@@ -452,6 +452,30 @@ def test_descriptions_cover_every_column_and_are_not_filler():
             assert len(text.strip()) >= 15 and text.strip().lower() != col.lower(), (short, col, text)
 
 
+def test_wire_type_asides_are_dropped_whole_never_cut_mid_parenthesis():
+    import sys
+
+    sys.path.insert(0, str(ROOT / "tools" / "codegen"))
+    import gen_sportality as G
+
+    assert G._fix("Points per game (a number or a numeric string).") == "Points per game."
+    assert G._fix("Blocks per game (a numeric string, or the integer 0).") == "Blocks per game."
+    assert (
+        G._fix("Free-throw percentage, 0-100 (a numeric string, or the integer 0).") == "Free-throw percentage, 0-100."
+    )
+    assert G._fix("Three-point percentage, 0-100 (the integer 0, or a string with two decimals).") == (
+        "Three-point percentage, 0-100."
+    )
+    assert G._fix("Blocks per game, a numeric string.") == "Blocks per game."
+    manual = yaml.safe_load((ROOT / "tools/codegen/manual_column_descriptions.yaml").read_text(encoding="utf-8"))
+    notes = yaml.safe_load(NOTES.read_text(encoding="utf-8"))
+    assert manual["sportality_athlete_career"]["ppg"] == notes["sportality_athlete_career"]["ppg"] == "Points per game."
+    for key, texts in notes.items():
+        for col, text in texts.items():
+            assert text.count("(") == text.count(")"), (key, col, text)
+            assert manual[key][col] == text, (key, col)
+
+
 def test_unplayed_games_type_the_score_like_played_ones():
     cols = _documented("team_upcoming_games")
     df = P.parse_sportality_schedule(_load(FIXTURES / "sports-v2__upcoming-games__team_uuid.json"), columns=cols)

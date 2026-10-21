@@ -584,6 +584,12 @@ The input frame with the EPA derivation applied. `EP_start` is rewritten to `0.9
 | `ep_start` | double |  |
 | `ep_end` | double |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If any column in `_EPA_REQUIRED_COLUMNS` is absent. |
+
 **Example**
 
 ```python

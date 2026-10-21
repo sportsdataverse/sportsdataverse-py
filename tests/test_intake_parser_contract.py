@@ -1,6 +1,6 @@
 """The intake-family parsers never raise, including on source shapes no capture happens to hold.
 
-Every one of these parsers promises ``Raises: None`` and a zero-row frame on anything unusable.
+Every one of these parsers promises (in its ``Returns:``) a zero-row frame on anything unusable, never an exception.
 Three real source shapes broke that promise before this file existed, and none of them appears in
 a committed capture -- so only a test like this one keeps them fixed:
 

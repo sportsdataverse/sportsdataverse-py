@@ -1,11 +1,11 @@
 ---
-title: "MLB — MLB Stats API — Other: pbp–award_recipients"
-sidebar_label: "Other: pbp–award_recipients"
+title: "MLB — MLB Stats API — Other: pbp–venues"
+sidebar_label: "Other: pbp–venues"
 sidebar_position: 8
-description: "MLB — MLB Stats API — Other: pbp–award_recipients — function reference in sdv-py, the SportsDataverse Python package."
+description: "MLB — MLB Stats API — Other: pbp–venues — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# MLB — MLB Stats API — Other: pbp–award_recipients
+# MLB — MLB Stats API — Other: pbp–venues
 
 ## mlb_pbp
 
@@ -27,6 +27,14 @@ GET /api/v1.1/game/{gamePk}/feed/live — live firehose (v1.1).
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#mlb_pbp-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#mlb_pbp-example}
 
@@ -290,6 +298,14 @@ GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mlb_boxscore-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mlb_boxscore-example}
 
 ```python
@@ -330,6 +346,14 @@ GET /api/v1/game/{gamePk}/linescore — inning-by-inning + current game state.
 | `away_left_on_base` | integer | Away runners left on base in the inning. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#mlb_linescore-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#mlb_linescore-example}
 
@@ -425,6 +449,14 @@ GET /api/v1/game/{gamePk}/winProbability — per-play WP timeline.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mlb_win_probability-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mlb_win_probability-example}
 
 ```python
@@ -499,6 +531,14 @@ GET /api/v1/people?personIds=... — bulk person lookup by MLBAM id.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mlb_people-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mlb_people-example}
 
 ```python
@@ -571,6 +611,14 @@ GET /api/v1/people/{personId} — single person detail.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mlb_person-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mlb_person-example}
 
 ```python
@@ -606,6 +654,14 @@ GET /api/v1/people/{personId}/stats/game/{gamePk} — one player, one game.
 | `group_display_name` | character | Stat group display name. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#mlb_person_game_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#mlb_person_game_stats-example}
 
@@ -689,6 +745,14 @@ GET /api/v1/sports/{sportId}/players — every player in a sport for a season.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mlb_sport_players-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mlb_sport_players-example}
 
 ```python
@@ -724,6 +788,14 @@ GET /api/v1/sports — list known sports (MLB, MiLB, KBO, NPB, …).
 | `active_status` | logical | Whether the sport/level is active. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#mlb_sports-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#mlb_sports-example}
 
@@ -796,6 +868,14 @@ GET /api/v1/leagues — list leagues.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mlb_leagues-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mlb_leagues-example}
 
 ```python
@@ -847,6 +927,14 @@ GET /api/v1/seasons/{seasonId} — single season detail.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mlb_season-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mlb_season-example}
 
 ```python
@@ -883,156 +971,18 @@ GET /api/v1/venues — list venues.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mlb_venues-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mlb_venues-example}
 
 ```python
 mlb_venues()
-```
-
-_Last validated n/a._
-
-## mlb_venue
-
-GET /api/v1/venues/{venueId} — single venue detail.
-
-**Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/venues/{venue_id}`
-
-**Valid URL:** [https://statsapi.mlb.com/api/v1/venues/15](https://statsapi.mlb.com/api/v1/venues/15)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `venue_id` | `venue_id` |  | `Y` |  | venue_id path parameter. |
-| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
-| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
-
-### Returns {#mlb_venue-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `id` | integer | Id. |
-| `name` | character | Display name. |
-| `link` | character | API link to the game feed. |
-| `active` | logical | Whether the player is currently active. |
-| `season` | character | Season year. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#mlb_venue-example}
-
-```python
-mlb_venue(venue_id=15)
-```
-
-_Last validated n/a._
-
-## mlb_meta
-
-GET /api/v1/{metaType} — enum lookup (the API's self-describing surface).
-
-**Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/{meta_type}`
-
-**Valid URL:** [https://statsapi.mlb.com/api/v1/leagueLeaderTypes](https://statsapi.mlb.com/api/v1/leagueLeaderTypes)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `meta_type` | `meta_type` |  | `Y` |  | meta_type path parameter. |
-
-### Returns {#mlb_meta-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#mlb_meta-example}
-
-```python
-mlb_meta(meta_type='leagueLeaderTypes')
-```
-
-_Last validated n/a._
-
-## mlb_awards
-
-GET /api/v1/awards — list award IDs (call with no params to enumerate).
-
-**Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/awards`
-
-**Valid URL:** [https://statsapi.mlb.com/api/v1/awards](https://statsapi.mlb.com/api/v1/awards)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
-
-### Returns {#mlb_awards-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `id` | character | Id. |
-| `name` | character | Display name. |
-| `description` | character | Long-form description text. |
-| `sort_order` | double | Display sort order for the sport. |
-| `active` | logical | Whether the player is currently active. |
-| `sport_id` | double | Sport MLBAM ID. |
-| `sport_link` | character | API link to the sport. |
-| `league_id` | double | League MLBAM ID. |
-| `league_link` | character | API link to the league. |
-| `notes` | character | Notes. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#mlb_awards-example}
-
-```python
-mlb_awards()
-```
-
-_Last validated n/a._
-
-## mlb_award_recipients
-
-GET /api/v1/awards/{awardId}/recipients — historical winners of one award.
-
-**Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/awards/{award_id}/recipients`
-
-**Valid URL:** [https://statsapi.mlb.com/api/v1/awards/MLBHOF/recipients?sportId=1](https://statsapi.mlb.com/api/v1/awards/MLBHOF/recipients?sportId=1)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `award_id` | `award_id` |  | `Y` |  | award_id path parameter. |
-| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
-| `sportId` | `sport_id` |  |  | `Y` | sportId query parameter. |
-| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
-
-### Returns {#mlb_award_recipients-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `id` | character | Id. |
-| `name` | character | Display name. |
-| `date` | character | Date in YYYY-MM-DD format. |
-| `season` | character | Season year. |
-| `team_id` | integer | Unique ESPN team identifier. |
-| `team_link` | character | API link to the team. |
-| `player_id` | integer | stats.ncaa.org player identifier. |
-| `player_link` | character | API relative link to the player. |
-| `player_primary_position_code` | character | Recipient primary fielding position code. |
-| `player_primary_position_name` | character | Recipient primary fielding position name. |
-| `player_primary_position_type` | character | Participant primary position type (e.g. 'Hitter'). |
-| `player_primary_position_abbreviation` | character | Participant primary position abbreviation (e.g. 'DH'). |
-| `player_name_first_last` | character | Participant name in first-last order. |
-| `votes` | double | Number of votes received. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#mlb_award_recipients-example}
-
-```python
-mlb_award_recipients(award_id='MLBHOF')
 ```
 
 _Last validated n/a._

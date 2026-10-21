@@ -721,8 +721,8 @@ def sportpress_ui_strings(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -781,8 +781,8 @@ def sportpress_club_seasons(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -844,8 +844,8 @@ def sportpress_referees(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -906,8 +906,8 @@ def sportpress_phases(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -966,8 +966,8 @@ def sportpress_competition_teams(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1030,8 +1030,8 @@ def sportpress_competition_staff(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1096,8 +1096,8 @@ def sportpress_standings(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1160,8 +1160,8 @@ def sportpress_schedule(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1225,8 +1225,8 @@ def sportpress_game_slider(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1291,8 +1291,8 @@ def sportpress_team_rankings(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1362,8 +1362,8 @@ def sportpress_player_rankings(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1428,8 +1428,8 @@ def sportpress_season_roster(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1490,8 +1490,8 @@ def sportpress_nationality_codes(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1552,8 +1552,8 @@ def sportpress_team_roster(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1614,8 +1614,8 @@ def sportpress_team_find(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1674,8 +1674,8 @@ def sportpress_team_player_averages(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1736,8 +1736,8 @@ def sportpress_team_games(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1798,8 +1798,8 @@ def sportpress_roster_find(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1860,8 +1860,8 @@ def sportpress_player_career(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1922,8 +1922,8 @@ def sportpress_player_games(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1984,8 +1984,8 @@ def sportpress_game_find(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2044,8 +2044,8 @@ def sportpress_game_periods(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2106,8 +2106,8 @@ def sportpress_game_overview(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2168,8 +2168,8 @@ def sportpress_game_top_performers(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2230,8 +2230,8 @@ def sportpress_game_leaders(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2294,8 +2294,8 @@ def sportpress_game_box(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2356,8 +2356,8 @@ def sportpress_game_team_box(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2420,8 +2420,8 @@ def sportpress_game_film(
         A polars/pandas DataFrame by default; the raw body (``dict``): ``{'data': ...}`` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus ``_request`` (the season, competition, team, roster or game ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty ``data`` list: an unknown id or a season without data, an empty ranking).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:

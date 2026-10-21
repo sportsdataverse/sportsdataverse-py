@@ -489,9 +489,6 @@ def parse_sihf_table(
         malformed -- with the ``columns`` schema when given -- so callers can chain without a
         null-check.
 
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
-
     Example:
         Quick start::
 
@@ -557,9 +554,6 @@ def parse_sihf_phases(
         Columns ``season``, ``phase_id`` (``Int64``), ``phase_name`` and ``n_games``. A
         zero-row frame with those columns when the payload is ``None``, empty or malformed,
         or carries no Phase filter.
-
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
 
     Example:
         Quick start::
@@ -733,9 +727,6 @@ def parse_sihf_pbp(
     Returns:
         One row per event with the documented columns; a zero-row frame with the same
         columns for a game not yet played, an empty or a malformed payload.
-
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
 
     Example:
         Quick start::
@@ -960,9 +951,6 @@ def parse_sihf_game_player_stats(
         One row per skater plus one total row per side; a zero-row frame with the documented
         columns for a game not yet played, an empty or a malformed payload.
 
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
-
     Example:
         Quick start::
 
@@ -1007,9 +995,6 @@ def parse_sihf_game_goalie_stats(
     Returns:
         One row per dressed goaltender; a zero-row frame with the documented columns for a
         game not yet played, an empty or a malformed payload.
-
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
 
     Example:
         Quick start::
@@ -1062,9 +1047,6 @@ def parse_sihf_game_team_stats(
     Returns:
         One row per statistic; a zero-row frame with the documented columns for a game not
         yet played, an empty or a malformed payload.
-
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
 
     Example:
         Quick start::
@@ -1170,9 +1152,6 @@ def parse_sihf_game_info(
     Returns:
         One row; a zero-row frame with the documented columns for an empty or a malformed
         payload.
-
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
 
     Example:
         Quick start::
@@ -1299,9 +1278,6 @@ def parse_sihf_game_lineups(
     Returns:
         One row per listed player; a zero-row frame with the documented columns for a game
         whose lineups are not out yet, an empty or a malformed payload.
-
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
 
     Example:
         Quick start::

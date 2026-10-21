@@ -269,9 +269,6 @@ def parse_fiba_gdap_schedule(
     Returns:
         One row per game, with both teams, the round and the competition flattened. A zero-row frame, typed from the returns schema, for an empty or malformed body.
 
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
-
     Example:
         Quick start::
 
@@ -300,9 +297,6 @@ def parse_fiba_gdap_games_between(
     Returns:
         One row per game; the window compares the venue-local game_date_time and dateTo is exclusive. A zero-row frame, typed from the returns schema, for an empty or malformed body.
 
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
-
     Example:
         Quick start::
 
@@ -328,9 +322,6 @@ def parse_fiba_gdap_game(raw: Any, *, return_as_pandas: bool = False, columns: O
 
     Returns:
         One row. A zero-row frame, typed from the returns schema, for an empty or malformed body.
-
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
@@ -360,9 +351,6 @@ def parse_fiba_gdap_game_periods(
     Returns:
         One row per period (Q1..Q4, OT1...). A zero-row frame, typed from the returns schema, for an empty or malformed body.
 
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
-
     Example:
         Quick start::
 
@@ -390,9 +378,6 @@ def parse_fiba_gdap_game_officials(
 
     Returns:
         One row per official; contact data and dates of birth are dropped. A zero-row frame, typed from the returns schema, for an empty or malformed body.
-
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
@@ -422,9 +407,6 @@ def parse_fiba_gdap_competition(
     Returns:
         One row. A zero-row frame, typed from the returns schema, for an empty or malformed body.
 
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
-
     Example:
         Quick start::
 
@@ -452,9 +434,6 @@ def parse_fiba_gdap_editions(
 
     Returns:
         One row per edition, shaped like fiba_gdap_competition. A zero-row frame, typed from the returns schema, for an empty or malformed body.
-
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
@@ -484,9 +463,6 @@ def parse_fiba_gdap_teams(
     Returns:
         One row per team; the team's e-mail address is dropped. A zero-row frame, typed from the returns schema, for an empty or malformed body.
 
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
-
     Example:
         Quick start::
 
@@ -514,9 +490,6 @@ def parse_fiba_gdap_rounds(
 
     Returns:
         One row per round; the standings are in fiba_gdap_round_standings. A zero-row frame, typed from the returns schema, for an empty or malformed body.
-
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
@@ -546,9 +519,6 @@ def parse_fiba_gdap_round_standings(
     Returns:
         One row per team in a group of a round. A zero-row frame, typed from the returns schema, for an empty or malformed body.
 
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
-
     Example:
         Quick start::
 
@@ -576,9 +546,6 @@ def parse_fiba_gdap_final_standings(
 
     Returns:
         One row per team. A zero-row frame, typed from the returns schema, for an empty or malformed body.
-
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
@@ -608,9 +575,6 @@ def parse_fiba_gdap_round_gamedays(
     Returns:
         One row per round; the game days are a JSON string. A zero-row frame, typed from the returns schema, for an empty or malformed body.
 
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
-
     Example:
         Quick start::
 
@@ -638,9 +602,6 @@ def parse_fiba_gdap_awards(
 
     Returns:
         One row per award winner. A zero-row frame, typed from the returns schema, for an empty or malformed body.
-
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
@@ -670,9 +631,6 @@ def parse_fiba_gdap_nominations(
     Returns:
         One row per official; contact data and dates of birth are dropped. A zero-row frame, typed from the returns schema, for an empty or malformed body.
 
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
-
     Example:
         Quick start::
 
@@ -700,9 +658,6 @@ def parse_fiba_gdap_team_staff(
 
     Returns:
         One row per coach, with the team ids; dates of birth are dropped. A zero-row frame, typed from the returns schema, for an empty or malformed body.
-
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
@@ -732,9 +687,6 @@ def parse_fiba_gdap_roster(
     Returns:
         One row per player, with the team and competition ids. A zero-row frame, typed from the returns schema, for an empty or malformed body.
 
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
-
     Example:
         Quick start::
 
@@ -762,9 +714,6 @@ def parse_fiba_gdap_roster_coaches(
 
     Returns:
         One row per coach; dates of birth are dropped. A zero-row frame, typed from the returns schema, for an empty or malformed body.
-
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
@@ -794,9 +743,6 @@ def parse_fiba_gdap_roster_latest(
     Returns:
         One row per player, with the team and competition ids. A zero-row frame, typed from the returns schema, for an empty or malformed body.
 
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
-
     Example:
         Quick start::
 
@@ -824,9 +770,6 @@ def parse_fiba_gdap_team_stats(
 
     Returns:
         One row. A zero-row frame, typed from the returns schema, for an empty or malformed body.
-
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
@@ -856,9 +799,6 @@ def parse_fiba_gdap_team_player_stats(
     Returns:
         One row per player. A zero-row frame, typed from the returns schema, for an empty or malformed body.
 
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
-
     Example:
         Quick start::
 
@@ -886,9 +826,6 @@ def parse_fiba_gdap_team_games(
 
     Returns:
         One row per game; leaders are flattened. A zero-row frame, typed from the returns schema, for an empty or malformed body.
-
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
@@ -918,9 +855,6 @@ def parse_fiba_gdap_player_info(
     Returns:
         One row. A zero-row frame, typed from the returns schema, for an empty or malformed body.
 
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
-
     Example:
         Quick start::
 
@@ -948,9 +882,6 @@ def parse_fiba_gdap_player_stats(
 
     Returns:
         One row. A zero-row frame, typed from the returns schema, for an empty or malformed body.
-
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
@@ -980,9 +911,6 @@ def parse_fiba_gdap_player_game_stats(
     Returns:
         One row per game. A zero-row frame, typed from the returns schema, for an empty or malformed body.
 
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
-
     Example:
         Quick start::
 
@@ -1010,9 +938,6 @@ def parse_fiba_gdap_federation_games(
 
     Returns:
         One row per game. A zero-row frame, typed from the returns schema, for an empty or malformed body.
-
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
@@ -1042,9 +967,6 @@ def parse_fiba_gdap_national_teams(
     Returns:
         One row per federation. A zero-row frame, typed from the returns schema, for an empty or malformed body.
 
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
-
     Example:
         Quick start::
 
@@ -1072,9 +994,6 @@ def parse_fiba_gdap_medal_count(
 
     Returns:
         One row per federation. A zero-row frame, typed from the returns schema, for an empty or malformed body.
-
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
@@ -1104,9 +1023,6 @@ def parse_fiba_gdap_ranking_zones(
     Returns:
         One row per zone. A zero-row frame, typed from the returns schema, for an empty or malformed body.
 
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
-
     Example:
         Quick start::
 
@@ -1134,9 +1050,6 @@ def parse_fiba_gdap_federation_ranking(
 
     Returns:
         One row per federation, with the ranking date. A zero-row frame, typed from the returns schema, for an empty or malformed body.
-
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
@@ -1166,9 +1079,6 @@ def parse_fiba_gdap_gateway_federation_ranking(
     Returns:
         One row per federation, with the ranking date. A zero-row frame, typed from the returns schema, for an empty or malformed body.
 
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
-
     Example:
         Quick start::
 
@@ -1196,9 +1106,6 @@ def parse_fiba_gdap_gateway_competition_ids(
 
     Returns:
         One row per competition id. A zero-row frame, typed from the returns schema, for an empty or malformed body.
-
-    Raises:
-        None: a malformed body parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::

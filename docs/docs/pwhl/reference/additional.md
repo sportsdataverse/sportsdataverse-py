@@ -6,8 +6,8 @@ sidebar_position: 50
 ---
 # PWHL — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.pwhl`
-not covered by the generated API-endpoint reference above.
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.pwhl` that are not
+generated API-endpoint wrappers (those have their own reference pages).
 
 ## sportsdataverse-data releases
 

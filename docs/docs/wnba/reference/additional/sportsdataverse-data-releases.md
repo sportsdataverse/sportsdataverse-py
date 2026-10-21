@@ -123,6 +123,14 @@ Polars dataframe with one row per player / team / lineup per requested season fo
 | `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `per_mode` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `family` is not one of `WNBA_STATS_LEAGUEDASH_FAMILIES`. |
+| `SeasonNotFoundError` | If any requested season is less than 1997. |
+| `AssetFetchError` | If a release asset request fails (a 403 or an exhausted retry budget) -- distinct from an absent season, which is skipped. |
+
 **Example**
 
 ```python

@@ -21,11 +21,11 @@ Season schedule and results of a tournament, one row per game (All-Star games dr
 
 **Example request:** `curl -X POST 'https://www.khl.ru/rest/calendar/list/' -d 'season=2026&stage=regular'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). None = the site's current season. |
-| `stage` | `stage` |  |  | `Y` | Which stage of the season: regular or playoff. |
-| `values[tournament]` | `tournament_id` |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `season` | `season` | body |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). None = the site's current season. |
+| `stage` | `stage` | body |  |  | `Y` | Which stage of the season: regular or playoff. |
+| `values[tournament]` | `tournament_id` | body |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
 
 ### Returns {#khl_schedule-returns}
 
@@ -52,6 +52,14 @@ Season schedule and results of a tournament, one row per game (All-Star games dr
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 
+### Raises {#khl_schedule-raises}
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#khl_schedule-example}
 
 ```python
@@ -68,9 +76,9 @@ Club roster (current season only): one row per player.
 
 **Example request:** `curl -X POST 'https://www.khl.ru/rest/clubs/team/' -d 'page=team&values%5Bclub_id%5D=7'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `values[club_id]` | `club_id` |  | `Y` |  | Required. khl.ru CLUB id (7 = Spartak; schedule home_club_id), not a team-season id. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `values[club_id]` | `club_id` | body |  | `Y` |  | Required. khl.ru CLUB id (7 = Spartak; schedule home_club_id), not a team-season id. |
 
 ### Returns {#khl_roster-returns}
 
@@ -91,6 +99,14 @@ Club roster (current season only): one row per player.
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 
+### Raises {#khl_roster-raises}
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#khl_roster-example}
 
 ```python
@@ -107,11 +123,11 @@ Stats filter options: seasons, tournaments, position groups and clubs (one row p
 
 **Example request:** `curl -X POST 'https://www.khl.ru/rest/filters/statplayers/' -d 'season=2026&stage=regular'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). None = the site's current season. |
-| `stage` | `stage` |  |  | `Y` | Which stage of the season: regular or playoff. |
-| `values[tournament]` | `tournament_id` |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `season` | `season` | body |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). None = the site's current season. |
+| `stage` | `stage` | body |  |  | `Y` | Which stage of the season: regular or playoff. |
+| `values[tournament]` | `tournament_id` | body |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
 
 ### Returns {#khl_stat_filters-returns}
 
@@ -127,6 +143,14 @@ Stats filter options: seasons, tournaments, position groups and clubs (one row p
 | `active` | integer | 1 when the option is selectable |
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
+
+### Raises {#khl_stat_filters-raises}
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_stat_filters-example}
 
@@ -144,12 +168,12 @@ Game header: status, teams, score, arena (one row).
 
 **Example request:** `curl -X POST 'https://www.khl.ru/rest/game/header/' -d 'page=resume&values%5Bgameid%5D=898236&season=2026&stage=regular'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `values[gameid]` | `game_id` |  | `Y` |  | Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id). |
-| `season` | `season` |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). The game's season; required unless tournament_id is given. |
-| `stage` | `stage` |  |  | `Y` | Which stage of the season: regular or playoff. |
-| `values[tournament]` | `tournament_id` |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `values[gameid]` | `game_id` | body |  | `Y` |  | Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id). |
+| `season` | `season` | body |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). The game's season; required unless tournament_id is given. |
+| `stage` | `stage` | body |  |  | `Y` | Which stage of the season: regular or playoff. |
+| `values[tournament]` | `tournament_id` | body |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
 
 ### Returns {#khl_game_header-returns}
 
@@ -207,6 +231,14 @@ Game header: status, teams, score, arena (one row).
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 
+### Raises {#khl_game_header-raises}
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#khl_game_header-example}
 
 ```python
@@ -223,12 +255,12 @@ Game protocol: one row per goal with scorer, assistants, strength and the jersey
 
 **Example request:** `curl -X POST 'https://www.khl.ru/rest/game/protocol/' -d 'values%5Bgameid%5D=898236&season=2026&stage=regular'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `values[gameid]` | `game_id` |  | `Y` |  | Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id). |
-| `season` | `season` |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). The game's season; required unless tournament_id is given. |
-| `stage` | `stage` |  |  | `Y` | Which stage of the season: regular or playoff. |
-| `values[tournament]` | `tournament_id` |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `values[gameid]` | `game_id` | body |  | `Y` |  | Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id). |
+| `season` | `season` | body |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). The game's season; required unless tournament_id is given. |
+| `stage` | `stage` | body |  |  | `Y` | Which stage of the season: regular or playoff. |
+| `values[tournament]` | `tournament_id` | body |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
 
 ### Returns {#khl_game_protocol-returns}
 
@@ -260,6 +292,14 @@ Game protocol: one row per goal with scorer, assistants, strength and the jersey
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 
+### Raises {#khl_game_protocol-raises}
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#khl_game_protocol-example}
 
 ```python
@@ -276,12 +316,12 @@ Game info: teams, score, arena, officials, starting goalies (one row).
 
 **Example request:** `curl -X POST 'https://www.khl.ru/rest/game/text/' -d 'values%5Bgameid%5D=898236&season=2026&stage=regular'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `values[gameid]` | `game_id` |  | `Y` |  | Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id). |
-| `season` | `season` |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). The game's season; required unless tournament_id is given. |
-| `stage` | `stage` |  |  | `Y` | Which stage of the season: regular or playoff. |
-| `values[tournament]` | `tournament_id` |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `values[gameid]` | `game_id` | body |  | `Y` |  | Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id). |
+| `season` | `season` | body |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). The game's season; required unless tournament_id is given. |
+| `stage` | `stage` | body |  |  | `Y` | Which stage of the season: regular or playoff. |
+| `values[tournament]` | `tournament_id` | body |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
 
 ### Returns {#khl_game_info-returns}
 
@@ -363,6 +403,14 @@ Game info: teams, score, arena, officials, starting goalies (one row).
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 
+### Raises {#khl_game_info-raises}
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#khl_game_info-example}
 
 ```python
@@ -379,12 +427,12 @@ Skater box score by period: one row per period, side and jersey, with the player
 
 **Example request:** `curl -X POST 'https://www.khl.ru/rest/game/text/' -d 'values%5Bgameid%5D=898236&season=2026&stage=regular'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `values[gameid]` | `game_id` |  | `Y` |  | Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id). |
-| `season` | `season` |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). The game's season; required unless tournament_id is given. |
-| `stage` | `stage` |  |  | `Y` | Which stage of the season: regular or playoff. |
-| `values[tournament]` | `tournament_id` |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `values[gameid]` | `game_id` | body |  | `Y` |  | Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id). |
+| `season` | `season` | body |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). The game's season; required unless tournament_id is given. |
+| `stage` | `stage` | body |  |  | `Y` | Which stage of the season: regular or playoff. |
+| `values[tournament]` | `tournament_id` | body |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
 
 ### Returns {#khl_player_box-returns}
 
@@ -425,6 +473,14 @@ Skater box score by period: one row per period, side and jersey, with the player
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 
+### Raises {#khl_player_box-raises}
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#khl_player_box-example}
 
 ```python
@@ -441,12 +497,12 @@ Play-by-play: shots, faceoffs, hits, blocks, giveaways, takeaways, penalties and
 
 **Example request:** `curl -X POST 'https://www.khl.ru/rest/game/text/' -d 'values%5Bgameid%5D=898236&season=2026&stage=regular'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `values[gameid]` | `game_id` |  | `Y` |  | Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id). |
-| `season` | `season` |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). The game's season; required unless tournament_id is given. |
-| `stage` | `stage` |  |  | `Y` | Which stage of the season: regular or playoff. |
-| `values[tournament]` | `tournament_id` |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `values[gameid]` | `game_id` | body |  | `Y` |  | Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id). |
+| `season` | `season` | body |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). The game's season; required unless tournament_id is given. |
+| `stage` | `stage` | body |  |  | `Y` | Which stage of the season: regular or playoff. |
+| `values[tournament]` | `tournament_id` | body |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
 
 ### Returns {#khl_pbp-returns}
 
@@ -483,6 +539,14 @@ Play-by-play: shots, faceoffs, hits, blocks, giveaways, takeaways, penalties and
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 
+### Raises {#khl_pbp-raises}
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#khl_pbp-example}
 
 ```python
@@ -499,12 +563,12 @@ Shot map: one row per shot with its x / y on the 1000 x 500 rink grid (2024-25 o
 
 **Example request:** `curl -X POST 'https://www.khl.ru/rest/game/text/' -d 'values%5Bgameid%5D=898236&season=2026&stage=regular'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `values[gameid]` | `game_id` |  | `Y` |  | Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id). |
-| `season` | `season` |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). The game's season; required unless tournament_id is given. |
-| `stage` | `stage` |  |  | `Y` | Which stage of the season: regular or playoff. |
-| `values[tournament]` | `tournament_id` |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `values[gameid]` | `game_id` | body |  | `Y` |  | Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id). |
+| `season` | `season` | body |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). The game's season; required unless tournament_id is given. |
+| `stage` | `stage` | body |  |  | `Y` | Which stage of the season: regular or playoff. |
+| `values[tournament]` | `tournament_id` | body |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
 
 ### Returns {#khl_shots-returns}
 
@@ -530,6 +594,14 @@ Shot map: one row per shot with its x / y on the 1000 x 500 rink grid (2024-25 o
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 
+### Raises {#khl_shots-raises}
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#khl_shots-example}
 
 ```python
@@ -546,9 +618,9 @@ Player profile: bio, contract, club (one row).
 
 **Example request:** `curl -X POST 'https://www.khl.ru/rest/players/profile/' -d 'values%5Bid%5D=41928'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `values[id]` | `player_id` |  | `Y` |  | Required. khl.ru player id (the box score / roster player_id). |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `values[id]` | `player_id` | body |  | `Y` |  | Required. khl.ru player id (the box score / roster player_id). |
 
 ### Returns {#khl_player_profile-returns}
 
@@ -590,6 +662,14 @@ Player profile: bio, contract, club (one row).
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 
+### Raises {#khl_player_profile-raises}
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#khl_player_profile-example}
 
 ```python
@@ -606,9 +686,9 @@ Player career: one row per season tournament.
 
 **Example request:** `curl -X POST 'https://www.khl.ru/rest/players/stats/' -d 'values%5Bid%5D=41928'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `values[id]` | `player_id` |  | `Y` |  | Required. khl.ru player id (the box score / roster player_id). |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `values[id]` | `player_id` | body |  | `Y` |  | Required. khl.ru player id (the box score / roster player_id). |
 
 ### Returns {#khl_player_career-returns}
 
@@ -659,6 +739,14 @@ Player career: one row per season tournament.
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 
+### Raises {#khl_player_career-raises}
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#khl_player_career-example}
 
 ```python
@@ -675,10 +763,10 @@ Playoff bracket: one row per team per series.
 
 **Example request:** `curl -X POST 'https://www.khl.ru/rest/standings/playoff/' -d 'stage=playoff&values%5Btype%5D=playoff&season=2026'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). Required unless tournament_id is given. |
-| `values[tournament]` | `tournament_id` |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `season` | `season` | body |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). Required unless tournament_id is given. |
+| `values[tournament]` | `tournament_id` | body |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
 
 ### Returns {#khl_playoff_bracket-returns}
 
@@ -698,6 +786,14 @@ Playoff bracket: one row per team per series.
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 
+### Raises {#khl_playoff_bracket-raises}
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#khl_playoff_bracket-example}
 
 ```python
@@ -714,10 +810,10 @@ Regular-season standings: one row per team per table (league, conferences, divis
 
 **Example request:** `curl -X POST 'https://www.khl.ru/rest/standings/regular/' -d 'values%5Btype%5D=regular&season=2026'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). None = the site's current season. |
-| `values[tournament]` | `tournament_id` |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `season` | `season` | body |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). None = the site's current season. |
+| `values[tournament]` | `tournament_id` | body |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
 
 ### Returns {#khl_standings-returns}
 
@@ -745,6 +841,14 @@ Regular-season standings: one row per team per table (league, conferences, divis
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 
+### Raises {#khl_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#khl_standings-example}
 
 ```python
@@ -761,15 +865,15 @@ League player stats of a tournament, one page (goalies: every page) (one row per
 
 **Example request:** `curl -X POST 'https://www.khl.ru/rest/stat/players/' -d 'season=2026&stage=regular&values%5Bamplua_full%5D=forwards&nav%5Bpage%5D=1&nav%5Bcount%5D=20'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). None = the site's current season. |
-| `stage` | `stage` |  |  | `Y` | Which stage of the season: regular or playoff. |
-| `values[tournament]` | `tournament_id` |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
-| `values[amplua_full]` | `position` |  |  | `Y` | Position group: goalies, defenses, forwards, skaters or all. None = the site's default. goalies fetches every page and returns one list sorted by games played, then wins (both descending), then name; page is ignored for it. A partial list raises AssetFetchError. |
-| `values[clubs_full]` | `club` |  |  | `Y` | Club slug (khl_stat_filters, filter clubs_full) or all. None = every club. |
-| `nav[page]` | `page` |  |  | `Y` | 1-based page (skaters); ignored for goalies. Loop until a page comes back shorter than per_page. |
-| `nav[count]` | `per_page` |  |  | `Y` | Rows per page: 12, 20, 24 or 36. Keep 20: the site computes page counts and ranks for 20. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `season` | `season` | body |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). None = the site's current season. |
+| `stage` | `stage` | body |  |  | `Y` | Which stage of the season: regular or playoff. |
+| `values[tournament]` | `tournament_id` | body |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
+| `values[amplua_full]` | `position` | body |  |  | `Y` | Position group: goalies, defenses, forwards, skaters or all. None = the site's default. goalies fetches every page and returns one list sorted by games played, then wins (both descending), then name; page is ignored for it. A partial list raises AssetFetchError. |
+| `values[clubs_full]` | `club` | body |  |  | `Y` | Club slug (khl_stat_filters, filter clubs_full) or all. None = every club. |
+| `nav[page]` | `page` | body |  |  | `Y` | 1-based page (skaters); ignored for goalies. Loop until a page comes back shorter than per_page. |
+| `nav[count]` | `per_page` | body |  |  | `Y` | Rows per page: 12, 20, 24 or 36. Keep 20: the site computes page counts and ranks for 20. |
 
 ### Returns {#khl_player_stats-returns}
 
@@ -818,12 +922,20 @@ League player stats of a tournament, one page (goalies: every page) (one row per
 | `sop` | integer | Games that went to a shootout (goalies only) |
 | `ga` | integer | Goals against (goalies only) |
 | `sv` | integer | Saves, shots on goal stopped (goalies only) |
-| `sv_pct` | numeric | Save percentage (goalies only) |
-| `gaa` | numeric | Goals-against average, 60 min x goals against / time on ice (goalies only) |
+| `sv_pct` | numeric | Save percentage on a 0-100 scale, saves / shots on goal x 100 (92.2 = .922; goalies only) |
+| `gaa` | numeric | Goals-against average, goals against per 60 minutes of ice time (goalies only) |
 | `so` | integer | Shutouts, games without a goal against (goalies only) |
-| `toi` | character | Total time on the ice (goalies only; text, null when none) |
+| `toi` | character | Total time on the ice over the stage, text "minutes:seconds" (e.g. "3521:21"; goalies only, null when none) |
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
+
+### Raises {#khl_player_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_player_stats-example}
 
