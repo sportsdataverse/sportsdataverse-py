@@ -3133,13 +3133,38 @@
   group: nfl-era-play-order
   finding: R963-3
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '                pl.when(pl.col("_kick_spot") & punt)'
-  mutant: '                pl.when(pl.lit(False))'
+  snippet: '                    pl.when(pl.col("_kick_spot") & punt).then(n.field(f)).otherwise(pl.col(c)).alias(c)'
+  mutant: '                    pl.when(pl.lit(False)).then(n.field(f)).otherwise(pl.col(c)).alias(c)'
   test: tests/nfl/test_nfl_era_play_order.py -k "next_snaps_clock"
   expected: kill
   note: >-
-    Without the clock, 270930001/1000 keeps ESPN's end clock 0 and the half-end clamp puts it at the 99 (EPA 0.485)
-    instead of the receiver's snap at 870 s and the 90 (EPA 0.386, nflverse 0.061).
+    Without the clocks, 270930001/1000 keeps ESPN's end clock 0 and the half-end clamp puts it at the 99 (EPA 0.485)
+    instead of the receiver's snap at 870 s (game clock 2670) and the 90 (EPA 0.386, nflverse 0.061), and
+    291203002/3741 keeps 205 s from a misfiled timeout row instead of the snap's 152.
+
+- id: nfl-punt-clock-carry-not-only-a-zero-clock
+  group: nfl-era-play-order
+  finding: R971-3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                    pl.when(pl.col("_kick_spot") & punt).then(n.field(f)).otherwise(pl.col(c)).alias(c)'
+  mutant: '                    pl.when(pl.col("_kick_spot") & punt & (pl.col("end.TimeSecsRem") <= 0)).then(n.field(f)).otherwise(pl.col(c)).alias(c)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "next_snaps_clock"
+  expected: kill
+  note: >-
+    Review #971 mutant B: carrying the snap's clock only where ESPN's end clock is 0 keeps 291203002/3741's 205 s,
+    the clock of a timeout row ESPN filed after the punt, instead of the snap's 152 (nflverse 152).
+
+- id: nfl-punt-next-snap-not-a-free-kick
+  group: nfl-era-play-order
+  finding: R971-4
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        (pl.col("_nxt").struct.field("kick") == False)'
+  mutant: '        ((pl.col("_nxt").struct.field("kick") == False) | punt)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "free_kick"
+  expected: kill
+  note: >-
+    Review #971 mutant A: if a punt's next play may be a kickoff, 271021019/2661 (a blocked punt out of the end zone
+    for a safety, unscored by ESPN) ends at NYG's free-kick spot instead of keeping ESPN's 99.
 
 - id: nfl-kick-spot-keys-on-scoringplay
   group: nfl-era-play-order

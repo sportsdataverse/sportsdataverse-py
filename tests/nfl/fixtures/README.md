@@ -285,7 +285,7 @@ the task 2.5 touchdown rule got wrong (review PR-808, R808-2/3/4) or one task 2.
 
 ## Era play order (`era_play_order/`, task 2.19)
 
-Twelve ESPN Site v2 summaries from `nflverse-dev/nfl-raw` `nfl/espn/raw/<season>/<game_id>.json.gz` (source
+Fourteen ESPN Site v2 summaries from `nflverse-dev/nfl-raw` `nfl/espn/raw/<season>/<game_id>.json.gz` (source
 `https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=<game_id>`), trimmed to the same keys as
 the whole-game captures, read by `tests/nfl/test_nfl_era_play_order.py`. The oracle is nflverse
 (`nflverse-dev/nfl-data` `python/.cache/nflverse_pbp/pbp_<season>.parquet`, joined on `game_id` + `play_id`).
@@ -304,3 +304,5 @@ the whole-game captures, read by `tests/nfl/test_nfl_era_play_order.py`. The ora
 | 271223008 (`2007_16_KC_DET`) | 4f540c18 | 1912, KC's bare "KickOff" at 0:23 of Q2, a touchback; ESPN's end clock (1:08) is a timeout row filed after it | `Kickoff`, start 0:23 / end 1:08 | `touchback` 1, `epa` 0.000 | R856-2 (owner ruling: EP_end at the start clock) |
 | 400791544 (`2015_01_MIA_WAS`) | d433655e | 2058, A.Franks kicks into the end zone at 0:27 of Q2, "Touchback."; ESPN's end clock 0:00 | `Kickoff`, end clock 0 (end clamped to the 99) | `touchback` 1, `epa` -0.127 (owner model 0) | R856-15 (text touchback at the spot) |
 | 401127996 (`2019_12_DET_WAS`) | 96b91e56 | 1913, M.Prater kicks into the end zone at 0:14 of Q2, "Touchback."; ESPN's end clock 0:00 | `Kickoff`, end clock 0 (end clamped to the 99) | `touchback` 1, `epa` -0.067 (owner model 0) | R856-15 |
+| 291203002 (`2009_13_NYJ_BUF`) | 044caca9 | 3741, NYJ's fair-caught punt at 2:39 of Q4; ESPN files "Timeout #3 by BUF at 03:25" after it, then BUF's sack at 2:32 | `Punt`, end clock 205 s (the timeout row's) | next play at `half_seconds_remaining` 152, `epa` -0.458 | R971-3 (task 2.25: a punt ends at its next snap's clock) |
+| 271021019 (`2007_07_SF_NYG`) | 4f540c18 | 2661, NYG's punt at 9:01 of Q3, blocked out of its end zone for a safety; the next play is NYG's free kick | `Blocked Punt`, `scoringPlay` false, end `yardsToEndzone` 99 | `safety` 1, `epa` 0.624 | R971-4 (task 2.25: a punt's next play is not a kickoff) |

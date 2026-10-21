@@ -650,6 +650,7 @@ def _kickoff_next_snap(stop: pl.Expr) -> tuple[pl.Expr, pl.Expr, pl.Expr, pl.Exp
         r=seq_rank,
         team=pl.col("start.pos_team.id"),
         clock=pl.col("start.TimeSecsRem"),
+        adj=pl.col("start.adj_TimeSecsRem"),
     )
     # the next real play of the same game and half, written to ``_nxt`` (R963-4: a frame of several games)
     nxt = pl.when(~stop).then(snap).backward_fill().shift(-1).over("game_id", "half")
@@ -1892,16 +1893,16 @@ class NFLPlayProcess(object):
             )
             .with_columns(
                 pl.when(pl.col("_kick_spot"))
-                .then(n.field("y2e"))
+                .then(pl.col("_nxt").struct.field("y2e"))
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
                 pl.when(pl.col("_first_down")).then(1).otherwise(pl.col("end.down")).alias("end.down"),
-                # the punt ends at the snap's clock too (R963-3); its down and distance already are the
-                # snap's (_end_state_from_next_play, or the first down a -1 end down takes here)
-                pl.when(pl.col("_kick_spot") & punt)
-                .then(n.field("clock"))
-                .otherwise(pl.col("end.TimeSecsRem"))
-                .alias("end.TimeSecsRem"),
+                # the punt ends at the snap's clocks too (R963-3, R971-2); its down and distance already are
+                # the snap's (_end_state_from_next_play, or the first down a -1 end down takes here)
+                *(
+                    pl.when(pl.col("_kick_spot") & punt).then(n.field(f)).otherwise(pl.col(c)).alias(c)
+                    for f, c in (("clock", "end.TimeSecsRem"), ("adj", "end.adj_TimeSecsRem"))
+                ),
             )
             .with_columns(
                 pl.when(pl.col("_first_down"))

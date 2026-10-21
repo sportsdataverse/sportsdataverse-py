@@ -203,14 +203,24 @@ def test_post_2009_punt_ends_at_the_receivers_next_snap(game_id, play_id):
     assert abs(row["EPA"] - nflverse_epa) <= ceiling, (row["EP_start"], row["EP_end"])
 
 
-# R963-3: the punt takes the snap's clock too. 270930001/1000 (2007, a punt at 14:37 of Q2) had ESPN's end clock 0, so
-# the EP block's half-end clamp scored it as the half's last play, at the 99 (EPA 0.485). The receiver's next snap is
-# at 870 s, at the 90 (nflverse yardline_100 90, epa 0.061): EPA 0.386. Its down and distance were already the
-# snap's: carrying them too left all 502 measured games (57 captures, 296 era sample, 149 held out) byte-identical.
-def test_punt_ends_at_the_next_snaps_clock():
-    row = _row(_era(270930001), 270930001, 1000)
-    assert (row["end.TimeSecsRem"], row["end.yardsToEndzone"]) == (870, 90)
-    assert abs(row["EPA"] - 0.061) <= 0.33, (row["EP_start"], row["EP_end"])
+# R963-3 / R971-2 / R971-3: the punt takes the snap's clocks too, the half clock and the game clock. Its down and
+# distance were already the snap's: carrying them too left all 502 measured games (57 captures, 296 era sample, 149
+# held out) byte-identical. (game, play) -> (end.TimeSecsRem, end.adj_TimeSecsRem, end yard line, nflverse epa, ceiling):
+# - 270930001/1000 (2007, a punt at 14:37 of Q2): ESPN's end clock was 0, so the EP block's half-end clamp scored it
+#   as the half's last play, at the 99 (EPA 0.485). The receiver's snap is at 870 s of the half (2670 of the game), at
+#   the 90 (nflverse yardline_100 90, epa 0.061): EPA 0.386.
+# - 291203002/3741 (2009, a fair catch at 2:39 of Q4): ESPN files "Timeout #3 by BUF at 03:25" after it, so its end
+#   clock was 205 s, later than its own start (159). BUF's sack is at 152 s, nflverse's next play: EPA -0.245 -> -0.272
+#   (nflverse -0.458).
+_PUNT_CLOCKS = {(270930001, 1000): (870, 2670, 90, 0.061, 0.33), (291203002, 3741): (152, 152, 77, -0.458, 0.19)}
+
+
+@pytest.mark.parametrize(("game_id", "play_id"), list(_PUNT_CLOCKS))
+def test_punt_ends_at_the_next_snaps_clock(game_id, play_id):
+    clock, game_clock, y2e, nflverse_epa, ceiling = _PUNT_CLOCKS[(game_id, play_id)]
+    row = _row(_era(game_id), game_id, play_id)
+    assert (row["end.TimeSecsRem"], row["end.adj_TimeSecsRem"], row["end.yardsToEndzone"]) == (clock, game_clock, y2e)
+    assert abs(row["EPA"] - nflverse_epa) <= ceiling, (row["EP_start"], row["EP_end"])
 
 
 # R963-5: the net-spot read keys on ESPN's scoringPlay, not td_play. A return touchdown ESPN left unscored ends at its
@@ -230,6 +240,16 @@ def test_unscored_return_touchdown_ends_at_its_try(path, game_id, play_id):
     assert row["scoringPlay"] is False and row["td_play"] is True
     assert row["end.yardsToEndzone"] == try_y2e
     assert abs(row["wpa"] - nflverse_wpa) <= ceiling
+
+
+# R971-4: a punt's next play may not be a kickoff. 271021019/2661 (2007, NYG's punt blocked out of its end zone for a
+# safety at 9:01 of Q3; nflverse safety 1) is not one of ESPN's scoring plays, so the net-spot read reaches it; the next
+# play is NYG's free kick, not SF's snap. The punt keeps ESPN's end (99). Its EPA (4.29, nflverse 0.62) is the unscored
+# safety's, which this test does not gate.
+def test_punt_followed_by_a_free_kick_keeps_espns_end():
+    row = _row(_era(271021019), 271021019, 2661)
+    assert row["type.text"] == "Blocked Punt" and row["scoringPlay"] is False
+    assert row["end.yardsToEndzone"] == 99
 
 
 # R963-4: the next-snap read is windowed by game and half, so a frame of two games reads each game's own next snap.
