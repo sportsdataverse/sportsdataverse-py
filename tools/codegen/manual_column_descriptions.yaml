@@ -9425,7 +9425,8 @@ load_cfb_pbp:
   TFL_rush: True when the play was a tackle for loss on a rush play.
   action_play: True when the play advanced the game state -- excludes timeouts, end-of-period markers and other non-action
     rows.
-  adj_rush_yardage: Rushing yards capped at 8, the input to the line-yards decomposition.
+  adj_rush_yardage: Rushing yards capped at 10, the input to the line-yards decomposition. Assets published before the
+    2026-10 line-yards fix cap at 8.
   air_yardsToEndzone: Yards to the endzone at the catch spot, parsed from the 2025+ vendor catch-spot text; null before 2025
     or when unresolvable.
   awayFinalScore: Final score of the away team from the ESPN game header, repeated on every play of the game; the processing
@@ -9603,8 +9604,10 @@ load_cfb_pbp:
   lead_wp_before2: Value of wp_before 2 plays ahead, used for sequence-aware derivations.
   lead_wp_before2_naive: Pre-snap naive win probability two plays ahead, used where the immediately following row is a non-play.
   lead_wp_before_naive: Next play's pre-snap naive win probability, used in the end-of-half and change-of-possession adjustments.
-  line_yards: 'Yards credited to the offensive line on a rush, using the standard sliding scale: 1.2x the capped yardage on
-    a loss, all of it through 3 yards, half of each yard from 4 to 8, and a 5.5-yard ceiling beyond that.'
+  line_yards: 'Yards credited to the offensive line on a rush, on the standard adjusted-line-yards band: 1.2x the yardage on
+    a loss, all of yards 0-4, half of each yard from 5 to 10, and nothing beyond 10 (a 7-yard ceiling). Line, second-level
+    and open-field yards sum to the carry on every gain. Assets published before the 2026-10 line-yards fix carry the old
+    band (all of yards 0-3, half of 4-8, a 5.5-yard ceiling).'
   make_fg_wp: Win probability given the field-goal attempt is made.
   mediaId: Identifier of the ESPN media item (video clip) attached to the play in ESPN's play feed, passed through as published;
     null when no clip is attached.
@@ -9613,7 +9616,8 @@ load_cfb_pbp:
   new_distance: Distance to go after the play, including any penalty enforcement.
   new_down: Down after the play, including any penalty enforcement.
   non_fumble_sack: True when the play was a sack that did not produce a fumble.
-  open_field_yards: Rushing yards gained beyond 8, credited to the ball carrier rather than the line.
+  open_field_yards: Rushing yards gained beyond 10, credited to the ball carrier rather than the line. Assets published
+    before the 2026-10 line-yards fix count the yards beyond 8.
   opp_highlight_yards: Highlight yards earned on opportunity runs, isolating carrier production on carries where the blocking
     succeeded. Assets published before the 2026-08 fix are identically 0 here, because the inverted opportunity_run gate could
     never co-occur with non-zero highlight yards.
@@ -9689,7 +9693,9 @@ load_cfb_pbp:
   scoringType.name: ESPN's name for the scoring type (e.g. touchdown, field goal).
   scrimmage_play: True when the play is a play from scrimmage rather than a special-teams or administrative row.
   seasonType: ESPN season type for the game (2 = regular season, 3 = postseason).
-  second_level_yards: Rushing yards earned from 4 to 8, split evenly between line and carrier under the line-yards decomposition.
+  second_level_yards: 'The ball carrier''s half of yards 5-10 of a rush (the line takes the other half); 0 on carries of 4
+    yards or fewer. Assets published before the 2026-10 line-yards fix carry the old band here: half of yards 4-8 in college
+    football, half of yards 5-8 in the NFL (where the old parts came up half a yard short of the carry).'
   short_rush_attempt: True when the play is a rush in a short-yardage situation.
   short_rush_success: True when a short-yardage rush gained the yardage needed.
   standard_down: True when the offense is on schedule for the series -- first down, second down needing fewer than 8, or third/fourth
