@@ -322,6 +322,22 @@ def test_a_session_that_cannot_be_primed_is_a_failed_fetch(monkeypatch, home):
         R._get(f"{REST}/game/header/", HEADER)
 
 
+CHALLENGE = (FIXTURES / "khl_rest" / "servicepipe_challenge.html").read_text(encoding="utf-8")
+
+
+def test_a_challenge_page_on_priming_names_the_block(monkeypatch):
+    http = _http(monkeypatch, homes=[_Resp(text=CHALLENGE)])
+    with pytest.raises(AssetFetchError, match="ServicePipe's anti-bot JS-challenge page.*Retry later"):
+        R._get(f"{REST}/game/header/", HEADER)
+    assert [c[0] for c in http.calls] == ["GET"]  # never retried, never POSTed
+
+
+def test_a_challenge_page_on_a_post_names_the_block(monkeypatch):
+    _http(monkeypatch, _Resp(text=CHALLENGE))
+    with pytest.raises(AssetFetchError, match="ServicePipe"):
+        R._get(f"{REST}/game/header/", HEADER)
+
+
 def test_a_dead_connection_is_a_failed_fetch(monkeypatch):
     http = _http(monkeypatch, *[ConnectionResetError("reset")] * R.ATTEMPTS)
     with pytest.raises(AssetFetchError, match="fetch failed after 3 attempts"):

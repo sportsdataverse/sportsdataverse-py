@@ -44,6 +44,13 @@ A polars DataFrame (pandas when `return_as_pandas=True`), one row per odds event
 | `espn_date` | character | Kickoff date as YYYY-MM-DD: the first ten characters of the matched ESPN game's UTC start timestamp; null when no ESPN game matched. |
 | `matched_sources` | character | 'odds+espn' when the Odds API event matched an ESPN game on matchup_key, 'odds' when it did not; all 88 sampled rows were 'odds+espn'. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The Odds API answered 404 (e.g. an unknown `sport`). |
+| `AssetFetchError` | The Odds API answered any other non-2xx status (a rejected key, spent quota, a 5xx that outlived the retries) or a non-JSON body. Its error body used to be parsed as an event list. |
+
 **Example**
 
 ```python
@@ -168,6 +175,12 @@ A polars DataFrame (pandas when `return_as_pandas=True`) with columns `matchup_k
 | `fox_date` | character |  |
 | `yahoo_date` | character |  |
 | `matched_sources` | character |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `CrosswalkSourceError` | Full-season mode, a provider fetch failed after its retries (a 404 is "no games", never a failure). |
 
 **Example**
 

@@ -11,7 +11,7 @@ toc_max_heading_level: 2
 
 > **Note:** Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
 
-> **Note:** Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; `cba_runtime` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+> **Note:** Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; `cba_runtime` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
 
 > **Note:** Seasons: the API's season is the START year; every `season` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named `season` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
 
@@ -42,8 +42,8 @@ toc_max_heading_level: 2
 | [cba_player_extras](cba/player.md#cba_player_extras) | Fast-break points, dunk points and paint points per player of a finished game, one row per player. |
 | [cba_player_base](cba/player.md#cba_player_base) | Season player box (one page of the season player table). |
 | [cba_player_offensive](cba/player.md#cba_player_offensive) | Season player offensive rates (one page). |
-| [cba_player_defensive](cba/player.md#cba_player_defensive) | Season player defensive rates (one page). |
-| [cba_player_shots](cba/player.md#cba_player_shots) | Season player shot-zone profile (one page). |
+| [cba_player_defensive](cba/player-2.md#cba_player_defensive) | Season player defensive rates (one page). |
+| [cba_player_shots](cba/player-2.md#cba_player_shots) | Season player shot-zone profile (one page). |
 
 ## Team
 

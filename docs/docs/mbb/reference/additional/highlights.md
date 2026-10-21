@@ -319,6 +319,13 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `team_is_active` | logical | TRUE if the team is currently active. |
 | `team_logo_href` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `season_type` is not `"regular"`/`"postseason"`. |
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+
 **Example**
 
 ```python
@@ -639,6 +646,12 @@ One row per player -- see `parse_ncaa_bb_team_roster` for the column contract.
 | `ht_inches` | integer |  |
 | `player_id` | character | Unique player identifier. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Neither `team_id` nor a resolvable `team`/`season` pair was given. |
+
 **Example**
 
 ```python
@@ -683,6 +696,12 @@ One row per scheduled game -- see `parse_ncaa_bb_team_schedule` for the column c
 | `is_neutral` | logical |  |
 | `detail` | character | Detail. |
 | `attendance` | integer | Reported attendance. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Neither `team_id` nor a resolvable `team`/`season` pair was given. |
 
 **Example**
 

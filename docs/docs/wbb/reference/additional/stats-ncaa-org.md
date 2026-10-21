@@ -414,6 +414,14 @@ Fetch *path* (bare path or full stats.ncaa.org URL), cache-first.
 
 The response HTML, decoded as UTF-8.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | *path* is a full URL for a host other than `stats.ncaa.org`. |
+| `RuntimeError` | No proxy is configured (the binding directive -- there is no direct-fetch mode), or every proxy in the pool failed / looked banned. |
+| `ImportError` | An optional dependency the selected transport needs is not installed -- patchright for the browser transport. Raised immediately rather than rotated on: no amount of proxy rotation installs a package, and reporting it as a pool exhaustion reads as a ban. Carries the install instruction. |
+
 #### NcaaFetcher.fetch_team_roster
 
 `NcaaFetcher.fetch_team_roster(team_id: 'object', year_id: 'object', *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`

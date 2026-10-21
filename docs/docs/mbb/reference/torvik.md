@@ -75,6 +75,14 @@ GET /{year}_team_results.csv — men's T-Rank team ratings (adjoe/adjde/barthag,
 
 **`return_parsed=False`** — the raw CSV response body (`str`).
 
+### Raises {#torvik_ratings-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. Barttorvik.com returned 404 (no data file for that season). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#torvik_ratings-example}
 
 ```python
@@ -145,6 +153,14 @@ GET /{year}_fffinal.csv — men's four-factors splits (eFG%/FTR/OR%/TO% offense 
 
 **`return_parsed=False`** — the raw CSV response body (`str`).
 
+### Raises {#torvik_team_factors-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. Barttorvik.com returned 404 (no data file for that season). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#torvik_team_factors-example}
 
 ```python
@@ -206,6 +222,15 @@ GET /getgamestats.php?year=&json=1 — men's per-team-game efficiency and four-f
 | `game_date` | Date | date parsed to a Date (null when it does not parse). |
 
 **`return_parsed=False`** — the decoded JSON response body (the positional-field array).
+
+### Raises {#torvik_game_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. Barttorvik.com returned 404 (no data file for that season). |
+| `requests.exceptions.RequestException` | Connection-level failure after `dl_utils.download` exhausts its retries. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#torvik_game_stats-example}
 
@@ -304,6 +329,14 @@ GET /getadvstats.php?year=&csv=1 — men's player advanced stats (one row per pl
 
 **`return_parsed=False`** — the raw CSV response body (`str`).
 
+### Raises {#torvik_player_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. Barttorvik.com returned 404 (no data file for that season). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#torvik_player_stats-example}
 
 ```python
@@ -389,6 +422,15 @@ GET /{year}_super_sked.json — men's season schedule/results with T-Rank projec
 | `year` | integer | Season ending year inferred from game_date (July onward is the next season). |
 
 **`return_parsed=False`** — the decoded JSON response body (the positional-field array).
+
+### Raises {#torvik_game_schedule-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. Barttorvik.com returned 404 (no data file for that season). |
+| `requests.exceptions.RequestException` | Connection-level failure after `dl_utils.download` exhausts its retries. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#torvik_game_schedule-example}
 

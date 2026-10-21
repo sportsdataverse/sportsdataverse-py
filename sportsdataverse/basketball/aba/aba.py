@@ -330,8 +330,8 @@ def aba_game(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape) or, for the three live-match helpers, ``{'rows': [...]}``, plus ``_request`` (kind, season, sez, league and the game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -398,8 +398,8 @@ def aba_periods(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape) or, for the three live-match helpers, ``{'rows': [...]}``, plus ``_request`` (kind, season, sez, league and the game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -466,8 +466,8 @@ def aba_box_players(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape) or, for the three live-match helpers, ``{'rows': [...]}``, plus ``_request`` (kind, season, sez, league and the game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -534,8 +534,8 @@ def aba_box_teams(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape) or, for the three live-match helpers, ``{'rows': [...]}``, plus ``_request`` (kind, season, sez, league and the game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -602,8 +602,8 @@ def aba_pbp(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape) or, for the three live-match helpers, ``{'rows': [...]}``, plus ``_request`` (kind, season, sez, league and the game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -670,8 +670,8 @@ def aba_shots(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape) or, for the three live-match helpers, ``{'rows': [...]}``, plus ``_request`` (kind, season, sez, league and the game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -740,8 +740,8 @@ def aba_score_flow(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape) or, for the three live-match helpers, ``{'rows': [...]}``, plus ``_request`` (kind, season, sez, league and the game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -810,8 +810,8 @@ def aba_score_difference(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape) or, for the three live-match helpers, ``{'rows': [...]}``, plus ``_request`` (kind, season, sez, league and the game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -880,8 +880,8 @@ def aba_calendar(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape) or, for the three live-match helpers, ``{'rows': [...]}``, plus ``_request`` (kind, season, sez, league and the game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -946,8 +946,8 @@ def aba_standings(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape) or, for the three live-match helpers, ``{'rows': [...]}``, plus ``_request`` (kind, season, sez, league and the game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1014,8 +1014,8 @@ def aba_player(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape) or, for the three live-match helpers, ``{'rows': [...]}``, plus ``_request`` (kind, season, sez, league and the game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1082,8 +1082,8 @@ def aba_player_games(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape) or, for the three live-match helpers, ``{'rows': [...]}``, plus ``_request`` (kind, season, sez, league and the game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:

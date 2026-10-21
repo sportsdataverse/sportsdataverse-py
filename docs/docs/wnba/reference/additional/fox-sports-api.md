@@ -34,6 +34,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `stat` | character | Stat. |
 | `value` | character | Numeric or string value field. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
+
 **Example**
 
 ```python
@@ -177,6 +184,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `entity_id` | character | Fox id of the row's linked player or team as a string: the trailing number of the row's entityLink contentUri. |
 | `min` | character | Minutes played. |
 | `mpg` | character | Minutes per game. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 
 **Example**
 
@@ -411,6 +425,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 No returns table is published for this function: no capture: for this sport Fox sends the odds under sectionList modules rather than the top-level sixPack key the shared parser reads (football and MLB still use sixPack), so it returns an empty frame for every game.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
+
 **Example**
 
 ```python
@@ -448,6 +469,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `left_score_change` | logical |  |
 | `right_score_change` | logical |  |
 | `play_text` | character | Play description text. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 
 **Example**
 
@@ -561,6 +589,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
 | `western` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
+
 **Example**
 
 ```python
@@ -596,6 +631,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `opponent` | character | Opponent. |
 | `stat` | character | Stat. |
 | `value` | character | Numeric or string value field. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 
 **Example**
 
@@ -653,6 +695,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `college` | character | College or school attended. |
 | `athlete_id` | character | Unique athlete identifier (ESPN). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
+
 **Example**
 
 ```python
@@ -686,6 +735,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `stat_abbreviation` | character |  |
 | `player` | character | Player name. |
 | `value` | character | Numeric or string value field. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 
 **Example**
 
@@ -751,6 +807,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `fox_team_id` | character | Fox Bifrost team id (NA if unmatched). |
 | `fox_team_name` | character | Fox team name (NA if unmatched). |
 | `fox_section` | character | Fox conference/section label (NA if unmatched). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 
 **Example**
 

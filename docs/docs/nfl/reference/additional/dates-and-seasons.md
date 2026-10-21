@@ -16,11 +16,17 @@ Return the current NFL season year.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `roster` | `bool` | `False` | If True, use roster-year logic (current calendar year on/after March 15, otherwise previous year). If False, use season logic (current calendar year on/after the Thursday following Labor Day, otherwise previous year). |
+| `roster` | `bool` | `False` | If True, use roster-year logic (current calendar year on/after March 15, otherwise previous year). If False, use season logic (current calendar year on/after the Wednesday following Labor Day, otherwise previous year), as nflreadr's `most_recent_season()`. |
 
 **Returns**
 
 The current season (or roster) year.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | If `roster` is not a bool. |
 
 **Example**
 
@@ -49,12 +55,18 @@ Return the current NFL week (1-22).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `use_date` | `bool` | `True` | If True (default), compute the week purely from the calendar (number of weeks since the first Thursday of September of the current season). If False, hit the live schedule via `load_nfl_schedule()` and return the week of the next unplayed game (matches nflreadpy's `use_date=False` path). |
+| `use_date` | `bool` | `True` | If True (default), compute the week purely from the calendar (number of weeks since the Thursday after Labor Day of the current season, as nflreadr's `get_current_week(use_date = TRUE)`). If False, hit the live schedule via `load_nfl_schedule()` and return the week of the next unplayed game (matches nflreadr's `use_date = FALSE` path). nflreadr defaults `use_date = FALSE`; sdv-py keeps `True` so the bare call stays offline. |
 | `roster` | `bool` | `False` | Forwarded to `get_current_nfl_season()` for season inference. |
 
 **Returns**
 
 The current week, capped at 22.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | If `use_date` or `roster` is not a bool. |
 
 **Example**
 
@@ -92,11 +104,17 @@ Return the current NFL season year.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `roster` | `bool` | `False` | If True, use roster-year logic (current calendar year on/after March 15, otherwise previous year). If False, use season logic (current calendar year on/after the Thursday following Labor Day, otherwise previous year). |
+| `roster` | `bool` | `False` | If True, use roster-year logic (current calendar year on/after March 15, otherwise previous year). If False, use season logic (current calendar year on/after the Wednesday following Labor Day, otherwise previous year), as nflreadr's `most_recent_season()`. |
 
 **Returns**
 
 The current season (or roster) year.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | If `roster` is not a bool. |
 
 **Example**
 
@@ -125,12 +143,18 @@ Return the current NFL week (1-22).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `use_date` | `bool` | `True` | If True (default), compute the week purely from the calendar (number of weeks since the first Thursday of September of the current season). If False, hit the live schedule via `load_nfl_schedule()` and return the week of the next unplayed game (matches nflreadpy's `use_date=False` path). |
+| `use_date` | `bool` | `True` | If True (default), compute the week purely from the calendar (number of weeks since the Thursday after Labor Day of the current season, as nflreadr's `get_current_week(use_date = TRUE)`). If False, hit the live schedule via `load_nfl_schedule()` and return the week of the next unplayed game (matches nflreadr's `use_date = FALSE` path). nflreadr defaults `use_date = FALSE`; sdv-py keeps `True` so the bare call stays offline. |
 | `roster` | `bool` | `False` | Forwarded to `get_current_nfl_season()` for season inference. |
 
 **Returns**
 
 The current week, capped at 22.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | If `use_date` or `roster` is not a bool. |
 
 **Example**
 

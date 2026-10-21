@@ -6,8 +6,8 @@ sidebar_position: 50
 ---
 # IBBA — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.basketball.ibba`
-not covered by the generated API-endpoint reference above.
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.basketball.ibba` that are not
+generated API-endpoint wrappers (those have their own reference pages).
 
 ## IDs and crosswalks
 
@@ -32,6 +32,13 @@ polars.DataFrame | pandas.DataFrame: `game_id` (IBBA) and `segev_game_id` (the `
 |---|---|---|
 | `game_id` | integer | IBBA game id (the game_id of the ibba_games frame). |
 | `segev_game_id` | integer | Segev game id of the same game (the game_id every ibba_segev_* wrapper takes). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | A missing column, or a key that maps to two ids. |
+| `TypeError` | `df` is not polars, or an id column has the wrong dtype. |
 
 **Example**
 

@@ -1,11 +1,92 @@
 ---
-title: "NBA — NBA Stats API (stats.nba.com) — League dashboards: leaguedashptteamdefend–leaguedashteamstats"
-sidebar_label: "League dashboards: leaguedashptteamdefend–leaguedashteamstats"
+title: "NBA — NBA Stats API (stats.nba.com) — League dashboards: leaguedashptstats–leaguedashteamstats"
+sidebar_label: "League dashboards: leaguedashptstats–leaguedashteamstats"
 sidebar_position: 10
-description: "NBA — NBA Stats API (stats.nba.com) — League dashboards: leaguedashptteamdefend–leaguedashteamstats — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — NBA Stats API (stats.nba.com) — League dashboards: leaguedashptstats–leaguedashteamstats — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NBA — NBA Stats API (stats.nba.com) — League dashboards: leaguedashptteamdefend–leaguedashteamstats
+# NBA — NBA Stats API (stats.nba.com) — League dashboards: leaguedashptstats–leaguedashteamstats
+
+## nba_stats_leaguedashptstats
+
+GET /stats/leaguedashptstats
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/leaguedashptstats`
+
+**Valid URL:** [https://stats.nba.com/stats/leaguedashptstats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&Height=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=PerGame&PlayerExperience=&PlayerOrTeam=Player&PlayerPosition=&PtMeasureType=Drives&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=](https://stats.nba.com/stats/leaguedashptstats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&Height=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=PerGame&PlayerExperience=&PlayerOrTeam=Player&PlayerPosition=&PtMeasureType=Drives&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `College` | `college_nullable` |  |  | `Y` | College query parameter. |
+| `Conference` | `conference_nullable` |  |  | `Y` | Conference query parameter. |
+| `Country` | `country_nullable` |  |  | `Y` | Country query parameter. |
+| `DateFrom` | `date_from_nullable` |  |  | `Y` | DateFrom query parameter. |
+| `DateTo` | `date_to_nullable` |  |  | `Y` | DateTo query parameter. |
+| `Division` | `division_simple_nullable` |  |  | `Y` | Division query parameter. |
+| `DraftPick` | `draft_pick_nullable` |  |  | `Y` | DraftPick query parameter. |
+| `DraftYear` | `draft_year_nullable` |  |  | `Y` | DraftYear query parameter. |
+| `GameScope` | `game_scope_simple_nullable` |  |  | `Y` | GameScope query parameter. |
+| `Height` | `height_nullable` |  |  | `Y` | Height query parameter. |
+| `LastNGames` | `last_n_games` |  |  | `Y` | LastNGames query parameter. |
+| `LeagueID` | `league_id` |  |  | `Y` | LeagueID query parameter. |
+| `Location` | `location_nullable` |  |  | `Y` | Location query parameter. |
+| `Month` | `month` |  |  | `Y` | Month query parameter. |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` | OpponentTeamID query parameter. |
+| `Outcome` | `outcome_nullable` |  |  | `Y` | Outcome query parameter. |
+| `PORound` | `po_round_nullable` |  |  | `Y` | PORound query parameter. |
+| `PerMode` | `per_mode_simple` |  |  | `Y` | PerMode query parameter. |
+| `PlayerExperience` | `player_experience_nullable` |  |  | `Y` | PlayerExperience query parameter. |
+| `PlayerOrTeam` | `player_or_team` |  |  | `Y` | PlayerOrTeam query parameter. |
+| `PlayerPosition` | `player_position_abbreviation_nullable` |  |  | `Y` | PlayerPosition query parameter. |
+| `PtMeasureType` | `pt_measure_type` |  |  | `Y` | PtMeasureType query parameter. |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time by a calendar cutoff, the month after a season's first games, so it can lag the newest rows by a few weeks. An NBA season tips off in late October and becomes the default in November (``2025-26`` through October 2026, ``2026-27`` from November 2026); a G League season (regular season from late December) in January; a Summer League (played in July, which stats.nba.com labels ``2026-27`` in 2026) in August; a draft combine (May) in June; a draft (``drafthistory``, a year; late June) in July. With season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) the NBA and the G League roll over in May, after their playoffs start; with ``All Star`` the NBA rolls over in March, after the February game (the G League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` | SeasonSegment query parameter. |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` | Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs``, ``PlayIn`` or ``All Star`` (each endpoint takes a subset). Not ESPN's numeric code: ``3`` is HTTP 400. A default season follows it: ``Playoffs`` / ``PlayIn`` roll over in May (NBA, G League), ``All Star`` in March (NBA). |
+| `StarterBench` | `starter_bench_nullable` |  |  | `Y` | StarterBench query parameter. |
+| `TeamID` | `team_id_nullable` |  |  | `Y` | TeamID query parameter. |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` | VsConference query parameter. |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` | VsDivision query parameter. |
+| `Weight` | `weight_nullable` |  |  | `Y` | Weight query parameter. |
+
+### Returns {#nba_stats_leaguedashptstats-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `gp` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `min` | numeric | Minutes played. |
+| `dist_feet` | numeric | NBA or WNBA Stats value for dist feet in the leaguedashptstats result set. |
+| `dist_miles` | numeric | NBA or WNBA Stats value for dist miles in the leaguedashptstats result set. |
+| `dist_miles_off` | numeric | NBA or WNBA Stats value for dist miles offensive in the leaguedashptstats result set. |
+| `dist_miles_def` | numeric | NBA or WNBA Stats value for dist miles defensive in the leaguedashptstats result set. |
+| `avg_speed` | numeric | NBA or WNBA Stats value for average speed in the leaguedashptstats result set. |
+| `avg_speed_off` | numeric | NBA or WNBA Stats value for average speed offensive in the leaguedashptstats result set. |
+| `avg_speed_def` | numeric | NBA or WNBA Stats value for average speed defensive in the leaguedashptstats result set. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nba_stats_leaguedashptstats-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#nba_stats_leaguedashptstats-example}
+
+```python
+nba_stats_leaguedashptstats(league_id='00', season='2024-25')
+```
+
+_Last validated n/a._
 
 ## nba_stats_leaguedashptteamdefend
 
@@ -58,6 +139,14 @@ GET /stats/leaguedashptteamdefend
 | `pct_plusminus` | numeric | Percentage share of plusminus for the requested NBA or WNBA Stats split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nba_stats_leaguedashptteamdefend-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nba_stats_leaguedashptteamdefend-example}
 
@@ -173,6 +262,14 @@ GET /stats/leaguedashteamclutch
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nba_stats_leaguedashteamclutch-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nba_stats_leaguedashteamclutch-example}
 
 ```python
@@ -244,6 +341,14 @@ GET /stats/leaguedashteamptshot
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nba_stats_leaguedashteamptshot-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nba_stats_leaguedashteamptshot-example}
 
@@ -331,6 +436,14 @@ GET /stats/leaguedashteamshotlocations
 | `40+_ft_fg_pct` | numeric | Team field-goal percentage on attempts from 40 feet and beyond, as a decimal. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nba_stats_leaguedashteamshotlocations-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nba_stats_leaguedashteamshotlocations-example}
 
@@ -443,6 +556,14 @@ GET /stats/leaguedashteamstats
 | `plus_minus_rank` | integer | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nba_stats_leaguedashteamstats-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nba_stats_leaguedashteamstats-example}
 

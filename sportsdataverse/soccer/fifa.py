@@ -54,7 +54,7 @@ def fifa_calendar_matches(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` (paginated routes return the first page; the API's paging request parameter is undocumented, see the spec's x-pagination) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the FIFA API returned 404 (unknown competition or team id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The FIFA API returned 404 (unknown competition or team id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -113,7 +113,7 @@ def fifa_competition(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` (paginated routes return the first page; the API's paging request parameter is undocumented, see the spec's x-pagination) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the FIFA API returned 404 (unknown competition or team id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The FIFA API returned 404 (unknown competition or team id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -169,7 +169,7 @@ def fifa_competitions(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` (paginated routes return the first page; the API's paging request parameter is undocumented, see the spec's x-pagination) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the FIFA API returned 404 (unknown competition or team id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The FIFA API returned 404 (unknown competition or team id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -224,7 +224,7 @@ def fifa_live_football(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` (paginated routes return the first page; the API's paging request parameter is undocumented, see the spec's x-pagination) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the FIFA API returned 404 (unknown competition or team id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The FIFA API returned 404 (unknown competition or team id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -280,7 +280,7 @@ def fifa_players_search(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` (paginated routes return the first page; the API's paging request parameter is undocumented, see the spec's x-pagination) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the FIFA API returned 404 (unknown competition or team id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The FIFA API returned 404 (unknown competition or team id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -339,7 +339,7 @@ def fifa_seasons(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` (paginated routes return the first page; the API's paging request parameter is undocumented, see the spec's x-pagination) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the FIFA API returned 404 (unknown competition or team id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The FIFA API returned 404 (unknown competition or team id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -397,7 +397,7 @@ def fifa_stadiums(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` (paginated routes return the first page; the API's paging request parameter is undocumented, see the spec's x-pagination) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the FIFA API returned 404 (unknown competition or team id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The FIFA API returned 404 (unknown competition or team id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -454,7 +454,7 @@ def fifa_team(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` (paginated routes return the first page; the API's paging request parameter is undocumented, see the spec's x-pagination) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the FIFA API returned 404 (unknown competition or team id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The FIFA API returned 404 (unknown competition or team id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -510,7 +510,7 @@ def fifa_teams_search(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` (paginated routes return the first page; the API's paging request parameter is undocumented, see the spec's x-pagination) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the FIFA API returned 404 (unknown competition or team id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The FIFA API returned 404 (unknown competition or team id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 

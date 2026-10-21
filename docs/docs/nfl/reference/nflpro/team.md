@@ -62,6 +62,13 @@ GET /api/secured/stats/team-offense/overview/season — one row per team for the
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nfl_pro_team_offense_overview_season-raises}
+
+| Exception | Description |
+|---|---|
+| `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
+| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
+
 ### Example {#nfl_pro_team_offense_overview_season-example}
 
 ```python
@@ -132,6 +139,13 @@ GET /api/secured/stats/team-offense/overview/week — one row per team per week 
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nfl_pro_team_offense_overview_week-raises}
+
+| Exception | Description |
+|---|---|
+| `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
+| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
+
 ### Example {#nfl_pro_team_offense_overview_week-example}
 
 ```python
@@ -201,6 +215,13 @@ GET /api/secured/stats/team-defense/overview/season — one row per team for the
 | `total_takeaways` | integer | Takeaways, season total (interception + fumble_recovered). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nfl_pro_team_defense_overview_season-raises}
+
+| Exception | Description |
+|---|---|
+| `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
+| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
 
 ### Example {#nfl_pro_team_defense_overview_season-example}
 
@@ -278,6 +299,13 @@ GET /api/secured/stats/team-defense/overview/week — one row per team per week 
 | `fapi_game_id` | character | NFL Football API (FAPI) UUID of the game, the id api.nfl.com uses for the same game. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nfl_pro_team_defense_overview_week-raises}
+
+| Exception | Description |
+|---|---|
+| `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
+| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
 
 ### Example {#nfl_pro_team_defense_overview_week-example}
 

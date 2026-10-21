@@ -54,6 +54,12 @@ unless `fox=True` or `alt_root` is set.
 
 `{"team": ..., "schedule": ..., "player": ...}`, with the same columns as `nba_team_crosswalk`, `nba_schedule_crosswalk` and `nba_player_crosswalk`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | `stats_dir` holds no box scores for `season`. |
+
 **Example**
 
 ```python
@@ -121,6 +127,12 @@ Jaro-Winkler with jersey and DOB tiebreaks); Fox contributes
 | `match_confidence` | double | Jaro-Winkler score or 1 for exact (NA if none). |
 | `match_keys` | character | NA (reserved for future use). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `CrosswalkSourceError` | A Stats team-directory or `commonteamroster` call for any team failed or was refused (stats.nba.com answers a throttle or block with an empty body), so `nba_*` would otherwise be silently null. Throttles are retried only when `SDV_PY_NBA_STATS_RETRIES` is set (default `0`, backoff `SDV_PY_NBA_STATS_BACKOFF`); without it one transient refusal aborts the whole build. The per-team ESPN or Fox rosters failed every per-item fetch and answered none -- the signature of an unreachable or rate-limited host -- or, with `strict`, any one fetch failed. Isolated failures are skipped and logged as a warning. |
+
 **Example**
 
 ```python
@@ -163,6 +175,12 @@ effectively current-season.
 `pl.DataFrame` (or pandas) with `SCHEDULE_COLUMNS`.
 
 No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `CrosswalkSourceError` | The per-date ESPN scoreboard failed every per-item fetch and answered none -- the signature of an unreachable or rate-limited host -- or, with `strict`, any one fetch failed. Isolated failures are skipped and logged as a warning. |
 
 **Example**
 
@@ -222,6 +240,12 @@ historical relocations are not back-modelled.
 | `yahoo_team_name` | character | Yahoo team name (NA placeholder). |
 | `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `match_confidence` | double | Jaro-Winkler score or 1 for exact (NA if none). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `CrosswalkSourceError` | A source that was not passed in pre-fetched could not be produced (Fox or the Stats endpoints). Building on a missing source would emit a well-formed crosswalk whose `fox_*` / `nba_*` columns are silently all-null, so it fails here instead. |
 
 **Example**
 

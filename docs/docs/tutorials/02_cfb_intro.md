@@ -40,13 +40,13 @@ Everything returns a tidy **polars** `DataFrame` by default — pass
 | [`load_cfb_team_info`](../cfb/reference/loaders/team.md#load_cfb_team_info) | **Team** metadata: conference, colors, venue | ⭐ release |
 | [`load_cfb_ratings`](../cfb/reference/loaders/other.md#load_cfb_ratings) | Opponent-adjusted **EPA ratings** per team-season | ⭐ release |
 | [`load_cfb_betting_lines`](../cfb/reference/additional/sportsdataverse-data-releases.md#load_cfb_betting_lines) | Historical **betting market** lines (spread/total/ML) | ⭐ release |
-| [`espn_cfb_scoreboard`](../cfb/reference/site.md#espn_cfb_scoreboard) | Live + recent **scoreboard** for a date/week | ⭐ ESPN |
+| [`espn_cfb_scoreboard`](../cfb/reference/site/other.md#espn_cfb_scoreboard) | Live + recent **scoreboard** for a date/week | ⭐ ESPN |
 | [`espn_cfb_schedule`](../cfb/reference/additional/highlights.md#espn_cfb_schedule) | ESPN **schedule** frame for a date/week | ⭐ ESPN |
 | [`espn_cfb_teams`](../cfb/reference/additional/espn.md#espn_cfb_teams) | Every FBS/FCS **team** (grab `team_id`s) | ⭐ ESPN |
-| [`espn_cfb_team_roster`](../cfb/reference/site.md#espn_cfb_team_roster) | One team's **roster** | ⭐ ESPN |
-| [`espn_cfb_team_schedule`](../cfb/reference/site.md#espn_cfb_team_schedule) | One team's **schedule** | ⭐ ESPN |
-| [`espn_cfb_standings`](../cfb/reference/site.md#espn_cfb_standings) | Conference / division **standings** | ⭐ ESPN |
-| [`espn_cfb_rankings`](../cfb/reference/site.md#espn_cfb_rankings) | AP / Coaches / CFP **polls** | ⭐ ESPN |
+| [`espn_cfb_team_roster`](../cfb/reference/site/team.md#espn_cfb_team_roster) | One team's **roster** | ⭐ ESPN |
+| [`espn_cfb_team_schedule`](../cfb/reference/site/team.md#espn_cfb_team_schedule) | One team's **schedule** | ⭐ ESPN |
+| [`espn_cfb_standings`](../cfb/reference/site/other.md#espn_cfb_standings) | Conference / division **standings** | ⭐ ESPN |
+| [`espn_cfb_rankings`](../cfb/reference/site/other.md#espn_cfb_rankings) | AP / Coaches / CFP **polls** | ⭐ ESPN |
 | [`espn_cfb_leaders`](../cfb/reference/web.md#espn_cfb_leaders) | League **stat leaders** by category | ⭐ ESPN |
 | [`espn_cfb_recruits`](../cfb/reference/core/other.md#espn_cfb_recruits) | Season **recruiting** class | ⭐ ESPN |
 | [`espn_cfb_play_participants`](../cfb/reference/additional/espn.md#espn_cfb_play_participants) | Per-play **athletes** (passer/rusher/tackler…) | ⭐ ESPN |
@@ -178,7 +178,7 @@ pbp.select(have).head() if have else 'pbp not published for these seasons right 
 ## 📡 Live from ESPN: the scoreboard
 
 When you need *today's* slate (or a specific date), the ESPN wrappers shine.
-[`espn_cfb_scoreboard`](../cfb/reference/site.md#espn_cfb_scoreboard) takes a
+[`espn_cfb_scoreboard`](../cfb/reference/site/other.md#espn_cfb_scoreboard) takes a
 `dates=YYYYMMDD` (or season year) and returns the games on the board. We wrap
 it in `safe()` since live endpoints can be quiet in the offseason.
 
@@ -547,8 +547,8 @@ A quick lap through the rest of the live ESPN surface. Each is wrapped in
 
 | Function | Use it for |
 |---|---|
-| [`espn_cfb_standings`](../cfb/reference/site.md#espn_cfb_standings) | conference / division standings |
-| [`espn_cfb_rankings`](../cfb/reference/site.md#espn_cfb_rankings) | AP / Coaches / CFP polls |
+| [`espn_cfb_standings`](../cfb/reference/site/other.md#espn_cfb_standings) | conference / division standings |
+| [`espn_cfb_rankings`](../cfb/reference/site/other.md#espn_cfb_rankings) | AP / Coaches / CFP polls |
 | [`espn_cfb_leaders`](../cfb/reference/web.md#espn_cfb_leaders) | league stat leaders by category |
 | [`espn_cfb_recruits`](../cfb/reference/core/other.md#espn_cfb_recruits) | a season's recruiting class |
 

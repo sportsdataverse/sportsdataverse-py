@@ -28,6 +28,13 @@ toc_max_heading_level: 2
 | [wjbl_game_months](wjbl/game.md#wjbl_game_months) | Months (YYYY-MM) that have games in a season, newest first; each is one page of wjbl_schedule. |
 | [wjbl_game_info](wjbl/game.md#wjbl_game_info) | Game information of a final game: venue, times, referees, links and the Japanese game report, one row. |
 
+## Player
+
+| Function | Summary |
+|---|---|
+| [wjbl_player_period_leaders](wjbl/player.md#wjbl_player_period_leaders) | Leading scorer, passer and rebounder of each team per period, half and game (2018-19 on). |
+| [wjbl_player](wjbl/player.md#wjbl_player) | Player profile: current team, names, bio and career notes, one row. |
+
 ## Team
 
 | Function | Summary |
@@ -48,9 +55,7 @@ toc_max_heading_level: 2
 | [wjbl_period_scores](wjbl/other.md#wjbl_period_scores) | Points of each side in each period played (quarters and overtimes) from the game header. |
 | [wjbl_box_score](wjbl/other.md#wjbl_box_score) | Box score of a final game (2013-14 on): one row per player of both teams. |
 | [wjbl_pbp](wjbl/other.md#wjbl_pbp) | Play-by-play of a final game (2018-19 on): one row per play, Japanese action vocabulary, no shot x/y. |
-| [wjbl_player_period_leaders](wjbl/other.md#wjbl_player_period_leaders) | Leading scorer, passer and rebounder of each team per period, half and game (2018-19 on). |
 | [wjbl_standing_seasons](wjbl/other.md#wjbl_standing_seasons) | Every season phase (season_id) with its edition name and standings flags. |
 | [wjbl_head_to_head](wjbl/other.md#wjbl_head_to_head) | Head-to-head results grid (hoshitori-hyo) of one or more season phases: one row per game played. |
 | [wjbl_roster](wjbl/other.md#wjbl_roster) | Players of a team in a season phase, with the head coach. |
 | [wjbl_staff](wjbl/other.md#wjbl_staff) | Staff of a team in a season phase (general manager, assistant coaches, support staff). |
-| [wjbl_player](wjbl/other.md#wjbl_player) | Player profile: current team, names, bio and career notes, one row. |
