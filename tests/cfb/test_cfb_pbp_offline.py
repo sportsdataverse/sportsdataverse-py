@@ -298,6 +298,34 @@ def test_the_override_flag_rejects_anything_else(value):
         CFBPlayProcess(gameId=401628455, odds_override={**_LEGACY, "overUnderAvailable": value})
 
 
+_TWO_STATE = [
+    (True, True),
+    (False, False),
+    ("False", False),
+    ("TRUE", True),
+    (" 0 ", False),
+    ("1", True),
+    (0, False),
+    (1, True),
+]
+
+
+@pytest.mark.parametrize("key", ["homeFavorite", "gameSpreadAvailable"])
+@pytest.mark.parametrize(("value", "expected"), _TWO_STATE)
+def test_the_required_override_flags_are_read_strictly(key, value, expected):
+    """WB-cfb-8: ``bool("False")`` is True, so the two required flags read a string by its text too."""
+    proc = CFBPlayProcess(gameId=401628455, odds_override={**_LEGACY, key: value})
+    assert proc.odds_override[key] is expected
+
+
+@pytest.mark.parametrize("key", ["homeFavorite", "gameSpreadAvailable"])
+@pytest.mark.parametrize("value", [None, float("nan"), "no", "", 2, 0.5, [False]])
+def test_the_required_override_flags_reject_anything_else(key, value):
+    """The two keys are required, so None (or a pandas NaN) is an error here, not unknown."""
+    with pytest.raises(ValueError, match=key):
+        CFBPlayProcess(gameId=401628455, odds_override={**_LEGACY, key: value})
+
+
 def _core_odds_init(monkeypatch, getter):
     monkeypatch.setattr("sportsdataverse.cfb.cfb_pbp._download_json", getter)
     proc = CFBPlayProcess(gameId=401628455, join_participants=False)

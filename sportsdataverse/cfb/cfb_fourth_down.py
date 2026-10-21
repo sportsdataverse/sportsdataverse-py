@@ -280,7 +280,8 @@ def _to_pandas(df) -> pd.DataFrame:
     out = pd.DataFrame(index=range(len(df)))
     for short, src in _PBP_COLS.items():
         out[short] = df[src].to_numpy() if src in df.columns else np.nan
-    # C-NF-2 shim, removed by a retrain on the corrected flag (owner decision): the WP booster was trained on 1 - is_home here
+    # C-NF-2 shim, until a WP retrain on the corrected flag (none has shipped; retraining is an open owner decision): the
+    # WP booster was trained on 1 - is_home here
     # (cfb_pbp._as_trained_2h_flag), not on the corrected published flag; the flips below keep toggling it
     out["pos_team_receives_2H_kickoff"] = ~out["is_home"].astype(bool)
     return out

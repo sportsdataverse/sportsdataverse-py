@@ -482,6 +482,17 @@ def _optional_flag(value: object, key: str) -> bool | None:
     return flag
 
 
+def _required_flag(value: object, key: str) -> bool:
+    """A required two-state ``odds_override`` flag: a bool, 1/0 or ``"true"``/``"false"``/``"1"``/``"0"``.
+
+    ``bool("False")`` is True, so a string flag is read by its text; anything else, None included, raises (WB-cfb-8).
+    """
+    flag = value if isinstance(value, bool) else _FLAG_TEXT.get(str(value).strip().lower())
+    if flag is None:
+        raise ValueError(f"odds_override[{key!r}] must be True/False, 1/0 or 'true'/'false'/'1'/'0'; got {value!r}")
+    return flag
+
+
 def _warn_default_total(game_id, odds_source, total) -> None:
     """Warn that a game with a market spread has no market total (R828-3): the total is a default.
 
@@ -544,8 +555,9 @@ def _with_ot_second(play_df):
 def _as_trained_2h_flag(features: pl.DataFrame) -> pl.DataFrame:
     """The booster input for ``pos_team_receives_2H_kickoff``: ``not is_home``, as the boosters were trained.
 
-    Shim for C-NF-2, removed by a retrain on the corrected flag (owner decision). The bundled ``wp_spread`` / ``wp_naive``
-    were trained on a frame where the flag was ``1 - is_home`` on every row, both halves, so they
+    Shim for C-NF-2, until the WP boosters are retrained on the corrected flag. No retrain has shipped (task 3.8
+    changed no model bytes); whether to retrain is an open owner decision, not a done task. The bundled
+    ``wp_spread`` / ``wp_naive`` were trained on a frame where the flag was ``1 - is_home`` on every row, both halves, so they
     learned it as a second home/away indicator. Feeding them the corrected published flag (true
     only on the opening kicker's first-half possessions) degrades ``wp_before_naive``; feeding
     the trained semantics keeps WP as it was while the published column stays correct.
@@ -2638,8 +2650,8 @@ class CFBPlayProcess(object):
             odds_override = {
                 "gameSpread": float(odds_override["gameSpread"]),
                 "overUnder": float(odds_override["overUnder"]),
-                "homeFavorite": bool(odds_override["homeFavorite"]),
-                "gameSpreadAvailable": bool(odds_override["gameSpreadAvailable"]),
+                "homeFavorite": _required_flag(odds_override["homeFavorite"], "homeFavorite"),
+                "gameSpreadAvailable": _required_flag(odds_override["gameSpreadAvailable"], "gameSpreadAvailable"),
                 "overUnderAvailable": _optional_flag(odds_override.get("overUnderAvailable"), "overUnderAvailable"),
             }
         self.gameId = int(gameId)
@@ -8039,8 +8051,9 @@ class CFBPlayProcess(object):
                 # that snap's start IS this play's end (yardLine and yard too). The same-team check is
                 # a defence if change_of_pos_team is wrong at source; no corpus row decides it today
                 # (registry: retired cfb-supp002-no-same-team-check). The next snap must be in the same
-                # period or the same half of regulation (an overtime period hands the ball back to the
-                # team that just had it). Fumble plays only: the same end block on other play types is
+                # period or the same half of regulation, both rows in regulation (_in_same_half, R905-2,
+                # WB-cfb-4: an overtime period hands the ball back to the team that just had it; it moves 0 rows
+                # over the 573 cfb-raw OT games with a Q3/Q4 fumble, the only games it can reach). Fumble plays only: the same end block on other play types is
                 # EX-3.4-c. Reach over all 20,719 cfb-raw games: 20 rows in 18 games.
                 _supp_002=(pl.col("end.yardLine") == 0)
                 .and_(pl.col("end.yardsToEndzone") == 0)
@@ -8048,10 +8061,7 @@ class CFBPlayProcess(object):
                 .and_(pl.col("scoring_play") == False)
                 .and_(pl.col("change_of_pos_team") == False)
                 .and_(_next_real_play("start.pos_team.id") == pl.col("start.pos_team.id"))
-                .and_(
-                    (_next_real_play("period") == pl.col("period"))
-                    | ((pl.col("period") < 5) & (_next_real_play("half") == pl.col("half")))
-                )
+                .and_(_in_same_half(_next_real_play))
                 .fill_null(False),
             )
             .with_columns(
