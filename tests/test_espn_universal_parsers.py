@@ -1476,24 +1476,26 @@ _HOSTILE = {
     # a SchemaDriftWarning allowed; the 3.10 CI job (#941) runs this sweep on pandas 2.
     "scalar_list": ["a", "b", "c"],
 }
-# Parsers whose documented payload IS a scalar array (247 ``sports/{k}/year`` -> [2007, ...], a list of ids,
-# MLB timecodes): one row per scalar in this one column, never drift.
-_SCALAR_ARRAY = {
-    "cbs.cbs_napi_parsers.parse_cbs_napi": "value",
+# A scalar array is a real payload for these (committed captures: mlb_api/game_timestamps.json,
+# on3/filters_status.json, sports247/sports247_sports_year_fb.json): one row per scalar in this one column.
+_SCALAR_ARRAY_CAPTURED = {
     "cfb.on3_parsers.parse_on3_rdb": "value",
-    "cfb.sports247_parsers.parse_sports247_institution_rankings": "value",
     "cfb.sports247_parsers.parse_sports247_result_set": "value",
-    "cfb.sports247_parsers.parse_sports247_teams": "value",
-    "euroleague.euroleague_parsers.parse_euroleague": "value",
     "mlb.mlb_api_parsers.parse_mlb_api_timecodes": "timecode",
+}
+# Generic "any body" flatteners whose shape rule reads a scalar array as a ``value`` column by design
+# (soccer/_frames.rows_to_frame, cbs_napi_parsers._rows_to_frame); no capture of that shape is committed.
+_SCALAR_ARRAY_ANY_BODY = {
+    "cbs.cbs_napi_parsers.parse_cbs_napi": "value",
+    "euroleague.euroleague_parsers.parse_euroleague": "value",
     "soccer.asa_parsers.parse_asa": "value",
     "soccer.fifa_parsers.parse_fifa": "value",
     "soccer.fotmob_parsers.parse_fotmob": "value",
     "soccer.mls.mls_api_parsers.parse_mls_api": "value",
-    "soccer.mls.mls_api_parsers.parse_mls_entity": "value",
     "soccer.nwsl.nwsl_api_parsers.parse_nwsl_sdp": "value",
     "soccer.uefa_parsers.parse_uefa": "value",
 }
+_SCALAR_ARRAY = {**_SCALAR_ARRAY_CAPTURED, **_SCALAR_ARRAY_ANY_BODY}
 # The scalar-list cases still N x 0 on pandas 2 in modules #941 (WB-codegen-runtime-1) fixes; the devel-providers
 # sync brings it, the strict xfail then XPASSes and this dict must be emptied.
 _SCALAR_LIST_941 = {

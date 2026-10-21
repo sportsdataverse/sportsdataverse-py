@@ -423,22 +423,30 @@ def _dict_only(parse: _Parser) -> _Parser:
     return _cast(_Parser, _normalize_payload(parse, lambda payload: payload if isinstance(payload, dict) else {}))
 
 
-def _object_records(records: Any, where: str) -> list | None:
-    """``records`` without its null entries, ready for ``pd.json_normalize``; ``None`` when it drifted (WB-providers-2).
+def _object_records(records: Any, where: str, stacklevel: int = 3) -> list | None:
+    """``records`` without its null rows, ready for ``pd.json_normalize``; ``None`` when it drifted (WB-providers-2).
 
-    A record that is not an object is drift: pandas 2 reads a scalar record as an empty row (an N x 0
-    frame) and pandas 3 raises, so the provider flatteners check here first, warn
-    :class:`SchemaDriftWarning` naming ``where`` (``"<parser>: <payload path>"``) and return zero rows.
-    ponytail: one row check per flattener; it becomes #941's ``_require_objects`` once that syncs in.
+    The rule: ``None`` is no records; a null row (``None``, ``NaN``, ``pd.NA``) is no row and is dropped;
+    a ``records`` that is not a list, or any other row that is not an object, is drift. pandas 2 reads a
+    scalar row as an empty one (an N x 0 frame) and pandas 3 raises, so the provider flatteners check here
+    first, warn :class:`SchemaDriftWarning` naming ``where`` (``"<parser>: <payload path>"``) and return
+    zero rows. ``stacklevel`` is passed to ``warnings.warn`` and should land on the parser's caller.
+    ponytail: unified with #941's ``_require_objects`` (one helper, this rule) after the providers sync.
     """
-    kept = [r for r in records or [] if r is not None]  # a null record carries no row
-    bad = next((r for r in kept if not isinstance(r, dict)), None)
-    if bad is None:
-        return kept
+    import pandas as pd  # lazy: errors.py is imported by every module, pandas only by the parsers
+
+    if records is None:
+        return []
+    if not isinstance(records, list):
+        shape = f"records is {type(records).__name__}, not a list"
+    else:
+        kept = [r for r in records if not (pd.api.types.is_scalar(r) and pd.isna(r))]  # a null row is no row
+        bad = [r for r in kept if not isinstance(r, dict)]
+        if not bad:
+            return kept
+        shape = f"a record is {type(bad[0]).__name__}, not an object"
     _warnings.warn(
-        f"{where}: unexpected payload shape (a record is {type(bad).__name__}, not an object); no rows read from it",
-        SchemaDriftWarning,
-        stacklevel=3,
+        f"{where}: unexpected payload shape ({shape}); no rows read from it", SchemaDriftWarning, stacklevel=stacklevel
     )
     return None
 

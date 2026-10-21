@@ -70,7 +70,8 @@ def _to_frame(records: List, return_as_pandas: bool, where: str) -> DataFrameT:
 
     from sportsdataverse.dl_utils import underscore
 
-    records = _object_records(records, where)
+    # stacklevel 5: _object_records <- _to_frame <- the parser <- its _data_only / _dict_only wrapper <- the caller
+    records = _object_records(records, where, stacklevel=5)
     if not records:
         return pd.DataFrame() if return_as_pandas else pl.DataFrame()
     try:
@@ -115,9 +116,12 @@ def parse_nfl_standings(raw: Dict, return_as_pandas: bool = False) -> DataFrameT
             parse_nfl_standings(raw).head()
     """
     records: List = []
-    for wk in raw.get("weeks", []) or []:
-        # a week that is not an object reaches _to_frame as a record, which reads it as drift
-        records.extend((wk.get("standings", []) or []) if isinstance(wk, dict) else [wk])
+    # stacklevel 4: _object_records <- this parser <- its _dict_only wrapper <- the caller
+    for wk in _object_records(raw.get("weeks"), "parse_nfl_standings: weeks", stacklevel=4) or []:
+        standings = _object_records(wk.get("standings"), "parse_nfl_standings: weeks[].standings", stacklevel=4)
+        if standings is None:  # drift, already warned: zero rows, never a partial table
+            return _to_frame([], return_as_pandas, "parse_nfl_standings: weeks[].standings")
+        records.extend(standings)
     return _to_frame(records, return_as_pandas, "parse_nfl_standings: weeks[].standings")
 
 
@@ -185,7 +189,7 @@ def parse_nfl_team(raw: Union[Dict, List], return_as_pandas: bool = False) -> Da
             parse_nfl_team(raw)
     """
     return _to_frame(
-        [raw] if isinstance(raw, dict) and raw else raw, return_as_pandas, "parse_nfl_team: payload"
+        [raw] if isinstance(raw, dict) and raw else raw or [], return_as_pandas, "parse_nfl_team: payload"
     )  # {} is no row
 
 
@@ -233,7 +237,7 @@ def parse_nfl_weeks_by_date(raw: Union[Dict, List], return_as_pandas: bool = Fal
             parse_nfl_weeks_by_date(raw)
     """
     return _to_frame(
-        [raw] if isinstance(raw, dict) and raw else raw, return_as_pandas, "parse_nfl_weeks_by_date: payload"
+        [raw] if isinstance(raw, dict) and raw else raw or [], return_as_pandas, "parse_nfl_weeks_by_date: payload"
     )  # {} is no row
 
 

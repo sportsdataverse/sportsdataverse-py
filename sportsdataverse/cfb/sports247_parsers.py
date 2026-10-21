@@ -21,7 +21,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
-from sportsdataverse.errors import _data_only
+from sportsdataverse.errors import _data_only, _object_records
 
 __all__ = [
     "parse_sports247_result_set",
@@ -39,7 +39,7 @@ def _rows_to_frame(rows: List[Any]) -> pl.DataFrame:
     # Scalar-array payloads (e.g. ``sports/{k}/year`` -> [2007, 2008, ...]) carry
     # no keys; surface them under a single ``value`` column. Every scalar, not just a leading
     # one: pandas 3 raises on a scalar after a dict, pandas 2 reads it as an empty row (WB-providers-2).
-    rows = [r if isinstance(r, dict) else {"value": r} for r in rows]
+    rows = [r if isinstance(r, dict) else {"value": r} for r in rows if r is not None]  # a null row is no row
     df = pd.json_normalize(rows, sep="_")
     df.columns = [underscore(str(c)) for c in df.columns]
     for c in df.columns:
@@ -47,6 +47,13 @@ def _rows_to_frame(rows: List[Any]) -> pl.DataFrame:
             # a gap is NaN on pandas 2, None on pandas 3: keep it null, never the string "nan"
             df[c] = df[c].map(lambda v: v if v is None or isinstance(v, str) else None if v != v else str(v))
     return pl.from_pandas(df)
+
+
+def _records_frame(raw: Any, return_as_pandas: bool, where: str) -> Union[pl.DataFrame, pd.DataFrame]:
+    """For a parser whose documented rows are records: a row that is not an object is drift (R945-3)."""
+    # stacklevel 5: _object_records <- here <- the parser <- its _data_only wrapper <- the caller
+    df = _rows_to_frame(_object_records(_extract_rows(raw), where, stacklevel=5) or [])
+    return df.to_pandas() if return_as_pandas else df
 
 
 def _extract_rows(raw: Any) -> List[Dict[str, Any]]:
@@ -130,7 +137,7 @@ def parse_sports247_teams(
 
     .. _recruitR: https://github.com/sportsdataverse/recruitR
     """
-    return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
+    return _records_frame(raw, return_as_pandas, "parse_sports247_teams: payload")
 
 
 @_data_only
@@ -165,4 +172,4 @@ def parse_sports247_institution_rankings(
 
     .. _recruitR: https://github.com/sportsdataverse/recruitR
     """
-    return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
+    return _records_frame(raw, return_as_pandas, "parse_sports247_institution_rankings: payload")
