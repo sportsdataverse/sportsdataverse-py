@@ -146,16 +146,6 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool) -> pl.DataFrame:
         return pl.from_pandas(df)
 
 
-def _rows_or_drift(entries: list, where: str) -> list[dict] | None:
-    """``entries`` under the row rule (:func:`~sportsdataverse.errors._object_rows`: null rows dropped), or
-    ``None`` after a :class:`SchemaDriftWarning` when another entry is not an object (A-L60, R953-1)."""
-    try:
-        return _object_rows(entries)
-    except TypeError as exc:
-        _warn_schema_drift(where, exc)
-        return None
-
-
 def _empty_frame(return_as_pandas: bool = False):
     """Return an appropriately-typed empty frame."""
     df = pd.DataFrame()
@@ -1025,7 +1015,7 @@ def parse_coaches(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame
     items = payload.get("items") or payload.get("coaches") or []
     if not items:
         return _empty_frame(return_as_pandas)
-    items = _rows_or_drift(items, "parse_coaches: items")
+    items = _object_rows(items, "parse_coaches: items")
     if items is None:
         return _empty_frame(return_as_pandas)
 
@@ -1133,7 +1123,7 @@ def parse_event_competitor_roster(payload: Dict, return_as_pandas: bool = False)
     entries = payload.get("entries") or payload.get("items") or []
     if not entries:
         return _empty_frame(return_as_pandas)
-    entries = _rows_or_drift(entries, "parse_event_competitor_roster: entries")
+    entries = _object_rows(entries, "parse_event_competitor_roster: entries")
     if entries is None:
         return _empty_frame(return_as_pandas)
 
@@ -1295,7 +1285,7 @@ def parse_event_plays(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
     items = payload.get("items") or payload.get("plays") or []
     if not items:
         return _empty_frame(return_as_pandas)
-    items = _rows_or_drift(items, "parse_event_plays: items")
+    items = _object_rows(items, "parse_event_plays: items")
     if items is None:
         return _empty_frame(return_as_pandas)
 
@@ -1483,12 +1473,12 @@ def parse_team_roster(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
     is_grouped = isinstance(first, dict) and "position" in first and isinstance(first.get("items"), list)
 
     if is_grouped:
-        groups = _rows_or_drift(athletes, "parse_team_roster: athletes")
+        groups = _object_rows(athletes, "parse_team_roster: athletes")
         if groups is None:
             return _empty_frame(return_as_pandas)
         rows = []
         for group in groups:
-            players = _rows_or_drift(
+            players = _object_rows(
                 group.get("items") or [], f"parse_team_roster: athletes[{group.get('position')}].items"
             )
             if players is None:

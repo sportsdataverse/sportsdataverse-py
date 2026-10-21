@@ -1,10 +1,117 @@
 ---
-title: "WBB — additional Python functions — stats.ncaa.org: phase1_shot–validate_lineup"
-sidebar_label: "stats.ncaa.org: phase1_shot–validate_lineup"
+title: "WBB — additional Python functions — stats.ncaa.org: ncaa_wbb–validate_lineup"
+sidebar_label: "stats.ncaa.org: ncaa_wbb–validate_lineup"
 sidebar_position: 4
-description: "WBB — additional Python functions — stats.ncaa.org: phase1_shot–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."
+description: "WBB — additional Python functions — stats.ncaa.org: ncaa_wbb–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — stats.ncaa.org: phase1_shot–validate_lineup
+# WBB — additional Python functions — stats.ncaa.org: ncaa_wbb–validate_lineup
+
+### ncaa_wbb_team_stats {#ncaa_wbb_team_stats}
+
+`ncaa_wbb_team_stats(pbp: 'pl.DataFrame', *, include_transition: 'bool' = False, fix_tip_in: 'bool' = True, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+
+Aggregate WBB play-by-play into per-team game stats (wbigballR `get_team_stats`).
+
+Pure delegation to
+`sportsdataverse.mbb.mbb_ncaa_stats_agg.ncaa_mbb_team_stats` — see
+it for the algorithm and column contract.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame in the sdv-py 35-column snake_case bigballR contract (`ncaa_wbb_game_pbp` output). |
+| `include_transition` | `bool` | `False` | Append the `_trans`/`_half` split surface. |
+| `fix_tip_in` | `bool` | `True` | Count the real `"Tip In"` vocabulary (default); False reproduces R's `"Tip-In"` bug for oracle parity. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per team per game.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `team` | character | Team-side label or team identifier. |
+| `mins` | double |  |
+| `o_mins` | double |  |
+| `d_mins` | double |  |
+| `o_poss` | double |  |
+| `d_poss` | double |  |
+| `ortg` | double |  |
+| `drtg` | double |  |
+| `netrtg` | double |  |
+| `pts` | double | Points scored. |
+| `d_pts` | double |  |
+| `fga` | double | Field goal attempts. |
+| `d_fga` | double |  |
+| `fgm` | double | Field goals made. |
+| `d_fgm` | double |  |
+| `tpa` | double |  |
+| `d_tpa` | double |  |
+| `tpm` | double |  |
+| `d_tpm` | double |  |
+| `fta` | double | Free throw attempts. |
+| `d_fta` | double |  |
+| `ftm` | double | Free throws made. |
+| `d_ftm` | double |  |
+| `rima` | double |  |
+| `d_rima` | double |  |
+| `rimm` | double |  |
+| `d_rimm` | double |  |
+| `orb` | double |  |
+| `d_orb` | double |  |
+| `drb` | double |  |
+| `d_drb` | double |  |
+| `blk` | double | Blocks. |
+| `d_blk` | double |  |
+| `to` | double | To. |
+| `d_to` | double |  |
+| `ast` | double | Assists. |
+| `d_ast` | double |  |
+| `e_poss` | double |  |
+| `fg_pct` | double | Field goal percentage (0-1). |
+| `d_fg_pct` | double |  |
+| `tpp` | double |  |
+| `d_tpp` | double |  |
+| `ftp` | double |  |
+| `d_ftp` | double |  |
+| `efg_pct` | double |  |
+| `d_efg_pct` | double |  |
+| `ts_pct` | double | True shooting percentage (0-1). |
+| `d_ts_pct` | double |  |
+| `rim_pct` | double |  |
+| `d_rim_pct` | double |  |
+| `mid_pct` | double |  |
+| `d_mid_pct` | double |  |
+| `tp_rate` | double |  |
+| `d_tp_rate` | double |  |
+| `rim_rate` | double |  |
+| `d_rim_rate` | double |  |
+| `mid_rate` | double |  |
+| `d_mid_rate` | double |  |
+| `ft_rate` | double | Ft rate. |
+| `d_ft_rate` | double |  |
+| `ast_rate` | double |  |
+| `d_ast_rate` | double |  |
+| `to_rate` | double | To rate. |
+| `d_to_rate` | double |  |
+| `blk_rate` | double |  |
+| `o_blk_rate` | double |  |
+| `orb_pct` | double | Offensive rebound percentage. |
+| `drb_pct` | double | Defensive rebound percentage. |
+| `time_per_poss` | double |  |
+| `d_time_per_poss` | double |  |
+
+**Example**
+
+```python
+from sportsdataverse.wbb.wbb_ncaa_stats_agg import ncaa_wbb_team_stats
+team = ncaa_wbb_team_stats(pbp)
+print(team.shape)
+```
 
 ### phase1_shot_event_enrichment {#phase1_shot_event_enrichment}
 

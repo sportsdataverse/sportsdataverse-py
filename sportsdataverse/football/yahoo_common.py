@@ -4,8 +4,8 @@ Yahoo serves both college and pro football from the same ``playbookBoxscore`` su
 same envelope, the same failure shapes and the same presentational fields. Everything here is
 identical for ``ncaaf`` and ``nfl`` and is therefore owned once:
 
-* **Fetching and its failure shapes.** The rate limit answers with a 23-byte ``text/html``
-  body, not JSON (:func:`_game_block` -> None, "try again"), and a game Yahoo does not cover
+* **Fetching and its failure shapes.** The rate limit (a 429, or a 23-byte ``text/html`` body)
+  raises ``AssetFetchError`` from the shangrila getter ("try again"), and a game Yahoo does not cover
   answers **HTTP 200** with a real game object carrying no plays (:func:`_has_plays` -> False,
   "never worth another try"). The two must not collapse into one error.
 * **Id arithmetic.** Both leagues' game ids embed the kickoff's **US-Eastern** calendar date
@@ -64,8 +64,9 @@ def _kickoff_et_date(kickoff: Optional[str]) -> Optional[str]:
 def _game_block(payload: Any) -> Optional[Dict[str, Any]]:
     """``data.games[0]`` of a shangrila playbook payload, or None when the envelope is absent.
 
-    None means "this is not a game payload" -- a 429's 23-byte ``text/html`` body, an error
-    envelope, a truncated response. It is deliberately **not** the same as a game with no
+    None means "this is not a game payload" -- an error envelope, a truncated response. (A 429,
+    and its 23-byte ``text/html`` body, never get here: the shangrila getter raises
+    ``AssetFetchError`` first.) It is deliberately **not** the same as a game with no
     plays (:func:`_has_plays`), which is Yahoo saying it does not cover the game: the first
     is worth another try, the second never is.
     """
@@ -94,8 +95,8 @@ def _envelope_games(payload: Any) -> Optional[list]:
     ``[]`` and None are different answers and must not be collapsed. An **empty list** is a
     well-formed envelope saying "no such game" -- Yahoo's NFL answer for a Pro Bowl and for
     anything before its play floor, HTTP 200 -- and is never worth another try. ``None`` means
-    the body was not an envelope at all (a 429's 23-byte ``text/html``, an error page, a
-    truncated response) and is.
+    the body was not an envelope at all (an error page, a truncated response) and is. A 429
+    raises ``AssetFetchError`` from the getter before reaching here.
     """
     if not isinstance(payload, dict) or not isinstance(payload.get("data"), dict):
         return None

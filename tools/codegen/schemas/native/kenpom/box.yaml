@@ -26,8 +26,8 @@ frames:
   - name: column_0
     type: character
     description: ''
-  - name: column_0_rk
-    type: integer
+  - name: jersey
+    type: character
     description: ''
   - name: name
     type: character
@@ -79,8 +79,8 @@ frames:
   - name: column_0
     type: character
     description: ''
-  - name: column_0_rk
-    type: integer
+  - name: jersey
+    type: character
     description: ''
   - name: name
     type: character

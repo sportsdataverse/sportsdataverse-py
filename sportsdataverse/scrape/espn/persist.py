@@ -14,6 +14,7 @@ accumulating a quarantine directory nobody reads.
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from typing import Any
 
@@ -28,6 +29,12 @@ _ERROR_SIGNATURES: tuple[frozenset[str], ...] = (
 )
 
 
+def _is_code_message_error(payload: dict) -> bool:
+    """ESPN's live 404 body, ``{"code": 404, "message": ...}``: an int ``code`` beside ``message``."""
+    code = payload.get("code")
+    return "message" in payload and isinstance(code, int) and not isinstance(code, bool)
+
+
 def is_error_payload(payload: Any) -> bool:
     """True when a payload is empty or is a provider error body.
 
@@ -38,7 +45,7 @@ def is_error_payload(payload: Any) -> bool:
     if not payload or not isinstance(payload, dict):
         return True
     keys = set(payload)
-    return any(signature <= keys for signature in _ERROR_SIGNATURES)
+    return any(signature <= keys for signature in _ERROR_SIGNATURES) or _is_code_message_error(payload)
 
 
 def write_payload(path: Path | str, payload: dict, *, indent: int | None = None) -> bool:
@@ -58,13 +65,17 @@ def write_payload(path: Path | str, payload: dict, *, indent: int | None = None)
         True when written, False when refused. Refusing leaves any existing
         capture at ``path`` untouched -- a later error must never truncate an
         earlier success, which is the failure that turns a working season into
-        a silent gap.
+        a silent gap. The write goes through ``<name>.tmp`` and ``os.replace``, so
+        a crash mid-write leaves the ``.tmp`` (which no capture listing counts),
+        never a truncated ``.json`` that reads as captured and is never re-fetched.
     """
     if is_error_payload(payload):
         return False
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=indent), encoding="utf-8")
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(payload, indent=indent), encoding="utf-8")
+    os.replace(tmp, path)
     return True
 
 

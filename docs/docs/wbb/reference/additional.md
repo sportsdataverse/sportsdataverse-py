@@ -78,7 +78,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [duration_from_period](additional/stats-ncaa-org.md#duration_from_period) | The game duration (minutes elapsed) once `period` has completed |
 | [enrich_and_reverse_game_events](additional/stats-ncaa-org.md#enrich_and_reverse_game_events) | Inserts game-break events and turns descending per-row times into |
 | [enrich_lineup](additional/stats-ncaa-org.md#enrich_lineup) | Populate `pts`/`plus_minus` from the score delta, then run the |
-| [enrich_shot_events_with_pbp](additional/stats-ncaa-org.md#enrich_shot_events_with_pbp) | Enrich each shot with its play-by-play event + on-floor lineup |
+| [enrich_shot_events_with_pbp](additional/stats-ncaa-org-2.md#enrich_shot_events_with_pbp) | Enrich each shot with its play-by-play event + on-floor lineup |
 | [enrich_stats](additional/stats-ncaa-org-2.md#enrich_stats) | Fold a lineup's raw events into a counting-stat tree (``protected def |
 | [ensure_ev_uniqueness](additional/stats-ncaa-org-2.md#ensure_ev_uniqueness) | Nudge each event's `min` by a tiny per-index delta so truly |
 | [extract_player_from_ev](additional/stats-ncaa-org-2.md#extract_player_from_ev) | Resolve the player named in `pbp_event` to a |
@@ -121,7 +121,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [ncaa_wbb_shot_locations](additional/stats-ncaa-org-2.md#ncaa_wbb_shot_locations) | Scrape WBB shot locations for one or more games. |
 | [ncaa_wbb_team_roster](additional/stats-ncaa-org-2.md#ncaa_wbb_team_roster) | Scrape a women's team roster from stats.ncaa.org. |
 | [ncaa_wbb_team_schedule](additional/stats-ncaa-org-2.md#ncaa_wbb_team_schedule) | Scrape a women's team's season schedule from stats.ncaa.org. |
-| [ncaa_wbb_team_stats](additional/stats-ncaa-org-2.md#ncaa_wbb_team_stats) | Aggregate WBB play-by-play into per-team game stats (wbigballR `get_team_stats`). |
+| [ncaa_wbb_team_stats](additional/stats-ncaa-org-3.md#ncaa_wbb_team_stats) | Aggregate WBB play-by-play into per-team game stats (wbigballR `get_team_stats`). |
 | [phase1_shot_event_enrichment](additional/stats-ncaa-org-3.md#phase1_shot_event_enrichment) | The court-geometry enrichment pass: ascending time, coordinate |
 | [playwright_transport](additional/stats-ncaa-org-3.md#playwright_transport) | Build the **suggested** stats.ncaa.org game-detail scraping transport. |
 | [remove_diacritics](additional/stats-ncaa-org-3.md#remove_diacritics) | Strip diacritical marks, e.g. `"Juhász"` -> `"Juhasz"` |

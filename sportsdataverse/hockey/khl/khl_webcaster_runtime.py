@@ -70,19 +70,20 @@ def _fetch(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> 
     """One GET on the throttled :data:`SESSION` (every retry waits too), through ``$KHL_WEBCASTER_PROXY`` when set."""
     kwargs.setdefault("session", SESSION)
     proxy = os.environ.get(PROXY_ENV, "").strip()
-    if not proxy:
-        return _rt._get(url, params, **kwargs)
+    if not proxy:  # a 204 / 205 raises _rt._NoContent: ``_get`` answers {} (EX-SYNC-a)
+        return _rt._get(url, params, transport=_rt._no_content_transport(), **kwargs)
     clean = {k: v for k, v in (params or {}).items() if v is not None}
     kwargs.setdefault("proxy", {"http": proxy, "https": proxy})
     kwargs.setdefault("logger", _QUIET)
     try:
-        return _rt._download_json(download, url, params=clean, **kwargs)
+        return _rt._download_json(_rt._no_content_transport(download), url, params=clean, **kwargs)
     except AssetFetchError as exc:
         cause = type(exc.__cause__).__name__ if exc.__cause__ is not None else "a non-2xx or unreadable answer"
         raise AssetFetchError(f"{_rt._where(url)}: the fetch through {PROXY_ENV} failed ({cause})") from None
 
 
 @functools.lru_cache(maxsize=1)
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-1)
 def season_table() -> Tuple[Dict[str, Any], ...]:
     """Every regular-season and playoff stage, from ``data.json`` ``stages_v2`` (cached in-process).
 
@@ -177,6 +178,7 @@ def _check(url: str, raw: Any, params: Dict[str, Any]) -> None:
             raise AssetFetchError(f"{where}: asked for players {sorted(asked)}, answered {sorted(other)}")
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET a webcaster route as JSON (``season`` / ``stage`` resolved to ``stage_id``), then verify it.
 

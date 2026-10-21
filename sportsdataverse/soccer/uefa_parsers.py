@@ -41,6 +41,7 @@ from typing import Any, Dict, List, Union
 import pandas as pd
 import polars as pl
 
+from sportsdataverse.errors import _data_only
 from sportsdataverse.soccer._frames import as_output, rows_to_frame
 
 __all__ = ["ID_KEY", "parse_uefa"]
@@ -63,6 +64,7 @@ def _as_rows(raw: Union[Dict[str, Any], List[Any], None]) -> List[Any]:
     return [raw]
 
 
+@_data_only
 def parse_uefa(
     raw: Union[Dict[str, Any], List[Any], None],
     *,

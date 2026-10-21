@@ -51,6 +51,7 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence
 from sportsdataverse.basketball.vtb import vtb_frames as F
 from sportsdataverse.basketball.vtb.vtb_codes import PLAY_TYPES, staff_role
 from sportsdataverse.basketball.vtb.vtb_frames import Frame
+from sportsdataverse.errors import _data_only
 
 __all__ = [
     "parse_vtb_infobasket_best_player_parameters",
@@ -151,6 +152,7 @@ def _fin(data: Any, columns: Optional[Sequence[str]], pandas: bool, parser: str)
 # --- seasons, calendar, games lists -------------------------------------------------------------------------------------
 
 
+@_data_only
 def parse_vtb_infobasket_seasons(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
@@ -193,6 +195,7 @@ def _game_row(r: Mapping[str, Any], ctx: Mapping[str, Any]) -> Dict[str, Any]:
     return F.tidy({**ctx, **F.flat(r, skip=_GAME_SKIP)})
 
 
+@_data_only
 def parse_vtb_infobasket_calendar(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
@@ -225,6 +228,7 @@ def parse_vtb_infobasket_calendar(
     return _fin(data, columns, return_as_pandas, "parse_vtb_infobasket_calendar")
 
 
+@_data_only
 def parse_vtb_infobasket_team_games(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
@@ -451,6 +455,7 @@ def parse_vtb_infobasket_best_teams(
     return _fin(_leader_rows(raw, True), columns, return_as_pandas, "parse_vtb_infobasket_best_teams")
 
 
+@_data_only
 def parse_vtb_infobasket_team_preview(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
@@ -853,6 +858,7 @@ def parse_vtb_infobasket_comp_issue(
     )
 
 
+@_data_only
 def parse_vtb_infobasket_standings(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
@@ -890,6 +896,7 @@ def parse_vtb_infobasket_standings(
     return _fin(data, columns, return_as_pandas, "parse_vtb_infobasket_standings")
 
 
+@_data_only
 def parse_vtb_infobasket_cross_table(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
@@ -929,6 +936,7 @@ def _cross_row(r: Mapping[str, Any], ctx: Mapping[str, Any]) -> Dict[str, Any]:
     return row
 
 
+@_data_only
 def parse_vtb_infobasket_playoff(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
@@ -1007,6 +1015,7 @@ def _codes(raw: Any, parser: str, columns: Optional[Sequence[str]], pandas: bool
     return _fin(data, columns, pandas, parser)
 
 
+@_data_only
 def parse_vtb_infobasket_best_player_parameters(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
@@ -1033,6 +1042,7 @@ def parse_vtb_infobasket_best_player_parameters(
     return _codes(raw, "parse_vtb_infobasket_best_player_parameters", columns, return_as_pandas)
 
 
+@_data_only
 def parse_vtb_infobasket_best_team_parameters(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
@@ -1300,6 +1310,7 @@ def parse_vtb_infobasket_team(
     return _fin([F.tidy(row)], columns, return_as_pandas, "parse_vtb_infobasket_team")
 
 
+@_data_only
 def parse_vtb_infobasket_team_seasons(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
@@ -1331,6 +1342,7 @@ def parse_vtb_infobasket_team_seasons(
     return _fin(data, columns, return_as_pandas, "parse_vtb_infobasket_team_seasons")
 
 
+@_data_only
 def parse_vtb_infobasket_team_comps(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:

@@ -216,6 +216,20 @@ def _is_no_shot_map(err: ParseError) -> bool:
     return any("no shot events found" in str(m).lower() for m in (err.messages or []))
 
 
+def _family_failed(parse_errors: list[dict[str, str]], family: str, contest_id: str, exc: BaseException) -> None:
+    """Log a family whose parse raised and record it for the ``parse_errors`` marker."""
+    logger.warning("ncaa_parse: family=%s contest_id=%s failed", family, contest_id, exc_info=exc)
+    parse_errors.append({"family": family, "error": _clip(f"{type(exc).__name__}: {exc}", 300)})
+
+
+def _with_marker(result: dict[str, Any], parse_errors: list[dict[str, str]]) -> dict[str, Any]:
+    """Add ``parse_errors`` only when a family failed: a crashed family is an empty list exactly
+    like a game with no shots or lineups, so the failure is recorded beside it. Absent = clean."""
+    if parse_errors:
+        result["parse_errors"] = parse_errors
+    return result
+
+
 def _log_family_skip(family: str, contest_id: str, team: str, errors: "list[ParseError]") -> None:
     """Record a family dropped for one TEAM via a returned ``ParseError``.
 
@@ -363,7 +377,9 @@ def parse_bundle(
         ``{"contest_id": str, "pbp": [...], "lineups": [...], "player_box":
         [...], "team_box": [...], "shots": [...], "possessions": [...],
         "teams": [...]}`` -- every dataset a ``list[dict]``. Any family whose
-        parse failed is an empty list (never raises). ``teams`` is the
+        parse failed is an empty list (never raises), and the record then also
+        carries ``"parse_errors": [{"family": ..., "error": ...}, ...]`` naming
+        each failed family (or ``identity``); the key is absent on a clean parse. ``teams`` is the
         two-row readable team identity added by :mod:`ncaa_identity`, which
         also stamps ids + properly-cased names onto the other families.
 
@@ -388,6 +404,7 @@ def parse_bundle(
         "possessions": [],
     }
 
+    parse_errors: list[dict[str, str]] = []
     pbp_df: Optional[pl.DataFrame] = None
     try:
         # Explicit branch rather than **kwargs: unpacking a dict hides which
@@ -399,50 +416,38 @@ def parse_bundle(
         else:
             pbp_df = parse_ncaa_bb_game_pbp(pbp_html, contest_id)
         result["pbp"] = pbp_df.to_dicts()
-    except Exception:  # noqa: BLE001 -- one family's failure must not abort the others
-        logger.warning("ncaa_parse: family=pbp contest_id=%s failed", contest_id, exc_info=True)
+    except Exception as exc:  # noqa: BLE001 -- one family's failure must not abort the others
+        _family_failed(parse_errors, "pbp", contest_id, exc)
 
     try:
         if pbp_df is not None and pbp_df.height > 0:
             result["lineups"] = _parse_lineups(contest_id, pbp_df, pbp_html, stats_html)
-    except Exception:  # noqa: BLE001
-        logger.warning("ncaa_parse: family=lineups contest_id=%s failed", contest_id, exc_info=True)
+    except Exception as exc:  # noqa: BLE001
+        _family_failed(parse_errors, "lineups", contest_id, exc)
 
     try:
         if pbp_df is not None and pbp_df.height > 0:
             result["player_box"] = ncaa_mbb_player_stats(pbp_df).to_dicts()
-    except Exception:  # noqa: BLE001
-        logger.warning(
-            "ncaa_parse: family=player_box contest_id=%s failed",
-            contest_id,
-            exc_info=True,
-        )
+    except Exception as exc:  # noqa: BLE001
+        _family_failed(parse_errors, "player_box", contest_id, exc)
 
     try:
         if pbp_df is not None and pbp_df.height > 0:
             result["team_box"] = ncaa_mbb_team_stats(pbp_df).to_dicts()
-    except Exception:  # noqa: BLE001
-        logger.warning(
-            "ncaa_parse: family=team_box contest_id=%s failed",
-            contest_id,
-            exc_info=True,
-        )
+    except Exception as exc:  # noqa: BLE001
+        _family_failed(parse_errors, "team_box", contest_id, exc)
 
     try:
         if pbp_df is not None and pbp_df.height > 0:
             result["shots"] = _parse_shots(contest_id, pbp_df, stats_html, box_html, season, league)
-    except Exception:  # noqa: BLE001
-        logger.warning("ncaa_parse: family=shots contest_id=%s failed", contest_id, exc_info=True)
+    except Exception as exc:  # noqa: BLE001
+        _family_failed(parse_errors, "shots", contest_id, exc)
 
     try:
         if pbp_df is not None and pbp_df.height > 0:
             result["possessions"] = ncaa_mbb_possessions(pbp_df).to_dicts()
-    except Exception:  # noqa: BLE001
-        logger.warning(
-            "ncaa_parse: family=possessions contest_id=%s failed",
-            contest_id,
-            exc_info=True,
-        )
+    except Exception as exc:  # noqa: BLE001
+        _family_failed(parse_errors, "possessions", contest_id, exc)
 
     # ONE per-game identifier column, on every family, named the same thing the
     # top-level key is. The parser stack emits `game_id` on five of the six
@@ -465,14 +470,10 @@ def parse_bundle(
             league=league,
             season=_ending_year(season),
         )
-    except Exception:  # noqa: BLE001
-        logger.warning(
-            "ncaa_parse: identity enrichment contest_id=%s failed",
-            contest_id,
-            exc_info=True,
-        )
+    except Exception as exc:  # noqa: BLE001
+        _family_failed(parse_errors, "identity", contest_id, exc)
 
-    return result
+    return _with_marker(result, parse_errors)
 
 
 def write_parsed(root: "Union[str, Path]", league: str, contest_id: str, parsed: "dict[str, Any]") -> Path:
@@ -573,14 +574,21 @@ def _main(default_league: str, default_root: str) -> None:
         f"force={args.force} shard={i}/{n} assigned={len(my_paths)}"
     )
 
-    counts = {"parsed": 0, "failed": 0}
+    counts = {"parsed": 0, "failed": 0, "with_parse_errors": 0}
     for path_str in my_paths:
         try:
             bundle = read_bundle(path_str)
-            parse_and_write(bundle, root, league=args.league)
+            parsed = parse_bundle(bundle, league=args.league, root=root)
+            write_parsed(root, args.league, parsed["contest_id"], parsed)
             counts["parsed"] += 1
+            if parsed.get("parse_errors"):
+                counts["with_parse_errors"] += 1
         except Exception:  # noqa: BLE001 -- one bad bundle must not abort the run
             logger.warning("ncaa_parse CLI: failed to parse %s", path_str, exc_info=True)
             counts["failed"] += 1
 
-    print(f"parsed={counts['parsed']} failed={counts['failed']}")
+    print(f"parsed={counts['parsed']} failed={counts['failed']} with_parse_errors={counts['with_parse_errors']}")
+    if counts["failed"] or counts["with_parse_errors"]:
+        # Every game was still written (a crashed family carries its parse_errors
+        # marker); the exit code is what lets a producer job notice.
+        raise SystemExit(1)

@@ -22,6 +22,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _error_envelope_code
 
 __all__ = [
     "parse_on3_rankings",
@@ -40,6 +41,7 @@ def _rows_to_frame(rows: List[Dict[str, Any]]) -> pl.DataFrame:
     or mixed-type (``highSchoolRating``) — those are JSON/str-encoded so the
     pandas→polars handoff never rejects the frame.
     """
+    rows = [r for r in rows if r != {}]  # an empty record is no row (A-L17)
     if not rows:
         return pl.DataFrame()
     # a bare scalar array (e.g. filters/status -> list of strings) has no keys to
@@ -72,8 +74,8 @@ def _rows_to_frame(rows: List[Dict[str, Any]]) -> pl.DataFrame:
 
 def _list_at(raw: Optional[Dict[str, Any]], data_key: str) -> List[Dict[str, Any]]:
     """Extract ``pageProps.{data_key}.list`` defensively (``[]`` on any miss)."""
-    page_props = (raw or {}).get("pageProps") or {}
-    data = page_props.get(data_key) or {}
+    page_props = raw.get("pageProps") if isinstance(raw, dict) else None
+    data = page_props.get(data_key) if isinstance(page_props, dict) else None
     rows = data.get("list") if isinstance(data, dict) else None
     return rows if isinstance(rows, list) else []
 
@@ -194,7 +196,7 @@ def parse_on3_rdb(
     """
     if isinstance(raw, list):
         rows: List[Any] = raw
-    elif isinstance(raw, dict):
+    elif isinstance(raw, dict) and _error_envelope_code(raw) is None:  # an error envelope is no record
         listed = raw.get("list")
         rows = listed if isinstance(listed, list) else ([raw] if raw else [])
     else:

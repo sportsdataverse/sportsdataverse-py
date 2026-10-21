@@ -497,10 +497,5 @@ def test_the_captured_espn_404_body_is_code_and_message():
     assert _ESPN_404["code"] == 404 and set(_ESPN_404) == {"code", "message"}
 
 
-@pytest.mark.xfail(
-    strict=True,
-    raises=AssertionError,
-    reason="B-L4: the ESPN signature {code, detail} never matches ESPN's real {code, message} 404 body; task 4.5",
-)
 def test_espn_real_404_body_is_an_error_payload():
     assert is_error_payload(_ESPN_404) is True

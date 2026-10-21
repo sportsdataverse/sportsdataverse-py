@@ -55,15 +55,18 @@ Documented divergences from a real ESPN summary:
   grammar, so rusher / receiver / sacker / returner names are mostly null.
 * ``boxscore`` is empty: ESPN's box is the only source of ESPN athlete ids.
 * **Coverage floors**: NFL play-by-play from the **2024** season, CFB **2022** full (2021
-  early-season only), and **zero** FCS-hosted games in any era. Fox answers HTTP 200 with the
-  ``pbp`` key simply **absent** in all three cases, which is why coverage is detected by shape
-  (:func:`_has_pbp`) and never by status code.
+  early-season only), and **zero** FCS-hosted games in any era. Fox answers HTTP 200 with **no
+  plays** in all three cases (``"pbp": {"sections": []}`` in both committed no-coverage captures,
+  or no ``pbp`` key), which is why coverage is detected by shape (:func:`_has_pbp`) and never by
+  status code.
 """
 
 from __future__ import annotations
 
 import re
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
+
+from sportsdataverse._codegen_runtime import _id_text
 
 #: Fox section / ``periodOfPlay`` labels -> period number.
 _PERIODS: Dict[str, int] = {
@@ -171,11 +174,12 @@ def _fox_team_id(entity: Any) -> Optional[str]:
 def _has_pbp(fox: Any) -> bool:
     """True when the payload actually carries play-by-play.
 
-    Fox answers **HTTP 200 with the ``pbp`` key simply absent** for a covered-but-unbackfilled
-    game: every NFL game before the 2024 season, every CFB game before 2022 (2021 outside the
-    early season), and **every FCS-hosted game in every era**. Detecting that by shape is the
-    only way to tell "Fox does not have this game" from "the request failed" -- the shared
-    ``_get`` returns ``{}`` for the latter, so a bare truthiness test conflates the two.
+    Fox answers **HTTP 200 with no plays** (``"pbp": {"sections": []}``, or no ``pbp`` key) for a
+    covered-but-unbackfilled game: every NFL game before the 2024 season, every CFB game before
+    2022 (2021 outside the early season), and **every FCS-hosted game in every era**. Detecting that by shape is the
+    only way to tell "Fox does not have this game" from "the request failed". The getter raises
+    on a failed request, but an injected payload (an offline rebuild) can still be ``{}``, so a
+    bare truthiness test would conflate the two.
     """
     if not isinstance(fox, Mapping):
         return False
@@ -216,6 +220,8 @@ def _fox_odds_override(odds: Any, home_full_name: Optional[str]) -> Optional[Dic
     total: Optional[float] = None
     home_favourite: Optional[bool] = None
     for row in rows:
+        # values[0] spread, [1] moneyline, [2] total. The six-pack carries one row per team and no
+        # ``id`` key, so there is no "closing" row to select (gap-B-139: live probe of event 11133).
         values = [(v or {}).get("odds") for v in (row or {}).get("values") or []]
         if len(values) < 3 or values[0] is None:
             continue
@@ -389,6 +395,9 @@ def _classify(
             return "74", None
         if "timeout" in title:
             return "21", None
+        if "penalty" in low:
+            # a pre-snap flag ("Delay of Game ... No Play") carries no event; ESPN types it 8
+            return "8", None
         return "2", None
 
     codes = {str(e.get("text") or "").upper() for e in events}
@@ -422,10 +431,11 @@ def _classify(
         return "39", recovering
     if fumble:
         return ("9", None) if recovering == offence else ("29", None)
-    if "SACK" in codes:
-        return "7", None
+    # before SACK: a sack in the end zone is a safety, scored by the defence
     if "safety" in low:
         return "20", other
+    if "SACK" in codes:
+        return "7", None
     if "PEN" in codes and not (codes & {"RUSH", "PASS", "INC", "SACK"}):
         # A flag on a play that still happened keeps the PLAY's ESPN type, not "Penalty":
         # ESPN types "... rush left for 2 yards ... PENALTY on OKLA, Personal Foul, 15 yards"
@@ -584,8 +594,18 @@ def _trailing_end(play: Dict[str, Any], team_ids: Mapping[str, str], home_side: 
     the ESPN summaries of this capture. Keeping the offence's frame is a ~100-yard, multi-EPA
     error on the highest-leverage snap in football, on the newest row of a live poll: 50 rows
     of the 7,184 in the capture would be served that way (#545 finding 1, same class).
+
+    **A kick hands the ball over**, so it ends in the RECEIVING team's frame at 1st & 10: a punt
+    or kickoff where its last event stops (Fox states a touchback as a final ``TB`` event ending
+    at the touchback line: 51 of 51 in the committed captures), a missed field goal at the spot it
+    was kicked from. Measured on the 8 kicks that end a half or
+    regulation in the 32 NFL OT games of 2024-25: all 8 land on ESPN's team, 6 on its spot, one
+    1 yard off and one 15 off (a penalty on the return, which Fox's geometry does not carry).
     """
     start = play["start"]
+    kick = _kick_end(play, team_ids, home_side)
+    if kick is not None:
+        return kick
     keeps = play["type"]["id"] in _KEEPS_THE_BALL
     gained = int(play.get("statYardage") or 0) if keeps else 0
     to_endzone = start["yardsToEndzone"]
@@ -610,6 +630,28 @@ def _trailing_end(play: Dict[str, Any], team_ids: Mapping[str, str], home_side: 
     }
 
 
+def _kick_end(play: Mapping[str, Any], team_ids: Mapping[str, str], home_side: str) -> Optional[Dict[str, Any]]:
+    """The receiving team's end state of a punt, kickoff or missed field goal, or None."""
+    type_id, start = play["type"]["id"], play["start"]
+    # a muffed kick the KICKING team recovers stays with it ("Fumble RECOVERED by CAR-N.Brooks")
+    receiver = play.get("_recovered_by") or ("home" if start["team"]["side"] == "away" else "away")
+    to_endzone: Optional[int] = None
+    if type_id == "60" and start["yardsToEndzone"] is not None:
+        to_endzone = 100 - int(start["yardsToEndzone"])
+    elif type_id in ("52", "53") and play.get("_end_pos") is not None:
+        end_pos = int(play["_end_pos"])
+        to_endzone = (100 - end_pos) if receiver == "away" else end_pos
+    if to_endzone is None:
+        return None
+    return {
+        "down": 1,
+        "distance": 10,
+        "yardLine": (100 - to_endzone) if receiver == home_side else to_endzone,
+        "yardsToEndzone": to_endzone,
+        "team": {"id": team_ids[receiver]},
+    }
+
+
 def _fill_end_state(plays: List[Dict[str, Any]], team_ids: Mapping[str, str], home_side: str) -> None:
     """Fill every play's ``end`` from the **next** snap's start, across drive boundaries.
 
@@ -618,9 +660,10 @@ def _fill_end_state(plays: List[Dict[str, Any]], team_ids: Mapping[str, str], ho
     frame, on the first row of the next drive. Clock stoppages carry no state of their own and
     are skipped, so the end spot of the play before a timeout is the ball's real spot.
 
-    The search **stops** at the end of a half (:data:`_HALF_BOUNDARY`): the next snap is then a
-    kickoff in the other direction, and reading through the boundary gave the clock-killing
-    kneel at the end of the half the ensuing kickoff's spot, in the receiving team's frame.
+    The search **stops** at the end of a half (:data:`_HALF_BOUNDARY`) and at the end of
+    regulation: the next snap is then a kickoff in the other direction, and reading through the
+    boundary gave the clock-killing kneel at the end of the half the ensuing kickoff's spot, in
+    the receiving team's frame.
 
     Two shapes take ESPN's own scoring convention instead: a **touchdown** ends at the goal
     line the scoring team was attacking, credited to the club the play says scored -- the
@@ -649,8 +692,13 @@ def _fill_end_state(plays: List[Dict[str, Any]], team_ids: Mapping[str, str], ho
             }
             continue
         nxt = None
+        period = play["period"]["number"] or 0
         for later in plays[index + 1 :]:
             if later["type"]["text"] in _HALF_BOUNDARY:
+                break
+            if period <= 4 < (later["period"]["number"] or 0):
+                # end of regulation: Fox emits no end-of-Q4 row, so the boundary is the period
+                # change itself; the next snap is the overtime kickoff (23 of 32 2024-25 OT games)
                 break
             if later["type"]["text"] not in _STOPPAGE:
                 nxt = later["start"]
@@ -775,10 +823,10 @@ def _fox_to_espn_summary(
     right = (header or {}).get("rightTeam")
     if not isinstance(left, Mapping) or not isinstance(right, Mapping):
         raise ValueError("fox payload carries no header with both teams")
-    event_id = str(idmap_row["espn_event_id"])
+    event_id = _id_text(idmap_row["espn_event_id"])
     espn_ids = {
-        "away": str(idmap_row.get("away_espn_team_id") or ""),
-        "home": str(idmap_row.get("home_espn_team_id") or ""),
+        "away": _id_text(idmap_row.get("away_espn_team_id")),
+        "home": _id_text(idmap_row.get("home_espn_team_id")),
     }
     if not (espn_ids["away"] and espn_ids["home"]):
         raise ValueError("id-map row states no ESPN team ids: possession cannot be attributed")
@@ -906,6 +954,11 @@ def _fox_to_espn_summary(
         to_endzone = None
         if start_pos is not None:
             to_endzone = (100 - start_pos) if start_side == "away" else start_pos
+        elif type_id == "8" and title["yard_line"] is not None:
+            # an event-less penalty states its spot only in the title ("4th & 5 · DAL 10")
+            owner = side_of.get(str(title["side"] or "").upper())
+            to_endzone = 100 - title["yard_line"] if owner == start_side else title["yard_line"]
+            start_pos = (100 - to_endzone) if start_side == "away" else to_endzone
         down = 0 if is_kick else (title["down"] or 0)
         distance = 0 if is_kick else (title["distance"] if title["distance"] is not None else 0)
         offence_sign = 1 if start_side == "away" else -1
@@ -939,6 +992,10 @@ def _fox_to_espn_summary(
             },
             "end": {},
             "_scoring_side": scoring_side,
+            "_end_pos": _pos(events[-1].get("yardEnd")) if events else None,
+            "_recovered_by": side_of.get(_RECOVERED_RE.findall(description)[-1].upper())
+            if _RECOVERED_RE.search(description)
+            else None,
         }
         penalty = _penalty(description, side_of, espn_ids)
         if penalty:
@@ -988,11 +1045,14 @@ def _fox_to_espn_summary(
     for play in emitted:
         play["start"]["team"].pop("side", None)
         play.pop("_scoring_side", None)
+        play.pop("_end_pos", None)
+        play.pop("_recovered_by", None)
 
     colours = {
         "away": (_hex_colour((header or {}).get("leftColor")), _hex_colour((header or {}).get("alternateLeftColor"))),
         "home": (_hex_colour((header or {}).get("rightColor")), _hex_colour((header or {}).get("alternateRightColor"))),
     }
+    final = (header or {}).get("eventStatus") == 3
     competitors = [
         _competitor(
             side,
@@ -1003,10 +1063,10 @@ def _fox_to_espn_summary(
             meta.get(espn_ids[side]) or {},
             espn_uid_league,
             colours[side],
+            final=final,
         )
         for order_index, side in enumerate(("home", "away"))
     ]
-    final = (header or {}).get("eventStatus") == 3
     drives: List[Dict[str, Any]] = []
     grouped: Dict[Any, List[Dict[str, Any]]] = {}
     for gid, play in zip(group_of_play, emitted):
@@ -1105,6 +1165,8 @@ def _competitor(
     meta: Mapping[str, Any],
     espn_uid_league: str,
     colours: Tuple[Optional[str], Optional[str]] = (None, None),
+    *,
+    final: bool = True,
 ) -> Dict[str, Any]:
     """One ``header.competitions[0].competitors[]`` entry, home first.
 
@@ -1126,7 +1188,8 @@ def _competitor(
         "uid": f"s:20~l:{espn_uid_league}~t:{espn_team_id}",
         "order": order,
         "homeAway": side,
-        "winner": bool(fox_team.get("isLoser") is False and fox_team.get("score") is not None),
+        # Fox reads ``isLoser: false`` for BOTH clubs on every live poll; only a final has a winner
+        "winner": bool(final and fox_team.get("isLoser") is False and fox_team.get("score") is not None),
         "team": {
             "id": str(espn_team_id),
             "uid": f"s:20~l:{espn_uid_league}~t:{espn_team_id}",

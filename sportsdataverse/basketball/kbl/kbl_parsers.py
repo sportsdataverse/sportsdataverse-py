@@ -47,8 +47,8 @@ year of its winter, and ``season_grade`` 2 tells it from the KBL).
 from __future__ import annotations
 
 import datetime as dt
-import math
 import json
+import math
 import re
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple, Union
 
@@ -57,6 +57,7 @@ import polars as pl
 
 from sportsdataverse.basketball.kbl import kbl_codes as codes
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _data_only
 
 __all__ = [
     "parse_kbl_current_standings",
@@ -1002,6 +1003,7 @@ def _shape_players(raw: Any) -> List[Dict[str, Any]]:
 # --- public parsers --------------------------------------------------------------
 
 
+@_data_only
 def parse_kbl_seasons(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/season/list`` -> one row per KBL regular season (and its D-League editions' gameCode 01 rows, if listed).
 
@@ -1029,6 +1031,7 @@ def parse_kbl_seasons(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     return _finish(_frame("parse_kbl_seasons", _shape_seasons(raw)), return_as_pandas)
 
 
+@_data_only
 def parse_kbl_teams(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/common/teamList`` -> the current clubs.
 
@@ -1056,6 +1059,7 @@ def parse_kbl_teams(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     return _finish(_frame("parse_kbl_teams", _shape_teams(raw)), return_as_pandas)
 
 
+@_data_only
 def parse_kbl_schedule(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/match/list`` -> one row per game (every competition) dated inside the window.
 
@@ -1137,6 +1141,7 @@ def parse_kbl_period_scores(raw: Any, *, return_as_pandas: bool = False) -> Fram
     return _finish(_frame("parse_kbl_period_scores", _shape_period_scores(raw)), return_as_pandas)
 
 
+@_data_only
 def parse_kbl_pbp(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/match/{gmkey}/text-cast`` -> play-by-play, one row per event in game order.
 
@@ -1164,6 +1169,7 @@ def parse_kbl_pbp(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     return _finish(_frame("parse_kbl_pbp", _shape_pbp(raw)), return_as_pandas)
 
 
+@_data_only
 def parse_kbl_player_box(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/match/{gmkey}/player-stat`` -> the player box score with advanced rates.
 
@@ -1193,6 +1199,7 @@ def parse_kbl_player_box(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     )
 
 
+@_data_only
 def parse_kbl_team_box(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/match/{gmkey}/team-record`` -> the team box score with team-only counts.
 
@@ -1303,6 +1310,7 @@ def parse_kbl_game_leaders(raw: Any, *, return_as_pandas: bool = False) -> Frame
     return _finish(_frame("parse_kbl_game_leaders", _shape_game_leaders(raw)), return_as_pandas)
 
 
+@_data_only
 def parse_kbl_player_totals(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/leagues/{glkey}/stats/players`` -> season player totals for one competition.
 
@@ -1330,6 +1338,7 @@ def parse_kbl_player_totals(raw: Any, *, return_as_pandas: bool = False) -> Fram
     return _finish(_frame("parse_kbl_player_totals", _shape_player_totals(raw)), return_as_pandas)
 
 
+@_data_only
 def parse_kbl_standings(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/league/rank/{glkey}`` -> the standings of one competition with team season totals.
 
@@ -1492,6 +1501,7 @@ def parse_kbl_playoff_games(raw: Any, *, return_as_pandas: bool = False) -> Fram
     return _finish(_frame("parse_kbl_playoff_games", _shape_playoff_games(raw)), return_as_pandas)
 
 
+@_data_only
 def parse_kbl_round_mvps(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/league/round-mvp/{seasonCode}`` -> the round MVPs of a season.
 
@@ -1519,6 +1529,7 @@ def parse_kbl_round_mvps(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     return _finish(_frame("parse_kbl_round_mvps", _shape_round_mvps(raw)), return_as_pandas)
 
 
+@_data_only
 def parse_kbl_current_standings(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/league/rank/team`` -> the current standings (the active season; no parameter).
 
@@ -1573,6 +1584,7 @@ def parse_kbl_season_leaders(raw: Any, *, return_as_pandas: bool = False) -> Fra
     return _finish(_frame("parse_kbl_season_leaders", _shape_season_leaders(raw)), return_as_pandas)
 
 
+@_data_only
 def parse_kbl_players(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/players`` -> the player directory (current and former players).
 

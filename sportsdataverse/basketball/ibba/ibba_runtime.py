@@ -17,8 +17,9 @@ Measured against the live host (sdv-internal-refs ``ibba/``, 2026-10-12):
     field, so this is a heuristic: two teams, two TOTAL rows of ``200 + 25 x overtimes`` player-minutes, and
     different scores; it cannot tell a final from a box frozen at the buzzer before confirmation).
 
-* **Error vocabulary.** ``NoDataError``: HTTP 404, an EMPTY 200 body (what an unknown id answers), a legitimate
-  empty list. ``ValueError``: a parameter that is not an integer, boolean or non-empty string as the op needs.
+* **Error vocabulary.** ``NoDataError``: HTTP 404, a legitimate empty list. A 204 / 205 returns ``{}``. An EMPTY
+  200 body is what an unknown id answers, but a failed fetch answers the same, so it is an ``AssetFetchError``
+  like every blank 2xx in the package. ``ValueError``: a parameter that is not an integer, boolean or non-empty string as the op needs.
   ``AssetFetchError``: any other non-200 (429 / 502 / 503 / 504 retried three times, spaced by
   ``dl_utils.download`` and honouring ``Retry-After``; a 500 is the host's deterministic error and is not
   retried), a dead connection, a non-JSON body, an error or changed envelope, a wrong-scope row, an unfinished
@@ -180,6 +181,7 @@ def _scope_error(op: str, wire: Dict[str, str], rows: list) -> Optional[str]:
     return None
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, Any]:
     """GET one ASMX op, refuse every wrong answer, return ``{"<key>": rows, "_request": {...}}``.
 
@@ -191,12 +193,13 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, An
 
     Returns:
         The parsed body ``{"<key>": [row, ...]}`` with the request stamped under ``_request``
-        (``{"op": ..., "params": {...}}``).
+        (``{"op": ..., "params": {...}}``); ``{}`` for a 204 / 205.
 
     Raises:
-        NoDataError: HTTP 404, an empty 200 body (an unknown id), an empty list.
+        NoDataError: HTTP 404, an empty list.
         ValueError: a missing, unexpected or malformed parameter, or HTTP 400 / 422.
-        AssetFetchError: any other failed or wrong answer (see the module docstring).
+        AssetFetchError: an empty 200 body (an unknown id, or a failed fetch), or any other failed or wrong
+            answer (see the module docstring).
         TypeError: an unsupported keyword argument.
     """
     if kwargs:
@@ -209,6 +212,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, An
     where = _rt._where(url)
     resp = _fetch(url, wire)
     status = getattr(resp, "status_code", None)
+    _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a)
     if status == 404:
         raise NoDataError(f"{where} answered HTTP 404")
     if status in (400, 422):
@@ -217,7 +221,8 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, An
         raise _fail(f"{where} answered HTTP {status}, not 200")
     text = getattr(resp, "text", "") or ""
     if not text.strip():
-        raise NoDataError(f"{where}: an empty 200 body (the host's answer for an unknown id)")
+        # a blank 2xx is a failed fetch repo-wide, even where the host also answers an unknown id so (EX-SYNC-d)
+        raise _fail(f"{where}: an empty 200 body (an unknown id answers so too, but so does a failed fetch)")
     ctype = ((getattr(resp, "headers", None) or {}).get("content-type", "") or "").lower()
     if "json" not in ctype:
         raise _fail(f"{where} answered {ctype or 'no content type'}, not JSON")

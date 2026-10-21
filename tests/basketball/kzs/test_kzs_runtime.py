@@ -202,11 +202,12 @@ def test_the_session_spaces_two_requests_by_the_interval(monkeypatch):
         },
     ],
 )
-def test_http_400_is_an_asset_fetch_error_never_a_value_error(body, transport):
+def test_http_400_is_a_value_error_never_an_asset_fetch_error(body, transport):
+    # EX-SYNC-b: a 400 is the request's fault repo-wide (an unknown id included); it was AssetFetchError.
     t = transport({"/matches/99999999": _response(400, body)})
-    with pytest.raises(AssetFetchError, match="400") as exc:
+    with pytest.raises(ValueError, match="400") as exc:
         _get("/matches/99999999")
-    assert not isinstance(exc.value, ValueError)
+    assert not isinstance(exc.value, AssetFetchError)
     assert len(t.calls) == 1  # a 400 is not retried
     assert body["status"] in str(exc.value) or "does not exist" in str(exc.value) or "fieldErrors" in str(exc.value)
 
@@ -219,7 +220,7 @@ def test_a_400_carries_the_apis_message_and_never_the_query(transport):
             )
         }
     )
-    with pytest.raises(AssetFetchError) as exc:
+    with pytest.raises(ValueError) as exc:
         _get("/matches/99999999")
     assert "does not exist" in str(exc.value) and "?" not in str(exc.value)
 

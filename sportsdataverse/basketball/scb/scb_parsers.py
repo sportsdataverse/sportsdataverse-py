@@ -63,6 +63,7 @@ import polars as pl
 
 from sportsdataverse.basketball.scb.scb_dtypes import DTYPES
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _data_only
 
 __all__ = [
     "parse_scb_game_actions",
@@ -331,6 +332,7 @@ def _fix_field_goals(row: Dict[str, Any]) -> Dict[str, Any]:
 # --- /seasons ---------------------------------------------------------------------------------------
 
 
+@_data_only
 def parse_scb_seasons(raw: Any, *, return_as_pandas: bool = False, columns: Columns = None) -> Frame:
     """``/seasons`` -> one row per season, newest first.
 
@@ -621,6 +623,7 @@ def _stat_rows(raw: Any, rename: Mapping[str, str]) -> List[Dict[str, Any]]:
     return rows
 
 
+@_data_only
 def parse_scb_player_statistics(raw: Any, *, return_as_pandas: bool = False, columns: Columns = None) -> Frame:
     """``/seasons/{seasonId}/player-statistics`` -> one row per player and stat block: season totals and per-game values.
 
@@ -653,6 +656,7 @@ def parse_scb_player_statistics(raw: Any, *, return_as_pandas: bool = False, col
     return _frame("parse_scb_player_statistics", _stat_rows(raw, _PLAYER_STAT_RENAME), columns, return_as_pandas)
 
 
+@_data_only
 def parse_scb_team_statistics(raw: Any, *, return_as_pandas: bool = False, columns: Columns = None) -> Frame:
     """``/seasons/{seasonId}/team-statistics`` -> one row per team and stat block: season totals and per-game values.
 
@@ -768,6 +772,7 @@ def _game_row(g: Mapping[str, Any], req: Mapping[str, Any], bucket: Optional[str
     return row
 
 
+@_data_only
 def parse_scb_games(raw: Any, *, return_as_pandas: bool = False, columns: Columns = None) -> Frame:
     """``/games`` (a page), ``/games/{gameId}`` (the header) -> one row per game.
 
@@ -1080,6 +1085,7 @@ _STANDINGS_POINTS = (
 )
 
 
+@_data_only
 def parse_scb_standings(raw: Any, *, return_as_pandas: bool = False, columns: Columns = None) -> Frame:
     """``/standings`` -> one row per team and stage: the league table.
 
@@ -1126,6 +1132,7 @@ def parse_scb_standings(raw: Any, *, return_as_pandas: bool = False, columns: Co
 # --- profiles ---------------------------------------------------------------------------------------
 
 
+@_data_only
 def parse_scb_season_player(raw: Any, *, return_as_pandas: bool = False, columns: Columns = None) -> Frame:
     """``/season-players/{seasonPlayerId}`` -> one row: the player profile of that engagement.
 
@@ -1184,6 +1191,7 @@ def parse_scb_season_player(raw: Any, *, return_as_pandas: bool = False, columns
     return _frame("parse_scb_season_player", [row], columns, return_as_pandas)
 
 
+@_data_only
 def parse_scb_team(raw: Any, *, return_as_pandas: bool = False, columns: Columns = None) -> Frame:
     """``/teams/{teamId}`` -> one row: the club profile.
 
@@ -1276,6 +1284,7 @@ def parse_scb_team_seasons(raw: Any, *, return_as_pandas: bool = False, columns:
     return _frame("parse_scb_team_seasons", rows, columns, return_as_pandas)
 
 
+@_data_only
 def parse_scb_referees(raw: Any, *, return_as_pandas: bool = False, columns: Columns = None) -> Frame:
     """``/referees`` -> one row per current official (referee or commissioner).
 
@@ -1342,6 +1351,7 @@ def _transfer_row(t: Mapping[str, Any], req: Mapping[str, Any]) -> Dict[str, Any
     }
 
 
+@_data_only
 def parse_scb_transfers(raw: Any, *, return_as_pandas: bool = False, columns: Columns = None) -> Frame:
     """``/transfers`` -> the latest transfers, one row per move (BBL only).
 

@@ -118,7 +118,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [fox_nfl_league_standings](additional/fox-sports-api.md#fox_nfl_league_standings) | Fox Sports nfl league-wide standings tables. |
 | [fox_nfl_league_stat_leaders](additional/fox-sports-api.md#fox_nfl_league_stat_leaders) | Fox Sports nfl league stats landing leaders. |
 | [fox_nfl_odds](additional/fox-sports-api.md#fox_nfl_odds) | NFL game odds six-pack (spread / to-win / total per team). |
-| [fox_nfl_pbp](additional/fox-sports-api.md#fox_nfl_pbp) | NFL play-by-play (one row per play; drive-based). |
+| [fox_nfl_pbp](additional/fox-sports-api.md#fox_nfl_pbp) | NFL play-by-play (one row per play, oldest first, live or final; drive-based). |
 | [fox_nfl_scoreboard](additional/fox-sports-api.md#fox_nfl_scoreboard) | Fox Sports nfl scoreboard nav selections (weeks / dates / groups). |
 | [fox_nfl_scorechip](additional/fox-sports-api.md#fox_nfl_scorechip) | Fox Sports nfl compact live score chip (raw dict -- live-only, uncaptured shape). |
 | [fox_nfl_scores_segment](additional/fox-sports-api.md#fox_nfl_scores_segment) | Fox Sports nfl one row per game in a scoreboard segment. |

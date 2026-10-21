@@ -89,6 +89,13 @@ def on3_player_rankings(
     Returns:
         One row per ranked recruit (On3 ratings). Zero-row frame on empty payload.
 
+    Raises:
+        ValueError: ``year`` / ``sport_slug`` build no On3 rankings route (a malformed value), or
+            On3 answered 400 / 422.
+        NoDataError: the ranking does not exist (the page or data route answered 404).
+        AssetFetchError: the fetch failed (any other non-2xx, a connection failure after
+            retries, a page with no buildId, or an empty / non-JSON data body).
+
     Example:
         Quick start::
 
@@ -135,6 +142,13 @@ def on3_industry_player_rankings(
 
     Returns:
         One row per recruit (consensus On3/Rivals/247/ESPN). Zero-row frame on empty.
+
+    Raises:
+        ValueError: ``year`` / ``sport_slug`` build no On3 rankings route (a malformed value), or
+            On3 answered 400 / 422.
+        NoDataError: the ranking does not exist (the page or data route answered 404).
+        AssetFetchError: the fetch failed (any other non-2xx, a connection failure after
+            retries, a page with no buildId, or an empty / non-JSON data body).
 
     Example:
         Quick start::
@@ -183,6 +197,13 @@ def on3_team_rankings(
     Returns:
         One row per team class (On3 ratings). Zero-row frame on empty payload.
 
+    Raises:
+        ValueError: ``year`` / ``sport_slug`` build no On3 rankings route (a malformed value), or
+            On3 answered 400 / 422.
+        NoDataError: the ranking does not exist (the page or data route answered 404).
+        AssetFetchError: the fetch failed (any other non-2xx, a connection failure after
+            retries, a page with no buildId, or an empty / non-JSON data body).
+
     Example:
         Quick start::
 
@@ -229,6 +250,13 @@ def on3_industry_team_rankings(
 
     Returns:
         One row per team class (consensus ratings). Zero-row frame on empty payload.
+
+    Raises:
+        ValueError: ``year`` / ``sport_slug`` build no On3 rankings route (a malformed value), or
+            On3 answered 400 / 422.
+        NoDataError: the ranking does not exist (the page or data route answered 404).
+        AssetFetchError: the fetch failed (any other non-2xx, a connection failure after
+            retries, a page with no buildId, or an empty / non-JSON data body).
 
     Example:
         Quick start::

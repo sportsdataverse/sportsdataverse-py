@@ -105,7 +105,7 @@ def test_object_rows_drops_null_rows_and_rejects_other_non_objects():
     pd.NA) is no data: it is dropped (4.13), and never hides a bad row after it (R941-1)."""
     import pandas as pd
 
-    from sportsdataverse.errors import _first_row, _object_rows
+    from sportsdataverse.errors import SchemaDriftWarning, _first_row, _object_rows
 
     for na in (None, float("nan"), pd.NA):
         assert _object_rows([{"a": 1}, na]) == [{"a": 1}]
@@ -122,3 +122,12 @@ def test_object_rows_drops_null_rows_and_rejects_other_non_objects():
         _object_rows([None, "x"])
     with pytest.raises(TypeError, match="a row is list, not an object"):  # pd.isna([None]) is not a scalar NA (R941-9)
         _object_rows([[None]])
+    # 4.14: one rule for the #941 sites and the provider flatteners. None is no rows; a non-list is drift.
+    assert _object_rows(None) == [] and _object_rows(None, "p: k") == []
+    for bad in (5, "x", {"a": 1}, {}, ""):
+        with pytest.raises(TypeError, match=f"rows is {type(bad).__name__}, not a list"):
+            _object_rows(bad)
+    with pytest.warns(SchemaDriftWarning, match=r"^p: k: unexpected payload shape \(TypeError: a row is str") as w:
+        assert _object_rows([None, {"a": 1}, "x"], "p: k", stacklevel=2) is None
+    assert w[0].filename == __file__  # stacklevel counts from the helper: 2 is its caller (the default 3, the parser's)
+    assert _object_rows([None, {"a": 1}], "p: k") == [{"a": 1}]

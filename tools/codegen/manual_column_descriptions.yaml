@@ -4580,6 +4580,11 @@ fox_cfb_league_scores:
 fox_cfb_league_stat_leaders:
   stat_abbreviation: Fox's short code for the leader's stat (e.g. 'PYDS', 'PTD', 'RECYDS'); some codes contain a space, such
     as 'KR YDS'.
+fox_cfb_pbp:
+  play_player: Name of the athlete Fox credits the play to (its play-level entity link), upper-cased as Fox serves it (e.g.
+    'LANDEN THOMAS'); null on admin rows such as timeouts and period ends.
+  play_team: Club code from the game header (e.g. 'OKLA') of the drive group Fox files the play under, i.e. the possession
+    team; on a kickoff it is the receiving team, since Fox opens the receiver's drive with the kick.
 fox_cfb_schedule:
   segment_id: 'Fox scoreboard segment the game was fetched from: ''{season}-{week}-1'' for a regular-season week (sampled ''2026-3-1''),
     ''{season}-bowls-2'' or ''{season}-cfp-2'' for the postseason.'
@@ -4888,6 +4893,11 @@ fox_nfl_league_standings:
   w_l_t: Team's record as a win-loss-tie string with the tie count shown only when nonzero (e.g. '1-0', '1-1-1').
 fox_nfl_league_stat_leaders:
   stat_abbreviation: Fox's short code for the leader stat (e.g. 'PYDS', 'RTD', 'K-RET YDS').
+fox_nfl_pbp:
+  play_player: Name of the athlete Fox credits the play to (its play-level entity link), upper-cased as Fox serves it (e.g.
+    'DEVIN SINGLETARY'); null on admin rows such as timeouts and period ends.
+  play_team: Club code from the game header (e.g. 'NYG') of the drive group Fox files the play under, i.e. the possession
+    team; on a kickoff it is the receiving team, since Fox opens the receiver's drive with the kick.
 fox_nfl_scoreboard:
   selected: Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload
     has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId,
@@ -62341,7 +62351,7 @@ torvik_player_stats:
   mid_pct: Field-goal percentage on non-rim twos as a fraction (0-1).
   min_pct: Share of team minutes played, in percent.
   minutes: Share of team minutes played, in percent (as on the Torvik player page).
-  number: Jersey number as listed (Int64).
+  number: Jersey number as listed, as text ("00" is not "0").
   o_rtg: Offensive rating (points produced per 100 individual possessions).
   obpm: Offensive box plus/minus.
   ogbpm: Offensive game box plus/minus.

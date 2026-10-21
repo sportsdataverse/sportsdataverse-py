@@ -292,6 +292,9 @@ def write_season_xwalk(root: Union[str, Path], league: str, season: int, frame: 
     tmp = path.with_suffix(path.suffix + ".tmp")
     tmp.write_text(json.dumps(frame.to_dicts()), encoding="utf-8")
     tmp.replace(path)
+    # The index is lru_cached, including the {} a missing file gave: drop it so this
+    # process reads the crosswalk just written instead of emitting null ids.
+    load_espn_game_index.cache_clear()
     return path
 
 

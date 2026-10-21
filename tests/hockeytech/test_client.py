@@ -269,3 +269,37 @@ def test_unparseable_body_snippet_never_carries_the_key(monkeypatch):
         _call()
     assert secret[:8] not in _rendered(ei.value)
     assert ei.value.__cause__ is None and ei.value.__context__ is None
+
+
+def test_rate_limit_holds_across_threads(monkeypatch):
+    """B-GB-26 (task 4.5): concurrent callers must not all read one stale stamp and fire together."""
+    import threading
+    import time
+
+    from sportsdataverse.hockeytech import _client as client
+
+    body = (_FIX / "pwhl_seasons.json").read_text(encoding="utf-8")
+    starts: list = []
+
+    def fake_download(url, **_k):
+        starts.append(time.monotonic())
+        time.sleep(0.02)  # an answer takes time: a second caller must not slip in meanwhile
+        return SimpleNamespace(text=body, status_code=200)
+
+    monkeypatch.setattr(client, "download", fake_download)
+    monkeypatch.setattr(client, "_RATE_LIMIT_S", 0.15)
+    monkeypatch.setattr(client, "_last_request_ts", 0.0)
+    gate = threading.Barrier(4)
+
+    def worker():
+        gate.wait()
+        _call()
+
+    threads = [threading.Thread(target=worker) for _ in range(4)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    gaps = [b - a for a, b in zip(sorted(starts), sorted(starts)[1:])]
+    assert len(starts) == 4
+    assert min(gaps) >= 0.13, gaps

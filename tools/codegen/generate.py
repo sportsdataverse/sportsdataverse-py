@@ -290,6 +290,10 @@ _VOCAB_GETTERS = frozenset(
         "sportsdataverse.soccer.nwsl.nwsl_api_runtime",
         "sportsdataverse.wnba.wnba_stats_runtime",
         "sportsdataverse.yahoo.yahoo_shangrila_runtime",
+        # 4.1b
+        "sportsdataverse.nfl.nflpro_runtime",
+        # 4.4
+        "sportsdataverse.cbs.cbs_napi_runtime",
     }
 )
 # (error name, aliases a YAML ``raises:`` line may already use for it, line to add)

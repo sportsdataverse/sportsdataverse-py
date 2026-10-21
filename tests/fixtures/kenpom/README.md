@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [kenpom fixtures](#kenpom-fixtures)
+  - [Returns-table captures (2026-10-07)](#returns-table-captures-2026-10-07)
+  - [Logged-out page (2026-10-19)](#logged-out-page-2026-10-19)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # kenpom fixtures
 
 | File | Provenance |
@@ -55,3 +65,9 @@ page from an embedded script and `parse_kenpom_page` reads HTML tables only, so 
 | `team_players_expanded.json` | `https://kenpom.com/player-expanded.php?team=Duke&y=2025` |
 | `team_stats.json` | `https://kenpom.com/teamstats.php?y=2025&od=o` |
 | `trends.json` | `https://kenpom.com/trends.php` |
+
+## Logged-out page (2026-10-19)
+
+| file | source | notes |
+|---|---|---|
+| `summary_logged_out.html` | `GET https://kenpom.com/summary.php?y=2025` with no session cookie, the package's own `User-Agent` and `Referer`; HTTP 200, `text/html`, 35,142 bytes, redirected to `register-kenpom.php?frompage=1`; captured 2026-10-19 from a residential IP | What a dead or superseded KenPom session gets for any member page (A-M19): the subscription/login page, with the `email` + `password` login form and no data table. Byte-for-byte except the per-request `idempotency` form value and the two Stripe publishable keys, replaced with `REDACTED`. Used by `tests/mbb/test_kenpom.py`: `get_html` must raise `AssetFetchError` on it instead of returning it for `parse_kenpom_page` to read as an empty answer. |

@@ -77,13 +77,14 @@ def _fetch_seasons(website_id: int, **kwargs: Any) -> List[Dict[str, Any]]:
     if hit is not None and time.monotonic() - hit[0] < SEASONS_TTL:
         return hit[1]
     url = f"{BASE}/{website_id}/fixtures"
-    body = _bb._get(url, None, **kwargs)
+    body = _bb._fetch_json(url, None, **kwargs)
     _check(url, website_id, "fixtures", {}, body, rows=False)
     rows = list(parse_atrium_seasons(body).iter_rows(named=True))
     _seasons_cache[website_id] = (time.monotonic(), rows)
     return rows
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-1)
 def atrium_season_id(website_id: int, season: int, competition_id: Optional[str] = None, **kwargs: Any) -> str:
     """The ``seasonId`` of a site's season, from its END year and optionally its competition.
 
@@ -221,6 +222,7 @@ def _check(url: str, website_id: int, typ: str, p: Dict[str, Any], body: Any, ro
         raise NoDataError(f"{where}: the site has no rows for this request")
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET an Atrium embed route as JSON; map ``season`` to ``seasonId`` and refuse every wrong answer.
 
@@ -256,6 +258,6 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         p["seasonId"] = atrium_season_id(site, season, p.get("competitionId"), **kwargs)
         if typ not in _COMPETITION_TYPES:
             p.pop("competitionId", None)
-    body = _bb._get(url, p, **kwargs)
+    body = _bb._fetch_json(url, p, **kwargs)
     _check(url, site, typ, p, body)
     return body

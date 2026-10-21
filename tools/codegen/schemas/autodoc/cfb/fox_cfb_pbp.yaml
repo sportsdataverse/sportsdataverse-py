@@ -37,3 +37,6 @@ columns:
 - name: play_team
   type: character
   description: ''
+- name: play_player
+  type: character
+  description: ''

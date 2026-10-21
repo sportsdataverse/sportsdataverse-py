@@ -41,6 +41,7 @@ from typing import Any, Dict, List, Optional, Sequence
 
 from sportsdataverse.basketball.fiba_hub.fiba_frames import Frame, _finish, _flatten, _frame, _id, _rows, _snake
 from sportsdataverse.basketball.fiba_hub.fiba_runtime import _scrub
+from sportsdataverse.errors import _data_only
 
 __all__ = [
     "parse_fiba_gdap_schedule",
@@ -477,6 +478,7 @@ def parse_fiba_gdap_teams(
     return _finish(_frame(_sh_flat(raw)), "parse_fiba_gdap_teams", columns, return_as_pandas)
 
 
+@_data_only
 def parse_fiba_gdap_rounds(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:

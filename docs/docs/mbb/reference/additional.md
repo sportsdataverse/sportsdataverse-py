@@ -83,7 +83,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [duration_from_period](additional/stats-ncaa-org.md#duration_from_period) | The game duration (minutes elapsed) once `period` has completed |
 | [enrich_and_reverse_game_events](additional/stats-ncaa-org.md#enrich_and_reverse_game_events) | Inserts game-break events and turns descending per-row times into |
 | [enrich_lineup](additional/stats-ncaa-org.md#enrich_lineup) | Populate `pts`/`plus_minus` from the score delta, then run the |
-| [enrich_shot_events_with_pbp](additional/stats-ncaa-org.md#enrich_shot_events_with_pbp) | Enrich each shot with its play-by-play event + on-floor lineup |
+| [enrich_shot_events_with_pbp](additional/stats-ncaa-org-2.md#enrich_shot_events_with_pbp) | Enrich each shot with its play-by-play event + on-floor lineup |
 | [enrich_stats](additional/stats-ncaa-org-2.md#enrich_stats) | Fold a lineup's raw events into a counting-stat tree (``protected def |
 | [enrich_sub_error](additional/stats-ncaa-org-2.md#enrich_sub_error) | Adds top-level location information to a single sub-error, returning a |
 | [enrich_sub_errors](additional/stats-ncaa-org-2.md#enrich_sub_errors) | Adds top-level location information to a list of sub-errors generated |
@@ -126,7 +126,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [ncaa_mbb_box_scores](additional/stats-ncaa-org-2.md#ncaa_mbb_box_scores) | Box scores for one or more NCAA games (bigballR `get_box_scores` port). |
 | [ncaa_mbb_date_games](additional/stats-ncaa-org-2.md#ncaa_mbb_date_games) | Discover every NCAA MBB game played on a date (bigballR `get_date_games`). |
 | [ncaa_mbb_join_pbp_shots](additional/stats-ncaa-org-2.md#ncaa_mbb_join_pbp_shots) | Attach shot-chart coordinates to play-by-play rows (bigballR |
-| [ncaa_mbb_player_stats](additional/stats-ncaa-org-2.md#ncaa_mbb_player_stats) | Aggregate bigballR-contract play-by-play into per-player box stats. |
+| [ncaa_mbb_player_stats](additional/stats-ncaa-org-3.md#ncaa_mbb_player_stats) | Aggregate bigballR-contract play-by-play into per-player box stats. |
 | [ncaa_mbb_possessions](additional/stats-ncaa-org-3.md#ncaa_mbb_possessions) | Aggregate bigballR-contract play-by-play into one row per possession. |
 | [ncaa_mbb_shot_locations](additional/stats-ncaa-org-3.md#ncaa_mbb_shot_locations) | Scrape MBB shot locations for one or more games (bigballR |
 | [ncaa_mbb_team_stats](additional/stats-ncaa-org-3.md#ncaa_mbb_team_stats) | Aggregate bigballR-contract play-by-play into per-team game stats. |

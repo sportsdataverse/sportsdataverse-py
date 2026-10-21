@@ -79,7 +79,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [fox_cfb_league_standings](additional/fox-sports-api.md#fox_cfb_league_standings) | Fox Sports cfb league-wide standings tables. |
 | [fox_cfb_league_stat_leaders](additional/fox-sports-api.md#fox_cfb_league_stat_leaders) | Fox Sports cfb league stats landing leaders. |
 | [fox_cfb_odds](additional/fox-sports-api.md#fox_cfb_odds) | Fox Sports CFB game odds six-pack (spread / to win / total per team). |
-| [fox_cfb_pbp](additional/fox-sports-api.md#fox_cfb_pbp) | Fox Sports CFB play-by-play (one row per play). |
+| [fox_cfb_pbp](additional/fox-sports-api.md#fox_cfb_pbp) | Fox Sports CFB play-by-play (one row per play, oldest first, live or final). |
 | [fox_cfb_play_process](additional/fox-sports-api.md#fox_cfb_play_process) | Build a *processed* CFB play-by-play game from FoxSports as a backup to ESPN. |
 | [fox_cfb_schedule](additional/fox-sports-api.md#fox_cfb_schedule) | Fox Sports CFB full-season schedule (one row per game). |
 | [fox_cfb_scoreboard](additional/fox-sports-api.md#fox_cfb_scoreboard) | Fox Sports cfb scoreboard nav selections (weeks / dates / groups). |

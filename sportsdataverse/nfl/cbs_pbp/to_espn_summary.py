@@ -41,6 +41,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
+from sportsdataverse._codegen_runtime import _id_text
 from sportsdataverse.football.cbs_common import (
     _admin_row,
     _fetch_cbs_game,
@@ -776,10 +777,13 @@ def _cbs_nfl_to_espn_summary(
 
     Raises:
         KeyError: ``idmap_row`` is missing ``espn_event_id`` or a team id.
+        ValueError: a team id is empty, None, NaN or ``pandas.NA`` (possession cannot be attributed).
     """
     notes: List[str] = []
-    event_id = str(idmap_row["espn_event_id"])
-    home_id, away_id = str(idmap_row["home_espn_team_id"]), str(idmap_row["away_espn_team_id"])
+    event_id = _id_text(idmap_row["espn_event_id"])
+    home_id, away_id = _id_text(idmap_row["home_espn_team_id"]), _id_text(idmap_row["away_espn_team_id"])
+    if not (home_id and away_id):
+        raise ValueError("id-map row states no ESPN team ids: possession cannot be attributed")
     home_cbs_id = str((scoreboard.get("hometeam") or {}).get("id") or "")
     away_cbs_id = str((scoreboard.get("awayteam") or {}).get("id") or "")
     espn_team_of = {home_cbs_id: home_id, away_cbs_id: away_id}
@@ -1028,7 +1032,8 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     row = dict(ctx.idmap_row or {})
     row.setdefault("espn_event_id", str(espn_id))
     resolved_by = "idmap" if ctx.idmap_row else "none"
-    if not (row.get("home_espn_team_id") and row.get("away_espn_team_id") and row.get("season")):
+    # ids through _id_text first: a NaN id is truthy and pandas.NA raises on truthiness
+    if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id")) and row.get("season")):
         # Game on Paper calls dispatch with the ESPN event id alone, so the row can arrive
         # empty even after dispatch's own cascade. The nflverse schedule closes the gap
         # offline for everything except CBS's game id, which only the scoreboard page has.
@@ -1036,9 +1041,9 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
         if from_schedule:
             resolved_by = "nflverse_schedule" if resolved_by == "none" else "idmap+nflverse_schedule"
             for key, value in from_schedule.items():
-                if row.get(key) is None:
+                if row.get(key) is None or (key.endswith("_espn_team_id") and not _id_text(row.get(key))):
                     row[key] = value
-    if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):
+    if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):
         raise SourceUnavailable(f"nfl {espn_id}: id-map row carries no ESPN team ids")
 
     payload = ctx.payload
@@ -1057,8 +1062,8 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
             int(row["season"]),
             int(row.get("season_type") or 2),
             int(row["week"]),
-            str(row["home_espn_team_id"]),
-            str(row["away_espn_team_id"]),
+            _id_text(row["home_espn_team_id"]),
+            _id_text(row["away_espn_team_id"]),
             kickoff_utc=row.get("kickoff_utc"),
         )
         cbs_id_source = "week_scoreboard"
@@ -1066,8 +1071,11 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
             raise SourceUnavailable(f"nfl {espn_id}: no CBS game id on the week scoreboard page")
 
     if payload is None:
+        # a line the caller already supplies makes CBS's odds unneeded, so a failed odds fetch must
+        # not hand the whole game over (the fetch raises on any non-404 failure)
+        known_line = ctx.odds_override or _odds_override_from_row(ctx.idmap_row)
         try:
-            payload = _fetch_cbs_game(str(cbs_game_id), optional=("drives", "odds"))
+            payload = _fetch_cbs_game(str(cbs_game_id), optional=("drives",) if known_line else ("drives", "odds"))
         except Exception as exc:  # network / JSON -> the next source
             raise SourceUnavailable(f"cbs napi fetch failed: {type(exc).__name__}: {exc}") from exc
 

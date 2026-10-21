@@ -482,8 +482,11 @@ def _ncaa_bb_date_games(
     if fetcher is None:
         from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
 
-        fetcher = NcaaFetcher.with_browser()
-    html = fetcher.fetch_html(path)
+        # Closed on return: a lingering browser blocks every later Playwright fetcher in the process.
+        with NcaaFetcher.with_browser() as browser_fetcher:
+            html = browser_fetcher.fetch_html(path)
+    else:
+        html = fetcher.fetch_html(path)
     return parse_ncaa_bb_scoreboard(html, date, season_id=sid)
 
 

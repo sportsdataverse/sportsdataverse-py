@@ -6,6 +6,7 @@ the ~1,000 generated functions share one tested HTTP path instead of inlining it
 
 from __future__ import annotations
 
+import functools
 import inspect
 import io
 import json
@@ -13,7 +14,7 @@ import logging
 import numbers
 import time
 from contextlib import contextmanager
-from typing import Any, Callable, Iterator, List, Optional
+from typing import Any, Callable, Iterator, List, Optional, TypeVar, cast
 from urllib.parse import quote, urlsplit
 
 import polars as pl
@@ -77,6 +78,21 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
             continue
         df = df.with_columns(cast.alias(col))
     return df
+
+
+#: A leading zero before a digit: the text a numeric cast would change ("07", "00", "000000").
+_ZERO_PADDED = r"^\s*[+-]?0\d"
+
+
+def _zero_padded(text: pl.Series) -> bool:
+    """True when a String column holds digits a numeric cast would lose: ``"00"``, ``"007"``, ``"000000"``.
+
+    The text-to-number casts in the HTML / CSV parsers call a cast lossless when it
+    invents no nulls; a leading zero before a digit is the case that check misses
+    (jersey ``"00"`` and ``"0"`` both become 0, colour ``"000000"`` becomes 0). Such a
+    column stays text (A-M18, B-M18, B-M19).
+    """
+    return bool(text.str.contains(_ZERO_PADDED).any())
 
 
 def _where(url: str) -> str:
@@ -183,6 +199,84 @@ def _transport_errors(url: str) -> Iterator[None]:
         raise AssetFetchError(f"{_where(url)}: fetch failed after retries: {type(exc).__name__}") from exc
 
 
+class _NoContent(NoDataError):
+    """A 204 / 205 met below a hand-written runtime's ``_get`` (see :func:`_no_content_is_empty`).
+
+    A ``NoDataError``, so on a path that is not a getter (a public season-id resolver sharing the
+    runtime's fetch) it still means what a 204 means: the fetch succeeded and there is nothing here.
+    """
+
+
+def _check_no_content(status: Any) -> None:
+    """Raise :class:`_NoContent` for a 204 / 205: no content by definition, so no body check may read it.
+
+    The shared chokepoints answer such a status with ``{}`` (:func:`_json_text`). A runtime that reads
+    its own body (an envelope, a row count, an HTML page) calls this right after the transport, and its
+    ``_get`` carries :func:`_no_content_is_empty`, so the 204 reaches the caller as the same ``{}``
+    instead of a failed envelope or row check (EX-SYNC-a).
+    """
+    if status in (204, 205):
+        raise _NoContent(f"answered HTTP {status}: no content")
+
+
+_Fn = TypeVar("_Fn", bound=Callable[..., Any])
+
+
+def _no_content_is_empty(get: _Fn) -> _Fn:
+    """Wrap a data getter (a runtime's ``_get``) so a 204 / 205 anywhere below it returns ``{}``.
+
+    ``_NoContent`` is private: every public function that can meet one carries this decorator or
+    :func:`_no_content_is_unknown` (tests/codegen/test_runtime_errors.py checks it).
+    """
+
+    @functools.wraps(get)
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        try:
+            return get(*args, **kwargs)
+        except _NoContent:
+            return {}
+
+    return cast(_Fn, wrapper)
+
+
+@contextmanager
+def _no_content_unknown(where: str) -> Iterator[None]:
+    """A lookup or bootstrap (a token page, a session page, a season list, a snapshot pointer) that answers
+    204 / 205 leaves nothing to read, so the answer is unknown: :class:`AssetFetchError`, never the data
+    request's ``{}`` (R4.1b-d-1)."""
+    try:
+        yield
+    except _NoContent as exc:
+        raise AssetFetchError(f"{where}: the lookup {exc}, so the answer is unknown") from None
+
+
+def _no_content_is_unknown(fn: _Fn) -> _Fn:
+    """:func:`_no_content_unknown` around a whole lookup function (a public season resolver, a token reader)."""
+
+    @functools.wraps(fn)
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        with _no_content_unknown(getattr(fn, "__qualname__", "a lookup")):
+            return fn(*args, **kwargs)
+
+    return cast(_Fn, wrapper)
+
+
+def _no_content_transport(transport: Optional[Callable[..., Any]] = None) -> Callable[..., Any]:
+    """A ``transport`` for :func:`_download_json` that raises :class:`_NoContent` on a 204 / 205.
+
+    For a runtime whose ``_get`` carries :func:`_no_content_is_empty`. ``transport`` defaults to this
+    module's ``download``, looked up at call time, so a test that patches ``_codegen_runtime.download``
+    (or passes its own module's ``download``) still intercepts the request.
+    """
+
+    def call(**kwargs: Any) -> Any:
+        resp = (transport or download)(**kwargs)
+        _check_no_content(getattr(resp, "status_code", None))
+        return resp
+
+    return call
+
+
 def _check_response(resp: Any, url: str) -> None:
     """:func:`_check_status` for a :func:`~sportsdataverse.dl_utils.download` response.
 
@@ -276,11 +370,22 @@ def _download_json(transport: Callable[..., Any], url: str, **kwargs: Any) -> An
     raise AssertionError("unreachable")  # pragma: no cover
 
 
-def _get(url: str, params: Optional[dict] = None, data: Any = None, json: Any = None, **kwargs) -> Any:
+def _get(
+    url: str,
+    params: Optional[dict] = None,
+    data: Any = None,
+    json: Any = None,
+    *,
+    transport: Optional[Callable[..., Any]] = None,
+    **kwargs,
+) -> Any:
     """GET ``url`` as JSON, or POST it when a ``data`` (form) or ``json`` body is given.
 
     Strips ``None`` params, and the ``None`` fields of a dict body, so a body endpoint
     (``body: form|json``) can run on this shared getter: ``params`` stays the query string.
+
+    ``transport`` replaces :func:`~sportsdataverse.dl_utils.download` (a runtime passes
+    :func:`_no_content_transport` to see a 204 / 205 instead of its ``{}``).
 
     Raises:
         NoDataError: the host answered 404 (or ESPN 200 with ``code: 404``).
@@ -292,7 +397,7 @@ def _get(url: str, params: Optional[dict] = None, data: Any = None, json: Any = 
     for kind, body in (("data", data), ("json_body", json)):  # download names its JSON body json_body
         if body is not None:
             kwargs[kind] = {k: v for k, v in body.items() if v is not None} if isinstance(body, dict) else body
-    return _download_json(download, url, params=clean, **kwargs)
+    return _download_json(transport or download, url, params=clean, **kwargs)
 
 
 def _integral(value: Any) -> int | None:
@@ -331,6 +436,21 @@ def _wire_text(value: Any) -> str:
     if _is_many(value):
         raise ValueError(f"expected a single value, got {type(value).__name__} {value!r}")
     return str(value)
+
+
+def _id_text(value: Any) -> str:
+    """An id read from a hand-built row as the text ESPN uses (B-GB-22): :func:`_wire_text`, or ``""`` when missing.
+
+    A float id goes through ``int`` (``401671775.0`` -> ``"401671775"``; ``str`` gave
+    ``"401671775.0"``, which matches no ESPN id). ``None``, NaN and ``pandas.NA`` -- how a
+    pandas-built id-map row carries a missing id -- are ``""``, never ``"None"`` / ``"nan"``.
+    """
+    try:
+        if value is None or value != value:  # NaN is the one value unequal to itself
+            return ""
+    except TypeError:  # pandas.NA: its comparison is NA, whose truth value raises
+        return ""
+    return _wire_text(value)
 
 
 def _csv(values: Any) -> Optional[str]:

@@ -4,9 +4,14 @@ Custom exceptions for sportsdataverse module
 
 from __future__ import annotations
 
+import functools as _functools
+import inspect as _inspect
 import re as _re
 import warnings as _warnings
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Callable
+from typing import TypeVar as _TypeVar
+from typing import cast as _cast
+from typing import overload as _overload
 from urllib.parse import urlsplit
 
 if TYPE_CHECKING:
@@ -351,21 +356,36 @@ class SchemaDriftWarning(UserWarning):
 _SHAPE_ERRORS: tuple[type[Exception], ...] = (TypeError, AttributeError, ValueError, KeyError, IndexError)
 
 
-def _object_rows(rows: list) -> list[dict]:
-    """The row rule: drop null rows, and raise ``TypeError`` on any other row that is not an object.
+@_overload
+def _object_rows(rows: Any) -> list[dict]: ...
+@_overload
+def _object_rows(rows: Any, where: str, stacklevel: int = 3) -> list[dict] | None: ...
+def _object_rows(rows: Any, where: str | None = None, stacklevel: int = 3) -> list[dict] | None:
+    """The one row rule (R945-2): ``rows`` without its null rows, ready for ``pd.json_normalize``.
 
-    A null row (``None``, ``NaN``, ``pd.NA``) is no data, so it is dropped: ``pd.json_normalize`` would
-    read it as an all-null row, and a list of nulls as an N x 0 frame (4.13). Any other row that is not
-    an object is schema drift, which pandas 3 raises on itself but pandas 2 reads as an empty row (WB-1).
-    Call it on the rows handed to ``pd.json_normalize``, inside the parser's ``_SHAPE_ERRORS`` catch.
+    ``None`` is no rows. A null row (``None``, ``NaN``, ``pd.NA``) is no data, so it is dropped:
+    ``pd.json_normalize`` would read it as an all-null row, and a list of nulls as an N x 0 frame (4.13).
+    A ``rows`` that is not a list, or any other row that is not an object, is schema drift, which
+    pandas 3 raises on itself but pandas 2 reads as an empty row (WB-1, WB-providers-2).
+
+    Drift raises ``TypeError``: call it inside the parser's ``_SHAPE_ERRORS`` catch. Given ``where``
+    (``"<parser>: <payload path>"``) it instead warns :class:`SchemaDriftWarning` and returns ``None``;
+    ``stacklevel`` counts from this function and should land on the parser's caller.
     """
-    kept: list[dict] = []
-    for row in rows:
-        if isinstance(row, dict):
-            kept.append(row)
-        elif not _is_null(row):
-            raise TypeError(f"a row is {type(row).__name__}, not an object")
-    return kept
+    if rows is None:
+        return []
+    if not isinstance(rows, list):
+        shape = f"rows is {type(rows).__name__}, not a list"
+    else:
+        kept = [row for row in rows if not _is_null(row)]
+        bad = [row for row in kept if not isinstance(row, dict)]
+        if not bad:
+            return kept
+        shape = f"a row is {type(bad[0]).__name__}, not an object"
+    if where is None:
+        raise TypeError(shape)
+    _warn_schema_drift(where, TypeError(shape), stacklevel=stacklevel + 1)
+    return None
 
 
 def _is_null(row: Any) -> bool:
@@ -381,12 +401,12 @@ def _first_row(rows: list) -> Any:
     return next((row for row in rows if not _is_null(row)), None)
 
 
-def _warn_schema_drift(where: str, exc: BaseException) -> None:
+def _warn_schema_drift(where: str, exc: BaseException, stacklevel: int = 3) -> None:
     """Warn that ``where`` (``"<parser>: <payload path>"``) met an unrecognised shape (A-L60)."""
     _warnings.warn(
         f"{where}: unexpected payload shape ({type(exc).__name__}: {exc}); no rows read from it",
         SchemaDriftWarning,
-        stacklevel=3,
+        stacklevel=stacklevel,
     )
 
 
@@ -402,6 +422,55 @@ def _error_envelope_code(body: Any) -> int | None:
         if isinstance(code, int) and not isinstance(code, bool) and 400 <= code <= 599:
             return code
     return None
+
+
+_Parser = _TypeVar("_Parser", bound=Callable[..., Any])
+
+
+def _normalize_payload(parse: Callable[..., Any], fix: Callable[[Any], Any]) -> Callable[..., Any]:
+    """``parse`` with ``fix`` applied to its payload, read under the parser's own first-parameter name.
+
+    The payload arrives positionally or as a keyword (``parse_kbl_teams(raw=body)``): a wrapper that took it
+    as ``payload`` would turn every keyword call into a ``TypeError`` (R4.1b-1).
+    """
+    name = next(iter(_inspect.signature(parse).parameters))
+
+    @_functools.wraps(parse)
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        if args:
+            args = (fix(args[0]), *args[1:])
+        elif name in kwargs:
+            kwargs[name] = fix(kwargs[name])
+        return parse(*args, **kwargs)
+
+    return wrapper
+
+
+def _data_body(payload: Any) -> Any:
+    if _error_envelope_code(payload) is not None:
+        return {}
+    if isinstance(payload, list):
+        return [rec for rec in payload if rec != {}]
+    return payload
+
+
+def _data_only(parse: _Parser) -> _Parser:
+    """The parser contract on a body that is not data (A-L17, EX-SYNC-g): zero rows, never a raise.
+
+    Wraps a public provider parser so ``{"code", "message"}`` error envelopes (see
+    :func:`_error_envelope_code`) read as ``{}`` and a list body loses its empty ``{}`` records, which
+    carry no field, instead of becoming a one-row frame. Every other body reaches the parser unchanged.
+    The result is whatever the parser already returns for ``{}`` / ``[]``.
+    """
+    return _cast(_Parser, _normalize_payload(parse, _data_body))
+
+
+def _dict_only(parse: _Parser) -> _Parser:
+    """For a parser whose payload is always an object: any non-dict body reads as ``{}`` (A-L17).
+
+    No envelope check: every parser it wraps reads named keys, which an error envelope lacks.
+    """
+    return _cast(_Parser, _normalize_payload(parse, lambda payload: payload if isinstance(payload, dict) else {}))
 
 
 #: Routes (``host/path`` prefixes) whose 2xx answer is a bare JSON string BY DESIGN. Every other

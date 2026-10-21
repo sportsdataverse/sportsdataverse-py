@@ -924,4 +924,6 @@ files = [
     "sdv_docs/schema.py",
     "sdv_docs/index.py",
     "sdv_docs/server.py",
+    # 4.4
+    "sportsdataverse/cbs/cbs_napi_runtime.py",
 ]

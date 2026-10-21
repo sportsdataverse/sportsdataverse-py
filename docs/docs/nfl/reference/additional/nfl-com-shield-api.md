@@ -32,7 +32,15 @@ scores, possession, weather, attendance, ...).
 
 **Returns**
 
-the `gameDetail` object (or the raw envelope when `raw=True`). Empty `dict` if the game has no detail payload.
+the `gameDetail` object (or the raw envelope when `raw=True`). Empty `dict` if `gameDetail` is `null` (the game has no detail payload).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | Api.nfl.com answered 404. |
+| `ValueError` | Api.nfl.com answered 400 / 422. |
+| `AssetFetchError` | Any other non-2xx or a connection failure after retries (the token mint's included), a 2xx whose body is not a JSON object or array, or a body with no `data.viewer.gameDetail` or carrying any GraphQL `errors` list, even alongside a populated `gameDetail` (a partial answer is an unknown one). |
 
 **Example**
 
@@ -159,6 +167,14 @@ List `api.nfl.com` games for a season/week slice (`/football/v2/games`).
 
 payload with the games list under `"games"` plus `"pagination"`. Each game carries `id` (the uuid game id used by `nfl_game_details`), `homeTeam`/`awayTeam`, `date`, `status`, `externalIds` (gsis etc.).
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | Api.nfl.com answered 404. |
+| `ValueError` | Api.nfl.com answered 400 / 422. |
+| `AssetFetchError` | Any other non-2xx or a connection failure after retries (the token mint's included), or a 2xx whose body is not a JSON object or array. |
+
 **Example**
 
 ```python
@@ -228,6 +244,14 @@ Resolution order (all overrides optional):
 **Returns**
 
 The bearer `accessToken` string.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `/identity/v3/token` answered 400 / 422 (the credentials are rejected). |
+| `NoDataError` | `/identity/v3/token` answered 404. |
+| `AssetFetchError` | Any other non-2xx or a connection failure while minting, or a 2xx body without a string `accessToken`. |
 
 **Example**
 

@@ -93,7 +93,7 @@ Season team stat table: totals and per-game values, one row per team and stat bl
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -142,7 +142,7 @@ Club profile: names, code, home page, ticket shop, year joined and honours.
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -188,7 +188,7 @@ Every season a club played: its name that season and its championship and cup ti
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -241,7 +241,7 @@ Per club, the current roster, one row per player (BBL only).
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

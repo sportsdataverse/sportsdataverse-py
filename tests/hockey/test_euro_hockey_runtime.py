@@ -154,7 +154,7 @@ def test_get_text_retries_a_dead_connection_429_and_5xx_then_gives_up(waits):
         (_Page(status=404), NoDataError, "HTTP 404"),
         (_Page(status=422), ValueError, "rejected the request"),
         (_Page(status=403), AssetFetchError, "HTTP 403"),
-        (_Page(status=204, body=b""), AssetFetchError, "not 200"),
+        (_Page(status=204, body=b""), AssetFetchError, "not 200"),  # without no_content=True (R4.1b-d-2)
         (_Page(ctype="application/json"), AssetFetchError, "non-HTML body"),
         (_Page(ctype=""), AssetFetchError, "no content type"),
         (_Page(body=b""), AssetFetchError, "empty body"),
@@ -168,6 +168,15 @@ def test_get_text_retries_a_dead_connection_429_and_5xx_then_gives_up(waits):
 def test_get_text_refusals_use_the_error_vocabulary(waits, answer, error, match):
     with pytest.raises(error, match=match):
         rt.get_text(URL, transport=_transport(answer), expect="html")
+
+
+@pytest.mark.parametrize("status", [204, 205])
+def test_get_text_opted_in_raises_the_private_no_content(waits, status):
+    """``no_content=True`` (a data page: magnus, vhl) raises ``_rt._NoContent`` for the caller's ``_get`` to answer {}."""
+    from sportsdataverse._codegen_runtime import _NoContent
+
+    with pytest.raises(_NoContent, match=f"HTTP {status}: no content"):
+        rt.get_text(URL, transport=_transport(_Page(status=status, body=b"")), expect="html", no_content=True)
 
 
 def test_get_text_strict_charset_decodes_what_the_site_declares(waits):

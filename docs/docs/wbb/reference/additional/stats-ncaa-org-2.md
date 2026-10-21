@@ -1,10 +1,61 @@
 ---
-title: "WBB — additional Python functions — stats.ncaa.org: enrich_stats–ncaa_wbb"
-sidebar_label: "stats.ncaa.org: enrich_stats–ncaa_wbb"
+title: "WBB — additional Python functions — stats.ncaa.org: enrich_shot–ncaa_wbb"
+sidebar_label: "stats.ncaa.org: enrich_shot–ncaa_wbb"
 sidebar_position: 3
-description: "WBB — additional Python functions — stats.ncaa.org: enrich_stats–ncaa_wbb — function reference in sdv-py, the SportsDataverse Python package."
+description: "WBB — additional Python functions — stats.ncaa.org: enrich_shot–ncaa_wbb — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — stats.ncaa.org: enrich_stats–ncaa_wbb
+# WBB — additional Python functions — stats.ncaa.org: enrich_shot–ncaa_wbb
+
+### enrich_shot_events_with_pbp {#enrich_shot_events_with_pbp}
+
+`enrich_shot_events_with_pbp(sorted_shot_events: 'list[ShotEvent]', sorted_pbp_events: 'list[PlayByPlayEvent]', lineup_events: 'list[LineupEvent]', bad_lineup_events: 'list[LineupEvent]', box_lineup: 'LineupEvent') -> 'list[ShotEvent]'`
+
+Enrich each shot with its play-by-play event + on-floor lineup
+
+(`PlayByPlayUtils.enrich_shot_events_with_pbp`,
+`PlayByPlayUtils.scala:28-278`).
+
+Folds over the (time-sorted) shots, threading two iterators (play-by-play
+and lineup) and a small amount of carry-over state. For each shot it:
+
+1. gathers the play-by-play events at the shot's time (`find_pbp_clump`),
+   keeping only the ones on the shot's side (team if `is_off`);
+2. picks the matching shot event via a strict -> loose -> first-of-N
+   cascade (`right_kind_of_shot` then `matching_player`);
+3. locates the on-floor lineup (`find_lineup`), falling back to
+   `bad_lineup_events` if the good lineups yield nothing (a bad-lineup
+   match is used for `players` but its id is suppressed);
+4. attributes an assist (a same-time non-self assist event) and transition
+   flag (`"fastbreak"` in the event string), and fills in `lineup_id` /
+   `players` / `pts` / `value` / `ast_by` / `is_ast` / `is_trans`
+   -- exactly the fields Task 5e.5's parser left as placeholders.
+
+Shots with no matching play-by-play clump, no matching shot event, or no
+matching lineup are dropped (the Scala logs a `WARN` and discards; the
+logging is dropped per the module note, the discard preserved).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `sorted_shot_events` | `list[ShotEvent]` |  | Shots in ascending game-clock order. |
+| `sorted_pbp_events` | `list[PlayByPlayEvent]` |  | The full play-by-play event stream, ascending. |
+| `lineup_events` | `list[LineupEvent]` |  | The good (validation-passing) stint events. |
+| `bad_lineup_events` | `list[LineupEvent]` |  | The validation-flagged stint events, used only as a last resort (their ids are never attributed). |
+| `box_lineup` | `LineupEvent` |  | The roster lineup event (drives name resolution). |
+
+**Returns**
+
+The enriched, still-time-sorted list of shots (a subset of the input -- unmatchable shots are dropped).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_pbp_glue import enrich_shot_events_with_pbp
+enriched = enrich_shot_events_with_pbp(
+    shots, pbp, good_lineups, bad_lineups, box_lineup
+)
+```
 
 ### enrich_stats {#enrich_stats}
 
@@ -1026,7 +1077,8 @@ One `http://login:password@ip:port` URL per IP in the package.
 
 | Exception | Description |
 |---|---|
-| `RuntimeError` | Non-200 response. |
+| `ValueError` | HTTP 400 / 422 (the request itself is wrong). |
+| `AssetFetchError` | Any other non-200 response, or a 200 whose body is not the package JSON (an error or HTML page). |
 
 **Example**
 
@@ -1097,7 +1149,7 @@ misspellings(None)  # {} (generic fallback)
 
 ### ncaa_wbb_box_scores {#ncaa_wbb_box_scores}
 
-`ncaa_wbb_box_scores(game_ids: 'Union[str, int, Iterable[Union[str, int]]]', *, multi_games: 'bool' = False, fetcher: 'Optional[Any]' = None, return_as_pandas: 'bool' = False) -> "Union['pl.DataFrame', 'pd.DataFrame']"`
+`ncaa_wbb_box_scores(game_ids: 'Union[str, int, Iterable[Union[str, int]]]', *, multi_games: 'bool' = False, fetcher: 'Optional[Any]' = None, return_as_pandas: 'bool' = False, errors: "Literal['raise', 'skip']" = 'raise') -> "Union['pl.DataFrame', 'pd.DataFrame']"`
 
 Scrape WBB per-player box scores (wbigballR `get_box_scores`/`scrape_box`).
 
@@ -1115,6 +1167,7 @@ markup no longer ships).
 | `multi_games` | `bool` | `False` | Aggregate per player across all games (fixed grouping on player/clean_name/team). |
 | `fetcher` | `Optional[Any]` | `None` | Optional injected fetcher exposing `fetch_game_individual_stats` (tests/offline). Defaults to a fresh `NcaaFetcher.with_browser()` context per call. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+| `errors` | `Literal['raise', 'skip']` | `'raise'` | `"raise"` (default) raises `AssetFetchError` on a failed fetch; `"skip"` skips it and adds a `scrape_status` column (see `~sportsdataverse.mbb.mbb_ncaa_box_stats.ncaa_mbb_box_scores`). |
 
 **Returns**
 
@@ -1150,6 +1203,13 @@ Per-player box rows (or per-player aggregates with `multi_games`).
 | `fouls` | double | Personal fouls. |
 | `dq` | double |  |
 | `tech` | double |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | A fetch failed and `errors="raise"`. |
+| `ValueError` | An unknown `errors`, or `errors="skip"` with `multi_games`. |
 
 **Example**
 
@@ -1660,111 +1720,4 @@ One row per scheduled game — see `~sportsdataverse.mbb.mbb_ncaa_schedule.parse
 from sportsdataverse.wbb.wbb_ncaa_schedule import ncaa_wbb_team_schedule
 df = ncaa_wbb_team_schedule(team="South Carolina", season="2024-25")
 print(df.shape)
-```
-
-### ncaa_wbb_team_stats {#ncaa_wbb_team_stats}
-
-`ncaa_wbb_team_stats(pbp: 'pl.DataFrame', *, include_transition: 'bool' = False, fix_tip_in: 'bool' = True, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
-
-Aggregate WBB play-by-play into per-team game stats (wbigballR `get_team_stats`).
-
-Pure delegation to
-`sportsdataverse.mbb.mbb_ncaa_stats_agg.ncaa_mbb_team_stats` — see
-it for the algorithm and column contract.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | Play-by-play frame in the sdv-py 35-column snake_case bigballR contract (`ncaa_wbb_game_pbp` output). |
-| `include_transition` | `bool` | `False` | Append the `_trans`/`_half` split surface. |
-| `fix_tip_in` | `bool` | `True` | Count the real `"Tip In"` vocabulary (default); False reproduces R's `"Tip-In"` bug for oracle parity. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per team per game.
-
-| col_name | type | description |
-|---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `home` | character | Home. |
-| `away` | character | Away record. |
-| `team` | character | Team-side label or team identifier. |
-| `mins` | double |  |
-| `o_mins` | double |  |
-| `d_mins` | double |  |
-| `o_poss` | double |  |
-| `d_poss` | double |  |
-| `ortg` | double |  |
-| `drtg` | double |  |
-| `netrtg` | double |  |
-| `pts` | double | Points scored. |
-| `d_pts` | double |  |
-| `fga` | double | Field goal attempts. |
-| `d_fga` | double |  |
-| `fgm` | double | Field goals made. |
-| `d_fgm` | double |  |
-| `tpa` | double |  |
-| `d_tpa` | double |  |
-| `tpm` | double |  |
-| `d_tpm` | double |  |
-| `fta` | double | Free throw attempts. |
-| `d_fta` | double |  |
-| `ftm` | double | Free throws made. |
-| `d_ftm` | double |  |
-| `rima` | double |  |
-| `d_rima` | double |  |
-| `rimm` | double |  |
-| `d_rimm` | double |  |
-| `orb` | double |  |
-| `d_orb` | double |  |
-| `drb` | double |  |
-| `d_drb` | double |  |
-| `blk` | double | Blocks. |
-| `d_blk` | double |  |
-| `to` | double | To. |
-| `d_to` | double |  |
-| `ast` | double | Assists. |
-| `d_ast` | double |  |
-| `e_poss` | double |  |
-| `fg_pct` | double | Field goal percentage (0-1). |
-| `d_fg_pct` | double |  |
-| `tpp` | double |  |
-| `d_tpp` | double |  |
-| `ftp` | double |  |
-| `d_ftp` | double |  |
-| `efg_pct` | double |  |
-| `d_efg_pct` | double |  |
-| `ts_pct` | double | True shooting percentage (0-1). |
-| `d_ts_pct` | double |  |
-| `rim_pct` | double |  |
-| `d_rim_pct` | double |  |
-| `mid_pct` | double |  |
-| `d_mid_pct` | double |  |
-| `tp_rate` | double |  |
-| `d_tp_rate` | double |  |
-| `rim_rate` | double |  |
-| `d_rim_rate` | double |  |
-| `mid_rate` | double |  |
-| `d_mid_rate` | double |  |
-| `ft_rate` | double | Ft rate. |
-| `d_ft_rate` | double |  |
-| `ast_rate` | double |  |
-| `d_ast_rate` | double |  |
-| `to_rate` | double | To rate. |
-| `d_to_rate` | double |  |
-| `blk_rate` | double |  |
-| `o_blk_rate` | double |  |
-| `orb_pct` | double | Offensive rebound percentage. |
-| `drb_pct` | double | Defensive rebound percentage. |
-| `time_per_poss` | double |  |
-| `d_time_per_poss` | double |  |
-
-**Example**
-
-```python
-from sportsdataverse.wbb.wbb_ncaa_stats_agg import ncaa_wbb_team_stats
-team = ncaa_wbb_team_stats(pbp)
-print(team.shape)
 ```

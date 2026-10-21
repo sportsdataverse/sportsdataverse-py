@@ -31,6 +31,7 @@ from typing import Any, Dict, List, Optional
 
 import polars as pl
 
+from sportsdataverse.errors import _data_only
 from sportsdataverse.hockey.khl.khl_rest_parsers import (
     Columns,
     Frame,
@@ -62,6 +63,7 @@ def _unwrap(item: Any) -> Any:
     return item
 
 
+@_data_only
 def parse_khl_webcaster(raw: Any, *, return_as_pandas: bool = False, columns: Columns = None) -> Frame:
     """Generic webcaster body -> rows (see the module docstring for the shapes).
 

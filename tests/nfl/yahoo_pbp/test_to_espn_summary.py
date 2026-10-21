@@ -570,3 +570,41 @@ def test_a_float_typed_home_team_id_resolves_to_nothing_rather_than_team_000():
     assert _yahoo_nfl_game_id("2026-09-14T00:15Z", 30) == "nfl.g.20260913030"
     assert _yahoo_nfl_game_id("2026-09-14T00:15Z", 30.0) is None
     assert _yahoo_nfl_game_id("2026-09-14T00:15Z", "30.0") is None
+
+
+def test_a_float_id_map_row_adapts_exactly_like_the_text_row(cle_jax_summary):
+    """B-GB-22: a pandas-built id-map row carries float ids; ``str`` sent ``"401856682.0"``, which matches no ESPN id."""
+    floats = {
+        **CLE_JAX_ROW,
+        **{k: float(CLE_JAX_ROW[k]) for k in ("espn_event_id", "home_espn_team_id", "away_espn_team_id")},
+    }
+    adapted = _yahoo_to_espn_summary(_payload(CLE_JAX_YAHOO_ID), floats)[0]
+    assert adapted["header"]["id"] == CLE_JAX_ROW["espn_event_id"]
+    assert json.dumps(adapted, sort_keys=True) == json.dumps(cle_jax_summary, sort_keys=True)
+
+
+#: How a pandas-built id-map row carries a missing team id: NaN is truthy, ``pandas.NA`` raises on truthiness.
+_MISSING_IDS = pytest.mark.parametrize(
+    "missing", [float("nan"), __import__("pandas").NA, None, ""], ids=["nan", "pd_na", "none", "blank"]
+)
+
+
+@_MISSING_IDS
+def test_a_missing_team_id_is_backfilled_from_the_schedule(missing, monkeypatch):
+    """The backfill ran only for a falsy id and filled only None: a NaN id stayed (then became ""),
+    pandas.NA raised."""
+    import sportsdataverse.nfl.yahoo_pbp.fetch as fetch
+
+    monkeypatch.setattr(fetch, "_row_from_nflverse_schedule", lambda espn_id: {"home_espn_team_id": "30"})
+    row, game_id, _how = _resolve_row(CLE_JAX_ESPN_ID, {**CLE_JAX_ROW, "home_espn_team_id": missing})
+    assert row["home_espn_team_id"] == "30" and game_id == CLE_JAX_YAHOO_ID
+
+
+def test_a_float_home_id_computes_the_same_yahoo_id(monkeypatch):
+    import sportsdataverse.nfl.yahoo_pbp.fetch as fetch
+
+    monkeypatch.setattr(fetch, "_row_from_nflverse_schedule", lambda espn_id: None)
+    floats = {k: v for k, v in CLE_JAX_ROW.items() if k != "yahoo_game_id"}
+    floats.update(home_espn_team_id=30.0, away_espn_team_id=5.0)
+    _row, game_id, how = _resolve_row(CLE_JAX_ESPN_ID, floats)
+    assert game_id == CLE_JAX_YAHOO_ID and how["yahoo_id_resolved_by"] == "computed"

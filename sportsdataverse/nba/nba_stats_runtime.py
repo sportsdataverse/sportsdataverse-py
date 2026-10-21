@@ -14,7 +14,7 @@ from datetime import date
 from typing import Any, Callable, Optional
 from urllib.parse import urlparse
 
-from sportsdataverse._codegen_runtime import _json_text, _transport_errors
+from sportsdataverse._codegen_runtime import _json_text, _transport_errors, _wire_text
 from sportsdataverse.errors import AssetFetchError, EmptyResponseWarning
 
 __all__ = ["_get", "season_latest_with_data", "stats_headers"]
@@ -170,6 +170,19 @@ def stats_headers(host: str = "stats.nba.com") -> dict:
     }
 
 
+def _env_number(name: str, default: str, kind: type) -> Any:
+    """``kind(os.environ[name])`` (else ``kind(default)``); a malformed value raises naming the variable (A-L68).
+
+    Raises:
+        ValueError: The variable's value does not parse as ``kind``.
+    """
+    raw = os.environ.get(name, default)
+    try:
+        return kind(raw)
+    except ValueError:
+        raise ValueError(f"{name}={raw!r} is not a valid {kind.__name__}") from None
+
+
 def _curl_transport(
     url: str,
     params: dict,
@@ -188,7 +201,7 @@ def _curl_transport(
     # endpoints (a real gamerotation payload for a 2011-12 game can take ~27s,
     # right at the old hardcoded 30s cliff), so bump SDV_PY_NBA_STATS_TIMEOUT
     # when back-filling old seasons.
-    timeout = float(os.environ.get("SDV_PY_NBA_STATS_TIMEOUT", "30"))
+    timeout = _env_number("SDV_PY_NBA_STATS_TIMEOUT", "30", float)
     r = creq.get(
         url,
         params=params,
@@ -227,7 +240,8 @@ def _get(
             ``"https://stats.nba.com/stats/leaguedashplayerstats"``).  The codegen
             wrappers pass full URLs; the bare-path form is convenient for ad-hoc use.
         params: Query-string parameters. ``None`` values are stripped before the
-            request.  ``GameID`` is zero-padded to 10 characters.
+            request.  ``GameID`` is zero-padded to 10 characters; a numeric id
+            goes through ``int`` first (``22400001.0`` -> ``"0022400001"``).
         host: Target host, used only when *path* is a bare endpoint name.
             Defaults to ``"stats.nba.com"``.
         headers: HTTP headers dict.  Defaults to ``stats_headers(host)``.
@@ -244,7 +258,8 @@ def _get(
 
     Raises:
         NoDataError: The host answered HTTP 404.
-        ValueError: The host answered HTTP 400 / 422 (the request is wrong).
+        ValueError: The host answered HTTP 400 / 422 (the request is wrong), or an
+            ``SDV_PY_NBA_STATS_*`` variable is not a number (the error names it).
         AssetFetchError: Any other non-2xx (401 / 403 / 429 / 5xx; stats.nba.com answers a
             missing required ``Season`` with an EMPTY HTTP 500), a 2xx whose body is blank or
             not JSON, or a connection failure, once ``SDV_PY_NBA_STATS_RETRIES`` is spent.
@@ -268,7 +283,7 @@ def _get(
     """
     clean: dict = {k: v for k, v in (params or {}).items() if v is not None}
     if "GameID" in clean:
-        clean["GameID"] = str(clean["GameID"]).zfill(10)
+        clean["GameID"] = _wire_text(clean["GameID"]).zfill(10)  # 22400001.0 -> "0022400001", never "22400001.0"
     if path.startswith("http://") or path.startswith("https://"):
         url = path
     else:
@@ -295,8 +310,8 @@ def _get(
     # exists — a retry recovers it. Defaults to 0 retries (a single shot) unless
     # SDV_PY_NBA_STATS_RETRIES is set (back-fill sweeps set it). A 404 (NoDataError)
     # and a 400/422 (ValueError) are answers, never retried.
-    retries = int(os.environ.get("SDV_PY_NBA_STATS_RETRIES", "0"))
-    backoff = float(os.environ.get("SDV_PY_NBA_STATS_BACKOFF", "1.5"))
+    retries = _env_number("SDV_PY_NBA_STATS_RETRIES", "0", int)
+    backoff = _env_number("SDV_PY_NBA_STATS_BACKOFF", "1.5", float)
     for attempt in range(retries + 1):
         try:
             with _transport_errors(url):

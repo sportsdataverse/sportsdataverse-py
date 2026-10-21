@@ -26,7 +26,9 @@ import os
 import time
 from typing import Any, Dict, List, Optional, Union
 
-from sportsdataverse.dl_utils import download
+from sportsdataverse._codegen_runtime import _json_body, _transport_errors, _where
+from sportsdataverse.dl_utils import _ENV_TIMEOUT, _env_int, download
+from sportsdataverse.errors import AssetFetchError
 from sportsdataverse.nfl.nflpro_parsers import _COLLECTION_KEYS
 
 __all__ = ["_get", "nflpro_token", "nflpro_headers_gen", "NFLProAuthError"]
@@ -40,8 +42,16 @@ _LOGGER = logging.getLogger(__name__)
 _token_cache: Dict[str, str] = {}
 
 
-class NFLProAuthError(RuntimeError):
-    """Raised when no user-bound NFL Pro token can be resolved."""
+# A token that does not decode: no ``.`` segment, bad base64 / UTF-8 / JSON, or claims of the wrong shape.
+_UNDECODABLE = (IndexError, ValueError, TypeError, AttributeError)
+
+
+class NFLProAuthError(AssetFetchError, RuntimeError):
+    """Raised when no user-bound NFL Pro token can be resolved, or pro.nfl.com refuses it (401 / 403).
+
+    An :class:`~sportsdataverse.errors.AssetFetchError` (the fetch failed; retrying with the same
+    token cannot help), and still a ``RuntimeError`` for callers that caught it as one.
+    """
 
 
 def _claims(token: str) -> Dict[str, Any]:
@@ -53,6 +63,12 @@ def _claims(token: str) -> Dict[str, Any]:
     return json.loads(base64.urlsafe_b64decode(part))
 
 
+def _undecodable(exc: BaseException) -> bool:
+    """Log a token that does not decode (never the token itself), so a re-login it forces is not silent (A-L70)."""
+    _LOGGER.warning("NFL Pro token does not decode (%s); treating it as unusable", type(exc).__name__)
+    return False
+
+
 def _entitled(token: str) -> bool:
     """True if the token carries an active NFL+ plan.
 
@@ -62,8 +78,8 @@ def _entitled(token: str) -> bool:
     """
     try:
         plans = _claims(token).get("plans") or []
-    except Exception:
-        return False
+    except _UNDECODABLE as exc:
+        return _undecodable(exc)
     for plan in plans:
         if not str(plan.get("plan", "")).startswith("NFL_PLUS"):
             continue
@@ -77,8 +93,8 @@ def _entitled(token: str) -> bool:
 def _fresh(token: str, skew: int = 120) -> bool:
     try:
         return float(_claims(token).get("exp", 0)) - skew > time.time()
-    except Exception:
-        return False
+    except _UNDECODABLE as exc:
+        return _undecodable(exc)
 
 
 def _browser_login(email: str, password: str, timeout_ms: int = 60000) -> str:
@@ -302,49 +318,38 @@ def _get(
         The parsed JSON body, with the record collection completed across pages.
 
     Raises:
-        NFLProAuthError: No user-bound token could be resolved.
-        ValueError: The API returned HTTP 200 with an empty body -- how it signals
-            rejected query params, since it sends no error envelope.
+        NFLProAuthError: No user-bound token could be resolved, or pro.nfl.com
+            answered 401 / 403 (an ``AssetFetchError``).
+        NoDataError: pro.nfl.com answered 404.
+        ValueError: pro.nfl.com answered 400 / 422, or ignored ``offset``.
+        AssetFetchError: Any other non-2xx or a connection failure after retries, or a
+            2xx whose body is not a JSON object or array -- including the HTTP 200 with
+            an empty body that is how this API rejects unsupported query params.
     """
     if headers is None:
         headers = nflpro_headers_gen()
     clean = {k: v for k, v in (params or {}).items() if v is not None}
-    kwargs.setdefault("timeout", 45)
+    kwargs.setdefault("timeout", _env_int(_ENV_TIMEOUT, 45))  # SDV_PY_HTTP_TIMEOUT wins over the 45 s default
     # download() retries 403 by default because that is ESPN under load. Here a
     # 401/403 means the token lacks the entitlement, which no retry can change.
     kwargs.setdefault("retry_statuses", {408, 429, 500, 502, 503, 504})
 
-    def _fetch(query: Dict[str, Any]) -> Dict[str, Any]:
-        resp = download(url=url, params=query, headers=headers, **kwargs)
-        if getattr(resp, "status_code", 200) in (401, 403):
+    def _fetch(query: Dict[str, Any]) -> Any:
+        with _transport_errors(url):
+            resp = download(url=url, params=query, headers=headers, **kwargs)
+        status = getattr(resp, "status_code", 200)
+        if status in (401, 403):
             raise NFLProAuthError(
-                f"pro.nfl.com refused {url} ({resp.status_code}). The token is expired, "
+                f"pro.nfl.com refused {_where(url)} ({status}). The token is expired, "
                 "not user-bound, or carries no active NFL_PLUS_* plan."
             )
-        if hasattr(resp, "raise_for_status"):
-            try:
-                resp.raise_for_status()
-            except Exception as exc:
-                # A missing required param (e.g. `position_group` on fantasy/game)
-                # surfaces as a bare 500 with no field named in a bare requests
-                # HTTPError. The body usually names the failed request -- surface it.
-                #
-                # Mutate the ORIGINAL exception's args and re-raise it bare, rather
-                # than constructing a new instance: requests.HTTPError carries
-                # `.response`/`.request` set by raise_for_status(), and a fresh
-                # `type(exc)(...)` call would silently drop both, so a caller
-                # inspecting `exc.response.status_code` would find None.
-                detail = (getattr(resp, "text", "") or "")[:300]
-                exc.args = (f"{exc} -- response body: {detail}",)
-                raise
-        text = getattr(resp, "text", "") or ""
-        if not text.strip():
-            raise ValueError(
-                f"pro.nfl.com returned HTTP 200 with an empty body for {url} with "
+        if status == 200 and not (getattr(resp, "text", "") or "").strip():
+            raise AssetFetchError(
+                f"pro.nfl.com returned HTTP 200 with an empty body for {_where(url)} with "
                 f"{query!r}. That is how this API rejects unsupported query params "
                 "(note: `week` is a path scope, not a query param)."
             )
-        return resp.json()
+        return _json_body(resp, url)
 
     body = _fetch(clean)
     if not paginate or not isinstance(body, dict):
@@ -359,7 +364,8 @@ def _get(
 
     start = int(clean.get("offset") or 0)
     limit = clean.get("limit")
-    limit = limit if isinstance(limit, int) else None
+    # A wrapper may pass ``limit="100"``; read as None it disabled the full-page stop test (A-L70).
+    limit = int(limit) if isinstance(limit, (int, str)) and str(limit).isdigit() else None
     items = list(body.get(key) or [])
     try:
         total: Optional[int] = int(body["total"])
