@@ -181,14 +181,55 @@ def test_bare_punt_ignores_the_punting_teams_next_snap(game_id, play_id):
     assert row["end.yardsToEndzone"] == _PUNTER_SNAPS_NEXT[(game_id, play_id)]
 
 
-# R963-2: the 2009 floor (ESPN_FULL_KICK_TEXT_FROM). 2009+ punts keep ESPN's end even where it is wrong:
-# 400554340/1481 (2014) ends at 8, the receiver's next snap is at 92 (EPA -5.36, nflverse 0.08). This asserts the
-# RIGHT end, so it xfails today and goes red (strict) if the floor is widened without task nfl 2.25's measurement.
-@pytest.mark.xfail(strict=True, reason="2009+ punts keep ESPN's end until task nfl 2.25 (R785-6) deletes this marker")
-def test_post_2009_punt_ends_at_the_receivers_next_snap():
-    row = _row("summary_400554340_trimmed.json.gz", 400554340, 1481)
+# Task nfl 2.25 (R785-6): the receiver's next snap ends a punt in every era, not only the bare pre-2009 feed. ESPN's
+# 2009+ end yard line is wrong as often: 400554340/1481 (2014, a fair catch at the MIN 16 and a holding foul on MIN)
+# ends 8 yards from MIN's scoring, MIN's next snap is at its own 8; 290927014/3343 (2009, a return to the GB 14 and a
+# holding foul) ends at 12, GB snaps at its own 6; 401671835/770 (2024, returned to the CIN 27) ends at 27, CIN snaps
+# at its own 27. (game, play) -> (end yard line = the next snap's = nflverse's, nflverse epa, ceiling); EPA on devel-nfl
+# -5.360 / -4.130 / -3.468. Each ceiling is the measured error rounded up.
+_POST_2009_PUNTS = {
+    (400554340, 1481): (92, 0.077, 0.20),
+    (290927014, 3343): (94, 1.025, 0.35),
+    (401671835, 770): (73, -0.555, 0.02),
+}
+
+
+@pytest.mark.parametrize(("game_id", "play_id"), list(_POST_2009_PUNTS))
+def test_post_2009_punt_ends_at_the_receivers_next_snap(game_id, play_id):
+    next_snap_y2e, nflverse_epa, ceiling = _POST_2009_PUNTS[(game_id, play_id)]
+    row = _row(f"summary_{game_id}_trimmed.json.gz", game_id, play_id)
     assert row["type.text"] == "Punt"
-    assert row["end.yardsToEndzone"] == 92
+    assert row["end.yardsToEndzone"] == next_snap_y2e
+    assert abs(row["EPA"] - nflverse_epa) <= ceiling, (row["EP_start"], row["EP_end"])
+
+
+# R963-3: the punt takes the snap's clock too. 270930001/1000 (2007, a punt at 14:37 of Q2) had ESPN's end clock 0, so
+# the EP block's half-end clamp scored it as the half's last play, at the 99 (EPA 0.485). The receiver's next snap is
+# at 870 s, at the 90 (nflverse yardline_100 90, epa 0.061): EPA 0.386. Its down and distance were already the
+# snap's: carrying them too left all 502 measured games (57 captures, 296 era sample, 149 held out) byte-identical.
+def test_punt_ends_at_the_next_snaps_clock():
+    row = _row(_era(270930001), 270930001, 1000)
+    assert (row["end.TimeSecsRem"], row["end.yardsToEndzone"]) == (870, 90)
+    assert abs(row["EPA"] - 0.061) <= 0.33, (row["EP_start"], row["EP_end"])
+
+
+# R963-5: the net-spot read keys on ESPN's scoringPlay, not td_play. A return touchdown ESPN left unscored ends at its
+# try, nflfastR's next play, and that is the end state nflverse's WPA reads: 261022011/1629 (a punt return TD) and
+# 271209034/1856 (a kickoff return TD) are each nearer nflverse with the try (wpa -0.171 / 0.101) than with ESPN's end
+# (-0.136 / 0.001). (fixture, game, play) -> (the try's yard line, nflverse wpa, ceiling).
+_UNSCORED_RETURN_TDS = {
+    ("summary_261022011_trimmed.json.gz", 261022011, 1629): (2, -0.275, 0.11),
+    ("td_flag_residuals/summary_271209034.json.gz", 271209034, 1856): (2, 0.116, 0.02),
+}
+
+
+@pytest.mark.parametrize(("path", "game_id", "play_id"), list(_UNSCORED_RETURN_TDS))
+def test_unscored_return_touchdown_ends_at_its_try(path, game_id, play_id):
+    try_y2e, nflverse_wpa, ceiling = _UNSCORED_RETURN_TDS[(path, game_id, play_id)]
+    row = _row(path, game_id, play_id)
+    assert row["scoringPlay"] is False and row["td_play"] is True
+    assert row["end.yardsToEndzone"] == try_y2e
+    assert abs(row["wpa"] - nflverse_wpa) <= ceiling
 
 
 # R963-4: the next-snap read is windowed by game and half, so a frame of two games reads each game's own next snap.

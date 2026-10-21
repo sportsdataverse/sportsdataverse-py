@@ -596,7 +596,7 @@ def _ends_a_half(half_play: pl.Expr) -> pl.Expr:
 
 
 def _kickoff_next_snap(stop: pl.Expr) -> tuple[pl.Expr, pl.Expr, pl.Expr, pl.Expr, pl.Expr]:
-    """The kick net-spot read for ``__add_downs_data``: ``(kickoff, bare_punt, nxt, next_snap, kicker_recovers)``.
+    """The kick net-spot read for ``__add_downs_data``: ``(kickoff, punt, nxt, next_snap, kicker_recovers)``.
 
     Kickoff EPA (the owner's model) is EP(1st & 10 at the net spot, for the team with the ball
     after the kick) - EP(1st & 10 at the touchback spot), so every unscored kickoff (returned,
@@ -614,15 +614,20 @@ def _kickoff_next_snap(stop: pl.Expr) -> tuple[pl.Expr, pl.Expr, pl.Expr, pl.Exp
     recovery, 301114003/3734, is the receiver's ball). ESPN files some kickoffs inside the kicking
     team's drive (401326517/1442), whose next snap is then not the receiver's.
 
-    A punt before ``ESPN_FULL_KICK_TEXT_FROM`` (the bare "Punt" feed) ends the same way, at the
-    receiver's next snap: ESPN's end yard line there is often not the receiver's spot (280921001/594
-    ends 1 yard from the receiver's goal, his next snap is at his own 8; EX-2.19-a). A punt whose
-    next snap is the punting team's (a muff it recovered, a re-kick after a penalty) keeps ESPN's,
-    and so does one whose next snap by id starts earlier in the half than the punt: ESPN filed a
-    play out of order there (261113029/386 at 7:26 is followed by 416 at 11:45).
+    A punt ends the same way, at the receiver's next snap, in every era: ESPN's end yard line is often
+    not the receiver's spot, in the bare pre-2009 "Punt" feed (280921001/594 ends 1 yard from the
+    receiver's goal, his next snap is at his own 8; EX-2.19-a) and after it (400554340/1481, a fair
+    catch at the MIN 16 and a holding foul on MIN, ends with MIN 8 yards from scoring, the MIN 8
+    counted from the wrong goal; MIN's next snap is at its own 8, 92 to go; task 2.25). A punt
+    whose next snap is the punting team's (a muff it recovered, a re-kick after a penalty) keeps
+    ESPN's, and so does one whose next snap by id starts earlier in the half than the punt: ESPN
+    filed a play out of order there (261113029/386 at 7:26 is followed by 416 at 11:45). As
+    nflfastR's EPA reads the next play's whole start state, the punt takes that snap's clock as well
+    (R963-3: 270930001/1000, at 14:37 of Q2, ended at a clock of 0, so the EP block's half-end clamp
+    put it at the 99 instead of the receiver's 90); its down and distance already are the snap's.
     """
     kickoff = pl.col("type.text").is_in(kickoff_vec).fill_null(False)
-    bare_punt = (pl.col("type.text").is_in(punt_vec) & (pl.col("season") < ESPN_FULL_KICK_TEXT_FROM)).fill_null(False)
+    punt = pl.col("type.text").is_in(punt_vec).fill_null(False)
     receiver = pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
     receiver = receiver.then(pl.col("awayTeamId")).otherwise(pl.col("homeTeamId"))
     kick_abbr = pl.col("text").str.extract(r"(?i)\bkicks\b.*?\bfrom\s+([A-Z]{2,3})\s+\d", 1)
@@ -634,7 +639,7 @@ def _kickoff_next_snap(stop: pl.Expr) -> tuple[pl.Expr, pl.Expr, pl.Expr, pl.Exp
     after_kick = (
         pl.when(kicker_recovers)
         .then(pl.col("start.team.id"))
-        .when(bare_punt)
+        .when(punt)
         .then(receiver)
         .otherwise(pl.col("start.pos_team.id"))
     )
@@ -652,9 +657,9 @@ def _kickoff_next_snap(stop: pl.Expr) -> tuple[pl.Expr, pl.Expr, pl.Expr, pl.Exp
         (pl.col("_nxt").struct.field("kick") == False)
         & (pl.col("_nxt").struct.field("r") == seq_rank + 1)
         & (pl.col("_nxt").struct.field("team") == after_kick)  # the snap of the team with the ball
-        & (~bare_punt | (pl.col("_nxt").struct.field("clock") <= pl.col("start.TimeSecsRem")))  # not filed early
+        & (~punt | (pl.col("_nxt").struct.field("clock") <= pl.col("start.TimeSecsRem")))  # not filed early
     ).fill_null(False)
-    return kickoff, bare_punt, nxt, next_snap, kicker_recovers
+    return kickoff, punt, nxt, next_snap, kicker_recovers
 
 
 def _missed_fg_unblocked() -> pl.Expr:
@@ -1860,7 +1865,7 @@ class NFLPlayProcess(object):
         stop = pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False)
         unscored = ~(pl.col("scoringPlay") == True).fill_null(False)
         no_down = (pl.col("end.down") == -1) & ~stop & unscored
-        kickoff, bare_punt, nxt, next_snap, kicker_recovers = _kickoff_next_snap(stop)
+        kickoff, punt, nxt, next_snap, kicker_recovers = _kickoff_next_snap(stop)
         # A missed field goal starts the other team's possession at a first down (the owner's
         # missed-field-goal model); its spot is set in __add_play_category_flags, once the kick's
         # line of scrimmage is final.
@@ -1869,6 +1874,7 @@ class NFLPlayProcess(object):
         # The first snap is 1st & 10, or 1st & goal inside the 10; ESPN's end distance on a return is
         # often stale (R810-1). A missed field goal's spot (set later) is never inside the 10.
         goal_to_go = pl.col("end.yardsToEndzone").is_between(1, 9) & ~missed_fg
+        n = pl.col("_nxt").struct
         play_df = (
             play_df.with_columns(
                 period=pl.col("period.number"),
@@ -1877,16 +1883,25 @@ class NFLPlayProcess(object):
             .with_columns(_nxt=nxt)
             .with_columns(
                 _first_down=first_down.fill_null(False),
-                _kick_spot=((kickoff | bare_punt) & unscored & next_snap).fill_null(False),
+                # ESPN's scoringPlay, not td_play (R963-5): a return touchdown ESPN left unscored ends at its
+                # try, nflfastR's next play (261022011/1629, 271209034/1856), and before 2009 td_play takes
+                # plain returns typed "... Return Touchdown" for touchdowns (251030010/1409).
+                _kick_spot=((kickoff | punt) & unscored & next_snap).fill_null(False),
                 # read by calculate_epa (EP_end is the kicker's), dropped after it
                 _kicker_recovers=kicker_recovers,
             )
             .with_columns(
                 pl.when(pl.col("_kick_spot"))
-                .then(pl.col("_nxt").struct.field("y2e"))
+                .then(n.field("y2e"))
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
                 pl.when(pl.col("_first_down")).then(1).otherwise(pl.col("end.down")).alias("end.down"),
+                # the punt ends at the snap's clock too (R963-3); its down and distance already are the
+                # snap's (_end_state_from_next_play, or the first down a -1 end down takes here)
+                pl.when(pl.col("_kick_spot") & punt)
+                .then(n.field("clock"))
+                .otherwise(pl.col("end.TimeSecsRem"))
+                .alias("end.TimeSecsRem"),
             )
             .with_columns(
                 pl.when(pl.col("_first_down"))
