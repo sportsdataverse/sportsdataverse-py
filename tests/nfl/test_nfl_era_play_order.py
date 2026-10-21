@@ -19,6 +19,8 @@ import pytest
 
 import sportsdataverse.nfl.nfl_fourth_down as nfl_fourth_down
 from sportsdataverse.nfl import NFLPlayProcess
+from sportsdataverse.nfl.model_vars import clock_stoppage_vec
+from sportsdataverse.nfl.nfl_pbp import _kickoff_next_snap
 from tests.nfl._whole_game import FIX
 
 
@@ -163,3 +165,45 @@ def test_bare_punt_ends_at_the_receivers_next_snap(game_id, play_id):
     assert row["type.text"] == "Punt" and row["text"] in ("Punt", None)  # the bare pre-2009 feed
     assert row["end.yardsToEndzone"] == next_snap_y2e
     assert abs(row["EPA"] - nflverse_epa) <= ceiling, (row["EP_start"], row["EP_end"])
+
+
+# R963-1: a punt whose next snap by id is the PUNTING team's keeps ESPN's end. 261113029/126 (2006, TB punts 22 yards
+# from the CAR 40 to the CAR 18 at 10:54 of Q1) is followed in id order by TB's own 141 at the CAR 29, filed out of
+# order but not earlier on the clock (870 s vs the punt's 1554), so only the team check stops it. ESPN's end, 82, is
+# where CAR's next snap (163) starts in nflverse. The EPA cannot gate this row: its error is EP_start and the clock.
+_PUNTER_SNAPS_NEXT = {(261113029, 126): 82}
+
+
+@pytest.mark.parametrize(("game_id", "play_id"), list(_PUNTER_SNAPS_NEXT))
+def test_bare_punt_ignores_the_punting_teams_next_snap(game_id, play_id):
+    row = _row(_era(game_id), game_id, f"{play_id:04d}")
+    assert row["type.text"] == "Punt"
+    assert row["end.yardsToEndzone"] == _PUNTER_SNAPS_NEXT[(game_id, play_id)]
+
+
+# R963-2: the 2009 floor (ESPN_FULL_KICK_TEXT_FROM). 2009+ punts keep ESPN's end even where it is wrong:
+# 400554340/1481 (2014) ends at 8, the receiver's next snap is at 92 (EPA -5.36, nflverse 0.08). This asserts the
+# RIGHT end, so it xfails today and goes red (strict) if the floor is widened without task nfl 2.25's measurement.
+@pytest.mark.xfail(strict=True, reason="2009+ punts keep ESPN's end until task nfl 2.25 (R785-6) deletes this marker")
+def test_post_2009_punt_ends_at_the_receivers_next_snap():
+    row = _row("summary_400554340_trimmed.json.gz", 400554340, 1481)
+    assert row["type.text"] == "Punt"
+    assert row["end.yardsToEndzone"] == 92
+
+
+# R963-4: the next-snap read is windowed by game and half, so a frame of two games reads each game's own next snap.
+def test_next_snap_read_stays_inside_its_game():
+    stop = pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False)
+    kickoff, bare_punt, nxt, next_snap, _ = _kickoff_next_snap(stop)
+
+    def spots(df: pl.DataFrame) -> pl.DataFrame:
+        f = df.with_columns(_nxt=nxt)
+        return f.select(
+            "id", spot=((kickoff | bare_punt) & next_snap).fill_null(False), y2e=pl.col("_nxt").struct.field("y2e")
+        )
+
+    games = [_plays(_era(g), g) for g in (280921001, 261113029)]
+    apart = pl.concat([spots(g) for g in games])
+    together = spots(pl.concat(games, how="diagonal_relaxed"))
+    assert apart["spot"].sum() > 10
+    assert together.equals(apart)

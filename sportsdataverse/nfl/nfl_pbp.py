@@ -605,7 +605,7 @@ def _kickoff_next_snap(stop: pl.Expr) -> tuple[pl.Expr, pl.Expr, pl.Expr, pl.Exp
     season's touchback spot (kickoff_tb & ~_kick_spot, EX-2.3-a). The net spot is
     where that team's next snap starts (ESPN's end yard line is flipped on some returns, R810-5).
     Pre-2014 play ids are not always in game order (R785-4), so the next snap by id must also be
-    the next snap by sequenceNumber in the same half, and not another kickoff; otherwise ESPN's
+    the next snap by sequenceNumber in the same game and half, and not another kickoff; otherwise ESPN's
     end yard line stands. It must also be the snap of the team with the ball after the kick: a
     kickoff row's start.pos_team.id is the receiving team in every era (ESPN's start.team is the
     kicker), unless the kicking team recovers (an onside kick, a muff, "Kickoff Team Fumble
@@ -638,14 +638,16 @@ def _kickoff_next_snap(stop: pl.Expr) -> tuple[pl.Expr, pl.Expr, pl.Expr, pl.Exp
         .then(receiver)
         .otherwise(pl.col("start.pos_team.id"))
     )
-    seq_rank = pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("half")
-    nxt = pl.struct(
+    seq_rank = pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("game_id", "half")
+    snap = pl.struct(
         y2e=pl.col("start.yardsToEndzone"),
         kick=kickoff,
         r=seq_rank,
         team=pl.col("start.pos_team.id"),
         clock=pl.col("start.TimeSecsRem"),
     )
+    # the next real play of the same game and half, written to ``_nxt`` (R963-4: a frame of several games)
+    nxt = pl.when(~stop).then(snap).backward_fill().shift(-1).over("game_id", "half")
     next_snap = (
         (pl.col("_nxt").struct.field("kick") == False)
         & (pl.col("_nxt").struct.field("r") == seq_rank + 1)
@@ -1845,7 +1847,7 @@ class NFLPlayProcess(object):
                 period=pl.col("period.number"),
                 half=pl.when(pl.col("period.number") <= 2).then(1).otherwise(2),
             )
-            .with_columns(_nxt=pl.when(~stop).then(nxt).backward_fill().shift(-1).over("half"))
+            .with_columns(_nxt=nxt)
             .with_columns(
                 _first_down=first_down.fill_null(False),
                 _kick_spot=((kickoff | bare_punt) & unscored & next_snap).fill_null(False),
