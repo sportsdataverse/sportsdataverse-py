@@ -16,7 +16,7 @@ espn_mbb_calendar - look up the men's college basketball calendar for a given se
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `int` | `None` | Used to define different seasons. 2002 is the earliest available season. |
+| `season` | `int` | `None` | Used to define different seasons. 2002 is the earliest available season; `None` means the current season. |
 | `ondays` | `boolean` | `None` | Used to return dates for calendar ondays |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
@@ -39,7 +39,7 @@ Polars dataframe containing calendar dates for the requested season.
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If `season` is less than 2002. |
+| `SeasonNotFoundError` | If `season` is less than 2002. |
 
 **Example**
 

@@ -120,11 +120,16 @@ STATIC: dict[str, str] = {
     "gameSpread": "Point spread used as an input to the win-probability model.",
     "gameSpreadAvailable": "True when a spread was available for the game.",
     "overUnder": "Over/under total used as a model input.",
+    "overUnderAvailable": (
+        "False when overUnder is the 55.5 default (the line had a spread and no total), True for a market total; null when an odds_override did not say. Absent from releases built before the column existed."
+    ),
     "homeFavorite": "True when the home team was favoured by the spread.",
     # --- game / clock metadata --------------------------------------------
     "playType": "ESPN's play-type label for the play.",
     "period.number": "Period (quarter) number in which the play occurred.",
-    "firstHalfKickoffTeamId": "ESPN id of the team that received the opening kickoff.",
+    "firstHalfKickoffTeamId": (
+        "ESPN id of the team that kicked the opening kickoff (it receives the second-half kickoff), one value per game."
+    ),
     "homeTimeoutCalled": "True when the home team called a timeout on the play.",
     "awayTimeoutCalled": "True when the away team called a timeout on the play.",
     "new_down": "Down after the play, including any penalty enforcement.",

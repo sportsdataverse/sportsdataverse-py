@@ -306,15 +306,8 @@ def test_flat_parsers_on_synthetic_payloads():
 
     # empty / None payloads -> zero-row frame, no raise
     assert P.parse_transactions(None).height == 0
-
-    # parse_game_info and parse_player_box on synthetic dicts
-    fake_gi = {"SiteKit": {"Gameinfo": [{"game_id": 99, "date": "2025-01-01"}]}}
-    df_gi = P.parse_game_info(fake_gi)
-    assert df_gi.height == 1 and "game_id" in df_gi.columns
-
-    fake_pb = {"SiteKit": {"Playerbox": [{"player_id": 10, "goals": "1"}]}}
-    df_pb = P.parse_player_box(fake_pb)
-    assert df_pb.height == 1 and "player_id" in df_pb.columns
+    # parse_game_info / parse_player_box / parse_player_info read the statviewfeed replies, which
+    # have no SiteKit envelope: tests/pwhl/test_pwhl_api.py drives them from real captures (B-M9).
 
 
 # ---------------------------------------------------------------------------

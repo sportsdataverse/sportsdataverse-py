@@ -19,6 +19,15 @@
     2004,
     2025
   ],
+  "holdout_seasons": [
+    2026,
+    2026
+  ],
+  "holdout_weeks": [
+    1,
+    4
+  ],
+  "holdout_scope": "season 2026, season_type 2, weeks 1-4 (541 matched passer-games); disjoint from training_seasons. Fit and gated by cfbfastR-cfb-data python/cfb_model_build/model_training/train_qbr.py; record in gate_record.",
   "n_training_rows": 32323,
   "hyperparameters": {
     "booster": "gbtree",

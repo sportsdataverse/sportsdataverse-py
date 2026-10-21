@@ -1,15 +1,11 @@
 from __future__ import annotations
 
-from functools import lru_cache
-
-import pandas as pd
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _download_json
-from sportsdataverse.dl_utils import download, underscore
+from sportsdataverse import _espn_teams
 
 
-@lru_cache(maxsize=None)
+@_espn_teams.cache_clear_shim
 def espn_nba_teams(return_as_pandas=False, **kwargs) -> pl.DataFrame:
     """espn_nba_teams - look up NBA teams
 
@@ -17,9 +13,15 @@ def espn_nba_teams(return_as_pandas=False, **kwargs) -> pl.DataFrame:
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pl.DataFrame: Polars dataframe containing teams for the requested league.
-        This function caches by default, so if you want to refresh the data, use the command
-        sportsdataverse.nba.espn_nba_teams.clear_cache().
+        pl.DataFrame: Polars dataframe of the NBA teams, one row per team, with the columns in the
+        returns table. A payload without teams returns a zero-row frame with those columns. The
+        result is not cached: every call fetches (through the package's opt-in TTL response
+        cache, ``sportsdataverse.cache``, when it is on).
+
+    Raises:
+        NoDataError: ESPN answered 404 for the teams resource.
+        AssetFetchError: the fetch failed (403, 429, 5xx, a dropped connection); never returned
+            as an empty frame.
 
     Example:
         Quick start::
@@ -44,13 +46,4 @@ def espn_nba_teams(return_as_pandas=False, **kwargs) -> pl.DataFrame:
     """
     url = "http://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams"
     params = {"limit": 1000}
-    events_txt = _download_json(download, url, params=params, **kwargs)
-
-    teams = events_txt.get("sports")[0].get("leagues")[0].get("teams")
-    del_keys = ["record", "links"]
-    for team in teams:
-        for k in del_keys:
-            team.get("team").pop(k, None)
-    teams = pd.json_normalize(teams, sep="_")
-    teams.columns = [underscore(c) for c in teams.columns.tolist()]
-    return teams if return_as_pandas else pl.from_pandas(teams)
+    return _espn_teams.teams_frame(url, params, return_as_pandas, **kwargs)

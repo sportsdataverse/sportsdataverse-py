@@ -80,6 +80,8 @@ from sportsdataverse.cfb.cfb_pbp import (
 #: the failure mode of cfbfastR-cfb-data#70, one layer down.
 from sportsdataverse.cfb.model_cards import card_features as _card_features
 from sportsdataverse.cfb.model_vars import (
+    CFB_MODEL_ERA_CUTS,
+    _cfb_touchback_yardline_np,
     ep_class_to_score_mapping,
 )
 from sportsdataverse.cfb.cfb_wp_overtime import (
@@ -106,7 +108,7 @@ __all__ = [
 # ordinal factor out-of-fold (first-down cal-MAE 0.0035 -> 0.0027). Cuts 2006/2013/2020.
 FD_FEATURES = _card_features("fd_model")
 FD_NUM_CLASS = 76  # gain class k -> yards = k - 10, range -10..65
-FD_ERA_BOUNDS = (2006, 2013, 2020)  # one-hot CFB rule-era factor cuts
+FD_ERA_BOUNDS = CFB_MODEL_ERA_CUTS  # one-hot CFB rule-era factor cuts (2006/2013/2020)
 
 EP_FEATURES = _card_features("ep_model")
 WP_SPREAD_FEATURES = _card_features("wp_spread")
@@ -278,6 +280,10 @@ def _to_pandas(df) -> pd.DataFrame:
     out = pd.DataFrame(index=range(len(df)))
     for short, src in _PBP_COLS.items():
         out[short] = df[src].to_numpy() if src in df.columns else np.nan
+    # C-NF-2 shim, until a WP retrain on the corrected flag (none has shipped; retraining is an open owner decision): the
+    # WP booster was trained on 1 - is_home here
+    # (cfb_pbp._as_trained_2h_flag), not on the corrected published flag; the flips below keep toggling it
+    out["pos_team_receives_2H_kickoff"] = ~out["is_home"].astype(bool)
     return out
 
 
@@ -589,10 +595,11 @@ def get_go_wp(pbp_df) -> pd.DataFrame:
     pos_diff = np.where(to_mask, -pos_diff, pos_diff)
 
     # touchdown: ytg hit 0 (after TD cap). Score offense (+6), other team receives
-    # kickoff at the 25 (ytg=75) -- same possession-flip bookkeeping again.
+    # kickoff touchback (ytg 75 from 2012, 80 before: TOUCHBACK_YARDLINE_BY_SEASON) -- same
+    # possession-flip bookkeeping again.
     td_mask = ytg == 0
     pos_diff = np.where(td_mask, -pos_diff - 6.0, pos_diff)
-    ytg = np.where(td_mask, 75, ytg)
+    ytg = np.where(td_mask, _cfb_touchback_yardline_np(state["season"]), ytg)
     td_pos_to = np.where(td_mask, new_def_to, new_pos_to)
     td_def_to = np.where(td_mask, new_pos_to, new_def_to)
     new_pos_to, new_def_to = td_pos_to, td_def_to
@@ -783,14 +790,15 @@ def get_punt_wp(pbp_df) -> pd.DataFrame:
     # flip possession to the receiving team's ensuing drive
     flipped_state = _flip_team_state(state[list(_PBP_COLS.keys())])
     # receiving team starts at (100 - yards_to_goal_end); a return TD (end==100)
-    # is handled by giving the punting team a kickoff at the 25 (handled via flip-back)
+    # is handled by giving the punting team a kickoff touchback (handled via flip-back)
     return_td = ytg_end == 100
     new_ytg = 100 - ytg_end
-    # return TD: receiving team scored, punting team now receives kickoff at the 25.
+    # return TD: receiving team scored, punting team now receives a kickoff touchback.
     # net effect on the (already once-flipped) receiving-team frame: flip score by
-    # -7 and place ball at 75 from the punting team's perspective. cfb4th sets
-    # yards_to_goal = 75 and pos_score_diff_start = -pos_diff - 7 on the punting team.
-    new_ytg = np.where(return_td, 75, new_ytg)
+    # -7 and place the ball at the season's touchback spot (TOUCHBACK_YARDLINE_BY_SEASON)
+    # from the punting team's perspective. cfb4th sets yards_to_goal = 75 (every season)
+    # and pos_score_diff_start = -pos_diff - 7 on the punting team.
+    new_ytg = np.where(return_td, _cfb_touchback_yardline_np(flipped_state["season"]), new_ytg)
     flipped_state["yards_to_goal"] = new_ytg
     # punt distance distribution already excludes muffs; on a return TD undo the
     # one flip so the punting team is the possessing team again (receives kickoff)
@@ -984,10 +992,10 @@ def get_fg_wp(pbp_df) -> pd.DataFrame:
     orig = st[list(_PBP_COLS.keys())]
     orig_is_home = orig["is_home"].to_numpy().astype(float)
 
-    # made FG: kicking team kicks off, opponent receives touchback (ytg=75) and
+    # made FG: kicking team kicks off, opponent receives touchback (ytg 75 from 2012, 80 before) and
     # the kicking team is now +3 (so the receiving team's pos_score_diff -3).
     make_state = _flip_team_state(orig)
-    make_state["yards_to_goal"] = 75
+    make_state["yards_to_goal"] = _cfb_touchback_yardline_np(make_state["season"])
     make_state["distance"] = 10
     make_state["pos_score_diff_start"] = make_state["pos_score_diff_start"].to_numpy().astype(float) - 3.0
     ep_make = _predict_ep(make_state)
@@ -1044,7 +1052,10 @@ def get_4th_down_probs(pbp_df) -> pd.DataFrame:
     """Full 4th-down decision surface (cfb4th ``add_4th_probs``) + recommendation.
 
     Runs :func:`get_go_wp`, :func:`get_fg_wp`, :func:`get_punt_wp` on the
-    fourth-down rows and adds the combined option columns plus:
+    fourth-down rows and adds the combined option columns plus the ones below. A
+    post-score kickoff (go touchdown, punt return touchdown, made field goal) is a
+    touchback at the season's spot (``model_vars.TOUCHBACK_YARDLINE_BY_SEASON``: 80 to go
+    through 2011, 75 from 2012); a null season takes the pre-2012 spot (80).
 
     * ``fourth_down_recommendation`` -- the max-WP choice among ``{go, punt,
       field_goal}`` (NaN options are excluded; when the FG model isn't bundled,

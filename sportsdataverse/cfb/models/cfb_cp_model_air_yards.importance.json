@@ -1,0 +1,95 @@
+{
+  "model": "cfb_cp_model_air_yards",
+  "sha256": "578d329f4dca351299f9444e6a5afd376dc9001afd3d31330cb832af55457c0a",
+  "method": "xgboost Booster.get_score: gain and cover are means per split, total_gain sums them, weight counts splits; a multiclass booster pools all its class trees",
+  "features": [
+    {
+      "feature": "down",
+      "gain": 12.21434402,
+      "total_gain": 696.2175903,
+      "weight": 57.0,
+      "cover": 2099.166016,
+      "share_total_gain": 0.005967984142
+    },
+    {
+      "feature": "distance",
+      "gain": 9.439735413,
+      "total_gain": 1047.810669,
+      "weight": 111.0,
+      "cover": 1463.608765,
+      "share_total_gain": 0.008981843526
+    },
+    {
+      "feature": "yards_to_goal",
+      "gain": 21.54732513,
+      "total_gain": 5860.872559,
+      "weight": 272.0,
+      "cover": 1789.666016,
+      "share_total_gain": 0.05023945815
+    },
+    {
+      "feature": "score_diff",
+      "gain": 8.987766266,
+      "total_gain": 1779.577637,
+      "weight": 198.0,
+      "cover": 1988.931519,
+      "share_total_gain": 0.01525455729
+    },
+    {
+      "feature": "seconds_remaining",
+      "gain": 8.764677048,
+      "total_gain": 2489.168213,
+      "weight": 284.0,
+      "cover": 1822.036255,
+      "share_total_gain": 0.0213371748
+    },
+    {
+      "feature": "is_home",
+      "gain": 6.184675694,
+      "total_gain": 129.8781891,
+      "weight": 21.0,
+      "cover": 785.4880981,
+      "share_total_gain": 0.001113317135
+    },
+    {
+      "feature": "period",
+      "gain": 6.866611004,
+      "total_gain": 89.26594543,
+      "weight": 13.0,
+      "cover": 1029.255737,
+      "share_total_gain": 0.0007651885764
+    },
+    {
+      "feature": "passing_down",
+      "gain": 6.51113224,
+      "total_gain": 84.64472198,
+      "weight": 13.0,
+      "cover": 1429.812988,
+      "share_total_gain": 0.0007255754028
+    },
+    {
+      "feature": "air_yards",
+      "gain": 93.74462891,
+      "total_gain": 46497.33594,
+      "weight": 496.0,
+      "cover": 2594.605713,
+      "share_total_gain": 0.3985756284
+    },
+    {
+      "feature": "pass_is_middle",
+      "gain": 13.86720085,
+      "total_gain": 1539.259277,
+      "weight": 111.0,
+      "cover": 1117.903809,
+      "share_total_gain": 0.01319454591
+    },
+    {
+      "feature": "qb_hurry",
+      "gain": 333.9924316,
+      "total_gain": 56444.72266,
+      "weight": 169.0,
+      "cover": 4241.112305,
+      "share_total_gain": 0.4838447267
+    }
+  ]
+}

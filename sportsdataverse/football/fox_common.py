@@ -18,8 +18,8 @@ What this module owns, and why each piece is not optional:
   measured from the **away** team's goal line, fixed for the whole game (no quarter flip); the
   end zones sit at -5 and 105. So ``yardsToEndzone = 100 - pos`` when the away team has the
   ball and ``pos`` when the home team does, and ``yardLine = 100 - pos`` either way. Reading
-  ``yardStart`` *as* yards-to-goal -- what the shipped ``cfb.cfb_pbp_fox`` does -- mirrors the
-  field on every away-offense play: 50.0%/53.7% of spots right and EP_start r 0.16/0.53 on the
+  ``yardStart`` *as* yards-to-goal -- what ``cfb.cfb_pbp_fox`` did before it read field position
+  through this module -- mirrors the field on every away-offense play: 50.0%/53.7% of spots right and EP_start r 0.16/0.53 on the
   two 2026 games measured (``2026-09-16-cfb-alt-sources/B_fox.md`` §7).
 * **Possession from the drive, never from the play's image.** ``play.image.altText`` names the
   team *credited* with the play (the sacker, the interceptor, the penalised club) in CFB and a
@@ -241,6 +241,7 @@ def _fox_odds_override(odds: Any, home_full_name: Optional[str]) -> Optional[Dic
         "overUnder": total,
         "homeFavorite": home_favourite,
         "gameSpreadAvailable": True,
+        "overUnderAvailable": True,  # None is returned above without a total
     }
 
 
@@ -788,7 +789,7 @@ def _fox_to_espn_summary(
             it is absent (college football has no such table and falls back to Fox's colours).
         text_aliases: Extra ``play-text club code -> header club code`` fixes for codes Fox's
             text spells differently from its own header (NFL: ``JAC`` for ``JAX``).
-        odds: ``{gameSpread, overUnder, homeFavorite, gameSpreadAvailable}``; becomes the
+        odds: ``{gameSpread, overUnder, homeFavorite, gameSpreadAvailable, overUnderAvailable}``; becomes the
             summary's one-provider ``pickcenter``.
 
     Returns:

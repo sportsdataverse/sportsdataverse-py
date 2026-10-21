@@ -267,7 +267,7 @@ A pandas copy of `pbp_df` plus: * `two_pt_wp` -- `prob_2pt * wp(pts=2) + (1 - pr
 | `start.defPosTeamTimeouts` | integer | ESPN's `defPosTeamTimeouts` value for the play state at the start of the play. |
 | `end.posTeamTimeouts` | integer | ESPN's `posTeamTimeouts` value for the play state at the end of the play. |
 | `end.defPosTeamTimeouts` | integer | ESPN's `defPosTeamTimeouts` value for the play state at the end of the play. |
-| `firstHalfKickoffTeamId` | integer | ESPN id of the team that received the opening kickoff. |
+| `firstHalfKickoffTeamId` | integer | ESPN id of the team that kicked the opening kickoff (it receives the second-half kickoff), one value per game. |
 | `start.yard` | integer | ESPN's `yard` value for the play state at the start of the play. |
 | `end.yard` | integer | ESPN's `yard` value for the play state at the end of the play. |
 | `lag_scoringPlay` | character | Value of scoringPlay on the previous play, used for sequence-aware derivations. |
@@ -552,7 +552,10 @@ print(out[["two_pt_wp", "xp_wp", "two_pt_recommendation"]].head())
 Full 4th-down decision surface (cfb4th `add_4th_probs`) + recommendation.
 
 Runs `get_go_wp`, `get_fg_wp`, `get_punt_wp` on the
-fourth-down rows and adds the combined option columns plus:
+fourth-down rows and adds the combined option columns plus the ones below. A
+post-score kickoff (go touchdown, punt return touchdown, made field goal) is a
+touchback at the season's spot (`model_vars.TOUCHBACK_YARDLINE_BY_SEASON`: 80 to go
+through 2011, 75 from 2012); a null season takes the pre-2012 spot (80).
 
 * `fourth_down_recommendation` -- the max-WP choice among `{go, punt,
   field_goal}` (NaN options are excluded; when the FG model isn't bundled,

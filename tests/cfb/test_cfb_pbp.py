@@ -17,6 +17,32 @@ def test_cfb_pbp_missing_competitions_raises_noespndata():
         proc._CFBPlayProcess__helper_cfb_pbp({"header": {}})
 
 
+def test_pickcenter_round_trip_odds_are_espn_scalars_401301042():
+    """C-M19 (offline): the summary_pickcenter odds are Python scalars equal to ESPN's pickcenter
+    numbers, carry ``homeFavorite``, and survive JSON into ``odds_override`` unchanged. The frame-level
+    round trip is ``test_cfb_whole_game_oracle.py::test_pickcenter_odds_round_trip_rebuilds_the_frame_401301042``."""
+    import copy
+    import json
+    from pathlib import Path
+
+    summary = json.loads((Path(__file__).parent / "fixtures" / "summary_401301042.json").read_text(encoding="utf-8"))
+    keys = ("gameSpread", "overUnder", "homeFavorite", "gameSpreadAvailable")
+    proc = CFBPlayProcess(gameId=401301042, join_participants=False)
+    pbp_txt, _ = proc._CFBPlayProcess__helper_cfb_pbp(copy.deepcopy(proc.espn_cfb_pbp(summary=summary)))
+    assert pbp_txt["odds_source"] == "summary_pickcenter"
+    odds = {k: pbp_txt[k] for k in keys}
+    assert [type(odds[k]) for k in keys] == [float, float, bool, bool]
+    assert odds == {"gameSpread": -4.0, "overUnder": 58.5, "homeFavorite": True, "gameSpreadAvailable": True}
+    assert {(p["spread"], p["overUnder"], p["homeTeamOdds"]["favorite"]) for p in summary["pickcenter"]} == {
+        (odds["gameSpread"], odds["overUnder"], odds["homeFavorite"]),
+    }
+    again = CFBPlayProcess(gameId=401301042, join_participants=False, odds_override=json.loads(json.dumps(odds)))
+    re_txt, _ = again._CFBPlayProcess__helper_cfb_pbp(copy.deepcopy(again.espn_cfb_pbp(summary=summary)))
+    assert re_txt["odds_source"] == "injected"
+    assert {k: re_txt[k] for k in keys} == odds
+    assert re_txt["homeTeamSpread"] == pbp_txt["homeTeamSpread"] == 4.0
+
+
 @pytest.fixture()
 def generated_cfb_data():
     test = CFBPlayProcess(gameId=401301025)

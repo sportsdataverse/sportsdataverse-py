@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from datetime import datetime
 
-import pandas as pd
 import polars as pl
 
 from sportsdataverse._codegen_runtime import _download_json
+from sportsdataverse._espn_schedule import _schedule_frame
 from sportsdataverse.dl_utils import download
 
 
@@ -18,7 +18,8 @@ def espn_wnba_schedule(dates=None, season_type=None, limit=500, return_as_pandas
         limit (int): number of records to return, default: 500.
 
     Returns:
-        pl.DataFrame: Polars dataframe containing schedule dates for the requested season. Returns None if no games
+        pl.DataFrame: Polars dataframe containing schedule dates for the requested season. A day with no
+            games returns a zero-row frame carrying the documented columns.
 
     Example:
         Pull a single date's slate (YYYYMMDD)::
@@ -47,38 +48,11 @@ def espn_wnba_schedule(dates=None, season_type=None, limit=500, return_as_pandas
         .. _hoopR: https://hoopR.sportsdataverse.org
     """
     url = "http://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard"
-    params = {"dates": dates, "seasonType": season_type, "limit": limit}
-    ev = pd.DataFrame()
+    params = {"dates": dates, "seasontype": season_type, "limit": limit}
     events_txt = _download_json(download, url, params=params, **kwargs)
-    events = events_txt.get("events")
-    if events is None:
-        return pd.DataFrame() if return_as_pandas else pl.DataFrame()
-    if len(events) == 0:
-        return pd.DataFrame() if return_as_pandas else pl.DataFrame()
-
-    for event in events:
-        event = scoreboard_event_parsing(event)
-        x = pl.from_pandas(pd.json_normalize(event.get("competitions")[0], sep="_"))
-        x = x.with_columns(
-            game_id=(pl.col("id").cast(pl.Int32)),
-            season=(event.get("season").get("year")),
-            season_type=(event.get("season").get("type")),
-            home_linescores=pl.when(pl.col("status_type_description") == "Postponed")
-            .then(None)
-            .otherwise(pl.col("home_linescores")),
-            away_linescores=pl.when(pl.col("status_type_description") == "Postponed")
-            .then(None)
-            .otherwise(pl.col("away_linescores")),
-        ).with_columns(
-            season=pl.col("season").cast(pl.Int32),
-            season_type=pl.col("season_type").cast(pl.Int32),
-        )
-        x = x[[s.name for s in x if s.null_count() != x.height]]
-        ev = pd.concat([ev, x.to_pandas()], axis=0, ignore_index=True)
-    ev = pl.from_pandas(ev)
-    ev = ev.janitor.clean_names()
-
-    return ev.to_pandas() if return_as_pandas else ev
+    return _schedule_frame(
+        events_txt.get("events"), scoreboard_event_parsing, "wnba", return_as_pandas=return_as_pandas
+    )
 
 
 def scoreboard_event_parsing(event):

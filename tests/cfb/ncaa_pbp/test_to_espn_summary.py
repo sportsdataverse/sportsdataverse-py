@@ -21,9 +21,13 @@ import pytest
 
 from sportsdataverse.cfb.ncaa_pbp.fetch import _archive_bundle, _has_plays, _resolve_contest_id
 from sportsdataverse.cfb.ncaa_pbp.to_espn_summary import _fill_end_state, _ncaa_to_espn_summary
-from sportsdataverse.football.sources.contract import _validate_summary
 from sportsdataverse.errors import NoDataError
+from sportsdataverse.football.sources.contract import _validate_summary
 from sportsdataverse.football.sources.dispatch import AllSourcesFailed, SourceUnavailable, _process_game
+
+# Processing a default-odds capture warns DefaultOddsWarning incidentally;
+# tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
+pytestmark = pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")
 
 FIXTURES = Path(__file__).parent / "fixtures"
 

@@ -603,7 +603,7 @@ def _ncaa_to_espn_summary(
             required; ``home_espn_team_id`` / ``away_espn_team_id`` are used when present and
             otherwise come from ``team_ids``. ``CFBPlayProcess`` casts ``team.id`` to ``int`` and
             uses it for logos, possession and the box score, so they must be ESPN's.
-        odds: ``{gameSpread, overUnder, homeFavorite, gameSpreadAvailable}`` (a stored closing
+        odds: ``{gameSpread, overUnder, homeFavorite, gameSpreadAvailable, overUnderAvailable}`` (a stored closing
             line) -- NCAA states no odds of its own.
         team_ids: ``{"home"/"away": espn_team_id}`` resolved from the vendored crosswalk or
             ESPN's schedule, used for whichever side the id-map row does not carry.
