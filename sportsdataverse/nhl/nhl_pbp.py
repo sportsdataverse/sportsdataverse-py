@@ -334,17 +334,33 @@ def helper_nhl_pbp_features(game_id, pbp_txt, init):
             lag_period=pl.col("period.number").shift(1),
             lead_period=pl.col("period.number").shift(-1),
         )
+        # ESPN's NHL clock is ELAPSED time in the period (0:00 at the opening faceoff,
+        # 20:00 at the horn), not time remaining as in basketball. A regulation period is
+        # 1200 s; a playoff (season type 3) overtime is 1200 s, a regular-season overtime
+        # 300 s, and the regular-season shootout (period 5, every clock 0:00) has no clock.
+        # In overtime game_seconds_remaining is the OT period clock (fastRhockey nhl_game_feed.R
+        # convention, no regulation offset), so it rises again at each OT period start.
         .with_columns(
-            (60 * pl.col("clock.minutes") + pl.col("clock.seconds")).alias("start.period_seconds_remaining"),
-            pl.when(pl.col("period.number") == 1)
-            .then(2400 + 60 * pl.col("clock.minutes") + pl.col("clock.seconds"))
-            .when(pl.col("period.number") == 2)
-            .then(1200 + 60 * pl.col("clock.minutes") + pl.col("clock.seconds"))
-            .when(pl.col("period.number") == 3)
-            .then(60 * pl.col("clock.minutes") + pl.col("clock.seconds"))
-            .otherwise(60 * pl.col("clock.minutes") + pl.col("clock.seconds"))
-            .alias("start.game_seconds_remaining"),
+            pl.when((pl.col("period.number") <= 3) | (pl.col("seasonType").cast(pl.Int64, strict=False) == 3))
+            .then(pl.lit(1200.0))
+            .when(pl.col("period.number") == 4)
+            .then(pl.lit(300.0))
+            .otherwise(pl.lit(0.0))
+            .alias("_period_length"),
+            pl.when(pl.col("period.number") <= 3)
+            .then(1200.0 * (3 - pl.col("period.number")))
+            .otherwise(pl.lit(0.0))
+            .alias("_game_offset"),
         )
+        .with_columns(
+            (pl.col("_period_length") - 60 * pl.col("clock.minutes") - pl.col("clock.seconds")).alias(
+                "start.period_seconds_remaining"
+            ),
+        )
+        .with_columns(
+            (pl.col("_game_offset") + pl.col("start.period_seconds_remaining")).alias("start.game_seconds_remaining"),
+        )
+        .drop("_period_length", "_game_offset")
         .with_columns(
             pl.col("start.period_seconds_remaining").shift(-1).alias("end.period_seconds_remaining"),
             pl.col("start.game_seconds_remaining").shift(-1).alias("end.game_seconds_remaining"),
@@ -353,27 +369,20 @@ def helper_nhl_pbp_features(game_id, pbp_txt, init):
 
     pbp_txt["plays"] = pbp_txt["plays"].with_row_index("game_play_number", offset=1)
 
+    # The last row of a period ends at 0:00 of its own period, not at the next period's
+    # first start (which restarts the clock); every other row ends at the next row's start.
+    # Same design as basketball's period_end_seconds (#841); kept local until both live on
+    # main, when the quality program's task 6.1 folds the two into one helper.
+    ends_period = pl.col("period.number") != pl.col("period.number").shift(-1)
+    left_in_period = pl.col("start.period_seconds_remaining")
     pbp_txt["plays"] = pbp_txt["plays"].with_columns(
-        pl.when(pl.col("game_play_number") == 1)
-        .then(1200)
-        .when((pl.col("lag_period") == 1).and_(pl.col("period.number") == 2))
-        .then(1200)
-        .when((pl.col("lag_period") == 2).and_(pl.col("period.number") == 3))
-        .then(1200)
-        .when((pl.col("lag_period") == pl.col("period.number") - 1).and_(pl.col("period.number") >= 4))
-        .then(1200)
-        .otherwise(pl.col("end.period_seconds_remaining"))
-        .alias("end.period_seconds_remaining"),
-        pl.when(pl.col("game_play_number") == 1)
-        .then(3600)
-        .when((pl.col("lag_period") == 1).and_(pl.col("period.number") == 2))
-        .then(2400)
-        .when((pl.col("lag_period") == 2).and_(pl.col("period.number") == 3))
-        .then(1200)
-        .when((pl.col("lag_period") == pl.col("period.number") - 1).and_(pl.col("period.number") >= 4))
-        .then(1200)
-        .otherwise(pl.col("end.game_seconds_remaining"))
-        .alias("end.game_seconds_remaining"),
+        [
+            pl.when(ends_period)
+            .then(pl.col(f"start.{s}_seconds_remaining") - left_in_period)
+            .otherwise(pl.col(f"end.{s}_seconds_remaining"))
+            .alias(f"end.{s}_seconds_remaining")
+            for s in ("period", "game")
+        ]
     )
 
     return pbp_txt

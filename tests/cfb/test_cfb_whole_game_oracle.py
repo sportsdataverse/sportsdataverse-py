@@ -24,12 +24,17 @@ Oracle per column
     define the kicker. Asserted on the 85 captures whose feed opens period 1 with a kickoff (43 kicked
     by the home team). On the other 41 (32 feeds from 2004-2012 that file a scrimmage play first, and 9
     later feeds that lack the opening kickoff or number a later play ahead of it) nothing is asserted.
-    XFAIL C-NF-2 / C-M13 on every one of the 85 (row 1 names the receiving team; later rows the away
-    team).
-``start/end.pos_team_receives_2H_kickoff`` (first-half rows)
-    cfbfastR ``cfbd_pbp_data.R:1329-1332``: true exactly when the possession team is the opening
-    kicker. Second-half rows are not asserted: cfbfastR leaves the flag ungated there while nflfastR
-    gates it to the first half, and the phase-2 port (plan task 2.6) makes that choice. XFAIL C-NF-2.
+    Green since task 2.6 (C-NF-2 / C-M13: it was a per-row expression naming the receiving team on row 1
+    and the away team on every later row). A second oracle reads period 3 alone: the opening kicker
+    receives the second-half kickoff, so it takes the first period-3 snap. Asserted on 118 captures,
+    34 of them among the 41 above (``_opening_kicker``'s first-snap-defense fallback); 6 are
+    undetermined (the half's start missing or misnumbered, an onside or return-touchdown kickoff) and 2
+    contradict their own period 1 (``_P3_CONTRADICTS_P1``).
+``start/end.pos_team_receives_2H_kickoff``
+    First-half rows: cfbfastR ``cfbd_pbp_data.R:1329-1332``, true exactly when the possession team is
+    the opening kicker (the 85 captures above). Rows after the first half: false on every capture,
+    nflfastR's ``receive_2h_ko`` gate (cfbfastR leaves the flag ungated there; task 2.6 chose the
+    nflfastR rule, as the NFL processor does). Green since task 2.6 (C-NF-2).
 ``start.yardsToEndzone.touchback`` (kickoff rows)
     The NCAA rule, sdv-internal-refs ``rules/cfb.yaml#cfb-2012-kickoff-35-touchback-25``: 80 through
     2011, 75 from 2012. Owner ruling: through 2011 the RULE is the oracle, not cfbfastR -- cfbfastR's
@@ -44,12 +49,17 @@ Oracle per column
 ``end.down`` / ``end.yardsToEndzone`` where ESPN's end block is ``{down 0, yardLine 0, yardsToEndzone 0}``
     The ESPN feed: when the same team snaps next, the play ended where that snap starts. Asserted on
     feeds that carry end blocks (a feed whose end blocks are mostly degenerate, e.g. 252532751 from
-    2005, has no end state to trust and is skipped), on the plays the processor emits. XFAIL supp-002.
+    2005, has no end state to trust and is skipped), on the plays the processor emits. Green on fumble
+    plays since task 3.4(a), and on the 7 captures whose degenerate end is on a rush, a pass or a
+    penalty since EX-3.4-c (a declined flag, an enforced flag and a gain each end where the next snap
+    starts; the full text of 401761622's "Roughing The Passer declined ... Pass Interference 15 yards
+    from GASO21 to GASO36, 1ST DOWN" names that spot).
 ``EPA`` of 401856682's Q4 Fumble Recovery (Own)
     EP at the next snap's start minus ``EP_start``, within 0.1 (the addendum's tolerance; the Yahoo and
     CBS adapters score -0.39, the next-snap state gives -0.41). The state comes from the feed; the EP
     values are the processor's own model evaluated at that state, so this pins the end STATE, not the
-    model. XFAIL supp-002.
+    model. Green since task 3.4(a) (supp-002; its 23-candidate count is
+    ``tests/cfb/test_cfb_supp002_degenerate_end.py``).
 ``line_yards``
     The standard per-yard adjusted-line-yards band (the ruling for plan task 2.1 in
     ``audit/EXECUTION-FINDINGS.md``; Action Network's ALY definition, Football Study Hall): a loss
@@ -59,16 +69,19 @@ Oracle per column
     100% through 3, 50% of 4-8, cap 5.5).
 ``yds_rushed``
     The feed's text states every rush's yardage (a number, "no gain", "loss of N"); a rush row without
-    it is a parse gap. XFAIL EX-1.2-a (a finding surfaced by this suite's null-aware review) on the 15
-    captures where it still happens (#768 closed 27 of the original 42); the line-yards checks below read
-    only the rows that carry a yardage.
+    it is a parse gap. XFAIL EX-1.2-a (a finding surfaced by this suite's null-aware review) on the 6
+    captures where a rush's text states no carry (#768 closed 27 of the original 42, task 3.4(f) 9 more:
+    "for 1 yard", "loss of N" without "a", a name ending "yard" before "rush", directional gains on
+    fumbled or flagged rushes, a "1 Yd Run" with a two-point try); the line-yards checks below read only
+    the rows that carry a yardage.
 ``line_yards + second_level_yards + open_field_yards`` on gains
     The decomposition identity: the three pieces sum to ``yds_rushed``. Green (C-H1's CFB twin).
 ``period``
-    The feed's chronology: never decreases along the emitted rows. XFAIL C-M18.
+    The feed's chronology: never decreases along the emitted rows. XFAIL C-M18 on 401628439 only (the
+    period label is wrong; ``errors.PlayOrderWarning`` names it).
 ``game_play_number``, ``lag_half``
     Recomputed after the final sort: ``game_play_number`` strictly increases along the rows and
-    ``lag_half`` is the previous row's ``half`` (null on row 1). XFAIL C-L1.
+    ``lag_half`` is the previous row's ``half`` (null on row 1). Green (C-L1, fixed in 3.4(b2)).
 ``id``
     The feed: every emitted row is a feed play, emitted once (C-L11's row-count diagnostic). Green.
 feed ``text`` literals
@@ -83,7 +96,8 @@ schema
     exact both ways, so the allowlist only shrinks.
 odds round trip (401301042)
     The offline-reprocess contract (CLAUDE.md, 0.0.52): the payload's resolved odds persist as JSON
-    and, fed back as ``odds_override``, rebuild the same frame. XFAIL C-M19.
+    and, fed back as ``odds_override``, rebuild the same frame; the persisted values are ESPN's
+    pickcenter numbers. Green since task 3.4(b1) (C-M19).
 
 Not oracles, and why. ``cfbfastR-cfb-data`` publishes this processor's own output (comparing to it is
 the snapshot ban in another form). ``cfbfastR-data`` holds three play-by-play trees: ``pbp/`` (2002-21)
@@ -111,6 +125,7 @@ import pytest
 import yaml
 
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+from sportsdataverse.errors import PlayOrderWarning
 
 FIX = Path(__file__).parent / "fixtures"
 _CAPTURE = re.compile(r"^summary_(\d+)(?:_trimmed)?\.json(?:\.gz)?$")
@@ -136,7 +151,14 @@ SUPP_002_EPA_ABS_TOL = 0.1
 #: committed row count of tests/cfb/schema_allowlist.yaml: it may only go down
 SCHEMA_ALLOWLIST_MAX_ROWS = 49
 
-pytestmark = pytest.mark.whole_game
+# Processing a default-odds capture warns DefaultOddsWarning incidentally;
+# tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
+# 401628439 warns PlayOrderWarning; test_period_monotonic_or_the_step_back_warns asserts it.
+pytestmark = [
+    pytest.mark.whole_game,
+    pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning"),
+    pytest.mark.filterwarnings("ignore::sportsdataverse.errors.PlayOrderWarning"),
+]
 
 
 def _load(path: Path) -> dict:
@@ -168,6 +190,8 @@ class Feed:
     home_id: int
     away_id: int
     opening_kicker: int | None
+    #: the team that received the second-half kickoff, read from period 3 alone; ``None`` when undetermined
+    second_half_receiver: int | None
     play_ids: frozenset[int]
     #: (play id, next snap's start.down, next snap's start.yardsToEndzone)
     degenerate_ends: tuple[tuple[int, int, int], ...]
@@ -205,12 +229,48 @@ def _opening_kicker(period1: list[dict], home: int, away: int) -> int | None:
     return labelled
 
 
+def _clock_secs(play: dict) -> int | None:
+    hit = re.match(r"^(\d{1,2}):(\d{2})$", (play.get("clock") or {}).get("displayValue") or "")
+    return int(hit.group(1)) * 60 + int(hit.group(2)) if hit else None
+
+
+def _second_half_receiver(period3: list[dict]) -> int | None:
+    """The team that received the second-half kickoff, read from period 3 alone, or ``None``.
+
+    The receiver snaps first: the first scrimmage snap of period 3 belongs to it, whether or not the
+    feed files the kickoff (a 2025 feed types it "Pass Completion"; the text still says kickoff).
+    ``None`` (6 captures) when the feed's first period-3 play comes after the opening minute (the
+    half's start is missing, 242972641 and 252740026, or a later play is numbered first, 322430041 and
+    401425418), or the kickoff is onside, ends in a turnover or a return touchdown, or a second kickoff
+    comes before any snap: then the first snap says nothing about who received (400548250, 272650194).
+    """
+    rows = [p for p in period3 if not re.search(r"(?i)timeout|end of|end period|coin toss|penalty", _type(p))]
+    if not rows or (_clock_secs(rows[0]) or 0) < 14 * 60:
+        return None
+    kicked = False
+    for play in rows:
+        kickoff = _KICKOFF_TYPE.search(_type(play)) or re.search(r"(?i)\bkickoff\b", play.get("text") or "")
+        if kickoff:
+            if kicked or re.search(r"(?i)fumble|recover|muff|onside|touchdown", play.get("text") or ""):
+                return None
+            kicked = True
+            continue
+        if _NOT_A_SNAP.search(_type(play)) or not (play.get("start") or {}).get("down"):
+            continue
+        return int(play["start"]["team"]["id"])
+    return None
+
+
 def _feed(game_id: int, summary: dict) -> Feed:
     plays = [p for d in (summary.get("drives") or {}).get("previous", []) for p in d.get("plays", [])]
-    period1 = sorted(
-        (p for p in plays if (p.get("period") or {}).get("number") == 1),
-        key=lambda p: int(p.get("sequenceNumber") or 0),
-    )
+
+    def period(n: int) -> list[dict]:
+        return sorted(
+            (p for p in plays if (p.get("period") or {}).get("number") == n),
+            key=lambda p: int(p.get("sequenceNumber") or 0),
+        )
+
+    period1 = period(1)
     sides = {c["homeAway"]: int(c["team"]["id"]) for c in summary["header"]["competitions"][0]["competitors"]}
     kicker = _opening_kicker(period1, sides["home"], sides["away"])
 
@@ -239,6 +299,7 @@ def _feed(game_id: int, summary: dict) -> Feed:
         home_id=sides["home"],
         away_id=sides["away"],
         opening_kicker=kicker,
+        second_half_receiver=_second_half_receiver(period(3)),
         play_ids=frozenset(int(p["id"]) for p in plays),
         degenerate_ends=tuple(ends),
         texts=tuple(p.get("text") or "" for p in plays),
@@ -270,6 +331,10 @@ _COLUMNS = (
     "start.yardsToEndzone.touchback",
     "rush",
     "yds_rushed",
+    "statYardage",
+    "fumble_vec",
+    "penalty_flag",
+    "penalty_detail",
     "line_yards",
     "second_level_yards",
     "open_field_yards",
@@ -289,11 +354,16 @@ class Run:
     schema: dict[str, str]
 
 
+#: real captures outside the ``summary_*`` set (so not whole-game oracle captures), read by one test each;
+#: provenance in tests/cfb/fixtures/README.md
+_FORM_FIXTURES = {282782655: FIX / "rush_forms" / "282782655_trimmed.json.gz"}
+
+
 @functools.lru_cache(maxsize=None)
 def _run(game_id: int) -> Run:
     """Process one capture offline, once per process; keep the columns the oracles read."""
     proc = CFBPlayProcess(gameId=game_id, join_participants=False)
-    proc.espn_cfb_pbp(summary=_load(PATHS[game_id]))
+    proc.espn_cfb_pbp(summary=_load(PATHS.get(game_id) or _FORM_FIXTURES[game_id]))
     proc.run_processing_pipeline()
     plays = proc.plays_frame
     return Run(frame=plays.select(_COLUMNS), schema={c: str(t) for c, t in plays.schema.items()})
@@ -318,19 +388,10 @@ def _params(game_ids, red: dict[int, str] | None = None) -> list:
 # --- C-NF-2 / C-M13: the opening-kickoff team and the 2H-kickoff flag -------------------------------
 
 _KICKOFF_DEFINED = tuple(gid for gid in CAPTURES if FEEDS[gid].opening_kicker is not None)
-_NF2 = (
-    "C-NF-2 / C-M13: firstHalfKickoffTeamId is a per-row expression (cfb_pbp.py:2865-2873): row 1 names the "
-    "receiving team and every later row the away team, so it is the opening kicker on no row-1 and on "
-    "no row at all when the home team kicked"
-)
-_NF2_FLAG = (
-    "C-NF-2: pos_team_receives_2H_kickoff reads the per-row firstHalfKickoffTeamId (cfb_pbp.py:4323-4330): "
-    "row 1 always, and every first-half row when the home team kicked, carry the inverted flag"
-)
 
 
-@pytest.mark.parametrize("game_id", _params(_KICKOFF_DEFINED, dict.fromkeys(_KICKOFF_DEFINED, _NF2)))
-def test_first_half_kickoff_team_is_the_opening_kicker_on_every_row(game_id):
+@pytest.mark.parametrize("game_id", _params(_KICKOFF_DEFINED))
+def test_first_half_kickoff_team_constant_is_the_opening_kicker(game_id):
     kicker = FEEDS[game_id].opening_kicker
     df = _frame(game_id)
     named = df["firstHalfKickoffTeamId"].cast(pl.Int64)
@@ -340,7 +401,7 @@ def test_first_half_kickoff_team_is_the_opening_kicker_on_every_row(game_id):
     assert wrong == 0, f"{wrong} of {df.height} rows name a team other than the opening kicker {kicker}"
 
 
-@pytest.mark.parametrize("game_id", _params(_KICKOFF_DEFINED, dict.fromkeys(_KICKOFF_DEFINED, _NF2_FLAG)))
+@pytest.mark.parametrize("game_id", _params(_KICKOFF_DEFINED))
 def test_receives_2h_kickoff_on_first_half_rows_is_the_opening_kicker(game_id):
     kicker = FEEDS[game_id].opening_kicker
     first_half = _frame(game_id).filter(pl.col("period") <= 2)
@@ -352,11 +413,53 @@ def test_receives_2h_kickoff_on_first_half_rows_is_the_opening_kicker(game_id):
         assert wrong == 0, f"{side}: {wrong} of {first_half.height} first-half rows carry the inverted flag"
 
 
+@pytest.mark.parametrize("game_id", _params(CAPTURES))
+def test_receives_2h_kickoff_is_false_after_the_first_half(game_id):
+    """Nobody is still waiting for the second-half kickoff once it has happened (nflfastR's gate)."""
+    later = _frame(game_id).filter(pl.col("period") > 2)
+    # every committed capture, trimmed or not, keeps rows after the first half; without them this passes vacuously
+    assert later.height > 0, "no rows after the first half to check"
+    for side in ("start", "end"):
+        flagged = int(later[f"{side}.pos_team_receives_2H_kickoff"].ne_missing(False).sum())
+        assert flagged == 0, f"{side}: {flagged} of {later.height} rows after the first half carry the flag"
+
+
+#: Feeds whose period 3 contradicts their period 1: the same team takes the first snap of both halves
+_P3_CONTRADICTS_P1 = {
+    262522509: "2006: Miami (OH) snaps first in both halves; period 3 opens with Purdue's kickoff",
+    322590228: "2012: Furman snaps first in both halves; the feed files no kickoff before either snap",
+}
+_RECEIVER_DEFINED = tuple(
+    gid for gid in CAPTURES if FEEDS[gid].second_half_receiver is not None and gid not in _P3_CONTRADICTS_P1
+)
+
+
+@pytest.mark.parametrize("game_id", _params(_RECEIVER_DEFINED))
+def test_first_half_kickoff_team_received_the_second_half_kickoff(game_id):
+    """The opening kicker receives the second-half kickoff, read from period 3 alone (R781-3).
+
+    Independent of period 1, so it also covers the captures with no opening kickoff, where
+    ``_opening_kicker`` falls back to the first snap's defense.
+    """
+    receiver = FEEDS[game_id].second_half_receiver
+    named = _frame(game_id)["firstHalfKickoffTeamId"].cast(pl.Int64)
+    wrong = int(named.ne_missing(receiver).sum())
+    assert wrong == 0, f"{wrong} of {named.len()} rows name a team other than the second-half receiver {receiver}"
+
+
+def test_the_second_half_oracle_covers_the_fallback_captures():
+    """Guard the guard: 123 captures checked, 36 of them without an opening kickoff in period 1."""
+    assert len(_RECEIVER_DEFINED) == 123
+    fallback = [FEEDS[g] for g in _RECEIVER_DEFINED if g not in _KICKOFF_DEFINED]
+    assert len(fallback) == 36
+    assert {f.second_half_receiver == f.home_id for f in fallback} == {True, False}
+
+
 def test_the_kickoff_oracle_covers_the_captures_it_should():
-    """Guard the guard: the feed names the opening kicker on 85 of the 126 captures, 43 of them home."""
+    """Guard the guard: the feed names the opening kicker on 89 of the 132 captures, 44 of them home."""
     kicked = [FEEDS[g] for g in _KICKOFF_DEFINED]
-    assert len(kicked) == 85
-    assert sum(1 for f in kicked if f.opening_kicker == f.home_id) == 43
+    assert len(kicked) == 89
+    assert sum(1 for f in kicked if f.opening_kicker == f.home_id) == 44
     # 400547866 (Kansas @ West Virginia, 2014): the away team kicks, the home team receives
     assert FEEDS[400547866].opening_kicker == 2305
     # 400559176 (West Alabama @ Jacksonville State, 2014): ESPN files the kickoff under the receiver,
@@ -434,7 +537,8 @@ def _half_closers(df: pl.DataFrame) -> list[tuple[str, dict]]:
 
 
 @pytest.mark.parametrize("game_id", _params(CAPTURES))
-def test_end_of_half_lands_on_the_last_real_play(game_id):
+def test_end_of_half_timeout_ending_lands_on_the_last_real_play(game_id):
+    """C-NF-12: named for gates/cfb.md's ``-k timeout_ending``; checks every capture's half-closing rows."""
     for which, row in _half_closers(_frame(game_id)):
         assert row["end_of_half"] is True, f"{which}: row {row['row']} ({row['type.text']}) is not end_of_half"
         scoring = row["scoring_play"] is True or bool(_TRY_OR_KICK_OR_SCORE.search(row["type.text"] or ""))
@@ -553,22 +657,9 @@ def test_timeout_ending_half_end_possession_change_wp_after_is_one_minus_next_pl
 # --- supp-002: ESPN's degenerate end block --------------------------------------------------------
 
 _DEGENERATE = tuple(gid for gid in CAPTURES if FEEDS[gid].degenerate_ends)
-_SUPP_002 = {
-    gid: f"supp-002: ESPN's {{down 0, yardLine 0, yardsToEndzone 0}} end block is kept ({note}) instead of the next snap's start"
-    for gid, note in {
-        322590228: "end.down 0",
-        400869270: "end.down 0 on a declined penalty",
-        401752744: "end.down 0 on a declined penalty",
-        401754585: "end.down 0, end.yardsToEndzone 99",
-        401754598: "end.down 0, end.yardsToEndzone 99",
-        401761622: "end.down 0, end.yardsToEndzone 79 where the next snap starts at 64",
-        401856682: "end.down 0, end.yardsToEndzone 99 on the Q4 Fumble Recovery (Own)",
-        401858435: "end.down 0, end.yardsToEndzone 99",
-    }.items()
-}
 
 
-@pytest.mark.parametrize("game_id", _params(_DEGENERATE, _SUPP_002))
+@pytest.mark.parametrize("game_id", _params(_DEGENERATE))
 def test_degenerate_end_block_takes_the_next_snap_state(game_id):
     oracle = pl.DataFrame(
         FEEDS[game_id].degenerate_ends,
@@ -590,12 +681,6 @@ def test_degenerate_end_block_takes_the_next_snap_state(game_id):
 
 
 @pytest.mark.xdist_group("cfb-oracle-401856682")
-@pytest.mark.xfail(
-    strict=True,
-    raises=AssertionError,
-    reason="supp-002: 401856682's Q4 'Fumble Recovery (Own)' scores EPA -5.91 from end.yardsToEndzone 99; "
-    "the next snap (3rd & 1 at the 1) gives -0.41",
-)
 def test_fumble_recovery_own_epa_from_the_next_snap_401856682():
     df = _frame(401856682).filter(pl.col("type.text").fill_null("") != "Timeout").with_row_index("row")
     hit = df.filter(pl.col("id").cast(pl.Int64) == 401856682824)
@@ -646,30 +731,56 @@ def _rushes(game_id: int) -> pl.DataFrame:
 
 
 # 27 captures left this table when main's #768 (6c5a48e44f, "kneel-down and yardless vendor rush yardage")
-# reached this branch: they now assert plainly. With #768's cfb_pbp.py hunk reverted every count below and
-# every removed capture returns to its pre-#768 value (303102638 48, 313090025 47, 401644749 7).
-_EX_1_2_A = {
-    gid: f"EX-1.2-a: {n} rush row(s) lose yds_rushed (and so line_yards) because the text pattern is unmatched "
-    "('rushed up the middle for 1 yard', fumbled rushes with no yardage clause, a '1 Yd Run' with a "
-    "two-point try; cfb_pbp.py yds_rushed chain)"
-    for gid, n in {
-        242972641: 14,
-        243040130: 9,
-        243040265: 5,
-        243042579: 5,
-        243110264: 6,
-        243392572: 5,
-        252532751: 6,
-        282430151: 1,
-        282570328: 1,
-        303102638: 3,
-        313090025: 2,
-        322802005: 1,
-        400756970: 1,
-        400953391: 1,
-        401644749: 2,
-    }.items()
+# reached this branch, 9 more with task 3.4(f) (the stated forms in test_stated_rush_yardage_is_read). The
+# 7 rows left are rushes whose text states no carry: a fumble named with no yardage clause (only where the
+# ball was RECOVERED, which the NCAA rule does not credit; statYardage disagrees with that spot on 2 of 4)
+# and a vendor rush whose only number is the penalty. Null is the honest value there, as for a sack that
+# states no loss; the xfails stay until a source states the carry.
+#: rush rows per capture whose text states no carry; pinned so a new null on these captures still fails
+_EX_1_2_A_COUNTS = {
+    252532751: 1,
+    282430151: 1,
+    282570328: 1,
+    313090025: 1,
+    322802005: 1,
+    401644749: 2,
 }
+_EX_1_2_A = {
+    gid: f"EX-1.2-a: {n} rush row(s) state no carry ('X rush, fumbled, recovered by ... at the Y 28', "
+    "'X rush (tackler), PENALTY ...'), so yds_rushed stays null (cfb_pbp.py yds_rushed chain)"
+    for gid, n in _EX_1_2_A_COUNTS.items()
+}
+
+#: (game, play id, yards, oracle): one row per text form task 3.4(f) reads; each was null before it
+_STATED_RUSH_FORMS = [
+    (242972641, 2429726410102, 1, "'rushed up the middle for 1 yard'; statYardage 1"),
+    (252532751, 252532751133, -8, "'rush for loss of 8 yards'; next snap 55 -> 63 yards to go (statYardage 0)"),
+    (303102638, 303102638101, 7, "statYardage stand-in (fall-through): 'Joseph Banyard rush' is no 'N Yard Rush'"),
+    (303102638, 303102638009, 3, "'rush over left tackle for 3 yards', SMU penalty after; statYardage 3"),
+    (313090025, 313090025162, 11, "'rush over right guard for 11 yards, fumbled', own recovery; statYardage 11"),
+    (400756970, 400756970104999301, 1, "'1 Yd Run (X Run for Two-Point Conversion)'; statYardage 1"),
+    # rush_forms/ fixture: a directional loss on a flagged rush (penalty declined)
+    (
+        282782655,
+        282782655087,
+        -5,
+        "'rush over right end for a loss of 5 yards', penalty declined; statYardage -5, next snap 52 -> 57 yards to go",
+    ),
+]
+
+
+@pytest.mark.parametrize(
+    ("game_id", "play_id", "yards", "oracle"),
+    [
+        pytest.param(*row, marks=pytest.mark.xdist_group(f"cfb-oracle-{row[0]}"), id=f"{row[0]}-{row[1]}")
+        for row in _STATED_RUSH_FORMS
+    ],
+)
+def test_stated_rush_yardage_is_read(game_id, play_id, yards, oracle):
+    """EX-1.2-a: each text form that states a carry yields it (the feed's statYardage or next snap)."""
+    row = _frame(game_id).filter(pl.col("id").cast(pl.Int64) == play_id)
+    assert row.height == 1
+    assert row["yds_rushed"].item() == yards, oracle
 
 
 @pytest.mark.parametrize("game_id", _params(CAPTURES, _EX_1_2_A))
@@ -678,6 +789,34 @@ def test_every_rush_carries_its_yardage(game_id):
     rushes = _frame(game_id).filter(pl.col("rush") == True)
     lost = rushes.filter(pl.col("yds_rushed").is_null())
     assert lost.height == 0, f"{lost.height} of {rushes.height} rushes: {lost['text'].head(3).to_list()}"
+
+
+@pytest.mark.parametrize("game_id", _params(sorted(_EX_1_2_A_COUNTS)))
+def test_rushes_without_a_stated_carry_stay_counted(game_id):
+    """EX-1.2-a: the xfailed captures keep exactly their counted no-carry rows (growth fails here)."""
+    lost = _frame(game_id).filter((pl.col("rush") == True) & pl.col("yds_rushed").is_null())
+    assert lost.height == _EX_1_2_A_COUNTS[game_id], lost["text"].to_list()
+
+
+#: a feed whose three yardages disagree: no reader can match statYardage without dropping the text
+_PLAIN_RUSH_PROVIDER = {
+    401012682: "provider defect: play 401012682104884901 reads 'run for 4 yds to the OrgSt 29' (yds_rushed 4) "
+    "with statYardage 8 and a 41 -> 29 spot (12 yards); two runners' texts merged in one record",
+}
+
+
+@pytest.mark.parametrize("game_id", _params(CAPTURES, _PLAIN_RUSH_PROVIDER))
+def test_plain_rush_yardage_equals_stat_yardage(game_id):
+    """A rush with no fumble and no flag gains what ESPN's statYardage says (where it is not the 0 blank)."""
+    plain = _frame(game_id).filter(
+        (pl.col("rush") == True)
+        & (pl.col("fumble_vec").fill_null(False) == False)
+        & (pl.col("penalty_flag").fill_null(False) == False)
+        & pl.col("penalty_detail").is_null()
+        & (pl.col("statYardage").cast(pl.Float64) != 0)
+    )
+    bad = plain.filter(~pl.col("yds_rushed").cast(pl.Float64).eq_missing(pl.col("statYardage").cast(pl.Float64)))
+    assert bad.height == 0, bad.select("id", "statYardage", "yds_rushed", "text").rows()[:5]
 
 
 @pytest.mark.parametrize("game_id", _params(CAPTURES))
@@ -726,44 +865,51 @@ def test_rush_adj_and_highlight_yards_follow_the_band(game_id):
 
 # --- C-M18 / C-L1: row order ------------------------------------------------------------------------
 
+# 401425418's third-quarter kickoff under an out-of-scheme id is placed by its clock since 3.4(b2).
+# 401628439's is a provider label defect, not a sort one: ESPN files an overtime touchdown (id period
+# digit 6) as period 2; PlayOrderWarning names it (test_period_monotonic_or_the_step_back_warns).
 _M18 = {
-    401425418: "C-M18: a third-quarter kickoff sorts first (game_play_number 1), so period steps back from 3 to 1",
-    401628439: "C-M18: an overtime touchdown ESPN labels period 2 sorts after period 5 rows",
+    401628439: "C-M18: an overtime touchdown ESPN labels period 2 sorts to the end of regulation",
 }
 
 
 @pytest.mark.parametrize("game_id", _params(CAPTURES, _M18))
 def test_period_never_decreases_along_the_rows(game_id):
-    period = _frame(game_id)["period"].cast(pl.Int64)
-    assert period.null_count() == 0
-    steps_back = [i for i, d in enumerate(period.diff().to_list()) if d is not None and d < 0]
+    """C-M18: kept as the deliberate strict-xfail marker for ESPN's 401628439 period-label error.
+
+    test_period_monotonic_or_the_step_back_warns implies it (its exact-pair assert); this one keeps the
+    provider defect visible as an open xfail.
+    """
+    steps_back = _period_steps_back(_frame(game_id))
     assert steps_back == [], f"period decreases at rows {steps_back}"
 
 
-_L1 = {
-    gid: f"C-L1: game_play_number / lag_half are set before the final sort (cfb_pbp.py:2536, :2619); {note}"
-    for gid, note in {
-        282430151: "lag_half stale on rows 0, 2",
-        282570328: "lag_half stale on rows 0, 2",
-        293250145: "lag_half stale on rows 0, 1",
-        302540025: "lag_half stale on rows 0, 1",
-        332990030: "lag_half stale on rows 0, 1",
-        401282146: "lag_half stale on rows 0, 201",
-        401301042: "lag_half stale on rows 0, 183",
-        401425418: "lag_half stale on rows 0, 1, 10",
-        401525860: "lag_half stale on rows 0, 98",
-        401525903: "game_play_number steps back at row 117",
-        401628439: "lag_half stale on row 173",
-        401752817: "lag_half stale on row 81",
-        401752854: "lag_half stale on row 84",
-        401754585: "lag_half stale on rows 40, 51, 191",
-        401858224: "lag_half stale on rows 35, 83, 174",
-    }.items()
-}
+def _period_steps_back(df: pl.DataFrame) -> list[int]:
+    period = df["period"].cast(pl.Int64)
+    assert period.null_count() == 0
+    return [i for i, d in enumerate(period.diff().to_list()) if d is not None and d < 0]
 
 
-@pytest.mark.parametrize("game_id", _params(CAPTURES, _L1))
-def test_game_play_number_and_lag_half_follow_the_rows(game_id):
+#: the (before, after) play ids PlayOrderWarning names where a capture's period label steps back
+_M18_WARNED = {401628439: (401628439104999901, 401628439106260230)}
+
+
+@pytest.mark.parametrize("game_id", _params(CAPTURES))
+def test_period_monotonic_or_the_step_back_warns(game_id):
+    """C-M18: the period never decreases along the rows, or the processor warns naming the step."""
+    if game_id not in _M18_WARNED:
+        assert _period_steps_back(_frame(game_id)) == []
+        return
+    before, after = _M18_WARNED[game_id]
+    # a fresh run: the cached one warned once, under the module's ignore filter
+    with pytest.warns(PlayOrderWarning, match=rf"{game_id}.*\({before}, {after}\)"):
+        frame = _run.__wrapped__(game_id).frame
+    ids = frame["id"].cast(pl.Int64).to_list()
+    assert [(ids[i - 1], ids[i]) for i in _period_steps_back(frame)] == [(before, after)]
+
+
+@pytest.mark.parametrize("game_id", _params(CAPTURES))
+def test_game_play_number_and_lag_half_after_sort_follow_the_rows(game_id):
     df = _frame(game_id)
     gpn = df["game_play_number"].cast(pl.Int64)
     assert gpn.null_count() == 0
@@ -785,6 +931,24 @@ def test_every_row_is_a_feed_play_once(game_id):
     assert ids.n_unique() == ids.len(), "a play id is emitted twice"
     invented = set(ids.to_list()) - FEEDS[game_id].play_ids
     assert invented == set(), f"rows that are not feed plays: {sorted(invented)}"
+
+
+_PRE_2005 = tuple(gid for gid in CAPTURES if FEEDS[gid].season < 2005)
+#: the feed rows that are not plays: period/game markers and the 2004 feed's drive banners
+_ADMIN_TEXT = re.compile(r"(?i)^(?:end of|start of|begin drive)")
+
+
+@pytest.mark.parametrize("game_id", _params(_PRE_2005))
+def test_pre_2005_rows_dropped_from_the_feed_are_admin_rows(game_id):
+    """C-L11: before 2005 ``sequenceNumber`` restarts per drive (nearly every value repeats), so it is
+    no key; the copy drops key on ``id``. Every feed row the output lacks is a marker, never a play."""
+    summary = _load(PATHS[game_id])
+    plays = [p for d in summary["drives"]["previous"] for p in d["plays"]]
+    sequences = [p.get("sequenceNumber") for p in plays]
+    assert len(set(sequences)) < len(sequences) / 2, "the capture no longer repeats sequenceNumber"
+    kept = set(_frame(game_id)["id"].cast(pl.Int64).to_list())
+    dropped = [p.get("text") or "" for p in plays if int(p["id"]) not in kept]
+    assert dropped and all(_ADMIN_TEXT.search(text) for text in dropped), dropped
 
 
 def test_flag_literals_meet_no_other_casing():
@@ -875,22 +1039,27 @@ def test_box_score_rerun_on_plays_frame_reproduces_adv_box_score(game_id):
 
 # --- C-M19: the pickcenter odds round trip ----------------------------------------------------------
 
-_ODDS_KEYS = ("gameSpread", "overUnder", "homeFavorite", "gameSpreadAvailable")
+# the five keys the payload carries; a four-key override rebuilds with a null overUnderAvailable (unknown, R895-1)
+_ODDS_KEYS = ("gameSpread", "overUnder", "homeFavorite", "gameSpreadAvailable", "overUnderAvailable")
 
 
 @pytest.mark.xdist_group("cfb-oracle-401301042")
-@pytest.mark.xfail(
-    strict=True,
-    raises=(KeyError, TypeError),
-    reason="C-M19: on the summary_pickcenter path gameSpread/overUnder are shape-(1,) ndarrays and "
-    "homeFavorite is missing from the payload (cfb_pbp.py:3655-3667), so the persisted odds cannot round trip",
-)
 def test_pickcenter_odds_round_trip_rebuilds_the_frame_401301042():
     first = CFBPlayProcess(gameId=401301042, join_participants=False)
     first.espn_cfb_pbp(summary=_load(PATHS[401301042]))
     payload = first.run_processing_pipeline()
     assert payload["odds_source"] == "summary_pickcenter"
     persisted = json.loads(json.dumps({k: payload[k] for k in _ODDS_KEYS}))
+    # the oracle: ESPN's pickcenter in the capture (both providers carry -4.0 / 58.5 / home favored)
+    espn = _load(PATHS[401301042])["pickcenter"]
+    assert {(p["spread"], p["overUnder"], p["homeTeamOdds"]["favorite"]) for p in espn} == {(-4.0, 58.5, True)}
+    assert persisted == {
+        "gameSpread": -4.0,
+        "overUnder": 58.5,
+        "homeFavorite": True,
+        "gameSpreadAvailable": True,
+        "overUnderAvailable": True,
+    }
     again = CFBPlayProcess(gameId=401301042, join_participants=False, odds_override=persisted)
     again.espn_cfb_pbp(summary=_load(PATHS[401301042]))
     again.run_processing_pipeline()

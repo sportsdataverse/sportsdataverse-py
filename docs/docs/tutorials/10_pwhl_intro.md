@@ -36,8 +36,8 @@ Everything returns a tidy **polars** `DataFrame` by default — pass `return_as_
 | [`load_pwhl_three_stars`](../pwhl/reference/loaders.md#load_pwhl_three_stars) | Post-game three-star selections | 📦 loader |
 | [`pwhl_schedule`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_schedule) | Live schedule, one row per game | 🛰️ live |
 | [`pwhl_standings`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_standings) | Live standings, one row per team | 🛰️ live |
-| [`pwhl_teams`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_teams) | Teams in a season (grab `team_id`s) | 🛰️ live |
-| [`pwhl_team_roster`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_team_roster) | A team's roster | 🛰️ live |
+| [`pwhl_teams`](../pwhl/reference/additional/hockeytech-leaguestat-2.md#pwhl_teams) | Teams in a season (grab `team_id`s) | 🛰️ live |
+| [`pwhl_team_roster`](../pwhl/reference/additional/hockeytech-leaguestat-2.md#pwhl_team_roster) | A team's roster | 🛰️ live |
 | [`pwhl_leaders`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_leaders) | Statistical leaders | 🛰️ live |
 | [`pwhl_stats`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_stats) | Aggregate skater/goalie stats | 🛰️ live |
 | [`pwhl_player_search`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_player_search) | Find a player_id by name | 🛰️ live |
@@ -433,7 +433,7 @@ out
 
 ### Recipe 13 — A team, its roster, and a game's PBP + Corsi 🛰️📈
 
-The full live tour. List teams with [`pwhl_teams`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_teams), grab a `team_id`, pull the roster with [`pwhl_team_roster`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_team_roster), take a `game_id` from the loader schedule, then fetch enriched events with [`pwhl_pbp`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_pbp) and shot-attempt share with [`pwhl_game_corsi`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_game_corsi) — all from the same feed. Everything is `safe()`-wrapped, so offline this prints a friendly note instead of raising.
+The full live tour. List teams with [`pwhl_teams`](../pwhl/reference/additional/hockeytech-leaguestat-2.md#pwhl_teams), grab a `team_id`, pull the roster with [`pwhl_team_roster`](../pwhl/reference/additional/hockeytech-leaguestat-2.md#pwhl_team_roster), take a `game_id` from the loader schedule, then fetch enriched events with [`pwhl_pbp`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_pbp) and shot-attempt share with [`pwhl_game_corsi`](../pwhl/reference/additional/hockeytech-leaguestat.md#pwhl_game_corsi) — all from the same feed. Everything is `safe()`-wrapped, so offline this prints a friendly note instead of raising.
 
 
 ```python

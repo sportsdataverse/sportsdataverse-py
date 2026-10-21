@@ -46,7 +46,8 @@ from __future__ import annotations
 
 import datetime as _dt
 import math
-from typing import Literal, Union, overload
+from collections.abc import Callable
+from typing import Any, Literal, Union, overload
 
 import numpy as np
 import pandas as pd
@@ -126,6 +127,8 @@ def nhl_player_props(
     league: str = ...,
     as_of_date: _dt.date | None = ...,
     stats: tuple[str, ...] = ...,
+    load_skater_boxscores: Callable[[Any], pl.DataFrame] | None = ...,
+    team_ratings: Callable[..., pl.DataFrame] | None = ...,
     return_as_pandas: Literal[False] = ...,
 ) -> pl.DataFrame: ...
 
@@ -137,6 +140,8 @@ def nhl_player_props(
     league: str = ...,
     as_of_date: _dt.date | None = ...,
     stats: tuple[str, ...] = ...,
+    load_skater_boxscores: Callable[[Any], pl.DataFrame] | None = ...,
+    team_ratings: Callable[..., pl.DataFrame] | None = ...,
     return_as_pandas: Literal[True],
 ) -> pd.DataFrame: ...
 
@@ -147,6 +152,8 @@ def nhl_player_props(
     league: str = "nhl",
     as_of_date: _dt.date | None = None,
     stats: tuple[str, ...] = ("shots", "points"),
+    load_skater_boxscores: Callable[[Any], pl.DataFrame] | None = None,
+    team_ratings: Callable[..., pl.DataFrame] | None = None,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Empirical-Bayes shots/points player-prop projections.
@@ -174,6 +181,13 @@ def nhl_player_props(
             does not make the ratings per-projected-game as-of (a documented
             approximation -- see the module docstring).
         stats: which stat families to project (``"shots"``, ``"points"``).
+        load_skater_boxscores: the per-player-game box loader, called as ``f(seasons)``;
+            ``None`` reads ``load_nhl_skater_boxscores``. Another league binds its own loader
+            here (columns ``game_id``, ``player_id``, ``game_date``, ``season``, ``position``,
+            ``team_abbrev``, ``shots_on_goal``, ``points``).
+        team_ratings: the matchup/game-script ratings builder, called as
+            ``f(seasons, as_of_date=as_of_date)``; ``None`` runs :func:`nhl_team_ratings`
+            with ``league``. Its ``team`` values must match the box's ``team_abbrev``.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -205,7 +219,7 @@ def nhl_player_props(
 
             props.filter(pl.col("player_id") == "8478402")
     """
-    box = load_nhl_skater_boxscores(seasons)
+    box = (load_skater_boxscores or load_nhl_skater_boxscores)(seasons)
     if box.is_empty():
         return _empty_props(return_as_pandas)
 
@@ -236,7 +250,10 @@ def nhl_player_props(
     # cannot be misread as leakage-safe while ratings stay full-season. This is a
     # single snapshot as-of the cutoff (or full-season when None), NOT
     # per-projected-game ratings -- see the module docstring's leakage-scope note.
-    ratings = nhl_team_ratings(seasons, league=league, as_of_date=as_of_date)
+    if team_ratings is None:
+        ratings = nhl_team_ratings(seasons, league=league, as_of_date=as_of_date)
+    else:
+        ratings = team_ratings(seasons, as_of_date=as_of_date)
     avg_xga = float(ratings["adj_xga"].mean()) if ratings.height else const.avg_xgf
     team_volume_slope = const.prop_team_volume_slope
     # Pre-index ratings once (team -> row) so the per-player-game loop is a dict

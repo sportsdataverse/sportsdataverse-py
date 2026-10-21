@@ -1,3 +1,8 @@
+from typing import Any
+
+import numpy as np
+import polars as pl
+
 ep_class_to_score_mapping = {0: 7, 1: -7, 2: 3, 3: -3, 4: 2, 5: -2, 6: 0}
 
 wp_start_touchback_columns = [
@@ -271,3 +276,129 @@ kickoff_turnovers = ["Kickoff Team Fumble Recovery", "Kickoff Team Fumble Recove
 # on identical plays. The box score still emits `spread` as a column; the model
 # no longer reads it.
 qbr_vars = ["qbr_epa", "sack_epa", "pass_epa", "rush_epa", "pen_epa", "era0", "era1", "era2", "era3"]
+
+#: The trained CFB rule-era cuts, the LAST season of era0 / era1 / era2 (era3 is open-ended):
+#: sdv-internal-refs ``rules/cfb.yaml`` ``cfb-2007-model-era-cut``, ``cfb-2014-model-era-cut``,
+#: ``cfb-2021-model-era-cut``; the bundled model cards' ``era.cuts`` (a test pins them equal). The
+#: QBR era dummies and the fourth-down / two-point ``FD_ERA_BOUNDS`` read it.
+CFB_MODEL_ERA_CUTS: tuple[int, int, int] = (2006, 2013, 2020)
+
+#: First season ESPN writes the try on the touchdown row (its 2014 participants/text template);
+#: through 2013 the try is its own "Extra point by X is good" row, so the touchdown row's score
+#: lacks it (the WPA ``+ 0.92`` expected-try adjustment). ``rules/cfb.yaml``
+#: ``cfb-2014-espn-participants-and-text-template``.
+CFB_ESPN_TRY_ON_TD_ROW_FROM: int = 2014
+
+#: First season a fair-caught kickoff inside the receiver's 25 is a touchback.
+#: ``rules/cfb.yaml`` ``cfb-2018-kickoff-fair-catch-touchback``.
+CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM: int = 2018
+
+#: ``(first season, first period)`` from which every overtime period is a two-point shootout:
+#: one alternating two-point play per team, no possession from the 25 (ESPN period 5 is the
+#: first overtime). No shootout before 2019 (sdv-internal-refs ``rules/cfb.yaml``
+#: ``cfb-1996-overtime-introduced``); the fifth overtime, period 9, in 2019-20
+#: (``cfb-2019-overtime-shootout-from-fifth``); the third, period 7, from 2021
+#: (``cfb-2021-overtime-shootout-from-third``). Source: NCAA, "Panel approves changes to
+#: overtime rules in football", 2021-04-22,
+#: https://www.ncaa.com/news/football/article/2021-04-22/panel-approves-changes-overtime-rules-football
+#: (the ncaa.org original, now redirected, archived at
+#: https://web.archive.org/web/20250430140415/https://www.ncaa.org/news/2021/4/22/panel-approves-changes-to-overtime-rules-in-football.aspx):
+#: "This is a change from the previous rule, which started to use 2-point plays in the fifth
+#: overtime period".
+OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2019, 9), (2021, 7))
+
+#: Kickoff-touchback yards-to-endzone by the FIRST season each spot applied, newest first (the twin of
+#: :data:`sportsdataverse.nfl.model_vars.TOUCHBACK_YARDLINE_BY_SEASON`). sdv-internal-refs
+#: ``rules/cfb.yaml#cfb-2012-kickoff-35-touchback-25``: PROP (February 2012) moved free-kick touchbacks
+#: from the 20 to the 25, so a kickoff touchback's next snap is 80 to go through 2011 and 75 from 2012.
+#: Every 2012-13 fixture touchback's next snap starts at the 25. cfbfastR's ``create_epa.R`` mirrors this
+#: table (cfbfastR #184).
+TOUCHBACK_YARDLINE_BY_SEASON: tuple[tuple[int, int], ...] = ((2012, 75), (0, 80))
+
+#: The receiving team's yardline after a kickoff out of bounds, by the FIRST season each spot applied,
+#: newest first: the 35 from 2012, the 40 before. The same 2012 rule set
+#: (``rules/cfb.yaml#cfb-2012-kickoff-35-touchback-25``, which moved the kick from the 30 to the 35; the
+#: catalogue entry does not itself state the out-of-bounds spot).
+KICKOFF_OUT_OF_BOUNDS_SPOT_BY_SEASON: tuple[tuple[int, int], ...] = ((2012, 35), (0, 40))
+
+
+def _by_season_expr(table: tuple[tuple[int, int], ...], season: pl.Expr) -> pl.Expr:
+    """Resolve a newest-first ``(first_season, value)`` table into a per-row polars expression."""
+    # Untyped literals on purpose (the NFL twin casts Int64): the processor's columns keep the dtypes they
+    # had when these spots were inline ``.then(75)`` literals (byte-stable on the 1.2 suite).
+    expr = pl.lit(table[-1][1])
+    for first_season, value in reversed(table[:-1]):
+        expr = pl.when(season >= first_season).then(pl.lit(value)).otherwise(expr)
+    return expr
+
+
+def _cfb_touchback_yardline_np(season: Any) -> np.ndarray:
+    """:data:`TOUCHBACK_YARDLINE_BY_SEASON` per element of a season array (the numpy decision surfaces).
+
+    A NaN season falls to the oldest spot, as a null season does in :func:`cfb_touchback_yardline_expr`.
+    """
+    s = np.asarray(season, dtype=float)
+    out = np.full(s.shape, TOUCHBACK_YARDLINE_BY_SEASON[-1][1], dtype=np.int64)
+    for first_season, value in reversed(TOUCHBACK_YARDLINE_BY_SEASON[:-1]):
+        out = np.where(s >= first_season, value, out)
+    return out
+
+
+def cfb_touchback_yardline_expr(season: pl.Expr) -> pl.Expr:
+    """Kickoff-touchback yards-to-endzone per row: 80 through 2011, 75 from 2012.
+
+    Reads :data:`TOUCHBACK_YARDLINE_BY_SEASON` (the NCAA 2012 kickoff rule). Named with the ``cfb_``
+    prefix so the top-level ``sportsdataverse`` namespace keeps NFL's ``touchback_yardline_expr``
+    (2016 cut) distinct from this one.
+
+    Args:
+        season: Integer season expression (``pl.col("season")``).
+
+    Returns:
+        An integer expression of the touchback yards-to-endzone per row.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.cfb import cfb_touchback_yardline_expr
+
+            df = pl.DataFrame({"season": [2011, 2012]})
+            print(df.select(cfb_touchback_yardline_expr(pl.col("season"))).to_series().to_list())  # [80, 75]
+
+        See Also:
+            * `cfbfastR`_ -- ``create_epa.R`` sets the same kickoff-touchback spot by season
+            * ``sportsdataverse.nfl.model_vars.touchback_yardline_expr`` -- the NFL twin (2016, 2024 and 2025 cuts)
+
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+    """
+    return _by_season_expr(TOUCHBACK_YARDLINE_BY_SEASON, season)
+
+
+def cfb_kickoff_out_of_bounds_spot_expr(season: pl.Expr) -> pl.Expr:
+    """The receiving team's yardline after a kickoff out of bounds: the 40 through 2011, the 35 from 2012.
+
+    Reads :data:`KICKOFF_OUT_OF_BOUNDS_SPOT_BY_SEASON` (the NCAA 2012 kickoff rule).
+
+    Args:
+        season: Integer season expression (``pl.col("season")``).
+
+    Returns:
+        An integer expression of the out-of-bounds spot per row.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.cfb import cfb_kickoff_out_of_bounds_spot_expr
+
+            df = pl.DataFrame({"season": [2011, 2012]})
+            print(df.select(cfb_kickoff_out_of_bounds_spot_expr(pl.col("season"))).to_series().to_list())  # [40, 35]
+
+        See Also:
+            * `cfbfastR`_ -- the R package whose play-by-play this processor mirrors
+            * ``sportsdataverse.nfl.model_vars.touchback_yardline_expr`` -- the NFL kickoff-spot twin
+
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+    """
+    return _by_season_expr(KICKOFF_OUT_OF_BOUNDS_SPOT_BY_SEASON, season)

@@ -114,11 +114,13 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [cfb_compute_results](additional/models-and-calculators-2.md#cfb_compute_results) | Default results generator — nflseedR's dynamic ELO model for CFB. |
 | [cfb_draft_projection](additional/models-and-calculators-2.md#cfb_draft_projection) | Project NFL-draft probability per player + expected picks per team. |
 | [cfb_field_position](additional/models-and-calculators-2.md#cfb_field_position) | Team-season field-position value: avg start, drive EP, margin, pts/drive. |
+| [cfb_kickoff_out_of_bounds_spot_expr](additional/models-and-calculators-2.md#cfb_kickoff_out_of_bounds_spot_expr) | The receiving team's yardline after a kickoff out of bounds: the 40 through 2011, the 35 from 2012. |
 | [cfb_predict_games](additional/models-and-calculators-2.md#cfb_predict_games) | Predict a whole schedule of games from a ratings frame (vectorized). |
 | [cfb_ratings](additional/models-and-calculators-2.md#cfb_ratings) | One row per team: the full CFB ratings spine (off/def/ST EPA + FEI). |
 | [cfb_recruiting_projection](additional/models-and-calculators-2.md#cfb_recruiting_projection) | Project team wins / scoring margin for a season from preseason roster features. |
 | [cfb_roster_talent](additional/models-and-calculators-2.md#cfb_roster_talent) | Team-talent composite per team-season (247 Team Talent Composite style). |
 | [cfb_simulations](additional/models-and-calculators-2.md#cfb_simulations) | Simulate college football seasons (nflseedR-style week loop). |
+| [cfb_touchback_yardline_expr](additional/models-and-calculators-2.md#cfb_touchback_yardline_expr) | Kickoff-touchback yards-to-endzone per row: 80 through 2011, 75 from 2012. |
 | [efficiency_ratings](additional/models-and-calculators-2.md#efficiency_ratings) | One row per team: opponent-adjusted offensive/defensive efficiency. |
 | [fei_ratings](additional/models-and-calculators-2.md#fei_ratings) | One row per team: opponent-adjusted per-drive efficiency (FEI-style). |
 | [fit_field_position_ep](additional/models-and-calculators-2.md#fit_field_position_ep) | Fit the monotone EP-by-starting-yardline curve from a drives frame. |
