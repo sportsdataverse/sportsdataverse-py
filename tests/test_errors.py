@@ -116,3 +116,5 @@ def test_require_objects_rejects_what_pandas3_json_normalize_rejects():
             _require_objects([{"a": 1}, bad])
     with pytest.raises(TypeError, match="a row is str, not an object"):
         _require_objects([None, "x"])
+    with pytest.raises(TypeError, match="a row is list, not an object"):  # pd.isna([None]) is not a scalar NA (R941-9)
+        _require_objects([[None]])
