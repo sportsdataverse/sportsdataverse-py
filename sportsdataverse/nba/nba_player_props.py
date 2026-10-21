@@ -223,8 +223,8 @@ def team_pace_projection(
     return expected_possessions(float(pace[home_team_id]), float(pace[away_team_id]), league_id=league_id)
 
 
-def _load_player_logs(season: int, league_id: str) -> pl.DataFrame:  # pragma: no cover - live network
-    """Live player box logs (monkeypatched to fixtures in tests); WNBA via league_id=10."""
+def _load_player_logs(season: int, league_id: str) -> pl.DataFrame:
+    """Live player box logs (the box loader is stubbed in tests); WNBA via league_id=10."""
     if league_id == "10":
         from sportsdataverse.wnba.wnba_loaders import load_wnba_player_boxscore  # noqa: PLC0415
 
@@ -233,6 +233,9 @@ def _load_player_logs(season: int, league_id: str) -> pl.DataFrame:  # pragma: n
         from sportsdataverse.nba.nba_loaders import load_nba_player_boxscore  # noqa: PLC0415
 
         box = load_nba_player_boxscore([season])
+    # checked before the select, which would otherwise raise polars' ColumnNotFoundError
+    if "game_date" not in box.columns:
+        raise ValueError("nba_player_props: box logs need game_date for the as-of cut")
     return box.select(
         pl.col("game_id").cast(pl.Int64, strict=False).cast(pl.Utf8),
         as_date(pl.col("game_date")).alias("game_date"),
@@ -359,8 +362,6 @@ def nba_player_props(
             props = nba_player_props(2024, "401585828", "2", "6", as_of_date=dt.date(2024, 1, 15))
     """
     logs = _load_player_logs(season, league_id)
-    if "game_date" not in logs.columns:
-        raise ValueError("nba_player_props: box logs need game_date for the as-of cut")
     if as_of_date is None:
         own = logs.filter(pl.col("game_id").cast(pl.Utf8) == str(game_id))["game_date"].drop_nulls()
         # A played game can be missing from the box logs (ESPN gap, wrong season): fall back to the schedule.
