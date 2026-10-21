@@ -1,12 +1,29 @@
+import copy
 import gzip
 import json
+import os
+import subprocess
+import sys
+import warnings
 from collections import Counter
 from pathlib import Path
 
+import numpy as np
+import pandas as pd
 import polars as pl
 import pytest
+from polars.testing import assert_frame_equal
 
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess, _drop_espn_play_copies
+from sportsdataverse.errors import AssetFetchError, DefaultOddsWarning, PlayOrderWarning
+
+# the default-odds captures processed here warn incidentally; test_default_odds_warn asserts it;
+# 401628439 warns PlayOrderWarning, asserted by
+# test_cfb_whole_game_oracle.py::test_period_monotonic_or_the_step_back_warns
+pytestmark = [
+    pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning"),
+    pytest.mark.filterwarnings("ignore::sportsdataverse.errors.PlayOrderWarning"),
+]
 
 FIX = Path(__file__).parent / "fixtures"
 
@@ -41,6 +58,520 @@ def test_odds_source_tag_summary_path():
     proc._CFBPlayProcess__helper_cfb_pickcenter(pbp_txt)
     assert proc.odds_source == "summary_pickcenter"
     assert proc.gameSpreadAvailable is True
+
+
+_DEFAULT_ODDS_WARNING = (
+    r"CFB game 401628455: no pregame spread is available \(odds_source='{}', gameSpreadAvailable=False\)"
+)
+_ODDS_KEYS = ("gameSpread", "overUnder", "homeFavorite", "gameSpreadAvailable")
+
+
+def test_default_odds_warn():
+    """W-M14 / R828-2: a default-odds capture warns, and so does its rebuild through the persisted odds.
+
+    401628455 (2024) has an empty ``pickcenter``; offline that resolves to the default spread. The
+    rebuild comes back ``odds_source="injected"`` with ``gameSpreadAvailable`` still False, so it must
+    warn too: a gate on ``odds_source != "default"`` alone would pass it.
+    """
+    proc = CFBPlayProcess(gameId=401628455, join_participants=False)
+    proc.espn_cfb_pbp(summary=_load_summary())
+    with pytest.warns(DefaultOddsWarning, match=_DEFAULT_ODDS_WARNING.format("default")):
+        pbp_txt, _ = proc._CFBPlayProcess__helper_cfb_pbp(copy.deepcopy(proc.json))
+    persisted = json.loads(json.dumps({k: pbp_txt[k] for k in _ODDS_KEYS}))
+    assert persisted == {"gameSpread": 2.5, "overUnder": 55.5, "homeFavorite": True, "gameSpreadAvailable": False}
+    again = CFBPlayProcess(gameId=401628455, join_participants=False, odds_override=persisted)
+    again.espn_cfb_pbp(summary=_load_summary())
+    with pytest.warns(DefaultOddsWarning, match=_DEFAULT_ODDS_WARNING.format("injected")):
+        re_txt, _ = again._CFBPlayProcess__helper_cfb_pbp(copy.deepcopy(again.json))
+    assert re_txt["odds_source"] == "injected"
+    assert re_txt["gameSpreadAvailable"] is False
+
+
+def test_default_odds_warning_not_on_pickcenter_capture():
+    """A capture whose pickcenter carries a spread (401301042) never warns, nor does its rebuild."""
+    summary = json.loads((FIX / "summary_401301042.json").read_text(encoding="utf-8"))
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", DefaultOddsWarning)
+        proc = CFBPlayProcess(gameId=401301042, join_participants=False)
+        proc.espn_cfb_pbp(summary=summary)
+        pbp_txt, _ = proc._CFBPlayProcess__helper_cfb_pbp(copy.deepcopy(proc.json))
+        assert pbp_txt["odds_source"] == "summary_pickcenter"
+        again = CFBPlayProcess(
+            gameId=401301042,
+            join_participants=False,
+            odds_override=json.loads(json.dumps({k: pbp_txt[k] for k in _ODDS_KEYS})),
+        )
+        again.espn_cfb_pbp(summary=summary)
+        again._CFBPlayProcess__helper_cfb_pbp(copy.deepcopy(again.json))
+
+
+def test_default_odds_warning_not_on_core_odds_api_spread(monkeypatch):
+    """R828-9: an empty pickcenter whose core odds endpoint carries a spread (live 2024+) never warns."""
+    odds = {
+        "items": [
+            {"provider": {"name": "ESPN BET"}, "spread": -6.5, "overUnder": 51.5, "homeTeamOdds": {"favorite": True}}
+        ]
+    }
+    monkeypatch.setattr("sportsdataverse.cfb.cfb_pbp._download_json", lambda *a, **k: odds)
+    proc = CFBPlayProcess(gameId=401628455, join_participants=False)
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", DefaultOddsWarning)
+        init = proc._CFBPlayProcess__helper_cfb_pickcenter({"pickcenter": []})
+    assert proc.odds_source == "core_odds_api"
+    assert init == {
+        "gameSpread": -6.5,
+        "overUnder": 51.5,
+        "homeFavorite": True,
+        "gameSpreadAvailable": True,
+        "overUnderAvailable": True,
+    }
+
+
+_DEFAULT_TOTAL_WARNING = r"CFB game {}: no pregame total is available \(odds_source='{}'\)"
+
+
+def _pickcenter_odds(game_id: int, edit=None) -> dict:
+    """Resolve a real capture's odds offline, after ``edit`` mutates its pickcenter providers."""
+    summary = json.loads((FIX / f"summary_{game_id}.json").read_text(encoding="utf-8"))
+    for provider in summary["pickcenter"]:
+        (edit or (lambda _: None))(provider)
+    proc = CFBPlayProcess(gameId=game_id, join_participants=False)
+    proc.espn_cfb_pbp(summary=summary)
+    return proc._CFBPlayProcess__helper_cfb_pickcenter(copy.deepcopy(proc.json))
+
+
+def test_pickcenter_without_a_total_defaults_it_and_warns():
+    """R828-3: no provider in 400869817's pickcenter has a total; it was 55.0 (55.5 on every other
+    path) with no warning. The total feeds the fourth-down surface's implied team totals."""
+    with pytest.warns(DefaultOddsWarning, match=_DEFAULT_TOTAL_WARNING.format(400869817, "summary_pickcenter")):
+        odds = _pickcenter_odds(400869817)
+    assert odds["overUnder"] == 55.5
+    assert odds["gameSpreadAvailable"] is True
+    assert odds["overUnderAvailable"] is False
+
+
+def test_pickcenter_all_null_total_does_not_raise():
+    """R828-3: an explicit null total on every provider raised IndexError on the empty filter."""
+    with pytest.warns(DefaultOddsWarning, match=_DEFAULT_TOTAL_WARNING.format(401301042, "summary_pickcenter")):
+        odds = _pickcenter_odds(401301042, lambda provider: provider.update(overUnder=None))
+    assert odds["overUnder"] == 55.5
+    assert odds["gameSpreadAvailable"] is True
+    assert odds["overUnderAvailable"] is False
+
+
+def test_pickcenter_all_null_spread_takes_the_default_path():
+    """C-NF-10(b): a pickcenter whose providers all carry a null spread raised IndexError; it is no
+    spread, so it takes the empty-pickcenter path (offline: the defaults, warned)."""
+    with pytest.warns(DefaultOddsWarning, match=r"CFB game 401301042: no pregame spread is available"):
+        odds = _pickcenter_odds(401301042, lambda provider: provider.update(spread=None))
+    assert odds == {
+        "gameSpread": 2.5,
+        "overUnder": 55.5,
+        "homeFavorite": True,
+        "gameSpreadAvailable": False,
+        "overUnderAvailable": False,
+    }
+
+
+def test_core_odds_api_spread_without_a_total_warns(monkeypatch):
+    """R828-3: the core odds endpoint's ESPN BET item with a spread and no total defaults the total, warned."""
+    odds = {"items": [{"provider": {"name": "ESPN BET"}, "spread": -6.5, "homeTeamOdds": {"favorite": True}}]}
+    monkeypatch.setattr("sportsdataverse.cfb.cfb_pbp._download_json", lambda *a, **k: odds)
+    proc = CFBPlayProcess(gameId=401628455, join_participants=False)
+    with pytest.warns(DefaultOddsWarning, match=_DEFAULT_TOTAL_WARNING.format(401628455, "core_odds_api")):
+        init = proc._CFBPlayProcess__helper_cfb_pickcenter({"pickcenter": []})
+    assert init == {
+        "gameSpread": -6.5,
+        "overUnder": 55.5,
+        "homeFavorite": True,
+        "gameSpreadAvailable": True,
+        "overUnderAvailable": False,
+    }
+
+
+def _processed(game_id: int, odds_override=None, match=None) -> CFBPlayProcess:
+    """Run a committed capture's full pipeline offline; ``match`` asserts the DefaultOddsWarning text."""
+    summary = json.loads((FIX / f"summary_{game_id}.json").read_text(encoding="utf-8"))
+    proc = CFBPlayProcess(gameId=game_id, join_participants=False, odds_override=odds_override)
+    proc.espn_cfb_pbp(summary=summary)
+    if match is None:
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", DefaultOddsWarning)
+            proc.run_processing_pipeline(fourth_down_probs=False, two_pt_probs=False)
+    else:
+        with pytest.warns(DefaultOddsWarning, match=match):
+            proc.run_processing_pipeline(fourth_down_probs=False, two_pt_probs=False)
+    return proc
+
+
+def test_a_defaulted_total_is_flagged_and_survives_the_rebuild():
+    """R837-2 / R837-3: 400869817's pickcenter has a spread and no total, so its 55.5 total is a default.
+
+    ``overUnderAvailable`` False records it in the payload and on every play (``gameSpreadAvailable``
+    stays True, so a gate on that column alone passed the game). Fed back as ``odds_override`` the
+    rebuild is ``odds_source="injected"``, keeps the flag and warns again: before, it relabelled the
+    default as an injected market total, unwarned. The fourth-down recommendation is kept (owner ruling
+    R837-3); the column is how a consumer tells the total apart.
+    """
+    proc = _processed(400869817, match=_DEFAULT_TOTAL_WARNING.format(400869817, "summary_pickcenter"))
+    assert proc.json["overUnderAvailable"] is False
+    assert proc.json["gameSpreadAvailable"] is True
+    assert proc.plays_frame["overUnderAvailable"].unique().to_list() == [False]
+    persisted = json.loads(json.dumps({k: proc.json[k] for k in (*_ODDS_KEYS, "overUnderAvailable")}))
+    again = _processed(400869817, persisted, match=_DEFAULT_TOTAL_WARNING.format(400869817, "injected"))
+    assert again.json["odds_source"] == "injected"
+    assert again.json["overUnderAvailable"] is False
+    assert again.plays_frame["overUnderAvailable"].unique().to_list() == [False]
+    assert again.plays_frame["EPA"].equals(proc.plays_frame["EPA"])
+
+
+def test_a_market_total_is_flagged_available():
+    """401301042's pickcenter carries a total: ``overUnderAvailable`` True, no warning."""
+    proc = _processed(401301042)
+    assert proc.json["overUnderAvailable"] is True
+    assert proc.plays_frame["overUnderAvailable"].unique().to_list() == [True]
+
+
+@pytest.mark.parametrize("game_id", [400869817, 401301042])
+def test_an_override_without_the_flag_is_unknown_and_changes_nothing_else(game_id):
+    """R895-1: an ``odds_override`` without ``overUnderAvailable`` (every payload persisted before the key,
+    and the cfb-raw / cfb-data producers, which fill 55.5 themselves and keep ``gameSpreadAvailable``
+    True) is UNKNOWN: a null payload value and a null Boolean column, no warning, never a guess. On
+    400869817, the R837-2 game, a guess of True would mark its default total as a market one. Every
+    other column of the rebuild equals the original run's, EPA and WP included."""
+    first = _processed(game_id, match=None if game_id == 401301042 else _DEFAULT_TOTAL_WARNING.format(game_id, ".*"))
+    legacy = json.loads(json.dumps({k: first.json[k] for k in _ODDS_KEYS}))
+    again = _processed(game_id, legacy)
+    assert again.json["odds_source"] == "injected"
+    assert again.json["overUnderAvailable"] is None
+    flag = again.plays_frame["overUnderAvailable"]
+    assert flag.dtype == pl.Boolean
+    assert flag.null_count() == again.plays_frame.height
+    assert_frame_equal(again.plays_frame.drop("overUnderAvailable"), first.plays_frame.drop("overUnderAvailable"))
+
+
+def test_a_legacy_default_odds_override_is_unknown_total():
+    """A legacy four-key override with ``gameSpreadAvailable`` False still warns the default spread; its
+    total's provenance is unknown (None), not inferred from the spread flag."""
+    proc = CFBPlayProcess(
+        gameId=401628455,
+        odds_override={"gameSpread": 2.5, "overUnder": 55.5, "homeFavorite": True, "gameSpreadAvailable": False},
+    )
+    with pytest.warns(DefaultOddsWarning, match=_DEFAULT_ODDS_WARNING.format("injected")):
+        init = proc._CFBPlayProcess__helper_cfb_pickcenter({"pickcenter": []})
+    assert init["overUnderAvailable"] is None
+
+
+_LEGACY = {"gameSpread": 7.0, "overUnder": 55.5, "homeFavorite": True, "gameSpreadAvailable": True}
+
+
+@pytest.mark.parametrize(
+    ("value", "expected"),
+    [
+        (True, True),
+        (False, False),
+        (None, None),
+        ("False", False),
+        ("true", True),
+        ("0", False),
+        ("1", True),
+        (0, False),
+    ],
+)
+def test_the_override_flag_is_read_strictly(value, expected):
+    """R895-5: ``bool("False")`` is True; the new key reads a string flag by its text."""
+    proc = CFBPlayProcess(gameId=401628455, odds_override={**_LEGACY, "overUnderAvailable": value})
+    assert proc.odds_override["overUnderAvailable"] is expected
+
+
+@pytest.mark.parametrize("value", [float("nan"), pd.NA, pd.NaT, np.nan])
+def test_a_pandas_missing_override_flag_is_unknown(value):
+    """R895-7: an override built from a pandas row of older data carries NaN / ``pd.NA`` for the absent
+    column; that is unknown, as a missing key is, not an error."""
+    proc = CFBPlayProcess(gameId=401628455, odds_override={**_LEGACY, "overUnderAvailable": value})
+    assert proc.odds_override["overUnderAvailable"] is None
+
+
+@pytest.mark.parametrize("value", ["no", "", 2, 0.5, [False]])
+def test_the_override_flag_rejects_anything_else(value):
+    with pytest.raises(ValueError, match="overUnderAvailable"):
+        CFBPlayProcess(gameId=401628455, odds_override={**_LEGACY, "overUnderAvailable": value})
+
+
+_TWO_STATE = [
+    (True, True),
+    (False, False),
+    ("False", False),
+    ("TRUE", True),
+    (" 0 ", False),
+    ("1", True),
+    (0, False),
+    (1, True),
+]
+
+
+@pytest.mark.parametrize("key", ["homeFavorite", "gameSpreadAvailable"])
+@pytest.mark.parametrize(("value", "expected"), _TWO_STATE)
+def test_the_required_override_flags_are_read_strictly(key, value, expected):
+    """WB-cfb-8: ``bool("False")`` is True, so the two required flags read a string by its text too."""
+    proc = CFBPlayProcess(gameId=401628455, odds_override={**_LEGACY, key: value})
+    assert proc.odds_override[key] is expected
+
+
+@pytest.mark.parametrize("key", ["homeFavorite", "gameSpreadAvailable"])
+@pytest.mark.parametrize("value", [None, float("nan"), "no", "", 2, 0.5, [False]])
+def test_the_required_override_flags_reject_anything_else(key, value):
+    """The two keys are required, so None (or a pandas NaN) is an error here, not unknown."""
+    with pytest.raises(ValueError, match=key):
+        CFBPlayProcess(gameId=401628455, odds_override={**_LEGACY, key: value})
+
+
+def _core_odds_init(monkeypatch, getter):
+    monkeypatch.setattr("sportsdataverse.cfb.cfb_pbp._download_json", getter)
+    proc = CFBPlayProcess(gameId=401628455, join_participants=False)
+    with pytest.warns(DefaultOddsWarning, match=_DEFAULT_ODDS_WARNING.format("default")):
+        return proc._CFBPlayProcess__helper_cfb_pickcenter({"pickcenter": []})
+
+
+def test_a_failed_core_odds_fetch_has_no_market_total(monkeypatch):
+    """R895-2: the core odds endpoint raising falls back to the default pair, total included."""
+
+    def _boom(*a, **k):
+        raise AssetFetchError("core odds unavailable")
+
+    assert _core_odds_init(monkeypatch, _boom)["overUnderAvailable"] is False
+
+
+def test_an_empty_core_odds_collection_has_no_market_total(monkeypatch):
+    """R895-2: an odds collection with no items falls back to the default pair, total included."""
+    assert _core_odds_init(monkeypatch, lambda *a, **k: {"items": []})["overUnderAvailable"] is False
+
+
+def test_processing_leaves_the_root_logger_alone():
+    """R828-5: ``cfb_pbp`` logged through the root module (``logging.debug``), which runs
+    ``logging.basicConfig()`` on an unconfigured root: processing a game installed a stderr handler on
+    the host's root logger. It logs through its own ``sdv.cfb_pbp`` logger now. A subprocess, because
+    pytest's own capture handlers sit on the root logger here."""
+    script = "\n".join(
+        [
+            "import json, logging, sys",
+            "from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess",
+            "before = list(logging.getLogger().handlers)",
+            "summary = json.loads(open(sys.argv[1], encoding='utf-8').read())",
+            "CFBPlayProcess(gameId=401301042, join_participants=False).espn_cfb_pbp(summary=summary)",
+            "print('ROOT_HANDLERS', len(before), len(logging.getLogger().handlers))",
+        ]
+    )
+    env = {**os.environ, "PYTHONPATH": str(Path(__file__).resolve().parents[2])}
+    out = subprocess.run(
+        [sys.executable, "-c", script, str(FIX / "summary_401301042.json")],
+        capture_output=True,
+        text=True,
+        env=env,
+        check=True,
+        timeout=300,
+    )
+    assert "ROOT_HANDLERS 0 0" in out.stdout, out.stdout + out.stderr
+
+
+def _process_capture(game_id: int, edit=None) -> CFBPlayProcess:
+    """Process a committed capture offline, after ``edit`` mutates each of its drive plays."""
+    path = next(FIX.glob(f"summary_{game_id}*.json*"))
+    opener = gzip.open if path.suffix == ".gz" else open
+    with opener(path, "rt", encoding="utf-8") as fh:
+        summary = json.load(fh)
+    for drive in summary["drives"]["previous"]:
+        for play in drive["plays"]:
+            (edit or (lambda _: None))(play)
+    proc = CFBPlayProcess(gameId=game_id, join_participants=False)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline(fourth_down_probs=False, two_pt_probs=False)
+    return proc
+
+
+def test_the_literal_null_play_text_is_not_a_player_name():
+    """C-L6: ESPN's play text "null punt blocked by blocked by" (401628559) named a punter "null"."""
+    plays = _process_capture(401628559).plays_frame
+    row = plays.filter(pl.col("id") == 401628559102988701)
+    assert row["text"].to_list() == ["null punt blocked by blocked by"]
+    assert row["punter_player_name"].to_list() == [None]
+
+
+def test_the_pass_flag_literals_fold_case():
+    """C-L16: cfbfastR matches "sacked" with ignore_case. 401628334's sacked-and-recovered fumble is a
+    pass play whatever the case of its text (the captures carry no other casing, so this edits one)."""
+    sack_id = 401628334102944601
+
+    def shout(play):
+        if int(play["id"]) == sack_id:
+            play["text"] = play["text"].replace("sacked", "SACKED")
+
+    row = _process_capture(401628334, shout).plays_frame.filter(pl.col("id") == sack_id)
+    assert row["type.text"].to_list() == ["Fumble Recovery (Own)"]
+    assert "SACKED" in row["text"].item()
+    assert row.select("pass", "sack").rows() == [(True, True)]
+
+
+def test_an_out_of_scheme_play_id_is_placed_by_its_clock():
+    """C-M18: 401425418's Q3 kickoff (id 4014254180 among 18-digit ids) sits between the 5:20 and 5:14 plays."""
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", PlayOrderWarning)
+        plays = _process_capture(401425418).plays_frame
+    at = plays["id"].to_list().index(4014254180)
+    assert at > 0
+    assert plays["period"].to_list()[at - 1 : at + 2] == [3, 3, 3]
+    assert plays["clock.displayValue"].to_list()[at - 1 : at + 2] == ["5:20", "5:14", "5:14"]
+
+
+@pytest.mark.parametrize(
+    ("game_id", "stray", "neighbours", "lead_text"),
+    [
+        # the feed files Western Michigan's personal foul AFTER the 9:41 touchdown, at the same clock
+        (400548110, 4005481100, (400548110102905801, 400548110102905804), "Richard Montgomery run for 11 yds"),
+        # the 11:58 rush follows the 13:23 pass; its twin's id sorts among the 14:43 plays, so a count
+        # of the plays with more time left put it between the 13:23 punt and that pass. The processor's
+        # second sort repairs the final order, but lead_text (read between the two) keeps the first
+        # pass's neighbour: the 13:23 pass under a count, the 11:30 touchdown under the last-row rule
+        (401420836, 4014208360, (401420836102867603, 401420836102886901), "Hunter Luepke run for 47 yds for a TD"),
+    ],
+    ids=["400548110-clock-tie", "401420836-id-not-clock-ordered"],
+)
+def test_an_out_of_scheme_play_follows_the_last_play_before_it(game_id, stray, neighbours, lead_text):
+    """R837-1: the stray goes right after the last play of an earlier period, with more time left, or
+    with the same clock and earlier in ESPN's feed -- not after a count of such plays."""
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", PlayOrderWarning)
+        plays = _process_capture(game_id).plays_frame
+    ids = plays["id"].to_list()
+    at = ids.index(stray)
+    assert (ids[at - 1], ids[at + 1]) == neighbours
+    assert plays["lead_text"][at].startswith(lead_text)
+
+
+def test_out_of_scheme_placement_refuses_a_frame_without_its_row_order():
+    """R908-2: without the pre-sort `_feed` column the tie-break has nothing to read, so it raises."""
+    from sportsdataverse.cfb.cfb_pbp import _place_out_of_scheme_plays
+
+    with pytest.raises(ValueError, match="_feed"):
+        _place_out_of_scheme_plays(pl.DataFrame({"id": [1, 2, 3]}))
+
+
+def test_a_play_copy_filed_outside_its_drive_is_counted_once():
+    """R908-3: 401420836 files two plays twice under two ids, and the id sort strands one copy of each
+    outside its drive: the 11:58 rush (``...102855603``) among the 14:43 plays, the 10:44 punt
+    (``...104895504``) after the next drive's first run. The stranded copy goes, so Gonnella's carries
+    and Steindorf's punts match ESPN's box score."""
+    plays = _process_capture(401420836).plays_frame
+    with gzip.open(next(FIX.glob("summary_401420836*")), "rt", encoding="utf-8") as fh:
+        box = {
+            (group["name"], athlete["athlete"]["displayName"]): athlete["stats"]
+            for team in json.load(fh)["boxscore"]["players"]
+            for group in team["statistics"]
+            for athlete in group["athletes"]
+        }
+    carries = plays.filter((pl.col("rush") == True) & (pl.col("rusher_player_name") == "Dominic Gonnella"))
+    assert [str(carries.height), str(carries["yds_rushed"].sum())] == box[("rushing", "Dominic Gonnella")][:2]
+    punts = plays.filter((pl.col("punt") == True) & pl.col("text").str.starts_with("Kaedin Steindorf punt"))
+    assert str(punts.height) == box[("punting", "Kaedin Steindorf")][0]
+    ids = plays["id"].to_list()
+    assert ids[ids.index(401420836102855601) + 1] == 401420836102855604  # the punt-return TD, then its kickoff
+    assert {401420836102855603, 401420836104895504}.isdisjoint(ids)
+
+
+_X = ("A", 1, 1, 1, 10, 75, "Rush", "X run for 3 yds", 3000)
+_Y = ("A", 1, 1, 2, 7, 72, "Rush", "Y run for 2 yds", 2980)
+_W = ("B", 1, 2, 1, 10, 80, "Rush", "W run for 1 yd", 2970)
+_V = ("B", 1, 2, 2, 9, 79, "Rush", "V run for 1 yd", 2960)
+_T = (*_X[:6], "Timeout", "Timeout A, clock 10:00", 3000)
+_S = (*_X[:5], 0, *_X[6:])  # no start spot
+_PLAY_COLS = ["drive.id", "period.number", "start.team.id", "start.down", "start.distance", "start.yardsToEndzone"]
+
+
+def _plays(*rows) -> pl.DataFrame:
+    cols = [*_PLAY_COLS, "type.text", "text", "start.adj_TimeSecsRem"]
+    return pl.DataFrame([dict(zip(cols, r)) for r in rows]).with_row_index("id")
+
+
+@pytest.mark.parametrize(
+    ("order", "home", "copy", "kept"),
+    [
+        ("xYWcV", _X, _X, False),  # between two plays of the next drive: the copy goes
+        ("xYcWV", _X, _X, True),  # after its drive's last play, so in its drive (a replayed down)
+        ("WcYxV", _X, _X, True),  # before its drive's first play, so in its drive
+        ("xYWcV", _X, (*_X[:7], "X run for 4 yds", 3000), True),  # other text: another play
+        ("xYWcV", _X, (*_X[:8], 2990), True),  # other clock: another play
+        ("xYWcV", _T, _T, True),  # a marker never goes
+        ("xYWcV", _S, _S, True),  # no start spot: too little state to call it a copy
+    ],
+    ids=["stranded", "drive-end", "drive-start", "text", "clock", "marker", "spotless"],
+)
+def test_only_a_copy_stranded_outside_its_drive_goes(order, home, copy, kept):
+    """R908-3, one case per guard: a row goes only when neither neighbour is in its drive and a row
+    INSIDE its drive has the same drive, clock, start state, type and text."""
+    row = {"x": home, "c": copy, "Y": _Y, "W": _W, "V": _V}
+    df = _plays(*(row[k] for k in order))
+    c = order.index("c")
+    assert _drop_espn_play_copies(df)["id"].to_list() == [i for i in range(df.height) if kept or i != c]
+    # without its twin inside the drive, the stranded row is a play and stays
+    alone = df.filter(pl.col("id") != order.index("x"))
+    assert _drop_espn_play_copies(alone)["id"].to_list() == alone["id"].to_list()
+
+
+@pytest.mark.parametrize(
+    ("game_id", "play_id", "kept"),
+    [
+        # each row stands outside its drive and matches a row inside the drive on every key but one
+        (252462426, 252462426141, True),  # period: Q3 15:00 and the Q2 0:00 kickoff share one adjusted clock
+        (400548291, 400548291101989406, True),  # down: "pass incomplete" on 3rd and 10, the twin on 1st and 10
+        (401309834, 401309834101957706, True),  # distance: the 4th-and-12 punt, the twin 4th and 8
+        (401524051, 401524051104936103, True),  # spot: 1st and 10 at the 37, the twin at the 25
+        (401282272, 401282272104878311, True),  # play type "Kickoff Return (Offense)", the twin "Kickoff"
+        (401636866, 401636866104866103, True),  # drive: the twin is filed in another drive, not this rule's call
+        # the frame's last row has no next row; out of its drive, its field goal's in-drive twin sends it
+        (292900218, 292900218135, False),
+        # a clock most of the period shares tells no plays apart: 401327913 reads 0:00 on 95% of its rows
+        # and files every kickoff in drive 1, yet scoringPlays has a score before each of these kickoffs
+        (401327913, 401327913102000013, True),
+        (401327913, 401327913102000033, True),
+        (401327913, 401327913103000035, True),
+    ],
+    ids=[
+        "period",
+        "down",
+        "distance",
+        "spot",
+        "type",
+        "drive",
+        "last-row",
+        "blank-clock-1",
+        "blank-clock-2",
+        "blank-clock-3",
+    ],
+)
+def test_a_stranded_copy_needs_every_key_of_its_twin(game_id, play_id, kept):
+    """R312-1, R312-2: one real row per match key (and per frame-edge or blank-clock rule) from the
+    stranded_copies/ trimmed captures."""
+    with gzip.open(FIX / "stranded_copies" / f"{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
+        summary = json.load(fh)
+    proc = CFBPlayProcess(gameId=game_id, join_participants=False)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline(fourth_down_probs=False, two_pt_probs=False)
+    assert (play_id in proc.plays_frame["id"].to_list()) is kept
+
+
+@pytest.mark.parametrize("keys", [("end",), ("homeScore", "awayScore")], ids=lambda k: k[0])
+def test_a_play_field_absent_from_every_play_does_not_crash(keys):
+    """C-NF-10(a): a block absent from EVERY play leaves json_normalize no column for it; the plays
+    build raised ColumnNotFoundError on ``end.down`` / ``homeScore``. Now those columns are null."""
+    summary = _load_summary()
+    for drive in summary["drives"]["previous"]:
+        for play in drive["plays"]:
+            for key in keys:
+                play.pop(key, None)
+    proc = CFBPlayProcess(gameId=401628455, join_participants=False)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline(fourth_down_probs=False, two_pt_probs=False)
+    assert proc.plays_frame.height > 100
 
 
 def test_injected_odds_bypasses_network(monkeypatch):

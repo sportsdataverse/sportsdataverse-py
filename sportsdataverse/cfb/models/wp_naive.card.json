@@ -22,6 +22,8 @@
     2004,
     2025
   ],
+  "in_sample": true,
+  "in_sample_reason": "Fit by cfbfastR-cfb-data python/cfb_model_build/model_training/cli.py train-wp --variant naive on the whole training_frame (artifacts/pbp_full_v2.parquet: 22 seasons, 2004-2025, 2,219,971 rows); no season was withheld, so every 2004-2025 score this booster produces is in-sample. Out-of-season error is measured by leave-one-season-out CV (model_training/loso_oof_extra.py write_wp_period_oof(variant=\"naive\"); validate.py loso_cv has no naive path), not by a holdout of this artifact.",
   "n_training_rows": 2219971,
   "hyperparameters": {
     "booster": "gbtree",
@@ -37,5 +39,8 @@
   "source": "cfb_final_json",
   "trained_date": "2026-08-02",
   "num_boost_round": 65,
-  "training_frame": "artifacts/pbp_full_v2.parquet"
+  "training_frame": "artifacts/pbp_full_v2.parquet",
+  "feature_semantics": {
+    "pos_team_receives_2H_kickoff": "Trained as 1 - is_home on every row, both halves (C-NF-2): the training frame's firstHalfKickoffTeamId was the away team on every row. Not the corrected published flag (true only on the opening kicker's first-half possessions). sdv-py feeds the booster 1 - is_home through a shim (cfb_pbp._as_trained_2h_flag) until a retrain on the corrected flag (owner decision)."
+  }
 }

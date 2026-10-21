@@ -43,8 +43,9 @@ play ids match `cfbfastR-cfb-raw/cfb/json/raw/401112489.json` exactly (236 plays
 ## Games the whole-game oracle leans on
 
 - **400547866** (Kansas @ West Virginia, 2014) -- an away-kicked game (the home team receives) for
-  C-NF-2 / C-M13: the processor's row-1 value names the receiving team, so the column is not even a
-  game-wide constant. Its home-kicked partners 400547699 and 400547865 are wrong on every row.
+  C-NF-2 / C-M13: before task 2.6 the processor's row-1 value named the receiving team, so the column
+  was not even a game-wide constant, and its home-kicked partners 400547699 and 400547865 were wrong
+  on every row.
   `tests/cfb/test_cfb_whole_game_oracle.py` reads the opening kicker from the feed on 85 captures, 43
   of them kicked off by the home team.
 - **400559176** (West Alabama @ Jacksonville State, 2014) -- the feed contradicts itself: ESPN files
@@ -85,8 +86,29 @@ overtime its rule is about; `tools/check_ot_era_captures.py` checks them.
 | 2021+ | `cfb-2021-overtime-shootout-from-third` | 401282146 | Alabama @ Auburn, 2021: four overtimes, the shootout from the third |
 
 The check reads ESPN's period LABEL, not an overtime count: on 401112489 ESPN files overtimes 1-5 as
-period 5, so the label alone cannot tell the third overtime from the fifth. Plan task 3.2's era tests
-must derive the overtime number from the possession sequence.
+period 5, so the label alone cannot tell the third overtime from the fifth. The processor's gate
+(`_ot_no_touchdown_before`, table `model_vars.OT_SHOOTOUT_FROM_PERIOD`) therefore takes a try as a
+shootout attempt when the season has a shootout and the row is either labelled inside it or not
+preceded by a touchdown; `tests/cfb/test_cfb_overtime_eras.py` holds one test per rule set (401628439,
+whose attempts are labelled 5, 9 and 12, covers 2021+ alongside 401282146). Two captures pin the table's
+cuts, both trimmed from `cfbfastR-cfb-raw/cfb/json/raw/<id>.json` (committed there 2026-07-29,
+`5c7cc45df3`) for task 3.2:
+
+- **272870068** (Nevada @ Boise State, 2007, four overtimes all filed as period 5): Nevada's forced
+  third-overtime try "Two-point conversion attempt, PASS FAILED." is filed before its touchdown; no
+  shootout before 2019, so it is the touchdown's try.
+- **401524025** (Arizona @ USC, 2023, three overtimes): "Caleb Williams Run for Two-Point Conversion"
+  (period 7) follows the second-overtime touchdown; from 2021 the third overtime is a shootout.
+
+Task 3.4 (g) adds two, trimmed the same way from `cfbfastR-cfb-raw/cfb/json/raw/<id>.json`:
+
+- **401866418** (Jacksonville State @ Ohio, 2026, four overtimes; `89812aa7b4`): ESPN's period-6
+  "End of OT." marker carries 17-34 (the first one, period 5, carries 31-31), which reaches the
+  shootout attempts as a 7-point margin (the linescore has 27-27); those attempts have a null win
+  probability.
+- **401677180** (Pittsburgh @ Toledo, 2024, six overtimes; `af9c0c24cb`): ESPN's scores run Toledo 2
+  ahead from the third overtime (42-44 where the linescore has 42-42), so the fifth overtime's first
+  attempt starts on -2; a shootout period that does not open tied has a null win probability.
 
 Other overtime captures: 252600087, 262522509, 322802005, 332570254, 400547980, 400869264,
 400869817, 401112081, 401301042, 401628439 (eight overtimes), 401752854, 401754543, 401754554,
@@ -126,7 +148,17 @@ docstrings of the tests that read them: `cbs_cfb/` (`tests/cfb/cbs_pbp/test_to_e
 `yahoo_cfb/` (`tests/cfb/yahoo_pbp/test_to_espn_summary.py`, `tests/cfb/test_cfb_yahoo_ext.py`),
 `participants_401856682.json` (`tests/cfb/test_cfb_box_score_denominators.py`,
 `tests/cfb/test_cfb_jersey_special_teams.py`) and `fox_cfb_event_41616_data.json`
-(`tests/cfb/test_cfb_pbp_fox_offline.py`).
+(`tests/cfb/test_cfb_pbp_fox_offline.py`). `supp002/` holds 37 trimmed captures (the `trimmed` form above,
+from `cfbfastR-cfb-raw` at `98deb3f091`) for the supp-002 candidate count
+(`tests/cfb/test_cfb_supp002_degenerate_end.py`); they are not `summary_*` files, so the whole-game
+oracle does not pick them up.
+`rush_forms/282782655_trimmed.json.gz` (Tulane @ Army, 2008) is one more trimmed capture, from
+`cfbfastR-cfb-raw/cfb/json/raw/282782655.json` at `9c61a436cc`, for the directional rush-loss reader
+(`test_stated_rush_yardage_is_read`, EX-1.2-a, play 282782655087); it is not a `summary_*` file either.
+`stranded_copies/` holds 8 trimmed captures (the `trimmed` form above, from `cfbfastR-cfb-raw/cfb/json/raw/<id>.json`
+at `19865a79e3`, trimmed 2026-10-20): 252462426, 292900218, 400548291, 401282272, 401309834, 401327913, 401524051 and
+401636866. Each holds one real row that a key of the stranded-copy rule in `_drop_espn_play_copies` keeps or drops
+(`test_a_stranded_copy_needs_every_key_of_its_twin`, R312-1 / R312-2). They are not `summary_*` files either.
 
 ## Captures
 
@@ -147,6 +179,7 @@ docstrings of the tests that read them: `cbs_cfb/` (`tests/cfb/cbs_pbp/test_to_e
 | 262940151 | 2006 | SMU Mustangs @ East Carolina Pirates | 4 | full summary | `summary_262940151.json` | `bc28eda428` 2026-08-29 |
 | 272650152 | 2007 | Clemson Tigers @ NC State Wolfpack | 4 | trimmed | `summary_272650152_trimmed.json.gz` | `edd88af3b2` 2026-09-26 #580 |
 | 272650194 | 2007 | Northwestern Wildcats @ Ohio State Buckeyes | 4 | trimmed | `summary_272650194_trimmed.json.gz` | `99484724be` 2026-10-01 #651 |
+| 272870068 | 2007 | Nevada Wolf Pack @ Boise State Broncos | 5 | trimmed | `summary_272870068_trimmed.json.gz` | task 3.2 (#792), 2026-10-11, from `cfbfastR-cfb-raw` `5c7cc45df3` |
 | 282410024 | 2008 | Oregon State Beavers @ Stanford Cardinal | 4 | trimmed | `summary_282410024_trimmed.json.gz` | `50d24c9978` 2026-09-26 #588 |
 | 282430151 | 2008 | Virginia Tech Hokies @ East Carolina Pirates | 4 | trimmed | `summary_282430151_trimmed.json.gz` | `ffa116cd09` 2026-09-26 #586 |
 | 282432641 | 2008 | Eastern Washington Eagles @ Texas Tech Red Raiders | 4 | trimmed | `summary_282432641_trimmed.json.gz` | `ffa116cd09` 2026-09-26 #586 |
@@ -174,6 +207,7 @@ docstrings of the tests that read them: `cbs_cfb/` (`tests/cfb/cbs_pbp/test_to_e
 | 400547866 | 2014 | Kansas Jayhawks @ West Virginia Mountaineers | 4 | trimmed | `summary_400547866_trimmed.json.gz` | `190438a6b2` 2026-09-30 #641 |
 | 400547980 | 2014 | Northwestern Wildcats @ Notre Dame Fighting Irish | 5 | trimmed | `summary_400547980_trimmed.json.gz` | `c146e82803` 2026-09-26 #585 |
 | 400548023 | 2014 | Rice Owls @ Texas A&M Aggies | 4 | trimmed | `summary_400548023_trimmed.json.gz` | `190438a6b2` 2026-09-30 #641 |
+| 400548110 | 2014 | Western Michigan Broncos @ Idaho Vandals | 4 | trimmed | `summary_400548110_trimmed.json.gz` | cfb 3.4 R837-1, 2026-10-19, from `cfbfastR-cfb-raw` `ee755dc65a` |
 | 400548134 | 2014 | Army Black Knights @ Kent State Golden Flashes | 4 | trimmed | `summary_400548134_trimmed.json.gz` | `46b754c9fb` 2026-09-30 #637 |
 | 400548250 | 2014 | Utah State Aggies @ Boise State Broncos | 4 | trimmed | `summary_400548250_trimmed.json.gz` | `ffa116cd09` 2026-09-26 #586 |
 | 400548425 | 2014 | Idaho Vandals @ Georgia Southern Eagles | 4 | trimmed | `summary_400548425_trimmed.json.gz` | `ffa116cd09` 2026-09-26 #586 |
@@ -201,9 +235,11 @@ docstrings of the tests that read them: `cbs_cfb/` (`tests/cfb/cbs_pbp/test_to_e
 | 401309854 | 2021 | Arizona State Sun Devils @ BYU Cougars | 4 | raw allowlist | `summary_401309854.json` | `3173503f76` 2026-06-08 #92 |
 | 401403886 | 2022 | Ole Miss Rebels @ Georgia Tech Yellow Jackets | 4 | trimmed | `summary_401403886_trimmed.json.gz` | `99484724be` 2026-10-01 #651 |
 | 401411109 | 2022 | Florida State Seminoles @ Louisville Cardinals | 4 | trimmed | `summary_401411109_trimmed.json.gz` | `12ddb2ad28` 2026-09-22 #567 |
+| 401420836 | 2022 | Drake Bulldogs @ North Dakota State Bison | 4 | trimmed | `summary_401420836_trimmed.json.gz` | cfb 3.4 R837-1, 2026-10-19, from `cfbfastR-cfb-raw` `882a510899` |
 | 401424416 | 2022 | Albany Great Danes @ Baylor Bears | 4 | full summary | `summary_401424416.json` | `a0c17d9a5e` 2026-08-29 |
 | 401425418 | 2022 | Grambling Tigers @ Arkansas State Red Wolves | 4 | full summary | `summary_401425418.json` | `4b2d0b4676` 2026-08-29 |
 | 401520349 | 2023 | Massachusetts Minutemen @ Army Black Knights | 4 | trimmed | `summary_401520349_trimmed.json.gz` | `d7ba21f92e` 2026-09-27 #596 |
+| 401524025 | 2023 | Arizona Wildcats @ USC Trojans | 7 | trimmed | `summary_401524025_trimmed.json.gz` | task 3.2 (#792), 2026-10-11, from `cfbfastR-cfb-raw` `5c7cc45df3` |
 | 401525860 | 2023 | UCF Knights @ Kansas Jayhawks | 4 | trimmed | `summary_401525860_trimmed.json.gz` | `edd88af3b2` 2026-09-26 #580 |
 | 401525903 | 2023 | Kansas Jayhawks @ Cincinnati Bearcats | 4 | trimmed | `summary_401525903_trimmed.json.gz` | `50d24c9978` 2026-09-26 #588 |
 | 401628334 | 2024 | USC Trojans @ LSU Tigers | 4 | full summary | `summary_401628334.json` | `fd65da22d9` 2026-06-30 #148 |
@@ -218,6 +254,7 @@ docstrings of the tests that read them: `cbs_cfb/` (`tests/cfb/cbs_pbp/test_to_e
 | 401644749 | 2024 | Western Michigan Broncos @ Buffalo Bulls | 4 | full summary | `summary_401644749.json` | `825258e81b` 2026-08-29 |
 | 401645333 | 2024 | Charlotte 49ers @ Rice Owls | 4 | raw allowlist | `summary_401645333.json` | `14e1c8c10f` 2026-09-17 #526 |
 | 401677179 | 2024 | Indiana Hoosiers @ Notre Dame Fighting Irish | 4 | full summary | `summary_401677179.json` | `fd65da22d9` 2026-06-30 #148 |
+| 401677180 | 2024 | Pittsburgh Panthers @ Toledo Rockets | 10 | trimmed | `summary_401677180_trimmed.json.gz` | task 3.4 (g), 2026-10-18, from `cfbfastR-cfb-raw` `af9c0c24cb` |
 | 401752671 | 2025 | LSU Tigers @ Clemson Tigers | 4 | trimmed | `summary_401752671_trimmed.json.gz` | `01d3c1ad62` 2026-09-30 #636 |
 | 401752684 | 2025 | South Florida Bulls @ Florida Gators | 4 | trimmed | `summary_401752684_trimmed.json.gz` | `29c209708f` 2026-09-27 #595 |
 | 401752744 | 2025 | Oklahoma Sooners @ South Carolina Gamecocks | 4 | trimmed | `summary_401752744_trimmed.json.gz` | `29c209708f` 2026-09-27 #595 |
@@ -258,3 +295,4 @@ docstrings of the tests that read them: `cbs_cfb/` (`tests/cfb/cbs_pbp/test_to_e
 | 401858426 | 2026 | Northern Illinois Huskies @ Iowa Hawkeyes | 4 | raw allowlist | `summary_401858426.json` | `7c30c24442` 2026-09-17 #506 |
 | 401858435 | 2026 | Indiana State Sycamores @ Purdue Boilermakers | 4 | raw allowlist | `summary_401858435.json` | `5538e69b03` 2026-09-17 #503 |
 | 401858439 | 2026 | Howard Bison @ Indiana Hoosiers | 4 | raw allowlist | `summary_401858439.json` | `5538e69b03` 2026-09-17 #503 |
+| 401866418 | 2026 | Jacksonville State Gamecocks @ Ohio Bobcats | 8 | trimmed | `summary_401866418_trimmed.json.gz` | task 3.4 (g), 2026-10-18, from `cfbfastR-cfb-raw` `89812aa7b4` |

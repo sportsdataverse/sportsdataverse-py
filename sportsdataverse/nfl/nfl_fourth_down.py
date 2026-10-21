@@ -79,10 +79,14 @@ from sportsdataverse.nfl.ep_wp import (
     calculate_win_probability,
 )
 from sportsdataverse.nfl.model_vars import (
+    ERA_SEASON_CUTS,
     PAT_FIRST_SEASON_FROM_15,
     PAT_YARDLINE_POST_2015,
     PAT_YARDLINE_PRE_2015,
 )
+
+#: The nflfastR era one-hot cuts (rules/nfl.yaml#nfl-2002-nflfastr-era-bins).
+_ERA_CUT0, _ERA_CUT1, _ERA_CUT2, _ERA_CUT3 = ERA_SEASON_CUTS
 
 if TYPE_CHECKING:  # pragma: no cover
     from xgboost import Booster
@@ -346,11 +350,11 @@ def _prepare(df: pd.DataFrame) -> pd.DataFrame:
     )
     d["model_roof"] = model_roof
     season = d["season"].to_numpy()
-    d["era0"] = (season <= 2001).astype(int)
-    d["era1"] = ((season > 2001) & (season <= 2005)).astype(int)
-    d["era2"] = ((season > 2005) & (season <= 2013)).astype(int)
-    d["era3"] = ((season > 2013) & (season <= 2017)).astype(int)
-    d["era4"] = (season > 2017).astype(int)
+    d["era0"] = (season <= _ERA_CUT0).astype(int)
+    d["era1"] = ((season > _ERA_CUT0) & (season <= _ERA_CUT1)).astype(int)
+    d["era2"] = ((season > _ERA_CUT1) & (season <= _ERA_CUT2)).astype(int)
+    d["era3"] = ((season > _ERA_CUT2) & (season <= _ERA_CUT3)).astype(int)
+    d["era4"] = (season > _ERA_CUT3).astype(int)
     # fg_model features (decision_models FG_FEATURES): yardline_100, fg_roof, and the
     # era0..era4 one-hot above. fg is era-aware across all kicking eras; the PAT path
     # (fg @ yardline_100 = 15) reads the modern era directly via era4.

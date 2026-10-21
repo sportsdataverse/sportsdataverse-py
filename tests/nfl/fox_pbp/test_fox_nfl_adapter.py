@@ -243,6 +243,7 @@ def test_the_odds_payload_yields_the_closing_line(row):
     home_name = payload["header"]["rightTeam"]["imageAltText"]
     resolved = _fox_odds_override(odds, home_name)
     assert resolved["gameSpreadAvailable"] is True
+    assert resolved["overUnderAvailable"] is True  # the override returns only with a total (R895-6)
     assert resolved["gameSpread"] > 0 and resolved["overUnder"] > 0
     assert isinstance(resolved["homeFavorite"], bool)
     # a payload with no six-pack is a miss, never a made-up line

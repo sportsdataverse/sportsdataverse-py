@@ -26,6 +26,10 @@ from sportsdataverse.validation import (
 from sportsdataverse.validation import pbp_invariants as inv
 from sportsdataverse.validation.findings import Severity
 
+# Processing a default-odds capture warns DefaultOddsWarning incidentally;
+# tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
+pytestmark = pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")
+
 FIXTURES = Path(__file__).resolve().parents[1]
 
 #: Games whose processed output carries no ``error``-severity finding on main.

@@ -635,8 +635,14 @@ pipeline relies on. Three additive pieces:
   resolution to those values (sets `odds_source="injected"`), so offline rebuilds never
   touch the network or inherit defaults. The override is **validated + type-coerced in
   `__init__`** (missing key / non-dict → `ValueError`). Default `None` = unchanged behavior.
+  An optional fifth key `overUnderAvailable` says whether the total is a market one; the payload
+  and the play frame carry it too. A missing key means UNKNOWN (null flag, EPA unchanged), never a
+  guess: external producers that fill 55.5 themselves must send it, so persist all five keys.
 
-Offline-rebuild pattern: `CFBPlayProcess(gameId, path_to_json=raw_dir, odds_override=<persisted>).cfb_pbp_disk()` then `.run_processing_pipeline()`.
+Offline-rebuild pattern: `CFBPlayProcess(gameId, path_to_json=raw_dir, join_participants=False, odds_override=<persisted>).cfb_pbp_disk()`
+then `.run_processing_pipeline()`. `cfb_pbp_disk()` alone does not make the run offline (C-L3): without
+`join_participants=False` the pipeline requests participants for every play, and without `odds_override` a summary
+with fewer than two pickcenter providers requests the odds endpoint. `espn_cfb_pbp(summary=...)` sets both.
 
 ### CFB — rule-era models + decision surfaces (0.0.68)
 
