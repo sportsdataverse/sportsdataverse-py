@@ -1,19 +1,19 @@
 {
-  "commit": "9cbc24460c (devel-hockey after the 10-18 sync of devel-test-harness 98fdc83e4d, main 3cda70429a); CI run 39114526731",
-  "measured_at": "2026-10-18T10:33:10+00:00",
+  "commit": "6550127481 (devel-test-harness after the 10-20 sync of program-setup b544c68158, main b4229f1ced); CI run 39462042681",
+  "measured_at": "2026-10-20T17:14:11+00:00",
   "metrics": {
     "handwritten_files": {
-      "value": 849,
+      "value": 848,
       "better": "info",
       "label": "Hand-written modules"
     },
     "handwritten_lines": {
-      "value": 323824,
+      "value": 322345,
       "better": "info",
       "label": "Hand-written lines"
     },
     "functions_over_100_lines": {
-      "value": 315,
+      "value": 316,
       "better": "lower",
       "label": "Functions over 100 lines"
     },
@@ -33,12 +33,12 @@
       "label": "Modules over 1,500 lines"
     },
     "mypy_checked_files": {
-      "value": 562,
+      "value": 561,
       "better": "higher",
       "label": "Files in the mypy strict list"
     },
     "lint_outdated_syntax": {
-      "value": 10854,
+      "value": 10861,
       "better": "lower",
       "label": "Outdated syntax a newer Python spells shorter (ruff UP)"
     },
@@ -98,7 +98,7 @@
       "label": "Local variables assigned but never used (ruff F841)"
     },
     "lint_too_complex_functions": {
-      "value": 224,
+      "value": 225,
       "better": "lower",
       "label": "Functions over complexity 10 (ruff C901)"
     },
@@ -108,12 +108,12 @@
       "label": "Functions with over 12 branches (ruff PLR0912)"
     },
     "lint_too_many_statements": {
-      "value": 69,
+      "value": 70,
       "better": "lower",
       "label": "Functions with over 50 statements (ruff PLR0915)"
     },
     "coverage_handwritten_percent": {
-      "value": 89.35,
+      "value": 89.29,
       "better": "higher",
       "label": "Line coverage of hand-written code (%)"
     },
@@ -198,11 +198,11 @@
       "7700 lines  sportsdataverse/nfl/nfl_pbp.py",
       "4586 lines  sportsdataverse/nfl/ep_wp.py",
       "2924 lines  sportsdataverse/nfl/nfl_loaders.py",
-      "2913 lines  sportsdataverse/basketball/acb/acb_parsers.py",
+      "2868 lines  sportsdataverse/basketball/acb/acb_parsers.py",
       "2811 lines  sportsdataverse/nfl/nfl_stats.py",
       "2668 lines  sportsdataverse/_common_espn_parsers.py",
       "2339 lines  sportsdataverse/mbb/mbb_rapm.py",
-      "2271 lines  sportsdataverse/basketball/plg/pleague_parsers.py",
+      "2279 lines  sportsdataverse/basketball/plg/pleague_parsers.py",
       "2008 lines  sportsdataverse/hockey/vhl/vhl_parsers.py",
       "1866 lines  sportsdataverse/nba/nba_possessions.py",
       "1790 lines  sportsdataverse/basketball/aba/aba_parsers.py",
@@ -211,9 +211,9 @@
       "1726 lines  sportsdataverse/hockey/_esports_schemas.py",
       "1635 lines  sportsdataverse/football/usage_box.py",
       "1630 lines  sportsdataverse/validation/pbp_invariants.py",
-      "1606 lines  sportsdataverse/basketball/bleague/bleague_parsers.py",
       "1601 lines  sportsdataverse/basketball/kbl/kbl_parsers.py",
-      "1589 lines  sportsdataverse/basketball/scb/scb_parsers.py"
+      "1590 lines  sportsdataverse/basketball/scb/scb_parsers.py",
+      "1578 lines  sportsdataverse/basketball/bleague/bleague_parsers.py"
     ],
     "unparsable_files": [],
     "most_lint_findings_by_file": [
@@ -285,8 +285,8 @@
       },
       {
         "file": "sportsdataverse/basketball/plg/pleague_parsers.py",
-        "total": 133,
-        "UP": 115,
+        "total": 135,
+        "UP": 117,
         "RUF": 5,
         "C901": 6,
         "PLR0912": 2,

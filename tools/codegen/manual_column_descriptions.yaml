@@ -3535,6 +3535,13 @@ env_adjusted_make_prob:
   base_make_prob: Shipped fg_model make probability (with nfl4th long-kick clamps applied).
   exp_make_prob: Environment-adjusted make probability (logit shift for long-kick clamp correction, wind, temperature and
     altitude).
+espn_cfb_game_rosters:
+  position_abbreviation: Short code of the athlete's listed position (e.g. G, F, RW, OL), from ESPN's position resource.
+  position_display_name: Display form of the athlete's listed position as ESPN renders it; usually equal to position_name.
+  position_id: ESPN's numeric identifier of the athlete's listed position (the Core v2 position resource id).
+  position_leaf: Whether the position is a leaf of ESPN's position tree; False marks a grouping, not a specific role.
+  position_name: Name of the athlete's listed position from ESPN's position resource, e.g. Guard or Offensive Lineman.
+  position_parent_href: ESPN API URL of the broader position group above a leaf position; null for a grouping position.
 espn_cfb_player_stats:
   general_defensive_fumbles_touchdowns: Number of touchdowns scored by the player on fumble recoveries attributed to the defensive
     category.
@@ -3726,6 +3733,7 @@ espn_cfb_schedule:
   home_linescores: Per-period point totals for the home team, stored as an array of quarter/overtime scores.
   home_records: Win-loss record of the home team at the time of the game, as reported by ESPN (e.g., overall or conference
     record).
+  status_type_alt_detail: ESPN's short extra-time label on a final ("OT", "SO"); null when the game ended in regulation.
   venue_address_country: Country in which the game venue is located, as provided by ESPN's venue data.
 espn_mbb_game_rosters:
   athlete_href: ESPN API URL pointing to the full athlete resource for this player.
@@ -3734,7 +3742,12 @@ espn_mbb_game_rosters:
   flag_href: URL to the player's country flag image as supplied by ESPN.
   flag_rel: Relationship descriptor for the country flag link, indicating the link type (e.g., 'country-flag').
   jersey_right: Right-justified or secondary jersey number display string for the player.
+  position_abbreviation: Short code of the athlete's listed position (e.g. G, F, RW, OL), from ESPN's position resource.
+  position_display_name: Display form of the athlete's listed position as ESPN renders it; usually equal to position_name.
   position_href: ESPN API URL pointing to the full position resource for this player's role.
+  position_id: ESPN's numeric identifier of the athlete's listed position (the Core v2 position resource id).
+  position_leaf: Whether the position is a leaf of ESPN's position tree; False marks a grouping, not a specific role.
+  position_name: Name of the athlete's listed position from ESPN's position resource, e.g. Guard or Forward.
   statistics_href: ESPN API URL pointing to the player's statistics resource for this game.
   team_alternate_ids_sdr: Alternate team identifier from ESPN's SDR (Sports Data Repository) system.
 espn_mbb_player_stats:
@@ -3798,6 +3811,12 @@ espn_mlb_player_stats:
   fielding_total_chances: Total fielding chances (putouts + assists + errors) offered to the player during the season.
   fielding_triple_plays: Number of triple plays in which the fielder participated during the season.
   fielding_zone_rating: Percentage of batted balls in the fielder's defined zone that were successfully converted into outs.
+espn_nba_game_rosters:
+  position_abbreviation: Short code of the athlete's listed position (e.g. G, F, RW, OL), from ESPN's position resource.
+  position_display_name: Display form of the athlete's listed position as ESPN renders it; usually equal to position_name.
+  position_id: ESPN's numeric identifier of the athlete's listed position (the Core v2 position resource id).
+  position_leaf: Whether the position is a leaf of ESPN's position tree; False marks a grouping, not a specific role.
+  position_name: Name of the athlete's listed position from ESPN's position resource, e.g. Guard or Forward.
 espn_nba_player_stats:
   defensive_avg48_blocks: Player's average blocked shots per 48 minutes played.
   defensive_avg48_defensive_rebounds: Player's average defensive rebounds per 48 minutes played.
@@ -3838,7 +3857,13 @@ espn_nfl_game_rosters:
   draft_pick_href: ESPN API hyperlink reference URL for the draft-pick record associated with this player.
   draft_team_href: ESPN API hyperlink reference URL for the team that originally drafted this player.
   jersey_right: Secondary or alternate jersey number display string used by ESPN (e.g., for special-game uniforms).
+  position_abbreviation: Short code of the athlete's listed position (e.g. G, F, RW, OL), from ESPN's position resource.
+  position_display_name: Display form of the athlete's listed position as ESPN renders it; usually equal to position_name.
   position_href: ESPN API hyperlink reference URL for the player's positional classification resource.
+  position_id: ESPN's numeric identifier of the athlete's listed position (the Core v2 position resource id).
+  position_leaf: Whether the position is a leaf of ESPN's position tree; False marks a grouping, not a specific role.
+  position_name: Name of the athlete's listed position from ESPN's position resource, e.g. Guard or Offensive Lineman.
+  position_parent_href: ESPN API URL of the broader position group above a leaf position; null for a grouping position.
   projections_href: ESPN API hyperlink reference URL for the player's statistical projection resource.
   statistics_href: ESPN API hyperlink reference URL for the player's career statistics resource.
   team_alternate_ids_sdr: SportsDataverse SDR alternate identifier for the team, used for cross-source joins.
@@ -4038,12 +4063,14 @@ espn_nfl_player_stats:
   scoring_two_point_rec_convs: Number of successful two-point conversion receptions caught by the player.
   scoring_two_point_rush_convs: Number of successful two-point conversion rushes scored by the player.
 espn_nfl_schedule:
-  away_current_rank: Current AP or ESPN power ranking of the away team at the time of the game.
+  away_current_rank: Always null. The NFL has no poll, so ESPN ships no curatedRank; kept so the column set matches the college schedules.
+  away_winner: True when the away team won, from ESPN's winner flag; null before the game ends.
   away_linescores: Comma-separated or serialized quarter-by-quarter score totals for the away team.
   away_records: Serialized win-loss-tie record(s) for the away team (e.g., overall, home, away, conference).
-  home_current_rank: Current AP or ESPN power ranking of the home team at the time of the game.
+  home_current_rank: Always null. The NFL has no poll, so ESPN ships no curatedRank; kept so the column set matches the college schedules.
   home_linescores: Comma-separated or serialized quarter-by-quarter score totals for the home team.
   home_records: Serialized win-loss-tie record(s) for the home team (e.g., overall, home, away, conference).
+  home_winner: True when the home team won, from ESPN's winner flag; null before the game ends.
   status_is_tbd_flex: Boolean flag indicating whether the game's broadcast slot is designated as a flex/TBD window.
   venue_address_country: Two-letter ISO country code or country name for the country where the venue is located.
 espn_nhl_game_rosters:
@@ -4052,7 +4079,13 @@ espn_nhl_game_rosters:
   contracts_href: ESPN API hypermedia URL pointing to the contract history resource for this player.
   draft_team_href: ESPN API hypermedia URL linking to the team that originally drafted this player.
   jersey_right: Right-aligned display string for the player's jersey number, used in ESPN scoreboard rendering contexts.
+  position_abbreviation: Short code of the athlete's listed position (e.g. G, F, RW, OL), from ESPN's position resource.
+  position_display_name: Display form of the athlete's listed position as ESPN renders it; usually equal to position_name.
   position_href: ESPN API hypermedia URL pointing to the position resource that defines this player's positional classification.
+  position_id: ESPN's numeric identifier of the athlete's listed position (the Core v2 position resource id).
+  position_leaf: Whether the position is a leaf of ESPN's position tree; False marks a grouping, not a specific role.
+  position_name: Name of the athlete's listed position from ESPN's position resource, e.g. Right Wing or Defense.
+  position_parent_href: ESPN API URL of the broader position group above a leaf position; null for a grouping position.
   statistics_href: ESPN API hypermedia URL linking to the statistics resource for this player's season or career totals.
   team_alternate_ids_sdr: Alternate team identifier from the ESPN SDR (Sports Data Repository) system, used to cross-reference
     team records across ESPN data sources.
@@ -4198,6 +4231,7 @@ espn_nhl_schedule:
   away_records: Serialized win-loss-overtime record string for the away team at the time of the scheduled game.
   home_linescores: Period-by-period goal totals for the home team, stored as an array of integer scores indexed by period.
   home_records: Serialized win-loss-overtime record string for the home team at the time of the scheduled game.
+  status_type_alt_detail: ESPN's short extra-time label on a final ("OT", "SO"); null when the game ended in regulation.
   venue_address_country: Country name or code for the country in which the game venue is located, as provided by ESPN's schedule
     endpoint.
 espn_wbb_game_officials:
@@ -4209,7 +4243,12 @@ espn_wbb_game_rosters:
   flag_href: URL of the SVG or PNG flag image representing the athlete's country of birth.
   flag_rel: Relationship descriptor for the athlete's country-of-birth flag link (e.g., "flag").
   jersey_right: Jersey number displayed on the right side of the roster card, used for alternate or secondary number representations.
+  position_abbreviation: Short code of the athlete's listed position (e.g. G, F, RW, OL), from ESPN's position resource.
+  position_display_name: Display form of the athlete's listed position as ESPN renders it; usually equal to position_name.
   position_href: ESPN API resource URL for the athlete's position resource.
+  position_id: ESPN's numeric identifier of the athlete's listed position (the Core v2 position resource id).
+  position_leaf: Whether the position is a leaf of ESPN's position tree; False marks a grouping, not a specific role.
+  position_name: Name of the athlete's listed position from ESPN's position resource, e.g. Guard or Forward.
   statistics_href: ESPN API resource URL pointing to the athlete's statistics endpoint.
   team_alternate_ids_sdr: Alternate team identifier from ESPN's SDR (Sports Data Reference) system for the athlete's team.
 espn_wbb_player_stats:
@@ -4225,6 +4264,12 @@ espn_wbb_schedule:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
 espn_wnba_game_officials:
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+espn_wnba_game_rosters:
+  position_abbreviation: Short code of the athlete's listed position (e.g. G, F, RW, OL), from ESPN's position resource.
+  position_display_name: Display form of the athlete's listed position as ESPN renders it; usually equal to position_name.
+  position_id: ESPN's numeric identifier of the athlete's listed position (the Core v2 position resource id).
+  position_leaf: Whether the position is a leaf of ESPN's position tree; False marks a grouping, not a specific role.
+  position_name: Name of the athlete's listed position from ESPN's position resource, e.g. Guard or Forward.
 espn_wnba_player_stats:
   defensive_avg48_blocks: Player's blocked shots per 48 minutes of play, drawn from the defensive statistical category.
   defensive_avg48_defensive_rebounds: Player's defensive rebounds per 48 minutes of play, drawn from the defensive statistical

@@ -1,0 +1,74 @@
+{
+ "count": 2,
+ "pageIndex": 1,
+ "pageSize": 25,
+ "pageCount": 1,
+ "items": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events/401724075/competitions/401724075/competitors/62?lang=en&region=us",
+   "id": "62",
+   "uid": "s:40~l:54~t:62",
+   "type": "team",
+   "order": 0,
+   "homeAway": "home",
+   "winner": false,
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/seasons/2025/teams/62?lang=en&region=us"
+   },
+   "score": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events/401724075/competitions/401724075/competitors/62/score?lang=en&region=us"
+   },
+   "linescores": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events/401724075/competitions/401724075/competitors/62/linescores?lang=en&region=us"
+   },
+   "roster": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events/401724075/competitions/401724075/competitors/62/roster?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events/401724075/competitions/401724075/competitors/62/statistics?lang=en&region=us"
+   },
+   "leaders": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events/401724075/competitions/401724075/competitors/62/leaders?lang=en&region=us"
+   },
+   "record": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events/401724075/competitions/401724075/competitors/62/records?lang=en&region=us"
+   },
+   "curatedRank": {
+    "current": 99
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events/401724075/competitions/401724075/competitors/26?lang=en&region=us",
+   "id": "26",
+   "uid": "s:40~l:54~t:26",
+   "type": "team",
+   "order": 1,
+   "homeAway": "away",
+   "winner": true,
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/seasons/2025/teams/26?lang=en&region=us"
+   },
+   "score": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events/401724075/competitions/401724075/competitors/26/score?lang=en&region=us"
+   },
+   "linescores": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events/401724075/competitions/401724075/competitors/26/linescores?lang=en&region=us"
+   },
+   "roster": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events/401724075/competitions/401724075/competitors/26/roster?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events/401724075/competitions/401724075/competitors/26/statistics?lang=en&region=us"
+   },
+   "leaders": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events/401724075/competitions/401724075/competitors/26/leaders?lang=en&region=us"
+   },
+   "record": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/events/401724075/competitions/401724075/competitors/26/records?lang=en&region=us"
+   },
+   "curatedRank": {
+    "current": 1
+   }
+  }
+ ]
+}

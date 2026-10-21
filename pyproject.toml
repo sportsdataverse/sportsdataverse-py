@@ -303,6 +303,9 @@ disallow_incomplete_defs = true
 warn_unused_ignores = true
 warn_redundant_casts = true
 files = [
+    "sportsdataverse/_espn_schedule.py",
+    "sportsdataverse/_espn_game_rosters.py",
+    "sportsdataverse/_espn_teams.py",
     "sportsdataverse/_deprecation.py",
     "sportsdataverse/euroleague/euroleague_parsers.py",
     "sportsdataverse/euroleague/euroleague_runtime.py",

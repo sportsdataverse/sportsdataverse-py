@@ -22,7 +22,7 @@ espn_mlb_game_rosters - pull the active game rosters for both teams.
 
 **Returns**
 
-One row per (game × team × athlete) with columns `game_id, team_id, home_away, athlete_id, athlete_full_name, athlete_jersey, athlete_position_id, athlete_position_abbreviation, athlete_starter`.
+One row per (game × team × athlete) with columns `game_id, team_id, home_away, athlete_id, athlete_full_name, athlete_jersey, athlete_position_id, athlete_position_abbreviation, athlete_position_name, athlete_starter`; zero rows with those columns when ESPN lists no competitor roster.
 
 **Example**
 
@@ -264,7 +264,7 @@ espn_mlb_schedule - look up the MLB schedule for a given date or season-year.
 
 **Returns**
 
-Polars dataframe containing the schedule. Returns `None` if no games.
+Polars dataframe containing the schedule. A day with no games returns a zero-row frame carrying the documented columns.
 
 | col_name | type | description |
 |---|---|---|
@@ -324,7 +324,7 @@ espn_mlb_teams - look up MLB teams from ESPN's Site v2 API.
 
 **Returns**
 
-Polars dataframe containing teams for MLB. This function caches by default, so if you want to refresh the data, use `sportsdataverse.mlb.espn_mlb_teams.cache_clear()`.
+Polars dataframe of the MLB teams, one row per team, with the columns in the returns table. A payload without teams returns a zero-row frame with those columns. The result is not cached: every call fetches (through the package's opt-in TTL response cache, `sportsdataverse.cache`, when it is on).
 
 | col_name | type | description |
 |---|---|---|
@@ -343,6 +343,13 @@ Polars dataframe containing teams for MLB. This function caches by default, so i
 | `team_slug` | character | URL-safe team identifier. |
 | `team_uid` | character | ESPN universal team identifier (UID). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | ESPN answered 404 for the teams resource. |
+| `AssetFetchError` | The fetch failed (403, 429, 5xx, a dropped connection); never returned as an empty frame. |
+
 **Example**
 
 ```python
@@ -356,9 +363,8 @@ teams.select(["team_id", "team_abbreviation", "team_display_name"]).head()
 import polars as pl
 teams.filter(pl.col("team_id") == "19").to_dicts()
 
-# Refresh the cache (the call is ``lru_cache``'d) and round-trip to pandas
+# Pandas round-trip
 
-espn_mlb_teams.cache_clear()
 teams_pd = espn_mlb_teams(return_as_pandas=True)
 teams_pd[["team_id", "team_abbreviation", "team_display_name"]].head()
 ```
