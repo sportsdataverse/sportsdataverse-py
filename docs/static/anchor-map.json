@@ -674,7 +674,7 @@
   "calculate_wpa": "models-and-calculators",
   "calculate_xpass": "models-and-calculators",
   "canonical_play_type_expr": "analytics",
-  "cfb_adjusted_epa": "models-and-calculators",
+  "cfb_adjusted_epa": "models-and-calculators-2",
   "cfb_adjusted_epa_by_game": "models-and-calculators-2",
   "cfb_adjusted_tempo": "analytics",
   "cfb_advanced_stats": "highlights",

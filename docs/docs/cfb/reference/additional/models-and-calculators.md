@@ -1,10 +1,10 @@
 ---
-title: "CFB — additional Python functions — Models and calculators: add_era–cfb_adjusted"
-sidebar_label: "Models and calculators: add_era–cfb_adjusted"
+title: "CFB — additional Python functions — Models and calculators: add_era–calculate_xpass"
+sidebar_label: "Models and calculators: add_era–calculate_xpass"
 sidebar_position: 7
-description: "CFB — additional Python functions — Models and calculators: add_era–cfb_adjusted — function reference in sdv-py, the SportsDataverse Python package."
+description: "CFB — additional Python functions — Models and calculators: add_era–calculate_xpass — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# CFB — additional Python functions — Models and calculators: add_era–cfb_adjusted
+# CFB — additional Python functions — Models and calculators: add_era–calculate_xpass
 
 ### add_era_columns {#add_era_columns}
 
@@ -379,10 +379,10 @@ the era boundary, both drifted to a 2017 cut the trainer never used, and
 | `stopped_run` | logical | True when the rush was stopped at or behind the line of scrimmage. |
 | `opportunity_run` | logical | True when a rush reached 4 yards -- the carries on which the blocking did its job. Matches cfbfastR's espn_cfb_15 definition. Assets published before the 2026-08 fix carry the inverted (4 yards or fewer) flag. |
 | `highlight_run` | logical | True when the rush gained 8 or more yards. |
-| `adj_rush_yardage` | integer | Rushing yards capped at 8, the input to the line-yards decomposition. |
-| `line_yards` | double | Yards credited to the offensive line on a rush, using the standard sliding scale: 1.2x the capped yardage on a loss, all of it through 3 yards, half of each yard from 4 to 8, and a 5.5-yard ceiling beyond that. |
-| `second_level_yards` | double | Rushing yards earned from 4 to 8, split evenly between line and carrier under the line-yards decomposition. |
-| `open_field_yards` | integer | Rushing yards gained beyond 8, credited to the ball carrier rather than the line. |
+| `adj_rush_yardage` | integer | Rushing yards capped at 10, the input to the line-yards decomposition. Assets published before the 2026-10 line-yards fix cap at 8. |
+| `line_yards` | double | Yards credited to the offensive line on a rush, on the standard adjusted-line-yards band: 1.2x the yardage on a loss, all of yards 0-4, half of each yard from 5 to 10, and nothing beyond 10 (a 7-yard ceiling). Line, second-level and open-field yards sum to the carry on every gain. Assets published before the 2026-10 line-yards fix carry the old band (all of yards 0-3, half of 4-8, a 5.5-yard ceiling). |
+| `second_level_yards` | double | The ball carrier's half of yards 5-10 of a rush (the line takes the other half); 0 on carries of 4 yards or fewer. Assets published before the 2026-10 line-yards fix carry the old band here: half of yards 4-8 in college football, half of yards 5-8 in the NFL (where the old parts came up half a yard short of the carry). |
+| `open_field_yards` | integer | Rushing yards gained beyond 10, credited to the ball carrier rather than the line. Assets published before the 2026-10 line-yards fix count the yards beyond 8. |
 | `highlight_yards` | double | Second-level plus open-field yards -- the yardage credited to the carrier. |
 | `opp_highlight_yards` | double | Highlight yards earned on opportunity runs, isolating carrier production on carries where the blocking succeeded. Assets published before the 2026-08 fix are identically 0 here, because the inverted opportunity_run gate could never co-occur with non-zero highlight yards. |
 | `short_rush_success` | logical | True when a short-yardage rush gained the yardage needed. |
@@ -985,52 +985,4 @@ through untouched.
 ```python
 from sportsdataverse.cfb import calculate_xpass
 calculate_xpass(df, season=2024)
-```
-
-### cfb_adjusted_epa {#cfb_adjusted_epa}
-
-`cfb_adjusted_epa(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Season opponent-adjusted per-team EPA from a season's play-by-play.
-
-Fits one ridge of per-play `EPA` on offense-team, defense-team, and
-home-field indicators (every team shrunk toward the league average by its own
-play count) over the `0.05 <= wp_before_naive <= 0.95` pass
-and rush plays, nets each team's per-game raw EPA against the opponent's
-fitted strength, and averages to a season figure. In-sample/descriptive (the
-fit uses the whole season); for leak-free per-game values use
-`cfb_adjusted_epa_by_game`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the columns listed in the module docstring. One season at a time. |
-| `ridge_lambda` | `float \| None` | `None` | Ridge penalty. Under `method="current"` it is per play of a full team season: each team keeps `n / (n + ridge_lambda * 577)` of its own signal for its `n` fit plays and is shrunk toward the league average by the rest (~7% at a full season, most of it on a handful of plays); must be > 0. Under `method="pre598"` it is passed unscaled to the old standardized ridge (the per-observation penalty; no 577 scaling, no positivity check). `None` (default) means 0.075 for `"current"` (the owner's choice, `_ADJ_EPA_LAMBDA`) and 0.035 for `"pre598"`. |
-| `method` | `Literal['current', 'pre598']` | `'current'` | `"current"` (default) or `"pre598"`, the fit this function used before #598 (`0.1 <= wp_before <= 0.9` band, standardized ridge with the first team id as the reference level, lambda 0.035). pre598 reads `wp_before` instead of `wp_before_naive`. It exists for nfl-data's NFL team summaries, is not validated for NFL either, and is kept only for continuity until NFL is validated. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
-
-**Returns**
-
-One row per team (>= 2 valid games): `team_id`, `pos_team`, `valid_games`, `adj_off_epa`, `adj_def_epa`, `off_strength_faced`, `def_strength_faced`, `net_adj_epa` and their `*_rank` columns.
-
-No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `KeyError` | If `plays` is missing a required column. |
-| `ValueError` | If `method` is unknown, or (`"current"`) if `ridge_lambda` is not positive or no play falls in the `wp_before_naive` fit band. |
-
-**Example**
-
-```python
-import sportsdataverse.cfb as cfb
-pbp = cfb.load_cfb_pbp(seasons=[2023])
-cfb.cfb_adjusted_epa(pbp).sort("net_adj_epa_rank").head()
-
-# NFL team summaries (the pre-#598 method; reads wp_before)
-
-cfb.cfb_adjusted_epa(nfl_plays, method="pre598")
 ```

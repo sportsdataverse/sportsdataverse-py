@@ -110,23 +110,57 @@
     row read survive_until 1.5) by 1.1's oracle: the CP booster on nflverse's own inputs must
     reproduce nflverse's cp (corr >= 0.994 / 0.993, MAE <= 0.016 on the two slices).
 
-# --- C-M7 / C-M8: prob_2pt dtype mix across captures ----------------------------------------------
+# --- C-M7 / C-L10: documented dtypes of the processed NFL plays (task 2.17) ------------------------
 - id: nfl-prob-2pt-float64
   finding: C-M7
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: 'scored_pl = pl.from_pandas(scored).with_columns(pl.col("go_index").cast(pl.UInt32))'
-  mutant: 'scored_pl = pl.from_pandas(scored).with_columns(pl.col("go_index").cast(pl.UInt32), pl.col("prob_2pt").cast(pl.Float64))'
-  test: tests/nfl/test_nfl_schema_allowlist.py::test_prob_2pt_has_one_documented_dtype
+  snippet: 'self.plays_json = self.plays_json.pipe(self.__documented_dtypes)'
+  mutant: 'self.plays_json = self.plays_json  # mutant: no documented-dtype step'
+  test: tests/nfl/test_nfl_schema_allowlist.py -k "prob_2pt or float32 or identical"
   expected: kill
   note: >-
-    The 2.17 fix as a mutant: prob_2pt Float64 whether or not the two-point model scores turns
-    the C-M7 strict xfail (Float32 on 400791508, Float64 on 221013007) into XPASS. Needs the
-    download-on-demand nfl4th WP booster, which the test loads explicitly: without it the test
-    skips by name and the mutant survives. 2.17 drops the marker and rewrites this row (the
-    snippet then carries the cast).
+    Without the output-boundary cast, prob_2pt / first_down_prob are Float32 where the nfl4th
+    boosters scored (400791508) and Float64 where they did not (221013007), the WP family and
+    drive_start are Float32 on every capture, and teamParticipants takes the payload's struct
+    field order (3 dtypes over 31 games). test_processed_plays_carry_no_float32 and
+    test_processed_schema_is_identical_across_captures are hermetic, so the row is killed even
+    when the download-on-demand WP booster cannot load and the prob_2pt test skips (TH-11).
 
-# --- C-H1: the phase-2 `-3` port flips 1.1's 31 strict xfails --------------------------------------
+- id: nfl-box-rerun-narrows-widened-floats
+  finding: C-M7
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'for c in getattr(self, "_widened_float32", ()) if c in play_df.columns'
+  mutant: 'for c in () if c in play_df.columns'
+  test: tests/nfl/test_nfl_schema_allowlist.py -k reproduces_adv_box_score
+  expected: kill
+  note: >-
+    R797-2: Game on Paper's ?span= boxes re-run create_box_score on plays_frame. Without narrowing
+    the widened scorer floats back, the box sums Float64 wpa and its Float32-only round(2) skips
+    WPA, so the span boxes stop equalling advBoxScore (31/31 captures).
+- id: cfb-documented-float64
+  finding: C-M8
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'self.plays_json = self.plays_json.pipe(self.__documented_dtypes)'
+  mutant: 'self.plays_json = self.plays_json  # mutant: no documented-dtype step'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k shared_column_dtypes_match_nfl
+  expected: kill
+  note: >-
+    The CFB twin of the NFL step (task 2.17): without it CFB's 44 EP/WP / probability columns stay
+    Float32 while NFL's are Float64, and the CFB-vs-NFL shared-column dtype test (cap 49) fails.
+- id: cfb-box-rerun-narrows-widened-floats
+  finding: C-M8
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'for c in getattr(self, "_widened_float32", ()) if c in play_df.columns'
+  mutant: 'for c in () if c in play_df.columns'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k reproduces_adv_box_score
+  expected: kill
+  note: >-
+    R797-2's CFB twin: the CFB box reads EPA*, wpa and drive_start, all Float32 in the pipeline and
+    Float64 on plays_frame; without the narrowing the span boxes publish unrounded EPA / WPA.
+
+# --- C-H1 / C-NF-3: the NFL rushing decomposition on the standard band (task 2.1) -----------------
 - id: nfl-second-level-yards-port
+  group: nfl-rush-yards
   finding: C-H1
   file: sportsdataverse/nfl/nfl_pbp.py
   snippet: '.then(0.5 * (pl.col("adj_rush_yardage") - 4))'
@@ -134,11 +168,42 @@
   test: tests/nfl/test_nfl_whole_game_oracle.py::test_rushing_decomposition_sums_to_the_carry[401872922]
   expected: kill
   note: >-
-    The xfails are live: the CFB `-3` port makes line + second level + open field equal the carry
-    on every 4+ yard rush, so all 31 strict xfails XPASS (measured: 31 failed; the row runs one
-    game to stay cheap). 2.1 lands exactly
-    this, drops the markers and rewrites this row and nfl-second-level-yards-offset (snippet
-    `- 3)`, mutant `- 4)`, expected kill).
+    Task 2.1 kept `- 4` and moved the line band to 0-4 / 5-10 / cap 7 (EXECUTION-FINDINGS ruling),
+    so the old CFB `- 3` port is now the mutant: every 4+ carry sums to the carry plus 0.5.
+
+- id: nfl-line-yards-band-five-to-ten
+  group: nfl-rush-yards
+  finding: C-NF-3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(4 + 0.5 * (pl.col("adj_rush_yardage") - 4))'
+  mutant: '.then(3 + 0.5 * (pl.col("adj_rush_yardage") - 3))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_line_yards_band_is_the_standard[401872922]
+  expected: kill
+  note: the pre-2.1 "100% through 3, 50% from 4" line credit on carries of 5-10 (0.5 high)
+
+- id: nfl-line-yards-cap-seven
+  group: nfl-rush-yards
+  finding: C-NF-3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(7.0)'
+  mutant: '.then(5.5)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_line_yards_band_is_the_standard[401872922]
+  expected: kill
+  note: the pre-2.1 5.5 ceiling on carries past 10 (the standard band caps the line at 7)
+
+- id: nfl-adj-rush-yardage-cap-ten
+  group: nfl-rush-yards
+  finding: C-H1
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: |-
+    adj_rush_yardage=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
+                    .then(10)
+  mutant: |-
+    adj_rush_yardage=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
+                    .then(8)
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_rushing_decomposition_sums_to_the_carry[401872922]
+  expected: kill
+  note: the pre-2.1 cap of 8 with the line capped at 7 over-credits every 11+ carry by one yard
 
 # --- C-M6: CFB overtime shootout threshold is period-based only -----------------------------------
 - id: cfb-ot-shootout-threshold-6
@@ -224,11 +289,47 @@
   group: cfb-rush-yards
   finding: C-H1
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: '.then(0.5 * (pl.col("adj_rush_yardage") - 3))'
-  mutant: '.then(0.5 * (pl.col("adj_rush_yardage") - 4))'
+  snippet: '.then(0.5 * (pl.col("adj_rush_yardage") - 4))'
+  mutant: '.then(0.5 * (pl.col("adj_rush_yardage") - 3))'
   test: tests/cfb/test_cfb_whole_game_oracle.py -k "decomposition and (400547866 or 401628455)"
   expected: kill
-  note: the half-yard C-H1 left in NFL; the CFB decomposition-sum test pins the fixed `-3`
+  note: >-
+    task 2.1 moved the band to 0-4 / 5-10 / cap 7, so the carrier's half of yards 5-10 is
+    `adj - 4`; the old `- 3` now sums to the carry plus 0.5
+
+- id: cfb-line-yards-band-five-to-ten
+  group: cfb-rush-yards
+  finding: C-NF-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.then(4 + 0.5 * (pl.col("adj_rush_yardage") - 4))'
+  mutant: '.then(3 + 0.5 * (pl.col("adj_rush_yardage") - 3))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "line_yards_band and gains_of_four and (400547866 or 401628455)"
+  expected: kill
+  note: the pre-2.1 CFB line credit on carries of 5-10 (the gate's "old band in cfb_pbp.py only")
+
+- id: cfb-line-yards-cap-seven
+  group: cfb-rush-yards
+  finding: C-NF-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.then(7.0)'
+  mutant: '.then(5.5)'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "line_yards_band and gains_of_four and (400547866 or 401628455)"
+  expected: kill
+  note: the pre-2.1 5.5 ceiling on CFB carries past 10
+
+- id: cfb-adj-rush-yardage-cap-ten
+  group: cfb-rush-yards
+  finding: C-H1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: |-
+    adj_rush_yardage=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
+                    .then(10)
+  mutant: |-
+    adj_rush_yardage=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
+                    .then(8)
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "decomposition and (400547866 or 401628455)"
+  expected: kill
+  note: the pre-2.1 cap of 8 with the line capped at 7 over-credits every 11+ carry by one yard
 
 - id: cfb-line-yards-loss-credit
   group: cfb-rush-yards
@@ -264,18 +365,16 @@
 
 # --- C-H1: NFL second_level_yards half-yard (the CFB `-3` port never reached NFL) ----------------
 - id: nfl-second-level-yards-offset
+  group: nfl-rush-yards
   finding: C-H1
   file: sportsdataverse/nfl/nfl_pbp.py
   snippet: '.then(0.5 * (pl.col("adj_rush_yardage") - 4))'
   mutant: '.then(0.5 * (pl.col("adj_rush_yardage") - 5))'
-  test: tests/nfl/test_nfl_pbp_sweep_fixes.py
-  expected:
-    survive_until: "2.1"
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_rushing_decomposition_sums_to_the_carry[401872922]
+  expected: kill
   note: >-
-    Today the shipped code IS the audit's mutant (`- 4`); no offline NFL test pins the
-    decomposition, so a further half-yard survives. 2.1 ports `- 3` and 1.1's decomposition-sum
-    xfail becomes a plain assert: rewrite this row then as snippet `- 3)` / mutant `- 4)`,
-    test tests/nfl/test_nfl_whole_game_oracle.py, expected kill.
+    Flipped by task 2.1: the decomposition-sum xfails are plain asserts now, so a half-yard short
+    in the other direction (the pre-2.1 C-H1 shape) goes red.
 
 # --- A-M10: the release parse stays use_pyarrow=True (pyarrow parses; R898-21) --------------------
 - id: codegen-runtime-use-pyarrow
@@ -650,11 +749,21 @@
   group: frozen-clock
   finding: C-M14
   file: sportsdataverse/nfl/utils_date.py
-  snippet: '    return current_year if today >= season_start else current_year - 1'
-  mutant: '    return current_year if today > season_start else current_year - 1'
+  snippet: '    return current_year if today >= _labor_day(current_year) + timedelta(days=2) else current_year - 1'
+  mutant: '    return current_year if today > _labor_day(current_year) + timedelta(days=2) else current_year - 1'
   test: tests/nfl/test_utils_date_frozen.py
   expected: kill
   note: the nflreadr table catches a one-day slip of the season flip in every season
+
+- id: nfl-week-one-anchored-a-day-early
+  group: frozen-clock
+  finding: C-M22
+  file: sportsdataverse/nfl/utils_date.py
+  snippet: '        first_game = _labor_day(season_year) + timedelta(days=3)'
+  mutant: '        first_game = _labor_day(season_year) + timedelta(days=2)'
+  test: tests/nfl/test_utils_date_frozen.py
+  expected: kill
+  note: week 1 must start on the Thursday after Labor Day (nflreadr monday1_sep + 3); a Wednesday anchor reads one high
 
 - id: cfb-fourth-down-go-wp-scaled
   group: fourth-down-level
@@ -791,13 +900,37 @@
   group: qbr-order
   finding: gap-C-083
   file: sportsdataverse/nfl/model_vars.py
-  snippet: 'qbr_vars = ["qbr_epa", "sack_epa", "pass_epa", "rush_epa", "pen_epa", "spread"]'
-  mutant: 'qbr_vars = ["qbr_epa", "pass_epa", "rush_epa", "sack_epa", "pen_epa", "spread"]'
-  test: tests/nfl/test_qbr_feature_order.py
+  snippet: 'qbr_vars = ["qbr_epa", "pass_epa", "rush_epa", "sack_epa", "pen_epa", "spread"]'
+  mutant: 'qbr_vars = ["qbr_epa", "sack_epa", "rush_epa", "pass_epa", "pen_epa", "spread"]'
+  test: tests/nfl/test_booster_feature_names.py
   expected: kill
   note: >-
-    task 2.7's reorder: the strict xfail turns XPASS (red), which is the kill; 2.7 flips the xfail to a
-    plain assert in the same PR and points this row at its named-booster guard
+    task 2.7's named re-save: swapping pass_epa and sack_epa no longer matches qbr_model.ubj's embedded
+    feature_names: the name assert fails, and the processor's named DMatrix raises at predict
+
+- id: nfl-qbr-trainer-order-oracle
+  group: qbr-order
+  finding: gap-C-083
+  file: sportsdataverse/nfl/model_vars.py
+  snippet: 'qbr_vars = ["qbr_epa", "pass_epa", "rush_epa", "sack_epa", "pen_epa", "spread"]'
+  mutant: 'qbr_vars = ["qbr_epa", "sack_epa", "rush_epa", "pass_epa", "pen_epa", "spread"]'
+  test: tests/nfl/test_qbr_oracle.py
+  expected: kill
+  note: >-
+    the same swap scored on the committed 2023 slice drops Spearman(exp_qbr, ESPN Total QBR) below the
+    post-reorder floor
+
+- id: nfl-qbr-empty-group-zero
+  group: qbr-order
+  finding: R795-1
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.sum() / pl.col(w).sum()).otherwise(0.0)'
+  mutant: '.sum() / pl.col(w).sum()).otherwise(float("nan"))'
+  test: tests/nfl/test_qbr_feature_order.py -k no_sack_rush_or_penalty
+  expected: kill
+  note: >-
+    without the empty-group guard a QB with no sack/rush/penalty play gets 0/0 = NaN, which the booster
+    reads as missing (the trainer replaced it with 0); Eli Manning in 400874485 then carries nulls, not zeros
 
 - id: nfl-fourth-down-go-wp-scaled
   group: fourth-down-level
@@ -840,6 +973,553 @@
   test: tests/test_xgb.py
   expected: kill
   note: an operator's explicit OMP_NUM_THREADS must win (review PR-774 R774-6)
+
+# --- EX-1.5-d (task 2.18): a play's end state comes from the next play --------------------------------
+- id: nfl-end-team-from-next-play
+  group: nfl-end-state
+  finding: EX-1.5-d
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(n.field("team"))'
+  mutant: '.then(pl.col("end.team.id"))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_EX_1_5_d_change_of_poss_is_nflverse_possession_change[401326467]
+  expected: kill
+  note: >-
+    Reading ESPN's end.team again brings back the spurious possession changes of the 2014-2021
+    feed (67 of 118 snaps wrong on the 2021 capture before the fix).
+
+- id: nfl-end-down-from-next-play
+  group: nfl-end-state
+  finding: EX-1.5-d
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(n.field("down"))'
+  mutant: '.then(pl.col("end.down"))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_EX_1_5_d_first_down_created_is_nflverse_first_down[401326467]
+  expected: kill
+  note: >-
+    ESPN's end.down disagrees with the next snap on 63% of 2021 plain plays; reading it again
+    drops first-down agreement with nflverse from 0.992 to 0.661 on the 2021 capture.
+
+- id: nfl-end-state-pipe
+  group: nfl-end-state
+  finding: EX-1.5-d
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.pipe(_end_state_from_next_play)'
+  mutant: '.pipe(lambda plays: plays)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_EX_1_5_d_epa_agrees_with_nflverse[401326467]
+  expected: kill
+  note: the whole fix unwired; EPA corr with nflverse falls from 0.933 to 0.426 on the 2021 capture
+
+# --- C-H5 / EX-1.1-c (task 2.3): ESPN's end.down -1 on non-scoring plays -------------------------
+- id: nfl-end-down-minus-one-rewrite
+  group: nfl-end-state
+  finding: C-H5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'pl.when(pl.col("_first_down")).then(1).otherwise(pl.col("end.down")).alias("end.down"),'
+  mutant: 'pl.col("end.down").alias("end.down"),'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "end_down_minus_one_only_on_a_score and 401326467"
+  expected: kill
+  note: >-
+    The ledger gate kickoff-return-down. Deleting the rewrite restores 29 non-scoring plays at
+    down -1 in 14 captures (21 kickoff returns, 8 pre-2014 missed field goals), 8 of them on
+    401326467; 401872922 has none (its 15 rows at -1 are scores and timeouts, which keep it).
+
+- id: nfl-kickoff-first-down-on-every-unscored-kickoff
+  group: nfl-end-state
+  finding: C-H5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'first_down = no_down | (kickoff & unscored) | missed_fg'
+  mutant: 'first_down = no_down | missed_fg'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_end_down_minus_one_kickoff_ignores_espn_down_and_distance
+  expected: kill
+  note: >-
+    The owner's kickoff model (EP of 1st & 10 at the net spot - EP of 1st & 10 at the touchback):
+    narrowing the first-down rewrite back to ESPN's -1 rows leaves ESPN's down / distance on the
+    other unscored kickoffs (penalty spots, onside, out of bounds).
+
+- id: nfl-kickoff-net-spot-from-next-snap
+  group: nfl-end-state
+  finding: C-H5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(pl.col("_nxt").struct.field("y2e"))'
+  mutant: '.then(pl.col("end.yardsToEndzone"))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "kickoff_net_spot_falls_back_to_espn"
+  expected: kill
+  note: >-
+    The kickoff's net spot is the receiver's next snap; ESPN's own end spot is flipped on some
+    returns (R810-5: 400874512's return ends at ESPN's 85, the next snap is at the 53).
+
+- id: nfl-kickoff-next-snap-adjacency-guard
+  group: nfl-end-state
+  finding: C-H5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& (pl.col("_nxt").struct.field("r") == seq_rank + 1)'
+  mutant: '& pl.lit(True)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "kickoff_net_spot_falls_back_to_espn and out_of_order"
+  expected: kill
+  note: >-
+    Pre-2014 play ids are not always in game order (R785-4): the next row by id must also be the
+    next snap by sequenceNumber, or ESPN's end spot stands.
+
+- id: nfl-kickoff-next-snap-not-a-kickoff
+  group: nfl-end-state
+  finding: C-H5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '(pl.col("_nxt").struct.field("kick") == False)'
+  mutant: 'pl.lit(True)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "kickoff_net_spot_falls_back_to_espn and next_is_kickoff"
+  expected: kill
+  note: >-
+    A next row that is itself a kickoff (a re-kick, or a half-ending play ESPN files under the next
+    period) is not the receiver's snap, so ESPN's end spot stands (review PR-810: the kick arm was
+    unpinned).
+
+- id: nfl-rewritten-row-distance-ten
+  group: nfl-end-state
+  finding: C-H5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(pl.when(goal_to_go).then(pl.col("end.yardsToEndzone")).otherwise(10))'
+  mutant: '.then(pl.col("end.distance"))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "kickoff_ends_at_the_next_snap_in_nflverse or every_kickoff_ends_at_a_first_down"
+  expected: kill
+  note: >-
+    R810-1: keeping ESPN's stale end distance on a rewritten return ends it at 1st & 4-20 where the
+    receiver's next snap (nflverse ydstogo) is 1st & 10.
+
+- id: nfl-missed-fg-kick-spot
+  group: nfl-end-state
+  finding: EX-1.1-c
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(pl.min_horizontal(100 - pl.col("start.yardsToEndzone") - 7, pl.lit(80)))'
+  mutant: '.then(pl.min_horizontal(100 - pl.col("start.yardsToEndzone") - 0, pl.lit(80)))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "spot_on_real_rows or (epa_agrees_with_nflverse and field_goal)"
+  expected: kill
+  note: >-
+    The owner's missed field goal model: the other team's 1st & 10 at the spot of the kick, 7 yards
+    behind the line of scrimmage. Spotting it at the line moves every receiver 7 yards closer.
+
+- id: nfl-missed-fg-inside-the-20-goes-to-the-20
+  group: nfl-end-state
+  finding: EX-1.1-c
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(pl.min_horizontal(100 - pl.col("start.yardsToEndzone") - 7, pl.lit(80)))'
+  mutant: '.then(100 - pl.col("start.yardsToEndzone") - 7)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "spot_on_real_rows and capped_at_the_20"
+  expected: kill
+  note: >-
+    Since 1994 a missed kick from inside the 20 gives the ball at the 20: 271209010's kick from the
+    11 would otherwise put the receiver at its own 18 (nflverse's next snap: the 80).
+
+- id: nfl-end-down-score-keeps-minus-one
+  group: nfl-end-state
+  finding: C-H5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'no_down = (pl.col("end.down") == -1) & ~stop & unscored'
+  mutant: 'no_down = (pl.col("end.down") == -1) & ~stop'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "score_keeps_espns_minus_one"
+  expected: kill
+  note: >-
+    R810-8: the gate's "scores keep ESPN's -1". Rewriting the 321 scored -1 rows in the captures
+    moves first_down_created on 160, series on 18, series_result on 5 and wpa on 76.
+
+- id: nfl-kickoff-first-down-skips-scored-kickoffs
+  group: nfl-end-state
+  finding: C-H5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'first_down = no_down | (kickoff & unscored) | missed_fg'
+  mutant: 'first_down = no_down | kickoff | missed_fg'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "score_keeps_espns_minus_one"
+  expected: kill
+  note: >-
+    R810-8: a scored kickoff (a return touchdown) keeps its scoring end; the kickoff model covers
+    unscored kickoffs only.
+
+- id: nfl-missed-fg-blocked-text-left-alone
+  group: nfl-end-state
+  finding: EX-1.1-c
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& ~pl.col("text").str.contains("(?i)block").fill_null(False)'
+  mutant: '& pl.lit(True)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "model_branches and blocked_text_is_left_alone"
+  expected: kill
+  note: >-
+    R810-9: a "Field Goal Missed" row whose text says blocked is a live ball (168 in nfl-raw); the
+    missed field goal model leaves its end alone.
+
+- id: nfl-missed-fg-first-down-clause
+  group: nfl-end-state
+  finding: EX-1.1-c
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'first_down = no_down | (kickoff & unscored) | missed_fg'
+  mutant: 'first_down = no_down | (kickoff & unscored)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "model_branches and espn_second_and_five_becomes_first_and_ten"
+  expected: kill
+  note: >-
+    R810-9: a missed field goal ends at the other team's 1st & 10 whatever down / distance ESPN ships
+    (about 100 2014+ misses in nfl-raw do not end at ESPN's 1st & 10).
+
+- id: nfl-missed-fg-scored-miss-left-alone
+  group: nfl-end-state
+  finding: EX-1.1-c
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& ~(pl.col("scoringPlay") == True).fill_null(False)'
+  mutant: '& pl.lit(True)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "model_branches and scored_miss_is_left_alone"
+  expected: kill
+  note: >-
+    R810-9: a scored "Field Goal Missed" row (3 in nfl-raw) is left to the scoring logic.
+
+- id: nfl-end-state-half-end-held
+  group: nfl-end-state
+  finding: EX-1.5-d
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& pl.col("type.text").is_in([*normalplay, "Penalty"]).fill_null(False)'
+  mutant: '& pl.lit(False)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "half_ending_snap or (plain_snap_without_a_next_play and 401326383)"
+  expected: kill
+  note: >-
+    Review R785-2: with no next play in the half, the half's last plain snap kept ESPN's corrupt
+    end team (2021: 41 of 160 first-half finales published as possession changes). 401326132's
+    4th-and-1 conversion at :02 and 401326383's 2nd-and-17 run at :41 are stated for the other
+    team by ESPN; nflverse has the offense keeping the ball on both.
+
+- id: nfl-end-state-score-exception
+  group: nfl-end-state
+  finding: EX-1.5-d
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'use = ~stop & ~score & pl.col("_nxt").is_not_null()'
+  mutant: 'use = ~stop & pl.col("_nxt").is_not_null()'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "offensive_score_keeps_possession and (261022011 or 291018018)"
+  expected: kill
+  note: >-
+    Review R785-3: a score keeps ESPN's end. Reading the next play instead turns a field goal
+    (261022011) and an extra point (291018018) into possession changes.
+
+- id: nfl-end-state-kick-exception
+  group: nfl-end-state
+  finding: EX-1.5-d
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'pl.col("_nxt").is_not_null() & (n.field("kick") == False)'
+  mutant: 'pl.col("_nxt").is_not_null()'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "plain_snap_without_a_next_play_keeps_possession and (400951676 or 261022011)"
+  expected: kill
+  note: >-
+    Review R785-3: a kickoff's start is the receiving team's, so it cannot speak for the play
+    before it. Reading it hands a plain snap followed by a kickoff to the receiver.
+
+- id: nfl-end-state-half-end-down-from-yardage
+  group: nfl-end-state
+  finding: EX-1.5-d
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(pl.when(gained).then(1).otherwise(pl.col("start.down") + 1))'
+  mutant: '.then(pl.col("end.down"))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "half_ending_snap and 401326383"
+  expected: kill
+  note: >-
+    Review R785-2: keeping ESPN's end.down on a half-ending snap whose team is now kept credits
+    ESPN's garbled "1st & 10" as a first down (401326383's 6-yard run on 2nd & 17; 2021 first-half
+    finales agree with nflverse 0.42 with the team alone, 1.0 with the snap's own gain).
+
+- id: nfl-end-state-half-end-turnover-text
+  group: nfl-end-state
+  finding: EX-1.5-d
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& ~pl.col("_turnover")'
+  mutant: '& pl.lit(True)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "half_ending_lateral_fumble_lost"
+  expected: kill
+  note: >-
+    Review R785-9: ESPN types a lateral fumbled away on the game's last snap "Pass Reception", so the
+    half-end keep-the-ball rule turned 4 lost fumbles (2021: 1, 2017: 3) into no possession change.
+    401326581 play 3846 (nflverse fumble_lost 1) pins it.
+
+# --- C-H3 / C-M3 / EX-1.1-a (task 2.4): first-down penalty and series --------------------------------
+- id: nfl-penalty-first-down-grammar
+  group: nfl-series
+  finding: C-H3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'return play_df.with_columns(penalty_1st_conv=_nfl_penalty_first_down())'
+  mutant: 'return play_df'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_nflverse_series_first_down_penalty[401547449]
+  expected: kill
+  note: >-
+    The CFB phrase "1st down" never occurs in ESPN's NFL text: without the NFL grammar the 2023
+    capture has 2 penalty first downs (the shared module's DPI / roughing heuristic) vs nflverse's 6.
+
+- id: nfl-first-down-penalty-not-masked-by-yards
+  group: nfl-series
+  finding: C-H3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.with_columns(first_down_penalty=pl.col("penalty_1st_conv").fill_null(False))'
+  mutant: '.with_columns(first_down_penalty=pl.col("first_down_penalty"))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_nflverse_series_first_down_penalty[401547449]
+  expected: kill
+  note: >-
+    nflverse's first_down_penalty also marks a defensive foul on a play whose yards reached the line
+    (11% of its rows, 2010 and 2023); the shared CFB bucket drops those (3 of 6 on this capture).
+
+- id: nfl-muffed-punt-opens-a-drive
+  group: nfl-series
+  finding: EX-1.1-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'muffed_punt = type_txt.is_in(["Punt Team Fumble Recovery", "Muffed Punt Recovery (Opponent)"])'
+  mutant: 'muffed_punt = type_txt.is_in(["__none__"])'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_nflverse_series_fixed_drive[401671740]
+  expected: kill
+  note: the muffed punt TB recovers on 401671740 opens no drive (20 vs nflverse 21)
+
+- id: nfl-timeout-row-has-no-posteam
+  group: nfl-series
+  finding: C-M3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'pl.when(type_txt.str.contains(r"(?i)timeout"))'
+  mutant: 'pl.when(pl.lit(False))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_nflverse_series_fixed_drive[401030962]
+  expected: kill
+  note: >-
+    ESPN's 2018 timeout rows carry the defense's team often enough to open a drive at each one
+    (90 of 164 joined rows off nflverse's fixed_drive on the 2018 capture).
+
+- id: nfl-kickoff-after-defensive-td-opens-a-drive
+  group: nfl-series
+  finding: C-M3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '((lag_td == 1) & (lag_pt != lag_tdteam))'
+  mutant: '(pl.lit(False))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_nflverse_series_fixed_drive[401326467]
+  expected: kill
+  note: the blocked-punt touchdown on 401326467 is followed by the kickoff (ESPN folds the try into the score)
+
+- id: nfl-defensive-score-td-team
+  group: nfl-series
+  finding: C-M3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.when(pl.col("defense_score_play") == True)'
+  mutant: '.when(pl.lit(False))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_nflverse_series_fixed_drive[401326467]
+  expected: kill
+  note: a "Blocked Punt Touchdown" credited to the punting team leaves the next kickoff in its drive
+
+- id: nfl-cleaning-pipeline-penalty-first-down
+  group: nfl-series
+  finding: C-H3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: |-
+    .pipe(self.__add_penalty_first_down)
+                        .pipe(self.__refine_play_types_post_attribution)
+                        .pipe(self.__credit_to_spot_of_foul)
+                        .pipe(self.__add_air_yards_cols)
+                        .pipe(self.__after_cols)
+                        .pipe(self.__add_series_data)
+                        .pipe(self.__add_spread_time)
+                        .pipe(self.__add_description_features)
+                        # __process_epa drops it in the full pipeline; the cleaning run never reaches it.
+                        .drop("_kick_spot", "_kicker_recovers", strict=False)
+                    )
+  mutant: |-
+    .pipe(self.__refine_play_types_post_attribution)
+                        .pipe(self.__credit_to_spot_of_foul)
+                        .pipe(self.__add_air_yards_cols)
+                        .pipe(self.__after_cols)
+                        .pipe(self.__add_series_data)
+                        .pipe(self.__add_spread_time)
+                        .pipe(self.__add_description_features)
+                        # __process_epa drops it in the full pipeline; the cleaning run never reaches it.
+                        .drop("_kick_spot", "_kicker_recovers", strict=False)
+                    )
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_nflverse_series_first_down_penalty_cleaning_pipeline[401547449]
+  expected: kill
+  note: >-
+    Review R806-1: without the step run_cleaning_pipeline() copies the setup-stage CFB-phrase
+    penalty_1st_conv into first_down_penalty, 0 on every slice (nflverse 6 on 401547449).
+
+# --- C-M1 / C-NF-6 (task 2.5): touchdowns that did not stand ------------------------------------------
+- id: nfl-td-reversed-unscored-gate
+  group: nfl-td-flags
+  finding: C-NF-6
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'unscored = _PENALTY_NEGATED_TEXT + "|reversed"'
+  mutant: 'unscored = _PENALTY_NEGATED_TEXT'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_box_td_parity_team_box_touchdowns_match_espn_box[291018018]
+  expected: kill
+  note: >-
+    Without the REVERSED gate the replay-reversed Colston touchdown (scoringPlay False) is counted:
+    NO 5 passing TDs on 291018018 vs ESPN's box 4.
+
+- id: nfl-td-nullified-unscored-gate
+  group: nfl-td-flags
+  finding: C-M1
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                & ~pl.col("_td_did_not_stand"),'
+  mutant: '                & pl.lit(True),'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_td_flags_nullified_touchdown_is_not_a_touchdown[291018018]
+  expected: kill
+  note: td_play True again on the three "TOUCHDOWN NULLIFIED by Penalty" rows of 291018018
+
+# --- R808-2 / R808-3 / R808-4 (task 2.20): touchdown-flag residuals -----------------------------------
+- id: nfl-td-nullified-scored-try-follows
+  group: nfl-td-flags
+  finding: R808-2
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '(text.str.contains("(?i)nullified by penalty") & ~try_follows)'
+  mutant: 'text.str.contains("(?i)nullified by penalty")'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_td_flags_residual_row_matches_nflverse[311218002-3112180024175]
+  expected: kill
+  note: >-
+    Without the try-follows guard the R.Bush 76-yard touchdown that stood (excessive celebration enforced
+    on the kickoff; nflverse touchdown 1, rush_touchdown 1) is negated again: td_play / rush_td False.
+
+- id: nfl-td-nullified-scored-any-next-row
+  group: nfl-td-flags
+  finding: R840-2
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'pl.col("type.text").shift(-1).over("game_id").str.contains(r"^(?:Extra Point|Two Point|Two-Point)")'
+  mutant: 'pl.col("type.text").shift(-1).over("game_id").is_not_null()'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_td_flags_residual_row_matches_nflverse[291129016-2911290162862]
+  expected: kill
+  note: >-
+    A guard that keeps any scored "nullified" row with a next row (not only a try) counts the 2009
+    C.Taylor holding-nullified run (nflverse touchdown 0) as a touchdown.
+
+- id: nfl-td-mistyped-return-season-floor
+  group: nfl-td-flags
+  finding: R840-1
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& (pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM)'
+  mutant: '& pl.lit(True)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_td_flags_residual_row_matches_nflverse[271209034-2712090341856]
+  expected: kill
+  note: >-
+    Without the 2009 floor the real 2007 kickoff return touchdown ESPN writes as a bare "Kickoff"
+    (nflverse touchdown 1) loses td_play.
+
+- id: nfl-td-reversed-into-safety
+  group: nfl-td-flags
+  finding: R808-3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '| (text.str.contains("(?i)reversed") & (pl.col("type.text") == "Safety"))'
+  mutant: '| pl.lit(False)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_td_flags_residual_row_matches_nflverse[291126008-2911260083341]
+  expected: kill
+  note: td_play True again on the 2009 fumble-return touchdown reversed into a safety (nflverse touchdown 0)
+
+- id: nfl-td-mistyped-return-unscored
+  group: nfl-td-flags
+  finding: R808-4
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.otherwise(text.str.contains(unscored) | mistyped_return)'
+  mutant: '.otherwise(text.str.contains(unscored))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_td_flags_residual_row_matches_nflverse[401671715-4016717152262]
+  expected: kill
+  note: >-
+    td_play True again on the 2024 short-of-landing-zone kickoff ESPN types "Kickoff Return Touchdown"
+    (unscored, no touchdown in the text; nflverse touchdown 0)
+
+# --- C-H2 / C-M2 / C-NF-12 (task 2.2): the play that ends a half, regulation or the game ----------------
+- id: nfl-end-of-half-reads-unfilled-lead-half
+  group: nfl-end-of-half
+  finding: C-H2
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'end_of_half=_ends_a_half(~stop),'
+  mutant: 'end_of_half=pl.col("half") != pl.col("lead_half"),'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "end_of_half_on_the_half_ending_play and 401547449"
+  expected: kill
+  note: >-
+    The original: end_of_half compared with lead_half in the same with_columns as its fill, so it read
+    the unfilled null on the game's last row and False on 401547449's regulation-ending kneel.
+
+- id: nfl-end-of-game-admin-row-type-text-only
+  group: nfl-end-of-half
+  finding: C-M2
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'return pl.col("text").str.contains(r"(?i)^\s*end of (the )?game").fill_null(False)'
+  mutant: 'return pl.lit(False)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "admin_row_2002"
+  expected: kill
+  note: >-
+    The original filter read type.text only, so 221013007's untyped "End of the game." row survived as
+    a play with an EPA.
+
+- id: nfl-end-of-half-timeout-rule
+  group: nfl-end-of-half
+  finding: C-NF-12
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'end_of_half=_ends_a_half(~stop),'
+  mutant: 'end_of_half=_ends_a_half(pl.lit(True)),'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_end_of_half_on_the_half_ending_play[400791590-half]
+  expected: kill
+  note: 400791590's first half ends on a Timeout row, which takes end_of_half from the play before it.
+
+- id: cfb-end-of-half-timeout-rule
+  group: nfl-end-of-half
+  finding: C-NF-12
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'half_play = pl.col("type.text").fill_null("") != "Timeout"'
+  mutant: 'half_play = pl.lit(True)'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "timeout_ending"
+  expected: kill
+  note: >-
+    The ledger gate cfb-timeout-ending-games: end_of_half back on the Timeout row (EPA 0.0) and
+    401752753's last scrimmage play at -1.195 instead of -4.986.
+
+- id: cfb-game-ender-last-real-play
+  group: nfl-end-of-half
+  finding: C-NF-12
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'last_play_number = pl.when(real_play).then(pl.col("game_play_number")).max()'
+  mutant: 'last_play_number = pl.col("game_play_number").max()'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "game_last_play_wp_after"
+  expected: kill
+  note: >-
+    A game that ends on a Timeout row ends on the play before it: keyed on the last ROW, the
+    game-ender branch skipped it and 401761656's game-ending sack read wp_after 0.064 for the winner.
+
+- id: cfb-half-end-wp-borrows-next-real-play
+  group: nfl-end-of-half
+  finding: C-NF-12
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.and_(pl.col("start.pos_team.id") == _next_play(pl.col("start.pos_team.id")))'
+  mutant: '.and_(pl.col("start.pos_team.id") == pl.col("lead_pos_team"))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "regulation_wp_after"
+  expected: kill
+  note: >-
+    401761665's Timeout row before overtime is filed to the other team; reading the next ROW's team
+    took the model's wp_after (0.392) instead of overtime's first wp_before (0.466).
+
+- id: cfb-half-end-wp-possession-change-borrows-next-real-play
+  group: nfl-end-of-half
+  finding: C-NF-12
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.then(1 - _next_play(pl.col(wb)))'
+  mutant: '.then(1 - pl.col(lwb))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "half_end_possession_change"
+  expected: kill
+  note: >-
+    R832-4: a half-ending play that changes possession takes 1 - the next real play's wp_before. On the
+    edited 401234617 (its End of Half marker retyped as a Timeout row) the next ROW is the Timeout.
+
+- id: nfl-end-of-half-try-keeps-its-epa
+  group: nfl-end-of-half
+  finding: C-H2
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '.when((pl.col("end_of_half") == True).and_(pl.col("type.text").is_in(_TRY_TYPES)))'
+  mutant: '.when(pl.lit(False))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "try_ending"
+  expected: kill
+  note: >-
+    R832-3: a good try that ends the game (291122008's extra point, 271021004's two-point pass) is a
+    scoring play in nflfastR (sp == 1) and keeps EP_end - EP_start; without the branch it scores -0.92.
+
+- id: nfl-end-of-half-never-on-a-stoppage-row
+  group: nfl-end-of-half
+  finding: C-NF-12
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    return half_play & ('
+  mutant: '    return pl.lit(True) & ('
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "end_of_half_rows and 400791590"
+  expected: kill
+  note: >-
+    R832-5: a Timeout row may take end_of_half alongside the play before it (400791590's first half);
+    the rule-of-the-next-play test alone stayed green.
 
 # --- CI harness: the scoreboard's sync-PR allowance (tools/quality_scoreboard.py compare()) -------
 - id: scoreboard-worse-than-all-not-any
@@ -2642,3 +3322,248 @@
   test: tests/mbb/test_ncaa_espn_team_crosswalk.py -k corrupt
   expected: kill
   note: R907-5, a corrupt or truncated release asset raised instead of falling back to the bundled copy
+
+# --- EX-2.3-a (task 2.21): a touchback kickoff ends at the season's touchback spot ----------------
+- id: nfl-kickoff-touchback-end-at-season-spot
+  group: nfl-end-state
+  finding: EX-2.3-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(touchback_yardline_expr(pl.col("season")))  # EX-2.3-a: the EP_start_touchback spot'
+  mutant: '.then(75)  # EX-2.3-a: the EP_start_touchback spot'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_touchback_without_a_next_snap_ends_at_the_season_spot[2024]
+  expected: kill
+  note: >-
+    The literal 75 back: a 2024 touchback kickoff whose next snap cannot be read starts at the 70
+    (EP_start_touchback) and ends at the 75, EPA about -0.25 instead of the owner's model's 0
+    (401671740 play 343 given an out-of-order next row). On the base, which re-spotted every
+    touchback, the mean over 96 sampled nfl-raw games was +0.35 before 2016, -0.25 in 2024 and
+    -0.48 in 2025.
+
+- id: nfl-kickoff-touchback-next-snap-guard
+  group: nfl-end-state
+  finding: EX-2.3-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'tb_fallback = (pl.col("kickoff_tb") == True) & ~pl.col("_kick_spot")  # R831-1: next snap wins'
+  mutant: 'tb_fallback = pl.col("kickoff_tb") == True  # R831-1: next snap wins'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_touchback_landing_zone_ends_at_the_next_snap
+  expected: kill
+  note: >-
+    Review R831-1: re-spotting every touchback at the season spot throws away the next-snap spot of
+    a 2024+ landing-zone touchback (the receiving 20): 401671740 play 3563 ends at the 70 with EPA 0
+    instead of the 80 and the owner's -0.600. It also re-spots the 2006-07 bare "KickOff" returns
+    (R831-2), MAE vs nflverse 0.040 -> 0.519 on the 32 capture rows.
+
+- id: nfl-cleaning-pipeline-drops-kick-spot
+  group: nfl-end-state
+  finding: EX-2.3-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.drop("_kick_spot", "_kicker_recovers", strict=False)'
+  mutant: '.drop("_no_such_column", strict=False)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_touchback_cleaning_pipeline_has_no_kick_spot_column
+  expected: kill
+  note: >-
+    The C-H5 block's _kick_spot flag rides to the EP block, which drops it; run_cleaning_pipeline
+    stops before the EP block, so without its own drop every cleaned play carries the temporary
+    column (CodeRabbit thread on #831).
+
+- id: nfl-kickoff-next-snap-is-the-receivers
+  group: nfl-end-state
+  finding: EX-2.3-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& (pl.col("_nxt").struct.field("team") == after_kick)  # the snap of the team with the ball'
+  mutant: '& pl.lit(True)  # the snap of the team with the ball'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_net_spot_is_the_receivers_next_snap
+  expected: kill
+  note: >-
+    The owner's net spot is the RECEIVER's next snap. ESPN files 401326517's touchback 1442 between two
+    PHI snaps; without the possession check the PHI snap at the NYJ 30 is read as NYJ's net spot and
+    the touchback scores EPA +2.508 instead of 0 (nflverse 0.000).
+
+- id: nfl-kickoff-kicking-team-recovery
+  group: nfl-end-state
+  finding: R810-3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'kickoff & (pl.col("type.text").is_in(kickoff_turnovers) | (recovered_by == kick_abbr))  # R810-3'
+  mutant: 'kickoff & pl.lit(False)  # R810-3'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "kicking_team_recovery_ends_at_the_kickers_snap"
+  expected: kill
+  note: >-
+    Without the kicking-team branch the team with the ball after a muff or onside recovery is taken
+    to be the receiver: the kicker's next snap fails the possession check and EP_end is not flipped,
+    so 301003002/297 reads 0.625 (nflverse -3.890) and 400554238/568 -2.855 (nflverse -3.798).
+
+- id: nfl-epa-kicking-team-recovery-flip
+  group: nfl-end-state
+  finding: R810-3
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '.when(pl.col("type.text").is_in(kickoff_vec) & kicker_recovers)'
+  mutant: '.when(pl.lit(False))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "kicking_team_recovery_ends_at_the_kickers_snap and muff"
+  expected: kill
+  note: >-
+    A muff the kicking team recovers ends at the kicker's snap; EP_end is the kicker's and must be
+    flipped to the receiver's side (onside kicks and "Kickoff Team Fumble Recovery" have their own
+    clauses). Unflipped, 301003002/297 reads about +2.25 against nflverse -3.890.
+
+- id: nfl-kickoff-recovery-after-reversal
+  group: nfl-end-state
+  finding: R810-3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'ruled = pl.col("text").str.split("REVERSED").list.last()  # the play as it stands'
+  mutant: 'ruled = pl.col("text")  # the play as it stands'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_kickoff_reversed_recovery_stays_the_receivers_ball
+  expected: kill
+  note: >-
+    A recovery the replay REVERSED is not the kicking team's ball: 301114003/3734 read it and scored
+    EPA -1.289 against nflverse 0.399 (the one sample kickoff the kicking-team branch made worse).
+
+# --- Task 2.19: ESPN's out-of-place period labels (R832-10) and the type.text scoring overlay ---------
+- id: nfl-period-repair-applied
+  group: nfl-era-play-order
+  finding: R832-10
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '            .pipe(_repair_espn_period)'
+  mutant: '            .pipe(lambda df: df)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "261022011"
+  expected: kill
+  note: >-
+    Without the repair 261022011's Q2 kickoff at 0:08 stays period 3 (nflverse qtr 2) and end_of_half
+    fires on three rows.
+
+- id: nfl-period-repair-lowers-only
+  group: nfl-era-play-order
+  finding: R832-10
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        & (period > period.shift(1))'
+  mutant: '        & (period != period.shift(1))'
+  test: tests/nfl/test_nfl_era_play_order.py -k "260910005-2819"
+  expected: kill
+  note: >-
+    ESPN mislabels a play with a LATER period. Raising a sandwiched row is wrong 50 of 51 times on nfl-raw:
+    260910005/2819 (ESPN 3, nflverse 3) between two rows ESPN files as 4 would become 4.
+
+- id: nfl-period-repair-clock-runs-down
+  group: nfl-era-play-order
+  finding: R832-10
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        & (pl.col("_secs").shift(1) >= pl.col("_secs"))'
+  mutant: '        & pl.lit(True)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "281005009"
+  expected: kill
+  note: >-
+    A Q3 opening kickoff at 15:00 whose id sorts between two Q2 timeouts is an out-of-order id, not a
+    mislabel: without the clock check 281005009/1872 is lowered to period 2 (nflverse qtr 3). The check
+    also blocks 10 real mislabels on nfl-raw 2002-13 (2 wrong vs 10 right without it); kept so no row
+    moves away from nflverse.
+
+- id: nfl-period-repair-end-row-guard
+  group: nfl-era-play-order
+  finding: R832-10
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        & ~admin.shift(-1)'
+  mutant: '        & pl.lit(True)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "270930001"
+  expected: kill
+  note: >-
+    270930001/1000 (a Q2 punt at 14:37) is followed in id order by Q1's late "End Period" row; without the
+    guard it is lowered to period 1 (nflverse qtr 2).
+
+- id: nfl-period-repair-season-floor
+  group: nfl-era-play-order
+  finding: R832-10
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        (pl.col("season") < ESPN_PERIOD_REPAIR_BEFORE)'
+  mutant: '        pl.lit(True)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "401030749"
+  expected: kill
+  note: >-
+    From 2014 the pattern is an out-of-order id with ESPN's period right: 401030749/906 (2018) would be
+    lowered to period 1 (nflverse qtr 2).
+
+- id: nfl-epa-kicker-recovery-touchdown
+  group: nfl-era-play-order
+  finding: R831-6
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '    def_score = (pl.col("type.text").is_in(defense_score_vec) | kicker_td) & td_stood'
+  mutant: '    def_score = pl.col("type.text").is_in(defense_score_vec) & td_stood'
+  test: tests/nfl/test_nfl_era_play_order.py -k "kicker-td"
+  expected: kill
+  note: >-
+    A kicking-team recovery returned for a TD is typed "Kickoff Return Touchdown"; without the clause it
+    scores the receiver's +6.92: 301107009/1557 EPA +6.302 against nflverse -7.672.
+
+- id: nfl-epa-offense-overlay-needs-td-to-stand
+  group: nfl-era-play-order
+  finding: EX-2.20-a
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '    off_score = pl.col("type.text").is_in(offense_score_vec) & td_stood'
+  mutant: '    off_score = pl.col("type.text").is_in(offense_score_vec)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "short-kick or onside"
+  expected: kill
+  note: >-
+    The 2024 short-of-landing-zone and onside kicks ESPN types "Kickoff Return Touchdown" (td_play false,
+    task 2.20) score the receiver's touchdown again: EPA 5.134 / 5.748 against nflverse 0.926 / 1.419.
+
+- id: nfl-touchback-kickoff-ep-end-start-clock
+  group: nfl-era-play-order
+  finding: R856-2
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '            half_sec_col="_ep_end_secs",'
+  mutant: '            half_sec_col="end.TimeSecsRem",'
+  test: tests/nfl/test_nfl_era_play_order.py -k "271223008"
+  expected: kill
+  note: >-
+    Owner ruling (2026-10-17): a touchback kickoff's EP_end is scored at its start clock. At ESPN's end
+    clock 271223008/1912 (start 0:23, end 1:08 from a misfiled timeout row) scores EPA +0.516 against
+    nflverse 0.000.
+
+- id: nfl-epa-defence-overlay-needs-td-to-stand
+  group: nfl-era-play-order
+  finding: R856-1
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '    def_score = (pl.col("type.text").is_in(defense_score_vec) | kicker_td) & td_stood'
+  mutant: '    def_score = pl.col("type.text").is_in(defense_score_vec) | kicker_td'
+  test: tests/nfl/test_nfl_era_play_order.py -k "punt-td-nullified"
+  expected: kill
+  note: >-
+    A defence-typed score whose touchdown did not stand takes no scoring overlay: 281109021/3307, a punt
+    return touchdown nullified by holding (td_play false), would score the receiver's -6.92 again (EPA -5.833
+    against nflverse -1.690).
+
+- id: nfl-touchback-kickoff-start-clock-needs-a-touchback
+  group: nfl-era-play-order
+  finding: R856-2
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                        | (pl.col("end.yardsToEndzone") == touchback_yardline_expr(pl.col("season")))'
+  mutant: '                        | pl.lit(True)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "271209010"
+  expected: kill
+  note: >-
+    The start clock is for touchbacks only. kickoff_tb alone also flags the 2006-08 bare "KickOff" rows
+    nflverse has as returns (R831-2): 271209010/3234 would score EPA 0.400 (nflverse 0.242, 0.354 at ESPN's
+    end clock); on the 644 sample games 1,865 such rows, sum |EPA - nflverse| 111.9 -> 120.3.
+
+- id: nfl-touchback-kickoff-text-evidence
+  group: nfl-era-play-order
+  finding: R856-15
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                        pl.col("text").str.contains("(?i)touchback")'
+  mutant: '                        pl.lit(False)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "zero_end_clock"
+  expected: kill
+  note: >-
+    A text touchback whose ESPN end clock is 0 has its end clamped to the 99, so only the text marks it:
+    without the check 400791544/2058 and 401127996/1913 keep the 0:00 end clock and the 99 (EPA -0.355 /
+    -0.335 against the owner model's 0).
+
+- id: nfl-touchback-kickoff-clamped-end-at-the-spot
+  group: nfl-era-play-order
+  finding: R856-15
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '            yardline_col="_ep_end_y2e",'
+  mutant: '            yardline_col="end.yardsToEndzone",'
+  test: tests/nfl/test_nfl_era_play_order.py -k "zero_end_clock"
+  expected: kill
+  note: >-
+    At the start clock with the clamped 99 end, 400791544/2058 and 401127996/1913 are scored as the receiver's
+    ball on his own 1: EPA -0.431 / -0.316 (R856-15, the round-2 head).
