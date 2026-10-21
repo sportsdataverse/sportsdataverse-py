@@ -223,8 +223,8 @@ def team_pace_projection(
     return expected_possessions(float(pace[home_team_id]), float(pace[away_team_id]), league_id=league_id)
 
 
-def _load_player_logs(season: int, league_id: str) -> pl.DataFrame:  # pragma: no cover - live network
-    """Live player box logs (monkeypatched to fixtures in tests); WNBA via league_id=10."""
+def _load_player_logs(season: int, league_id: str) -> pl.DataFrame:
+    """Live player box logs (the box loader is stubbed in tests); WNBA via league_id=10."""
     if league_id == "10":
         from sportsdataverse.wnba.wnba_loaders import load_wnba_player_boxscore  # noqa: PLC0415
 
