@@ -1,11 +1,11 @@
 ---
-title: "ACB — ACB API (api2.acb.com, Spain) — Other: period_scores–league_zones"
-sidebar_label: "Other: period_scores–league_zones"
-sidebar_position: 4
-description: "ACB — ACB API (api2.acb.com, Spain) — Other: period_scores–league_zones — function reference in sdv-py, the SportsDataverse Python package."
+title: "ACB — ACB API (api2.acb.com, Spain) — Other: period_scores–bracket_games"
+sidebar_label: "Other: period_scores–bracket_games"
+sidebar_position: 5
+description: "ACB — ACB API (api2.acb.com, Spain) — Other: period_scores–bracket_games — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# ACB — ACB API (api2.acb.com, Spain) — Other: period_scores–league_zones
+# ACB — ACB API (api2.acb.com, Spain) — Other: period_scores–bracket_games
 
 ## acb_period_scores
 
@@ -31,6 +31,14 @@ Points each team scored in each period of a game.
 | `away_score` | integer | Points the away team scored IN this period (not cumulative). |
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
+
+### Raises {#acb_period_scores-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_period_scores-example}
 
@@ -73,6 +81,14 @@ Coaches and game facts per team: head coach, assistants, arena, attendance, refe
 | `referees` | character | Referees' names joined with '; '; repeats on both team rows. |
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
+
+### Raises {#acb_box_info-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_box_info-example}
 
@@ -141,6 +157,14 @@ Play-by-play of a game (2016-17 onward): every shot, rebound, foul, turnover, su
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
 
+### Raises {#acb_pbp-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+
 ### Example {#acb_pbp-example}
 
 ```python
@@ -194,6 +218,14 @@ Every field-goal and free-throw attempt of a game (2016-17 onward) with its cour
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
 
+### Raises {#acb_shots-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+
 ### Example {#acb_shots-example}
 
 ```python
@@ -233,6 +265,14 @@ Score through a game, one row per scoring moment, with the margin.
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
 
+### Raises {#acb_lead_tracker-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+
 ### Example {#acb_lead_tracker-example}
 
 ```python
@@ -267,6 +307,14 @@ Lead statistics of a game (best run, maximum lead, time ahead, lead changes) per
 | `is_highlighted` | logical | True for the side whose bar the site highlights as the better value. |
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
+
+### Raises {#acb_lead_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_lead_stats-example}
 
@@ -319,6 +367,14 @@ Players of a game with their game line, starters first.
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
 
+### Raises {#acb_lineup-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+
 ### Example {#acb_lineup-example}
 
 ```python
@@ -370,6 +426,14 @@ The playoff series a game belongs to, one row per game of the series (zero rows 
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
 
+### Raises {#acb_serie-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+
 ### Example {#acb_serie-example}
 
 ```python
@@ -410,6 +474,14 @@ Pre-match facts per team: standing, record, recent results.
 | `last_results` | character | Recent results joined with '; ' (WIN / LOSS), in the order the API sends them. |
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
+
+### Raises {#acb_quickfacts-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_quickfacts-example}
 
@@ -456,6 +528,14 @@ Each team's season leaders before a game, by category.
 | `game_role` | character | Position or staff role, in Spanish: Base (point guard), Escolta (shooting guard), Alero (small forward), Ala-pivot (power forward), Pivot (centre); Entrenador (head coach), Segundo Entrenador / Entrenador Ayudante (assistant coach). Null or '' in many rows |
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
+
+### Raises {#acb_season_leaders-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_season_leaders-example}
 
@@ -519,163 +599,18 @@ The games of the round (or week) around a game.
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
 
+### Raises {#acb_matchlist-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+
 ### Example {#acb_matchlist-example}
 
 ```python
 acb_matchlist(match_id=105401)
-```
-
-_Last validated n/a._
-
-## acb_competition_editions
-
-Every competition edition (season) the API knows, one row per edition.
-
-**Endpoint URL:** `GET https://api2.acb.com/api/matchdata/Menu/competition-data`
-
-**Valid URL:** [https://api2.acb.com/api/matchdata/Menu/competition-data](https://api2.acb.com/api/matchdata/Menu/competition-data)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `competitionIds` | `competition_ids` |  |  | `Y` | Competition id (1, 2, 3, 10) or a list of ids for several. Omitted = the API's default competition. |
-
-### Returns {#acb_competition_editions-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `competition_id` | integer | Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa, 10 Minicopa Endesa. |
-| `competition_name` | character | The API's competition name ('Liga Nacional' for the Liga). |
-| `edition_id` | integer | Season id (START year - 1935). |
-| `season_start_year` | integer | Calendar year the season starts (2026 for 2026-27). |
-| `season` | integer | Season END year (2027 for 2026-27) = seasonEndYear. |
-| `n_rounds` | integer | Rounds the edition lists. |
-| `n_weeks` | integer | Weeks the edition lists. |
-
-**`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
-
-### Example {#acb_competition_editions-example}
-
-```python
-acb_competition_editions()
-```
-
-_Last validated n/a._
-
-## acb_competition_rounds
-
-The rounds of every competition edition: the round ids to crawl.
-
-**Endpoint URL:** `GET https://api2.acb.com/api/matchdata/Menu/competition-data`
-
-**Valid URL:** [https://api2.acb.com/api/matchdata/Menu/competition-data](https://api2.acb.com/api/matchdata/Menu/competition-data)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `competitionIds` | `competition_ids` |  |  | `Y` | Competition id (1, 2, 3, 10) or a list of ids for several. Omitted = the API's default competition. |
-
-### Returns {#acb_competition_rounds-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `competition_id` | integer | Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa, 10 Minicopa Endesa. |
-| `edition_id` | integer | Season id the round belongs to (START year - 1935). |
-| `season` | integer | Season END year (2027 = 2026-27) = edition_id + 1936: the key the wrappers take. |
-| `round_id` | integer | Round id: global across seasons, not the round number (6017 = Liga 2026-27 round 3; 2600 = 2016-17 round 1) |
-| `round_number` | integer | Round number within the phase |
-| `subphase_id` | integer | Sub-phase id inside a phase (a playoff round or a cup round, e.g. 291, 292, 293); null in the regular season |
-| `subphase_number` | integer | Sub-phase number; null in the regular season |
-
-**`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
-
-### Example {#acb_competition_rounds-example}
-
-```python
-acb_competition_rounds()
-```
-
-_Last validated n/a._
-
-## acb_competition_weeks
-
-The weeks of every competition edition: the week ids to crawl.
-
-**Endpoint URL:** `GET https://api2.acb.com/api/matchdata/Menu/competition-data`
-
-**Valid URL:** [https://api2.acb.com/api/matchdata/Menu/competition-data](https://api2.acb.com/api/matchdata/Menu/competition-data)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `competitionIds` | `competition_ids` |  |  | `Y` | Competition id (1, 2, 3, 10) or a list of ids for several. Omitted = the API's default competition. |
-
-### Returns {#acb_competition_weeks-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `competition_id` | integer | Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa, 10 Minicopa Endesa. |
-| `edition_id` | integer | Season id the week belongs to (START year - 1935). |
-| `season` | integer | Season END year (2027 = 2026-27) = edition_id + 1936: the key the wrappers take. |
-| `week_id` | integer | Week id: global across seasons (2989 = the week of 2026-10-10) |
-| `description` | character | Spanish week label ('Semana 1'). |
-| `start_date` | character | Monday the week starts (UTC midnight). |
-
-**`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
-
-### Example {#acb_competition_weeks-example}
-
-```python
-acb_competition_weeks()
-```
-
-_Last validated n/a._
-
-## acb_competition_current
-
-The API's current pointers: competition, edition, week, round and match.
-
-**Endpoint URL:** `GET https://api2.acb.com/api/matchdata/Menu/competition-data`
-
-**Valid URL:** [https://api2.acb.com/api/matchdata/Menu/competition-data](https://api2.acb.com/api/matchdata/Menu/competition-data)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `competitionIds` | `competition_ids` |  |  | `Y` | Competition id (1, 2, 3, 10) or a list of ids for several. Omitted = the API's default competition. |
-
-### Returns {#acb_competition_current-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `competition_id` | integer | Competition the site opens by default. |
-| `edition_id` | integer | Edition (season) the site opens by default. |
-| `season` | integer | Season END year (2027 = 2026-27) = edition_id + 1936: the key the wrappers take. |
-| `week_id` | integer | Week the site opens by default. |
-| `round_id` | integer | Round the site opens by default. |
-| `match_grouping` | character | round or week (current pointers) |
-| `match_id` | integer | The current match (the featured game). |
-| `status` | character | State of the current match. |
-| `start` | character | Tip-off instant (UTC) of the current match. |
-| `home_team_id` | integer | Home season-team entry id of the current match. |
-| `home_club_id` | integer | Home stable club id of the current match. |
-| `home_team` | character | Home team name of the current match. |
-| `home_team_abbr` | character | Home team abbreviation of the current match. |
-| `away_team_id` | integer | Away season-team entry id of the current match. |
-| `away_club_id` | integer | Away stable club id of the current match. |
-| `away_team` | character | Away team name of the current match. |
-| `away_team_abbr` | character | Away team abbreviation of the current match. |
-
-**`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
-
-### Example {#acb_competition_current-example}
-
-```python
-acb_competition_current()
 ```
 
 _Last validated n/a._
@@ -730,6 +665,14 @@ Games of one round (or week) with scores, status and broadcasters.
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
 
+### Raises {#acb_round_matches-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+
 ### Example {#acb_round_matches-example}
 
 ```python
@@ -783,6 +726,14 @@ League table after a round (default: the current round).
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
 
+### Raises {#acb_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+
 ### Example {#acb_standings-example}
 
 ```python
@@ -826,6 +777,14 @@ Standings history: each team's position after each round, with the round's game.
 | `match_id` | integer | The team's game in this round. |
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
+
+### Raises {#acb_standings_rounds-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_standings_rounds-example}
 
@@ -874,6 +833,14 @@ Playoff bracket: one row per series (quarter-final, semifinal, final).
 | `season` | integer | Season END year (2027 = 2026-27) = edition_id + 1936: the key the wrappers take. |
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
+
+### Raises {#acb_bracket-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_bracket-example}
 
@@ -927,103 +894,18 @@ The games of every playoff series of a bracket, one row per game.
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
 
+### Raises {#acb_bracket_games-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+
 ### Example {#acb_bracket_games-example}
 
 ```python
 acb_bracket_games(season=2026)
-```
-
-_Last validated n/a._
-
-## acb_calendar
-
-Every round of a season with its games: one call lists every game id.
-
-**Endpoint URL:** `GET https://api2.acb.com/api/seasondata/Calendar/season-calendar`
-
-**Valid URL:** [https://api2.acb.com/api/seasondata/Calendar/season-calendar?season=2027](https://api2.acb.com/api/seasondata/Calendar/season-calendar?season=2027)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `competitionId` | `competition_id` |  |  | `Y` | Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa, 10 Minicopa Endesa (youth). Omitted = the API's default competition. |
-| `season` | `season` |  |  | `Y` | Season END year (2027 = 2026-27; the first ACB season, 1983-84, is 1984). ``acb_runtime`` sends the API's ``editionId`` = season - 1936. Omitted = the current season. |
-
-### Returns {#acb_calendar-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `competition_id` | integer | Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa, 10 Minicopa Endesa. |
-| `edition_id` | integer | Season id (editionId) = season START year - 1935 (91 = 2026-27). The wrappers take the END year, `season`. |
-| `season` | integer | Season END year (2027 = 2026-27) = edition_id + 1936: the key the wrappers take. |
-| `round_id` | integer | Global round id (6017 = Liga 2026-27 round 3); not the round number. |
-| `round_number` | integer | Round number within its phase. |
-| `subphase_id` | integer | Sub-phase id of the round (playoff stages); null in the regular season. |
-| `subphase_number` | integer | Sub-phase number of the round; null in the regular season. |
-| `week_id` | integer | Not sent by the calendar route (always null). |
-| `match_id` | integer | Match id. Legacy ids (seasons up to 2019-20) sit below about 20000 (12559 = 2005-06 final, 17718 = 2016-17 final); from 2020-21 they start at about 100000 (102920 in 2021-22, 105401 in 2026-27). One key space across competitions: the matchId param of every matchdata route. |
-| `home_team_id` | integer | Home season-team entry id (new every season; joins the body's team list). |
-| `away_team_id` | integer | Away season-team entry id (new every season; joins the body's team list). |
-| `home_score` | integer | Home points (null before the match) |
-| `away_score` | integer | Away points (null before the match) |
-| `start` | character | Tip-off, ISO 8601 UTC |
-| `status` | character | Match state (x-match-statuses) |
-| `is_on_half_time` | logical | At half time (live) |
-| `current_quarter` | integer | Current or last quarter (5+ = overtime); not reliable after the match (1 in the 2017 series rows) |
-| `home_club_id` | integer | Stable club id of the home team (looked up in the body's team list). |
-| `home_team` | character | Home team name for the season (looked up in the body's team list). |
-| `home_team_abbr` | character | Home team three-letter abbreviation (looked up in the body's team list). |
-| `away_club_id` | integer | Stable club id of the away team (looked up in the body's team list). |
-| `away_team` | character | Away team name for the season (looked up in the body's team list). |
-| `away_team_abbr` | character | Away team three-letter abbreviation (looked up in the body's team list). |
-| `ticketing_link` | character | Ticket shop URL; null when none. |
-| `broadcasters` | character | Broadcast channel names of the game joined with '; ' (the first is the primary). |
-
-**`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
-
-### Example {#acb_calendar-example}
-
-```python
-acb_calendar(season=2027)
-```
-
-_Last validated n/a._
-
-## acb_league_zones
-
-League-wide shooting by court zone for a season.
-
-**Endpoint URL:** `GET https://api2.acb.com/api/seasondata/ShotChart/league-zones`
-
-**Valid URL:** [https://api2.acb.com/api/seasondata/ShotChart/league-zones?season=2027](https://api2.acb.com/api/seasondata/ShotChart/league-zones?season=2027)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `competitionId` | `competition_id` |  |  | `Y` | Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa, 10 Minicopa Endesa (youth). Omitted = the API's default competition. |
-| `season` | `season` |  |  | `Y` | Season END year (2027 = 2026-27; the first ACB season, 1983-84, is 1984). ``acb_runtime`` sends the API's ``editionId`` = season - 1936. Omitted = the current season. |
-
-### Returns {#acb_league_zones-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `competition_id` | integer | Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa, 10 Minicopa Endesa. |
-| `edition_id` | integer | Season id (editionId) = season START year - 1935 (91 = 2026-27). The wrappers take the END year, `season`. |
-| `season` | integer | Season END year (2027 = 2026-27) = edition_id + 1936: the key the wrappers take. |
-| `phase_id` | integer | Phase the statistics cover; null in the sample (read as all phases, unverified). |
-| `zone` | character | Court zone (acb_codes.SHOT_ZONES): restricted_area, paint, mid_range_*, corner_three_*, wing_three_*, top_three. |
-| `attempts` | integer | Field-goal attempts in the zone, league-wide. |
-| `made` | integer | Field goals made in the zone, league-wide. |
-| `points_scored` | integer | Points scored from the zone, league-wide. |
-
-**`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
-
-### Example {#acb_league_zones-example}
-
-```python
-acb_league_zones(season=2027)
 ```
 
 _Last validated n/a._

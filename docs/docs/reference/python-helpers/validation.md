@@ -1,7 +1,7 @@
 ---
 title: "Package — additional Python functions — Validation"
 sidebar_label: "Validation"
-sidebar_position: 14
+sidebar_position: 15
 description: "Package — additional Python functions — Validation — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Package — additional Python functions — Validation
@@ -36,6 +36,12 @@ skipped silently.
 **Returns**
 
 `ok` is True when no rule fired at `error` severity.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is neither `"nfl"` nor `"cfb"`. |
 
 **Example**
 

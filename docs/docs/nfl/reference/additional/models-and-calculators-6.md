@@ -423,6 +423,12 @@ DataFrame with the original columns plus `xpass` (predicted pass probability, nu
 | `xpass` | double | Probability of dropback scaled from 0 to 1. |
 | `pass_oe` | double | Dropback percent over expected on a given play scaled from 0 to 100. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | When `xpass_model.ubj` cannot be located (no bundled / cached copy and no network). |
+
 **Example**
 
 ```python

@@ -1,7 +1,7 @@
 ---
 title: "Package — additional Python functions — Cache and configuration"
 sidebar_label: "Cache and configuration"
-sidebar_position: 12
+sidebar_position: 13
 description: "Package — additional Python functions — Cache and configuration — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Package — additional Python functions — Cache and configuration
@@ -51,6 +51,12 @@ Switch the global cache mode.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `mode` | `str` |  | One of `"off"`, `"memory"`, `"filesystem"`. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `mode` is not one of the three valid options. |
 
 ### set_default_ttl {#set_default_ttl}
 

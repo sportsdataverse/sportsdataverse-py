@@ -78,8 +78,9 @@ def test_release_read_goes_through_pyarrow(read):
 def test_success_path_never_calls_the_transport():
     """The bytes must NOT be routed through ``download``.
 
-    Fetch-then-parse co-resides the compressed asset with the decoded frame; Arrow's
-    direct read does not. This asserts the fast path stays fast -- if someone later
+    A trip through ``download`` holds an extra ``requests`` copy of the compressed asset;
+    ``_release_bytes`` reads the body once with urllib into the one buffer pyarrow parses.
+    This asserts the fast path stays fast -- if someone later
     reroutes the read through the gateway "for consistency", this fails first.
     """
     calls = {"n": 0}

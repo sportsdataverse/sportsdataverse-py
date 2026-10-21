@@ -447,9 +447,6 @@ def parse_genius_game(raw: Any, *, return_as_pandas: bool = False, columns: Opti
         ``referee1``..``commissioner`` read ``officials.<role>.name`` (current feeds) or the flat
         ``officials_refereeN`` strings (older feeds); null when absent.
 
-    Raises:
-        None: a malformed body gives a zero-row frame.
-
     Example:
         Parse a fetched game::
 
@@ -510,9 +507,7 @@ def parse_genius_team_box(
         the ``tot_s*`` totals (``field_goals_made`` ... ``points``) plus ``eff_1``..``eff_7``. Percentages are
         ``Float64`` 0-100. ``ot_score`` is the points in overtime (null without overtime; whether it sums several
         overtimes is unverified). The feed has no team id: ``tno`` is in-game only.
-
-    Raises:
-        None: a malformed body gives a zero-row frame.
+        A malformed body gives a zero-row frame.
 
     Example:
         Both teams of a game::
@@ -570,9 +565,7 @@ def parse_genius_player_box(
         display name in the competition's script; ``international_*`` are the Latin forms. Stat columns drop the
         wire ``s`` prefix (``field_goals_made``, ``points``, ``plus_minus_points``); percentages are 0-100
         ``Float64``. ``minutes`` is the printed ``mm:ss`` and ``seconds_played`` its seconds.
-
-    Raises:
-        None: a malformed body gives a zero-row frame.
+        A malformed body gives a zero-row frame.
 
     Example:
         Every player line of a game::
@@ -631,9 +624,7 @@ def parse_genius_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Optio
         in-game numbers (0 = none). ``qualifier`` joins the qualifier codes with commas (null when none).
         ``clock`` (``mm:ss:cc``) and ``action_number`` / ``previous_action`` are absent in the 2014-15 feed, so
         they are null there. Overtime restarts ``period`` at 1: read it with ``period_type``.
-
-    Raises:
-        None: a malformed body gives a zero-row frame.
+        A malformed body gives a zero-row frame.
 
     Example:
         Fetch and sort oldest first::
@@ -694,9 +685,7 @@ def parse_genius_shots(raw: Any, *, return_as_pandas: bool = False, columns: Opt
         basket: a team attacks one end in periods 1-2 and the other in 3-4, so flip x per period before
         plotting one basket. The origin corner is unverified. ``result`` is 1 for a made shot and 0 for a miss.
         ``action_number`` joins the play-by-play row (null in the 2014-15 feed).
-
-    Raises:
-        None: a malformed body gives a zero-row frame.
+        A malformed body gives a zero-row frame.
 
     Example:
         Made shots only::
@@ -775,9 +764,7 @@ def parse_genius_competition_games(
         ``away_team_id`` are the global Genius team ids (the key space of the hosted schedule and the widget;
         ``data.json`` has none). Scores are strings on most rows and are cast to ``Int64`` (null before
         tip-off). Times are the feed's text: ``match_time`` is local (zone not stated), ``match_time_utc`` UTC.
-
-    Raises:
-        None: a malformed body gives a zero-row frame.
+        A malformed body gives a zero-row frame.
 
     Example:
         Games of the Greek league window::
@@ -999,9 +986,7 @@ def parse_genius_match_competition(
     Returns:
         A one-row frame: the only way to map a ``data.json`` game to its competition (``comp_id``) and, through
         ``genius_competitions``, to a season. ``org`` is the ORG the request used.
-
-    Raises:
-        None: a malformed record gives a zero-row frame.
+        A malformed record gives a zero-row frame.
 
     Example:
         Which competition is a game in::
@@ -1028,9 +1013,7 @@ def season_end(label: Optional[str], year: Optional[int], span: Optional[str]) -
 
     Returns:
         ``(season, rule)``; ``(None, "unknown")`` when none of the rules applies.
-
-    Raises:
-        None: does not raise; an unreadable label gives ``(None, "unknown")``.
+        Does not raise; an unreadable label gives ``(None, "unknown")``.
 
     Example:
         Season of a Greek competition::
@@ -1072,9 +1055,7 @@ def parse_genius_competitions(
         ``selected`` marks the competition the chooser pre-selects (the org default, not always the newest).
         The registry the refs keep also reads game dates to fix a season the label leaves ambiguous; this
         frame uses the label and the year only.
-
-    Raises:
-        None: a malformed record gives a zero-row frame.
+        A malformed record gives a zero-row frame.
 
     Example:
         The seasons of the Greek league::
@@ -1120,9 +1101,7 @@ def parse_genius_schedule(
         ``away_team_id`` are the global Genius team ids. Scores are null before tip-off and for some completed games whose score the page does not print. ``date_time`` is the
         page's text (``'Oct 10, 2026, 6:00 PM'``, local time, zone not stated). ``link_match_id`` is null for
         orgs that hide match pages (FFBB); ``venue_id`` is null when the venue is plain text.
-
-    Raises:
-        None: a malformed record gives a zero-row frame.
+        A malformed record gives a zero-row frame.
 
     Example:
         All games of a competition::
@@ -1148,9 +1127,7 @@ def parse_genius_widget_games(
         One row per game (about 5 to 50, newest competition first). ``match_id`` is the ``data.json`` id;
         ``webcast_org`` is the LiveStats ORG of the webcast link (``NZN`` for the hosted ``NZNBL``);
         ``home_team_id`` / ``away_team_id`` are the global Genius team ids. ``date`` is the widget's text.
-
-    Raises:
-        None: a malformed record gives a zero-row frame.
+        A malformed record gives a zero-row frame.
 
     Example:
         The Greek league widget::

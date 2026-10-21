@@ -1,10 +1,10 @@
 ---
-title: "Package — additional Python functions — PFF Premium Stats (LEGACY): aaf_facet–aaf_leagues"
-sidebar_label: "PFF Premium Stats (LEGACY): aaf_facet–aaf_leagues"
+title: "Package — additional Python functions — PFF Premium Stats (LEGACY): aaf_facet"
+sidebar_label: "PFF Premium Stats (LEGACY): aaf_facet"
 sidebar_position: 2
-description: "Package — additional Python functions — PFF Premium Stats (LEGACY): aaf_facet–aaf_leagues — function reference in sdv-py, the SportsDataverse Python package."
+description: "Package — additional Python functions — PFF Premium Stats (LEGACY): aaf_facet — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Package — additional Python functions — PFF Premium Stats (LEGACY): aaf_facet–aaf_leagues
+# Package — additional Python functions — PFF Premium Stats (LEGACY): aaf_facet
 
 ### pff_aaf_facet_blocking_summary {#pff_aaf_facet_blocking_summary}
 
@@ -32,6 +32,14 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/blocking
 **Returns**
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 **Example**
 
@@ -66,6 +74,14 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_scheme
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 **Example**
 
 ```python
@@ -98,6 +114,14 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/coverage
 **Returns**
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 **Example**
 
@@ -132,6 +156,14 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/summary
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 **Example**
 
 ```python
@@ -164,6 +196,14 @@ Example URL: https://premium.pff.com/api/v1/facet/field_goal/summary
 **Returns**
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 **Example**
 
@@ -198,6 +238,14 @@ Example URL: https://premium.pff.com/api/v1/facet/kickoff/summary
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 **Example**
 
 ```python
@@ -230,6 +278,14 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/summary
 **Returns**
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 **Example**
 
@@ -264,6 +320,14 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/pass_blocking
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 **Example**
 
 ```python
@@ -296,6 +360,14 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/pass_rush
 **Returns**
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 **Example**
 
@@ -330,6 +402,14 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/allowed_pressure
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 **Example**
 
 ```python
@@ -362,6 +442,14 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/concept
 **Returns**
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 **Example**
 
@@ -396,6 +484,14 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/depth
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 **Example**
 
 ```python
@@ -428,6 +524,14 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/detail
 **Returns**
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 **Example**
 
@@ -462,6 +566,14 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/pressure
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 **Example**
 
 ```python
@@ -494,6 +606,14 @@ Example URL: https://premium.pff.com/api/v1/facet/passing/summary
 **Returns**
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 **Example**
 
@@ -528,6 +648,14 @@ Example URL: https://premium.pff.com/api/v1/facet/signature/pass-blocking/effici
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 **Example**
 
 ```python
@@ -560,6 +688,14 @@ Example URL: https://premium.pff.com/api/v1/facet/signature/defense/outside_pass
 **Returns**
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 **Example**
 
@@ -594,6 +730,14 @@ Example URL: https://premium.pff.com/api/v1/facet/punting/summary
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 **Example**
 
 ```python
@@ -626,6 +770,14 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/concept
 **Returns**
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 **Example**
 
@@ -660,6 +812,14 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/coverage
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 **Example**
 
 ```python
@@ -692,6 +852,14 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/coverage_matchup
 **Returns**
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 **Example**
 
@@ -726,6 +894,14 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/depth
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 **Example**
 
 ```python
@@ -758,6 +934,14 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/scheme
 **Returns**
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 **Example**
 
@@ -792,6 +976,14 @@ Example URL: https://premium.pff.com/api/v1/facet/receiving/summary
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 **Example**
 
 ```python
@@ -824,6 +1016,14 @@ Example URL: https://premium.pff.com/api/v1/facet/return/summary
 **Returns**
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 **Example**
 
@@ -858,6 +1058,14 @@ Example URL: https://premium.pff.com/api/v1/facet/offense/run_blocking
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 **Example**
 
 ```python
@@ -890,6 +1098,14 @@ Example URL: https://premium.pff.com/api/v1/facet/defense/run
 **Returns**
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 **Example**
 
@@ -924,199 +1140,16 @@ Example URL: https://premium.pff.com/api/v1/facet/rushing/direction
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 **Example**
 
 ```python
 pff_facet_rushing_direction_stats()
-```
-
-### pff_aaf_facet_rushing_summary {#pff_aaf_facet_rushing_summary}
-
-`pff_aaf_facet_rushing_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
-
-LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
-
-Endpoint: `GET https://premium.pff.com/api/v1/facet/rushing/summary`
-Example URL: https://premium.pff.com/api/v1/facet/rushing/summary
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
-| `season` | `Optional[int]` | `None` | Season (starting year). |
-| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
-| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
-| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
-| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
-| `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
-| `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
-| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
-
-**Example**
-
-```python
-pff_facet_rushing_summary()
-```
-
-### pff_aaf_facet_slot_coverages {#pff_aaf_facet_slot_coverages}
-
-`pff_aaf_facet_slot_coverages(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
-
-LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/slot_coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
-
-Endpoint: `GET https://premium.pff.com/api/v1/facet/signature/defense/slot_coverage`
-Example URL: https://premium.pff.com/api/v1/facet/signature/defense/slot_coverage
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
-| `season` | `Optional[int]` | `None` | Season (starting year). |
-| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
-| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
-| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
-| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
-| `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
-| `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
-| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
-
-**Example**
-
-```python
-pff_facet_slot_coverages()
-```
-
-### pff_aaf_facet_special_teams_summary {#pff_aaf_facet_special_teams_summary}
-
-`pff_aaf_facet_special_teams_summary(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
-
-LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /special/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
-
-Endpoint: `GET https://premium.pff.com/api/v1/facet/special/summary`
-Example URL: https://premium.pff.com/api/v1/facet/special/summary
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
-| `season` | `Optional[int]` | `None` | Season (starting year). |
-| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
-| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
-| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
-| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
-| `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
-| `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
-| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
-
-**Example**
-
-```python
-pff_facet_special_teams_summary()
-```
-
-### pff_aaf_facet_time_in_pockets {#pff_aaf_facet_time_in_pockets}
-
-`pff_aaf_facet_time_in_pockets(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[str]' = None, franchise_id: 'Optional[int]' = None, game_id: 'Optional[int]' = None, division: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
-
-LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/passing/time_in_pocket (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
-
-Endpoint: `GET https://premium.pff.com/api/v1/facet/signature/passing/time_in_pocket`
-Example URL: https://premium.pff.com/api/v1/facet/signature/passing/time_in_pocket
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
-| `season` | `Optional[int]` | `None` | Season (starting year). |
-| `week` | `Optional[str]` | `None` | Week or week-group key (e.g. 'REG', a week number, or a range). |
-| `franchise_id` | `Optional[int]` | `None` | PFF franchise (team) id; filters a report 'By Team'. |
-| `game_id` | `Optional[int]` | `None` | PFF game id; filters a report 'By Game'. |
-| `division` | `Optional[str]` | `None` | Division filter (NCAA). |
-| `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
-| `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
-| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
-
-**Example**
-
-```python
-pff_facet_time_in_pockets()
-```
-
-### pff_aaf_games {#pff_aaf_games}
-
-`pff_aaf_games(*, league: 'Optional[str]' = 'aaf', season: 'Optional[int]' = None, week: 'Optional[int]' = None, headers: 'Optional[Dict[str, str]]' = None, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
-
-LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Games list for league-season(-week)
-
-Endpoint: `GET https://premium.pff.com/api/v1/games`
-Example URL: https://premium.pff.com/api/v1/games
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `league` | `Optional[str]` | `'aaf'` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
-| `season` | `Optional[int]` | `None` | Season (starting year). |
-| `week` | `Optional[int]` | `None` | Single week number. |
-| `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
-| `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
-| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
-
-**Example**
-
-```python
-pff_games()
-```
-
-### pff_aaf_leagues {#pff_aaf_leagues}
-
-`pff_aaf_leagues(headers: 'Optional[Dict[str, str]]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
-
-LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Leagues + seasons + week groups (bootstrap)
-
-Endpoint: `GET https://premium.pff.com/api/v1/leagues`
-Example URL: https://premium.pff.com/api/v1/leagues
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `headers` | `Optional[Dict[str, str]]` | `None` | optional pre-minted auth headers dict (e.g. from nfl_headers_gen()) to reuse across calls; a fresh anonymous token is minted when omitted. |
-| `return_parsed` | `bool` | `True` | parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict. |
-| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
-
-No returns table is published for this function: no capture: PFF Premium (legacy) needs a browser session cookie, and the docs build has none.
-
-**Example**
-
-```python
-pff_leagues()
 ```

@@ -87,9 +87,6 @@ def parse_uefa(
         to ``Utf8``. A zero-row frame when the payload is ``None``, empty or
         malformed -- callers can chain without a null-check.
 
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
-
     Example:
         Quick start::
 

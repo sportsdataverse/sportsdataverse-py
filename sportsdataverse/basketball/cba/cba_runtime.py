@@ -10,7 +10,11 @@ Three things make this host unusual (sdv-internal-refs ``cba/``, live-verified 2
   Anything that does not decrypt is REFUSED: the API's unencrypted HTTP 500 envelope, an empty 200 body, a plain body.
 * **The host blocks datacenter IPs at TCP.** Set ``CBA_PROXY`` (a residential proxy URL; owner ruling: Decodo, small
   requests only). The value is read by :func:`basketball_runtime.proxy_from_env`, never logged and never put in an
-  error. Without it the request goes direct and fails from a datacenter.
+  error. Without it the request goes direct and fails FAST from a datacenter: a 5 s connect timeout
+  (:data:`FAST_CONNECT_TIMEOUT`) and no retry of a refused or timed-out CONNECT (a read timeout or a connection reset
+  mid-response is still retried), so the ``AssetFetchError`` naming
+  ``CBA_PROXY`` comes in seconds, not after three 60 s connect timeouts. On a network where direct access works (a
+  residential IP), set ``CBA_DIRECT=1`` (:data:`DIRECT_ENV`): direct requests then get the full timeout and retries.
 * **Several game routes answer team-season tables, not game data** (``schedule-shoot-list``,
   ``schedule-four-elements``): their rows cannot be scoped to the game (documented in the wrapper notes).
 
@@ -36,23 +40,26 @@ Operator ids (``createdBy`` / ``lastModifiedBy``) and any bare mobile-number str
 
 from __future__ import annotations
 
+import os
 from contextlib import nullcontext
-
 import re
 import time
 from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import urlsplit
 
 import requests
+from urllib3.exceptions import NewConnectionError
 
 from sportsdataverse import _codegen_runtime as _rt
 from sportsdataverse.basketball.basketball_runtime import SESSION, proxy_from_env
 from sportsdataverse.basketball.cba.cba_aes import Undecryptable, decrypt_body
 from sportsdataverse.errors import AssetFetchError, NoDataError
 
-__all__ = ["PROXY_ENV", "REQUEST_KEY", "wire_season"]
+__all__ = ["DIRECT_ENV", "PROXY_ENV", "REQUEST_KEY", "wire_season"]
 
 PROXY_ENV = "CBA_PROXY"
+#: Set to ``1`` where direct access works (a residential IP): no proxy, but the full timeout and retries.
+DIRECT_ENV = "CBA_DIRECT"
 REQUEST_KEY = "_request"
 API = "https://data-server.cbaleague.com"
 #: Public constant from the site bundle (see the module docstring).
@@ -60,10 +67,10 @@ _KEY = b"uVayqL4ONKjFbVzQ"
 HEADERS = {"Referer": "https://www.cbaleague.com/data/"}
 ATTEMPTS = 3
 TIMEOUT = 60
+#: Connect timeout of a direct request without :data:`DIRECT_ENV` (the host drops datacenter connections at TCP).
+FAST_CONNECT_TIMEOUT = 5
 RETRY_STATUSES = frozenset({429, 502, 503, 504})
 MAX_RETRY_AFTER = 30.0
-#: POST routes: wire keys that go in the query string; every other key is the JSON body.
-_QUERY_KEYS = frozenset({"pageNumber", "pageSize", "startNum"})
 _POST = frozenset(
     {
         "player-match-datas/data-count",
@@ -153,27 +160,54 @@ def _retry_after(resp: Any) -> float:
         return 0.0
 
 
+def _dropped_at_connect(exc: BaseException) -> bool:
+    """True when ``exc`` failed while OPENING the connection: a connect timeout, or a refused / unreachable connect.
+
+    That is how the host turns away a datacenter IP. A connection that opened and then broke mid-response (a reset,
+    ``RemoteDisconnected``) or a read timeout is an ordinary transient failure and is retried.
+    """
+    if isinstance(exc, requests.ConnectTimeout):
+        return True
+    seen: set = set()
+    todo: List[Optional[BaseException]] = [exc]
+    while todo:
+        err = todo.pop()
+        if err is None or id(err) in seen:
+            continue
+        seen.add(id(err))
+        if isinstance(err, (ConnectionRefusedError, NewConnectionError)):
+            return True
+        reason = getattr(err, "reason", None)
+        todo += [err.__cause__, err.__context__, reason if isinstance(reason, BaseException) else None]
+        todo += [a for a in getattr(err, "args", ()) if isinstance(a, BaseException)]
+    return False
+
+
 # ----------------------------------------------------------------------------- transport
 def _fetch(route: str, query: Dict[str, Any], body: Optional[Dict[str, Any]]) -> Any:
     """One request through the throttled session (every attempt waits its turn); returns the decrypted JSON."""
     url = f"{API}/api/{route}"
     where = _rt._where(url)
     method = "POST" if body is not None else "GET"
+    proxies = proxy_from_env(PROXY_ENV)
+    fast = proxies is None and os.environ.get(DIRECT_ENV, "").strip() != "1"
+    timeout: Any = (FAST_CONNECT_TIMEOUT, TIMEOUT) if fast else TIMEOUT
     resp = None
     for attempt in range(ATTEMPTS):
         try:
             resp = SESSION.request(
-                method, url, params=query or None, json=body, headers=HEADERS, timeout=TIMEOUT,
-                proxies=proxy_from_env(PROXY_ENV),
+                method, url, params=query or None, json=body, headers=HEADERS, timeout=timeout, proxies=proxies,
             )  # fmt: skip
         except requests.RequestException as exc:  # the message can carry the proxy URL: class name only
-            if attempt == ATTEMPTS - 1:
+            dropped = fast and _dropped_at_connect(exc)  # turned away at connect: never retried without a proxy
+            if attempt == ATTEMPTS - 1 or dropped:
                 hint = (
-                    f" (set {PROXY_ENV}: the host blocks datacenter IPs)" if proxy_from_env(PROXY_ENV) is None else ""
+                    f" (set {PROXY_ENV}: the host blocks datacenter IPs; {DIRECT_ENV}=1 if direct access works here)"
+                    if proxies is None
+                    else ""
                 )
-                raise AssetFetchError(
-                    f"{where}: fetch failed after {ATTEMPTS} attempts: {type(exc).__name__}{hint}"
-                ) from None
+                tries = "on the first attempt" if dropped else f"after {ATTEMPTS} attempts"
+                raise AssetFetchError(f"{where}: fetch failed {tries}: {type(exc).__name__}{hint}") from None
             continue
         if getattr(resp, "status_code", None) in RETRY_STATUSES and attempt < ATTEMPTS - 1:
             time.sleep(max(_retry_after(resp), min(2.0 * 2**attempt, MAX_RETRY_AFTER)))  # backoff, or Retry-After
@@ -302,7 +336,7 @@ def _scope_error(route: str, body: Any, sid: int, info: Dict[str, Any]) -> Optio
 
 
 def _checked(
-    route: str, sid: int, fields: Dict[str, Any], path_id: Optional[str] = None, qkeys: frozenset = _QUERY_KEYS
+    route: str, sid: int, fields: Dict[str, Any], path_id: Optional[str] = None, qkeys: frozenset = frozenset()
 ) -> Any:
     """Fetch a game route (after the finished-game check) and refuse a body that is not this game's."""
     info = _info(sid)
@@ -383,8 +417,8 @@ def _get(url: str, params: Optional[dict] = None, json: Optional[dict] = None, *
         params: wire keys for the query string (``pageNumber`` / ``pageSize`` / ``startNum`` on a POST route; every key
             on a GET route). ``season`` is the END year and is sent as the START year on the routes that take one.
             ``None`` values are dropped.
-        json: the JSON body fields of a POST route (``scheduleId`` as a string). When it is ``None`` (a direct call
-            that predates the split) a POST route's paging keys are picked out of ``params`` and the rest is its body.
+        json: the JSON body fields of a POST route (``scheduleId`` as a string); required on a POST route, as the
+            generated wrappers send it.
         **kwargs: accepted from the generated wrappers; none is supported, so any raises.
 
     Returns:
@@ -395,13 +429,15 @@ def _get(url: str, params: Optional[dict] = None, json: Optional[dict] = None, *
         NoDataError: see the module docstring (HTTP 404, no play-by-play).
         ValueError: a non-integer id or season, or HTTP 400 / 422.
         AssetFetchError: any other failed or wrong answer, including an unfinished game.
-        TypeError: an unsupported keyword argument.
+        TypeError: an unsupported keyword argument, or a POST route without ``json``.
     """
     if kwargs:
         raise TypeError(f"unsupported argument(s) for a CBA request: {sorted(kwargs)}")
     route, path_id = _split(url)
+    if route in _POST and json is None:
+        raise TypeError(f"a CBA POST route takes its body as json=: {_rt._where(url)}")
     q = {k: v for k, v in {**(params or {}), **(json or {})}.items() if v is not None}
-    qkeys = frozenset(k for k, v in (params or {}).items() if v is not None) if json is not None else _QUERY_KEYS
+    qkeys = frozenset(k for k, v in (params or {}).items() if v is not None)
     if route in _SEASON_ROUTES and "season" in q:
         q["season"] = wire_season(q["season"])
     sid: Optional[int] = None

@@ -29,6 +29,14 @@ front of the API); a body that echoes another ``seasonId``, ``fixtureId``, ``per
 returns a summary body, which must not be mistaken for a box score); a default ``fixtures`` page
 whose season is not in its own season list. A well-formed body with no rows (an empty fixture
 list, a game with no play-by-play yet, an empty ribbon) raises ``NoDataError``.
+
+**A game of another site** is never served: asked under the wrong ``websiteId``, the API answers
+HTTP 200 with an empty ``fixture`` (no ``fixtureId``, ``seasonId`` or competition), the same body it
+gives an unknown id (both measured live on 2026-10-18). That body is ``NoDataError`` ("this site has
+no such game"); it cannot prove the game belongs elsewhere, so it is not called a wrong scope. A
+game's ``seasonId`` missing from the site's season list proves nothing either (LNB lists only its
+2023-2025 seasons), so it is not checked. A full body of another site or game (a cache in front of
+the API) is still refused by the ``links.self`` and ``fixtureId`` echoes.
 """
 
 from __future__ import annotations
@@ -192,6 +200,11 @@ def _check(url: str, website_id: int, typ: str, p: Dict[str, Any], body: Any, ro
         echo("sub", data.get("sub"), p["sub"])
     if "seasonId" in p and typ not in _NO_SEASON_ECHO:
         echo("seasonId", data.get("seasonId"), p["seasonId"])
+    if typ == "fixture_detail" and "fixtureId" in p and not _dict(data.get("fixture")):
+        raise NoDataError(
+            f"{where}: site {website_id} has no fixture {p['fixtureId']!r} (an unknown id, or a game of another site: "
+            "the API answers both with an empty fixture)"
+        )
     if "fixtureId" in p:
         echo("fixtureId", _dict(data.get("fixture")).get("fixtureId"), p["fixtureId"])
     if "personId" in p:
@@ -225,7 +238,9 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         The parsed JSON body.
 
     Raises:
-        NoDataError: the host answered 404, the site lists no such season, or the body has no rows.
+        NoDataError: the host answered 404, the site lists no such season, the site has no such game
+            (an unknown fixture id, or a game of another site: the API answers both alike), or the
+            body has no rows.
         ValueError: the host answered 400 / 422, ``season`` and ``seasonId`` were both given, or the
             season cannot be mapped (see :func:`atrium_season_id`).
         AssetFetchError: any other failed fetch, an error / stub / wrong-scope body, or a body of

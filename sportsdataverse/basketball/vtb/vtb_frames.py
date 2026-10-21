@@ -10,6 +10,7 @@ malformed body.
 * ``/Date(ms)/`` (.NET, milliseconds since the Unix epoch) -> an ISO 8601 string in **Moscow time with its offset**
   (``2025-09-28T14:00:00+03:00``); the year-1 value ``/Date(-62135596800000)/`` is Infobasket's "unset" and becomes null.
 * ``DD.MM.YYYY`` -> ``YYYY-MM-DD``.
+* ``''`` in an id, rank or number column (``LiveID``, the roster's ``Rank``, which is blank in every sample) -> null.
 * Percentages and averages arrive as strings with a comma decimal (``'68,2'``, ``'80,3%'``, ``''`` when there were no
   attempts): :func:`decimals` turns the ``*_percent`` and ``avg_*`` columns into ``Float64``.
 * ``made/attempted`` strings (``'15/22'``) and the broken paint stats are dropped: the integer ``goal*`` / ``shot*``
@@ -43,6 +44,7 @@ _NET_DATE = re.compile(r"^/Date\((-?\d+)\)/$")
 _DMY = re.compile(r"^(\d\d)\.(\d\d)\.(\d{4})$")
 _UNSET_MS = -62135596800000  # year 1: Infobasket's "no date"
 _ID_COL = re.compile(r"(^|_)id$")
+_BLANK_NULL = re.compile(r"(^|_)(id|rank|number)$")
 _DTYPE_CODES = {"i": pl.Int64, "f": pl.Float64, "b": pl.Boolean, "s": pl.String}
 
 #: Wire keys never output: platform bookkeeping, system/operator fields, empty relation lists and personal data.
@@ -156,6 +158,8 @@ def flat(
                 out[name] = json.dumps(value, ensure_ascii=False)
         elif isinstance(value, dict):
             out.update(flat(value, name + "_", skip, parent=str(key), birth=birth))
+        elif value == "" and _BLANK_NULL.search(name):
+            out[name] = None
         else:
             out[name] = conv(value)
     return out

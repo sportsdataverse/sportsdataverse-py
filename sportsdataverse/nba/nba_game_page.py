@@ -966,10 +966,14 @@ def game_page_frames(
     lg = _resolve_league(league, league_id)
     header = final["header"]
     comp = (header.get("competitions") or [{}])[0]
+    # ESPN's `format` is normally {"regulation": {"periods": n}}, but it is not guaranteed to be an
+    # object; anything else falls back to the league's season era
+    fmt = final.get("format")
+    fmt_reg = fmt.get("regulation") if isinstance(fmt, dict) else None
     reg = game_regulation_periods(
         lg,
         season=(header.get("season") or {}).get("year"),
-        format_regulation_periods=((final.get("format") or {}).get("regulation") or {}).get("periods"),
+        format_regulation_periods=fmt_reg.get("periods") if isinstance(fmt_reg, dict) else None,
     )
     neutral = _is_neutral(comp.get("neutralSite"))
     pbp = _converter(lg, "play_by_play")(final)  # same converter order as the shipped NBA function

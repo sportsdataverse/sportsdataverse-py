@@ -35,6 +35,12 @@ Polars dataframe containing calendar dates for the requested season.
 | `dateURL` | character | The calendar day as YYYYMMDD, the dates= value of that day's scoreboard request. |
 | `url` | character | RotoWire player page URL. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season` is less than 2001. |
+
 **Example**
 
 ```python
@@ -85,6 +91,13 @@ Polars (or pandas) DataFrame with one row per official: `game_id`, `season`, `of
 | `position_name` | character | Listed roster position ('Guard', 'Forward', 'Center'). |
 | `position_display_name` | character | Position display name. |
 | `order` | integer | Display order within the result set. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+| `requests.exceptions.RequestException` | Other network failures after retries. |
 
 **Example**
 
@@ -413,6 +426,14 @@ A single-row wide DataFrame (polars by default). Columns: identity / echo (`seas
 | `team_is_active` | logical | TRUE if the team is currently active. |
 | `team_logo_href` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `season_type` is not `"regular"`/`"postseason"`. |
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404 (no season line for that athlete/season). |
+| `sportsdataverse.errors.AssetFetchError` | The statistics, athlete or team fetch failed (403, 429, 5xx, a dead connection); only a 404 on the athlete or team node leaves those columns null. |
+
 **Example**
 
 ```python
@@ -596,6 +617,13 @@ Polars (or pandas) DataFrame with one row per team. Documented columns include `
 | `division_losses` | integer | Losses against division opponents, as ESPN's standings report them. |
 | `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+| `requests.exceptions.RequestException` | Other network failures after retries. |
+
 **Example**
 
 ```python
@@ -670,6 +698,13 @@ Polars (or pandas) DataFrame with one row per athlete: `athlete_id`, `athlete_ui
 | `team_id` | integer | Unique team identifier. |
 | `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+| `requests.exceptions.RequestException` | Other network failures after retries. |
+
 **Example**
 
 ```python
@@ -717,6 +752,13 @@ Pull ESPN team season stats for a women's-college-basketball team.
 **Returns**
 
 Dict with one DataFrame per stat category. The canonical keys `"Averages"`, `"Totals"`, `"Misc"` are ALWAYS present; missing categories come back as empty frames carrying the documented schema. Any ESPN-shipped category whose name does not match one of the three canonical keys is collected under an additional `"Other"` key (only added if non-empty). Per-category column set (one row per stat): * `stat_name` (Utf8) * `abbreviation` (Utf8) * `display_value` (Utf8) * `value` (Float64) * `description` (Utf8) * `category` (Utf8, constant per frame) * `team_id` (Int64, constant) * `season` (Int32, constant) If `raw=True`, returns the raw response dict.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+| `requests.exceptions.RequestException` | Other network failures after retries. |
 
 **Example**
 

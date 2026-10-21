@@ -54,6 +54,13 @@ One row per coach -- `staff`, `team`, `start_season`, `years_in_role`, `birth_da
 | `birth_date` | character | Date of birth (YYYY-MM-DD). |
 | `nationality` | character | Player nationality. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | When Playwright is missing and no `fetcher` was supplied. |
+| `AssetFetchError` | The page was still Cloudflare's challenge page (it never cleared). It is a failed fetch, never a zero-row answer. |
+
 **Example**
 
 ```python
@@ -104,6 +111,13 @@ One row per selection -- `pick`, `player`, `team`, `draft_trades`, `pos`, `ht`, 
 | `round` | integer | Tournament / playoff round. |
 | `draft_year` | integer | Draft year (4-digit). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | When Playwright is missing and no `fetcher` was supplied. |
+| `AssetFetchError` | The page was still Cloudflare's challenge page (it never cleared). It is a failed fetch, never a zero-row answer. |
+
 **Example**
 
 ```python
@@ -138,6 +152,13 @@ Port of hoopR's `realgm_draft_prospects()`.
 One row per prospect -- `player`, `team` (school / club), `gp`, `mpg`, `ppg`, shooting splits, `rpg`, `apg`, `spg`, `bpg`. Zero rows when the page carried no data table.
 
 No returns table is published for this function: no capture: the RealGM page it reads now carries no table, so it returns an empty frame.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | When Playwright is missing and no `fetcher` was supplied. |
+| `AssetFetchError` | The page was still Cloudflare's challenge page (it never cleared). It is a failed fetch, never a zero-row answer. |
 
 **Example**
 
@@ -182,6 +203,13 @@ One row per candidate -- `player`, `pos`, `ht`, `wt`, `birth_date`, `college` / 
 | `yos` | integer | Years of service. |
 | `nationality` | character | Player nationality. |
 | `pre_draft_team` | character | Pre-draft team / school / club. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | When Playwright is missing and no `fetcher` was supplied. |
+| `AssetFetchError` | The page was still Cloudflare's challenge page (it never cleared). It is a failed fetch, never a zero-row answer. |
 
 **Example**
 
@@ -229,6 +257,13 @@ One row per upcoming free agent -- `player`, `pos`, `team`, `season`, `age`, `yo
 | `per` | double | Player Efficiency Rating. |
 | `agent` | character | Listed player agent. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | When Playwright is missing and no `fetcher` was supplied. |
+| `AssetFetchError` | The page was still Cloudflare's challenge page (it never cleared). It is a failed fetch, never a zero-row answer. |
+
 **Example**
 
 ```python
@@ -271,6 +306,13 @@ One row per general manager -- `staff`, `team`, `start_season`, `years_in_role`,
 | `birth_date` | character | Date of birth (YYYY-MM-DD). |
 | `nationality` | character | Player nationality. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | When Playwright is missing and no `fetcher` was supplied. |
+| `AssetFetchError` | The page was still Cloudflare's challenge page (it never cleared). It is a failed fetch, never a zero-row answer. |
+
 **Example**
 
 ```python
@@ -301,6 +343,13 @@ Port of hoopR's `realgm_individual_games()`.
 One row per player-game -- `player`, `date`, `team`, `min`, `pts`, `fgm`, `fga`, `reb`, `ast`, `stl`, `blk`, ... Zero rows when the page carried no data table.
 
 No returns table is published for this function: no capture: the RealGM page it reads now carries no table, so it returns an empty frame.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | When Playwright is missing and no `fetcher` was supplied. |
+| `AssetFetchError` | The page was still Cloudflare's challenge page (it never cleared). It is a failed fetch, never a zero-row answer. |
 
 **Example**
 
@@ -357,6 +406,13 @@ One row per player-season -- `player`, `season`, `team`, `gp`, `min`, `pts`, sho
 | `blk` | character | Blocks. |
 | `tov` | character | Turnovers. |
 | `pf` | double | Personal fouls. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | When Playwright is missing and no `fetcher` was supplied. |
+| `AssetFetchError` | The page was still Cloudflare's challenge page (it never cleared). It is a failed fetch, never a zero-row answer. |
 
 **Example**
 
@@ -419,6 +475,13 @@ One row per qualified player, columns varying by `stat_type` (for `"Averages"`: 
 | `stat_type` | character | Stat type code (e.g. "win", "loss"). |
 | `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | When Playwright is missing and no `fetcher` was supplied. |
+| `AssetFetchError` | The page was still Cloudflare's challenge page (it never cleared). It is a failed fetch, never a zero-row answer. |
+
 **Example**
 
 ```python
@@ -467,6 +530,13 @@ One row per active player -- `number`, `player`, `pos`, `ht`, `wt`, `age`, `curr
 | `pre_draft_team` | character | Pre-draft team / school / club. |
 | `draft_status` | character | Draft pick / undrafted status. |
 | `nationality` | character | Player nationality. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | When Playwright is missing and no `fetcher` was supplied. |
+| `AssetFetchError` | The page was still Cloudflare's challenge page (it never cleared). It is a failed fetch, never a zero-row answer. |
 
 **Example**
 
@@ -520,6 +590,13 @@ One row per player -- `player`, `pos`, `ht`, `wt`, `nba_status`, `team_s`, `gp`,
 | `rpg` | double | Rebounds per game. |
 | `apg` | double | Assists per game. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | When Playwright is missing and no `fetcher` was supplied. |
+| `AssetFetchError` | The page was still Cloudflare's challenge page (it never cleared). It is a failed fetch, never a zero-row answer. |
+
 **Example**
 
 ```python
@@ -558,6 +635,13 @@ One row per first-round pick -- `pick`, the four contract-year amounts, the 4th-
 | `3rd_year_option_salary` | character |  |
 | `4th_year_option_percentage_increased_over_3rd_year_salary` | character |  |
 | `qualifying_offer_percentage_increase_over_4th_year_salary` | character |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | When Playwright is missing and no `fetcher` was supplied. |
+| `AssetFetchError` | The page was still Cloudflare's challenge page (it never cleared). It is a failed fetch, never a zero-row answer. |
 
 **Example**
 
@@ -601,6 +685,13 @@ One row per season -- `season`, `salary_cap`, `luxury_tax`, `x1st_apron`, `x2nd_
 | `non_taxpayer_mle` | character | Non-taxpayer mid-level exception. |
 | `taxpayer_mle` | character | Taxpayer mid-level exception. |
 | `team_room_mle` | character | Room mid-level exception. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | When Playwright is missing and no `fetcher` was supplied. |
+| `AssetFetchError` | The page was still Cloudflare's challenge page (it never cleared). It is a failed fetch, never a zero-row answer. |
 
 **Example**
 
@@ -658,6 +749,13 @@ One row per team -- `number`, `team`, `w`, `l`, `pct`, `gb`, `l10`, `strk`, `ppg
 | `rem` | integer |  |
 | `rowp` | double |  |
 | `conference` | character | Conference name. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | When Playwright is missing and no `fetcher` was supplied. |
+| `AssetFetchError` | The page was still Cloudflare's challenge page (it never cleared). It is a failed fetch, never a zero-row answer. |
 
 **Example**
 
@@ -720,6 +818,13 @@ One row per team (`team`, `gp`, `mpg`, `ppg`, `rpg`, `apg`, ... for `"Averages"`
 | `stat_type` | character | Stat type code (e.g. "win", "loss"). |
 | `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | When Playwright is missing and no `fetcher` was supplied. |
+| `AssetFetchError` | The page was still Cloudflare's challenge page (it never cleared). It is a failed fetch, never a zero-row answer. |
+
 **Example**
 
 ```python
@@ -757,6 +862,13 @@ One row per team -- `team`, `division`, `conference`. Zero rows (with that schem
 | `division` | character | Team division. |
 | `conference` | character | Conference name. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | When Playwright is missing and no `fetcher` was supplied. |
+| `AssetFetchError` | The page was still Cloudflare's challenge page (it never cleared). It is a failed fetch, never a zero-row answer. |
+
 **Example**
 
 ```python
@@ -792,6 +904,13 @@ One row per transaction -- `date` (`polars.Date`) and `transaction` (text). Zero
 |---|---|---|
 | `date` | character | Date in YYYY-MM-DD format. |
 | `transaction` | character | Transaction description. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | When Playwright is missing and no `fetcher` was supplied. |
+| `AssetFetchError` | The page was still Cloudflare's challenge page (it never cleared). It is a failed fetch, never a zero-row answer. |
 
 **Example**
 

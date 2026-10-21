@@ -215,8 +215,8 @@ def ibba_segev_game_info(
         A polars/pandas DataFrame by default; the raw JSON-RPC envelope (``dict``): ``result`` with the method's block plus ``_request`` (the method and game id sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -277,8 +277,8 @@ def ibba_segev_rosters(
         A polars/pandas DataFrame by default; the raw JSON-RPC envelope (``dict``): ``result`` with the method's block plus ``_request`` (the method and game id sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -339,8 +339,8 @@ def ibba_segev_player_box(
         A polars/pandas DataFrame by default; the raw JSON-RPC envelope (``dict``): ``result`` with the method's block plus ``_request`` (the method and game id sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -403,8 +403,8 @@ def ibba_segev_team_box(
         A polars/pandas DataFrame by default; the raw JSON-RPC envelope (``dict``): ``result`` with the method's block plus ``_request`` (the method and game id sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -465,8 +465,8 @@ def ibba_segev_period_scores(
         A polars/pandas DataFrame by default; the raw JSON-RPC envelope (``dict``): ``result`` with the method's block plus ``_request`` (the method and game id sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -529,8 +529,8 @@ def ibba_segev_pbp(
         A polars/pandas DataFrame by default; the raw JSON-RPC envelope (``dict``): ``result`` with the method's block plus ``_request`` (the method and game id sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:

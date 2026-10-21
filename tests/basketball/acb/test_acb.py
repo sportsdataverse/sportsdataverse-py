@@ -431,8 +431,9 @@ def test_no_float_origin_id_strings_and_no_id_stringified():
 def test_every_public_parser_has_a_documented_example_and_helpers_are_private():
     for name in P.__all__:
         doc = getattr(P, name).__doc__ or ""
-        for part in ("Args:", "Returns:", "Raises:", "Example:", "Quick start::"):
+        for part in ("Args:", "Returns:", "Example:", "Quick start::"):
             assert part in doc, (name, part)
+        assert not any(ln.strip().startswith("None:") for ln in doc.splitlines()), name  # a parser raises nothing
         assert ">>>" not in doc
     public = {n for n in dir(P) if n.startswith("parse_")}
     assert public == set(P.__all__)

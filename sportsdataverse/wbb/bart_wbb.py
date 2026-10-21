@@ -41,7 +41,7 @@ def bart_wbb_ratings(
         A polars/pandas DataFrame by default; the raw CSV response body (``str``) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: barttorvik.com returned 404 (no data file for that season).
+        sportsdataverse.errors.NoESPNDataError: The host answered 404 -- the requested resource does not exist. Barttorvik.com returned 404 (no data file for that season).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 

@@ -379,7 +379,7 @@ DTYPES: Dict[str, Dict[str, str]] = {
         "season_team_id": "s",
         "seconds_per_game": "f",
         "seconds_played": "i",
-        "shirt_number": "i",
+        "shirt_number": "s",
         "stage": "s",
         "steals": "i",
         "steals_per_game": "f",

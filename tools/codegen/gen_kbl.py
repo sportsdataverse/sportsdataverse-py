@@ -674,7 +674,7 @@ NOTES = [
     "anything else raises AssetFetchError. The first game call also fetches the header (and, for such a game, the "
     "play-by-play) once; the answer is cached for the process.",
     "Coverage: box scores and play-by-play from the first season (1997); shot x/y from 2006-07 (an earlier game's shot "
-    "chart is empty: NoDataError); advanced rates are filled from 1997-98 on (the vendor computes them from the box); "
+    "chart is empty: a zero-row frame); advanced rates are filled from 1997-98 on (the vendor computes them from the box); "
     "screen assists and deflections are 0 before the recent seasons. fg is TWO-point field goals made (dunks included), "
     "fgt all field goals, and a made dunk is its own row in the play-by-play. Shot x/y are pixels on the site's 726 x 412 "
     "full-court image; basket names the target end and teams switch at half-time, so normalise with basket before "
@@ -716,7 +716,7 @@ def main() -> None:
             "notes": NOTES,
             "raises": [
                 "sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game "
-                "with no box score or shot chart, no playoff bracket, no schedule rows in a window).",
+                "with no box score, no playoff bracket, no schedule rows in a window).",
                 "sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any "
                 "non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a "
                 "game that is not final, or a body for another game, season or window than the one asked for.",

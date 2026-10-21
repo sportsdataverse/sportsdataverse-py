@@ -25,7 +25,7 @@ columns:
   type: integer
 - description: ''
   name: season
-  type: character
+  type: integer
 - description: ''
   name: genius_match_id
   type: integer

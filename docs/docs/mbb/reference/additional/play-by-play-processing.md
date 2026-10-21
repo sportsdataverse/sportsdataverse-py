@@ -222,6 +222,12 @@ Read a saved ESPN MBB play-by-play payload from disk.
 
 The payload exactly as saved (the raw ESPN summary JSON), ready for `helper_mbb_pbp`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | There is no `{game_id}.json` in `path_to_json`. |
+
 ### mbb_shot_data {#mbb_shot_data}
 
 `mbb_shot_data(seasons: "'int | list[int]'", *, source: 'str' = 'espn', league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
@@ -263,6 +269,12 @@ The canonical shot frame; seasons the release doesn't cover are skipped, and no 
 | `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
 | `sec_left` | double |  |
 | `source` | character |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `source` is not `"espn"`. |
 
 **Example**
 

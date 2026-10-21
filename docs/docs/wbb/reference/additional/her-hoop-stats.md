@@ -50,6 +50,12 @@ returned session can be handed to a wrapper as `session=`.
 
 An authenticated `requests.Session`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | When credentials cannot be resolved, or the site rejects them. |
+
 **Example**
 
 ```python
@@ -98,6 +104,13 @@ One row per player. A zero-row frame with the roster columns when the page carri
 | `2_p_pct` | character |  |
 | `3_p_pct` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | When credentials cannot be resolved or are rejected. |
+| `AssetFetchError` | The fetch failed, or the page was the free-tier teaser (the session expired or the subscription lapsed), never returned as data. |
+
 **Example**
 
 ```python
@@ -128,6 +141,13 @@ position), so a single fetch covers the whole page.
 **Returns**
 
 `{table_key: DataFrame}`; empty when the page carried no data table.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | When credentials cannot be resolved or are rejected. |
+| `AssetFetchError` | The fetch failed, or the page was the free-tier teaser (the session expired or the subscription lapsed), never returned as data. |
 
 **Example**
 
@@ -182,6 +202,13 @@ One row per team-season, plus a `team_link` column carrying each team's page pat
 | `min_season` | integer |  |
 | `max_season` | integer |  |
 | `division` | integer | Team division. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | When credentials cannot be resolved or are rejected. |
+| `AssetFetchError` | The fetch failed, or the page was the free-tier teaser (the session expired or the subscription lapsed), never returned as data. |
 
 **Example**
 

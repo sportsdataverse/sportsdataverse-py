@@ -63,6 +63,8 @@ from sportsdataverse.hockey.khl import khl_webcaster_runtime as _wc
 __all__: List[str] = []
 
 SESSID_RE = re.compile(r'sessid":"([a-f0-9]{32})')
+#: The ServicePipe anti-bot JS-challenge page (HTTP 200 HTML: its loader script, the challenge spinner).
+CHALLENGE_RE = re.compile(r"servicepipe\.tech|<js-challenge|get_cookie_spid|id_captcha_frame_div", re.IGNORECASE)
 TIMEOUT = 60
 #: Statuses worth another attempt, and the attempt budget per request (first try included).
 RETRY_STATUSES = frozenset({429, 500, 502, 503, 504})
@@ -150,13 +152,28 @@ def _send(url: str, call: Callable[[], Any]) -> Any:
     raise AssertionError("unreachable")  # pragma: no cover
 
 
+def _refuse_challenge(url: str, status: Any, text: str) -> None:
+    """Raise :class:`~sportsdataverse.errors.AssetFetchError` when ``text`` is ServicePipe's JS-challenge page.
+
+    The challenge is never solved here: it means khl.ru is blocking this client / network for now.
+    """
+    if CHALLENGE_RE.search(text):
+        raise AssetFetchError(
+            f"{_rt._where(url)} answered HTTP {status} with ServicePipe's anti-bot JS-challenge page instead "
+            "of data: khl.ru is blocking this client or network. Retry later, or from another network "
+            "(for example through a residential proxy)."
+        )
+
+
 def _prime(http: Any, site: str, timeout: Any) -> str:
     """GET ``site/`` (following the cookie-setting 307) and return the page's ``sessid``."""
     home = site + "/"
     resp = _send(home, lambda: http.get(home, timeout=timeout))
     status = getattr(resp, "status_code", None)
     _rt._check_status(home, status, "")  # a 204 here has no sessid to read: AssetFetchError below (R4.1b-d-1)
-    match = SESSID_RE.search(getattr(resp, "text", "") or "")
+    text = getattr(resp, "text", "") or ""
+    _refuse_challenge(home, status, text)
+    match = SESSID_RE.search(text)
     if match is None:
         raise AssetFetchError(
             f"{_rt._where(home)} answered HTTP {status} without a sessid; the session cannot be primed"
@@ -262,7 +279,7 @@ def _get(
         NoDataError: HTTP 404, an empty answer or an unknown season.
         AssetFetchError: an answer for another game / player / tournament than the one requested, an
             error envelope (a second ``invalid_csrf`` included), a second 307 after re-priming, a page
-            without a sessid, any other non-2xx (429 / 5xx once the retries are spent), a non-JSON body
+            without a sessid, ServicePipe's anti-bot JS-challenge page, any other non-2xx (429 / 5xx once the retries are spent), a non-JSON body
             or a dead connection.
     """
     route = urlsplit(url).path.removeprefix("/rest")
@@ -307,8 +324,10 @@ def _post(
                     raise AssetFetchError(f"{_rt._where(url)} answered 307 again after re-priming the session")
                 session[1] = _prime(http, site, timeout)  # its _polite starts >= 1 s after the 307 answered
                 continue
-            _rt._check_no_content(getattr(resp, "status_code", None))  # the data POST's 204 / 205 is {} (EX-SYNC-a)
-            raw = _rt._json_text(url, getattr(resp, "status_code", None), getattr(resp, "text", "") or "")
+            status, text = getattr(resp, "status_code", None), getattr(resp, "text", "") or ""
+            _rt._check_no_content(status)  # the data POST's 204 / 205 is {} (EX-SYNC-a)
+            _refuse_challenge(url, status, text)
+            raw = _rt._json_text(url, status, text)
             if not (isinstance(raw, dict) and "invalid_csrf" in str(raw.get("errors"))):
                 break
             _sessions.pop(site, None)  # the sessid expired: drop the session, prime a fresh one, retry once

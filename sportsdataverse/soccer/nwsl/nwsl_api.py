@@ -54,7 +54,7 @@ def nwsl_competitions(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
+        sportsdataverse.errors.NoESPNDataError: The host answered 404 -- the requested resource does not exist. The SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -112,7 +112,7 @@ def nwsl_match_lineups(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
+        sportsdataverse.errors.NoESPNDataError: The host answered 404 -- the requested resource does not exist. The SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -168,7 +168,7 @@ def nwsl_matchdays(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
+        sportsdataverse.errors.NoESPNDataError: The host answered 404 -- the requested resource does not exist. The SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -234,7 +234,7 @@ def nwsl_player_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
+        sportsdataverse.errors.NoESPNDataError: The host answered 404 -- the requested resource does not exist. The SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -299,7 +299,7 @@ def nwsl_season_matches(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
+        sportsdataverse.errors.NoESPNDataError: The host answered 404 -- the requested resource does not exist. The SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -358,7 +358,7 @@ def nwsl_stages(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
+        sportsdataverse.errors.NoESPNDataError: The host answered 404 -- the requested resource does not exist. The SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -418,7 +418,7 @@ def nwsl_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
+        sportsdataverse.errors.NoESPNDataError: The host answered 404 -- the requested resource does not exist. The SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -478,7 +478,7 @@ def nwsl_team_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
+        sportsdataverse.errors.NoESPNDataError: The host answered 404 -- the requested resource does not exist. The SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -535,7 +535,7 @@ def nwsl_teams(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoESPNDataError: the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
+        sportsdataverse.errors.NoESPNDataError: The host answered 404 -- the requested resource does not exist. The SDP host returned 404 (unknown composite id, or an unmapped match sub-resource).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 

@@ -20,7 +20,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
-from sportsdataverse.errors import _SHAPE_ERRORS, _warn_schema_drift
+from sportsdataverse.errors import _SHAPE_ERRORS, _object_rows, _warn_schema_drift
 
 # What ``pl.from_pandas`` raises on a mixed-type object column: pyarrow's ArrowInvalid (ValueError),
 # ArrowTypeError (TypeError), ArrowNotImplementedError (NotImplementedError), or a polars error.
@@ -72,7 +72,7 @@ def parse_nhl_records(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
     if not rows:
         return _empty_frame(return_as_pandas)
     try:
-        df = pd.json_normalize(rows, sep="_")
+        df = pd.json_normalize(_object_rows(rows), sep="_")
     except _SHAPE_ERRORS as exc:
         _warn_schema_drift("parse_nhl_records: data", exc)
         return _empty_frame(return_as_pandas)

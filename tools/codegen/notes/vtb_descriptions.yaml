@@ -752,7 +752,9 @@ vtb_infobasket_roster:
     4 power forward, 5 centre; coaches 1000 head coach, 1001 assistant; officials
     101-103 referees, 104 commissioner, 111-123 table officials (exact roles unverified).'
   position: 'Playing position: a record (PlayerPage) or its English name (TeamRoster).'
-  rank: Rank in the leader list.
+  rank: 'Unobserved: the roster sends an empty string for every player and coach (null
+    here); the field belongs to the leader lists (best_players), so its meaning on
+    the roster is unconfirmed.'
   season: 'Season END year (2026 = 2025-26): the season the request asked for, stamped
     by the runtime.'
   team_id: Infobasket TeamID (2650 = Lokomotiv Kuban); the v2 teamId. Not a club-record
@@ -778,7 +780,9 @@ vtb_infobasket_roster_coaches:
   person_last_name_ru: Last name, Russian.
   post: Coaching post ('Head Coach', 'Assistant Coach').
   post_id: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
-  rank: Rank in the leader list.
+  rank: 'Unobserved: the roster sends an empty string for every player and coach (null
+    here); the field belongs to the leader lists (best_players), so its meaning on
+    the roster is unconfirmed.'
   season: 'Season END year (2026 = 2025-26): the season the request asked for, stamped
     by the runtime.'
   team_id: Infobasket TeamID (2650 = Lokomotiv Kuban); the v2 teamId. Not a club-record

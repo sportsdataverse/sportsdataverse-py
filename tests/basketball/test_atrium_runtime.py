@@ -204,6 +204,69 @@ def test_wrong_scope_error_and_stub_bodies_are_asset_fetch_errors(wire, mutate, 
         rt._get(*pbp_request())
 
 
+@pytest.mark.parametrize(
+    "name",
+    ["14__fixture_detail__pbp.json", "14__fixture_detail__statistics.json", "12__fixture_detail__statistics.json",
+     "12__fixture_detail__pbp.json", "13__fixture_detail__pbp.json", "326__fixture_detail__pbp.json"],
+)  # fmt: skip
+def test_a_game_of_the_asked_site_passes_with_no_season_list_request(wire, name):
+    b = body(name)
+    site, fixture = int(name.split("__")[0]), b["data"]["fixture"]["fixtureId"]
+    calls = wire(serve(b))
+    assert rt._get(f"{BASE}/{site}/fixture_detail", {"fixtureId": fixture, "sub": b["data"]["sub"]}) is b
+    assert [u for u, _ in calls] == [f"{BASE}/{site}/fixture_detail"]
+
+
+def test_an_older_game_whose_season_the_site_no_longer_lists_passes(wire):
+    old = "00000000-0000-1000-8000-0000000000aa"  # LNB lists only 2023-2025: an older season is not proof of anything
+    b = copy.deepcopy(body("12__fixture_detail__pbp.json"))
+    b["data"]["seasonId"] = b["data"]["fixture"]["seasonId"] = old
+    calls = wire(lambda url, p: season_list_body() if url.endswith("/fixtures") else b)
+    assert old not in set(P.parse_atrium_seasons(season_list_body())["season_id"])
+    assert rt._get(f"{BASE}/12/fixture_detail", {"fixtureId": F12, "sub": "pbp"}) is b
+    assert [u for u, _ in calls] == [f"{BASE}/12/fixture_detail"]
+
+
+def _shell(site: int) -> dict:
+    """The live answer to a fixture the site does not serve (another site's game, or an unknown id)."""
+    b = json.loads((FIX / "refusals" / "14__fixture_detail__pbp__other_site.json").read_text(encoding="utf-8"))
+    b["links"]["self"] = b["links"]["self"].replace("/embed/14/", f"/embed/{site}/")
+    return b
+
+
+def test_another_sites_game_is_the_empty_answer_no_data_not_a_proven_wrong_scope(wire):
+    wire(serve(_shell(14)))
+    with pytest.raises(NoDataError, match="site 14 has no fixture .*another site"):
+        rt._get(f"{BASE}/14/fixture_detail", {"fixtureId": F12, "sub": "pbp"})
+
+
+def test_an_unknown_fixture_id_is_the_same_empty_answer_no_data(wire):
+    wire(serve(_shell(12)))
+    with pytest.raises(NoDataError, match="an unknown id"):
+        rt._get(f"{BASE}/12/fixture_detail", {"fixtureId": "00000000-0000-1000-8000-000000000000", "sub": "pbp"})
+
+
+@pytest.mark.parametrize("sub", ["pbp", "statistics", "shot_chart"])
+def test_a_body_that_proves_another_site_is_a_wrong_scope_asset_fetch_error(wire, sub):
+    wire(serve(body(f"12__fixture_detail__{sub}.json")))  # an LNB game (links.self /12) answered for an LNBP request
+    with pytest.raises(AssetFetchError, match="asked for /14/fixture_detail, the body is /12/fixture_detail"):
+        rt._get(f"{BASE}/14/fixture_detail", {"fixtureId": F12, "sub": sub})
+
+
+def test_a_body_that_proves_another_game_is_a_wrong_scope_asset_fetch_error(wire):
+    wire(serve(body("14__fixture_detail__pbp.json")))
+    with pytest.raises(AssetFetchError, match="fixtureId"):
+        rt._get(f"{BASE}/14/fixture_detail", {"fixtureId": F12, "sub": "pbp"})
+
+
+def test_a_site_236_game_is_unchanged(wire):
+    b = copy.deepcopy(body("14__fixture_detail__pbp.json"))
+    b["links"]["self"] = b["links"]["self"].replace("/embed/14/", "/embed/236/")
+    calls = wire(serve(b))
+    assert rt._get(f"{BASE}/236/fixture_detail", {"fixtureId": F14, "sub": "pbp"}) is b
+    assert len(calls) == 1
+
+
 def test_a_summary_body_for_an_unknown_sub_is_not_mistaken_for_a_box_score(wire):
     summary = copy.deepcopy(body("14__fixture_detail__statistics.json"))
     summary["data"]["sub"] = "preview"

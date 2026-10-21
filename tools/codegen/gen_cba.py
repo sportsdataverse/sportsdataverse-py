@@ -22,7 +22,6 @@ checkout) and emits:
 from __future__ import annotations
 
 import copy
-import importlib
 import json
 import re
 import sys
@@ -502,7 +501,9 @@ NOTES_DOC = [
     "Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; "
     "``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The "
     "host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never "
-    "logged). Without it the request goes direct and fails from a datacenter.",
+    "logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, "
+    "no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full "
+    "60 s timeout and retries.",
     "Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and "
     "the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). "
     "The season list reaches 1995-96; box data before 2009-10 is unverified.",
@@ -544,8 +545,10 @@ def _presence(refs: Path, sample: str) -> Dict[str, Any]:
     return json.loads((refs / "captures" / "presence" / f"{sample}.json").read_text(encoding="utf-8"))
 
 
-def _dtypes(refs: Path) -> Dict[str, Dict[str, str]]:
+def _dtypes(refs: Path) -> Tuple[Dict[str, Dict[str, str]], set]:
+    """``{short: {column: code}}`` from the presence sidecars, and the ``(short, column)`` pairs null in every body."""
     out: Dict[str, Dict[str, str]] = {}
+    unobserved: set = set()
     junk = {"created_by", "last_modified_by"}
     for short, (_sp, _wp, _m, sample, prefixes, _md, _sum, _f) in ENDPOINTS.items():
         pres = _presence(refs, sample)
@@ -558,6 +561,7 @@ def _dtypes(refs: Path) -> Dict[str, Dict[str, str]]:
                         continue
                     seen.setdefault(underscore(leaf), []).extend(info["types"])
         cols = {c: _code(t, c) for c, t in seen.items() if c not in junk}
+        unobserved |= {(short, c) for c, t in seen.items() if c in cols and not set(t) - {"null"}}
         head: Dict[str, str] = {}
         if short in STAMPED:
             head["schedule_id"] = "i"
@@ -566,6 +570,55 @@ def _dtypes(refs: Path) -> Dict[str, Dict[str, str]]:
         if short == "period_scores":
             head.update(period="i", points="i")
         out[short] = {**head, **cols}
+    return out, unobserved
+
+
+def _family_fill(dtypes: Dict[str, Dict[str, str]], unobserved: set) -> Dict[str, Dict[str, str]]:
+    """A column null in every body of one route takes the one dtype the family's other routes observed for it
+    (``team_shots.bout_point_sort`` is always null: Float64 like ``team_overview``), else it keeps its name rule."""
+    family: Dict[str, set] = {}
+    for short, cols in dtypes.items():
+        for col, code in cols.items():
+            if (short, col) not in unobserved:
+                family.setdefault(col, set()).add(code)
+    out = copy.deepcopy(dtypes)
+    for short, col in unobserved:
+        codes = {"f" if c == "p" else c for c in family.get(col, ())}
+        if len(codes) == 1 or codes == {"i", "f"}:
+            out[short][col] = "f" if len(codes) > 1 else next(iter(codes))
+    return out
+
+
+_NUMERIC_TEXT = re.compile(r"^-?\d+(\.\d+)?%?$")
+#: String columns whose digit text is a label, not a measurement: jersey numbers (``00``) and code-table keys.
+TEXT_DIGITS = frozenset({"number", "player_no", "value", "key", "cvalue"})
+#: Digit-text columns that are integers: the START-year ``season`` and the 0/1 win / loss flags of schedules/day.
+_INT_TEXT = re.compile(r"^(season|(home|visiting)_team_(win|lose))$")
+
+
+def _numeric_text(dtypes: Dict[str, Dict[str, str]], parsers: Any) -> Dict[str, Dict[str, str]]:
+    """Retype the String columns whose every fixture value is display text of a number (``'21.6'``, ``'39.4%'``).
+
+    A decimal string becomes ``f``. A percent string becomes ``p`` (Float64, divided by 100: a FRACTION 0-1, like the
+    ``*_sort`` companions and the player_box percentages). The scale is decided per ROUTE from what that route sends:
+    a percent string is always a fraction, even where another route of the family sends the same name as a plain 0-100
+    number (``turnovers_rate``: '13.5%' -> 0.135 on player_offensive, 13.5 stays 13.5 on team_four, as each route's
+    description says). ``TEXT_DIGITS`` stay text.
+    """
+    out = copy.deepcopy(dtypes)
+    for short, cols in dtypes.items():
+        rows = parsers._rows(short, fixture(short))
+        for col, code in cols.items():
+            vals = [r.get(col) for r in rows if r.get(col) is not None]
+            text = [v for v in vals if isinstance(v, str)]
+            if code != "s" or col in TEXT_DIGITS or not text or len(text) != len(vals):
+                continue
+            if not all(_NUMERIC_TEXT.match(v.strip()) for v in text):
+                continue
+            if any(v.strip().endswith("%") for v in text):
+                out[short][col] = "p"
+            else:
+                out[short][col] = "i" if _INT_TEXT.match(col) else "f"
     return out
 
 
@@ -574,7 +627,9 @@ def _write_dtypes(dtypes: Dict[str, Dict[str, str]]) -> None:
         '"""Column dtypes of the CBA parsers, one map per parser (``cba_parsers.ROUTES`` key).',
         "",
         "Generated by ``tools/codegen/gen_cba.py`` from the refs ``captures/presence`` sidecars (the type set of every",
-        "column over the FULL bodies); do not edit. Codes: ``i`` Int64, ``f`` Float64, ``b`` Boolean, ``s`` String.",
+        "column over the FULL bodies), with display text of a number retyped from the committed fixtures; do not edit.",
+        "Codes: ``i`` Int64, ``f`` Float64, ``p`` Float64 from a percent string (a FRACTION 0-1), ``b`` Boolean,",
+        "``s`` String.",
         '"""',
         "",
         "from typing import Dict",
@@ -681,7 +736,51 @@ def _lookup(short: str, col: str, md_rows: Dict[str, Dict[str, str]]) -> str:
     return ""
 
 
+_STRING_CLAIM = re.compile(
+    r",?\s*(as\s+)?an?\s+(decimal\s+|percent\s+|whole-percent\s+)?STRING(\s+with one decimal)?(\s*\('[^']*'\))?"
+    r"(\s+on player-base-list)?|\.?\s+percent\s+\('[^']*'\)",
+    re.IGNORECASE,
+)
+
+
+def _as_number(text: str, code: str, *, sort: bool, filled: bool = False) -> str:
+    """A refs description of a display-text column, restated for the parsed number.
+
+    ``filled``: the column is null in every sample of this route and takes the family's dtype (``_family_fill``), so
+    nothing is said about what the API sends.
+    """
+    text = _STRING_CLAIM.sub("", text).strip().rstrip(".").replace("( form", "(a numeric form")
+    if filled:
+        kind = {"i": "Int64", "p": "Float64", "f": "Float64"}.get(code, "the family's dtype")
+        return f"{text}. Typed {kind} like the family's other routes."
+    if code == "p":
+        same = "; the _sort column holds the same fraction" if sort else ""
+        return f"{text}. A FRACTION 0-1 (the API sends a percent string such as '39.4%'{same})."
+    if code == "i":
+        return f"{text}. An integer (the API sends it as digit text)."
+    return f"{text}. A number (the API sends it as display text)."
+
+
+#: Route-specific texts where the refs row describes another route of the family (``(short, column)`` -> text).
+ROUTE_LOCAL: Dict[Tuple[str, str], str] = {
+    **{
+        (short, "minutes"): "Minutes played in the season (whole-season total, integer; cba_player_base gives the "
+        "per-game average)."
+        for short in ("player_offensive", "player_defensive", "player_shots")
+    },
+    **{
+        (short, "seconds"): "Seconds played in the season (whole-season total, integer; cba_player_base gives the "
+        "per-game average)."
+        for short in ("player_offensive", "player_defensive", "player_shots")
+    },
+    ("rosters", "team_cba_id"): "teamId again as an integer (29128); meaning unverified beyond equalling team_id in "
+    "the sample.",
+}
+
+
 def _describe(short: str, col: str, md_rows: Dict[str, Dict[str, str]], tables: Dict[str, List[List[str]]]) -> str:
+    if (short, col) in ROUTE_LOCAL:
+        return ROUTE_LOCAL[(short, col)]
     text = LOCAL.get(col, "") if col in LOCAL and col != "points" else ""
     if short == "period_scores" and col in ("period", "points", "side"):
         text = LOCAL[col]
@@ -779,13 +878,19 @@ def main() -> None:
         raise SystemExit(f"cba: spec paths and ENDPOINTS differ: {sorted(differs)}")
     assert len(ENDPOINTS) == 27 and sum(1 for e in ENDPOINTS.values() if e[2] == "post") == 15
 
-    dtypes = _dtypes(refs)
-    _write_dtypes(dtypes)
-    from sportsdataverse.basketball.cba import cba_parsers  # after the dtypes exist
+    dtypes, unobserved = _dtypes(refs)
+    from sportsdataverse.basketball.cba import cba_parsers as P
 
-    importlib.reload(importlib.import_module("sportsdataverse.basketball.cba.cba_dtypes"))
-    P = importlib.reload(cba_parsers)
     assert set(P.ROUTES) == set(ENDPOINTS)
+    # the parsers read the module global; set it rather than write + reload: one write only, since a same-size rewrite
+    # within one second ('s' -> 'p') leaves the earlier bytecode in use
+    P.DTYPES = dtypes
+    numeric = _numeric_text(dtypes, P)
+    retyped = _family_fill(numeric, unobserved)
+    converted = {(s, c): k for s, cols in retyped.items() for c, k in cols.items() if dtypes[s][c] != k}
+    filled = {(s, c) for (s, c) in converted if numeric[s][c] == dtypes[s][c]}
+    _write_dtypes(retyped)
+    P.DTYPES = retyped
 
     doc = {
         "api": "cba",
@@ -839,6 +944,13 @@ def main() -> None:
         block = notes.setdefault(f"{SCHEMA_PREFIX}{short}", {})
         for col in cols:
             text = _describe(short, col["name"], md_rows, tables)
+            if (short, col["name"]) in converted:
+                text = _as_number(
+                    text,
+                    converted[(short, col["name"])],
+                    sort=f"{col['name']}_sort" in retyped[short],
+                    filled=(short, col["name"]) in filled,
+                )
             if len(text) < 15 or text.lower() == col["name"].lower() or _BANNED.match(text):
                 bad.append(f"{SCHEMA_PREFIX}{short}.{col['name']}: {text!r}")
             block[col["name"]] = text

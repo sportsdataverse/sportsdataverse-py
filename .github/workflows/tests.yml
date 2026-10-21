@@ -15,7 +15,8 @@
 #
 # SCOPE (still narrowed, unchanged by this split): the suite runs on 3.13.2 only and
 # Windows is NOT exercised; the `floor-import` job below imports the package on the
-# 3.10 floor so a 3.11+-only construct cannot ship again. Restore a full version
+# 3.10 floor so a 3.11+-only construct cannot ship again, and runs the parser tests
+# there on pandas 2. Restore a full version
 # sweep by re-adding a matrix `include:` block.
 #
 # Uses `uv sync --all-extras --all-groups` against the committed uv.lock.
@@ -141,6 +142,12 @@ jobs:
         run: uv sync --all-extras --all-groups --frozen --python 3.10
       - name: Import every module on 3.10
         run: uv run --python 3.10 --frozen pytest tests/test_import_sweep.py -q -p no:cacheprovider
+      # 3.10 resolves pandas 2 (3.13 resolves pandas 3), and pd.json_normalize differs between
+      # them: pandas 2 reads a row that is not an object as an empty row instead of raising, which
+      # once hid every parser's schema-drift warning (WB-1). The offline parser tests are the
+      # pandas-2 coverage; they need no network and run in about a minute.
+      - name: Parser tests on 3.10 (pandas 2)
+        run: uv run --python 3.10 --frozen pytest tests/test_*parsers.py -n auto -q -p no:cacheprovider
 
   live:
     name: pytest (live APIs)

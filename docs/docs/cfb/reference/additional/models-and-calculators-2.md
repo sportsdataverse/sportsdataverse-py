@@ -6,6 +6,54 @@ description: "CFB — additional Python functions — Models and calculators: cf
 ---
 # CFB — additional Python functions — Models and calculators: cfb_adjusted–fit_field
 
+### cfb_adjusted_epa {#cfb_adjusted_epa}
+
+`cfb_adjusted_epa(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Season opponent-adjusted per-team EPA from a season's play-by-play.
+
+Fits one ridge of per-play `EPA` on offense-team, defense-team, and
+home-field indicators (every team shrunk toward the league average by its own
+play count) over the `0.05 <= wp_before_naive <= 0.95` pass
+and rush plays, nets each team's per-game raw EPA against the opponent's
+fitted strength, and averages to a season figure. In-sample/descriptive (the
+fit uses the whole season); for leak-free per-game values use
+`cfb_adjusted_epa_by_game`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the columns listed in the module docstring. One season at a time. |
+| `ridge_lambda` | `float \| None` | `None` | Ridge penalty. Under `method="current"` it is per play of a full team season: each team keeps `n / (n + ridge_lambda * 577)` of its own signal for its `n` fit plays and is shrunk toward the league average by the rest (~7% at a full season, most of it on a handful of plays); must be > 0. Under `method="pre598"` it is passed unscaled to the old standardized ridge (the per-observation penalty; no 577 scaling, no positivity check). `None` (default) means 0.075 for `"current"` (the owner's choice, `_ADJ_EPA_LAMBDA`) and 0.035 for `"pre598"`. |
+| `method` | `Literal['current', 'pre598']` | `'current'` | `"current"` (default) or `"pre598"`, the fit this function used before #598 (`0.1 <= wp_before <= 0.9` band, standardized ridge with the first team id as the reference level, lambda 0.035). pre598 reads `wp_before` instead of `wp_before_naive`. It exists for nfl-data's NFL team summaries, is not validated for NFL either, and is kept only for continuity until NFL is validated. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
+
+**Returns**
+
+One row per team (>= 2 valid games): `team_id`, `pos_team`, `valid_games`, `adj_off_epa`, `adj_def_epa`, `off_strength_faced`, `def_strength_faced`, `net_adj_epa` and their `*_rank` columns.
+
+No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `plays` is missing a required column. |
+| `ValueError` | If `method` is unknown, or (`"current"`) if `ridge_lambda` is not positive or no play falls in the `wp_before_naive` fit band. |
+
+**Example**
+
+```python
+import sportsdataverse.cfb as cfb
+pbp = cfb.load_cfb_pbp(seasons=[2023])
+cfb.cfb_adjusted_epa(pbp).sort("net_adj_epa_rank").head()
+
+# NFL team summaries (the pre-#598 method; reads wp_before)
+
+cfb.cfb_adjusted_epa(nfl_plays, method="pre598")
+```
+
 ### cfb_adjusted_epa_by_game {#cfb_adjusted_epa_by_game}
 
 `cfb_adjusted_epa_by_game(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -33,6 +81,13 @@ average team), and teams seen on few plays are shrunk most of the way there.
 One row per (game, team), sorted by `week` then `team_id`: `game_id`, `week`, `team_id`, `opponent_id`, `pos_team`, `raw_off_epa`, `adj_off_epa`, `raw_def_epa`, `adj_def_epa`, `off_strength_faced` (opponent offense), `def_strength_faced` (opponent defense), `net_adj_epa`. The `adj_*` / `net` columns are null for week 1 (and any week with no prior fit).
 
 No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `plays` is missing a required column (incl. `week`, and `seasonType` unless `method="pre598"`). |
+| `ValueError` | If `method` is unknown, or (`"current"`) if `ridge_lambda` is not positive or no play falls in the `wp_before_naive` fit band. |
 
 **Example**
 
@@ -205,6 +260,12 @@ One row per game with `game_id`, `home_team_id`, `away_team_id`, `neutral_site`,
 | `home_win_prob` | double | Home win probability, Phi(exp_margin / margin_sd) under a Gaussian margin model. |
 | `exp_total` | double | Expected combined point total from the fitted efficiency + pace totals model. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssertionError` | If either team-id join key's dtype disagrees with `ratings["team_id"]`. |
+
 **Example**
 
 ```python
@@ -267,6 +328,13 @@ A DataFrame with one row per `team_id`, columns in this order: `season` (Int64 -
 | `fei_off_rank` | integer |  |
 | `fei_def_rank` | integer |  |
 | `fei_net_rank` | integer |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If the loaded plays frame is missing a required column. |
+| `ImportError` | If `scikit-learn` is not installed. |
 
 **Example**
 
@@ -366,6 +434,12 @@ Per `(season, team_id)`: `team` (Utf8), `talent_composite` (Float64), `talent_ra
 | `blue_chip_ratio` | double | Share of the trailing four signing classes rated 4+ stars. |
 | `n_recruits` | integer | Total signees across the trailing recruiting-class window. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `composite_247` is supplied without the documented schema. |
+
 **Example**
 
 ```python
@@ -418,6 +492,12 @@ Dict of frames mirroring the nflseedR summary list: * `"standings"` — per (sim
 | `first_round_bye` | double | Share of simulations in which the team earned a CFP first-round bye (seed 4 or better). |
 | `won_cfp` | double | Share of simulations in which the team won the College Football Playoff national championship. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | On invalid `sim_include` / `tiebreaker_depth`, multi-season input, or missing columns. |
+
 **Example**
 
 ```python
@@ -460,6 +540,13 @@ its own games.
 A `polars.DataFrame` with one row per `team_id`: `team_id` (Utf8), `adj_off_epa` / `adj_def_epa` / `adj_net` (Float64), `games` (Int64), `off_pace` (Float64 -- scrimmage plays per game, the tempo input the totals model consumes). Empty (zero-row, correctly-typed) when `plays` has no competitive plays.
 
 No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `plays` is missing a required column. |
+| `ImportError` | If `scikit-learn` is not installed. |
 
 **Example**
 
@@ -507,6 +594,12 @@ directly, matching `special_teams_ratings`.
 A `polars.DataFrame` with one row per `team_id` appearing as `pos_team_id` on at least one drive: `team_id` (Utf8), `fei_off` / `fei_def` / `fei_net` (Float64). The ridge's dropped reference team is re-added at the shared intercept (`fei_net == 0.0`). Zero-row (correctly-typed) when `plays` has no rows with a non-null `EPA`.
 
 No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | If `scikit-learn` is not installed. |
 
 **Example**
 

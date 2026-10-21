@@ -6,8 +6,8 @@ sidebar_position: 50
 ---
 # NFL — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.nfl`
-not covered by the generated API-endpoint reference above.
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.nfl` that are not
+generated API-endpoint wrappers (those have their own reference pages).
 
 ## ESPN
 
@@ -81,7 +81,7 @@ not covered by the generated API-endpoint reference above.
 | [load_nfl_pfr_advstats](additional/nflverse-data-releases-2.md#load_nfl_pfr_advstats) | Load Pro-Football Reference advanced statistics going back to 2018. |
 | [load_nfl_player_stats](additional/nflverse-data-releases-2.md#load_nfl_player_stats) | Load NFL player stats data |
 | [load_nfl_players](additional/nflverse-data-releases-2.md#load_nfl_players) | Load the nflverse NFL player-identity master. |
-| [load_nfl_schedule](additional/nflverse-data-releases-2.md#load_nfl_schedule) | Load NFL schedule data |
+| [load_nfl_schedule](additional/nflverse-data-releases-3.md#load_nfl_schedule) | Load NFL schedule data |
 | [load_nfl_team_stats](additional/nflverse-data-releases-3.md#load_nfl_team_stats) | Load NFL team stats data going back to 1999 |
 | [load_nfl_teams](additional/nflverse-data-releases-3.md#load_nfl_teams) | Load NFL team ID information and logos |
 | [load_nfl_trades](additional/nflverse-data-releases-3.md#load_nfl_trades) | Load NFL trades data |
@@ -91,7 +91,7 @@ not covered by the generated API-endpoint reference above.
 | [load_pfr_advstats](additional/nflverse-data-releases-4.md#load_pfr_advstats) | Load Pro-Football Reference advanced statistics going back to 2018. |
 | [load_player_stats](additional/nflverse-data-releases-4.md#load_player_stats) | Load NFL player stats data |
 | [load_players](additional/nflverse-data-releases-4.md#load_players) | Load the nflverse NFL player-identity master. |
-| [load_rosters](additional/nflverse-data-releases-4.md#load_rosters) | Load NFL season roster data for the requested seasons. |
+| [load_rosters](additional/nflverse-data-releases-5.md#load_rosters) | Load NFL season roster data for the requested seasons. |
 | [load_rosters_weekly](additional/nflverse-data-releases-5.md#load_rosters_weekly) | Load NFL weekly roster data for the requested seasons. |
 | [load_schedules](additional/nflverse-data-releases-5.md#load_schedules) | Load NFL schedule data |
 | [load_snap_counts](additional/nflverse-data-releases-5.md#load_snap_counts) | Load NFL snap counts data for selected seasons |

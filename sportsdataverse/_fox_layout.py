@@ -262,9 +262,7 @@ def parse_teams(raw: Dict[str, Any]) -> List[Dict[str, Any]]:
         One dict per team with keys ``fox_team_id`` (``str``), ``fox_team_name``
         (``str`` or ``None``) and ``fox_section`` (``str`` or ``None``). Feed it to
         :func:`frame` (or the league wrappers' ``_teams_frame``) for a DataFrame.
-
-    Raises:
-        None: a malformed or empty payload returns ``[]`` rather than raising --
+        A malformed or empty payload returns ``[]`` rather than raising --
         transport failures surface from :func:`fox_get`, not from this parser.
 
     Example:
@@ -411,10 +409,8 @@ def parse_drive_pbp(raw: Dict, game_id: Union[int, str]) -> List[Dict]:
         ``play_team`` is the club code (``"DET"``) of the drive group Fox files the
         play under (the possession team; on a kickoff, the receiving team) and
         ``play_player`` the athlete Fox credits the play to. A payload with no
-        ``pbp`` section yields ``[]``.
-
-    Raises:
-        None: a malformed or empty payload returns ``[]`` rather than raising.
+        ``pbp`` section yields ``[]``. A malformed or empty payload returns ``[]``
+        rather than raising.
 
     Example:
         Flatten a Fox NFL game's drive-based play-by-play::
@@ -475,9 +471,7 @@ def parse_selection_nav(raw: Dict) -> List[Dict]:
         One dict per selection with ``selection_list`` (which of the three lists
         it came from), ``id``, ``title``, ``date``, ``uri``, ``web_url``,
         ``selected`` and ``group_id``. An empty payload yields ``[]``.
-
-    Raises:
-        None: a malformed or empty payload returns ``[]`` rather than raising.
+        A malformed or empty payload returns ``[]`` rather than raising.
 
     Example:
         Enumerate a league's scoreboard segments::
@@ -531,9 +525,7 @@ def parse_segment_events(raw: Dict, segment_id: Optional[Union[int, str]] = None
     Returns:
         One dict per game -- ``game_id`` / ``home_team_id`` / ``away_team_id``
         are the numeric Bifrost ids as ``str``. An empty payload yields ``[]``.
-
-    Raises:
-        None: a malformed or empty payload returns ``[]`` rather than raising.
+        A malformed or empty payload returns ``[]`` rather than raising.
 
     Example:
         Flatten one CFB scoreboard segment::
@@ -600,9 +592,7 @@ def parse_nav_items(raw: Dict) -> List[Dict]:
         carry no entity uri), ``abbreviation``, ``name``, ``content_uri``,
         ``content_type``, ``web_url``, ``color``, ``logo_url`` and the bucket
         ``group``. An empty payload yields ``[]``.
-
-    Raises:
-        None: a malformed or empty payload returns ``[]`` rather than raising.
+        A malformed or empty payload returns ``[]`` rather than raising.
 
     Example:
         Pull a league's whole team directory::
@@ -645,9 +635,7 @@ def parse_header(raw: Dict) -> List[Dict]:
         ``content_uri``, ``content_type``, ``color``, ``logo_url``,
         ``image_alt_text``, ``rank`` and the joined ``details`` line. An empty
         payload yields ``[]``.
-
-    Raises:
-        None: a malformed or empty payload returns ``[]`` rather than raising.
+        A malformed or empty payload returns ``[]`` rather than raising.
 
     Example:
         Read a team's header row::
@@ -685,9 +673,7 @@ def parse_player_news(raw: Dict) -> List[Dict]:
         ``description``, ``impact_title``, ``impact``, ``date``, ``source``,
         ``athlete_id`` (``str``), ``content_uri`` and ``web_url``. The feed is
         empty in the offseason, which yields ``[]``.
-
-    Raises:
-        None: a malformed or empty payload returns ``[]`` rather than raising.
+        A malformed or empty payload returns ``[]`` rather than raising.
 
     Example:
         Read the league-wide player news feed::
@@ -728,9 +714,7 @@ def parse_stat_leaders(raw: Dict) -> List[Dict]:
     Returns:
         One dict per leader with ``category``, ``stat``, ``stat_abbreviation``,
         ``player`` and ``value``. An empty payload yields ``[]``.
-
-    Raises:
-        None: a malformed or empty payload returns ``[]`` rather than raising.
+        A malformed or empty payload returns ``[]`` rather than raising.
 
     Example:
         Read the league stats landing leaders::
@@ -766,9 +750,7 @@ def parse_odds_board(raw: Dict) -> List[Dict]:
         One dict per team per game with ``section``, ``game_id`` (``str``),
         ``event_time``, ``event_status``, ``team`` and one column per odds
         column header. An empty payload yields ``[]``.
-
-    Raises:
-        None: a malformed or empty payload returns ``[]`` rather than raising.
+        A malformed or empty payload returns ``[]`` rather than raising.
 
     Example:
         Flatten the NBA odds board::
@@ -813,9 +795,7 @@ def parse_matchup(raw: Dict, game_id: Union[int, str]) -> List[Dict]:
         One dict per stat with ``left_team`` / ``left_team_id`` (``str``) /
         ``left_value`` / ``left_emphasized`` and the ``right_*`` twins. An empty
         payload yields ``[]``.
-
-    Raises:
-        None: a malformed or empty payload returns ``[]`` rather than raising.
+        A malformed or empty payload returns ``[]`` rather than raising.
 
     Example:
         Compare the two teams' season stats::
@@ -859,9 +839,7 @@ def parse_top_performers(raw: Dict, game_id: Union[int, str]) -> List[Dict]:
         ``stat_line``, ``athlete_id`` (``str``), ``content_uri`` and
         ``web_url``. A pregame recap carries no ``topPerformers`` and yields
         ``[]``.
-
-    Raises:
-        None: a malformed or empty payload returns ``[]`` rather than raising.
+        A malformed or empty payload returns ``[]`` rather than raising.
 
     Example:
         Read a finished game's top performers::
@@ -898,9 +876,7 @@ def parse_search_results(raw: Dict) -> List[Dict]:
         ``type``, ``entity_id`` (``str``), ``title``, ``subtitle``,
         ``content_type``, ``content_uri``, ``web_url``, ``analytics_name`` and
         ``image_url``. An empty payload yields ``[]``.
-
-    Raises:
-        None: a malformed or empty payload returns ``[]`` rather than raising.
+        A malformed or empty payload returns ``[]`` rather than raising.
 
     Example:
         Resolve a team by name::
@@ -947,9 +923,7 @@ def parse_trending(raw: Dict) -> List[Dict]:
         ``publication_date``, ``last_published_date``, ``canonical_url``,
         ``thumbnail_url`` and ``playback_url`` (videos only). An empty payload
         yields ``[]``.
-
-    Raises:
-        None: a malformed or empty payload returns ``[]`` rather than raising.
+        A malformed or empty payload returns ``[]`` rather than raising.
 
     Example:
         Read the trending video feed::
@@ -1005,9 +979,7 @@ def fox_get_feed(path: str, params: Optional[dict] = None, **kwargs: Any) -> Dic
 
     Returns:
         The parsed JSON response body as a ``dict``.
-
-    Raises:
-        None: transport failures surface from the underlying getter.
+        Transport failures surface from the underlying getter.
 
     Example:
         Read the trending article feed::
@@ -1041,9 +1013,7 @@ def fox_search_content(
         A polars DataFrame (default), a pandas DataFrame when
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``.
-
-    Raises:
-        None: an empty or malformed payload yields a zero-row frame.
+        An empty or malformed payload yields a zero-row frame.
 
     Example:
         Search across teams, players and shows::
@@ -1072,9 +1042,7 @@ def fox_search_entities(
         A polars DataFrame (default), a pandas DataFrame when
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``.
-
-    Raises:
-        None: an empty or malformed payload yields a zero-row frame.
+        An empty or malformed payload yields a zero-row frame.
 
     Example:
         Resolve a Fox team id from a name::
@@ -1100,9 +1068,7 @@ def fox_search_popular(*, return_parsed: bool = True, return_as_pandas: bool = F
         A polars DataFrame (default), a pandas DataFrame when
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``.
-
-    Raises:
-        None: an empty or malformed payload yields a zero-row frame.
+        An empty or malformed payload yields a zero-row frame.
 
     Example:
         Read today's popular entities::
@@ -1132,9 +1098,7 @@ def fox_explore_browse(
         A polars DataFrame (default), a pandas DataFrame when
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``.
-
-    Raises:
-        None: an empty or malformed payload yields a zero-row frame.
+        An empty or malformed payload yields a zero-row frame.
 
     Example:
         List every browsable sport::
@@ -1160,9 +1124,7 @@ def fox_explore_odds(*, return_parsed: bool = True, return_as_pandas: bool = Fal
         A polars DataFrame (default), a pandas DataFrame when
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``.
-
-    Raises:
-        None: an empty or malformed payload yields a zero-row frame.
+        An empty or malformed payload yields a zero-row frame.
 
     Example:
         Read the featured cross-sport betting board::
@@ -1191,9 +1153,7 @@ def fox_topevents_scoreboard(*, return_parsed: bool = True, return_as_pandas: bo
         A polars DataFrame (default), a pandas DataFrame when
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``.
-
-    Raises:
-        None: an empty or malformed payload yields a zero-row frame.
+        An empty or malformed payload yields a zero-row frame.
 
     Example:
         List the top-events board segments::
@@ -1222,9 +1182,7 @@ def fox_topevents_segment(
         A polars DataFrame (default), a pandas DataFrame when
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``.
-
-    Raises:
-        None: an empty or malformed payload yields a zero-row frame.
+        An empty or malformed payload yields a zero-row frame.
 
     Example:
         Read today's cross-sport games::
@@ -1259,9 +1217,7 @@ def fox_trending_articles(
         A polars DataFrame (default), a pandas DataFrame when
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``.
-
-    Raises:
-        None: an empty or malformed payload yields a zero-row frame.
+        An empty or malformed payload yields a zero-row frame.
 
     Example:
         Trending college-football articles::
@@ -1299,9 +1255,7 @@ def fox_trending_videos(
         A polars DataFrame (default), a pandas DataFrame when
         ``return_as_pandas=True``, or the raw JSON ``dict`` when
         ``return_parsed=False``.
-
-    Raises:
-        None: an empty or malformed payload yields a zero-row frame.
+        An empty or malformed payload yields a zero-row frame.
 
     Example:
         Trending clips with playback urls::
@@ -1330,9 +1284,7 @@ def fox_polls(entity_ids: str, *, include_answers: bool = True, **kwargs: Any) -
 
     Returns:
         The raw JSON ``dict`` -- ``{"values": [...]}``.
-
-    Raises:
-        None: transport failures surface from the underlying getter.
+        Transport failures surface from the underlying getter.
 
     Example:
         Ask for a team's active fan poll::

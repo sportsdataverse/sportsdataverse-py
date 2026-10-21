@@ -7,7 +7,7 @@ columns:
   type: integer
 - description: ''
   name: assists_rate
-  type: character
+  type: numeric
 - description: ''
   name: assists_rate_rank
   type: numeric
@@ -16,7 +16,7 @@ columns:
   type: numeric
 - description: ''
   name: assists_round_rate
-  type: character
+  type: numeric
 - description: ''
   name: assists_round_rate_rank
   type: numeric
@@ -67,7 +67,7 @@ columns:
   type: character
 - description: ''
   name: real_rate
-  type: character
+  type: numeric
 - description: ''
   name: real_rate_rank
   type: numeric
@@ -76,7 +76,7 @@ columns:
   type: numeric
 - description: ''
   name: round_rate
-  type: character
+  type: numeric
 - description: ''
   name: round_rate_rank
   type: numeric
@@ -100,7 +100,7 @@ columns:
   type: integer
 - description: ''
   name: turnovers_rate
-  type: character
+  type: numeric
 - description: ''
   name: turnovers_rate_rank
   type: numeric

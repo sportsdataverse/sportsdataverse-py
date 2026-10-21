@@ -1165,9 +1165,9 @@ def fiba_gdap_awards(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -1223,9 +1223,9 @@ def fiba_gdap_competition(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -1286,9 +1286,9 @@ def fiba_gdap_editions(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -1345,9 +1345,9 @@ def fiba_gdap_federation_games(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -1408,9 +1408,9 @@ def fiba_gdap_federation_ranking(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -1469,9 +1469,9 @@ def fiba_gdap_final_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -1529,9 +1529,9 @@ def fiba_gdap_game(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -1586,9 +1586,9 @@ def fiba_gdap_game_officials(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -1645,9 +1645,9 @@ def fiba_gdap_game_periods(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -1706,9 +1706,9 @@ def fiba_gdap_games_between(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -1768,9 +1768,9 @@ def fiba_gdap_gateway_competition_ids(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -1833,9 +1833,9 @@ def fiba_gdap_gateway_federation_ranking(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -1895,9 +1895,9 @@ def fiba_gdap_medal_count(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -1952,9 +1952,9 @@ def fiba_gdap_national_teams(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -2011,9 +2011,9 @@ def fiba_gdap_nominations(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -2073,9 +2073,9 @@ def fiba_gdap_player_game_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -2135,9 +2135,9 @@ def fiba_gdap_player_info(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -2197,9 +2197,9 @@ def fiba_gdap_player_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -2255,9 +2255,9 @@ def fiba_gdap_ranking_zones(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -2314,9 +2314,9 @@ def fiba_gdap_roster(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -2374,9 +2374,9 @@ def fiba_gdap_roster_coaches(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -2434,9 +2434,9 @@ def fiba_gdap_roster_latest(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -2493,9 +2493,9 @@ def fiba_gdap_round_gamedays(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -2552,9 +2552,9 @@ def fiba_gdap_round_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -2611,9 +2611,9 @@ def fiba_gdap_rounds(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -2668,9 +2668,9 @@ def fiba_gdap_schedule(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -2725,9 +2725,9 @@ def fiba_gdap_team_games(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -2782,9 +2782,9 @@ def fiba_gdap_team_player_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -2841,9 +2841,9 @@ def fiba_gdap_team_staff(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -2898,9 +2898,9 @@ def fiba_gdap_team_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::
@@ -2955,9 +2955,9 @@ def fiba_gdap_teams(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date.
 
     Example:
         Quick start::

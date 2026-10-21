@@ -127,6 +127,18 @@ def test_shots_before_2006_are_empty_not_an_error():
     )
 
 
+def test_docs_say_an_early_shot_chart_is_an_empty_frame_not_nodata():
+    from sportsdataverse.basketball.kbl import kbl
+
+    texts = [(ROOT / "tools/codegen/endpoints/kbl.yaml").read_text(encoding="utf-8"), kbl.kbl_shots.__doc__]
+    texts += [rt.__doc__, rt._get.__doc__]
+    for text in texts:
+        flat = " ".join(str(text).split())
+        assert "empty: NoDataError" not in flat and "box score or shot chart" not in flat
+    assert "shot chart is empty: a zero-row frame" in " ".join(str(kbl.kbl_shots.__doc__).split())
+    assert "(none before 2006-07) is not: it parses to zero rows" in " ".join(str(rt.__doc__).split())
+
+
 # --- crosswalk and registry -----------------------------------------------------------------------------------------
 
 

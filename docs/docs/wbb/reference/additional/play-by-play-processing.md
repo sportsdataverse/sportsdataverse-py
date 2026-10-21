@@ -349,6 +349,13 @@ Row-bound play-by-play for every game that scraped successfully (zero-row contra
 | `is_garbage_time` | logical |  |
 | `sub_deviate` | integer |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | A fetch failed and `errors="raise"`. |
+| `ValueError` | `errors` is not `"raise"` or `"skip"`. |
+
 **Example**
 
 ```python
@@ -420,3 +427,9 @@ Read a saved ESPN WBB play-by-play payload from disk.
 **Returns**
 
 The payload exactly as saved (the raw ESPN summary JSON), ready for `helper_wbb_pbp`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | There is no `{game_id}.json` in `path_to_json`. |

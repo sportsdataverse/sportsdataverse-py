@@ -797,8 +797,8 @@ def cba_seasons(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -816,7 +816,7 @@ def cba_seasons(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -857,8 +857,8 @@ def cba_match_types(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -876,7 +876,7 @@ def cba_match_types(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -919,8 +919,8 @@ def cba_team_options(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -938,7 +938,7 @@ def cba_team_options(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -982,8 +982,8 @@ def cba_teams(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1001,7 +1001,7 @@ def cba_teams(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -1046,8 +1046,8 @@ def cba_schedule_month(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1065,7 +1065,7 @@ def cba_schedule_month(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -1113,8 +1113,8 @@ def cba_schedule_day(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1132,7 +1132,7 @@ def cba_schedule_day(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -1178,8 +1178,8 @@ def cba_game_info(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1197,7 +1197,7 @@ def cba_game_info(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -1240,8 +1240,8 @@ def cba_player_box(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1259,7 +1259,7 @@ def cba_player_box(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -1308,8 +1308,8 @@ def cba_period_scores(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1327,7 +1327,7 @@ def cba_period_scores(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -1376,8 +1376,8 @@ def cba_game_team_shots(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1395,7 +1395,7 @@ def cba_game_team_shots(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -1446,8 +1446,8 @@ def cba_player_advanced(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1465,7 +1465,7 @@ def cba_player_advanced(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -1516,8 +1516,8 @@ def cba_player_extras(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1535,7 +1535,7 @@ def cba_player_extras(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -1584,8 +1584,8 @@ def cba_game_team_four(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1603,7 +1603,7 @@ def cba_game_team_four(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -1654,8 +1654,8 @@ def cba_best_player(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1673,7 +1673,7 @@ def cba_best_player(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -1716,8 +1716,8 @@ def cba_best_stats(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1735,7 +1735,7 @@ def cba_best_stats(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -1778,8 +1778,8 @@ def cba_rosters(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1797,7 +1797,7 @@ def cba_rosters(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -1840,8 +1840,8 @@ def cba_report_status(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1859,7 +1859,7 @@ def cba_report_status(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -1904,8 +1904,8 @@ def cba_pbp(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1923,7 +1923,7 @@ def cba_pbp(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -1975,8 +1975,8 @@ def cba_team_counts(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1994,7 +1994,7 @@ def cba_team_counts(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -2045,8 +2045,8 @@ def cba_team_basic(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2064,7 +2064,7 @@ def cba_team_basic(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -2118,8 +2118,8 @@ def cba_team_four(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2137,7 +2137,7 @@ def cba_team_four(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -2193,8 +2193,8 @@ def cba_team_overview(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2212,7 +2212,7 @@ def cba_team_overview(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -2271,8 +2271,8 @@ def cba_team_shots(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2290,7 +2290,7 @@ def cba_team_shots(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -2355,8 +2355,8 @@ def cba_player_base(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2374,7 +2374,7 @@ def cba_player_base(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -2446,8 +2446,8 @@ def cba_player_offensive(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2465,7 +2465,7 @@ def cba_player_offensive(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -2541,8 +2541,8 @@ def cba_player_defensive(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2560,7 +2560,7 @@ def cba_player_defensive(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.
@@ -2636,8 +2636,8 @@ def cba_player_shots(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2655,7 +2655,7 @@ def cba_player_shots(
 
     Notes:
         * Unofficial and unsupported: the routes cbaleague.com's own data site (a Vue SPA) calls. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets. Requests are spaced at least 1 s apart; keep use small.
-        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and fails from a datacenter.
+        * Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; ``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full 60 s timeout and retries.
         * Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). The season list reaches 1995-96; box data before 2009-10 is unverified.
         * Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Play-by-play is verified on 2017-18 and 2025-26 only and is absent for 2009-10 (NoDataError). There are NO shot x/y coordinates in this API: shot location exists only as team and player zone splits. Play-by-play has no player or team ids (Chinese sentence text plus surnames). Box data has 12-minute quarters in 2009-10 and 2017-18 and 10-minute quarters in 2025-26; the women's CBA is not covered (no official source).
         * Not game data: cba_game_team_shots and cba_game_team_four answer the two teams' SEASON tables (the shot zones are the teams' current profile; the four factors are the previous season), whichever game is asked for; rows cannot be scoped to the game. The reference lists (cba_team_options, cba_team_counts) and cba_report_status are not echoed by the API, so their scope is unchecked.

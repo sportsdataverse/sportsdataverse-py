@@ -1360,9 +1360,9 @@ def acb_match_header(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -1422,9 +1422,9 @@ def acb_period_scores(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -1484,9 +1484,9 @@ def acb_player_box(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -1546,9 +1546,9 @@ def acb_team_box(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -1608,9 +1608,9 @@ def acb_box_info(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -1670,9 +1670,9 @@ def acb_pbp(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -1732,9 +1732,9 @@ def acb_shots(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -1794,9 +1794,9 @@ def acb_lead_tracker(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -1856,9 +1856,9 @@ def acb_lead_stats(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -1918,9 +1918,9 @@ def acb_lineup(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -1980,9 +1980,9 @@ def acb_match_leaders(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -2042,9 +2042,9 @@ def acb_team_comparison(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -2106,9 +2106,9 @@ def acb_serie(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -2168,9 +2168,9 @@ def acb_quickfacts(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -2230,9 +2230,9 @@ def acb_season_leaders(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -2294,9 +2294,9 @@ def acb_match_advanced_stats(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -2360,9 +2360,9 @@ def acb_player_advanced_stats(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -2429,9 +2429,9 @@ def acb_matchlist(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -2493,9 +2493,9 @@ def acb_competition_editions(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -2557,9 +2557,9 @@ def acb_competition_rounds(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -2621,9 +2621,9 @@ def acb_competition_weeks(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -2685,9 +2685,9 @@ def acb_competition_current(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -2757,9 +2757,9 @@ def acb_round_matches(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -2827,9 +2827,9 @@ def acb_standings(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -2895,9 +2895,9 @@ def acb_standings_rounds(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -2963,9 +2963,9 @@ def acb_bracket(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -3028,9 +3028,9 @@ def acb_bracket_games(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -3093,9 +3093,9 @@ def acb_calendar(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -3158,9 +3158,9 @@ def acb_league_zones(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -3223,9 +3223,9 @@ def acb_teams(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -3290,9 +3290,9 @@ def acb_team_matches(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -3360,9 +3360,9 @@ def acb_next_matches(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -3425,9 +3425,9 @@ def acb_club_data(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -3491,9 +3491,9 @@ def acb_current_roster(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -3563,9 +3563,9 @@ def acb_team_leaders(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -3632,9 +3632,9 @@ def acb_team_stats(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -3700,9 +3700,9 @@ def acb_team_totals(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -3764,9 +3764,9 @@ def acb_team_records(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -3826,9 +3826,9 @@ def acb_player_data(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -3892,9 +3892,9 @@ def acb_player_stats(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -3960,9 +3960,9 @@ def acb_player_totals(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -4024,9 +4024,9 @@ def acb_career_stints(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -4086,9 +4086,9 @@ def acb_career_trophies(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -4152,9 +4152,9 @@ def acb_player_matches(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -4219,9 +4219,9 @@ def acb_search(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
-        ValueError: a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, play-by-play or shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::

@@ -40,6 +40,12 @@ One row per candidate per award: `award` (`mvp`, `roy`, `dpoy`, `smoy`, `mip`, `
 | `award` | character | Award slug (`mvp`, `roy`, `dpoy`, `smoy`, `mip`, `clutch_poy`, `coy`). |
 | `season` | integer | Season year. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Never raised directly; a missing page yields a zero-row frame. |
+
 **Example**
 
 ```python
@@ -103,6 +109,12 @@ One row per pick: `pick_overall`, `round`, `team`, `player`, `college_name`, `se
 | `vorp` | character | Career value over replacement player. |
 | `season` | integer | Season year. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Never raised directly; a missing page yields a zero-row frame. |
+
 **Example**
 
 ```python
@@ -147,6 +159,12 @@ One row per injured player: `player`, `team_name`, `date_update` and `note` (sta
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `date_update` | character | Date the status was last updated. |
 | `note` | character | Injury status and description. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Never raised directly; an unreachable page yields a zero-row frame. |
 
 **Example**
 
@@ -199,6 +217,12 @@ One row per player: `player`, `player_id` (e.g. `jamesle01`), `year_min`, `year_
 | `birth_date` | character | Date of birth (YYYY-MM-DD). |
 | `colleges` | character | College(s). |
 | `letter` | character | Last-name initial (echoes the `letter` argument). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When `letter` is not a single `a`-`z` character. |
 
 **Example**
 
@@ -279,6 +303,12 @@ One row per regular-season game: `ranker`, `player_game_num_career`, `date`, `te
 | `player_id` | character | Unique player identifier. |
 | `season` | integer | Season year. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Never raised directly; an unknown slug yields a zero-row frame. |
+
 **Example**
 
 ```python
@@ -330,6 +360,12 @@ One row per rostered player: `number`, `player`, `pos`, `height`, `weight`, `bir
 | `college` | character | College. |
 | `team` | character | Team-side label or team identifier. |
 | `season` | integer | Season year. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Never raised directly; an unknown team yields a zero-row frame. |
 
 **Example**
 
