@@ -374,7 +374,9 @@ Per game: resolves each shift row's full team name (`event_team`) to home/away v
 then folds `ids_on`/`ids_off` deltas chronologically into a running on-ice set per
 side. A new interval begins at every distinct `game_seconds` boundary; the final
 interval is closed at the last `scored` event's `game_seconds` + 1 for that game
-(there is no explicit "end of game" CHANGE row in the shift-chart feed).
+(there is no explicit "end of game" CHANGE row in the shift-chart feed). A shot or goal
+at a change second credits its xG to the interval that ends there (the players on the
+ice before the change), as NHL scorers credit the outgoing line.
 
 Known simplification: shift-chart id lists do not distinguish position, so
 `home_ids`/`away_ids` may include the on-ice goalie's id alongside skaters;

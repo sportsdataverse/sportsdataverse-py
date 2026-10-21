@@ -72,7 +72,9 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
     then folds ``ids_on``/``ids_off`` deltas chronologically into a running on-ice set per
     side. A new interval begins at every distinct ``game_seconds`` boundary; the final
     interval is closed at the last ``scored`` event's ``game_seconds`` + 1 for that game
-    (there is no explicit "end of game" CHANGE row in the shift-chart feed).
+    (there is no explicit "end of game" CHANGE row in the shift-chart feed). A shot or goal
+    at a change second credits its xG to the interval that ends there (the players on the
+    ice before the change), as NHL scorers credit the outgoing line.
 
     Known simplification: shift-chart id lists do not distinguish position, so
     ``home_ids``/``away_ids`` may include the on-ice goalie's id alongside skaters;
@@ -177,16 +179,26 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
                 if game_scored.height > 0
                 else game_scored
             )
+            # A shot at a change second belongs to the players on the ice BEFORE the change:
+            # the shift chart changes lines at the goal second, so the half-open window
+            # above handed most goals' xG to the line that came on after them (WB-hockey-1).
+            # xG therefore uses (start_s, end_s] -- the hockeyR / fastRhockey NHL order,
+            # shots and goals before CHANGE, faceoffs after -- and the first interval also
+            # keeps its own start second. Goalie / strength stay on `window`: the PWHL
+            # adapter's CHANGE rows at start_s carry the new interval's strength.
+            xg_lo = start_s - 1 if i == 0 else start_s
+            xg_window = (
+                game_scored.filter((pl.col("game_seconds") > xg_lo) & (pl.col("game_seconds") <= end_s))
+                if game_scored.height > 0
+                else game_scored
+            )
             xgf_home = xgf_away = 0.0
+            if xg_window.height > 0:
+                xgf_home = float(xg_window.filter(pl.col("event_team_abbr") == home_abbr)["xg"].sum() or 0.0)
+                xgf_away = float(xg_window.filter(pl.col("event_team_abbr") == away_abbr)["xg"].sum() or 0.0)
             home_goalie = away_goalie = None
             strength_state = None
             if window.height > 0:
-                home_events = window.filter(pl.col("event_team_abbr") == home_abbr)
-                away_events = window.filter(pl.col("event_team_abbr") == away_abbr)
-                if home_events.height > 0:
-                    xgf_home = float(home_events["xg"].sum() or 0.0)
-                if away_events.height > 0:
-                    xgf_away = float(away_events["xg"].sum() or 0.0)
                 # .mode() returns ALL tied-most-frequent values in an unspecified
                 # order, so a bare .mode()[0] is nondeterministic when a window has two
                 # equally-common goalies / strength states (e.g. a line change or
