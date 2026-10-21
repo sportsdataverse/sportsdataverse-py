@@ -213,6 +213,7 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `homeFavorite` | Boolean | True when the home team was favoured by the spread. |
 | `gameSpreadAvailable` | Boolean | True when a spread was available for the game. |
 | `overUnder` | Float64 | Over/under total used as a model input. |
+| `overUnderAvailable` | Boolean | False when overUnder is the 55.5 default (the line had a spread and no total), True for a market total; null when an odds_override did not say. Absent from releases built before the column existed. |
 | `homeTeamSpread` | Float64 | ESPN's home-team Spread for the game, stamped on every play. |
 | `clock.minutes` | Int64 | Minutes remaining on the game clock at the play. |
 | `clock.seconds` | Int64 | Seconds component of the game clock at the play. |
@@ -250,7 +251,7 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `start.defPosTeamTimeouts` | Int64 | ESPN's `defPosTeamTimeouts` value for the play state at the start of the play. |
 | `end.posTeamTimeouts` | Int64 | ESPN's `posTeamTimeouts` value for the play state at the end of the play. |
 | `end.defPosTeamTimeouts` | Int64 | ESPN's `defPosTeamTimeouts` value for the play state at the end of the play. |
-| `firstHalfKickoffTeamId` | Int64 | ESPN id of the team that received the opening kickoff. |
+| `firstHalfKickoffTeamId` | Int64 | ESPN id of the team that kicked the opening kickoff (it receives the second-half kickoff), one value per game. |
 | `start.yard` | Int64 | ESPN's `yard` value for the play state at the start of the play. |
 | `end.yard` | Int64 | ESPN's `yard` value for the play state at the end of the play. |
 | `lag_scoringPlay` | Boolean | Value of scoringPlay on the previous play, used for sequence-aware derivations. |

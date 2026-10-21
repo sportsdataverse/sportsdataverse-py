@@ -1,0 +1,36 @@
+{
+  "model_type": "cpoe_air_yards",
+  "xgboost_version": "3.2.0",
+  "objective": "binary:logistic",
+  "features": [
+    "down",
+    "distance",
+    "yards_to_goal",
+    "score_diff",
+    "seconds_remaining",
+    "is_home",
+    "period",
+    "passing_down",
+    "air_yards",
+    "pass_is_middle",
+    "qb_hurry"
+  ],
+  "n_features": 11,
+  "label": "completion",
+  "training_seasons": null,
+  "in_sample": true,
+  "in_sample_reason": "Fit by cfbfastR-cfb-data python/cfb_model_build/cpoe/cli.py (air_yards variant) on every loaded play with air_yards from MIN_SEASON_AIR_YARDS = 2025 on; the upper season of the run is not recorded. No season was withheld.",
+  "n_training_rows": null,
+  "hyperparameters": {
+    "objective": "binary:logistic",
+    "eta": 0.025,
+    "gamma": 5,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "max_depth": 4,
+    "min_child_weight": 6,
+    "eval_metric": "logloss"
+  },
+  "source": "cfb_final_json",
+  "trained_date": "2026-09-07"
+}

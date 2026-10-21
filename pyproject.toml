@@ -464,6 +464,7 @@ files = [
     "sportsdataverse/cfb/cfb_tempo.py",
     "sportsdataverse/cfb/cfb_transfer_impact.py",
     "sportsdataverse/cfb/cfb_yahoo_ext.py",
+    "sportsdataverse/cfb/model_vars.py",
     "sportsdataverse/nfl/config.py",
     "sportsdataverse/nfl/model_vars.py",
     "sportsdataverse/nfl/nfl_build.py",

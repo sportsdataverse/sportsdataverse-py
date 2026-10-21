@@ -1,0 +1,79 @@
+{
+  "model": "qbr_model",
+  "sha256": "0e8726fe6addfb140d6e5e18d36d10d9ec1ffb52568c6f7042cb4943f399e96b",
+  "method": "xgboost Booster.get_score: gain and cover are means per split, total_gain sums them, weight counts splits; a multiclass booster pools all its class trees",
+  "features": [
+    {
+      "feature": "qbr_epa",
+      "gain": 300090.5,
+      "total_gain": 74722536.0,
+      "weight": 249.0,
+      "cover": 9423.220703,
+      "share_total_gain": 0.894941348
+    },
+    {
+      "feature": "sack_epa",
+      "gain": 11667.46387,
+      "total_gain": 828389.9375,
+      "weight": 71.0,
+      "cover": 5638.873047,
+      "share_total_gain": 0.009921510256
+    },
+    {
+      "feature": "pass_epa",
+      "gain": 34108.88672,
+      "total_gain": 4434155.5,
+      "weight": 130.0,
+      "cover": 6539.899902,
+      "share_total_gain": 0.05310725937
+    },
+    {
+      "feature": "rush_epa",
+      "gain": 29124.45117,
+      "total_gain": 3028943.0,
+      "weight": 104.0,
+      "cover": 3987.163574,
+      "share_total_gain": 0.03627722607
+    },
+    {
+      "feature": "pen_epa",
+      "gain": 3480.404053,
+      "total_gain": 299314.75,
+      "weight": 86.0,
+      "cover": 4789.104492,
+      "share_total_gain": 0.003584850838
+    },
+    {
+      "feature": "era0",
+      "gain": 7257.053711,
+      "total_gain": 145141.0781,
+      "weight": 20.0,
+      "cover": 6754.200195,
+      "share_total_gain": 0.001738334364
+    },
+    {
+      "feature": "era1",
+      "gain": 1999.324707,
+      "total_gain": 5997.974121,
+      "weight": 3.0,
+      "cover": 3080.333252,
+      "share_total_gain": 7.183689597e-05
+    },
+    {
+      "feature": "era2",
+      "gain": 3248.479248,
+      "total_gain": 22739.35547,
+      "weight": 7.0,
+      "cover": 8761.571289,
+      "share_total_gain": 0.0002723460756
+    },
+    {
+      "feature": "era3",
+      "gain": 2373.693115,
+      "total_gain": 7121.079102,
+      "weight": 3.0,
+      "cover": 7460.333496,
+      "share_total_gain": 8.528816701e-05
+    }
+  ]
+}
