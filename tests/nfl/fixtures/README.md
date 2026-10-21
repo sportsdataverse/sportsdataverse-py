@@ -285,7 +285,7 @@ the task 2.5 touchdown rule got wrong (review PR-808, R808-2/3/4) or one task 2.
 
 ## Era play order (`era_play_order/`, task 2.19)
 
-Ten ESPN Site v2 summaries from `nflverse-dev/nfl-raw` `nfl/espn/raw/<season>/<game_id>.json.gz` (source
+Twelve ESPN Site v2 summaries from `nflverse-dev/nfl-raw` `nfl/espn/raw/<season>/<game_id>.json.gz` (source
 `https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=<game_id>`), trimmed to the same keys as
 the whole-game captures, read by `tests/nfl/test_nfl_era_play_order.py`. The oracle is nflverse
 (`nflverse-dev/nfl-data` `python/.cache/nflverse_pbp/pbp_<season>.parquet`, joined on `game_id` + `play_id`).
@@ -298,6 +298,8 @@ the whole-game captures, read by `tests/nfl/test_nfl_era_play_order.py`. The ora
 | 281005009 (`2008_05_ATL_GB`) | 4b1d90b6 | 1872, Q3 opening kickoff between two Q2 timeouts | period 3 | `qtr` 3 | R832-10 (clock check) |
 | 401030749 (`2018_08_IND_OAK`) | d0480d17 | 906, a Q2 snap whose id sorts among Q1 rows | period 2 | `qtr` 2 | R832-10 (season floor) |
 | 301107009 (`2010_09_DAL_GB`) | 56da67ca | 1557, GB recovers DAL's kickoff fumble and scores | `Kickoff Return Touchdown` | `epa` -7.672 | R831-6 |
+| 280921001 (`2008_03_KC_ATL`) | 4b1d90b6 | 594, KC's bare "Punt" from its 33 (nflverse: 52 yards to ATL 15, returned to the ATL 8); ESPN's end is 1 yard from ATL's goal | `Punt`, end `yardsToEndzone` 1; ATL's next snap at 92 | `epa` 1.240 | EX-2.19-a (task 2.24: a pre-2009 punt ends at the receiver's next snap) |
+| 261113029 (`2006_10_TB_CAR`) | 704bd9ad | 386, CAR's bare "Punt" at 7:26 of Q1 (nflverse: 44 yards to the TB 5, returned to the 17); the next row in id order is TB's 416 at 11:45, a snap from before the punt | `Punt`, end `yardsToEndzone` 83 (TB's next snap, 428 at 7:15) | `epa` -0.119 | EX-2.19-a (task 2.24: a next snap filed earlier in the half is not the punt's end) |
 | 281109021 (`2008_10_NYG_PHI`) | 4b1d90b6 | 3307, D.Hixon's 73-yard punt return "TOUCHDOWN NULLIFIED by Penalty" (holding) | `Punt Return Touchdown`, `td_play` false | `touchdown` 0, `epa` -1.690 | R856-1 (`def_score` needs the TD to stand) |
 | 271223008 (`2007_16_KC_DET`) | 4f540c18 | 1912, KC's bare "KickOff" at 0:23 of Q2, a touchback; ESPN's end clock (1:08) is a timeout row filed after it | `Kickoff`, start 0:23 / end 1:08 | `touchback` 1, `epa` 0.000 | R856-2 (owner ruling: EP_end at the start clock) |
 | 400791544 (`2015_01_MIA_WAS`) | d433655e | 2058, A.Franks kicks into the end zone at 0:27 of Q2, "Touchback."; ESPN's end clock 0:00 | `Kickoff`, end clock 0 (end clamped to the 99) | `touchback` 1, `epa` -0.127 (owner model 0) | R856-15 (text touchback at the spot) |

@@ -3040,3 +3040,91 @@
     devel-nfl's unsorted _to_rows: on the 37 NFL captures team_usage / st_kickers / st_punters / st_returners /
     st_team differ between two processes in 15 / 18 / 18 / 23 / 20 games, and player_usage / drive_scripting
     are not key-ordered in 35 / 37; the in-process check is red on all 8 order captures.
+
+# --- Task 2.24: a pre-2009 bare "Punt" ends at the receiver's next snap (EX-2.19-a/c) -------------------------
+- id: nfl-bare-punt-ends-at-the-next-snap
+  group: nfl-era-play-order
+  finding: EX-2.19-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                _kick_spot=((kickoff | bare_punt) & unscored & next_snap).fill_null(False),'
+  mutant: '                _kick_spot=(kickoff & unscored & next_snap).fill_null(False),'
+  test: tests/nfl/test_nfl_era_play_order.py -k "bare_punt or punt-td-nullified"
+  expected: kill
+  note: >-
+    Without the punt in the net-spot read, 280921001/594 keeps ESPN's end 1 yard from the receiver's goal
+    (EPA -4.246, nflverse 1.240) and 281109021/3307 goes back to 0.321 (nflverse -1.690).
+
+- id: nfl-bare-punt-next-snap-is-the-receivers
+  group: nfl-era-play-order
+  finding: EX-2.19-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        .then(receiver)'
+  mutant: '        .then(pl.col("start.pos_team.id"))'
+  test: tests/nfl/test_nfl_era_play_order.py -k "bare_punt"
+  expected: kill
+  note: >-
+    A punt row's start.pos_team is the punting team; reading the punter's next snap finds none after a
+    punt, so 280921001/594 keeps ESPN's end at the 1.
+
+- id: nfl-bare-punt-next-snap-not-filed-early
+  group: nfl-era-play-order
+  finding: EX-2.19-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        & (~bare_punt | (pl.col("_nxt").struct.field("clock") <= pl.col("start.TimeSecsRem")))  # not filed early'
+  mutant: '        & pl.lit(True)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "261113029"
+  expected: kill
+  note: >-
+    ESPN files some pre-2009 plays out of id order: 261113029/386 (a punt at 7:26) is followed by TB's 416 at
+    11:45 from the TB 45; without the clock check the punt ends there (EPA -2.632, nflverse -0.119) instead of
+    ESPN's 83, where TB's next snap starts. On the 644 sample games it is the one row the check moves.
+
+- id: nfl-bare-punt-skips-the-punters-next-snap
+  group: nfl-era-play-order
+  finding: EX-2.19-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        & (pl.col("_nxt").struct.field("team") == after_kick)  # the snap of the team with the ball'
+  mutant: '        & (bare_punt | (pl.col("_nxt").struct.field("team") == after_kick))'
+  test: tests/nfl/test_nfl_era_play_order.py -k "punting_teams"
+  expected: kill
+  note: >-
+    R963-1 (review M1). 261113029/126 is followed in id order by the punting team's own 141, filed out of order
+    but not earlier on the clock; without the team check the punt ends at TB's 71 instead of ESPN's 82 (CAR's
+    next snap). Its EPA cannot gate it (nflverse -0.710 is nearer the wrong spot's 0.229 than the right 0.988).
+
+- id: nfl-bare-punt-season-floor
+  group: nfl-era-play-order
+  finding: EX-2.19-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    bare_punt = (pl.col("type.text").is_in(punt_vec) & (pl.col("season") < ESPN_FULL_KICK_TEXT_FROM)).fill_null(False)'
+  mutant: '    bare_punt = pl.col("type.text").is_in(punt_vec).fill_null(False)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "post_2009"
+  expected: kill
+  note: >-
+    R963-2 (review M3). Without the floor 400554340/1481 (2014) ends at the receiver's 92 and the strict xfail
+    asserting it XPASSes. 2009+ punts are task nfl 2.25 (R785-6), which measures them across eras first and
+    deletes the marker.
+
+- id: nfl-kick-next-snap-rank-per-game
+  group: nfl-era-play-order
+  finding: R963-4
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    seq_rank = pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("game_id", "half")'
+  mutant: '    seq_rank = pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("half")'
+  test: tests/nfl/test_nfl_era_play_order.py -k "inside_its_game"
+  expected: kill
+  note: >-
+    Ranked by half only, two games' sequence numbers interleave, so on 280921001 + 261113029 in one frame most
+    kick spots fail the "next by sequenceNumber" check (the review measured 36 -> 5).
+
+- id: nfl-kick-next-snap-read-per-game
+  group: nfl-era-play-order
+  finding: R963-4
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    nxt = pl.when(~stop).then(snap).backward_fill().shift(-1).over("game_id", "half")'
+  mutant: '    nxt = pl.when(~stop).then(snap).backward_fill().shift(-1).over("half")'
+  test: tests/nfl/test_nfl_era_play_order.py -k "inside_its_game"
+  expected: kill
+  note: >-
+    Windowed by half only, the next snap is read across the game boundary in a frame of several games: a
+    game's last kick of a half reads the next game's first snap.
