@@ -3024,3 +3024,19 @@
   note: >-
     At the start clock with the clamped 99 end, 400791544/2058 and 401127996/1913 are scored as the receiver's
     ball on his own 1: EPA -0.431 / -0.316 (R856-15, the round-2 head).
+
+# --- 2.23 (R2.22-4): NFL usage / special-teams sections sorted by their keys ----------------------
+# Killer: tests/nfl/test_nfl_box_row_order.py, the NFL usage carve-out dropped (in-process key sort on 8
+# captures, plus the two-process compare of every section on 4).
+- id: nfl-usage-sections-key-sorted
+  group: nfl-row-order
+  finding: R2.22-4
+  file: sportsdataverse/football/usage_box.py
+  snippet: '    return (df.sort(keys, nulls_last=True, maintain_order=True) if keys else df).to_dicts()'
+  mutant: '    return df.to_dicts()'
+  test: tests/nfl/test_nfl_box_row_order.py
+  expected: kill
+  note: >-
+    devel-nfl's unsorted _to_rows: on the 37 NFL captures team_usage / st_kickers / st_punters / st_returners /
+    st_team differ between two processes in 15 / 18 / 18 / 23 / 20 games, and player_usage / drive_scripting
+    are not key-ordered in 35 / 37; the in-process check is red on all 8 order captures.

@@ -1,5 +1,9 @@
 """NFL advBoxScore team tables come out home team first, in every process (#913, R828-4 NFL side).
 
+The shared usage / special-teams sections (``football/usage_box.SECTIONS``) are sorted by their keys in
+``usage_box._to_rows`` (#910); before that, ``team_usage`` and the ``st_*`` tables listed their rows in a different
+order in two processes in 15-23 of the 37 captures (2.23, R2.22-4).
+
 ``create_box_score`` builds ``team`` / ``situational`` / ``drives`` / ``defensive`` with ``group_by`` and full
 joins, whose row order is per-process hash order: before the fix, 15-23 of the 37 committed NFL captures listed
 a table in a different order in two processes. CFB's side and its tests are #910
@@ -15,7 +19,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-from sportsdataverse.football.usage_box import SECTIONS
+from sportsdataverse.football.usage_box import _SUM_KEYS, SECTIONS
+from tests.football.test_box_row_order import _key_sorted
 
 FIX = Path(__file__).parent / "fixtures"
 _TEAM_TABLES = {"team": "pos_team", "situational": "pos_team", "drives": "pos_team", "defensive": "def_pos_team"}
@@ -56,7 +61,13 @@ def test_team_tables_list_the_home_team_first():
             assert len(box[section]) == 2, f"{gid} {section}: the capture must exercise the sort"
             if box[section][0][team] != home:
                 wrong.append((gid, section))
-    assert not wrong, f"(game, section) not home-first: {wrong}"
+        # the usage / special-teams sections equal themselves sorted by their keys
+        for section in SECTIONS:
+            rows = box[section]
+            if rows != _key_sorted(rows, [k for k in _SUM_KEYS[section] if rows and k in rows[0]]):
+                wrong.append((gid, section))
+        assert box["team_usage"] and box["st_team"], f"{gid}: the capture must exercise the usage sort"
+    assert not wrong, f"(game, section) out of order: {wrong}"
 
 
 #: captures whose four team tables all came out in a different order in two pre-fix processes, so a pre-fix
@@ -99,8 +110,7 @@ def test_advboxscore_is_identical_in_two_processes():
     second = _boxes_in_a_fresh_process("2", "8")
     assert first.keys() == second.keys()
     for game, box in first.items():
-        # the shared usage / special-teams SECTIONS are sorted by football/usage_box._to_rows in #910 (devel-cfb)
-        sections = (box.keys() | second[game].keys()) - set(SECTIONS)
+        sections = box.keys() | second[game].keys()
         assert set(_TEAM_TABLES) <= sections
         differ = sorted(s for s in sections if box.get(s) != second[game].get(s))
         assert not differ, f"{game}: sections in a different order across processes: {differ}"
