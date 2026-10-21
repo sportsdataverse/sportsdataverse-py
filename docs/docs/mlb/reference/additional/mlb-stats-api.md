@@ -26,6 +26,14 @@ GET /api/v1/attendance — game attendance figures.
 
 The StatsAPI JSON body for this endpoint, unparsed (no committed capture pins its keys yet; inspect `.keys()`).
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
+| `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
+
 ### mlb_divisions {#mlb_divisions}
 
 `mlb_divisions(sport_id: 'int' = 1, league_id: 'Optional[Union[int, str]]' = None, division_id: 'Optional[int]' = None, **kwargs) -> 'Dict'`
@@ -44,6 +52,14 @@ GET /api/v1/divisions — list divisions.
 
 The StatsAPI JSON body, unparsed: `copyright` and `divisions` (one dict per division).
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
+| `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
+
 ### mlb_draft_prospects {#mlb_draft_prospects}
 
 `mlb_draft_prospects(year: 'Union[int, str]', scouting_report: 'Optional[bool]' = None, limit: 'int' = 100, **kwargs) -> 'Dict'`
@@ -61,6 +77,14 @@ GET /api/v1/draft/prospects/{year} — draft prospect list for a year.
 **Returns**
 
 The StatsAPI JSON body for this endpoint, unparsed (no committed capture pins its keys yet; inspect `.keys()`).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
+| `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_pbp_diff {#mlb_pbp_diff}
 
@@ -81,6 +105,14 @@ Replays of in-game state for low-bandwidth clients.
 **Returns**
 
 dict | list: The parsed JSON body of the diff, unparsed (no committed capture pins its shape yet).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
+| `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_pbp_live {#mlb_pbp_live}
 
@@ -105,6 +137,14 @@ Includes Statcast metrics where available. The historical name
 **Returns**
 
 The StatsAPI JSON body, unparsed: `copyright`, `gamePk`, `link`, `metaData`, `gameData` (teams, players, venue, status) and `liveData` (plays, linescore, boxscore).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
+| `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_person_stats {#mlb_person_stats}
 
@@ -131,6 +171,14 @@ GET /api/v1/people/{personId}/stats — player aggregate stats.
 **Returns**
 
 The StatsAPI JSON body, unparsed: `copyright` and `stats` -- one dict per requested stat type with `type`, `group` and `splits`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
+| `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_schedule {#mlb_schedule}
 
@@ -160,6 +208,14 @@ Response: `dates[].games[]`.
 
 The StatsAPI JSON body, unparsed: `copyright`, the `totalItems` / `totalGames` / `totalGamesInProgress` counts and `dates` -- one dict per date, each with its own counts and a `games` list.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
+| `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
+
 ### mlb_seasons {#mlb_seasons}
 
 `mlb_seasons(sport_id: 'int' = 1, season: 'Optional[Union[int, str]]' = None, all_seasons: 'bool' = False, **kwargs) -> 'Dict'`
@@ -177,6 +233,14 @@ GET /api/v1/seasons — list of seasons for a sport.
 **Returns**
 
 The StatsAPI JSON body, unparsed: `copyright` and `seasons` (one dict per season with its key dates).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
+| `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_standings {#mlb_standings}
 
@@ -201,6 +265,14 @@ GET /api/v1/standings — league standings.
 **Returns**
 
 The StatsAPI JSON body, unparsed: `copyright` and `records` -- one dict per division standings table (`standingsType`, `league`, `division`, `lastUpdated` and `teamRecords`).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
+| `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_stats {#mlb_stats}
 
@@ -232,6 +304,14 @@ Filters: `season`, `team_id`, `league_id`, `game_type`, `player_pool`.
 
 The StatsAPI JSON body for this endpoint, unparsed (no committed capture pins its keys yet; inspect `.keys()`).
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
+| `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
+
 ### mlb_stats_leaders {#mlb_stats_leaders}
 
 `mlb_stats_leaders(leader_categories: 'str', season: 'Optional[Union[int, str]]' = None, leader_game_types: 'Optional[str]' = None, stat_group: 'Optional[str]' = None, league_id: 'Optional[Union[int, str]]' = None, sport_id: 'int' = 1, limit: 'int' = 10, **kwargs) -> 'Dict'`
@@ -253,6 +333,14 @@ GET /api/v1/stats/leaders — top-N leaders for a stat category.
 **Returns**
 
 The StatsAPI JSON body for this endpoint, unparsed (no committed capture pins its keys yet; inspect `.keys()`).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
+| `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_stats_streaks {#mlb_stats_streaks}
 
@@ -277,6 +365,14 @@ GET /api/v1/stats/streaks — active or historical streaks.
 
 The StatsAPI JSON body for this endpoint, unparsed (no committed capture pins its keys yet; inspect `.keys()`).
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
+| `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
+
 ### mlb_team_leaders {#mlb_team_leaders}
 
 `mlb_team_leaders(team_id: 'int', leader_categories: 'str', season: 'Optional[Union[int, str]]' = None, leader_game_types: 'Optional[str]' = None, limit: 'int' = 10, **kwargs) -> 'Dict'`
@@ -299,6 +395,14 @@ GET /api/v1/teams/{teamId}/leaders — team leaders.
 **Returns**
 
 The StatsAPI JSON body for this endpoint, unparsed (no committed capture pins its keys yet; inspect `.keys()`).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
+| `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_team_stats {#mlb_team_stats}
 
@@ -325,6 +429,14 @@ GET /api/v1/teams/{teamId}/stats — team-level stats.
 
 The StatsAPI JSON body for this endpoint, unparsed (no committed capture pins its keys yet; inspect `.keys()`).
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
+| `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
+
 ### mlb_teams {#mlb_teams}
 
 `mlb_teams(season: 'Optional[Union[int, str]]' = None, sport_id: 'int' = 1, league_ids: 'Optional[Union[int, List[int], str]]' = None, active_status: 'Optional[str]' = None, all_star_statuses: 'Optional[str]' = None, hydrate: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'`
@@ -346,3 +458,11 @@ GET /api/v1/teams — list teams. `sport_id=1` = MLB.
 **Returns**
 
 The StatsAPI JSON body, unparsed: `copyright` and `teams` (one dict per team).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
+| `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |

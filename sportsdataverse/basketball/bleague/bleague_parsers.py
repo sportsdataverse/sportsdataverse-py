@@ -365,9 +365,7 @@ def parse_bleague_game_info(
         number ``game_no``, ``event``, winning / losing streaks, weather, report text); they are null on ``v2``.
         ``temperature`` and ``humidity`` were null in every observed body, so their dtype is an assumption.
         A body without a ``Game`` object gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -412,9 +410,7 @@ def parse_bleague_period_scores(
         One row per (period, team side): ``points`` are scored IN the period (not cumulative). Periods run 1 to the
         game's ``MaxPeriod`` (4 when the header has none), and a period whose score slot is missing is skipped.
         A body without a ``Game`` object gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -533,9 +529,7 @@ def parse_bleague_player_box(
         definition differs by feed (see ``efficiency``), the advanced columns (``plus_minus``, ``ast_to``, ``efg``,
         ``ts``, ``usg``) exist from 2022-23 on ``v2`` only, and ``dunks`` / ``ptpft`` exist on ``v1`` only. A body
         without box rows gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -563,9 +557,7 @@ def parse_bleague_team_box(
         for the game), one per ``period_category``. The same columns as ``bleague_player_box``. The ``v2`` totals
         row carries no ``TeamID``; ``team_id`` is filled from the game header. A body without box rows gives a
         zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -642,9 +634,7 @@ def parse_bleague_team_summary(
         and ``fast_break_points`` are POINTS here (unlike the box score's counts of the same wire names).
         ``lead_changes`` and ``ties`` belong to the whole row and repeat on both sides. A body without ``Summaries``
         gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -779,9 +769,7 @@ def parse_bleague_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Opti
         on ``v2`` from 2022-23 and ``side`` from 2025-26 (see ``bleague_shots``). ``recorded_at`` is a UTC instant.
         Game-level rows (start, period, clock) carry null team and player columns. A body without
         ``PlayByPlays`` gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -835,9 +823,7 @@ def parse_bleague_shots(raw: Any, *, return_as_pandas: bool = False, columns: Op
         y / 100 x 15) are an inference. ``side`` (``left`` / ``right``) names the basket a shot is charted at, from
         2025-26 only; teams change ends at half-time. ``in_paint`` is null on the B3 feed, whose 2PT codes do not
         split by paint. Locations exist from 2022-23 on the ``v2`` feed only: any other game gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -895,9 +881,7 @@ def parse_bleague_leaders(
         5 rebounds, 8 shots blocked (decoded by matching ``count`` to the box score; other codes are unnamed).
         Only the ``v1`` feed (B3, B1/B2 2018-2020, the 2016-17 embed) publishes leaders: a ``v2`` game gives a
         zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -959,9 +943,7 @@ def parse_bleague_score_track(
         One row per scoring event: ``event_index`` is the index of the event (0 = the 0-0 start row, then 1, 2, ...;
         it is the chart's x axis, NOT a clock) and ``home_points`` / ``away_points`` the running totals. Only the
         ``v1`` feed publishes it: a ``v2`` game gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1373,9 +1355,7 @@ def parse_bleague_schedule(
         round, both clubs (``team_id`` is text; names are the page's short Japanese names), final score, venue and
         tip-off time. ``tab`` is the division (1 = B1, 2 = B2, 3 = B3) and ``event`` the competition type;
         ``season`` is the END year. A record without games gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1416,9 +1396,7 @@ def parse_bleague_schedule_clubs(
     Returns:
         One row per club the page's filter lists, which maps a team id to the short Japanese name the schedule
         uses. A record without clubs gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1450,9 +1428,7 @@ def parse_bleague_schedule_events(
         One row per competition type (2 B1 league, 3 B1 Championship, 5 all-star, 7 B2 league, 15 B3 league, ...)
         with its Japanese label; ``selected`` marks the one the page was asked for. A record without events
         gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1492,9 +1468,7 @@ def parse_bleague_schedule_days(
     Returns:
         One row per game day of the requested month, as a date: loop over them with ``bleague_schedule`` to list
         every ``schedule_key`` of a season. A record without game days gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1559,9 +1533,7 @@ def parse_bleague_standings(
         ``section_en`` its English name for those four. A club can appear in a division table and in the wild-card
         table. ``win_pct`` is a 0-1 fraction. The page shows the standings as of the request, not a season end.
         A record without rows gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::

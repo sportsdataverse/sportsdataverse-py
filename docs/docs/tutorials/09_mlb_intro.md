@@ -40,7 +40,7 @@ full reference:
 | [`mlb_play_by_play`](../mlb/reference/mlb_api/play.md#mlb_play_by_play) | Plate-appearance-level play-by-play | 🟢 **MLB Stats API** |
 | [`mlb_stats_leaders`](../mlb/reference/additional/mlb-stats-api.md#mlb_stats_leaders) | League leaders for any stat (HR, AVG, ERA, …) | 🟢 **MLB Stats API** |
 | [`mlb_win_probability`](../mlb/reference/mlb_api/other.md#mlb_win_probability) | Per-play win probability + WPA for a game | 🟢 **MLB Stats API** |
-| [`mlb_awards`](../mlb/reference/mlb_api/other.md#mlb_awards) · [`mlb_award_recipients`](../mlb/reference/mlb_api/other.md#mlb_award_recipients) | Award catalog + season winners (MVP, Cy Young, …) | 🟢 **MLB Stats API** |
+| [`mlb_awards`](../mlb/reference/mlb_api/other-2.md#mlb_awards) · [`mlb_award_recipients`](../mlb/reference/mlb_api/other-2.md#mlb_award_recipients) | Award catalog + season winners (MVP, Cy Young, …) | 🟢 **MLB Stats API** |
 | [`mlb_draft`](../mlb/reference/mlb_api/draft.md#mlb_draft) | Amateur draft board — one row per pick | 🟢 **MLB Stats API** |
 | [`mlb_statcast_search`](../mlb/reference/additional/baseball-savant-statcast.md#mlb_statcast_search) | Every pitch matching a filter — ~110 cols/pitch; auto date-chunks past the 25k cap; friendly filters (`batters_lookup`, `pitch_type`, `at_bat_result`, …) | 🔵 **Statcast** |
 | [`mlb_statcast_search_minors`](../mlb/reference/additional/baseball-savant-statcast.md#mlb_statcast_search_minors) · [`mlb_statcast_search_wbc`](../mlb/reference/additional/baseball-savant-statcast.md#mlb_statcast_search_wbc) | Same pitch search for MiLB and the World Baseball Classic | 🔵 **Statcast** |
@@ -517,8 +517,8 @@ wpa if wpa is not None else "win-probability unavailable right now"
 
 ### Recipe 11 — Season award winners (MVP, Cy Young) 🏅
 
-[`mlb_awards`](../mlb/reference/mlb_api/other.md#mlb_awards) is the catalog of
-every award id; [`mlb_award_recipients`](../mlb/reference/mlb_api/other.md#mlb_award_recipients)
+[`mlb_awards`](../mlb/reference/mlb_api/other-2.md#mlb_awards) is the catalog of
+every award id; [`mlb_award_recipients`](../mlb/reference/mlb_api/other-2.md#mlb_award_recipients)
 names the season's winner for one id. We grab the four marquee awards — AL/NL
 MVP and AL/NL Cy Young — and stack them into one tidy board.
 

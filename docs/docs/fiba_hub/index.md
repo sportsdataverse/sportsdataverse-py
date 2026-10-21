@@ -9,8 +9,8 @@ description: "sdv-py FIBA (digital API and game pages): endpoint references, dat
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [FIBA digital API and game pages](#fiba-digital-api-and-game-pages) | `digital-api.fiba.basketball`, `www.fiba.basketball` | 101 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 64 | — |
+| [FIBA digital API and game pages](#fiba-digital-api-and-game-pages) | `digital-api.fiba.basketball`, `www.fiba.basketball` | 173 | none |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 136 | — |
 
 ## FIBA digital API and game pages {#fiba-digital-api-and-game-pages}
 
@@ -18,7 +18,7 @@ description: "sdv-py FIBA (digital API and game pages): endpoint references, dat
 |---|---:|
 | [FIBA digital API (GDAP, digital-api.fiba.basketball)](reference/fiba_gdap) | 31 |
 | [FIBA game pages (fiba.basketball, RSC payload parsed)](reference/fiba_gamepage) | 6 |
-| [Hand-written wrappers](reference/additional/fiba-digital-api-and-game-pages) | 64 |
+| [Hand-written wrappers](reference/additional/fiba-digital-api-and-game-pages) | 136 |
 
 ## Examples
 

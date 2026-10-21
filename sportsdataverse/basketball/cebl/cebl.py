@@ -62,9 +62,9 @@ def cebl_seasons(
         A polars/pandas DataFrame by default; the raw record (``dict``): ``{'rows': <API body>, '_request': {...}}`` with the request (kind, season, mode, competition, segment, ids) stamped under ``_request`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
-        ValueError: a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
 
     Example:
         Quick start::
@@ -120,9 +120,9 @@ def cebl_teams(
         A polars/pandas DataFrame by default; the raw record (``dict``): ``{'rows': <API body>, '_request': {...}}`` with the request (kind, season, mode, competition, segment, ids) stamped under ``_request`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
-        ValueError: a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
 
     Example:
         Quick start::
@@ -180,9 +180,9 @@ def cebl_standings(
         A polars/pandas DataFrame by default; the raw record (``dict``): ``{'rows': <API body>, '_request': {...}}`` with the request (kind, season, mode, competition, segment, ids) stamped under ``_request`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
-        ValueError: a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
 
     Example:
         Quick start::
@@ -242,9 +242,9 @@ def cebl_roster(
         A polars/pandas DataFrame by default; the raw record (``dict``): ``{'rows': <API body>, '_request': {...}}`` with the request (kind, season, mode, competition, segment, ids) stamped under ``_request`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
-        ValueError: a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
 
     Example:
         Quick start::
@@ -312,9 +312,9 @@ def cebl_team_stats(
         A polars/pandas DataFrame by default; the raw record (``dict``): ``{'rows': <API body>, '_request': {...}}`` with the request (kind, season, mode, competition, segment, ids) stamped under ``_request`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
-        ValueError: a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
 
     Example:
         Quick start::
@@ -391,9 +391,9 @@ def cebl_games(
         A polars/pandas DataFrame by default; the raw record (``dict``): ``{'rows': <API body>, '_request': {...}}`` with the request (kind, season, mode, competition, segment, ids) stamped under ``_request`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
-        ValueError: a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
 
     Example:
         Quick start::
@@ -461,9 +461,9 @@ def cebl_player_stats(
         A polars/pandas DataFrame by default; the raw record (``dict``): ``{'rows': <API body>, '_request': {...}}`` with the request (kind, season, mode, competition, segment, ids) stamped under ``_request`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
-        ValueError: a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
 
     Example:
         Quick start::
@@ -543,9 +543,9 @@ def cebl_player_leaders(
         A polars/pandas DataFrame by default; the raw record (``dict``): ``{'rows': <API body>, '_request': {...}}`` with the request (kind, season, mode, competition, segment, ids) stamped under ``_request`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
-        ValueError: a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
 
     Example:
         Quick start::
@@ -619,9 +619,9 @@ def cebl_player_seasons(
         A polars/pandas DataFrame by default; the raw record (``dict``): ``{'rows': <API body>, '_request': {...}}`` with the request (kind, season, mode, competition, segment, ids) stamped under ``_request`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
-        ValueError: a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
 
     Example:
         Quick start::
@@ -687,9 +687,9 @@ def cebl_player(
         A polars/pandas DataFrame by default; the raw record (``dict``): ``{'rows': <API body>, '_request': {...}}`` with the request (kind, season, mode, competition, segment, ids) stamped under ``_request`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
-        ValueError: a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
 
     Example:
         Quick start::
@@ -751,9 +751,9 @@ def cebl_player_gamelog(
         A polars/pandas DataFrame by default; the raw record (``dict``): ``{'rows': <API body>, '_request': {...}}`` with the request (kind, season, mode, competition, segment, ids) stamped under ``_request`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
-        ValueError: a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
 
     Example:
         Quick start::
@@ -818,9 +818,9 @@ def cebl_news(
         A polars/pandas DataFrame by default; the raw record (``dict``): ``{'rows': <API body>, '_request': {...}}`` with the request (kind, season, mode, competition, segment, ids) stamped under ``_request`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
-        ValueError: a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter).
 
     Example:
         Quick start::

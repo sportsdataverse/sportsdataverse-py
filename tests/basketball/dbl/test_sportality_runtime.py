@@ -176,6 +176,16 @@ def test_a_short_layout_directory_is_refused(served):
 # --------------------------------------------------------------------------- stats-info refusals
 
 
+@pytest.mark.parametrize(("suffix", "season"), [("", 2027), ("@qzw34da6jg", 2026), ("@rejluryl18", 2003)])
+def test_the_standings_samples_pass_the_column_check(served, suffix, season):
+    """The 3-row samples keep the whole dataColumns list (the table's header), so the runtime accepts them."""
+    routes, _, _ = served
+    body = _load(f"statistics-v2__stats-info__module__standings_standings{suffix}.json")
+    routes["/statistics-v2/stats-info/standings_standings"] = _Resp(body)
+    got = rt._get(f"{B}/statistics-v2/stats-info/standings_standings", {"season": season})
+    assert [c["name"] for c in got[0]["dataColumns"]][:5] == ["Rank", "Team", "GP", "W", "L"]
+
+
 def test_truncated_stats_page_is_refused(served):
     routes, _, _ = served
     body = _full("statistics-v2__stats-info__players_summary__qzw34da6jg.json")

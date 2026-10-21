@@ -199,6 +199,12 @@ which loads PWHL pbp, schedules and game info only.
 
 One row per (season, team), the `sportsdataverse.nhl.nhl_team_ratings.nhl_team_ratings` schema (`season`, `team`, `adj_xgf`, `adj_xga`, `adj_xg_net`, `adj_gf`, `adj_ga`, `games`, `off_rank`, `def_rank`, `net_rank`, `net_z`).
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `DeprecationWarning` | As a warning, when `league` is passed. |
+
 **Example**
 
 ```python

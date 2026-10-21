@@ -242,6 +242,24 @@ def test_pbp_adds_game_context_scores_and_the_coordinate_frame_by_era():
     assert old["home_score"].null_count() == old.height  # no score text before 2021-22
 
 
+def test_pbp_side_is_the_basket_the_court_zone_is_measured_from_not_the_team():
+    pbp = P.parse_lba_pbp(_load("full/pbp__25602.json"))
+    located = pbp.filter(
+        pl.col("side").is_not_null() & pl.col("x").is_not_null() & pl.col("side_area_zone").is_not_null()
+    )
+    assert located.height > 300
+    # zone A = the half of basket `side` (0: x < 50, 1: x >= 50); D = the other half
+    mismatch = located.filter((pl.col("x") < 50) != ((pl.col("side") == 0) == (pl.col("side_area_zone") == "A")))
+    assert mismatch.height == 0
+    # not home/visitor (that is team_side): both teams have both values, and a team's shots switch basket at half-time
+    assert located.group_by("team_side").agg(pl.col("side").n_unique())["side"].to_list() == [2, 2]
+    shots = pbp.filter(pl.col("description").str.contains("punti") & pl.col("side").is_not_null())
+    halves = shots.group_by("team_side", pl.col("period") <= 2).agg(pl.col("side").unique())
+    assert all(len(v) == 1 for v in halves["side"].to_list())
+    by_team = halves.with_columns(pl.col("side").list.first()).group_by("team_side").agg(pl.col("side").n_unique())
+    assert by_team["side"].to_list() == [2, 2]
+
+
 def test_pbp_legend_and_shots():
     legend = P.parse_lba_pbp_legend(_load("full/pbp__25602.json"))
     assert legend.height == 59 and legend.schema["code"] == pl.Int64

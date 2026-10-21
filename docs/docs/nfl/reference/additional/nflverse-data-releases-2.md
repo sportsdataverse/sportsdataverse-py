@@ -187,6 +187,12 @@ Polars dataframe containing fantasy football opportunity data for the requested 
 | `total_fantasy_points_exp_team` | double | Team-level total expected total_fantasy_points_exp for a game, summed across all plays & players for that team. |
 | `total_fantasy_points_diff_team` | double | Team-level difference between actual and expected number of total_fantasy_points_diff for a game, summed across all plays/players for that team. Often interpreted as team-level efficiency. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season` is less than 2006, or if `stat_type` / `model_version` are not allowed values. |
+
 **Example**
 
 ```python
@@ -320,6 +326,12 @@ Polars dataframe containing fantasy football rankings data.
 | `scrape_date` | character | Date this dataframe was last updated |
 | `tm` | character | Team ID as used on MyFantasyLeague.com |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the resolved value is not one of the allowed values. |
+
 **Example**
 
 ```python
@@ -393,6 +405,12 @@ Polars dataframe containing NextGen Stats data for the requested `stat_type` and
 | `player_last_name` | character | Player's last name |
 | `player_jersey_number` | integer | Player's jersey number |
 | `player_short_name` | character | Short version of player's name |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `stat_type` is not one of the allowed values. |
 
 **Example**
 
@@ -510,6 +528,12 @@ Polars dataframe containing PFR advanced stats data for the requested `stat_type
 | `def_times_blitzed` | double | Number of times the defensive player sent additional rushers on a blitz during the game or season period. |
 | `def_times_hurried` | double | Number of times the defensive player hurried or pressured the quarterback without recording a sack. |
 | `def_times_hitqb` | double | Number of times the defensive player made contact with the quarterback (hit on the QB) during pass rushes. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `stat_type` or `summary_level` are not allowed values, or if any season is less than 2018. |
 
 **Example**
 
@@ -641,6 +665,14 @@ Polars dataframe containing player stats.
 | `fantasy_points` | double | Standard fantasy points. |
 | `fantasy_points_ppr` | double | PPR fantasy points. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `SeasonNotFoundError` | If any requested season is less than 1999. |
+| `TypeError` | If `seasons` is a bool -- the first positional argument used to be `kicking`, so `load_nfl_player_stats(True)` is rejected loudly rather than read as "seasons=True". |
+| `ValueError` | If `source` is not one of `"nflverse"`, `None`, `"sportsdataverse"`, or `"sdv"`; or if `kicking=True` is combined with the SDV source (the SDV play-by-play surface lacks a `kicker_player_id`, so kicking stats are nflverse-only). |
+
 **Example**
 
 ```python
@@ -735,6 +767,13 @@ One-row-per-player identity master. `return_as_pandas` narrows the return to a `
 | `draft_pick` | integer | Overall pick number at which the player was drafted (null if undrafted). |
 | `draft_team` | character | Abbreviation of the team that drafted the player (null if undrafted). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `source` is not one of `"nflverse"`, `None`, `"sportsdataverse"`, or `"sdv"`. |
+| `Exception` | Propagates any network / parquet-read error from the underlying `pl.read_parquet` against the release URL. |
+
 **Example**
 
 ```python
@@ -823,6 +862,12 @@ Polars dataframe containing the schedule for the requested seasons.
 | `referee` | character | Name of the game's referee (head official) |
 | `stadium_id` | character | ID of the stadium the game was played in. (Source: Pro-Football-Reference) |
 | `stadium` | character | Name of the stadium |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season` is less than 1999. |
 
 **Example**
 

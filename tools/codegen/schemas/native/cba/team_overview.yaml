@@ -37,10 +37,10 @@ columns:
   type: numeric
 - description: ''
   name: rhythm
-  type: character
+  type: numeric
 - description: ''
   name: rhythm_rank
-  type: character
+  type: numeric
 - description: ''
   name: season
   type: integer
@@ -55,6 +55,6 @@ columns:
   type: numeric
 - description: ''
   name: win_rate
-  type: character
+  type: numeric
 kind: dataframe
 schema: cba_team_overview
