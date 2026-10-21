@@ -939,6 +939,11 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     else:
         end_team_score_diff = pl.col("pos_score_diff_end")
 
+    # The game's last play: a game that ends on a Timeout row ends on the play before it (C-NF-12),
+    # which ends the game whatever WP the trailing Timeout row was scored at.
+    real_play = pl.col("type.text").fill_null("") != "Timeout"
+    last_play_number = pl.when(real_play).then(pl.col("game_play_number")).max()
+
     # Dead-ball rows between a touchdown and its try: the clock stoppages and a penalty
     # walked off before the try. The penalty inherits the touchdown's end state like a
     # timeout, instead of the model's placeholder (282710130: the touchdown ends at 0.081,
@@ -1071,7 +1076,7 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
                 (pl.col("status_type_completed") == True)
                 .and_(
                     (pl.col("lead_play_type").is_null()).or_(
-                        pl.col("game_play_number") == pl.col("game_play_number").max(),
+                        pl.col("game_play_number") == last_play_number,
                     ),
                 )
                 .and_(end_team_score_diff > 0),
@@ -1081,7 +1086,7 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
                 (pl.col("status_type_completed") == True)
                 .and_(
                     (pl.col("lead_play_type").is_null()).or_(
-                        pl.col("game_play_number") == pl.col("game_play_number").max(),
+                        pl.col("game_play_number") == last_play_number,
                     ),
                 )
                 .and_(end_team_score_diff < 0),
@@ -1092,6 +1097,8 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             .then(None)
             .when(try_to_kickoff)
             .then(kick_board)
+            # the play that ends a half borrows the next real play's wp_before, past a Timeout
+            # row (C-NF-12): 401761665's timeout before overtime is filed to the other team
             .when(
                 (pl.col("end_of_half") == True)
                 .and_(pl.col("start.pos_team.id") == lead_team)
@@ -4440,6 +4447,11 @@ class CFBPlayProcess(object):
             pl.col("type.text").str.contains("(?i)end of|(?i)coin toss|(?i)end period|(?i)wins toss") == False,
         )
         _warn_period_steps_back(play_df, self.gameId)
+        # A half or game that ends on a Timeout row ends on the play before it (C-NF-12): end_of_half
+        # reads the next row that is not a Timeout, and a Timeout row never takes it.
+        half_play = pl.col("type.text").fill_null("") != "Timeout"
+        next_half = pl.when(half_play).then(pl.col("half")).shift(-1).backward_fill()
+        next_period = pl.when(half_play).then(pl.col("period")).shift(-1).backward_fill()
         play_df = (
             play_df.with_columns(
                 period=pl.col("period.number"),
@@ -4474,11 +4486,11 @@ class CFBPlayProcess(object):
                 # a fresh possession), and a finished game's last row (a live game's latest row
                 # has no next row YET). This compared against lead_half in the same
                 # with_columns as its fill, so it read the unfilled null on the game's last row.
-                end_of_half=(
-                    (pl.col("half").shift(-1) != pl.col("half"))
-                    | ((pl.col("period") == 4) & (pl.col("period").shift(-1) >= 5))
-                ).fill_null(False)
-                | (pl.col("half").shift(-1).is_null() & (pl.col("status_type_completed") == True)).fill_null(False),
+                end_of_half=half_play
+                & (
+                    ((next_half != pl.col("half")) | ((pl.col("period") == 4) & (next_period >= 5))).fill_null(False)
+                    | (next_half.is_null() & (pl.col("status_type_completed") == True)).fill_null(False)
+                ),
                 down_1=pl.col("start.down") == 1,
                 down_2=pl.col("start.down") == 2,
                 down_3=pl.col("start.down") == 3,
@@ -7712,33 +7724,32 @@ class CFBPlayProcess(object):
                 highlight_run=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 8))
                 .then(True)
                 .otherwise(False),
-                adj_rush_yardage=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 8))
-                .then(8)
-                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") <= 8))
+                # The standard per-yard adjusted-line-yards band (losses 120%, yards 0-4 100%, yards
+                # 5-10 50%, beyond 10 0%; cap 7), the NFL processor's twin: the line takes half of
+                # yards 5-10, the carrier (second level) the other half, open field everything past
+                # 10, so the three parts sum to the carry. It was a 0-3 / 4-8 / cap 5.5 band (C-NF-3).
+                adj_rush_yardage=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
+                .then(10)
+                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") <= 10))
                 .then(pl.col("yds_rushed"))
                 .otherwise(None),
             )
             .with_columns(
                 line_yards=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") < 0))
                 .then(1.2 * pl.col("adj_rush_yardage"))
-                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 0).and_(pl.col("yds_rushed") <= 3))
+                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") <= 4))
                 .then(pl.col("adj_rush_yardage"))
-                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 4).and_(pl.col("yds_rushed") <= 8))
-                .then(3 + 0.5 * (pl.col("adj_rush_yardage") - 3))
-                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 8))
-                .then(5.5)
+                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") <= 10))
+                .then(4 + 0.5 * (pl.col("adj_rush_yardage") - 4))
+                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
+                .then(7.0)
                 .otherwise(None),
-                # The runner's half of the shared band starts where the line's full credit stops, and
-                # line_yards above gives the line 100% only through 3 yards. Subtracting 4 here instead
-                # of 3 lost exactly half a yard on every carry of 4+, so line + second level + open
-                # field came to yds_rushed - 0.5 rather than yds_rushed: 29 of the 55 rushes in
-                # ESPN 401864570 were short by 0.5 and the rest (runs under 4) were exact.
                 second_level_yards=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 4))
-                .then(0.5 * (pl.col("adj_rush_yardage") - 3))
+                .then(0.5 * (pl.col("adj_rush_yardage") - 4))
                 .when(pl.col("rush") == True)
                 .then(0)
                 .otherwise(None),
-                open_field_yards=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 8))
+                open_field_yards=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
                 .then(pl.col("yds_rushed") - pl.col("adj_rush_yardage"))
                 .when(pl.col("rush") == True)
                 .then(0)
@@ -9337,6 +9348,18 @@ class CFBPlayProcess(object):
             play_df = play_df.with_columns((pl.Null).alias(column))
         return play_df
 
+    def __documented_dtypes(self, play_df):
+        """Widen the Float32 columns the XGBoost scorers leave (the WP family, ``first_down_prob``,
+        ``prob_2pt``, ``drive_start``) to their documented Float64, after every consumer has run.
+
+        Twin of ``NFLPlayProcess.__documented_dtypes`` (the CFB-vs-NFL shared-column dtype test binds
+        the two processors). float32 -> float64 is exact, so no value changes. The widened names are
+        kept so :meth:`create_box_score` narrows them back when re-run on ``plays_frame``.
+        """
+        widened = [c for c, dtype in play_df.schema.items() if dtype == pl.Float32]
+        self._widened_float32 = tuple(dict.fromkeys((*getattr(self, "_widened_float32", ()), *widened)))
+        return play_df.with_columns(pl.col(pl.Float32).cast(pl.Float64))
+
     def create_box_score(self, play_df):
         """Build a per-team and per-player advanced box score from a processed
         plays frame.
@@ -9376,6 +9399,13 @@ class CFBPlayProcess(object):
         # have to run the pipeline before pulling this in
         if self.ran_pipeline == False:
             self.run_processing_pipeline()
+        # The box aggregates and rounds (``pl.col(pl.Float32).round(2)``) at the precision the
+        # scorers emit, but plays_frame publishes those columns Float64 (__documented_dtypes).
+        # Narrowing them back here lets a caller re-run the box on plays_frame (Game on Paper's
+        # ?span= boxes) and get advBoxScore's values; they are widened float32, so this is exact.
+        play_df = play_df.with_columns(
+            pl.col(c).cast(pl.Float32) for c in getattr(self, "_widened_float32", ()) if c in play_df.columns
+        )
 
         box_score_columns = [
             "completion",
@@ -10979,6 +11009,7 @@ class CFBPlayProcess(object):
                     self.plays_json = self.__add_two_pt_probs(self.plays_json)
                 self.ran_pipeline = True
                 advBoxScore = self.plays_json.pipe(self.create_box_score)
+                self.plays_json = self.plays_json.pipe(self.__documented_dtypes)
                 # Keep the enriched polars frame: plays_json becomes a list of
                 # dicts below (and callers mutate it), so consumers that need
                 # to re-aggregate windows (Game on Paper's ?span= boxes filter
@@ -11105,7 +11136,9 @@ class CFBPlayProcess(object):
         keep = ["__fourth_row_idx"] + [c for c in decision_cols if c in scored.columns]
         scored_pl = pl.from_pandas(scored[keep]).with_columns(pl.col("__fourth_row_idx").cast(pl.UInt32))
 
-        plays = plays.join(scored_pl, on="__fourth_row_idx", how="left").drop("__fourth_row_idx")
+        plays = self.__documented_dtypes(
+            plays.join(scored_pl, on="__fourth_row_idx", how="left").drop("__fourth_row_idx")
+        )
         # keep the retained frame in sync -- consumers re-aggregating windows
         # (see run_processing_pipeline) must see the added columns too
         self.plays_frame = plays
@@ -11152,7 +11185,9 @@ class CFBPlayProcess(object):
             # plain run already carries the columns; recompute here for explicit calls.
             self.run_processing_pipeline()
 
-        plays = self.__add_two_pt_probs(pl.DataFrame(self.plays_json, infer_schema_length=None))
+        plays = self.__documented_dtypes(
+            self.__add_two_pt_probs(pl.DataFrame(self.plays_json, infer_schema_length=None))
+        )
         # keep the retained frame in sync -- consumers re-aggregating windows
         # (see run_processing_pipeline) must see the added columns too
         self.plays_frame = plays

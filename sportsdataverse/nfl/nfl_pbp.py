@@ -55,7 +55,7 @@ from sportsdataverse.football.attribution import (
     refine_play_types_post_attribution as _refine_play_types_post_attribution,
 )
 from sportsdataverse.football.box import air_yards_box as _air_yards_box
-from sportsdataverse.football.box import _ordered_rows
+from sportsdataverse.football.box import _home_first, _ordered_rows
 from sportsdataverse.football.box import _avg_start_ep
 from sportsdataverse.football.box import build_defensive_players_box as _build_defensive_players_box
 from sportsdataverse.football.box import build_specialists_box as _build_specialists_box
@@ -87,6 +87,8 @@ from sportsdataverse.nfl.ep_wp import (
     calculate_xpass,
 )
 from sportsdataverse.nfl.model_vars import (
+    ESPN_FULL_KICK_TEXT_FROM,
+    ESPN_PERIOD_REPAIR_BEFORE,
     SPREAD_TIME_DECAY_EXPONENT,
     touchback_yardline_expr,
     defense_score_vec,
@@ -104,6 +106,49 @@ from sportsdataverse.nfl.model_vars import (
     scores_vec,
     turnover_vec,
 )
+from sportsdataverse.cfb.cfb_pbp import _PENALTY_NEGATED_TEXT
+
+
+def _touchdown_did_not_stand() -> pl.Expr:
+    """Whether a touchdown the row's text or type names did not stand.
+
+    The CFB rule (``cfb_pbp._touchdown_negated``, C-M1) with ESPN's ``scoringPlay`` as the gate. On
+    a row ESPN did not score, the no-play marker ("TOUCHDOWN NULLIFIED by Penalty") or a replay
+    reversal negates it: ESPN still types "... for 29 yards, TOUCHDOWN ... and the play was REVERSED"
+    as a "Passing Touchdown" (291018018, 401671740; C-NF-6). So does a "Kickoff/Punt Return
+    Touchdown" type whose text names no touchdown, from ``ESPN_FULL_KICK_TEXT_FROM`` (2009): ESPN
+    types 2024 onside and short-of-landing-zone kicks that way (R808-4).
+
+    On a row ESPN scored, the "No Play" belongs to the try or to the ruling a reversal INTO the
+    touchdown overturned (2812140120518, 4005542932688), and the NFL text has no CFB "clock" tail to
+    cut those off at. Two markers still negate there. "Nullified by penalty" does unless the game's
+    next row is a try (Extra Point / Two Point, made or not): only a touchdown that stood is followed
+    by one, the foul having been enforced on the kickoff (3112180024175, R808-2). Of the 38 scored
+    "nullified" rows 2006-24 only that one has a try next; 2911290162862 (nflverse 0) does not. A
+    reversal negates when ESPN types the row a Safety: the touchdown was reversed into one
+    (2911260083341, R808-3). ``__add_play_type_flags`` stores the result once as
+    ``_td_did_not_stand`` (the next row is read within ``game_id``) for td_play, pass_td and rush_td.
+    """
+    text = pl.col("text")
+    try_follows = (
+        pl.col("type.text").shift(-1).over("game_id").str.contains(r"^(?:Extra Point|Two Point|Two-Point)")
+    ).fill_null(False)
+    unscored = _PENALTY_NEGATED_TEXT + "|reversed"
+    mistyped_return = (
+        pl.col("type.text").is_in(["Kickoff Return Touchdown", "Punt Return Touchdown"])
+        & ~text.str.contains("(?i)touchdown|for a TD")
+        & (pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM)
+    )
+    return (
+        pl.when(pl.col("scoringPlay") == True)
+        .then(
+            (text.str.contains("(?i)nullified by penalty") & ~try_follows)
+            | (text.str.contains("(?i)reversed") & (pl.col("type.text") == "Safety"))
+        )
+        .otherwise(text.str.contains(unscored) | mistyped_return)
+        .fill_null(False)
+    )
+
 
 # ESPN NFL play-text grammar. A ball-carrier is "X.Surname" (optionally
 # "Ja.Surname", "A.St. Brown", "A.Van Ginkel", "D.Jones Jr."); the CFB text the
@@ -445,6 +490,231 @@ def _nfl_timeout_side(text, home, away):
         if h != a:
             return "home" if h else "away"
     return None
+
+
+def _nfl_turnover_in_text(row: dict) -> bool:
+    """An interception, or a fumble whose last recovery is the defense's, by the play text."""
+    text = row["text"] or ""
+    if re.search(r"(?i)intercept", text):
+        return True
+    codes = _nfl_parse_recovery_abbrevs(text)
+    side = _nfl_side_of_abbrev(codes[-1], row["homeTeamAbbrev"], row["awayTeamAbbrev"]) if codes else None
+    return side is not None and side != ("home" if row["_offense_home"] else "away")
+
+
+# A first down by penalty in ESPN's NFL text (C-H3). The feed never writes the CFB phrase "1st
+# down"; it writes the accepted foul ("PENALTY on TB-V.Vea, Defensive Holding, 5 yards, enforced at
+# TB 49."). The defense's automatic-first-down fouls convert on their own, any other accepted
+# defensive foul only when its yards reach the line to gain on a play that does not stand. Against
+# nflverse ``first_down_penalty`` (GSIS stat 5) on 199 nfl-raw games of 2010/2013/2017/2023: 674 of
+# 682 found, 3 false positives (the CFB phrase found 226). The 2002-2008 feed writes no accepted-foul
+# clause ("5 yard penalty on Giants.", "Face Mask (15 Yards)"), so those seasons find none (2007: 0 of 63).
+_NFL_ACCEPTED_FOUL = r"(?i)penalty on [^,]+, [^,]+, \d+ yards?, enforced"
+_NFL_AUTO_FIRST_DOWN_FOUL = (
+    r"(?i)penalty on [^,]+, (?:defensive pass interference|defensive holding|illegal contact|illegal use of hands"
+    r"|roughing the (?:passer|kicker|snapper)|unnecessary roughness|face ?mask[^,]*|horse collar[^,]*"
+    r"|lowering the head[^,]*|leaping|personal foul[^,]*|disqualification|low block|taunting|tripping"
+    r"|unsportsmanlike conduct), \d+ yards?, enforced"
+)
+
+
+def _nfl_penalty_first_down() -> pl.Expr:
+    """True where an accepted foul by the defense gave the offense a first down (needs ``penalized_team``)."""
+    text = pl.col("text").fill_null("")
+    gains_line = (
+        text.str.contains(_NFL_ACCEPTED_FOUL)
+        & (pl.col("statYardage") >= pl.col("start.distance")).fill_null(False)
+        & (pl.col("penalty_no_play").fill_null(False) | (pl.col("type.text") == "Penalty").fill_null(False))
+    )
+    return (
+        (pl.col("penalized_team") == pl.col("def_pos_team")).fill_null(False)
+        & ~pl.col("penalty_offset").fill_null(False)
+        & ~pl.col("kickoff_play").fill_null(False)
+        & ~pl.col("touchdown").fill_null(False)
+        & ~pl.col("change_of_pos_team").fill_null(False)
+        # a try, or a dead-ball foul after the play, has no line to gain
+        & pl.col("start.down").is_between(1, 4).fill_null(False)
+        & ~text.str.contains(r"(?i)enforced between downs")
+        # on a punt only a foul on the kicker or snapper is the kicking team's first down
+        & (~pl.col("punt").fill_null(False) | text.str.contains(r"(?i)roughing the (?:kicker|snapper)|running into"))
+        & (text.str.contains(_NFL_AUTO_FIRST_DOWN_FOUL) | gains_line)
+    )
+
+
+def _end_of_game_row() -> pl.Expr:
+    """ESPN's "End of the game." admin row by its text: the 2002-05 feeds ship it untyped (C-M2)."""
+    return pl.col("text").str.contains(r"(?i)^\s*end of (the )?game").fill_null(False)
+
+
+def _repair_espn_period(plays: pl.DataFrame) -> pl.DataFrame:
+    """Sort one game's ESPN plays by id and undo ESPN's out-of-place ``period.number`` (R832-10).
+
+    Before ``ESPN_PERIOD_REPAIR_BEFORE`` ESPN sometimes files a play under a later period than the
+    plays on both sides of it while the clock keeps running down across all three (261022011's Q2
+    kickoff at 0:08 as period 3, so the half "ended" three times). Such a row takes its neighbours'
+    period. Only a later period is lowered, and never just before an "End ..." admin row: raising
+    a period, or lowering one ahead of a late quarter-end row, is what an out-of-order play id looks
+    like, and there ESPN's period is right (measured on nfl-raw against nflverse ``qtr``;
+    see the constant). ``clock.minutes`` / ``clock.seconds`` are the split clock strings.
+    """
+    secs = pl.col("clock.minutes").cast(pl.Int32, strict=False) * 60 + pl.col("clock.seconds").cast(
+        pl.Int32, strict=False
+    )
+    period = pl.col("period.number")
+    admin = pl.col("type.text").str.to_lowercase().str.starts_with("end ").fill_null(False)
+    out_of_place = (
+        (pl.col("season") < ESPN_PERIOD_REPAIR_BEFORE)
+        & (period.shift(1) == period.shift(-1))
+        & (period > period.shift(1))
+        & (pl.col("_secs").shift(1) >= pl.col("_secs"))
+        & (pl.col("_secs") >= pl.col("_secs").shift(-1))
+        & ~admin.shift(-1)
+    ).fill_null(False)
+    return (
+        plays.sort(pl.col("id").cast(pl.Int64), maintain_order=True)
+        .with_columns(_secs=secs)
+        .with_columns(pl.when(out_of_place).then(period.shift(1)).otherwise(period).alias("period.number"))
+        .drop("_secs")
+    )
+
+
+def _ends_a_half(half_play: pl.Expr) -> pl.Expr:
+    """The play that ends a half, among the rows ``half_play`` marks as plays.
+
+    The first half's last play, regulation's last play when the game goes to overtime, and a
+    finished game's last play (nflfastR helper_add_ep_wp.R:710-724: its EPA is -EP_start unless it
+    scored). It reads the next play, so a half that ends on a timeout ends on the play before it
+    (C-NF-12); compared with lead_half in that column's own fill, it read the unfilled null on the
+    game's last row (C-H2). Port of cfb_pbp.py __add_downs_data.
+    """
+    next_half = pl.when(half_play).then(pl.col("half")).shift(-1).backward_fill()
+    next_period = pl.when(half_play).then(pl.col("period")).shift(-1).backward_fill()
+    return half_play & (
+        ((next_half != pl.col("half")) | ((pl.col("period") == 4) & (next_period >= 5))).fill_null(False)
+        | (next_half.is_null() & (pl.col("status_type_completed") == True)).fill_null(False)
+    )
+
+
+def _kickoff_next_snap(stop: pl.Expr) -> tuple[pl.Expr, pl.Expr, pl.Expr, pl.Expr]:
+    """The kickoff net-spot read for ``__add_downs_data``: ``(kickoff, nxt, next_snap, kicker_recovers)``.
+
+    Kickoff EPA (the owner's model) is EP(1st & 10 at the net spot, for the team with the ball
+    after the kick) - EP(1st & 10 at the touchback spot), so every unscored kickoff (returned,
+    out of bounds, penalty spot, onside recovered by either side) ends at a first down whatever
+    down / distance ESPN ships; a touchback with no next snap to read is re-spotted later at the
+    season's touchback spot (kickoff_tb & ~_kick_spot, EX-2.3-a). The net spot is
+    where that team's next snap starts (ESPN's end yard line is flipped on some returns, R810-5).
+    Pre-2014 play ids are not always in game order (R785-4), so the next snap by id must also be
+    the next snap by sequenceNumber in the same half, and not another kickoff; otherwise ESPN's
+    end yard line stands. It must also be the snap of the team with the ball after the kick: a
+    kickoff row's start.pos_team.id is the receiving team in every era (ESPN's start.team is the
+    kicker), unless the kicking team recovers (an onside kick, a muff, "Kickoff Team Fumble
+    Recovery"; R810-3): the play type says so, or the text's last "RECOVERED by XXX" names the
+    team of its own "kicks ... from XXX"; only the text after a REVERSED ruling counts (a reversed
+    recovery, 301114003/3734, is the receiver's ball). ESPN files some kickoffs inside the kicking
+    team's drive (401326517/1442), whose next snap is then not the receiver's.
+    """
+    kickoff = pl.col("type.text").is_in(kickoff_vec).fill_null(False)
+    kick_abbr = pl.col("text").str.extract(r"(?i)\bkicks\b.*?\bfrom\s+([A-Z]{2,3})\s+\d", 1)
+    ruled = pl.col("text").str.split("REVERSED").list.last()  # the play as it stands
+    recovered_by = ruled.str.extract_all(r"RECOVERED by [A-Z]{2,3}\b").list.last().str.slice(13)
+    kicker_recovers = (
+        kickoff & (pl.col("type.text").is_in(kickoff_turnovers) | (recovered_by == kick_abbr))  # R810-3
+    ).fill_null(False)
+    after_kick = pl.when(kicker_recovers).then(pl.col("start.team.id")).otherwise(pl.col("start.pos_team.id"))
+    seq_rank = pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("half")
+    nxt = pl.struct(y2e=pl.col("start.yardsToEndzone"), kick=kickoff, r=seq_rank, team=pl.col("start.pos_team.id"))
+    next_snap = (
+        (pl.col("_nxt").struct.field("kick") == False)
+        & (pl.col("_nxt").struct.field("r") == seq_rank + 1)
+        & (pl.col("_nxt").struct.field("team") == after_kick)  # the snap of the team with the ball
+    ).fill_null(False)
+    return kickoff, nxt, next_snap, kicker_recovers
+
+
+def _missed_fg_unblocked() -> pl.Expr:
+    """An unscored missed field goal; a blocked kick is a live ball, so text saying blocked is not one."""
+    return (
+        (pl.col("type.text") == "Field Goal Missed")
+        & ~pl.col("text").str.contains("(?i)block").fill_null(False)
+        & ~(pl.col("scoringPlay") == True).fill_null(False)
+    )
+
+
+def _end_state_from_next_play(plays: pl.DataFrame) -> pl.DataFrame:
+    """A play ends where the next play of its game and half starts (EX-1.5-d).
+
+    ESPN's 2014-2021 feed states a growing share of play ``end`` objects with the defense's team
+    id and a down/distance that does not follow from the play (2021: 30% of plain scrimmage
+    plays), while the yard line stays right. nflfastR reads possession change and the next state
+    off the next play; so does this, for ``end.team.id`` and ``end.down`` / ``end.distance``. No next
+    play speaks for a score (its end is stated for the scorer and the try follows), the half's last
+    play, or a play followed by a kickoff. A score keeps ESPN's ``end``. On the other two a plain
+    snap (``normalplay`` or a penalty with no interception or lost fumble in its text, on downs 1-3 or a
+    4th down that gains the line) keeps the ball, as nflfastR's possession does when a half ends
+    (``helper_add_ep_wp.R:710-728`` scores it ``0 - ep``; drives and series are grouped by
+    ``game_half``, ``helper_add_fixed_drives.R:29``), and a ``normalplay`` snap's down and distance
+    follow from its own gain (a penalty keeps ESPN's). Anything else keeps ESPN's ``end``. A down
+    is only replaced where ESPN states one (1-4): its ``-1`` on returned kickoffs and pre-2014
+    missed field goals is C-H5 / EX-1.1-c (task 2.3).
+    """
+    stop = pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False)
+    # the next real play of the same game and half (clock stoppages in between skipped)
+    nxt = pl.struct(
+        team=pl.col("start.pos_team.id"),
+        down=pl.col("start.down"),
+        dist=pl.col("start.distance"),
+        kick=pl.col("type.text").is_in(kickoff_vec).fill_null(False),
+    )
+    plays = plays.with_columns(_nxt=pl.when(~stop).then(nxt).backward_fill().shift(-1).over("game_id", "half"))
+    # ponytail: a Python pass over the rows (one game, ~180), so the parser runs where coverage traces it
+    offense_home = (pl.col("start.pos_team.id") == pl.col("homeTeamId")).alias("_offense_home")
+    rows = plays.select("text", "homeTeamAbbrev", "awayTeamAbbrev", offense_home).iter_rows(named=True)
+    plays = plays.with_columns(_turnover=pl.Series([_nfl_turnover_in_text(r) for r in rows], dtype=pl.Boolean))
+    n = pl.col("_nxt").struct
+    # the snap's own gain, from ESPN's yard lines (right where its end team and down are not, and
+    # unlike statYardage it counts a lateral's whole gain); an incompletion gains nothing
+    home = pl.col("start.pos_team.id") == pl.col("homeTeamId")
+
+    def _to_go(side: str) -> pl.Expr:
+        line = pl.col(f"{side}.yardLine").cast(pl.Int64, strict=False)
+        return pl.when(home).then(100 - line).otherwise(line)
+
+    gain = pl.when(pl.col("type.text") == "Pass Incompletion").then(0).otherwise(_to_go("start") - _to_go("end"))
+    gained = gain >= pl.col("start.distance")
+    score = pl.col("scoringPlay").fill_null(False) | pl.col("type.text").is_in(scores_vec).fill_null(False)
+    use = ~stop & ~score & pl.col("_nxt").is_not_null() & (n.field("kick") == False)
+    held = (
+        ~stop
+        & ~score
+        & ~use
+        & pl.col("type.text").is_in([*normalplay, "Penalty"]).fill_null(False)
+        # ESPN types a lateral fumbled away at the gun "Pass Reception": a turnover in the text keeps ESPN's end
+        & ~pl.col("_turnover")
+        & (pl.col("start.down").is_between(1, 3) | ((pl.col("start.down") == 4) & gained)).fill_null(False)
+    )
+    held_snap = held & pl.col("type.text").is_in(normalplay).fill_null(False) & gain.is_not_null()
+    real_down = use & pl.col("end.down").is_between(1, 4) & n.field("down").is_between(1, 4) & (n.field("dist") > 0)
+    return plays.with_columns(
+        pl.when(use)
+        .then(n.field("team"))
+        .when(held)
+        .then(pl.col("start.pos_team.id"))
+        .otherwise(pl.col("end.team.id"))
+        .alias("end.team.id"),
+        pl.when(real_down)
+        .then(n.field("down"))
+        .when(held_snap)
+        .then(pl.when(gained).then(1).otherwise(pl.col("start.down") + 1))
+        .otherwise(pl.col("end.down"))
+        .alias("end.down"),
+        pl.when(real_down)
+        .then(n.field("dist"))
+        .when(held_snap)
+        .then(pl.when(gained).then(10).otherwise(pl.col("start.distance") - gain))
+        .otherwise(pl.col("end.distance"))
+        .alias("end.distance"),
+    ).drop("_nxt", "_turnover")
 
 
 # "td" : float(p[0]),
@@ -871,6 +1141,7 @@ class NFLPlayProcess(object):
             )
             .with_columns(pl.col("clock.mm").struct.rename_fields(["clock.minutes", "clock.seconds"]))
             .unnest("clock.mm")
+            .pipe(_repair_espn_period)
             .with_columns(
                 pl.col("clock.minutes").cast(pl.Int32),
                 pl.col("clock.seconds").cast(pl.Int32),
@@ -998,6 +1269,7 @@ class NFLPlayProcess(object):
                 .otherwise(pl.col("start.team.id"))
                 .alias("start.pos_team.id"),
             )
+            .pipe(_end_state_from_next_play)
             .with_columns(
                 pl.when(pl.col("start.pos_team.id") == init["homeTeamId"])
                 .then(init["awayTeamId"])
@@ -1547,20 +1819,65 @@ class NFLPlayProcess(object):
             maintain_order=True,
         )
         play_df = play_df.filter(
-            pl.col("type.text").str.contains("(?i)end of|(?i)coin toss|(?i)end period|(?i)wins toss") == False,
+            (
+                pl.col("type.text").str.contains("(?i)end of|(?i)coin toss|(?i)end period|(?i)wins toss")
+                | _end_of_game_row()
+            )
+            == False,
         )
+        # ESPN ends a returned kickoff (2014 on) and a missed field goal (before 2014) at down -1,
+        # and the EP and WP models read that as no down at all: 401282817's return to the 17 scored
+        # 0.79 where the 1st & 10 snapped there scores 1.83. An unscored play at -1 starts the next
+        # possession at a first down (the CFB rewrite in cfb_pbp.py __add_downs_data; C-H5,
+        # EX-1.1-c). A score keeps its -1 (a try or a kickoff follows, and the series and touchdown
+        # logic read it), and so does a timeout: nflverse carries no media timeout and gives a team
+        # timeout no down.
+        stop = pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False)
+        unscored = ~(pl.col("scoringPlay") == True).fill_null(False)
+        no_down = (pl.col("end.down") == -1) & ~stop & unscored
+        kickoff, nxt, next_snap, kicker_recovers = _kickoff_next_snap(stop)
+        # A missed field goal starts the other team's possession at a first down (the owner's
+        # missed-field-goal model); its spot is set in __add_play_category_flags, once the kick's
+        # line of scrimmage is final.
+        missed_fg = _missed_fg_unblocked()
+        first_down = no_down | (kickoff & unscored) | missed_fg
+        # The first snap is 1st & 10, or 1st & goal inside the 10; ESPN's end distance on a return is
+        # often stale (R810-1). A missed field goal's spot (set later) is never inside the 10.
+        goal_to_go = pl.col("end.yardsToEndzone").is_between(1, 9) & ~missed_fg
         play_df = (
             play_df.with_columns(
                 period=pl.col("period.number"),
                 half=pl.when(pl.col("period.number") <= 2).then(1).otherwise(2),
             )
+            .with_columns(_nxt=pl.when(~stop).then(nxt).backward_fill().shift(-1).over("half"))
+            .with_columns(
+                _first_down=first_down.fill_null(False),
+                _kick_spot=(kickoff & unscored & next_snap).fill_null(False),
+                # read by calculate_epa (EP_end is the kicker's), dropped after it
+                _kicker_recovers=kicker_recovers,
+            )
+            .with_columns(
+                pl.when(pl.col("_kick_spot"))
+                .then(pl.col("_nxt").struct.field("y2e"))
+                .otherwise(pl.col("end.yardsToEndzone"))
+                .alias("end.yardsToEndzone"),
+                pl.when(pl.col("_first_down")).then(1).otherwise(pl.col("end.down")).alias("end.down"),
+            )
+            .with_columns(
+                pl.when(pl.col("_first_down"))
+                .then(pl.when(goal_to_go).then(pl.col("end.yardsToEndzone")).otherwise(10))
+                .otherwise(pl.col("end.distance"))
+                .alias("end.distance"),
+            )
+            # _kick_spot is kept for the kickoff_tb re-spot in the EP block, which drops it.
+            .drop("_nxt", "_first_down")
             .with_columns(
                 lead_half=pl.col("half").shift(-1),
                 lag_scoringPlay=pl.col("scoringPlay").shift(1),
             )
             .with_columns(
                 pl.when(pl.col("lead_half").is_null()).then(2).otherwise(pl.col("lead_half")).alias("lead_half"),
-                end_of_half=pl.col("half") != pl.col("lead_half"),
+                end_of_half=_ends_a_half(~stop),
                 down_1=pl.col("start.down") == 1,
                 down_2=pl.col("start.down") == 2,
                 down_3=pl.col("start.down") == 3,
@@ -1581,10 +1898,14 @@ class NFLPlayProcess(object):
         """
         # --- Touchdown, Fumble, Special Teams flags -----------------
         play_df = (
-            play_df.with_columns(
+            play_df.with_columns(_td_did_not_stand=_touchdown_did_not_stand())
+            .with_columns(
                 scoring_play=pl.when(pl.col("type.text").is_in(scores_vec)).then(True).otherwise(False),
-                td_play=pl.col("text").str.contains("(?i)touchdown|(?i)for a TD")
-                | pl.col("type.text").str.contains("Touchdown"),
+                td_play=(
+                    pl.col("text").str.contains("(?i)touchdown|(?i)for a TD")
+                    | pl.col("type.text").str.contains("Touchdown")
+                )
+                & ~pl.col("_td_did_not_stand"),
                 touchdown=pl.col("type.text").str.contains("(?i)touchdown"),
                 ## Portion of touchdown check for plays where touchdown is not listed in the play_type--
                 td_check=pl.col("text").str.contains("(?i)touchdown"),
@@ -2729,7 +3050,9 @@ class NFLPlayProcess(object):
                 # ``type.text`` alone does not catch every one: ESPN labels some pick-sixes
                 # "Passing Touchdown" and some "Interception Return", so the text -- which
                 # says the ball was intercepted or lost and THEN scored -- gates first (O3).
-                pass_td=pl.when(_returned_for_touchdown("text"))
+                pass_td=pl.when(pl.col("_td_did_not_stand"))
+                .then(False)
+                .when(_returned_for_touchdown("text"))
                 .then(False)
                 .when(pl.col("type.text").is_in(["Passing Touchdown"]))
                 .then(True)
@@ -2740,7 +3063,9 @@ class NFLPlayProcess(object):
                 )
                 .then(True)
                 .otherwise(False),
-                rush_td=pl.when(_returned_for_touchdown("text"))
+                rush_td=pl.when(pl.col("_td_did_not_stand"))
+                .then(False)
+                .when(_returned_for_touchdown("text"))
                 .then(False)
                 .when(pl.col("type.text").is_in(["Rushing Touchdown"]))
                 .then(True)
@@ -2808,6 +3133,7 @@ class NFLPlayProcess(object):
                 .str.extract(r"(\d+)")
                 .cast(pl.Int32),
             )
+            .drop("_td_did_not_stand")
             .with_columns(
                 # A field goal snaps from ESPN's own yard line; the kick distance is a
                 # fallback for the oldest feeds, and it is 18 yards longer than the
@@ -2836,6 +3162,17 @@ class NFLPlayProcess(object):
                 .then(pl.col("start.yardLine").cast(pl.Int32))
                 .otherwise(pl.col("start.yardsToEndzone"))
                 .alias("start.yardsToEndzone"),
+            )
+            .with_columns(
+                # Missed field goal EPA (the owner's model) = EP(the other team, 1st & 10 at the spot
+                # of the kick) - EP_start, every season, whatever end ESPN ships. The kick is 7 yards
+                # behind the line of scrimmage, and since 1994 a kick from inside the 20 gives the
+                # ball at the 20: the receiver's yards to go = min(100 - start.yardsToEndzone - 7, 80).
+                # Down 1 / distance 10 and the possession change are set in __add_downs_data.
+                pl.when(_missed_fg_unblocked() & pl.col("start.yardsToEndzone").is_not_null())
+                .then(pl.min_horizontal(100 - pl.col("start.yardsToEndzone") - 7, pl.lit(80)))
+                .otherwise(pl.col("end.yardsToEndzone"))
+                .alias("end.yardsToEndzone"),
             )
             .with_columns(
                 pos_unit=pl.when(pl.col("punt") == True)
@@ -4304,13 +4641,31 @@ class NFLPlayProcess(object):
             max_penalty_yards=99,
         )
 
+    def __add_penalty_first_down(self, play_df):
+        """``penalty_1st_conv`` from the NFL grammar, once ``penalized_team`` is known (C-H3).
+
+        The value set in ``__setup_penalty_data`` (the CFB phrase "1st down") feeds attribution's
+        side vote only; everything after reads this one (the refine step's ``downs_turnover``, both
+        series counters).
+        """
+        return play_df.with_columns(penalty_1st_conv=_nfl_penalty_first_down())
+
     def __refine_play_types_post_attribution(self, play_df):
         """Correct two play-type labels that need the post-attribution turnover signal."""
         return _refine_play_types_post_attribution(play_df, normalplay=normalplay, end_change_vec=end_change_vec)
 
     def __add_series_data(self, play_df):
-        """cfbfastR's series / first-down decomposition (shared football series module)."""
-        return _add_series_data(play_df, penalty=penalty, normalplay=normalplay)
+        """cfbfastR's series / first-down decomposition (shared football series module).
+
+        ``first_down_penalty`` is nflfastR's (GSIS stat 5): the play's penalty first down, also
+        where the play's yards reached the line (11% of nflverse's, 2010 and 2023). The shared
+        module's CFB bucket drops those and only knows the NCAA automatic fouls (C-H3).
+        """
+        return (
+            _add_series_data(play_df, penalty=penalty, normalplay=normalplay)
+            .with_columns(first_down_penalty=pl.col("penalty_1st_conv").fill_null(False))
+            .with_columns(first_down_earned=pl.col("first_down_yards") | pl.col("first_down_penalty"))
+        )
 
     def __credit_to_spot_of_foul(self, play_df):
         """Official-scoring credit for a run or catch that drew an offensive foul.
@@ -4601,28 +4956,33 @@ class NFLPlayProcess(object):
                 highlight_run=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 8))
                 .then(True)
                 .otherwise(False),
-                adj_rush_yardage=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 8))
-                .then(8)
-                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") <= 8))
+                # The standard per-yard adjusted-line-yards band (losses 120%, yards 0-4 100%, yards
+                # 5-10 50%, beyond 10 0%; cap 7): the line takes half of yards 5-10, the carrier
+                # (second level) the other half, open field everything past 10, so the three parts sum
+                # to the carry. The old 0-3 / 4-8 / cap 5.5 band paired with `adj - 4` here came up
+                # half a yard short on every carry of 4+ (C-H1, C-NF-3).
+                adj_rush_yardage=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
+                .then(10)
+                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") <= 10))
                 .then(pl.col("yds_rushed"))
                 .otherwise(None),
             )
             .with_columns(
                 line_yards=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") < 0))
                 .then(1.2 * pl.col("adj_rush_yardage"))
-                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 0).and_(pl.col("yds_rushed") <= 3))
+                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") <= 4))
                 .then(pl.col("adj_rush_yardage"))
-                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 4).and_(pl.col("yds_rushed") <= 8))
-                .then(3 + 0.5 * (pl.col("adj_rush_yardage") - 3))
-                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 8))
-                .then(5.5)
+                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") <= 10))
+                .then(4 + 0.5 * (pl.col("adj_rush_yardage") - 4))
+                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
+                .then(7.0)
                 .otherwise(None),
                 second_level_yards=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 4))
                 .then(0.5 * (pl.col("adj_rush_yardage") - 4))
                 .when(pl.col("rush") == True)
                 .then(0)
                 .otherwise(None),
-                open_field_yards=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 8))
+                open_field_yards=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
                 .then(pl.col("yds_rushed") - pl.col("adj_rush_yardage"))
                 .when(pl.col("rush") == True)
                 .then(0)
@@ -4878,6 +5238,7 @@ class NFLPlayProcess(object):
         _probs_start = _ep_model.predict(DMatrix(X_ep_start, feature_names=EP_FEATURES)).reshape(-1, 7)
         EP_start = np.clip(_probs_start @ _EP_POINT_VALUES, -10.0, 10.0)
 
+        tb_fallback = (pl.col("kickoff_tb") == True) & ~pl.col("_kick_spot")  # R831-1: next snap wins
         play_df = (
             play_df.with_columns(
                 pl.when(pl.col("end.TimeSecsRem") <= 0)
@@ -4920,10 +5281,22 @@ class NFLPlayProcess(object):
                 .alias("end.yardsToEndzone"),
             )
             .with_columns(
-                pl.when(pl.col("kickoff_tb") == True)
-                .then(75)
+                # A touchback kickoff with no receiver's next snap to read ends where EP_start_touchback
+                # starts it: the season's rule spot, with the receiver's ball, timeouts and clock (a
+                # touchback runs none), so its EPA is 0 (the owner's kickoff model; EX-2.3-a). ESPN's end
+                # team / clock on such a row come from whatever row follows it (401326517/1442 is filed
+                # inside the kicking team's drive). One the next snap places keeps that spot (_kick_spot,
+                # set with the C-H5 rewrite): from 2024 a kick that lands in the landing zone and rolls
+                # into the end zone is a touchback at the 20, not the 30 / 35 (R831-1). The punt
+                # touchback below is the 20 in every season.
+                pl.when(tb_fallback)
+                .then(touchback_yardline_expr(pl.col("season")))  # EX-2.3-a: the EP_start_touchback spot
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
+                *(
+                    pl.when(tb_fallback).then(pl.col(f"start.{c}")).otherwise(pl.col(f"end.{c}")).alias(f"end.{c}")
+                    for c in ("is_home", "posTeamTimeouts", "defPosTeamTimeouts", "TimeSecsRem")
+                ),
                 pl.when(pl.col("kickoff_tb") == True).then(1).otherwise(pl.col("end.down")).alias("end.down"),
                 pl.when(pl.col("kickoff_tb") == True).then(10).otherwise(pl.col("end.distance")).alias("end.distance"),
             )
@@ -4935,12 +5308,45 @@ class NFLPlayProcess(object):
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
             )
+            .drop("_kick_spot")
+            # A touchback runs no clock, so a touchback kickoff's EP_end is scored at its START clock,
+            # whatever ESPN's end clock says (owner ruling 2026-10-17, R856-2: 271223008/1912 takes
+            # its 1:08 end clock from a misordered timeout row). EPA only: end.TimeSecsRem, which the
+            # WP end view reads, keeps ESPN's clock. A touchback is a kickoff_tb row whose text says so
+            # or whose receiver next snaps at the season's touchback spot: kickoff_tb also flags the
+            # 2006-08 bare "KickOff" rows, most of them returns in nflverse (R831-2), and their return
+            # does run the clock (on the 644 sample games the flag alone moved 1,865 such rows,
+            # sum |EPA - nflverse| 111.9 -> 120.3). The next-snap half cannot tell a bare "KickOff" whose
+            # return or penalty ends exactly at the spot from a touchback (260917021/4272, in overtime):
+            # such a row takes the start clock too, a clock-only effect of at most ~0.005 EPA (R856-17).
+            .with_columns(
+                _ep_end_tb=(
+                    (pl.col("kickoff_tb") == True)
+                    & (
+                        pl.col("text").str.contains("(?i)touchback")
+                        | (pl.col("end.yardsToEndzone") == touchback_yardline_expr(pl.col("season")))
+                    )
+                ).fill_null(False)
+            )
+            .with_columns(
+                _ep_end_secs=pl.when(pl.col("_ep_end_tb"))
+                .then(pl.col("start.TimeSecsRem"))
+                .otherwise(pl.col("end.TimeSecsRem")),
+                # A touchback whose ESPN end clock is 0 took the period-end clamp above (end at the 99),
+                # so at the start clock it would be scored as the receiver's ball on his own 1. It ends at
+                # the season's touchback spot, 1st & 10 (R856-15: 400791544/2058, 401127996/1913). Every
+                # other touchback keeps its end spot: the spot itself, a penalty enforced from it, or the
+                # 2024+ landing-zone touchback at the 20 its next snap places (R831-1). EP view only.
+                _ep_end_y2e=pl.when(pl.col("_ep_end_tb") & (pl.col("end.TimeSecsRem") <= 0) & (pl.col("period") < 5))
+                .then(touchback_yardline_expr(pl.col("season")))
+                .otherwise(pl.col("end.yardsToEndzone")),
+            )
         )
 
         X_ep_end = _espn_ep_features(
             play_df,
-            half_sec_col="end.TimeSecsRem",
-            yardline_col="end.yardsToEndzone",
+            half_sec_col="_ep_end_secs",
+            yardline_col="_ep_end_y2e",
             home_col="end.is_home",
             ydstogo_col="end.distance",
             down1_col="down_1_end",
@@ -4952,6 +5358,7 @@ class NFLPlayProcess(object):
         )
         _probs_end = _ep_model.predict(DMatrix(X_ep_end, feature_names=EP_FEATURES)).reshape(-1, 7)
         EP_end = np.clip(_probs_end @ _EP_POINT_VALUES, -10.0, 10.0)
+        play_df = play_df.drop("_ep_end_tb", "_ep_end_secs", "_ep_end_y2e")
 
         # --- Accepted-penalty counterfactual (parity with the CFB processor) ---
         # What the play would have been worth had the foul not been enforced:
@@ -5061,7 +5468,7 @@ class NFLPlayProcess(object):
         # calculate_epa also emits lowercase nflverse aliases (ep / epa / ep_start /
         # ep_end) the legacy __process_epa output never carried, so drop them to keep
         # the plays schema byte-identical; the EPA_* summary flags below stay inline.
-        play_df = calculate_epa(play_df).drop("ep", "epa", "ep_start", "ep_end")
+        play_df = calculate_epa(play_df).drop("ep", "epa", "ep_start", "ep_end", "_kicker_recovers", strict=False)
 
         play_df = play_df.with_columns(
             def_EPA=pl.col("EPA") * -1,
@@ -6056,6 +6463,10 @@ class NFLPlayProcess(object):
         txt = pl.col("text") if "text" in cols else pl.col("desc")
         type_txt = pl.col("type.text") if "type.text" in cols else pl.lit("")
         eoh = pl.col("end_of_half").cast(pl.Boolean) if "end_of_half" in cols else pl.lit(False)
+        # nflverse books a muffed punt the kicking team recovers as a punt with the returner's lost
+        # fumble (helper_add_fixed_drives.R:91-97 then opens a drive). ESPN's text says "MUFFS", so
+        # fumble_lost is False on it, and its pre-2014 type is not a punt (EX-1.1-a).
+        muffed_punt = type_txt.is_in(["Punt Team Fumble Recovery", "Muffed Punt Recovery (Opponent)"])
 
         # ---- map nflfastR inputs from ESPN columns + derive missing signals ----
         play_df = (
@@ -6069,10 +6480,10 @@ class NFLPlayProcess(object):
                 txt.alias("_ff_desc"),
                 pl.col("touchdown").cast(pl.Int8).alias("_ff_td"),
                 pl.col("safety").cast(pl.Int8).alias("_ff_safety"),
-                pl.col("fumble_lost").cast(pl.Int8).alias("_ff_fumlost"),
+                (pl.col("fumble_lost") | muffed_punt).cast(pl.Int8).alias("_ff_fumlost"),
                 pl.col("field_goal_result").alias("_ff_fgr"),
                 pl.col("kickoff_play").cast(pl.Int8).alias("_ff_kick_att"),
-                (pl.col("punt") | pl.col("punt_play")).cast(pl.Int8).alias("_ff_punt_att"),
+                (pl.col("punt") | pl.col("punt_play") | muffed_punt).cast(pl.Int8).alias("_ff_punt_att"),
                 pl.col("fg_attempt").cast(pl.Int8).alias("_ff_fg"),
             )
             .with_columns(
@@ -6105,6 +6516,12 @@ class NFLPlayProcess(object):
                 # td_team: defense on return / interception TDs, else offense
                 pl.when(pl.col("_ff_td") == 0)
                 .then(None)
+                # a blocked-punt or fumble-return score is the defense's; a kickoff's pos_team is
+                # the receiving side, so its return touchdown is pos_team's
+                .when(pl.col("defense_score_play") == True)
+                .then(pl.col("def_pos_team"))
+                .when(pl.col("kickoff_play") == True)
+                .then(pl.col("pos_team"))
                 .when(type_txt.str.contains(r"(?i)return touchdown") | pl.col("int_td"))
                 .then(pl.col("def_pos_team"))
                 .when(
@@ -6161,8 +6578,13 @@ class NFLPlayProcess(object):
         # ===================== fixed_drive (add_drive_results) =====================
         # posteam swap: on a recovered kickoff the kicking team (defteam) owns the
         # drive (helper_add_fixed_drives.R L15-27).
+        # A timeout row has no posteam in nflverse (all 1,996 of 2018), and the lag-2/3 branches
+        # below read through it; ESPN's 2014-2021 timeout rows carry a team that is often the
+        # defense's (EX-1.5-d), which opened a drive at every such timeout.
         play_df = play_df.with_columns(
-            pl.when(
+            pl.when(type_txt.str.contains(r"(?i)timeout"))
+            .then(None)
+            .when(
                 (pl.col("_ff_kick_att") == 1) & ((pl.col("_ff_own_kick_rec") == 1) | (pl.col("_ff_fumlost") == 1)),
             )
             .then(pl.col("_ff_defteam"))
@@ -6253,6 +6675,21 @@ class NFLPlayProcess(object):
                             & lag_ptype2.is_in(["punt", "pass", "run", "field_goal"])
                             & (lag_td2 == 0)
                         )
+                    ),
+                )
+                .then(1)
+                .otherwise(pl.col("_ff_nd"))
+                .alias("_ff_nd"),
+            )
+            .with_columns(
+                # ESPN folds the try into the touchdown row, so after a defensive score the
+                # kickoff follows the score directly with the same pos_team; nflverse's try row
+                # (posteam = the scorer) is what opens the drive there (L32-54 on that row).
+                pl.when(
+                    (pl.col("_ff_kick_att") == 1)
+                    & (
+                        ((lag_td == 1) & (lag_pt != lag_tdteam))
+                        | (lag_pt.is_null() & (lag_td2 == 1) & (lag_pt2 != lag_tdteam2))
                     ),
                 )
                 .then(1)
@@ -6447,6 +6884,13 @@ class NFLPlayProcess(object):
         # have to run the pipeline before pulling this in
         if self.ran_pipeline == False:
             self.run_processing_pipeline()
+        # The box aggregates and rounds (``pl.col(pl.Float32).round(2)``) at the precision the
+        # scorers emit, but plays_frame publishes those columns Float64 (__documented_dtypes).
+        # Narrowing them back here lets a caller re-run the box on plays_frame (Game on Paper's
+        # ?span= boxes) and get advBoxScore's values; they are widened float32, so this is exact.
+        play_df = play_df.with_columns(
+            pl.col(c).cast(pl.Float32) for c in getattr(self, "_widened_float32", ()) if c in play_df.columns
+        )
 
         box_score_columns = [
             "completion",
@@ -6570,14 +7014,21 @@ class NFLPlayProcess(object):
             & (pl.col("scrimmage_play") == True)
             & (pl.col("athlete_name").is_in(qbs_list)),
         )
+
+        def wmean(x: str, w: str) -> pl.Expr:
+            # A QB with no play of a type has no weight: 0/0 would be NaN, which the booster reads as missing. The
+            # trainer replaced that empty group with 0 (cfb_qbr@9ef6010 qbr_xgb.R:81-85, replace_na); any other NaN
+            # still propagates.
+            return pl.when(pl.col(w).sum() > 0).then((pl.col(x) * pl.col(w)).sum() / pl.col(w).sum()).otherwise(0.0)
+
         pass_qbr = (
             pass_qbr_box.group_by(["pos_team", "athlete_name"])
             .agg(
-                qbr_epa=(pl.col("qbr_epa") * pl.col("weight")).sum() / pl.col("weight").sum(),
-                sack_epa=(pl.col("sack_epa") * pl.col("sack_weight")).sum() / pl.col("sack_weight").sum(),
-                pass_epa=(pl.col("pass_epa") * pl.col("pass_weight")).sum() / pl.col("pass_weight").sum(),
-                rush_epa=(pl.col("rush_epa") * pl.col("rush_weight")).sum() / pl.col("rush_weight").sum(),
-                pen_epa=(pl.col("pen_epa") * pl.col("pen_weight")).sum() / pl.col("pen_weight").sum(),
+                qbr_epa=wmean("qbr_epa", "weight"),
+                sack_epa=wmean("sack_epa", "sack_weight"),
+                pass_epa=wmean("pass_epa", "pass_weight"),
+                rush_epa=wmean("rush_epa", "rush_weight"),
+                pen_epa=wmean("pen_epa", "pen_weight"),
                 spread=(pl.col("start.pos_team_spread").first()),
             )
             .fill_null(0.0)
@@ -7217,7 +7668,7 @@ class NFLPlayProcess(object):
             lambda left, right: left.join(right, on=["def_pos_team"], how="full", coalesce=True),
             def_data_frames,
         )
-        def_box_json = json.loads(def_box.write_json())
+        def_box_json = json.loads(_home_first(def_box, "def_pos_team", int(self.homeTeamId)).write_json())
 
         pos_ev = play_df.filter(pl.col("is_pos_team_turnover") == True).select(
             team=pl.col("pos_team").cast(pl.Int32),
@@ -7357,11 +7808,11 @@ class NFLPlayProcess(object):
             "pass": json.loads(_ordered_rows(passer_box, "pos_team", "passer_player_name", "Att").write_json()),
             "rush": json.loads(_ordered_rows(rusher_box, "pos_team", "rusher_player_name", "Car").write_json()),
             "receiver": json.loads(_ordered_rows(receiver_box, "pos_team", "receiver_player_name", "Tar").write_json()),
-            "team": json.loads(team_box.write_json()),
-            "situational": json.loads(situation_box.write_json()),
+            "team": json.loads(_home_first(team_box, "pos_team", team_ids[0]).write_json()),
+            "situational": json.loads(_home_first(situation_box, "pos_team", team_ids[0]).write_json()),
             "defensive": def_box_json,
             "turnover": turnover_box_json,
-            "drives": json.loads(drives_data.write_json()),
+            "drives": json.loads(_home_first(drives_data, "pos_team", team_ids[0]).write_json()),
             "defensive_players": _build_defensive_players_box(play_df),
             "specialists": _build_specialists_box(play_df),
             # ESPN's official boxes, verbatim: the reference the play-by-play
@@ -7378,6 +7829,53 @@ class NFLPlayProcess(object):
             logging.debug(f"{self.gameId}: usage box failed -- {exc}")
             box.update({k: [] for k in _USAGE_SECTIONS})
         return box
+
+    # ESPN's teamParticipants entry fields, in one order: the payload's own key order (and the
+    # optional statistics/playStatistics/timeout keys) varies by game, so the inferred List(Struct)
+    # dtype did too (C-L10). Missing fields are null.
+    _TEAM_PARTICIPANT_FIELDS = (
+        ("id", pl.Utf8),
+        ("order", pl.Int64),
+        ("team", pl.Struct({"$ref": pl.Utf8})),
+        ("type", pl.Utf8),
+        ("statistics", pl.Struct({"$ref": pl.Utf8})),
+        ("playStatistics", pl.Struct({"$ref": pl.Utf8})),
+        ("timeout", pl.Boolean),
+    )
+
+    def __documented_dtypes(self, play_df):
+        """Cast the processed plays to their documented dtypes, after every consumer has run.
+
+        The XGBoost scorers emit float32, so the WP family (``wp_before`` ... ``wpa``), the
+        fourth-down and two-point probabilities (``first_down_prob``, ``prob_2pt`` when the model
+        scored) and ``drive_start`` left as Float32 while their all-null twins and the documented
+        type are Float64 (C-M7). Widening here, not at the scorers, keeps the WP cascade and the
+        box score computing at the precision they always did; float32 -> float64 is exact, so no
+        value changes. The widened names are kept so :meth:`create_box_score` narrows them back when
+        re-run on ``plays_frame``. ``teamParticipants`` gets one struct field order (C-L10).
+        """
+        widened = [c for c, dtype in play_df.schema.items() if dtype == pl.Float32]
+        self._widened_float32 = tuple(dict.fromkeys((*getattr(self, "_widened_float32", ()), *widened)))
+        play_df = play_df.with_columns(pl.col(pl.Float32).cast(pl.Float64))
+        if "teamParticipants" not in play_df.columns:
+            return play_df
+        fields = dict(self._TEAM_PARTICIPANT_FIELDS)
+        dtype = play_df.schema["teamParticipants"]
+        if isinstance(dtype, pl.List) and isinstance(dtype.inner, pl.Struct):
+            # a field ESPN adds later is kept after the pinned ones, never dropped: top-level, or
+            # nested inside a pinned struct (team / statistics / playStatistics)
+            for f in dtype.inner.fields:
+                pinned = fields.get(f.name)
+                if isinstance(pinned, pl.Struct) and isinstance(f.dtype, pl.Struct):
+                    nested = {g.name: g.dtype for g in pinned.fields}
+                    fields[f.name] = pl.Struct({**nested, **{g.name: g.dtype for g in f.dtype.fields}})
+                elif pinned is None:
+                    fields[f.name] = f.dtype
+        # rebuilt by field name: the Series constructor fills a missing key with null
+        participants = pl.Series(
+            "teamParticipants", play_df["teamParticipants"].to_list(), dtype=pl.List(pl.Struct(fields))
+        )
+        return play_df.with_columns(participants)
 
     def __pipeline_input(self):
         """A pipeline replaces ``self.json`` with its result, so every run starts from a copy of
@@ -7485,6 +7983,7 @@ class NFLPlayProcess(object):
                     .pipe(self.__add_yardage_cols)
                     .pipe(self.__add_player_cols)
                     .pipe(self.__add_attribution_cols)
+                    .pipe(self.__add_penalty_first_down)
                     .pipe(self.__refine_play_types_post_attribution)
                     .pipe(self.__credit_to_spot_of_foul)
                     .pipe(self.__add_air_yards_cols)
@@ -7510,6 +8009,7 @@ class NFLPlayProcess(object):
                 )
                 self.ran_pipeline = True
                 advBoxScore = self.plays_json.pipe(self.create_box_score)
+                self.plays_json = self.plays_json.pipe(self.__documented_dtypes)
                 # Keep the enriched polars frame (see __init__): plays_json becomes
                 # a list of dicts below and callers mutate it.
                 self.plays_frame = self.plays_json
@@ -7641,6 +8141,7 @@ class NFLPlayProcess(object):
                     .pipe(self.__add_yardage_cols)
                     .pipe(self.__add_player_cols)
                     .pipe(self.__add_attribution_cols)
+                    .pipe(self.__add_penalty_first_down)
                     .pipe(self.__refine_play_types_post_attribution)
                     .pipe(self.__credit_to_spot_of_foul)
                     .pipe(self.__add_air_yards_cols)
@@ -7648,6 +8149,8 @@ class NFLPlayProcess(object):
                     .pipe(self.__add_series_data)
                     .pipe(self.__add_spread_time)
                     .pipe(self.__add_description_features)
+                    # __process_epa drops it in the full pipeline; the cleaning run never reaches it.
+                    .drop("_kick_spot", "_kicker_recovers", strict=False)
                 )
                 self.plays_json = self.plays_json.to_dicts()
                 pbp_json = {

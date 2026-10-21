@@ -188,7 +188,9 @@ def test_rush_flags_gate_on_rush_and_opportunity_means_four_plus_yards(game_id, 
     yds = runs["yds_rushed"]
     assert (runs["opportunity_run"] == (yds >= 4)).all()
     assert (runs["highlight_run"] == (yds >= 8)).all()
-    assert (runs["adj_rush_yardage"] == pl.Series([min(y, 8) for y in yds.to_list()], dtype=pl.Float64)).all()
+    # the standard line-yards band caps the decomposition input at 10 (task 2.1; it was 8)
+    assert (runs["adj_rush_yardage"] == pl.Series([min(y, 10) for y in yds.to_list()], dtype=pl.Float64)).all()
+    assert (yds >= 11).any()  # the cap is exercised
     # the boundary is in the data and lands on the right side: 3 yards no, 4 yards yes
     three, four = runs.filter(pl.col("yds_rushed") == 3), runs.filter(pl.col("yds_rushed") == 4)
     assert three.height > 0 and four.height > 0

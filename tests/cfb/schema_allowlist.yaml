@@ -122,110 +122,6 @@
   finding: C-M8
   reason: 'absent on the 37 captures whose feed has no wallclock'
   games: [242972641, 243040130, 243040265, 243042579, 243110264, 243392572, 252460252, 252532751, 252600087, 252740026, 262522509, 262660245, 262940151, 272650152, 272650194, 272870068, 282410024, 282430151, 282432641, 282570328, 282640084, 282710130, 292542649, 292810142, 293182305, 293250145, 302450154, 302540025, 303102638, 313090025, 322430041, 322590228, 322802005, 332570254, 332852449, 332990030, 333130023]
-- column: 'EPA'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EPA_fg'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EPA_kickoff'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EPA_non_explosive'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EPA_pass'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EPA_penalty'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EPA_penalty_direct'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EPA_punt'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EPA_rush'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EPA_scrimmage'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EPA_sp'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EPA_success_EPA'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EPA_success_pass_EPA'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EPA_success_passing_down_EPA'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EPA_success_rush_EPA'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EPA_success_standard_down_EPA'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EP_between'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EP_end'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EP_penalty_cf'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EP_start'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'EP_start_touchback'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'away_wp_after_naive'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'away_wp_before_naive'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'def_EPA'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'def_wp_after_naive'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'def_wp_before_naive'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
 - column: 'fg_block_player_id'
   scope: vs_nfl
   finding: C-M8
@@ -234,18 +130,10 @@
   scope: vs_nfl
   finding: C-M8
   reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'fg_make_prob'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
 - column: 'fg_return_player_id'
   scope: vs_nfl
   finding: C-M8
   reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'first_down_prob'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float64 vs NFL Float32; tier C T4: probabilities and EP/WP values Float64, the documented double'
 - column: 'fumble_forced_player_id'
   scope: vs_nfl
   finding: C-M8
@@ -258,14 +146,6 @@
   scope: vs_nfl
   finding: C-M8
   reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'home_wp_after_naive'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'home_wp_before_naive'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
 - column: 'interception_player_id'
   scope: vs_nfl
   finding: C-M8
@@ -278,10 +158,6 @@
   scope: vs_nfl
   finding: C-M8
   reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'lag_EP_end'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
 - column: 'lag_pos_team'
   scope: vs_nfl
   finding: C-M8
@@ -294,42 +170,18 @@
   scope: vs_nfl
   finding: C-M8
   reason: 'CFB Int64 vs NFL Int32; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'lead_wp_before2_naive'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'lead_wp_before_naive'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
 - column: 'pass_breakup_player_id'
   scope: vs_nfl
   finding: C-M8
   reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'pass_epa'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
 - column: 'passer_player_id'
   scope: vs_nfl
   finding: C-M8
   reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'pen_epa'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
 - column: 'pos_team'
   scope: vs_nfl
   finding: C-M8
   reason: 'CFB Int64 vs NFL Int32; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'prob_2pt'
-  scope: vs_nfl
-  finding: C-M7
-  reason: 'CFB Float64 vs NFL Float32; the NFL dtype follows the two-point model (Float32 when it scores, Float64 when all null)'
-- column: 'prog_drive_EPA'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
 - column: 'punt_block_player_id'
   scope: vs_nfl
   finding: C-M8
@@ -346,26 +198,14 @@
   scope: vs_nfl
   finding: C-M8
   reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'qbr_epa'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
 - column: 'receiver_player_id'
   scope: vs_nfl
   finding: C-M8
   reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'rush_epa'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
 - column: 'rusher_player_id'
   scope: vs_nfl
   finding: C-M8
   reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'sack_epa'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
 - column: 'sack_player_id'
   scope: vs_nfl
   finding: C-M8
@@ -382,22 +222,6 @@
   scope: vs_nfl
   finding: C-L10
   reason: 'CFB List(Struct({''team'': Struct({''$ref'': String}), ''id'': String, ''order'': Int64, ''type'': String})) vs NFL List(Struct({''team'': Struct({''$ref'': String}), ''id'': String, ''statistics'': Struct({''$ref'': String}), ''playStatistics'': Struct({''$ref'': String}), ''order'': Int64, ''type'': String, ''timeout'': Boolean})) (struct field set differs)'
-- column: 'wp_after_naive'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'wp_before_naive'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'wp_touchback_naive'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
-- column: 'wpa_naive'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Float32 vs NFL Float64; tier C T4: probabilities and EP/WP values Float64, the documented double'
 - column: 'yds_kickoff_return'
   scope: vs_nfl
   finding: C-M8
