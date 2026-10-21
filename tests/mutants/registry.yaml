@@ -1688,6 +1688,26 @@
   expected: kill
   note: the persisted overUnderAvailable False would be dropped on the rebuild
 
+- id: cfb-override-home-favorite-read-strictly
+  group: cfb-total-provenance
+  finding: WB-cfb-8
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_required_flag(odds_override["homeFavorite"], "homeFavorite")'
+  mutant: 'bool(odds_override["homeFavorite"])'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "required_override_flags"
+  expected: kill
+  note: bool("False") is True, so an override persisted as text would make the away favourite the home one
+
+- id: cfb-override-spread-available-read-strictly
+  group: cfb-total-provenance
+  finding: WB-cfb-8
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_required_flag(odds_override["gameSpreadAvailable"], "gameSpreadAvailable")'
+  mutant: 'bool(odds_override["gameSpreadAvailable"])'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "required_override_flags"
+  expected: kill
+  note: bool("False") is True, so a defaulted spread persisted as text would read as a market one
+
 - id: cfb-ou-available-missing-is-unknown
   group: cfb-total-provenance
   finding: R895-1
