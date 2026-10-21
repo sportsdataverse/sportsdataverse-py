@@ -2531,7 +2531,8 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
       a possession change otherwise flips the lead;
       everything else keeps the model ``wp_after``.
     * ``def_wp_after = 1 - wp_after``; ``home_wp_after`` / ``away_wp_after``
-      use the **end** possession team for the perspective flip.
+      use the **start** possession team for the perspective flip (every
+      ``wp_after`` branch above is stated in that team's frame).
     * ``wpa = wp_after - wp_before``.
 
     **Every** ``shift`` / forward reference is grouped ``.over("game_id")`` so a
@@ -2781,8 +2782,9 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             .then(0.0)
             .when(try_to_kickoff)
             .then(kick_board)
-            # The play that ends a half hands over to the next real play, past a Timeout or an
-            # End Period row: its wp_before, flipped when that play is the other team's. nflfastR
+            # The play that ends a half hands over to the next real play, past any clock-stoppage
+            # row (on the captures, only ever a Timeout: ESPN's end-of-period marker rows do not
+            # reach this frame): its wp_before, flipped when that play is the other team's. nflfastR
             # has no branch here, home_wpa = lead(home_wp) - home_wp with the marker rows filled
             # up from the next play (helper_add_ep_wp.R:1073-1181). Keyed on this play's own
             # possession change, a half-ending play that kept the ball (a kneel, then the other

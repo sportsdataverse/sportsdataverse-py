@@ -53,7 +53,8 @@ Derivation rules (mirror the original `__process_wpa`):
   a possession change otherwise flips the lead;
   everything else keeps the model `wp_after`.
 * `def_wp_after = 1 - wp_after`; `home_wp_after` / `away_wp_after`
-  use the **end** possession team for the perspective flip.
+  use the **start** possession team for the perspective flip (every
+  `wp_after` branch above is stated in that team's frame).
 * `wpa = wp_after - wp_before`.
 
 **Every** `shift` / forward reference is grouped `.over("game_id")` so a
