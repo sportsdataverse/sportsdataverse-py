@@ -46,12 +46,15 @@ Derivation rules (mirror the original `__process_wpa`):
   to the defense `def_wp_before`).
 * `wp_after` is rewritten by the end-of-half / end-of-game / OT two-path:
   timeouts hold `wp_before`; a completed final play resolves to `1.0` /
-  `0.0` by the winner; end-of-half and `End Period` / `End of Half`
-  lead plays take `lead_wp_before` (or `1 - lead_wp_before` on a
-  possession change); a possession change otherwise flips the lead;
+  `0.0` by the winner; the play that ends a half takes the next real
+  play's `wp_before` (past clock stoppages), flipped when that play is
+  the other team's; `End Period` / `End of Half` lead plays take
+  `lead_wp_before` (or `1 - lead_wp_before` on a possession change);
+  a possession change otherwise flips the lead;
   everything else keeps the model `wp_after`.
 * `def_wp_after = 1 - wp_after`; `home_wp_after` / `away_wp_after`
-  use the **end** possession team for the perspective flip.
+  use the **start** possession team for the perspective flip (every
+  `wp_after` branch above is stated in that team's frame).
 * `wpa = wp_after - wp_before`.
 
 **Every** `shift` / forward reference is grouped `.over("game_id")` so a
