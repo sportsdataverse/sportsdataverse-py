@@ -23,6 +23,14 @@ def test_strip_jsonp_bare_parens():
     assert _strip_jsonp('({"a":1})') == '{"a":1}'
 
 
+def test_strip_jsonp_trailing_semicolon():
+    """B-GB-17: a JSONP body ending ``);`` still unwraps (the ``;`` used to defeat the ``)`` check)."""
+    from sportsdataverse.hockeytech._client import _strip_jsonp
+
+    assert _strip_jsonp('angular.callbacks._8({"a":1});\n') == '{"a":1}'
+    assert _strip_jsonp('({"a":1});') == '{"a":1}'
+
+
 def test_strip_jsonp_passthrough_plain_json():
     from sportsdataverse.hockeytech._client import _strip_jsonp
 

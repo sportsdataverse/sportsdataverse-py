@@ -56907,6 +56907,31 @@ pwhl_game_corsi:
     strength in the PWHL game.
   fenwick_for_pct: Share of all unblocked shot attempts belonging to this team, expressed as a decimal (Fenwick For percentage).
   toi_seconds: Total time on ice in seconds for this team at the tracked strength during the PWHL game.
+pwhl_game_info:
+  game_id: HockeyTech game id (the game_id pwhl_game_info was called with).
+  game_number: Game number within the season as the feed labels it, as text (e.g. '72').
+  game_date: Game date as a long display string (e.g. 'Wednesday, March 19, 2025').
+  game_date_iso: Scheduled start as an ISO 8601 date-time with UTC offset (e.g. '2025-03-19T19:00:00-04:00').
+  start_time: Actual puck-drop time as a local display string with time zone (e.g. '7:08 pm EDT').
+  end_time: Time the game ended as a local display string with time zone (e.g. '9:47 pm EDT').
+  game_duration: Elapsed real time from start to end as 'h:mm' (e.g. '2:39').
+  game_venue: Arena and city as one display string (e.g. 'Coca-Cola Coliseum | Toronto').
+  attendance: Announced attendance.
+  game_status: Game status label (e.g. 'Final').
+  game_season_id: HockeyTech season id the game belongs to (resolve to a season with pwhl_season_id).
+  started: 1 when the game has started, 0 otherwise.
+  final: 1 when the game is final, 0 otherwise.
+  home_team_id: HockeyTech team id of the home team.
+  home_team: Full name of the home team (e.g. 'Toronto Sceptres').
+  home_team_abbr: Abbreviation of the home team (e.g. 'TOR').
+  home_score: Goals scored by the home team.
+  away_team_id: HockeyTech team id of the visiting team.
+  away_team: Full name of the visiting team (e.g. 'New York Sirens').
+  away_team_abbr: Abbreviation of the visiting team (e.g. 'NY').
+  away_score: Goals scored by the visiting team.
+  has_shootout: 1 when the game went to a shootout, 0 otherwise.
+  game_report_url: URL of the official HockeyTech game report.
+  boxscore_url: URL of the HockeyTech text box score.
 pwhl_game_shifts:
   end_s: Shift end time in seconds elapsed from the start of the period.
   goal_on_shift: Number of goals scored while this shift was active (0 or 1 in most cases).
@@ -56920,6 +56945,26 @@ pwhl_leaders:
   team_logo_small: URL of the small-format team logo image for the PWHL leader-board entry.
   type_formatted: Human-readable label for the statistical category driving the leader-board ranking (e.g., "Goals", "Save
     Percentage").
+pwhl_player_info:
+  player_id: HockeyTech player id (the player_id pwhl_player_info was called with).
+  person_id: HockeyTech person id; one person keeps it across player and staff records.
+  first_name: Player's first name.
+  last_name: Player's last name.
+  name: First and last name joined by a space.
+  jersey_number: Jersey number as text, on the player's most recent team.
+  position: Position code (e.g. 'LD', 'C', 'G').
+  shoots: Shooting hand, 'L' or 'R'.
+  catches: Catching hand, 'L' or 'R' (the feed fills it for skaters too).
+  height: Height as feet'inches text (e.g. "5'11").
+  weight: Weight in pounds as text; '0' when the feed has none.
+  birthdate: Date of birth as YYYY-MM-DD.
+  birth_place: Birthplace as 'city, region, country' text.
+  nationality: Nationality label (e.g. 'American').
+  player_type: Player kind, 'skater' or 'goalie'.
+  team_name: Full name of the player's most recent team (e.g. 'Boston Fleet').
+  team_nickname: Nickname of the player's most recent team (e.g. 'Fleet').
+  image_url: URL of the player's 240x240 profile image.
+  current_season_id: HockeyTech season id the feed treats as current when answering (not a season the player played).
 pwhl_player_search:
   all_roles: Pipe- or comma-delimited string listing every positional or roster role associated with the player in the PWHL
     HockeyTech system.

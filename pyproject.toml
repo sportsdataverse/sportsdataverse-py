@@ -763,6 +763,7 @@ files = [
     "sportsdataverse/nhl/nhl_special_teams.py",
     "sportsdataverse/nhl/nhl_war.py",
     "sportsdataverse/pwhl/pwhl_player_impact.py",
+    "sportsdataverse/pwhl/_impact_contract.py",
     "sportsdataverse/pwhl/pwhl_xg_proxy.py",
     "sportsdataverse/nhl/nhl_microstat_constants.py",
     "sportsdataverse/nhl/nhl_faceoff_value.py",

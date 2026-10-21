@@ -2092,6 +2092,390 @@
     In a shallow history "the base lacks the upstream tip" can be a false positive (fail OPEN), so a
     history still shallow after the fetch must add no allowance (review R824-1).
 
+# --- B-M9 / B-GB-17: PWHL statviewfeed gameSummary / player (task 2.14) ----------------------------
+# Killers: tests/pwhl/test_pwhl_api.py on the live captures pwhl_svf_gamesummary_164.json and
+# pwhl_svf_player_12.json, and tests/hockeytech/test_client.py for the JSONP `);` strip.
+- id: pwhl-game-info-sitekit-envelope
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: 'details = _obj(payload, "details")'
+  mutant: 'details = _obj(payload, "SiteKit", "details")'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_game_info_rows_on_statviewfeed_capture
+  expected: kill
+  note: The gate MUTATION -- reading the reply as a SiteKit envelope again gives the (0, 0) frame.
+- id: pwhl-game-info-away-side-from-home
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: 'for side, team in (("home", home), ("away", away)):'
+  mutant: 'for side, team in (("home", home), ("away", home)):'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_game_info_rows_on_statviewfeed_capture
+  expected: kill
+  note: The visiting team's id, abbreviation and score come from visitingTeam, not homeTeam.
+- id: pwhl-player-box-sitekit-envelope
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: 'team = _obj(payload, side)'
+  mutant: 'team = _obj(payload, "SiteKit", side)'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_player_box_rows_on_statviewfeed_capture
+  expected: kill
+  note: The gate MUTATION for the box -- both frames go back to zero rows.
+- id: pwhl-player-box-team-id-per-side
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: 'team_id = _as_int(_obj(team, "info").get("id"))'
+  mutant: 'team_id = _as_int(_obj(payload, "homeTeam", "info").get("id"))'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_player_box_rows_on_statviewfeed_capture
+  expected: kill
+  note: Each side's players carry their own team id; the per-team totals reconcile only then.
+- id: pwhl-player-box-goals-against-key
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '("goals_against", "goalsAgainst"),'
+  mutant: '("goals_against", "goals"),'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_player_box_rows_on_statviewfeed_capture
+  expected: kill
+  note: Stats are read by key; a starter's goals_against equals the other team's score.
+- id: pwhl-player-box-faceoff-losses
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '"faceoff_losses": attempts - wins if'
+  mutant: '"faceoff_losses": wins - attempts if'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_player_box_rows_on_statviewfeed_capture
+  expected: kill
+  note: fastRhockey faceoff_losses = attempts - wins.
+- id: pwhl-player-box-toi-minutes
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: 'return round((int(parts[0]) * 60 + int(parts[1])) / 60, 1)'
+  mutant: 'return round((int(parts[0]) * 60 + int(parts[1])), 1)'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_player_box_rows_on_statviewfeed_capture
+  expected: kill
+  note: time_on_ice is minutes ("21:54" -> 21.9), as in fastRhockey.
+- id: pwhl-player-info-sitekit-envelope
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: 'info = _obj(payload, "info")'
+  mutant: 'info = _obj(payload, "SiteKit", "info")'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_player_info_rows_on_statviewfeed_capture
+  expected: kill
+  note: The gate MUTATION for player info.
+- id: hockeytech-jsonp-trailing-semicolon
+  group: pwhl-statviewfeed
+  finding: B-GB-17
+  file: sportsdataverse/hockeytech/_client.py
+  snippet: 'text = text.strip().rstrip(";").rstrip()'
+  mutant: 'text = text.strip()'
+  test: tests/hockeytech/test_client.py::test_strip_jsonp_trailing_semicolon
+  expected: kill
+  note: A JSONP body ending `);` must still unwrap.
+- id: pwhl-statviewfeed-non-scalar-cell
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: 'rows = [{c: _cell(r.get(c), t) for c, t in schema.items()} for r in rows]'
+  mutant: 'rows = [{c: r.get(c) for c in schema} for r in rows]'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_game_info_non_scalar_fields_become_null
+  expected: kill
+  note: A list / dict where the feed ships a scalar becomes null instead of raising in pl.from_dicts (review PRRT_kwDOGNKCHc6rtBLY).
+- id: pwhl-player-box-requires-game-id
+  group: pwhl-statviewfeed
+  finding: B-M9
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: 'for side in ("homeTeam", "visitingTeam") if game_id is not None else ():'
+  mutant: 'for side in ("homeTeam", "visitingTeam"):'
+  test: tests/pwhl/test_pwhl_api.py::test_pwhl_player_box_without_game_id_is_empty
+  expected: kill
+  note: No details.id -> empty frames, never box rows with a null game_id (review PRRT_kwDOGNKCHc6rtBLb).
+# --- C-NF-5 / B-GB-01 / supp-001: PWHL player impact on HockeyTech pbp + ratings/props routing (2.13) ----
+# Killers: tests/pwhl/test_pwhl_player_impact_real.py (five real 2025 games from fastRhockey-pwhl-data)
+# and the `routing` tests in tests/pwhl/test_pwhl_prediction_model_shims.py (sockets closed, NHL
+# loaders refusing, PWHL loaders serving the same real slices).
+- id: pwhl-impact-secondary-type-mapped
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/pwhl/_impact_contract.py
+  snippet: '            .then(pl.col("event_type").replace_strict(_SHOT_TYPE, default=None)),'
+  mutant: '            .then(pl.lit(None, dtype=pl.Utf8)),'
+  test: tests/pwhl/test_pwhl_player_impact_real.py::test_skater_rapm_fits_shift_chart_skaters
+  expected: kill
+  note: >-
+    Ledger gate pwhl-impact-on-real-pbp MUTATION, strengthened (review R846-1, reviewer mutant X1):
+    every secondary_type null. The old row only removed the column, which the contract check catches;
+    this one keeps the column and needs the per-type coverage assertion (174 of 296 typed shots).
+
+- id: pwhl-impact-change-rows-carry-strength
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/pwhl/_impact_contract.py
+  snippet: '[pl.col(c).forward_fill().over("game_id").alias(c) for c in state]'
+  mutant: '[pl.col(c).alias(c) for c in state]'
+  test: tests/pwhl/test_pwhl_player_impact_real.py::test_special_teams_value_reads_feed_strength_on_every_stint
+  expected: kill
+  note: >-
+    CHANGE rows (and invalid-strength events) without the carried strength leave about half the
+    stint-seconds with a null strength_state, which the 5v5 RAPM inside WAR and the PP/PK split drop.
+
+- id: pwhl-impact-goalies-off-shift-chart
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/pwhl/_impact_contract.py
+  snippet: '        work.join(goalies, on=["game_id", "player_id"], how="anti")'
+  mutant: '        work'
+  test: tests/pwhl/test_pwhl_player_impact_real.py::test_skater_rapm_fits_shift_chart_skaters
+  expected: kill
+  note: HockeyTech shift charts carry the goalies; without the anti-join they are fit as skaters.
+
+- id: pwhl-impact-shift-clock-remaining
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/pwhl/_impact_contract.py
+  snippet: '            _on=base + period_len - pl.col("start_s"),'
+  mutant: '            _on=base + pl.col("start_s"),'
+  test: tests/pwhl/test_pwhl_player_impact_real.py::test_special_teams_value_reads_feed_strength_on_every_stint
+  expected: kill
+  note: shift start_s is seconds LEFT on the period clock; read as elapsed the stints no longer tile the games.
+
+- id: pwhl-impact-faceoff-home-taker-won
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/pwhl/_impact_contract.py
+  snippet: '            .then(pl.when(home_won).then(pl.col("player_id")))'
+  mutant: '            .then(pl.col("player_id"))'
+  test: tests/pwhl/test_pwhl_player_impact_real.py::test_skater_war_faceoffs_and_penalties_match_the_feed
+  expected: kill
+  note: HockeyTech faceoffs name the home taker; crediting every faceoff to her as a win breaks the WAR parity.
+
+- id: nhl-war-faceoff-null-player-dropped
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/nhl/nhl_war.py
+  snippet: '    fo_tab = won.join(lost, on="player_id", how="full", coalesce=True).drop_nulls("player_id").fill_null(0)'
+  mutant: '    fo_tab = won.join(lost, on="player_id", how="full", coalesce=True).fill_null(0)'
+  test: tests/pwhl/test_pwhl_player_impact_real.py::test_skater_war_faceoffs_and_penalties_match_the_feed
+  expected: kill
+  note: an unnamed faceoff side groups under a null id that fill_null turned into a phantom player 0.
+
+- id: nhl-rapm-stints-take-team-abbr
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/nhl/nhl_rapm.py
+  snippet: '        if "team_abbr" in shifts.columns'
+  mutant: '        if False'
+  test: tests/pwhl/test_pwhl_player_impact_real.py::test_skater_rapm_fits_shift_chart_skaters
+  expected: kill
+  note: the NHL full-name crosswalk knows no PWHL team; without the adapter's team_abbr no shift row lands.
+
+- id: nhl-props-injected-box-loader
+  group: pwhl-impact-routing
+  finding: supp-001
+  file: sportsdataverse/nhl/nhl_player_props.py
+  snippet: '    box = (load_skater_boxscores or load_nhl_skater_boxscores)(seasons)'
+  mutant: '    box = load_nhl_skater_boxscores(seasons)'
+  test: tests/pwhl/test_pwhl_prediction_model_shims.py::test_pwhl_player_props_routing_reads_pwhl_loaders_only
+  expected: kill
+  note: Ledger gate pwhl-routes-to-pwhl-loaders MUTATION (the props engine reads the NHL box again).
+
+- id: nhl-props-injected-ratings
+  group: pwhl-impact-routing
+  finding: supp-001
+  file: sportsdataverse/nhl/nhl_player_props.py
+  snippet: '        ratings = team_ratings(seasons, as_of_date=as_of_date)'
+  mutant: '        ratings = nhl_team_ratings(seasons, league=league, as_of_date=as_of_date)'
+  test: tests/pwhl/test_pwhl_prediction_model_shims.py::test_pwhl_player_props_routing_reads_pwhl_loaders_only
+  expected: kill
+  note: the matchup ratings inside PWHL props must come from PWHL data, not load_nhl_pbp_full.
+
+- id: pwhl-props-binds-pwhl-box
+  group: pwhl-impact-routing
+  finding: supp-001
+  file: sportsdataverse/pwhl/pwhl_player_props.py
+  snippet: '        load_skater_boxscores=_pwhl_props_box,'
+  mutant: '        load_skater_boxscores=None,'
+  test: tests/pwhl/test_pwhl_prediction_model_shims.py::test_pwhl_player_props_routing_reads_pwhl_loaders_only
+  expected: kill
+  note: the PWHL shim must bind its own box loader.
+
+- id: pwhl-team-ratings-pwhl-data
+  group: pwhl-impact-routing
+  finding: supp-001
+  file: sportsdataverse/pwhl/pwhl_team_ratings.py
+  snippet: '    return pwhl_ratings_from_proxy(seasons, **kwargs)'
+  mutant: '    return __import__("importlib").import_module("sportsdataverse.nhl.nhl_team_ratings").nhl_team_ratings(seasons, league="pwhl", **kwargs)'
+  test: tests/pwhl/test_pwhl_prediction_model_shims.py::test_pwhl_team_ratings_routing_reads_pwhl_loaders_only
+  expected: kill
+  note: the pre-2.13 body (NHL engine with PWHL constants).
+
+# Review R846: xG comes from pwhl_shot_xg and the engines must keep it. Reviewer mutant X2
+# (shot_distance -> 0.0) has no target any more: with the PWHL model no engine reads the adapter's
+# shot_distance / shot_angle, so those columns left the contract; the rows below gate the xG source.
+- id: pwhl-impact-xg-aligned-to-shots
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/pwhl/_impact_contract.py
+  snippet: 'pbp = pbp.join(on_net.select("_row").with_columns(_xg=scored["xg"]), on="_row", how="left")'
+  mutant: 'pbp = pbp.join(on_net.select("_row").with_columns(_xg=scored["xg"].reverse()), on="_row", how="left")'
+  test: tests/pwhl/test_pwhl_player_impact_real.py::test_special_teams_value_reads_feed_strength_on_every_stint
+  expected: kill
+  note: pwhl_shot_xg rows attached to the wrong shots keep the level band but lose the goal/save ranking.
+
+- id: pwhl-impact-shim-marks-xg-scored
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/pwhl/pwhl_player_impact.py
+  snippet: '    return pbp, shifts, True'
+  mutant: '    return pbp, shifts, False'
+  test: tests/pwhl/test_pwhl_player_impact_real.py::test_skater_rapm_fits_shift_chart_skaters
+  expected: kill
+  note: R846-3 -- without the flag the engines re-score PWHL shots with the NHL boosters (~1/3 low).
+
+- id: nhl-rapm-honours-xg-scored
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/nhl/nhl_rapm.py
+  snippet: '        scored = pbp if xg_scored else nhl_xg(pbp, model_dir=model_dir, league=league)'
+  mutant: '        scored = nhl_xg(pbp, model_dir=model_dir, league=league)'
+  test: tests/pwhl/test_pwhl_player_impact_real.py::test_skater_rapm_fits_shift_chart_skaters
+  expected: kill
+  note: R846-3 -- the RAPM engine must keep a given xG.
+
+- id: nhl-special-teams-honours-xg-scored
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/nhl/nhl_special_teams.py
+  snippet: '        scored = pbp if xg_scored else nhl_xg(pbp, model_dir=model_dir, league=league)'
+  mutant: '        scored = nhl_xg(pbp, model_dir=model_dir, league=league)'
+  test: tests/pwhl/test_pwhl_player_impact_real.py::test_special_teams_value_reads_feed_strength_on_every_stint
+  expected: kill
+  note: R846-3 -- the special-teams engine must keep a given xG.
+
+- id: nhl-war-threads-xg-scored
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/nhl/nhl_war.py
+  snippet: '        pbp, shifts, model_dir=model_dir, league=league, strength_states=["5v5"], xg_scored=xg_scored'
+  mutant: '        pbp, shifts, model_dir=model_dir, league=league, strength_states=["5v5"]'
+  test: tests/pwhl/test_pwhl_player_impact_real.py::test_skater_war_faceoffs_and_penalties_match_the_feed
+  expected: kill
+  note: R846-3 -- WAR's even-strength RAPM must use the given xG.
+
+- id: pwhl-impact-rejects-raw-canvas
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/pwhl/_impact_contract.py
+  snippet: '    _assert_rink_feet(pbp)'
+  mutant: '    pass'
+  test: tests/pwhl/test_pwhl_player_impact_shims.py::test_hockeytech_adapter_rejects_a_raw_canvas_frame
+  expected: kill
+  note: R846-8 -- a raw 0-600 HockeyTech canvas frame must raise, not score from the wrong geometry.
+
+- id: pwhl-team-ratings-league-deprecated
+  group: pwhl-impact-routing
+  finding: supp-001
+  file: sportsdataverse/pwhl/pwhl_team_ratings.py
+  snippet: '    if league is not None:'
+  mutant: '    if False:'
+  test: tests/pwhl/test_pwhl_prediction_model_shims.py::test_pwhl_team_ratings_league_keyword_is_deprecated_and_ignored
+  expected: kill
+  note: R846-2 -- 0.1.5 callers passing league= get a DeprecationWarning, not a TypeError or silence.
+
+- id: nhl-unit-ratings-honours-xg-scored
+  group: pwhl-impact-routing
+  finding: C-NF-5
+  file: sportsdataverse/nhl/nhl_unit_ratings.py
+  snippet: '        scored = pbp if xg_scored else nhl_xg(pbp, model_dir=model_dir, league=league)'
+  mutant: '        scored = nhl_xg(pbp, model_dir=model_dir, league=league)'
+  test: tests/pwhl/test_pwhl_player_impact_real.py::test_unit_ratings_label_units_with_pwhl_teams
+  expected: kill
+  note: >-
+    Review R846-9: with the unconditional re-score, on-ice xGF over all units moves 24.725 -> 68.162
+    on the fixture while every other test stays green; the level band kills it.
+
+- id: pwhl-props-skips-season-without-game-info
+  group: pwhl-impact-routing
+  finding: supp-001
+  file: sportsdataverse/pwhl/pwhl_player_props.py
+  snippet: '        if box.is_empty() or sched.is_empty() or info.is_empty():'
+  mutant: '        if box.is_empty() or sched.is_empty():'
+  test: tests/pwhl/test_pwhl_prediction_model_shims.py::test_pwhl_player_props_skips_a_season_without_game_info
+  expected: kill
+  note: >-
+    CodeRabbit thread on #846: an unpublished game_info season is a column-less pl.DataFrame(), and
+    selecting game_id from it raised ColumnNotFoundError instead of skipping the season.
+
+# --- C-NF-4 / R841-5: ESPN NHL clocks are elapsed, not remaining (task 2.15) -------------------
+# Killers: tests/nhl/test_nhl_pbp.py on three real ESPN summaries (2024 SCF G7, the 2024 WCF G1
+# double-overtime game, a 2025 regular-season shootout) and the NHL API's goal timeRemaining.
+- id: nhl-espn-clock-elapsed-not-remaining
+  group: nhl-espn-clock
+  finding: C-NF-4
+  file: sportsdataverse/nhl/nhl_pbp.py
+  snippet: '(pl.col("_period_length") - 60 * pl.col("clock.minutes") - pl.col("clock.seconds"))'
+  mutant: '(60 * pl.col("clock.minutes") + pl.col("clock.seconds"))'
+  test: tests/nhl/test_nhl_pbp.py::test_clock_remaining_decreases_within_period
+  expected: kill
+  note: >-
+    The original: elapsed seconds added to the period base give 2400, 2421, 2431 on the SCF G7
+    capture, rising through every period.
+
+- id: nhl-espn-clock-period-last-row-fill
+  group: nhl-espn-clock
+  finding: C-NF-4
+  file: sportsdataverse/nhl/nhl_pbp.py
+  snippet: '            pl.when(ends_period)'
+  mutant: '            pl.when(pl.lit(False))'
+  test: tests/nhl/test_nhl_pbp.py::test_clock_remaining_end_not_after_start
+  expected: kill
+  note: >-
+    R841-5: without the period-last-row fill a period's horn row (0 s left) ends at the next
+    period's 1200, end > start.
+
+- id: nhl-espn-clock-playoff-overtime-length
+  group: nhl-espn-clock
+  finding: C-NF-4
+  file: sportsdataverse/nhl/nhl_pbp.py
+  snippet: '| (pl.col("seasonType").cast(pl.Int64, strict=False) == 3)'
+  mutant: '| pl.lit(False)'
+  test: tests/nhl/test_nhl_pbp.py::test_clock_remaining_is_period_length_less_elapsed
+  expected: kill
+  note: >-
+    Playoff overtime is 20 minutes (WCF G1 401672983 P4 runs 0:00 -> 20:00); a 300 s length gives
+    negative remaining seconds.
+
+- id: nhl-espn-clock-shootout-no-clock
+  group: nhl-espn-clock
+  finding: C-NF-4
+  file: sportsdataverse/nhl/nhl_pbp.py
+  snippet: |-
+    .otherwise(pl.lit(0.0))
+                .alias("_period_length"),
+  mutant: |-
+    .otherwise(pl.lit(300.0))
+                .alias("_period_length"),
+  test: tests/nhl/test_nhl_pbp.py::test_clock_remaining_is_period_length_less_elapsed
+  expected: kill
+  note: >-
+    The regular-season shootout (period 5 of 401688272, every clock 0:00) has no clock: 0 s, not
+    another 300 s overtime.
+
+- id: nhl-espn-clock-regulation-game-offset
+  group: nhl-espn-clock
+  finding: C-NF-4
+  file: sportsdataverse/nhl/nhl_pbp.py
+  snippet: '.then(1200.0 * (3 - pl.col("period.number")))'
+  mutant: '.then(1200.0 * (pl.col("period.number") - 1))'
+  test: tests/nhl/test_nhl_pbp.py::test_clock_remaining_is_period_length_less_elapsed
+  expected: kill
+  note: >-
+    Game seconds remaining count down from 3600: period p adds (3 - p) * 1200 to its period clock.
+
 # --- supp-002 (3.4(a)): a degenerate ESPN end block takes the next snap's start ------------------
 # Killer: 41 candidates (the 23 published "Fumble Recovery (Own)" signature rows, the 20 rows the rule
 # moves across all 20,719 cfb-raw games, 401778310647); exactly the 20 move, the rest stay byte-stable.

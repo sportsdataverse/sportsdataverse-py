@@ -8798,10 +8798,10 @@
   "pwhl_stats": "hockeytech-leaguestat",
   "pwhl_streaks": "hockeytech-leaguestat",
   "pwhl_team_ratings": "models-and-calculators",
-  "pwhl_team_roster": "hockeytech-leaguestat",
-  "pwhl_teams": "hockeytech-leaguestat",
-  "pwhl_transactions": "hockeytech-leaguestat",
-  "pwhl_unit_ratings": "hockeytech-leaguestat",
+  "pwhl_team_roster": "hockeytech-leaguestat-2",
+  "pwhl_teams": "hockeytech-leaguestat-2",
+  "pwhl_transactions": "hockeytech-leaguestat-2",
+  "pwhl_unit_ratings": "hockeytech-leaguestat-2",
   "spearman_corr": "models-and-calculators"
  },
  "/docs/reference/python-helpers": {

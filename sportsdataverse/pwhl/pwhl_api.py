@@ -60,6 +60,22 @@ def pwhl_season_id(return_as_pandas: bool = False) -> Any:
         NoDataError: The feed answered 404.
         AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
             ``Undefined Tab`` / ``InvalidView`` sentinel.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import pwhl_season_id
+            df = pwhl_season_id()
+
+        Next step::
+
+            import polars as pl
+            df.filter(pl.col("game_type_label") == "regular")
+
+        See Also:
+            * `fastRhockey`_ -- the R package these wrappers mirror
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return P.parse_seasons(hockeytech_api(_LG, "modulekit", "seasons", {}), return_as_pandas)
 
@@ -76,6 +92,21 @@ def most_recent_pwhl_season() -> int:
     Raises:
         NoDataError: The seasons feed lists no regular season.
         AssetFetchError: The seasons feed failed.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import most_recent_pwhl_season
+            season = most_recent_pwhl_season()
+
+        Next step::
+
+            print(season)
+
+        See Also:
+            * `fastRhockey`_ -- the R package these wrappers mirror
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return most_recent_season_yr(pwhl_season_id(), _LG)
 
@@ -112,6 +143,22 @@ def pwhl_schedule(
         AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
             ``Undefined Tab`` / ``InvalidView`` sentinel.
         ValueError: No season matches ``season``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import pwhl_schedule
+            df = pwhl_schedule(season=2025)
+
+        Next step::
+
+            import polars as pl
+            df.filter(pl.col("game_status") == "Final").head()
+
+        See Also:
+            * `fastRhockey`_ -- the R package these wrappers mirror
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     payload = hockeytech_api(_LG, "modulekit", "schedule", {"season_id": sid})
@@ -161,6 +208,22 @@ def pwhl_pbp(game_id: int, return_as_pandas: bool = False) -> Any:
         NoDataError: The feed answered 404.
         AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body,
             or an ``Undefined Tab`` / ``InvalidView`` sentinel.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import pwhl_pbp
+            df = pwhl_pbp(game_id=164)
+
+        Next step::
+
+            import polars as pl
+            df.filter(pl.col("event") == "goal").head()
+
+        See Also:
+            * `fastRhockey`_ -- the R package these wrappers mirror
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     payload = hockeytech_api(_LG, "statviewfeed", "gameCenterPlayByPlay", {"game_id": game_id, "league_id": ""})
     df = P.parse_pbp(payload, pbp_style="hockeytech_a", game_id=game_id)
@@ -201,6 +264,21 @@ def pwhl_standings(
         NoDataError: The feed answered 404.
         AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
             ``Undefined Tab`` / ``InvalidView`` sentinel.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import pwhl_standings
+            df = pwhl_standings(season=2025)
+
+        Next step::
+
+            df.sort("team_rank").head()
+
+        See Also:
+            * `fastRhockey`_ -- the R package these wrappers mirror
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     payload = hockeytech_api(
@@ -240,6 +318,21 @@ def pwhl_teams(
         NoDataError: The feed answered 404.
         AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
             ``Undefined Tab`` / ``InvalidView`` sentinel.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import pwhl_teams
+            df = pwhl_teams(season=2025)
+
+        Next step::
+
+            df.select("team_id", "team_name", "team_code")
+
+        See Also:
+            * `fastRhockey`_ -- the R package these wrappers mirror
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     return P.parse_teams(hockeytech_api(_LG, "modulekit", "teamsbyseason", {"season": sid}), return_as_pandas)
@@ -271,6 +364,22 @@ def pwhl_team_roster(
         NoDataError: The feed answered 404.
         AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
             ``Undefined Tab`` / ``InvalidView`` sentinel.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import pwhl_team_roster
+            df = pwhl_team_roster(team_id=1, season=2025)
+
+        Next step::
+
+            import polars as pl
+            df.filter(pl.col("position") == "G")
+
+        See Also:
+            * `fastRhockey`_ -- the R package these wrappers mirror
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     return P.parse_roster(
@@ -297,6 +406,21 @@ def pwhl_player_stats(player_id: int, return_as_pandas: bool = False) -> Any:
         NoDataError: The feed answered 404.
         AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
             ``Undefined Tab`` / ``InvalidView`` sentinel.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import pwhl_player_stats
+            df = pwhl_player_stats(player_id=27)
+
+        Next step::
+
+            df.select("season_name", "games_played", "points")
+
+        See Also:
+            * `fastRhockey`_ -- the R package these wrappers mirror
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return P.parse_player_stats(
         hockeytech_api(_LG, "modulekit", "player", {"player_id": player_id, "category": "seasonstats"}),
@@ -331,6 +455,22 @@ def pwhl_leaders(
         NoDataError: The feed answered 404.
         AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
             ``Undefined Tab`` / ``InvalidView`` sentinel.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import pwhl_leaders
+            df = pwhl_leaders(season=2025)
+
+        Next step::
+
+            import polars as pl
+            df.filter(pl.col("type_formatted") == "Goals").head()
+
+        See Also:
+            * `fastRhockey`_ -- the R package these wrappers mirror
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     payload = hockeytech_api(
@@ -364,6 +504,21 @@ def pwhl_game_summary(game_id: int) -> dict:
         NoDataError: The feed answered 404.
         AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
             ``Undefined Tab`` / ``InvalidView`` sentinel.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import pwhl_game_summary
+            out = pwhl_game_summary(game_id=164)
+
+        Next step::
+
+            out["goals"].head()
+
+        See Also:
+            * `fastRhockey`_ -- the R package these wrappers mirror
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return P.parse_game_summary(hockeytech_api(_LG, "gc", "gamesummary", {"game_id": game_id}), game_id=game_id)
 
@@ -385,6 +540,21 @@ def pwhl_scorebar(return_as_pandas: bool = False) -> Any:
         NoDataError: The feed answered 404.
         AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
             ``Undefined Tab`` / ``InvalidView`` sentinel.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import pwhl_scorebar
+            df = pwhl_scorebar()
+
+        Next step::
+
+            print(df.shape)
+
+        See Also:
+            * `fastRhockey`_ -- the R package these wrappers mirror
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return P.parse_scorebar(
         hockeytech_api(
@@ -398,23 +568,41 @@ def pwhl_scorebar(return_as_pandas: bool = False) -> Any:
 
 
 def pwhl_game_info(game_id: int, return_as_pandas: bool = False) -> Any:
-    """PWHL single-game metadata.
-
-    NOTE: returns an empty frame pending a captured fixture + correct endpoint wiring
-    (A1.8 follow-up); not yet functional.
+    """PWHL single-game metadata from the ``statviewfeed`` ``gameSummary`` view.
 
     Args:
         game_id: The HockeyTech game id.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
-        polars.DataFrame: A zero-row frame today -- the ``statviewfeed`` reply is not a ``SiteKit``
-            envelope, so there is nothing to parse (see the note above). A pandas DataFrame when ``return_as_pandas`` is True.
+        polars.DataFrame: One row: ``game_id``, ``game_number``, ``game_date`` / ``game_date_iso``,
+            ``start_time`` / ``end_time`` / ``game_duration``, ``game_venue``, ``attendance``,
+            ``game_status``, ``game_season_id``, ``started`` / ``final`` flags, ``home_team_id`` /
+            ``home_team`` / ``home_team_abbr`` / ``home_score``, the same ``away_*`` columns,
+            ``has_shootout`` and the official report / text box score URLs (ids, scores and flags
+            Int64): the published ``load_pwhl_game_info`` schema. A zero-row frame of that schema
+            when the reply carries no game. A pandas DataFrame when ``return_as_pandas`` is True.
 
     Raises:
         NoDataError: The feed answered 404.
         AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
             ``Undefined Tab`` / ``InvalidView`` sentinel.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import pwhl_game_info
+            df = pwhl_game_info(game_id=164)
+            print(df.select("game_id", "home_team", "home_score", "away_team", "away_score"))
+
+        As pandas::
+
+            pdf = pwhl_game_info(game_id=164, return_as_pandas=True)
+
+        See Also:
+            * `fastRhockey`_ -- R ``pwhl_game_info``
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return P.parse_game_info(
         hockeytech_api(_LG, "statviewfeed", "gameSummary", {"game_id": game_id}),
@@ -422,24 +610,50 @@ def pwhl_game_info(game_id: int, return_as_pandas: bool = False) -> Any:
     )
 
 
-def pwhl_player_box(game_id: int, return_as_pandas: bool = False) -> Any:
-    """PWHL player box score for a single game.
+def pwhl_player_box(game_id: int, return_as_pandas: bool = False) -> dict[str, Any]:
+    """PWHL player box score for a single game, skaters and goalies (fastRhockey ``pwhl_player_box``).
 
-    NOTE: returns an empty frame pending a captured fixture + correct endpoint wiring
-    (A1.8 follow-up); not yet functional.
+    Reads the ``statviewfeed`` ``gameSummary`` view. The return is a dict, as in fastRhockey and as
+    the ``fastRhockey-pwhl-raw`` producer reads it (``box["skaters"]`` / ``box["goalies"]``).
 
     Args:
         game_id: The HockeyTech game id.
-        return_as_pandas: Return a pandas DataFrame instead of polars.
+        return_as_pandas: Return pandas DataFrames instead of polars.
 
     Returns:
-        polars.DataFrame: A zero-row frame today -- the ``statviewfeed`` reply is not a ``SiteKit``
-            envelope, so there is nothing to parse (see the note above). A pandas DataFrame when ``return_as_pandas`` is True.
+        dict[str, polars.DataFrame]: ``skaters`` -- one row per dressed skater, home team first:
+            ``player_id``, ``first_name``, ``last_name``, ``position``, ``team_id``, ``game_id``,
+            ``league``, ``toi`` ("mm:ss"), ``time_on_ice`` (Float64 minutes), ``goals``, ``assists``,
+            ``points``, ``shots``, ``hits``, ``blocked_shots``, ``penalty_minutes``, ``plus_minus``,
+            ``faceoff_attempts`` / ``faceoff_wins`` / ``faceoff_losses``, ``faceoff_pct`` (Float64,
+            null on no attempts) and ``starting`` (1 = starting lineup). ``goalies`` -- one row per
+            dressed goalie with the same id / name / time columns, ``saves``, ``goals_against``,
+            ``shots_against``, the scoring, penalty and faceoff columns and ``starting``; a goalie
+            who did not play has null ``toi`` / ``time_on_ice``. Ids and counts are Int64. Both
+            frames are zero-row with these columns when the reply carries no players. pandas
+            DataFrames when ``return_as_pandas`` is True.
 
     Raises:
         NoDataError: The feed answered 404.
         AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
             ``Undefined Tab`` / ``InvalidView`` sentinel.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import pwhl_player_box
+            box = pwhl_player_box(game_id=164)
+            print(box["skaters"].shape, box["goalies"].shape)
+
+        Goalies who played::
+
+            import polars as pl
+            box["goalies"].filter(pl.col("time_on_ice").is_not_null())
+
+        See Also:
+            * `fastRhockey`_ -- R ``pwhl_player_box``
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return P.parse_player_box(
         hockeytech_api(_LG, "statviewfeed", "gameSummary", {"game_id": game_id}),
@@ -448,23 +662,40 @@ def pwhl_player_box(game_id: int, return_as_pandas: bool = False) -> Any:
 
 
 def pwhl_player_info(player_id: int, return_as_pandas: bool = False) -> Any:
-    """PWHL player biographical info.
-
-    NOTE: returns an empty frame pending a captured fixture + correct endpoint wiring
-    (A1.8 follow-up); not yet functional.
+    """PWHL player biographical info from the ``statviewfeed`` ``player`` view.
 
     Args:
         player_id: The HockeyTech player id.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
-        polars.DataFrame: A zero-row frame today -- the ``statviewfeed`` reply is not a ``SiteKit``
-            envelope, so there is nothing to parse (see the note above). A pandas DataFrame when ``return_as_pandas`` is True.
+        polars.DataFrame: One row: ``player_id`` and ``person_id`` (Int64), ``first_name``,
+            ``last_name``, ``name``, ``jersey_number``, ``position``, ``shoots``, ``catches``,
+            ``height``, ``weight``, ``birthdate``, ``birth_place``, ``nationality``, ``player_type``
+            ("skater" or "goalie"), ``team_name`` / ``team_nickname`` (most recent team),
+            ``image_url`` and ``current_season_id`` (Int64). A zero-row frame of these columns when
+            the reply carries no player. A pandas DataFrame when ``return_as_pandas`` is True.
 
     Raises:
         NoDataError: The feed answered 404.
         AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
             ``Undefined Tab`` / ``InvalidView`` sentinel.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import pwhl_player_info
+            df = pwhl_player_info(player_id=12)
+            print(df.select("player_id", "name", "position", "team_name"))
+
+        As pandas::
+
+            pdf = pwhl_player_info(player_id=12, return_as_pandas=True)
+
+        See Also:
+            * `fastRhockey`_ -- R ``pwhl_player_info``
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return P.parse_player_info(
         hockeytech_api(_LG, "statviewfeed", "player", {"player_id": player_id}),
@@ -492,6 +723,21 @@ def pwhl_player_game_log(player_id: int, return_as_pandas: bool = False) -> Any:
         NoDataError: The feed answered 404.
         AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or
             an ``Undefined Tab`` / ``InvalidView`` sentinel.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import pwhl_player_game_log
+            df = pwhl_player_game_log(player_id=27)
+
+        Next step::
+
+            print(df.shape)
+
+        See Also:
+            * `fastRhockey`_ -- the R package these wrappers mirror
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return P.parse_player_game_log(
         hockeytech_api(_LG, "modulekit", "player", {"player_id": player_id, "category": "gamebygame"}),
@@ -516,6 +762,21 @@ def pwhl_player_search(name: str, return_as_pandas: bool = False) -> Any:
         NoDataError: The feed answered 404.
         AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
             ``Undefined Tab`` / ``InvalidView`` sentinel.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import pwhl_player_search
+            df = pwhl_player_search(name="Poulin")
+
+        Next step::
+
+            df.select("player_id", "first_name", "last_name")
+
+        See Also:
+            * `fastRhockey`_ -- the R package these wrappers mirror
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return P.parse_player_search(
         hockeytech_api(_LG, "modulekit", "searchplayers", {"search_term": name}),
@@ -549,6 +810,21 @@ def pwhl_stats(
         NoDataError: The feed answered 404.
         AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
             ``Undefined Tab`` / ``InvalidView`` sentinel.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import pwhl_stats
+            df = pwhl_stats(season=2025)
+
+        Next step::
+
+            print(df.shape)
+
+        See Also:
+            * `fastRhockey`_ -- the R package these wrappers mirror
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     return P.parse_stats(
@@ -585,6 +861,21 @@ def pwhl_streaks(return_as_pandas: bool = False) -> Any:
 
     Warns:
         DeprecationWarning: always — the upstream view is gone.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import pwhl_streaks
+            df = pwhl_streaks()
+
+        Next step::
+
+            print(df.shape)
+
+        See Also:
+            * `fastRhockey`_ -- the R package these wrappers mirror
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     warnings.warn(
         "pwhl_streaks() is non-functional: the HockeyTech feed has no 'streaks' view "
@@ -614,6 +905,21 @@ def pwhl_transactions(return_as_pandas: bool = False) -> Any:
         NoDataError: The feed answered 404.
         AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or
             an ``Undefined Tab`` / ``InvalidView`` sentinel.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import pwhl_transactions
+            df = pwhl_transactions()
+
+        Next step::
+
+            df.head()
+
+        See Also:
+            * `fastRhockey`_ -- the R package these wrappers mirror
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return P.parse_transactions(hockeytech_api(_LG, "modulekit", "transactions", {"league_id": 1}), return_as_pandas)
 
@@ -646,6 +952,21 @@ def pwhl_playoff_bracket(
         NoDataError: The seasons feed lists no playoff season, or the feed answered 404.
         AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or
             an ``Undefined Tab`` / ``InvalidView`` sentinel.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl import pwhl_playoff_bracket
+            df = pwhl_playoff_bracket(season=2025)
+
+        Next step::
+
+            print(df.shape)
+
+        See Also:
+            * `fastRhockey`_ -- the R package these wrappers mirror
+
+        .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     if season is None and season_id is None:
         seasons = pwhl_season_id()
