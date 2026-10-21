@@ -11,6 +11,7 @@ import warnings as _warnings
 from typing import TYPE_CHECKING, Any, Callable
 from typing import TypeVar as _TypeVar
 from typing import cast as _cast
+from typing import overload as _overload
 from urllib.parse import urlsplit
 
 if TYPE_CHECKING:
@@ -355,21 +356,36 @@ class SchemaDriftWarning(UserWarning):
 _SHAPE_ERRORS: tuple[type[Exception], ...] = (TypeError, AttributeError, ValueError, KeyError, IndexError)
 
 
-def _object_rows(rows: list) -> list[dict]:
-    """The row rule: drop null rows, and raise ``TypeError`` on any other row that is not an object.
+@_overload
+def _object_rows(rows: Any) -> list[dict]: ...
+@_overload
+def _object_rows(rows: Any, where: str, stacklevel: int = 3) -> list[dict] | None: ...
+def _object_rows(rows: Any, where: str | None = None, stacklevel: int = 3) -> list[dict] | None:
+    """The one row rule (R945-2): ``rows`` without its null rows, ready for ``pd.json_normalize``.
 
-    A null row (``None``, ``NaN``, ``pd.NA``) is no data, so it is dropped: ``pd.json_normalize`` would
-    read it as an all-null row, and a list of nulls as an N x 0 frame (4.13). Any other row that is not
-    an object is schema drift, which pandas 3 raises on itself but pandas 2 reads as an empty row (WB-1).
-    Call it on the rows handed to ``pd.json_normalize``, inside the parser's ``_SHAPE_ERRORS`` catch.
+    ``None`` is no rows. A null row (``None``, ``NaN``, ``pd.NA``) is no data, so it is dropped:
+    ``pd.json_normalize`` would read it as an all-null row, and a list of nulls as an N x 0 frame (4.13).
+    A ``rows`` that is not a list, or any other row that is not an object, is schema drift, which
+    pandas 3 raises on itself but pandas 2 reads as an empty row (WB-1, WB-providers-2).
+
+    Drift raises ``TypeError``: call it inside the parser's ``_SHAPE_ERRORS`` catch. Given ``where``
+    (``"<parser>: <payload path>"``) it instead warns :class:`SchemaDriftWarning` and returns ``None``;
+    ``stacklevel`` counts from this function and should land on the parser's caller.
     """
-    kept: list[dict] = []
-    for row in rows:
-        if isinstance(row, dict):
-            kept.append(row)
-        elif not _is_null(row):
-            raise TypeError(f"a row is {type(row).__name__}, not an object")
-    return kept
+    if rows is None:
+        return []
+    if not isinstance(rows, list):
+        shape = f"rows is {type(rows).__name__}, not a list"
+    else:
+        kept = [row for row in rows if not _is_null(row)]
+        bad = [row for row in kept if not isinstance(row, dict)]
+        if not bad:
+            return kept
+        shape = f"a row is {type(bad[0]).__name__}, not an object"
+    if where is None:
+        raise TypeError(shape)
+    _warn_schema_drift(where, TypeError(shape), stacklevel=stacklevel + 1)
+    return None
 
 
 def _is_null(row: Any) -> bool:
@@ -385,12 +401,12 @@ def _first_row(rows: list) -> Any:
     return next((row for row in rows if not _is_null(row)), None)
 
 
-def _warn_schema_drift(where: str, exc: BaseException) -> None:
+def _warn_schema_drift(where: str, exc: BaseException, stacklevel: int = 3) -> None:
     """Warn that ``where`` (``"<parser>: <payload path>"``) met an unrecognised shape (A-L60)."""
     _warnings.warn(
         f"{where}: unexpected payload shape ({type(exc).__name__}: {exc}); no rows read from it",
         SchemaDriftWarning,
-        stacklevel=3,
+        stacklevel=stacklevel,
     )
 
 
@@ -455,34 +471,6 @@ def _dict_only(parse: _Parser) -> _Parser:
     No envelope check: every parser it wraps reads named keys, which an error envelope lacks.
     """
     return _cast(_Parser, _normalize_payload(parse, lambda payload: payload if isinstance(payload, dict) else {}))
-
-
-def _object_records(records: Any, where: str, stacklevel: int = 3) -> list | None:
-    """``records`` without its null rows, ready for ``pd.json_normalize``; ``None`` when it drifted (WB-providers-2).
-
-    The rule: ``None`` is no records; a null row (``None``, ``NaN``, ``pd.NA``) is no row and is dropped;
-    a ``records`` that is not a list, or any other row that is not an object, is drift. pandas 2 reads a
-    scalar row as an empty one (an N x 0 frame) and pandas 3 raises, so the provider flatteners check here
-    first, warn :class:`SchemaDriftWarning` naming ``where`` (``"<parser>: <payload path>"``) and return
-    zero rows. ``stacklevel`` is passed to ``warnings.warn`` and should land on the parser's caller.
-    ponytail: unified with #941's ``_require_objects`` (one helper, this rule) after the providers sync.
-    """
-    import pandas as pd  # lazy: errors.py is imported by every module, pandas only by the parsers
-
-    if records is None:
-        return []
-    if not isinstance(records, list):
-        shape = f"records is {type(records).__name__}, not a list"
-    else:
-        kept = [r for r in records if not (pd.api.types.is_scalar(r) and pd.isna(r))]  # a null row is no row
-        bad = [r for r in kept if not isinstance(r, dict)]
-        if not bad:
-            return kept
-        shape = f"a record is {type(bad[0]).__name__}, not an object"
-    _warnings.warn(
-        f"{where}: unexpected payload shape ({shape}); no rows read from it", SchemaDriftWarning, stacklevel=stacklevel
-    )
-    return None
 
 
 #: Routes (``host/path`` prefixes) whose 2xx answer is a bare JSON string BY DESIGN. Every other

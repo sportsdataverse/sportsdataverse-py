@@ -1,7 +1,7 @@
 """A record that is not an object is drift, on pandas 2 and 3 alike (WB-providers-2).
 
 ``pd.json_normalize`` reads a scalar record as an empty row on pandas 2 (an N x 0 frame) and raises on
-pandas 3. The provider flatteners check first (``errors._object_records``): a null row is no row; a
+pandas 3. The provider flatteners check first (``errors._object_rows``): a null row is no row; a
 records value that is not a list, or any other row that is not an object, is zero rows and a
 ``SchemaDriftWarning`` naming the parser and pointing at its caller, whichever pandas is installed. The
 name matches the 3.10 (pandas 2) CI job's ``tests/test_*parsers.py`` (#941), so CI runs it on both.
@@ -53,23 +53,27 @@ _NFL_KEYED = [
     [
         ("parse_nfl_team", ["a", "b", "c"], "parse_nfl_team: payload"),
         ("parse_nfl_team", [{"id": 1}, "b"], "parse_nfl_team: payload"),
-        ("parse_nfl_team", 5, r"parse_nfl_team: payload: .*\(records is int"),
+        ("parse_nfl_team", 5, r"parse_nfl_team: payload: .*\(TypeError: rows is int"),
         ("parse_nfl_weeks_by_date", ["a", "b"], "parse_nfl_weeks_by_date: payload"),
         ("parse_nfl_weekly_game_details", ["a", "b"], "parse_nfl_weekly_game_details: games/data"),
         ("parse_nfl_rosters", {"rosters": ["a", "b"]}, "parse_nfl_rosters: rosters"),
-        ("parse_nfl_standings", {"weeks": ["a", "b"]}, r"parse_nfl_standings: weeks: .*\(a record is str"),
-        ("parse_nfl_standings", {"weeks": 5}, r"parse_nfl_standings: weeks: .*\(records is int"),
-        ("parse_nfl_standings", {"weeks": [{"standings": 5}]}, r"weeks\[\]\.standings: .*\(records is int"),
-        ("parse_nfl_standings", {"weeks": [{"standings": ["a"]}]}, r"weeks\[\]\.standings: .*\(a record is str"),
+        ("parse_nfl_standings", {"weeks": ["a", "b"]}, r"parse_nfl_standings: weeks: .*\(TypeError: a row is str"),
+        ("parse_nfl_standings", {"weeks": 5}, r"parse_nfl_standings: weeks: .*\(TypeError: rows is int"),
+        ("parse_nfl_standings", {"weeks": [{"standings": 5}]}, r"weeks\[\]\.standings: .*\(TypeError: rows is int"),
+        (
+            "parse_nfl_standings",
+            {"weeks": [{"standings": ["a"]}]},
+            r"weeks\[\]\.standings: .*\(TypeError: a row is str",
+        ),
         # R945-8: one good week and one drifted week is zero rows, never a partial table
         (
             "parse_nfl_standings",
             {"weeks": [{"standings": [{"team": {"abbr": "KC"}}]}, {"standings": 5}]},
-            r"weeks\[\]\.standings: .*\(records is int",
+            r"weeks\[\]\.standings: .*\(TypeError: rows is int",
         ),
     ]
-    + [(name, {key: 5}, rf"{name}: \S+: .*\(records is int, not a list") for name, key in _NFL_KEYED]
-    + [(name, {key: {"a": 1}}, rf"{name}: \S+: .*\(records is dict, not a list") for name, key in _NFL_KEYED],
+    + [(name, {key: 5}, rf"{name}: \S+: .*\(TypeError: rows is int, not a list") for name, key in _NFL_KEYED]
+    + [(name, {key: {"a": 1}}, rf"{name}: \S+: .*\(TypeError: rows is dict, not a list") for name, key in _NFL_KEYED],
 )
 def test_nfl_api_scalar_records_are_drift(name, body, where):
     from sportsdataverse.nfl import nfl_api_parsers
@@ -125,7 +129,9 @@ def test_sports247_record_envelope_with_a_non_list_collection_is_drift(name, val
     from sportsdataverse.cfb import sports247_parsers
 
     body = {"pagination": {"page": 1}, "list": value}
-    _drifts(getattr(sports247_parsers, name), body, rf"{name}: payload\.list: .*\(records is {type(value).__name__}")
+    _drifts(
+        getattr(sports247_parsers, name), body, rf"{name}: payload\.list: .*\(TypeError: rows is {type(value).__name__}"
+    )
 
 
 def test_sports247_wraps_every_scalar_not_only_a_leading_one_and_drops_null_rows():

@@ -3300,14 +3300,14 @@
 - id: espn-entries-not-objects-warns
   group: codegen-runtime
   finding: A-L60
-  file: sportsdataverse/_common_espn_parsers.py
+  file: sportsdataverse/errors.py
   snippet: |-
-    _warn_schema_drift(where, exc)
-            return None
-  mutant: return entries
+    _warn_schema_drift(where, TypeError(shape), stacklevel=stacklevel + 1)
+        return None
+  mutant: return rows
   test: tests/test_espn_universal_parsers.py -k "espn_schema_drift and (parse_coaches or parse_event_plays or parse_team_roster)"
   expected: kill
-  note: R907-1 / R953-1, _rows_or_drift; a coach / play / roster entry that is not an object raised AttributeError (or a grouped roster dropped it)
+  note: R907-1 / R953-1, errors._object_rows(where=) (was _rows_or_drift, 4.14); a coach / play / roster entry that is not an object raised AttributeError (or a grouped roster dropped it)
 
 - id: nba-stats-non-object-result-set-warns
   group: codegen-runtime
