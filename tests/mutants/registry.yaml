@@ -1189,11 +1189,12 @@
   group: provider-gates
   finding: B-M33
   file: sportsdataverse/_common_espn_player_stats.py
-  snippet: 'out[col] = num if num is not None else stat.get("displayValue")'
-  mutant: 'out[col] = stat.get("displayValue") if stat.get("displayValue") is not None else num'
+  snippet: 'out[col] = _coerce_float(stat.get("value"))'
+  mutant: 'out[col] = _coerce_float(stat.get("displayValue"))'
   test: tests/test_common_espn_player_stats.py
   expected: kill
-  note: the pinned capture values (ledger gate player-stats-offline)
+  note: the pinned capture values (ledger gate player-stats-offline); re-keyed in task 5.1 (B-L20), where the
+    displayValue fallback went
 
 - id: ncaa-parse-quarters-for-every-season
   group: provider-gates
@@ -6765,3 +6766,84 @@
   note: >-
     A game with no plays falls through to literals added to the (0, 0) frame: 28 columns on polars 2.0,
     one all-null phantom row on polars 1.x.
+
+# --- task 5.1 part (b): provider columns take their documented types (B-M17, B-L90, B-GB-15, B-L83, B-L36, B-L55, B-L20)
+- id: cbs-flag-column-stays-boolean
+  group: dtype-contract-5-1
+  finding: B-M17
+  file: sportsdataverse/cbs/cbs_napi_parsers.py
+  snippet: '            frame[col] = cells if flags else cells.map(_stringify)'
+  mutant: '            frame[col] = cells.map(_stringify)'
+  test: tests/cbs/test_cbs_napi.py -k "boolean_flags"
+  expected: kill
+  note: The clinch / elimination flags on the NFL and NHL standings captures become "True" / "False" strings again.
+
+- id: yahoo-flag-column-stays-boolean
+  group: dtype-contract-5-1
+  finding: B-M17
+  file: sportsdataverse/yahoo/yahoo_shangrila_parsers.py
+  snippet: '            if {type(v) for v in cells if v is not None} <= {bool}:'
+  mutant: '            if False:'
+  test: tests/yahoo/test_yahoo_shangrila.py -k "boolean_flags"
+  expected: kill
+  note: The stream's `official` flag becomes the strings "True" plus a null, not Boolean.
+
+- id: odds-outcome-point-float64
+  group: dtype-contract-5-1
+  finding: B-L90
+  file: sportsdataverse/odds/the_odds_api_parsers.py
+  snippet: '        df["outcome_point"] = df["outcome_point"].astype("float64")'
+  mutant: '        pass'
+  test: tests/odds/test_the_odds_api.py -k "outcome_point_dtype"
+  expected: kill
+  note: An h2h-only frame's line is untyped again and a whole-number spread is Int64.
+
+- id: euroleague-header-round-int64
+  group: dtype-contract-5-1
+  finding: B-GB-15
+  file: sportsdataverse/euroleague/euroleague_parsers.py
+  snippet: '    df = df.with_columns(pl.col("round").cast(pl.Int64, strict=False)) if "round" in df.columns else df'
+  mutant: '    df = df'
+  test: tests/euroleague/test_euroleague.py -k "round_int64"
+  expected: kill
+  note: The v1 header's round is String again and does not concat with the v2 games' Int64 round.
+
+- id: statcast-chunk-pins-its-returns-table
+  group: dtype-contract-5-1
+  finding: B-L83
+  file: sportsdataverse/mlb/mlb_statcast_extra.py
+  snippet: '    return _pin_search_chunk(frame, base_url)'
+  mutant: '    return frame'
+  test: tests/mlb/test_mlb_statcast_extra.py -k "documented_dtypes"
+  expected: kill
+  note: A chunk with one missing `zone` reads Float64 while a full one reads Int64.
+
+- id: college-baseball-pandas-counts-stay-integer
+  group: dtype-contract-5-1
+  finding: B-L36
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: '        return df.to_pandas().astype({c: "Int64" for c, t in PBP_SCHEMA.items() if t == pl.Int64})'
+  mutant: '        return df.to_pandas()'
+  test: tests/baseball/test_college_baseball_ncaa_pbp.py -k "count_columns"
+  expected: kill
+  note: count_balls / count_strikes come back float64 under pandas on game 6356679.
+
+- id: fox-frame-warns-on-mixed-columns
+  group: dtype-contract-5-1
+  finding: B-L55
+  file: sportsdataverse/_fox_layout.py
+  snippet: '    if mixed:'
+  mutant: '    if False:'
+  test: tests/test_fox_layout.py -k "mixes_text_and_numbers"
+  expected: kill
+  note: A roster column holding one number among text is retyped String with no warning.
+
+- id: espn-player-stat-without-a-number-is-null
+  group: dtype-contract-5-1
+  finding: B-L20
+  file: sportsdataverse/_common_espn_player_stats.py
+  snippet: '            out[col] = _coerce_float(stat.get("value"))'
+  mutant: '            out[col] = _coerce_float(stat.get("value")) if stat.get("value") is not None else stat.get("displayValue")'
+  test: tests/test_common_espn_player_stats.py -k "null_float_not_its_display_value"
+  expected: kill
+  note: A stat with no value carries its "--" display string into a Float64 column again.

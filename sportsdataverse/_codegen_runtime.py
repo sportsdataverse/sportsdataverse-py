@@ -93,6 +93,29 @@ def _empty_from_schema(name: str, return_as_pandas: bool = False) -> Any:
     return df.to_pandas() if return_as_pandas else df
 
 
+def _pin_documented(name: str, df: pl.DataFrame) -> pl.DataFrame:
+    """Cast ``df``'s columns to the dtypes of the returns table ``name`` wherever no value can change (B-L83).
+
+    A column moves when it is all null (its dtype only reflects what a reader guessed) or when both
+    dtypes are numeric and every value survives (an integer column the pandas hop or a missing value
+    turned Float64, or the reverse). Anything else is left as it is: a mismatch there is a parser
+    question, not a cast.
+    """
+    from sportsdataverse._returns_schemas import SCHEMAS
+
+    casts = []
+    for col, want in SCHEMAS[name].items():
+        if col not in df.columns or df.schema[col] == want:
+            continue
+        have, values = df.schema[col], df[col].drop_nulls()
+        lossless = (
+            have.is_numeric() and want.is_numeric() and (not want.is_integer() or (values == values.round(0)).all())
+        )
+        if values.len() == 0 or lossless:
+            casts.append(pl.col(col).cast(want))
+    return df.with_columns(casts) if casts else df
+
+
 def _documented_empty(name: str) -> Callable[[_Fn], _Fn]:
     """Decorate a parser or loader so a result with no columns is the documented empty frame ``name`` (task 5.1)."""
 

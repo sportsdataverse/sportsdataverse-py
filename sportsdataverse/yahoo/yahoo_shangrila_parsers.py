@@ -122,7 +122,13 @@ def _rows_to_frame(rows: List[Any]) -> pl.DataFrame:
     df.columns = cols
     for c in df.columns:
         if df[c].dtype == object:
-            df[c] = df[c].map(
+            # B-M17: a key absent from some rows is pandas' NaN: null, never the string "nan"; and a column
+            # of flags stays Boolean instead of becoming "True" / "False" strings.
+            cells = df[c].map(lambda v: None if isinstance(v, float) and v != v else v)
+            if {type(v) for v in cells if v is not None} <= {bool}:
+                df[c] = cells
+                continue
+            df[c] = cells.map(
                 lambda v: (
                     json.dumps(v) if isinstance(v, (list, dict)) else (v if v is None or isinstance(v, str) else str(v))
                 ),

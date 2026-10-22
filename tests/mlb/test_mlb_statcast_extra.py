@@ -86,3 +86,31 @@ def test_dropped_connection_is_a_failed_fetch(monkeypatch) -> None:
     monkeypatch.setattr(ex, "download", refuse)
     with pytest.raises(AssetFetchError):
         ex.mlb_statcast_search("2024-06-15", "2024-06-15")
+
+
+def _blank_one_cell(csv: str, column: str) -> str:
+    """The real capture with ``column`` emptied on its first row: a pitch Savant ships without that value."""
+    import io
+
+    import pandas as pd
+
+    frame = pd.read_csv(io.StringIO(csv), dtype=str, keep_default_na=False)
+    frame.loc[0, column] = ""
+    return frame.to_csv(index=False)
+
+
+def test_documented_dtypes_do_not_depend_on_nulls(monkeypatch) -> None:
+    """B-L83: a column's dtype is the returns table's whether or not a chunk has a missing value."""
+    from tests.conftest import documented_schema
+
+    gaps = _blank_one_cell(_blank_one_cell(_SEARCH, "zone"), "release_spin_rate")
+    header_only = _SEARCH.splitlines()[0] + "\n"
+    _serve_by_window(monkeypatch, {"2024-06-15": _SEARCH, "2024-06-16": gaps, "2024-06-17": header_only})
+    full, holes, empty = (ex.mlb_statcast_search(day, day) for day in ("2024-06-15", "2024-06-16", "2024-06-17"))
+    want = documented_schema("autodoc/mlb/mlb_statcast_search")
+    assert full.schema == holes.schema
+    assert {c: full.schema[c] for c in ("zone", "release_spin_rate", "spin_axis")} == {
+        c: want[c] for c in ("zone", "release_spin_rate", "spin_axis")
+    }
+    assert holes["zone"].null_count() == 1 and full["zone"].to_list()[1:] == holes["zone"].to_list()[1:]
+    assert empty.height == 0 and dict(empty.schema) == want

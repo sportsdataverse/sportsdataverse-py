@@ -176,7 +176,8 @@ def _espn_player_stats(
 
     # Wide stat columns sit between athlete identity and team identity so the
     # frame reads athlete -> stats -> team.
-    row.update(_wide_stats(stats_payload))
+    stat_cols = _wide_stats(stats_payload)
+    row.update(stat_cols)
     row.update(team_meta)
 
     # Ensure athlete_id is always populated even if the athlete deref failed.
@@ -187,7 +188,7 @@ def _espn_player_stats(
         if col in row:
             row[col] = _coerce_int(row[col])
 
-    frame = pl.DataFrame({k: [v] for k, v in row.items()})
+    frame = pl.DataFrame({k: [v] for k, v in row.items()}, schema_overrides=dict.fromkeys(stat_cols, pl.Float64))
     if return_as_pandas:
         return frame.to_pandas()
     return frame
@@ -268,9 +269,10 @@ def _extract_team_meta(payload: dict[str, Any] | None) -> dict[str, Any]:
 def _wide_stats(stats_payload: dict[str, Any]) -> dict[str, Any]:
     """Pivot ``splits.categories[].stats[]`` into ``{category}_{stat}`` columns.
 
-    Each stat's numeric ``value`` becomes one column named
-    ``underscore(f"{category_name}_{stat_name}")``. Composite / non-numeric
-    values fall back to their string ``displayValue``.
+    Each stat's numeric ``value`` becomes one Float64 column named
+    ``underscore(f"{category_name}_{stat_name}")``. A stat with no numeric
+    ``value`` is null: falling back to its ``displayValue`` string made the same
+    column Float64 for one athlete and String for the next (B-L20).
     """
     out: dict[str, Any] = {}
     splits = stats_payload.get("splits")
@@ -294,9 +296,7 @@ def _wide_stats(stats_payload: dict[str, Any]) -> dict[str, Any]:
             if not stat_name:
                 continue
             col = underscore(f"{cat_name}_{stat_name}")
-            value = stat.get("value")
-            num = _coerce_float(value)
-            out[col] = num if num is not None else stat.get("displayValue")
+            out[col] = _coerce_float(stat.get("value"))
     return out
 
 

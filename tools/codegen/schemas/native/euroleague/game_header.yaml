@@ -2,9 +2,9 @@ columns:
 - description: Whether the game is in progress.
   name: live
   type: logical
-- description: Round label (e.g. Round 1).
+- description: Round number (Int64, as the v2 rounds and games routes carry it).
   name: round
-  type: character
+  type: integer
 - description: Game date (venue local, dd/mm/yyyy).
   name: date
   type: character

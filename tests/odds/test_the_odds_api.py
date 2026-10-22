@@ -234,3 +234,20 @@ def test_422_bad_params_is_a_value_error(monkeypatch):
         toa.toa_sports_odds(markets="notamarket", api_key=key, return_parsed=False)
     assert not isinstance(ei.value, AssetFetchError)
     assert key not in str(ei.value) and len(str(ei.value)) < 400
+
+
+def test_outcome_point_dtype_is_float64_on_every_market():
+    """B-L90: the line is Float64 whether the frame holds only h2h (all null) or a whole-number spread.
+
+    No live capture is committed (the API needs a key); the event shape is the API's documented one."""
+    import copy
+
+    spread = copy.deepcopy(_ODDS_EVENT)
+    spread["bookmakers"][0]["markets"] = [
+        {"key": "spreads", "outcomes": [{"name": "Houston Texans", "price": -110, "point": 3}]},
+    ]
+    for events in ([_ODDS_EVENT], [spread], [_ODDS_EVENT, spread]):
+        df = toap.parse_toa_odds(events)
+        assert df.schema["outcome_point"] == pl.Float64
+        assert toap.parse_toa_odds(events, return_as_pandas=True)["outcome_point"].dtype == "float64"
+    assert toap.parse_toa_odds([spread])["outcome_point"].to_list() == [3.0]

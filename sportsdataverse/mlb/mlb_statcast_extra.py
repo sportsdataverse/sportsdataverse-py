@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Any, List, Optional, Set, Tuple, Union
 
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _check_status, _excerpt, _text_body, _transport_errors
+from sportsdataverse._codegen_runtime import _check_status, _excerpt, _pin_documented, _text_body, _transport_errors
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import AssetFetchError
 from sportsdataverse.mlb.mlb_statcast_parsers import (
@@ -147,7 +147,20 @@ def _fetch_chunk(
         raise AssetFetchError(
             f"{label} answered HTTP {status} with a body that is not a Statcast CSV: {_excerpt(text)}"
         )
-    return frame
+    return _pin_search_chunk(frame, base_url)
+
+
+def _pin_search_chunk(frame: pl.DataFrame, base_url: str) -> pl.DataFrame:
+    """B-L83: one chunk's dtypes are the returns table's, whatever its nulls made pandas guess.
+
+    pandas reads an integer column with a missing value as float64 and an all-empty column as object, so
+    without the pin a column's dtype (and the concat's supertype) depended on which chunks had nulls.
+    """
+    if base_url == _SEARCH_URL_MINORS:
+        return _pin_documented("autodoc/mlb/mlb_statcast_search_minors", frame)
+    if base_url == _SEARCH_URL_WBC:
+        return _pin_documented("autodoc/mlb/mlb_statcast_search_wbc", frame)
+    return _pin_documented("autodoc/mlb/mlb_statcast_search", frame)
 
 
 def _search_core(

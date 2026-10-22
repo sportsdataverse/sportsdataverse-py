@@ -351,24 +351,24 @@ Get standings for a particular team.
 | `season_season_end_date` | character | Last day of the season in the same MM-DD-YYYY HH:MM:SS plus UTC-offset format, e.g. 01-04-2026 23:59:59 -0500. |
 | `goal_differential_differential` | integer | Goals scored minus goals conceded, on the soccer standings shape. |
 | `clinched_division_clinched_id` | integer | Numeric mirror of clinched_division_clinched (1 clinched, 0 not). |
-| `clinched_division_clinched` | character | Whether the team has clinched its division. |
+| `clinched_division_clinched` | logical | Whether the team has clinched its division. |
 | `team_code_id` | integer | League-scoped team code on the US-league standings shape, a small per-league sequence (3 for the Angels, 34 for the Texans) rather than the global id. |
 | `team_code_global_id` | integer | CBS global team identifier on the US-league standings shape, e.g. 227 for the Angels and 325 for the Texans. |
 | `team_city_city` | character | City CBS attributes the team to on the US-league standings shape, e.g. Houston. |
 | `clinched_playoff_spot_clinched_id` | integer | Numeric mirror of clinched_playoff_spot_clinched (1 clinched, 0 not). |
-| `clinched_playoff_spot_clinched` | character | Whether the team has clinched a playoff berth, on the MLB standings shape. |
+| `clinched_playoff_spot_clinched` | logical | Whether the team has clinched a playoff berth, on the MLB standings shape. |
 | `games_back_number` | character | Games behind the leader of the team's standings group; typed as text because CBS emits a dash on rows where it does not compute one. |
-| `division_rank_tied` | character | Whether the team's division rank is shared with another team. |
+| `division_rank_tied` | logical | Whether the team's division rank is shared with another team. |
 | `division_rank_rank` | integer | Team's rank within its division, 1 being best. |
 | `division_rank_tied_id` | integer | Numeric mirror of division_rank_tied (1 tied, 0 not). |
 | `streak_kind` | character | Direction of the team's current run when CBS returns a single streak object, e.g. winning or losing (the NHL returns an array instead, kept in the streak column). |
 | `streak_games` | integer | Length in games of the current run described by streak_kind. |
-| `wild_card_rank_tied` | character | Whether the team's wild-card rank is shared with another team. |
+| `wild_card_rank_tied` | logical | Whether the team's wild-card rank is shared with another team. |
 | `wild_card_rank_rank` | integer | Team's rank in the wild-card race, on the MLB and NHL standings shapes. |
 | `wild_card_rank_tied_id` | integer | Numeric mirror of wild_card_rank_tied (1 tied, 0 not). |
-| `today_games_included_through` | character | Whether the standings figures already account for games played today. |
+| `today_games_included_through` | logical | Whether the standings figures already account for games played today. |
 | `today_games_included_through_id` | integer | Numeric mirror of today_games_included_through (1 included, 0 not). |
-| `eliminated_from_playoffs_eliminated` | character | Whether the team has been eliminated from playoff contention. |
+| `eliminated_from_playoffs_eliminated` | logical | Whether the team has been eliminated from playoff contention. |
 | `wc_games_back_number` | character | Games behind the last wild-card position, on the MLB standings shape. |
 | `team_name_name` | character | Nickname CBS uses for the team on the US-league standings shape, e.g. Texans or Angels. |
 | `team_name_alias` | character | Short alias for the team on the US-league standings shape, e.g. Hou or LAA. |
@@ -376,7 +376,7 @@ Get standings for a particular team.
 | `wc_elimination_number_number` | integer | Elimination number for the team's wild-card contention specifically, on the MLB standings shape. |
 | `runs_allowed` | integer | Runs the team conceded, on the MLB standings shape. |
 | `runs_scored` | integer | Runs the team scored, on the MLB standings shape. |
-| `league_rank_tied` | character | Whether the team's league rank is shared with another team. |
+| `league_rank_tied` | logical | Whether the team's league rank is shared with another team. |
 | `league_rank_rank` | integer | Team's rank across the whole league, 1 being best. |
 | `league_rank_tied_id` | integer | Numeric mirror of league_rank_tied (1 tied, 0 not). |
 | `place_conference_rank` | integer | Rank the team holds within its conference, carried on the place block of the MLS standings shape. |
@@ -412,7 +412,7 @@ Get standings for a particular team.
 | `points_for_number` | integer | Points the team scored, on the NFL standings shape. |
 | `points_against_number` | integer | Points the team conceded, on the NFL standings shape. |
 | `clinched_home_field_clinched` | logical | Whether the team has clinched home-field advantage through the playoffs, on the NFL standings shape. |
-| `clinched_first_round_bye_clinched` | character | Whether the team has clinched a first-round playoff bye, on the NFL standings shape. |
+| `clinched_first_round_bye_clinched` | logical | Whether the team has clinched a first-round playoff bye, on the NFL standings shape. |
 | `content` | character | Raw markup fragment CBS emits on some NFL standings blocks; the captured rows carry only the string /> and it holds no standings meaning. |
 | `clinched_playoffs_date_date` | integer | Day of the month on which the team clinched a playoff berth. |
 | `clinched_playoffs_date_month` | integer | Month of the date on which the team clinched a playoff berth, 1 through 12. |

@@ -59,7 +59,7 @@ columns:
   type: integer
   description: ''
 - name: jersey_number
-  type: double
+  type: integer
   description: ''
 - name: high_school_rating
   type: character
@@ -284,7 +284,7 @@ columns:
   type: character
   description: ''
 - name: person_high_school_default_asset_key
-  type: double
+  type: integer
   description: ''
 - name: person_high_school_default_asset_domain_override
   type: double
@@ -314,10 +314,10 @@ columns:
   type: double
   description: ''
 - name: person_high_school_default_asset_height
-  type: double
+  type: integer
   description: ''
 - name: person_high_school_default_asset_width
-  type: double
+  type: integer
   description: ''
 - name: person_high_school_default_asset_asset_type
   type: character
@@ -335,7 +335,7 @@ columns:
   type: double
   description: ''
 - name: person_high_school_default_asset_duration
-  type: double
+  type: integer
   description: ''
 - name: person_high_school_default_asset_mime_type
   type: character

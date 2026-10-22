@@ -28,10 +28,10 @@ def _two_retries(monkeypatch):
     monkeypatch.setenv("SDV_PY_HTTP_RETRIES", "2")
 
 
-def _serve(monkeypatch, athlete_status: int = 404, athlete_body: str = NOT_FOUND):
+def _serve(monkeypatch, athlete_status: int = 404, athlete_body: str = NOT_FOUND, stats: str = STATS):
     def answer(url: str):
         if "/statistics" in url:
-            return (200, STATS, "application/json")
+            return (200, stats, "application/json")
         return (athlete_status, athlete_body, "application/json")
 
     return _route(monkeypatch, answer)
@@ -98,3 +98,14 @@ def test_coerce_float_maps_nan_to_null(value):
 
     assert _coerce_float(value) is None
     assert _coerce_float(" 7.8 ") == 7.8 and _coerce_float(3) == 3.0 and _coerce_float("7.8-15.7") is None
+
+
+def test_stat_without_a_number_is_a_null_float_not_its_display_value(monkeypatch):
+    """B-L20: the real capture with one stat's value withheld: the column stays Float64 (null), not "--"."""
+    payload = json.loads(STATS)
+    stat = payload["splits"]["categories"][0]["stats"][0]
+    stat["value"], stat["displayValue"] = None, "--"
+    _serve(monkeypatch, stats=json.dumps(payload))
+    col = underscore(f"{payload['splits']['categories'][0]['name']}_{stat['name']}")
+    df = _lebron()
+    assert df.schema[col] == pl.Float64 and df[col][0] is None

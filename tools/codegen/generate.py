@@ -2144,7 +2144,7 @@ _EMPTY_DTYPES = {
     "datetime": "Datetime",
     "Null": "Null",
 }
-_EMPTY_SCHEMA_CALL = re.compile(r"""_(?:empty_from_schema|documented_empty)\(\s*["']([\w./:-]+)["']""")
+_EMPTY_SCHEMA_CALL = re.compile(r"""_(?:empty_from_schema|documented_empty|pin_documented)\(\s*["']([\w./:-]+)["']""")
 
 
 def _empty_polars_dtype(label: str):
@@ -2191,7 +2191,7 @@ def render_returns_schemas() -> str:
     """``sportsdataverse/_returns_schemas.py``: every returns table an empty result is built from (task 5.1).
 
     Holds each generated loader's ``loader_schemas.yaml`` entry plus every name a hand-written module passes
-    to ``_empty_from_schema`` / ``_documented_empty`` (found by scanning the package), so the wheel carries
+    to ``_empty_from_schema`` / ``_documented_empty`` / ``_pin_documented`` (found by scanning the package), so the wheel carries
     the tables ``tools/`` keeps out of it."""
     names = {f"loader_schemas:{ld.fn}" for ld in _releases_cfg().loaders if ld.league in _GENERATED_LOADER_LEAGUES}
     names &= {f"loader_schemas:{fn}" for fn in _loader_schemas()}
