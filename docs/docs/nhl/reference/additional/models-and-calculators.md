@@ -374,7 +374,12 @@ Per game: resolves each shift row's full team name (`event_team`) to home/away v
 then folds `ids_on`/`ids_off` deltas chronologically into a running on-ice set per
 side. A new interval begins at every distinct `game_seconds` boundary; the final
 interval is closed at the last `scored` event's `game_seconds` + 1 for that game
-(there is no explicit "end of game" CHANGE row in the shift-chart feed).
+(there is no explicit "end of game" CHANGE row in the shift-chart feed). A shot or goal
+at a change second credits its xG to the interval that ends there (the players on the
+ice before the change), following fastRhockey's within-second event order
+(`R/nhl_game_feed.R`: shots, goals, stops and penalties before a CHANGE, faceoffs
+after). So xG sums over `(start_s, end_s]` while goalie and `strength_state` read
+the events in `[start_s, end_s)`, falling back to the xG window when that is empty.
 
 Known simplification: shift-chart id lists do not distinguish position, so
 `home_ids`/`away_ids` may include the on-ice goalie's id alongside skaters;
