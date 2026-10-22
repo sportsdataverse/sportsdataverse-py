@@ -58,8 +58,6 @@ Team leaderboard of a competition for one stat category (total, per-game average
 kzs_team_leaderboard(competition_id=579)
 ```
 
-_Last validated n/a._
-
 ## kzs_team_box_score
 
 Team totals of a final game's box score, one row per side.
@@ -172,8 +170,6 @@ Team totals of a final game's box score, one row per side.
 kzs_team_box_score(match_id=101839)
 ```
 
-_Last validated n/a._
-
 ## kzs_teams
 
 Teams entered in a competition.
@@ -227,8 +223,6 @@ Teams entered in a competition.
 ```python
 kzs_teams(competition_id=579)
 ```
-
-_Last validated n/a._
 
 ## kzs_team
 
@@ -293,8 +287,6 @@ Team profile: club, home hall, colours and the competitions the team entered.
 ```python
 kzs_team(team_id=17551)
 ```
-
-_Last validated n/a._
 
 ## kzs_team_general
 
@@ -381,5 +373,3 @@ A team's record, form and best players in one competition (the body echoes neith
 ```python
 kzs_team_general(competition_id=579, team_id=17551)
 ```
-
-_Last validated n/a._

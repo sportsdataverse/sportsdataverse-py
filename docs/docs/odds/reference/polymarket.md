@@ -97,8 +97,6 @@ Events -- groups of related markets -- on the Gamma metadata host.
 polymarket_gamma_events(closed='false', limit='3', tag_slug='sports')
 ```
 
-_Last validated n/a._
-
 ## polymarket_gamma_market
 
 One market by its Gamma id.
@@ -226,8 +224,6 @@ One market by its Gamma id.
 ```python
 polymarket_gamma_market(id='608565')
 ```
-
-_Last validated n/a._
 
 ## polymarket_gamma_markets
 
@@ -366,8 +362,6 @@ Markets on the Gamma metadata host, orderable by volume or liquidity.
 polymarket_gamma_markets(ascending='false', closed='false', limit='3', order='volume24hr')
 ```
 
-_Last validated n/a._
-
 ## polymarket_gamma_tags
 
 Tags used to categorise Gamma events and markets.
@@ -409,8 +403,6 @@ Tags used to categorise Gamma events and markets.
 ```python
 polymarket_gamma_tags(limit='3')
 ```
-
-_Last validated n/a._
 
 ## polymarket_clob_book
 
@@ -457,8 +449,6 @@ Full order book, bids and asks, for one outcome token.
 ```python
 polymarket_clob_book(token_id='14940935985254400645996902276818598247231942791302218826999289776538227075176')
 ```
-
-_Last validated n/a._
 
 ## polymarket_clob_markets
 
@@ -527,8 +517,6 @@ Markets on the CLOB host, cursor-paged.
 polymarket_clob_markets(next_cursor='MA==')
 ```
 
-_Last validated n/a._
-
 ## polymarket_clob_midpoint
 
 Midpoint between the best bid and the best ask for one outcome token.
@@ -564,8 +552,6 @@ Midpoint between the best bid and the best ask for one outcome token.
 ```python
 polymarket_clob_midpoint(token_id='14940935985254400645996902276818598247231942791302218826999289776538227075176')
 ```
-
-_Last validated n/a._
 
 ## polymarket_clob_price
 
@@ -603,5 +589,3 @@ Best price on one side of the book for one outcome token.
 ```python
 polymarket_clob_price(side='buy', token_id='14940935985254400645996902276818598247231942791302218826999289776538227075176')
 ```
-
-_Last validated n/a._

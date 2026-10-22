@@ -51,8 +51,6 @@ Team per-game leaders in nine categories (one row per team and category).
 sportpress_team_rankings(competition_id=24)
 ```
 
-_Last validated n/a._
-
 ## sportpress_team_roster
 
 Roster of one competition team (current entries only).
@@ -101,8 +99,6 @@ Roster of one competition team (current entries only).
 sportpress_team_roster(competition_team_id=541)
 ```
 
-_Last validated n/a._
-
 ## sportpress_team_find
 
 One competition team with its season scoring averages.
@@ -149,8 +145,6 @@ One competition team with its season scoring averages.
 ```python
 sportpress_team_find(competition_team_id=541)
 ```
-
-_Last validated n/a._
 
 ## sportpress_team_player_averages
 
@@ -223,8 +217,6 @@ Per-game averages of each player of a competition team.
 ```python
 sportpress_team_player_averages(competition_team_id=541)
 ```
-
-_Last validated n/a._
 
 ## sportpress_team_games
 
@@ -309,5 +301,3 @@ Every finished game of a competition team with that team's totals.
 ```python
 sportpress_team_games(competition_team_id=541)
 ```
-
-_Last validated n/a._

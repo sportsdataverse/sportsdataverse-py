@@ -133,8 +133,6 @@ GET /stats/playergamelogs
 wnba_stats_playergamelogs(league_id='10', season_nullable='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_playergamestreakfinder
 
 GET /stats/playergamestreakfinder
@@ -268,8 +266,6 @@ GET /stats/playergamestreakfinder
 wnba_stats_playergamestreakfinder(league_id='10', season_nullable='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_playerindex
 
 GET /stats/playerindex
@@ -343,8 +339,6 @@ GET /stats/playerindex
 wnba_stats_playerindex(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_playernextngames
 
 GET /stats/playernextngames
@@ -397,8 +391,6 @@ GET /stats/playernextngames
 ```python
 wnba_stats_playernextngames(league_id='10', season_all='2024')
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_playerprofilev2
 
@@ -853,8 +845,6 @@ GET /stats/playerprofilev2
 wnba_stats_playerprofilev2(league_id='10')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_playervsplayer
 
 GET /stats/playervsplayer
@@ -1096,5 +1086,3 @@ GET /stats/playervsplayer
 ```python
 wnba_stats_playervsplayer(league_id='10', season='2024')
 ```
-
-_Last validated n/a._

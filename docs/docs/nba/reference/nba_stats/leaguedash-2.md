@@ -87,8 +87,6 @@ GET /stats/leaguedashptstats
 nba_stats_leaguedashptstats(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_leaguedashptteamdefend
 
 GET /stats/leaguedashptteamdefend
@@ -155,8 +153,6 @@ GET /stats/leaguedashptteamdefend
 ```python
 nba_stats_leaguedashptteamdefend(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_leaguedashteamclutch
 
@@ -279,8 +275,6 @@ GET /stats/leaguedashteamclutch
 nba_stats_leaguedashteamclutch(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_leaguedashteamptshot
 
 GET /stats/leaguedashteamptshot
@@ -359,8 +353,6 @@ GET /stats/leaguedashteamptshot
 ```python
 nba_stats_leaguedashteamptshot(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_leaguedashteamshotlocations
 
@@ -455,8 +447,6 @@ GET /stats/leaguedashteamshotlocations
 ```python
 nba_stats_leaguedashteamshotlocations(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_leaguedashteamstats
 
@@ -576,5 +566,3 @@ GET /stats/leaguedashteamstats
 ```python
 nba_stats_leaguedashteamstats(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._

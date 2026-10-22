@@ -73,8 +73,6 @@ One game's goals: scorer, assists, strength codes and skaters on ice.
 liiga_game_goals(game_id=1, season=2026)
 ```
 
-_Last validated n/a._
-
 ## liiga_game_penalties
 
 One game's penalties, both teams: player, fault, minutes, start and end.
@@ -128,8 +126,6 @@ One game's penalties, both teams: player, fault, minutes, start and end.
 liiga_game_penalties(game_id=1, season=2026)
 ```
 
-_Last validated n/a._
-
 ## liiga_game_shootout
 
 One game's shootout attempts: shooter, goalkeeper and result (none for a game without one).
@@ -176,8 +172,6 @@ One game's shootout attempts: shooter, goalkeeper and result (none for a game wi
 ```python
 liiga_game_shootout(game_id=1, season=2026)
 ```
-
-_Last validated n/a._
 
 ## liiga_game_lineups
 
@@ -246,8 +240,6 @@ One game's lineups, both teams: line, role, jersey, captaincy and bio.
 ```python
 liiga_game_lineups(game_id=1, season=2026)
 ```
-
-_Last validated n/a._
 
 ## liiga_game_players_stats
 
@@ -357,8 +349,6 @@ One game's lineups with each player's all-time, season, season-in-team and versu
 liiga_game_players_stats(game_id=1, season=2026)
 ```
 
-_Last validated n/a._
-
 ## liiga_game_stats
 
 One game's per-period player box score, skaters and goalies, with tracking where Liiga has it.
@@ -455,8 +445,6 @@ One game's per-period player box score, skaters and goalies, with tracking where
 liiga_game_stats(game_id=1, season=2026)
 ```
 
-_Last validated n/a._
-
 ## liiga_game_team_stats
 
 One game's per-period team stats with puck possession.
@@ -514,5 +502,3 @@ One game's per-period team stats with puck possession.
 ```python
 liiga_game_team_stats(game_id=1, season=2026)
 ```
-
-_Last validated n/a._

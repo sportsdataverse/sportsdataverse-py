@@ -44,8 +44,6 @@ Every season of the CBA data site, newest first (the upcoming season is the defa
 cba_seasons()
 ```
 
-_Last validated n/a._
-
 ## cba_match_types
 
 The match types (regular season, playoffs, preseason, all-star, relegation play-off) with their ids.
@@ -82,8 +80,6 @@ The match types (regular season, playoffs, preseason, all-star, relegation play-
 ```python
 cba_match_types()
 ```
-
-_Last validated n/a._
 
 ## cba_schedule_month
 
@@ -122,8 +118,6 @@ Game count per day of one calendar month.
 ```python
 cba_schedule_month(month=12, year=2025)
 ```
-
-_Last validated n/a._
 
 ## cba_schedule_day
 
@@ -187,8 +181,6 @@ The games of one day: ids, teams, status, score, round and the data flags.
 cba_schedule_day(day='2025-12-12')
 ```
 
-_Last validated n/a._
-
 ## cba_period_scores
 
 Points each side scored in each period of a finished game (up to seven periods).
@@ -227,8 +219,6 @@ Points each side scored in each period of a finished game (up to seven periods).
 ```python
 cba_period_scores(schedule_id=100105799)
 ```
-
-_Last validated n/a._
 
 ## cba_best_player
 
@@ -284,8 +274,6 @@ The best player of each side in the game report.
 cba_best_player(schedule_id=100105799)
 ```
 
-_Last validated n/a._
-
 ## cba_best_stats
 
 Single-category leaders of each side in the game report.
@@ -330,8 +318,6 @@ Single-category leaders of each side in the game report.
 ```python
 cba_best_stats(schedule_id=100105799)
 ```
-
-_Last validated n/a._
 
 ## cba_rosters
 
@@ -406,8 +392,6 @@ Registered rosters of both sides with player bio fields (the season registration
 cba_rosters(schedule_id=100105799)
 ```
 
-_Last validated n/a._
-
 ## cba_report_status
 
 Whether the game report page exists for the game.
@@ -444,8 +428,6 @@ Whether the game report page exists for the game.
 ```python
 cba_report_status(schedule_id=100105799)
 ```
-
-_Last validated n/a._
 
 ## cba_pbp
 
@@ -501,5 +483,3 @@ Play-by-play of a finished game, every period merged, oldest first (Chinese text
 ```python
 cba_pbp(schedule_id=100105799)
 ```
-
-_Last validated n/a._

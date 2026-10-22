@@ -101,8 +101,6 @@ ESPN endpoint.
 espn_soccer_league_root(league='eng.1')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_seasons
 
 ESPN endpoint.
@@ -140,8 +138,6 @@ ESPN endpoint.
 ```python
 espn_soccer_seasons(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_games
 
@@ -181,8 +177,6 @@ ESPN endpoint.
 ```python
 espn_soccer_games(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_game
 
@@ -232,8 +226,6 @@ ESPN endpoint.
 espn_soccer_game(league='eng.1', event_id='401584793')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_teams_core
 
 ESPN endpoint.
@@ -282,8 +274,6 @@ ESPN endpoint.
 ```python
 espn_soccer_teams_core(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_team_core
 
@@ -360,8 +350,6 @@ ESPN endpoint.
 espn_soccer_team_core(league='eng.1', team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_venues
 
 ESPN endpoint.
@@ -399,8 +387,6 @@ ESPN endpoint.
 ```python
 espn_soccer_venues(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_venue
 
@@ -444,8 +430,6 @@ ESPN endpoint.
 espn_soccer_venue(league='eng.1', venue_id='3663')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_franchises
 
 ESPN endpoint.
@@ -483,8 +467,6 @@ ESPN endpoint.
 ```python
 espn_soccer_franchises(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_franchise
 
@@ -543,8 +525,6 @@ ESPN endpoint.
 espn_soccer_franchise(league='eng.1', franchise_id='2')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_coach
 
 ESPN endpoint.
@@ -590,8 +570,6 @@ ESPN endpoint.
 espn_soccer_coach(league='eng.1', coach_id='1')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_coach_record
 
 ESPN endpoint.
@@ -636,8 +614,6 @@ ESPN endpoint.
 espn_soccer_coach_record(league='eng.1', coach_id='1')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_coach_season
 
 ESPN endpoint.
@@ -672,8 +648,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_soccer_coach_season(league='eng.1', coach_id='1', season=2024)
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_positions
 
@@ -712,8 +686,6 @@ ESPN endpoint.
 ```python
 espn_soccer_positions(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_position
 
@@ -757,8 +729,6 @@ ESPN endpoint.
 espn_soccer_position(league='eng.1', position_id='1')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_tournaments
 
 ESPN endpoint.
@@ -797,8 +767,6 @@ ESPN endpoint.
 espn_soccer_tournaments(league='eng.1')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_awards
 
 ESPN endpoint.
@@ -836,8 +804,6 @@ ESPN endpoint.
 ```python
 espn_soccer_awards(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_award
 
@@ -878,8 +844,6 @@ ESPN endpoint.
 ```python
 espn_soccer_award(league='eng.1', award_id='1')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_standings_core
 
@@ -934,8 +898,6 @@ ESPN endpoint.
 espn_soccer_standings_core(league='eng.1')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_leaders_core
 
 ESPN endpoint.
@@ -969,8 +931,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 espn_soccer_leaders_core(league='eng.1')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_league_notes
 
 ESPN endpoint.
@@ -1003,8 +963,6 @@ No returns table is published for this endpoint: no capture: the page holds zero
 ```python
 espn_soccer_league_notes(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_talentpicks
 
@@ -1053,5 +1011,3 @@ ESPN endpoint.
 ```python
 espn_soccer_talentpicks(league='eng.1')
 ```
-
-_Last validated n/a._

@@ -196,8 +196,6 @@ GET /stats/scoreboardv2
 nba_stats_scoreboardv2(league_id='00')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_scoreboardv3
 
 GET /stats/scoreboardv3
@@ -314,5 +312,3 @@ GET /stats/scoreboardv3
 ```python
 nba_stats_scoreboardv3(league_id='00')
 ```
-
-_Last validated n/a._

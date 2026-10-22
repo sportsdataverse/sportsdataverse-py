@@ -1,7 +1,7 @@
 ---
 title: "CFB — On3 Recruit Database (api.on3.com) — Organizations"
 sidebar_label: "Organizations"
-sidebar_position: 6
+sidebar_position: 5
 description: "CFB — On3 Recruit Database (api.on3.com) — Organizations — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -43,8 +43,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 on3_organizations_draft_class_by_state(organization_key=1867)
 ```
 
-_Last validated n/a._
-
 ## on3_organizations_draft_class_by_year
 
 GET /rdb/v1/organizations/{organizationKey}/draft-class-by-year
@@ -81,8 +79,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 on3_organizations_draft_class_by_year(organization_key=1867)
 ```
 
-_Last validated n/a._
-
 ## on3_organizations_draft_count_by_stars
 
 GET /rdb/v1/organizations/{organizationKey}/draft-count-by-stars
@@ -116,8 +112,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 ```python
 on3_organizations_draft_count_by_stars(organization_key=1867)
 ```
-
-_Last validated n/a._
 
 ## on3_organizations_draft_count_by_year
 
@@ -155,8 +149,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 on3_organizations_draft_count_by_year(organization_key=1867)
 ```
 
-_Last validated n/a._
-
 ## on3_organizations_draft_ranking_summary
 
 GET /rdb/v1/organizations/{organizationKey}/draft-ranking-summary
@@ -191,8 +183,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 ```python
 on3_organizations_draft_ranking_summary(organization_key=1867)
 ```
-
-_Last validated n/a._
 
 ## on3_organizations_drafted_players
 
@@ -230,8 +220,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 on3_organizations_drafted_players(organization_key=1867)
 ```
 
-_Last validated n/a._
-
 ## on3_organizations_drafts_by_stars_summary
 
 GET /rdb/v1/organizations/{organizationKey}/drafts-by-stars-summary
@@ -266,8 +254,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 ```python
 on3_organizations_drafts_by_stars_summary(organization_key=1867)
 ```
-
-_Last validated n/a._
 
 ## on3_organizations_roster
 
@@ -485,8 +471,6 @@ GET /rdb/v1/organizations/{organizationKey}/roster
 on3_organizations_roster(organization_key=1867)
 ```
 
-_Last validated n/a._
-
 ## on3_organizations_roster_header
 
 GET /rdb/v1/organizations/{organizationKey}/roster-header
@@ -595,5 +579,3 @@ GET /rdb/v1/organizations/{organizationKey}/roster-header
 ```python
 on3_organizations_roster_header(organization_key=1867)
 ```
-
-_Last validated n/a._

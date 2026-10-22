@@ -260,8 +260,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_facet_passing_pressure()
 ```
 
-_Last validated n/a._
-
 ## pff_facet_receiving_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
@@ -353,8 +351,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_facet_receiving_summary()
 ```
 
-_Last validated n/a._
-
 ## pff_facet_return_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /return/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
@@ -425,8 +421,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_facet_return_summary()
 ```
 
-_Last validated n/a._
-
 ## pff_facet_rushing_direction_stats
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/direction (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
@@ -478,8 +472,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_facet_rushing_direction_stats()
 ```
 
-_Last validated n/a._
-
 ## pff_facet_receiving_coverage_stats
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_matchup (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
@@ -515,8 +507,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_facet_receiving_coverage_stats()
 ```
-
-_Last validated n/a._
 
 ## pff_facet_rushing_summary
 
@@ -609,8 +599,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_facet_rushing_summary()
 ```
 
-_Last validated n/a._
-
 ## pff_facet_slot_coverages
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/slot_coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
@@ -672,8 +660,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_facet_slot_coverages()
 ```
 
-_Last validated n/a._
-
 ## pff_facet_pbes
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/pass-blocking/efficiency/line (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
@@ -724,8 +710,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_facet_pbes()
 ```
-
-_Last validated n/a._
 
 ## pff_facet_prps
 
@@ -810,8 +794,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_facet_prps()
 ```
-
-_Last validated n/a._
 
 ## pff_facet_receiving_scheme
 
@@ -927,5 +909,3 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_facet_receiving_scheme()
 ```
-
-_Last validated n/a._

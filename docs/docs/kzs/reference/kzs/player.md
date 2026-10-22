@@ -62,8 +62,6 @@ Player leaderboard of a competition for one stat category (total, per-game avera
 kzs_player_leaderboard(competition_id=579)
 ```
 
-_Last validated n/a._
-
 ## kzs_player
 
 Player profile: names, year of birth, nationality and positions.
@@ -112,8 +110,6 @@ Player profile: names, year of birth, nationality and positions.
 ```python
 kzs_player(player_id=106285)
 ```
-
-_Last validated n/a._
 
 ## kzs_player_stats
 
@@ -201,5 +197,3 @@ A player's totals and per-game averages in each competition of one season.
 ```python
 kzs_player_stats(player_id=106285, season=2026)
 ```
-
-_Last validated n/a._

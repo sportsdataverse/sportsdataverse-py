@@ -54,8 +54,6 @@ Season table: every stage (season END year, regular / playoff) with its khl.ru t
 khl_webcaster_stages()
 ```
 
-_Last validated n/a._
-
 ## khl_webcaster_event
 
 One game: officials, team totals, per-player match stats, goals, penalties (one row; lists as JSON text).
@@ -251,8 +249,6 @@ One game: officials, team totals, per-player match stats, goals, penalties (one 
 khl_webcaster_event(event_id=2786714)
 ```
 
-_Last validated n/a._
-
 ## khl_webcaster_events
 
 Games of a stage, 16 per page (one row per game; khl_id is the khl.ru game id).
@@ -349,8 +345,6 @@ Games of a stage, 16 per page (one row per game; khl_id is the khl.ru game id).
 khl_webcaster_events(season=2026)
 ```
 
-_Last validated n/a._
-
 ## khl_webcaster_leaders
 
 Stat leaders of a stage: one row per player per category.
@@ -402,8 +396,6 @@ Stat leaders of a stage: one row per player per category.
 ```python
 khl_webcaster_leaders(season=2026)
 ```
-
-_Last validated n/a._
 
 ## khl_webcaster_players
 
@@ -473,8 +465,6 @@ Players with stage-scoped stats (one row per player; khl_id is the khl.ru player
 khl_webcaster_players(player_ids=[33405, 1144], season=2026)
 ```
 
-_Last validated n/a._
-
 ## khl_webcaster_players_light
 
 Every current player: webcaster id, khl.ru id, jersey and team (one row per player).
@@ -519,8 +509,6 @@ Every current player: webcaster id, khl.ru id, jersey and team (one row per play
 ```python
 khl_webcaster_players_light()
 ```
-
-_Last validated n/a._
 
 ## khl_webcaster_tables
 
@@ -585,8 +573,6 @@ League table of every season (one row per season per team, from the championship
 ```python
 khl_webcaster_tables()
 ```
-
-_Last validated n/a._
 
 ## khl_webcaster_team
 
@@ -671,8 +657,6 @@ One team with roster, stats and news feed (one row; lists as JSON text).
 khl_webcaster_team(season=2026, team_id=18)
 ```
 
-_Last validated n/a._
-
 ## khl_webcaster_teams
 
 Teams of a stage (one row per team; khl_id is the khl.ru club id).
@@ -719,5 +703,3 @@ Teams of a stage (one row per team; khl_id is the khl.ru club id).
 ```python
 khl_webcaster_teams(season=2026)
 ```
-
-_Last validated n/a._

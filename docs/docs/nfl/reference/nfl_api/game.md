@@ -78,8 +78,6 @@ GET /football/v2/stats/live/game-summaries — one row per game (live state).
 nfl_game_summaries(season=2024, season_type='REG', week=1)
 ```
 
-_Last validated n/a._
-
 ## nfl_game_details_v2
 
 GET /experience/v2/gamedetails/{game_id} — one row: the flat v2 game detail (game, summary, optional drive chart / replays / standings).
@@ -299,8 +297,6 @@ GET /experience/v2/gamedetails/{game_id} — one row: the flat v2 game detail (g
 nfl_game_details_v2(game_id='a9a890ed-4feb-11f1-abca-2c54536568a9')
 ```
 
-_Last validated n/a._
-
 ## nfl_game_details_by_slug
 
 GET /experience/v1/gamedetailsbyslug/{slug} — one row: the flat game detail looked up by nfl.com slug.
@@ -515,5 +511,3 @@ GET /experience/v1/gamedetailsbyslug/{slug} — one row: the flat game detail lo
 ```python
 nfl_game_details_by_slug(slug='broncos-at-chiefs-2026-reg-1')
 ```
-
-_Last validated n/a._

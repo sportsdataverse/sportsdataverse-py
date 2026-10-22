@@ -94,8 +94,6 @@ One match's header (the same body as nbl_rosetta_match): status, scores, venue, 
 nbl_rosetta_match_by_id(match_id='b217a699-4bef-11f0-bc08-933162362355')
 ```
 
-_Last validated n/a._
-
 ## nbl_rosetta_match_player_box
 
 One match's official player box score, one row per player line (period 0 = whole game).
@@ -179,8 +177,6 @@ One match's official player box score, one row per player line (period 0 = whole
 nbl_rosetta_match_player_box(match_id='b217a699-4bef-11f0-bc08-933162362355')
 ```
 
-_Last validated n/a._
-
 ## nbl_rosetta_match_team_box
 
 One match's team box score by period, one row per team and period (0 = whole game).
@@ -250,8 +246,6 @@ One match's team box score by period, one row per team and period (0 = whole gam
 ```python
 nbl_rosetta_match_team_box(match_id='b217a699-4bef-11f0-bc08-933162362355')
 ```
-
-_Last validated n/a._
 
 ## nbl_rosetta_match_player_period_box
 
@@ -326,8 +320,6 @@ One match's player box score by period (Rosetta-computed from the event log), on
 nbl_rosetta_match_player_period_box(match_id='b217a699-4bef-11f0-bc08-933162362355')
 ```
 
-_Last validated n/a._
-
 ## nbl_rosetta_match_pbp
 
 One match's play-by-play with shot x/y, oldest first (NBL 2025-26 included, which ESPN's nbl feed lacks).
@@ -391,5 +383,3 @@ One match's play-by-play with shot x/y, oldest first (NBL 2025-26 included, whic
 ```python
 nbl_rosetta_match_pbp(match_id='b217a699-4bef-11f0-bc08-933162362355')
 ```
-
-_Last validated n/a._

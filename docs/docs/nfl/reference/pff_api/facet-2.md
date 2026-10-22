@@ -605,5 +605,3 @@ League-wide passing-by-depth leaderboard
 ```python
 pff_api_facet_passing_depth(league='nfl', season='2022')
 ```
-
-_Last validated n/a._

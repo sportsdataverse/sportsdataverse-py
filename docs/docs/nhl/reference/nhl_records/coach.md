@@ -81,8 +81,6 @@ Coach career-records (regular season).
 nhl_records_coach_career()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_coach_career_with_playoffs
 
 Coach career records inclusive of regular season + playoffs.
@@ -129,8 +127,6 @@ Coach career records inclusive of regular season + playoffs.
 ```python
 nhl_records_coach_career_with_playoffs()
 ```
-
-_Last validated n/a._
 
 ## nhl_records_coach_franchise
 
@@ -212,8 +208,6 @@ Coach records scoped to individual franchise stints.
 nhl_records_coach_franchise()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_coach_stanley_cup
 
 Coach Stanley Cup Final win streak and consecutive-cup records.
@@ -258,5 +252,3 @@ Coach Stanley Cup Final win streak and consecutive-cup records.
 ```python
 nhl_records_coach_stanley_cup()
 ```
-
-_Last validated n/a._

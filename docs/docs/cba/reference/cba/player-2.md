@@ -81,8 +81,6 @@ Season player defensive rates (one page).
 cba_player_defensive(season=2026, team_id=29128)
 ```
 
-_Last validated n/a._
-
 ## cba_player_shots
 
 Season player shot-zone profile (one page).
@@ -168,5 +166,3 @@ Season player shot-zone profile (one page).
 ```python
 cba_player_shots(season=2026, team_id=29128)
 ```
-
-_Last validated n/a._

@@ -88,8 +88,6 @@ Player career totals, one row per ssgt.
 sportality_athlete_career(athlete_uuid='dpu0901c0t', master_site_instance_id='dbl1_dbl')
 ```
 
-_Last validated n/a._
-
 ## sportality_athlete_details
 
 Player bio plus playerExtIds (the Genius person id).
@@ -139,8 +137,6 @@ Player bio plus playerExtIds (the Genius person id).
 ```python
 sportality_athlete_details(athlete_uuid='dpu0901c0t')
 ```
-
-_Last validated n/a._
 
 ## sportality_athlete_profile
 
@@ -210,5 +206,3 @@ Player profile: age, height, position, season and career totals.
 ```python
 sportality_athlete_profile(athlete_uuid='dpu0901c0t', master_site_instance_id='dbl1_dbl')
 ```
-
-_Last validated n/a._

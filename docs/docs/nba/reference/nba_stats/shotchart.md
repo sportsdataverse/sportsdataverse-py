@@ -111,8 +111,6 @@ GET /stats/shotchartdetail
 nba_stats_shotchartdetail(league_id='00', season_nullable='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_shotchartleaguewide
 
 GET /stats/shotchartleaguewide
@@ -156,8 +154,6 @@ GET /stats/shotchartleaguewide
 ```python
 nba_stats_shotchartleaguewide(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_shotchartlineupdetail
 
@@ -253,5 +249,3 @@ GET /stats/shotchartlineupdetail
 ```python
 nba_stats_shotchartlineupdetail(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._

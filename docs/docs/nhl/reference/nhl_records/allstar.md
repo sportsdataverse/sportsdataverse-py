@@ -62,8 +62,6 @@ All-Star Game career statistics for skaters.
 nhl_records_allstar_skater_career()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_allstar_goalie_career
 
 All-Star Game career statistics for goaltenders.
@@ -120,8 +118,6 @@ All-Star Game career statistics for goaltenders.
 nhl_records_allstar_goalie_career()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_allstar_coach_career
 
 All-Star Game career records for coaches.
@@ -168,8 +164,6 @@ All-Star Game career records for coaches.
 ```python
 nhl_records_allstar_coach_career()
 ```
-
-_Last validated n/a._
 
 ## nhl_records_allstar_skater_game
 
@@ -234,8 +228,6 @@ All-Star Game single-game scoring records for skaters.
 nhl_records_allstar_skater_game()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_allstar_goalie_game
 
 All-Star Game single-game stats for goaltenders.
@@ -295,5 +287,3 @@ All-Star Game single-game stats for goaltenders.
 ```python
 nhl_records_allstar_goalie_game()
 ```
-
-_Last validated n/a._

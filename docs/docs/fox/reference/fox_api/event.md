@@ -64,8 +64,6 @@ GET /bifrost/v1/{sport}/event/{event_id}/data -- Fox Sports API event data.
 fox_api_event_data(sport='nfl', event_id='11195')
 ```
 
-_Last validated n/a._
-
 ## fox_api_event_matchup
 
 GET /bifrost/v1/{sport}/event/{event_id}/matchup -- Fox Sports API event matchup.
@@ -125,8 +123,6 @@ GET /bifrost/v1/{sport}/event/{event_id}/matchup -- Fox Sports API event matchup
 fox_api_event_matchup(sport='nfl', event_id='11195')
 ```
 
-_Last validated n/a._
-
 ## fox_api_event_odds
 
 GET /bifrost/v1/{sport}/event/{event_id}/odds -- Fox Sports API event odds.
@@ -174,8 +170,6 @@ GET /bifrost/v1/{sport}/event/{event_id}/odds -- Fox Sports API event odds.
 ```python
 fox_api_event_odds(sport='nfl', event_id='11195')
 ```
-
-_Last validated n/a._
 
 ## fox_api_event_recap
 
@@ -236,8 +230,6 @@ GET /bifrost/v1/{sport}/event/{event_id}/recap -- Fox Sports API event recap.
 fox_api_event_recap(sport='nfl', event_id='11195')
 ```
 
-_Last validated n/a._
-
 ## fox_api_event_standings
 
 GET /bifrost/v1/{sport}/event/{event_id}/standings -- Fox Sports API event standings.
@@ -283,5 +275,3 @@ GET /bifrost/v1/{sport}/event/{event_id}/standings -- Fox Sports API event stand
 ```python
 fox_api_event_standings(sport='nfl', event_id='11195')
 ```
-
-_Last validated n/a._

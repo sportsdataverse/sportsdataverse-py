@@ -84,8 +84,6 @@ Header of one game: league, phase, teams, final and per-period score and shots, 
 sihf_game_info(game_id=20261105000325)
 ```
 
-_Last validated n/a._
-
 ## sihf_game_player_stats
 
 Skater box score of one game, both sides, with ice time and faceoffs.
@@ -148,8 +146,6 @@ Skater box score of one game, both sides, with ice time and faceoffs.
 sihf_game_player_stats(game_id=20261105000325)
 ```
 
-_Last validated n/a._
-
 ## sihf_game_goalie_stats
 
 Goaltender box score of one game, both sides.
@@ -201,8 +197,6 @@ Goaltender box score of one game, both sides.
 sihf_game_goalie_stats(game_id=20261105000325)
 ```
 
-_Last validated n/a._
-
 ## sihf_game_team_stats
 
 Team stats of one game: shots by period, faceoffs by zone, penalty minutes, power play and penalty kill.
@@ -242,8 +236,6 @@ Team stats of one game: shots by period, faceoffs by zone, penalty minutes, powe
 ```python
 sihf_game_team_stats(game_id=20261105000325)
 ```
-
-_Last validated n/a._
 
 ## sihf_game_lineups
 
@@ -292,5 +284,3 @@ Lineups of one game by unit and slot, plus the absentees.
 ```python
 sihf_game_lineups(game_id=20261105000325)
 ```
-
-_Last validated n/a._

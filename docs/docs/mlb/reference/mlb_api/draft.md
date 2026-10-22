@@ -42,8 +42,6 @@ GET /api/v1/draft/{year} — draft results for a year (optionally one round).
 mlb_draft(year=2024)
 ```
 
-_Last validated n/a._
-
 ## mlb_draft_latest
 
 View latest player drafted, endpoint best used when draft is currently open.
@@ -172,5 +170,3 @@ View latest player drafted, endpoint best used when draft is currently open.
 ```python
 mlb_draft_latest(year=2023)
 ```
-
-_Last validated n/a._

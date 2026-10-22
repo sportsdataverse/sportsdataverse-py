@@ -69,8 +69,6 @@ Game header of a finished game: teams, coaches, final score, officials, venue an
 tbf_game_header(match_id=346279)
 ```
 
-_Last validated n/a._
-
 ## tbf_game_players
 
 Game roster from the header: every listed player of both sides (names and shirt numbers, no usable ids).
@@ -112,8 +110,6 @@ Game roster from the header: every listed player of both sides (names and shirt 
 ```python
 tbf_game_players(match_id=346279)
 ```
-
-_Last validated n/a._
 
 ## tbf_game_leaders
 
@@ -158,5 +154,3 @@ Game leaders of a finished game per statistic category (top five each).
 ```python
 tbf_game_leaders(match_id=346279)
 ```
-
-_Last validated n/a._

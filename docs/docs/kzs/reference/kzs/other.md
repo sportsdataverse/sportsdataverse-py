@@ -46,8 +46,6 @@ Every season (39: 1991/1992 to 2029/2030) with its opaque id and the sdv END yea
 kzs_seasons()
 ```
 
-_Last validated n/a._
-
 ## kzs_competitions
 
 Competitions of a season (leagues, cups, youth, 3x3, national teams), or of every season.
@@ -93,8 +91,6 @@ Competitions of a season (leagues, cups, youth, 3x3, national teams), or of ever
 ```python
 kzs_competitions(season=2026)
 ```
-
-_Last validated n/a._
 
 ## kzs_competition
 
@@ -143,8 +139,6 @@ One competition: season, gender, category, rank and type (its phases are kzs_pha
 kzs_competition(competition_id=579)
 ```
 
-_Last validated n/a._
-
 ## kzs_phases
 
 The phases of a competition (regular season, play-offs, finals) with dates and type.
@@ -189,8 +183,6 @@ The phases of a competition (regular season, play-offs, finals) with dates and t
 kzs_phases(competition_id=579)
 ```
 
-_Last validated n/a._
-
 ## kzs_rounds
 
 Number of rounds of each phase of a competition.
@@ -228,8 +220,6 @@ Number of rounds of each phase of a competition.
 ```python
 kzs_rounds(competition_id=579)
 ```
-
-_Last validated n/a._
 
 ## kzs_matches
 
@@ -336,8 +326,6 @@ Matches of a competition (optionally inside a from/to window) with the Genius Li
 ```python
 kzs_matches(competition_id=579, date_from='2025-10-01T00:00:00.000Z', date_to='2025-10-31T23:59:59.000Z')
 ```
-
-_Last validated n/a._
 
 ## kzs_match
 
@@ -472,8 +460,6 @@ Match header: teams, scores, venue, officials' names, best performers and status
 kzs_match(match_id=101839)
 ```
 
-_Last validated n/a._
-
 ## kzs_period_scores
 
 Points by match part (quarters and overtimes) from the match header.
@@ -513,8 +499,6 @@ Points by match part (quarters and overtimes) from the match header.
 ```python
 kzs_period_scores(match_id=101839)
 ```
-
-_Last validated n/a._
 
 ## kzs_pbp
 
@@ -578,8 +562,6 @@ Play-by-play of a final game (2015/16 on, with gaps), one row per action with sh
 kzs_pbp(match_id=101839)
 ```
 
-_Last validated n/a._
-
 ## kzs_pbp_players
 
 The players the play-by-play feed lists for each side of a final game.
@@ -619,8 +601,6 @@ The players the play-by-play feed lists for each side of a final game.
 ```python
 kzs_pbp_players(match_id=101839)
 ```
-
-_Last validated n/a._
 
 ## kzs_box_score
 
@@ -718,8 +698,6 @@ Box score of a final game (2015/16 on): one row per player of both teams.
 kzs_box_score(match_id=101839)
 ```
 
-_Last validated n/a._
-
 ## kzs_score_changes
 
 The score at the end of each minute of a final game.
@@ -759,8 +737,6 @@ The score at the end of each minute of a final game.
 ```python
 kzs_score_changes(match_id=101839)
 ```
-
-_Last validated n/a._
 
 ## kzs_standings
 
@@ -822,8 +798,6 @@ Standings of a competition, one row per team in each phase (and group).
 kzs_standings(competition_id=579)
 ```
 
-_Last validated n/a._
-
 ## kzs_playing_days
 
 Match days of a competition and the number of games on each.
@@ -861,8 +835,6 @@ Match days of a competition and the number of games on each.
 ```python
 kzs_playing_days(competition_id=579)
 ```
-
-_Last validated n/a._
 
 ## kzs_roster
 
@@ -917,5 +889,3 @@ A team's roster in one competition (the rows carry no team or competition id).
 ```python
 kzs_roster(competition_id=579, team_id=17551)
 ```
-
-_Last validated n/a._

@@ -54,8 +54,6 @@ Yahoo shangrila persisted query `teamInjuries` -> one row per `teams` entry
 yahoo_team_injuries()
 ```
 
-_Last validated n/a._
-
 ## yahoo_team_playoff_series
 
 Yahoo shangrila persisted query `teamPlayoffSeries` -> one row per `teams.playoffSeries` entry
@@ -87,8 +85,6 @@ Yahoo shangrila persisted query `teamPlayoffSeries` -> one row per `teams.playof
 ```python
 yahoo_team_playoff_series()
 ```
-
-_Last validated n/a._
 
 ## yahoo_team_roster
 
@@ -128,8 +124,6 @@ Yahoo shangrila persisted query `teamRoster` -> one row per `teams` entry
 ```python
 yahoo_team_roster()
 ```
-
-_Last validated n/a._
 
 ## yahoo_team_schedule_by_season
 
@@ -182,8 +176,6 @@ Yahoo shangrila persisted query `teamScheduleBySeason` -> one row per `teams` en
 yahoo_team_schedule_by_season()
 ```
 
-_Last validated n/a._
-
 ## yahoo_team_search
 
 Yahoo shangrila persisted query `teamSearch` -> one row per `teams` entry
@@ -233,8 +225,6 @@ Yahoo shangrila persisted query `teamSearch` -> one row per `teams` entry
 ```python
 yahoo_team_search()
 ```
-
-_Last validated n/a._
 
 ## yahoo_team_stats_leaders_v2
 
@@ -286,8 +276,6 @@ Yahoo shangrila persisted query `teamStatsLeadersV2` -> tables: leagues, teams
 yahoo_team_stats_leaders_v2()
 ```
 
-_Last validated n/a._
-
 ## yahoo_team_transactions
 
 Yahoo shangrila persisted query `teamTransactions` -> one row per `teams` entry
@@ -335,8 +323,6 @@ Yahoo shangrila persisted query `teamTransactions` -> one row per `teams` entry
 ```python
 yahoo_team_transactions()
 ```
-
-_Last validated n/a._
 
 ## yahoo_teams_basic
 
@@ -388,5 +374,3 @@ Yahoo shangrila persisted query `teamsBasic` -> one row per `teams` entry
 ```python
 yahoo_teams_basic()
 ```
-
-_Last validated n/a._

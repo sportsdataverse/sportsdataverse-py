@@ -51,8 +51,6 @@ Every KBL regular season (1997 to the next one) with its competition key and dat
 kbl_seasons()
 ```
 
-_Last validated n/a._
-
 ## kbl_schedule
 
 Every game (all competitions, KBL and D-League) of a season or of a date window, with scores and venue.
@@ -122,8 +120,6 @@ Every game (all competitions, KBL and D-League) of a season or of a date window,
 ```python
 kbl_schedule(season=2026)
 ```
-
-_Last validated n/a._
 
 ## kbl_game
 
@@ -200,8 +196,6 @@ Game header of a final game: teams, final score, overtimes, venue, attendance, o
 kbl_game(gmkey='S47G01N49')
 ```
 
-_Last validated n/a._
-
 ## kbl_period_scores
 
 Points by period (quarters and overtimes) and side of a final game, from the game header.
@@ -246,8 +240,6 @@ Points by period (quarters and overtimes) and side of a final game, from the gam
 ```python
 kbl_period_scores(gmkey='S47G01N49')
 ```
-
-_Last validated n/a._
 
 ## kbl_pbp
 
@@ -307,8 +299,6 @@ Play-by-play (the site's text cast) of a final game, one row per event, from 199
 kbl_pbp(gmkey='S47G01N49')
 ```
 
-_Last validated n/a._
-
 ## kbl_shots
 
 Shot chart of a final game (2006-07 on): every charted shot with x/y pixels on the full-court image.
@@ -359,8 +349,6 @@ Shot chart of a final game (2006-07 on): every charted shot with x/y pixels on t
 kbl_shots(gmkey='S47G01N49')
 ```
 
-_Last validated n/a._
-
 ## kbl_score_track
 
 Lead tracker and score chart of a final game: home margin and both scores at eight checkpoints per period.
@@ -406,8 +394,6 @@ Lead tracker and score chart of a final game: home margin and both scores at eig
 ```python
 kbl_score_track(gmkey='S47G01N49')
 ```
-
-_Last validated n/a._
 
 ## kbl_game_leaders
 
@@ -457,8 +443,6 @@ Each team's leader per category (points, rebounds, assists, steals, blocks) in a
 ```python
 kbl_game_leaders(gmkey='S47G01N49')
 ```
-
-_Last validated n/a._
 
 ## kbl_standings
 
@@ -561,8 +545,6 @@ Standings of one competition with each team's season totals.
 kbl_standings(season=2025)
 ```
 
-_Last validated n/a._
-
 ## kbl_rounds
 
 The season's round calendar (the KBL plays six rounds) with each round's first and last date.
@@ -606,8 +588,6 @@ The season's round calendar (the KBL plays six rounds) with each round's first a
 ```python
 kbl_rounds(season=2025)
 ```
-
-_Last validated n/a._
 
 ## kbl_round_mvps
 
@@ -655,8 +635,6 @@ The round MVPs of a season with their totals over the round.
 ```python
 kbl_round_mvps(season=2025)
 ```
-
-_Last validated n/a._
 
 ## kbl_current_standings
 
@@ -709,8 +687,6 @@ Current standings of the active season (no parameter): record, games behind, str
 kbl_current_standings()
 ```
 
-_Last validated n/a._
-
 ## kbl_season_leaders
 
 Current season leaders per category (no parameter): points, rebounds, assists, steals, blocks, shooting.
@@ -757,5 +733,3 @@ Current season leaders per category (no parameter): points, rebounds, assists, s
 ```python
 kbl_season_leaders()
 ```
-
-_Last validated n/a._

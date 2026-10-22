@@ -68,8 +68,6 @@ GET /leaderboard/catcher-throwing — catcher throwing leaderboard.
 mlb_statcast_leaderboard_catcher_throwing()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_catcher_stance
 
 GET /leaderboard/catcher-stance — catcher stance leaderboard.
@@ -135,8 +133,6 @@ GET /leaderboard/catcher-stance — catcher stance leaderboard.
 mlb_statcast_leaderboard_catcher_stance()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_basestealing_run_value
 
 GET /leaderboard/basestealing-run-value — basestealing run-value leaderboard.
@@ -199,8 +195,6 @@ GET /leaderboard/basestealing-run-value — basestealing run-value leaderboard.
 mlb_statcast_leaderboard_basestealing_run_value()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_baserunning_run_value
 
 GET /leaderboard/baserunning-run-value — baserunning run-value leaderboard.
@@ -256,8 +250,6 @@ GET /leaderboard/baserunning-run-value — baserunning run-value leaderboard.
 ```python
 mlb_statcast_leaderboard_baserunning_run_value()
 ```
-
-_Last validated n/a._
 
 ## mlb_statcast_leaderboard_baserunning
 
@@ -317,8 +309,6 @@ GET /leaderboard/baserunning — extra-bases-taken run-value leaderboard.
 ```python
 mlb_statcast_leaderboard_baserunning()
 ```
-
-_Last validated n/a._
 
 ## mlb_statcast_leaderboard_year_to_year
 
@@ -383,8 +373,6 @@ GET /leaderboard/statcast-year-to-year — year-to-year metric change leaderboar
 mlb_statcast_leaderboard_year_to_year()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_timer_infractions
 
 GET /leaderboard/pitch-timer-infractions — pitch-timer infractions leaderboard.
@@ -433,8 +421,6 @@ GET /leaderboard/pitch-timer-infractions — pitch-timer infractions leaderboard
 mlb_statcast_leaderboard_timer_infractions()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_custom
 
 GET /leaderboard/custom — build-your-own metric leaderboard (comma-separated selections).
@@ -482,8 +468,6 @@ GET /leaderboard/custom — build-your-own metric leaderboard (comma-separated s
 ```python
 mlb_statcast_leaderboard_custom()
 ```
-
-_Last validated n/a._
 
 ## mlb_statcast_leaderboard_fielding_run_value
 
@@ -545,8 +529,6 @@ GET /leaderboard/fielding-run-value — fielding run-value leaderboard (HTML-emb
 ```python
 mlb_statcast_leaderboard_fielding_run_value()
 ```
-
-_Last validated n/a._
 
 ## mlb_statcast_leaderboard_park_factors
 
@@ -611,5 +593,3 @@ GET /leaderboard/statcast-park-factors — Statcast park-factors leaderboard (HT
 ```python
 mlb_statcast_leaderboard_park_factors()
 ```
-
-_Last validated n/a._

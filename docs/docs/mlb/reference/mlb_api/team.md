@@ -79,8 +79,6 @@ GET /api/v1/teams/{teamId} — single team detail.
 mlb_team(team_id=10)
 ```
 
-_Last validated n/a._
-
 ## mlb_team_roster
 
 GET /api/v1/teams/{teamId}/roster — team roster.
@@ -130,8 +128,6 @@ GET /api/v1/teams/{teamId}/roster — team roster.
 ```python
 mlb_team_roster(team_id=10)
 ```
-
-_Last validated n/a._
 
 ## mlb_team_alumni
 
@@ -217,8 +213,6 @@ GET /api/v1/teams/{teamId}/alumni — players who played for this team in a seas
 mlb_team_alumni(team_id=10)
 ```
 
-_Last validated n/a._
-
 ## mlb_team_affiliates
 
 GET /api/v1/teams/affiliates — org affiliates (MLB parent → minor league chain).
@@ -292,8 +286,6 @@ GET /api/v1/teams/affiliates — org affiliates (MLB parent → minor league cha
 mlb_team_affiliates()
 ```
 
-_Last validated n/a._
-
 ## mlb_teams_history
 
 View historical records for a list of teams.
@@ -358,8 +350,6 @@ View historical records for a list of teams.
 mlb_teams_history(team_ids='147')
 ```
 
-_Last validated n/a._
-
 ## mlb_teams_stats
 
 View team stats.
@@ -408,8 +398,6 @@ View team stats.
 ```python
 mlb_teams_stats(season='2023', sport_ids='1', stat_group='hitting', stats='season')
 ```
-
-_Last validated n/a._
 
 ## mlb_teams_stats_leaders
 
@@ -464,8 +452,6 @@ View leaders for a statistic.
 mlb_teams_stats_leaders(leader_categories='homeRuns', season='2023')
 ```
 
-_Last validated n/a._
-
 ## mlb_team_coaches
 
 View biographical  information on all coaches for a given club.
@@ -511,8 +497,6 @@ View biographical  information on all coaches for a given club.
 mlb_team_coaches(team_id=147, season='2023')
 ```
 
-_Last validated n/a._
-
 ## mlb_team_personnel
 
 View biographical  information on all personnel for a given club.
@@ -556,8 +540,6 @@ View biographical  information on all personnel for a given club.
 ```python
 mlb_team_personnel(team_id=147)
 ```
-
-_Last validated n/a._
 
 ## mlb_team_roster_type
 
@@ -608,5 +590,3 @@ View biographical and statistical information for a club's roster based on roste
 ```python
 mlb_team_roster_type(team_id=147, roster_type='active', season='2023')
 ```
-
-_Last validated n/a._

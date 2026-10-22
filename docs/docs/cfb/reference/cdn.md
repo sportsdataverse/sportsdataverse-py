@@ -393,8 +393,6 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 espn_cfb_cdn_playbyplay(game_id='401628551')
 ```
 
-_Last validated n/a._
-
 ## espn_cfb_cdn_boxscore
 
 One game's espn.com box-score page data, parsed like a Site v2 summary. For football the drives and scoring plays are only on the playbyplay page.
@@ -779,8 +777,6 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 espn_cfb_cdn_boxscore(game_id='401628551')
 ```
 
-_Last validated n/a._
-
 ## espn_cfb_cdn_schedule
 
 espn.com schedule page data, one row per game: up to 7 days starting at `date` (mbb and wbb: that day only; cfb and nfl: one week).
@@ -868,8 +864,6 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 ```python
 espn_cfb_cdn_schedule(season=2024, week=12, season_type=2)
 ```
-
-_Last validated n/a._
 
 ## espn_cfb_cdn_scoreboard
 
@@ -959,8 +953,6 @@ espn.com scoreboard page data for one day (one week for football), one row per g
 espn_cfb_cdn_scoreboard(season=2024, week=12, season_type=2)
 ```
 
-_Last validated n/a._
-
 ## espn_cfb_cdn_rankings
 
 espn.com poll rankings page data: every poll (AP, Coaches, FCS, Division II and III) for one week, one row per ranked or vote-receiving team.
@@ -1012,5 +1004,3 @@ espn.com poll rankings page data: every poll (AP, Coaches, FCS, Division II and 
 ```python
 espn_cfb_cdn_rankings(season=2024, week=5, season_type=2)
 ```
-
-_Last validated n/a._

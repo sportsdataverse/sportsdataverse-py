@@ -64,8 +64,6 @@ Goaltender season totals: games, starts, goals against, GAA, shots, saves, save 
 sihf_goalie_stats(season=2026, league_id=1)
 ```
 
-_Last validated n/a._
-
 ## sihf_goalie_shots
 
 Goaltender shots against: on goal (total, slot), missed, post, with per-game rates and the slot save percentage.
@@ -121,8 +119,6 @@ Goaltender shots against: on goal (total, slot), missed, post, with per-game rat
 ```python
 sihf_goalie_shots(season=2026, league_id=1)
 ```
-
-_Last validated n/a._
 
 ## sihf_goalie_wins
 
@@ -181,8 +177,6 @@ Goaltender decisions: starts, wins and losses in regulation, overtime and shooto
 sihf_goalie_wins(season=2026, league_id=1)
 ```
 
-_Last validated n/a._
-
 ## sihf_goalie_shootouts
 
 Goaltender shootouts: attempts faced, goals against, saves and save percentage.
@@ -233,5 +227,3 @@ Goaltender shootouts: attempts faced, goals against, saves and save percentage.
 ```python
 sihf_goalie_shootouts(season=2026, league_id=1)
 ```
-
-_Last validated n/a._

@@ -49,8 +49,6 @@ Every field-goal attempt of one player in one division with its court position.
 tpbl_player_shots(division_id=2, player_id=75)
 ```
 
-_Last validated n/a._
-
 ## tpbl_player_games
 
 A player's game log in one division: one row per game played, with that game's whole stat line.
@@ -229,5 +227,3 @@ A player's game log in one division: one row per game played, with that game's w
 ```python
 tpbl_player_games(division_id=2, player_id=75)
 ```
-
-_Last validated n/a._

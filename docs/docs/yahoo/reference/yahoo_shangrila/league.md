@@ -45,8 +45,6 @@ Yahoo shangrila persisted query `leagueConferences` -> one row per `leagues` ent
 yahoo_league_conferences()
 ```
 
-_Last validated n/a._
-
 ## yahoo_league_filters_data
 
 Yahoo shangrila persisted query `leagueFiltersData` -> one row per `leagues` entry
@@ -102,8 +100,6 @@ Yahoo shangrila persisted query `leagueFiltersData` -> one row per `leagues` ent
 yahoo_league_filters_data()
 ```
 
-_Last validated n/a._
-
 ## yahoo_league_future_odds
 
 Yahoo shangrila persisted query `leagueFutureOdds` -> one row per `leagues` entry
@@ -141,8 +137,6 @@ Yahoo shangrila persisted query `leagueFutureOdds` -> one row per `leagues` entr
 ```python
 yahoo_league_future_odds()
 ```
-
-_Last validated n/a._
 
 ## yahoo_league_game_ids
 
@@ -193,8 +187,6 @@ Yahoo shangrila persisted query `leagueGameIds` -> one row per `leagues` entry
 ```python
 yahoo_league_game_ids()
 ```
-
-_Last validated n/a._
 
 ## yahoo_league_game_ids_by_date
 
@@ -249,8 +241,6 @@ Yahoo shangrila persisted query `leagueGameIdsByDate` -> one row per `leagues` e
 yahoo_league_game_ids_by_date()
 ```
 
-_Last validated n/a._
-
 ## yahoo_league_games_by_round
 
 Yahoo shangrila persisted query `leagueGamesByRound` -> one row per `leagues` entry
@@ -283,8 +273,6 @@ Yahoo shangrila persisted query `leagueGamesByRound` -> one row per `leagues` en
 ```python
 yahoo_league_games_by_round()
 ```
-
-_Last validated n/a._
 
 ## yahoo_league_info
 
@@ -324,8 +312,6 @@ Yahoo shangrila persisted query `leagueInfo` -> one row per `leagues` entry
 ```python
 yahoo_league_info()
 ```
-
-_Last validated n/a._
 
 ## yahoo_league_injuries
 
@@ -373,8 +359,6 @@ Yahoo shangrila persisted query `leagueInjuries` -> one row per `leagues.teams` 
 yahoo_league_injuries()
 ```
 
-_Last validated n/a._
-
 ## yahoo_league_names
 
 Yahoo shangrila persisted query `leagueNames` -> one row per `leagues` entry
@@ -421,8 +405,6 @@ Yahoo shangrila persisted query `leagueNames` -> one row per `leagues` entry
 yahoo_league_names()
 ```
 
-_Last validated n/a._
-
 ## yahoo_league_prop_odds
 
 Yahoo shangrila persisted query `leaguePropOdds` -> one row per `leagues` entry
@@ -454,8 +436,6 @@ Yahoo shangrila persisted query `leaguePropOdds` -> one row per `leagues` entry
 ```python
 yahoo_league_prop_odds()
 ```
-
-_Last validated n/a._
 
 ## yahoo_league_standings
 
@@ -499,8 +479,6 @@ Yahoo shangrila persisted query `leagueStandings` -> one row per `leagues` entry
 ```python
 yahoo_league_standings()
 ```
-
-_Last validated n/a._
 
 ## yahoo_league_stats_by_team
 
@@ -549,8 +527,6 @@ Yahoo shangrila persisted query `leagueStatsByTeam` -> one row per `leagues` ent
 ```python
 yahoo_league_stats_by_team()
 ```
-
-_Last validated n/a._
 
 ## yahoo_league_stats_individual
 
@@ -608,8 +584,6 @@ Yahoo shangrila persisted query `leagueStatsIndividual` -> one row per `leagues`
 yahoo_league_stats_individual()
 ```
 
-_Last validated n/a._
-
 ## yahoo_league_stats_overview
 
 Yahoo shangrila persisted query `leagueStatsOverview` (response body not captured; shape unknown)
@@ -649,8 +623,6 @@ Yahoo shangrila persisted query `leagueStatsOverview` (response body not capture
 ```python
 yahoo_league_stats_overview()
 ```
-
-_Last validated n/a._
 
 ## yahoo_league_stats_weekly
 
@@ -697,8 +669,6 @@ Yahoo shangrila persisted query `leagueStatsWeekly` -> one row per `leagues` ent
 yahoo_league_stats_weekly()
 ```
 
-_Last validated n/a._
-
 ## yahoo_league_team_ids
 
 Yahoo shangrila persisted query `leagueTeamIds` -> one row per `leagues` entry
@@ -737,8 +707,6 @@ Yahoo shangrila persisted query `leagueTeamIds` -> one row per `leagues` entry
 ```python
 yahoo_league_team_ids()
 ```
-
-_Last validated n/a._
 
 ## yahoo_league_teams
 
@@ -779,8 +747,6 @@ Yahoo shangrila persisted query `leagueTeams` -> one row per `leagues` entry
 ```python
 yahoo_league_teams()
 ```
-
-_Last validated n/a._
 
 ## yahoo_leagues_season_states
 
@@ -831,5 +797,3 @@ Yahoo shangrila persisted query `leaguesSeasonStates` -> one row per `leagues` e
 ```python
 yahoo_leagues_season_states()
 ```
-
-_Last validated n/a._

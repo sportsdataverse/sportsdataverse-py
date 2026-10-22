@@ -48,8 +48,6 @@ Every TPBL season with its TPBL and GoHoops ids, label, status and date window.
 tpbl_seasons()
 ```
 
-_Last validated n/a._
-
 ## tpbl_divisions
 
 The divisions (preseason, regular season, play-in, playoffs, finals) of one season.
@@ -92,8 +90,6 @@ The divisions (preseason, regular season, play-in, playoffs, finals) of one seas
 tpbl_divisions(season=2026)
 ```
 
-_Last validated n/a._
-
 ## tpbl_teams
 
 The teams of one season (bracket placeholders flagged).
@@ -135,8 +131,6 @@ The teams of one season (bracket placeholders flagged).
 ```python
 tpbl_teams(season=2026)
 ```
-
-_Last validated n/a._
 
 ## tpbl_games
 
@@ -209,8 +203,6 @@ Every game of one season, all divisions, played and scheduled, with teams, venue
 tpbl_games(season=2026)
 ```
 
-_Last validated n/a._
-
 ## tpbl_standings
 
 League table of one division: rank, record, games behind and streak.
@@ -258,8 +250,6 @@ League table of one division: rank, record, games behind and streak.
 tpbl_standings(division_id=2)
 ```
 
-_Last validated n/a._
-
 ## tpbl_standings_against
 
 Head-to-head record of every team against every other team in one division.
@@ -302,8 +292,6 @@ Head-to-head record of every team against every other team in one division.
 ```python
 tpbl_standings_against(division_id=2)
 ```
-
-_Last validated n/a._
 
 ## tpbl_game
 
@@ -374,8 +362,6 @@ Header of one finished game: teams with scores, venue, status, quarters, tip-off
 tpbl_game(game_id=6)
 ```
 
-_Last validated n/a._
-
 ## tpbl_referees
 
 The officiating crew of one finished game, chief referee first (names only).
@@ -416,8 +402,6 @@ The officiating crew of one finished game, chief referee first (names only).
 ```python
 tpbl_referees(game_id=6)
 ```
-
-_Last validated n/a._
 
 ## tpbl_roster
 
@@ -475,8 +459,6 @@ The registered roster of one team in one division (birth dates omitted).
 tpbl_roster(division_id=2, team_id=4)
 ```
 
-_Last validated n/a._
-
 ## tpbl_team_shots
 
 Every field-goal attempt of one team in one division with its court position (optionally per quarter).
@@ -520,5 +502,3 @@ Every field-goal attempt of one team in one division with its court position (op
 ```python
 tpbl_team_shots(division_id=2, team_id=4)
 ```
-
-_Last validated n/a._

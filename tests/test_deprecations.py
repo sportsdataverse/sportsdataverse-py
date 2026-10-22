@@ -136,3 +136,28 @@ def test_dl_utils_and_decorators_import_is_silent() -> None:
         text=True,
     )
     assert proc.returncode == 0, proc.stderr[-2000:]
+
+
+# --- sportsdataverse.config: the unread release URLs (C-L45) ---------------------------------
+
+
+def test_config_dead_urls_warn_on_access_and_keep_their_value() -> None:
+    config = importlib.import_module("sportsdataverse.config")
+    assert len(config._DEPRECATED) == 29
+    with pytest.warns(
+        DeprecationWarning,
+        match=r"config\.NBA_BASE_URL is deprecated since 0\.1\.6 and will be removed in 0\.2\.0; use the league's generated",
+    ):
+        url = config.NBA_BASE_URL
+    assert url == config.SDVRELEASES + "espn_nba_pbp/play_by_play_{season}.parquet"
+    with pytest.raises(AttributeError):
+        config.NO_SUCH_URL  # noqa: B018
+
+
+def test_config_live_urls_do_not_warn() -> None:
+    import warnings
+
+    config = importlib.import_module("sportsdataverse.config")
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", DeprecationWarning)
+        assert config.CFB_BETTING_LINES_URL and config.CFB_ROSTERS_CROSSWALK_URL and config.NFL_BASE_URL

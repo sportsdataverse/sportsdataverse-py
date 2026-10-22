@@ -101,8 +101,6 @@ ESPN endpoint.
 espn_mbb_league_root()
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_seasons
 
 ESPN endpoint.
@@ -140,8 +138,6 @@ ESPN endpoint.
 ```python
 espn_mbb_seasons()
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_games
 
@@ -181,8 +177,6 @@ ESPN endpoint.
 ```python
 espn_mbb_games()
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_game
 
@@ -231,8 +225,6 @@ ESPN endpoint.
 ```python
 espn_mbb_game(event_id='401584793')
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_teams_core
 
@@ -283,8 +275,6 @@ ESPN endpoint.
 ```python
 espn_mbb_teams_core()
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_team_core
 
@@ -361,8 +351,6 @@ ESPN endpoint.
 espn_mbb_team_core(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_venues
 
 ESPN endpoint.
@@ -400,8 +388,6 @@ ESPN endpoint.
 ```python
 espn_mbb_venues()
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_venue
 
@@ -445,8 +431,6 @@ ESPN endpoint.
 espn_mbb_venue(venue_id='3663')
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_franchises
 
 ESPN endpoint.
@@ -484,8 +468,6 @@ ESPN endpoint.
 ```python
 espn_mbb_franchises()
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_franchise
 
@@ -544,8 +526,6 @@ ESPN endpoint.
 espn_mbb_franchise(franchise_id='2')
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_coach
 
 ESPN endpoint.
@@ -591,8 +571,6 @@ ESPN endpoint.
 espn_mbb_coach(coach_id='1')
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_coach_record
 
 ESPN endpoint.
@@ -637,8 +615,6 @@ ESPN endpoint.
 espn_mbb_coach_record(coach_id='1')
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_coach_season
 
 ESPN endpoint.
@@ -673,8 +649,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_mbb_coach_season(coach_id='1', season=2024)
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_positions
 
@@ -713,8 +687,6 @@ ESPN endpoint.
 ```python
 espn_mbb_positions()
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_position
 
@@ -758,8 +730,6 @@ ESPN endpoint.
 espn_mbb_position(position_id='1')
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_tournaments
 
 ESPN endpoint.
@@ -798,8 +768,6 @@ ESPN endpoint.
 espn_mbb_tournaments()
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_awards
 
 ESPN endpoint.
@@ -837,8 +805,6 @@ ESPN endpoint.
 ```python
 espn_mbb_awards()
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_award
 
@@ -879,8 +845,6 @@ ESPN endpoint.
 ```python
 espn_mbb_award(award_id='1')
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_standings_core
 
@@ -943,8 +907,6 @@ ESPN endpoint.
 espn_mbb_standings_core()
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_leaders_core
 
 ESPN endpoint.
@@ -978,8 +940,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 espn_mbb_leaders_core()
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_league_notes
 
 ESPN endpoint.
@@ -1012,8 +972,6 @@ No returns table is published for this endpoint: no capture: the page holds zero
 ```python
 espn_mbb_league_notes()
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_talentpicks
 
@@ -1063,8 +1021,6 @@ ESPN endpoint.
 espn_mbb_talentpicks()
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_recruiting_years
 
 ESPN endpoint.
@@ -1101,8 +1057,6 @@ ESPN endpoint.
 ```python
 espn_mbb_recruiting_years()
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_recruiting_players
 
@@ -1177,8 +1131,6 @@ ESPN endpoint.
 espn_mbb_recruiting_players(year=2026)
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_recruiting_rankings
 
 ESPN endpoint.
@@ -1216,5 +1168,3 @@ ESPN endpoint.
 ```python
 espn_mbb_recruiting_rankings(year=2026)
 ```
-
-_Last validated n/a._

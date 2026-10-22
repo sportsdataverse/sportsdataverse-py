@@ -98,8 +98,6 @@ ESPN endpoint.
 espn_wch_scoreboard(dates='20240115')
 ```
 
-_Last validated n/a._
-
 ## espn_wch_summary
 
 ESPN endpoint.
@@ -386,8 +384,6 @@ ESPN endpoint.
 espn_wch_summary()
 ```
 
-_Last validated n/a._
-
 ## espn_wch_calendar
 
 ESPN endpoint.
@@ -420,8 +416,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_wch_calendar()
 ```
-
-_Last validated n/a._
 
 ## espn_wch_news
 
@@ -475,8 +469,6 @@ ESPN endpoint.
 espn_wch_news()
 ```
 
-_Last validated n/a._
-
 ## espn_wch_injuries
 
 ESPN endpoint.
@@ -513,8 +505,6 @@ ESPN endpoint.
 ```python
 espn_wch_injuries()
 ```
-
-_Last validated n/a._
 
 ## espn_wch_transactions
 
@@ -562,8 +552,6 @@ ESPN endpoint.
 espn_wch_transactions()
 ```
 
-_Last validated n/a._
-
 ## espn_wch_conferences
 
 ESPN endpoint.
@@ -606,8 +594,6 @@ ESPN endpoint.
 espn_wch_conferences()
 ```
 
-_Last validated n/a._
-
 ## espn_wch_statistics_league
 
 ESPN endpoint.
@@ -641,8 +627,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 espn_wch_statistics_league()
 ```
 
-_Last validated n/a._
-
 ## espn_wch_draft
 
 ESPN endpoint.
@@ -675,8 +659,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 ```python
 espn_wch_draft()
 ```
-
-_Last validated n/a._
 
 ## espn_wch_teams_site
 
@@ -726,8 +708,6 @@ ESPN endpoint.
 ```python
 espn_wch_teams_site()
 ```
-
-_Last validated n/a._
 
 ## espn_wch_team
 
@@ -804,8 +784,6 @@ ESPN endpoint.
 ```python
 espn_wch_team(team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_wch_team_roster
 
@@ -911,8 +889,6 @@ ESPN endpoint.
 espn_wch_team_roster(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_wch_team_schedule
 
 ESPN endpoint.
@@ -962,8 +938,6 @@ ESPN endpoint.
 espn_wch_team_schedule(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_wch_team_record
 
 ESPN endpoint.
@@ -998,8 +972,6 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 espn_wch_team_record(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_wch_team_depthcharts
 
 ESPN endpoint.
@@ -1033,8 +1005,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 ```python
 espn_wch_team_depthcharts(team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_wch_team_injuries
 
@@ -1074,8 +1044,6 @@ ESPN endpoint.
 espn_wch_team_injuries(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_wch_team_transactions
 
 ESPN endpoint.
@@ -1110,8 +1078,6 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 espn_wch_team_transactions(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_wch_team_history
 
 ESPN endpoint.
@@ -1145,8 +1111,6 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 ```python
 espn_wch_team_history(team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_wch_team_news
 
@@ -1201,8 +1165,6 @@ ESPN endpoint.
 espn_wch_team_news(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_wch_team_leaders
 
 ESPN endpoint.
@@ -1236,8 +1198,6 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 ```python
 espn_wch_team_leaders(team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_wch_player_info
 
@@ -1273,8 +1233,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 espn_wch_player_info(athlete_id='4239')
 ```
 
-_Last validated n/a._
-
 ## espn_wch_player_bio
 
 ESPN endpoint.
@@ -1308,8 +1266,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_wch_player_bio(athlete_id='4239')
 ```
-
-_Last validated n/a._
 
 ## espn_wch_player_news
 
@@ -1362,8 +1318,6 @@ ESPN endpoint.
 ```python
 espn_wch_player_news(athlete_id='4239')
 ```
-
-_Last validated n/a._
 
 ## espn_wch_standings
 
@@ -1433,8 +1387,6 @@ ESPN endpoint.
 espn_wch_standings()
 ```
 
-_Last validated n/a._
-
 ## espn_wch_rankings
 
 ESPN endpoint.
@@ -1493,5 +1445,3 @@ ESPN endpoint.
 ```python
 espn_wch_rankings()
 ```
-
-_Last validated n/a._

@@ -46,8 +46,6 @@ Months (YYYY-MM) that have games in a season, newest first; each is one page of 
 wjbl_game_months(season=2026)
 ```
 
-_Last validated n/a._
-
 ## wjbl_game_info
 
 Game information of a final game: venue, times, referees, links and the Japanese game report, one row.
@@ -129,5 +127,3 @@ Game information of a final game: venue, times, referees, links and the Japanese
 ```python
 wjbl_game_info(play_schedule_id=7987)
 ```
-
-_Last validated n/a._

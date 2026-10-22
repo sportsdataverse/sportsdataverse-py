@@ -46,8 +46,6 @@ Seasons, newest first, with the active flag (BBL back to 1966, DBBL 2024 on).
 scb_seasons()
 ```
 
-_Last validated n/a._
-
 ## scb_season_players
 
 Every player registered in a season: the id crosswalk (season_player_id, real_player_id, season_team_id).
@@ -92,8 +90,6 @@ Every player registered in a season: the id crosswalk (season_player_id, real_pl
 scb_season_players(season=2027)
 ```
 
-_Last validated n/a._
-
 ## scb_season_teams
 
 Every team of a season: club id, season-team id, name and three-letter code.
@@ -137,8 +133,6 @@ Every team of a season: club id, season-team id, name and three-letter code.
 ```python
 scb_season_teams(season=2027)
 ```
-
-_Last validated n/a._
 
 ## scb_playoff_series
 
@@ -194,8 +188,6 @@ Playoff bracket of a season: one row per series (quarter-finals, semi-finals, fi
 scb_playoff_series(season=2026)
 ```
 
-_Last validated n/a._
-
 ## scb_playoff_games
 
 Every playoff game of a season with its series and the points of each series team.
@@ -246,8 +238,6 @@ Every playoff game of a season with its series and the points of each series tea
 ```python
 scb_playoff_games(season=2026)
 ```
-
-_Last validated n/a._
 
 ## scb_player_statistics
 
@@ -357,8 +347,6 @@ Season player stat table: totals and per-game values, one row per player and sta
 ```python
 scb_player_statistics(display_type='MAIN_ROUND', season=2026)
 ```
-
-_Last validated n/a._
 
 ## scb_games
 
@@ -489,8 +477,6 @@ Games of a season (the whole season in one page): teams, score by period, offici
 scb_games(season=2026)
 ```
 
-_Last validated n/a._
-
 ## scb_game
 
 One game header: teams, score by period, officials, venue and top scorer.
@@ -618,8 +604,6 @@ One game header: teams, score by period, officials, venue and top scorer.
 scb_game(game_id='2006920')
 ```
 
-_Last validated n/a._
-
 ## scb_standings
 
 League table of a season: record, home / away split, streaks and tie-break detail (2005-06 on).
@@ -712,8 +696,6 @@ League table of a season: record, home / away split, streaks and tie-break detai
 scb_standings(season=2026)
 ```
 
-_Last validated n/a._
-
 ## scb_season_player
 
 Player profile by season-player id: bio, position, club and previous clubs.
@@ -770,8 +752,6 @@ Player profile by season-player id: bio, position, club and previous clubs.
 scb_season_player(season_player_id='56414')
 ```
 
-_Last validated n/a._
-
 ## scb_referees
 
 Current referees and commissioners (BBL only).
@@ -813,8 +793,6 @@ Current referees and commissioners (BBL only).
 ```python
 scb_referees()
 ```
-
-_Last validated n/a._
 
 ## scb_transfers
 
@@ -860,8 +838,6 @@ Latest transfers, one row per move (BBL only).
 ```python
 scb_transfers()
 ```
-
-_Last validated n/a._
 
 ## scb_transfers_teams
 
@@ -909,5 +885,3 @@ Per club, the players joining and leaving, one row per move with its direction (
 ```python
 scb_transfers_teams()
 ```
-
-_Last validated n/a._

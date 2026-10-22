@@ -101,8 +101,6 @@ GET /stats/leaguedashteamshotlocations
 wnba_stats_leaguedashteamshotlocations(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_leaguedashteamstats
 
 GET /stats/leaguedashteamstats
@@ -221,5 +219,3 @@ GET /stats/leaguedashteamstats
 ```python
 wnba_stats_leaguedashteamstats(league_id='10', season='2024')
 ```
-
-_Last validated n/a._

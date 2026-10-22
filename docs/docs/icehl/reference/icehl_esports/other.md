@@ -88,8 +88,6 @@ Schedule and results of one competition season, one row per match, played or not
 icehl_schedule(league_id=1, season=2027)
 ```
 
-_Last validated n/a._
-
 ## icehl_league_part_player_stats
 
 Every skater's stats in one league part (a competition stage), one row per player.
@@ -189,8 +187,6 @@ Every skater's stats in one league part (a competition stage), one row per playe
 icehl_league_part_player_stats(league_part_id=56)
 ```
 
-_Last validated n/a._
-
 ## icehl_team_player_stats
 
 Season player stats of one team in one competition, one row per player.
@@ -281,8 +277,6 @@ Season player stats of one team in one competition, one row per player.
 icehl_team_player_stats(league_id=1, season=2027, team_id=4)
 ```
 
-_Last validated n/a._
-
 ## icehl_top_scorers
 
 Skater scoring leaderboard of one competition season.
@@ -332,8 +326,6 @@ Skater scoring leaderboard of one competition season.
 icehl_top_scorers(league_id=1, season=2027)
 ```
 
-_Last validated n/a._
-
 ## icehl_faceoffs
 
 Every faceoff of one match: time, dot, winner and loser.
@@ -377,8 +369,6 @@ Every faceoff of one match: time, dot, winner and loser.
 ```python
 icehl_faceoffs(match_id=8161)
 ```
-
-_Last validated n/a._
 
 ## icehl_pbp
 
@@ -467,8 +457,6 @@ Play-by-play of one match: goals, penalties, goalie changes and timeouts, one ro
 ```python
 icehl_pbp(match_id=8161)
 ```
-
-_Last validated n/a._
 
 ## icehl_player_box
 
@@ -559,8 +547,6 @@ Player boxscore of one team in one match, one row per player.
 ```python
 icehl_player_box(match_id=8161, team_id=4)
 ```
-
-_Last validated n/a._
 
 ## icehl_goalie_box
 
@@ -658,8 +644,6 @@ Goalie lines of one match, one row per goalie who played.
 icehl_goalie_box(match_id=8161)
 ```
 
-_Last validated n/a._
-
 ## icehl_standings
 
 Standings of one competition season, one row per team.
@@ -727,8 +711,6 @@ Standings of one competition season, one row per team.
 icehl_standings(league_id=1, season=2027)
 ```
 
-_Last validated n/a._
-
 ## icehl_shots
 
 Shots of one match with rink coordinates and result, one row per shot.
@@ -788,5 +770,3 @@ Shots of one match with rink coordinates and result, one row per shot.
 ```python
 icehl_shots(match_id=8161)
 ```
-
-_Last validated n/a._

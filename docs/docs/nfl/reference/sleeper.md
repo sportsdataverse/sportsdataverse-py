@@ -73,8 +73,6 @@ A draft.
 sleeper_draft(draft_id='257270643320426496')
 ```
 
-_Last validated n/a._
-
 ## sleeper_draft_picks
 
 Picks of a draft.
@@ -128,8 +126,6 @@ Picks of a draft.
 ```python
 sleeper_draft_picks(draft_id='257270643320426496')
 ```
-
-_Last validated n/a._
 
 ## sleeper_drafts
 
@@ -194,8 +190,6 @@ Drafts of a league.
 ```python
 sleeper_drafts(league_id='289646328504385536')
 ```
-
-_Last validated n/a._
 
 ## sleeper_league
 
@@ -379,8 +373,6 @@ A league.
 sleeper_league(league_id='289646328504385536')
 ```
 
-_Last validated n/a._
-
 ## sleeper_matchups
 
 Matchups for a week.
@@ -424,8 +416,6 @@ Matchups for a week.
 ```python
 sleeper_matchups(league_id='289646328504385536', week='1')
 ```
-
-_Last validated n/a._
 
 ## sleeper_players
 
@@ -514,8 +504,6 @@ All NFL players (large; fetch at most once per day).
 sleeper_players()
 ```
 
-_Last validated n/a._
-
 ## sleeper_rosters
 
 Rosters in a league.
@@ -574,8 +562,6 @@ Rosters in a league.
 sleeper_rosters(league_id='289646328504385536')
 ```
 
-_Last validated n/a._
-
 ## sleeper_state
 
 Current NFL week and season state.
@@ -620,8 +606,6 @@ Current NFL week and season state.
 sleeper_state()
 ```
 
-_Last validated n/a._
-
 ## sleeper_traded_picks
 
 Traded draft picks.
@@ -661,8 +645,6 @@ Traded draft picks.
 ```python
 sleeper_traded_picks(league_id='289646328504385536')
 ```
-
-_Last validated n/a._
 
 ## sleeper_transactions
 
@@ -716,8 +698,6 @@ Transactions for a week.
 sleeper_transactions(league_id='289646328504385536', week='1')
 ```
 
-_Last validated n/a._
-
 ## sleeper_trending_adds
 
 Trending adds (lookback_hours, limit).
@@ -755,8 +735,6 @@ Trending adds (lookback_hours, limit).
 ```python
 sleeper_trending_adds()
 ```
-
-_Last validated n/a._
 
 ## sleeper_user
 
@@ -813,8 +791,6 @@ Look up a user by username or id.
 ```python
 sleeper_user(username='457511950237696')
 ```
-
-_Last validated n/a._
 
 ## sleeper_user_leagues
 
@@ -1010,8 +986,6 @@ Leagues a user is in for a season.
 sleeper_user_leagues(season='2018', user_id='457511950237696')
 ```
 
-_Last validated n/a._
-
 ## sleeper_users
 
 Users in a league.
@@ -1066,8 +1040,6 @@ Users in a league.
 sleeper_users(league_id='289646328504385536')
 ```
 
-_Last validated n/a._
-
 ## sleeper_winners_bracket
 
 Playoff bracket.
@@ -1109,5 +1081,3 @@ Playoff bracket.
 ```python
 sleeper_winners_bracket(league_id='289646328504385536')
 ```
-
-_Last validated n/a._

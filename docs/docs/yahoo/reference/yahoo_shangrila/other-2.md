@@ -123,8 +123,6 @@ Yahoo shangrila persisted query `scoreboardGame` -> one row per `games` entry
 yahoo_scoreboard_game()
 ```
 
-_Last validated n/a._
-
 ## yahoo_tennis_matches_by_date
 
 Yahoo shangrila persisted query `tennisMatchesByDate` -> one row per `tennisTournaments` entry
@@ -172,8 +170,6 @@ Yahoo shangrila persisted query `tennisMatchesByDate` -> one row per `tennisTour
 yahoo_tennis_matches_by_date()
 ```
 
-_Last validated n/a._
-
 ## yahoo_tennis_tournament
 
 Yahoo shangrila persisted query `tennisTournament` -> one row per `tennisTournaments` entry
@@ -219,8 +215,6 @@ Yahoo shangrila persisted query `tennisTournament` -> one row per `tennisTournam
 ```python
 yahoo_tennis_tournament()
 ```
-
-_Last validated n/a._
 
 ## yahoo_tennis_tournaments
 
@@ -276,8 +270,6 @@ Yahoo shangrila persisted query `tennisTournaments` -> one row per `tennisTourna
 yahoo_tennis_tournaments()
 ```
 
-_Last validated n/a._
-
 ## yahoo_tennis_tournaments_by_date
 
 Yahoo shangrila persisted query `tennisTournamentsByDate` -> one row per `tennisTournaments` entry
@@ -309,8 +301,6 @@ Yahoo shangrila persisted query `tennisTournamentsByDate` -> one row per `tennis
 ```python
 yahoo_tennis_tournaments_by_date()
 ```
-
-_Last validated n/a._
 
 ## yahoo_trending_event_ids
 
@@ -345,8 +335,6 @@ Yahoo shangrila persisted query `trendingEventIds` -> one row per `trendingEvent
 yahoo_trending_event_ids()
 ```
 
-_Last validated n/a._
-
 ## yahoo_trending_game_ids
 
 Yahoo shangrila persisted query `trendingGameIds` -> one row per `trendingGames` entry
@@ -380,5 +368,3 @@ Yahoo shangrila persisted query `trendingGameIds` -> one row per `trendingGames`
 ```python
 yahoo_trending_game_ids()
 ```
-
-_Last validated n/a._

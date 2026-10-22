@@ -401,5 +401,3 @@ GET /stats/playerdashboardbygamesplits
 ```python
 wnba_stats_playerdashboardbygamesplits(league_id='10', season='2024')
 ```
-
-_Last validated n/a._

@@ -641,7 +641,7 @@ def _param_rows(ep: spec.Endpoint, league_prefix: str = "", fn_name: str = "") -
 # (cfbfastR / hoopR / wehoop / baseballr / fastRhockey) plus the nflverse data
 # dictionaries (nflreadr CSVs + nflfastR variable list) into
 # r_column_descriptions.yaml, shape:
-#   {package: {col_name: description}, ..., _merged: {col_name: description}}
+#   {package: {col_name: description}, ...}
 # At RENDER time (NOT capture) we backfill any blank return-table description
 # cell from this dictionary, keyed by column name and league-aware package. A
 # stored (hand-curated) description is never overwritten. Unmatched columns stay
@@ -1338,7 +1338,6 @@ class _EndpointView:
         bare = ep.path.replace("[", "").replace("]", "")
         url = f"{ep_host}{_sub_slugs(bare, league.sport, lg_slug)}"
         self.url_fstring = url
-        self.full_url = url  # back-compat alias
 
         needs_build = (
             ep.now_variant is not None
@@ -1419,9 +1418,6 @@ class _EndpointView:
         self.frames_by = str(schema_doc.get("frames_by") or "")
         self.unverified = str(schema_doc.get("unverified") or "")
         self.returns_prose = _normalize_rst(ep.summary or "")
-        self.r_equivalent: dict[str, str] = {}  # reserved for a future R cross-ref map
-        self.notebook: str | None = None
-        self.last_validated: str | None = None
         self.api_name = ""  # set by _espn_league_views for per-API docs filtering
 
     @staticmethod
@@ -1492,7 +1488,6 @@ def _ruff_format_dir(path: Path) -> None:
 
 
 _ESPN_RENAME_FILE = ROOT / "tools" / "codegen" / "espn_rename_map.yaml"
-_ESPN_RENAME_SKIPPED: dict[str, str] = {}  # old -> reason (collisions held back from the curated map)
 
 
 def _load_espn_renames() -> dict:
@@ -1686,10 +1681,9 @@ def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
         if new != base:
             if new in base_names or new in handwritten or new in used:
                 versioned = _versioned_on_collision(ep.short, league.prefix)
+                # A collision with no free versioned name keeps the base name (the rename is held back).
                 if versioned and versioned not in base_names and versioned not in handwritten and versioned not in used:
                     fn_name = versioned
-                else:
-                    _ESPN_RENAME_SKIPPED[base] = f"{new} (collision)"
             else:
                 fn_name = new
         renamed_from = None

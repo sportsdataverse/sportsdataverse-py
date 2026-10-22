@@ -85,8 +85,6 @@ Game header: Genius match id (extId), arena, state, teams, scores.
 sportality_game_header(game_uuid='c4hh5nig6t')
 ```
 
-_Last validated n/a._
-
 ## sportality_game_overview
 
 Score, state, clock and the Genius ids of one game (2023/24 on).
@@ -151,8 +149,6 @@ Score, state, clock and the Genius ids of one game (2023/24 on).
 sportality_game_overview(game_uuid='c4hh5nig6t')
 ```
 
-_Last validated n/a._
-
 ## sportality_game_summary
 
 Points per period, team comparison and best scorers (2023/24 on).
@@ -194,5 +190,3 @@ Points per period, team comparison and best scorers (2023/24 on).
 ```python
 sportality_game_summary(game_uuid='c4hh5nig6t')
 ```
-
-_Last validated n/a._

@@ -68,8 +68,6 @@ Match header: teams, status, score, bonus, current period and the content the si
 acb_match_header(match_id=105401)
 ```
 
-_Last validated n/a._
-
 ## acb_match_leaders
 
 Each team's leaders of a game by category.
@@ -122,8 +120,6 @@ Each team's leaders of a game by category.
 acb_match_leaders(match_id=105401)
 ```
 
-_Last validated n/a._
-
 ## acb_match_advanced_stats
 
 Team advanced statistics of a game against the team's season and win/loss splits.
@@ -175,5 +171,3 @@ Team advanced statistics of a game against the team's season and win/loss splits
 ```python
 acb_match_advanced_stats(match_id=105401)
 ```
-
-_Last validated n/a._

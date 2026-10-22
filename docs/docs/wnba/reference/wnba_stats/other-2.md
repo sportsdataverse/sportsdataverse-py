@@ -44,8 +44,6 @@ No returns table is published for this endpoint: the committed capture tests/fix
 wnba_stats_playbyplayv3()
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_videostatus
 
 GET /stats/videostatus
@@ -96,5 +94,3 @@ GET /stats/videostatus
 ```python
 wnba_stats_videostatus(league_id='10')
 ```
-
-_Last validated n/a._

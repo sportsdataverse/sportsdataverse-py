@@ -96,8 +96,6 @@ GET /stats/scheduleleaguev2
 wnba_stats_scheduleleaguev2(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_scheduleleaguev2int
 
 GET /stats/scheduleleaguev2int
@@ -186,5 +184,3 @@ GET /stats/scheduleleaguev2int
 ```python
 wnba_stats_scheduleleaguev2int(league_id='10', season='2024')
 ```
-
-_Last validated n/a._

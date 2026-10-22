@@ -113,8 +113,6 @@ The current season's games (CMS records, decoded from the schedule page): slug, 
 ha_schedule()
 ```
 
-_Last validated n/a._
-
 ## ha_game
 
 One game's CMS record by slug (2025/26 onward): StatNet game number and team ids, scores by period, venue, attendance.
@@ -220,8 +218,6 @@ One game's CMS record by slug (2025/26 onward): StatNet game number and team ids
 ha_game(slug='20260918-aik-modo')
 ```
 
-_Last validated n/a._
-
 ## ha_pbp
 
 One game's events (2025/26 onward): shots with outcome, goals with assists and strength, penalties, goalkeeper changes, timeouts. No coordinates, no on-ice players.
@@ -285,8 +281,6 @@ One game's events (2025/26 onward): shots with outcome, goals with assists and s
 ```python
 ha_pbp(away_statnet_id='MODO', home_statnet_id='AIK', scheduled_date_time='2026-09-18T17:00:00.000Z', statnet_game_number=23401)
 ```
-
-_Last validated n/a._
 
 ## ha_games
 
@@ -356,8 +350,6 @@ Every game of a season, played or scheduled (is_played): date, display team code
 ha_games(season=2026)
 ```
 
-_Last validated n/a._
-
 ## ha_standings
 
 Standings of a season. Wins and losses are REGULATION only; overtime counts include shootouts.
@@ -412,8 +404,6 @@ Standings of a season. Wins and losses are REGULATION only; overtime counts incl
 ```python
 ha_standings(season=2026)
 ```
-
-_Last validated n/a._
 
 ## ha_skater_stats
 
@@ -479,8 +469,6 @@ Skater stats of a season, one category (column set) per call. Names and StatNet 
 ha_skater_stats(category='summary', season=2026)
 ```
 
-_Last validated n/a._
-
 ## ha_goalie_stats
 
 Goalkeeper stats of a season, one category per call. Names and StatNet team ids, no player ids.
@@ -539,8 +527,6 @@ Goalkeeper stats of a season, one category per call. Names and StatNet team ids,
 ```python
 ha_goalie_stats(category='summary', season=2026)
 ```
-
-_Last validated n/a._
 
 ## ha_team_stats
 
@@ -604,8 +590,6 @@ Team stats of a season, one category per call. W / L are totals including overti
 ha_team_stats(category='results', season=2026)
 ```
 
-_Last validated n/a._
-
 ## ha_teams
 
 Teams of a season with both team keys: StatNet team id <-> display code (from the stats tables' teams list).
@@ -651,8 +635,6 @@ Teams of a season with both team keys: StatNet team id <-> display code (from th
 ```python
 ha_teams(season=2026)
 ```
-
-_Last validated n/a._
 
 ## ha_leaders
 
@@ -709,8 +691,6 @@ Current-season top 25 of one metric, with the StatNet player id (the only stats 
 ```python
 ha_leaders(metric='TP')
 ```
-
-_Last validated n/a._
 
 ## ha_players
 
@@ -774,5 +754,3 @@ One team's players from the CMS directory: CMS ids, position, jersey, birth date
 ```python
 ha_players(team='AIK')
 ```
-
-_Last validated n/a._

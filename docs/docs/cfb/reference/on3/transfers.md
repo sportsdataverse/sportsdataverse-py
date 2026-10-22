@@ -1,7 +1,7 @@
 ---
 title: "CFB — On3 Recruit Database (api.on3.com) — Transfers"
 sidebar_label: "Transfers"
-sidebar_position: 12
+sidebar_position: 10
 description: "CFB — On3 Recruit Database (api.on3.com) — Transfers — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -302,8 +302,6 @@ GET /rdb/v1/transfers/best-available
 on3_transfers_best_available()
 ```
 
-_Last validated n/a._
-
 ## on3_transfers_latest
 
 GET /rdb/v1/transfers/latest
@@ -592,5 +590,3 @@ GET /rdb/v1/transfers/latest
 ```python
 on3_transfers_latest()
 ```
-
-_Last validated n/a._

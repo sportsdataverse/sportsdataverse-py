@@ -86,5 +86,3 @@ ESPN endpoint.
 ```python
 espn_soccer_fpi(league='eng.1', season=2024)
 ```
-
-_Last validated n/a._

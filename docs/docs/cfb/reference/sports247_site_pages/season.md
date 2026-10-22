@@ -55,8 +55,6 @@ Current expert 'crystal ball' predictions for a season.
 sports247_site_pages_season_current_expert_predictions(season='2026-Football')
 ```
 
-_Last validated n/a._
-
 ## sports247_site_pages_season_recruit_interest_events
 
 Recruit-interest timeline events for a season (offers/visits/commits).
@@ -98,8 +96,6 @@ Recruit-interest timeline events for a season (offers/visits/commits).
 ```python
 sports247_site_pages_season_recruit_interest_events(season='2026-Football')
 ```
-
-_Last validated n/a._
 
 ## sports247_site_pages_season_recruit_interests
 
@@ -163,8 +159,6 @@ All recruit interests for a season (paginated).
 ```python
 sports247_site_pages_season_recruit_interests(season='2026-Football')
 ```
-
-_Last validated n/a._
 
 ## sports247_site_pages_season_recruits
 
@@ -264,8 +258,6 @@ Recruit class rankings for a season (rich per-recruit rows with inlined Player).
 sports247_site_pages_season_recruits(season='2026-Football')
 ```
 
-_Last validated n/a._
-
 ## sports247_site_pages_season_roster_embed
 
 Signed-class roster embed (PlayerSport rows). Accuracy can lag.
@@ -337,5 +329,3 @@ Signed-class roster embed (PlayerSport rows). Accuracy can lag.
 ```python
 sports247_site_pages_season_roster_embed(season='2020-Football')
 ```
-
-_Last validated n/a._

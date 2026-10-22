@@ -46,8 +46,6 @@ Points each team scored in each period of a game.
 acb_period_scores(match_id=105401)
 ```
 
-_Last validated n/a._
-
 ## acb_box_info
 
 Coaches and game facts per team: head coach, assistants, arena, attendance, referees.
@@ -95,8 +93,6 @@ Coaches and game facts per team: head coach, assistants, arena, attendance, refe
 ```python
 acb_box_info(match_id=105401)
 ```
-
-_Last validated n/a._
 
 ## acb_pbp
 
@@ -171,8 +167,6 @@ Play-by-play of a game (2016-17 onward): every shot, rebound, foul, turnover, su
 acb_pbp(match_id=105401)
 ```
 
-_Last validated n/a._
-
 ## acb_shots
 
 Every field-goal and free-throw attempt of a game (2016-17 onward) with its court position.
@@ -232,8 +226,6 @@ Every field-goal and free-throw attempt of a game (2016-17 onward) with its cour
 acb_shots(match_id=105401)
 ```
 
-_Last validated n/a._
-
 ## acb_lead_tracker
 
 Score through a game, one row per scoring moment, with the margin.
@@ -279,8 +271,6 @@ Score through a game, one row per scoring moment, with the margin.
 acb_lead_tracker(match_id=105401)
 ```
 
-_Last validated n/a._
-
 ## acb_lead_stats
 
 Lead statistics of a game (best run, maximum lead, time ahead, lead changes) per side.
@@ -321,8 +311,6 @@ Lead statistics of a game (best run, maximum lead, time ahead, lead changes) per
 ```python
 acb_lead_stats(match_id=105401)
 ```
-
-_Last validated n/a._
 
 ## acb_lineup
 
@@ -381,8 +369,6 @@ Players of a game with their game line, starters first.
 acb_lineup(match_id=105401)
 ```
 
-_Last validated n/a._
-
 ## acb_serie
 
 The playoff series a game belongs to, one row per game of the series (zero rows outside a series: HTTP 204).
@@ -440,8 +426,6 @@ The playoff series a game belongs to, one row per game of the series (zero rows 
 acb_serie(match_id=17718)
 ```
 
-_Last validated n/a._
-
 ## acb_quickfacts
 
 Pre-match facts per team: standing, record, recent results.
@@ -488,8 +472,6 @@ Pre-match facts per team: standing, record, recent results.
 ```python
 acb_quickfacts(match_id=105401)
 ```
-
-_Last validated n/a._
 
 ## acb_season_leaders
 
@@ -542,8 +524,6 @@ Each team's season leaders before a game, by category.
 ```python
 acb_season_leaders(match_id=105401)
 ```
-
-_Last validated n/a._
 
 ## acb_matchlist
 
@@ -613,8 +593,6 @@ The games of the round (or week) around a game.
 acb_matchlist(match_id=105401)
 ```
 
-_Last validated n/a._
-
 ## acb_round_matches
 
 Games of one round (or week) with scores, status and broadcasters.
@@ -679,8 +657,6 @@ Games of one round (or week) with scores, status and broadcasters.
 acb_round_matches(round_id=6017, season=2027)
 ```
 
-_Last validated n/a._
-
 ## acb_standings
 
 League table after a round (default: the current round).
@@ -740,8 +716,6 @@ League table after a round (default: the current round).
 acb_standings(season=2027)
 ```
 
-_Last validated n/a._
-
 ## acb_standings_rounds
 
 Standings history: each team's position after each round, with the round's game.
@@ -791,8 +765,6 @@ Standings history: each team's position after each round, with the round's game.
 ```python
 acb_standings_rounds(season=2027)
 ```
-
-_Last validated n/a._
 
 ## acb_bracket
 
@@ -847,8 +819,6 @@ Playoff bracket: one row per series (quarter-final, semifinal, final).
 ```python
 acb_bracket(season=2026)
 ```
-
-_Last validated n/a._
 
 ## acb_bracket_games
 
@@ -907,5 +877,3 @@ The games of every playoff series of a bracket, one row per game.
 ```python
 acb_bracket_games(season=2026)
 ```
-
-_Last validated n/a._

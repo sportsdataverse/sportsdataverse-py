@@ -1688,5 +1688,3 @@ One of nineteen player reports for the whole league, one row per player
 ```python
 pff_api_position_report(league='nfl', report='offense', season=2022)
 ```
-
-_Last validated n/a._

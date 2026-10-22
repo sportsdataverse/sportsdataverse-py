@@ -75,8 +75,6 @@ Team totals of a finished game with the team-credited rebounds, turnovers and fo
 tbf_team_box(match_id=346279)
 ```
 
-_Last validated n/a._
-
 ## tbf_teams
 
 Every team registered in one league-season with its team-season id (team_process_id) and club id.
@@ -121,8 +119,6 @@ Every team registered in one league-season with its team-season id (team_process
 ```python
 tbf_teams(competition='bsl', season=2027)
 ```
-
-_Last validated n/a._
 
 ## tbf_team_player_stats
 
@@ -201,8 +197,6 @@ Season player statistics of one team-season: totals, percentages and per-game av
 tbf_team_player_stats(season=2027, team_process_id=265995)
 ```
 
-_Last validated n/a._
-
 ## tbf_team_games
 
 Games and results of one team-season, scheduled games included.
@@ -261,8 +255,6 @@ Games and results of one team-season, scheduled games included.
 tbf_team_games(season=2027, team_process_id=265995)
 ```
 
-_Last validated n/a._
-
 ## tbf_team_roster
 
 Roster of one team-season with games, minutes and per-game points and efficiency (birth dates dropped).
@@ -313,8 +305,6 @@ Roster of one team-season with games, minutes and per-game points and efficiency
 tbf_team_roster(season=2027, team_process_id=265995)
 ```
 
-_Last validated n/a._
-
 ## tbf_team_staff
 
 Coaching and club staff of one team-season.
@@ -359,5 +349,3 @@ Coaching and club staff of one team-season.
 ```python
 tbf_team_staff(season=2027, team_process_id=265995)
 ```
-
-_Last validated n/a._

@@ -96,5 +96,3 @@ espn.com scoreboard page data for one day (one week for football), one row per g
 ```python
 espn_ucl_cdn_scoreboard(date='20250115')
 ```
-
-_Last validated n/a._

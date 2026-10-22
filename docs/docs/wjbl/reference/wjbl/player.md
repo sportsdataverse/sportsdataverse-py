@@ -59,8 +59,6 @@ Leading scorer, passer and rebounder of each team per period, half and game (201
 wjbl_player_period_leaders(play_schedule_id=7987)
 ```
 
-_Last validated n/a._
-
 ## wjbl_player
 
 Player profile: current team, names, bio and career notes, one row.
@@ -131,5 +129,3 @@ Player profile: current team, names, bio and career notes, one row.
 ```python
 wjbl_player(player_id=9799)
 ```
-
-_Last validated n/a._

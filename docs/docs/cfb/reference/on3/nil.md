@@ -1,7 +1,7 @@
 ---
 title: "CFB — On3 Recruit Database (api.on3.com) — Nil"
 sidebar_label: "Nil"
-sidebar_position: 5
+sidebar_position: 4
 description: "CFB — On3 Recruit Database (api.on3.com) — Nil — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -40,8 +40,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 ```python
 on3_nil_100()
 ```
-
-_Last validated n/a._
 
 ## on3_nil_100_v2
 
@@ -234,8 +232,6 @@ GET /rdb/v2/nil-100
 on3_nil_100_v2()
 ```
 
-_Last validated n/a._
-
 ## on3_nil_compliances_state
 
 GET /rdb/v1/nil-compliances/state
@@ -269,8 +265,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 ```python
 on3_nil_compliances_state()
 ```
-
-_Last validated n/a._
 
 ## on3_nil_rankings
 
@@ -454,5 +448,3 @@ GET /rdb/v1/nil-rankings
 ```python
 on3_nil_rankings()
 ```
-
-_Last validated n/a._

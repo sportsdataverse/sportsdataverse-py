@@ -52,8 +52,6 @@ Competitions (one per season) of a competition type.
 magnus_competitions()
 ```
 
-_Last validated n/a._
-
 ## magnus_game
 
 Game header from the game sheet: teams, score, start time, status, attendance and rink (one row).
@@ -110,8 +108,6 @@ Game header from the game sheet: teams, score, start time, status, attendance an
 magnus_game(game_id=77779)
 ```
 
-_Last validated n/a._
-
 ## magnus_lineups
 
 Game roster from the game sheet: one row per dressed player, with the person id, the per-game participant id, jersey, licence number, position, captaincy and MVP flag.
@@ -160,8 +156,6 @@ Game roster from the game sheet: one row per dressed player, with the person id,
 ```python
 magnus_lineups(game_id=77779)
 ```
-
-_Last validated n/a._
 
 ## magnus_pbp
 
@@ -227,8 +221,6 @@ Play-by-play from the game sheet: goals, penalties, shots, faceoffs, goalie chan
 magnus_pbp(game_id=77779)
 ```
 
-_Last validated n/a._
-
 ## magnus_phases
 
 Phases of a competition (regular season, playoffs, relegation).
@@ -271,8 +263,6 @@ Phases of a competition (regular season, playoffs, relegation).
 ```python
 magnus_phases(season=2027)
 ```
-
-_Last validated n/a._
 
 ## magnus_round_games
 
@@ -332,8 +322,6 @@ One round of a phase with its games.
 magnus_round_games(phase_id=714, round=1)
 ```
 
-_Last validated n/a._
-
 ## magnus_rounds
 
 Rounds (journees) of a phase with their dates (games via get_rencontrestours).
@@ -377,8 +365,6 @@ Rounds (journees) of a phase with their dates (games via get_rencontrestours).
 ```python
 magnus_rounds(phase_id=714)
 ```
-
-_Last validated n/a._
 
 ## magnus_schedule
 
@@ -442,8 +428,6 @@ Games (schedule and results); Laravel-paginated, par_page=700 returns a full sea
 magnus_schedule(season=2027)
 ```
 
-_Last validated n/a._
-
 ## magnus_shootout
 
 Shootout attempts from the game sheet: round, shooter, goalie and result (zero rows when the game had no shootout).
@@ -488,8 +472,6 @@ Shootout attempts from the game sheet: round, shooter, goalie and result (zero r
 ```python
 magnus_shootout(game_id=77779)
 ```
-
-_Last validated n/a._
 
 ## magnus_standings
 
@@ -543,8 +525,6 @@ Standings of a phase.
 magnus_standings(phase_id=714)
 ```
 
-_Last validated n/a._
-
 ## magnus_teams
 
 Teams of a phase.
@@ -590,5 +570,3 @@ Teams of a phase.
 ```python
 magnus_teams(phase_id=714)
 ```
-
-_Last validated n/a._

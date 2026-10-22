@@ -65,8 +65,6 @@ Game header: tip-off, competition, both teams and the game state (scores are in 
 ibba_segev_game_info(game_id=50)
 ```
 
-_Last validated n/a._
-
 ## ibba_segev_rosters
 
 Both teams' game rosters with Segev player ids and names in English and Hebrew.
@@ -112,8 +110,6 @@ Both teams' game rosters with Segev player ids and names in English and Hebrew.
 ```python
 ibba_segev_rosters(game_id=50)
 ```
-
-_Last validated n/a._
 
 ## ibba_segev_player_box
 
@@ -188,8 +184,6 @@ Per-player box score of a finished game, plus a team-credited line per side.
 ```python
 ibba_segev_player_box(game_id=50)
 ```
-
-_Last validated n/a._
 
 ## ibba_segev_team_box
 
@@ -270,8 +264,6 @@ Team totals of both sides: final score, timeouts, lead stats, shooting, rebounds
 ibba_segev_team_box(game_id=50)
 ```
 
-_Last validated n/a._
-
 ## ibba_segev_period_scores
 
 Points and team fouls in each period of a finished game.
@@ -312,8 +304,6 @@ Points and team fouls in each period of a finished game.
 ```python
 ibba_segev_period_scores(game_id=50)
 ```
-
-_Last validated n/a._
 
 ## ibba_segev_pbp
 
@@ -379,5 +369,3 @@ Play-by-play of a finished game: every action with shot coordinates, running sco
 ```python
 ibba_segev_pbp(game_id=50)
 ```
-
-_Last validated n/a._

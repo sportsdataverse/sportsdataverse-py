@@ -82,8 +82,6 @@ Box score of one game: per-player and team totals per side, by-quarter scores, r
 euroleague_game_boxscore(game_code=1, season_code='E2025')
 ```
 
-_Last validated n/a._
-
 ## euroleague_game_header
 
 Game header: teams, codes, coaches, score by quarter, venue, referees.
@@ -164,8 +162,6 @@ Game header: teams, codes, coaches, score by quarter, venue, referees.
 euroleague_game_header(game_code=1, season_code='E2025')
 ```
 
-_Last validated n/a._
-
 ## euroleague_game_pbp
 
 Play-by-play of one game, one array per quarter (FirstQuarter ... ForthQuarter, ExtraTime).
@@ -221,8 +217,6 @@ Play-by-play of one game, one array per quarter (FirstQuarter ... ForthQuarter, 
 euroleague_game_pbp(game_code=1, season_code='E2025')
 ```
 
-_Last validated n/a._
-
 ## euroleague_game_points
 
 Shot chart of one game: one row per made/missed FG and made FT, with COORD_X/COORD_Y in cm from the hoop (the shot-chart source).
@@ -276,8 +270,6 @@ Shot chart of one game: one row per made/missed FG and made FT, with COORD_X/COO
 ```python
 euroleague_game_points(game_code=1, season_code='E2025')
 ```
-
-_Last validated n/a._
 
 ## euroleague_game_report
 
@@ -360,8 +352,6 @@ Game report: date, round, phase, both clubs with score and last-5 form.
 ```python
 euroleague_game_report(competition_code='E', game_code=1, season_code='E2025')
 ```
-
-_Last validated n/a._
 
 ## euroleague_game_stats
 
@@ -501,5 +491,3 @@ Box score of one game.
 ```python
 euroleague_game_stats(competition_code='E', game_code=1, season_code='E2025')
 ```
-
-_Last validated n/a._

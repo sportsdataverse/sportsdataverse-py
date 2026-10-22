@@ -78,8 +78,6 @@ Roster rows of every team in a season: player bio, jersey, position and team.
 nbl_rosetta_players(org='nbl', season=2026)
 ```
 
-_Last validated n/a._
-
 ## nbl_rosetta_player_game_log
 
 A player's game log for a season: the box-score line of each game (period 0 = whole game) and the game.
@@ -183,8 +181,6 @@ A player's game log for a season: the box-score line of each game (period 0 = wh
 ```python
 nbl_rosetta_player_game_log(org='nbl', participated=1, player_id='7619d3ea-410d-11f0-9235-2902fc2f936f', season=2026)
 ```
-
-_Last validated n/a._
 
 ## nbl_rosetta_player_stats
 
@@ -312,5 +308,3 @@ A player's season totals and averages for every season, by period.
 ```python
 nbl_rosetta_player_stats(org='nbl', player_id='7619d3ea-410d-11f0-9235-2902fc2f936f')
 ```
-
-_Last validated n/a._

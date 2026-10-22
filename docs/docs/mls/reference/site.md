@@ -63,8 +63,6 @@ ESPN endpoint.
 espn_mls_scoreboard(dates='20240115')
 ```
 
-_Last validated n/a._
-
 ## espn_mls_summary
 
 ESPN endpoint.
@@ -330,8 +328,6 @@ ESPN endpoint.
 espn_mls_summary()
 ```
 
-_Last validated n/a._
-
 ## espn_mls_calendar
 
 ESPN endpoint.
@@ -364,8 +360,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_mls_calendar()
 ```
-
-_Last validated n/a._
 
 ## espn_mls_news
 
@@ -419,8 +413,6 @@ ESPN endpoint.
 espn_mls_news()
 ```
 
-_Last validated n/a._
-
 ## espn_mls_injuries
 
 ESPN endpoint.
@@ -457,8 +449,6 @@ ESPN endpoint.
 ```python
 espn_mls_injuries()
 ```
-
-_Last validated n/a._
 
 ## espn_mls_transactions
 
@@ -506,8 +496,6 @@ ESPN endpoint.
 espn_mls_transactions()
 ```
 
-_Last validated n/a._
-
 ## espn_mls_conferences
 
 ESPN endpoint.
@@ -550,8 +538,6 @@ ESPN endpoint.
 espn_mls_conferences()
 ```
 
-_Last validated n/a._
-
 ## espn_mls_statistics_league
 
 ESPN endpoint.
@@ -585,8 +571,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 espn_mls_statistics_league()
 ```
 
-_Last validated n/a._
-
 ## espn_mls_draft
 
 ESPN endpoint.
@@ -619,8 +603,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 ```python
 espn_mls_draft()
 ```
-
-_Last validated n/a._
 
 ## espn_mls_teams_site
 
@@ -669,8 +651,6 @@ ESPN endpoint.
 ```python
 espn_mls_teams_site()
 ```
-
-_Last validated n/a._
 
 ## espn_mls_team
 
@@ -748,8 +728,6 @@ ESPN endpoint.
 espn_mls_team(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_mls_team_roster
 
 ESPN endpoint.
@@ -807,8 +785,6 @@ ESPN endpoint.
 espn_mls_team_roster(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_mls_team_schedule
 
 ESPN endpoint.
@@ -858,8 +834,6 @@ ESPN endpoint.
 espn_mls_team_schedule(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_mls_team_record
 
 ESPN endpoint.
@@ -894,8 +868,6 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 espn_mls_team_record(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_mls_team_depthcharts
 
 ESPN endpoint.
@@ -929,8 +901,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 ```python
 espn_mls_team_depthcharts(team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_mls_team_injuries
 
@@ -970,8 +940,6 @@ ESPN endpoint.
 espn_mls_team_injuries(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_mls_team_transactions
 
 ESPN endpoint.
@@ -1006,8 +974,6 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 espn_mls_team_transactions(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_mls_team_history
 
 ESPN endpoint.
@@ -1041,8 +1007,6 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 ```python
 espn_mls_team_history(team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_mls_team_news
 
@@ -1097,8 +1061,6 @@ ESPN endpoint.
 espn_mls_team_news(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_mls_team_leaders
 
 ESPN endpoint.
@@ -1132,8 +1094,6 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 ```python
 espn_mls_team_leaders(team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_mls_player_info
 
@@ -1169,8 +1129,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 espn_mls_player_info(athlete_id='4239')
 ```
 
-_Last validated n/a._
-
 ## espn_mls_player_bio
 
 ESPN endpoint.
@@ -1204,8 +1162,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_mls_player_bio(athlete_id='4239')
 ```
-
-_Last validated n/a._
 
 ## espn_mls_player_news
 
@@ -1258,8 +1214,6 @@ ESPN endpoint.
 ```python
 espn_mls_player_news(athlete_id='4239')
 ```
-
-_Last validated n/a._
 
 ## espn_mls_standings
 
@@ -1316,5 +1270,3 @@ ESPN endpoint.
 ```python
 espn_mls_standings()
 ```
-
-_Last validated n/a._

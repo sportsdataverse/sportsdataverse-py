@@ -67,8 +67,6 @@ GET /index.php - Pomeroy season ratings (AdjEM/AdjO/AdjD/AdjT plus SOS, one row 
 kenpom_ratings(year=2025)
 ```
 
-_Last validated n/a._
-
 ## kenpom_efficiency
 
 GET /summary.php - efficiency and tempo summary (adjusted and raw O/D/T, average possession length). Port of hoopR kp_efficiency().
@@ -128,8 +126,6 @@ GET /summary.php - efficiency and tempo summary (adjusted and raw O/D/T, average
 ```python
 kenpom_efficiency(year=2025)
 ```
-
-_Last validated n/a._
 
 ## kenpom_four_factors
 
@@ -194,8 +190,6 @@ GET /stats.php - four-factors rankings (eFG%, TO%, OR%, FTRate on offense and de
 kenpom_four_factors(year=2025)
 ```
 
-_Last validated n/a._
-
 ## kenpom_point_distribution
 
 GET /pointdist.php - share of points scored from 2s, 3s and free throws, offense and defense. Port of hoopR kp_pointdist().
@@ -248,8 +242,6 @@ GET /pointdist.php - share of points scored from 2s, 3s and free throws, offense
 ```python
 kenpom_point_distribution(year=2025)
 ```
-
-_Last validated n/a._
 
 ## kenpom_height
 
@@ -312,8 +304,6 @@ GET /height.php - team height, effective height, experience, bench minutes and c
 kenpom_height(year=2025)
 ```
 
-_Last validated n/a._
-
 ## kenpom_foul_trouble
 
 GET /foul_trouble.php - team foul-trouble splits (minutes and efficiency with starters in foul trouble). Port of hoopR kp_foul_trouble().
@@ -365,8 +355,6 @@ GET /foul_trouble.php - team foul-trouble splits (minutes and efficiency with st
 kenpom_foul_trouble(year=2025)
 ```
 
-_Last validated n/a._
-
 ## kenpom_player_stats
 
 GET /playerstats.php - national player leaderboard for one metric. Port of hoopR kp_playerstats().
@@ -416,8 +404,6 @@ GET /playerstats.php - national player leaderboard for one metric. Port of hoopR
 kenpom_player_stats(year=2025, metric='eFG')
 ```
 
-_Last validated n/a._
-
 ## kenpom_kpoy
 
 GET /kpoy.php - KenPom Player of the Year standings and the game-MVP table. Port of hoopR kp_kpoy().
@@ -466,8 +452,6 @@ GET /kpoy.php - KenPom Player of the Year standings and the game-MVP table. Port
 ```python
 kenpom_kpoy(year=2025)
 ```
-
-_Last validated n/a._
 
 ## kenpom_game_plan
 
@@ -569,8 +553,6 @@ GET /gameplan.php - a team's game-plan page (per-game four factors and personnel
 kenpom_game_plan(team='Duke', year=2025)
 ```
 
-_Last validated n/a._
-
 ## kenpom_opponent_tracker
 
 GET /opptracker.php - opponent tracker; side='o' for offense, 'd' for defense. Port of hoopR kp_opptracker().
@@ -634,8 +616,6 @@ GET /opptracker.php - opponent tracker; side='o' for offense, 'd' for defense. P
 ```python
 kenpom_opponent_tracker(team='Duke', year=2025, side='o')
 ```
-
-_Last validated n/a._
 
 ## kenpom_player_career
 
@@ -822,8 +802,6 @@ GET /player.php - one player's career page (season-by-season stats and game log)
 kenpom_player_career(player_id=51234)
 ```
 
-_Last validated n/a._
-
 ## kenpom_box
 
 GET /box.php - box-score detail for one game (per-team four factors, player lines, scoring runs). Port of hoopR kp_box().
@@ -913,8 +891,6 @@ GET /box.php - box-score detail for one game (per-team four factors, player line
 kenpom_box(game_id=1097, year=2025)
 ```
 
-_Last validated n/a._
-
 ## kenpom_win_probability
 
 GET /winprob.php - in-game win-probability table for one game. Port of hoopR kp_winprob().
@@ -950,8 +926,6 @@ No returns table is published for this endpoint: parser: KenPom draws this page 
 ```python
 kenpom_win_probability(game_id=3577, year=2025)
 ```
-
-_Last validated n/a._
 
 ## kenpom_fan_match
 
@@ -997,8 +971,6 @@ GET /fanmatch.php - the FanMatch slate for one date (predictions, thrill score, 
 ```python
 kenpom_fan_match(date='2025-02-01')
 ```
-
-_Last validated n/a._
 
 ## kenpom_coach_history
 
@@ -1068,8 +1040,6 @@ GET /history.php?c= - a coach's season-by-season history. Port of hoopR kp_coach
 kenpom_coach_history(coach='Jon Scheyer')
 ```
 
-_Last validated n/a._
-
 ## kenpom_program_ratings
 
 GET /programs.php - program-level ratings across the full KenPom era. Port of hoopR kp_program_ratings().
@@ -1124,8 +1094,6 @@ GET /programs.php - program-level ratings across the full KenPom era. Port of ho
 ```python
 kenpom_program_ratings()
 ```
-
-_Last validated n/a._
 
 ## kenpom_archive_ratings
 
@@ -1186,8 +1154,6 @@ GET /archive.php - the Pomeroy ratings as they stood on a past date. Port of hoo
 ```python
 kenpom_archive_ratings(date='2025-02-01')
 ```
-
-_Last validated n/a._
 
 ## kenpom_conference
 
@@ -1330,8 +1296,6 @@ GET /conf.php - one conference's season page (standings, efficiency, per-team sp
 kenpom_conference(conf='ACC', year=2025)
 ```
 
-_Last validated n/a._
-
 ## kenpom_conference_stats
 
 GET /confstats.php - league-wide conference comparison for one season. Port of hoopR kp_confstats().
@@ -1404,8 +1368,6 @@ GET /confstats.php - league-wide conference comparison for one season. Port of h
 kenpom_conference_stats(year=2025)
 ```
 
-_Last validated n/a._
-
 ## kenpom_conference_history
 
 GET /confhistory.php - one conference's season-by-season history. Port of hoopR kp_confhistory().
@@ -1467,8 +1429,6 @@ GET /confhistory.php - one conference's season-by-season history. Port of hoopR 
 kenpom_conference_history(conf='ACC')
 ```
 
-_Last validated n/a._
-
 ## kenpom_trends
 
 GET /trends.php - national Division I trends by season (tempo, efficiency, shooting, fouls). Port of hoopR kp_trends().
@@ -1525,8 +1485,6 @@ GET /trends.php - national Division I trends by season (tempo, efficiency, shoot
 kenpom_trends()
 ```
 
-_Last validated n/a._
-
 ## kenpom_home_court_advantage
 
 GET /hca.php - per-team home-court advantage estimates. Port of hoopR kp_hca().
@@ -1579,8 +1537,6 @@ GET /hca.php - per-team home-court advantage estimates. Port of hoopR kp_hca().
 kenpom_home_court_advantage()
 ```
 
-_Last validated n/a._
-
 ## kenpom_arenas
 
 GET /arenas.php - arena reference (name, capacity, average attendance) by team. Port of hoopR kp_arenas().
@@ -1624,8 +1580,6 @@ GET /arenas.php - arena reference (name, capacity, average attendance) by team. 
 ```python
 kenpom_arenas(year=2025)
 ```
-
-_Last validated n/a._
 
 ## kenpom_officials
 
@@ -1671,5 +1625,3 @@ GET /officials.php - referee ratings for one season. Port of hoopR kp_officials(
 ```python
 kenpom_officials(year=2025)
 ```
-
-_Last validated n/a._

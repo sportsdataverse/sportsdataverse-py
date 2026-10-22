@@ -61,8 +61,6 @@ GET /stats/commonallplayers
 nba_stats_commonallplayers(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_commonplayerinfo
 
 GET /stats/commonplayerinfo
@@ -153,8 +151,6 @@ GET /stats/commonplayerinfo
 nba_stats_commonplayerinfo(league_id='00')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_commonplayoffseries
 
 GET /stats/commonplayoffseries
@@ -197,8 +193,6 @@ GET /stats/commonplayoffseries
 ```python
 nba_stats_commonplayoffseries(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_commonteamroster
 
@@ -271,8 +265,6 @@ GET /stats/commonteamroster
 nba_stats_commonteamroster(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_commonteamyears
 
 GET /stats/commonteamyears
@@ -313,5 +305,3 @@ GET /stats/commonteamyears
 ```python
 nba_stats_commonteamyears(league_id='00')
 ```
-
-_Last validated n/a._

@@ -74,8 +74,6 @@ Team lines of a final game's box score: the team-booked stats and the totals of 
 lba_team_box_score(game_id=25602)
 ```
 
-_Last validated n/a._
-
 ## lba_teams
 
 Teams of a season, one row per team-season with the stable club id.
@@ -118,8 +116,6 @@ Teams of a season, one row per team-season with the stable club id.
 ```python
 lba_teams(season=2027)
 ```
-
-_Last validated n/a._
 
 ## lba_team_players_stats
 
@@ -195,8 +191,6 @@ Season totals of each player of a team-season.
 lba_team_players_stats(season=2027, team_id=1764)
 ```
 
-_Last validated n/a._
-
 ## lba_teams_leaderboard
 
 Season team leaderboards, offensive or defensive, one row per team and category.
@@ -247,5 +241,3 @@ Season team leaderboards, offensive or defensive, one row per team and category.
 ```python
 lba_teams_leaderboard(board='teams_offensive', season=2027)
 ```
-
-_Last validated n/a._

@@ -1,7 +1,7 @@
 ---
 title: "CFB — On3 Recruit Database (api.on3.com) — Team"
 sidebar_label: "Team"
-sidebar_position: 11
+sidebar_position: 9
 description: "CFB — On3 Recruit Database (api.on3.com) — Team — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -44,8 +44,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 on3_team_ranking()
 ```
 
-_Last validated n/a._
-
 ## on3_team_ranking_bluechips_team_rankings
 
 GET /rdb/v1/team-ranking/{sport}-{year}/bluechips-team-rankings
@@ -80,8 +78,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 ```python
 on3_team_ranking_bluechips_team_rankings(sport_slug='football', year=2025)
 ```
-
-_Last validated n/a._
 
 ## on3_team_ranking_consensus_team_rankings
 
@@ -118,8 +114,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 on3_team_ranking_consensus_team_rankings(sport_slug='football', year=2025)
 ```
 
-_Last validated n/a._
-
 ## on3_team_ranking_organizations_summary
 
 GET /rdb/v1/team-ranking/organizations/{orgKey}/summary
@@ -153,8 +147,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 ```python
 on3_team_ranking_organizations_summary(org_key=1867)
 ```
-
-_Last validated n/a._
 
 ## on3_team_ranking_team_rankings
 
@@ -241,5 +233,3 @@ GET /rdb/v1/team-ranking/{sport}-{year}/team-rankings
 ```python
 on3_team_ranking_team_rankings(sport_slug='football', year=2025)
 ```
-
-_Last validated n/a._

@@ -93,8 +93,6 @@ Team rows of the box score (team-credited stats and team totals) per period cate
 bleague_team_box(schedule_key=504734)
 ```
 
-_Last validated n/a._
-
 ## bleague_team_summary
 
 Team summary per period category in long form: shooting, rebounds, paint, fast-break and second-chance points.
@@ -170,5 +168,3 @@ Team summary per period category in long form: shooting, rebounds, paint, fast-b
 ```python
 bleague_team_summary(schedule_key=504734)
 ```
-
-_Last validated n/a._

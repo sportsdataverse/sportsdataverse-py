@@ -49,8 +49,6 @@ List all NHL franchises (historical and active).
 nhl_records_franchises()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_franchise_detail
 
 Franchise detail records (extended metadata per franchise).
@@ -97,8 +95,6 @@ Franchise detail records (extended metadata per franchise).
 ```python
 nhl_records_franchise_detail()
 ```
-
-_Last validated n/a._
 
 ## nhl_records_franchise_team_totals
 
@@ -172,8 +168,6 @@ All-time team totals per franchise (regular season).
 nhl_records_franchise_team_totals()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_franchise_season_results
 
 Season-by-season results for each franchise.
@@ -246,8 +240,6 @@ Season-by-season results for each franchise.
 nhl_records_franchise_season_results()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_franchise_playoff_appearances
 
 Franchise playoff appearance counts and streak information.
@@ -289,8 +281,6 @@ Franchise playoff appearance counts and streak information.
 ```python
 nhl_records_franchise_playoff_appearances()
 ```
-
-_Last validated n/a._
 
 ## nhl_records_franchise_totals
 
@@ -362,5 +352,3 @@ League-wide franchise totals (all-time aggregate per franchise).
 ```python
 nhl_records_franchise_totals()
 ```
-
-_Last validated n/a._

@@ -41,8 +41,6 @@ Get a player resource
 cbs_player(player_id=1751796)
 ```
 
-_Last validated n/a._
-
 ## cbs_player_combine_data
 
 Get draft related info for a particular player.
@@ -73,8 +71,6 @@ Get draft related info for a particular player.
 ```python
 cbs_player_combine_data(player_id=1751796)
 ```
-
-_Last validated n/a._
 
 ## cbs_player_depth_charts
 
@@ -108,8 +104,6 @@ Get depth charts for a particular player.
 ```python
 cbs_player_depth_charts(player_id=1751796)
 ```
-
-_Last validated n/a._
 
 ## cbs_player_draft_info
 
@@ -145,8 +139,6 @@ Get draft info for a particular player.
 cbs_player_draft_info(player_id=1751796)
 ```
 
-_Last validated n/a._
-
 ## cbs_player_encyclopedia
 
 Get encyclopedia resource for a particular player.
@@ -180,8 +172,6 @@ Get encyclopedia resource for a particular player.
 cbs_player_encyclopedia(player_id=1751796)
 ```
 
-_Last validated n/a._
-
 ## cbs_player_futures
 
 Get futures for a player.
@@ -212,8 +202,6 @@ Get futures for a player.
 ```python
 cbs_player_futures(player_id=1751796)
 ```
-
-_Last validated n/a._
 
 ## cbs_player_game_stats
 
@@ -249,8 +237,6 @@ Get game stats for a particular player.
 cbs_player_game_stats(player_id=1751796)
 ```
 
-_Last validated n/a._
-
 ## cbs_player_hockey_meta
 
 Get the hockey meta data resource for a particular player.
@@ -281,8 +267,6 @@ Get the hockey meta data resource for a particular player.
 ```python
 cbs_player_hockey_meta(player_id=1751796)
 ```
-
-_Last validated n/a._
 
 ## cbs_player_injuries
 
@@ -316,8 +300,6 @@ Get injuries for a particular player.
 cbs_player_injuries(player_id=1751796)
 ```
 
-_Last validated n/a._
-
 ## cbs_player_meta_baseball
 
 Get meta data associated to a particular baseball player.
@@ -349,8 +331,6 @@ Get meta data associated to a particular baseball player.
 cbs_player_meta_baseball(player_id=1751796)
 ```
 
-_Last validated n/a._
-
 ## cbs_player_meta_golf
 
 Get a metadata resource for a particular golf player.
@@ -381,8 +361,6 @@ Get a metadata resource for a particular golf player.
 ```python
 cbs_player_meta_golf(player_id=1751796)
 ```
-
-_Last validated n/a._
 
 ## cbs_player_outlook
 
@@ -416,8 +394,6 @@ Get outlook for a player (context is now)
 cbs_player_outlook(player_id=1751796)
 ```
 
-_Last validated n/a._
-
 ## cbs_player_position_rankings
 
 Get position rankings for a player
@@ -449,8 +425,6 @@ Get position rankings for a player
 ```python
 cbs_player_position_rankings(player_id=1751796)
 ```
-
-_Last validated n/a._
 
 ## cbs_player_rankings
 
@@ -488,8 +462,6 @@ Get all rankings for a player.
 cbs_player_rankings(player_id=1751796)
 ```
 
-_Last validated n/a._
-
 ## cbs_player_recruit_associations
 
 Get recruit associations for a particular player.
@@ -521,8 +493,6 @@ Get recruit associations for a particular player.
 ```python
 cbs_player_recruit_associations(player_id=1751796)
 ```
-
-_Last validated n/a._
 
 ## cbs_player_standings
 
@@ -559,8 +529,6 @@ Get standings for a particular player
 ```python
 cbs_player_standings(player_id=1751796)
 ```
-
-_Last validated n/a._
 
 ## cbs_player_stats
 
@@ -600,8 +568,6 @@ Get all statistics for a player.
 cbs_player_stats(player_id=1751796)
 ```
 
-_Last validated n/a._
-
 ## cbs_player_team_associations
 
 Get team associations for a particular player.
@@ -635,8 +601,6 @@ Get team associations for a particular player.
 ```python
 cbs_player_team_associations(player_id=1751796)
 ```
-
-_Last validated n/a._
 
 ## cbs_player_transactions
 
@@ -673,5 +637,3 @@ Get transactions resource for a particular player.
 ```python
 cbs_player_transactions(player_id=1751796)
 ```
-
-_Last validated n/a._

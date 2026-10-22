@@ -98,8 +98,6 @@ Player box score of one FIBA game.
 fiba_gamepage_box_players(comp=208182, game_id=100720)
 ```
 
-_Last validated n/a._
-
 ## fiba_gamepage_box_teams
 
 Team box score of one FIBA game, with the game-level figures.
@@ -193,8 +191,6 @@ Team box score of one FIBA game, with the game-level figures.
 fiba_gamepage_box_teams(comp=208182, game_id=100720)
 ```
 
-_Last validated n/a._
-
 ## fiba_gamepage_lineup
 
 Lineup card (the players who were registered for the game) of both teams of one FIBA game.
@@ -240,8 +236,6 @@ Lineup card (the players who were registered for the game) of both teams of one 
 ```python
 fiba_gamepage_lineup(comp=208182, game_id=100720)
 ```
-
-_Last validated n/a._
 
 ## fiba_gamepage_pbp
 
@@ -305,8 +299,6 @@ Play-by-play of one FIBA game: every action with period, clock, running score, a
 fiba_gamepage_pbp(comp=208182, game_id=100720)
 ```
 
-_Last validated n/a._
-
 ## fiba_gamepage_period_scores
 
 Points by period of both teams of one FIBA game.
@@ -350,8 +342,6 @@ Points by period of both teams of one FIBA game.
 ```python
 fiba_gamepage_period_scores(comp=208182, game_id=100720)
 ```
-
-_Last validated n/a._
 
 ## fiba_gamepage_shots
 
@@ -407,5 +397,3 @@ Shot attempts of one FIBA game (two- and three-pointers and free throws) with th
 ```python
 fiba_gamepage_shots(comp=208182, game_id=100720)
 ```
-
-_Last validated n/a._

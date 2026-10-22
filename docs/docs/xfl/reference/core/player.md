@@ -47,8 +47,6 @@ ESPN endpoint.
 espn_xfl_players_index()
 ```
 
-_Last validated n/a._
-
 ## espn_xfl_player_core
 
 ESPN endpoint.
@@ -138,8 +136,6 @@ ESPN endpoint.
 espn_xfl_player_core(athlete_id='4239')
 ```
 
-_Last validated n/a._
-
 ## espn_xfl_player_career_stats
 
 ESPN endpoint.
@@ -174,8 +170,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 ```python
 espn_xfl_player_career_stats(athlete_id='4239')
 ```
-
-_Last validated n/a._
 
 ## espn_xfl_player_statisticslog
 
@@ -216,8 +210,6 @@ ESPN endpoint.
 espn_xfl_player_statisticslog(athlete_id='4239')
 ```
 
-_Last validated n/a._
-
 ## espn_xfl_player_eventlog
 
 ESPN endpoint.
@@ -251,8 +243,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_xfl_player_eventlog(athlete_id='4239')
 ```
-
-_Last validated n/a._
 
 ## espn_xfl_player_contracts
 
@@ -292,8 +282,6 @@ ESPN endpoint.
 espn_xfl_player_contracts(athlete_id='4239')
 ```
 
-_Last validated n/a._
-
 ## espn_xfl_player_awards
 
 ESPN endpoint.
@@ -327,8 +315,6 @@ No returns table is published for this endpoint: no capture: the page holds zero
 ```python
 espn_xfl_player_awards(athlete_id='4239')
 ```
-
-_Last validated n/a._
 
 ## espn_xfl_player_seasons
 
@@ -368,8 +354,6 @@ ESPN endpoint.
 espn_xfl_player_seasons(athlete_id='4239')
 ```
 
-_Last validated n/a._
-
 ## espn_xfl_player_records
 
 ESPN endpoint.
@@ -403,8 +387,6 @@ No returns table is published for this endpoint: no capture: the page holds zero
 ```python
 espn_xfl_player_records(athlete_id='4239')
 ```
-
-_Last validated n/a._
 
 ## espn_xfl_player_injuries
 
@@ -444,8 +426,6 @@ ESPN endpoint.
 espn_xfl_player_injuries(athlete_id='4239')
 ```
 
-_Last validated n/a._
-
 ## espn_xfl_player_notes
 
 ESPN endpoint.
@@ -479,8 +459,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_xfl_player_notes(athlete_id='4239')
 ```
-
-_Last validated n/a._
 
 ## espn_xfl_player_vs_player
 
@@ -516,5 +494,3 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_xfl_player_vs_player(athlete_id='4239', opp_id='5')
 ```
-
-_Last validated n/a._

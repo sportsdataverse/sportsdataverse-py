@@ -65,8 +65,6 @@ ESPN endpoint.
 espn_nbasl_ca_player_overview(athlete_id='4239')
 ```
 
-_Last validated n/a._
-
 ## espn_nbasl_ca_player_stats
 
 ESPN endpoint.
@@ -109,8 +107,6 @@ ESPN endpoint.
 ```python
 espn_nbasl_ca_player_stats(athlete_id='4239')
 ```
-
-_Last validated n/a._
 
 ## espn_nbasl_ca_player_gamelog
 
@@ -174,8 +170,6 @@ ESPN endpoint.
 espn_nbasl_ca_player_gamelog(athlete_id='4239')
 ```
 
-_Last validated n/a._
-
 ## espn_nbasl_ca_player_splits
 
 ESPN endpoint.
@@ -218,8 +212,6 @@ ESPN endpoint.
 ```python
 espn_nbasl_ca_player_splits(athlete_id='4239')
 ```
-
-_Last validated n/a._
 
 ## espn_nbasl_ca_leaders
 
@@ -294,5 +286,3 @@ ESPN endpoint.
 ```python
 espn_nbasl_ca_leaders()
 ```
-
-_Last validated n/a._

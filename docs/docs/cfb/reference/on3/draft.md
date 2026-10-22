@@ -44,8 +44,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 on3_draft_organization_rank()
 ```
 
-_Last validated n/a._
-
 ## on3_draft_pick_organization_rank
 
 GET /rdb/v1/draft-pick-organization-rank
@@ -83,8 +81,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 on3_draft_pick_organization_rank()
 ```
 
-_Last validated n/a._
-
 ## on3_drafts
 
 GET /rdb/v1/drafts
@@ -120,8 +116,6 @@ No returns table is published for this endpoint: its committed capture has 0 row
 ```python
 on3_drafts()
 ```
-
-_Last validated n/a._
 
 ## on3_drafts_by_stars
 
@@ -172,8 +166,6 @@ GET /rdb/v1/drafts-by-stars
 on3_drafts_by_stars()
 ```
 
-_Last validated n/a._
-
 ## on3_drafts_by_stars_summary
 
 GET /rdb/v1/drafts-by-stars-summary
@@ -209,8 +201,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 on3_drafts_by_stars_summary()
 ```
 
-_Last validated n/a._
-
 ## on3_drafts_players
 
 GET /rdb/v1/drafts/{orgKey}/players
@@ -245,5 +235,3 @@ No returns table is published for this endpoint: no committed capture with rows,
 ```python
 on3_drafts_players(org_key=1867)
 ```
-
-_Last validated n/a._

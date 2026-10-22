@@ -54,8 +54,6 @@ Season leaders in points: the server's top 20 by season total and by per-game av
 tbf_leaders_points(competition='bsl', season=2027)
 ```
 
-_Last validated n/a._
-
 ## tbf_leaders_assists
 
 Season leaders in assists: the server's top 20 by season total and by per-game average.
@@ -102,8 +100,6 @@ Season leaders in assists: the server's top 20 by season total and by per-game a
 ```python
 tbf_leaders_assists(competition='bsl', season=2027)
 ```
-
-_Last validated n/a._
 
 ## tbf_leaders_blocks
 
@@ -152,8 +148,6 @@ Season leaders in blocks: the server's top 20 by season total and by per-game av
 tbf_leaders_blocks(competition='bsl', season=2027)
 ```
 
-_Last validated n/a._
-
 ## tbf_leaders_rebounds
 
 Season leaders in rebounds: the server's top 20 by season total and by per-game average.
@@ -200,8 +194,6 @@ Season leaders in rebounds: the server's top 20 by season total and by per-game 
 ```python
 tbf_leaders_rebounds(competition='bsl', season=2027)
 ```
-
-_Last validated n/a._
 
 ## tbf_leaders_steals
 
@@ -250,8 +242,6 @@ Season leaders in steals: the server's top 20 by season total and by per-game av
 tbf_leaders_steals(competition='bsl', season=2027)
 ```
 
-_Last validated n/a._
-
 ## tbf_leaders_minutes
 
 Season leaders in minutes played: the server's top 20 by season total and by per-game average.
@@ -298,8 +288,6 @@ Season leaders in minutes played: the server's top 20 by season total and by per
 ```python
 tbf_leaders_minutes(competition='bsl', season=2027)
 ```
-
-_Last validated n/a._
 
 ## tbf_leaders_threes
 
@@ -348,8 +336,6 @@ Season leaders in three-point field goals made: the server's top 20 by season to
 tbf_leaders_threes(competition='bsl', season=2027)
 ```
 
-_Last validated n/a._
-
 ## tbf_leaders_turnovers
 
 Season leaders in turnovers: the server's top 20 by season total and by per-game average.
@@ -397,8 +383,6 @@ Season leaders in turnovers: the server's top 20 by season total and by per-game
 tbf_leaders_turnovers(competition='bsl', season=2027)
 ```
 
-_Last validated n/a._
-
 ## tbf_leaders_efficiency
 
 Season leaders in efficiency rating: the server's top 20 by season total and by per-game average.
@@ -445,5 +429,3 @@ Season leaders in efficiency rating: the server's top 20 by season total and by 
 ```python
 tbf_leaders_efficiency(competition='bsl', season=2027)
 ```
-
-_Last validated n/a._

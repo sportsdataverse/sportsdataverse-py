@@ -90,8 +90,6 @@ UEFA competitions by id (Champions League 1, Europa League 3, Conference League 
 uefa_competitions(competition_ids='1,3,2019')
 ```
 
-_Last validated n/a._
-
 ## uefa_livescore
 
 Matches live right now across UEFA competitions.
@@ -129,8 +127,6 @@ Matches live right now across UEFA competitions.
 ```python
 uefa_livescore()
 ```
-
-_Last validated n/a._
 
 ## uefa_matches
 
@@ -777,8 +773,6 @@ Matches of a UEFA competition season.
 uefa_matches(competition_id='1', limit='3', offset='0', season_year='2026')
 ```
 
-_Last validated n/a._
-
 ## uefa_players
 
 Players registered in a UEFA competition season.
@@ -897,8 +891,6 @@ Players registered in a UEFA competition season.
 ```python
 uefa_players(competition_id='1', limit='3', offset='0', season_year='2026')
 ```
-
-_Last validated n/a._
 
 ## uefa_standings
 
@@ -1020,8 +1012,6 @@ Group / league-phase standings of a UEFA competition season.
 uefa_standings(competition_id='1', season_year='2026')
 ```
 
-_Last validated n/a._
-
 ## uefa_team_statistics
 
 Per-team match statistics of one UEFA match (one row per team).
@@ -1059,8 +1049,6 @@ Per-team match statistics of one UEFA match (one row per team).
 ```python
 uefa_team_statistics(match_id='2047742')
 ```
-
-_Last validated n/a._
 
 ## uefa_teams
 
@@ -1160,5 +1148,3 @@ Teams entered in a UEFA competition season.
 ```python
 uefa_teams(competition_id='1', limit='3', offset='0', season_year='2026')
 ```
-
-_Last validated n/a._

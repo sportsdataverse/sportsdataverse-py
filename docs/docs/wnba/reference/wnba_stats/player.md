@@ -57,8 +57,6 @@ GET /stats/playerawards
 wnba_stats_playerawards()
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_playercareerbycollegerollup
 
 GET /stats/playercareerbycollegerollup
@@ -210,8 +208,6 @@ GET /stats/playercareerbycollegerollup
 ```python
 wnba_stats_playercareerbycollegerollup(league_id='10', season_nullable='2024')
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_playercareerstats
 
@@ -649,8 +645,6 @@ GET /stats/playercareerstats
 wnba_stats_playercareerstats(league_id='10')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_playercompare
 
 GET /stats/playercompare
@@ -766,8 +760,6 @@ GET /stats/playercompare
 wnba_stats_playercompare(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_playerestimatedmetrics
 
 GET /stats/playerestimatedmetrics
@@ -837,8 +829,6 @@ GET /stats/playerestimatedmetrics
 ```python
 wnba_stats_playerestimatedmetrics(league_id='10', season='2024')
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_playerfantasyprofile
 
@@ -1067,8 +1057,6 @@ GET /stats/playerfantasyprofile
 wnba_stats_playerfantasyprofile(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_playerfantasyprofilebargraph
 
 GET /stats/playerfantasyprofilebargraph
@@ -1145,8 +1133,6 @@ GET /stats/playerfantasyprofilebargraph
 wnba_stats_playerfantasyprofilebargraph(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_playergamelog
 
 GET /stats/playergamelog
@@ -1214,5 +1200,3 @@ GET /stats/playergamelog
 ```python
 wnba_stats_playergamelog(league_id='10', season='2024')
 ```
-
-_Last validated n/a._
