@@ -1899,8 +1899,8 @@
   group: nfl-td-flags
   finding: R840-2
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: 'pl.col("type.text").shift(-1).over("game_id").str.contains(r"^(?:Extra Point|Two Point|Two-Point)")'
-  mutant: 'pl.col("type.text").shift(-1).over("game_id").is_not_null()'
+  snippet: 'try_follows = next_play.str.contains(r"^(?:Extra Point|Two Point|Two-Point)").fill_null(False)'
+  mutant: 'try_follows = next_play.is_not_null()'
   test: tests/nfl/test_nfl_whole_game_oracle.py::test_td_flags_residual_row_matches_nflverse[291129016-2911290162862]
   expected: kill
   note: >-
@@ -1911,7 +1911,7 @@
   group: nfl-td-flags
   finding: R840-1
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '& ((pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM) | ~try_follows)'
+  snippet: '& ((pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM) | (next_play.is_not_null() & ~try_follows))'
   mutant: '& pl.lit(True)'
   test: tests/nfl/test_nfl_whole_game_oracle.py::test_td_flags_residual_row_matches_nflverse[271209034-2712090341856]
   expected: kill
@@ -3209,7 +3209,7 @@
   group: nfl-td-flags
   finding: task-2.28
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '& ((pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM) | ~try_follows)'
+  snippet: '& ((pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM) | (next_play.is_not_null() & ~try_follows))'
   mutant: '& (pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM)'
   test: tests/nfl/test_nfl_era_play_order.py -k "without_a_try"
   expected: kill
@@ -3402,3 +3402,62 @@
   note: >-
     Review #973 mutant H1: the start-team key only at half ends, the end-team key elsewhere, survived the half-end
     test and all of tests/nfl + tests/football; every punt and turnover outside a half end flips home WP twice.
+
+# --- review #975: windows, the try past a stoppage, the walk-off return, the overlay's text fallback ---------------
+- id: nfl-untyped-safety-rise-per-game
+  group: nfl-safety-flags
+  finding: R975-3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        pl.col("awayScore").shift(1).over("game_id")'
+  mutant: '        pl.col("awayScore").shift(1)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "inside_its_game"
+  expected: kill
+  note: >-
+    Unwindowed, the rise of a game's first row reads the previous game's last score: 271021019 cut before 2661 flags
+    2661 in the second game (the visitors' line; the home line mirrors it).
+
+- id: nfl-next-play-per-game
+  group: nfl-safety-flags
+  finding: R975-3
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '    return pl.when(skip).then(None).otherwise(col).backward_fill().shift(-1).over("game_id")'
+  mutant: '    return pl.when(skip).then(None).otherwise(col).backward_fill().shift(-1)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "inside_its_game"
+  expected: kill
+  note: >-
+    The shared next-real-play read (the untyped safety's free kick, the touchdown's try, the naive WP half end)
+    crosses games: 271021019 cut after 2661 reads the next game's free kick and flags 2661 again.
+
+- id: nfl-td-mistyped-return-try-past-a-stoppage
+  group: nfl-td-flags
+  finding: R975-4
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    next_play = _next_play(pl.col("type.text"), pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False))'
+  mutant: '    next_play = pl.col("type.text").shift(-1).over("game_id")'
+  test: tests/nfl/test_nfl_era_play_order.py -k "past_a_stoppage"
+  expected: kill
+  note: >-
+    Reading the very next row, a timeout filed between 261022011/1629 (an unscored punt return touchdown) and its try
+    negates the touchdown.
+
+- id: nfl-td-mistyped-return-walk-off-stands
+  group: nfl-td-flags
+  finding: R975-4
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '| (next_play.is_not_null() & ~try_follows))'
+  mutant: '| ~try_follows)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "past_a_stoppage"
+  expected: kill
+  note: A return touchdown with no next play at all (the game ends on it) loses td_play for want of a try.
+
+- id: nfl-safety-overlay-text-fallback
+  group: nfl-safety-flags
+  finding: R975-2
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '        else _lower.str.contains(r"safety")'
+  mutant: '        else pl.lit(False)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "falls_back"
+  expected: kill
+  note: >-
+    A frame whose safety column is not the Boolean flag (nflverse's Float64, or none) loses the -2 overlay:
+    291122008/3158, a scored "Safety", takes the defence-touchdown -6.92.

@@ -19,8 +19,9 @@ import pytest
 
 import sportsdataverse.nfl.nfl_fourth_down as nfl_fourth_down
 from sportsdataverse.nfl import NFLPlayProcess
+from sportsdataverse.nfl.ep_wp import calculate_epa
 from sportsdataverse.nfl.model_vars import clock_stoppage_vec
-from sportsdataverse.nfl.nfl_pbp import _kickoff_next_snap
+from sportsdataverse.nfl.nfl_pbp import _kickoff_next_snap, _touchdown_did_not_stand, _untyped_safety
 from tests.nfl._whole_game import FIX
 
 
@@ -287,6 +288,46 @@ _NOT_SAFETIES = {
 def test_one_safety_signal_alone_is_not_a_safety(path, game_id, play_id):
     row = _row(path, game_id, play_id)
     assert (row["type.text"], row["safety"]) == (_NOT_SAFETIES[(path, game_id, play_id)], False)
+
+
+def _index(df: pl.DataFrame, row_id: str) -> int:
+    return df["id"].cast(pl.Utf8).to_list().index(row_id)
+
+
+# R975-3: the untyped-safety read is windowed by game, its score rise and its next real play both. Cut 271021019 at
+# its safety into two games: 2661 opening the second has no earlier score to rise from, and 2661 closing the first has
+# no free kick after it. Unwindowed, either read crosses into the other game and flags 2661 again.
+def test_untyped_safety_read_stays_inside_its_game():
+    game = _plays(_era(271021019), 271021019)
+    i = _index(game, "2710210192661")
+    flag = game.select(s=_untyped_safety())["s"]
+    assert flag[i] and flag.sum() == 1
+    for cut in (i, i + 1):
+        two = pl.concat([game[:cut], game[cut:].with_columns(pl.col("game_id") + 1)])
+        assert two.select(s=_untyped_safety())["s"].sum() == 0, cut
+
+
+# R975-4: the try that keeps an unscored pre-2009 return touchdown is the next real play, and with no next play at all
+# (a walk-off return) ESPN's typing stands. 261022011/1629 (a punt return touchdown, its try 1662 next): a timeout
+# filed between them, or the game ending on the return, must not negate it.
+def test_pre_2009_return_touchdown_reads_its_try_past_a_stoppage():
+    game = _plays("summary_261022011_trimmed.json.gz", 261022011)
+    i = _index(game, "2610220111629")
+    timeout = game.filter(pl.col("type.text") == "Timeout").head(1)
+    assert timeout.height == 1
+    for frame in (game, pl.concat([game[: i + 1], timeout, game[i + 1 :]]), game[: i + 1]):
+        assert frame.select(s=_touchdown_did_not_stand())["s"][i] is False
+
+
+# R975-2: on a frame whose safety column is not NFLPlayProcess's Boolean flag (nflverse's is Float64) the -2 overlay
+# keys on the text. 291122008/3158 is a scored "Safety" whose text says so; without the fallback it would take the
+# defence-touchdown -6.92.
+@pytest.mark.parametrize("safety_dtype", [pl.Float64, None], ids=["float", "absent"])
+def test_safety_overlay_falls_back_to_the_text(safety_dtype):
+    game = _plays("try_endings/summary_291122008.json.gz", 291122008)
+    frame = game.drop("safety") if safety_dtype is None else game.with_columns(pl.col("safety").cast(safety_dtype))
+    out = calculate_epa(frame)
+    assert out["EP_end"][_index(out, "2911220083158")] == -2
 
 
 # Task 2.28: a safety ESPN scored and typed "Safety", but whose text never says "safety" (blank on most pre-2009 rows).

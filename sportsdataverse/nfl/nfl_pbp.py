@@ -122,7 +122,8 @@ def _touchdown_did_not_stand() -> pl.Expr:
     is blank or bare ("KickOff"), so it can name no touchdown, and ESPN types plain returns that
     way too (251030010/1409, a punt return with no score change: nflverse epa +1.33, scored as a
     touchdown -5.55; task 2.28). There a try separates them: on nfl-raw 2002-2008 a try follows
-    each of the 4 unscored return touchdowns nflverse counts and none of the 17 it does not.
+    each of the 4 unscored return touchdowns nflverse counts and none of the 17 it does not. With no
+    next play at all (a walk-off return) ESPN's typing stands.
 
     On a row ESPN scored, the "No Play" belongs to the try or to the ruling a reversal INTO the
     touchdown overturned (2812140120518, 4005542932688), and the NFL text has no CFB "clock" tail to
@@ -132,17 +133,17 @@ def _touchdown_did_not_stand() -> pl.Expr:
     "nullified" rows 2006-24 only that one has a try next; 2911290162862 (nflverse 0) does not. A
     reversal negates when ESPN types the row a Safety: the touchdown was reversed into one
     (2911260083341, R808-3). ``__add_play_type_flags`` stores the result once as
-    ``_td_did_not_stand`` (the next row is read within ``game_id``) for td_play, pass_td and rush_td.
+    ``_td_did_not_stand`` for td_play, pass_td and rush_td. The try is the next real play of the game
+    (``ep_wp._next_play``): a timeout or period row filed between a touchdown and its try is skipped.
     """
     text = pl.col("text")
-    try_follows = (
-        pl.col("type.text").shift(-1).over("game_id").str.contains(r"^(?:Extra Point|Two Point|Two-Point)")
-    ).fill_null(False)
+    next_play = _next_play(pl.col("type.text"), pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False))
+    try_follows = next_play.str.contains(r"^(?:Extra Point|Two Point|Two-Point)").fill_null(False)
     unscored = _PENALTY_NEGATED_TEXT + "|reversed"
     mistyped_return = (
         pl.col("type.text").is_in(["Kickoff Return Touchdown", "Punt Return Touchdown"])
         & ~text.str.contains("(?i)touchdown|for a TD").fill_null(False)  # pre-2009 kick text is often null
-        & ((pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM) | ~try_follows)
+        & ((pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM) | (next_play.is_not_null() & ~try_follows))
     )
     return (
         pl.when(pl.col("scoringPlay") == True)
@@ -162,7 +163,7 @@ def _untyped_safety() -> pl.Expr:
     (nflverse safety 1, epa 0.62; scored from its end state, 4.29). The scoring overlay keys on a
     safety's type, and the score repair takes an unscored row's 2 points for a feed error. The game
     says what happened: the defence's score rises by 2 on the row, and the next real play of the
-    half is a free kick by the team that had the ball, from its own 20 (``start.yardsToEndzone`` 80;
+    game is a free kick by the team that had the ball, from its own 20 (``start.yardsToEndzone`` 80;
     a kickoff row's ``start.team`` is the kicker). On nfl-raw 2002-2025 both together take 30 rows,
     every one a nflverse safety: 11 of the 15 ESPN left unscored and 19 it scored as a Sack, Blocked
     Punt, Fumble, Rush or Penalty (271223008/738, a blocked punt: epa 2.50, nflverse -0.01). Each
@@ -181,13 +182,16 @@ def _untyped_safety() -> pl.Expr:
     # ESPN types one free kick "Safety", unscored (271223008/764, after the punt blocked for a safety at 738)
     free_kick = pl.col("type.text").is_in([*kickoff_vec, "Safety"])
     kick = pl.struct(kick=free_kick, team=pl.col("start.team.id"), y2e=pl.col("start.yardsToEndzone"))
-    nxt = pl.when(~stop).then(kick).backward_fill().shift(-1).over("game_id", "half").struct
+    nxt = _next_play(kick, stop).struct  # the next real play of the game
     return (
+        # ponytail: the next three guards change no row of nfl-raw 2002-2025 (review #975); they keep a stoppage
+        # row with a booked score, a scored or kick row, and another team's free kick from reading as a safety
         ~stop
         & ~pl.col("type.text").is_in([*kickoff_vec, *scores_vec]).fill_null(False)
+        & (nxt.field("team") == pl.col("start.pos_team.id"))
+        # a safety is worth exactly 2; ``>= 2`` changes no row either, but a 3+ rise there is a misbooked score
         & (rise == 2)
         & (nxt.field("kick") == True)
-        & (nxt.field("team") == pl.col("start.pos_team.id"))
         & (nxt.field("y2e") == 80)
     ).fill_null(False)
 
