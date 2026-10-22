@@ -65,6 +65,17 @@ _SF_CONTRACT_SCHEMA: dict[str, pl.PolarsDataType] = {
 assert set(_SF_CONTRACT_SCHEMA) == set(NFLVERSE_FRAME_CONTRACT)
 
 
+def _check_scorable(league: str) -> None:
+    """Validate ``league`` and refuse the ones no EP/WP pipeline ships for (CFL)."""
+    get_sf_constants(league)  # validates league; raises ValueError on unknown
+    if league == "cfl":
+        raise ValueError(
+            "league='cfl' is not supported: no CFL EP/WP pipeline ships. The CFL plays 3 downs on a "
+            "110-yard field, and the NFL boosters these functions score with only cover yardline_100 1-99; "
+            "get_sf_constants('cfl') is descriptive metadata only."
+        )
+
+
 def _empty_sf_frame() -> pl.DataFrame:
     return pl.DataFrame(schema=_SF_CONTRACT_SCHEMA)
 
@@ -144,8 +155,9 @@ def build_spring_football_pbp(summary: dict, *, league: str) -> pl.DataFrame:
 
     Args:
         summary: Raw dict from ``espn_{league}_summary(return_parsed=False)``.
-        league: ``"ufl"``, ``"xfl"``, or ``"cfl"`` -- validated against
+        league: ``"ufl"`` or ``"xfl"`` -- validated against
             :func:`~sportsdataverse.football.spring_football_constants.get_sf_constants`.
+            ``"cfl"`` is refused: no CFL pipeline ships.
 
     Returns:
         One row per play with every ``NFLVERSE_FRAME_CONTRACT`` column
@@ -154,7 +166,7 @@ def build_spring_football_pbp(summary: dict, *, league: str) -> pl.DataFrame:
         docstring).
 
     Raises:
-        ValueError: ``league`` is not a recognized spring-football league.
+        ValueError: ``league`` is unknown, or is ``"cfl"`` (no CFL pipeline ships).
 
     Example:
         Quick start::
@@ -166,7 +178,7 @@ def build_spring_football_pbp(summary: dict, *, league: str) -> pl.DataFrame:
             pbp = build_spring_football_pbp(summary, league="xfl")
             print(pbp.select("down", "ydstogo", "yardline_100").head())
     """
-    get_sf_constants(league)  # validates league; raises ValueError on unknown
+    _check_scorable(league)
 
     raw = parse_summary_drive_plays(summary)
     if raw.height == 0:
@@ -340,8 +352,8 @@ def enrich_spring_football_pbp(
 
     Args:
         pbp: Output of :func:`build_spring_football_pbp`.
-        league: ``"ufl"``, ``"xfl"``, ``"cfl"``, or ``"nfl_parity"`` --
-            validated via
+        league: ``"ufl"``, ``"xfl"``, or ``"nfl_parity"`` (``"cfl"`` is
+            refused: no CFL pipeline ships) -- validated via
             :func:`~sportsdataverse.football.spring_football_constants.get_sf_constants`.
             The constants of the frame's season (first row's ``season``) are
             threaded into scoring; ``"nfl_parity"`` takes the plain NFL path.
@@ -375,7 +387,7 @@ def enrich_spring_football_pbp(
         would drop 15 columns and break the nfl_parity column-set equality.
 
     Raises:
-        ValueError: ``league`` is not a recognized spring-football league.
+        ValueError: ``league`` is unknown, or is ``"cfl"`` (no CFL pipeline ships).
 
     Example:
         Quick start::
@@ -388,7 +400,7 @@ def enrich_spring_football_pbp(
             scored = enrich_spring_football_pbp(pbp, league="xfl")
             print(scored.select("play_id", "epa", "wp").head())
     """
-    get_sf_constants(league)  # validates league; raises ValueError on unknown
+    _check_scorable(league)
 
     if pbp.height == 0:
         return pbp.to_pandas() if return_as_pandas else pbp

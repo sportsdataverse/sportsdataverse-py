@@ -1021,7 +1021,7 @@ Shooter-talent shrinkage `k` for a league.
 
 **Returns**
 
-The pseudo-attempt shrinkage constant (fitted split-half).
+The pseudo-attempt shrinkage constant. `"00"` / `"20"` are fitted split-half (`tools/fit_nba_shot_shrinkage_k.py`); `"10"` is a seeded placeholder, not a fit.
 
 **Raises**
 

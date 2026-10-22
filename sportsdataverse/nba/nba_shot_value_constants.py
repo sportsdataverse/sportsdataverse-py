@@ -143,10 +143,11 @@ COURT_ERAS: "dict[str, dict[int, CourtGeometry]]" = {
     },
 }
 
-# ``"00"`` fitted split-half on the 2022-23 fixture
-# (dev/nba_shot_value/fit_shrinkage_k.py, 2026-07-08): cross-half reliability
-# 0.699 raw → 0.707 shrunk. G-League reuses it; ``"10"`` is the Phase-5
-# women's fit (seeded until captured).
+# ``"00"`` fitted split-half on the committed 2022-23 fixture
+# (tools/fit_nba_shot_shrinkage_k.py, 2026-07-08): cross-half reliability
+# 0.699 raw → 0.707 shrunk. G-League reuses it. ``"10"`` (WNBA) is NOT fitted:
+# 60.0 is a SEEDED placeholder, kept until a WNBA shot fixture is captured and
+# the split-half fit is run on it.
 TALENT_SHRINKAGE_K: "dict[str, float]" = {"00": 70.1, "20": 70.1, "10": 60.0}
 
 # stats.nba.com ``shot_zone_basic`` → canonical collapsed zone.
@@ -203,7 +204,9 @@ def get_shrinkage_k(league_id: str) -> float:
         league_id: ``"00"`` NBA, ``"10"`` WNBA, ``"20"`` G-League.
 
     Returns:
-        The pseudo-attempt shrinkage constant (fitted split-half).
+        The pseudo-attempt shrinkage constant. ``"00"`` / ``"20"`` are fitted
+        split-half (``tools/fit_nba_shot_shrinkage_k.py``); ``"10"`` is a seeded
+        placeholder, not a fit.
 
     Raises:
         ValueError: Unknown ``league_id``.

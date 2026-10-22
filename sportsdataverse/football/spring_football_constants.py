@@ -38,7 +38,9 @@ ones (``get_sf_constants(league, season=)`` resolves them):
 
 CFL differs structurally (3 downs, 110-yard field, rouge scoring) and is
 handled separately (Phase 6, conditional refit-or-defer) -- its entry here
-is descriptive metadata only; no CFL model/pipeline ships from this module.
+is descriptive metadata only; no CFL model/pipeline ships from this module,
+and ``build_spring_football_pbp`` / ``enrich_spring_football_pbp`` refuse
+``league="cfl"`` with a ``ValueError``.
 """
 
 from __future__ import annotations

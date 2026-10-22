@@ -27,11 +27,14 @@ from sportsdataverse._common.metrics import (
 class RatingsConfig:
     """Knobs for the opponent-adjusted EPA ridge (model 1).
 
-    ``ridge_lambda`` is fitted by ``dev/nfl_prediction/fit_ridge_lambda.py``
-    (2023 out-of-sample next-week agreement); the competitive-``wp`` window
-    drops garbage-time plays before the ridge.
+    ``ridge_lambda`` was fitted by ``dev/nfl_prediction/fit_ridge_lambda.py``
+    (2023 out-of-sample next-week agreement); that script is lost (never
+    committed), so the fit is recorded but not reproducible. The
+    competitive-``wp`` window drops garbage-time plays before the ridge.
     """
 
+    # LOST SCRIPT: dev/nfl_prediction/fit_ridge_lambda.py was never committed to any branch and is not on disk,
+    # so this value cannot be re-derived from the repository (docs/docs/architecture/model-lineage.md).
     # Fitted by dev/nfl_prediction/fit_ridge_lambda.py: grid {25,50,100,200,400,800},
     # mean spearman(as-of adj_net diff, realized margin) over 2023 weeks 6-18.
     # Observed surface is nearly flat (0.3204-0.3297); argmax 25 -> 0.3297.
@@ -45,8 +48,9 @@ class PredictConfig:
     """Closed-form pregame constants (model 2), one row per era.
 
     Seed values are published references (NFL modern HFA ~1.8 pts, margin SD
-    ~13.5); the real numbers are fitted by ``dev/nfl_prediction/fit_pregame.py``
-    on the committed 2023 backtest fixtures and pasted here.
+    ~13.5); the real numbers were fitted by ``dev/nfl_prediction/fit_pregame.py``
+    on the committed 2023 backtest fixtures and pasted here. That script is
+    lost (never committed), so the fit is recorded but not reproducible.
     """
 
     hfa: float
@@ -63,8 +67,9 @@ class PropConfig:
     ``shrink_*`` are the EB kappas per stat family; ``pos_priors`` maps
     position -> stat -> league prior; ``proj_sds`` maps projected stat ->
     residual standard deviation (used for ``p_over``). Seeds are league
-    per-game averages; fitted values come from
-    ``dev/nfl_prediction/fit_props.py``.
+    per-game averages; the fitted values were produced by
+    ``dev/nfl_prediction/fit_props.py``, a script that is lost (never
+    committed), so they are recorded but not reproducible.
     """
 
     shrink_pass: float
@@ -75,6 +80,8 @@ class PropConfig:
 
 
 NFL_CONSTANTS: Dict[str, PredictConfig] = {
+    # LOST SCRIPT: dev/nfl_prediction/fit_pregame.py was never committed to any branch and is not on disk,
+    # so this value cannot be re-derived from the repository (docs/docs/architecture/model-lineage.md).
     # Fitted by dev/nfl_prediction/fit_pregame.py on the 2023 as-of backtest
     # (weeks 5-18, 208 games, committed fixtures): OLS margin ~ points_per_net
     # * net_diff + hfa * (1 - neutral); margin_sd = residual std; OLS total ~
@@ -89,6 +96,8 @@ NFL_CONSTANTS: Dict[str, PredictConfig] = {
 }
 
 PROP_CONSTANTS: Dict[str, PropConfig] = {
+    # LOST SCRIPT: dev/nfl_prediction/fit_props.py was never committed to any branch and is not on disk,
+    # so this value cannot be re-derived from the repository (docs/docs/architecture/model-lineage.md).
     # Fitted by dev/nfl_prediction/fit_props.py on player_stats_2023.parquet:
     # priors = 2023 league per-game / per-opportunity means by position;
     # kappas = argmin of as-of next-week MAE over the plan grid {2,3,4,5,6,8,10}
