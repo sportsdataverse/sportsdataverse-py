@@ -82,6 +82,7 @@ from sportsdataverse.nfl.ep_wp import (
     _espn_ep_features,
     _espn_wp_features,
     _load_model as _ep_wp_load_model,
+    _next_play,
     calculate_epa,
     calculate_wpa,
     calculate_xpass,
@@ -4534,9 +4535,17 @@ class NFLPlayProcess(object):
         """
         if "wp" not in play_df.columns:
             return play_df
-        lead_wp = pl.col("wp").shift(-1)
         last_play = pl.col("game_play_number") == pl.col("game_play_number").max()
         completed = pl.col("status_type_completed") == True  # noqa: E712
+        # nflfastR home_wpa = lead(home_wp) - home_wp, marker rows filled up from the next play: every
+        # real play hands over to the next real play past any clock stoppage, flipped when that play is
+        # the other team's (calculate_wpa's half-end rule, 2.26). Read from the next ROW through this
+        # play's own possession change, a half-ending kneel took the other team's kickoff unflipped, and
+        # a play before a Timeout read the Timeout's own wp, flipped when ESPN filed it to the other
+        # team (2.27). Where no Timeout follows, change_of_pos_team is exactly "the next play is the
+        # other team's", so those rows do not move.
+        team, stoppage = pl.col("start.pos_team.id"), pl.col("type.text").is_in(clock_stoppage_vec)
+        naive_next_team, naive_next_wb = _next_play(team, stoppage), _next_play(pl.col("wp_before_naive"), stoppage)
         return (
             play_df.with_columns(wp_before_naive=pl.col("wp").cast(pl.Float64))
             .with_columns(
@@ -4546,9 +4555,9 @@ class NFLPlayProcess(object):
                 .then(1.0)
                 .when(completed.and_(last_play).and_(pl.col("pos_score_diff_end") < 0))
                 .then(0.0)
-                .when(pl.col("change_of_pos_team") == True)  # noqa: E712
-                .then(1.0 - lead_wp)
-                .otherwise(lead_wp)
+                .when(team != naive_next_team)
+                .then(1.0 - naive_next_wb)
+                .otherwise(naive_next_wb)
                 .fill_null(pl.col("wp_before_naive")),
             )
             .with_columns(
@@ -4558,7 +4567,9 @@ class NFLPlayProcess(object):
                 home_wp_before_naive=pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
                 .then(pl.col("wp_before_naive"))
                 .otherwise(1.0 - pl.col("wp_before_naive")),
-                home_wp_after_naive=pl.when(pl.col("end.pos_team.id") == pl.col("homeTeamId"))
+                # START team, as calculate_wpa: every wp_after_naive branch is in that team's frame
+                # (keyed on the end team, a turnover or punt flipped home WP twice, 2.27)
+                home_wp_after_naive=pl.when(team == pl.col("homeTeamId"))
                 .then(pl.col("wp_after_naive"))
                 .otherwise(1.0 - pl.col("wp_after_naive")),
                 lead_wp_before_naive=pl.col("wp_before_naive").shift(-1),
