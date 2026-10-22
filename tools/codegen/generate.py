@@ -1213,6 +1213,28 @@ def _schema_doc(schema_name: str | None, league: str | None = None) -> dict:
     return yaml.safe_load(p.read_text(encoding="utf-8")) or {}
 
 
+def _documented_table(ep: spec.Endpoint, league_key: str) -> str:
+    """The returns table an empty parse of ``ep`` carries in ``league_key``'s wrapper (task 5.1, R978-1).
+
+    The table the league's reference page shows (``_schema_doc``: ``<schema>/<league>`` first, then
+    ``<schema>``), passed as ``documented_table=`` to a parser that takes one (``_documented_empty``, or a
+    summary dispatcher). Empty when the parser takes none or the table has no columns."""
+    import importlib
+    import inspect
+
+    modules = ["sportsdataverse._common_espn_parsers", *_SPORT_PARSER_MODULE.values()]
+    found = (getattr(importlib.import_module(m), ep.parser or "", None) for m in modules)
+    fn = next((f for f in found if f is not None), None)
+    takes = fn is not None and (
+        getattr(fn, "__documented_empty__", None) or "documented_table" in inspect.signature(fn).parameters
+    )
+    doc = _schema_doc(ep.returns_schema, league_key)
+    if not (takes and (doc.get("columns") or any(f.get("columns") for f in doc.get("frames") or []))):
+        return ""
+    per_league = ROOT / "tools" / "codegen" / "schemas" / str(ep.returns_schema) / f"{league_key}.yaml"
+    return f"{ep.returns_schema}/{league_key}" if per_league.exists() else str(ep.returns_schema)
+
+
 @functools.lru_cache(maxsize=None)
 def _return_table(schema_name: str | None, league: str | None = None) -> str:
     """Markdown ``@return`` table(s) for a ``returns_schema`` (resolved by ``_schema_doc``).
@@ -1407,6 +1429,7 @@ class _EndpointView:
         self.return_table = _return_table(ep.returns_schema, schema_key)
         schema_doc = _schema_doc(ep.returns_schema, schema_key)
         self.return_frames = schema_doc.get("kind") == "frames"
+        self.documented_table = "" if flat else _documented_table(ep, schema_key)
         self.returns_dict = _returns_dict(schema_doc)
         # The parsed return the signature names follows the docstring: a dict of frames when the
         # docstring says one (a ``parsed_doc`` or a dict-of-frames schema), else one frame (R858-4).
@@ -2176,6 +2199,18 @@ def _empty_dtype(label: str) -> str:
     return source(_empty_polars_dtype(label))
 
 
+def _schema_yaml(path: str) -> dict:
+    return yaml.safe_load((ENDPOINTS.parent / "schemas" / f"{path}.yaml").read_text(encoding="utf-8")) or {}
+
+
+def _schema_kind(path: str) -> str:
+    return str(_schema_yaml(path).get("kind") or "")
+
+
+def _schema_frames(path: str) -> list[dict]:
+    return list(_schema_yaml(path).get("frames") or [])
+
+
 def _documented_columns(name: str) -> list[dict]:
     """The columns of a returns table named ``<path under schemas/>[:<frames section or loader>]``."""
     path, _, key = name.partition(":")
@@ -2187,17 +2222,45 @@ def _documented_columns(name: str) -> list[dict]:
     return doc.get("columns") or []
 
 
+def _league_documented_tables() -> set[str]:
+    """Every ``documented_table`` a league wrapper can pass (R978-1): the scope rules of
+    :func:`_espn_league_views` without building the views (a superset is harmless; a table is only data)."""
+    params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
+    apis = [spec.load_espn_api(ENDPOINTS / f"{a}.yaml", params) for a in ESPN_APIS]
+    out: set[str] = set()
+    for lg in spec.load_leagues(ENDPOINTS / "leagues.yaml").leagues:
+        overrides = _SPORT_PARSER_OVERRIDES.get(lg.sport, {})
+        for api in apis:
+            for ep in api.endpoints:
+                if ep.scope not in lg.scopes or lg.league in ep.exclude_leagues:
+                    continue
+                if ep.include_prefixes and lg.prefix not in ep.include_prefixes:
+                    continue
+                if ep.short in overrides:  # the sport parser documents the sport's table, as in the views
+                    out.add(_documented_table(dataclasses.replace(ep, parser=overrides[ep.short]), lg.sport))
+                else:
+                    out.add(_documented_table(ep, lg.prefix))
+    out.discard("")
+    return out
+
+
 def render_returns_schemas() -> str:
     """``sportsdataverse/_returns_schemas.py``: every returns table an empty result is built from (task 5.1).
 
     Holds each generated loader's ``loader_schemas.yaml`` entry plus every name a hand-written module passes
-    to ``_empty_from_schema`` / ``_documented_empty`` (found by scanning the package), so the wheel carries
-    the tables ``tools/`` keeps out of it."""
+    to ``_empty_from_schema`` / ``_documented_empty`` (found by scanning the package) and every league
+    wrapper's ``documented_table`` (each section of a ``frames`` table), so the wheel carries the tables
+    ``tools/`` keeps out of it."""
     names = {f"loader_schemas:{ld.fn}" for ld in _releases_cfg().loaders if ld.league in _GENERATED_LOADER_LEAGUES}
     names &= {f"loader_schemas:{fn}" for fn in _loader_schemas()}
     for py in sorted(LIVE.rglob("*.py")):
-        if py.name != "_returns_schemas.py":
+        if py.name != "_returns_schemas.py" and not py.name.endswith("_espn_ext.py"):
             names.update(_EMPTY_SCHEMA_CALL.findall(py.read_text(encoding="utf-8")))
+    names.update(_league_documented_tables())
+    for name in [n for n in names if ":" not in n and _schema_kind(n) == "frames"]:
+        # a frames table is read one section at a time (``summary/mbb:plays``)
+        names.remove(name)
+        names.update(f"{name}:{f['section']}" for f in _schema_frames(name))
     lines = [
         "# GENERATED by tools/codegen/generate.py -- DO NOT EDIT.",
         "# Source: tools/codegen/schemas/** (the returns tables)",

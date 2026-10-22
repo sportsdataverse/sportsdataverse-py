@@ -6714,9 +6714,9 @@
   group: dtype-contract-5-1
   finding: A-M12
   file: sportsdataverse/_codegen_runtime.py
-  snippet: '            if isinstance(out, pl.DataFrame) and out.width == 0:'
-  mutant: '            if False:'
-  test: tests/test_espn_universal_parsers.py -k "empty_schema_quiet_scoreboard"
+  snippet: '            return _empty_from_schema(table, return_as_pandas=not isinstance(out, pl.DataFrame), arrow=arrow)'
+  mutant: '            return out'
+  test: tests/test_espn_universal_parsers.py -k "empty_schema_quiet_scoreboard_day_keeps_each"
   expected: kill
   note: >-
     Without the swap a quiet scoreboard day is a (0, 0) frame again and `pl.col("home_id")` raises
@@ -6738,8 +6738,8 @@
   group: dtype-contract-5-1
   finding: MD-3
   file: sportsdataverse/nba/nba_loaders_extra.py
-  snippet: '@_documented_empty("autodoc/nba/load_nba_stats_synergy")'
-  mutant: '# @_documented_empty("autodoc/nba/load_nba_stats_synergy")'
+  snippet: '@_documented_empty("autodoc/nba/load_nba_stats_synergy", arrow=True)'
+  mutant: '# @_documented_empty("autodoc/nba/load_nba_stats_synergy", arrow=True)'
   test: tests/nba/test_nba_stats_multifile_loaders.py -k "empty_schema and synergy"
   expected: kill
   note: load_nba_stats_synergy with no published season returns (0, 0) again.
@@ -6765,3 +6765,65 @@
   note: >-
     A game with no plays falls through to literals added to the (0, 0) frame: 28 columns on polars 2.0,
     one all-null phantom row on polars 1.x.
+
+- id: league-wrapper-passes-its-own-table
+  group: dtype-contract-5-1
+  finding: A-M12
+  file: sportsdataverse/mbb/mbb_espn_ext.py
+  snippet: '        return parse_scoreboard(raw, return_as_pandas=return_as_pandas, documented_table="scoreboard/mbb")'
+  mutant: '        return parse_scoreboard(raw, return_as_pandas=return_as_pandas)'
+  test: tests/test_espn_universal_parsers.py -k "empty_schema_quiet_scoreboard_day_keeps_each"
+  expected: kill
+  note: >-
+    R978-1: without its league's table a quiet mbb day is (0, 0) again (and with the generic table it would turn
+    a season's home_rank String through diagonal_relaxed).
+
+- id: per-league-parser-without-a-table-keeps-zero-width
+  group: dtype-contract-5-1
+  finding: A-M12
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            table = documented_table or (None if _league_tables(name) else name)'
+  mutant: '            table = documented_table or name'
+  test: tests/test_espn_universal_parsers.py -k "empty_schema_hostile and parse_scoreboard-dict"
+  expected: kill
+  note: R978-1, a direct parse_scoreboard({}) would take the generic (NBA) table, whose rank columns are String.
+
+- id: documented-empty-swaps-zero-width-only
+  group: dtype-contract-5-1
+  finding: A-M12
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            if table is None or not hasattr(out, "columns") or len(out.columns):'
+  mutant: '            if table is None or not hasattr(out, "columns") or len(out):'
+  test: tests/test_espn_universal_parsers.py -k "empty_schema_zero_rows_with_columns"
+  expected: kill
+  note: R978-6, a zero-row result that already has its own columns would be replaced.
+
+- id: empty-pandas-is-arrow-backed-where-the-full-one-is
+  group: dtype-contract-5-1
+  finding: MD-3
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    return df.to_pandas(use_pyarrow_extension_array=True) if arrow else df.to_pandas()'
+  mutant: '    return df.to_pandas()'
+  test: tests/nba/test_nba_stats_multifile_loaders.py -k "empty_schema and synergy"
+  expected: kill
+  note: R978-3, an empty multi-file load would have numpy dtypes while a full one has Arrow dtypes.
+
+- id: enrich-pbp-zero-rows-with-columns-is-documented
+  group: dtype-contract-5-1
+  finding: B-GB-09
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '    df = df.select([c for c in order if c in df.columns] + [c for c in df.columns if c not in order])'
+  mutant: '    df = df'
+  test: tests/hockeytech/test_pbp_enrich.py -k "real_games_stack"
+  expected: kill
+  note: R978-4, the two payload dialects build their columns in different orders, so the leagues do not stack.
+
+- id: hockeytech-shift-end-stays-int64
+  group: dtype-contract-5-1
+  finding: B-L73
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '    df = df.with_columns(pl.col(c).cast(pl.Int64) for c in ("start_s", "end_s") if c in df.columns)'
+  mutant: '    df = df'
+  test: tests/hockeytech/test_parsers.py -k "on_the_ice"
+  expected: kill
+  note: R978-4, a shift still on the ice makes end_s Float64.
