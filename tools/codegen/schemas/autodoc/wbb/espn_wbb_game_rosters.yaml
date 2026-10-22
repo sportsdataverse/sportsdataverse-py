@@ -59,7 +59,7 @@ columns:
   type: character
   description: ''
 - name: birth_country_alternate_id
-  type: character
+  type: integer
   description: ''
 - name: birth_country_abbreviation
   type: character
@@ -89,7 +89,7 @@ columns:
   type: character
   description: ''
 - name: status_id
-  type: character
+  type: integer
   description: ''
 - name: status_name
   type: character

@@ -11,7 +11,8 @@ bodies live here once (merging the rest is task 6.1):
 * one athlete ``$ref`` that 404s drops that athlete with a warning, not the whole game (B-L5);
 * one team ``pop_cols`` list for every league (B-M30 data half, B-GB-32);
 * a team with one logo keeps it, and a logo shape the flattening cannot read warns instead of
-  silently writing ``""`` (B-GB-19).
+  silently writing ``""`` (B-GB-19);
+* every id column of the finished frame is ``Int64``, cast from the raw integer (task 5.2, B-M15).
 """
 
 from __future__ import annotations
@@ -22,7 +23,7 @@ from typing import Any
 import pandas as pd
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _download_json
+from sportsdataverse._codegen_runtime import _cast_ids_int64, _download_json
 from sportsdataverse.dl_utils import download, normalize_team_roster_columns, underscore
 from sportsdataverse.errors import NoDataError
 
@@ -87,6 +88,15 @@ def _logo_columns(teams_df: pl.DataFrame) -> pl.DataFrame:
             stacklevel=3,
         )
         return teams_df.with_columns(logo_href=pl.lit(""), logo_dark_href=pl.lit("")).drop("logos")
+
+
+def roster_ids(rosters: pl.DataFrame) -> pl.DataFrame:
+    """Every ``id`` / ``*_id`` column of a finished game-rosters frame as ``Int64`` (task 5.2, B-M15).
+
+    The chain read ``team_id`` / ``game_id`` as Int32, ``athlete_id`` / ``player_id`` as Int64 and the
+    athlete's ``status_id`` as String; one dtype per id lets the frame join every other ESPN surface.
+    """
+    return _cast_ids_int64(rosters, [c for c in rosters.columns if c == "id" or c.endswith("_id")])
 
 
 def team_items(items: pl.DataFrame, **kwargs: Any) -> pl.DataFrame:

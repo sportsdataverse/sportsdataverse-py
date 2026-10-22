@@ -45,13 +45,16 @@ def test_pandas_round_trip():
     assert isinstance(parse_espn_content(load("news"), return_as_pandas=True), pd.DataFrame)
 
 
-def test_id_columns_are_utf8():
+def test_id_columns_are_int64():
+    """B-GB-10 (task 5.2): story ids join the Int64 contract; ESPN's text content id ``now_id`` stays String."""
     from sportsdataverse.espn_content.espn_content_parsers import parse_espn_content
 
-    df = parse_espn_content(load("news"))
+    raw = load("news")
+    df = parse_espn_content(raw)
     for name, dtype in df.schema.items():
         if name == "id" or name.endswith("_id"):
-            assert dtype == pl.String, name
+            assert dtype == (pl.String if name == "now_id" else pl.Int64), name
+    assert df["id"].to_list() == [int(h["id"]) for h in raw["headlines"]]
 
 
 def test_no_path_token_named_league_or_sport():

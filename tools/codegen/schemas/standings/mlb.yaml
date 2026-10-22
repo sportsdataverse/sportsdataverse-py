@@ -8,7 +8,7 @@ columns:
   type: character
   description: Group abbreviation.
 - name: team_id
-  type: character
+  type: integer
   description: Team id.
 - name: team_name
   type: character

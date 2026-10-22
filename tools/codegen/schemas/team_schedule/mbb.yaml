@@ -2,7 +2,7 @@ schema: team_schedule
 kind: dataframe
 columns:
 - name: id
-  type: character
+  type: integer
   description: ''
 - name: date
   type: character
@@ -29,7 +29,7 @@ columns:
   type: character
   description: ''
 - name: season_type_id
-  type: character
+  type: integer
   description: ''
 - name: season_type_type
   type: integer

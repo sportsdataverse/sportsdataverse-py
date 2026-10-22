@@ -1096,10 +1096,10 @@ def load_mbb_player_crosswalk(seasons, return_as_pandas: bool = False):
         |col_name           |type    |
         |:------------------|:-------|
         |season             |Int32   |
-        |espn_team_id       |Int32   |
+        |espn_team_id       |Int64   |
         |team_abbreviation  |String  |
         |player_name        |String  |
-        |espn_athlete_id    |String  |
+        |espn_athlete_id    |Int64   |
         |espn_full_name     |String  |
         |espn_jersey        |String  |
         |espn_position      |String  |
@@ -1143,6 +1143,9 @@ def load_mbb_player_crosswalk(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_mbb_player_crosswalk")
     )
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["espn_team_id", "espn_athlete_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1163,9 +1166,9 @@ def load_mbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         |:-----------------|:-------|
         |season            |Int32   |
         |game_date         |Date    |
-        |home_espn_team_id |Int32   |
-        |away_espn_team_id |Int32   |
-        |espn_game_id      |String  |
+        |home_espn_team_id |Int64   |
+        |away_espn_team_id |Int64   |
+        |espn_game_id      |Int64   |
         |bart_muid         |String  |
         |bart_team1        |String  |
         |bart_team2        |String  |
@@ -1205,6 +1208,9 @@ def load_mbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_mbb_schedule_crosswalk")
     )
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1224,7 +1230,7 @@ def load_mbb_team_crosswalk(seasons, return_as_pandas: bool = False):
         |col_name              |type    |
         |:---------------------|:-------|
         |season                |Int32   |
-        |espn_team_id          |Int32   |
+        |espn_team_id          |Int64   |
         |espn_abbreviation     |String  |
         |espn_display_name     |String  |
         |espn_short_name       |String  |
@@ -1274,6 +1280,9 @@ def load_mbb_team_crosswalk(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_mbb_team_crosswalk")
     )
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 

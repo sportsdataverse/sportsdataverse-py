@@ -30,7 +30,7 @@ Headlines for one league (limit, offset).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character |  |
+| `id` | integer |  |
 | `now_id` | character |  |
 | `content_key` | character |  |
 | `data_source_identifier` | character |  |
@@ -104,7 +104,7 @@ Cross-sport headlines (limit, offset).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ESPN numeric identifier for the article. |
+| `id` | integer | ESPN numeric identifier for the article. |
 | `now_id` | character | ESPN 'now' feed id. |
 | `content_key` | character | Internal content key. |
 | `data_source_identifier` | character | Source-system identifier. |
@@ -176,7 +176,7 @@ One story (same envelope, one headline).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character |  |
+| `id` | integer |  |
 | `now_id` | character |  |
 | `content_key` | character |  |
 | `data_source_identifier` | character |  |

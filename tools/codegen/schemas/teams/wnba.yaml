@@ -14,7 +14,7 @@ columns:
   type: character
   description: Full team display name (location + nickname).
 - name: team_id
-  type: character
+  type: integer
   description: ESPN team id (stable join key across ESPN endpoints).
 - name: team_is_active
   type: logical

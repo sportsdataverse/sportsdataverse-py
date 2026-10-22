@@ -72,6 +72,23 @@ def test_game_rosters_keep_position(league, monkeypatch):
 
 
 @pytest.mark.parametrize("league", LEAGUES)
+def test_game_rosters_ids_int64(league, monkeypatch):
+    """B-M15: the finished frame's ids are Int64 (the chain reads team_id / position_id Int32, status_id String)."""
+    from sportsdataverse._espn_game_rosters import roster_ids
+
+    athlete = _payload("athlete_core", league)
+    _serve(monkeypatch, {_key(athlete["$ref"]): athlete})
+    df = getattr(_mod(league), f"helper_{league}_athlete_items")(
+        teams_rosters=pl.DataFrame({"athlete_href": [athlete["$ref"]]})
+    )
+    df = roster_ids(df.with_columns(team_id=pl.lit(1, dtype=pl.Int32), game_id=pl.lit(401, dtype=pl.Int64)))
+    ids = {c: df.schema[c] for c in df.columns if c == "id" or c.endswith("_id")}
+    assert {"athlete_id", "position_id", "team_id", "game_id"} <= set(ids)
+    assert set(ids.values()) == {pl.Int64}, ids
+    assert df["position_id"].to_list() == [int(athlete["position"]["id"])]
+
+
+@pytest.mark.parametrize("league", LEAGUES)
 def test_game_rosters_athlete_404_drops_only_that_athlete(league, monkeypatch):
     athlete = _payload("athlete_core", league)
     missing = re.sub(r"/athletes/\d+", "/athletes/1", athlete["$ref"])

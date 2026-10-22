@@ -304,24 +304,24 @@ Polars dataframe containing the schedule. A day with no games returns a zero-row
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique ESPN game/event identifier. |
+| `game_id` | integer | Unique ESPN game/event identifier. |
 | `date` | character | Date in YYYY-MM-DD format. |
 | `season_year` | integer |  |
 | `season_type` | integer | Season-type id. |
 | `status_type_state` | character |  |
 | `status_type_completed` | logical |  |
 | `status_type_description` | character |  |
-| `venue_id` | character | MLBAM venue ID. |
+| `venue_id` | integer | MLBAM venue ID. |
 | `venue_full_name` | character |  |
 | `venue_city` | character | Venue city. |
 | `venue_state` | character | Venue state / province. |
-| `home_id` | character |  |
+| `home_id` | integer |  |
 | `home_name` | character |  |
 | `home_abbreviation` | character |  |
 | `home_display_name` | character |  |
 | `home_score` | character | Home team score from the ESPN scoreboard: the final score for a completed game, the live score for one in progress (string). |
 | `home_winner` | logical |  |
-| `away_id` | character |  |
+| `away_id` | integer |  |
 | `away_name` | character |  |
 | `away_abbreviation` | character |  |
 | `away_display_name` | character |  |
@@ -368,7 +368,7 @@ Polars dataframe of the MLB teams, one row per team, with the columns in the ret
 | `team_alternate_color` | character | Team alternate color (hex). |
 | `team_color` | character | Team primary color (hex, no leading '#'). |
 | `team_display_name` | character | Full team display name (e.g. 'New York Yankees'). |
-| `team_id` | character | Unique ESPN team identifier. |
+| `team_id` | integer | Unique ESPN team identifier. |
 | `team_is_active` | logical | Team is active. |
 | `team_is_all_star` | logical | Team is all star. |
 | `team_location` | character | Team city / location. |

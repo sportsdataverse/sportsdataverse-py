@@ -84,7 +84,7 @@ def test_athlete_id_is_recovered_from_the_player_card_link():
     assert direct == 0
     df = _snapshot("nfl")
     assert df["athlete_id"].null_count() == 0
-    assert df["athlete_id"].str.contains(r"^\d+$").all()
+    assert df.schema["athlete_id"] == pl.Int64 and (df["athlete_id"] > 0).all()
 
 
 def test_athlete_id_falls_back_to_the_headshot_when_the_link_is_gone():
@@ -127,20 +127,28 @@ def test_athlete_id_falls_back_to_the_headshot_when_the_link_is_gone():
     assert parse_injuries_snapshot(blind, league="cfb", as_of_date=STAMP)["athlete_id"].null_count() == 27
 
 
-def test_ids_are_utf8_and_never_float_stringified():
+def test_ids_are_int64_and_never_float_stringified():
+    """B-M15 (task 5.2, inverted from the Utf8 pin): ids are Int64 like every ESPN id, read from the integer."""
+    raw = load_fixture("espn", "injuries_nfl")
     df = _snapshot("nfl")
     for column in _ID_COLUMNS:
-        assert df.schema[column] == pl.Utf8, column
-        assert not df[column].drop_nulls().str.contains(r"\.").any(), column
+        assert df.schema[column] == pl.Int64, column
+        assert not df[column].cast(pl.Utf8).drop_nulls().str.contains(r"\.").any(), column
+    want = [int(t["id"]) for t in raw["injuries"] for _ in t.get("injuries") or []]
+    assert df["team_id"].to_list() == want
+    assert df["injury_id"].to_list() == [int(i["id"]) for t in raw["injuries"] for i in t.get("injuries") or []]
 
 
 @pytest.mark.parametrize(
     ("raw", "expected"),
     [
-        (123, "123"),
-        ("123", "123"),
-        (123.0, "123"),  # never "123.0"
+        (123, 123),
+        ("123", 123),
+        (" 123 ", 123),
+        ("-1975351", -1975351),  # ESPN's injury ids are negative
+        (123.0, 123),  # never "123.0"
         (12.5, None),
+        ("abc", None),
         (True, None),  # bool is an int subclass; not an id
         (None, None),
         ("", None),
@@ -172,7 +180,7 @@ def test_malformed_entries_are_skipped_not_raised():
     payload = {"injuries": ["junk", {"id": "1", "injuries": ["junk", {"id": "9"}]}]}
     df = parse_injuries_snapshot(payload, league="nfl", as_of_date=STAMP)
     assert df.height == 1
-    assert df["injury_id"].to_list() == ["9"]
+    assert df["injury_id"].to_list() == [9]
     assert df["athlete_id"].to_list() == [None]
 
 
@@ -228,8 +236,8 @@ def test_collapsed_nested_objects_null_their_fields_instead_of_raising(record):
     assert df.height == 1
     row = df.row(0, named=True)
     # Identity survives...
-    assert row["injury_id"] == "9"
-    assert row["team_id"] == "1"
+    assert row["injury_id"] == 9
+    assert row["team_id"] == 1
     # ...and NOTHING derived from the collapsed object leaks a value.
     assert {c for c, v in row.items() if v is not None} == _IDENTITY_COLUMNS
 
@@ -252,8 +260,8 @@ def test_a_malformed_team_does_not_cost_the_valid_teams():
     }
     df = parse_injuries_snapshot(payload, league="nfl", as_of_date=STAMP)
     assert df.height == 1
-    assert df["team_id"].to_list() == ["2"]
-    assert df["athlete_id"].to_list() == ["4870808"]
+    assert df["team_id"].to_list() == [2]
+    assert df["athlete_id"].to_list() == [4870808]
 
 
 # ---------------------------------------------------------------------------
@@ -361,11 +369,11 @@ def test_depth_rank_is_the_order_espn_published():
         for slot_key, slot in group["positions"].items():
             if not slot["athletes"]:
                 continue
-            rows = df.filter((pl.col("group_id") == str(group["id"])) & (pl.col("position_slot") == slot_key)).sort(
+            rows = df.filter((pl.col("group_id") == int(group["id"])) & (pl.col("position_slot") == slot_key)).sort(
                 "depth_rank"
             )
             assert rows["depth_rank"].to_list() == list(range(1, len(slot["athletes"]) + 1))
-            assert rows["athlete_id"].to_list() == [str(a["id"]) for a in slot["athletes"]]
+            assert rows["athlete_id"].to_list() == [int(a["id"]) for a in slot["athletes"]]
 
 
 def test_the_slot_key_is_what_makes_the_grain_unique():
@@ -375,7 +383,7 @@ def test_the_slot_key_is_what_makes_the_grain_unique():
     df = _depthchart("nfl")
     wrs = df.filter((pl.col("group_name") == "3WR 1TE") & (pl.col("position_abbreviation") == "WR"))
 
-    assert wrs["position_id"].unique().to_list() == ["1"]
+    assert wrs["position_id"].unique().to_list() == [1]
     assert sorted(wrs["position_slot"].unique().to_list()) == ["wr1", "wr2", "wr3"]
 
     grain = ("team_id", "group_id", "position_slot", "depth_rank")
@@ -402,11 +410,11 @@ def test_malformed_depthchart_payloads_degrade_to_zero_rows(payload):
     assert list(df.columns) == list(DEPTHCHART_SNAPSHOT_SCHEMA)
 
 
-def test_depthchart_ids_are_utf8_and_never_float_stringified():
+def test_depthchart_ids_are_int64_and_never_float_stringified():
     df = _depthchart("mlb")
     for column in ("team_id", "group_id", "position_id", "athlete_id"):
-        assert df.schema[column] == pl.Utf8
-        assert not [v for v in df[column].drop_nulls().to_list() if "." in v]
+        assert df.schema[column] == pl.Int64
+        assert not [v for v in df[column].cast(pl.Utf8).drop_nulls().to_list() if "." in v]
     assert df["athlete_id"].null_count() == 0
 
 

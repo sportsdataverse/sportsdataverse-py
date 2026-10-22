@@ -43,7 +43,7 @@ ESPN endpoint.
 | `type_has_groups` | logical |  |
 | `type_has_legs` | logical |  |
 | `type_has_standings` | logical |  |
-| `type_id` | character |  |
+| `type_id` | integer |  |
 | `type_name` | character |  |
 | `type_slug` | character |  |
 | `type_start_date` | character |  |
@@ -112,7 +112,7 @@ ESPN endpoint.
 | `type_has_groups` | logical |  |
 | `type_has_legs` | logical |  |
 | `type_has_standings` | logical |  |
-| `type_id` | character |  |
+| `type_id` | integer |  |
 | `type_leaders_$ref` | character |  |
 | `type_name` | character |  |
 | `type_slug` | character |  |
@@ -210,7 +210,7 @@ ESPN endpoint.
 | `has_groups` | logical |  |
 | `has_legs` | logical |  |
 | `has_standings` | logical |  |
-| `id` | character | ID of the player in the 'name' column. |
+| `id` | integer | ID of the player in the 'name' column. |
 | `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
 | `slug` | character |  |
 | `start_date` | character |  |
@@ -260,7 +260,7 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
-| `id` | character | ID of the player in the 'name' column. |
+| `id` | integer | ID of the player in the 'name' column. |
 | `is_conference` | logical |  |
 | `links` | character |  |
 | `midsize_name` | character |  |
@@ -479,7 +479,7 @@ ESPN endpoint.
 | `competition_$ref` | character |  |
 | `split_stats_abbreviation` | character |  |
 | `split_stats_categories` | character |  |
-| `split_stats_id` | character |  |
+| `split_stats_id` | integer |  |
 | `split_stats_name` | character |  |
 | `team_$ref` | character |  |
 | `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
@@ -776,7 +776,7 @@ ESPN endpoint.
 | `color` | character |  |
 | `display_name` | character | Full name of player |
 | `guid` | character |  |
-| `id` | character | ID of the player in the 'name' column. |
+| `id` | integer | ID of the player in the 'name' column. |
 | `is_active` | logical | Active contract |
 | `is_all_star` | logical |  |
 | `links` | character |  |
@@ -806,7 +806,7 @@ ESPN endpoint.
 | `venue_full_name` | character |  |
 | `venue_grass` | logical |  |
 | `venue_guid` | character |  |
-| `venue_id` | character |  |
+| `venue_id` | integer |  |
 | `venue_images` | character |  |
 | `venue_indoor` | logical |  |
 | `venue_short_name` | character |  |
@@ -1273,7 +1273,7 @@ ESPN endpoint.
 | `season_$ref` | character |  |
 | `splits_abbreviation` | character |  |
 | `splits_categories` | character |  |
-| `splits_id` | character |  |
+| `splits_id` | integer |  |
 | `splits_name` | character |  |
 | `team_$ref` | character |  |
 | `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
