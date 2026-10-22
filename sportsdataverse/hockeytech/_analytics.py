@@ -12,6 +12,8 @@ from typing import Any, Optional
 
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _empty_from_schema
+
 # ---------------------------------------------------------------------------
 # PWHL PBP enrichment: clock + coordinate transforms
 # Ported faithfully from fastRhockey R/pwhl_pbp.R
@@ -915,6 +917,11 @@ def enrich_pbp(
     # keeping this import lazy sidesteps any future circular-import issues.
     from sportsdataverse.hockeytech import _parsers as P
     from sportsdataverse.hockeytech._client import hockeytech_api
+
+    if df.height == 0:
+        # A game with no plays: the documented columns, never literals added to a (0, 0) frame,
+        # which polars 1.x turns into one all-null phantom row (B-GB-09).
+        return _empty_from_schema("autodoc/pwhl/pwhl_pbp", return_as_pandas)
 
     # ------------------------------------------------------------------
     # Step 1: fetch meta if not provided

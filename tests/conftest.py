@@ -278,6 +278,18 @@ def load_fixture(category: str, stem: str) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def documented_schema(name: str) -> dict:
+    """``{column: polars dtype}`` of the returns table ``name``, read from ``tools/codegen/schemas`` (task 5.1).
+
+    ``name`` is what ``_empty_from_schema`` takes: the table's path under ``schemas/`` plus an optional
+    ``:<frames section>`` or ``:<loader>``. Read from the YAML, not from the generated copy the package
+    ships, so a stale copy fails the test.
+    """
+    from tools.codegen import generate
+
+    return {c["name"]: generate._empty_polars_dtype(str(c["type"])) for c in generate._documented_columns(name)}
+
+
 def fetch_pbp_or_skip(proc):
     """Run a CFB/NFL ``*PlayProcess`` live ESPN fetch, gating + skipping cleanly.
 

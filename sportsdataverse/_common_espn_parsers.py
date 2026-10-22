@@ -90,6 +90,7 @@ import re
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _documented_empty
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _first_row, _object_rows, _warn_schema_drift
 
@@ -261,6 +262,7 @@ def _scoreboard_event_parsing(event: dict) -> dict:
     }
 
 
+@_documented_empty("scoreboard")
 @_zero_rows_unless_dict
 def parse_scoreboard(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a scoreboard response into a tidy polars frame.
@@ -304,6 +306,7 @@ def parse_scoreboard(payload: Dict, return_as_pandas: bool = False) -> pl.DataFr
 # ===========================================================================
 
 
+@_documented_empty("teams")
 @_zero_rows_unless_dict
 def parse_teams(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a site-v2 teams response into a tidy polars frame.
@@ -401,6 +404,7 @@ def _extract_standing_entries(
     return rows
 
 
+@_documented_empty("standings")
 @_zero_rows_unless_dict
 def parse_standings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a standings (alt v2) response into a tidy polars frame.
@@ -472,6 +476,7 @@ def _flatten_groups(groups: List[dict], parent_id: str = "", depth: int = 0) -> 
     return rows
 
 
+@_documented_empty("conferences")
 @_zero_rows_unless_dict
 def parse_groups(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a groups response into a tidy polars frame.
@@ -523,6 +528,7 @@ def parse_groups(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
 # ===========================================================================
 
 
+@_documented_empty("fpi")
 @_zero_rows_unless_dict
 def parse_fpi(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse an ESPN fitt-v3 ``powerindex`` payload into a tidy team-season frame.
@@ -574,6 +580,7 @@ def parse_fpi(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
+@_documented_empty("season_week_powerindex")
 @_zero_rows_unless_dict
 def parse_weekly_powerindex(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a core-v2 weekly ``powerindex`` payload into a tidy team-week frame.
@@ -622,6 +629,7 @@ def parse_weekly_powerindex(payload: Dict, return_as_pandas: bool = False) -> pl
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
+@_documented_empty("athlete_overview")
 @_zero_rows_unless_dict
 def parse_athlete_overview(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse an athlete overview response into a tidy polars frame.
@@ -737,6 +745,7 @@ def _category_rows(cat: dict) -> list[dict]:
     return rows
 
 
+@_documented_empty("athlete_stats")
 @_zero_rows_unless_dict
 def parse_athlete_stats(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse an athlete stats response into a tidy polars frame.
@@ -790,6 +799,7 @@ def parse_athlete_stats(payload: Dict, return_as_pandas: bool = False) -> pl.Dat
 # ===========================================================================
 
 
+@_documented_empty("athlete_gamelog")
 @_zero_rows_unless_dict
 def parse_athlete_gamelog(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse an athlete gamelog response into a tidy polars frame.
@@ -861,6 +871,7 @@ def parse_athlete_gamelog(payload: Dict, return_as_pandas: bool = False) -> pl.D
 # ===========================================================================
 
 
+@_documented_empty("athlete_splits")
 @_zero_rows_unless_dict
 def parse_athlete_splits(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse an athlete splits response into a tidy polars frame.
@@ -916,6 +927,7 @@ def parse_athlete_splits(payload: Dict, return_as_pandas: bool = False) -> pl.Da
 # ===========================================================================
 
 
+@_documented_empty("leaders")
 @_zero_rows_unless_dict
 def parse_leaders(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a statistics-by-athlete leaderboard response into a tidy polars frame.
@@ -989,6 +1001,7 @@ def parse_leaders(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame
 # ===========================================================================
 
 
+@_documented_empty("season_coaches")
 @_zero_rows_unless_dict
 def parse_coaches(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a season coaches response into a tidy polars frame.
@@ -1042,6 +1055,7 @@ def parse_coaches(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame
 # ===========================================================================
 
 
+@_documented_empty("season_draft")
 @_zero_rows_unless_dict
 def parse_draft(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a draft response into a tidy polars frame.
@@ -1103,6 +1117,7 @@ def parse_draft(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
 # ===========================================================================
 
 
+@_documented_empty("event_competitor_roster")
 @_zero_rows_unless_dict
 def parse_event_competitor_roster(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse an event competitor roster response into a tidy polars frame.
@@ -1154,6 +1169,7 @@ def parse_event_competitor_roster(payload: Dict, return_as_pandas: bool = False)
 # ===========================================================================
 
 
+@_documented_empty("event_competitor_statistics")
 @_zero_rows_unless_dict
 def parse_event_competitor_statistics(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse an event competitor statistics response into a tidy polars frame.
@@ -1259,6 +1275,7 @@ def parse_event_competitor_linescores(payload: Dict, return_as_pandas: bool = Fa
 # ===========================================================================
 
 
+@_documented_empty("event_plays")
 @_zero_rows_unless_dict
 def parse_event_plays(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse an event plays response into a tidy polars frame.
@@ -1400,6 +1417,7 @@ def parse_items(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
 # ===========================================================================
 
 
+@_documented_empty("team_schedule")
 def parse_team_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a Site v2 ``team/{id}/schedule`` response into a tidy frame.
 
@@ -1432,6 +1450,7 @@ def parse_team_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.Dat
     return _to_output(df, return_as_pandas)
 
 
+@_documented_empty("team_roster")
 def parse_team_roster(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a Site v2 ``team/{id}/roster`` response into a tidy frame.
 
@@ -1503,6 +1522,7 @@ def parse_team_roster(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
 # ===========================================================================
 
 
+@_documented_empty("news")
 def parse_news(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a Site v2 ``news`` response into a tidy frame.
 
@@ -1537,6 +1557,7 @@ def parse_news(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     return _to_output(df, return_as_pandas)
 
 
+@_documented_empty("transactions")
 def parse_transactions(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a Site v2 ``transactions`` response into a tidy frame.
 
@@ -1572,6 +1593,7 @@ def parse_transactions(payload: Dict, return_as_pandas: bool = False) -> pl.Data
     return _to_output(df, return_as_pandas)
 
 
+@_documented_empty("injuries")
 def parse_injuries(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a Site v2 ``injuries`` response into a tidy frame.
 
@@ -1633,6 +1655,7 @@ def parse_injuries(payload: Dict, return_as_pandas: bool = False) -> pl.DataFram
 # to be zipped per athlete to produce a tidy long-form frame.
 
 
+@_documented_empty("summary:boxscore_player")
 def parse_summary_boxscore_player(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract per-athlete boxscore stats from a Site v2 summary payload.
 
@@ -1700,6 +1723,7 @@ def parse_summary_boxscore_player(payload: Dict, return_as_pandas: bool = False)
     return _to_output(df, return_as_pandas)
 
 
+@_documented_empty("summary:boxscore_team")
 def parse_summary_boxscore_team(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract per-team boxscore stats from a Site v2 summary payload.
 
@@ -1751,6 +1775,7 @@ def parse_summary_boxscore_team(payload: Dict, return_as_pandas: bool = False) -
     return _to_output(df, return_as_pandas)
 
 
+@_documented_empty("summary:plays")
 def parse_summary_plays(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract the play-by-play list from a Site v2 summary payload.
 
@@ -1784,6 +1809,7 @@ def parse_summary_plays(payload: Dict, return_as_pandas: bool = False) -> pl.Dat
     return _to_output(df, return_as_pandas)
 
 
+@_documented_empty("summary:winprobability")
 def parse_summary_winprobability(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract win-probability over time from a Site v2 summary payload.
 
@@ -1813,6 +1839,7 @@ def parse_summary_winprobability(payload: Dict, return_as_pandas: bool = False) 
     return _to_output(df, return_as_pandas)
 
 
+@_documented_empty("summary:leaders")
 def parse_summary_leaders(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract per-game stat leaders from a Site v2 summary payload.
 
@@ -1900,6 +1927,7 @@ def _row_per_item(items, return_as_pandas: bool, where: str):
     return _to_output(df, return_as_pandas)
 
 
+@_documented_empty("summary:game_info")
 @_zero_rows_unless_dict
 def parse_summary_game_info(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract the venue + attendance from a summary payload's ``gameInfo``.
@@ -1923,6 +1951,7 @@ def parse_summary_game_info(payload: Dict, return_as_pandas: bool = False) -> pl
     return _single_row(flat, return_as_pandas)
 
 
+@_documented_empty("summary:officials")
 @_zero_rows_unless_dict
 def parse_summary_officials(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract the per-game officials list from ``gameInfo.officials``.
@@ -1934,6 +1963,7 @@ def parse_summary_officials(payload: Dict, return_as_pandas: bool = False) -> pl
     return _row_per_item(officials, return_as_pandas, where="parse_summary_officials: officials")
 
 
+@_documented_empty("summary:header")
 def parse_summary_header(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract the single-row game header from ``payload["header"]``.
 
@@ -1945,6 +1975,7 @@ def parse_summary_header(payload: Dict, return_as_pandas: bool = False) -> pl.Da
     return _single_row(payload.get("header") if isinstance(payload, dict) else None, return_as_pandas)
 
 
+@_documented_empty("summary:season_series")
 @_zero_rows_unless_dict
 def parse_summary_season_series(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract head-to-head season series context from ``payload["seasonseries"]``.
@@ -1994,6 +2025,7 @@ def parse_summary_against_the_spread(payload: Dict, return_as_pandas: bool = Fal
     return _to_output(df, return_as_pandas)
 
 
+@_documented_empty("summary:standings")
 @_zero_rows_unless_dict
 def parse_summary_standings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract a standings snapshot from ``payload["standings"]``.
@@ -2057,6 +2089,7 @@ def parse_summary_broadcasts(payload: Dict, return_as_pandas: bool = False) -> p
     )
 
 
+@_documented_empty("summary:format")
 def parse_summary_format(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract the game format from ``payload["format"]``.
 
@@ -2091,6 +2124,7 @@ def parse_summary_odds(payload: Dict, return_as_pandas: bool = False) -> pl.Data
     return _row_per_item((payload or {}).get("odds"), return_as_pandas, where="parse_summary_odds: odds")
 
 
+@_documented_empty("summary:article")
 def parse_summary_article(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract the recap article metadata from ``payload["article"]``.
 
@@ -2101,6 +2135,7 @@ def parse_summary_article(payload: Dict, return_as_pandas: bool = False) -> pl.D
     return _single_row(payload.get("article") if isinstance(payload, dict) else None, return_as_pandas)
 
 
+@_documented_empty("summary:injuries")
 @_zero_rows_unless_dict
 def parse_summary_injuries(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract per-team injuries from ``payload["injuries"]``.
@@ -2114,6 +2149,7 @@ def parse_summary_injuries(payload: Dict, return_as_pandas: bool = False) -> pl.
     return _row_per_item((payload or {}).get("injuries"), return_as_pandas, where="parse_summary_injuries: injuries")
 
 
+@_documented_empty("summary:news")
 @_zero_rows_unless_dict
 def parse_summary_news(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Extract the embedded news feed from ``payload["news"]``.
@@ -2353,6 +2389,7 @@ def parse_cdn_game(payload: Dict, section: str = None, return_as_pandas: bool = 
     return parse_summary(gp if isinstance(gp, dict) else {}, section=section, return_as_pandas=return_as_pandas)
 
 
+@_documented_empty("cdn_scoreboard")
 def parse_cdn_scoreboard(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a CDN ``scoreboard`` page: its ``content.sbData`` block is a Site v2 scoreboard.
 
@@ -2377,6 +2414,7 @@ def parse_cdn_scoreboard(payload: Dict, return_as_pandas: bool = False) -> pl.Da
     return parse_scoreboard(sb if isinstance(sb, dict) else {}, return_as_pandas=return_as_pandas)
 
 
+@_documented_empty("cdn_scoreboard")
 def parse_cdn_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a CDN ``schedule`` page: every day's ``games`` flattened into one frame.
 
@@ -2501,6 +2539,7 @@ _RANKINGS_SCHEMA = {
 }
 
 
+@_documented_empty("rankings")
 def parse_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a Site v2 ``rankings`` payload into one row per poll entry.
 

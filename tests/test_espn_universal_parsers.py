@@ -1390,8 +1390,8 @@ def test_rankings_wrapper_routes_through_parse_rankings(monkeypatch):
 # ``python -m tests.test_espn_universal_parsers`` only for a deliberate dtype change.
 
 _SNAPSHOT = Path(__file__).parent / "espn_parser_dtype_snapshot.json"
-# Four snapshot entries pin zero columns (injuries_mbb, injuries_wbb, team_schedule_cfb, team_schedule_nhl):
-# their captures are empty and parse to zero-width frames. Task 5.1 gives empty frames their documented schema.
+# The captures that parse to zero rows (injuries_mbb, injuries_wbb, team_schedule_cfb, team_schedule_nhl and the
+# empty summary sections) pin their returns table's columns: task 5.1 gave empty frames their documented schema.
 # scoreboard_cfb_2014_placeholder carries ESPN's real `{}` placeholder event, which has no ids: its row comes back
 # all-null, so its id columns keep the String dtype of every other scoreboard (A-M15, task 5.2), but the pandas hop
 # turns six Int64 columns Float64 (season_year, season_type, status_period, attendance, home_rank, away_rank;
@@ -1565,6 +1565,51 @@ def test_hostile_body_is_zero_rows_or_a_vocabulary_raise(qual, shape):
     else:
         out = parse(_HOSTILE[shape])
     assert {sec: df.height for sec, df in _frames(out).items() if df.height} == {}
+
+
+# Task 5.1 (A-M12, B-L73): a parser whose returns table is one fixed table carries it on every empty result.
+# 38 ESPN parsers (the dedicated ones whose table has columns) + 4 HockeyTech ones on 2026-10-22. The generic
+# flatteners (parse_items, parse_single_entity) have no single table; HockeyTech standings / roster / player
+# stats and the ESPN cdn rankings have one per league.
+_DOCUMENTED_EMPTY_FLOOR = 42
+
+
+def _documented_parsers() -> Dict[str, Any]:
+    return {q: fn for q, fn in _public_parsers().items() if getattr(fn, "__documented_empty__", None)}
+
+
+@pytest.mark.parametrize(
+    ("qual", "shape"),
+    [(q, s) for q in sorted(_documented_parsers()) for s in _HOSTILE if s != "scalar_list"],
+)
+def test_empty_schema_hostile_body_carries_the_documented_columns(qual, shape):
+    from sportsdataverse.errors import AssetFetchError, NoDataError
+    from tests.conftest import documented_schema
+
+    parse = _documented_parsers()[qual]
+    want = documented_schema(parse.__documented_empty__)
+    try:
+        out = parse(_HOSTILE[shape])
+        pdf = parse(_HOSTILE[shape], return_as_pandas=True)
+    except (NoDataError, AssetFetchError):
+        assert shape == "error_envelope"
+        return
+    assert out.height == 0 and dict(out.schema) == want
+    assert len(pdf) == 0 and list(pdf.columns) == list(want)
+
+
+def test_empty_schema_sweep_covers_every_documented_parser():
+    assert len(_documented_parsers()) >= _DOCUMENTED_EMPTY_FLOOR
+
+
+def test_empty_schema_quiet_scoreboard_day_keeps_the_scoreboard_columns():
+    """A-M12: on a day with no events, ``team_id`` filters and joins still find their columns."""
+    from sportsdataverse._common_espn_parsers import parse_scoreboard
+    from tests.conftest import documented_schema
+
+    df = parse_scoreboard({"events": []})
+    assert df.height == 0 and dict(df.schema) == documented_schema("scoreboard")
+    assert df.filter(pl.col("home_id") == "150").height == 0
 
 
 def test_hostile_closed_modules_stay_closed():

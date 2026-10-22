@@ -6708,3 +6708,60 @@
   note: >-
     At the start clock with the clamped 99 end, 400791544/2058 and 401127996/1913 are scored as the receiver's
     ball on his own 1: EPA -0.431 / -0.316 (R856-15, the round-2 head).
+
+# --- task 5.1 (devel-dtype-contract): empty results carry their returns table (A-M12, A-M7, MD-3, B-L73, B-GB-09)
+- id: documented-empty-replaces-a-zero-width-frame
+  group: dtype-contract-5-1
+  finding: A-M12
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            if isinstance(out, pl.DataFrame) and out.width == 0:'
+  mutant: '            if False:'
+  test: tests/test_espn_universal_parsers.py -k "empty_schema_quiet_scoreboard"
+  expected: kill
+  note: >-
+    Without the swap a quiet scoreboard day is a (0, 0) frame again and `pl.col("home_id")` raises
+    ColumnNotFoundError.
+
+- id: generated-loader-no-season-is-the-documented-table
+  group: dtype-contract-5-1
+  finding: A-M7
+  file: sportsdataverse/pwhl/pwhl_loaders.py
+  snippet: '    out = pl.concat(frames, how="diagonal_relaxed") if frames else _empty_from_schema("loader_schemas:load_phf_pbp")'
+  mutant: '    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()'
+  test: tests/codegen/test_loaders_parity.py -k "empty_schema"
+  expected: kill
+  note: >-
+    The template's pre-5.1 empty frame in one generated loader: load_phf_pbp with no published season
+    returns (0, 0) instead of its 79 documented columns.
+
+- id: nba-multifile-loader-no-season-is-the-documented-table
+  group: dtype-contract-5-1
+  finding: MD-3
+  file: sportsdataverse/nba/nba_loaders_extra.py
+  snippet: '@_documented_empty("autodoc/nba/load_nba_stats_synergy")'
+  mutant: '# @_documented_empty("autodoc/nba/load_nba_stats_synergy")'
+  test: tests/nba/test_nba_stats_multifile_loaders.py -k "empty_schema and synergy"
+  expected: kill
+  note: load_nba_stats_synergy with no published season returns (0, 0) again.
+
+- id: hockeytech-parser-carries-its-documented-table
+  group: dtype-contract-5-1
+  finding: B-L73
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '@_documented_empty("autodoc/pwhl/pwhl_teams")'
+  mutant: '# @_documented_empty("autodoc/pwhl/pwhl_teams")'
+  test: tests/test_espn_universal_parsers.py -k "empty_schema_sweep_covers"
+  expected: kill
+  note: parse_teams drops out of the empty-result sweep (41 documented parsers < the floor of 42).
+
+- id: enrich-pbp-no-plays-is-the-documented-table
+  group: dtype-contract-5-1
+  finding: B-GB-09
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '        return _empty_from_schema("autodoc/pwhl/pwhl_pbp", return_as_pandas)'
+  mutant: '        pass'
+  test: tests/hockeytech/test_pbp_enrich.py -k "empty_schema"
+  expected: kill
+  note: >-
+    A game with no plays falls through to literals added to the (0, 0) frame: 28 columns on polars 2.0,
+    one all-null phantom row on polars 1.x.

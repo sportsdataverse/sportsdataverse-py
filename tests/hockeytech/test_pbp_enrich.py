@@ -405,3 +405,18 @@ def test_add_coord_transforms_shots_populated_on_real_data():
     # All shots should have x_coord_original populated
     assert shots["x_coord_original"].drop_nulls().len() == shots.height
     assert shots["y_coord_original"].drop_nulls().len() == shots.height
+
+
+@pytest.mark.parametrize("payload", [{}, None, {"GC": {"Pxpverbose": []}}])
+def test_empty_schema_enrich_pbp_on_a_game_with_no_plays(payload):
+    """B-GB-09: a game with no plays is the documented pbp table with zero rows (no phantom row on polars 1.x)."""
+    from sportsdataverse.hockeytech import _parsers as P
+    from sportsdataverse.hockeytech._analytics import enrich_pbp
+    from tests.conftest import documented_schema
+
+    df = P.parse_pbp(payload, game_id=42)
+    meta, shifts = load_fixture("hockeytech", "pwhl_game_summary_42"), load_fixture("hockeytech", "pwhl_gameshifts_42")
+    out = enrich_pbp(df, "pwhl", 42, meta_payload=meta, shifts_payload=shifts)
+    assert out.height == 0 and dict(out.schema) == documented_schema("autodoc/pwhl/pwhl_pbp")
+    pdf = enrich_pbp(df, "pwhl", 42, meta_payload=meta, shifts_payload=shifts, return_as_pandas=True)
+    assert len(pdf) == 0 and list(pdf.columns) == list(documented_schema("autodoc/pwhl/pwhl_pbp"))

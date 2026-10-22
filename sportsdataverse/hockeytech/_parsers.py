@@ -13,6 +13,7 @@ from typing import Any, Dict, List, Optional
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _documented_empty
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import _data_only, _dict_only
 
@@ -219,6 +220,7 @@ def parse_standings(payload: Any, return_as_pandas: bool = False) -> Any:
     return df.to_pandas() if return_as_pandas else df
 
 
+@_documented_empty("autodoc/pwhl/pwhl_teams")
 def parse_teams(payload: Any, return_as_pandas: bool = False) -> Any:
     """Parse a HockeyTech ``modulekit/teamsbyseason`` JSON payload into a flat frame.
 
@@ -547,6 +549,7 @@ def mmss_to_seconds(value: Any) -> Optional[int]:
         return None
 
 
+@_documented_empty("autodoc/pwhl/pwhl_game_shifts")
 def parse_shifts(payload: Any, game_id: Any = None, return_as_pandas: bool = False) -> Any:
     """Parse a HockeyTech ``modulekit/gameshifts`` JSON payload into a flat frame.
 
@@ -622,6 +625,7 @@ def parse_player_stats(payload: Any, return_as_pandas: bool = False) -> Any:
     return _to_frame(rows, return_as_pandas)
 
 
+@_documented_empty("autodoc/pwhl/pwhl_leaders")
 def parse_leaders(payload: Any, return_as_pandas: bool = False) -> Any:
     """Parse a HockeyTech leaders payload into a flat frame.
 
@@ -1161,6 +1165,7 @@ def parse_player_info(payload: Any, return_as_pandas: bool = False) -> Any:
     return _frame([row], PLAYER_INFO_SCHEMA, return_as_pandas)
 
 
+@_documented_empty("autodoc/pwhl/pwhl_season_id")
 def parse_seasons(payload: Any, return_as_pandas: bool = False) -> Any:
     """Parse a HockeyTech ``modulekit/seasons`` JSON payload into a flat frame.
 

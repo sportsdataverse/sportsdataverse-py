@@ -210,3 +210,32 @@ def test_pick_deduplicates_repeated_filter_values():
     from sportsdataverse.nba.nba_loaders_extra import _pick
 
     assert _pick("per_mode", ["totals", "totals", "pergame"], ("pergame", "totals")) == ("totals", "pergame")
+
+
+_MULTIFILE = [
+    "load_nba_stats_synergy",
+    "load_nba_stats_hustle_player",
+    "load_nba_stats_hustle_team",
+    "load_nba_stats_matchups",
+    "load_nba_stats_matchups_rollup",
+    "load_nba_stats_draft_combine_stats",
+    "load_nba_stats_draft_combine_anthro",
+    "load_nba_stats_draft_combine_drills",
+    "load_nba_stats_draft_combine_spot_shooting",
+    "load_nba_stats_draft_combine_nonstationary_shooting",
+]
+
+
+@pytest.mark.parametrize("fn", _MULTIFILE)
+def test_empty_schema_no_published_season_is_the_documented_table(fn, monkeypatch):
+    """MD-3: no published season gives the documented columns with zero rows, never a (0, 0) frame."""
+    from tests.conftest import documented_schema
+
+    monkeypatch.setattr(x, "_read_release_parquet", lambda url, *a, **k: None)
+    want = documented_schema(f"autodoc/nba/{fn}")
+    with pytest.warns(UserWarning, match="no data"):
+        out = getattr(x, fn)(2024)
+    assert out.height == 0 and dict(out.schema) == want
+    with pytest.warns(UserWarning, match="no data"):
+        pdf = getattr(x, fn)(2024, return_as_pandas=True)
+    assert len(pdf) == 0 and list(pdf.columns) == list(want)

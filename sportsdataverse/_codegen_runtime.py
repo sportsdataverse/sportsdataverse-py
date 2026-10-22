@@ -80,6 +80,38 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
     return df
 
 
+def _empty_from_schema(name: str, return_as_pandas: bool = False) -> Any:
+    """A zero-row frame with the columns and dtypes of the returns table ``name`` (task 5.1).
+
+    ``name`` is the table's path under ``tools/codegen/schemas/`` without ``.yaml``, plus
+    ``:<section>`` for one frame of a ``frames`` table or ``:<loader>`` for a ``loader_schemas.yaml``
+    entry. Codegen copies every table a call names into ``sportsdataverse/_returns_schemas.py``.
+    """
+    from sportsdataverse._returns_schemas import SCHEMAS
+
+    df = pl.DataFrame(schema=SCHEMAS[name])
+    return df.to_pandas() if return_as_pandas else df
+
+
+def _documented_empty(name: str) -> Callable[[_Fn], _Fn]:
+    """Decorate a parser or loader so a result with no columns is the documented empty frame ``name`` (task 5.1)."""
+
+    def wrap(parse: _Fn) -> _Fn:
+        @functools.wraps(parse)
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            out = parse(*args, **kwargs)
+            if isinstance(out, pl.DataFrame) and out.width == 0:
+                return _empty_from_schema(name)
+            if not isinstance(out, pl.DataFrame) and hasattr(out, "columns") and len(out.columns) == 0:
+                return _empty_from_schema(name, return_as_pandas=True)
+            return out
+
+        setattr(wrapper, "__documented_empty__", name)  # the empty-result sweep finds the table by it
+        return cast(_Fn, wrapper)
+
+    return wrap
+
+
 #: A leading zero before a digit: the text a numeric cast would change ("07", "00", "000000").
 _ZERO_PADDED = r"^\s*[+-]?0\d"
 
