@@ -140,7 +140,7 @@ Columns include `player_id`, `first_name`, `last_name`, `home`, `period`, `start
 | `end_time` | character | Shift end time (MM:SS countdown clock). |
 | `length` | character | Length of the streak in games. |
 | `start_s` | integer | Shift start time in seconds elapsed from the start of the period. |
-| `end_s` | double | Shift end time in seconds elapsed from the start of the period. |
+| `end_s` | integer | Shift end time in seconds elapsed from the start of the period. |
 | `goal_on_shift` | integer | Number of goals scored while this shift was active (0 or 1 in most cases). |
 | `penalty_on_shift` | integer | Number of penalties called while this shift was active. |
 

@@ -211,7 +211,7 @@ def _search_core(
     else:
         # Every chunk header-only (no games in the window): a header-only frame carries no values
         # to infer dtypes from, so it is kept out of the concat above and stands in on its own,
-        # holding the 119 documented columns with ids Int64 and the rest Null (widens cleanly).
+        # holding the 119 documented columns typed as the returns table says (``_pin_search_chunk``).
         # A 200-with-error-body parses into a 1-column frame named after the error text -- require
         # a real Statcast column so that is never handed back as "the documented schema".
         out = next((f for f in frames if "game_pk" in f.columns), pl.DataFrame())
@@ -265,9 +265,8 @@ def mlb_statcast_search(
 
     Returns:
         A polars (or pandas) DataFrame, one row per pitch. A window with no games
-        returns zero rows keeping the documented columns -- MLBAM ids ``Int64``, the
-        rest ``Null`` (no values to infer a dtype from), so the frame widens cleanly
-        into a populated one.
+        returns zero rows with the documented columns and dtypes (MLBAM ids ``Int64``), so
+        it stacks onto a populated one with either relaxed concat.
 
     Raises:
         AssetFetchError: When Savant answers an error status for a chunk after
@@ -329,9 +328,8 @@ def mlb_statcast_search_minors(
 
     Returns:
         A polars (or pandas) DataFrame, one row per minor-league pitch. A window with no games
-        returns zero rows keeping the documented columns -- MLBAM ids ``Int64``, the
-        rest ``Null`` (no values to infer a dtype from), so the frame widens cleanly
-        into a populated one.
+        returns zero rows with the documented columns and dtypes (MLBAM ids ``Int64``), so
+        it stacks onto a populated one with either relaxed concat.
 
     Raises:
         AssetFetchError: When Savant answers an error status for a chunk after
@@ -386,9 +384,8 @@ def mlb_statcast_search_wbc(
 
     Returns:
         A polars (or pandas) DataFrame, one row per WBC pitch. A window with no games
-        returns zero rows keeping the documented columns -- MLBAM ids ``Int64``, the
-        rest ``Null`` (no values to infer a dtype from), so the frame widens cleanly
-        into a populated one.
+        returns zero rows with the documented columns and dtypes (MLBAM ids ``Int64``), so
+        it stacks onto a populated one with either relaxed concat.
 
     Raises:
         AssetFetchError: When Savant answers an error status for a chunk after
