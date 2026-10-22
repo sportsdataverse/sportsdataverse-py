@@ -26,22 +26,20 @@ drift gate, but they are not the same pipeline — see
 
 Upstream one-shot generators write some of those inputs rather than being run per
 build: `gen_asa` / `gen_cbs` / `gen_mls` / `gen_nwsl` / `gen_on3` / `gen_pff` /
-`gen_pff_api` / `gen_sports247*` / `gen_yahoo` and `openapi_to_endpoints` turn
-vendor OpenAPI specs into endpoint YAML; `gen_nba_stats` reads
+`gen_pff_api` / `gen_sports247*` / `gen_yahoo` turn vendor OpenAPI specs into
+endpoint YAML; `gen_nba_stats` reads
 `inputs/nba_canonical_catalog.json`; `vendor_captures.py` copies sdv-internal-refs
 captures into `tests/fixtures/`; `gen_*_descriptions.py` mine column descriptions.
-`extract*.py` are historical bootstraps and no longer run.
 
 ## API generation
 
-A no-arg `uv run python tools/codegen/generate.py` runs six stages in order, and
+A no-arg `uv run python tools/codegen/generate.py` runs five stages in order, and
 each one `ruff format`s exactly what it wrote. The last two read the package's live
-signatures and docstrings, so they run in a fresh interpreter after the first four have
+signatures and docstrings, so they run in a fresh interpreter after the first three have
 written it: one run converges, with no second run needed to pick up its own output.
 
 | Stage | Writes |
 |---|---|
-| `build()` | the `tools/codegen/_generated/` staging copies |
 | `build_live()` | `sportsdataverse/<league>/<prefix>_espn_ext.py` + the container `__init__` files |
 | `build_flat_live()` | `sportsdataverse/<league>/<stem>.py` from `api_module.py.jinja`; a league with a `group` in `leagues.yaml` nests under it (`soccer/mls/`), and a home in `generate._NESTED_HOMES` (hockey) or `generate._BASKETBALL_HOMES` (international basketball) under its container (`hockey/sihf/`, `hockey/liiga/`, `basketball/fiba_hub/`; DEL's package is `hockey/del_/` because `del` is a Python keyword) |
 | `build_loaders_live()` | `sportsdataverse/<lg>/<lg>_loaders.py` for the 8 `_GENERATED_LOADER_LEAGUES` |

@@ -37,7 +37,7 @@ dev/
 dist_check/
 
 # Per-run `generate.py --check` temp dirs (unique names; a killed run leaves one behind).
-tools/codegen/_generated/_check_*/
+tools/codegen/_generated/
 
 # Local environment / API-key secrets — NEVER commit. Keep real keys here and
 # load them into the shell (e.g. `set -a; source .env; set +a`). A committed,
