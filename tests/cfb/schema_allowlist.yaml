@@ -7,46 +7,6 @@
 #   counted 69; teamParticipants follows the feed). The set must equal the measured differences.
 # Every row names its finding. Both halves only shrink; SCHEMA_ALLOWLIST_MAX_ROWS caps the row count.
 # Phase-2 dtype fixes (plan 2.17) delete rows or games.
-- column: 'drive.description'
-  scope: across_captures
-  finding: C-L5
-  reason: 'dtype Null on 252532751 (2005), whose drives carry no end; String/Int64 elsewhere'
-  games: [252532751]
-- column: 'drive.displayResult'
-  scope: across_captures
-  finding: C-L5
-  reason: 'dtype Null on 252532751 (2005), whose drives carry no end; String/Int64 elsewhere'
-  games: [252532751]
-- column: 'drive.end.clock.displayValue'
-  scope: across_captures
-  finding: C-L5
-  reason: 'dtype Null on 252532751 (2005), whose drives carry no end; String/Int64 elsewhere'
-  games: [252532751]
-- column: 'drive.end.period.number'
-  scope: across_captures
-  finding: C-L5
-  reason: 'dtype Null on 252532751 (2005), whose drives carry no end; String/Int64 elsewhere'
-  games: [252532751]
-- column: 'drive.end.period.type'
-  scope: across_captures
-  finding: C-L5
-  reason: 'dtype Null on 252532751 (2005), whose drives carry no end; String/Int64 elsewhere'
-  games: [252532751]
-- column: 'drive.end.yardLine'
-  scope: across_captures
-  finding: C-L5
-  reason: 'dtype Null on 252532751 (2005), whose drives carry no end; String/Int64 elsewhere'
-  games: [252532751]
-- column: 'drive.shortDisplayResult'
-  scope: across_captures
-  finding: C-L5
-  reason: 'dtype Null on 252532751 (2005), whose drives carry no end; String/Int64 elsewhere'
-  games: [252532751]
-- column: 'drive.timeElapsed.displayValue'
-  scope: across_captures
-  finding: C-L5
-  reason: 'dtype Null on 252532751 (2005), whose drives carry no end; String/Int64 elsewhere'
-  games: [252532751]
 - column: 'end.downDistanceText'
   scope: across_captures
   finding: C-M8

@@ -175,6 +175,18 @@ _CLOCK_PREFIX = r"^\s*\(\d{1,2}:\d{2}\)\s*"
 #: 9 of them in 2006); no intact entity survives. Python ``re``: polars has no lookbehind.
 _MANGLED_ENTITY = r"(amp|apos|quot|#39);"
 _MANGLED_ENTITY_RE = re.compile("(?<!&)" + _MANGLED_ENTITY)
+# C-L5: the drive columns a feed with no drive `end` block (252532751, 2005) leaves all-null, typed as the
+# published release (load_cfb_pbp) and every other capture carry them.
+_DRIVE_DTYPES = {
+    "drive.description": pl.Utf8,
+    "drive.displayResult": pl.Utf8,
+    "drive.end.clock.displayValue": pl.Utf8,
+    "drive.end.period.number": pl.Int64,
+    "drive.end.period.type": pl.Utf8,
+    "drive.end.yardLine": pl.Int64,
+    "drive.shortDisplayResult": pl.Utf8,
+    "drive.timeElapsed.displayValue": pl.Utf8,
+}
 
 
 def _repair_entities(text: str) -> str:
@@ -2945,6 +2957,9 @@ class CFBPlayProcess(object):
             pl.col(c).cast(pl.Int64)
             for c in ("start.down", "start.distance", "end.down", "end.distance")
             if pbp_txt["plays"].schema.get(c, pl.Null).is_float()
+        )
+        pbp_txt["plays"] = pbp_txt["plays"].with_columns(
+            pl.col(c).cast(t) for c, t in _DRIVE_DTYPES.items() if pbp_txt["plays"].schema.get(c) == pl.Null
         )
         pbp_txt["timeouts"] = {
             init["homeTeamId"]: {"1": [], "2": []},

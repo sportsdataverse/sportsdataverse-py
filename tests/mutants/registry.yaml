@@ -6847,3 +6847,14 @@
   test: tests/test_common_espn_player_stats.py -k "null_float_not_its_display_value"
   expected: kill
   note: A stat with no value carries its "--" display string into a Float64 column again.
+
+# --- task 5.1 part (c): CFB drive columns of a feed with no drive end keep their dtype (C-L5)
+- id: cfb-drive-columns-without-an-end-keep-their-dtype
+  group: dtype-contract-5-1
+  finding: C-L5
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '            pl.col(c).cast(t) for c, t in _DRIVE_DTYPES.items() if pbp_txt["plays"].schema.get(c) == pl.Null'
+  mutant: '            pl.col(c) for c, t in _DRIVE_DTYPES.items() if pbp_txt["plays"].schema.get(c) == pl.Null'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "schema_is_identical and 252532751"
+  expected: kill
+  note: The eight drive.* columns of 252532751 (2005, drives without an end) are dtype Null again.
