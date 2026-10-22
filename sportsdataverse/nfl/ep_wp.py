@@ -2231,15 +2231,13 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
     # NFLPlayProcess's safety flag also reads a scored "Safety" row whose text is blank (most before 2009) and a safety
     # ESPN typed as something else (task 2.28); a frame without it keys on the text.
     is_safety = (
-        (pl.col("safety") == True).fill_null(False)  # noqa: E712
+        (pl.col("safety") == True).fill_null(False)
         if df.schema.get("safety") == pl.Boolean
         else _lower.str.contains(r"safety")
     )
     # ... and NFLPlayProcess's _untyped_safety, a safety whatever ESPN typed it (a Sack, a Blocked Punt), dropped after
     untyped_safety = (
-        (pl.col("_untyped_safety") == True).fill_null(False)  # noqa: E712
-        if "_untyped_safety" in df.columns
-        else pl.lit(False)
+        (pl.col("_untyped_safety") == True).fill_null(False) if "_untyped_safety" in df.columns else pl.lit(False)
     )
     off_score = pl.col("type.text").is_in(offense_score_vec) & td_stood  # a kicker_td row met def_score first
     kick_good = _lower.str.contains(r"kick\)")
