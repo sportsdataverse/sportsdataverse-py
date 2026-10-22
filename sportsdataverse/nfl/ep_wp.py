@@ -2228,6 +2228,17 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
         else pl.lit(True)
     )
     def_score = (pl.col("type.text").is_in(defense_score_vec) | kicker_td) & td_stood
+    # NFLPlayProcess's safety flag also reads a scored "Safety" row whose text is blank (most before 2009) and a safety
+    # ESPN typed as something else (task 2.28); a frame without it keys on the text.
+    is_safety = (
+        (pl.col("safety") == True).fill_null(False)
+        if df.schema.get("safety") == pl.Boolean
+        else _lower.str.contains(r"safety")
+    )
+    # ... and NFLPlayProcess's _untyped_safety, a safety whatever ESPN typed it (a Sack, a Blocked Punt), dropped after
+    untyped_safety = (
+        (pl.col("_untyped_safety") == True).fill_null(False) if "_untyped_safety" in df.columns else pl.lit(False)
+    )
     off_score = pl.col("type.text").is_in(offense_score_vec) & td_stood  # a kicker_td row met def_score first
     kick_good = _lower.str.contains(r"kick\)")
     kick_failed = _lower.str.contains(r"pat (?:failed|missed|no good)|extra point is (?:no good|blocked)")
@@ -2260,11 +2271,7 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             .when(pl.col("type.text").is_in(["Defensive 2pt Conversion"]))
             .then(-2)
             # Safeties
-            .when(
-                def_score.and_(
-                    pl.col("text").str.to_lowercase().str.contains(r"(?i)safety"),
-                ),
-            )
+            .when(def_score.and_(is_safety).or_(untyped_safety))
             .then(-2)
             # Defense TD + Successful Two-Point Conversion
             .when(def_score.and_(two_pt_good))

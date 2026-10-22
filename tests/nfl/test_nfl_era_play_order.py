@@ -19,8 +19,9 @@ import pytest
 
 import sportsdataverse.nfl.nfl_fourth_down as nfl_fourth_down
 from sportsdataverse.nfl import NFLPlayProcess
+from sportsdataverse.nfl.ep_wp import calculate_epa
 from sportsdataverse.nfl.model_vars import clock_stoppage_vec
-from sportsdataverse.nfl.nfl_pbp import _kickoff_next_snap
+from sportsdataverse.nfl.nfl_pbp import _kickoff_next_snap, _touchdown_did_not_stand, _untyped_safety
 from tests.nfl._whole_game import FIX
 
 
@@ -244,12 +245,123 @@ def test_unscored_return_touchdown_ends_at_its_try(path, game_id, play_id):
 
 # R971-4: a punt's next play may not be a kickoff. 271021019/2661 (2007, NYG's punt blocked out of its end zone for a
 # safety at 9:01 of Q3; nflverse safety 1) is not one of ESPN's scoring plays, so the net-spot read reaches it; the next
-# play is NYG's free kick, not SF's snap. The punt keeps ESPN's end (99). Its EPA (4.29, nflverse 0.62) is the unscored
-# safety's, which this test does not gate.
+# play is NYG's free kick, not SF's snap. The punt keeps ESPN's end (99); task 2.28 scores it as a safety.
 def test_punt_followed_by_a_free_kick_keeps_espns_end():
     row = _row(_era(271021019), 271021019, 2661)
-    assert row["type.text"] == "Blocked Punt" and row["scoringPlay"] is False
+    assert row["scoringPlay"] is False
     assert row["end.yardsToEndzone"] == 99
+
+
+# Task 2.28: the same row is a safety ESPN neither scored nor typed (blank text): SF's score rises by 2 on it and NYG
+# free-kicks from its own 20 next. On devel-nfl it kept "Blocked Punt" and scored from its end state, EPA 4.292 against
+# nflverse 0.624, and the score repair dropped SF's 2 points as a feed error until SF's next score (26-7, nflverse
+# 26-9). Read from the score and the free kick, it takes the -2 overlay and keeps ESPN's type: EPA 0.626.
+def test_unscored_safety_scores_two_for_the_defence():
+    row = _row(_era(271021019), 271021019, 2661)
+    assert (row["type.text"], row["safety"], row["fixed_drive_result"]) == ("Blocked Punt", True, "Safety")
+    assert abs(row["EPA"] - 0.624) <= 0.01, (row["EP_start"], row["EP_end"])
+    kick = _row(_era(271021019), 271021019, 2683)
+    assert (kick["homeScore"], kick["awayScore"]) == (26, 9)
+
+
+# Task 2.28: a safety ESPN scored but typed "Blocked Punt" (271223008/738, text "Safety"), outside defense_score_vec, so
+# the -2 overlay skipped it: EPA 2.499, nflverse -0.015. ESPN types the free kick after it "Safety" (764), so that type
+# counts as a free kick too: EPA 0.045. The row keeps its type (and so its punt and blocker columns).
+def test_scored_safety_typed_a_blocked_punt():
+    row = _row(_era(271223008), 271223008, "0738")
+    assert (row["type.text"], row["scoringPlay"], row["safety"]) == ("Blocked Punt", True, True)
+    assert abs(row["EPA"] - (-0.015)) <= 0.07, (row["EP_start"], row["EP_end"])
+
+
+# Task 2.28: the untyped-safety read needs both signals and a free kick. Each row has one without the rest and is not a
+# safety (nflverse safety 0): a try before a kickoff from the 20 (a 15-yard foul enforced on it) with no 2-point rise;
+# ESPN books 2 points for the defence on a snap the offence follows with a snap from its own 20 (no kick); and, a row
+# early, on the snap before B.Moorman's intentional safety (996, ESPN "Safety"), which starts at the BUF 24, not the 20.
+_NOT_SAFETIES = {
+    ("td_flag_residuals/summary_311218002.json.gz", 311218002, 4196): "Extra Point Good",
+    (_era(400874522), 400874522, 79): "Rush",
+    (_era(271216005), 271216005, "0961"): "Pass",
+}
+
+
+@pytest.mark.parametrize(("path", "game_id", "play_id"), list(_NOT_SAFETIES), ids=["no-rise", "no-kick", "not-from-20"])
+def test_one_safety_signal_alone_is_not_a_safety(path, game_id, play_id):
+    row = _row(path, game_id, play_id)
+    assert (row["type.text"], row["safety"]) == (_NOT_SAFETIES[(path, game_id, play_id)], False)
+
+
+def _index(df: pl.DataFrame, row_id: str) -> int:
+    return df["id"].cast(pl.Utf8).to_list().index(row_id)
+
+
+# R975-3: the untyped-safety read is windowed by game, its score rise and its next real play both. Cut 271021019 at
+# its safety into two games: 2661 opening the second has no earlier score to rise from, and 2661 closing the first has
+# no free kick after it. Unwindowed, either read crosses into the other game and flags 2661 again.
+def test_untyped_safety_read_stays_inside_its_game():
+    game = _plays(_era(271021019), 271021019)
+    i = _index(game, "2710210192661")
+    flag = game.select(s=_untyped_safety())["s"]
+    assert flag[i] and flag.sum() == 1
+    for cut in (i, i + 1):
+        two = pl.concat([game[:cut], game[cut:].with_columns(pl.col("game_id") + 1)])
+        assert two.select(s=_untyped_safety())["s"].sum() == 0, cut
+
+
+# R975-6: the free kick is the next REAL play. A timeout filed between a safety and its free kick (250918010/3832 and
+# 300912002/4199 on nfl-raw) must not hide it: copy one of 271021019's timeouts in right after 2661.
+def test_untyped_safety_reads_its_free_kick_past_a_timeout():
+    game = _plays(_era(271021019), 271021019)
+    i = _index(game, "2710210192661")
+    timeout = game.filter(pl.col("type.text") == "Timeout").head(1)
+    assert timeout.height == 1
+    frame = pl.concat([game[: i + 1], timeout, game[i + 1 :]])
+    assert frame.select(s=_untyped_safety())["s"][i] is True
+
+
+# R975-4: the try that keeps an unscored pre-2009 return touchdown is the next real play, and with no next play at all
+# (a walk-off return) ESPN's typing stands. 261022011/1629 (a punt return touchdown, its try 1662 next): a timeout
+# filed between them, or the game ending on the return, must not negate it.
+def test_pre_2009_return_touchdown_reads_its_try_past_a_stoppage():
+    game = _plays("summary_261022011_trimmed.json.gz", 261022011)
+    i = _index(game, "2610220111629")
+    timeout = game.filter(pl.col("type.text") == "Timeout").head(1)
+    assert timeout.height == 1
+    for frame in (game, pl.concat([game[: i + 1], timeout, game[i + 1 :]]), game[: i + 1]):
+        assert frame.select(s=_touchdown_did_not_stand())["s"][i] is False
+
+
+# R975-2: on a frame whose safety column is not NFLPlayProcess's Boolean flag (nflverse's is Float64) the -2 overlay
+# keys on the text. 291122008/3158 is a scored "Safety" whose text says so; without the fallback it would take the
+# defence-touchdown -6.92.
+@pytest.mark.parametrize("safety_dtype", [pl.Float64, None], ids=["float", "absent"])
+def test_safety_overlay_falls_back_to_the_text(safety_dtype):
+    game = _plays("try_endings/summary_291122008.json.gz", 291122008)
+    frame = game.drop("safety") if safety_dtype is None else game.with_columns(pl.col("safety").cast(safety_dtype))
+    out = calculate_epa(frame)
+    assert out["EP_end"][_index(out, "2911220083158")] == -2
+
+
+# Task 2.28: a safety ESPN scored and typed "Safety", but whose text never says "safety" (blank on most pre-2009 rows).
+# The -2 overlay keyed on the text, so the row fell through to the defence-touchdown -6.92: 281012016/923 (2008, "Dan
+# Orlovsky tackled in end zone by Jared Allen.") had EPA -4.576, nflverse 0.230; read from the safety flag, 0.344. ESPN
+# also types a free kick "Safety" without scoring it (271223008/764, nflverse a kickoff, safety 0): not a safety.
+def test_scored_safety_whose_text_does_not_say_so():
+    row = _row(_era(281012016), 281012016, "0923")
+    assert (row["type.text"], row["safety"], row["fixed_drive_result"]) == ("Safety", True, "Safety")
+    assert abs(row["EPA"] - 0.230) <= 0.12, (row["EP_start"], row["EP_end"])
+    assert _row(_era(271223008), 271223008, "0764")["safety"] is False
+
+
+# Task 2.28: before 2009 ESPN's kick text is blank, and it types some plain returns "Punt/Kickoff Return Touchdown".
+# 251030010/1409 (2005, OAK punts, TEN's return TOUCHDOWN NULLIFIED by penalty; ESPN: no text, no score change, no try,
+# not a scoring play) took td_play from the type: EPA -5.552, nflverse 1.334. No try follows, so it is not a
+# touchdown: EPA 1.297. A real one ESPN left unscored has its try next (test_unscored_return_touchdown_ends_at_its_try).
+# The 2005 feed has no play text at all (so the row's text is null), which the football source contract vetoes, so the
+# capture is named outside the summary_* files tests/football/sources/test_contract.py requires to pass it.
+def test_pre_2009_return_typed_a_touchdown_without_a_try_is_not_one():
+    row = _row("era_play_order/notext_251030010_trimmed.json.gz", 251030010, 1409)
+    assert row["type.text"] == "Punt Return Touchdown" and row["td_play"] is False
+    assert abs(row["EPA"] - 1.334) <= 0.04, (row["EP_start"], row["EP_end"])
 
 
 # R963-4: the next-snap read is windowed by game and half, so a frame of two games reads each game's own next snap.

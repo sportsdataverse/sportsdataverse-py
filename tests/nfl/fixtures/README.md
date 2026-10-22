@@ -285,7 +285,7 @@ the task 2.5 touchdown rule got wrong (review PR-808, R808-2/3/4) or one task 2.
 
 ## Era play order (`era_play_order/`, task 2.19)
 
-Fourteen ESPN Site v2 summaries from `nflverse-dev/nfl-raw` `nfl/espn/raw/<season>/<game_id>.json.gz` (source
+Eighteen ESPN Site v2 summaries from `nflverse-dev/nfl-raw` `nfl/espn/raw/<season>/<game_id>.json.gz` (source
 `https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=<game_id>`), trimmed to the same keys as
 the whole-game captures, read by `tests/nfl/test_nfl_era_play_order.py`. The oracle is nflverse
 (`nflverse-dev/nfl-data` `python/.cache/nflverse_pbp/pbp_<season>.parquet`, joined on `game_id` + `play_id`).
@@ -305,4 +305,8 @@ the whole-game captures, read by `tests/nfl/test_nfl_era_play_order.py`. The ora
 | 400791544 (`2015_01_MIA_WAS`) | d433655e | 2058, A.Franks kicks into the end zone at 0:27 of Q2, "Touchback."; ESPN's end clock 0:00 | `Kickoff`, end clock 0 (end clamped to the 99) | `touchback` 1, `epa` -0.127 (owner model 0) | R856-15 (text touchback at the spot) |
 | 401127996 (`2019_12_DET_WAS`) | 96b91e56 | 1913, M.Prater kicks into the end zone at 0:14 of Q2, "Touchback."; ESPN's end clock 0:00 | `Kickoff`, end clock 0 (end clamped to the 99) | `touchback` 1, `epa` -0.067 (owner model 0) | R856-15 |
 | 291203002 (`2009_13_NYJ_BUF`) | 044caca9 | 3741, NYJ's fair-caught punt at 2:39 of Q4; ESPN files "Timeout #3 by BUF at 03:25" after it, then BUF's sack at 2:32 | `Punt`, end clock 205 s (the timeout row's) | next play at `half_seconds_remaining` 152, `epa` -0.458 | R971-3 (task 2.25: a punt ends at its next snap's clock) |
-| 271021019 (`2007_07_SF_NYG`) | 4f540c18 | 2661, NYG's punt at 9:01 of Q3, blocked out of its end zone for a safety; the next play is NYG's free kick | `Blocked Punt`, `scoringPlay` false, end `yardsToEndzone` 99 | `safety` 1, `epa` 0.624 | R971-4 (task 2.25: a punt's next play is not a kickoff) |
+| 271021019 (`2007_07_SF_NYG`) | 4f540c18 | 2661, NYG's punt at 9:01 of Q3, blocked out of its end zone for a safety; the next play is NYG's free kick | `Blocked Punt`, `scoringPlay` false, end `yardsToEndzone` 99 | `safety` 1, `epa` 0.624 | R971-4 (task 2.25: a punt's next play is not a kickoff); task 2.28 (an unscored safety, from the score and the free kick) |
+| 251030010 (`2005_08_OAK_TEN`; `notext_` prefix: the 2005 feed carries no play text, which the football source contract vetoes) | a62f3dfb | 1409, OAK's punt at 7:05 of Q2; nflverse: A.Jones' 82-yard return "TOUCHDOWN NULLIFIED by Penalty" | `Punt Return Touchdown`, no text, `scoringPlay` false, score 12-17 before and after, next row a pass | `touchdown` 0, `epa` 1.334 | task 2.28 (a pre-2009 return typed a touchdown with no try after it is not one) |
+| 281012016 (`2008_06_DET_MIN`) | 4b1d90b6 | 923, "Dan Orlovsky tackled in end zone by Jared Allen." at 0:21 of Q1 | `Safety`, `scoringPlay` true, text without the word "safety" | `safety` 1, `epa` 0.230 | task 2.28 (a scored "Safety" row takes the -2 overlay whatever its text) |
+| 400874522 (`2016_01_TB_ATL`) | eb7830dc | 79, D.Freeman's run to the ATL 20 at 14:20 of Q1 | `Rush`, TB's score 0 -> 2 -> 0 over 58 / 79 / 100; ATL snaps next from its own 20 | `safety` 0, `epa` -0.770 | task 2.28 (an untyped safety needs a free kick next) |
+| 271216005 (`2007_15_BUF_CLE`) | 4f540c18 | 961, T.Edwards' pass at 14:15 of Q2; the next row is 996, B.Moorman's intentional safety (ESPN `Safety`, scored) | `Pass`, CLE's score 3 -> 5 on it (a row early); 996 starts at the BUF 24 (`yardsToEndzone` 76) | `safety` 0 (996: 1), `epa` -0.474 | task 2.28 (an untyped safety's free kick is from the kicker's 20) |
