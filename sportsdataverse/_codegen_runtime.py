@@ -82,6 +82,15 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
     return df
 
 
+def _cast_id_columns(df: pl.DataFrame) -> pl.DataFrame:
+    """Every ``id`` / ``*_id`` column of a parser's frame through :func:`_cast_ids_int64` (task 5.2).
+
+    A column holding an id that is not an integer (NHL stats-rest ``formatted_season_id`` ``"1971-72"``, a
+    country ``id`` ``"DEU"``) is refused there and keeps its dtype.
+    """
+    return _cast_ids_int64(df, [c for c in df.columns if c == "id" or c.endswith("_id")])
+
+
 def _empty_from_schema(name: str, return_as_pandas: bool = False) -> Any:
     """A zero-row frame with the columns and dtypes of the returns table ``name`` (task 5.1).
 
