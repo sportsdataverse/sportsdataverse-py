@@ -80,17 +80,21 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
     return df
 
 
-def _empty_from_schema(name: str, return_as_pandas: bool = False) -> Any:
+def _empty_from_schema(name: str, return_as_pandas: bool = False, arrow: bool = False) -> Any:
     """A zero-row frame with the columns and dtypes of the returns table ``name`` (task 5.1).
 
-    ``name`` is the table's path under ``tools/codegen/schemas/`` without ``.yaml``, plus
-    ``:<section>`` for one frame of a ``frames`` table or ``:<loader>`` for a ``loader_schemas.yaml``
-    entry. Codegen copies every table a call names into ``sportsdataverse/_returns_schemas.py``.
+    ``name`` is the table's path under ``tools/codegen/schemas/`` without ``.yaml`` (``scoreboard``, or a
+    league's own ``scoreboard/mbb``), plus ``:<section>`` for one frame of a ``frames`` table or
+    ``:<loader>`` for a ``loader_schemas.yaml`` entry. Codegen copies every table a call names into
+    ``sportsdataverse/_returns_schemas.py``. ``arrow`` gives the pandas frame Arrow-backed dtypes, for the
+    callers whose non-empty pandas result has them.
     """
     from sportsdataverse._returns_schemas import SCHEMAS
 
     df = pl.DataFrame(schema=SCHEMAS[name])
-    return df.to_pandas() if return_as_pandas else df
+    if not return_as_pandas:
+        return df
+    return df.to_pandas(use_pyarrow_extension_array=True) if arrow else df.to_pandas()
 
 
 def _pin_documented(name: str, df: pl.DataFrame) -> pl.DataFrame:
@@ -116,20 +120,33 @@ def _pin_documented(name: str, df: pl.DataFrame) -> pl.DataFrame:
     return df.with_columns(casts) if casts else df
 
 
-def _documented_empty(name: str) -> Callable[[_Fn], _Fn]:
-    """Decorate a parser or loader so a result with no columns is the documented empty frame ``name`` (task 5.1)."""
+def _league_tables(name: str) -> bool:
+    """Whether the returns table ``name`` has per-league variants (``scoreboard/mbb``, ``summary/nfl:plays``)."""
+    from sportsdataverse._returns_schemas import SCHEMAS
+
+    base = name.split(":", 1)[0]
+    return any(k.startswith(base + "/") for k in SCHEMAS)
+
+
+def _documented_empty(name: str, arrow: bool = False) -> Callable[[_Fn], _Fn]:
+    """Decorate a parser or loader so a result with no columns is the documented empty frame (task 5.1).
+
+    The table is ``name``, or the ``documented_table=`` the caller passes: the generated league wrappers pass
+    their league's own table (``scoreboard/mbb``), as the league's reference page documents it. Called
+    without one, a parser whose table has per-league variants cannot know which applies and keeps its
+    zero-width result (R978-1); a zero-row result that has columns is always left as it is.
+    """
 
     def wrap(parse: _Fn) -> _Fn:
         @functools.wraps(parse)
-        def wrapper(*args: Any, **kwargs: Any) -> Any:
+        def wrapper(*args: Any, documented_table: Optional[str] = None, **kwargs: Any) -> Any:
             out = parse(*args, **kwargs)
-            if isinstance(out, pl.DataFrame) and out.width == 0:
-                return _empty_from_schema(name)
-            if not isinstance(out, pl.DataFrame) and hasattr(out, "columns") and len(out.columns) == 0:
-                return _empty_from_schema(name, return_as_pandas=True)
-            return out
+            table = documented_table or (None if _league_tables(name) else name)
+            if table is None or not hasattr(out, "columns") or len(out.columns):
+                return out
+            return _empty_from_schema(table, return_as_pandas=not isinstance(out, pl.DataFrame), arrow=arrow)
 
-        setattr(wrapper, "__documented_empty__", name)  # the empty-result sweep finds the table by it
+        wrapper.__documented_empty__ = name  # type: ignore[attr-defined]  # the empty-result sweep reads it
         return cast(_Fn, wrapper)
 
     return wrap

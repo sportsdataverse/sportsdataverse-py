@@ -3,6 +3,7 @@ from __future__ import annotations
 
 
 import polars as pl
+import pytest
 
 from tests.conftest import load_fixture
 
@@ -408,3 +409,38 @@ def test_parse_pbp_flags_goal_shot_twins_real_fixture():
 
     # non-shot rows are never flagged
     assert df.filter((pl.col("event") != "shot") & (pl.col("is_goal_twin") == True)).height == 0  # noqa: E712
+
+
+@pytest.mark.parametrize(
+    ("parser", "stem", "kwargs", "table"),
+    [
+        ("parse_teams", "pwhl_teams_5", {}, "pwhl_teams"),
+        ("parse_shifts", "pwhl_gameshifts_42", {"game_id": 42}, "pwhl_game_shifts"),
+        ("parse_seasons", "pwhl_seasons", {}, "pwhl_season_id"),
+    ],
+)
+def test_empty_schema_documented_table_is_the_real_output(parser, stem, kwargs, table):
+    """R978-4 (mutant M8): the table an empty result carries is the one a real reply parses to."""
+    import pandas as pd
+
+    from sportsdataverse.hockeytech import _parsers as P
+    from tests.conftest import documented_schema
+
+    fn = getattr(P, parser)
+    want = documented_schema(f"autodoc/pwhl/{table}")
+    assert fn.__documented_empty__ == f"autodoc/pwhl/{table}"
+    assert dict(fn(_load(stem), **kwargs).schema) == want
+    assert dict(fn({}, **kwargs).schema) == want and fn({}, **kwargs).height == 0
+    pdf = fn({}, return_as_pandas=True, **kwargs)
+    assert isinstance(pdf, pd.DataFrame) and list(pdf.columns) == list(want)
+
+
+def test_shift_still_on_the_ice_keeps_end_s_int64():
+    """R978-4: the real shift feed with one shift's end time not yet set: end_s stays Int64 (null), never Float64."""
+    from sportsdataverse.hockeytech._parsers import parse_shifts
+
+    raw = _load("pwhl_gameshifts_42")
+    shift = next(sh for player in raw["SiteKit"]["Gameshifts"]["home"] for sh in player.get("shifts") or [])
+    shift["end_time"] = None
+    df = parse_shifts(raw, game_id=42)
+    assert df.schema["end_s"] == pl.Int64 and df["end_s"].null_count() == 1
