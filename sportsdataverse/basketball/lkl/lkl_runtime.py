@@ -114,6 +114,7 @@ def _fetch(url: str, params: Optional[Dict[str, Any]] = None) -> Any:
 
 def _check_status(url: str, resp: Any) -> None:
     status = getattr(resp, "status_code", None)
+    _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a)
     if status == 200:
         return
     where = _rt._where(url)
@@ -305,8 +306,11 @@ def _scope_error(kind: str, body: Dict[str, Any], rec: Dict[str, Any]) -> Option
 
 def _api(route: str, game_id: int) -> Dict[str, Any]:
     kind = _API_ROUTES[route]
-    rec = _game(game_id)  # NoDataError / AssetFetchError before the route is asked for
     url = f"{API}/{route}/{game_id}"
+    # the finished-game check is a lookup here: its 204 is an unknown answer (R4.1b-d-1); as the game-page
+    # route's own data request (``_game_page``) a 204 is {}
+    with _rt._no_content_unknown(f"{_rt._where(f'{SITE}/rungtynes/{game_id}')} (the finished-game check)"):
+        rec = _game(game_id)  # NoDataError / AssetFetchError before the route is asked for
     body = _json(url)
     where = _rt._where(url)
     if not isinstance(body, dict) or not body:
@@ -350,14 +354,17 @@ def _season_id(index_html: str, select_id: str, season: int, what: str) -> int:
 
 def _results(season: int) -> Dict[str, Any]:
     index_url = f"{SITE}/rezultatai"
-    index = _html(index_url)
+    with _rt._no_content_unknown(f"{_rt._where(index_url)} (the season index)"):  # a lookup
+        index = _html(index_url)
     sid = _season_id(index, "season-lkl", season, _rt._where(index_url))
     url = f"{SITE}/loadResults"
     q = {"team": "-", "opponent": "-", "month": "-", "season": sid}
     pages: List[str] = []
     last = 1
     while len(pages) < min(last, MAX_PAGES):
-        pages.append(_html(url, {**q, "page": len(pages) + 1}))
+        # several pages make one list: a 204 on any leaves it partial, an unknown answer (R4.1b-d-8)
+        with _rt._no_content_unknown(f"{_rt._where(url)} (page {len(pages) + 1} of the results)"):
+            pages.append(_html(url, {**q, "page": len(pages) + 1}))
         if len(pages) == 1:
             try:
                 last = _results_page(pages[0])[1] or 1
@@ -366,7 +373,8 @@ def _results(season: int) -> Dict[str, Any]:
     after = None
     try:
         if pages and len(_results_page(pages[-1])[0]) == PAGE_SIZE:  # a full last page: confirm nothing follows
-            after = _html(url, {**q, "page": len(pages) + 1})
+            with _rt._no_content_unknown(f"{_rt._where(url)} (the page after the last full one)"):
+                after = _html(url, {**q, "page": len(pages) + 1})
         rec = _page_record("results", sid, index, pages, after)
     except _NotParsed as exc:
         if exc.empty:
@@ -378,7 +386,8 @@ def _results(season: int) -> Dict[str, Any]:
 
 def _standings(season: int) -> Dict[str, Any]:
     index_url = f"{SITE}/turnyrine-lentele"
-    index = _html(index_url)
+    with _rt._no_content_unknown(f"{_rt._where(index_url)} (the season index)"):  # a lookup
+        index = _html(index_url)
     sid = _season_id(index, "season", season, _rt._where(index_url))
     url = f"{SITE}/loadStandings/{sid}"
     text = _html(url)
@@ -393,6 +402,7 @@ def _standings(season: int) -> Dict[str, Any]:
 
 
 # ------------------------------------------------------------------------------ the getter
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, Any]:
     """GET an LKL route, refuse every wrong answer, return the body or page record with the request stamped.
 

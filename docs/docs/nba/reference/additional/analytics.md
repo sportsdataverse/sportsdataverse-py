@@ -1266,11 +1266,12 @@ pos = nba_player_positions("2023-24", fetch=stub)
 
 ### nba_player_props {#nba_player_props}
 
-`nba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`nba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '00', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Per-player expected prop lines + team pace projection for a matchup.
 
-Loads the season's player box logs + team ratings, computes per-minute
+Loads the season's player box logs + team ratings, keeps only games played
+strictly before `as_of_date` (both inputs), computes per-minute
 `player_rates`, and projects each player's line onto their mean
 minutes and the matchup's pace factor (`exp_poss / avg_pace`). Only the
 two teams in the matchup are returned.
@@ -1280,10 +1281,11 @@ two teams in the matchup are returned.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `season` | `int` |  | End year of the season (e.g. `2024`). |
-| `game_id` | `str` |  | The game id (passed through for the caller's join; not used to filter historical rates). |
+| `game_id` | `str` |  | The game id. When `as_of_date` is `None` and this game is in the season's box logs or schedule, its date becomes the cut, so the default call never sees the game's own or any later line. |
 | `home_team_id` | `str` |  | Home team id. |
 | `away_team_id` | `str` |  | Away team id. |
 | `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League. |
+| `as_of_date` | `Union[date, None]` | `None` | Only box lines and ratings games with `game_date < as_of_date` (strict) are used. `None` = the target game's date from the box logs, else from the schedule (one extra schedule read, only when the game is missing from the logs); a game in neither gets no cut and an `~sportsdataverse.errors.AsOfCutWarning`. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
@@ -1300,11 +1302,22 @@ One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_e
 | `stat_fg3m_exp` | double |  |
 | `pace_proj` | double |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | The box logs carry no `game_date` (the as-of cut cannot be applied). |
+
 **Example**
 
 ```python
 from sportsdataverse.nba.nba_player_props import nba_player_props
 props = nba_player_props(2024, "401585828", "2", "6")
+
+# Backtest as of a date
+
+import datetime as dt
+props = nba_player_props(2024, "401585828", "2", "6", as_of_date=dt.date(2024, 1, 15))
 ```
 
 ### nba_playtype_ratings {#nba_playtype_ratings}

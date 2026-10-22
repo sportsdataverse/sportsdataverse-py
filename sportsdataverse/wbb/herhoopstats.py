@@ -63,9 +63,22 @@ HERHOOPSTATS = SubscriptionSite(
     proxy_env="SDV_PY_HERHOOPSTATS_PROXY",
     csrf_field="csrfmiddlewaretoken",  # Django
     signup_url="https://herhoopstats.com/subscribe/",
+    # Every page pushes `'subscribed': 0|1` to its analytics dataLayer. Measured 2026-10-20 on
+    # team_single_seasons 2025: logged out 0 (a 5-row teaser, no login form), subscriber 1 (362 rows).
+    free_tier_marker=r"'subscribed':\s*0\b",
 )
 
 _TEAM_SEASONS_PATH = "/stats/ncaa/research/team_single_seasons/"
+
+#: The roster table's columns as a team page parses (tools/codegen/schemas/autodoc/wbb/herhoopstats_team_roster.yaml);
+#: the zero-row answer when a page carries no roster.
+_ROSTER_SCHEMA = {
+    "player": pl.Utf8,
+    "g": pl.Int64,
+    "gs": pl.Int64,
+    **dict.fromkeys(("min", "pts", "trb", "ast", "tov", "stl", "blk"), pl.Float64),
+    **dict.fromkeys(("fg_pct", "ft_pct", "2_p_pct", "3_p_pct"), pl.Utf8),
+}
 
 
 def herhoopstats_login(
@@ -209,6 +222,8 @@ def herhoopstats_teams(
 
     Raises:
         RuntimeError: When credentials cannot be resolved or are rejected.
+        AssetFetchError: The fetch failed, or the page was the free-tier teaser (the
+            session expired or the subscription lapsed), never returned as data.
 
     Example:
         Quick start::
@@ -277,6 +292,8 @@ def herhoopstats_team_stats(
 
     Raises:
         RuntimeError: When credentials cannot be resolved or are rejected.
+        AssetFetchError: The fetch failed, or the page was the free-tier teaser (the
+            session expired or the subscription lapsed), never returned as data.
 
     Example:
         Quick start::
@@ -301,7 +318,8 @@ def herhoopstats_team_roster(
     """The player roster table from one Her Hoop Stats team page.
 
     Port of wehoop's ``hhs_team_roster()``: picks the table carrying a player /
-    name column, falling back to the tallest table on the page.
+    name column. A page without one has no roster: it answers a zero-row frame with the
+    roster columns, never another table (wehoop falls back to the tallest table).
 
     Args:
         team_link: A team page path or full URL.
@@ -311,10 +329,13 @@ def herhoopstats_team_roster(
         **kwargs: ``proxy`` / ``session`` steer auth; the rest reach ``download``.
 
     Returns:
-        One row per player. A zero-row frame when the page carried no roster.
+        One row per player. A zero-row frame with the roster columns when the page
+        carried no roster.
 
     Raises:
         RuntimeError: When credentials cannot be resolved or are rejected.
+        AssetFetchError: The fetch failed, or the page was the free-tier teaser (the
+            session expired or the subscription lapsed), never returned as data.
 
     Example:
         Quick start::
@@ -329,5 +350,6 @@ def herhoopstats_team_roster(
         (t for t in tables.values() if any(("player" in c or "name" in c) for c in t.columns)),
         None,
     )
-    frame = _largest(tables) if roster is None else roster
+    # B-GB-24: no player column means no roster on this page; the tallest table is something else.
+    frame = pl.DataFrame(schema=_ROSTER_SCHEMA) if roster is None else roster
     return frame.to_pandas() if return_as_pandas else frame

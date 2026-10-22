@@ -205,7 +205,7 @@ halves era. The line-score width alone cannot (halves + 2 OT and quarters
 
 **Returns**
 
-`(2, 1200, 300)` when a first-period clock above 10:00 is present, otherwise `(4, 600, 300)` (an unreadable page falls through to the modern model, matching `~sportsdataverse.scrape.ncaa.parse.wbb_period_model`).
+`(2, 1200, 300)` when a first-period clock above 10:00 is present, otherwise the quarters model (an unreadable page falls through to the modern model, matching `~sportsdataverse.scrape.ncaa.parse.wbb_period_model`).
 
 **Example**
 
@@ -229,7 +229,7 @@ quarters from 2015-16 (see the module docstring).
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `object` |  | NCAA contest id (e.g. `"5722355"`). |
-| `season` | `Optional[object]` | `None` | Season as an ending year (`2015`) or span (`"2014-15"`). When omitted the era is inferred from the page's first-period clock (`infer_wbb_period_model`). |
+| `season` | `Optional[object]` | `None` | Season as an ending year (`2015`) or span (`"2014-15"`). When omitted, NaN or blank, the era is inferred from the page's first-period clock (`infer_wbb_period_model`). |
 | `fetcher` | `Optional[_SupportsFetchGamePbp]` | `None` | Optional injected fetcher exposing `fetch_game_pbp` (for tests/offline use). Defaults to a fresh `NcaaFetcher.with_browser()` context per call. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
@@ -275,6 +275,12 @@ The 35-column play-by-play frame (zero rows when the game is not found).
 | `is_garbage_time` | logical |  |
 | `sub_deviate` | integer |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `game_id` is not an integral contest id (`None`, NaN, `5722355.5`); a float such as `5722355.0` is accepted. |
+
 **Example**
 
 ```python
@@ -289,22 +295,24 @@ df = ncaa_wbb_game_pbp("1613299", season=2015)
 
 ### ncaa_wbb_play_by_play {#ncaa_wbb_play_by_play}
 
-`ncaa_wbb_play_by_play(game_ids: 'Sequence[object]', *, season: 'Optional[object]' = None, fetcher: 'Optional[_SupportsFetchGamePbp]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`ncaa_wbb_play_by_play(game_ids: 'Sequence[object]', *, season: 'Optional[object]' = None, fetcher: 'Optional[_SupportsFetchGamePbp]' = None, return_as_pandas: 'bool' = False, errors: "Literal['raise', 'skip']" = 'raise') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Scrape many WBB games' play-by-play (wbigballR `get_play_by_play`, era-aware).
 
 Same driver as `sportsdataverse.mbb.mbb_ncaa_game_pbp.ncaa_mbb_play_by_play`
-(drop missing ids, shared fetcher session, one retry per empty scrape) with
+(drop missing ids, shared fetcher session, one retry per empty or failed scrape
+except a page the format guard rejected) with
 the WBB period model for each game's era bound.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_ids` | `Sequence[object]` |  | NCAA contest ids; `None`/NaN entries are dropped. |
-| `season` | `Optional[object]` | `None` | Season shared by every id, as an ending year or span. When omitted each page's era is inferred from its first-period clock, so ids from both eras may be mixed. |
+| `game_ids` | `Sequence[object]` |  | NCAA contest ids; `None`/NaN entries and non-integral floats (`5722355.5`) are dropped, an integral float (`5722355.0`) is read as `"5722355"`. |
+| `season` | `Optional[object]` | `None` | Season shared by every id, as an ending year or span. When omitted, NaN or blank, each page's era is inferred from its first-period clock, so ids from both eras may be mixed. |
 | `fetcher` | `Optional[_SupportsFetchGamePbp]` | `None` | Optional injected fetcher exposing `fetch_game_pbp`. Defaults to one shared `NcaaFetcher.with_browser()` context. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+| `errors` | `Literal['raise', 'skip']` | `'raise'` | `"raise"` (default): a failed fetch (a ban, an exhausted proxy pool, an uncleared challenge) raises `AssetFetchError`. `"skip"`: it is dropped like a missing game, and the frame gains a `scrape_status` column -- `"ok"` on every play row, plus one row per dropped game (`game_id` and why: `fetch_failed: ...`, `no_data: ...`, `request_error: ...`, `parse_failed: ...` or `empty`). |
 
 **Returns**
 
@@ -347,6 +355,13 @@ Row-bound play-by-play for every game that scraped successfully (zero-row contra
 | `status` | character | Status label. |
 | `is_garbage_time` | logical |  |
 | `sub_deviate` | integer |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | A fetch failed and `errors="raise"`. |
+| `ValueError` | `errors` is not `"raise"` or `"skip"`. |
 
 **Example**
 

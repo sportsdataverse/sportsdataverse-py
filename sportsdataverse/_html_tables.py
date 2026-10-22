@@ -23,7 +23,7 @@ from __future__ import annotations
 
 import io
 import re
-from typing import Any, Dict
+from typing import Any, Callable, Dict, Optional
 
 import polars as pl
 
@@ -168,11 +168,33 @@ def _table_key(node: Any, index: int, used: set[str]) -> str:
     return key
 
 
+def _restore_text(frame: Any, node: Any, positions: Any) -> Any:
+    """``frame`` with the columns at ``positions`` put back as their cell text (A-M18, R48b-7).
+
+    Every other column keeps ``read_html``'s typing.
+
+    ``read_html`` takes no ``dtype=``, so this is a SECOND parse of the same table with a
+    ``str`` converter per column position: the same rows and columns, only the typing differs.
+    """
+    import pandas as pd
+
+    converters = dict.fromkeys(range(frame.shape[1]), str)
+    text = pd.read_html(io.StringIO(str(node)), flavor="lxml", converters=converters)[0]
+    if text.shape != frame.shape:  # cannot happen for one table read twice; never swap misaligned columns
+        raise ValueError(f"the text read of a table is {text.shape}, its typed read {frame.shape}")
+    frame = frame.copy()
+    for j in positions:
+        col = text.iloc[:, j]
+        frame.isetitem(j, col.where(col.notna(), None))
+    return frame
+
+
 def html_tables(
     html: str,
     *,
     min_rows: int = 1,
     return_as_pandas: bool = False,
+    text_columns: Optional[Callable[[Any], Dict[int, str]]] = None,
 ) -> Dict[str, Any]:
     """Parse every ``<table>`` on a page into cleaned DataFrames.
 
@@ -187,6 +209,10 @@ def html_tables(
         min_rows: Drop tables with fewer than this many data rows (KenPom pages
             carry small nav/legend tables alongside the real one).
         return_as_pandas: Return ``pandas.DataFrame`` values instead of polars.
+        text_columns: Called with each ``<table>`` node; returns ``{column position: name}``
+            for label columns (a jersey) that are always text and take that name.
+            ``read_html`` would type a jersey as a number, so ``"00"`` became 0. Every
+            other column keeps ``read_html``'s typing.
 
     Returns:
         ``{table_key: DataFrame}`` -- keyed by the table's HTML ``id`` (e.g.
@@ -227,8 +253,12 @@ def html_tables(
         frame = frames[0]
         if len(frame) < min_rows:
             continue
+        labels = text_columns(node) if text_columns else {}
+        if labels:
+            frame = _restore_text(frame, node, labels)
         flat = [_flatten_header(col) for col in frame.columns]
-        frame.columns = _dedupe_headers(flat)
+        names = _dedupe_headers(flat)
+        frame.columns = [labels.get(j, name) for j, name in enumerate(names)]
         key = _table_key(node, i, set(out))
         out[key] = frame if return_as_pandas else pl.from_pandas(frame)
     return out

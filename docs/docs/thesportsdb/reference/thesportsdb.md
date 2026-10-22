@@ -13,9 +13,9 @@ toc_max_heading_level: 2
 
 One event.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/lookupevent.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/123/lookupevent.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/lookupevent.php?id=2267073](https://www.thesportsdb.com/api/v1/json/3/lookupevent.php?id=2267073)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/123/lookupevent.php?id=2267073](https://www.thesportsdb.com/api/v1/json/123/lookupevent.php?id=2267073)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -99,9 +99,9 @@ _Last validated n/a._
 
 One league.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/lookupleague.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/123/lookupleague.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/lookupleague.php?id=4328](https://www.thesportsdb.com/api/v1/json/3/lookupleague.php?id=4328)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/123/lookupleague.php?id=4328](https://www.thesportsdb.com/api/v1/json/123/lookupleague.php?id=4328)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -183,9 +183,9 @@ _Last validated n/a._
 
 Next 15 events of a league.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/123/eventsnextleague.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=4328](https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=4328)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/123/eventsnextleague.php?id=4328](https://www.thesportsdb.com/api/v1/json/123/eventsnextleague.php?id=4328)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -269,9 +269,9 @@ _Last validated n/a._
 
 Teams in a league (by league name).
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/search_all_teams.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/123/search_all_teams.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/search_all_teams.php?l=English+Premier+League](https://www.thesportsdb.com/api/v1/json/3/search_all_teams.php?l=English+Premier+League)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/123/search_all_teams.php?l=English+Premier+League](https://www.thesportsdb.com/api/v1/json/123/search_all_teams.php?l=English+Premier+League)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -369,9 +369,9 @@ _Last validated n/a._
 
 All leagues.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/all_leagues.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/123/all_leagues.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/all_leagues.php](https://www.thesportsdb.com/api/v1/json/3/all_leagues.php)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/123/all_leagues.php](https://www.thesportsdb.com/api/v1/json/123/all_leagues.php)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -408,9 +408,9 @@ _Last validated n/a._
 
 One player.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/lookupplayer.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/123/lookupplayer.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/lookupplayer.php?id=34145937](https://www.thesportsdb.com/api/v1/json/3/lookupplayer.php?id=34145937)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/123/lookupplayer.php?id=34145937](https://www.thesportsdb.com/api/v1/json/123/lookupplayer.php?id=34145937)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -516,9 +516,9 @@ _Last validated n/a._
 
 Search players by name.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/searchplayers.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/123/searchplayers.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p=Danny+Welbeck](https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p=Danny+Welbeck)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/123/searchplayers.php?p=Danny+Welbeck](https://www.thesportsdb.com/api/v1/json/123/searchplayers.php?p=Danny+Welbeck)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -566,9 +566,9 @@ _Last validated n/a._
 
 Events of a league-season.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/eventsseason.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/123/eventsseason.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=4328&s=2025-2026](https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=4328&s=2025-2026)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/123/eventsseason.php?id=4328&s=2025-2026](https://www.thesportsdb.com/api/v1/json/123/eventsseason.php?id=4328&s=2025-2026)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -634,9 +634,9 @@ _Last validated n/a._
 
 All sports.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/all_sports.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/123/all_sports.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/all_sports.php](https://www.thesportsdb.com/api/v1/json/3/all_sports.php)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/123/all_sports.php](https://www.thesportsdb.com/api/v1/json/123/all_sports.php)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -677,9 +677,9 @@ _Last validated n/a._
 
 League table.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/lookuptable.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/123/lookuptable.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/lookuptable.php?l=4328&s=2025-2026](https://www.thesportsdb.com/api/v1/json/3/lookuptable.php?l=4328&s=2025-2026)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/123/lookuptable.php?l=4328&s=2025-2026](https://www.thesportsdb.com/api/v1/json/123/lookuptable.php?l=4328&s=2025-2026)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -735,9 +735,9 @@ _Last validated n/a._
 
 One team.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/lookupteam.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/123/lookupteam.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/lookupteam.php?id=133604](https://www.thesportsdb.com/api/v1/json/3/lookupteam.php?id=133604)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/123/lookupteam.php?id=133604](https://www.thesportsdb.com/api/v1/json/123/lookupteam.php?id=133604)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -835,9 +835,9 @@ _Last validated n/a._
 
 Players of a team.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/lookup_all_players.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/123/lookup_all_players.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/lookup_all_players.php?id=133604](https://www.thesportsdb.com/api/v1/json/3/lookup_all_players.php?id=133604)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/123/lookup_all_players.php?id=133604](https://www.thesportsdb.com/api/v1/json/123/lookup_all_players.php?id=133604)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

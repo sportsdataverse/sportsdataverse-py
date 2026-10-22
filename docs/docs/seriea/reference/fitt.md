@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # SERIEA — ESPN FPI API (fitt v3)
 
-`sportsdataverse.seriea` — 1 endpoint.
+`sportsdataverse.soccer.seriea` — 1 endpoint.
 
 ## espn_seriea_fpi
 

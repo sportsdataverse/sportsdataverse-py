@@ -110,7 +110,7 @@ def describe_fn(module, name: str, fn, base: str, strip_prefix: str) -> Optional
     try:
         url_min, q_min = _capture(module, fn, args_min)
         url_max, q_max = _capture(module, fn, args_max)
-    except Exception:
+    except Exception:  # noqa: BLE001 -- a bootstrap probe of any hand-written fn: one that cannot run on a stub is not flat
         return None
     if not url_max:
         return None

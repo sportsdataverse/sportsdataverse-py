@@ -135,6 +135,7 @@ def _fetch(url: str, params: Optional[Dict[str, Any]]) -> str:
         err.transient = True
         raise err from None
     status = getattr(resp, "status_code", None)
+    _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a)
     text = _body_text(resp)
     if status == 200:
         return text
@@ -194,6 +195,7 @@ def _wrong(url: str, what: str, got: Any, want: Any) -> AssetFetchError:
 
 
 # ------------------------------------------------------------------------------ the getter
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET a Genius route, refuse every wrong answer and return its body (or page record).
 

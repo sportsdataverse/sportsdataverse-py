@@ -3,7 +3,7 @@ title: QMJHL
 sidebar_label: QMJHL
 description: "sdv-py QMJHL: endpoint references, dataset loaders and parsers for QMJHL in the SportsDataverse Python package."
 ---
-# QMJHL (`sportsdataverse.qmjhl`)
+# QMJHL (`sportsdataverse.hockey.qmjhl`)
 
 ## Data sources
 
@@ -36,7 +36,7 @@ Worked examples — executed notebooks rendered as pages (refreshed weekly again
 
 Each `sportsdataverse` function and its equivalent in the sister R package, [`fastRhockey`](https://github.com/sportsdataverse). Same-named where possible; the R column links the package's pkgdown reference.
 
-| `sportsdataverse.qmjhl` (Python) | `fastRhockey` (R) |
+| `sportsdataverse.hockey.qmjhl` (Python) | `fastRhockey` (R) |
 |---|---|
 | [`most_recent_qmjhl_season`](reference/additional#most_recent_qmjhl_season) | [`most_recent_qmjhl_season`](https://fastRhockey.sportsdataverse.org/reference/most_recent_qmjhl_season.html) |
 | [`qmjhl_game_corsi`](reference/additional#qmjhl_game_corsi) | [`qmjhl_game_corsi`](https://fastRhockey.sportsdataverse.org/reference/qmjhl_game_corsi.html) |

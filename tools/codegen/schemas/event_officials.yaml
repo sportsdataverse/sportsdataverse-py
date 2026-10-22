@@ -31,3 +31,9 @@ columns:
 - name: position_name
   type: character
   description: ''
+- name: count
+  type: integer
+  description: ''
+- name: page_count
+  type: integer
+  description: ''

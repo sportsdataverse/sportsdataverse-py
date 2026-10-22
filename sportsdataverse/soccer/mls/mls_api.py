@@ -4,7 +4,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
+from typing import Dict, List, Optional, Union  # noqa: F401
+
+# Imported at runtime, not under TYPE_CHECKING: typing.get_type_hints() evaluates the
+# annotations below and raised NameError on ``pl`` / ``pd`` (R858-4).
+import pandas as pd  # noqa: F401
+import polars as pl  # noqa: F401
 
 from sportsdataverse.soccer.mls.mls_api_runtime import _get, bool_str
 from sportsdataverse.soccer.mls.mls_api_parsers import (
@@ -13,10 +18,6 @@ from sportsdataverse.soccer.mls.mls_api_parsers import (
     parse_mls_match,
     parse_mls_standings,
 )
-
-if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
-    import pandas as pd
-    import polars as pl
 
 __all__ = [
     "mls_club",
@@ -63,7 +64,7 @@ def mls_club(
     Example:
         Quick start::
 
-            from sportsdataverse.mls import mls_club
+            from sportsdataverse.soccer.mls import mls_club
             mls_club(club_id='MLS-CLU-000001')
 
         See Also:
@@ -116,7 +117,7 @@ def mls_competition_seasons(
     Example:
         Quick start::
 
-            from sportsdataverse.mls import mls_competition_seasons
+            from sportsdataverse.soccer.mls import mls_competition_seasons
             mls_competition_seasons(competition_id='MLS-COM-000001')
 
         See Also:
@@ -167,7 +168,7 @@ def mls_competitions(
     Example:
         Quick start::
 
-            from sportsdataverse.mls import mls_competitions
+            from sportsdataverse.soccer.mls import mls_competitions
             mls_competitions()
 
         See Also:
@@ -220,7 +221,7 @@ def mls_content_season(
     Example:
         Quick start::
 
-            from sportsdataverse.mls import mls_content_season
+            from sportsdataverse.soccer.mls import mls_content_season
             mls_content_season(slug='mls-regular-season-2026')
 
         See Also:
@@ -275,7 +276,7 @@ def mls_content_seasons(
     Example:
         Quick start::
 
-            from sportsdataverse.mls import mls_content_seasons
+            from sportsdataverse.soccer.mls import mls_content_seasons
             mls_content_seasons()
 
         See Also:
@@ -330,7 +331,7 @@ def mls_match(
     Example:
         Quick start::
 
-            from sportsdataverse.mls import mls_match
+            from sportsdataverse.soccer.mls import mls_match
             mls_match(match_id='MLS-MAT-0009H8')
 
         See Also:
@@ -395,7 +396,7 @@ def mls_season_matches(
     Example:
         Quick start::
 
-            from sportsdataverse.mls import mls_season_matches
+            from sportsdataverse.soccer.mls import mls_season_matches
             mls_season_matches(season_id='MLS-SEA-0001KA')
 
         See Also:
@@ -456,7 +457,7 @@ def mls_sportapi_club_players(
     Example:
         Quick start::
 
-            from sportsdataverse.mls import mls_sportapi_club_players
+            from sportsdataverse.soccer.mls import mls_sportapi_club_players
             mls_sportapi_club_players(club_id='MLS-CLU-000001')
 
         See Also:
@@ -510,7 +511,7 @@ def mls_sportapi_clubs_by_sportec_ids(
     Example:
         Quick start::
 
-            from sportsdataverse.mls import mls_sportapi_clubs_by_sportec_ids
+            from sportsdataverse.soccer.mls import mls_sportapi_clubs_by_sportec_ids
             mls_sportapi_clubs_by_sportec_ids(ids='MLS-MAT-0009H8')
 
         See Also:
@@ -563,7 +564,7 @@ def mls_sportapi_match(
     Example:
         Quick start::
 
-            from sportsdataverse.mls import mls_sportapi_match
+            from sportsdataverse.soccer.mls import mls_sportapi_match
             mls_sportapi_match(match_id='MLS-MAT-0009H8')
 
         See Also:
@@ -616,7 +617,7 @@ def mls_sportapi_matches_by_sportec_ids(
     Example:
         Quick start::
 
-            from sportsdataverse.mls import mls_sportapi_matches_by_sportec_ids
+            from sportsdataverse.soccer.mls import mls_sportapi_matches_by_sportec_ids
             mls_sportapi_matches_by_sportec_ids(ids='MLS-MAT-0009H8')
 
         See Also:
@@ -677,7 +678,7 @@ def mls_standings(
     Example:
         Quick start::
 
-            from sportsdataverse.mls import mls_standings
+            from sportsdataverse.soccer.mls import mls_standings
             mls_standings(competition_id='MLS-COM-000001', season_id='MLS-SEA-0001KA')
 
         See Also:
@@ -691,7 +692,7 @@ def mls_standings(
     _params = {
         "category": category,
         "type": standings_type,
-        "is_live": bool_str(is_live),
+        "is_live": bool_str(is_live, name="is_live"),
         **{_k: _v for _k, _v in kwargs.items() if _v is not None},
     }
     _params.update(_caller_params)

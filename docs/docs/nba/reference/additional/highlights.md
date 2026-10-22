@@ -485,6 +485,7 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 |---|---|
 | `ValueError` | `season_type` is not `"regular"`/`"postseason"`. |
 | `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+| `sportsdataverse.errors.AssetFetchError` | The statistics, athlete or team fetch failed (403, 429, 5xx, a dead connection); only a 404 on the athlete or team node leaves those columns null. |
 
 **Example**
 
@@ -511,7 +512,7 @@ espn_nba_schedule - look up the NBA schedule for a given date from ESPN
 
 **Returns**
 
-Polars dataframe containing schedule dates for the requested season. Returns None if no games
+Polars dataframe containing schedule dates for the requested season. A day with no games returns a zero-row frame carrying the documented columns.
 
 | col_name | type | description |
 |---|---|---|
@@ -620,7 +621,7 @@ espn_nba_teams - look up NBA teams
 
 **Returns**
 
-Polars dataframe containing teams for the requested league. This function caches by default, so if you want to refresh the data, use the command sportsdataverse.nba.espn_nba_teams.clear_cache().
+Polars dataframe of the NBA teams, one row per team, with the columns in the returns table. A payload without teams returns a zero-row frame with those columns. The result is not cached: every call fetches (through the package's opt-in TTL response cache, `sportsdataverse.cache`, when it is on).
 
 | col_name | type | description |
 |---|---|---|
@@ -638,6 +639,13 @@ Polars dataframe containing teams for the requested league. This function caches
 | `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |
 | `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
 | `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | ESPN answered 404 for the teams resource. |
+| `AssetFetchError` | The fetch failed (403, 429, 5xx, a dropped connection); never returned as an empty frame. |
 
 **Example**
 

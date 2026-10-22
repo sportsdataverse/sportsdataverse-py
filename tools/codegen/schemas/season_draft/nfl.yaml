@@ -1,0 +1,39 @@
+schema: season_draft
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''
+- name: display_name
+  type: character
+  description: ''
+- name: links
+  type: character
+  description: ''
+- name: needs
+  type: character
+  description: ''
+- name: number_of_rounds
+  type: integer
+  description: ''
+- name: positions
+  type: character
+  description: ''
+- name: short_display_name
+  type: character
+  description: ''
+- name: uid
+  type: character
+  description: ''
+- name: year
+  type: integer
+  description: ''
+- name: athletes_$ref
+  type: character
+  description: ''
+- name: rounds_$ref
+  type: character
+  description: ''
+- name: status_$ref
+  type: character
+  description: ''

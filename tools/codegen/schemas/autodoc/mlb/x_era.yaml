@@ -1,0 +1,15 @@
+schema: x_era
+kind: dataframe
+columns:
+- name: pitcher
+  type: integer
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: x_woba
+  type: double
+  description: ''
+- name: x_era
+  type: double
+  description: ''

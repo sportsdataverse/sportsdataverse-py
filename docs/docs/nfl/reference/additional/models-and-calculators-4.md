@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Models and calculators: calculate_win"
 sidebar_label: "Models and calculators: calculate_win"
-sidebar_position: 17
+sidebar_position: 18
 description: "NFL — additional Python functions — Models and calculators: calculate_win — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Models and calculators: calculate_win

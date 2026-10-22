@@ -26,6 +26,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 
 | Function | Summary |
 |---|---|
+| [espn_cfb_calendar](additional/espn.md#espn_cfb_calendar) | espn_cfb_calendar - look up the men's college football calendar for a given season |
 | [espn_cfb_game_rosters](additional/espn.md#espn_cfb_game_rosters) | espn_cfb_game_rosters() - Pull the game by id. |
 | [espn_cfb_play_participants](additional/espn.md#espn_cfb_play_participants) | Pull ESPN per-play participants for a college-football game. |
 | [espn_cfb_teams](additional/espn.md#espn_cfb_teams) | espn_cfb_teams - look up the college football teams |
@@ -78,7 +79,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [fox_cfb_league_standings](additional/fox-sports-api.md#fox_cfb_league_standings) | Fox Sports cfb league-wide standings tables. |
 | [fox_cfb_league_stat_leaders](additional/fox-sports-api.md#fox_cfb_league_stat_leaders) | Fox Sports cfb league stats landing leaders. |
 | [fox_cfb_odds](additional/fox-sports-api.md#fox_cfb_odds) | Fox Sports CFB game odds six-pack (spread / to win / total per team). |
-| [fox_cfb_pbp](additional/fox-sports-api.md#fox_cfb_pbp) | Fox Sports CFB play-by-play (one row per play). |
+| [fox_cfb_pbp](additional/fox-sports-api.md#fox_cfb_pbp) | Fox Sports CFB play-by-play (one row per play, oldest first, live or final). |
 | [fox_cfb_play_process](additional/fox-sports-api.md#fox_cfb_play_process) | Build a *processed* CFB play-by-play game from FoxSports as a backup to ESPN. |
 | [fox_cfb_schedule](additional/fox-sports-api.md#fox_cfb_schedule) | Fox Sports CFB full-season schedule (one row per game). |
 | [fox_cfb_scoreboard](additional/fox-sports-api.md#fox_cfb_scoreboard) | Fox Sports cfb scoreboard nav selections (weeks / dates / groups). |
@@ -99,6 +100,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 |---|---|
 | [add_era_columns](additional/models-and-calculators.md#add_era_columns) | Add the era column(s) `model` consumes, using ITS card's cuts. |
 | [assert_rating_scale](additional/models-and-calculators.md#assert_rating_scale) | Warn if the ratings have drifted off the scale the constants were fit on. |
+| [blue_chip_ratio](additional/models-and-calculators.md#blue_chip_ratio) | Blue-chip ratio per team-season over a trailing window of recruiting classes. |
 | [calculate_completion_probability](additional/models-and-calculators.md#calculate_completion_probability) | Completion probability for each pass attempt. |
 | [calculate_epa](additional/models-and-calculators.md#calculate_epa) | Expected points added: the change in EP across a play. |
 | [calculate_expected_points](additional/models-and-calculators.md#calculate_expected_points) | Expected points for each row. |
@@ -109,7 +111,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [calculate_win_probability](additional/models-and-calculators.md#calculate_win_probability) | Win probability for each row. |
 | [calculate_wpa](additional/models-and-calculators.md#calculate_wpa) | Win probability added: the change in WP across a play. |
 | [calculate_xpass](additional/models-and-calculators.md#calculate_xpass) | Expected pass probability for each row. |
-| [cfb_adjusted_epa](additional/models-and-calculators.md#cfb_adjusted_epa) | Season opponent-adjusted per-team EPA from a season's play-by-play. |
+| [cfb_adjusted_epa](additional/models-and-calculators-2.md#cfb_adjusted_epa) | Season opponent-adjusted per-team EPA from a season's play-by-play. |
 | [cfb_adjusted_epa_by_game](additional/models-and-calculators-2.md#cfb_adjusted_epa_by_game) | Walk-forward (point-in-time) opponent-adjusted EPA, one row per team-game. |
 | [cfb_compute_results](additional/models-and-calculators-2.md#cfb_compute_results) | Default results generator — nflseedR's dynamic ELO model for CFB. |
 | [cfb_draft_projection](additional/models-and-calculators-2.md#cfb_draft_projection) | Project NFL-draft probability per player + expected picks per team. |

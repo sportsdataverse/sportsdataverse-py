@@ -88,6 +88,7 @@ class Wrapper:
     schema: Optional[str]
     summary: str
     params: tuple  # spec.Param, path params first
+    schema_league: str | None = None  # returns-schema key when it is not ``league`` (soccer/cricket overrides)
 
 
 _HEADING = re.compile(r"^(?:## ([A-Za-z_][A-Za-z0-9_]*)|### ([A-Za-z_][A-Za-z0-9_]*) \{#([A-Za-z0-9_]+)\})\s*$")
@@ -142,13 +143,19 @@ def codegen_wrappers(commit: str, rows: Rows) -> dict[str, Wrapper]:
             warnings.filterwarnings(
                 "ignore", message=r"import sportsdataverse\.\w+ is deprecated", category=DeprecationWarning
             )
-            views = G._espn_league_views(lg, list(apis.values()), cfg.hosts)
+            views = G._documented_espn_views(lg, list(apis.values()), cfg.hosts)
         for v in views:
             ep = next(e for e in apis[v.api_name].endpoints if e.short == v.short)
             out.setdefault(
                 v.fn_name,
                 Wrapper(
-                    v.fn_name, lg.prefix, "espn", ep.returns_schema, v.summary, (*ep.path_params, *ep.query_params)
+                    v.fn_name,
+                    lg.prefix,
+                    "espn",
+                    ep.returns_schema,
+                    v.summary,
+                    (*ep.path_params, *ep.query_params),
+                    v.schema_league,
                 ),
             )
             found.setdefault((v.api_name, v.short), (v.host_url, []))[1].append(v.fn_name)
@@ -290,7 +297,7 @@ def python_columns(funcs: dict[str, str], wrappers: dict[str, Wrapper], loaders:
     for name, league in funcs.items():
         w = wrappers.get(name)
         if w is not None:
-            doc = G._schema_doc(w.schema, w.league) if w.schema else {}
+            doc = G._schema_doc(w.schema, w.schema_league or w.league) if w.schema else {}
             frames = doc.get("frames") or ([{"section": None, "columns": doc.get("columns") or []}] if doc else [])
             for fr in frames:
                 for c in fr.get("columns") or []:
@@ -303,10 +310,16 @@ def python_columns(funcs: dict[str, str], wrappers: dict[str, Wrapper], loaders:
         else:
             for scope in (league, "global"):
                 cols = G._autodoc_return_columns(scope, name)
-                for c in cols:
-                    desc = G._table_cell_desc(c.get("description") or "", league, c["name"], schema=name)
-                    rows.columns.append((name, None, c["name"], c.get("type"), _clean(desc)))
-                if cols:
+                frames = [{"section": None, "columns": cols}] if cols else G._autodoc_return_frames(scope, name)
+                for fr in frames:
+                    sec = fr.get("section")
+                    for c in fr.get("columns") or []:
+                        stored = c.get("description") or ""
+                        desc = (
+                            sec and G._table_cell_desc(stored, league, f"{sec}.{c['name']}", schema=name)
+                        ) or G._table_cell_desc(stored, league, c["name"], schema=name)
+                        rows.columns.append((name, sec, c["name"], c.get("type"), _clean(desc)))
+                if frames:
                     break
 
 

@@ -72,7 +72,7 @@ def _build_game_espn(game_id: int) -> pl.DataFrame:
     """Process one ESPN game and return its plays as a polars ``DataFrame``."""
     # Import lazily to keep module-level imports light and to allow tests to
     # monkeypatch the function before the first call.
-    from sportsdataverse.nfl.nfl_pbp import NFLPlayProcess  # noqa: PLC0415
+    from sportsdataverse.nfl.nfl_pbp import NFLPlayProcess
 
     proc = NFLPlayProcess(gameId=game_id)
     proc.espn_nfl_pbp()
@@ -95,7 +95,7 @@ def _shield_schedule_lookup(season: int) -> dict[str, dict[str, Any]]:
     lookup must never fail a build.
     """
     try:
-        from sportsdataverse.nfl.nfl_loaders import load_nfl_schedule  # noqa: PLC0415
+        from sportsdataverse.nfl.nfl_loaders import load_nfl_schedule
 
         sched = load_nfl_schedule([season])
         if not isinstance(sched, pl.DataFrame):
@@ -224,7 +224,10 @@ def build_nfl_season(
         ``field_goal_result``), drive/series (``fixed_drive``,
         ``fixed_drive_result``, ``series``, ``series_result``), schedule fields
         (``roof``, ``spread_line``, ``total_line``) and game outcome
-        (``home_score``, ``away_score``, ``result``).
+        (``home_score``, ``away_score``, ``result``). When no requested season
+        has a regular-season or postseason game in ``raw_dir``, the shield frame
+        is empty with no columns: the column set comes from the games built, so
+        check ``frame.height`` (or ``frame.width``) before selecting columns.
 
     Raises:
         ValueError: If *source* is not one of ``"espn"``, ``"nflverse"``,
@@ -289,7 +292,7 @@ def build_nfl_season(
             )
         if raw_dir is None:
             raise ValueError("source='shield' requires raw_dir (root of the {season}/{game_id}.json Shield library).")
-        from sportsdataverse.nfl.shield_pbp.build import build_season  # noqa: PLC0415
+        from sportsdataverse.nfl.shield_pbp.build import build_season
 
         season_frames = [
             build_season(
@@ -312,7 +315,7 @@ def build_nfl_season(
             raise ValueError(
                 "source='nflverse' requires seasons to be a non-empty list of season years (e.g. seasons=[2023])."
             )
-        from sportsdataverse.nfl.nfl_loaders import load_nfl_pbp  # noqa: PLC0415
+        from sportsdataverse.nfl.nfl_loaders import load_nfl_pbp
 
         frame = load_nfl_pbp(seasons=seasons, return_as_pandas=False)
         if return_as_pandas:

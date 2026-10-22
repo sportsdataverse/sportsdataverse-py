@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # WCH — ESPN site API (v2)
 
-`sportsdataverse.wch` — 25 endpoints.
+`sportsdataverse.hockey.wch` — 25 endpoints.
 
 ## espn_wch_scoreboard
 

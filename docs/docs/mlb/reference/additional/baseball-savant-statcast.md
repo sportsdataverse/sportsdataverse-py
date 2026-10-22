@@ -464,7 +464,7 @@ A polars (or pandas) DataFrame, one row per pitch. A window with no games return
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | When Savant answers an error status for a chunk after `download`'s retries; an outage is never reported as an empty window. |
+| `AssetFetchError` | When Savant answers an error status for a chunk after `download`'s retries, or a 200 body that is not a Statcast CSV (an HTML or error page); an outage is never reported as an empty window. |
 
 **Example**
 
@@ -626,7 +626,7 @@ A polars (or pandas) DataFrame, one row per minor-league pitch. A window with no
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | When Savant answers an error status for a chunk after `download`'s retries; an outage is never reported as an empty window. |
+| `AssetFetchError` | When Savant answers an error status for a chunk after `download`'s retries, or a 200 body that is not a Statcast CSV (an HTML or error page); an outage is never reported as an empty window. |
 
 **Example**
 
@@ -789,7 +789,7 @@ A polars (or pandas) DataFrame, one row per WBC pitch. A window with no games re
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | When Savant answers an error status for a chunk after `download`'s retries; an outage is never reported as an empty window. |
+| `AssetFetchError` | When Savant answers an error status for a chunk after `download`'s retries, or a 200 body that is not a Statcast CSV (an HTML or error page); an outage is never reported as an empty window. |
 
 **Example**
 

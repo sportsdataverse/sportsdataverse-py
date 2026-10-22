@@ -1,7 +1,7 @@
 ---
 title: "Package — additional Python functions — Cache and configuration"
 sidebar_label: "Cache and configuration"
-sidebar_position: 12
+sidebar_position: 13
 description: "Package — additional Python functions — Cache and configuration — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Package — additional Python functions — Cache and configuration
@@ -17,6 +17,18 @@ Cheap — doesn't read the cached bodies, just counts + sizes.
 **Returns**
 
 `mode` (the current cache mode), `entries` (cached responses: memory entries, or cache files in filesystem mode) and `disk_bytes` (total size of those files; 0 unless the mode is `"filesystem"`).
+
+### clear_team_cache {#clear_team_cache}
+
+`clear_team_cache(league: 'Optional[str]' = None) -> 'None'`
+
+Reset the in-process team-list cache.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `Optional[str]` | `None` | If given, only clear that league's cache. With no arg, clear every league. |
 
 ### get_cache_mode {#get_cache_mode}
 

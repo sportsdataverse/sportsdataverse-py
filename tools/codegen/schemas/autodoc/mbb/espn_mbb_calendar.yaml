@@ -1,0 +1,27 @@
+schema: espn_mbb_calendar
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: datetime
+  type: character
+  description: ''
+- name: date
+  type: character
+  description: ''
+- name: year
+  type: character
+  description: ''
+- name: month
+  type: character
+  description: ''
+- name: day
+  type: character
+  description: ''
+- name: dateURL
+  type: character
+  description: ''
+- name: url
+  type: character
+  description: ''

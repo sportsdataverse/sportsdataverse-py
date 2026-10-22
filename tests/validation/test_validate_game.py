@@ -452,3 +452,18 @@ def test_a_planted_defect_in_a_real_game_goes_red(nfl_401872922, rule, where, pl
     if row_level:
         assert target in fired[0].sample_row_ids, fired[0].to_dict()
     print("VALIDATE_GAME_RED_OK", rule)
+
+
+def test_float_scores_validate_like_int_scores():
+    """C-M9: a pandas hop or float parquet makes the four score columns Float64; under polars 2.0 the
+    ``score.delta_value`` rule's ``is_in([0, 1, ...])`` raised InvalidOperationError and the gate crashed.
+    Real NFL 401872922 (the processor's own output), scores cast to Float64: the same verdict as Int64."""
+    proc, game = _process("nfl", 401872922, "nfl/fixtures/summary_401872922.json")
+    score = list(inv._SCORE)
+    floats = proc.plays_frame.with_columns(pl.col(score).cast(pl.Float64))
+    assert all(floats.schema[c] == pl.Float64 for c in score)
+    kw = {"header": game["header"], "summary": game, "box": game.get("advBoxScore")}
+    as_int = validate_game(proc.plays_frame, "nfl", **kw)
+    as_float = validate_game(floats, "nfl", **kw)
+    assert as_float.errors == [] and as_float.ok
+    assert as_float.counts_by_rule == as_int.counts_by_rule

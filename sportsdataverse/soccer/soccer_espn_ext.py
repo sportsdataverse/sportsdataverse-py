@@ -6,7 +6,12 @@ from __future__ import annotations
 
 from typing import Dict, Optional, Union  # noqa: F401
 
-from sportsdataverse._codegen_runtime import _get, bool_str
+# Imported at runtime, not under TYPE_CHECKING: typing.get_type_hints() evaluates the
+# annotations below and raised NameError on ``pl`` / ``pd`` (R858-4).
+import pandas as pd  # noqa: F401
+import polars as pl  # noqa: F401
+
+from sportsdataverse._codegen_runtime import _check_kwargs, _get, _path_seg, bool_str
 from sportsdataverse._common_espn_parsers import (
     parse_athlete_gamelog,
     parse_athlete_overview,
@@ -166,7 +171,7 @@ def espn_soccer_scoreboard(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -180,7 +185,7 @@ def espn_soccer_scoreboard(
         season_type: Season phase: 1=preseason, 2=regular season, 3=postseason.
         groups: Conference or group id filter (e.g. an ESPN conference id).
         limit: Maximum number of items to return.
-        return_parsed: parse the payload through parse_scoreboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_soccer_scoreboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
@@ -188,8 +193,9 @@ def espn_soccer_scoreboard(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -197,6 +203,7 @@ def espn_soccer_scoreboard(
             espn_soccer_scoreboard(league='eng.1', dates='20240115')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_scoreboard", kwargs)
     _params = {
         "dates": dates,
         "week": week,
@@ -206,7 +213,7 @@ def espn_soccer_scoreboard(
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/scoreboard",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/scoreboard",
         params=_params,
         **kwargs,
     )
@@ -222,7 +229,7 @@ def espn_soccer_summary(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -232,7 +239,7 @@ def espn_soccer_summary(
 
     Args:
         event_id: event query parameter.
-        return_parsed: parse the payload through parse_summary -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_soccer_summary -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
@@ -241,8 +248,9 @@ def espn_soccer_summary(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -250,12 +258,13 @@ def espn_soccer_summary(
             espn_soccer_summary(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_summary", kwargs)
     _params = {
         "event": event_id,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/summary",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/summary",
         params=_params,
         **kwargs,
     )
@@ -270,7 +279,7 @@ def espn_soccer_calendar(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -287,8 +296,9 @@ def espn_soccer_calendar(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -296,10 +306,11 @@ def espn_soccer_calendar(
             espn_soccer_calendar(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_calendar", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/calendar",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/calendar",
         params=_params,
         **kwargs,
     )
@@ -315,7 +326,7 @@ def espn_soccer_news(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -333,8 +344,9 @@ def espn_soccer_news(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -342,12 +354,13 @@ def espn_soccer_news(
             espn_soccer_news(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_news", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/news",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/news",
         params=_params,
         **kwargs,
     )
@@ -362,7 +375,7 @@ def espn_soccer_injuries(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -379,8 +392,9 @@ def espn_soccer_injuries(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -388,10 +402,11 @@ def espn_soccer_injuries(
             espn_soccer_injuries(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_injuries", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/injuries",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/injuries",
         params=_params,
         **kwargs,
     )
@@ -407,7 +422,7 @@ def espn_soccer_transactions(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -425,8 +440,9 @@ def espn_soccer_transactions(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -434,12 +450,13 @@ def espn_soccer_transactions(
             espn_soccer_transactions(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_transactions", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/transactions",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/transactions",
         params=_params,
         **kwargs,
     )
@@ -454,7 +471,7 @@ def espn_soccer_conferences(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -471,8 +488,9 @@ def espn_soccer_conferences(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -480,10 +498,11 @@ def espn_soccer_conferences(
             espn_soccer_conferences(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_conferences", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/groups",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/groups",
         params=_params,
         **kwargs,
     )
@@ -498,7 +517,7 @@ def espn_soccer_statistics_league(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -515,8 +534,9 @@ def espn_soccer_statistics_league(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -524,10 +544,11 @@ def espn_soccer_statistics_league(
             espn_soccer_statistics_league(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_statistics_league", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/statistics",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/statistics",
         params=_params,
         **kwargs,
     )
@@ -542,7 +563,7 @@ def espn_soccer_draft(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -559,8 +580,9 @@ def espn_soccer_draft(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -568,10 +590,11 @@ def espn_soccer_draft(
             espn_soccer_draft(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_draft", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/draft",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/draft",
         params=_params,
         **kwargs,
     )
@@ -587,7 +610,7 @@ def espn_soccer_teams_site(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -597,7 +620,7 @@ def espn_soccer_teams_site(
 
     Args:
         limit: Maximum number of items to return.
-        return_parsed: parse the payload through parse_teams -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_soccer_teams -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
@@ -605,8 +628,9 @@ def espn_soccer_teams_site(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -614,12 +638,13 @@ def espn_soccer_teams_site(
             espn_soccer_teams_site(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_teams_site", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/teams",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/teams",
         params=_params,
         **kwargs,
     )
@@ -635,7 +660,7 @@ def espn_soccer_team(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -653,8 +678,9 @@ def espn_soccer_team(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -662,10 +688,11 @@ def espn_soccer_team(
             espn_soccer_team(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_team", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/teams/{team_id}",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/teams/{_path_seg(team_id)}",
         params=_params,
         **kwargs,
     )
@@ -682,7 +709,7 @@ def espn_soccer_team_roster(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -693,7 +720,7 @@ def espn_soccer_team_roster(
     Args:
         team_id: team_id path parameter.
         limit: Maximum number of items to return.
-        return_parsed: parse the payload through parse_team_roster -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_soccer_team_roster -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
@@ -701,8 +728,9 @@ def espn_soccer_team_roster(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -710,12 +738,13 @@ def espn_soccer_team_roster(
             espn_soccer_team_roster(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_team_roster", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/teams/{team_id}/roster",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/teams/{_path_seg(team_id)}/roster",
         params=_params,
         **kwargs,
     )
@@ -732,7 +761,7 @@ def espn_soccer_team_schedule(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -751,8 +780,9 @@ def espn_soccer_team_schedule(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -760,12 +790,13 @@ def espn_soccer_team_schedule(
             espn_soccer_team_schedule(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_team_schedule", kwargs)
     _params = {
         "season": season,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/teams/{team_id}/schedule",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/teams/{_path_seg(team_id)}/schedule",
         params=_params,
         **kwargs,
     )
@@ -781,7 +812,7 @@ def espn_soccer_team_record(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -799,8 +830,9 @@ def espn_soccer_team_record(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -808,10 +840,11 @@ def espn_soccer_team_record(
             espn_soccer_team_record(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_team_record", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/teams/{team_id}/record",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/teams/{_path_seg(team_id)}/record",
         params=_params,
         **kwargs,
     )
@@ -827,7 +860,7 @@ def espn_soccer_team_depthcharts(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -845,8 +878,9 @@ def espn_soccer_team_depthcharts(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -854,10 +888,11 @@ def espn_soccer_team_depthcharts(
             espn_soccer_team_depthcharts(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_team_depthcharts", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/teams/{team_id}/depthcharts",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/teams/{_path_seg(team_id)}/depthcharts",
         params=_params,
         **kwargs,
     )
@@ -873,7 +908,7 @@ def espn_soccer_team_injuries(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -891,8 +926,9 @@ def espn_soccer_team_injuries(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -900,10 +936,11 @@ def espn_soccer_team_injuries(
             espn_soccer_team_injuries(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_team_injuries", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/teams/{team_id}/injuries",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/teams/{_path_seg(team_id)}/injuries",
         params=_params,
         **kwargs,
     )
@@ -919,7 +956,7 @@ def espn_soccer_team_transactions(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -937,8 +974,9 @@ def espn_soccer_team_transactions(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -946,10 +984,11 @@ def espn_soccer_team_transactions(
             espn_soccer_team_transactions(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_team_transactions", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/teams/{team_id}/transactions",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/teams/{_path_seg(team_id)}/transactions",
         params=_params,
         **kwargs,
     )
@@ -965,7 +1004,7 @@ def espn_soccer_team_history(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -983,8 +1022,9 @@ def espn_soccer_team_history(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -992,10 +1032,11 @@ def espn_soccer_team_history(
             espn_soccer_team_history(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_team_history", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/teams/{team_id}/history",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/teams/{_path_seg(team_id)}/history",
         params=_params,
         **kwargs,
     )
@@ -1012,7 +1053,7 @@ def espn_soccer_team_news(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1031,8 +1072,9 @@ def espn_soccer_team_news(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1040,12 +1082,13 @@ def espn_soccer_team_news(
             espn_soccer_team_news(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_team_news", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/teams/{team_id}/news",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/teams/{_path_seg(team_id)}/news",
         params=_params,
         **kwargs,
     )
@@ -1061,7 +1104,7 @@ def espn_soccer_team_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1079,8 +1122,9 @@ def espn_soccer_team_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1088,10 +1132,11 @@ def espn_soccer_team_leaders(
             espn_soccer_team_leaders(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_team_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/teams/{team_id}/leaders",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/teams/{_path_seg(team_id)}/leaders",
         params=_params,
         **kwargs,
     )
@@ -1107,7 +1152,7 @@ def espn_soccer_player_info(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1125,8 +1170,9 @@ def espn_soccer_player_info(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1134,10 +1180,11 @@ def espn_soccer_player_info(
             espn_soccer_player_info(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_player_info", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/athletes/{athlete_id}",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/athletes/{_path_seg(athlete_id)}",
         params=_params,
         **kwargs,
     )
@@ -1153,7 +1200,7 @@ def espn_soccer_player_bio(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1171,8 +1218,9 @@ def espn_soccer_player_bio(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1180,10 +1228,11 @@ def espn_soccer_player_bio(
             espn_soccer_player_bio(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_player_bio", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/athletes/{athlete_id}/bio",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/athletes/{_path_seg(athlete_id)}/bio",
         params=_params,
         **kwargs,
     )
@@ -1199,7 +1248,7 @@ def espn_soccer_player_news(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1217,8 +1266,9 @@ def espn_soccer_player_news(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1226,10 +1276,11 @@ def espn_soccer_player_news(
             espn_soccer_player_news(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_player_news", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/athletes/{athlete_id}/news",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/{_path_seg(league)}/athletes/{_path_seg(athlete_id)}/news",
         params=_params,
         **kwargs,
     )
@@ -1247,7 +1298,7 @@ def espn_soccer_standings(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1259,7 +1310,7 @@ def espn_soccer_standings(
         season: Season year (e.g. 2024).
         group: Conference or group id filter (e.g. an ESPN conference id).
         standings_type: Standings variant (e.g. 'by-division' or 'by-conference').
-        return_parsed: parse the payload through parse_standings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_soccer_standings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1267,8 +1318,9 @@ def espn_soccer_standings(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1276,6 +1328,7 @@ def espn_soccer_standings(
             espn_soccer_standings(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_standings", kwargs)
     _params = {
         "season": season,
         "group": group,
@@ -1283,7 +1336,7 @@ def espn_soccer_standings(
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/v2/sports/soccer/{league}/standings",
+        f"https://site.api.espn.com/apis/v2/sports/soccer/{_path_seg(league)}/standings",
         params=_params,
         **kwargs,
     )
@@ -1299,7 +1352,7 @@ def espn_soccer_player_overview(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1317,8 +1370,9 @@ def espn_soccer_player_overview(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1326,10 +1380,11 @@ def espn_soccer_player_overview(
             espn_soccer_player_overview(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_player_overview", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/{league}/athletes/{athlete_id}/overview",
+        f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/{_path_seg(league)}/athletes/{_path_seg(athlete_id)}/overview",
         params=_params,
         **kwargs,
     )
@@ -1346,7 +1401,7 @@ def espn_soccer_player_stats(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1365,8 +1420,9 @@ def espn_soccer_player_stats(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1374,12 +1430,13 @@ def espn_soccer_player_stats(
             espn_soccer_player_stats(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_player_stats", kwargs)
     _params = {
         "season": season,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/{league}/athletes/{athlete_id}/stats",
+        f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/{_path_seg(league)}/athletes/{_path_seg(athlete_id)}/stats",
         params=_params,
         **kwargs,
     )
@@ -1396,7 +1453,7 @@ def espn_soccer_player_gamelog(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1415,8 +1472,9 @@ def espn_soccer_player_gamelog(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1424,12 +1482,13 @@ def espn_soccer_player_gamelog(
             espn_soccer_player_gamelog(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_player_gamelog", kwargs)
     _params = {
         "season": season,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/{league}/athletes/{athlete_id}/gamelog",
+        f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/{_path_seg(league)}/athletes/{_path_seg(athlete_id)}/gamelog",
         params=_params,
         **kwargs,
     )
@@ -1446,7 +1505,7 @@ def espn_soccer_player_splits(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1465,8 +1524,9 @@ def espn_soccer_player_splits(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1474,12 +1534,13 @@ def espn_soccer_player_splits(
             espn_soccer_player_splits(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_player_splits", kwargs)
     _params = {
         "season": season,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/{league}/athletes/{athlete_id}/splits",
+        f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/{_path_seg(league)}/athletes/{_path_seg(athlete_id)}/splits",
         params=_params,
         **kwargs,
     )
@@ -1500,7 +1561,7 @@ def espn_soccer_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1523,8 +1584,9 @@ def espn_soccer_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1532,6 +1594,7 @@ def espn_soccer_leaders(
             espn_soccer_leaders(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_leaders", kwargs)
     _params = {
         "category": category,
         "season": season,
@@ -1542,7 +1605,7 @@ def espn_soccer_leaders(
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/{league}/statistics/byathlete",
+        f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/{_path_seg(league)}/statistics/byathlete",
         params=_params,
         **kwargs,
     )
@@ -1557,7 +1620,7 @@ def espn_soccer_league_root(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1574,8 +1637,9 @@ def espn_soccer_league_root(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1583,10 +1647,11 @@ def espn_soccer_league_root(
             espn_soccer_league_root(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_league_root", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}",
         params=_params,
         **kwargs,
     )
@@ -1601,7 +1666,7 @@ def espn_soccer_season_pointer(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1618,8 +1683,9 @@ def espn_soccer_season_pointer(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1627,10 +1693,11 @@ def espn_soccer_season_pointer(
             espn_soccer_season_pointer(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_pointer", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/season",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/season",
         params=_params,
         **kwargs,
     )
@@ -1646,7 +1713,7 @@ def espn_soccer_seasons(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1664,8 +1731,9 @@ def espn_soccer_seasons(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1673,12 +1741,13 @@ def espn_soccer_seasons(
             espn_soccer_seasons(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_seasons", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons",
         params=_params,
         **kwargs,
     )
@@ -1694,7 +1763,7 @@ def espn_soccer_season_info(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1712,8 +1781,9 @@ def espn_soccer_season_info(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1721,10 +1791,11 @@ def espn_soccer_season_info(
             espn_soccer_season_info(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_info", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}",
         params=_params,
         **kwargs,
     )
@@ -1740,7 +1811,7 @@ def espn_soccer_season_types(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1758,8 +1829,9 @@ def espn_soccer_season_types(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1767,10 +1839,11 @@ def espn_soccer_season_types(
             espn_soccer_season_types(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_types", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/types",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types",
         params=_params,
         **kwargs,
     )
@@ -1787,7 +1860,7 @@ def espn_soccer_season_type(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1806,8 +1879,9 @@ def espn_soccer_season_type(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1815,10 +1889,11 @@ def espn_soccer_season_type(
             espn_soccer_season_type(league='eng.1', season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_type", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/types/{season_type}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}",
         params=_params,
         **kwargs,
     )
@@ -1836,7 +1911,7 @@ def espn_soccer_season_group(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1856,8 +1931,9 @@ def espn_soccer_season_group(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1865,10 +1941,11 @@ def espn_soccer_season_group(
             espn_soccer_season_group(league='eng.1', season=2024, season_type=2, group_id=80)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_group", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups/{_path_seg(group_id)}",
         params=_params,
         **kwargs,
     )
@@ -1885,7 +1962,7 @@ def espn_soccer_season_groups(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1904,8 +1981,9 @@ def espn_soccer_season_groups(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1913,10 +1991,11 @@ def espn_soccer_season_groups(
             espn_soccer_season_groups(league='eng.1', season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_groups", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/types/{season_type}/groups",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups",
         params=_params,
         **kwargs,
     )
@@ -1935,7 +2014,7 @@ def espn_soccer_season_group_teams(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -1956,8 +2035,9 @@ def espn_soccer_season_group_teams(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1965,12 +2045,13 @@ def espn_soccer_season_group_teams(
             espn_soccer_season_group_teams(league='eng.1', season=2024, season_type=2, group_id=80)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_group_teams", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/teams",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups/{_path_seg(group_id)}/teams",
         params=_params,
         **kwargs,
     )
@@ -1989,7 +2070,7 @@ def espn_soccer_season_group_children(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2010,8 +2091,9 @@ def espn_soccer_season_group_children(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2019,12 +2101,13 @@ def espn_soccer_season_group_children(
             espn_soccer_season_group_children(league='eng.1', season=2024, season_type=2, group_id=80)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_group_children", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/children",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups/{_path_seg(group_id)}/children",
         params=_params,
         **kwargs,
     )
@@ -2041,7 +2124,7 @@ def espn_soccer_season_type_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2060,8 +2143,9 @@ def espn_soccer_season_type_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2069,10 +2153,11 @@ def espn_soccer_season_type_leaders(
             espn_soccer_season_type_leaders(league='eng.1', season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_type_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/types/{season_type}/leaders",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/leaders",
         params=_params,
         **kwargs,
     )
@@ -2089,7 +2174,7 @@ def espn_soccer_season_type_corrections(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2108,8 +2193,9 @@ def espn_soccer_season_type_corrections(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2117,10 +2203,11 @@ def espn_soccer_season_type_corrections(
             espn_soccer_season_type_corrections(league='eng.1', season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_type_corrections", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/types/{season_type}/corrections",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/corrections",
         params=_params,
         **kwargs,
     )
@@ -2137,7 +2224,7 @@ def espn_soccer_season_weeks(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2156,8 +2243,9 @@ def espn_soccer_season_weeks(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2165,10 +2253,11 @@ def espn_soccer_season_weeks(
             espn_soccer_season_weeks(league='eng.1', season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_weeks", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/types/{season_type}/weeks",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks",
         params=_params,
         **kwargs,
     )
@@ -2186,7 +2275,7 @@ def espn_soccer_season_week(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2206,8 +2295,9 @@ def espn_soccer_season_week(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2215,10 +2305,11 @@ def espn_soccer_season_week(
             espn_soccer_season_week(league='eng.1', season=2024, season_type=2, week=1)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_week", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks/{_path_seg(week)}",
         params=_params,
         **kwargs,
     )
@@ -2237,7 +2328,7 @@ def espn_soccer_season_week_powerindex(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2258,8 +2349,9 @@ def espn_soccer_season_week_powerindex(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2267,12 +2359,13 @@ def espn_soccer_season_week_powerindex(
             espn_soccer_season_week_powerindex(league='eng.1', season=2024, season_type=2, week=8)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_week_powerindex", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}/powerindex",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks/{_path_seg(week)}/powerindex",
         params=_params,
         **kwargs,
     )
@@ -2291,7 +2384,7 @@ def espn_soccer_season_week_games(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2312,8 +2405,9 @@ def espn_soccer_season_week_games(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2321,12 +2415,13 @@ def espn_soccer_season_week_games(
             espn_soccer_season_week_games(league='eng.1', season=2024, season_type=2, week=1)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_week_games", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}/events",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks/{_path_seg(week)}/events",
         params=_params,
         **kwargs,
     )
@@ -2344,7 +2439,7 @@ def espn_soccer_season_teams(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2364,8 +2459,9 @@ def espn_soccer_season_teams(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2373,13 +2469,14 @@ def espn_soccer_season_teams(
             espn_soccer_season_teams(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_teams", kwargs)
     _params = {
         "limit": limit,
         "page": page,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/teams",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/teams",
         params=_params,
         **kwargs,
     )
@@ -2396,7 +2493,7 @@ def espn_soccer_season_team(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2415,8 +2512,9 @@ def espn_soccer_season_team(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2424,10 +2522,11 @@ def espn_soccer_season_team(
             espn_soccer_season_team(league='eng.1', season=2024, team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_team", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/teams/{team_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/teams/{_path_seg(team_id)}",
         params=_params,
         **kwargs,
     )
@@ -2445,7 +2544,7 @@ def espn_soccer_season_players(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2465,8 +2564,9 @@ def espn_soccer_season_players(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2474,13 +2574,14 @@ def espn_soccer_season_players(
             espn_soccer_season_players(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_players", kwargs)
     _params = {
         "limit": limit,
         "page": page,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/athletes",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/athletes",
         params=_params,
         **kwargs,
     )
@@ -2497,7 +2598,7 @@ def espn_soccer_season_coaches(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2516,8 +2617,9 @@ def espn_soccer_season_coaches(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2525,12 +2627,13 @@ def espn_soccer_season_coaches(
             espn_soccer_season_coaches(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_coaches", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/coaches",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/coaches",
         params=_params,
         **kwargs,
     )
@@ -2546,7 +2649,7 @@ def espn_soccer_season_draft(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2564,8 +2667,9 @@ def espn_soccer_season_draft(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2573,10 +2677,11 @@ def espn_soccer_season_draft(
             espn_soccer_season_draft(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_draft", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/draft",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/draft",
         params=_params,
         **kwargs,
     )
@@ -2593,7 +2698,7 @@ def espn_soccer_season_draft_round_picks(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2612,8 +2717,9 @@ def espn_soccer_season_draft_round_picks(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2621,10 +2727,11 @@ def espn_soccer_season_draft_round_picks(
             espn_soccer_season_draft_round_picks(league='eng.1', season=2024, round_num='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_draft_round_picks", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/draft/rounds/{round_num}/picks",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/draft/rounds/{_path_seg(round_num)}/picks",
         params=_params,
         **kwargs,
     )
@@ -2640,7 +2747,7 @@ def espn_soccer_season_futures(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2658,8 +2765,9 @@ def espn_soccer_season_futures(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2667,10 +2775,11 @@ def espn_soccer_season_futures(
             espn_soccer_season_futures(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_futures", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/futures",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/futures",
         params=_params,
         **kwargs,
     )
@@ -2686,7 +2795,7 @@ def espn_soccer_season_freeagents(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2704,8 +2813,9 @@ def espn_soccer_season_freeagents(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2713,10 +2823,11 @@ def espn_soccer_season_freeagents(
             espn_soccer_season_freeagents(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_freeagents", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/freeagents",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/freeagents",
         params=_params,
         **kwargs,
     )
@@ -2733,7 +2844,7 @@ def espn_soccer_season_powerindex(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2752,8 +2863,9 @@ def espn_soccer_season_powerindex(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2761,10 +2873,14 @@ def espn_soccer_season_powerindex(
             espn_soccer_season_powerindex(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_powerindex", kwargs)
     _params = {}
     _params.update(_caller_params)
-    __seg = f"/{team_id}" if team_id is not None else ""
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/powerindex" + __seg
+    __seg = f"/{_path_seg(team_id)}" if team_id is not None else ""
+    __url = (
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/powerindex"
+        + __seg
+    )
     raw = _get(
         __url,
         params=_params,
@@ -2782,7 +2898,7 @@ def espn_soccer_season_powerindex_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2800,8 +2916,9 @@ def espn_soccer_season_powerindex_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2809,10 +2926,11 @@ def espn_soccer_season_powerindex_leaders(
             espn_soccer_season_powerindex_leaders(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_powerindex_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/powerindex/leaders",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/powerindex/leaders",
         params=_params,
         **kwargs,
     )
@@ -2829,7 +2947,7 @@ def espn_soccer_season_awards(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2848,8 +2966,9 @@ def espn_soccer_season_awards(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2857,12 +2976,13 @@ def espn_soccer_season_awards(
             espn_soccer_season_awards(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_season_awards", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/seasons/{season}/awards",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/awards",
         params=_params,
         **kwargs,
     )
@@ -2880,7 +3000,7 @@ def espn_soccer_players_index(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2900,8 +3020,9 @@ def espn_soccer_players_index(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a flag is a string other than 'true'/'false'/'1'/'0' or a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2909,14 +3030,15 @@ def espn_soccer_players_index(
             espn_soccer_players_index(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_players_index", kwargs)
     _params = {
-        "active": bool_str(active),
+        "active": bool_str(active, name="active"),
         "limit": limit,
         "page": page,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/athletes",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/athletes",
         params=_params,
         **kwargs,
     )
@@ -2932,7 +3054,7 @@ def espn_soccer_player_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2950,8 +3072,9 @@ def espn_soccer_player_core(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2959,10 +3082,11 @@ def espn_soccer_player_core(
             espn_soccer_player_core(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_player_core", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/athletes/{athlete_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/athletes/{_path_seg(athlete_id)}",
         params=_params,
         **kwargs,
     )
@@ -2979,7 +3103,7 @@ def espn_soccer_player_career_stats(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -2998,8 +3122,9 @@ def espn_soccer_player_career_stats(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3007,11 +3132,13 @@ def espn_soccer_player_career_stats(
             espn_soccer_player_career_stats(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_player_career_stats", kwargs)
     _params = {}
     _params.update(_caller_params)
-    __seg = f"/{stat_type}" if stat_type is not None else ""
+    __seg = f"/{_path_seg(stat_type)}" if stat_type is not None else ""
     __url = (
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/athletes/{athlete_id}/statistics" + __seg
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/athletes/{_path_seg(athlete_id)}/statistics"
+        + __seg
     )
     raw = _get(
         __url,
@@ -3030,7 +3157,7 @@ def espn_soccer_player_statisticslog(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3048,8 +3175,9 @@ def espn_soccer_player_statisticslog(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3057,10 +3185,11 @@ def espn_soccer_player_statisticslog(
             espn_soccer_player_statisticslog(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_player_statisticslog", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/athletes/{athlete_id}/statisticslog",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/athletes/{_path_seg(athlete_id)}/statisticslog",
         params=_params,
         **kwargs,
     )
@@ -3076,7 +3205,7 @@ def espn_soccer_player_eventlog(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3094,8 +3223,9 @@ def espn_soccer_player_eventlog(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3103,10 +3233,11 @@ def espn_soccer_player_eventlog(
             espn_soccer_player_eventlog(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_player_eventlog", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/athletes/{athlete_id}/eventlog",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/athletes/{_path_seg(athlete_id)}/eventlog",
         params=_params,
         **kwargs,
     )
@@ -3122,7 +3253,7 @@ def espn_soccer_player_contracts(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3140,8 +3271,9 @@ def espn_soccer_player_contracts(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3149,10 +3281,11 @@ def espn_soccer_player_contracts(
             espn_soccer_player_contracts(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_player_contracts", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/athletes/{athlete_id}/contracts",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/athletes/{_path_seg(athlete_id)}/contracts",
         params=_params,
         **kwargs,
     )
@@ -3168,7 +3301,7 @@ def espn_soccer_player_awards(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3186,8 +3319,9 @@ def espn_soccer_player_awards(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3195,10 +3329,11 @@ def espn_soccer_player_awards(
             espn_soccer_player_awards(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_player_awards", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/athletes/{athlete_id}/awards",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/athletes/{_path_seg(athlete_id)}/awards",
         params=_params,
         **kwargs,
     )
@@ -3214,7 +3349,7 @@ def espn_soccer_player_seasons(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3232,8 +3367,9 @@ def espn_soccer_player_seasons(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3241,10 +3377,11 @@ def espn_soccer_player_seasons(
             espn_soccer_player_seasons(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_player_seasons", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/athletes/{athlete_id}/seasons",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/athletes/{_path_seg(athlete_id)}/seasons",
         params=_params,
         **kwargs,
     )
@@ -3260,7 +3397,7 @@ def espn_soccer_player_records(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3278,8 +3415,9 @@ def espn_soccer_player_records(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3287,10 +3425,11 @@ def espn_soccer_player_records(
             espn_soccer_player_records(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_player_records", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/athletes/{athlete_id}/records",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/athletes/{_path_seg(athlete_id)}/records",
         params=_params,
         **kwargs,
     )
@@ -3306,7 +3445,7 @@ def espn_soccer_player_injuries(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3324,8 +3463,9 @@ def espn_soccer_player_injuries(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3333,10 +3473,11 @@ def espn_soccer_player_injuries(
             espn_soccer_player_injuries(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_player_injuries", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/athletes/{athlete_id}/injuries",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/athletes/{_path_seg(athlete_id)}/injuries",
         params=_params,
         **kwargs,
     )
@@ -3352,7 +3493,7 @@ def espn_soccer_player_notes(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3370,8 +3511,9 @@ def espn_soccer_player_notes(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3379,10 +3521,11 @@ def espn_soccer_player_notes(
             espn_soccer_player_notes(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_player_notes", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/athletes/{athlete_id}/notes",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/athletes/{_path_seg(athlete_id)}/notes",
         params=_params,
         **kwargs,
     )
@@ -3399,7 +3542,7 @@ def espn_soccer_player_vs_player(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3418,8 +3561,9 @@ def espn_soccer_player_vs_player(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3427,10 +3571,11 @@ def espn_soccer_player_vs_player(
             espn_soccer_player_vs_player(league='eng.1', athlete_id='4239', opp_id='5')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_player_vs_player", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/athletes/{athlete_id}/vsathlete/{opp_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/athletes/{_path_seg(athlete_id)}/vsathlete/{_path_seg(opp_id)}",
         params=_params,
         **kwargs,
     )
@@ -3447,7 +3592,7 @@ def espn_soccer_games(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3466,8 +3611,9 @@ def espn_soccer_games(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3475,13 +3621,14 @@ def espn_soccer_games(
             espn_soccer_games(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_games", kwargs)
     _params = {
         "dates": dates,
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events",
         params=_params,
         **kwargs,
     )
@@ -3497,7 +3644,7 @@ def espn_soccer_game(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3515,8 +3662,9 @@ def espn_soccer_game(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3524,10 +3672,11 @@ def espn_soccer_game(
             espn_soccer_game(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}",
         params=_params,
         **kwargs,
     )
@@ -3544,7 +3693,7 @@ def espn_soccer_game_competition(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3563,8 +3712,9 @@ def espn_soccer_game_competition(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3572,10 +3722,11 @@ def espn_soccer_game_competition(
             espn_soccer_game_competition(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_competition", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}"
     raw = _get(
         __url,
         params=_params,
@@ -3594,7 +3745,7 @@ def espn_soccer_game_teams(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3613,8 +3764,9 @@ def espn_soccer_game_teams(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3622,10 +3774,11 @@ def espn_soccer_game_teams(
             espn_soccer_game_teams(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_teams", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/competitors"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors"
     raw = _get(
         __url,
         params=_params,
@@ -3645,7 +3798,7 @@ def espn_soccer_game_team(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3665,8 +3818,9 @@ def espn_soccer_game_team(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3674,10 +3828,11 @@ def espn_soccer_game_team(
             espn_soccer_game_team(league='eng.1', event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_team", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}"
     raw = _get(
         __url,
         params=_params,
@@ -3697,7 +3852,7 @@ def espn_soccer_game_team_roster(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3717,8 +3872,9 @@ def espn_soccer_game_team_roster(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3726,10 +3882,11 @@ def espn_soccer_game_team_roster(
             espn_soccer_game_team_roster(league='eng.1', event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_team_roster", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/roster"
     raw = _get(
         __url,
         params=_params,
@@ -3749,7 +3906,7 @@ def espn_soccer_game_team_linescores(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3769,8 +3926,9 @@ def espn_soccer_game_team_linescores(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3778,10 +3936,11 @@ def espn_soccer_game_team_linescores(
             espn_soccer_game_team_linescores(league='eng.1', event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_team_linescores", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/linescores"
     raw = _get(
         __url,
         params=_params,
@@ -3801,7 +3960,7 @@ def espn_soccer_game_team_statistics(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3821,8 +3980,9 @@ def espn_soccer_game_team_statistics(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3830,10 +3990,11 @@ def espn_soccer_game_team_statistics(
             espn_soccer_game_team_statistics(league='eng.1', event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_team_statistics", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/statistics"
     raw = _get(
         __url,
         params=_params,
@@ -3853,7 +4014,7 @@ def espn_soccer_game_team_record(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3873,8 +4034,9 @@ def espn_soccer_game_team_record(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3882,10 +4044,11 @@ def espn_soccer_game_team_record(
             espn_soccer_game_team_record(league='eng.1', event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_team_record", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/record"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/record"
     raw = _get(
         __url,
         params=_params,
@@ -3905,7 +4068,7 @@ def espn_soccer_game_team_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3925,8 +4088,9 @@ def espn_soccer_game_team_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3934,10 +4098,11 @@ def espn_soccer_game_team_leaders(
             espn_soccer_game_team_leaders(league='eng.1', event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_team_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/leaders"
     raw = _get(
         __url,
         params=_params,
@@ -3956,7 +4121,7 @@ def espn_soccer_game_odds(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -3975,8 +4140,9 @@ def espn_soccer_game_odds(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3984,12 +4150,11 @@ def espn_soccer_game_odds(
             espn_soccer_game_odds(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_odds", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = (
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/odds"
-    )
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/odds"
     raw = _get(
         __url,
         params=_params,
@@ -4009,7 +4174,7 @@ def espn_soccer_game_probabilities(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4029,8 +4194,9 @@ def espn_soccer_game_probabilities(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4038,12 +4204,13 @@ def espn_soccer_game_probabilities(
             espn_soccer_game_probabilities(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_probabilities", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/probabilities"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/probabilities"
     raw = _get(
         __url,
         params=_params,
@@ -4063,7 +4230,7 @@ def espn_soccer_game_plays(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4083,8 +4250,9 @@ def espn_soccer_game_plays(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4092,14 +4260,13 @@ def espn_soccer_game_plays(
             espn_soccer_game_plays(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_plays", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = (
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/plays"
-    )
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/plays"
     raw = _get(
         __url,
         params=_params,
@@ -4119,7 +4286,7 @@ def espn_soccer_game_play(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4139,8 +4306,9 @@ def espn_soccer_game_play(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4148,10 +4316,11 @@ def espn_soccer_game_play(
             espn_soccer_game_play(league='eng.1', event_id='401584793', play_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_play", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/plays/{_path_seg(play_id)}"
     raw = _get(
         __url,
         params=_params,
@@ -4171,7 +4340,7 @@ def espn_soccer_game_play_personnel(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4191,8 +4360,9 @@ def espn_soccer_game_play_personnel(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4200,10 +4370,11 @@ def espn_soccer_game_play_personnel(
             espn_soccer_game_play_personnel(league='eng.1', event_id='401584793', play_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_play_personnel", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/plays/{_path_seg(play_id)}/personnel"
     raw = _get(
         __url,
         params=_params,
@@ -4222,7 +4393,7 @@ def espn_soccer_game_situation(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4241,8 +4412,9 @@ def espn_soccer_game_situation(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4250,10 +4422,11 @@ def espn_soccer_game_situation(
             espn_soccer_game_situation(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_situation", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/situation"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/situation"
     raw = _get(
         __url,
         params=_params,
@@ -4272,7 +4445,7 @@ def espn_soccer_game_status(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4291,8 +4464,9 @@ def espn_soccer_game_status(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4300,10 +4474,11 @@ def espn_soccer_game_status(
             espn_soccer_game_status(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_status", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/status"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/status"
     raw = _get(
         __url,
         params=_params,
@@ -4322,7 +4497,7 @@ def espn_soccer_game_officials(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4341,8 +4516,9 @@ def espn_soccer_game_officials(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4350,10 +4526,11 @@ def espn_soccer_game_officials(
             espn_soccer_game_officials(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_officials", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/officials"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/officials"
     raw = _get(
         __url,
         params=_params,
@@ -4372,7 +4549,7 @@ def espn_soccer_game_broadcasts(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4391,8 +4568,9 @@ def espn_soccer_game_broadcasts(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4400,10 +4578,11 @@ def espn_soccer_game_broadcasts(
             espn_soccer_game_broadcasts(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_broadcasts", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/broadcasts"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/broadcasts"
     raw = _get(
         __url,
         params=_params,
@@ -4422,7 +4601,7 @@ def espn_soccer_game_predictor(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4441,8 +4620,9 @@ def espn_soccer_game_predictor(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4450,10 +4630,11 @@ def espn_soccer_game_predictor(
             espn_soccer_game_predictor(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_predictor", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/predictor"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/predictor"
     raw = _get(
         __url,
         params=_params,
@@ -4472,7 +4653,7 @@ def espn_soccer_game_powerindex(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4491,8 +4672,9 @@ def espn_soccer_game_powerindex(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4500,10 +4682,11 @@ def espn_soccer_game_powerindex(
             espn_soccer_game_powerindex(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_powerindex", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/powerindex"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/powerindex"
     raw = _get(
         __url,
         params=_params,
@@ -4522,7 +4705,7 @@ def espn_soccer_game_propbets(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4541,8 +4724,9 @@ def espn_soccer_game_propbets(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4550,10 +4734,11 @@ def espn_soccer_game_propbets(
             espn_soccer_game_propbets(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_propbets", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/propbets"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/propbets"
     raw = _get(
         __url,
         params=_params,
@@ -4572,7 +4757,7 @@ def espn_soccer_game_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4591,8 +4776,9 @@ def espn_soccer_game_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4600,10 +4786,11 @@ def espn_soccer_game_leaders(
             espn_soccer_game_leaders(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/leaders"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/leaders"
     raw = _get(
         __url,
         params=_params,
@@ -4622,7 +4809,7 @@ def espn_soccer_game_scoringplays(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4641,8 +4828,9 @@ def espn_soccer_game_scoringplays(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4650,10 +4838,11 @@ def espn_soccer_game_scoringplays(
             espn_soccer_game_scoringplays(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_scoringplays", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/scoringplays"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/scoringplays"
     raw = _get(
         __url,
         params=_params,
@@ -4673,7 +4862,7 @@ def espn_soccer_game_official_detail(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4693,8 +4882,9 @@ def espn_soccer_game_official_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4702,10 +4892,11 @@ def espn_soccer_game_official_detail(
             espn_soccer_game_official_detail(league='eng.1', event_id='401584793', official_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_game_official_detail", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/events/{event_id}/competitions/{cid}/officials/{official_id}"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/officials/{_path_seg(official_id)}"
     raw = _get(
         __url,
         params=_params,
@@ -4724,7 +4915,7 @@ def espn_soccer_teams_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4743,8 +4934,9 @@ def espn_soccer_teams_core(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4752,13 +4944,14 @@ def espn_soccer_teams_core(
             espn_soccer_teams_core(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_teams_core", kwargs)
     _params = {
         "limit": limit,
         "page": page,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/teams",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/teams",
         params=_params,
         **kwargs,
     )
@@ -4774,7 +4967,7 @@ def espn_soccer_team_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4792,8 +4985,9 @@ def espn_soccer_team_core(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4801,10 +4995,11 @@ def espn_soccer_team_core(
             espn_soccer_team_core(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_team_core", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/teams/{team_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/teams/{_path_seg(team_id)}",
         params=_params,
         **kwargs,
     )
@@ -4820,7 +5015,7 @@ def espn_soccer_venues(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4838,8 +5033,9 @@ def espn_soccer_venues(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4847,12 +5043,13 @@ def espn_soccer_venues(
             espn_soccer_venues(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_venues", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/venues",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/venues",
         params=_params,
         **kwargs,
     )
@@ -4868,7 +5065,7 @@ def espn_soccer_venue(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4886,8 +5083,9 @@ def espn_soccer_venue(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4895,10 +5093,11 @@ def espn_soccer_venue(
             espn_soccer_venue(league='eng.1', venue_id='3663')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_venue", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/venues/{venue_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/venues/{_path_seg(venue_id)}",
         params=_params,
         **kwargs,
     )
@@ -4914,7 +5113,7 @@ def espn_soccer_franchises(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4932,8 +5131,9 @@ def espn_soccer_franchises(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4941,12 +5141,13 @@ def espn_soccer_franchises(
             espn_soccer_franchises(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_franchises", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/franchises",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/franchises",
         params=_params,
         **kwargs,
     )
@@ -4962,7 +5163,7 @@ def espn_soccer_franchise(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -4980,8 +5181,9 @@ def espn_soccer_franchise(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4989,10 +5191,11 @@ def espn_soccer_franchise(
             espn_soccer_franchise(league='eng.1', franchise_id='2')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_franchise", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/franchises/{franchise_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/franchises/{_path_seg(franchise_id)}",
         params=_params,
         **kwargs,
     )
@@ -5008,7 +5211,7 @@ def espn_soccer_coach(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -5026,8 +5229,9 @@ def espn_soccer_coach(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5035,10 +5239,11 @@ def espn_soccer_coach(
             espn_soccer_coach(league='eng.1', coach_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_coach", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/coaches/{coach_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/coaches/{_path_seg(coach_id)}",
         params=_params,
         **kwargs,
     )
@@ -5055,7 +5260,7 @@ def espn_soccer_coach_record(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -5074,8 +5279,9 @@ def espn_soccer_coach_record(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5083,10 +5289,11 @@ def espn_soccer_coach_record(
             espn_soccer_coach_record(league='eng.1', coach_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_coach_record", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/coaches/{coach_id}/record/{record_type}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/coaches/{_path_seg(coach_id)}/record/{_path_seg(record_type)}",
         params=_params,
         **kwargs,
     )
@@ -5103,7 +5310,7 @@ def espn_soccer_coach_season(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -5122,8 +5329,9 @@ def espn_soccer_coach_season(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5131,10 +5339,11 @@ def espn_soccer_coach_season(
             espn_soccer_coach_season(league='eng.1', coach_id='1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_coach_season", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/coaches/{coach_id}/seasons/{season}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/coaches/{_path_seg(coach_id)}/seasons/{_path_seg(season)}",
         params=_params,
         **kwargs,
     )
@@ -5150,7 +5359,7 @@ def espn_soccer_positions(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -5168,8 +5377,9 @@ def espn_soccer_positions(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5177,12 +5387,13 @@ def espn_soccer_positions(
             espn_soccer_positions(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_positions", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/positions",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/positions",
         params=_params,
         **kwargs,
     )
@@ -5198,7 +5409,7 @@ def espn_soccer_position(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -5216,8 +5427,9 @@ def espn_soccer_position(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5225,10 +5437,11 @@ def espn_soccer_position(
             espn_soccer_position(league='eng.1', position_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_position", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/positions/{position_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/positions/{_path_seg(position_id)}",
         params=_params,
         **kwargs,
     )
@@ -5244,7 +5457,7 @@ def espn_soccer_tournaments(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -5262,8 +5475,9 @@ def espn_soccer_tournaments(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5271,12 +5485,13 @@ def espn_soccer_tournaments(
             espn_soccer_tournaments(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_tournaments", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/tournaments",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/tournaments",
         params=_params,
         **kwargs,
     )
@@ -5292,7 +5507,7 @@ def espn_soccer_awards(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -5310,8 +5525,9 @@ def espn_soccer_awards(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5319,12 +5535,13 @@ def espn_soccer_awards(
             espn_soccer_awards(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_awards", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/awards",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/awards",
         params=_params,
         **kwargs,
     )
@@ -5340,7 +5557,7 @@ def espn_soccer_award(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -5358,8 +5575,9 @@ def espn_soccer_award(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5367,10 +5585,11 @@ def espn_soccer_award(
             espn_soccer_award(league='eng.1', award_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_award", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/awards/{award_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/awards/{_path_seg(award_id)}",
         params=_params,
         **kwargs,
     )
@@ -5385,7 +5604,7 @@ def espn_soccer_standings_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -5402,8 +5621,9 @@ def espn_soccer_standings_core(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5411,10 +5631,11 @@ def espn_soccer_standings_core(
             espn_soccer_standings_core(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_standings_core", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/standings",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/standings",
         params=_params,
         **kwargs,
     )
@@ -5429,7 +5650,7 @@ def espn_soccer_leaders_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -5446,8 +5667,9 @@ def espn_soccer_leaders_core(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5455,10 +5677,11 @@ def espn_soccer_leaders_core(
             espn_soccer_leaders_core(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_leaders_core", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/leaders",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/leaders",
         params=_params,
         **kwargs,
     )
@@ -5473,7 +5696,7 @@ def espn_soccer_league_notes(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -5490,8 +5713,9 @@ def espn_soccer_league_notes(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5499,10 +5723,11 @@ def espn_soccer_league_notes(
             espn_soccer_league_notes(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_league_notes", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/notes",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/notes",
         params=_params,
         **kwargs,
     )
@@ -5517,7 +5742,7 @@ def espn_soccer_talentpicks(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -5534,8 +5759,9 @@ def espn_soccer_talentpicks(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5543,10 +5769,11 @@ def espn_soccer_talentpicks(
             espn_soccer_talentpicks(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_talentpicks", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{league}/talentpicks",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/{_path_seg(league)}/talentpicks",
         params=_params,
         **kwargs,
     )
@@ -5564,7 +5791,7 @@ def espn_soccer_fpi(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
@@ -5584,8 +5811,9 @@ def espn_soccer_fpi(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5593,6 +5821,7 @@ def espn_soccer_fpi(
             espn_soccer_fpi(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_soccer_fpi", kwargs)
     _params = {
         "season": season,
         "limit": limit,
@@ -5600,7 +5829,7 @@ def espn_soccer_fpi(
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.web.api.espn.com/apis/fitt/v3/sports/soccer/{league}/powerindex",
+        f"https://site.web.api.espn.com/apis/fitt/v3/sports/soccer/{_path_seg(league)}/powerindex",
         params=_params,
         **kwargs,
     )

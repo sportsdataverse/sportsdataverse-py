@@ -304,6 +304,7 @@ _OFFICIAL_COLS = (
     "position_name",
     "position_display_name",
 )
+_OFFICIAL_INT_COLS = ("season", "official_id", "official_order")
 
 
 def helper_wbb_officials(payload: dict, *, season: int, game_id: int | str) -> pl.DataFrame:
@@ -322,8 +323,9 @@ def helper_wbb_officials(payload: dict, *, season: int, game_id: int | str) -> p
         game_id: The ESPN game id (kept as character, matching R).
 
     Returns:
-        pl.DataFrame: One row per official, deduped. Empty (zero-column)
-        frame when no officials are present.
+        pl.DataFrame: One row per official, deduped (an official without an
+        id is always kept). A zero-row frame with the same columns when no
+        officials are present.
 
     Example:
         Quick start::
@@ -344,8 +346,10 @@ def helper_wbb_officials(payload: dict, *, season: int, game_id: int | str) -> p
     officials = (
         payload.get("officials") or payload.get("items") or (payload.get("gameInfo") or {}).get("officials") or []
     )
+    officials = [o for o in officials if isinstance(o, dict)]  # B-L8: a null element raised AttributeError
+    schema = {c: pl.Int32 if c in _OFFICIAL_INT_COLS else pl.Utf8 for c in _OFFICIAL_COLS}
     if not officials:
-        return pl.DataFrame()
+        return pl.DataFrame(schema=schema)
     rows: list[dict] = []
     for o in officials:
         position = o.get("position")
@@ -370,18 +374,7 @@ def helper_wbb_officials(payload: dict, *, season: int, game_id: int | str) -> p
                 "position_display_name": pos_display,
             }
         )
-    df = pl.DataFrame({c: [r.get(c) for r in rows] for c in _OFFICIAL_COLS}, strict=False)
-    df = df.with_columns(
-        [pl.col(c).cast(pl.Int32, strict=False) for c in ("season", "official_id", "official_order")]
-        + [
-            pl.col(c).cast(pl.Utf8)
-            for c in (
-                "official_uid",
-                "official_first_name",
-                "official_last_name",
-                "position_display_name",
-            )
-        ]
-    )
-    # R: season-level distinct() -- per-game unique yields the identical set.
-    return df.unique(maintain_order=True, keep="first")
+    df = pl.DataFrame({c: [r.get(c) for r in rows] for c in _OFFICIAL_COLS}, strict=False).cast(schema, strict=False)
+    # R: season-level distinct() -- per-game unique yields the identical set. An official without an
+    # id is never a duplicate: two all-null rows are two unnamed officials, not one (B-GB-18).
+    return df.filter(pl.col("official_id").is_null() | pl.struct(pl.all()).is_first_distinct())

@@ -14,6 +14,7 @@ have their own reference pages): per-competition functions minted from the compe
 
 | Function | Summary |
 |---|---|
+| [atrium_end_year](additional/sportradar-atrium-embed-api.md#atrium_end_year) | The sdv season key (END year) of a site's `year`, or `None` when it cannot be mapped. |
 | [lmb_pbp](additional/sportradar-atrium-embed-api.md#lmb_pbp) | Play-by-play of a Liga Mayor de Baloncesto (El Salvador) game. |
 | [lmb_player_box](additional/sportradar-atrium-embed-api.md#lmb_player_box) | Player box score of a Liga Mayor de Baloncesto (El Salvador) game. |
 | [lmb_schedule](additional/sportradar-atrium-embed-api.md#lmb_schedule) | Fixtures (schedule and results) of a Liga Mayor de Baloncesto (El Salvador) season. |
@@ -26,7 +27,7 @@ have their own reference pages): per-competition functions minted from the compe
 | [lnb_player_box](additional/sportradar-atrium-embed-api.md#lnb_player_box) | Player box score of a LNB (France) game. |
 | [lnb_schedule](additional/sportradar-atrium-embed-api.md#lnb_schedule) | Fixtures (schedule and results) of a LNB (France) season. |
 | [lnb_seasons](additional/sportradar-atrium-embed-api.md#lnb_seasons) | Every season and competition id of LNB (France). |
-| [lnb_shots](additional/sportradar-atrium-embed-api.md#lnb_shots) | Shot chart of a LNB (France) game. |
+| [lnb_shots](additional/sportradar-atrium-embed-api-2.md#lnb_shots) | Shot chart of a LNB (France) game. |
 | [lnb_standings](additional/sportradar-atrium-embed-api-2.md#lnb_standings) | Standings of a LNB (France) season. |
 | [lnb_team_box](additional/sportradar-atrium-embed-api-2.md#lnb_team_box) | Team box score of a LNB (France) game. |
 | [lnb_teams](additional/sportradar-atrium-embed-api-2.md#lnb_teams) | Teams of a LNB (France) season. |

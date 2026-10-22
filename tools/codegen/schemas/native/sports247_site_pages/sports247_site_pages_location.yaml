@@ -4,7 +4,7 @@ columns:
   type: integer
 - description: ''
   name: postal_code
-  type: integer
+  type: character
 - description: ''
   name: city
   type: character

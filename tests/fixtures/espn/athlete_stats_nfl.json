@@ -1,0 +1,1887 @@
+{
+ "categories": [
+  {
+   "descriptions": [
+    "Games Played",
+    "The times a player completes a pass to another player who is eligible to catch a pass.",
+    "The number of times a pass is attempted.",
+    "The percentage of completed passes.",
+    "The total passing yards.",
+    "The average number yards per pass attempt.",
+    "The total number of passing touchdowns.",
+    "The number of passes thrown that were intercepted by the opposing team.",
+    "The longest pass play completed in terms of yards.",
+    "The total number of sacks.",
+    "Passer Rating",
+    "Adjusted Quarterback Rating."
+   ],
+   "displayName": "Passing",
+   "displayNames": [
+    "Games Played",
+    "Completions",
+    "Passing Attempts",
+    "Completion Percentage",
+    "Passing Yards",
+    "Yards Per Pass Attempt",
+    "Passing Touchdowns",
+    "Interceptions",
+    "Longest Pass",
+    "Total Sacks",
+    "Passer Rating",
+    "Adjusted QBR"
+   ],
+   "labels": [
+    "GP",
+    "CMP",
+    "ATT",
+    "CMP%",
+    "YDS",
+    "AVG",
+    "TD",
+    "INT",
+    "LNG",
+    "SACK",
+    "RTG",
+    "QBR"
+   ],
+   "name": "passing",
+   "names": [
+    "gamesPlayed",
+    "completions",
+    "passingAttempts",
+    "completionPct",
+    "passingYards",
+    "yardsPerPassAttempt",
+    "passingTouchdowns",
+    "interceptions",
+    "longPassing",
+    "sacks",
+    "QBRating",
+    "adjQBR"
+   ],
+   "sortKey": "passing",
+   "statistics": [
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2017",
+      "year": 2017
+     },
+     "stats": [
+      "1",
+      "22",
+      "35",
+      "62.9",
+      "284",
+      "8.1",
+      "0",
+      "1",
+      "51",
+      "2",
+      "76.4",
+      "66.8"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2018",
+      "year": 2018
+     },
+     "stats": [
+      "16",
+      "383",
+      "580",
+      "66.0",
+      "5,097",
+      "8.8",
+      "50",
+      "12",
+      "89",
+      "26",
+      "113.8",
+      "80.3"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2019",
+      "year": 2019
+     },
+     "stats": [
+      "14",
+      "319",
+      "484",
+      "65.9",
+      "4,031",
+      "8.3",
+      "26",
+      "5",
+      "83",
+      "17",
+      "105.3",
+      "77.7"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2020",
+      "year": 2020
+     },
+     "stats": [
+      "15",
+      "390",
+      "588",
+      "66.3",
+      "4,740",
+      "8.1",
+      "38",
+      "6",
+      "75",
+      "22",
+      "108.2",
+      "78.1"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2021",
+      "year": 2021
+     },
+     "stats": [
+      "17",
+      "436",
+      "658",
+      "66.3",
+      "4,839",
+      "7.4",
+      "37",
+      "13",
+      "75",
+      "28",
+      "98.5",
+      "67.7"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2022",
+      "year": 2022
+     },
+     "stats": [
+      "17",
+      "435",
+      "648",
+      "67.1",
+      "5,250",
+      "8.1",
+      "41",
+      "12",
+      "67",
+      "26",
+      "105.2",
+      "79.0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2023",
+      "year": 2023
+     },
+     "stats": [
+      "16",
+      "401",
+      "597",
+      "67.2",
+      "4,183",
+      "7.0",
+      "27",
+      "14",
+      "67",
+      "27",
+      "92.6",
+      "63.9"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2024",
+      "year": 2024
+     },
+     "stats": [
+      "16",
+      "392",
+      "581",
+      "67.5",
+      "3,928",
+      "6.8",
+      "26",
+      "11",
+      "54",
+      "36",
+      "93.5",
+      "64.6"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2025",
+      "year": 2025
+     },
+     "stats": [
+      "14",
+      "315",
+      "502",
+      "62.7",
+      "3,587",
+      "7.1",
+      "22",
+      "11",
+      "61",
+      "34",
+      "89.6",
+      "68.5"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2026",
+      "year": 2026
+     },
+     "stats": [
+      "4",
+      "82",
+      "128",
+      "64.1",
+      "1,037",
+      "8.1",
+      "9",
+      "2",
+      "59",
+      "6",
+      "106.2",
+      "68.2"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    }
+   ],
+   "totals": [
+    "130",
+    "3175",
+    "4801",
+    "66.1",
+    "36,976",
+    "7.7",
+    "276",
+    "87",
+    "89",
+    "224",
+    "100.9",
+    "-"
+   ]
+  },
+  {
+   "descriptions": [
+    "Games Played",
+    "The total number of attempted rushes.",
+    "The total rushing yards.",
+    "The average number of yards per rush attempt.",
+    "The total number of rushing touchdowns.",
+    "The amount of yards for the longest run.",
+    "The number of times a first down is picked up by a run.",
+    "The number of times there is a run and then the ball is fumbled.",
+    "The number of times there is a run and then the ball is fumbled."
+   ],
+   "displayName": "Rushing",
+   "displayNames": [
+    "Games Played",
+    "Rushing Attempts",
+    "Rushing Yards",
+    "Yards Per Rush Attempt",
+    "Rushing Touchdowns",
+    "Long Rushing",
+    "Rushing 1st downs",
+    "Rushing Fumbles",
+    "Rushing Fumbles Lost"
+   ],
+   "labels": [
+    "GP",
+    "CAR",
+    "YDS",
+    "AVG",
+    "TD",
+    "LNG",
+    "FD",
+    "FUM",
+    "LST"
+   ],
+   "name": "rushing",
+   "names": [
+    "gamesPlayed",
+    "rushingAttempts",
+    "rushingYards",
+    "yardsPerRushAttempt",
+    "rushingTouchdowns",
+    "longRushing",
+    "rushingFirstDowns",
+    "rushingFumbles",
+    "rushingFumblesLost"
+   ],
+   "sortKey": "rushing",
+   "statistics": [
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2017",
+      "year": 2017
+     },
+     "stats": [
+      "1",
+      "7",
+      "10",
+      "1.4",
+      "0",
+      "5",
+      "0",
+      "0",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2018",
+      "year": 2018
+     },
+     "stats": [
+      "16",
+      "60",
+      "272",
+      "4.5",
+      "2",
+      "28",
+      "18",
+      "2",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2019",
+      "year": 2019
+     },
+     "stats": [
+      "14",
+      "43",
+      "218",
+      "5.1",
+      "2",
+      "25",
+      "15",
+      "1",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2020",
+      "year": 2020
+     },
+     "stats": [
+      "15",
+      "62",
+      "308",
+      "5.0",
+      "2",
+      "24",
+      "21",
+      "2",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2021",
+      "year": 2021
+     },
+     "stats": [
+      "17",
+      "66",
+      "381",
+      "5.8",
+      "2",
+      "32",
+      "25",
+      "4",
+      "2"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2022",
+      "year": 2022
+     },
+     "stats": [
+      "17",
+      "61",
+      "358",
+      "5.9",
+      "4",
+      "20",
+      "25",
+      "5",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2023",
+      "year": 2023
+     },
+     "stats": [
+      "16",
+      "75",
+      "389",
+      "5.2",
+      "0",
+      "25",
+      "27",
+      "1",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2024",
+      "year": 2024
+     },
+     "stats": [
+      "16",
+      "58",
+      "307",
+      "5.3",
+      "2",
+      "33",
+      "22",
+      "1",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2025",
+      "year": 2025
+     },
+     "stats": [
+      "14",
+      "64",
+      "422",
+      "6.6",
+      "5",
+      "22",
+      "27",
+      "0",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2026",
+      "year": 2026
+     },
+     "stats": [
+      "4",
+      "12",
+      "41",
+      "3.4",
+      "1",
+      "15",
+      "4",
+      "0",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    }
+   ],
+   "totals": [
+    "130",
+    "508",
+    "2,706",
+    "5.3",
+    "20",
+    "33",
+    "184",
+    "16",
+    "2"
+   ]
+  },
+  {
+   "descriptions": [
+    "Games Played",
+    "The total number of receptions.",
+    "The number of times a receiver is thrown to.",
+    "The total receiving yards.",
+    "The average number of yards per reception.",
+    "The total number of receiving touchdowns.",
+    "The amount of yards for the longest reception.",
+    "The number of times a first down is picked up by a reception.",
+    "The number of times a reception is made and then the ball is fumbled.",
+    "The number of times a reception is made and the balled is fumbled and recovered by the opposing team."
+   ],
+   "displayName": "Receiving",
+   "displayNames": [
+    "Games Played",
+    "Receptions",
+    "Receiving Targets",
+    "Receiving Yards",
+    "Yards Per Reception",
+    "Receiving Touchdowns",
+    "Long Reception",
+    "Receiving First Downs",
+    "Receiving Fumbles",
+    "Receiving Fumbles Lost"
+   ],
+   "labels": [
+    "GP",
+    "REC",
+    "TGTS",
+    "YDS",
+    "AVG",
+    "TD",
+    "LNG",
+    "FD",
+    "FUM",
+    "LST"
+   ],
+   "name": "receiving",
+   "names": [
+    "gamesPlayed",
+    "receptions",
+    "receivingTargets",
+    "receivingYards",
+    "yardsPerReception",
+    "receivingTouchdowns",
+    "longReception",
+    "receivingFirstDowns",
+    "receivingFumbles",
+    "receivingFumblesLost"
+   ],
+   "sortKey": "receiving",
+   "statistics": [
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2020",
+      "year": 2020
+     },
+     "stats": [
+      "15",
+      "0",
+      "2",
+      "0",
+      "0.0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2022",
+      "year": 2022
+     },
+     "stats": [
+      "17",
+      "1",
+      "1",
+      "6",
+      "6.0",
+      "0",
+      "6",
+      "0",
+      "0",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2024",
+      "year": 2024
+     },
+     "stats": [
+      "16",
+      "1",
+      "1",
+      "2",
+      "2.0",
+      "0",
+      "2",
+      "0",
+      "0",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2025",
+      "year": 2025
+     },
+     "stats": [
+      "14",
+      "1",
+      "1",
+      "-10",
+      "-10.0",
+      "0",
+      "-10",
+      "0",
+      "0",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    }
+   ],
+   "totals": [
+    "130",
+    "3",
+    "5",
+    "-2",
+    "-0.7",
+    "0",
+    "6",
+    "0",
+    "0",
+    "0"
+   ]
+  },
+  {
+   "descriptions": [
+    "Games Played",
+    "The total number of tackles.",
+    "The number of times a tackle was made unassisted.",
+    "The number of assists on tackles.",
+    "The total number of sacks.",
+    "The total number of forced fumbles.",
+    "The number of fumbles recovered.",
+    "The number of yards gained after a fumble is recovered.",
+    "The total number of interceptions.",
+    "The number of yards gained after an interception.",
+    "The average number of return yards per interception.",
+    "The number of times an interception is returned for a touchdown.",
+    "The amount of yards of the longest interception return.",
+    "The total number of passes defended.",
+    "The number of times that a runner is stuffed at or behind the line of scrimmage.",
+    "The number of yards lost from stuffs.",
+    "The number of times a kick was blocked."
+   ],
+   "displayName": "Defense",
+   "displayNames": [
+    "Games Played",
+    "Total Tackles",
+    "Solo Tackles",
+    "Assist Tackles",
+    "Sacks",
+    "Forced Fumbles",
+    "Fumbles Recovered",
+    "Fumbles Recovered Yards",
+    "Interceptions",
+    "Interception Yards",
+    "Average Interception Yards",
+    "Interception Touchdowns",
+    "Long Interception",
+    "Passes Defended",
+    "Stuffs",
+    "Stuff Yards",
+    "Kicks Blocked"
+   ],
+   "labels": [
+    "GP",
+    "TOT",
+    "SOLO",
+    "AST",
+    "SACK",
+    "FF",
+    "FR",
+    "YDS",
+    "INT",
+    "YDS",
+    "AVG",
+    "TD",
+    "LNG",
+    "PD",
+    "STF",
+    "STFYDS",
+    "KB"
+   ],
+   "name": "defensive",
+   "names": [
+    "gamesPlayed",
+    "totalTackles",
+    "soloTackles",
+    "assistTackles",
+    "sacks",
+    "fumblesForced",
+    "fumblesRecovered",
+    "fumblesRecoveredYards",
+    "interceptions",
+    "interceptionYards",
+    "avgInterceptionYards",
+    "interceptionTouchdowns",
+    "longInterception",
+    "passesDefended",
+    "stuffs",
+    "stuffYards",
+    "kicksBlocked"
+   ],
+   "sortKey": "defensive",
+   "statistics": [
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2020",
+      "year": 2020
+     },
+     "stats": [
+      "15",
+      "3",
+      "2",
+      "1",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0.0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2021",
+      "year": 2021
+     },
+     "stats": [
+      "17",
+      "1",
+      "1",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0.0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2022",
+      "year": 2022
+     },
+     "stats": [
+      "17",
+      "2",
+      "1",
+      "1",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0.0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2023",
+      "year": 2023
+     },
+     "stats": [
+      "16",
+      "1",
+      "1",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0.0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2025",
+      "year": 2025
+     },
+     "stats": [
+      "14",
+      "1",
+      "1",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0.0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2026",
+      "year": 2026
+     },
+     "stats": [
+      "4",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "3",
+      "0",
+      "0",
+      "0",
+      "0.0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    }
+   ],
+   "totals": [
+    "130",
+    "8",
+    "6",
+    "2",
+    "0",
+    "0",
+    "3",
+    "0",
+    "0",
+    "0",
+    "0.0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0"
+   ]
+  },
+  {
+   "descriptions": [
+    "Games Played",
+    "The total number of passing touchdowns.",
+    "The total number of rushing touchdowns.",
+    "The total number of receiving touchdowns.",
+    "The total number of return touchdowns.",
+    "The number of touchdowns scored in total.",
+    "The number of times a 2-point conversion is successful.",
+    "The number of extra points made.",
+    "The number of field goals made.",
+    "The number of total points scored."
+   ],
+   "displayName": "Scoring",
+   "displayNames": [
+    "Games Played",
+    "Passing Touchdowns",
+    "Rushing Touchdowns",
+    "Receiving Touchdowns",
+    "Return Touchdowns",
+    "Total Touchdowns",
+    "Total Two Point Conversions",
+    "Kick Extra Points",
+    "Field Goals",
+    "Total Points"
+   ],
+   "labels": [
+    "GP",
+    "PASS",
+    "RUSH",
+    "REC",
+    "RET",
+    "TD",
+    "2PT",
+    "PAT",
+    "FG",
+    "PTS"
+   ],
+   "name": "scoring",
+   "names": [
+    "gamesPlayed",
+    "passingTouchdowns",
+    "rushingTouchdowns",
+    "receivingTouchdowns",
+    "returnTouchdowns",
+    "totalTouchdowns",
+    "totalTwoPointConvs",
+    "kickExtraPoints",
+    "fieldGoals",
+    "totalPoints"
+   ],
+   "sortKey": "scoring",
+   "statistics": [
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2018",
+      "year": 2018
+     },
+     "stats": [
+      "16",
+      "50",
+      "2",
+      "0",
+      "0",
+      "2",
+      "1",
+      "0",
+      "0",
+      "14"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2019",
+      "year": 2019
+     },
+     "stats": [
+      "14",
+      "26",
+      "2",
+      "0",
+      "0",
+      "2",
+      "0",
+      "0",
+      "0",
+      "12"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2020",
+      "year": 2020
+     },
+     "stats": [
+      "15",
+      "39",
+      "2",
+      "0",
+      "0",
+      "2",
+      "0",
+      "0",
+      "0",
+      "12"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2021",
+      "year": 2021
+     },
+     "stats": [
+      "17",
+      "37",
+      "2",
+      "0",
+      "0",
+      "2",
+      "1",
+      "0",
+      "0",
+      "14"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2022",
+      "year": 2022
+     },
+     "stats": [
+      "17",
+      "41",
+      "4",
+      "0",
+      "0",
+      "4",
+      "1",
+      "0",
+      "0",
+      "26"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2023",
+      "year": 2023
+     },
+     "stats": [
+      "16",
+      "27",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2024",
+      "year": 2024
+     },
+     "stats": [
+      "16",
+      "26",
+      "2",
+      "0",
+      "0",
+      "2",
+      "0",
+      "0",
+      "0",
+      "12"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2025",
+      "year": 2025
+     },
+     "stats": [
+      "14",
+      "22",
+      "5",
+      "0",
+      "0",
+      "5",
+      "0",
+      "0",
+      "0",
+      "30"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    },
+    {
+     "position": "QB",
+     "season": {
+      "displayName": "2026",
+      "year": 2026
+     },
+     "stats": [
+      "4",
+      "9",
+      "1",
+      "0",
+      "0",
+      "1",
+      "0",
+      "0",
+      "0",
+      "6"
+     ],
+     "teamId": "12",
+     "teamSlug": "kansas-city-chiefs"
+    }
+   ],
+   "totals": [
+    "130",
+    "277",
+    "20",
+    "0",
+    "0",
+    "20",
+    "3",
+    "0",
+    "0",
+    "126"
+   ]
+  }
+ ],
+ "filters": [
+  {
+   "displayName": "League",
+   "name": "league",
+   "options": [
+    {
+     "displayValue": "NCAA - Football",
+     "shortDisplayName": "NCAAF",
+     "value": "college-football"
+    },
+    {
+     "displayValue": "National Football League",
+     "shortDisplayName": "NFL",
+     "value": "nfl"
+    }
+   ],
+   "value": "nfl"
+  },
+  {
+   "displayName": "Season",
+   "name": "seasontype",
+   "options": [
+    {
+     "displayValue": "Regular Season",
+     "value": "2"
+    },
+    {
+     "displayValue": "Postseason",
+     "value": "3"
+    }
+   ],
+   "value": "2"
+  }
+ ],
+ "glossary": [
+  {
+   "abbreviation": "1-19\t",
+   "displayName": "FGM 1-19 yards"
+  },
+  {
+   "abbreviation": "20-29\t",
+   "displayName": "FGM 20-29 yards"
+  },
+  {
+   "abbreviation": "2PT",
+   "displayName": "Total Two Point Conversions"
+  },
+  {
+   "abbreviation": "30-39",
+   "displayName": "FGM 30-39 yards"
+  },
+  {
+   "abbreviation": "40-49\t",
+   "displayName": "FGM 40-49 yards"
+  },
+  {
+   "abbreviation": "50+",
+   "displayName": "FGM 50+ yards"
+  },
+  {
+   "abbreviation": "AST",
+   "displayName": "Assist Tackles"
+  },
+  {
+   "abbreviation": "ATT",
+   "displayName": "Passing Attempts"
+  },
+  {
+   "abbreviation": "AVG",
+   "displayName": "Yards Per Pass Attempt"
+  },
+  {
+   "abbreviation": "CAR",
+   "displayName": "Rushing Attempts"
+  },
+  {
+   "abbreviation": "CMP",
+   "displayName": "Completions"
+  },
+  {
+   "abbreviation": "CMP%",
+   "displayName": "Completion Percentage"
+  },
+  {
+   "abbreviation": "FC",
+   "displayName": "Punt Return Fair Catches"
+  },
+  {
+   "abbreviation": "FD",
+   "displayName": "Rushing 1st downs"
+  },
+  {
+   "abbreviation": "FF",
+   "displayName": "Forced Fumbles"
+  },
+  {
+   "abbreviation": "FG",
+   "displayName": "Field Goals"
+  },
+  {
+   "abbreviation": "FG%",
+   "displayName": "Field Goal Percentage"
+  },
+  {
+   "abbreviation": "FR",
+   "displayName": "Fumbles Recovered"
+  },
+  {
+   "abbreviation": "FUM",
+   "displayName": "Rushing Fumbles"
+  },
+  {
+   "abbreviation": "GP",
+   "displayName": "Games Played"
+  },
+  {
+   "abbreviation": "IN20",
+   "displayName": "Punts Inside 20"
+  },
+  {
+   "abbreviation": "IN20%",
+   "displayName": "Punts Inside 20 Percentage"
+  },
+  {
+   "abbreviation": "INT",
+   "displayName": "Interceptions"
+  },
+  {
+   "abbreviation": "KB",
+   "displayName": "Kicks Blocked"
+  },
+  {
+   "abbreviation": "KRFC",
+   "displayName": "Kick Return Fair Catches"
+  },
+  {
+   "abbreviation": "LNG",
+   "displayName": "Longest Pass"
+  },
+  {
+   "abbreviation": "LST",
+   "displayName": "Rushing Fumbles Lost"
+  },
+  {
+   "abbreviation": "NET",
+   "displayName": "Net Average Punt Yards"
+  },
+  {
+   "abbreviation": "PASS",
+   "displayName": "Passing Touchdowns"
+  },
+  {
+   "abbreviation": "PAT",
+   "displayName": "Kick Extra Points"
+  },
+  {
+   "abbreviation": "PD",
+   "displayName": "Passes Defended"
+  },
+  {
+   "abbreviation": "PTS",
+   "displayName": "Total Points"
+  },
+  {
+   "abbreviation": "PUNTS",
+   "displayName": "Punts"
+  },
+  {
+   "abbreviation": "QBR",
+   "displayName": "Adjusted QBR"
+  },
+  {
+   "abbreviation": "REC",
+   "displayName": "Receptions"
+  },
+  {
+   "abbreviation": "RET",
+   "displayName": "Return Touchdowns"
+  },
+  {
+   "abbreviation": "RTG",
+   "displayName": "Passer Rating"
+  },
+  {
+   "abbreviation": "RUSH",
+   "displayName": "Rushing Touchdowns"
+  },
+  {
+   "abbreviation": "SACK",
+   "displayName": "Total Sacks"
+  },
+  {
+   "abbreviation": "SOLO",
+   "displayName": "Solo Tackles"
+  },
+  {
+   "abbreviation": "STF",
+   "displayName": "Stuffs"
+  },
+  {
+   "abbreviation": "STFYDS",
+   "displayName": "Stuff Yards"
+  },
+  {
+   "abbreviation": "TB",
+   "displayName": "Touchbacks"
+  },
+  {
+   "abbreviation": "TB%",
+   "displayName": "Touchback Percentage"
+  },
+  {
+   "abbreviation": "TD",
+   "displayName": "Passing Touchdowns"
+  },
+  {
+   "abbreviation": "TGTS",
+   "displayName": "Receiving Targets"
+  },
+  {
+   "abbreviation": "TOT",
+   "displayName": "Total Tackles"
+  },
+  {
+   "abbreviation": "XPA",
+   "displayName": "Extra Point Attempts"
+  },
+  {
+   "abbreviation": "XPM",
+   "displayName": "Extra Points Made"
+  },
+  {
+   "abbreviation": "YDS",
+   "displayName": "Passing Yards"
+  }
+ ],
+ "teams": {
+  "kansas-city-chiefs": {
+   "abbreviation": "KC",
+   "againstTheSpreadRecords": {},
+   "alternateColor": "ffb612",
+   "coaches": {},
+   "color": "BE1415",
+   "displayName": "Kansas City Chiefs",
+   "franchise": {},
+   "groups": {},
+   "guid": "f68f2343-8ceb-7a02-740d-af6338be21d2",
+   "id": "12",
+   "isActive": true,
+   "isAllStar": false,
+   "links": [
+    {
+     "href": "https://www.espn.com/nfl/team/_/name/kc/kansas-city-chiefs",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "clubhouse",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Clubhouse",
+     "text": "Clubhouse"
+    },
+    {
+     "href": "https://www.espn.com/nfl/team/roster/_/name/kc/kansas-city-chiefs",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:20~l:28~t:12&section=roster",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "https://www.espn.com/nfl/team/stats/_/name/kc/kansas-city-chiefs",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:20~l:28~t:12&section=stats",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "https://www.espn.com/nfl/team/schedule/_/name/kc",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:20~l:28~t:12&section=scores",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "https://www.espn.com/nfl/team/photos/_/name/kc",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "photos",
+      "desktop",
+      "team"
+     ],
+     "shortText": "photos",
+     "text": "photos"
+    },
+    {
+     "href": "https://www.vividseats.com/kansas-city-chiefs-tickets--sports-nfl-football/performer/427?wsUser=717",
+     "isExternal": true,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "tickets",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Tickets",
+     "text": "Tickets"
+    },
+    {
+     "href": "https://www.espn.com/nfl/draft/teams/_/name/kc/kansas-city-chiefs",
+     "isExternal": false,
+     "isPremium": true,
+     "language": "en",
+     "rel": [
+      "draftpicks",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Draft Picks",
+     "text": "Draft Picks"
+    },
+    {
+     "href": "https://www.espn.com/nfl/team/transactions/_/name/kc",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "transactions",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Transactions",
+     "text": "Transactions"
+    },
+    {
+     "href": "https://www.espn.com/nfl/team/injuries/_/name/kc",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "injuries",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Injuries",
+     "text": "Injuries"
+    },
+    {
+     "href": "https://www.espn.com/nfl/team/depth/_/name/kc",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "depthchart",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Depth Chart",
+     "text": "Depth Chart"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:20~l:28~t:12&section=depthchart",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "depthchart",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Depth Chart",
+     "text": "Depth Chart"
+    }
+   ],
+   "location": "Kansas City",
+   "logos": [
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nfl/500/kc.png",
+     "rel": [
+      "full",
+      "default"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nfl/500-dark/kc.png",
+     "rel": [
+      "full",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/kc.png",
+     "rel": [
+      "full",
+      "scoreboard"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nfl/500-dark/scoreboard/kc.png",
+     "rel": [
+      "full",
+      "scoreboard",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/guid/f68f2343-8ceb-7a02-740d-af6338be21d2/logos/grayscale.png",
+     "rel": [
+      "full",
+      "grayscale"
+     ],
+     "width": 500
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/f68f2343-8ceb-7a02-740d-af6338be21d2/logos/primary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/f68f2343-8ceb-7a02-740d-af6338be21d2/logos/primary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/f68f2343-8ceb-7a02-740d-af6338be21d2/logos/primary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/f68f2343-8ceb-7a02-740d-af6338be21d2/logos/primary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/f68f2343-8ceb-7a02-740d-af6338be21d2/logos/primary_logo_black.png",
+     "rel": [
+      "full",
+      "primary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/f68f2343-8ceb-7a02-740d-af6338be21d2/logos/primary_logo_white.png",
+     "rel": [
+      "full",
+      "primary_logo_white"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/f68f2343-8ceb-7a02-740d-af6338be21d2/logos/secondary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/f68f2343-8ceb-7a02-740d-af6338be21d2/logos/secondary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/f68f2343-8ceb-7a02-740d-af6338be21d2/logos/secondary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/f68f2343-8ceb-7a02-740d-af6338be21d2/logos/secondary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/f68f2343-8ceb-7a02-740d-af6338be21d2/logos/secondary_logo_black.png",
+     "rel": [
+      "full",
+      "secondary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/f68f2343-8ceb-7a02-740d-af6338be21d2/logos/secondary_logo_white.png",
+     "rel": [
+      "full",
+      "secondary_logo_white"
+     ],
+     "width": 4096
+    }
+   ],
+   "name": "Chiefs",
+   "nickname": "Chiefs",
+   "ranks": {},
+   "record": {},
+   "shortDisplayName": "Chiefs",
+   "slug": "kansas-city-chiefs",
+   "uid": "s:20~l:28~t:12",
+   "venue": {
+    "address": {
+     "city": "Kansas City",
+     "country": "USA",
+     "state": "MO",
+     "zipCode": "64129"
+    },
+    "fullName": "Arrowhead Stadium",
+    "grass": true,
+    "id": "3622",
+    "images": [
+     {
+      "height": 1125,
+      "href": "https://a.espncdn.com/i/venues/nfl/day/3622.jpg",
+      "rel": [
+       "full",
+       "day"
+      ],
+      "width": 2000
+     },
+     {
+      "height": 1125,
+      "href": "https://a.espncdn.com/i/venues/nfl/day/interior/3622.jpg",
+      "rel": [
+       "full",
+       "day",
+       "interior"
+      ],
+      "width": 2000
+     }
+    ],
+    "indoor": false
+   }
+  }
+ }
+}

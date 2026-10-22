@@ -103,3 +103,9 @@ columns:
 - name: athlete_hometown_zip_code
   type: character
   description: ''
+- name: count
+  type: integer
+  description: ''
+- name: page_count
+  type: integer
+  description: ''

@@ -1,6 +1,6 @@
 {
-  "commit": "9769eb7183 (devel-cfb after the 10-18 sync of devel-test-harness 98fdc83e4d, main 3cda70429a)",
-  "measured_at": "2026-10-18T08:25:28+00:00",
+  "commit": "0b2039e8b6 (devel-basketball after the 10-18 sync of devel-test-harness 98fdc83e4d, main 3cda70429a)",
+  "measured_at": "2026-10-18T09:43:21+00:00",
   "metrics": {
     "handwritten_files": {
       "value": 848,
@@ -8,17 +8,17 @@
       "label": "Hand-written modules"
     },
     "handwritten_lines": {
-      "value": 323318,
+      "value": 322810,
       "better": "info",
       "label": "Hand-written lines"
     },
     "functions_over_100_lines": {
-      "value": 315,
+      "value": 314,
       "better": "lower",
       "label": "Functions over 100 lines"
     },
     "functions_over_200_lines": {
-      "value": 59,
+      "value": 57,
       "better": "lower",
       "label": "Functions over 200 lines"
     },
@@ -33,12 +33,12 @@
       "label": "Modules over 1,500 lines"
     },
     "mypy_checked_files": {
-      "value": 562,
+      "value": 561,
       "better": "higher",
       "label": "Files in the mypy strict list"
     },
     "lint_outdated_syntax": {
-      "value": 10854,
+      "value": 10848,
       "better": "lower",
       "label": "Outdated syntax a newer Python spells shorter (ruff UP)"
     },
@@ -88,7 +88,7 @@
       "label": "noqa comments naming a rule the project does not run (ruff RUF100)"
     },
     "lint_unused_arguments": {
-      "value": 163,
+      "value": 162,
       "better": "lower",
       "label": "Function arguments never used (ruff ARG)"
     },
@@ -115,30 +115,30 @@
   },
   "details": {
     "longest_functions": [
-      "1180 lines  sportsdataverse/cfb/cfb_pbp.py:2693 __helper_cfb_pbp_features",
-      "992 lines  sportsdataverse/cfb/cfb_pbp.py:9052 create_box_score",
-      "964 lines  sportsdataverse/nfl/nfl_pbp.py:6417 create_box_score",
-      "874 lines  sportsdataverse/cfb/cfb_pbp.py:7630 __process_epa",
-      "787 lines  sportsdataverse/cfb/cfb_ncaa_cfbfastr.py:529 to_cfbfastr",
-      "643 lines  sportsdataverse/cfb/cfb_pbp.py:6457 __add_player_cols",
-      "635 lines  sportsdataverse/nfl/nfl_pbp.py:3371 __add_player_cols",
+      "1176 lines  sportsdataverse/cfb/cfb_pbp.py:2535 __helper_cfb_pbp_features",
+      "991 lines  sportsdataverse/cfb/cfb_pbp.py:8797 create_box_score",
+      "964 lines  sportsdataverse/nfl/nfl_pbp.py:6390 create_box_score",
+      "815 lines  sportsdataverse/cfb/cfb_pbp.py:7438 __process_epa",
+      "785 lines  sportsdataverse/cfb/cfb_ncaa_cfbfastr.py:529 to_cfbfastr",
+      "643 lines  sportsdataverse/cfb/cfb_pbp.py:6269 __add_player_cols",
+      "635 lines  sportsdataverse/nfl/nfl_pbp.py:3344 __add_player_cols",
       "581 lines  sportsdataverse/football/attribution.py:260 add_attribution_cols",
-      "572 lines  sportsdataverse/nfl/nfl_pbp.py:740 __helper_nfl_pbp_features",
-      "541 lines  sportsdataverse/cfb/cfb_pbp.py:4702 __add_new_play_types",
-      "487 lines  sportsdataverse/cfb/cfb_pbp.py:5500 __add_play_category_flags",
+      "547 lines  sportsdataverse/nfl/nfl_pbp.py:740 __helper_nfl_pbp_features",
+      "541 lines  sportsdataverse/cfb/cfb_pbp.py:4511 __add_new_play_types",
+      "484 lines  sportsdataverse/cfb/cfb_pbp.py:5309 __add_play_category_flags",
       "456 lines  sportsdataverse/cfb/cfb_situational_stats.py:108 create_situational_stats",
       "449 lines  sportsdataverse/mbb/mbb_ncaa_game_pbp.py:648 parse_ncaa_bb_game_pbp",
-      "443 lines  sportsdataverse/nfl/nfl_pbp.py:2615 __add_play_category_flags",
+      "443 lines  sportsdataverse/nfl/nfl_pbp.py:2588 __add_play_category_flags",
       "427 lines  sportsdataverse/mbb/mbb_ratings.py:421 build_o_rtg",
       "427 lines  sportsdataverse/hockeytech/_family.py:53 build_family",
       "390 lines  sportsdataverse/football/series.py:11 add_series_data",
-      "388 lines  sportsdataverse/nfl/nfl_pbp.py:6021 __add_fixed_drives_series",
+      "388 lines  sportsdataverse/nfl/nfl_pbp.py:5994 __add_fixed_drives_series",
       "380 lines  sportsdataverse/nfl/nfl_simulations.py:296 nfl_simulations",
-      "379 lines  sportsdataverse/nfl/ep_wp.py:2461 calculate_wpa"
+      "379 lines  sportsdataverse/nfl/ep_wp.py:2454 calculate_wpa"
     ],
     "largest_classes": [
-      "8632 lines  sportsdataverse/cfb/cfb_pbp.py:2396 CFBPlayProcess",
-      "7260 lines  sportsdataverse/nfl/nfl_pbp.py:467 NFLPlayProcess",
+      "8512 lines  sportsdataverse/cfb/cfb_pbp.py:2252 CFBPlayProcess",
+      "7233 lines  sportsdataverse/nfl/nfl_pbp.py:467 NFLPlayProcess",
       "317 lines  sportsdataverse/mbb/mbb_ncaa_fetch.py:982 NcaaFetcher",
       "232 lines  sportsdataverse/mbb/mbb_ncaa_fetch.py:698 _PlaywrightTransport",
       "187 lines  sportsdataverse/_rds.py:104 _RdsWriter",
@@ -149,9 +149,9 @@
       "125 lines  sportsdataverse/mbb/mbb_ncaa_stints.py:764 LineupBuildingState"
     ],
     "largest_modules": [
-      "11028 lines  sportsdataverse/cfb/cfb_pbp.py",
-      "7727 lines  sportsdataverse/nfl/nfl_pbp.py",
-      "4593 lines  sportsdataverse/nfl/ep_wp.py",
+      "10764 lines  sportsdataverse/cfb/cfb_pbp.py",
+      "7700 lines  sportsdataverse/nfl/nfl_pbp.py",
+      "4586 lines  sportsdataverse/nfl/ep_wp.py",
       "2924 lines  sportsdataverse/nfl/nfl_loaders.py",
       "2913 lines  sportsdataverse/basketball/acb/acb_parsers.py",
       "2811 lines  sportsdataverse/nfl/nfl_stats.py",
@@ -164,8 +164,8 @@
       "1758 lines  sportsdataverse/mbb/mbb_ncaa_lineup_enrich.py",
       "1756 lines  sportsdataverse/nba/nba_lineups.py",
       "1726 lines  sportsdataverse/hockey/_esports_schemas.py",
+      "1714 lines  sportsdataverse/validation/pbp_invariants.py",
       "1635 lines  sportsdataverse/football/usage_box.py",
-      "1630 lines  sportsdataverse/validation/pbp_invariants.py",
       "1606 lines  sportsdataverse/basketball/bleague/bleague_parsers.py",
       "1601 lines  sportsdataverse/basketball/kbl/kbl_parsers.py",
       "1589 lines  sportsdataverse/basketball/scb/scb_parsers.py"

@@ -229,7 +229,8 @@ def test_loader_schema_refresh_captures_the_richest_season(tmp_path, monkeypatch
     Mid-season the newest asset is partial: in September 2026
     ``load_cfb_game_rosters`` had 73 columns for 2026 and 77 for 2025, so taking
     the newest season dropped the 2025-only ``draft_*`` columns from the docs.
-    A tie goes to the newer season, and a season whose read raises is skipped.
+    A tie goes to the newer season, and an unpublished season (fsspec's 404 is
+    ``FileNotFoundError``) is skipped.
     """
     import polars as pl
     import yaml
@@ -250,7 +251,7 @@ def test_loader_schema_refresh_captures_the_richest_season(tmp_path, monkeypatch
     def fake_schema(url):
         name = url.rsplit("/", 1)[-1]
         if name not in cols:
-            raise OSError(f"404 {url}")
+            raise FileNotFoundError(url)
         return {c: pl.Int64 for c in cols[name]}
 
     rel = spec.ReleasesConfig(
@@ -269,6 +270,43 @@ def test_loader_schema_refresh_captures_the_richest_season(tmp_path, monkeypatch
     written = yaml.safe_load((tmp_path / "schemas" / "loader_schemas.yaml").read_text(encoding="utf-8"))
     assert [c["name"] for c in written["load_rich"]] == ["a", "b", "draft_round"], "richest season not captured"
     assert [c["name"] for c in written["load_tie"]] == ["a", "new"], "tie did not go to the newest season"
+
+
+def test_loader_schema_refresh_failed_read_is_not_an_absent_season(tmp_path, monkeypatch):
+    """A-L11: a 403 / 5xx / dead connection on a footer is unknown, not absent.
+
+    The loader keeps its committed schema (it is neither rebuilt from an older season nor
+    dropped from the file) and the run exits 1 naming the failure; a 404 season is still skipped.
+    """
+    import polars as pl
+    import yaml
+
+    from tools.codegen import spec
+
+    def fake_schema(url):
+        name = url.rsplit("/", 1)[-1]
+        if name == "flaky_2026.parquet":
+            raise FileNotFoundError(url)  # not published yet
+        if name == "flaky_2025.parquet":
+            raise PermissionError(f"403 Forbidden {url}")
+        return {"a": pl.Int64, "older_only": pl.Int64}
+
+    rel = spec.ReleasesConfig(
+        bases={"b": "https://example.invalid/"},
+        loaders=[spec.Loader(fn="load_flaky", league="cfb", base="b", url="flaky_{season}.parquet", tag="t")],
+    )
+    committed = {"load_flaky": [{"name": "a", "type": "Int64"}, {"name": "b", "type": "String"}]}
+    (tmp_path / "schemas").mkdir()
+    (tmp_path / "schemas" / "loader_schemas.yaml").write_text(yaml.safe_dump(committed), encoding="utf-8")
+    monkeypatch.setattr(generate, "ENDPOINTS", tmp_path / "endpoints")
+    monkeypatch.setattr(generate.spec, "load_releases", lambda path: rel)
+    monkeypatch.setattr(generate, "_remote_parquet_schema", fake_schema)
+    generate._loader_schemas.cache_clear()  # read the tmp file, not the warm repo one
+
+    assert generate.refresh_loader_schemas() == 1
+
+    written = yaml.safe_load((tmp_path / "schemas" / "loader_schemas.yaml").read_text(encoding="utf-8"))
+    assert written == committed
 
 
 @skip_if_no_live
@@ -360,3 +398,38 @@ def test_loader_without_notes_emits_no_empty_caveat_block():
         ],
     )
     assert ":::caution" not in page
+
+
+def _failing_import(exc):
+    def fake(name, *a, **k):
+        raise exc
+
+    return fake
+
+
+def test_league_import_failure_raises_unless_the_package_is_absent(monkeypatch):
+    """A-L11: only a league package that does not exist yet reads as "no names"; any other failure raises.
+
+    An empty answer on a mid-edit syntax error or a missing optional dependency would silently change
+    the generated public names (``reserved_names``) or drop every documented parameter
+    (``_docstring_param_descs``) on a local regen.
+    """
+    import pytest
+
+    absent = ModuleNotFoundError("No module named 'sportsdataverse.nba'", name="sportsdataverse.nba")
+    monkeypatch.setattr(importlib, "import_module", _failing_import(absent))
+    assert generate._import_league_package("nba") is None
+    assert generate.reserved_names("nba") == set()
+    for exc in (SyntaxError("invalid syntax"), ModuleNotFoundError("No module named 'curl_cffi'", name="curl_cffi")):
+        monkeypatch.setattr(importlib, "import_module", _failing_import(exc))
+        with pytest.raises(type(exc)):
+            generate.reserved_names("nba")
+        with pytest.raises(type(exc)):
+            generate._docstring_param_descs.__wrapped__("nba", "nba_stats_leaguedashplayerstats")
+
+
+def test_native_schema_parser_crash_is_a_failure_not_a_skip():
+    """A-N14: a parser that cannot read its committed capture is reported (``--schemas`` exits 1), never skipped."""
+    written, failed = generate._write_native_schemas({"mlb_api": {"no_such_capture.json": "team_roster"}})
+    assert written == 0
+    assert len(failed) == 1 and failed[0].startswith("mlb_api/team_roster (no_such_capture.json): FileNotFoundError")

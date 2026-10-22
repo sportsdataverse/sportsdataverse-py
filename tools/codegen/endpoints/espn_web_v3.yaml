@@ -28,6 +28,17 @@ endpoints:
   parser: parse_athlete_stats
   example_args:
     athlete_id: '4239'
+  league_example_args:  # an athlete of each league (4239 is an NBA id); live-checked 2026-10-18
+    wnba:
+      athlete_id: '3149391'
+    mbb:
+      athlete_id: '4684793'
+    wbb:
+      athlete_id: '4433403'
+    nfl:
+      athlete_id: '3139477'
+    mlb:
+      athlete_id: '39832'
 - short: athlete_gamelog
   returns_schema: athlete_gamelog
   scope: universal

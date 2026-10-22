@@ -29,7 +29,8 @@ from sportsdataverse.cfb.cfb_fourth_down import (
 try:
     _load_fd_model()
     FD_MODEL_AVAILABLE = True
-except Exception:  # pragma: no cover - environment dependent
+# Any load failure (offline, no cache, no xgboost) skips these tests.
+except Exception:  # pragma: no cover  # noqa: BLE001 -- any load failure skips
     FD_MODEL_AVAILABLE = False
 
 requires_fd = pytest.mark.skipif(

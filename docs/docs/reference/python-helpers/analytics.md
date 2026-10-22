@@ -1,7 +1,7 @@
 ---
 title: "Package — additional Python functions — Analytics"
 sidebar_label: "Analytics"
-sidebar_position: 11
+sidebar_position: 12
 description: "Package — additional Python functions — Analytics — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Package — additional Python functions — Analytics

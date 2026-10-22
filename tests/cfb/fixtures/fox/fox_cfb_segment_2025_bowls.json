@@ -1,0 +1,1415 @@
+{
+ "sectionList": [
+  {
+   "title": "WEEK 0",
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42816",
+     "eventTime": "2025-12-13T20:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42816",
+        "homeUri": "football/cfb/teams/62",
+        "awayUri": "football/cfb/teams/47"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/47",
+      "stackedNameTop": "Army",
+      "stackedNameBottom": "Black Knights",
+      "longName": "Army",
+      "name": "ARMY"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/62",
+      "stackedNameTop": "Navy",
+      "stackedNameBottom": "Midshipmen",
+      "longName": "Navy",
+      "name": "NAVY"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42841",
+     "eventTime": "2025-12-14T01:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42841",
+        "homeUri": "football/cfb/teams/93",
+        "awayUri": "football/cfb/teams/42"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/42",
+      "stackedNameTop": "Boise State",
+      "stackedNameBottom": "Broncos",
+      "longName": "Boise State",
+      "name": "BSU"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/93",
+      "stackedNameTop": "Washington",
+      "stackedNameBottom": "Huskies",
+      "longName": "Washington",
+      "name": "WASH"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42799",
+     "eventTime": "2025-12-17T02:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42799",
+        "homeUri": "football/cfb/teams/219",
+        "awayUri": "football/cfb/teams/226"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/226",
+      "stackedNameTop": "Troy",
+      "stackedNameBottom": "Trojans",
+      "longName": "Troy",
+      "name": "TROY"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/219",
+      "stackedNameTop": "Jacksonville State",
+      "stackedNameBottom": "Gamecocks",
+      "longName": "Jacksonville St",
+      "name": "JSU"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42802",
+     "eventTime": "2025-12-17T22:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42802",
+        "homeUri": "football/cfb/teams/153",
+        "awayUri": "football/cfb/teams/564"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/564",
+      "stackedNameTop": "Old Dominion",
+      "stackedNameBottom": "Monarchs",
+      "longName": "Old Dominion",
+      "name": "ODU"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/153",
+      "stackedNameTop": "South Florida",
+      "stackedNameBottom": "Bulls",
+      "longName": "South Florida",
+      "name": "USF"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42765",
+     "eventTime": "2025-12-18T01:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42765",
+        "homeUri": "football/cfb/teams/116",
+        "awayUri": "football/cfb/teams/59"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/59",
+      "stackedNameTop": "Louisiana",
+      "stackedNameBottom": "Ragin' Cajuns",
+      "longName": "Louisiana",
+      "name": "LA"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/116",
+      "stackedNameTop": "Delaware",
+      "stackedNameBottom": "Blue Hens",
+      "longName": "Delaware",
+      "name": "DEL"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42843",
+     "eventTime": "2025-12-19T02:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42843",
+        "homeUri": "football/cfb/teams/41",
+        "awayUri": "football/cfb/teams/139"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/139",
+      "stackedNameTop": "Missouri State",
+      "stackedNameBottom": "Bears",
+      "longName": "Missouri State",
+      "name": "MOST"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/41",
+      "stackedNameTop": "Arkansas State",
+      "stackedNameBottom": "Red Wolves",
+      "longName": "Arkansas State",
+      "name": "ARKST"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42766",
+     "eventTime": "2025-12-19T16:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42766",
+        "homeUri": "football/cfb/teams/76",
+        "awayUri": "football/cfb/teams/776"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/776",
+      "stackedNameTop": "Kennesaw State",
+      "stackedNameBottom": "Owls",
+      "longName": "Kennesaw State",
+      "name": "KENNST"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/76",
+      "stackedNameTop": "Western Michigan",
+      "stackedNameBottom": "Broncos",
+      "longName": "Western Michigan",
+      "name": "WMU"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42768",
+     "eventTime": "2025-12-19T19:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42768",
+        "homeUri": "football/cfb/teams/7",
+        "awayUri": "football/cfb/teams/52"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/52",
+      "stackedNameTop": "Memphis",
+      "stackedNameBottom": "Tigers",
+      "longName": "Memphis",
+      "name": "MEM"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/7",
+      "stackedNameTop": "North Carolina State",
+      "stackedNameBottom": "Wolfpack",
+      "longName": "North Carolina St",
+      "name": "NCST"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42767",
+     "eventTime": "2025-12-20T01:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42767",
+        "homeUri": "football/cfb/teams/36",
+        "awayUri": "football/cfb/teams/101"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/101",
+      "stackedNameTop": "Alabama",
+      "stackedNameBottom": "Crimson Tide",
+      "longName": "Alabama",
+      "name": "ALA"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/36",
+      "stackedNameTop": "Oklahoma",
+      "stackedNameBottom": "Sooners",
+      "longName": "Oklahoma",
+      "name": "OU"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42771",
+     "eventTime": "2025-12-20T17:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42771",
+        "homeUri": "football/cfb/teams/39",
+        "awayUri": "football/cfb/teams/11"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/11",
+      "stackedNameTop": "Miami (FL)",
+      "stackedNameBottom": "Hurricanes",
+      "longName": "Miami (FL)",
+      "name": "MIA"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/39",
+      "stackedNameTop": "Texas A&M",
+      "stackedNameBottom": "Aggies",
+      "longName": "Texas A&M",
+      "name": "TXA&M"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42773",
+     "eventTime": "2025-12-20T20:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42773",
+        "homeUri": "football/cfb/teams/105",
+        "awayUri": "football/cfb/teams/54"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/54",
+      "stackedNameTop": "Tulane",
+      "stackedNameBottom": "Green Wave",
+      "longName": "Tulane",
+      "name": "TULANE"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/105",
+      "stackedNameTop": "Ole Miss",
+      "stackedNameBottom": "Rebels",
+      "longName": "Ole Miss",
+      "name": "MISS"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42770",
+     "eventTime": "2025-12-21T00:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42770",
+        "homeUri": "football/cfb/teams/88",
+        "awayUri": "football/cfb/teams/117"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/117",
+      "stackedNameTop": "James Madison",
+      "stackedNameBottom": "Dukes",
+      "longName": "James Madison",
+      "name": "JMU"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/88",
+      "stackedNameTop": "Oregon",
+      "stackedNameBottom": "Ducks",
+      "longName": "Oregon",
+      "name": "ORE"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42774",
+     "eventTime": "2025-12-22T19:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42774",
+        "homeUri": "football/cfb/teams/46",
+        "awayUri": "football/cfb/teams/94"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/94",
+      "stackedNameTop": "Washington State",
+      "stackedNameBottom": "Cougars",
+      "longName": "Washington State",
+      "name": "WSU"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/46",
+      "stackedNameTop": "Utah State",
+      "stackedNameBottom": "Aggies",
+      "longName": "Utah State",
+      "name": "USU"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42775",
+     "eventTime": "2025-12-23T19:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42775",
+        "homeUri": "football/cfb/teams/51",
+        "awayUri": "football/cfb/teams/75"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/75",
+      "stackedNameTop": "Toledo",
+      "stackedNameBottom": "Rockets",
+      "longName": "Toledo",
+      "name": "TOLEDO"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/51",
+      "stackedNameTop": "Louisville",
+      "stackedNameBottom": "Cardinals",
+      "longName": "Louisville",
+      "name": "LOU"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42796",
+     "eventTime": "2025-12-23T22:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42796",
+        "homeUri": "football/cfb/teams/53",
+        "awayUri": "football/cfb/teams/197"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/197",
+      "stackedNameTop": "Western Kentucky",
+      "stackedNameBottom": "Hilltoppers",
+      "longName": "Western Kentucky",
+      "name": "WKU"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/53",
+      "stackedNameTop": "Southern Miss",
+      "stackedNameBottom": "Golden Eagles",
+      "longName": "Southern Miss",
+      "name": "SMISS"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42829",
+     "eventTime": "2025-12-24T02:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42829",
+        "homeUri": "football/cfb/teams/70",
+        "awayUri": "football/cfb/teams/82"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/82",
+      "stackedNameTop": "UNLV",
+      "stackedNameBottom": "Rebels",
+      "longName": "UNLV",
+      "name": "UNLV"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/70",
+      "stackedNameTop": "Ohio",
+      "stackedNameBottom": "Bobcats",
+      "longName": "Ohio",
+      "name": "OHIO"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42776",
+     "eventTime": "2025-12-25T01:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42776",
+        "homeUri": "football/cfb/teams/108",
+        "awayUri": "football/cfb/teams/87"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/87",
+      "stackedNameTop": "California",
+      "stackedNameBottom": "Golden Bears",
+      "longName": "California",
+      "name": "CAL"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/108",
+      "stackedNameTop": "Hawai'i",
+      "stackedNameBottom": "Rainbow Warriors",
+      "longName": "Hawaii",
+      "name": "HAW"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42821",
+     "eventTime": "2025-12-26T18:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42821",
+        "homeUri": "football/cfb/teams/24",
+        "awayUri": "football/cfb/teams/72"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/72",
+      "stackedNameTop": "Central Michigan",
+      "stackedNameBottom": "Chippewas",
+      "longName": "Central Michigan",
+      "name": "CMICH"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/24",
+      "stackedNameTop": "Northwestern",
+      "stackedNameBottom": "Wildcats",
+      "longName": "Northwestern",
+      "name": "NU"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42817",
+     "eventTime": "2025-12-26T21:30:00Z",
+     "statusLine": "FINAL / OT",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42817",
+        "homeUri": "football/cfb/teams/23",
+        "awayUri": "football/cfb/teams/80"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/80",
+      "stackedNameTop": "New Mexico",
+      "stackedNameBottom": "Lobos",
+      "longName": "New Mexico",
+      "name": "UNM"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/23",
+      "stackedNameTop": "Minnesota",
+      "stackedNameBottom": "Golden Gophers",
+      "longName": "Minnesota",
+      "name": "MINN"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42777",
+     "eventTime": "2025-12-27T01:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42777",
+        "homeUri": "football/cfb/teams/750",
+        "awayUri": "football/cfb/teams/447"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/447",
+      "stackedNameTop": "Florida International",
+      "stackedNameBottom": "Panthers",
+      "longName": "FIU",
+      "name": "FIU"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/750",
+      "stackedNameTop": "UTSA",
+      "stackedNameBottom": "Roadrunners",
+      "longName": "UTSA",
+      "name": "UTSA"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42778",
+     "eventTime": "2025-12-27T16:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42778",
+        "homeUri": "football/cfb/teams/49",
+        "awayUri": "football/cfb/teams/12"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/12",
+      "stackedNameTop": "Pittsburgh",
+      "stackedNameBottom": "Panthers",
+      "longName": "Pittsburgh",
+      "name": "PITT"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/49",
+      "stackedNameTop": "East Carolina",
+      "stackedNameBottom": "Pirates",
+      "longName": "East Carolina",
+      "name": "ECU"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42827",
+     "eventTime": "2025-12-27T17:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42827",
+        "homeUri": "football/cfb/teams/1",
+        "awayUri": "football/cfb/teams/26"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/26",
+      "stackedNameTop": "Penn State",
+      "stackedNameBottom": "Nittany Lions",
+      "longName": "Penn State",
+      "name": "PSU"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/1",
+      "stackedNameTop": "Clemson",
+      "stackedNameBottom": "Tigers",
+      "longName": "Clemson",
+      "name": "CLEM"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42832",
+     "eventTime": "2025-12-27T19:15:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42832",
+        "homeUri": "football/cfb/teams/47",
+        "awayUri": "football/cfb/teams/57"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/57",
+      "stackedNameTop": "UConn",
+      "stackedNameBottom": "Huskies",
+      "longName": "Connecticut",
+      "name": "UCONN"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/47",
+      "stackedNameTop": "Army",
+      "stackedNameBottom": "Black Knights",
+      "longName": "Army",
+      "name": "ARMY"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42803",
+     "eventTime": "2025-12-27T20:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42803",
+        "homeUri": "football/cfb/teams/78",
+        "awayUri": "football/cfb/teams/4"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/4",
+      "stackedNameTop": "Georgia Tech",
+      "stackedNameBottom": "Yellow Jackets",
+      "longName": "Georgia Tech",
+      "name": "GT"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/78",
+      "stackedNameTop": "BYU",
+      "stackedNameBottom": "Cougars",
+      "longName": "BYU",
+      "name": "BYU"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42779",
+     "eventTime": "2025-12-27T21:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42779",
+        "homeUri": "football/cfb/teams/107",
+        "awayUri": "football/cfb/teams/69"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/69",
+      "stackedNameTop": "Miami (OH)",
+      "stackedNameBottom": "RedHawks",
+      "longName": "Miami (OH)",
+      "name": "MIA-OH"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/107",
+      "stackedNameTop": "Fresno State",
+      "stackedNameBottom": "Bulldogs",
+      "longName": "Fresno State",
+      "name": "FRES"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42780",
+     "eventTime": "2025-12-27T22:45:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42780",
+        "homeUri": "football/cfb/teams/81",
+        "awayUri": "football/cfb/teams/45"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/45",
+      "stackedNameTop": "North Texas",
+      "stackedNameBottom": "Mean Green",
+      "longName": "North Texas",
+      "name": "UNT"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/81",
+      "stackedNameTop": "San Diego State",
+      "stackedNameBottom": "Aztecs",
+      "longName": "San Diego State",
+      "name": "SDSU"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42809",
+     "eventTime": "2025-12-28T00:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42809",
+        "homeUri": "football/cfb/teams/33",
+        "awayUri": "football/cfb/teams/8"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/8",
+      "stackedNameTop": "Virginia",
+      "stackedNameBottom": "Cavaliers",
+      "longName": "Virginia",
+      "name": "UVA"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/33",
+      "stackedNameTop": "Missouri",
+      "stackedNameBottom": "Tigers",
+      "longName": "Missouri",
+      "name": "MIZZOU"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42818",
+     "eventTime": "2025-12-28T02:15:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42818",
+        "homeUri": "football/cfb/teams/50",
+        "awayUri": "football/cfb/teams/104"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/104",
+      "stackedNameTop": "LSU",
+      "stackedNameBottom": "Tigers",
+      "longName": "LSU",
+      "name": "LSU"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/50",
+      "stackedNameTop": "Houston",
+      "stackedNameBottom": "Cougars",
+      "longName": "Houston",
+      "name": "HOU"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42781",
+     "eventTime": "2025-12-29T19:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42781",
+        "homeUri": "football/cfb/teams/210",
+        "awayUri": "football/cfb/teams/215"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/215",
+      "stackedNameTop": "Georgia Southern",
+      "stackedNameBottom": "Eagles",
+      "longName": "GA Southern",
+      "name": "GEOSOU"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/210",
+      "stackedNameTop": "Appalachian State",
+      "stackedNameBottom": "Mountaineers",
+      "longName": "Appalachian State",
+      "name": "APP"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42807",
+     "eventTime": "2025-12-30T19:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42807",
+        "homeUri": "football/cfb/teams/58",
+        "awayUri": "football/cfb/teams/468"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/468",
+      "stackedNameTop": "Coastal Carolina",
+      "stackedNameBottom": "Chanticleers",
+      "longName": "C.Carolina",
+      "name": "COCAR"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/58",
+      "stackedNameTop": "Louisiana Tech",
+      "stackedNameBottom": "Bulldogs",
+      "longName": "Louisiana Tech",
+      "name": "LATECH"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42782",
+     "eventTime": "2025-12-30T22:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42782",
+        "homeUri": "football/cfb/teams/18",
+        "awayUri": "football/cfb/teams/99"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/99",
+      "stackedNameTop": "Tennessee",
+      "stackedNameBottom": "Volunteers",
+      "longName": "Tennessee",
+      "name": "TENN"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/18",
+      "stackedNameTop": "Illinois",
+      "stackedNameBottom": "Fighting Illini",
+      "longName": "Illinois",
+      "name": "ILL"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42783",
+     "eventTime": "2025-12-31T02:00:00Z",
+     "statusLine": "FINAL / OT",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42783",
+        "homeUri": "football/cfb/teams/113",
+        "awayUri": "football/cfb/teams/90"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/90",
+      "stackedNameTop": "USC",
+      "stackedNameBottom": "Trojans",
+      "longName": "USC",
+      "name": "USC"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/113",
+      "stackedNameTop": "TCU",
+      "stackedNameBottom": "Horned Frogs",
+      "longName": "TCU",
+      "name": "TCU"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42784",
+     "eventTime": "2025-12-31T17:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42784",
+        "homeUri": "football/cfb/teams/100",
+        "awayUri": "football/cfb/teams/20"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/20",
+      "stackedNameTop": "Iowa",
+      "stackedNameBottom": "Hawkeyes",
+      "longName": "Iowa",
+      "name": "IOWA"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/100",
+      "stackedNameTop": "Vanderbilt",
+      "stackedNameBottom": "Commodores",
+      "longName": "Vanderbilt",
+      "name": "VANDY"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42785",
+     "eventTime": "2025-12-31T19:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42785",
+        "homeUri": "football/cfb/teams/2",
+        "awayUri": "football/cfb/teams/86"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/86",
+      "stackedNameTop": "Arizona State",
+      "stackedNameBottom": "Sun Devils",
+      "longName": "Arizona State",
+      "name": "ASU"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/2",
+      "stackedNameTop": "Duke",
+      "stackedNameBottom": "Blue Devils",
+      "longName": "Duke",
+      "name": "DUKE"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42804",
+     "eventTime": "2025-12-31T20:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42804",
+        "homeUri": "football/cfb/teams/38",
+        "awayUri": "football/cfb/teams/21"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/21",
+      "stackedNameTop": "Michigan",
+      "stackedNameBottom": "Wolverines",
+      "longName": "Michigan",
+      "name": "MICH"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/38",
+      "stackedNameTop": "Texas",
+      "stackedNameBottom": "Longhorns",
+      "longName": "Texas",
+      "name": "TEXAS"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42786",
+     "eventTime": "2025-12-31T20:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42786",
+        "homeUri": "football/cfb/teams/83",
+        "awayUri": "football/cfb/teams/34"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/34",
+      "stackedNameTop": "Nebraska",
+      "stackedNameBottom": "Cornhuskers",
+      "longName": "Nebraska",
+      "name": "NEB"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/83",
+      "stackedNameTop": "Utah",
+      "stackedNameBottom": "Utes",
+      "longName": "Utah",
+      "name": "UTAH"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42826",
+     "eventTime": "2026-01-01T00:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42826",
+        "homeUri": "football/cfb/teams/25",
+        "awayUri": "football/cfb/teams/11"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/11",
+      "stackedNameTop": "Miami (FL)",
+      "stackedNameBottom": "Hurricanes",
+      "longName": "Miami (FL)",
+      "name": "MIA"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/25",
+      "stackedNameTop": "Ohio State",
+      "stackedNameBottom": "Buckeyes",
+      "longName": "Ohio State",
+      "name": "OSU"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42787",
+     "eventTime": "2026-01-01T17:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42787",
+        "homeUri": "football/cfb/teams/40",
+        "awayUri": "football/cfb/teams/88"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/88",
+      "stackedNameTop": "Oregon",
+      "stackedNameBottom": "Ducks",
+      "longName": "Oregon",
+      "name": "ORE"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/40",
+      "stackedNameTop": "Texas Tech",
+      "stackedNameBottom": "Red Raiders",
+      "longName": "Texas Tech",
+      "name": "TEXTCH"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42788",
+     "eventTime": "2026-01-01T21:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42788",
+        "homeUri": "football/cfb/teams/19",
+        "awayUri": "football/cfb/teams/101"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/101",
+      "stackedNameTop": "Alabama",
+      "stackedNameBottom": "Crimson Tide",
+      "longName": "Alabama",
+      "name": "ALA"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/19",
+      "stackedNameTop": "Indiana",
+      "stackedNameBottom": "Hoosiers",
+      "longName": "Indiana",
+      "name": "IND"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42797",
+     "eventTime": "2026-01-02T01:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42797",
+        "homeUri": "football/cfb/teams/96",
+        "awayUri": "football/cfb/teams/105"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/105",
+      "stackedNameTop": "Ole Miss",
+      "stackedNameBottom": "Rebels",
+      "longName": "Ole Miss",
+      "name": "MISS"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/96",
+      "stackedNameTop": "Georgia",
+      "stackedNameBottom": "Bulldogs",
+      "longName": "Georgia",
+      "name": "UGA"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42789",
+     "eventTime": "2026-01-02T18:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42789",
+        "homeUri": "football/cfb/teams/224",
+        "awayUri": "football/cfb/teams/110"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/110",
+      "stackedNameTop": "Rice",
+      "stackedNameBottom": "Owls",
+      "longName": "Rice",
+      "name": "RICE"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/224",
+      "stackedNameTop": "Texas State",
+      "stackedNameBottom": "Bobcats",
+      "longName": "Texas State",
+      "name": "TEXST"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42790",
+     "eventTime": "2026-01-02T21:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42790",
+        "homeUri": "football/cfb/teams/48",
+        "awayUri": "football/cfb/teams/62"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/62",
+      "stackedNameTop": "Navy",
+      "stackedNameBottom": "Midshipmen",
+      "longName": "Navy",
+      "name": "NAVY"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/48",
+      "stackedNameTop": "Cincinnati",
+      "stackedNameBottom": "Bearcats",
+      "longName": "Cincinnati",
+      "name": "CIN"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42812",
+     "eventTime": "2026-01-03T01:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42812",
+        "homeUri": "football/cfb/teams/106",
+        "awayUri": "football/cfb/teams/9"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/9",
+      "stackedNameTop": "Wake Forest",
+      "stackedNameBottom": "Demon Deacons",
+      "longName": "Wake Forest",
+      "name": "WAKE"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/106",
+      "stackedNameTop": "Mississippi State",
+      "stackedNameBottom": "Bulldogs",
+      "longName": "Mississippi State",
+      "name": "MSST"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42842",
+     "eventTime": "2026-01-03T01:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42842",
+        "homeUri": "football/cfb/teams/112",
+        "awayUri": "football/cfb/teams/85"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/85",
+      "stackedNameTop": "Arizona",
+      "stackedNameBottom": "Wildcats",
+      "longName": "Arizona",
+      "name": "ARIZ"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/112",
+      "stackedNameTop": "SMU",
+      "stackedNameBottom": "Mustangs",
+      "longName": "SMU",
+      "name": "SMU"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42822",
+     "eventTime": "2026-01-09T00:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42822",
+        "homeUri": "football/cfb/teams/105",
+        "awayUri": "football/cfb/teams/11"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/11",
+      "stackedNameTop": "Miami (FL)",
+      "stackedNameBottom": "Hurricanes",
+      "longName": "Miami (FL)",
+      "name": "MIA"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/105",
+      "stackedNameTop": "Ole Miss",
+      "stackedNameBottom": "Rebels",
+      "longName": "Ole Miss",
+      "name": "MISS"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42838",
+     "eventTime": "2026-01-10T00:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42838",
+        "homeUri": "football/cfb/teams/19",
+        "awayUri": "football/cfb/teams/88"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/88",
+      "stackedNameTop": "Oregon",
+      "stackedNameBottom": "Ducks",
+      "longName": "Oregon",
+      "name": "ORE"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/19",
+      "stackedNameTop": "Indiana",
+      "stackedNameBottom": "Hoosiers",
+      "longName": "Indiana",
+      "name": "IND"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42792",
+     "eventTime": "2026-01-20T00:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42792",
+        "homeUri": "football/cfb/teams/19",
+        "awayUri": "football/cfb/teams/11"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/11",
+      "stackedNameTop": "Miami (FL)",
+      "stackedNameBottom": "Hurricanes",
+      "longName": "Miami (FL)",
+      "name": "MIA"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/19",
+      "stackedNameTop": "Indiana",
+      "stackedNameBottom": "Hoosiers",
+      "longName": "Indiana",
+      "name": "IND"
+     }
+    }
+   ]
+  }
+ ]
+}

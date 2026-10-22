@@ -343,7 +343,7 @@ def calculate_nfl_standings(
         return _empty_standings(return_as_pandas=return_as_pandas)
 
     if teams is None:
-        from sportsdataverse.nfl.nfl_loaders import load_nfl_teams  # noqa: PLC0415
+        from sportsdataverse.nfl.nfl_loaders import load_nfl_teams
 
         teams = load_nfl_teams()
 

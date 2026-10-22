@@ -48,7 +48,7 @@ def _row_count(payload: dict) -> int:
 def fetch_season(season: str) -> dict:
     """Fetch leaguedashptstats with retries/backoff. Raises on exhaustion."""
     # Import here so failures are obvious at call time, not import time
-    from sportsdataverse.nba import nba_stats  # noqa: PLC0415
+    from sportsdataverse.nba import nba_stats
 
     last_exc: Exception | None = None
     for attempt in range(1, MAX_ATTEMPTS + 1):
@@ -68,7 +68,7 @@ def fetch_season(season: str) -> dict:
                 raise ValueError(f"Payload has 0 rows for season {season}")
             log.info("  OK: %d player rows", rows)
             return payload
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:  # noqa: BLE001 -- live capture: every failure is retried, and the last one re-raised
             last_exc = exc
             wait = BACKOFF_BASE * (2 ** (attempt - 1))
             log.warning("  attempt %d failed: %s — retrying in %.1fs", attempt, exc, wait)

@@ -1,8 +1,8 @@
 """Women's college basketball shot locations from stats.ncaa.org.
 
 WBB binding of :mod:`sportsdataverse.mbb.mbb_ncaa_shots` with the WBB
-``period_model`` -- quarters ``(4, 600, 300)`` by default, halves
-``(2, 1200, 300)`` when ``season=`` names a pre-2016 season
+``period_model`` from :func:`~sportsdataverse.scrape.ncaa.parse.wbb_period_model` --
+quarters by default, halves when ``season=`` names a pre-2016 season
 (rules/wbb.yaml#wbb-2016-four-quarters). This surface is a deliberate EXTENSION:
 wbigballR ships ``get_shot_locations``/``join_pbp_shots`` but exports
 neither (``dev/bigballr_port/design.md``); the shared parser is validated on
@@ -22,14 +22,13 @@ from sportsdataverse.mbb.mbb_ncaa_shots import (
     ncaa_mbb_join_pbp_shots,
     parse_ncaa_bb_shots,
 )
+from sportsdataverse.scrape.ncaa.identity import _utf8_id
 from sportsdataverse.scrape.ncaa.parse import wbb_period_model
 
 if TYPE_CHECKING:  # pragma: no cover
     import pandas as pd
 
 logger = logging.getLogger(__name__)
-
-_WBB_PERIOD_MODEL = (4, 600, 300)
 
 __all__ = [
     "ncaa_wbb_join_pbp_shots",
@@ -76,13 +75,14 @@ def ncaa_wbb_shot_locations(
             shots = ncaa_wbb_shot_locations(["5722355"])
             print(shots.shape)
     """
-    ids = [g for g in game_ids if g is not None and g == g]
-    period_model = _WBB_PERIOD_MODEL if season is None else wbb_period_model(str(season))
+    ids = [g for g in map(_utf8_id, game_ids) if g is not None]
+    # _utf8_id, never str(): season=2015.0 must read "2015" (halves), not "2015.0" (quarters)
+    period_model = wbb_period_model(_utf8_id(season))
 
     def _run(f: Any) -> "list[pl.DataFrame]":
         frames: "list[pl.DataFrame]" = []
         for gid in ids:
-            df = parse_ncaa_bb_shots(f.fetch_game_box(gid), str(gid), period_model=period_model)
+            df = parse_ncaa_bb_shots(f.fetch_game_box(gid), gid, period_model=period_model)
             found = sorted({t for t in df["team"].to_list() if t is not None})
             logger.info(
                 "Game_ID: %s || %s v. %s || %d shots found",

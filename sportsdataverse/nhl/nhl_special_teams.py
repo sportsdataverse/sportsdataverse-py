@@ -50,6 +50,7 @@ def nhl_special_teams_value(
     model_dir: "str | None" = None,
     league: str = "nhl",
     return_as_pandas: bool = False,
+    xg_scored: bool = False,
     _stints: pl.DataFrame | None = None,
 ) -> "pl.DataFrame | pd.DataFrame":
     """Per-skater power-play/penalty-kill value (goals) above/below league baseline.
@@ -61,6 +62,8 @@ def nhl_special_teams_value(
         league: ``"nhl"`` or ``"pwhl"`` -- selects ``league_xg_rate_pp``/``_pk`` via
             ``LEAGUE_CONSTANTS``.
         return_as_pandas: return a pandas DataFrame instead of polars.
+        xg_scored: ``pbp`` already carries the shot ``xg`` to use (another league's own xG
+            model); skip re-scoring with the NHL boosters, which would replace it.
         _stints: internal test hook -- inject a pre-built stints frame.
 
     Returns:
@@ -83,7 +86,7 @@ def nhl_special_teams_value(
     else:
         if pbp.height == 0 or shifts.height == 0:
             return pl.DataFrame(schema=_ST_SCHEMA)
-        scored = nhl_xg(pbp, model_dir=model_dir, league=league)
+        scored = pbp if xg_scored else nhl_xg(pbp, model_dir=model_dir, league=league)
         stints = build_stints(shifts, scored)
 
     if stints.height == 0:

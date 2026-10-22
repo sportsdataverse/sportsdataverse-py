@@ -15,5 +15,10 @@
     -0.0537381653257905
   ],
   "intercept": -0.0022402488867253913,
-  "cutoff_season": 2016
+  "cutoff_season": 2016,
+  "median_ref": {
+    "gp_pct": 0.7560975609756098,
+    "bmi": 24.0
+  },
+  "cutoff_season_note": "cutoff_season is a START year (stats.nba.com season_id '2016-17' -> 2016): train = seasons starting <= 2016. nba_availability's seasons are END years. median_ref = median train GP% (gp / 82) over those seasons."
 }

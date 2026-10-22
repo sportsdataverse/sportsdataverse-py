@@ -62,6 +62,7 @@ def _to_frame(records: List, return_as_pandas: bool) -> DataFrameT:
 
     from sportsdataverse.dl_utils import underscore
 
+    records = [r for r in records if _is_record(r)]
     if not records:
         return pd.DataFrame() if return_as_pandas else pl.DataFrame()
     try:
@@ -83,6 +84,13 @@ def _to_frame(records: List, return_as_pandas: bool) -> DataFrameT:
         return pl.from_pandas(df2)
 
 
+def _is_record(rec: Any) -> bool:
+    """A non-empty dict that is not an error envelope: an empty one or an envelope is no row (A-L17)."""
+    from sportsdataverse.errors import _error_envelope_code
+
+    return isinstance(rec, dict) and bool(rec) and _error_envelope_code(rec) is None
+
+
 def _flatten_odds(events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Unroll a list of event dicts into long ``one row per outcome`` records.
 
@@ -93,7 +101,7 @@ def _flatten_odds(events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
     rows: List[Dict[str, Any]] = []
     for ev in events or []:
-        if not isinstance(ev, dict):
+        if not _is_record(ev):
             continue
         base = {
             "event_id": ev.get("id"),

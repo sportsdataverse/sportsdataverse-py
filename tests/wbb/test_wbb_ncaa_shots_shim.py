@@ -80,3 +80,35 @@ def test_wbb_shot_locations_season_pins_the_period_model(monkeypatch) -> None:
     ncaa_wbb_shot_locations(["5728709"], season=2015, fetcher=_FakeFetcher())
     ncaa_wbb_shot_locations(["5728709"], season="2015-16", fetcher=_FakeFetcher())
     assert seen == [(4, 600, 300), (2, 1200, 300), (4, 600, 300)]
+
+
+class _RecordingFetcher(_FakeFetcher):
+    def __init__(self) -> None:
+        self.calls: "list[object]" = []
+
+    def fetch_game_box(self, gid: object) -> str:
+        self.calls.append(gid)
+        return super().fetch_game_box(gid)
+
+
+def test_wbb_shot_locations_float_contest_ids_are_integer_strings() -> None:
+    """A float id fetches ``5728709``, never ``5728709.0``; NaN / None are dropped (R853-2)."""
+    fetcher = _RecordingFetcher()
+    got = ncaa_wbb_shot_locations([5728709.0, float("nan"), None], fetcher=fetcher)
+    assert fetcher.calls == ["5728709"]
+    assert got["game_id"].unique().to_list() == ["5728709"]
+
+
+def test_wbb_shot_locations_float_season_pins_halves(monkeypatch) -> None:
+    """``season=2015.0`` resolves the halves model, not "2015.0" -> quarters (R853-5)."""
+    from sportsdataverse.wbb import wbb_ncaa_shots as mod
+
+    seen: list = []
+
+    def _spy(html, gid, *, period_model):
+        seen.append(period_model)
+        return parse_ncaa_bb_shots(html, gid, period_model=period_model)
+
+    monkeypatch.setattr(mod, "parse_ncaa_bb_shots", _spy)
+    ncaa_wbb_shot_locations(["5728709"], season=2015.0, fetcher=_FakeFetcher())
+    assert seen == [(2, 1200, 300)]

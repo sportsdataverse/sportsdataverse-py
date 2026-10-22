@@ -11,10 +11,9 @@ What the live API does (sdv-internal-refs ``kzs/``, probed 2026-10-12):
   the leaderboard ``stats_category``), which the parsers read; a bare list (``playingDays``) is wrapped as
   ``{"items": [...], "_request": {...}}``.
 * **Errors are HTTP 400**, never 404: ``INVALID_REQUEST`` (``Match with id 99999999 does not exist``) and
-  ``VALIDATION_ERROR`` (a bad or missing parameter). The shared transport reads a 400 as "the request is wrong"
-  (``ValueError``), but here a 400 for an id the caller passed cannot be told from an unknown id, so it is
-  ``AssetFetchError`` ("the answer is unknown"), with the API's own message. A 200 whose ``status`` is not ``OK`` is
-  ``AssetFetchError`` too.
+  ``VALIDATION_ERROR`` (a bad or missing parameter). Both are ``ValueError`` ("the request is wrong"), as everywhere
+  in the package: an unknown id is a request the API cannot answer. A 200 whose ``status`` is not ``OK`` is
+  ``AssetFetchError``.
 * **Seasons are opaque ids** (27 = 2026/2027). The public argument is the END year (2027); ``_get`` maps it with
   :data:`SEASON_IDS` (the 39 rows of ``/seasons/``, verified against the live list) before sending ``seasonId``.
 * **List routes default to 150 rows and say nothing**: ``count``, ``offset`` and ``limit`` are always 0. Every list
@@ -155,10 +154,8 @@ def _int_param(value: Any, name: str) -> int:
 def _fetch(url: str, params: Optional[Mapping[str, Any]], **kwargs: Any) -> Any:
     """GET ``url`` through the polite session and unwrap the ``{status, data}`` envelope."""
     kwargs.setdefault("session", _bb.SESSION)
-    try:
-        body = _bb._get(url, dict(params or {}), **kwargs)
-    except ValueError as exc:  # HTTP 400 / 422: the API's only error status, for unknown ids and bad params alike
-        raise AssetFetchError(str(exc)) from None
+    # a 400 / 422 stays ValueError: the request is wrong (EX-SYNC-b, the repo-wide vocabulary)
+    body = _bb._fetch_json(url, dict(params or {}), **kwargs)
     where = _rt._where(url)
     if not isinstance(body, dict):
         raise AssetFetchError(f"{where} answered a {type(body).__name__}, not an envelope")
@@ -170,6 +167,7 @@ def _fetch(url: str, params: Optional[Mapping[str, Any]], **kwargs: Any) -> Any:
 # --- dependencies (one extra, cached request each) ------------------------------------------------------------------
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _competition(competition_id: int, **kwargs: Any) -> Mapping[str, Any]:
     key = ("competition", competition_id)
     if key not in _CACHE:
@@ -180,6 +178,7 @@ def _competition(competition_id: int, **kwargs: Any) -> Mapping[str, Any]:
     return _CACHE[key]
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _team_ids(competition_id: int, **kwargs: Any) -> set:
     """Team ids in the standings of a competition (the competition's entrants)."""
     key = ("teams", competition_id)
@@ -196,6 +195,7 @@ def _team_ids(competition_id: int, **kwargs: Any) -> set:
     return _CACHE[key]
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _header(match_id: int, **kwargs: Any) -> Mapping[str, Any]:
     """The match header, which must be FINISHED (cached once it is)."""
     key = ("header", match_id)
@@ -213,6 +213,7 @@ def _need_final(match_id: int, head: Mapping[str, Any]) -> None:
         raise AssetFetchError(f"match {match_id}: the game is not final (status={head.get('status')!r})")
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _season_competitions(sid: int, **kwargs: Any) -> set:
     key = ("season", sid)
     if key not in _CACHE:
@@ -404,6 +405,7 @@ def _context(ids: Mapping[str, int], params: Mapping[str, Any]) -> Dict[str, Any
     return ctx
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET a KZS route, unwrap the envelope, refuse the partial or out-of-scope answers and stamp the request.
 
@@ -420,9 +422,9 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     Raises:
         NoDataError: the API answered no rows (an empty list, a competition without standings, a final game with no
             play-by-play or box score).
-        ValueError: ``season`` is not an END year, or an id is not an integer.
-        AssetFetchError: any other failure: HTTP 400 (the API's only error status: an unknown id or a bad
-            parameter), any other non-2xx, an empty / non-JSON body, an envelope whose status is not ``OK``, a
+        ValueError: ``season`` is not an END year, an id is not an integer, or HTTP 400 (the API's only error
+            status: an unknown id or a bad parameter).
+        AssetFetchError: any other failure: any other non-2xx, an empty / non-JSON body, an envelope whose status is not ``OK``, a
             full list page (cut at the limit), a game that is not final, or a body for another competition, match,
             team, player or season than the one asked for.
     """

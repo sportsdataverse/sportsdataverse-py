@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # COLLEGE_BASEBALL — ESPN site API (v2)
 
-`sportsdataverse.college_baseball` — 25 endpoints.
+`sportsdataverse.baseball.college_baseball` — 25 endpoints.
 
 ## espn_college_baseball_scoreboard
 

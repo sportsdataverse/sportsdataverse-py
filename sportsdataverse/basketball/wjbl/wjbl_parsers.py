@@ -48,6 +48,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.basketball.wjbl.wjbl_runtime import season_of_title
+from sportsdataverse.errors import _data_only
 
 __all__ = [
     "parse_wjbl_box_score",
@@ -344,6 +345,7 @@ def _side_rows(raw: Any) -> List[tuple]:
 # --- competitions, schedules --------------------------------------------------------------------------------------
 
 
+@_data_only
 def parse_wjbl_leagues(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/leagues`` -> one row per competition edition (every W League season, all-star game, cup and camp).
 
@@ -895,6 +897,7 @@ def parse_wjbl_team_ranking(raw: Any, *, return_as_pandas: bool = False) -> Fram
     return _finish(rows, "parse_wjbl_team_ranking", return_as_pandas)
 
 
+@_data_only
 def parse_wjbl_teams(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/teams/base`` -> every franchise (``team_id``) the site knows, all-star sides included.
 

@@ -54,6 +54,7 @@ import polars as pl
 from sportsdataverse._codegen_runtime import _cast_ids_int64
 from sportsdataverse.basketball.kzs.kzs_dtypes import DTYPES
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _data_only
 
 __all__ = [
     "parse_kzs_box_score",
@@ -241,6 +242,7 @@ def _items(raw: Any) -> List[Mapping[str, Any]]:
 # --- seasons, competitions ----------------------------------------------------------------------------------------
 
 
+@_data_only
 def parse_kzs_seasons(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """``/seasons/`` -> one row per season (39: 1991/1992 to 2029/2030).
 
@@ -276,6 +278,7 @@ def _competition_row(c: Mapping[str, Any]) -> Dict[str, Any]:
     return row
 
 
+@_data_only
 def parse_kzs_competitions(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
@@ -407,6 +410,7 @@ def _leaderboard(raw: Any, parser: str, columns: Optional[Sequence[str]], as_pan
     return _finish(_frame(rows), columns, as_pandas, parser)
 
 
+@_data_only
 def parse_kzs_player_leaderboard(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
@@ -435,6 +439,7 @@ def parse_kzs_player_leaderboard(
     return _leaderboard(raw, "parse_kzs_player_leaderboard", columns, return_as_pandas)
 
 
+@_data_only
 def parse_kzs_team_leaderboard(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
@@ -497,6 +502,7 @@ def _match_row(m: Mapping[str, Any], cid: Optional[int]) -> Dict[str, Any]:
     }
 
 
+@_data_only
 def parse_kzs_matches(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """``/matches/`` -> one row per match of a competition (optionally inside a from/to window).
 
@@ -856,6 +862,7 @@ def parse_kzs_standings(raw: Any, *, return_as_pandas: bool = False, columns: Op
     return _finish(_frame(rows), columns, return_as_pandas, "parse_kzs_standings")
 
 
+@_data_only
 def parse_kzs_playing_days(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
@@ -900,6 +907,7 @@ def _team_row(t: Mapping[str, Any]) -> Dict[str, Any]:
     return row
 
 
+@_data_only
 def parse_kzs_teams(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """``/teams/`` -> the teams entered in a competition.
 
@@ -1017,6 +1025,7 @@ def _player_row(p: Mapping[str, Any], id_name: str = "player_id") -> Dict[str, A
     }
 
 
+@_data_only
 def parse_kzs_roster(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """``/teamPlayers/`` -> a team's roster in one competition.
 

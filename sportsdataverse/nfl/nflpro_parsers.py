@@ -17,6 +17,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _data_only
 
 __all__ = ["parse_nfl_pro_stats", "_COLLECTION_KEYS"]
 
@@ -57,6 +58,7 @@ def _records(payload: Any) -> list:
     return _dicts(max(lists, key=len)) if lists else []
 
 
+@_data_only
 def parse_nfl_pro_stats(
     payload: Union[Dict[str, Any], list, None],
     return_as_pandas: bool = False,

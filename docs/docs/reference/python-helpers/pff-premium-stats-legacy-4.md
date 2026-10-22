@@ -1,7 +1,7 @@
 ---
 title: "Package — additional Python functions — PFF Premium Stats (LEGACY): ncaa_player–nfl_facet"
 sidebar_label: "PFF Premium Stats (LEGACY): ncaa_player–nfl_facet"
-sidebar_position: 4
+sidebar_position: 5
 description: "Package — additional Python functions — PFF Premium Stats (LEGACY): ncaa_player–nfl_facet — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Package — additional Python functions — PFF Premium Stats (LEGACY): ncaa_player–nfl_facet

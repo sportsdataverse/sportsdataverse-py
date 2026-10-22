@@ -167,17 +167,22 @@ def test_wnba_timeout_without_a_team_name_goes_to_the_play_team() -> None:
 def test_mbb_overtime_end_seconds_agree_in_every_overtime() -> None:
     # 2OT game: on the first play of 2OT (4:36), end.period_seconds_remaining took the
     # next play's start (272) while end.game_seconds_remaining was set to 300.
-    out = mbb_pbp.helper_mbb_pbp(401830342, _raw("mbb_401830342.json.gz"))
+    raw = _raw("mbb_401830342.json.gz")
+    out = mbb_pbp.helper_mbb_pbp(401830342, copy.deepcopy(raw))
     plays = pl.from_dicts(out["plays"], infer_schema_length=None)
     second_half_on = plays.filter(pl.col("period.number") >= 2)
     assert second_half_on["end.period_seconds_remaining"].to_list() == (
         second_half_on["end.game_seconds_remaining"].to_list()
     )
-    first_of_ot = plays.filter(
+    first_of_ot = plays.with_row_index("i").filter(
         (pl.col("period.number") >= 3) & (pl.col("period.number") != pl.col("period.number").shift(1))
     )
     assert first_of_ot["period.number"].to_list() == [3, 4]
-    assert first_of_ot["end.period_seconds_remaining"].to_list() == [300, 300]
+    # each first OT play (4:47, 4:36) ends where ESPN's next play starts, not at 5:00
+    # (300, after it started: C-M21); the period before it ends at 0:00
+    next_clock = [raw["plays"][i + 1]["clock"]["displayValue"].split(":") for i in first_of_ot["i"]]
+    assert first_of_ot["end.period_seconds_remaining"].to_list() == [60 * int(m) + int(s) for m, s in next_clock]
+    assert plays["end.period_seconds_remaining"].gather(first_of_ot["i"] - 1).to_list() == [0, 0]
 
 
 def test_mbb_bare_seconds_clock_parses() -> None:

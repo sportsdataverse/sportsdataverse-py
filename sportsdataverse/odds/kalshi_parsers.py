@@ -42,6 +42,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _data_only
 
 __all__ = ["parse_kalshi"]
 
@@ -124,6 +125,7 @@ def _to_frame(rows: List[Dict[str, Any]]) -> pl.DataFrame:
     return df.with_columns(ids) if ids else df
 
 
+@_data_only
 def parse_kalshi(
     raw: Union[Dict[str, Any], List[Any], None],
     *,

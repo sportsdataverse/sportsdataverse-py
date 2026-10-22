@@ -6,9 +6,65 @@ description: "CFB — additional Python functions — ESPN — function referenc
 ---
 # CFB — additional Python functions — ESPN
 
+### espn_cfb_calendar {#espn_cfb_calendar}
+
+`espn_cfb_calendar(season=None, groups=None, ondays=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+
+espn_cfb_calendar - look up the men's college football calendar for a given season
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `None` | Used to define different seasons. 2002 is the earliest available season. |
+| `groups` | `int` | `None` | Used to define different divisions. 80 is FBS, 81 is FCS. |
+| `ondays` | `boolean` | `None` | Used to return dates for calendar ondays |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+
+**Returns**
+
+One row per calendar week of the requested season (`week`, `week_label`, `week_start_date`, `season_type`, ...); `season` is the `season` argument as passed (null when omitted). With `ondays=True` it is a different frame: one row per date with games (`dates`, `dateURL`, `url`).
+
+| col_name | type | description |
+|---|---|---|
+| `week_label` | character | Week label as ESPN's calendar names it, e.g. Week 1. |
+| `week_alternate_label` | character | Alternate week label ESPN ships next to week_label; usually the same text. |
+| `week_detail` | character | Date span of the week as display text, e.g. Aug 22-Sep 7. |
+| `week` | character | Game week of the season. |
+| `week_start_date` | character | Start of the week window, an ISO 8601 UTC timestamp string (e.g. 2026-08-22T07:00Z). |
+| `week_end_date` | character | End of the week window, an ISO 8601 UTC timestamp string (the last minute before the next week). |
+| `season_type_label` | character | Name of the season segment the week belongs to, e.g. Regular Season or Postseason. |
+| `season_type` | character | ESPN season type (2 = regular, 3 = postseason). |
+| `season_type_start_date` | character | Start of that season segment, an ISO 8601 UTC timestamp string. |
+| `season_type_end_date` | character | End of that season segment, an ISO 8601 UTC timestamp string. |
+| `season` | integer | The season argument as passed (null when the call omits it); ondays=True returns a different frame (dates, dateURL, url). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season` is less than 2002. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb import espn_cfb_calendar
+cal = espn_cfb_calendar(season=2023)
+print(cal.shape)
+
+# Use ondays to get every scheduled date for the season
+
+ondays = espn_cfb_calendar(season=2023, ondays=True)
+
+# Pipeline next step (loop the URLs to scrape day-by-day)
+
+cal = espn_cfb_calendar(season=2023, ondays=True)
+urls = cal["url"].to_list()  # feed each into espn_cfb_schedule
+```
+
 ### espn_cfb_game_rosters {#espn_cfb_game_rosters}
 
-`espn_cfb_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+`espn_cfb_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame | pd.DataFrame | dict'`
 
 espn_cfb_game_rosters() - Pull the game by id.
 
@@ -17,12 +73,12 @@ espn_cfb_game_rosters() - Pull the game by id.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `int` |  | Unique game_id, can be obtained from espn_cfb_schedule(). |
-| `raw` |  | `False` |  |
+| `raw` | `bool` | `False` | If True, returns the Core v2 competitors payload (dict) as ESPN sent it; its roster, team and athlete `$ref` links are not followed. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**
 
-Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 'athlete_guid', 'athlete_type', 'first_name', 'last_name', 'full_name', 'athlete_display_name', 'short_name', 'weight', 'display_weight', 'height', 'display_height', 'age', 'date_of_birth', 'slug', 'jersey', 'linked', 'active', 'alternate_ids_sdr', 'birth_place_city', 'birth_place_state', 'birth_place_country', 'headshot_href', 'headshot_alt', 'experience_years', 'experience_display_value', 'experience_abbreviation', 'status_id', 'status_name', 'status_type', 'status_abbreviation', 'hand_type', 'hand_abbreviation', 'hand_display_value', 'draft_display_text', 'draft_round', 'draft_year', 'draft_selection', 'player_id', 'starter', 'valid', 'did_not_play', 'display_name', 'ejected', 'athlete_href', 'position_href', 'statistics_href', 'team_id', 'team_guid', 'team_uid', 'team_slug', 'team_location', 'team_name', 'team_nickname', 'team_abbreviation', 'team_display_name', 'team_short_display_name', 'team_color', 'team_alternate_color', 'is_active', 'is_all_star', 'team_alternate_ids_sdr', 'logo_href', 'logo_dark_href', 'game_id'
+Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 'athlete_guid', 'athlete_type', 'first_name', 'last_name', 'full_name', 'athlete_display_name', 'short_name', 'weight', 'display_weight', 'height', 'display_height', 'age', 'date_of_birth', 'slug', 'jersey', 'linked', 'active', 'alternate_ids_sdr', 'birth_place_city', 'birth_place_state', 'birth_place_country', 'headshot_href', 'headshot_alt', 'experience_years', 'experience_display_value', 'experience_abbreviation', 'status_id', 'status_name', 'status_type', 'status_abbreviation', 'hand_type', 'hand_abbreviation', 'hand_display_value', 'draft_display_text', 'draft_round', 'draft_year', 'draft_selection', 'player_id', 'starter', 'valid', 'did_not_play', 'display_name', 'ejected', 'athlete_href', 'position_href', 'statistics_href', 'team_id', 'team_guid', 'team_uid', 'team_slug', 'team_location', 'team_name', 'team_nickname', 'team_abbreviation', 'team_display_name', 'team_short_display_name', 'team_color', 'team_alternate_color', 'is_active', 'is_all_star', 'team_alternate_ids_sdr', 'logo_href', 'logo_dark_href', 'game_id' plus the athlete's `position_id`, `position_name`, `position_display_name`, `position_abbreviation` and `position_leaf` (a leaf position also `position_parent_href`). With `raw=True`, the competitors payload (dict).
 
 | col_name | type | description |
 |---|---|---|
@@ -61,6 +117,12 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `status_name` | character | Status-type key (e.g. `STATUS_FINAL`). |
 | `status_type` | character | Status type. |
 | `status_abbreviation` | character |  |
+| `position_id` | integer | ESPN's numeric identifier of the athlete's listed position (the Core v2 position resource id). |
+| `position_name` | character | Name of the athlete's listed position from ESPN's position resource, e.g. Guard or Offensive Lineman. |
+| `position_display_name` | character | Display form of the athlete's listed position as ESPN renders it; usually equal to position_name. |
+| `position_abbreviation` | character | Short code of the athlete's listed position (e.g. G, F, RW, OL), from ESPN's position resource. |
+| `position_leaf` | logical | Whether the position is a leaf of ESPN's position tree; False marks a grouping, not a specific role. |
+| `position_parent_href` | character | ESPN API URL of the broader position group above a leaf position; null for a grouping position. |
 | `hand_type` | character |  |
 | `hand_abbreviation` | character |  |
 | `hand_display_value` | character |  |
@@ -95,6 +157,13 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `logo_href` | character | URL of the default team logo. |
 | `logo_dark_href` | character | URL of the dark-variant team logo. |
 | `game_id` | integer | ESPN game identifier. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | ESPN has no competitors, roster or athlete resource for the game (404), or every rostered athlete's `$ref` answered 404. A single 404 athlete is left out with a `UserWarning` and the rest of the roster is returned. |
+| `AssetFetchError` | A fetch failed (403, 429, 5xx, a dropped connection); never treated as a missing athlete. |
 
 **Example**
 
@@ -225,7 +294,7 @@ espn_cfb_teams - look up the college football teams
 
 **Returns**
 
-Polars dataframe containing schedule dates for the requested season. This function caches by default, so if you want to refresh the data, use the command sportsdataverse.cfb.espn_cfb_teams.clear_cache().
+Polars dataframe of the college football teams, one row per team, with the columns in the returns table. A payload without teams returns a zero-row frame with those columns. The result is not cached: every call fetches (through the package's opt-in TTL response cache, `sportsdataverse.cache`, when it is on).
 
 | col_name | type | description |
 |---|---|---|
@@ -243,6 +312,13 @@ Polars dataframe containing schedule dates for the requested season. This functi
 | `team_short_display_name` | character | Short team display name. |
 | `team_slug` | character | Team slug for the stat row. |
 | `team_uid` | character |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | ESPN answered 404 for the teams resource. |
+| `AssetFetchError` | The fetch failed (403, 429, 5xx, a dropped connection); never returned as an empty frame. |
 
 **Example**
 

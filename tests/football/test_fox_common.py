@@ -313,3 +313,27 @@ def test_mutation_taking_the_period_from_the_section_misfiles_the_quarter_end_ro
         (p["type"]["id"], p["period"]["number"]) for p in _plays(mutated) if p["type"]["id"] in ("2", "65")
     ]
     assert mutated_periods != good_periods
+
+
+def test_a_float_id_map_row_adapts_exactly_like_the_text_row(nfl_final, nfl_row):
+    """B-GB-22: ``str(401671775.0)`` is ``"401671775.0"``, which matches no ESPN event or team id.
+    A pandas-built id-map row carries its ids as floats."""
+    floats = {**nfl_row, **{k: float(nfl_row[k]) for k in ("espn_event_id", "home_espn_team_id", "away_espn_team_id")}}
+    good = _fox_nfl_to_espn_summary(nfl_final, nfl_row)[0]
+    adapted = _fox_nfl_to_espn_summary(nfl_final, floats)[0]
+    assert adapted["header"]["id"] == "401671775"
+    assert {p["start"]["team"]["id"] for p in _plays(adapted)} <= {"22", "26"}
+    assert json.dumps(adapted, sort_keys=True) == json.dumps(good, sort_keys=True)
+
+
+def test_a_nan_team_id_is_missing_not_the_text_nan(nfl_final, nfl_row):
+    """A missing id in a pandas row is NaN; ``str`` made it ``"nan"`` and the "no ESPN team ids" guard passed."""
+    with pytest.raises(ValueError, match="states no ESPN team ids"):
+        _fox_nfl_to_espn_summary(nfl_final, {**nfl_row, "home_espn_team_id": float("nan")})
+
+
+def test_a_missing_team_id_is_missing_not_the_text_none(nfl_final, nfl_row):
+    """``.get()`` of an absent key is None; ``str`` made it ``"None"`` and the "no ESPN team ids" guard passed."""
+    row = {k: v for k, v in nfl_row.items() if k != "away_espn_team_id"}
+    with pytest.raises(ValueError, match="states no ESPN team ids"):
+        _fox_nfl_to_espn_summary(nfl_final, row)

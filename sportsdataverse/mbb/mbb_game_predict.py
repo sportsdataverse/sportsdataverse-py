@@ -42,7 +42,7 @@ def _load_wp_artifact(league: str) -> dict[str, Any]:
     if name.endswith(".json"):
         return {"kind": "logistic", **json.loads(path.read_text(encoding="utf-8"))}
     try:
-        import xgboost as xgb  # noqa: PLC0415 -- optional dep, only the tree artifact needs it
+        import xgboost as xgb  # optional dep, only the tree artifact needs it
     except ImportError as exc:  # pragma: no cover
         raise ImportError(
             "mbb_in_game_win_prob requires xgboost for the bundled tree artifact; "
