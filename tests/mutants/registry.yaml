@@ -6759,3 +6759,16 @@
     every other boundary keeps the pre-fix own-possession-change key. It survived the full tests/cfb (only
     401858224's regulation end, which has a Timeout, pinned the branch) while it reverts 63 of the 64 moved
     capture rows, mostly the first half's last snap handing to the other team's 2H kickoff.
+
+# --- W-M8 / supp-004 (task 3.10): CFL is refused, not scored with the NFL boosters -----------------------
+- id: spring-football-cfl-scored-again
+  group: cfl-refused
+  finding: supp-004
+  file: sportsdataverse/football/spring_football_ep_wp.py
+  snippet: '    if league == "cfl":'
+  mutant: '    if league == "cfl-never":'
+  test: tests/football/test_spring_football_ep_wp.py -k "cfl_refused"
+  expected: kill
+  note: >-
+    The pre-3.10 behaviour: `league="cfl"` passes validation and both entry points run end to end, scoring a
+    110-yard, 3-down game with the NFL boosters (158/159 plays scored on the XFL fixture relabelled CFL).

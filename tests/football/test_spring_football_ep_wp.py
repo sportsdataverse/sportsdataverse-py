@@ -251,3 +251,22 @@ def test_enrich_xfl_scores_kickoffs_at_the_xfl_touchback_spot():
     scrimmage = pl.col("down").is_not_null()
     a, b = via_port.filter(scrimmage)["ep"], nfl_at_65.filter(scrimmage)["ep"]
     assert bool(((a.fill_null(-99.0) - b.fill_null(-99.0)).abs() < 1e-9).all())
+
+
+# ---------------------------------------------------------------------------
+# W-M8 / supp-004 -- CFL is refused, not scored with the NFL boosters
+# ---------------------------------------------------------------------------
+
+
+def test_build_cfl_refused():
+    """No CFL pipeline ships: the builder raises instead of emitting a frame the NFL boosters would score."""
+    with pytest.raises(ValueError, match=r"league='cfl' is not supported: no CFL EP/WP pipeline ships"):
+        build_spring_football_pbp(_xfl_summary(), league="cfl")
+
+
+def test_enrich_cfl_refused():
+    """A frame relabelled CFL is refused: CFL yardline_100 reaches 110, outside the boosters' 1-99 support."""
+    pbp = build_spring_football_pbp(_xfl_summary(), league="xfl")
+    assert pbp.height > 0
+    with pytest.raises(ValueError, match=r"league='cfl' is not supported: no CFL EP/WP pipeline ships"):
+        enrich_spring_football_pbp(pbp, league="cfl")
