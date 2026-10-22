@@ -1911,7 +1911,7 @@
   group: nfl-td-flags
   finding: R840-1
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '& (pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM)'
+  snippet: '& ((pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM) | ~try_follows)'
   mutant: '& pl.lit(True)'
   test: tests/nfl/test_nfl_whole_game_oracle.py::test_td_flags_residual_row_matches_nflverse[271209034-2712090341856]
   expected: kill
@@ -3203,3 +3203,152 @@
     Gated on a named touchdown (td_play's test) instead of scoringPlay, an unscored return TD keeps ESPN's end
     instead of its try: 261022011/1629 wpa -0.136 (try -0.171, nflverse -0.275) and 271209034/1856 0.001 (try 0.101,
     nflverse 0.116). Task 2.25 measured the td_play gate and rejected it on this evidence.
+
+# --- task 2.28: pre-2009 return "touchdowns" with no try; safeties ESPN did not type as one -----------------
+- id: nfl-td-mistyped-return-pre2009-needs-a-try
+  group: nfl-td-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& ((pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM) | ~try_follows)'
+  mutant: '& (pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "without_a_try"
+  expected: kill
+  note: >-
+    Without the try test before 2009, 251030010/1409 (a punt return ESPN types "Punt Return Touchdown", no text, no
+    score change, no try) keeps td_play: EPA -5.552, nflverse 1.334.
+
+- id: nfl-td-mistyped-return-null-text
+  group: nfl-td-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& ~text.str.contains("(?i)touchdown|for a TD").fill_null(False)  # pre-2009 kick text is often null'
+  mutant: '& ~text.str.contains("(?i)touchdown|for a TD")  # pre-2009 kick text is often null'
+  test: tests/nfl/test_nfl_era_play_order.py -k "without_a_try"
+  expected: kill
+  note: A null text makes the whole mistyped-return test null, so 251030010/1409 keeps td_play.
+
+- id: nfl-untyped-safety-read
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '_untyped_safety=_untyped_safety())'
+  mutant: '_untyped_safety=pl.lit(False))'
+  test: tests/nfl/test_nfl_era_play_order.py -k "unscored_safety"
+  expected: kill
+  note: >-
+    271021019/2661, NYG's punt blocked out of its end zone (ESPN "Blocked Punt", unscored), stays a punt: EPA 4.292,
+    nflverse 0.624, and SF's 2 points are repaired away.
+
+- id: nfl-untyped-safety-flag
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                | pl.col("_untyped_safety"),'
+  mutant: '                | pl.lit(False),'
+  test: tests/nfl/test_nfl_era_play_order.py -k "unscored_safety"
+  expected: kill
+  note: 271021019/2661's safety flag stays null, so its drive does not end in a safety (fixed_drive_result).
+
+- id: nfl-untyped-safety-takes-the-overlay
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '            .when(def_score.and_(is_safety).or_(untyped_safety))'
+  mutant: '            .when(def_score.and_(is_safety))'
+  test: tests/nfl/test_nfl_era_play_order.py -k "unscored_safety or typed_a_blocked_punt"
+  expected: kill
+  note: >-
+    ESPN types 271021019/2661 and 271223008/738 "Blocked Punt", outside defense_score_vec, so without the untyped
+    flag the -2 overlay skips both (EPA 4.292 / 2.499; nflverse 0.624 / -0.015).
+
+- id: nfl-untyped-safety-keeps-its-points
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        scored = (play_df["scoringPlay"].fill_null(False) | play_df["_untyped_safety"]).to_list()'
+  mutant: '        scored = play_df["scoringPlay"].fill_null(False).to_list()'
+  test: tests/nfl/test_nfl_era_play_order.py -k "unscored_safety"
+  expected: kill
+  note: The score repair takes SF's unscored 2 points for a feed error; the free kick after 271021019/2661 reads 26-7.
+
+- id: nfl-safety-flag-scored-safety-type
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                | ((pl.col("type.text") == "Safety") & (pl.col("scoringPlay") == True))'
+  mutant: '                | pl.lit(False)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "does_not_say"
+  expected: kill
+  note: >-
+    281012016/923 ("Dan Orlovsky tackled in end zone by Jared Allen.", ESPN "Safety", scored) loses its safety flag and
+    falls to the defence-touchdown -6.92: EPA -4.576, nflverse 0.230.
+
+- id: nfl-safety-flag-type-needs-a-score
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                | ((pl.col("type.text") == "Safety") & (pl.col("scoringPlay") == True))'
+  mutant: '                | (pl.col("type.text") == "Safety")'
+  test: tests/nfl/test_nfl_era_play_order.py -k "does_not_say"
+  expected: kill
+  note: 271223008/764, KC's free kick ESPN types "Safety" without scoring it (nflverse a kickoff, safety 0), is flagged a safety.
+
+- id: nfl-safety-overlay-reads-the-flag
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '            .when(def_score.and_(is_safety).or_(untyped_safety))'
+  mutant: '            .when(def_score.and_(_lower.str.contains(r"safety")).or_(untyped_safety))'
+  test: tests/nfl/test_nfl_era_play_order.py -k "does_not_say"
+  expected: kill
+  note: >-
+    Keyed on the text, the -2 overlay misses 281012016/923 (ESPN "Safety", text without "safety"), which falls to the
+    defence-touchdown -6.92.
+
+- id: nfl-untyped-safety-needs-the-rise
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        & (rise == 2)'
+  mutant: '        & pl.lit(True)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "one_safety_signal"
+  expected: kill
+  note: >-
+    Without the defence's 2-point rise, 311218002/4196 (MIA's extra point, the kickoff after it moved back 15 yards to
+    MIA's 20) is typed a safety.
+
+- id: nfl-untyped-safety-needs-a-kick
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        & (nxt.field("kick") == True)'
+  mutant: '        & pl.lit(True)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "one_safety_signal"
+  expected: kill
+  note: >-
+    Without the free kick, 400874522/79 (a 2016 run on which ESPN books TB 2 points it takes back a row later; ATL
+    snaps next from its own 20) is typed a safety.
+
+- id: nfl-untyped-safety-kick-from-the-20
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        & (nxt.field("y2e") == 80)'
+  mutant: '        & pl.lit(True)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "one_safety_signal"
+  expected: kill
+  note: >-
+    Any free kick will do: 271216005/961, on which ESPN books CLE's 2 points a row early, is typed a safety ahead of
+    B.Moorman's real one (996, ESPN "Safety", from the BUF 24).
+
+- id: nfl-untyped-safety-safety-typed-free-kick
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    free_kick = pl.col("type.text").is_in([*kickoff_vec, "Safety"])'
+  mutant: '    free_kick = pl.col("type.text").is_in(kickoff_vec)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "typed_a_blocked_punt"
+  expected: kill
+  note: >-
+    ESPN types the free kick after 271223008/738 "Safety" (764); counting only kickoff types, the blocked-punt safety
+    ESPN scored as a "Blocked Punt" keeps EPA 2.499 (nflverse -0.015).
