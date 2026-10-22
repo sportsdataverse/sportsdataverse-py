@@ -1,10 +1,68 @@
 ---
-title: "MBB — additional Python functions — stats.ncaa.org: enrich_shot–ncaa_mbb"
-sidebar_label: "stats.ncaa.org: enrich_shot–ncaa_mbb"
+title: "MBB — additional Python functions — stats.ncaa.org: enrich_and–ncaa_mbb"
+sidebar_label: "stats.ncaa.org: enrich_and–ncaa_mbb"
 sidebar_position: 4
-description: "MBB — additional Python functions — stats.ncaa.org: enrich_shot–ncaa_mbb — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — stats.ncaa.org: enrich_and–ncaa_mbb — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — stats.ncaa.org: enrich_shot–ncaa_mbb
+# MBB — additional Python functions — stats.ncaa.org: enrich_and–ncaa_mbb
+
+### enrich_and_reverse_game_events {#enrich_and_reverse_game_events}
+
+`enrich_and_reverse_game_events(in_events: 'list[PlayByPlayEvent]') -> 'list[PlayByPlayEvent]'`
+
+Inserts game-break events and turns descending per-row times into
+
+ascending game-clock minutes, returning the whole list latest-to-earliest
+(`PlayByPlayParser.enrich_and_reverse_game_events`, `:297-370`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `in_events` | `list[PlayByPlayEvent]` |  | The raw parsed events, earliest to latest, with each `.min` still a per-period DESCENDING clock reading. |
+
+**Returns**
+
+`in_events` with `~sportsdataverse.mbb.mbb_ncaa_stints .GameBreakEvent`\ s inserted at every period boundary, every `.min` converted to an ASCENDING whole-game reading, and a trailing (once reversed, LEADING) `~sportsdataverse.mbb .mbb_ncaa_stints.GameEndEvent` -- the whole list in LATEST-TO-EARLIEST order (the caller is expected to `reversed(...)` it back when chronological order is wanted, exactly like `get_sorted_pbp_events` does).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_models import Score
+from sportsdataverse.mbb.mbb_ncaa_pbp_parser import enrich_and_reverse_game_events
+from sportsdataverse.mbb.mbb_ncaa_stints import OtherTeamEvent
+
+events = [OtherTeamEvent(18.0, Score(1, 1), "tipoff")]
+reversed_enriched = enrich_and_reverse_game_events(events)
+reversed_enriched[0].__class__.__name__  # 'GameEndEvent'
+```
+
+### enrich_lineup {#enrich_lineup}
+
+`enrich_lineup(lineup: 'LineupEvent') -> 'LineupEvent'`
+
+Populate `pts`/`plus_minus` from the score delta, then run the
+
+full stat-tree enrichment (`enrich_lineup`, `LineupUtils.scala:29-46`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineup` | `LineupEvent` |  | The lineup event to enrich (not mutated -- see the module docstring's "Scala idiom decisions"). |
+
+**Returns**
+
+A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEvent` with `team_stats`/`opponent_stats` fully populated.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import enrich_lineup
+
+enriched = enrich_lineup(lineup)
+enriched.team_stats.pts
+```
 
 ### enrich_shot_events_with_pbp {#enrich_shot_events_with_pbp}
 
@@ -164,6 +222,36 @@ under `==` (`ensure_ev_uniqueness`, `LineupUtils.scala:105-111`).
 **Returns**
 
 A new `~sportsdataverse.mbb.mbb_ncaa_possessions.ConcurrentClump` with each event's `min` incremented by `1e-6 * index`.
+
+### expand_xwalk_aliases {#expand_xwalk_aliases}
+
+`expand_xwalk_aliases(xwalk: 'pl.DataFrame', observed: 'pl.DataFrame', *, name_changes: "'pl.DataFrame | None'" = None) -> 'pl.DataFrame'`
+
+Add alias rows for on-floor names the exact key misses.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `xwalk` | `DataFrame` |  | Output of `build_player_xwalk`. |
+| `observed` | `DataFrame` |  | Frame with `team` and `player` -- the distinct (team, player) pairs seen in the possessions slots. |
+| `name_changes` | `DataFrame \| None` | `None` | Optional frame with `team`, `name_game_time` and `name_current` -- the id-bound crosswalk built from the `box_score` page (`dev/ncaa_rapm/build_name_changes.py`). Injected rather than loaded so this stays pure and testable. |
+
+**Returns**
+
+`xwalk` plus one row per confidently-resolved alias. Never fewer rows than the input, and idempotent.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_rapm_input import (
+    build_player_xwalk, expand_xwalk_aliases, observed_pairs,
+)
+
+xwalk = expand_xwalk_aliases(
+    build_player_xwalk(team_rosters), observed_pairs(possessions)
+)
+```
 
 ### extract_player_from_ev {#extract_player_from_ev}
 

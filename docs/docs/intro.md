@@ -97,7 +97,7 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 | [NBA Summer League (Sacramento)](nbasl_sac/) | `sportsdataverse.nbasl_sac` | ESPN (112) |
 | [NBA Summer League (Orlando)](nbasl_orl/) | `sportsdataverse.nbasl_orl` | ESPN (112) |
 | [NBA Summer League (Golden State)](nbasl_gs/) | `sportsdataverse.nbasl_gs` | ESPN (112) |
-| [MBB](mbb/) | `sportsdataverse.mbb` | ESPN (129), sportsdataverse-data releases (34), stats.ncaa.org (120), KenPom (32), Bart Torvik T-Rank (5), Fox Sports API (27) |
+| [MBB](mbb/) | `sportsdataverse.mbb` | ESPN (129), sportsdataverse-data releases (34), stats.ncaa.org (136), KenPom (32), Bart Torvik T-Rank (5), Fox Sports API (27) |
 | [WBB](wbb/) | `sportsdataverse.wbb` | ESPN (132), sportsdataverse-data releases (34), stats.ncaa.org (113), Bart Torvik Women's T-Rank (1), Fox Sports API (27), Her Hoop Stats (5) |
 | [CFB](cfb/) | `sportsdataverse.cfb` | ESPN (132), sportsdataverse-data releases (74), stats.ncaa.org (1), On3 Recruit Database (82), 247Sports Recruit Database (47), Yahoo Sports Shangrila (7), Fox Sports API (29) |
 | [NFL](nfl/) | `sportsdataverse.nfl` | ESPN (125), NFL.com Shield API (22), NFL Pro (32), Sleeper fantasy API (15), PFF Developer API (68), PFF Premium Stats (LEGACY) (46), nflverse data releases (48), sportsdataverse-data releases (21), Fox Sports API (25) |

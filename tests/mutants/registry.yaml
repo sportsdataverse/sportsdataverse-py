@@ -2461,6 +2461,15 @@
   test: tests/test_deprecations.py -k record_mem_usage
   expected: kill
   note: record_mem_usage applies without a DeprecationWarning.
+- id: config-dead-url-access-silent
+  group: dead-public
+  finding: C-L45
+  file: sportsdataverse/config.py
+  snippet: "        warn_deprecated(\n            f\"sportsdataverse.config.{name}\","
+  mutant: "        (lambda *a, **k: None)(\n            f\"sportsdataverse.config.{name}\","
+  test: tests/test_deprecations.py -k config_dead_urls
+  expected: kill
+  note: config.NBA_BASE_URL (unread since the generated loaders) resolves without a DeprecationWarning.
 - id: ncaa-pbp-format-guard-silent
   group: ncaa-era
   finding: B-GB-27

@@ -413,6 +413,68 @@ df_pd = ncaa_mbb_team_stats(pbp, include_transition=True, return_as_pandas=True)
 teams.sort("netrtg", descending=True).head()
 ```
 
+### normalize_player_key {#normalize_player_key}
+
+`normalize_player_key(expr: 'pl.Expr') -> 'pl.Expr'`
+
+Normalize a player name-code so possessions and rosters agree.
+
+Three normalizations, each fixing an observed divergence between the two
+sources:
+
+* **Trailing dots** -- `possessions` writes `ANTONIA.BATES.` where
+  `team_rosters` writes `ANTONIA.BATES`. Interior dots are the
+  `FIRST.LAST` separator and are load-bearing, so only trailing ones go.
+* **Diacritics** -- `ANAELLE.DUTAT` on the floor vs `ANAËLLE.DUTAT` on
+  the roster. NFKD-decompose and drop combining marks.
+* **Case** -- belt and braces; both sources are upper today.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `expr` | `Expr` |  | A `Utf8` expression holding the raw name-code. |
+
+**Returns**
+
+The normalized key expression.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.mbb import normalize_player_key
+
+pl.DataFrame({"code": ["anaëlle.dutat."]}).select(normalize_player_key(pl.col("code")))
+# ANAELLE.DUTAT
+```
+
+### observed_pairs {#observed_pairs}
+
+`observed_pairs(possessions: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+Distinct `(team, player)` pairs across the ten on-floor slots.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Published `ncaa_{lg}_possessions` frame. |
+
+**Returns**
+
+Unique `team`/`player` frame, the input `expand_xwalk_aliases` expects.
+
+**Example**
+
+```python
+::
+
+from sportsdataverse.mbb.mbb_ncaa_rapm_input import observed_pairs
+
+pairs = observed_pairs(possessions)
+```
+
 ### phase1_shot_event_enrichment {#phase1_shot_event_enrichment}
 
 `phase1_shot_event_enrichment(sorted_very_raw_events: 'list[tuple[int, ShotEvent]]', second_half_override: 'Optional[set[int]]' = None) -> 'list[ShotEvent]'`
@@ -491,6 +553,40 @@ with NcaaFetcher.with_browser() as fetcher:
     pbp = fetcher.fetch_game_pbp("1613299")               # raw PBP HTML
     box = fetcher.fetch_game_individual_stats("1613299")  # raw box HTML
 # -> feed to get_box_lineup / create_lineup_data (mbb_ncaa_*_parser)
+```
+
+### possession_deciles {#possession_deciles}
+
+`possession_deciles(players: 'pl.DataFrame', *, n_bins: 'int' = 10) -> 'pl.DataFrame'`
+
+Equal-count possession bins: median of every SE column, mean of every coverage flag.
+
+One table serves both SE validations: on `solve_rapm_league`
+output the median posterior SE must fall with playing time (Spearman
+strongly negative; the top deciles flatten at a collinearity floor --
+heavy-minute starters share the floor with the same four teammates); on
+`split_half_se_check` output the sampling coverage should sit
+near 0.95 in every bin. Uses `poss` when present, else
+`off_poss + def_poss`. Bins are rank-based (always `n_bins`
+equal-count bins), so heavy ties at low possessions cannot collapse a
+decile.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `players` | `DataFrame` |  | Output of `solve_rapm_league` or the `per_player` frame of `split_half_se_check`. |
+| `n_bins` | `int` | `10` | Number of equal-count bins (10 = deciles). |
+
+**Returns**
+
+One row per bin, sorted: `decile` (0 = fewest possessions), `n`, `poss_min`, `poss_max`, `median_<se col>` ... and `coverage_<c>[_sampling]` ... (only for the columns present).
+
+**Example**
+
+```python
+d = possession_deciles(players)
+assert d["median_rapm_net_se"][0] > d["median_rapm_net_se"][-1]
 ```
 
 ### remove_diacritics {#remove_diacritics}
@@ -621,6 +717,30 @@ update_config(timeout=5)
 reset_config()
 ```
 
+### resolve_possessions {#resolve_possessions}
+
+`resolve_possessions(possessions: 'pl.DataFrame', xwalk: 'pl.DataFrame', *, non_di: "Literal['drop', 'pool']" = 'drop') -> 'pl.DataFrame'`
+
+Attach a `player_id` to each of the ten on-floor slots.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Published `ncaa_{lg}_possessions` frame, carrying `home`/`away` and `home_1..5`/`away_1..5`. |
+| `xwalk` | `DataFrame` |  | Output of `build_player_xwalk`. |
+| `non_di` | `Literal['drop', 'pool']` | `'drop'` | How to treat possessions involving a team with no roster. `"drop"` (default, conservative) discards them; `"pool"` rewrites the team to `NON_DI_TEAM` so the D-I side keeps its minutes. |
+
+**Returns**
+
+`possessions` plus ten `{slot}_id` columns. `TEAM` slots and unresolved players carry a null id -- an explicit "not a rated player" that the design-matrix build must skip, never impute.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `non_di` is not `"drop"` or `"pool"`. |
+
 ### right_kind_of_shot {#right_kind_of_shot}
 
 `right_kind_of_shot(shot: 'ShotEvent', pbp_event: 'MiscGameEvent', strict: 'bool') -> 'bool'`
@@ -736,6 +856,39 @@ Exact match, or both names inside one `team_name_equivalents` class.
 from sportsdataverse.mbb.mbb_ncaa_data_quality import same_school
 same_school("New Orleans", "LSU New Orleans")  # True
 same_school("Miami (FL)", "Miami (OH)")        # False
+```
+
+### season_slice {#season_slice}
+
+`season_slice(players: 'pl.DataFrame', stints: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+Cut a POOLED fit's players back to ONE season's participants and exposure.
+
+A fit pooled over seasons `t-2 .. t` rates everyone who played in any of
+them, and its `off_poss` / `def_poss` are three-season sums. A per-season
+published asset must be neither: this inner-joins the players to the
+exposure of `stints` (the TARGET season alone), which in one step drops
+everyone who did not play that season and restores the season's own
+possession counts. Every other column -- coefficients and standard errors,
+which are properties of the pooled fit -- is carried through untouched.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `players` | `DataFrame` |  | First element of a `solve_rapm_league` return. |
+| `stints` | `DataFrame` |  | The TARGET season's stints only (`aggregate_stints` output), NOT the pooled design. |
+
+**Returns**
+
+`players` restricted to the season's participants, with `off_poss` / `def_poss` recomputed from `stints`.
+
+**Example**
+
+```python
+pooled = stack_seasons({2023: s23, 2024: s24}, 2024, 0.5)
+players, info = solve_rapm_league(pooled)
+season_2024 = season_slice(players, s24)
 ```
 
 ### select_contains {#select_contains}
@@ -903,6 +1056,175 @@ shot_value("18:28:00,0-0,Kyle Guy, assist")                # 0
 shot_value("04:28:0,52-59,Team, rebound deadballdeadball")  # -1
 ```
 
+### sides_from_box {#sides_from_box}
+
+`sides_from_box(box_lineup: "'LineupEvent'") -> "'tuple[Optional[str], Optional[str]]'"`
+
+`(home_team, away_team)` implied by an already-resolved box lineup.
+
+Lets the play-by-play and shot parsers reuse the pairing `get_box_lineup`
+established, so a page that names only ONE team (a non-D-I opponent has no
+header on the box page) does not fail again further down the chain.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `box_lineup` | `LineupEvent` |  | A box lineup already resolved by `~sportsdataverse.mbb.mbb_ncaa_boxscore_parser.get_box_lineup`. |
+
+**Returns**
+
+`(home_team, away_team)`, or `(None, None)` for a NEUTRAL-site game: there `location_type` comes from the date rather than title order, so it carries no ordering information and guessing would pick the wrong roster table.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_boxscore_parser import get_box_lineup
+from sportsdataverse.mbb.mbb_ncaa_models import TeamId
+from sportsdataverse.mbb.mbb_ncaa_stints import sides_from_box
+
+box = get_box_lineup("individual_stats.html", stats_html, TeamId("Kansas"), format_version=1)
+home, away = sides_from_box(box)
+
+# Feeding the hints back into a later parse
+
+from sportsdataverse.mbb.mbb_ncaa_stints import parse_team_name
+parse_team_name(["Kansas"], TeamId("Kansas"), box.team.year, home, away)
+```
+
+### solve_rapm_league {#solve_rapm_league}
+
+`solve_rapm_league(stints: 'pl.DataFrame', *, ridge_lambda: 'float' = 1000.0, prior_mean: "'pl.DataFrame | None'" = None, compute_se: 'bool' = True, return_as_pandas: 'bool' = False) -> "'tuple[pl.DataFrame | pd.DataFrame, dict[str, float]]'"`
+
+Weighted sparse joint O/D ridge over matchup stints.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `stints` | `DataFrame` |  | Output of `aggregate_stints`. Two OPTIONAL columns are honoured when present, both no-ops when absent: `fit_weight` (Float64) multiplies the row's possession weight — the decay weight of a stacked multi-season design, where older seasons enter the same fit at `decay ** (t - s)`; and `y_offset` (Float64) is subtracted from the row's per-100 rate before centering, which is how a pooled design removes the season-to-season scoring-level drift that would otherwise credit a player for the era he played in. `off_poss` / `def_poss` always report real possessions, never weighted ones. |
+| `ridge_lambda` | `float` | `1000.0` | L2 penalty on the possession-weighted normal equations. Because rows are weighted by possessions, the same `lambda` is exactly equivalent to a per-possession ridge with that penalty. |
+| `prior_mean` | `DataFrame \| None` | `None` | Optional frame with `player_id` (Utf8), `orapm_prior` and `drapm_prior`: the ridge then shrinks each player toward THAT point instead of zero (`beta ~ N(b0, sigma^2 / lambda)`), which is the box-score-plus-minus-prior form of RAPM. Solved by re-centering — `delta = beta - b0` against the offset target `y - X b0` — so `lambda` keeps its meaning and the posterior covariance `sigma^2 (X'WX + lambda I)^-1` (hence every `*_se` column) is unchanged. Players absent from the frame keep a zero prior; a frame that overlaps NO rated player raises rather than silently degrading to the flat ridge. |
+| `compute_se` | `bool` | `True` | Also return the posterior standard errors (module docstring, "Uncertainty"). Costs one dense Cholesky inverse of the `(2P+1)`-square penalised Gram matrix. One such matrix is ~0.8 GB for a D-I season (P ~ 5,000, dim ~ 10,001); the symmetrise step holds two of them at once, so the peak is ~1.6 GB and a few seconds. Switch off for pooled designs past ~20k columns. |
+| `return_as_pandas` | `bool` | `False` | Return the players frame as pandas. |
+
+**Returns**
+
+`(players, info)`. `players` has one row per rated player: `player_id`, `orapm`, `drapm` (positive = good defense), `rapm_net = orapm + drapm` (all per 100 possessions), `off_poss`, `def_poss`, the posterior standard errors `orapm_se`, `drapm_se`, `rapm_net_se` and the sampling (sandwich) standard errors `*_se_sampling` (both net SEs include the O/D covariance; all six are null when `compute_se=False`; see the module docstring for which to publish). `info` carries `intercept` (possession-weighted league mean pts/100), `hca` (half the home-minus-away offensive gap), `ridge_lambda`, `n_stints`, `n_poss`, `prior_mean_mad` (mean |b0| over the player block — 0.0 without a prior, so a prior that silently failed to attach is visible in the output rather than only in the intent), the lsqr diagnostics and, with SEs, `sigma2` (weighted residual variance on the per-100 scale = `1e4 x` the per-possession points variance, ~1.3e4 in D-I), `df_eff` (trace of the ridge hat matrix), `hca_se` and `solve_max_abs_dev` (max |lsqr - exact| coefficient deviation -- the exact solve comes free with the factorisation and doubles as the solver-tolerance check).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | Lsqr stopped without converging, or the penalised Gram matrix is not positive definite (`ridge_lambda` must be > 0 for the SEs). |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_rapm_league import (
+    aggregate_stints, solve_rapm_league,
+)
+
+players, info = solve_rapm_league(aggregate_stints(resolved))
+players.sort("rapm_net", descending=True).head()
+
+# A 95% interval per player
+
+players.with_columns(
+    (pl.col("rapm_net") - 2 * pl.col("rapm_net_se")).alias("lo95"),
+    (pl.col("rapm_net") + 2 * pl.col("rapm_net_se")).alias("hi95"),
+)
+```
+
+### split_half_se_check {#split_half_se_check}
+
+`split_half_se_check(resolved: 'pl.DataFrame', *, ridge_lambda: 'float' = 1000.0, refit: "'Any | None'" = None) -> "'tuple[pl.DataFrame, dict[str, float]]'"`
+
+Odd-vs-even-game refit: are the standard errors on the right scale?
+
+Splits `resolved` by the parity of `contest_id` (deterministic and
+roster-neutral -- the halves differ by sampling noise, not by the
+mid-season development or transfer drift a date split would add), fits
+`solve_rapm_league` on each half, and asks per player rated in both
+whether the two estimates agree to within `2 * sqrt(se_A^2 + se_B^2)`.
+
+Two readings, both reported. Under the SAMPLING SE this is the textbook
+calibration test -- ~95% coverage means `sigma2` and the inverse are
+right. Under the POSTERIOR SE (the published one) coverage is expected
+ABOVE nominal (~100% on real seasons): a credible interval for the truth
+is wider than the estimator's repeatability, so its coverage here is a
+one-sided guard (a bug that shrinks the SEs drops it), not a two-sided
+calibration.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `resolved` | `DataFrame` |  | Output of `resolve_possessions` WITH its `contest_id` column (integer-like). |
+| `ridge_lambda` | `float` | `1000.0` | Passed to both half fits. |
+| `refit` | `Any \| None` | `None` | Optional `(half_resolved, half_index) -> (players, info)` replacing the default single-season flat-ridge half fit. Pass it when the PUBLISHED estimator is not that fit -- a pooled or prior-shrunk producer must check the standard errors it actually publishes, and it must split every pooled season by the same parity, or the two halves share possessions and the coverage is inflated by construction. |
+
+**Returns**
+
+`(per_player, summary)`. `per_player` has one row per player rated in both halves: `player_id`, `poss` (both halves' exposure) and, for each of `orapm` / `drapm` / `rapm_net`, `<c>_a`, `<c>_b`, `<c>_z` / `<c>_covered` (posterior SE units, |z| <= 2) and `<c>_z_sampling` / `<c>_covered_sampling` (sampling SE units). `summary` carries `n_players`, `n_games_a`, `n_games_b` and, per `<c>`, `coverage_<c>`, `coverage_sampling_<c>`, `z_sd_<c>` (a posterior/sampling ratio proxy) and `z_sd_sampling_<c>` (~1 when calibrated). Feed `per_player` to `possession_deciles` for the coverage by playing time.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `contest_id` is missing or not integer-like. |
+
+**Example**
+
+```python
+per_player, summary = split_half_se_check(resolved)
+print(summary["coverage_sampling_rapm_net"])   # ~0.95
+possession_deciles(per_player)
+```
+
+### stack_seasons {#stack_seasons}
+
+`stack_seasons(per_season: "'dict[int, pl.DataFrame]'", target: 'int', decay: 'float') -> 'pl.DataFrame'`
+
+Pool several seasons' stints into ONE decayed-weight design for `target`.
+
+Each season `s` contributes its stints with `fit_weight = decay ** (target
+- s)` and `y_offset` equal to its own per-100 scoring level minus the
+target season's, so a pooled fit can neither credit a player for his era's
+pace nor weight a three-year-old possession like last night's. The stint
+frames must be keyed by a CROSS-SEASON person id (see
+`mbb_ncaa_rapm_input.build_person_keys`) or the pool rates the same human
+as several different players.
+
+**Leakage boundary.** A season strictly after `target` is refused, not
+down-weighted: the estimate published for season `t` must be computable
+from what was known at the end of season `t`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `per_season` | `dict[int, DataFrame]` |  | `{season: stints}`, each the output of `aggregate_stints`. Seasons `> target` raise. |
+| `target` | `int` |  | The season the pooled fit is FOR. |
+| `decay` | `float` |  | Per-season weight multiplier in `(0, 1]`. `1.0` pools unweighted; the producers use 0.5 (mbb) / 0.75 (wbb). |
+
+**Returns**
+
+One vertically concatenated stint frame carrying the extra `fit_weight` / `y_offset` columns `solve_rapm_league` reads.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | A season is after `target`, a season's stints carry no possessions, `decay` is outside `(0, 1]`, or `target` itself is absent from `per_season`. |
+
+**Example**
+
+```python
+pooled = stack_seasons({2022: s22, 2023: s23, 2024: s24}, 2024, 0.5)
+players, info = solve_rapm_league(pooled)
+```
+
 ### start_time_from_period {#start_time_from_period}
 
 `start_time_from_period(period: 'int', is_women_game: 'bool') -> 'float'`
@@ -932,6 +1254,33 @@ from sportsdataverse.mbb.mbb_ncaa_stints import start_time_from_period
 start_time_from_period(2, is_women_game=False)  # 20.0 (men's 2nd half)
 start_time_from_period(1, is_women_game=True)  # 0.0 (women's 1st quarter)
 start_time_from_period(6, is_women_game=False)  # 45.0 (men's 2nd OT)
+```
+
+### stint_exposure {#stint_exposure}
+
+`stint_exposure(stints: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+`player_id` -> `off_poss` / `def_poss` from a stint frame's REAL possessions.
+
+`fit_weight` is deliberately ignored: exposure is a count of possessions
+PLAYED, never a count of possessions the fit chose to believe. Callers that
+need a possession total (an SPM prior's exposure shrink, a possession bin)
+use this so the count means the same thing everywhere.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `stints` | `DataFrame` |  | `aggregate_stints` output (one season, or a pooled design). |
+
+**Returns**
+
+One row per player: `player_id`, `off_poss`, `def_poss` (Int64).
+
+**Example**
+
+```python
+stint_exposure(stints).sort("off_poss", descending=True).head()
 ```
 
 ### sum_event_stats {#sum_event_stats}
@@ -1024,6 +1373,38 @@ soup = parse_html("<tr><td>A</td><td>B</td></tr>")
 row = soup.find("tr")
 td_at(row, 1).get_text()  # "B"
 td_at(row, 5)  # None
+```
+
+### team_aggregate {#team_aggregate}
+
+`team_aggregate(stints: 'pl.DataFrame', players: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+Model-implied team ratings from player coefficients.
+
+For each team: `team_orapm` is the possession-weighted mean over its
+offensive stints of the on-floor five's `orapm` sum; `team_drapm`
+likewise with `drapm` over its defensive stints; `team_net` is their
+sum. This is exactly what the fitted model predicts for the team's
+average possession (excluding opponent terms and home-court), so it is
+the faithful aggregate to hold against an external team rating (Torvik
+AdjEM) in the oracle gate.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `stints` | `DataFrame` |  | Output of `aggregate_stints`. |
+| `players` | `DataFrame` |  | Players frame from `solve_rapm_league` (needs `player_id`, `orapm`, `drapm`). A player absent from it contributes 0 -- the model's own convention for an unrated column. |
+
+**Returns**
+
+One row per team: `team`, `team_orapm`, `team_drapm`, `team_net`, `off_poss`, `def_poss`.
+
+**Example**
+
+```python
+teams = team_aggregate(stints, players)
+joined = teams.join(torvik, on="team", how="inner")
 ```
 
 ### transform_shot_location {#transform_shot_location}
