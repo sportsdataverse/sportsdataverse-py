@@ -170,7 +170,7 @@ def _prime(http: Any, site: str, timeout: Any) -> str:
     home = site + "/"
     resp = _send(home, lambda: http.get(home, timeout=timeout))
     status = getattr(resp, "status_code", None)
-    _rt._check_status(home, status, "")
+    _rt._check_status(home, status, "")  # a 204 here has no sessid to read: AssetFetchError below (R4.1b-d-1)
     text = getattr(resp, "text", "") or ""
     _refuse_challenge(home, status, text)
     match = SESSID_RE.search(text)
@@ -253,6 +253,7 @@ def _check(url: str, route: str, raw: Any, form: Dict[str, str]) -> None:
             )
 
 
+@_rt._no_content_is_empty
 def _get(
     url: str,
     params: Optional[dict] = None,
@@ -324,6 +325,7 @@ def _post(
                 session[1] = _prime(http, site, timeout)  # its _polite starts >= 1 s after the 307 answered
                 continue
             status, text = getattr(resp, "status_code", None), getattr(resp, "text", "") or ""
+            _rt._check_no_content(status)  # the data POST's 204 / 205 is {} (EX-SYNC-a)
             _refuse_challenge(url, status, text)
             raw = _rt._json_text(url, status, text)
             if not (isinstance(raw, dict) and "invalid_csrf" in str(raw.get("errors"))):
@@ -375,6 +377,12 @@ def _all_goalies(
             raise AssetFetchError(f"{where}: still paging goalies after {MAX_PAGES} pages")
         try:
             raw = _post(url, route, {**form, "nav[page]": str(page)}, headers, timeout, dict(kwargs))
+        except _rt._NoContent:  # a NoDataError subclass: caught first, so a 204 never reads as "past the end"
+            if page == 1:
+                raise  # the route's own answer: ``_get`` returns {} (an empty list)
+            raise AssetFetchError(
+                f"{where}: page {page} answered HTTP 204 mid-list; the list would be partial"
+            ) from None
         except NoDataError:
             if page == 1:
                 raise

@@ -3,7 +3,7 @@ title: BUNDESLIGA
 sidebar_label: BUNDESLIGA
 description: "sdv-py BUNDESLIGA: endpoint references, dataset loaders and parsers for BUNDESLIGA in the SportsDataverse Python package."
 ---
-# BUNDESLIGA (`sportsdataverse.bundesliga`)
+# BUNDESLIGA (`sportsdataverse.soccer.bundesliga`)
 
 ## Data sources
 

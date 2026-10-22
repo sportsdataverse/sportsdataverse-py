@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Models and calculators: calculate_wpa"
 sidebar_label: "Models and calculators: calculate_wpa"
-sidebar_position: 18
+sidebar_position: 19
 description: "NFL — additional Python functions — Models and calculators: calculate_wpa — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Models and calculators: calculate_wpa
@@ -195,7 +195,7 @@ The input frame with the WPA derivation applied: `wp_before` rewritten by the ki
 | `start.defPosTeamTimeouts` | integer | ESPN's `defPosTeamTimeouts` value for the play state at the start of the play. |
 | `end.posTeamTimeouts` | integer | ESPN's `posTeamTimeouts` value for the play state at the end of the play. |
 | `end.defPosTeamTimeouts` | integer | ESPN's `defPosTeamTimeouts` value for the play state at the end of the play. |
-| `firstHalfKickoffTeamId` | integer | ESPN id of the team that received the opening kickoff. |
+| `firstHalfKickoffTeamId` | integer | ESPN id of the team that kicked the opening kickoff (it receives the second-half kickoff), one value per game. |
 | `period` | integer |  |
 | `start.yard` | integer | ESPN's `yard` value for the play state at the start of the play. |
 | `end.yard` | integer | ESPN's `yard` value for the play state at the end of the play. |

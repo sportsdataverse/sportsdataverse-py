@@ -219,6 +219,14 @@ One row per recruit (consensus On3/Rivals/247/ESPN). Zero-row frame on empty.
 | `college_team_url_slug` | character |  |
 | `college_team_primary_color` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `year` / `sport_slug` build no On3 rankings route (a malformed value), or On3 answered 400 / 422. |
+| `NoDataError` | The ranking does not exist (the page or data route answered 404). |
+| `AssetFetchError` | The fetch failed (any other non-2xx, a connection failure after retries, a page with no buildId, or an empty / non-JSON data body). |
+
 **Example**
 
 ```python
@@ -303,6 +311,14 @@ One row per team class (consensus ratings). Zero-row frame on empty payload.
 | `organization_slug` | character |  |
 | `organization_url_slug` | character |  |
 | `organization_primary_color` | character |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `year` / `sport_slug` build no On3 rankings route (a malformed value), or On3 answered 400 / 422. |
+| `NoDataError` | The ranking does not exist (the page or data route answered 404). |
+| `AssetFetchError` | The fetch failed (any other non-2xx, a connection failure after retries, a page with no buildId, or an empty / non-JSON data body). |
 
 **Example**
 
@@ -526,6 +542,14 @@ One row per ranked recruit (On3 ratings). Zero-row frame on empty payload.
 | `college_team_primary_color` | character | Primary hex color of the college program. |
 | `person_high_school_default_asset` | double |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `year` / `sport_slug` build no On3 rankings route (a malformed value), or On3 answered 400 / 422. |
+| `NoDataError` | The ranking does not exist (the page or data route answered 404). |
+| `AssetFetchError` | The fetch failed (any other non-2xx, a connection failure after retries, a page with no buildId, or an empty / non-JSON data body). |
+
 **Example**
 
 ```python
@@ -610,6 +634,14 @@ One row per team class (On3 ratings). Zero-row frame on empty payload.
 | `organization_slug` | character | URL slug of the program on On3. |
 | `organization_url_slug` | character |  |
 | `organization_primary_color` | character | Primary hex color of the program. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `year` / `sport_slug` build no On3 rankings route (a malformed value), or On3 answered 400 / 422. |
+| `NoDataError` | The ranking does not exist (the page or data route answered 404). |
+| `AssetFetchError` | The fetch failed (any other non-2xx, a connection failure after retries, a page with no buildId, or an empty / non-JSON data body). |
 
 **Example**
 

@@ -122,8 +122,8 @@ def test_seasons_arg_requests_one_asset_per_season(monkeypatch, raw: pl.DataFram
     assert out.columns == list(_PLAYER_STATS_SCHEMA)
 
 
-def test_seasons_none_still_loads_the_whole_history(monkeypatch, raw: pl.DataFrame) -> None:
-    """Backwards compatibility: the no-argument call keeps meaning "everything"."""
+def _season_fetch(monkeypatch, raw: pl.DataFrame, current: int = 2025) -> list[int]:
+    """Serve the real weekly slice for any season; record the seasons requested."""
     seen: list[int] = []
 
     def fake_fetch(url: str) -> pl.DataFrame:
@@ -132,16 +132,34 @@ def test_seasons_none_still_loads_the_whole_history(monkeypatch, raw: pl.DataFra
         return raw.with_columns(pl.lit(season, dtype=pl.Int32).alias("season"))
 
     monkeypatch.setattr(nfl_loaders, "_fetch_release_parquet", fake_fetch)
-    load_nfl_player_stats()
-    assert seen[0] == 1999
-    assert seen[-1] >= 2025
-    assert seen == sorted(seen)
+    monkeypatch.setattr(nfl_loaders, "get_current_nfl_season", lambda roster=False: current)
+    return seen
+
+
+def test_seasons_none_is_the_current_season(monkeypatch, raw: pl.DataFrame) -> None:
+    """Owner ruling (nflreadpy): the no-argument call is the current season, not every season."""
+    seen = _season_fetch(monkeypatch, raw)
+    out = load_nfl_player_stats()
+    assert seen == [2025]
+    assert out["season"].unique().to_list() == [2025]
+
+
+def test_seasons_true_loads_the_whole_history(monkeypatch, raw: pl.DataFrame) -> None:
+    seen = _season_fetch(monkeypatch, raw)
+    load_nfl_player_stats(True)
+    assert seen == list(range(1999, 2026))
+
+
+def test_seasons_empty_is_the_contracted_schema_with_no_request(monkeypatch, raw: pl.DataFrame) -> None:
+    seen = _season_fetch(monkeypatch, raw)
+    out = load_nfl_player_stats([])
+    assert seen == [] and out.height == 0 and out.columns == list(_PLAYER_STATS_SCHEMA)
 
 
 def test_positional_kicking_flag_is_rejected_loudly() -> None:
-    """`seasons` took the first positional slot — a silent reinterpretation would lie."""
+    """`seasons` took the first positional slot; ``False`` can only be a misplaced ``kicking``."""
     with pytest.raises(TypeError, match="kicking"):
-        load_nfl_player_stats(True)
+        load_nfl_player_stats(False)
 
 
 def test_season_below_1999_raises() -> None:

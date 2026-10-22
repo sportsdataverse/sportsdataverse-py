@@ -6,6 +6,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse._codegen_runtime import _download_json
+from sportsdataverse._espn_schedule import _schedule_frame
 from sportsdataverse.dl_utils import download
 
 
@@ -38,14 +39,15 @@ def espn_cfb_schedule(
 
     Returns:
 
-        pl.DataFrame: Polars dataframe containing schedule dates for the requested season. Returns None if no games
+        pl.DataFrame: Polars dataframe containing schedule dates for the requested season. A day with no
+            games returns a zero-row frame carrying the documented columns.
 
     Example:
         Quick start (today's slate)::
 
             from sportsdataverse.cfb import espn_cfb_schedule
             slate = espn_cfb_schedule()
-            print(slate.shape if slate is not None else "no games")
+            print(slate.shape)  # (0, n) on a day with no games
 
         Pull a specific week of FBS games::
 
@@ -76,51 +78,10 @@ def espn_cfb_schedule(
 
     url = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard"
 
-    ev = pd.DataFrame()
-
     events_txt = _download_json(download, url, params=params, **kwargs)
-
-    events = events_txt.get("events")
-
-    if events is None:
-        return None
-
-    if len(events) == 0:
-        return None
-
-    for event in events:
-        # Some ESPN scoreboards (e.g. 2010, 2014) include placeholder events with
-        # null competitions/competitors. scoreboard_event_parsing subscripts those
-        # unguarded, so skip them here rather than fail the whole season.
-        _comps = event.get("competitions") or []
-        if not _comps or not (_comps[0].get("competitors") or []):
-            continue
-        event = scoreboard_event_parsing(event)
-        x = pl.from_pandas(pd.json_normalize(event.get("competitions")[0], sep="_"))
-        x = x.with_columns(
-            game_id=(pl.col("id").cast(pl.Int32)),
-            season=(event.get("season").get("year")),
-            season_type=(event.get("season").get("type")),
-            week=(event.get("week", {}).get("number")),
-            home_linescores=pl.when(pl.col("status_type_description").is_in(["Postponed", "Canceled"]))
-            .then(None)
-            .otherwise(pl.col("home_linescores")),
-            away_linescores=pl.when(pl.col("status_type_description").is_in(["Postponed", "Canceled"]))
-            .then(None)
-            .otherwise(pl.col("away_linescores")),
-        ).with_columns(
-            season=pl.col("season").cast(pl.Int32),
-            season_type=pl.col("season_type").cast(pl.Int32),
-            week=pl.col("week").cast(pl.Int32),
-        )
-
-        x = x[[s.name for s in x if s.null_count() != x.height]]
-
-        ev = pd.concat([ev, x.to_pandas()], axis=0, ignore_index=True)
-    ev = pl.from_pandas(ev)
-    ev = ev.janitor.clean_names()
-
-    return ev.to_pandas() if return_as_pandas else ev
+    return _schedule_frame(
+        events_txt.get("events"), scoreboard_event_parsing, "cfb", week=True, return_as_pandas=return_as_pandas
+    )
 
 
 def scoreboard_event_parsing(event):
@@ -240,7 +201,10 @@ def espn_cfb_calendar(season=None, groups=None, ondays=None, return_as_pandas=Fa
 
     Returns:
 
-        pl.DataFrame: Polars dataframe containing calendar dates for the requested season.
+        pl.DataFrame: One row per calendar week of the requested season (``week``, ``week_label``,
+        ``week_start_date``, ``season_type``, ...); ``season`` is the ``season`` argument as passed (null
+        when omitted). With ``ondays=True`` it is a different frame: one row per date with games
+        (``dates``, ``dateURL``, ``url``).
 
 
     Raises:

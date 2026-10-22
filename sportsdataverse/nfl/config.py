@@ -12,7 +12,8 @@ Environment variables (all optional):
 - ``SDV_PY_NFL_CACHE_DURATION`` — cache duration in seconds (int)
 - ``SDV_PY_NFL_VERBOSE``      — verbose output (1/0, true/false, yes/no)
 - ``SDV_PY_NFL_TIMEOUT``      — HTTP timeout in seconds (int)
-- ``SDV_PY_NFL_USER_AGENT``   — custom user-agent string
+- ``SDV_PY_NFL_USER_AGENT``   — accepted for nflreadpy parity but NOT sent: the release
+  reads go through Arrow and ``dl_utils.download``, which set their own headers
 
 Programmatic example::
 
@@ -29,6 +30,7 @@ from pathlib import Path
 from typing import Literal, Optional
 
 CacheMode = Literal["memory", "filesystem", "off"]
+_CACHE_MODES = ("memory", "filesystem", "off")
 
 
 @dataclass
@@ -70,6 +72,7 @@ class NflConfig:
     cache_duration: int = 86400  # seconds (24h)
     verbose: bool = True
     timeout: int = 30
+    #: nflreadpy-parity field; no NFL request sends it today.
     user_agent: str = "sportsdataverse-py-nfl"
 
     def __post_init__(self) -> None:
@@ -89,7 +92,7 @@ def _from_env() -> NflConfig:
 
     if (v := os.environ.get("SDV_PY_NFL_CACHE")) is not None:
         v_lower = v.lower()
-        if v_lower in ("memory", "filesystem", "off"):
+        if v_lower in _CACHE_MODES:
             cfg.cache_mode = v_lower  # type: ignore[assignment]
     if (v := os.environ.get("SDV_PY_NFL_CACHE_DIR")) is not None:
         cfg.cache_dir = Path(v).expanduser()
@@ -160,7 +163,9 @@ def update_config(**kwargs: object) -> NflConfig:
 
     Raises:
         ValueError: If a passed key does not correspond to an
-            ``NflConfig`` field.
+            ``NflConfig`` field, or ``cache_mode`` is not ``"memory"``,
+            ``"filesystem"`` or ``"off"`` (an unknown mode used to switch
+            caching off silently).
 
     Example:
         Switch to filesystem caching with a 1-hour TTL::
@@ -184,6 +189,8 @@ def update_config(**kwargs: object) -> NflConfig:
     for key, value in kwargs.items():
         if not hasattr(_config, key):
             raise ValueError(f"Unknown config key: {key!r}")
+        if key == "cache_mode" and value not in _CACHE_MODES:
+            raise ValueError(f"Unknown cache_mode {value!r}; expected one of {_CACHE_MODES}")
         if key == "cache_dir" and isinstance(value, str):
             value = Path(value).expanduser()
         setattr(_config, key, value)

@@ -320,7 +320,7 @@ Signed-class roster embed (PlayerSport rows). Accuracy can lag.
 | `default_name` | character | Server-rendered display label for the entity. |
 | `star_rating` | integer | Star tier (2-5). |
 | `secondary_institution_prediction_percentage` | numeric | Share of Crystal Ball predictions favoring the second-place institution. |
-| `jersey` | integer | Jersey number. |
+| `jersey` | character | Jersey number. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

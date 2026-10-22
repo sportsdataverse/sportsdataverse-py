@@ -1,10 +1,160 @@
 ---
-title: "WBB — additional Python functions — stats.ncaa.org: playwright_transport–validate_lineup"
-sidebar_label: "stats.ncaa.org: playwright_transport–validate_lineup"
+title: "WBB — additional Python functions — stats.ncaa.org: ncaa_wbb–validate_lineup"
+sidebar_label: "stats.ncaa.org: ncaa_wbb–validate_lineup"
 sidebar_position: 4
-description: "WBB — additional Python functions — stats.ncaa.org: playwright_transport–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."
+description: "WBB — additional Python functions — stats.ncaa.org: ncaa_wbb–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — stats.ncaa.org: playwright_transport–validate_lineup
+# WBB — additional Python functions — stats.ncaa.org: ncaa_wbb–validate_lineup
+
+### ncaa_wbb_team_stats {#ncaa_wbb_team_stats}
+
+`ncaa_wbb_team_stats(pbp: 'pl.DataFrame', *, include_transition: 'bool' = False, fix_tip_in: 'bool' = True, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+
+Aggregate WBB play-by-play into per-team game stats (wbigballR `get_team_stats`).
+
+Pure delegation to
+`sportsdataverse.mbb.mbb_ncaa_stats_agg.ncaa_mbb_team_stats` — see
+it for the algorithm and column contract.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame in the sdv-py 35-column snake_case bigballR contract (`ncaa_wbb_game_pbp` output). |
+| `include_transition` | `bool` | `False` | Append the `_trans`/`_half` split surface. |
+| `fix_tip_in` | `bool` | `True` | Count the real `"Tip In"` vocabulary (default); False reproduces R's `"Tip-In"` bug for oracle parity. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per team per game.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `team` | character | Team-side label or team identifier. |
+| `mins` | double |  |
+| `o_mins` | double |  |
+| `d_mins` | double |  |
+| `o_poss` | double |  |
+| `d_poss` | double |  |
+| `ortg` | double |  |
+| `drtg` | double |  |
+| `netrtg` | double |  |
+| `pts` | double | Points scored. |
+| `d_pts` | double |  |
+| `fga` | double | Field goal attempts. |
+| `d_fga` | double |  |
+| `fgm` | double | Field goals made. |
+| `d_fgm` | double |  |
+| `tpa` | double |  |
+| `d_tpa` | double |  |
+| `tpm` | double |  |
+| `d_tpm` | double |  |
+| `fta` | double | Free throw attempts. |
+| `d_fta` | double |  |
+| `ftm` | double | Free throws made. |
+| `d_ftm` | double |  |
+| `rima` | double |  |
+| `d_rima` | double |  |
+| `rimm` | double |  |
+| `d_rimm` | double |  |
+| `orb` | double |  |
+| `d_orb` | double |  |
+| `drb` | double |  |
+| `d_drb` | double |  |
+| `blk` | double | Blocks. |
+| `d_blk` | double |  |
+| `to` | double | To. |
+| `d_to` | double |  |
+| `ast` | double | Assists. |
+| `d_ast` | double |  |
+| `e_poss` | double |  |
+| `fg_pct` | double | Field goal percentage (0-1). |
+| `d_fg_pct` | double |  |
+| `tpp` | double |  |
+| `d_tpp` | double |  |
+| `ftp` | double |  |
+| `d_ftp` | double |  |
+| `efg_pct` | double |  |
+| `d_efg_pct` | double |  |
+| `ts_pct` | double | True shooting percentage (0-1). |
+| `d_ts_pct` | double |  |
+| `rim_pct` | double |  |
+| `d_rim_pct` | double |  |
+| `mid_pct` | double |  |
+| `d_mid_pct` | double |  |
+| `tp_rate` | double |  |
+| `d_tp_rate` | double |  |
+| `rim_rate` | double |  |
+| `d_rim_rate` | double |  |
+| `mid_rate` | double |  |
+| `d_mid_rate` | double |  |
+| `ft_rate` | double | Ft rate. |
+| `d_ft_rate` | double |  |
+| `ast_rate` | double |  |
+| `d_ast_rate` | double |  |
+| `to_rate` | double | To rate. |
+| `d_to_rate` | double |  |
+| `blk_rate` | double |  |
+| `o_blk_rate` | double |  |
+| `orb_pct` | double | Offensive rebound percentage. |
+| `drb_pct` | double | Defensive rebound percentage. |
+| `time_per_poss` | double |  |
+| `d_time_per_poss` | double |  |
+
+**Example**
+
+```python
+from sportsdataverse.wbb.wbb_ncaa_stats_agg import ncaa_wbb_team_stats
+team = ncaa_wbb_team_stats(pbp)
+print(team.shape)
+```
+
+### phase1_shot_event_enrichment {#phase1_shot_event_enrichment}
+
+`phase1_shot_event_enrichment(sorted_very_raw_events: 'list[tuple[int, ShotEvent]]', second_half_override: 'Optional[set[int]]' = None) -> 'list[ShotEvent]'`
+
+The court-geometry enrichment pass: ascending time, coordinate
+
+transform + geo synthesis, and the self-correcting side-flip re-run
+(`ShotEventParser.phase1_shot_event_enrichment`, `:415-528`).
+
+For each shot: compute the ascending game time, decide (from
+`is_team_shooting_left_to_start` + which half the period falls in)
+whether the shot's side needs flipping, run `transform_shot_location`
+to get both the believed-correct and alternative (mirrored) locations,
+keep whichever is closer to the basket (a >1.2x distance advantage for
+the "alternative" wins, or ANY shot taken with <0.1 min left on the
+clock always keeps the original -- a half-court heave near the buzzer
+is plausible, so the tie-break favors trusting the raw geometry there),
+then synthesize a lat/lon.
+
+After all shots are processed, if any period had >=6 shots AND more than
+75% of them came back implausibly long-distance (>50ft), the whole pass
+re-runs ONCE with those periods' orientation flipped (the self-correcting
+part) -- `second_half_override` is `None` on the initial call and a
+non-`None` set on the one allowed retry, preventing infinite recursion.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `sorted_very_raw_events` | `list[tuple[int, ShotEvent]]` |  | The chronologically-sorted (period, shot) pairs from `parse_shot_html`, pre-geometry-transform. |
+| `second_half_override` | `Optional[set[int]]` | `None` | The set of periods whose `second_half_switch` orientation should be inverted (the self-correction re-run's input); `None` on the first call. |
+
+**Returns**
+
+The fully court-geometry-enriched shots, in the same order as `sorted_very_raw_events`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_shot_parser import phase1_shot_event_enrichment
+shots = phase1_shot_event_enrichment([(1, very_raw_shot)])
+```
 
 ### playwright_transport {#playwright_transport}
 
@@ -357,6 +507,37 @@ The `circle.shot` elements reconstructed from every matching line (non-matching 
 from sportsdataverse.mbb.mbb_ncaa_shot_parser import shot_js_to_html
 js = "addShot(27.0, 77.0, 392, false, 1, 'title text', 'class', false);"
 circles = shot_js_to_html(js)
+```
+
+### shot_value {#shot_value}
+
+`shot_value(event_str: 'str') -> 'int'`
+
+Classify a play-by-play event string as a 3, a 2, or an assist
+
+(`ShotEnrichmentUtils.shot_value`, `PlayByPlayUtils.scala:534-542`).
+
+Ported as an ordered first-match cascade, exactly mirroring the Scala
+`match` arm order (assist is tested first, so an assist string never
+falls through to a shot classifier).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `event_str` | `str` |  | The raw play-by-play event string. |
+
+**Returns**
+
+`0` for an assist, `3` for any 3-pointer (made or missed), `2` for any 2-pointer (made or missed), or `-1` for anything else (rebounds, turnovers, unparseable, ...).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_pbp_glue import shot_value
+shot_value("18:28:00,0-0,Eric Ayala, 3pt jumpshot made")   # 3
+shot_value("18:28:00,0-0,Kyle Guy, assist")                # 0
+shot_value("04:28:0,52-59,Team, rebound deadballdeadball")  # -1
 ```
 
 ### start_time_from_period {#start_time_from_period}

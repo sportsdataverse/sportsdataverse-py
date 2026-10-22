@@ -72,6 +72,7 @@ exercised. Consumed by `tests/cfb/test_cfb_ncaa_pbp.py` + `test_cfb_ncaa_box.py`
 | `mfb_play_by_play_6386574.html` | 6386574 | Rice @ South Fla., 2025-11-29 | mixed-case yard-line side code (`Ric25`) | <https://stats.ncaa.org/contests/6386574/play_by_play> |
 | `mfb_drives_6386512.html` | 6386512 | Houston @ Oregon St., 2025-09-26 (1OT) | drives tab with `1OT` quarter rows (`period` = 5) | <https://stats.ncaa.org/contests/6386512/drives> |
 | `mfb_box_score_6386512.html` | 6386512 | Houston @ Oregon St., 2025-09-26 (1OT) | `scoring_summary_table` with an OT row (concatenated `tr`s, re-chunked by 9) | <https://stats.ncaa.org/contests/6386512/box_score> |
+| `mfb_box_score_5365797.html` | 5365797 | Roosevelt @ Valparaiso, 2024-09-21 | `box_score` tab extracted byte-for-byte from the `ncaa-mfb-football-raw` bundle `mfb/raw/2025/5365797.json.gz` (captured 2026-08-20, repo HEAD 566727705); the "Has Ball" logo alt carries a trailing space (`alt="Roosevelt "`), so `team` must be stripped to join the linescore name | <https://stats.ncaa.org/contests/5365797/box_score> |
 | `mfb_play_by_play_6386512.html` | 6386512 | Houston @ Oregon St., 2025-09-26 (1OT, 27-24) | completes the 1OT game's pbp + box + drives bundle, so `to_cfbfastr` runs exactly as the `-data` build calls it (drive titles, linescore, scoring summary, OT synthesis); consumed by `test_cfb_ncaa_cfbfastr.py` field-position tests | <https://stats.ncaa.org/contests/6386512/play_by_play> |
 
 ## 2019-season and 2025 text/side-code variants (bundles captured 2026-08-19 / 2026-08-21)

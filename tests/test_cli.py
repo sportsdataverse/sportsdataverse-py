@@ -221,6 +221,30 @@ def test_cli_find_event_with_home_filter(fake_nba_lookup, capsys):
     assert payload["id"] == "401585607"
 
 
+@pytest.mark.parametrize(("status", "error"), [(403, "AssetFetchError"), (404, "NoDataError")])
+def test_cli_fetch_errors_print_sdv_message_and_exit_2(monkeypatch, capsys, status, error):
+    """C-L57: a failed or empty fetch is ``sdv: <msg>`` on stderr and exit 2, not a traceback."""
+    import sportsdataverse._codegen_runtime as rt
+    from sportsdataverse.find import clear_team_cache
+
+    class _Resp:
+        status_code = status
+        text = "Forbidden"
+
+        def json(self):
+            raise ValueError("not json")
+
+    monkeypatch.setattr(rt, "download", lambda url, params=None, **kw: _Resp())
+    clear_team_cache()
+    try:
+        exit_code = main(["find-team", "lakers", "--league", "nba"])
+    finally:
+        clear_team_cache()
+    err = capsys.readouterr().err
+    assert exit_code == 2, error
+    assert err.startswith("sdv: ") and f"HTTP {status}" in err and "Traceback" not in err
+
+
 # ---------------------------------------------------------------------------
 # cache subcommand
 # ---------------------------------------------------------------------------

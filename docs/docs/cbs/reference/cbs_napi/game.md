@@ -26,8 +26,8 @@ Get a BettingSplits resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_betting_splits-example}
@@ -57,8 +57,8 @@ Get boxscore resource
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_boxscore-example}
@@ -88,8 +88,8 @@ Get content for game preview
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_content_preview-example}
@@ -119,8 +119,8 @@ Get content for game recap
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_content_recap-example}
@@ -151,8 +151,8 @@ Get content for game story
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_content_story-example}
@@ -182,8 +182,8 @@ Get a FeaturedGame resource.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_featured-example}
@@ -214,8 +214,8 @@ Get a lineup resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_lineup-example}
@@ -250,8 +250,8 @@ Get an odds resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_odds-example}
@@ -281,8 +281,8 @@ Get an HQ odds resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_odds_hq-example}
@@ -312,8 +312,8 @@ Get an odds outcome for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_outcomes-example}
@@ -345,8 +345,8 @@ Get a list of players who are probably playing in a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_probable_players-example}
@@ -381,8 +381,8 @@ Get game props for a game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_props-example}
@@ -412,8 +412,8 @@ Get a rtwp resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_rtwp-example}
@@ -443,8 +443,8 @@ Get the RUWT highlights resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_ruwt_highlights-example}
@@ -474,8 +474,8 @@ Get an scoring box scores resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_scoring_boxscores-example}
@@ -527,8 +527,8 @@ Get a drives resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_scoring_drives-example}
@@ -558,8 +558,8 @@ Get an scoring leaders resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_scoring_leaders-example}
@@ -589,8 +589,8 @@ Get an scoring player stats resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_scoring_player_stats-example}
@@ -645,8 +645,8 @@ Get an scoring plays resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_scoring_plays-example}
@@ -676,8 +676,8 @@ Get an scoring rosters resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_scoring_rosters-example}
@@ -707,8 +707,8 @@ Get an scoring scoreboard resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_scoring_scoreboard-example}
@@ -738,8 +738,8 @@ Get an scoring scores resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_scoring_scores-example}
@@ -769,8 +769,8 @@ Get an scoring team stats resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_scoring_team_stats-example}
@@ -800,8 +800,8 @@ Get an scoring winprob resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_scoring_winprob-example}
@@ -831,8 +831,8 @@ Get an scoring YTD player stats resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_scoring_ytd_player_stats-example}
@@ -862,8 +862,8 @@ Get an scoring YTD team stats resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_scoring_ytd_team_stats-example}
@@ -893,8 +893,8 @@ Get a ticket resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_ticket-example}
@@ -924,8 +924,8 @@ Get a Weather resource for a particular game.
 
 | Exception | Description |
 |---|---|
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). An unknown id is NOT an exception -- NAPI answers it with HTTP 200 plus an `{error\|errors\|warnings}` envelope, which parses to a zero-row frame. |
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The id is unknown -- NAPI answers it with HTTP 200 plus a `warnings` entry whose `code` is 404 (or with an HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cbs_game_weather-example}

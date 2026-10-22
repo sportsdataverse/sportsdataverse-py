@@ -49,7 +49,7 @@ from typing import Any, Callable, Literal, Optional, overload, Protocol, Sequenc
 
 import polars as pl
 
-from sportsdataverse.errors import UnsupportedPageFormatWarning
+from sportsdataverse.errors import AssetFetchError, NoDataError, UnsupportedPageFormatWarning
 from sportsdataverse.scrape.ncaa.identity import _utf8_id
 
 from .mbb_ncaa_html import parse_html
@@ -1159,25 +1159,68 @@ def _fetch_and_parse(
     fetcher: _SupportsFetchGamePbp,
     game_id: str,
     period_model: PeriodModel,
-) -> "tuple[pl.DataFrame, bool]":
-    """One game's frame, and whether an empty one may be retried (R :1873-1878).
+    errors: str = "raise",
+) -> tuple[pl.DataFrame, str, bool]:
+    """One game's frame, its status (``ok``, ``empty``, or why it has no rows), and whether an empty one may be retried.
 
-    A page the format guard rejected is not: its layout cannot change on a
-    re-fetch, which would only spend a second stats.ncaa.org request and warn
-    twice (R853-8).
+    A failed fetch (``AssetFetchError``: a ban, an exhausted pool, a challenge) raises
+    unless ``errors="skip"``; swallowing it made a ban read as a smaller season. A
+    missing game (``NoDataError``) or a parser crash keeps R's tryCatch(-> NULL) parity.
+
+    An empty frame is retried once (R :1873-1878), except a page the format guard
+    rejected: its layout cannot change on a re-fetch, which would only spend a second
+    stats.ncaa.org request and warn twice (R853-8).
     """
+    html = None
     try:
         html = fetcher.fetch_game_pbp(game_id)
         model = _resolve_period_model(period_model, html)
-        df = parse_ncaa_bb_game_pbp(html, game_id, period_model=model)
-        return df, df.height > 0 or _unsupported_layout(_extract_tables(html), model[0]) is None
+        df = parse_ncaa_bb_game_pbp(html, str(game_id), period_model=model)
+        retry = df.height > 0 or _unsupported_layout(_extract_tables(html), model[0]) is None
     except UnsupportedPageFormatWarning:
         # escalated by the caller (warnings "error" filter): a page we cannot read is
         # not a failed scrape, so it must neither be swallowed nor re-fetched
         raise
-    except Exception:  # noqa: BLE001 — R tryCatch(-> NULL) parity (:1870-1872)
+    except AssetFetchError as exc:
+        if errors == "raise":
+            raise
+        logger.warning("fetch failed for game id %s: %s", game_id, exc)
+        return _empty_pbp(), f"fetch_failed: {exc}", True
+    except Exception as exc:  # R tryCatch(-> NULL) parity (:1870-1872)
         logger.exception("scrape failed for game id %s", game_id)
-        return _empty_pbp(), True
+        return _empty_pbp(), f"{_failure_kind(exc, fetched=html is not None)}: {exc}", True
+    return df, "ok" if df.height else "empty", retry
+
+
+def _failure_kind(exc: BaseException, *, fetched: bool) -> str:
+    """``scrape_status`` label for a game dropped on a non-``AssetFetchError`` exception.
+
+    ``request_error``: the fetch itself raised, e.g. the fetch layer's ``ValueError`` for an
+    HTTP 400 / 422 -- not a parser problem, so it must not read as ``parse_failed``.
+    """
+    if isinstance(exc, NoDataError):
+        return "no_data"
+    return "parse_failed" if fetched else "request_error"
+
+
+def _with_status(out: pl.DataFrame, removed: list[tuple[str, str]]) -> pl.DataFrame:
+    """``errors="skip"`` output: ``scrape_status`` is ``ok`` on every row, plus one row per dropped game saying why.
+
+    Not ``status``: the play-by-play contract already has a ``status`` column (the game's state).
+    """
+    out = out.with_columns(pl.lit("ok").alias("scrape_status"))
+    if not removed:
+        return out
+    stub = pl.DataFrame(
+        {"game_id": [g for g, _ in removed], "scrape_status": [why for _, why in removed]},
+        schema={"game_id": pl.Utf8, "scrape_status": pl.Utf8},
+    )
+    return pl.concat([out, stub], how="diagonal_relaxed")
+
+
+def _check_errors(errors: str) -> None:
+    if errors not in ("raise", "skip"):
+        raise ValueError(f"errors must be 'raise' or 'skip', not {errors!r}")
 
 
 def _ncaa_bb_game_pbp(
@@ -1206,21 +1249,23 @@ def _ncaa_bb_play_by_play(
     fetcher: Optional[_SupportsFetchGamePbp] = None,
     period_model: PeriodModel = _MBB_PERIOD_MODEL,
     return_as_pandas: bool = False,
+    errors: str = "raise",
 ) -> "Union[pl.DataFrame, Any]":
     """League-parameterized multi-game driver (bigballR ``get_play_by_play``)."""
+    _check_errors(errors)
     # drop NA ids (R :1859); NaN and non-integral floats map to None
     ids = [g for g in map(_utf8_id, game_ids) if g is not None]
 
-    def _run(f: _SupportsFetchGamePbp) -> "tuple[list[pl.DataFrame], list[str]]":
-        frames: "list[pl.DataFrame]" = []
-        removed: "list[str]" = []
+    def _run(f: _SupportsFetchGamePbp) -> tuple[list[pl.DataFrame], list[tuple[str, str]]]:
+        frames: list[pl.DataFrame] = []
+        removed: list[tuple[str, str]] = []
         for gid in ids:
-            df, retry = _fetch_and_parse(f, gid, period_model)
+            df, status, retry = _fetch_and_parse(f, gid, period_model, errors)
             if df.height == 0 and retry:
-                # retry a NULL/empty scrape once (R :1873-1878)
-                df, _ = _fetch_and_parse(f, gid, period_model)
+                # retry a NULL/empty scrape once (R :1873-1878); never a rejected layout (R853-8)
+                df, status, _ = _fetch_and_parse(f, gid, period_model, errors)
             if df.height == 0:
-                removed.append(str(gid))
+                removed.append((str(gid), status))
             else:
                 frames.append(df)
         return frames, removed
@@ -1234,8 +1279,10 @@ def _ncaa_bb_play_by_play(
         frames, removed = _run(fetcher)
 
     if removed:
-        logger.warning("%s removed", ",".join(removed))
+        logger.warning("%s removed", ",".join(g for g, _ in removed))
     out = pl.concat(frames, how="diagonal_relaxed") if frames else _empty_pbp()
+    if errors == "skip":
+        out = _with_status(out, removed)
     return out.to_pandas() if return_as_pandas else out
 
 
@@ -1318,6 +1365,7 @@ def ncaa_mbb_play_by_play(
     *,
     fetcher: Optional[_SupportsFetchGamePbp] = ...,
     return_as_pandas: Literal[False] = ...,
+    errors: Literal["raise", "skip"] = ...,
 ) -> pl.DataFrame: ...
 
 
@@ -1327,6 +1375,7 @@ def ncaa_mbb_play_by_play(
     *,
     fetcher: Optional[_SupportsFetchGamePbp] = ...,
     return_as_pandas: Literal[True],
+    errors: Literal["raise", "skip"] = ...,
 ) -> Any: ...
 
 
@@ -1335,6 +1384,7 @@ def ncaa_mbb_play_by_play(
     *,
     fetcher: Optional[_SupportsFetchGamePbp] = None,
     return_as_pandas: bool = False,
+    errors: Literal["raise", "skip"] = "raise",
 ) -> "Union[pl.DataFrame, Any]":
     """Scrape many MBB games' play-by-play (bigballR ``get_play_by_play``).
 
@@ -1350,10 +1400,22 @@ def ncaa_mbb_play_by_play(
         fetcher: Optional injected fetcher exposing ``fetch_game_pbp``.
             Defaults to one shared ``NcaaFetcher.with_browser()`` context.
         return_as_pandas: Return a pandas DataFrame instead of polars.
+        errors: ``"raise"`` (default): a failed fetch (a ban, an exhausted
+            proxy pool, an uncleared challenge) raises ``AssetFetchError``.
+            ``"skip"``: it is dropped like a missing game, and the frame gains a
+            ``scrape_status`` column -- ``"ok"`` on every play row, plus one row per
+            dropped game (``game_id`` and why: ``fetch_failed: ...``,
+            ``no_data: ...``, ``request_error: ...``, ``parse_failed: ...``
+            or ``empty``).
 
     Returns:
         Row-bound play-by-play for every game that scraped successfully
-        (zero-row contract frame when none did).
+        (zero-row contract frame when none did). A missing game or a page
+        the parser cannot read is dropped and logged (bigballR parity).
+
+    Raises:
+        AssetFetchError: A fetch failed and ``errors="raise"``.
+        ValueError: ``errors`` is not ``"raise"`` or ``"skip"``.
 
     Warns:
         UnsupportedPageFormatWarning: Once per game whose page is in a layout
@@ -1381,4 +1443,5 @@ def ncaa_mbb_play_by_play(
         fetcher=fetcher,
         period_model=_MBB_PERIOD_MODEL,
         return_as_pandas=return_as_pandas,
+        errors=errors,
     )

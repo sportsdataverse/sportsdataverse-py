@@ -442,7 +442,7 @@ df = fox_cfb_odds("41616")
 
 `fox_cfb_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
-Fox Sports CFB play-by-play (one row per play).
+Fox Sports CFB play-by-play (one row per play, oldest first, live or final).
 
 Endpoint: `GET https://api.foxsports.com/bifrost/v1/cfb/event/{game_id}/data`
 
@@ -471,7 +471,8 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `clock` | character | Game clock display value at the play (`MM:SS`). |
 | `field_position` | character | Ball spot expressed on Yahoo's 0-100 field scale, measured toward the offense's target goal line. |
 | `play_text` | character | Free-form text description of the play from the CFBD feed. |
-| `play_team` | character |  |
+| `play_team` | character | Club code from the game header (e.g. 'OKLA') of the drive group Fox files the play under, i.e. the possession team; on a kickoff it is the receiving team, since Fox opens the receiver's drive with the kick. |
+| `play_player` | character | Name of the athlete Fox credits the play to (its play-level entity link), upper-cased as Fox serves it (e.g. 'LANDEN THOMAS'); null on admin rows such as timeouts and period ends. |
 
 **Example**
 
@@ -500,13 +501,19 @@ text-derived columns are lower fidelity than the ESPN path).
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `event_id` |  |  | FoxSports CFB event id (e.g. `41616`). |
-| `odds_override` | `Optional[Dict[str, Any]]` | `None` | Optional `{gameSpread, overUnder, homeFavorite, gameSpreadAvailable}` dict. Fox does not expose a clean pre-game spread, so when omitted a neutral pick'em line is used (EPA is unaffected; only the WP model's spread term is neutralized). |
+| `odds_override` | `Optional[Dict[str, Any]]` | `None` | Optional `{gameSpread, overUnder, homeFavorite, gameSpreadAvailable, overUnderAvailable}` dict. Fox does not expose a clean pre-game spread, so when omitted a neutral pick'em line is used (EPA is unaffected; only the WP model's spread term is neutralized). |
 | `process` | `bool` | `True` | If `True` (default) run the full `~sportsdataverse.cfb.cfb_pbp.CFBPlayProcess.run_processing_pipeline` (EPA/WPA/box). If `False` run the lighter `~sportsdataverse.cfb.cfb_pbp.CFBPlayProcess.run_cleaning_pipeline`. |
 | `raw` | `bool` | `False` | If `True` skip the processor entirely and return the adapted ESPN-summary dict (the input the processor would consume). |
 
 **Returns**
 
 The processed game payload (same keys as `CFBPlayProcess.run_processing_pipeline`) with an added `source="fox"` key. When `raw=True`, the adapted summary dict.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | Fox answered but carries no play-by-play for the game (it does not cover it, e.g. an FCS-hosted game). |
 
 **Example**
 

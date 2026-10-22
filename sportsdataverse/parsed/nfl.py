@@ -25,6 +25,7 @@ warnings.warn(
 
 from sportsdataverse.nfl import espn_nfl_award as _raw_espn_nfl_award
 from sportsdataverse.nfl import espn_nfl_awards as _raw_espn_nfl_awards
+from sportsdataverse.nfl import espn_nfl_calendar_site as _raw_espn_nfl_calendar_site
 from sportsdataverse.nfl import espn_nfl_cdn_boxscore as _raw_espn_nfl_cdn_boxscore
 from sportsdataverse.nfl import espn_nfl_cdn_playbyplay as _raw_espn_nfl_cdn_playbyplay
 from sportsdataverse.nfl import espn_nfl_cdn_schedule as _raw_espn_nfl_cdn_schedule
@@ -409,6 +410,7 @@ __all__ = [
     "espn_nfl_award",
     "espn_nfl_awards",
     "espn_nfl_calendar",
+    "espn_nfl_calendar_site",
     "espn_nfl_cdn_boxscore",
     "espn_nfl_cdn_playbyplay",
     "espn_nfl_cdn_schedule",
@@ -764,6 +766,20 @@ def espn_nfl_awards(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_nfl_awards(*args, **kwargs)
+
+
+def espn_nfl_calendar_site(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.espn_nfl_calendar_site``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.espn_nfl_calendar_site` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.espn_nfl_calendar_site` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_nfl_calendar_site(*args, **kwargs)
 
 
 def espn_nfl_cdn_boxscore(*args, **kwargs):

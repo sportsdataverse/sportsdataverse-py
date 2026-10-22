@@ -3,7 +3,7 @@ title: VIJHL
 sidebar_label: VIJHL
 description: "sdv-py VIJHL: endpoint references, dataset loaders and parsers for VIJHL in the SportsDataverse Python package."
 ---
-# VIJHL (`sportsdataverse.vijhl`)
+# VIJHL (`sportsdataverse.hockey.vijhl`)
 
 ## Data sources
 

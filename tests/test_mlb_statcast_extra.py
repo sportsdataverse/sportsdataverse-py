@@ -29,7 +29,7 @@ def test_search_concats_chunks_and_rechunks_on_truncation(monkeypatch):
         # first call (7-day chunk) returns a full 25k -> truncated; sub-chunks return 1 row
         rng = params["game_date_lt"]
         rows = 25000 if params["game_date_gt"] == "2024-04-01" and rng == "2024-04-07" else 1
-        body = "pitch_type,game_date\n" + "\n".join("FF,%s" % rng for _ in range(rows))
+        body = "pitch_type,game_date,game_pk\n" + "\n".join("FF,%s,1" % rng for _ in range(rows))
 
         class R:  # minimal response-like
             text = body
@@ -85,7 +85,7 @@ def test_search_passes_friendly_filters_through_to_savant(monkeypatch):
         seen.update(params or {})
 
         class R:
-            text = "pitch_type,game_date\nFF,2024-07-01"
+            text = "pitch_type,game_date,game_pk\nFF,2024-07-01,1"
 
         return R()
 
@@ -327,9 +327,10 @@ def test_search_rejected_request_is_a_value_error(monkeypatch):
 
 def test_search_error_body_is_not_returned_as_the_documented_schema(monkeypatch):
     """A 200 carrying an error page parses into a 1-column frame named after the error text;
-    it must never stand in as the schema-carrying empty result."""
+    it is a failed fetch (B-M7), never the schema-carrying empty result."""
+    from sportsdataverse.errors import AssetFetchError
     from sportsdataverse.mlb import mlb_statcast_extra as ex
 
     monkeypatch.setattr(ex, "download", lambda url, params=None, **kw: _Resp("Error: invalid request\n"))
-    df = ex.mlb_statcast_search("2024-06-15", "2024-06-15")
-    assert df.shape == (0, 0), df.columns
+    with pytest.raises(AssetFetchError, match="not a Statcast CSV: Error: invalid request"):
+        ex.mlb_statcast_search("2024-06-15", "2024-06-15")

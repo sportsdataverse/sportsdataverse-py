@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # BUNDESLIGA — ESPN FPI API (fitt v3)
 
-`sportsdataverse.bundesliga` — 1 endpoint.
+`sportsdataverse.soccer.bundesliga` — 1 endpoint.
 
 ## espn_bundesliga_fpi
 

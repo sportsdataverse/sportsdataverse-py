@@ -53,8 +53,8 @@ Player leaderboard of a competition for one stat category (total, per-game avera
 | Exception | Description |
 |---|---|
 | `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score). |
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for. |
-| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API answered HTTP 400 (its only error status: an unknown id or a bad parameter). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for. |
 
 ### Example {#kzs_player_leaderboard-example}
 
@@ -104,8 +104,8 @@ Player profile: names, year of birth, nationality and positions.
 | Exception | Description |
 |---|---|
 | `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score). |
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for. |
-| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API answered HTTP 400 (its only error status: an unknown id or a bad parameter). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for. |
 
 ### Example {#kzs_player-example}
 
@@ -193,8 +193,8 @@ A player's totals and per-game averages in each competition of one season.
 | Exception | Description |
 |---|---|
 | `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score). |
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for. |
-| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API answered HTTP 400 (its only error status: an unknown id or a bad parameter). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for. |
 
 ### Example {#kzs_player_stats-example}
 

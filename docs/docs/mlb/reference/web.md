@@ -73,7 +73,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.web.api.espn.com/apis/common/v3/sports/baseball/mlb/athletes/{athlete_id}/stats`
 
-**Valid URL:** [https://site.web.api.espn.com/apis/common/v3/sports/baseball/mlb/athletes/4239/stats](https://site.web.api.espn.com/apis/common/v3/sports/baseball/mlb/athletes/4239/stats)
+**Valid URL:** [https://site.web.api.espn.com/apis/common/v3/sports/baseball/mlb/athletes/39832/stats](https://site.web.api.espn.com/apis/common/v3/sports/baseball/mlb/athletes/39832/stats)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -82,9 +82,56 @@ ESPN endpoint.
 
 ### Returns {#espn_mlb_player_stats_v3-returns}
 
-**`return_parsed=True`** (default) — the output of `parse_athlete_stats`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 
-No returns table is published for this endpoint: parser: parse_athlete_stats returns no columns on the live payload (nba, mlb, mbb, 2026-10-07); its rows sit under keys it does not read (top level: categories, filters, glossary, teams).
+| col_name | type | description |
+|---|---|---|
+| `category` | character | ESPN stat category the row belongs to (e.g., basketball "averages" / "totals" / "miscellaneous", NFL "passing", MLB "career-batting"). The stat columns after `position` are named from each category's own `names` list, so they differ by sport, and the other categories' columns are null on a row. |
+| `split_name` | character | Season label of the row (e.g., "2010-11") on the Web v3 payload, or "Career" on the row built from the category's career totals; the split's name on payloads that ship named splits. |
+| `split_category` | character | Category of a named split; null on the Web v3 per-season rows. |
+| `split_value` | character | Value of a named split; null on the Web v3 per-season rows. |
+| `season` | integer | Season end year of the row (e.g., 2011 for 2010-11); null on the "Career" row. |
+| `team_id` | integer | ESPN team id (Int64) the athlete played that season for; a traded player has one row per team. Null on the "Career" row. |
+| `position` | character | Position abbreviation the athlete was listed at for that season and team (e.g., "G"); null on the "Career" row. |
+| `games_played` | character | Games played (GP), as ESPN ships it (a string). |
+| `at_bats` | character | At bats (AB), plate appearances minus walks, hit-by-pitches and sacrifices. |
+| `runs` | character | Runs scored (R). |
+| `hits` | character | Hits (H), singles through home runs. |
+| `doubles` | character | Doubles (2B), two-base hits. |
+| `triples` | character | Triples (3B), three-base hits. |
+| `home_runs` | character | Home runs (HR). |
+| `rb_is` | character | Runs batted in (RBI); ESPN's stat key `RBIs`, snake-cased. |
+| `walks` | character | Walks (BB), bases on balls. |
+| `hit_by_pitch` | character | Times hit by a pitch (HBP). |
+| `strikeouts` | character | Strikeouts (SO). |
+| `stolen_bases` | character | Stolen bases (SB). |
+| `caught_stealing` | character | Times caught stealing (CS). |
+| `avg` | character | Batting average (AVG), hits / at bats. |
+| `on_base_pct` | character | On-base percentage (OBP), (hits + walks + hit-by-pitches) / plate appearances. |
+| `slug_avg` | character | Slugging percentage (SLG), total bases / at bats. |
+| `ops` | character | On-base plus slugging (OPS). |
+| `warbr` | character | Wins above replacement (WAR); ESPN's stat key `WARBR`, snake-cased. |
+| `plate_appearances` | character | Plate appearances (PA). |
+| `pitches` | character | Pitches seen (P). |
+| `pitches_per_plate_appearance` | character | Pitches seen per plate appearance (P/PA). |
+| `extra_base_hits` | character | Extra-base hits (XBH), doubles plus triples plus home runs. |
+| `total_bases` | character | Total bases (TB), 1 per single, 2 per double, 3 per triple, 4 per home run. |
+| `intentional_walks` | character | Intentional walks (IBB). |
+| `gid_ps` | character | Grounded into double play (GIDP); ESPN's stat key `GIDPs`, snake-cased. |
+| `sac_hits` | character | Sacrifice bunts (SH). |
+| `sac_flies` | character | Sacrifice flies (SF). |
+| `stolen_base_pct` | character | Stolen-base success percentage (SB%). |
+| `off_warbr` | character | Offensive wins above replacement (OWAR); ESPN's stat key `offWARBR`, snake-cased. |
+| `runs_created` | character | Runs created (RC), an estimate of the runs a batter produced. |
+| `runs_created_per27_outs` | character | Runs created per 27 outs (RC/27). |
+| `isolated_power` | character | Isolated power (ISOP), slugging percentage minus batting average. |
+| `secondary_avg` | character | Secondary average (SECA), extra bases from hits plus walks and stolen bases, per at bat. |
+| `at_bats_per_home_run` | character | At bats per home run (AB/HR). |
+| `walks_per_plate_appearance` | character | Walks per plate appearance (BB/PA). |
+| `walk_to_strikeout_ratio` | character | Walks per strikeout (BB/K). |
+| `ground_balls` | character | Ground-ball outs (GO). |
+| `fly_balls` | character | Fly-ball outs (FO). |
+| `ground_to_fly_ratio` | character | Ground outs per fly out (GO/FO). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -99,7 +146,7 @@ No returns table is published for this endpoint: parser: parse_athlete_stats ret
 ### Example {#espn_mlb_player_stats_v3-example}
 
 ```python
-espn_mlb_player_stats_v3(athlete_id='4239')
+espn_mlb_player_stats_v3(athlete_id='39832')
 ```
 
 _Last validated n/a._

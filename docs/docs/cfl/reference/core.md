@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # CFL — ESPN core API (v2)
 
-`sportsdataverse.cfl` — 82 endpoints.
+`sportsdataverse.football.cfl` — 82 endpoints.
 
 ## Game
 

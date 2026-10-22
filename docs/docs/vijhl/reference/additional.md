@@ -6,7 +6,7 @@ sidebar_position: 50
 ---
 # VIJHL — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.vijhl` that are not
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.vijhl` that are not
 generated API-endpoint wrappers (those have their own reference pages).
 
 ## HockeyTech / LeagueStat

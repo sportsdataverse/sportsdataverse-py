@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # WWC — ESPN core API (v2)
 
-`sportsdataverse.wwc` — 82 endpoints.
+`sportsdataverse.soccer.wwc` — 82 endpoints.
 
 ## Game
 

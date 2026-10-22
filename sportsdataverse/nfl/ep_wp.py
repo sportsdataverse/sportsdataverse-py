@@ -58,6 +58,7 @@ from sportsdataverse.errors import EraCoverageWarning
 from sportsdataverse.nfl.model_vars import (
     _EP_POINT_VALUES,
     ERA_MAX_KNOWN_SEASON,
+    ERA_SEASON_CUTS,
     OT_BOTH_POSSESS,
     OT_MODIFIED_SUDDEN_DEATH,
     OT_SUDDEN_DEATH,
@@ -71,6 +72,9 @@ from sportsdataverse.nfl.model_vars import (
     offense_score_vec,
     touchback_yardline_expr,
 )
+
+#: The nflfastR era one-hot cuts (rules/nfl.yaml#nfl-2002-nflfastr-era-bins), unpacked once for the era helpers.
+_ERA_CUT0, _ERA_CUT1, _ERA_CUT2, _ERA_CUT3 = ERA_SEASON_CUTS
 
 # ---------------------------------------------------------------------------
 # Feature lists — mirror nflfastR's ep_model_select / wp_*_model_select
@@ -263,6 +267,16 @@ _MODEL_URLS: dict[str, str] = {
         "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_4th_down_models/wp_model.ubj"
     ),
 }
+
+
+def _models_strict(strict: bool | None = None) -> bool:
+    """Whether a missing model raises instead of warning and nulling its columns.
+
+    An explicit ``strict`` wins; otherwise ``SDV_PY_MODELS_STRICT`` (``1`` / ``true`` / ``yes``).
+    """
+    if strict is not None:
+        return strict
+    return os.environ.get("SDV_PY_MODELS_STRICT", "").strip().lower() in ("1", "true", "yes")
 
 
 def _model_path(name: str) -> Path:
@@ -474,11 +488,11 @@ def _make_model_mutations(df: pl.DataFrame) -> pl.DataFrame:
     _warn_if_season_beyond_known_eras(df)
     df = df.with_columns(
         # Era flags
-        pl.when(pl.col("season") <= 2001).then(1).otherwise(0).alias("era0"),
-        pl.when((pl.col("season") > 2001) & (pl.col("season") <= 2005)).then(1).otherwise(0).alias("era1"),
-        pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("era2"),
-        pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("era3"),
-        pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("era4"),
+        pl.when(pl.col("season") <= _ERA_CUT0).then(1).otherwise(0).alias("era0"),
+        pl.when((pl.col("season") > _ERA_CUT0) & (pl.col("season") <= _ERA_CUT1)).then(1).otherwise(0).alias("era1"),
+        pl.when((pl.col("season") > _ERA_CUT1) & (pl.col("season") <= _ERA_CUT2)).then(1).otherwise(0).alias("era2"),
+        pl.when((pl.col("season") > _ERA_CUT2) & (pl.col("season") <= _ERA_CUT3)).then(1).otherwise(0).alias("era3"),
+        pl.when(pl.col("season") > _ERA_CUT3).then(1).otherwise(0).alias("era4"),
         # Down dummies
         pl.when(pl.col("down") == 1).then(1).otherwise(0).alias("down1"),
         pl.when(pl.col("down") == 2).then(1).otherwise(0).alias("down2"),
@@ -566,9 +580,9 @@ def _make_cp_mutations(df: pl.DataFrame) -> pl.DataFrame:
     df = df.with_columns(
         pl.when(pl.col("air_yards") == 0).then(1).otherwise(0).alias("air_is_zero"),
         (pl.col("air_yards") - pl.col("ydstogo")).alias("distance_to_sticks"),
-        pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("era2"),
-        pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("era3"),
-        pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("era4"),
+        pl.when((pl.col("season") > _ERA_CUT1) & (pl.col("season") <= _ERA_CUT2)).then(1).otherwise(0).alias("era2"),
+        pl.when((pl.col("season") > _ERA_CUT2) & (pl.col("season") <= _ERA_CUT3)).then(1).otherwise(0).alias("era3"),
+        pl.when(pl.col("season") > _ERA_CUT3).then(1).otherwise(0).alias("era4"),
     )
     if "home" not in df.columns:
         df = df.with_columns(
@@ -659,11 +673,11 @@ def _espn_ep_features(
     """
     _warn_if_season_beyond_known_eras(play_df)
     df = play_df.with_columns(
-        pl.when(pl.col("season") <= 2001).then(1).otherwise(0).alias("_era0"),
-        pl.when((pl.col("season") > 2001) & (pl.col("season") <= 2005)).then(1).otherwise(0).alias("_era1"),
-        pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("_era2"),
-        pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("_era3"),
-        pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("_era4"),
+        pl.when(pl.col("season") <= _ERA_CUT0).then(1).otherwise(0).alias("_era0"),
+        pl.when((pl.col("season") > _ERA_CUT0) & (pl.col("season") <= _ERA_CUT1)).then(1).otherwise(0).alias("_era1"),
+        pl.when((pl.col("season") > _ERA_CUT1) & (pl.col("season") <= _ERA_CUT2)).then(1).otherwise(0).alias("_era2"),
+        pl.when((pl.col("season") > _ERA_CUT2) & (pl.col("season") <= _ERA_CUT3)).then(1).otherwise(0).alias("_era3"),
+        pl.when(pl.col("season") > _ERA_CUT3).then(1).otherwise(0).alias("_era4"),
     )
     roof = _roof_one_hots(_roof_expr(play_df, roof_col))
     return (
@@ -816,9 +830,9 @@ def _espn_cp_features(
     df = play_df.with_columns(
         pl.when(pl.col(air_yards_col) == 0).then(1).otherwise(0).alias("_air_is_zero"),
         (pl.col(air_yards_col) - pl.col(ydstogo_col)).alias("_distance_to_sticks"),
-        pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("_era2"),
-        pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("_era3"),
-        pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("_era4"),
+        pl.when((pl.col("season") > _ERA_CUT1) & (pl.col("season") <= _ERA_CUT2)).then(1).otherwise(0).alias("_era2"),
+        pl.when((pl.col("season") > _ERA_CUT2) & (pl.col("season") <= _ERA_CUT3)).then(1).otherwise(0).alias("_era3"),
+        pl.when(pl.col("season") > _ERA_CUT3).then(1).otherwise(0).alias("_era4"),
     )
     pass_mid = (
         pl.col(pass_middle_col).cast(pl.Int8)
@@ -896,9 +910,9 @@ def _espn_xyac_features(
         pl.when(pl.col(air_yards_col) == 0).then(1).otherwise(0).alias("_air_is_zero"),
         (pl.col(yardline_col) - pl.col(air_yards_col)).alias("_distance_to_goal"),
         (pl.col(air_yards_col) - pl.col(ydstogo_col)).alias("_distance_to_sticks"),
-        pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("_era2"),
-        pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("_era3"),
-        pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("_era4"),
+        pl.when((pl.col("season") > _ERA_CUT1) & (pl.col("season") <= _ERA_CUT2)).then(1).otherwise(0).alias("_era2"),
+        pl.when((pl.col("season") > _ERA_CUT2) & (pl.col("season") <= _ERA_CUT3)).then(1).otherwise(0).alias("_era3"),
+        pl.when(pl.col("season") > _ERA_CUT3).then(1).otherwise(0).alias("_era4"),
     )
     pass_mid = (
         pl.col(pass_middle_col).cast(pl.Int8)
@@ -1994,11 +2008,14 @@ def calculate_xpass(
         # _make_model_mutations / _espn_ep_features.
         if "era0" not in feats.columns:
             feats = feats.with_columns(
-                pl.when(pl.col("season") <= 2001).then(1).otherwise(0).alias("era0"),
+                pl.when(pl.col("season") <= _ERA_CUT0).then(1).otherwise(0).alias("era0"),
             )
         if "era1" not in feats.columns:
             feats = feats.with_columns(
-                pl.when((pl.col("season") > 2001) & (pl.col("season") <= 2005)).then(1).otherwise(0).alias("era1"),
+                pl.when((pl.col("season") > _ERA_CUT0) & (pl.col("season") <= _ERA_CUT1))
+                .then(1)
+                .otherwise(0)
+                .alias("era1"),
             )
         X = feats.select(XPASS_FEATURES).to_numpy(allow_copy=True).astype(np.float32)
         preds = _load_model(_XPASS_MODEL_FILE, models_dir=models_dir).predict(DMatrix(X, feature_names=XPASS_FEATURES))
@@ -4194,6 +4211,7 @@ def _add_fourth_down_decisions(
     df: pl.DataFrame,
     *,
     return_as_pandas: bool = False,
+    strict: bool = False,
 ) -> pl.DataFrame:
     """Attach the nfl4th 4th-down decision columns to a full nflverse frame.
 
@@ -4206,7 +4224,8 @@ def _add_fourth_down_decisions(
 
     The 4th-down models (``fd_model`` / ``wp_model``) are download-on-demand; if
     they are unavailable offline the decision columns are emitted as all-null so
-    the frame keeps a stable column set.
+    the frame keeps a stable column set, with one ``RuntimeWarning`` per missing
+    model; ``strict=True`` raises the ``FileNotFoundError`` instead.
 
     Args:
         df: Full nflverse-shape play-by-play frame (every play, not just 4th
@@ -4218,11 +4237,19 @@ def _add_fourth_down_decisions(
             ``spread_line``, ``total_line``).
         return_as_pandas: unused here (the caller controls final conversion);
             retained for signature symmetry.
+        strict: Raise when a 4th-down model cannot be obtained.
 
     Returns:
         ``df`` with the 14 decision columns added (null on non-4th-down rows).
+
+    Raises:
+        FileNotFoundError: ``strict`` and ``fd_model.ubj`` / ``wp_model.ubj`` cannot be obtained.
     """
     import sportsdataverse.nfl.nfl_fourth_down as _fd
+
+    if strict:  # resolve both up front: get_4th_down_probs degrades a missing model to nulls
+        _load_model(_fd._FD_MODEL_FILE)
+        _load_model(_fd._WP_MODEL_FILE)
 
     decision_cols = [
         "go_wp",
@@ -4271,7 +4298,9 @@ def _add_fourth_down_decisions(
 
     try:
         probs_pd = _fd.get_4th_down_probs(fourth)
-    except Exception as exc:  # noqa: BLE001 — degrade gracefully on any scoring failure
+    except Exception as exc:  # degrade gracefully on any scoring failure
+        if strict:
+            raise
         # The 4th-down models (fd_model / wp_model) are download-on-demand and
         # may be unavailable (FileNotFoundError), or an incompatible cached
         # booster can raise an xgboost feature-count error (XGBoostError) — in
@@ -4313,6 +4342,7 @@ def enrich_nfl_pbp(
     touchback_yardline: Union[int, None] = None,
     ep_point_values: Union[np.ndarray, None] = None,
     return_as_pandas: bool = False,
+    strict: bool | None = None,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Enrich an nflverse-shape PBP frame with EP/EPA/WP/WPA/CP/CPOE/xYAC.
 
@@ -4372,6 +4402,11 @@ def enrich_nfl_pbp(
             re-scores keep the NFL vector; today every league's vector equals
             it, so nothing diverges.
         return_as_pandas: When ``True``, return a ``pandas.DataFrame``.
+        strict: When ``True``, a model that cannot be obtained (the
+            download-on-demand xYAC / nfl4th boosters offline with an empty
+            cache) raises instead of warning and nulling the columns it feeds.
+            ``None`` (default) reads ``SDV_PY_MODELS_STRICT`` (``1`` = strict);
+            a producer that must not publish null model columns turns it on.
 
     Returns:
         polars.DataFrame (or pandas.DataFrame when *return_as_pandas* is
@@ -4461,6 +4496,8 @@ def enrich_nfl_pbp(
     Raises:
         ValueError: when ``method`` is not ``"lead_diff"``, or required
             contract columns are absent from ``df``.
+        FileNotFoundError: in strict mode, when a model cannot be obtained
+            (the message names the artifact).
 
     Example:
         Quick start::
@@ -4498,6 +4535,7 @@ def enrich_nfl_pbp(
         )
 
     _validate_enrich_input(df)
+    strict = _models_strict(strict)
 
     # Resolve the scorers off the module so monkeypatched stubs in tests and any
     # future indirection are honoured.
@@ -4561,6 +4599,8 @@ def enrich_nfl_pbp(
     try:
         raw = _self.calculate_xpass(raw, models_dir=models_dir)
     except FileNotFoundError as exc:
+        if strict:
+            raise
         import warnings
 
         warnings.warn(
@@ -4579,6 +4619,8 @@ def enrich_nfl_pbp(
     try:
         raw = _self.calculate_xyac(raw, models_dir=models_dir)
     except (FileNotFoundError, pl.exceptions.ColumnNotFoundError) as exc:
+        if strict and isinstance(exc, FileNotFoundError):
+            raise
         import warnings
 
         # FileNotFoundError → xyac_model.ubj genuinely unavailable (offline,
@@ -4607,7 +4649,7 @@ def enrich_nfl_pbp(
     # 8. 4th-down decision surface — default-on, scored only on the qualifying
     #    4th-down rows and null elsewhere (nfl4th add_4th_probs + recommendation).
     if add_fourth_down:
-        raw = _add_fourth_down_decisions(raw)
+        raw = _add_fourth_down_decisions(raw, strict=strict)
 
     if return_as_pandas:
         return raw.to_pandas()

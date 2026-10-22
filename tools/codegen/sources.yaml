@@ -73,6 +73,13 @@ providers:
       - sportsdataverse.cricket.cricket_espn_ext
       - sportsdataverse.wbb.wbb_team_stats
       - sportsdataverse.wnba.wnba_team_stats
+      # Hand-written ESPN functions that once shared a name with a generated site-v2 wrapper and
+      # resolved through it; the wrapper is now ``*_site`` (B-M31), so they need their own rule.
+      - sportsdataverse.wbb.wbb_standings
+      - sportsdataverse.wbb.wbb_team_roster
+      - sportsdataverse.wnba.wnba_draft
+      - sportsdataverse.wnba.wnba_standings
+      - sportsdataverse.wnba.wnba_team_roster
     functions:
       - espn_*_pbp
 
@@ -762,6 +769,7 @@ categories:
       - sportsdataverse.nfl.model_vars
       - sportsdataverse.nfl.nfl_fourth_down
       - sportsdataverse.cfb.cfb_fourth_down
+      - sportsdataverse.cfb.model_vars
       - sportsdataverse.football.spring_football_ep_wp
       - sportsdataverse.nba.nba_draft_model
       - sportsdataverse.nfl.nfl_draft_model

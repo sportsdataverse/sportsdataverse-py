@@ -9,6 +9,39 @@ sidebar_position: 50
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.basketball.plg` that are not
 generated API-endpoint wrappers (those have their own reference pages).
 
+## P. LEAGUE+ (Taiwan) and Preciser
+
+### season_slug {#season_slug}
+
+`season_slug(season: 'Any') -> 'str'`
+
+The site's slug for a season END year (2025 -> `'2024-25'`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Any` |  | the season END year. |
+
+**Returns**
+
+`f"{season - 1}-{season % 100:02d}"`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | `season` is before 2021 (the site's first season is 2020-21). |
+| `ValueError` | `season` is not an integer. |
+
+**Example**
+
+```python
+from sportsdataverse.basketball.plg.pleague_runtime import season_slug
+
+season_slug(2025)  # '2024-25'
+```
+
 ## IDs and crosswalks
 
 ### pleague_team_crosswalk {#pleague_team_crosswalk}

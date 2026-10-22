@@ -1,11 +1,11 @@
 ---
-title: "NFL — nflpro — Defense"
+title: "NFL — NFL Pro API (pro.nfl.com, NFL+ Premium account) — Defense"
 sidebar_label: "Defense"
 sidebar_position: 1
-description: "NFL — nflpro — Defense — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — NFL Pro API (pro.nfl.com, NFL+ Premium account) — Defense — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NFL — nflpro — Defense
+# NFL — NFL Pro API (pro.nfl.com, NFL+ Premium account) — Defense
 
 ## nfl_pro_defense_overview_season
 
@@ -71,8 +71,10 @@ GET /api/secured/stats/defense/overview/season — one row per defender for the 
 
 | Exception | Description |
 |---|---|
-| `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
-| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
+| `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan, or pro.nfl.com answered 401 / 403 (an `AssetFetchError`). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. Pro.nfl.com answered 400 / 422, or ignored `offset`. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other non-2xx or a connection failure after retries, or a 2xx whose body is not a JSON object or array -- including the HTTP 200 with an empty body that is how pro.nfl.com rejects unsupported query params. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
 
 ### Example {#nfl_pro_defense_overview_season-example}
 
@@ -154,8 +156,10 @@ GET /api/secured/stats/defense/overview/week — one row per defender per week �
 
 | Exception | Description |
 |---|---|
-| `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
-| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
+| `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan, or pro.nfl.com answered 401 / 403 (an `AssetFetchError`). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. Pro.nfl.com answered 400 / 422, or ignored `offset`. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other non-2xx or a connection failure after retries, or a 2xx whose body is not a JSON object or array -- including the HTTP 200 with an empty body that is how pro.nfl.com rejects unsupported query params. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
 
 ### Example {#nfl_pro_defense_overview_week-example}
 
@@ -229,8 +233,10 @@ GET /api/secured/stats/defense/nearest/season — one row per defender for the s
 
 | Exception | Description |
 |---|---|
-| `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
-| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
+| `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan, or pro.nfl.com answered 401 / 403 (an `AssetFetchError`). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. Pro.nfl.com answered 400 / 422, or ignored `offset`. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other non-2xx or a connection failure after retries, or a 2xx whose body is not a JSON object or array -- including the HTTP 200 with an empty body that is how pro.nfl.com rejects unsupported query params. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
 
 ### Example {#nfl_pro_defense_nearest_season-example}
 
@@ -312,8 +318,10 @@ GET /api/secured/stats/defense/nearest/week — one row per defender per week �
 
 | Exception | Description |
 |---|---|
-| `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
-| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
+| `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan, or pro.nfl.com answered 401 / 403 (an `AssetFetchError`). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. Pro.nfl.com answered 400 / 422, or ignored `offset`. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other non-2xx or a connection failure after retries, or a 2xx whose body is not a JSON object or array -- including the HTTP 200 with an empty body that is how pro.nfl.com rejects unsupported query params. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
 
 ### Example {#nfl_pro_defense_nearest_week-example}
 

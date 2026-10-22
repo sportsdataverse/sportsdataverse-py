@@ -40,8 +40,9 @@ import os
 import time
 from typing import Any, Callable, Dict, Optional
 
-from sportsdataverse._codegen_runtime import _json_text, _transport_errors
+from sportsdataverse._codegen_runtime import _json_text, _transport_errors, _where
 from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import AssetFetchError
 
 __all__ = ["_get", "pff_login"]
 
@@ -266,7 +267,7 @@ def _default_transport(url: str, params: dict, headers: dict, cookies: dict) -> 
     hdrs = dict(headers or {})
     if cookies:
         hdrs["Cookie"] = "; ".join(f"{name}={value}" for name, value in cookies.items())
-    resp = download(url=url, params=params, headers=hdrs, timeout=30)
+    resp = download(url=url, params=params, headers=hdrs)  # timeout: SDV_PY_HTTP_TIMEOUT, else 30 (A-L67)
     return getattr(resp, "status_code", 200), resp.text
 
 
@@ -297,7 +298,7 @@ def _get(
         **kwargs: Accepted for forward-compatibility with generated callers; unused.
 
     Returns:
-        Parsed JSON ``dict``; ``{}`` for a 204/205 or a non-object JSON body.
+        Parsed JSON ``dict``; ``{}`` for a 204/205.
 
     Raises:
         RuntimeError: When no auth cookies can be resolved.
@@ -305,7 +306,7 @@ def _get(
         ValueError: premium.pff.com answered 400 / 422 -- the request is wrong.
         AssetFetchError: Any other non-2xx (an expired cookie's 401/403, a 429, a
             5xx), a connection failure after retries, or a 2xx whose body is empty
-            (not 204/205) or not JSON -- the answer is unknown, not empty.
+            (not 204/205), not JSON, or not a JSON object -- the answer is unknown, not empty.
 
     Example:
         Quick start (offline -- inject a transport, no cookies needed on the wire)::
@@ -335,7 +336,9 @@ def _get(
     with _transport_errors(url):
         status, text = _transport(url, clean, headers or _pff_headers(), resolved)
     body = _json_text(url, status, text)
-    return body if isinstance(body, dict) else {}
+    if not isinstance(body, dict):  # every premium.pff.com route answers an object (B-L75)
+        raise AssetFetchError(f"{_where(url)} answered HTTP {status} with a JSON array, not an object")
+    return body
 
 
 def pff_login(

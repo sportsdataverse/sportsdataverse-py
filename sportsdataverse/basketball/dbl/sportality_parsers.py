@@ -89,6 +89,7 @@ import polars as pl
 
 from sportsdataverse.basketball.dbl.sportality_dtypes import SCHEMAS
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _data_only
 
 __all__ = [
     "parse_sportality",
@@ -312,6 +313,7 @@ def _body(raw: Any) -> Any:
 # --------------------------------------------------------------------------- generic
 
 
+@_data_only
 def parse_sportality(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """Parse any Basketligaen body by the generic row rule (see the module docstring).
 
@@ -343,6 +345,7 @@ def parse_sportality(raw: Any, *, return_as_pandas: bool = False, columns: Optio
     return _finish(_frame(flat), columns, return_as_pandas)
 
 
+@_data_only
 def parse_sportality_page(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:

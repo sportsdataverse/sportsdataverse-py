@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import re
+import threading
 import time
 import urllib.parse
 from typing import Any, Dict, Optional, Union
@@ -24,6 +25,7 @@ _ACCESS_DENIED_RE = re.compile(r"^\s*Feed type access denied\.?\s*$", re.IGNOREC
 _CREDENTIAL_QS_RE = re.compile(r"(?i)\b(key|api_?key|access_token|token|password|secret)=[^&\s'\"<>)]+")
 _RATE_LIMIT_S = 0.4
 _last_request_ts = 0.0
+_RATE_LOCK = threading.Lock()  # 4.5 / B-GB-26: two threads must not both read a stale stamp
 
 # League-specific Referer headers. Falls back to no Referer for unknown leagues.
 _LEAGUE_REFERER: Dict[str, str] = {
@@ -36,8 +38,8 @@ _LEAGUE_REFERER: Dict[str, str] = {
 
 
 def _strip_jsonp(text: str) -> str:
-    """Strip an ``angular.callbacks._N( ... )`` or bare ``( ... )`` JSONP wrapper."""
-    text = text.strip()
+    """Strip an ``angular.callbacks._N( ... )`` or bare ``( ... )`` JSONP wrapper, and a trailing ``;``."""
+    text = text.strip().rstrip(";").rstrip()
     if _CALLBACK_RE.match(text) and text.endswith(")"):
         text = text[text.index("(") + 1 : -1]
     elif text.startswith("(") and text.endswith(")"):
@@ -130,9 +132,11 @@ def hockeytech_api(
     where = f"hockeytech_api({league}/{feed}/{view})"  # no URL: it carries the key
     key = resolve_api_key(league, view=view)
 
-    elapsed = time.monotonic() - _last_request_ts
-    if elapsed < _RATE_LIMIT_S:
-        time.sleep(_RATE_LIMIT_S - elapsed)
+    with _RATE_LOCK:
+        elapsed = time.monotonic() - _last_request_ts
+        if elapsed < _RATE_LIMIT_S:
+            time.sleep(_RATE_LIMIT_S - elapsed)
+        _last_request_ts = time.monotonic()  # claim the slot before the next thread reads it
 
     # Error text from requests / download() quotes the URL, which carries the key: redact
     # it, and raise outside the except block so the original is not chained either.

@@ -12,6 +12,7 @@ from pathlib import Path
 
 import polars as pl
 import pytest
+import requests
 
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import AssetFetchError
@@ -76,16 +77,24 @@ def test_identity_columns_on_a_404_athlete_deref(monkeypatch):
     assert row["full_name"] is None and row["team_id"] is None
 
 
-@pytest.mark.parametrize("status", [403, 429, 503])
-@pytest.mark.xfail(
-    strict=True,
-    raises=AssertionError,
-    reason="B-M1: _safe_json turns a failed athlete deref into a null-identity row; task 4.9",
-)
+@pytest.mark.parametrize("status", [403, 429, 503, "connection"])
 def test_safe_json_raises_on_a_failed_athlete_deref(monkeypatch, status):
-    _serve(monkeypatch, athlete_status=status, athlete_body='{"message": "unavailable"}')
-    try:
-        df = _lebron()
-    except AssetFetchError:
-        return
-    raise AssertionError(f"HTTP {status} on the athlete node became a row with full_name={df['full_name'][0]!r}")
+    """B-M1: only a 404 on the athlete node may leave identity null; a failed fetch raises."""
+    if status == "connection":
+        _route(
+            monkeypatch,
+            lambda url: (200, STATS, "application/json") if "/statistics" in url else requests.ConnectionError("reset"),
+        )
+    else:
+        _serve(monkeypatch, athlete_status=status, athlete_body='{"message": "unavailable"}')
+    with pytest.raises(AssetFetchError):
+        _lebron()
+
+
+@pytest.mark.parametrize("value", [float("nan"), "nan", " NaN "])
+def test_coerce_float_maps_nan_to_null(value):
+    """B-GB-20: a NaN is a missing value, not a float that stringifies as "nan"."""
+    from sportsdataverse._common_espn_player_stats import _coerce_float
+
+    assert _coerce_float(value) is None
+    assert _coerce_float(" 7.8 ") == 7.8 and _coerce_float(3) == 3.0 and _coerce_float("7.8-15.7") is None

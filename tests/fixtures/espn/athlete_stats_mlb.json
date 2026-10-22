@@ -1,0 +1,2370 @@
+{
+ "categories": [
+  {
+   "averages": [
+    "128",
+    "473",
+    "89",
+    "133",
+    "24",
+    "5",
+    "34",
+    "83",
+    "69",
+    "4",
+    "140",
+    "20",
+    "5",
+    ".281",
+    ".375",
+    ".574",
+    ".948",
+    "-"
+   ],
+   "descriptions": [
+    "Games Played",
+    "The number of times a batter comes up to bat not counting walks and sacrifices.",
+    "The number of runs scored.",
+    "The number of hits.",
+    "The number of times that a batter reaches second base as the result of a hit without an error being committed.",
+    "The number of hits that result in the batter reaching 3rd base without the aid of an error.",
+    "The number of hits that allowed the batter to round the bases and score without the aid of an error of the defense.",
+    "The number of runs scored by a batter's play.",
+    "The number of times a batter reaches base on four balls",
+    "The number of times a player has been by a pitch.",
+    "The number of times a player strikes out.",
+    "The number of bases stolen.",
+    "The number of times that a baserunner attempts to steal a base but is thrown out.",
+    "The average number of times the batter reached successfully on base due to a hit: hits / atBats",
+    "The ratio of the number of times the batter reached base per plate appearnce: (hits + walks + hbp / plateAppearances)",
+    "Slugging percentage is a metric that is meant to measuring how many bases the hitter safely advances to after making contact with the ball: (totalBases / atBats)",
+    "The average calculated by adding up on-base percentage and slugging percentage.",
+    "Wins Above Replacement."
+   ],
+   "displayName": "Career Batting",
+   "displayNames": [
+    "Games Played",
+    "At Bats",
+    "Runs",
+    "Hits",
+    "Doubles",
+    "Triples",
+    "Home Runs",
+    "Runs Batted In",
+    "Walks",
+    "Hit By Pitch",
+    "Strikeouts",
+    "Stolen Bases",
+    "Caught Stealing",
+    "Batting Average",
+    "On Base Percentage",
+    "Slugging Percentage",
+    "OBP Pct + SLG Pct",
+    "Wins Above Replacement"
+   ],
+   "labels": [
+    "GP",
+    "AB",
+    "R",
+    "H",
+    "2B",
+    "3B",
+    "HR",
+    "RBI",
+    "BB",
+    "HBP",
+    "SO",
+    "SB",
+    "CS",
+    "AVG",
+    "OBP",
+    "SLG",
+    "OPS",
+    "WAR"
+   ],
+   "name": "career-batting",
+   "names": [
+    "gamesPlayed",
+    "atBats",
+    "runs",
+    "hits",
+    "doubles",
+    "triples",
+    "homeRuns",
+    "RBIs",
+    "walks",
+    "hitByPitch",
+    "strikeouts",
+    "stolenBases",
+    "caughtStealing",
+    "avg",
+    "onBasePct",
+    "slugAvg",
+    "OPS",
+    "WARBR"
+   ],
+   "sortKey": "career-batting",
+   "statistics": [
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2018",
+      "year": 2018
+     },
+     "stats": [
+      "104",
+      "326",
+      "59",
+      "93",
+      "21",
+      "2",
+      "22",
+      "61",
+      "37",
+      "2",
+      "102",
+      "10",
+      "4",
+      ".285",
+      ".361",
+      ".564",
+      ".925",
+      "2.7"
+     ],
+     "teamId": "3",
+     "teamSlug": "los-angeles-angels"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2019",
+      "year": 2019
+     },
+     "stats": [
+      "106",
+      "384",
+      "51",
+      "110",
+      "20",
+      "5",
+      "18",
+      "62",
+      "33",
+      "2",
+      "110",
+      "12",
+      "3",
+      ".286",
+      ".343",
+      ".505",
+      ".848",
+      "2.5"
+     ],
+     "teamId": "3",
+     "teamSlug": "los-angeles-angels"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2020",
+      "year": 2020
+     },
+     "stats": [
+      "44",
+      "153",
+      "23",
+      "29",
+      "6",
+      "0",
+      "7",
+      "24",
+      "22",
+      "0",
+      "50",
+      "7",
+      "1",
+      ".190",
+      ".291",
+      ".366",
+      ".657",
+      "-0.1"
+     ],
+     "teamId": "3",
+     "teamSlug": "los-angeles-angels"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2021",
+      "year": 2021
+     },
+     "stats": [
+      "155",
+      "537",
+      "103",
+      "138",
+      "26",
+      "8",
+      "46",
+      "100",
+      "96",
+      "4",
+      "189",
+      "26",
+      "10",
+      ".257",
+      ".372",
+      ".592",
+      ".965",
+      "4.9"
+     ],
+     "teamId": "3",
+     "teamSlug": "los-angeles-angels"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2022",
+      "year": 2022
+     },
+     "stats": [
+      "157",
+      "586",
+      "90",
+      "160",
+      "30",
+      "6",
+      "34",
+      "95",
+      "72",
+      "5",
+      "161",
+      "11",
+      "9",
+      ".273",
+      ".356",
+      ".519",
+      ".875",
+      "3.4"
+     ],
+     "teamId": "3",
+     "teamSlug": "los-angeles-angels"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2023",
+      "year": 2023
+     },
+     "stats": [
+      "135",
+      "497",
+      "102",
+      "151",
+      "26",
+      "8",
+      "44",
+      "95",
+      "91",
+      "3",
+      "143",
+      "20",
+      "6",
+      ".304",
+      ".412",
+      ".654",
+      "1.066",
+      "6.0"
+     ],
+     "teamId": "3",
+     "teamSlug": "los-angeles-angels"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2024",
+      "year": 2024
+     },
+     "stats": [
+      "159",
+      "636",
+      "134",
+      "197",
+      "38",
+      "7",
+      "54",
+      "130",
+      "81",
+      "6",
+      "162",
+      "59",
+      "4",
+      ".310",
+      ".390",
+      ".646",
+      "1.036",
+      "9.2"
+     ],
+     "teamId": "19",
+     "teamSlug": "los-angeles-dodgers"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2025",
+      "year": 2025
+     },
+     "stats": [
+      "158",
+      "611",
+      "146",
+      "172",
+      "25",
+      "9",
+      "55",
+      "102",
+      "109",
+      "3",
+      "187",
+      "20",
+      "6",
+      ".282",
+      ".392",
+      ".622",
+      "1.014",
+      "6.6"
+     ],
+     "teamId": "19",
+     "teamSlug": "los-angeles-dodgers"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2026",
+      "year": 2026
+     },
+     "stats": [
+      "135",
+      "523",
+      "89",
+      "144",
+      "26",
+      "4",
+      "30",
+      "81",
+      "81",
+      "7",
+      "152",
+      "11",
+      "3",
+      ".275",
+      ".377",
+      ".512",
+      ".889",
+      "3.2"
+     ],
+     "teamId": "19",
+     "teamSlug": "los-angeles-dodgers"
+    }
+   ],
+   "totals": [
+    "1153",
+    "4253",
+    "797",
+    "1194",
+    "218",
+    "49",
+    "310",
+    "750",
+    "622",
+    "32",
+    "1256",
+    "176",
+    "46",
+    ".281",
+    ".375",
+    ".574",
+    ".948",
+    "--"
+   ]
+  },
+  {
+   "descriptions": [
+    "Games Played",
+    "The number of times a batter comes up to bat not counting walks and sacrifices.",
+    "The number of runs scored.",
+    "The number of hits.",
+    "The number of times that a batter reaches second base as the result of a hit without an error being committed.",
+    "The number of hits that result in the batter reaching 3rd base without the aid of an error.",
+    "The number of hits that allowed the batter to round the bases and score without the aid of an error of the defense.",
+    "The number of runs scored by a batter's play.",
+    "The number of times a batter reaches base on four balls",
+    "The number of times a player has been by a pitch.",
+    "The number of times a player strikes out.",
+    "The number of bases stolen.",
+    "The number of times that a baserunner attempts to steal a base but is thrown out.",
+    "The average number of times the batter reached successfully on base due to a hit: hits / atBats",
+    "The ratio of the number of times the batter reached base per plate appearnce: (hits + walks + hbp / plateAppearances)",
+    "Slugging percentage is a metric that is meant to measuring how many bases the hitter safely advances to after making contact with the ball: (totalBases / atBats)",
+    "The average calculated by adding up on-base percentage and slugging percentage."
+   ],
+   "displayName": "Postseason Batting",
+   "displayNames": [
+    "Games Played",
+    "At Bats",
+    "Runs",
+    "Hits",
+    "Doubles",
+    "Triples",
+    "Home Runs",
+    "Runs Batted In",
+    "Walks",
+    "Hit By Pitch",
+    "Strikeouts",
+    "Stolen Bases",
+    "Caught Stealing",
+    "Batting Average",
+    "On Base Percentage",
+    "Slugging Percentage",
+    "OBP Pct + SLG Pct"
+   ],
+   "labels": [
+    "GP",
+    "AB",
+    "R",
+    "H",
+    "2B",
+    "3B",
+    "HR",
+    "RBI",
+    "BB",
+    "HBP",
+    "K",
+    "SB",
+    "CS",
+    "AVG",
+    "OBP",
+    "SLG",
+    "OPS"
+   ],
+   "name": "postseason-batting",
+   "names": [
+    "gamesPlayed",
+    "atBats",
+    "runs",
+    "hits",
+    "doubles",
+    "triples",
+    "homeRuns",
+    "RBIs",
+    "walks",
+    "hitByPitch",
+    "strikeouts",
+    "stolenBases",
+    "caughtStealing",
+    "avg",
+    "onBasePct",
+    "slugAvg",
+    "OPS"
+   ],
+   "sortKey": "postseason-batting",
+   "statistics": [
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2024",
+      "year": 2024
+     },
+     "stats": [
+      "16",
+      "61",
+      "14",
+      "14",
+      "1",
+      "0",
+      "3",
+      "10",
+      "13",
+      "1",
+      "22",
+      "0",
+      "2",
+      ".230",
+      ".373",
+      ".393",
+      ".767"
+     ],
+     "teamId": "19",
+     "teamSlug": "los-angeles-dodgers"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2025",
+      "year": 2025
+     },
+     "stats": [
+      "17",
+      "68",
+      "13",
+      "18",
+      "3",
+      "1",
+      "8",
+      "14",
+      "16",
+      "0",
+      "23",
+      "1",
+      "1",
+      ".265",
+      ".405",
+      ".691",
+      "1.096"
+     ],
+     "teamId": "19",
+     "teamSlug": "los-angeles-dodgers"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2026",
+      "year": 2026
+     },
+     "stats": [
+      "8",
+      "26",
+      "3",
+      "5",
+      "0",
+      "0",
+      "1",
+      "3",
+      "4",
+      "1",
+      "10",
+      "1",
+      "0",
+      ".192",
+      ".323",
+      ".308",
+      ".630"
+     ],
+     "teamId": "19",
+     "teamSlug": "los-angeles-dodgers"
+    }
+   ],
+   "totals": [
+    "41",
+    "155",
+    "30",
+    "37",
+    "4",
+    "1",
+    "12",
+    "27",
+    "33",
+    "2",
+    "55",
+    "2",
+    "3",
+    ".239",
+    ".379",
+    ".510",
+    ".889"
+   ]
+  },
+  {
+   "descriptions": [
+    "The number of times a batter comes up to bat.",
+    "The number of pitches faced.",
+    "The average number of pitches a batter sees per plate appearance.",
+    "The number of hits that are greater than singles.",
+    "The number of bases calculated as 1 for a 1B, 2 for a 2B, 3 for a 3B and 4 for a HR.",
+    "The number of times that a batter is walked by four intentionally thrown balls by the pitcher.",
+    "The number of times a player has been by a pitch.",
+    "The number of times a batter grounds into a double play.",
+    "The number of sacrifice bunts that allow baserunners to advance",
+    "The number of times a batter advances a runner with a fly out.",
+    "The number of bases stolen.",
+    "The number of times that a baserunner attempts to steal a base but is thrown out.",
+    "The percentage of stolen bases successfully stolen by a baserunner."
+   ],
+   "displayName": "Expanded Batting",
+   "displayNames": [
+    "Plate Appearances",
+    "Pitches",
+    "Pitches Per Plate Appearance",
+    "Extra Base Hits",
+    "Total Bases",
+    "Intentional Walks",
+    "Hit By Pitch",
+    "Ground Into Double Play",
+    "Sacrifice Hit",
+    "Sacrifice Flies",
+    "Stolen Bases",
+    "Caught Stealing",
+    "Stolen Base Percentage"
+   ],
+   "labels": [
+    "PA",
+    "P",
+    "P/PA",
+    "XBH",
+    "TB",
+    "IBB",
+    "HBP",
+    "GIDP",
+    "SH",
+    "SF",
+    "SB",
+    "CS",
+    "SB%"
+   ],
+   "name": "expanded-batting",
+   "names": [
+    "plateAppearances",
+    "pitches",
+    "pitchesPerPlateAppearance",
+    "extraBaseHits",
+    "totalBases",
+    "intentionalWalks",
+    "hitByPitch",
+    "GIDPs",
+    "sacHits",
+    "sacFlies",
+    "stolenBases",
+    "caughtStealing",
+    "stolenBasePct"
+   ],
+   "sortKey": "expanded-batting",
+   "statistics": [
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2018",
+      "year": 2018
+     },
+     "stats": [
+      "367",
+      "1455",
+      "3.96",
+      "45",
+      "184",
+      "2",
+      "2",
+      "3",
+      "0",
+      "1",
+      "10",
+      "4",
+      "0.71"
+     ],
+     "teamId": "3",
+     "teamSlug": "los-angeles-angels"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2019",
+      "year": 2019
+     },
+     "stats": [
+      "425",
+      "1683",
+      "3.96",
+      "43",
+      "194",
+      "1",
+      "2",
+      "6",
+      "0",
+      "4",
+      "12",
+      "3",
+      "0.80"
+     ],
+     "teamId": "3",
+     "teamSlug": "los-angeles-angels"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2020",
+      "year": 2020
+     },
+     "stats": [
+      "175",
+      "739",
+      "4.22",
+      "13",
+      "56",
+      "0",
+      "0",
+      "3",
+      "0",
+      "0",
+      "7",
+      "1",
+      "0.88"
+     ],
+     "teamId": "3",
+     "teamSlug": "los-angeles-angels"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2021",
+      "year": 2021
+     },
+     "stats": [
+      "639",
+      "2594",
+      "4.06",
+      "80",
+      "318",
+      "20",
+      "4",
+      "7",
+      "0",
+      "2",
+      "26",
+      "10",
+      "0.72"
+     ],
+     "teamId": "3",
+     "teamSlug": "los-angeles-angels"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2022",
+      "year": 2022
+     },
+     "stats": [
+      "666",
+      "2546",
+      "3.82",
+      "70",
+      "304",
+      "14",
+      "5",
+      "6",
+      "0",
+      "3",
+      "11",
+      "9",
+      "0.55"
+     ],
+     "teamId": "3",
+     "teamSlug": "los-angeles-angels"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2023",
+      "year": 2023
+     },
+     "stats": [
+      "599",
+      "2321",
+      "3.87",
+      "78",
+      "325",
+      "21",
+      "3",
+      "9",
+      "0",
+      "3",
+      "20",
+      "6",
+      "0.77"
+     ],
+     "teamId": "3",
+     "teamSlug": "los-angeles-angels"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2024",
+      "year": 2024
+     },
+     "stats": [
+      "731",
+      "2838",
+      "3.88",
+      "99",
+      "411",
+      "10",
+      "6",
+      "7",
+      "0",
+      "5",
+      "59",
+      "4",
+      "0.94"
+     ],
+     "teamId": "19",
+     "teamSlug": "los-angeles-dodgers"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2025",
+      "year": 2025
+     },
+     "stats": [
+      "727",
+      "2865",
+      "3.94",
+      "89",
+      "380",
+      "20",
+      "3",
+      "9",
+      "0",
+      "2",
+      "20",
+      "6",
+      "0.77"
+     ],
+     "teamId": "19",
+     "teamSlug": "los-angeles-dodgers"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2026",
+      "year": 2026
+     },
+     "stats": [
+      "618",
+      "2356",
+      "3.81",
+      "60",
+      "268",
+      "16",
+      "7",
+      "9",
+      "0",
+      "5",
+      "11",
+      "3",
+      "0.79"
+     ],
+     "teamId": "19",
+     "teamSlug": "los-angeles-dodgers"
+    }
+   ],
+   "totals": [
+    "4947",
+    "19397",
+    "3.92",
+    "577",
+    "2440",
+    "104",
+    "32",
+    "59",
+    "0",
+    "25",
+    "176",
+    "46",
+    "0.79"
+   ]
+  },
+  {
+   "descriptions": [
+    "Wins Above Replacement.",
+    "Offensive Wins Above Replacement.",
+    "The estimate of how many runs a player has created.",
+    "The estimated number of runs created per 27 outs played.",
+    "The measure of a batter's ability to hit for extra bases, calculated by subtracting batting average from slugging percentage.",
+    "The average of extra bases gained via hits, walks and stolen bases versus at bats.",
+    "The ratio of at bats per home run hit.",
+    "The ratio of walks to plate appearances for a batter.",
+    "The number of walks to the number of strikeouts by a batter.",
+    "The number of ground outs made by a player or team.",
+    "The number of time a batter flies out.",
+    "The ratio of ground outs to fly outs."
+   ],
+   "displayName": "Advanced Batting",
+   "displayNames": [
+    "Wins Above Replacement",
+    "Offensive Wins Above Replacement",
+    "Runs Created",
+    "Runs Created Per 27 Outs",
+    "Isolated Power",
+    "Secondary Average",
+    "At Bats Per Home Run",
+    "Walks Per Plate Appearance",
+    "Walk To Strikeout Ratio",
+    "Ground Balls",
+    "Fly Balls",
+    "Ground To Fly Ball Ratio"
+   ],
+   "labels": [
+    "WAR",
+    "OWAR",
+    "RC",
+    "RC/27",
+    "ISOP",
+    "SECA",
+    "AB/HR",
+    "BB/PA",
+    "BB/K",
+    "GO",
+    "FO",
+    "GO/FO"
+   ],
+   "name": "advanced-batting",
+   "names": [
+    "WARBR",
+    "offWARBR",
+    "runsCreated",
+    "runsCreatedPer27Outs",
+    "isolatedPower",
+    "secondaryAvg",
+    "atBatsPerHomeRun",
+    "walksPerPlateAppearance",
+    "walkToStrikeoutRatio",
+    "groundBalls",
+    "flyBalls",
+    "groundToFlyRatio"
+   ],
+   "sortKey": "advanced-batting",
+   "statistics": [
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2018",
+      "year": 2018
+     },
+     "stats": [
+      "2.7",
+      "2.7",
+      "65.4",
+      "7.3",
+      ".279",
+      ".411",
+      "14.8",
+      ".101",
+      "0.36",
+      "99",
+      "126",
+      "0.8"
+     ],
+     "teamId": "3",
+     "teamSlug": "los-angeles-angels"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2019",
+      "year": 2019
+     },
+     "stats": [
+      "2.5",
+      "2.4",
+      "66.4",
+      "6.2",
+      ".219",
+      ".328",
+      "21.3",
+      ".078",
+      "0.30",
+      "138",
+      "140",
+      "1.0"
+     ],
+     "teamId": "3",
+     "teamSlug": "los-angeles-angels"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2020",
+      "year": 2020
+     },
+     "stats": [
+      "-0.1",
+      "-0.1",
+      "17.4",
+      "3.7",
+      ".176",
+      ".359",
+      "21.9",
+      ".126",
+      "0.44",
+      "51",
+      "52",
+      "1.0"
+     ],
+     "teamId": "3",
+     "teamSlug": "los-angeles-angels"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2021",
+      "year": 2021
+     },
+     "stats": [
+      "4.9",
+      "4.9",
+      "118.4",
+      "7.6",
+      ".335",
+      ".544",
+      "11.7",
+      ".150",
+      "0.51",
+      "139",
+      "211",
+      "0.7"
+     ],
+     "teamId": "3",
+     "teamSlug": "los-angeles-angels"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2022",
+      "year": 2022
+     },
+     "stats": [
+      "3.4",
+      "3.5",
+      "107.0",
+      "6.5",
+      ".246",
+      ".372",
+      "17.2",
+      ".108",
+      "0.45",
+      "184",
+      "244",
+      "0.8"
+     ],
+     "teamId": "3",
+     "teamSlug": "los-angeles-angels"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2023",
+      "year": 2023
+     },
+     "stats": [
+      "6.0",
+      "6.0",
+      "128.6",
+      "9.5",
+      ".350",
+      ".561",
+      "11.3",
+      ".152",
+      "0.64",
+      "152",
+      "205",
+      "0.7"
+     ],
+     "teamId": "3",
+     "teamSlug": "los-angeles-angels"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2024",
+      "year": 2024
+     },
+     "stats": [
+      "9.2",
+      "9.2",
+      "162.9",
+      "9.7",
+      ".336",
+      ".550",
+      "11.8",
+      ".111",
+      "0.50",
+      "174",
+      "305",
+      "0.6"
+     ],
+     "teamId": "19",
+     "teamSlug": "los-angeles-dodgers"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2025",
+      "year": 2025
+     },
+     "stats": [
+      "6.6",
+      "6.6",
+      "145.7",
+      "8.6",
+      ".340",
+      ".542",
+      "11.1",
+      ".150",
+      "0.58",
+      "169",
+      "257",
+      "0.7"
+     ],
+     "teamId": "19",
+     "teamSlug": "los-angeles-dodgers"
+    },
+    {
+     "position": "DH",
+     "season": {
+      "displayName": "2026",
+      "year": 2026
+     },
+     "stats": [
+      "3.2",
+      "3.3",
+      "102.4",
+      "7.0",
+      ".237",
+      ".407",
+      "17.4",
+      ".131",
+      "0.53",
+      "161",
+      "215",
+      "0.7"
+     ],
+     "teamId": "19",
+     "teamSlug": "los-angeles-dodgers"
+    }
+   ],
+   "totals": [
+    "--",
+    "--",
+    "913.3",
+    "7.7",
+    ".293",
+    ".470",
+    "13.7",
+    ".126",
+    "0.50",
+    "1267",
+    "1755",
+    "0.7"
+   ]
+  }
+ ],
+ "filters": [
+  {
+   "displayName": "Category",
+   "name": "category",
+   "options": [
+    {
+     "displayValue": "Batting",
+     "shortDisplayName": "Batting",
+     "value": "batting"
+    },
+    {
+     "displayValue": "Pitching",
+     "shortDisplayName": "Pitching",
+     "value": "pitching"
+    },
+    {
+     "displayValue": "Fielding",
+     "shortDisplayName": "Fielding",
+     "value": "fielding"
+    }
+   ],
+   "value": "batting"
+  }
+ ],
+ "glossary": [
+  {
+   "abbreviation": "2B",
+   "displayName": "Doubles"
+  },
+  {
+   "abbreviation": "3B",
+   "displayName": "Triples"
+  },
+  {
+   "abbreviation": "AB",
+   "displayName": "At Bats"
+  },
+  {
+   "abbreviation": "AB/HR",
+   "displayName": "At Bats Per Home Run"
+  },
+  {
+   "abbreviation": "AVG",
+   "displayName": "Batting Average"
+  },
+  {
+   "abbreviation": "BB",
+   "displayName": "Walks"
+  },
+  {
+   "abbreviation": "BB/K",
+   "displayName": "Walk To Strikeout Ratio"
+  },
+  {
+   "abbreviation": "BB/PA",
+   "displayName": "Walks Per Plate Appearance"
+  },
+  {
+   "abbreviation": "CS",
+   "displayName": "Caught Stealing"
+  },
+  {
+   "abbreviation": "FO",
+   "displayName": "Fly Balls"
+  },
+  {
+   "abbreviation": "GIDP",
+   "displayName": "Ground Into Double Play"
+  },
+  {
+   "abbreviation": "GO",
+   "displayName": "Ground Balls"
+  },
+  {
+   "abbreviation": "GO/FO",
+   "displayName": "Ground To Fly Ball Ratio"
+  },
+  {
+   "abbreviation": "GP",
+   "displayName": "Games Played"
+  },
+  {
+   "abbreviation": "H",
+   "displayName": "Hits"
+  },
+  {
+   "abbreviation": "HBP",
+   "displayName": "Hit By Pitch"
+  },
+  {
+   "abbreviation": "HR",
+   "displayName": "Home Runs"
+  },
+  {
+   "abbreviation": "IBB",
+   "displayName": "Intentional Walks"
+  },
+  {
+   "abbreviation": "ISOP",
+   "displayName": "Isolated Power"
+  },
+  {
+   "abbreviation": "OBP",
+   "displayName": "On Base Percentage"
+  },
+  {
+   "abbreviation": "OPS",
+   "displayName": "OBP Pct + SLG Pct"
+  },
+  {
+   "abbreviation": "OWAR",
+   "displayName": "Offensive Wins Above Replacement"
+  },
+  {
+   "abbreviation": "P",
+   "displayName": "Pitches"
+  },
+  {
+   "abbreviation": "P/PA",
+   "displayName": "Pitches Per Plate Appearance"
+  },
+  {
+   "abbreviation": "PA",
+   "displayName": "Plate Appearances"
+  },
+  {
+   "abbreviation": "R",
+   "displayName": "Runs"
+  },
+  {
+   "abbreviation": "RBI",
+   "displayName": "Runs Batted In"
+  },
+  {
+   "abbreviation": "RC",
+   "displayName": "Runs Created"
+  },
+  {
+   "abbreviation": "RC/27",
+   "displayName": "Runs Created Per 27 Outs"
+  },
+  {
+   "abbreviation": "SB",
+   "displayName": "Stolen Bases"
+  },
+  {
+   "abbreviation": "SB%",
+   "displayName": "Stolen Base Percentage"
+  },
+  {
+   "abbreviation": "SECA",
+   "displayName": "Secondary Average"
+  },
+  {
+   "abbreviation": "SF",
+   "displayName": "Sacrifice Flies"
+  },
+  {
+   "abbreviation": "SH",
+   "displayName": "Sacrifice Hit"
+  },
+  {
+   "abbreviation": "SLG",
+   "displayName": "Slugging Percentage"
+  },
+  {
+   "abbreviation": "SO",
+   "displayName": "Strikeouts"
+  },
+  {
+   "abbreviation": "TB",
+   "displayName": "Total Bases"
+  },
+  {
+   "abbreviation": "WAR",
+   "displayName": "Wins Above Replacement"
+  },
+  {
+   "abbreviation": "XBH",
+   "displayName": "Extra Base Hits"
+  }
+ ],
+ "teams": {
+  "19": {
+   "abbreviation": "LAD",
+   "alternateColor": "ffffff",
+   "coaches": {},
+   "color": "005a9c",
+   "displayName": "Los Angeles Dodgers",
+   "franchise": {},
+   "groups": {},
+   "guid": "fb7cf413-5156-9fc2-abe0-2273b89f70db",
+   "id": "19",
+   "isActive": true,
+   "isAllStar": false,
+   "links": [
+    {
+     "href": "https://www.espn.com/mlb/team/_/name/lad/los-angeles-dodgers",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "clubhouse",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Clubhouse",
+     "text": "Clubhouse"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/roster/_/name/lad/los-angeles-dodgers",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~t:19&section=roster",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/stats/_/name/lad/los-angeles-dodgers",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~t:19&section=stats",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/schedule/_/name/lad",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~t:19&section=scores",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/photos/_/name/lad",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "photos",
+      "desktop",
+      "team"
+     ],
+     "shortText": "photos",
+     "text": "photos"
+    },
+    {
+     "href": "https://www.vividseats.com/los-angeles-dodgers-tickets--sports-mlb-baseball/performer/481?wsUser=717",
+     "isExternal": true,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "tickets",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Tickets",
+     "text": "Tickets"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/transactions/_/name/lad",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "transactions",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Transactions",
+     "text": "Transactions"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/injuries/_/name/lad",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "injuries",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Injuries",
+     "text": "Injuries"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/depth/_/name/lad",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "depthchart",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Depth Chart",
+     "text": "Depth Chart"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~t:19&section=depthchart",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "depthchart",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Depth Chart",
+     "text": "Depth Chart"
+    }
+   ],
+   "location": "Los Angeles",
+   "logos": [
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/mlb/500/lad.png",
+     "rel": [
+      "full",
+      "default"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/mlb/500-dark/lad.png",
+     "rel": [
+      "full",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/lad.png",
+     "rel": [
+      "full",
+      "scoreboard"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/mlb/500-dark/scoreboard/lad.png",
+     "rel": [
+      "full",
+      "scoreboard",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/primary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/primary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/primary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/primary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/primary_logo_black.png",
+     "rel": [
+      "full",
+      "primary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/primary_logo_white.png",
+     "rel": [
+      "full",
+      "primary_logo_white"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/secondary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/secondary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/secondary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/secondary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/secondary_logo_black.png",
+     "rel": [
+      "full",
+      "secondary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/secondary_logo_white.png",
+     "rel": [
+      "full",
+      "secondary_logo_white"
+     ],
+     "width": 4096
+    }
+   ],
+   "name": "Dodgers",
+   "ranks": {},
+   "record": {},
+   "shortDisplayName": "Dodgers",
+   "slug": "los-angeles-dodgers",
+   "uid": "s:1~l:10~t:19"
+  },
+  "los-angeles-angels": {
+   "abbreviation": "LAA",
+   "alternateColor": "c4ced4",
+   "coaches": {},
+   "color": "ba0021",
+   "displayName": "Los Angeles Angels",
+   "franchise": {},
+   "groups": {},
+   "guid": "053868c7-8bff-5edb-3cb6-f5490f33ef99",
+   "id": "3",
+   "isActive": true,
+   "isAllStar": false,
+   "links": [
+    {
+     "href": "https://www.espn.com/mlb/team/_/name/laa/los-angeles-angels",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "clubhouse",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Clubhouse",
+     "text": "Clubhouse"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/roster/_/name/laa/los-angeles-angels",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~t:3&section=roster",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/stats/_/name/laa/los-angeles-angels",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~t:3&section=stats",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/schedule/_/name/laa",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~t:3&section=scores",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/photos/_/name/laa",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "photos",
+      "desktop",
+      "team"
+     ],
+     "shortText": "photos",
+     "text": "photos"
+    },
+    {
+     "href": "https://www.vividseats.com/los-angeles-angels-of-anaheim-tickets--sports-mlb-baseball/performer/29?wsUser=717",
+     "isExternal": true,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "tickets",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Tickets",
+     "text": "Tickets"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/transactions/_/name/laa",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "transactions",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Transactions",
+     "text": "Transactions"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/injuries/_/name/laa",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "injuries",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Injuries",
+     "text": "Injuries"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/depth/_/name/laa",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "depthchart",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Depth Chart",
+     "text": "Depth Chart"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~t:3&section=depthchart",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "depthchart",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Depth Chart",
+     "text": "Depth Chart"
+    }
+   ],
+   "location": "Los Angeles",
+   "logos": [
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/mlb/500/laa.png",
+     "rel": [
+      "full",
+      "default"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/mlb/500-dark/laa.png",
+     "rel": [
+      "full",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/laa.png",
+     "rel": [
+      "full",
+      "scoreboard"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/mlb/500-dark/scoreboard/laa.png",
+     "rel": [
+      "full",
+      "scoreboard",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/053868c7-8bff-5edb-3cb6-f5490f33ef99/logos/primary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/053868c7-8bff-5edb-3cb6-f5490f33ef99/logos/primary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/053868c7-8bff-5edb-3cb6-f5490f33ef99/logos/primary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/053868c7-8bff-5edb-3cb6-f5490f33ef99/logos/primary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/053868c7-8bff-5edb-3cb6-f5490f33ef99/logos/primary_logo_black.png",
+     "rel": [
+      "full",
+      "primary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/053868c7-8bff-5edb-3cb6-f5490f33ef99/logos/primary_logo_white.png",
+     "rel": [
+      "full",
+      "primary_logo_white"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/053868c7-8bff-5edb-3cb6-f5490f33ef99/logos/secondary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/053868c7-8bff-5edb-3cb6-f5490f33ef99/logos/secondary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/053868c7-8bff-5edb-3cb6-f5490f33ef99/logos/secondary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/053868c7-8bff-5edb-3cb6-f5490f33ef99/logos/secondary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/053868c7-8bff-5edb-3cb6-f5490f33ef99/logos/secondary_logo_black.png",
+     "rel": [
+      "full",
+      "secondary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/053868c7-8bff-5edb-3cb6-f5490f33ef99/logos/secondary_logo_white.png",
+     "rel": [
+      "full",
+      "secondary_logo_white"
+     ],
+     "width": 4096
+    }
+   ],
+   "name": "Angels",
+   "ranks": {},
+   "record": {},
+   "shortDisplayName": "Angels",
+   "slug": "los-angeles-angels",
+   "uid": "s:1~l:10~t:3"
+  },
+  "los-angeles-dodgers": {
+   "abbreviation": "LAD",
+   "alternateColor": "ffffff",
+   "coaches": {},
+   "color": "005a9c",
+   "displayName": "Los Angeles Dodgers",
+   "franchise": {},
+   "groups": {},
+   "guid": "fb7cf413-5156-9fc2-abe0-2273b89f70db",
+   "id": "19",
+   "isActive": true,
+   "isAllStar": false,
+   "links": [
+    {
+     "href": "https://www.espn.com/mlb/team/_/name/lad/los-angeles-dodgers",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "clubhouse",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Clubhouse",
+     "text": "Clubhouse"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/roster/_/name/lad/los-angeles-dodgers",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~t:19&section=roster",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/stats/_/name/lad/los-angeles-dodgers",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~t:19&section=stats",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/schedule/_/name/lad",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~t:19&section=scores",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/photos/_/name/lad",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "photos",
+      "desktop",
+      "team"
+     ],
+     "shortText": "photos",
+     "text": "photos"
+    },
+    {
+     "href": "https://www.vividseats.com/los-angeles-dodgers-tickets--sports-mlb-baseball/performer/481?wsUser=717",
+     "isExternal": true,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "tickets",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Tickets",
+     "text": "Tickets"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/transactions/_/name/lad",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "transactions",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Transactions",
+     "text": "Transactions"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/injuries/_/name/lad",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "injuries",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Injuries",
+     "text": "Injuries"
+    },
+    {
+     "href": "https://www.espn.com/mlb/team/depth/_/name/lad",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "depthchart",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Depth Chart",
+     "text": "Depth Chart"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~t:19&section=depthchart",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "depthchart",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Depth Chart",
+     "text": "Depth Chart"
+    }
+   ],
+   "location": "Los Angeles",
+   "logos": [
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/mlb/500/lad.png",
+     "rel": [
+      "full",
+      "default"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/mlb/500-dark/lad.png",
+     "rel": [
+      "full",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/lad.png",
+     "rel": [
+      "full",
+      "scoreboard"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/mlb/500-dark/scoreboard/lad.png",
+     "rel": [
+      "full",
+      "scoreboard",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/primary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/primary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/primary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/primary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/primary_logo_black.png",
+     "rel": [
+      "full",
+      "primary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/primary_logo_white.png",
+     "rel": [
+      "full",
+      "primary_logo_white"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/secondary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/secondary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/secondary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/secondary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/secondary_logo_black.png",
+     "rel": [
+      "full",
+      "secondary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/fb7cf413-5156-9fc2-abe0-2273b89f70db/logos/secondary_logo_white.png",
+     "rel": [
+      "full",
+      "secondary_logo_white"
+     ],
+     "width": 4096
+    }
+   ],
+   "name": "Dodgers",
+   "ranks": {},
+   "record": {},
+   "shortDisplayName": "Dodgers",
+   "slug": "los-angeles-dodgers",
+   "uid": "s:1~l:10~t:19"
+  }
+ }
+}

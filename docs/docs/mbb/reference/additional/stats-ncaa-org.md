@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — stats.ncaa.org: BadLineupClump–enrich_shot"
-sidebar_label: "stats.ncaa.org: BadLineupClump–enrich_shot"
+title: "MBB — additional Python functions — stats.ncaa.org: BadLineupClump–enrich_lineup"
+sidebar_label: "stats.ncaa.org: BadLineupClump–enrich_lineup"
 sidebar_position: 3
-description: "MBB — additional Python functions — stats.ncaa.org: BadLineupClump–enrich_shot — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — stats.ncaa.org: BadLineupClump–enrich_lineup — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — stats.ncaa.org: BadLineupClump–enrich_shot
+# MBB — additional Python functions — stats.ncaa.org: BadLineupClump–enrich_lineup
 
 ### BadLineupClump {#BadLineupClump}
 
@@ -418,8 +418,10 @@ The response HTML, decoded as UTF-8.
 
 | Exception | Description |
 |---|---|
-| `ValueError` | *path* is a full URL for a host other than `stats.ncaa.org`. |
-| `RuntimeError` | No proxy is configured (the binding directive -- there is no direct-fetch mode), or every proxy in the pool failed / looked banned. |
+| `ValueError` | *path* is a full URL for a host other than `stats.ncaa.org`, or stats.ncaa.org answered HTTP 400 / 422 with no ban or challenge page (one request, no rotation). |
+| `RuntimeError` | No proxy is configured (the binding directive -- there is no direct-fetch mode). |
+| `NoDataError` | Stats.ncaa.org answered HTTP 404 (one request, no rotation). |
+| `AssetFetchError` | The fetch failed and the answer is unknown: every proxy in the pool looked banned, the pool was exhausted on transport errors or bm-verify challenges that did not clear, or the Terms gate could not be passed. |
 | `ImportError` | An optional dependency the selected transport needs is not installed -- patchright for the browser transport. Raised immediately rather than rotated on: no amount of proxy rotation installs a package, and reporting it as a pool exhaustion reads as a ban. Carries the install instruction. |
 
 #### NcaaFetcher.fetch_team_roster
@@ -1826,55 +1828,4 @@ from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import enrich_lineup
 
 enriched = enrich_lineup(lineup)
 enriched.team_stats.pts
-```
-
-### enrich_shot_events_with_pbp {#enrich_shot_events_with_pbp}
-
-`enrich_shot_events_with_pbp(sorted_shot_events: 'list[ShotEvent]', sorted_pbp_events: 'list[PlayByPlayEvent]', lineup_events: 'list[LineupEvent]', bad_lineup_events: 'list[LineupEvent]', box_lineup: 'LineupEvent') -> 'list[ShotEvent]'`
-
-Enrich each shot with its play-by-play event + on-floor lineup
-
-(`PlayByPlayUtils.enrich_shot_events_with_pbp`,
-`PlayByPlayUtils.scala:28-278`).
-
-Folds over the (time-sorted) shots, threading two iterators (play-by-play
-and lineup) and a small amount of carry-over state. For each shot it:
-
-1. gathers the play-by-play events at the shot's time (`find_pbp_clump`),
-   keeping only the ones on the shot's side (team if `is_off`);
-2. picks the matching shot event via a strict -> loose -> first-of-N
-   cascade (`right_kind_of_shot` then `matching_player`);
-3. locates the on-floor lineup (`find_lineup`), falling back to
-   `bad_lineup_events` if the good lineups yield nothing (a bad-lineup
-   match is used for `players` but its id is suppressed);
-4. attributes an assist (a same-time non-self assist event) and transition
-   flag (`"fastbreak"` in the event string), and fills in `lineup_id` /
-   `players` / `pts` / `value` / `ast_by` / `is_ast` / `is_trans`
-   -- exactly the fields Task 5e.5's parser left as placeholders.
-
-Shots with no matching play-by-play clump, no matching shot event, or no
-matching lineup are dropped (the Scala logs a `WARN` and discards; the
-logging is dropped per the module note, the discard preserved).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `sorted_shot_events` | `list[ShotEvent]` |  | Shots in ascending game-clock order. |
-| `sorted_pbp_events` | `list[PlayByPlayEvent]` |  | The full play-by-play event stream, ascending. |
-| `lineup_events` | `list[LineupEvent]` |  | The good (validation-passing) stint events. |
-| `bad_lineup_events` | `list[LineupEvent]` |  | The validation-flagged stint events, used only as a last resort (their ids are never attributed). |
-| `box_lineup` | `LineupEvent` |  | The roster lineup event (drives name resolution). |
-
-**Returns**
-
-The enriched, still-time-sorted list of shots (a subset of the input -- unmatchable shots are dropped).
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_pbp_glue import enrich_shot_events_with_pbp
-enriched = enrich_shot_events_with_pbp(
-    shots, pbp, good_lineups, bad_lineups, box_lineup
-)
 ```

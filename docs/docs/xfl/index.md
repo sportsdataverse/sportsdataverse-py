@@ -3,7 +3,7 @@ title: XFL
 sidebar_label: XFL
 description: "sdv-py XFL: endpoint references, dataset loaders and parsers for XFL in the SportsDataverse Python package."
 ---
-# XFL (`sportsdataverse.xfl`)
+# XFL (`sportsdataverse.football.xfl`)
 
 ## Data sources
 

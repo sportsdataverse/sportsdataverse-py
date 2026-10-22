@@ -118,6 +118,7 @@ GET /stats/leaguedashlineups
 | `NoDataError` | The host answered 404 -- the requested resource does not exist. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+| `ImportError` | `curl_cffi` is not installed -- stats.nba.com / stats.wnba.com block plain `requests`, so the transport needs it (`pip install curl_cffi` or `sportsdataverse[all]`). |
 
 ### Example {#wnba_stats_leaguedashlineups-example}
 
@@ -208,6 +209,7 @@ GET /stats/leaguedashplayerbiostats
 | `NoDataError` | The host answered 404 -- the requested resource does not exist. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+| `ImportError` | `curl_cffi` is not installed -- stats.nba.com / stats.wnba.com block plain `requests`, so the transport needs it (`pip install curl_cffi` or `sportsdataverse[all]`). |
 
 ### Example {#wnba_stats_leaguedashplayerbiostats-example}
 
@@ -350,6 +352,7 @@ GET /stats/leaguedashplayerclutch
 | `NoDataError` | The host answered 404 -- the requested resource does not exist. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+| `ImportError` | `curl_cffi` is not installed -- stats.nba.com / stats.wnba.com block plain `requests`, so the transport needs it (`pip install curl_cffi` or `sportsdataverse[all]`). |
 
 ### Example {#wnba_stats_leaguedashplayerclutch-example}
 
@@ -455,6 +458,7 @@ GET /stats/leaguedashplayershotlocations
 | `NoDataError` | The host answered 404 -- the requested resource does not exist. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+| `ImportError` | `curl_cffi` is not installed -- stats.nba.com / stats.wnba.com block plain `requests`, so the transport needs it (`pip install curl_cffi` or `sportsdataverse[all]`). |
 
 ### Example {#wnba_stats_leaguedashplayershotlocations-example}
 
@@ -594,6 +598,7 @@ GET /stats/leaguedashplayerstats
 | `NoDataError` | The host answered 404 -- the requested resource does not exist. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+| `ImportError` | `curl_cffi` is not installed -- stats.nba.com / stats.wnba.com block plain `requests`, so the transport needs it (`pip install curl_cffi` or `sportsdataverse[all]`). |
 
 ### Example {#wnba_stats_leaguedashplayerstats-example}
 
@@ -675,6 +680,7 @@ GET /stats/leaguedashptdefend
 | `NoDataError` | The host answered 404 -- the requested resource does not exist. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+| `ImportError` | `curl_cffi` is not installed -- stats.nba.com / stats.wnba.com block plain `requests`, so the transport needs it (`pip install curl_cffi` or `sportsdataverse[all]`). |
 
 ### Example {#wnba_stats_leaguedashptdefend-example}
 
@@ -797,6 +803,7 @@ GET /stats/leaguedashteamclutch
 | `NoDataError` | The host answered 404 -- the requested resource does not exist. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+| `ImportError` | `curl_cffi` is not installed -- stats.nba.com / stats.wnba.com block plain `requests`, so the transport needs it (`pip install curl_cffi` or `sportsdataverse[all]`). |
 
 ### Example {#wnba_stats_leaguedashteamclutch-example}
 

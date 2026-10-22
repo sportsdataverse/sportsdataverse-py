@@ -67,6 +67,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _data_only
 from sportsdataverse.hockey.shl.shl_schemas import SCHEMAS
 
 __all__ = [
@@ -241,6 +242,7 @@ def _body(raw: Any) -> Any:
 # --------------------------------------------------------------------------- generic
 
 
+@_data_only
 def parse_shl(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """Parse any SHL body by the generic row rule (see the module docstring).
 
@@ -280,6 +282,7 @@ def parse_shl(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Seq
     return _finish(_frame(flat), columns, return_as_pandas)
 
 
+@_data_only
 def parse_shl_page(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """Parse a page object (a team, a game header, an athlete profile) into ONE row.
 

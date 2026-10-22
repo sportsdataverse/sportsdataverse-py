@@ -5,9 +5,9 @@ both Fox adapters share; this module is the CFB half: ESPN's college play-type v
 id resolver, and the dispatch registration for ``source="fox"``.
 
 This is a **rewrite**, not a wrapper around the shipped :mod:`sportsdataverse.cfb.cfb_pbp_fox`.
-That module reads Fox's absolute field coordinates as yards-to-goal and takes possession from
-``play.image.altText`` (the team *credited* with the play), which mirrors the field on every
-away-offense play: 50.0% / 53.7% of spots right and ``EP_start`` r 0.16 / 0.53 on the two 2026
+That module read Fox's absolute field coordinates as yards-to-goal (it now reads them through
+:mod:`sportsdataverse.football.fox_common`) and takes possession from ``play.image.altText`` (the
+team *credited* with the play); the coordinate reading mirrored the field on every away-offense play: 50.0% / 53.7% of spots right and ``EP_start`` r 0.16 / 0.53 on the two 2026
 games measured in ``2026-09-16-cfb-alt-sources/B_fox.md`` §7. Nothing here imports it.
 
 Fox is the **last** CFB source in ``...sources.dispatch.SOURCE_ORDER``: its play-by-play covers
@@ -26,6 +26,7 @@ from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _id_text
 from sportsdataverse.cfb.yahoo_pbp.to_espn_summary import ESPN_PLAY_TYPES as _YAHOO_CFB_PLAY_TYPES
 from sportsdataverse.football.fox_common import (
     _fox_event_data,
@@ -144,8 +145,8 @@ def _fox_adapter(league: str, espn_id: int, ctx: Any) -> Any:
 
     Raises:
         SourceUnavailable: no Fox event id could be resolved without inventing one; the fetch
-            failed; the payload carries no ``header`` (the shared ``_get`` returns ``{}`` on
-            any failure); the payload carries no ``pbp``; the id-map row states no ESPN team
+            failed; the payload carries no ``header`` (an empty or headerless injected payload, or
+            a bad id); the payload carries no ``pbp``; the id-map row states no ESPN team
             ids; or the adapted drive chart carries no plays yet.
     """
     from sportsdataverse.football.sources.dispatch import AdaptedGame, SourceUnavailable
@@ -165,16 +166,17 @@ def _fox_adapter(league: str, espn_id: int, ctx: Any) -> Any:
             )
         try:
             payload = _fox_event_data("cfb", fox_event_id)
-        except Exception as exc:  # noqa: BLE001 -- network / JSON -> the next source
+        except Exception as exc:  # network / JSON -> the next source
             raise SourceUnavailable(f"fox event data fetch failed: {type(exc).__name__}: {exc}") from exc
     if not isinstance(payload, Mapping) or not payload.get("header"):
         raise SourceUnavailable(f"cfb {espn_id}: fox returned no event payload (request failed or bad id)")
     if not _has_pbp(payload):
         raise SourceUnavailable(
             f"cfb {espn_id}: fox event {fox_event_id or payload.get('header', {}).get('id')} carries no "
-            "play-by-play (HTTP 200 with no pbp key: FCS-hosted, or before Fox's 2022 play floor)"
+            "play-by-play (HTTP 200 with no plays: FCS-hosted, or before Fox's 2022 play floor)"
         )
-    if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):
+    # ids through _id_text first: a NaN id is truthy and pandas.NA raises on truthiness
+    if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):
         raise SourceUnavailable(f"cfb {espn_id}: id-map row carries no ESPN team ids")
 
     odds = ctx.odds_override or _odds_override_from_row(ctx.idmap_row)

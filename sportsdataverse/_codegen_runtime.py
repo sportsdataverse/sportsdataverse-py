@@ -6,17 +6,27 @@ the ~1,000 generated functions share one tested HTTP path instead of inlining it
 
 from __future__ import annotations
 
+import functools
+import inspect
+import io
 import json
 import logging
+import numbers
 import time
 from contextlib import contextmanager
-from typing import Any, Callable, Iterator, List, Optional
-from urllib.parse import urlsplit
+from typing import Any, Callable, Iterator, List, Optional, TypeVar, cast
+from urllib.parse import quote, urlsplit
 
 import polars as pl
 
 from sportsdataverse.dl_utils import download
-from sportsdataverse.errors import AssetFetchError, NoDataError, _redact_secrets
+from sportsdataverse.errors import (
+    AssetFetchError,
+    NoDataError,
+    _error_envelope_code,
+    _redact_secrets,
+    _string_route,
+)
 from sportsdataverse.errors import SeasonNotFoundError  # noqa: F401  (re-export for generated loaders)
 
 logger = logging.getLogger(__name__)
@@ -70,6 +80,21 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
     return df
 
 
+#: A leading zero before a digit: the text a numeric cast would change ("07", "00", "000000").
+_ZERO_PADDED = r"^\s*[+-]?0\d"
+
+
+def _zero_padded(text: pl.Series) -> bool:
+    """True when a String column holds digits a numeric cast would lose: ``"00"``, ``"007"``, ``"000000"``.
+
+    The text-to-number casts in the HTML / CSV parsers call a cast lossless when it
+    invents no nulls; a leading zero before a digit is the case that check misses
+    (jersey ``"00"`` and ``"0"`` both become 0, colour ``"000000"`` becomes 0). Such a
+    column stays text (A-M18, B-M18, B-M19).
+    """
+    return bool(text.str.contains(_ZERO_PADDED).any())
+
+
 def _where(url: str) -> str:
     """``host/path`` of ``url``: never the query string, which can carry an API key."""
     parts = urlsplit(url)
@@ -106,11 +131,12 @@ def _check_status(url: str, status: Any, text: str = "", *, label: Optional[str]
 def _json_text(url: str, status: Any, text: str) -> Any:
     """Decode a ``(status, text)`` transport answer under the error vocabulary.
 
-    2xx with a JSON body -> the body; 204 / 205 (no content by definition) -> ``{}``.
+    2xx with a JSON object or array -> the body; 204 / 205 (no content by definition) -> ``{}``.
     A 200 with an EMPTY body is not "nothing": barttorvik's block, pro.nfl.com's
     rejected params and stats-host throttling all answer that way, so it raises
     :class:`~sportsdataverse.errors.AssetFetchError`, as does any non-JSON 2xx body.
-    A non-2xx raises per :func:`_check_status`.
+    A non-2xx raises per :func:`_check_status`; so does a 2xx carrying an error
+    envelope or a bare JSON scalar (see :func:`_json_data`).
     """
     _check_status(url, status, text)
     if status in (204, 205):
@@ -118,10 +144,36 @@ def _json_text(url: str, status: Any, text: str) -> Any:
     if not (text or "").strip():
         raise AssetFetchError(f"{_where(url)} answered HTTP {status} with an empty body")
     try:
-        return json.loads(text)
+        body = json.loads(text)
     except ValueError:  # its ``.doc`` is the whole body: never chain it as __context__
         pass
+    else:
+        return _json_data(url, status, body)
     raise AssetFetchError(f"{_where(url)} answered HTTP {status} with a non-JSON body: {_excerpt(text)}")
+
+
+def _json_data(url: str, status: Any, body: Any) -> Any:
+    """A decoded 2xx JSON body, refused when it is not data.
+
+    * A JSON ``null``, number, string or boolean is no payload any parser reads, so it
+      raises :class:`~sportsdataverse.errors.AssetFetchError` (B-GB-16): the fetch failed.
+      The one exception is a string from a route that answers one by design
+      (:data:`~sportsdataverse.errors._STRING_ROUTES`, OpenLigaDB's last-change timestamp).
+    * ESPN's ``{"code": 4xx/5xx, "message": ...}`` error envelope is classified by its
+      code like an HTTP status (A-M13): 404 -> ``NoDataError``, 400 / 422 ->
+      ``ValueError``, anything else -> ``AssetFetchError``.
+    """
+    if isinstance(body, str) and _string_route(url):
+        return body
+    if not isinstance(body, (dict, list)):
+        raise AssetFetchError(
+            f"{_where(url)} answered HTTP {status} with a JSON {type(body).__name__}, not an object or array: "
+            f"{_excerpt(json.dumps(body))}"
+        )
+    code = _error_envelope_code(body)
+    if code is not None:
+        _check_status(url, code, str(body["message"]), label=f"{_where(url)} (a 2xx error envelope)")
+    return body
 
 
 @contextmanager
@@ -147,6 +199,84 @@ def _transport_errors(url: str) -> Iterator[None]:
         raise AssetFetchError(f"{_where(url)}: fetch failed after retries: {type(exc).__name__}") from exc
 
 
+class _NoContent(NoDataError):
+    """A 204 / 205 met below a hand-written runtime's ``_get`` (see :func:`_no_content_is_empty`).
+
+    A ``NoDataError``, so on a path that is not a getter (a public season-id resolver sharing the
+    runtime's fetch) it still means what a 204 means: the fetch succeeded and there is nothing here.
+    """
+
+
+def _check_no_content(status: Any) -> None:
+    """Raise :class:`_NoContent` for a 204 / 205: no content by definition, so no body check may read it.
+
+    The shared chokepoints answer such a status with ``{}`` (:func:`_json_text`). A runtime that reads
+    its own body (an envelope, a row count, an HTML page) calls this right after the transport, and its
+    ``_get`` carries :func:`_no_content_is_empty`, so the 204 reaches the caller as the same ``{}``
+    instead of a failed envelope or row check (EX-SYNC-a).
+    """
+    if status in (204, 205):
+        raise _NoContent(f"answered HTTP {status}: no content")
+
+
+_Fn = TypeVar("_Fn", bound=Callable[..., Any])
+
+
+def _no_content_is_empty(get: _Fn) -> _Fn:
+    """Wrap a data getter (a runtime's ``_get``) so a 204 / 205 anywhere below it returns ``{}``.
+
+    ``_NoContent`` is private: every public function that can meet one carries this decorator or
+    :func:`_no_content_is_unknown` (tests/codegen/test_runtime_errors.py checks it).
+    """
+
+    @functools.wraps(get)
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        try:
+            return get(*args, **kwargs)
+        except _NoContent:
+            return {}
+
+    return cast(_Fn, wrapper)
+
+
+@contextmanager
+def _no_content_unknown(where: str) -> Iterator[None]:
+    """A lookup or bootstrap (a token page, a session page, a season list, a snapshot pointer) that answers
+    204 / 205 leaves nothing to read, so the answer is unknown: :class:`AssetFetchError`, never the data
+    request's ``{}`` (R4.1b-d-1)."""
+    try:
+        yield
+    except _NoContent as exc:
+        raise AssetFetchError(f"{where}: the lookup {exc}, so the answer is unknown") from None
+
+
+def _no_content_is_unknown(fn: _Fn) -> _Fn:
+    """:func:`_no_content_unknown` around a whole lookup function (a public season resolver, a token reader)."""
+
+    @functools.wraps(fn)
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        with _no_content_unknown(getattr(fn, "__qualname__", "a lookup")):
+            return fn(*args, **kwargs)
+
+    return cast(_Fn, wrapper)
+
+
+def _no_content_transport(transport: Optional[Callable[..., Any]] = None) -> Callable[..., Any]:
+    """A ``transport`` for :func:`_download_json` that raises :class:`_NoContent` on a 204 / 205.
+
+    For a runtime whose ``_get`` carries :func:`_no_content_is_empty`. ``transport`` defaults to this
+    module's ``download``, looked up at call time, so a test that patches ``_codegen_runtime.download``
+    (or passes its own module's ``download``) still intercepts the request.
+    """
+
+    def call(**kwargs: Any) -> Any:
+        resp = (transport or download)(**kwargs)
+        _check_no_content(getattr(resp, "status_code", None))
+        return resp
+
+    return call
+
+
 def _check_response(resp: Any, url: str) -> None:
     """:func:`_check_status` for a :func:`~sportsdataverse.dl_utils.download` response.
 
@@ -161,24 +291,34 @@ def _check_response(resp: Any, url: str) -> None:
         _check_status(url, status, getattr(resp, "text", "") or "")
 
 
-def _text_body(resp: Any, url: str) -> str:
-    """The checked body of a text (CSV / HTML) response; an empty 200 raises like :func:`_json_text`."""
+def _text_body(resp: Any, url: str, *, html: bool = True) -> str:
+    """The checked body of a text (CSV / HTML) response; an empty 200 raises like :func:`_json_text`.
+
+    ``html=False`` is for a getter that never serves a page (a CSV or JSON host): a 2xx
+    body that opens with ``<`` is then a challenge or error page, not data, and raises
+    :class:`~sportsdataverse.errors.AssetFetchError` (A-L63). No CSV starts with ``<``.
+    """
     _check_response(resp, url)
     text = getattr(resp, "text", "") or ""
     status = getattr(resp, "status_code", 200)
     if not text.strip() and status not in (204, 205):
         raise AssetFetchError(f"{_where(url)} answered HTTP {status} with an empty body")
+    if not html and text.lstrip("\ufeff \t\r\n").startswith("<"):
+        raise AssetFetchError(f"{_where(url)} answered HTTP {status} with a page, not data: {_excerpt(text)}")
     return text
 
 
 def _json_body(resp: Any, url: str) -> Any:
     """Decode a :func:`~sportsdataverse.dl_utils.download` response like :func:`_json_text`."""
     _check_response(resp, url)
+    status = getattr(resp, "status_code", 200)
     try:
-        return resp.json()
-    except ValueError:
+        body = resp.json()
+    except ValueError:  # decoded again below, outside this handler, so the error never chains it
         pass
-    return _json_text(url, getattr(resp, "status_code", 200), getattr(resp, "text", "") or "")
+    else:
+        return _json_data(url, status, body)
+    return _json_text(url, status, getattr(resp, "text", "") or "")
 
 
 #: Re-fetches of a 2xx JSON body that arrived cut off (see :func:`_download_json`).
@@ -187,10 +327,19 @@ _TRUNCATED_JSON_DELAY = 1.0
 
 
 def _truncated_json(resp: Any) -> bool:
-    """A 2xx body that opens like JSON (``{`` / ``[``); called only once it failed to decode."""
+    """A 2xx body that opens like JSON (``{`` / ``[``) but does not decode.
+
+    A body that decodes was refused for what it says (an error envelope), not cut off.
+    """
     status = getattr(resp, "status_code", 200)
     text = (getattr(resp, "text", "") or "").lstrip()
-    return isinstance(status, int) and 200 <= status < 300 and text[:1] in ("{", "[")
+    if not (isinstance(status, int) and 200 <= status < 300 and text[:1] in ("{", "[")):
+        return False
+    try:
+        json.loads(text)
+    except ValueError:
+        return True
+    return False
 
 
 def _download_json(transport: Callable[..., Any], url: str, **kwargs: Any) -> Any:
@@ -221,11 +370,22 @@ def _download_json(transport: Callable[..., Any], url: str, **kwargs: Any) -> An
     raise AssertionError("unreachable")  # pragma: no cover
 
 
-def _get(url: str, params: Optional[dict] = None, data: Any = None, json: Any = None, **kwargs) -> Any:
+def _get(
+    url: str,
+    params: Optional[dict] = None,
+    data: Any = None,
+    json: Any = None,
+    *,
+    transport: Optional[Callable[..., Any]] = None,
+    **kwargs,
+) -> Any:
     """GET ``url`` as JSON, or POST it when a ``data`` (form) or ``json`` body is given.
 
     Strips ``None`` params, and the ``None`` fields of a dict body, so a body endpoint
     (``body: form|json``) can run on this shared getter: ``params`` stays the query string.
+
+    ``transport`` replaces :func:`~sportsdataverse.dl_utils.download` (a runtime passes
+    :func:`_no_content_transport` to see a 204 / 205 instead of its ``{}``).
 
     Raises:
         NoDataError: the host answered 404 (or ESPN 200 with ``code: 404``).
@@ -237,35 +397,174 @@ def _get(url: str, params: Optional[dict] = None, data: Any = None, json: Any = 
     for kind, body in (("data", data), ("json_body", json)):  # download names its JSON body json_body
         if body is not None:
             kwargs[kind] = {k: v for k, v in body.items() if v is not None} if isinstance(body, dict) else body
-    return _download_json(download, url, params=clean, **kwargs)
+    return _download_json(transport or download, url, params=clean, **kwargs)
+
+
+def _integral(value: Any) -> int | None:
+    """``value`` as an ``int`` when it is a whole number (an int, a numpy integer, ``2024.0``), else ``None``.
+
+    A bool is not a number here: ``True`` as a season or an id is a caller's mistake.
+    """
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, numbers.Integral):
+        return int(value)
+    if isinstance(value, numbers.Real) and float(value).is_integer():
+        return int(float(value))
+    return None
+
+
+def _is_many(value: Any) -> bool:
+    """An iterable of values (list, tuple, set, range, numpy array, polars / pandas Series), not one value."""
+    return not isinstance(value, (str, bytes)) and hasattr(value, "__iter__")
+
+
+def _wire_text(value: Any) -> str:
+    """One query / path value as the text the host receives (A-M16).
+
+    A whole number goes through ``int``, so ``2024.0`` and ``np.int64(2024)`` are
+    ``"2024"``, never ``"2024.0"``; a bool is the lowercase ``"true"``/``"false"``.
+
+    Raises:
+        ValueError: ``value`` is itself a collection.
+    """
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    whole = _integral(value)
+    if whole is not None:
+        return str(whole)
+    if _is_many(value):
+        raise ValueError(f"expected a single value, got {type(value).__name__} {value!r}")
+    return str(value)
+
+
+def _id_text(value: Any) -> str:
+    """An id read from a hand-built row as the text ESPN uses (B-GB-22): :func:`_wire_text`, or ``""`` when missing.
+
+    A float id goes through ``int`` (``401671775.0`` -> ``"401671775"``; ``str`` gave
+    ``"401671775.0"``, which matches no ESPN id). ``None``, NaN and ``pandas.NA`` -- how a
+    pandas-built id-map row carries a missing id -- are ``""``, never ``"None"`` / ``"nan"``.
+    """
+    try:
+        if value is None or value != value:  # NaN is the one value unequal to itself
+            return ""
+    except TypeError:  # pandas.NA: its comparison is NA, whose truth value raises
+        return ""
+    return _wire_text(value)
 
 
 def _csv(values: Any) -> Optional[str]:
-    """Join an iterable into a comma-separated string; pass scalar / None through."""
+    """Join an iterable into a comma-separated string; pass scalar / None through.
+
+    Any iterable joins (a numpy array, a polars Series and a range included); a set
+    joins sorted, so the request does not depend on hash order. Each item is
+    :func:`_wire_text`.
+    """
     if values is None:
         return None
-    if isinstance(values, (list, tuple, set)):
-        return ",".join(str(v) for v in values)
-    return str(values)
+    if not _is_many(values):
+        return _wire_text(values)
+    items = sorted(values) if isinstance(values, (set, frozenset)) else values
+    return ",".join(_wire_text(v) for v in items)
 
 
-def bool_str(value: Any) -> Optional[str]:
+def _path_seg(value: Any) -> str:
+    """A path parameter as one URL segment: :func:`_wire_text`, percent-quoted (A-N2).
+
+    ``team_id="13/roster"`` is the segment ``13%2Froster``; unquoted, it changed the route.
+    """
+    return quote(_wire_text(value), safe="")
+
+
+#: Keyword arguments a generated ESPN wrapper forwards through ``_get`` to ``download``. A body
+#: (``data`` / ``json_body``) is not one: it would silently turn the wrapper's GET into an uncached
+#: POST.
+_GET_KWARGS = frozenset(inspect.signature(download).parameters) - {"url", "params", "data", "json_body"}
+
+
+def _check_kwargs(fn: str, kwargs: dict) -> None:
+    """Refuse a keyword ``fn`` cannot use before any request (A-N3).
+
+    A misspelled query kwarg (``date=`` for ``dates=``) used to fail inside ``download``
+    as ``download() got an unexpected keyword argument``, naming the wrong function.
+
+    Raises:
+        TypeError: ``kwargs`` holds a name ``download`` does not take.
+    """
+    bad = sorted(set(kwargs) - _GET_KWARGS)
+    if bad:
+        names = ", ".join(repr(k) for k in bad)
+        raise TypeError(
+            f"{fn}() got an unexpected keyword argument {names}; "
+            f"besides its own parameters it accepts {', '.join(sorted(_GET_KWARGS))} and params"
+        )
+
+
+_TRUE_TEXT = frozenset({"true", "1"})
+_FALSE_TEXT = frozenset({"false", "0"})
+
+
+def bool_str(value: Any, name: str = "value") -> Optional[str]:
     """Coerce a truthy/falsey value to the lowercase ``"true"``/``"false"`` ESPN expects.
 
-    Passes ``None`` through unchanged so ``_get`` still strips it.
+    Passes ``None`` through unchanged so ``_get`` still strips it. A string is parsed,
+    not tested for truth: ``"false"`` and ``"0"`` are ``"false"`` (A-M17).
+
+    Args:
+        value: a bool (or anything with a truth value), one of ``"true"`` / ``"false"`` /
+            ``"1"`` / ``"0"`` in any case, or ``None``.
+        name: the parameter ``value`` came from; the ``ValueError`` names it.
+
+    Returns:
+        ``"true"`` / ``"false"``, or ``None`` when ``value`` is ``None``.
+
+    Raises:
+        ValueError: ``value`` is a string other than true / false / 1 / 0 (any case);
+            the message names the parameter ``name``.
+
+    Example:
+        Basic use::
+
+            from sportsdataverse._codegen_runtime import bool_str
+
+            bool_str("False", name="active")
+            # 'false'
     """
     if value is None:
         return None
+    if isinstance(value, str):
+        text = value.strip().lower()
+        if text in _TRUE_TEXT:
+            return "true"
+        if text in _FALSE_TEXT:
+            return "false"
+        raise ValueError(f"{name} must be a bool or one of 'true'/'false'/'1'/'0'; got {value!r}")
     return "true" if value else "false"
 
 
+def _season(value: Any) -> int:
+    """One season as an ``int`` year (see :func:`_as_season_list`)."""
+    whole = _integral(value)
+    if whole is not None:
+        return whole
+    if isinstance(value, str):
+        try:
+            return int(value)
+        except ValueError:
+            pass
+    raise ValueError(f"seasons must be a year or an iterable of years; got {value!r}")
+
+
 def _as_season_list(seasons: Any) -> List[int]:
-    """Normalize an int / iterable of seasons to a list of ints."""
-    if isinstance(seasons, (int,)) and not isinstance(seasons, bool):
-        return [seasons]
-    if isinstance(seasons, str):
-        return [int(seasons)]
-    return [int(s) for s in seasons]
+    """Normalize an int / iterable of seasons to a list of ints (A-M6).
+
+    A numpy integer, ``2024.0``, a numpy array and a polars Series all work; a
+    fractional year, a bool, ``None`` and non-numeric text raise ``ValueError``
+    before any request (``2024.5`` used to truncate to ``2024``).
+    """
+    if _is_many(seasons):
+        return [_season(s) for s in seasons]
+    return [_season(seasons)]
 
 
 def cli_warn(msg: str) -> None:
@@ -278,27 +577,37 @@ def cli_warn(msg: str) -> None:
 def _fetch_release_parquet(url: str) -> pl.DataFrame:
     """Read a release parquet, RAISING when the asset is missing.
 
-    The read stays a direct Arrow fetch, and the bytes deliberately do NOT go
-    through the HTTP gateway. Arrow overlaps the fetch with decoding and range-reads
-    column chunks; buffering the asset first serializes the two and holds an extra copy
-    of the compressed file. Measured on the 59 MB ``play_by_play_2025.parquet`` (best of
-    3, one read per process, identical imports): direct 1010 MB / 6.0s versus buffered
-    1081 MB / 10.5s -- +7% peak RSS and +75% wall. Routing through a temp file or a
+    The read stays a direct read, and the bytes deliberately do NOT go through the
+    HTTP gateway: :func:`_release_bytes` reads the whole body with urllib, as polars'
+    own URL read does, and pyarrow parses it from memory, while a trip through
+    ``download`` holds an extra ``requests`` copy of the compressed file. Measured on the
+    59 MB ``play_by_play_2025.parquet`` (best of 3, one read per process, identical
+    imports): direct 1010 MB / 6.0s versus buffered 1081 MB / 10.5s -- +7% peak RSS and
+    +75% wall. Routing through a temp file or a
     zero-copy ``pa.py_buffer`` was no better. See issue #397.
 
     What DOES go through the gateway is the *classification* of a failure. When the
     direct read fails we ask ``download`` what the server actually said instead of
-    pattern-matching the reader's exception message:
+    pattern-matching the reader's exception message (:func:`_classify_release_failure`):
 
     * a 404 raises :class:`~sportsdataverse.errors.NoDataError` -- the asset is
       genuinely absent;
-    * any other non-200 -- notably a 403 or a rate limit that outlived the retry
-      budget -- raises :class:`~sportsdataverse.errors.AssetFetchError`, so a fetch
-      that FAILED is never confused with an asset that is ABSENT;
-    * a reachable, readable asset means the failure was a genuine parse/schema error,
-      which is re-raised untouched.
+    * any other non-2xx -- notably a 403 or a rate limit that outlived the retry
+      budget -- and a refused or reset connection raise
+      :class:`~sportsdataverse.errors.AssetFetchError`, so a fetch that FAILED is never
+      confused with an asset that is ABSENT;
+    * a reachable asset is read once more, so a failure in transit (B-L74) recovers; a
+      second transport failure is classified the same way (404 -> ``NoDataError``,
+      anything else -> ``AssetFetchError``).
 
-    The extra round trip happens only on the failure path and costs ~0.1s.
+    Only a transport failure (``OSError``, ``http.client.HTTPException``) is classified.
+    A parse or schema error from a body that arrived whole is the asset's own and is
+    re-raised at once, without a second fetch. The classification is a one-byte ranged
+    GET, so it never re-downloads the asset (A-N10).
+
+    The read honours ``SDV_PY_HTTP_TIMEOUT`` (default 30 s per socket operation), like the
+    rest of the HTTP layer, so a server that accepts the connection and never answers is a
+    failed fetch, not a hang.
 
     R-producer assets can carry an ``arrow.r.vctrs`` field-extension whose metadata is
     raw RDS bytes (not UTF-8) -- e.g. a ``glue`` character column. polars' arrow-FFI
@@ -310,23 +619,79 @@ def _fetch_release_parquet(url: str) -> pl.DataFrame:
     Use :func:`_read_release_parquet` instead when a missing season should be skipped
     rather than raised.
     """
-    from sportsdataverse.errors import AssetFetchError
+    import http.client
+    import urllib.error
 
+    # The fetch and the parse are separate steps: pyarrow reports a corrupt footer as a
+    # plain OSError ("Couldn't deserialize thrift"), which must not read as a failed fetch.
     try:
-        return pl.read_parquet(url, use_pyarrow=True)
-    except Exception as e:  # noqa: BLE001 -- classified below, by the server not the message
+        data = _release_bytes(url)
+    except (OSError, http.client.HTTPException) as e:  # a transport failure: classified below
         original: BaseException = e
-    except BaseException as e:  # pyo3 PanicException does not subclass Exception
+    else:
+        return _parse_release(url, data)  # a parse error is the asset's own: raised at once
+
+    _classify_release_failure(url, original)
+    # Reachable (B-L74): a read that failed in transit succeeds now. A second transport
+    # failure is classified like the first.
+    try:
+        data = _release_bytes(url)  # the second read, after the probe
+    except urllib.error.HTTPError as e:
+        e.close()  # its unread body holds the socket open
+        if e.code == 404:
+            raise NoDataError(f"{_where(url)}: release asset not found (HTTP 404)") from e
+        raise AssetFetchError(f"release asset fetch failed with HTTP {e.code}: {url}") from e
+    except (OSError, http.client.HTTPException) as e:
+        raise AssetFetchError(f"{_where(url)}: release asset read failed: {type(e).__name__}") from e
+    return _parse_release(url, data)  # the asset, read after the probe
+
+
+def _release_bytes(url: str) -> io.BytesIO:
+    """The asset's whole body as a buffer, read the way polars reads a URL (urllib, no gateway; #397).
+
+    Returned as ``io.BytesIO(f.read())`` and handed on as that one object (R898-14): the bytes
+    have no other reference, so polars' ``getbuffer()`` shares them instead of copying the asset.
+    """
+    import urllib.request
+
+    from sportsdataverse.dl_utils import _DEFAULT_TIMEOUT, _ENV_TIMEOUT, _env_int
+
+    with urllib.request.urlopen(url, timeout=_env_int(_ENV_TIMEOUT, _DEFAULT_TIMEOUT)) as f:
+        return io.BytesIO(f.read())
+
+
+def _parse_release(url: str, data: io.BytesIO) -> pl.DataFrame:
+    """Parse a release buffer with pyarrow; on pyo3's metadata panic, re-read with the metadata stripped."""
+    try:
+        return pl.read_parquet(data, use_pyarrow=True)
+    except BaseException as e:  # pyo3's PanicException does not subclass Exception
         if type(e).__name__ != "PanicException":
-            raise  # never swallow KeyboardInterrupt / SystemExit into an HTTP call
+            raise  # a parse error is the asset's own; never turn Ctrl-C / SystemExit into an HTTP call
         return _read_parquet_stripped_metadata(url)
 
-    resp = download(url)  # raises NoDataError on a 404 -- the "absent" signal
 
+#: One byte answers "is the asset there?" without re-downloading a 20-59 MB file (A-N10).
+_PROBE_HEADERS = {"Range": "bytes=0-0"}
+
+
+def _classify_release_failure(url: str, original: BaseException) -> None:
+    """Raise what the server says about an asset Arrow failed to read; return when it is reachable.
+
+    A 404 raises :class:`~sportsdataverse.errors.NoDataError` (from ``download``); a refused
+    or reset connection after the retries (A-M9) and any other non-2xx raise
+    :class:`~sportsdataverse.errors.AssetFetchError` chained to ``original``. The release
+    CDN answers the ranged GET 206, a host that ignores ``Range`` 200, and a zero-byte
+    asset 416: all three are reachable, so the caller reads again.
+    """
+    import urllib.error
+
+    if isinstance(original, urllib.error.HTTPError):
+        original.close()  # the first read's error response holds its socket open (R898-13)
+    with _transport_errors(url):
+        resp = download(url, headers=_PROBE_HEADERS)
     status = getattr(resp, "status_code", None)
-    if status is not None and status != 200:
+    if isinstance(status, int) and not (200 <= status < 300 or status == 416):
         raise AssetFetchError(f"release asset fetch failed with HTTP {status}: {url}") from original
-    raise original
 
 
 def _read_release_parquet(url: str) -> Optional[pl.DataFrame]:
@@ -361,9 +726,8 @@ def _read_parquet_stripped_metadata(url: str) -> pl.DataFrame:
     import pyarrow as pa
     import pyarrow.parquet as pq
 
-    from sportsdataverse.errors import AssetFetchError
-
-    resp = download(url)
+    with _transport_errors(url):  # A-M9: a dead connection is a failed fetch, not a requests error
+        resp = download(url)
     status = getattr(resp, "status_code", None)
     if status is not None and status != 200:
         raise AssetFetchError(f"release asset fetch failed with HTTP {status}: {url}")
@@ -372,6 +736,26 @@ def _read_parquet_stripped_metadata(url: str) -> pl.DataFrame:
     out = pl.from_arrow(tbl.cast(plain).replace_schema_metadata(None))
     assert isinstance(out, pl.DataFrame)
     return out
+
+
+def _fetch_csv(url: str, **read_csv_kwargs: Any) -> pl.DataFrame:
+    """Read a remote CSV through the HTTP gateway, under the error vocabulary (A-M11).
+
+    A CSV is small, so unlike :func:`_fetch_release_parquet` its bytes go through
+    ``download``, and its 429/5xx backoff and the vocabulary come with them. Handed a
+    URL, polars 2.0's own reader raises a bare ``OSError`` for every HTTP failure, so a
+    missing file, a rate limit and a dead connection were indistinguishable.
+
+    Raises:
+        NoDataError: the host answered 404.
+        ValueError: the host answered 400 / 422.
+        AssetFetchError: any other non-2xx after retries, a connection failure after
+            retries, or a 2xx whose body is empty or a page rather than CSV.
+    """
+    with _transport_errors(url):
+        resp = download(url)
+    _text_body(resp, url, html=False)
+    return pl.read_csv(io.BytesIO(resp.content), **read_csv_kwargs)
 
 
 def format_nhl_season(season: Any) -> Optional[str]:

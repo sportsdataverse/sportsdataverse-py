@@ -10,14 +10,14 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
 | [Highlights](reference/additional#highlights) | curated "start here" functions | 8 | — |
-| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 131 | none |
+| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 132 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com`, `raw.githubusercontent.com` | 74 | none |
 | [stats.ncaa.org](#stats-ncaa-org) | `stats.ncaa.org` | 1 | none (Terms gate + rate rotation) |
 | [On3 Recruit Database](#on3-recruit-database) | `api.on3.com` | 82 | API key (ON3_API_KEY) |
 | [247Sports Recruit Database](#247sports-recruit-database) | `247sports.com`, `ipa.247sports.com` | 47 | none |
 | [Yahoo Sports Shangrila](#yahoo-sports-shangrila) | `graphite-secure.sports.yahoo.com` | 7 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 29 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 105 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 109 | — |
 
 ## ESPN {#espn}
 
@@ -28,7 +28,7 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 | [ESPN core API (v2)](reference/core) | 89 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
 | [ESPN CDN API (cdn.espn.com)](reference/cdn) | 5 |
-| [Hand-written wrappers](reference/additional/espn) | 6 |
+| [Hand-written wrappers](reference/additional/espn) | 7 |
 
 ## sportsdataverse-data releases {#sportsdataverse-data-releases}
 
@@ -79,6 +79,7 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 
 - [`add_era_columns`](reference/additional/models-and-calculators#add_era_columns)
 - [`assert_rating_scale`](reference/additional/models-and-calculators#assert_rating_scale)
+- [`blue_chip_ratio`](reference/additional/models-and-calculators#blue_chip_ratio)
 - [`calculate_completion_probability`](reference/additional/models-and-calculators#calculate_completion_probability)
 - [`calculate_epa`](reference/additional/models-and-calculators#calculate_epa)
 - [`calculate_expected_points`](reference/additional/models-and-calculators#calculate_expected_points)
@@ -89,16 +90,18 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 - [`calculate_win_probability`](reference/additional/models-and-calculators#calculate_win_probability)
 - [`calculate_wpa`](reference/additional/models-and-calculators#calculate_wpa)
 - [`calculate_xpass`](reference/additional/models-and-calculators#calculate_xpass)
-- [`cfb_adjusted_epa`](reference/additional/models-and-calculators#cfb_adjusted_epa)
+- [`cfb_adjusted_epa`](reference/additional/models-and-calculators-2#cfb_adjusted_epa)
 - [`cfb_adjusted_epa_by_game`](reference/additional/models-and-calculators-2#cfb_adjusted_epa_by_game)
 - [`cfb_compute_results`](reference/additional/models-and-calculators-2#cfb_compute_results)
 - [`cfb_draft_projection`](reference/additional/models-and-calculators-2#cfb_draft_projection)
 - [`cfb_field_position`](reference/additional/models-and-calculators-2#cfb_field_position)
+- [`cfb_kickoff_out_of_bounds_spot_expr`](reference/additional/models-and-calculators-2#cfb_kickoff_out_of_bounds_spot_expr)
 - [`cfb_predict_games`](reference/additional/models-and-calculators-2#cfb_predict_games)
 - [`cfb_ratings`](reference/additional/models-and-calculators-2#cfb_ratings)
 - [`cfb_recruiting_projection`](reference/additional/models-and-calculators-2#cfb_recruiting_projection)
 - [`cfb_roster_talent`](reference/additional/models-and-calculators-2#cfb_roster_talent)
 - [`cfb_simulations`](reference/additional/models-and-calculators-2#cfb_simulations)
+- [`cfb_touchback_yardline_expr`](reference/additional/models-and-calculators-2#cfb_touchback_yardline_expr)
 - [`efficiency_ratings`](reference/additional/models-and-calculators-2#efficiency_ratings)
 - [`fei_ratings`](reference/additional/models-and-calculators-2#fei_ratings)
 - [`fit_field_position_ep`](reference/additional/models-and-calculators-2#fit_field_position_ep)
@@ -178,7 +181,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`cf
 | [`calculate_xpass`](reference/additional/models-and-calculators#calculate_xpass) | [`calculate_xpass`](https://cfbfastR.sportsdataverse.org/reference/calculate_xpass.html) |
 | [`espn_cfb_award`](reference/core/other#espn_cfb_award) | [`espn_cfb_award`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_award.html) |
 | [`espn_cfb_awards`](reference/core/other#espn_cfb_awards) | [`espn_cfb_awards`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_awards.html) |
-| [`espn_cfb_calendar`](reference/site/other#espn_cfb_calendar) | [`espn_cfb_calendar`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_calendar.html) |
+| [`espn_cfb_calendar`](reference/additional/espn#espn_cfb_calendar) | [`espn_cfb_calendar`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_calendar.html) |
 | [`espn_cfb_coach`](reference/core/other#espn_cfb_coach) | [`espn_cfb_coach`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_coach.html) |
 | [`espn_cfb_coach_record`](reference/core/other#espn_cfb_coach_record) | [`espn_cfb_coach_record`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_coach_record.html) |
 | [`espn_cfb_franchise`](reference/core/other#espn_cfb_franchise) | [`espn_cfb_franchise`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_franchise.html) |

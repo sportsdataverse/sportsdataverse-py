@@ -517,3 +517,221 @@ def test_the_first_card_logo_is_the_away_team_on_a_real_page():
         club_of = {logo: club for club, logo in linked}
         assert len(club_of) == 2, card
         assert (club_of[card["away_cbs_team_id"]], club_of[card["home_cbs_team_id"]]) == (card["away"], card["home"])
+
+
+# ------------------------------------------------- failure provenance (task 3.5: B-L53, B-L56)
+def test_a_failed_scoreboard_page_is_retried_after_a_while_not_remembered_as_no_cards(monkeypatch):
+    """A dead connection or a 503 after retries (download() hands back the last response) is
+    skipped for a few minutes -- a burst of games must not re-bill a dead page -- and then read
+    again, so one bad minute cannot switch CBS id lookup off for the life of a worker."""
+    import types
+
+    from sportsdataverse.football import cbs_common
+
+    clock = [1000.0]
+    monkeypatch.setattr(cbs_common, "time", types.SimpleNamespace(monotonic=lambda: clock[0]))
+    html = (CBS_FIX / "scoreboard_2019_regular_1_cards.html").read_text(encoding="utf-8")
+
+    class _Resp:
+        def __init__(self, status, text):
+            self.status_code, self.text = status, text
+
+    answers = [ConnectionError("reset"), _Resp(503, "<html>busy</html>"), _Resp(200, html)]
+    urls = []
+
+    def transport(url, **kwargs):
+        urls.append(url)
+        answer = answers.pop(0)
+        if isinstance(answer, Exception):
+            raise answer
+        return answer
+
+    def resolve():
+        return _resolve_cbs_game_id(2019, 2, 1, "18", "34", transport=transport)[0]
+
+    assert resolve() is None  # connection reset
+    assert resolve() is None and len(urls) == 1  # inside the window: not re-read
+    clock[0] += cbs_common._FAILURE_TTL_SECONDS
+    assert resolve() is None and len(urls) == 2  # 503
+    clock[0] += cbs_common._FAILURE_TTL_SECONDS
+    assert resolve() == "3115586" and len(urls) == 3
+
+
+def test_a_404_scoreboard_page_is_remembered_for_the_process(monkeypatch):
+    """A 404 is an ANSWER (CBS has no such page), so unlike a failed read it never expires."""
+    import types
+
+    from sportsdataverse.errors import NoDataError
+    from sportsdataverse.football import cbs_common
+
+    clock = [1000.0]
+    monkeypatch.setattr(cbs_common, "time", types.SimpleNamespace(monotonic=lambda: clock[0]))
+    urls = []
+
+    def transport(url, **kwargs):
+        urls.append(url)
+        raise NoDataError("404")
+
+    for _ in range(3):
+        assert _resolve_cbs_game_id(2019, 2, 1, "18", "34", transport=transport)[0] is None
+        clock[0] += 10 * cbs_common._FAILURE_TTL_SECONDS
+    assert len(urls) == 1
+
+
+def test_a_failed_optional_resource_raises_instead_of_reading_as_absent(monkeypatch):
+    import sportsdataverse.cbs.cbs_napi as napi
+    from sportsdataverse.errors import AssetFetchError, NoDataError
+    from sportsdataverse.football.cbs_common import _fetch_cbs_game
+
+    def raiser(exc):
+        def getter(*a, **k):
+            raise exc
+
+        return getter
+
+    monkeypatch.setattr(napi, "cbs_game_scoring_plays", lambda *a, **k: {"plays": []})
+    monkeypatch.setattr(napi, "cbs_game_scoring_scoreboard", lambda *a, **k: {"scoreboard": {}})
+    monkeypatch.setattr(napi, "cbs_game_scoring_drives", raiser(NoDataError("404")))
+    assert _fetch_cbs_game("1", optional=("drives",))["drives"] is None  # CBS says absent
+    monkeypatch.setattr(napi, "cbs_game_scoring_drives", raiser(AssetFetchError("429")))
+    with pytest.raises(AssetFetchError):
+        _fetch_cbs_game("1", optional=("drives",))
+
+
+def test_a_200_page_with_no_cards_is_remembered_for_the_process(monkeypatch):
+    """A 200 without a card is an ANSWER too: it never expires like a failed read."""
+    import types
+
+    from sportsdataverse.football import cbs_common
+
+    clock = [1000.0]
+    monkeypatch.setattr(cbs_common, "time", types.SimpleNamespace(monotonic=lambda: clock[0]))
+    transport = _stub_transport("<html>no games this week</html>")
+    for _ in range(3):
+        assert _resolve_cbs_game_id(2019, 2, 1, "18", "34", transport=transport)[0] is None
+        clock[0] += 10 * cbs_common._FAILURE_TTL_SECONDS
+    assert len(transport.urls) == 1
+
+
+@pytest.mark.parametrize(
+    ("odds_override", "idmap_line", "optional"),
+    [
+        (None, {}, ("drives", "odds")),
+        ({"gameSpread": 3.0}, {}, ("drives",)),
+        # the common production path: the id-map row carries the nflverse closing line
+        (None, {"spread_line": 3.5, "total_line": 47.5}, ("drives",)),
+    ],
+)
+def test_a_known_line_skips_the_cbs_odds_fetch(monkeypatch, odds_override, idmap_line, optional):
+    """A failed (non-404) odds fetch raises, so it is not asked for when the caller already has the line."""
+    from sportsdataverse.nfl.cbs_pbp import to_espn_summary as adapter_module
+
+    asked = []
+    monkeypatch.setattr(adapter_module, "_fetch_cbs_game", lambda gid, optional: asked.append(optional) or {})
+    adapter = _adapter_for("nfl", "cbs")
+
+    class _Ctx:
+        idmap_row = {**CLE_JAX_ROW, **idmap_line}
+        payload = None
+        participants = None
+
+    _Ctx.odds_override = odds_override
+    with pytest.raises(SourceUnavailable, match="no plays"):
+        adapter("nfl", CLE_JAX_ESPN_ID, _Ctx())
+    assert asked == [optional]
+
+
+def test_a_float_id_map_row_adapts_exactly_like_the_text_row(cle_jax_payload, cle_jax_summary):
+    """B-GB-22: a pandas-built id-map row carries float ids; ``str`` sent ``"401856682.0"``, which matches no ESPN id."""
+    floats = {
+        **CLE_JAX_ROW,
+        **{k: float(CLE_JAX_ROW[k]) for k in ("espn_event_id", "home_espn_team_id", "away_espn_team_id")},
+    }
+    adapted = _cbs_nfl_to_espn_summary(*_bodies(cle_jax_payload), floats)[0]
+    assert adapted["header"]["id"] == CLE_JAX_ROW["espn_event_id"]
+    assert json.dumps(adapted, sort_keys=True) == json.dumps(cle_jax_summary[0], sort_keys=True)
+
+
+def test_a_float_id_map_row_looks_the_cbs_game_up_by_integer_team_ids(monkeypatch):
+    """B-GB-22: the week-scoreboard lookup got ``"30.0"`` / ``"5.0"``, which match no CBS card."""
+    from sportsdataverse.nfl.cbs_pbp import game_id as game_id_module
+
+    seen = []
+
+    def resolve(season, season_type, week, home, away, **kwargs):
+        seen.append((home, away))
+        return None, {"how": "unresolved"}
+
+    monkeypatch.setattr(game_id_module, "_resolve_cbs_game_id", resolve)
+    row = {k: v for k, v in CLE_JAX_ROW.items() if k != "cbs_game_id"}
+    floats = {
+        **row,
+        "home_espn_team_id": float(row["home_espn_team_id"]),
+        "away_espn_team_id": float(row["away_espn_team_id"]),
+    }
+
+    class _Ctx:
+        idmap_row = floats
+        payload = None
+        participants = None
+        odds_override = None
+
+    with pytest.raises(SourceUnavailable):
+        _adapter_for("nfl", "cbs")("nfl", CLE_JAX_ESPN_ID, _Ctx())
+    assert seen == [(row["home_espn_team_id"], row["away_espn_team_id"])]
+
+
+#: How a pandas-built id-map row carries a missing team id: NaN is truthy, ``pandas.NA`` raises on truthiness.
+_MISSING_IDS = pytest.mark.parametrize(
+    "missing", [float("nan"), __import__("pandas").NA, None, ""], ids=["nan", "pd_na", "none", "blank"]
+)
+
+
+@_MISSING_IDS
+def test_a_missing_team_id_is_backfilled_before_the_cbs_lookup(missing, monkeypatch):
+    """CodeRabbit PRRT_..Swdt: a NaN id skipped the schedule backfill (truthy) and reached the CBS
+    lookup / summary as ""; ``pandas.NA`` raised TypeError."""
+    from sportsdataverse.nfl.cbs_pbp import game_id as game_id_module
+    from sportsdataverse.nfl.shield_pbp import to_espn_summary as shield_module
+
+    seen = []
+    monkeypatch.setattr(
+        game_id_module, "_resolve_cbs_game_id", lambda *a, **k: seen.append(a[3:5]) or (None, {"how": "unresolved"})
+    )
+    home = CLE_JAX_ROW["home_espn_team_id"]
+    monkeypatch.setattr(shield_module, "_idmap_row_from_schedule", lambda espn_id: {"home_espn_team_id": home})
+    row = {k: v for k, v in CLE_JAX_ROW.items() if k != "cbs_game_id"}
+
+    class _Ctx:
+        idmap_row = {**row, "home_espn_team_id": missing}
+        payload = None
+        participants = None
+        odds_override = None
+
+    with pytest.raises(SourceUnavailable):
+        _adapter_for("nfl", "cbs")("nfl", CLE_JAX_ESPN_ID, _Ctx())
+    assert seen == [(home, CLE_JAX_ROW["away_espn_team_id"])]
+
+
+def test_the_summary_refuses_a_missing_team_id(cle_jax_payload):
+    row = {**CLE_JAX_ROW, "home_espn_team_id": float("nan")}
+    with pytest.raises(ValueError, match="states no ESPN team ids"):
+        _cbs_nfl_to_espn_summary(*_bodies(cle_jax_payload), row)
+
+
+@_MISSING_IDS
+def test_a_missing_team_id_without_a_schedule_row_hands_over(missing, monkeypatch):
+    from sportsdataverse.nfl.cbs_pbp import game_id as game_id_module
+    from sportsdataverse.nfl.shield_pbp import to_espn_summary as shield_module
+
+    monkeypatch.setattr(game_id_module, "_resolve_cbs_game_id", lambda *a, **k: pytest.fail("no lookup without ids"))
+    monkeypatch.setattr(shield_module, "_idmap_row_from_schedule", lambda espn_id: None)
+
+    class _Ctx:
+        idmap_row = {**{k: v for k, v in CLE_JAX_ROW.items() if k != "cbs_game_id"}, "home_espn_team_id": missing}
+        payload = None
+        participants = None
+        odds_override = None
+
+    with pytest.raises(SourceUnavailable, match="no ESPN team ids"):
+        _adapter_for("nfl", "cbs")("nfl", CLE_JAX_ESPN_ID, _Ctx())

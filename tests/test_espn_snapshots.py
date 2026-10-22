@@ -522,3 +522,85 @@ def test_skipping_a_malformed_entry_does_not_promote_the_players_behind_it():
 
     assert df["depth_rank"].to_list() == [1, 3]
     assert df["athlete_display_name"].to_list() == ["Starter", "Third"]
+
+
+# ---------------------------------------------------------------------------
+# One failed team / league does not cost the day (B-L7, task 4.5)
+# ---------------------------------------------------------------------------
+
+
+def test_one_failed_team_warns_and_keeps_the_other_teams(monkeypatch):
+    from sportsdataverse.errors import AssetFetchError
+
+    raw = load_fixture("espn", "depthcharts_nba")
+
+    def fake_fetch(team_id, return_parsed=False):
+        if team_id == "2":
+            raise AssetFetchError("espn answered 403")
+        return raw
+
+    monkeypatch.setattr("sportsdataverse.nba.espn_nba_team_depthcharts", fake_fetch)
+    with pytest.warns(UserWarning, match=r"1 of 3 fetches failed \(2\).*espn answered 403"):
+        df = espn_depthcharts_snapshot("nba", team_ids=[1, 2, 17], as_of_date=STAMP, request_delay=0)
+    assert df.height == 39 * 2
+
+
+def test_a_parser_bug_is_not_swallowed_as_a_failed_team(monkeypatch):
+    """R4.5-5: only the two fetch errors are skipped; a bug in the parse step propagates."""
+    import sportsdataverse.espn_snapshots as mod
+
+    raw = load_fixture("espn", "depthcharts_nba")
+    odd = {"odd": "team 2's payload"}
+    monkeypatch.setattr(
+        "sportsdataverse.nba.espn_nba_team_depthcharts",
+        lambda team_id, return_parsed=False: odd if team_id == "2" else raw,
+    )
+    real = mod.parse_depthchart_snapshot
+
+    def buggy(payload, **kwargs):
+        if payload is odd:
+            raise KeyError("athletes")
+        return real(payload, **kwargs)
+
+    monkeypatch.setattr(mod, "parse_depthchart_snapshot", buggy)
+    # team 1 parses fine, so a catch-all would warn and return team 1 instead of raising
+    with pytest.raises(KeyError, match="athletes"):
+        espn_depthcharts_snapshot("nba", team_ids=[1, 2], as_of_date=STAMP, request_delay=0)
+
+
+def test_every_team_failing_raises_instead_of_an_empty_day(monkeypatch):
+    from sportsdataverse.errors import AssetFetchError
+
+    def fake_fetch(team_id, return_parsed=False):
+        raise AssetFetchError("espn answered 403")
+
+    monkeypatch.setattr("sportsdataverse.nba.espn_nba_team_depthcharts", fake_fetch)
+    with pytest.raises(AssetFetchError, match="403"):
+        espn_depthcharts_snapshot("nba", team_ids=[1, 2], as_of_date=STAMP, request_delay=0)
+
+
+def test_one_failed_league_warns_and_keeps_the_other_leagues(monkeypatch):
+    import sportsdataverse.espn_snapshots as mod
+    from sportsdataverse.errors import NoDataError
+
+    def fake(league: str):
+        if league == "cfb":
+            raise NoDataError("espn answered 404")
+        return load_fixture("espn", f"injuries_{league}")
+
+    monkeypatch.setattr(
+        mod.importlib,
+        "import_module",
+        lambda name: type(
+            "M",
+            (),
+            {
+                f"espn_{name.split('.')[-1]}_injuries": staticmethod(
+                    lambda return_parsed=True, _lg=name.split(".")[-1]: fake(_lg)
+                )
+            },
+        ),
+    )
+    with pytest.warns(UserWarning, match=r"1 of 2 fetches failed \(cfb\)"):
+        df = espn_injuries_snapshot(["nfl", "cfb"], as_of_date=STAMP, request_delay=0)
+    assert df["league"].unique().to_list() == ["nfl"] and df.height > 0

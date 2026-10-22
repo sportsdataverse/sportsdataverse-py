@@ -59,7 +59,7 @@ def test_load_nfl_trades():
 def test_load_nfl_ff_playerids():
     try:
         df = load_nfl_ff_playerids()
-    except Exception as exc:  # noqa: BLE001 - transient upstream errors only; see helper
+    except Exception as exc:  # transient upstream errors only; see helper
         skip_on_transient_network_error(exc)
         raise
     assert isinstance(df, pl.DataFrame)
@@ -71,7 +71,7 @@ def test_load_nfl_ff_playerids():
 def test_load_nfl_ff_rankings_draft():
     try:
         df = load_nfl_ff_rankings(type="draft")
-    except Exception as exc:  # noqa: BLE001 - transient upstream errors only; see helper
+    except Exception as exc:  # transient upstream errors only; see helper
         skip_on_transient_network_error(exc)
         raise
     assert isinstance(df, pl.DataFrame)

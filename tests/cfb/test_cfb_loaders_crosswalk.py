@@ -111,7 +111,7 @@ def test_rosters_loader_url_locks_single_current_asset(monkeypatch: pytest.Monke
         seen.append(url)
         return pl.DataFrame({"espn_team_id": [194]})
 
-    monkeypatch.setattr(cle.pl, "read_parquet", fake)
+    monkeypatch.setattr(cle, "_fetch_release_parquet", fake)
     load_cfb_rosters_crosswalk()
     assert seen == [
         "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_crosswalk/cfb_rosters_crosswalk.parquet"
@@ -119,6 +119,6 @@ def test_rosters_loader_url_locks_single_current_asset(monkeypatch: pytest.Monke
 
 
 def test_rosters_loader_pandas_roundtrip(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(cle.pl, "read_parquet", lambda url, **k: pl.DataFrame({"espn_team_id": [194]}))
+    monkeypatch.setattr(cle, "_fetch_release_parquet", lambda url, **k: pl.DataFrame({"espn_team_id": [194]}))
     assert isinstance(load_cfb_rosters_crosswalk(), pl.DataFrame)
     assert isinstance(load_cfb_rosters_crosswalk(return_as_pandas=True), pd.DataFrame)

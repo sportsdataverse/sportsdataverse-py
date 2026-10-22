@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # LIGUE1 — ESPN FPI API (fitt v3)
 
-`sportsdataverse.ligue1` — 1 endpoint.
+`sportsdataverse.soccer.ligue1` — 1 endpoint.
 
 ## espn_ligue1_fpi
 

@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # COLLEGE_SOFTBALL — ESPN core API (v2)
 
-`sportsdataverse.college_softball` — 87 endpoints.
+`sportsdataverse.baseball.college_softball` — 87 endpoints.
 
 ## Game
 

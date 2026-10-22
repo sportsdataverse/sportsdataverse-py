@@ -48,6 +48,7 @@ from gen_soccer_common import (
     spec_descriptions,
     write_yaml,
 )
+from openapi_params import _query_params
 
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.soccer.uefa_parsers import parse_uefa
@@ -122,20 +123,6 @@ def _path_params(op: dict) -> List[Dict[str, Any]]:
     return out
 
 
-def _query_params(op: dict) -> List[Dict[str, Any]]:
-    """Query params as ``extra_params`` (python name snake, ``query_key`` = wire key)."""
-    out: List[Dict[str, Any]] = []
-    for prm in op.get("parameters", []):
-        if prm.get("in") != "query":
-            continue
-        wire = prm["name"]
-        description = str(prm.get("description") or "").strip()
-        if prm.get("required"):
-            description = ("Required. " + description).strip()
-        out.append({"name": underscore(wire), "query_key": wire, "type": "str", "description": description})
-    return out
-
-
 def _example_args(op: dict) -> Dict[str, Any]:
     out: Dict[str, Any] = {}
     for prm in op.get("parameters", []):
@@ -177,7 +164,7 @@ def _endpoint_entry(spec: dict, path: str, op: dict) -> Dict[str, Any]:
         entry["host"] = host
     if pps:
         entry["path_params"] = pps
-    qps = _query_params(op)
+    qps = _query_params(op, keep_empty_description=True, required="note")
     if qps:
         entry["extra_params"] = qps
     examples = _example_args(op)

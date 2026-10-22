@@ -491,9 +491,9 @@ def mbb_shot_data(
             "create_shot_event_data and flatten via shot_events_to_frame"
         )
     if league == "womens":
-        from sportsdataverse.wbb.wbb_loaders import load_wbb_shots as _loader  # noqa: PLC0415
+        from sportsdataverse.wbb.wbb_loaders import load_wbb_shots as _loader
     else:
-        from sportsdataverse.mbb.mbb_loaders import load_mbb_shots as _loader  # noqa: PLC0415
+        from sportsdataverse.mbb.mbb_loaders import load_mbb_shots as _loader
 
     seasons_list = [seasons] if isinstance(seasons, int) else list(seasons)
     frames = []

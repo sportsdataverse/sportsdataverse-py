@@ -25,14 +25,14 @@ generated API-endpoint wrappers (those have their own reference pages).
 | Function | Summary |
 |---|---|
 | [pwhl_game_corsi](additional/hockeytech-leaguestat.md#pwhl_game_corsi) | Player-level on-ice Corsi and Fenwick for a single PWHL game. |
-| [pwhl_game_info](additional/hockeytech-leaguestat.md#pwhl_game_info) | PWHL single-game metadata. |
+| [pwhl_game_info](additional/hockeytech-leaguestat.md#pwhl_game_info) | PWHL single-game metadata from the `statviewfeed` `gameSummary` view. |
 | [pwhl_game_shifts](additional/hockeytech-leaguestat.md#pwhl_game_shifts) | Parsed shift stints for a single PWHL game. |
 | [pwhl_game_summary](additional/hockeytech-leaguestat.md#pwhl_game_summary) | PWHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars). |
 | [pwhl_leaders](additional/hockeytech-leaguestat.md#pwhl_leaders) | PWHL statistical leaders for a given season. |
 | [pwhl_pbp](additional/hockeytech-leaguestat.md#pwhl_pbp) | PWHL play-by-play — one row per event, fully enriched. |
-| [pwhl_player_box](additional/hockeytech-leaguestat.md#pwhl_player_box) | PWHL player box score for a single game. |
+| [pwhl_player_box](additional/hockeytech-leaguestat.md#pwhl_player_box) | PWHL player box score for a single game, skaters and goalies (fastRhockey `pwhl_player_box`). |
 | [pwhl_player_game_log](additional/hockeytech-leaguestat.md#pwhl_player_game_log) | PWHL player game-by-game log. |
-| [pwhl_player_info](additional/hockeytech-leaguestat.md#pwhl_player_info) | PWHL player biographical info. |
+| [pwhl_player_info](additional/hockeytech-leaguestat.md#pwhl_player_info) | PWHL player biographical info from the `statviewfeed` `player` view. |
 | [pwhl_player_search](additional/hockeytech-leaguestat.md#pwhl_player_search) | Search for PWHL players by name. |
 | [pwhl_player_stats](additional/hockeytech-leaguestat.md#pwhl_player_stats) | PWHL player season stats across all seasons. |
 | [pwhl_player_toi](additional/hockeytech-leaguestat.md#pwhl_player_toi) | Per-player time-on-ice totals for a single PWHL game. |
@@ -45,10 +45,10 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [pwhl_standings](additional/hockeytech-leaguestat.md#pwhl_standings) | PWHL standings — one row per team. |
 | [pwhl_stats](additional/hockeytech-leaguestat.md#pwhl_stats) | PWHL aggregate stats by season and position. |
 | [pwhl_streaks](additional/hockeytech-leaguestat.md#pwhl_streaks) | Current PWHL player/team streaks — **non-functional: no such upstream view**. |
-| [pwhl_team_roster](additional/hockeytech-leaguestat.md#pwhl_team_roster) | PWHL team roster for a given team + season. |
-| [pwhl_teams](additional/hockeytech-leaguestat.md#pwhl_teams) | PWHL teams for a given season. |
-| [pwhl_transactions](additional/hockeytech-leaguestat.md#pwhl_transactions) | PWHL roster transactions. |
-| [pwhl_unit_ratings](additional/hockeytech-leaguestat.md#pwhl_unit_ratings) | ⑤ PWHL line/pair ratings -- shim over `nhl_unit_ratings` with `league='pwhl'`. |
+| [pwhl_team_roster](additional/hockeytech-leaguestat-2.md#pwhl_team_roster) | PWHL team roster for a given team + season. |
+| [pwhl_teams](additional/hockeytech-leaguestat-2.md#pwhl_teams) | PWHL teams for a given season. |
+| [pwhl_transactions](additional/hockeytech-leaguestat-2.md#pwhl_transactions) | PWHL roster transactions. |
+| [pwhl_unit_ratings](additional/hockeytech-leaguestat-2.md#pwhl_unit_ratings) | ⑤ PWHL line/pair ratings -- shim over `nhl_unit_ratings` with `league='pwhl'`. |
 
 ## Models and calculators
 

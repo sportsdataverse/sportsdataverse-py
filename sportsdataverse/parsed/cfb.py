@@ -25,6 +25,7 @@ warnings.warn(
 
 from sportsdataverse.cfb import espn_cfb_award as _raw_espn_cfb_award
 from sportsdataverse.cfb import espn_cfb_awards as _raw_espn_cfb_awards
+from sportsdataverse.cfb import espn_cfb_calendar_site as _raw_espn_cfb_calendar_site
 from sportsdataverse.cfb import espn_cfb_cdn_boxscore as _raw_espn_cfb_cdn_boxscore
 from sportsdataverse.cfb import espn_cfb_cdn_playbyplay as _raw_espn_cfb_cdn_playbyplay
 from sportsdataverse.cfb import espn_cfb_cdn_rankings as _raw_espn_cfb_cdn_rankings
@@ -361,6 +362,7 @@ from sportsdataverse.cfb import cfb_compute_results as cfb_compute_results  # no
 from sportsdataverse.cfb import cfb_draft_projection as cfb_draft_projection  # noqa: F401
 from sportsdataverse.cfb import cfb_field_position as cfb_field_position  # noqa: F401
 from sportsdataverse.cfb import cfb_games_from_schedule as cfb_games_from_schedule  # noqa: F401
+from sportsdataverse.cfb import cfb_kickoff_out_of_bounds_spot_expr as cfb_kickoff_out_of_bounds_spot_expr  # noqa: F401
 from sportsdataverse.cfb import cfb_odds_events_crosswalk as cfb_odds_events_crosswalk  # noqa: F401
 from sportsdataverse.cfb import cfb_playoff_seeds as cfb_playoff_seeds  # noqa: F401
 from sportsdataverse.cfb import cfb_predict_games as cfb_predict_games  # noqa: F401
@@ -375,6 +377,7 @@ from sportsdataverse.cfb import cfb_season_odds as cfb_season_odds  # noqa: F401
 from sportsdataverse.cfb import cfb_simulations as cfb_simulations  # noqa: F401
 from sportsdataverse.cfb import cfb_standings as cfb_standings  # noqa: F401
 from sportsdataverse.cfb import cfb_teams_crosswalk as cfb_teams_crosswalk  # noqa: F401
+from sportsdataverse.cfb import cfb_touchback_yardline_expr as cfb_touchback_yardline_expr  # noqa: F401
 from sportsdataverse.cfb import cfb_transfer_impact as cfb_transfer_impact  # noqa: F401
 from sportsdataverse.cfb import cfb_transfer_moves as cfb_transfer_moves  # noqa: F401
 from sportsdataverse.cfb import check_box_invariants as check_box_invariants  # noqa: F401
@@ -550,6 +553,7 @@ __all__ = [
     "cfb_draft_projection",
     "cfb_field_position",
     "cfb_games_from_schedule",
+    "cfb_kickoff_out_of_bounds_spot_expr",
     "cfb_odds_events_crosswalk",
     "cfb_playoff_seeds",
     "cfb_predict_games",
@@ -564,6 +568,7 @@ __all__ = [
     "cfb_simulations",
     "cfb_standings",
     "cfb_teams_crosswalk",
+    "cfb_touchback_yardline_expr",
     "cfb_transfer_impact",
     "cfb_transfer_moves",
     "check_box_invariants",
@@ -574,6 +579,7 @@ __all__ = [
     "espn_cfb_award",
     "espn_cfb_awards",
     "espn_cfb_calendar",
+    "espn_cfb_calendar_site",
     "espn_cfb_cdn_boxscore",
     "espn_cfb_cdn_playbyplay",
     "espn_cfb_cdn_rankings",
@@ -1012,6 +1018,20 @@ def espn_cfb_awards(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_cfb_awards(*args, **kwargs)
+
+
+def espn_cfb_calendar_site(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.espn_cfb_calendar_site``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.espn_cfb_calendar_site` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.espn_cfb_calendar_site` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_cfb_calendar_site(*args, **kwargs)
 
 
 def espn_cfb_cdn_boxscore(*args, **kwargs):

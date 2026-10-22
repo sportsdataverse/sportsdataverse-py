@@ -19,6 +19,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
+from sportsdataverse._codegen_runtime import _id_text
 from sportsdataverse.football.fox_common import (
     _fox_event_data,
     _fox_event_odds,
@@ -65,8 +66,8 @@ def _resolve_fox_event_id(idmap_row: Mapping[str, Any], *, transport: Any = None
         row.get("season"),
         row.get("season_type"),
         row.get("week"),
-        row.get("home_espn_team_id"),
-        row.get("away_espn_team_id"),
+        _id_text(row.get("home_espn_team_id")),
+        _id_text(row.get("away_espn_team_id")),
         transport=transport,
     )
 
@@ -108,8 +109,8 @@ def _fox_adapter(league: str, espn_id: int, ctx: Any) -> Any:
 
     Raises:
         SourceUnavailable: no Fox event id could be resolved without inventing one; the fetch
-            failed; the payload carries no ``header`` (the shared ``_get`` returns ``{}`` on
-            any failure); the payload carries no ``pbp``; the id-map row states no ESPN team
+            failed; the payload carries no ``header`` (an empty or headerless injected payload, or
+            a bad id); the payload carries no ``pbp``; the id-map row states no ESPN team
             ids; or the adapted drive chart carries no plays yet.
     """
     from sportsdataverse.football.sources.dispatch import AdaptedGame, SourceUnavailable
@@ -129,19 +130,20 @@ def _fox_adapter(league: str, espn_id: int, ctx: Any) -> Any:
             raise SourceUnavailable(f"nfl {espn_id}: no fox_event_id in the id map and none on Fox's week scoreboard")
         try:
             payload = _fox_event_data("nfl", fox_event_id)
-        except Exception as exc:  # noqa: BLE001 -- network / JSON -> the next source
+        except Exception as exc:  # network / JSON -> the next source
             raise SourceUnavailable(f"fox event data fetch failed: {type(exc).__name__}: {exc}") from exc
     if not isinstance(payload, Mapping) or not payload.get("header"):
-        # the shared ``_get`` returns {} on any failure, so this is "the request failed" --
+        # the getter raises on a failed request, so this is an empty or headerless payload --
         # deliberately a different message from "Fox does not cover this game", below.
         raise SourceUnavailable(f"nfl {espn_id}: fox returned no event payload (request failed or bad id)")
     if not _has_pbp(payload):
         raise SourceUnavailable(
             f"nfl {espn_id}: fox event {fox_event_id or payload.get('header', {}).get('id')} carries no "
-            "play-by-play (HTTP 200 with no pbp key: before Fox's 2024 NFL play floor, "
+            "play-by-play (HTTP 200 with no plays: before Fox's 2024 NFL play floor, "
             "or a listed game Fox has not served yet)"
         )
-    if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):
+    # ids through _id_text first: a NaN id is truthy and pandas.NA raises on truthiness
+    if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):
         raise SourceUnavailable(f"nfl {espn_id}: id-map row carries no ESPN team ids")
 
     odds = ctx.odds_override or _odds_override_from_row(ctx.idmap_row)
