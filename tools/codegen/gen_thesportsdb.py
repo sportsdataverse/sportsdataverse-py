@@ -4,7 +4,7 @@ TheSportsDB API v1 OpenAPI spec (``thesportsdb.com/api/v1/json/{key}``, read-onl
 The API key is a **path segment**, not a query parameter, so the emitted ``host``
 keeps the literal ``{key}`` placeholder and the YAML points ``getter_module`` at
 ``sportsdataverse.thesportsdb.thesportsdb_runtime``, which substitutes the
-caller's key (``$THESPORTSDB_API_KEY``, else the free test key ``3``) at call time.
+caller's key (``$THESPORTSDB_API_KEY``, else the free test key ``123``) at call time.
 
 Idempotent: same spec + same captures -> byte-identical output. Modeled on
 ``gen_sleeper.py``, with the shared plumbing in ``gen_soccer_common.py``.
@@ -46,7 +46,8 @@ from sportsdataverse.thesportsdb.thesportsdb_parsers import parse_thesportsdb
 # placeholder there renders 24 dead links. ``thesportsdb_runtime`` swaps this segment for
 # $THESPORTSDB_API_KEY when one is set, so the default is a URL a reader can open and a
 # paid key still works.
-FREE_TEST_KEY = "3"
+# The old key "3" answers HTTP 403 "permanently disabled" (measured 2026-10-20); "123" is its replacement.
+FREE_TEST_KEY = "123"
 HOST = f"https://www.thesportsdb.com/api/v1/json/{FREE_TEST_KEY}"
 SPEC = "thesportsdb.openapi.yaml"
 STEM = "thesportsdb"
@@ -168,7 +169,7 @@ def main() -> None:
                 {
                     "name": "TheSportsDB API docs",
                     "url": "https://www.thesportsdb.com/free_sports_api",
-                    "note": "free test key 3 is the default (30 req/min); set $THESPORTSDB_API_KEY to use your own",
+                    "note": "free test key 123 is the default (it returns a capped sample of each list); set $THESPORTSDB_API_KEY to use your own",
                 },
             ],
         },

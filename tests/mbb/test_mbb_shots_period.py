@@ -62,6 +62,10 @@ class TestWomensEraSplit:
         assert quarters == (3, 300.0)
         assert halves != quarters
 
+    def test_float_season_is_the_halves_era(self) -> None:
+        """``season=2015.0`` (a pandas-hopped year) is 2015, not "2015.0" -> quarters (R853-6)."""
+        assert period_and_sec_left(25.0, league="wbb", season=2015.0) == (2, 900.0)  # type: ignore[arg-type]
+
     def test_womens_regulation_still_ends_at_40_minutes(self) -> None:
         """Both eras play 40 minutes; only the subdivision changed.
 

@@ -18,23 +18,11 @@ from sportsdataverse.scrape.ncaa import (
     discover,
     espn_game_xwalk,
     identity,
-    league_config,
     parse,
     rosters,
 )
 
 ENGINE_DIR = pathlib.Path(capture.__file__).parent
-
-
-def test_configs_resolve_and_carry_the_period_split() -> None:
-    assert league_config.by_league("mbb") is league_config.MBB
-    assert league_config.by_league("wbb") is league_config.WBB
-    # men's halves vs women's quarters -- the one rule that is genuinely
-    # different rather than merely a different token.
-    assert league_config.MBB.periods == 2
-    assert league_config.WBB.periods == 4
-    with pytest.raises(KeyError):
-        league_config.by_league("nba")
 
 
 @pytest.mark.parametrize(
@@ -154,3 +142,26 @@ def test_cli_entry_points_require_a_root() -> None:
         param = inspect.signature(mod._main).parameters.get("default_root")
         assert param is not None, f"{mod.__name__}._main takes no default_root"
         assert param.default is inspect.Parameter.empty, f"{mod.__name__}._main defaults its root"
+
+
+def test_wbb_period_tuples_have_one_owner() -> None:
+    """The WBB period-model tuples are written once, in ``_rules.py`` (B-L26).
+
+    A second copy (``wbb_ncaa_shots.py`` had one) drifts silently: the wrong model
+    parses a game to zero rows without raising. Read them via ``wbb_period_model``.
+    """
+    from sportsdataverse.scrape.ncaa import _rules
+    from sportsdataverse.scrape.ncaa.parse import wbb_period_model
+
+    assert wbb_period_model("2015") == _rules.WBB_HALVES_MODEL
+    assert wbb_period_model("2015-16") == _rules.WBB_QUARTERS_MODEL
+    assert wbb_period_model(None) == _rules.WBB_QUARTERS_MODEL
+    pkg = ENGINE_DIR.parents[1]
+    offenders = [
+        f"{path.relative_to(pkg)}:{i}"
+        for path in sorted(pkg.rglob("*.py"))
+        if path.name != "_rules.py"
+        for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1)
+        if "(4, 600, 300)" in line and "wbb_period_model" not in line
+    ]
+    assert not offenders, "WBB period tuple re-defined outside scrape/ncaa/_rules.py:\n" + "\n".join(offenders)

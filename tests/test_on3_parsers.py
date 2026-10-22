@@ -211,8 +211,10 @@ def test_get_merges_caller_headers_and_derived_params_win(on3_runtime, monkeypat
     assert seen["params"]["page"] == 3
 
 
-def test_get_returns_empty_dict_on_unknown_path(on3_runtime):
-    assert on3_runtime._scrape_get("https://www.on3.com/some/other/route.json") == {}
+def test_get_refuses_an_unknown_path(on3_runtime):
+    # B-L88: a path no rankings route matches is a wrong request, not an empty ranking.
+    with pytest.raises(ValueError, match="not an On3 rankings route"):
+        on3_runtime._scrape_get("https://www.on3.com/some/other/route.json")
 
 
 # ===========================================================================

@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Models and calculators: calculate_xyac–get_2pt"
 sidebar_label: "Models and calculators: calculate_xyac–get_2pt"
-sidebar_position: 20
+sidebar_position: 21
 description: "NFL — additional Python functions — Models and calculators: calculate_xyac–get_2pt — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Models and calculators: calculate_xyac–get_2pt
@@ -580,6 +580,14 @@ A pandas frame with `go_index` plus `two_pt_wp`, `xp_wp`, `prob_2pt`, `two_pt_re
 | `two_pt_wp_diff` | double |  |
 | `two_pt_recommendation` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | `SDV_PY_MODELS_STRICT=1` and an nfl4th model cannot be obtained. |
+| `XGBoostError` | A cached nfl4th booster is corrupt. |
+| `ValueError` | A model card beside a booster disagrees with the applier's fitted constants. |
+
 **Example**
 
 ```python
@@ -611,6 +619,14 @@ the better of go-for-2 and kick-the-PAT.
 A pandas frame with `go_index`, `yardline_100` (always 0) and `wp_td`. `wp_td` is NaN when the WP / 2-pt models are unavailable.
 
 No returns table is published for this function: no capture: it never prepares its input, so it raises KeyError (era3) on real play-by-play.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | `SDV_PY_MODELS_STRICT=1` and an nfl4th model cannot be obtained. |
+| `XGBoostError` | A cached nfl4th booster is corrupt. |
+| `ValueError` | A model card beside a booster disagrees with the applier's fitted constants. |
 
 **Example**
 

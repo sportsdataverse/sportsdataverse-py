@@ -201,9 +201,9 @@ def mbb_bracketology(
         * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
         * `wehoop <https://wehoop.sportsdataverse.org>`_ -- women's basketball (R)
     """
-    from sportsdataverse.mbb.mbb_prediction_constants import as_of_ratings_split  # noqa: PLC0415
-    from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule  # noqa: PLC0415
-    from sportsdataverse.mbb.mbb_team_ratings import (  # noqa: PLC0415
+    from sportsdataverse.mbb.mbb_prediction_constants import as_of_ratings_split
+    from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule
+    from sportsdataverse.mbb.mbb_team_ratings import (
         _league_loaders,
         _normalize_schedule,
         adjust_efficiency,
@@ -212,9 +212,9 @@ def mbb_bracketology(
 
     load_schedule, load_team_box = _league_loaders(league)
     if league == "womens":
-        from sportsdataverse.wbb.wbb_loaders import load_wbb_standings as load_standings  # noqa: PLC0415
+        from sportsdataverse.wbb.wbb_loaders import load_wbb_standings as load_standings
     else:
-        from sportsdataverse.mbb.mbb_loaders import load_mbb_standings as load_standings  # noqa: PLC0415
+        from sportsdataverse.mbb.mbb_loaders import load_mbb_standings as load_standings
 
     results = _normalize_schedule(load_schedule([season])).filter(
         pl.col("home_score").is_not_null() & pl.col("away_score").is_not_null()

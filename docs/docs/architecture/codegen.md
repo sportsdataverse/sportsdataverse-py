@@ -18,7 +18,7 @@ drift gate, but they are not the same pipeline — see
 | the five ESPN YAMLs in `generate.ESPN_APIS` | `espn_site_v2`, `espn_web_v3`, `espn_core_v2`, `espn_fitt_v3`, `espn_cdn` |
 | the 78 flat-API YAMLs in `generate.FLAT_APIS` | one live API family each (NHL ×4, MLB ×2, NFL ×5 including both PFF APIs and Sleeper, F1, basketball, soccer, recruiting, prediction markets, TheSportsDB, ESPN content, Swiss hockey (SIHF), the European hockey leagues (DEL, ICEHL, EIHL, Metal Ligaen, Czech Extraliga, Liiga, SHL, HockeyAllsvenskan, National League, Ligue Magnus, KHL ×2, VHL), the international basketball leagues (FIBA, Genius, Atrium, NBL, FEB, BBL/DBBL, Lega Basket, ACB, IBBA, W League, VTB, KBL, B.LEAGUE, KZS, LKL, TBF, CEBL, ABA League, EASL, BNXT, TPBL, P. LEAGUE+, CBA, Basketligaen), the vendor networks) |
 | `endpoints/releases.yaml` | every dataset loader, its release `base`, tag and asset URL |
-| `espn_rename_map.yaml` | the ESPN short-name renames |
+| `espn_rename_map.yaml` | the ESPN short-name renames. A generated name a hand-written function already holds is version-qualified by `generate._ESPN_COLLISION_VERSIONED` (`player_stats_v3`, `calendar_site`, ...) |
 | `sources.yaml` | provider / category registry: which source each public function belongs to |
 | `schemas/<name>.yaml`, `schemas/<name>/<league>.yaml`, `schemas/native/<stem>/`, `schemas/autodoc/<league>/` | the returns tables, in four shapes |
 | `manual_column_descriptions.yaml`, `r_column_descriptions.yaml` | column descriptions (captured → manual → R, in that precedence) |
@@ -35,15 +35,17 @@ captures into `tests/fixtures/`; `gen_*_descriptions.py` mine column description
 ## API generation
 
 A no-arg `uv run python tools/codegen/generate.py` runs six stages in order, and
-each one `ruff format`s exactly what it wrote:
+each one `ruff format`s exactly what it wrote. The last two read the package's live
+signatures and docstrings, so they run in a fresh interpreter after the first four have
+written it: one run converges, with no second run needed to pick up its own output.
 
 | Stage | Writes |
 |---|---|
 | `build()` | the `tools/codegen/_generated/` staging copies |
 | `build_live()` | `sportsdataverse/<league>/<prefix>_espn_ext.py` + the container `__init__` files |
-| `build_parsed_live()` | `sportsdataverse/parsed/*.py` (the deprecated aliases) |
 | `build_flat_live()` | `sportsdataverse/<league>/<stem>.py` from `api_module.py.jinja`; a league with a `group` in `leagues.yaml` nests under it (`soccer/mls/`), and a home in `generate._NESTED_HOMES` (hockey) or `generate._BASKETBALL_HOMES` (international basketball) under its container (`hockey/sihf/`, `hockey/liiga/`, `basketball/fiba_hub/`; DEL's package is `hockey/del_/` because `del` is a Python keyword) |
 | `build_loaders_live()` | `sportsdataverse/<lg>/<lg>_loaders.py` for the 8 `_GENERATED_LOADER_LEAGUES` |
+| `build_parsed_live()` | `sportsdataverse/parsed/*.py` (the deprecated aliases) |
 | `build_docs()` | the docs tree (below) |
 
 Refresh flags are separate, deliberate, mostly-networked passes:

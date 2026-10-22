@@ -124,8 +124,11 @@ def proxy_from_env(env_var: str) -> Optional[Dict[str, str]]:
     return {"http": url, "https": url} if url else None
 
 
-def _get(url: str, params: Optional[dict] = None, *, proxy_env: Optional[str] = None, **kwargs: Any) -> Any:
+def _fetch_json(url: str, params: Optional[dict] = None, *, proxy_env: Optional[str] = None, **kwargs: Any) -> Any:
     """GET ``url`` as JSON; every attempt waits at least :data:`MIN_INTERVAL` after its host's last.
+
+    A runtime that reads its own envelope calls this and carries ``_rt._no_content_is_empty`` on its ``_get``;
+    everything else calls :func:`_get`.
 
     Args:
         url: fully-built request URL.
@@ -138,6 +141,7 @@ def _get(url: str, params: Optional[dict] = None, *, proxy_env: Optional[str] = 
         The parsed JSON body.
 
     Raises:
+        _NoContent: the host answered 204 / 205; the calling runtime's ``_get`` turns it into ``{}``.
         NoDataError: the host answered 404.
         ValueError: the host answered 400 / 422.
         AssetFetchError: any other failed fetch. Through a proxy the message names the variable
@@ -145,12 +149,19 @@ def _get(url: str, params: Optional[dict] = None, *, proxy_env: Optional[str] = 
     """
     kwargs.setdefault("session", SESSION)
     proxy = proxy_from_env(proxy_env) if proxy_env else None
+    # A 204 / 205 raises _NoContent: every caller's ``_get`` carries ``_no_content_is_empty`` (EX-SYNC-a).
     if proxy is None:
-        return _rt._get(url, params, **kwargs)
+        return _rt._get(url, params, transport=_rt._no_content_transport(), **kwargs)
     kwargs.setdefault("proxy", proxy)
     kwargs.setdefault("logger", _QUIET)
     try:  # the shared getter: drops None params and maps a ``json`` body to download's ``json_body``
-        return _rt._get(url, params, **kwargs)
+        return _rt._get(url, params, transport=_rt._no_content_transport(), **kwargs)
     except AssetFetchError as exc:
         cause = type(exc.__cause__).__name__ if exc.__cause__ is not None else "a non-2xx or unreadable answer"
         raise AssetFetchError(f"{_rt._where(url)}: the fetch through {proxy_env} failed ({cause})") from None
+
+
+@_rt._no_content_is_empty
+def _get(url: str, params: Optional[dict] = None, *, proxy_env: Optional[str] = None, **kwargs: Any) -> Any:
+    """GET ``url`` as JSON (:func:`_fetch_json`); a 204 / 205 returns ``{}``, as from the shared chokepoints."""
+    return _fetch_json(url, params, proxy_env=proxy_env, **kwargs)

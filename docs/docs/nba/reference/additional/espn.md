@@ -6,9 +6,61 @@ description: "NBA — additional Python functions — ESPN — function referenc
 ---
 # NBA — additional Python functions — ESPN
 
+### espn_nba_calendar {#espn_nba_calendar}
+
+`espn_nba_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+
+espn_nba_calendar - look up the NBA calendar for a given season from ESPN
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `None` | Used to define different seasons. 2002 is the earliest available season. |
+| `ondays` | `boolean` | `None` | Used to return dates for calendar ondays |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+
+**Returns**
+
+Polars dataframe containing calendar dates for the requested season.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season year. |
+| `datetime` | character | The calendar day as ESPN sends it, an ISO 8601 UTC timestamp string. |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `year` | character | 4-digit year. |
+| `month` | character | Month of the calendar day as a two-digit string. |
+| `day` | character | Day number within the month. |
+| `dateURL` | character | The calendar day as YYYYMMDD, the dates= value of that day's scoreboard request. |
+| `url` | character | RotoWire player page URL. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season` is less than 2002. |
+
+**Example**
+
+```python
+from sportsdataverse.nba import espn_nba_calendar
+cal = espn_nba_calendar(season=2023)
+print(cal.shape)
+
+# Use ondays to get every scheduled date for the season
+
+ondays = espn_nba_calendar(season=2023, ondays=True)
+
+# Pipeline next step (loop the URLs to scrape day-by-day)
+
+cal = espn_nba_calendar(season=2023, ondays=True)
+urls = cal["url"].to_list()  # feed each into espn_nba_schedule
+```
+
 ### espn_nba_game_rosters {#espn_nba_game_rosters}
 
-`espn_nba_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+`espn_nba_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame | pd.DataFrame | dict'`
 
 espn_nba_game_rosters() - Pull the game by id.
 
@@ -17,12 +69,12 @@ espn_nba_game_rosters() - Pull the game by id.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `int` |  | Unique game_id, can be obtained from espn_nba_schedule(). |
-| `raw` |  | `False` |  |
+| `raw` | `bool` | `False` | If True, returns the Core v2 competitors payload (dict) as ESPN sent it; its roster, team and athlete `$ref` links are not followed. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**
 
-Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 'athlete_guid', 'athlete_type', 'first_name', 'last_name', 'full_name', 'athlete_display_name', 'short_name', 'weight', 'display_weight', 'height', 'display_height', 'age', 'date_of_birth', 'slug', 'jersey', 'linked', 'active', 'alternate_ids_sdr', 'birth_place_city', 'birth_place_state', 'birth_place_country', 'headshot_href', 'headshot_alt', 'experience_years', 'experience_display_value', 'experience_abbreviation', 'status_id', 'status_name', 'status_type', 'status_abbreviation', 'hand_type', 'hand_abbreviation', 'hand_display_value', 'draft_display_text', 'draft_round', 'draft_year', 'draft_selection', 'player_id', 'starter', 'valid', 'did_not_play', 'display_name', 'ejected', 'athlete_href', 'position_href', 'statistics_href', 'team_id', 'team_guid', 'team_uid', 'team_slug', 'team_location', 'team_name', 'team_abbreviation', 'team_display_name', 'team_short_display_name', 'team_color', 'team_alternate_color', 'is_active', 'is_all_star', 'logo_href', 'logo_dark_href', 'game_id'
+Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 'athlete_guid', 'athlete_type', 'first_name', 'last_name', 'full_name', 'athlete_display_name', 'short_name', 'weight', 'display_weight', 'height', 'display_height', 'age', 'date_of_birth', 'slug', 'jersey', 'linked', 'active', 'alternate_ids_sdr', 'birth_place_city', 'birth_place_state', 'birth_place_country', 'headshot_href', 'headshot_alt', 'experience_years', 'experience_display_value', 'experience_abbreviation', 'status_id', 'status_name', 'status_type', 'status_abbreviation', 'hand_type', 'hand_abbreviation', 'hand_display_value', 'draft_display_text', 'draft_round', 'draft_year', 'draft_selection', 'player_id', 'starter', 'valid', 'did_not_play', 'display_name', 'ejected', 'athlete_href', 'position_href', 'statistics_href', 'team_id', 'team_guid', 'team_uid', 'team_slug', 'team_location', 'team_name', 'team_abbreviation', 'team_display_name', 'team_short_display_name', 'team_color', 'team_alternate_color', 'is_active', 'is_all_star', 'logo_href', 'logo_dark_href', 'game_id' plus the athlete's `position_id`, `position_name`, `position_display_name`, `position_abbreviation` and `position_leaf`. With `raw=True`, the competitors payload (dict).
 
 | col_name | type | description |
 |---|---|---|
@@ -84,6 +136,11 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `status_name` | character | Status label. |
 | `status_type` | character | Status type. |
 | `status_abbreviation` | character | Status abbreviation. |
+| `position_id` | integer | ESPN's numeric identifier of the athlete's listed position (the Core v2 position resource id). |
+| `position_name` | character | Name of the athlete's listed position from ESPN's position resource, e.g. Guard or Forward. |
+| `position_display_name` | character | Display form of the athlete's listed position as ESPN renders it; usually equal to position_name. |
+| `position_abbreviation` | character | Short code of the athlete's listed position (e.g. G, F, RW, OL), from ESPN's position resource. |
+| `position_leaf` | logical | Whether the position is a leaf of ESPN's position tree; False marks a grouping, not a specific role. |
 | `birth_place_state` | character | Birth place state. |
 | `college_athlete_href` | character |  |
 | `hand_type` | character | Hand type. |
@@ -118,6 +175,13 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `logo_href` | character | Team or league logo URL. |
 | `logo_dark_href` | character | Logo URL for dark backgrounds. |
 | `game_id` | integer | Unique game identifier. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | ESPN has no competitors, roster or athlete resource for the game (404), or every rostered athlete's `$ref` answered 404. A single 404 athlete is left out with a `UserWarning` and the rest of the roster is returned. |
+| `AssetFetchError` | A fetch failed (403, 429, 5xx, a dropped connection); never treated as a missing athlete. |
 
 **Example**
 

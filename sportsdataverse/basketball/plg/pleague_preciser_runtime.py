@@ -81,6 +81,7 @@ def _vendor(kind: str, route: str, uuid: str, ctx: Dict[str, Any]) -> Dict[str, 
     where = _rt._where(url)
     resp = _fetch(url)
     status = getattr(resp, "status_code", None)
+    _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a)
     if status == 404:
         raise NoDataError(f"{where} answered HTTP 404")
     if status in (400, 422):
@@ -116,6 +117,7 @@ def _vendor(kind: str, route: str, uuid: str, ctx: Dict[str, Any]) -> Dict[str, 
     return body[0]
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, Any]:
     """GET one Preciser route, refuse every wrong answer, return the game object with the request stamped.
 
@@ -152,8 +154,10 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, An
         game = SITE.game_record(gid)
         if game.get("uuid") != uuid:
             raise AssetFetchError(f"game {gid} on the site has uuid {game.get('uuid')!r}, not {uuid!r}")
-        ctx["game"], ctx["box"] = game, SITE.box_data(gid)["data"]
-        if kind in ("shots", "injury"):  # these two are compared with the summary's team uuids
-            _vendor("summary", "/post/game/summary/o/plg/gameId/", uuid, ctx)
+        # the site's box and (for shots / injury) the summary verify the uuid: lookups, so a 204 is unknown
+        with _rt._no_content_unknown(f"game {gid} (the site box and summary checks)"):
+            ctx["game"], ctx["box"] = game, SITE._box_data(gid)["data"]
+            if kind in ("shots", "injury"):  # these two are compared with the summary's team uuids
+                _vendor("summary", "/post/game/summary/o/plg/gameId/", uuid, ctx)
     data = _vendor(kind, route, uuid, ctx)
     return {"data": data, REQUEST_KEY: {"kind": kind, "uuid": uuid, "verified": gid is not None, "gid": gid}}

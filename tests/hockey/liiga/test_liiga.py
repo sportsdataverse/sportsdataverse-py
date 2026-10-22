@@ -458,7 +458,7 @@ def test_runtime_throttles_and_never_retries_a_500(transport):
     ("body", "error", "match"),
     [
         ({"stats": "Remote server error"}, NoDataError, "no such game"),
-        ("Remote server error", AssetFetchError, "error string"),
+        ("Remote server error", AssetFetchError, "a JSON str, not an object"),  # the shared _json_body refuses it first
         ({"message": "Internal server error"}, AssetFetchError, "error envelope"),
         ({"games": "unexpected error"}, AssetFetchError, "error body"),
         ([], NoDataError, "no rows"),

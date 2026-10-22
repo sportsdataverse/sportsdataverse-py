@@ -171,6 +171,7 @@ def _call(path: str, params: Optional[Dict[str, Any]] = None) -> Any:
         if getattr(resp, "status_code", None) != 401:
             break
     status = getattr(resp, "status_code", None)
+    _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a)
     if status == 401:
         raise _fail(
             f"{where} answered HTTP 401: the X-Authorization key was rejected (key rotated? re-read it from the "
@@ -589,6 +590,7 @@ def _int_arg(value: Any, what: str) -> int:
 
 
 # --------------------------------------------------------------------------------------- the getter
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, Any]:
     """GET a Sportpress route, refuse every wrong answer, return the body with the request stamped.
 
@@ -630,7 +632,8 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, An
     canonical = pattern.pattern.strip("^$")
     path = re.sub(r"\(\?P<(\w+)>\[\^/\]\+\)", lambda mm: str(ids[mm.group(1)]), canonical)
     if check in _GATED:  # the gate reads the game first, so an unfinished game costs one request
-        _game(ids["gameId"])
+        with _rt._no_content_unknown(f"{base.netloc}/schedule/find/{ids['gameId']} (the finished-game check)"):
+            _game(ids["gameId"])
     body = _scrub_personal(_call(path, q or None))
     where = f"{base.netloc}{path}"
     check(body, ids, q, where)

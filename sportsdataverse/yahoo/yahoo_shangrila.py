@@ -4,7 +4,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
+from typing import Dict, List, Optional, Union  # noqa: F401
+
+# Imported at runtime, not under TYPE_CHECKING: typing.get_type_hints() evaluates the
+# annotations below and raised NameError on ``pl`` / ``pd`` (R858-4).
+import pandas as pd  # noqa: F401
+import polars as pl  # noqa: F401
 
 from sportsdataverse.yahoo.yahoo_shangrila_runtime import _get
 from sportsdataverse.yahoo.yahoo_shangrila_parsers import (
@@ -12,10 +17,6 @@ from sportsdataverse.yahoo.yahoo_shangrila_parsers import (
     parse_yahoo_shangrila,
     parse_yahoo_shangrila_tables,
 )
-
-if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
-    import pandas as pd
-    import polars as pl
 
 __all__ = [
     "yahoo_oly_medal_count",
@@ -3267,7 +3268,7 @@ def yahoo_nav_dropdown_tray(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Yahoo shangrila persisted query `navDropdownTray` -> tables: nfl, nhl, nba, mlb, wnba, ncaab, ncaaf, ncaaw, sportsbook_legal_states
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/navDropdownTray``
@@ -3387,7 +3388,7 @@ def yahoo_playbook_boxscore(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Yahoo shangrila persisted query `playbookBoxscore` -> tables: football_positions, football_stat_types, games
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playbookBoxscore``
@@ -3461,7 +3462,7 @@ def yahoo_playbook_boxscore_poll(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Yahoo shangrila persisted query `playbookBoxscorePoll` -> tables: football_positions, football_stat_types, games
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playbookBoxscorePoll``
@@ -4071,7 +4072,7 @@ def yahoo_playbook_team(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Yahoo shangrila persisted query `playbookTeam` -> tables: teams, leagues
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playbookTeam``
@@ -4296,7 +4297,7 @@ def yahoo_player_basic(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Yahoo shangrila persisted query `playerBasic` -> tables: players, leagues
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playerBasic``
@@ -5020,7 +5021,7 @@ def yahoo_season_stats_football_defense_ncaaf(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Legacy player season Defense leaders (NCAAF)
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/seasonStatsFootballDefenseNcaaf``
@@ -5078,7 +5079,7 @@ def yahoo_season_stats_football_kicking_ncaaf(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Legacy player season Kicking leaders (NCAAF)
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/seasonStatsFootballKickingNcaaf``
@@ -5136,7 +5137,7 @@ def yahoo_season_stats_football_passing_ncaaf(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Legacy player season Passing leaders (NCAAF)
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/seasonStatsFootballPassingNcaaf``
@@ -5194,7 +5195,7 @@ def yahoo_season_stats_football_punting_ncaaf(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Legacy player season Punting leaders (NCAAF)
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/seasonStatsFootballPuntingNcaaf``
@@ -5252,7 +5253,7 @@ def yahoo_season_stats_football_receiving_ncaaf(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Legacy player season Receiving leaders (NCAAF)
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/seasonStatsFootballReceivingNcaaf``
@@ -5310,7 +5311,7 @@ def yahoo_season_stats_football_returns_ncaaf(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Legacy player season Returns leaders (NCAAF)
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/seasonStatsFootballReturnsNcaaf``
@@ -5368,7 +5369,7 @@ def yahoo_season_stats_football_rushing_ncaaf(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Legacy player season Rushing leaders (NCAAF)
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/seasonStatsFootballRushingNcaaf``
@@ -5426,7 +5427,7 @@ def yahoo_season_team_stats_football_defense(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Legacy team season Defense (NCAAF)
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/seasonTeamStatsFootballDefense``
@@ -5484,7 +5485,7 @@ def yahoo_season_team_stats_football_kicking(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Legacy team season Kicking (NCAAF)
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/seasonTeamStatsFootballKicking``
@@ -5542,7 +5543,7 @@ def yahoo_season_team_stats_football_kickoffs(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Legacy team season Kickoffs (NCAAF)
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/seasonTeamStatsFootballKickoffs``
@@ -5600,7 +5601,7 @@ def yahoo_season_team_stats_football_offense(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Legacy team season Offense (NCAAF)
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/seasonTeamStatsFootballOffense``
@@ -5658,7 +5659,7 @@ def yahoo_season_team_stats_football_passing(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Legacy team season Passing (NCAAF)
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/seasonTeamStatsFootballPassing``
@@ -5716,7 +5717,7 @@ def yahoo_season_team_stats_football_passing_defense(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Legacy team Passing defense allowed (NCAAF)
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/seasonTeamStatsFootballPassingDefense``
@@ -5774,7 +5775,7 @@ def yahoo_season_team_stats_football_punting(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Legacy team season Punting (NCAAF)
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/seasonTeamStatsFootballPunting``
@@ -5832,7 +5833,7 @@ def yahoo_season_team_stats_football_receiving(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Legacy team season Receiving (NCAAF)
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/seasonTeamStatsFootballReceiving``
@@ -5890,7 +5891,7 @@ def yahoo_season_team_stats_football_receiving_defense(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Legacy team Receiving defense allowed (NCAAF)
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/seasonTeamStatsFootballReceivingDefense``
@@ -5948,7 +5949,7 @@ def yahoo_season_team_stats_football_returns(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Legacy team season Returns (NCAAF)
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/seasonTeamStatsFootballReturns``
@@ -6006,7 +6007,7 @@ def yahoo_season_team_stats_football_rushing(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Legacy team season Rushing (NCAAF)
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/seasonTeamStatsFootballRushing``
@@ -6064,7 +6065,7 @@ def yahoo_season_team_stats_football_rushing_defense(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Legacy team Rushing defense allowed (NCAAF)
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/seasonTeamStatsFootballRushingDefense``
@@ -6414,7 +6415,7 @@ def yahoo_team_stats_leaders_v2(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Yahoo shangrila persisted query `teamStatsLeadersV2` -> tables: leagues, teams
 
     Endpoint: ``GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/teamStatsLeadersV2``
@@ -6949,7 +6950,7 @@ def yahoo_editorial_boxscore(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Full game box score + play-by-play (normalized stat dictionaries)
 
     Endpoint: ``GET https://api-secure.sports.yahoo.com/v1/editorial/s/boxscore/{game_id}``
@@ -7003,7 +7004,7 @@ def yahoo_editorial_scoreboard(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Scoreboard: games + teams + leagues + odds (fat payload)
 
     Endpoint: ``GET https://api-secure.sports.yahoo.com/v1/editorial/s/scoreboard``

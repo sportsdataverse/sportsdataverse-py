@@ -71,7 +71,7 @@ def _requested_url(fn_name: str, league: str, season: int) -> str:
         box["url"] = url
         raise FileNotFoundError("404 not found")  # 404-safe path: warn + skip
 
-    with patch.object(mod.pl, "read_parquet", side_effect=fake):
+    with patch.object(runtime, "_release_bytes", side_effect=fake):  # the release fetch, before the parse (R898-9)
         # `_read_release_parquet` classifies a failed read by asking the transport
         # what the server said, so keep that lookup offline too.
         with patch.object(runtime, "download", side_effect=NoDataError("404")):
@@ -161,7 +161,7 @@ def test_shim_warns_and_names_its_replacement(shim, target):
     import importlib
 
     mod = importlib.import_module("sportsdataverse.nba.nba_loaders")
-    with patch.object(mod.pl, "read_parquet", side_effect=FileNotFoundError("404")):
+    with patch.object(runtime, "_release_bytes", side_effect=FileNotFoundError("404")):
         with patch.object(runtime, "download", side_effect=NoDataError("404")):
             with pytest.warns(DeprecationWarning, match=target):
                 getattr(mod, shim)(seasons=2025)

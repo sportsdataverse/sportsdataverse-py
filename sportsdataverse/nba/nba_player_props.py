@@ -20,7 +20,9 @@ floors move.
 
 from __future__ import annotations
 
+import datetime as dt
 import math
+import warnings
 from typing import Any, Literal, Union, overload
 
 import numpy as np
@@ -28,6 +30,8 @@ import pandas as pd
 import polars as pl
 import scipy.stats as st
 
+from sportsdataverse._temporal import as_date
+from sportsdataverse.errors import AsOfCutWarning
 from sportsdataverse.nba.nba_game_predict import expected_possessions
 from sportsdataverse.nba.nba_prediction_constants import get_constants
 
@@ -219,17 +223,22 @@ def team_pace_projection(
     return expected_possessions(float(pace[home_team_id]), float(pace[away_team_id]), league_id=league_id)
 
 
-def _load_player_logs(season: int, league_id: str) -> pl.DataFrame:  # pragma: no cover - live network
-    """Live player box logs (monkeypatched to fixtures in tests); WNBA via league_id=10."""
+def _load_player_logs(season: int, league_id: str) -> pl.DataFrame:
+    """Live player box logs (the box loader is stubbed in tests); WNBA via league_id=10."""
     if league_id == "10":
-        from sportsdataverse.wnba.wnba_loaders import load_wnba_player_boxscore  # noqa: PLC0415
+        from sportsdataverse.wnba.wnba_loaders import load_wnba_player_boxscore
 
         box = load_wnba_player_boxscore([season])
     else:
-        from sportsdataverse.nba.nba_loaders import load_nba_player_boxscore  # noqa: PLC0415
+        from sportsdataverse.nba.nba_loaders import load_nba_player_boxscore
 
         box = load_nba_player_boxscore([season])
+    # checked before the select, which would otherwise raise polars' ColumnNotFoundError
+    if "game_date" not in box.columns:
+        raise ValueError("nba_player_props: box logs need game_date for the as-of cut")
     return box.select(
+        pl.col("game_id").cast(pl.Int64, strict=False).cast(pl.Utf8),
+        as_date(pl.col("game_date")).alias("game_date"),
         pl.col("athlete_id").cast(pl.Int64, strict=False).cast(pl.Utf8).alias("player_id"),
         pl.col("team_id").cast(pl.Int64, strict=False).cast(pl.Utf8),
         pl.col("minutes").cast(pl.Float64),
@@ -240,11 +249,23 @@ def _load_player_logs(season: int, league_id: str) -> pl.DataFrame:  # pragma: n
     )
 
 
-def _load_ratings(season: int, league_id: str) -> pl.DataFrame:  # pragma: no cover - live network
-    """Live team ratings for pace (monkeypatched to fixtures in tests)."""
-    from sportsdataverse.nba.nba_team_ratings import nba_team_ratings  # noqa: PLC0415
+def _load_ratings(
+    season: int, league_id: str, as_of_date: Union[dt.date, None] = None
+) -> pl.DataFrame:  # pragma: no cover - live network
+    """Live team ratings for pace, from games strictly before ``as_of_date`` (monkeypatched in tests)."""
+    from sportsdataverse.nba.nba_team_ratings import nba_team_ratings
 
-    return nba_team_ratings(season, league_id=league_id)
+    return nba_team_ratings(season, league_id=league_id, as_of_date=as_of_date)
+
+
+def _load_game_date(season: int, league_id: str, game_id: str) -> Union[dt.date, None]:  # pragma: no cover - live
+    """The game's date from the season schedule (the one ``nba_team_ratings`` reads); ``None`` if absent."""
+    from sportsdataverse.nba.nba_team_ratings import _league_loaders, _normalize_schedule
+
+    load_schedule, _ = _league_loaders(league_id)
+    sched = _normalize_schedule(load_schedule([season]))
+    hit = sched.filter(pl.col("game_id").cast(pl.Int64, strict=False).cast(pl.Utf8) == str(game_id))
+    return hit.select(as_date(pl.col("date"))).to_series().min() if hit.height else None
 
 
 _PROPS_SCHEMA = {
@@ -266,6 +287,7 @@ def nba_player_props(
     away_team_id: str,
     *,
     league_id: str = "00",
+    as_of_date: Union[dt.date, None] = None,
     return_as_pandas: Literal[False] = False,
 ) -> pl.DataFrame: ...
 
@@ -278,6 +300,7 @@ def nba_player_props(
     away_team_id: str,
     *,
     league_id: str = "00",
+    as_of_date: Union[dt.date, None] = None,
     return_as_pandas: Literal[True],
 ) -> pd.DataFrame: ...
 
@@ -289,22 +312,30 @@ def nba_player_props(
     away_team_id: str,
     *,
     league_id: str = "00",
+    as_of_date: Union[dt.date, None] = None,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Per-player expected prop lines + team pace projection for a matchup.
 
-    Loads the season's player box logs + team ratings, computes per-minute
+    Loads the season's player box logs + team ratings, keeps only games played
+    strictly before ``as_of_date`` (both inputs), computes per-minute
     :func:`player_rates`, and projects each player's line onto their mean
     minutes and the matchup's pace factor (``exp_poss / avg_pace``). Only the
     two teams in the matchup are returned.
 
     Args:
         season: End year of the season (e.g. ``2024``).
-        game_id: The game id (passed through for the caller's join; not used to
-            filter historical rates).
+        game_id: The game id. When ``as_of_date`` is ``None`` and this game is in
+            the season's box logs or schedule, its date becomes the cut, so the
+            default call never sees the game's own or any later line.
         home_team_id: Home team id.
         away_team_id: Away team id.
         league_id: ``"00"`` NBA / ``"10"`` WNBA / ``"20"`` G-League.
+        as_of_date: Only box lines and ratings games with ``game_date <
+            as_of_date`` (strict) are used. ``None`` = the target game's date
+            from the box logs, else from the schedule (one extra schedule read,
+            only when the game is missing from the logs); a game in neither gets
+            no cut and an :class:`~sportsdataverse.errors.AsOfCutWarning`.
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
@@ -312,14 +343,40 @@ def nba_player_props(
         stat_reb_exp, stat_ast_exp, stat_fg3m_exp, pace_proj``. Empty input
         returns that schema with zero rows.
 
+    Raises:
+        ValueError: The box logs carry no ``game_date`` (the as-of cut cannot be applied).
+
+    Warns:
+        AsOfCutWarning: ``as_of_date`` is ``None`` and ``game_id`` is in neither
+            the box logs nor the schedule, so no cut was applied.
+
     Example:
         Quick start::
 
             from sportsdataverse.nba.nba_player_props import nba_player_props
             props = nba_player_props(2024, "401585828", "2", "6")
+
+        Backtest as of a date::
+
+            import datetime as dt
+            props = nba_player_props(2024, "401585828", "2", "6", as_of_date=dt.date(2024, 1, 15))
     """
     logs = _load_player_logs(season, league_id)
-    ratings = _load_ratings(season, league_id)
+    if as_of_date is None:
+        own = logs.filter(pl.col("game_id").cast(pl.Utf8) == str(game_id))["game_date"].drop_nulls()
+        # A played game can be missing from the box logs (ESPN gap, wrong season): fall back to the schedule.
+        as_of_date = own.min() if own.len() else _load_game_date(season, league_id, game_id)
+        if as_of_date is None:
+            warnings.warn(
+                f"nba_player_props: game {game_id} is in neither the box logs nor the schedule; "
+                "no as-of cut applied (pass as_of_date to cut)",
+                AsOfCutWarning,
+                stacklevel=2,
+            )
+    if as_of_date is not None:
+        # Strict `<`: the target game's own line (and every later one) never feeds its projection.
+        logs = logs.filter(pl.col("game_date") < as_of_date)
+    ratings = _load_ratings(season, league_id, as_of_date=as_of_date)
     rates = player_rates(logs)
     if rates.height == 0 or ratings.height == 0:
         out = pl.DataFrame(schema=_PROPS_SCHEMA)

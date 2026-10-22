@@ -254,6 +254,45 @@ from sportsdataverse.mlb.mlb_run_values import event_run_value
 rv_sb = event_run_value(pitches, ["stolen_base_2b", "stolen_base_3b"])
 ```
 
+### leverage_index {#leverage_index}
+
+`leverage_index(states: 'pl.DataFrame', we_table: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+
+Empirical (Tango) leverage index per base-out-score-inning state bucket.
+
+`leverage_index(s) = E[|delta WE|] over the empirical next-state
+distribution from `s`, divided by the league-average of that
+quantity (so the average state has `leverage_index == 1``).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `states` | `DataFrame` |  | Output of `sportsdataverse.mlb.mlb_run_expectancy.pbp_base_out_states`. |
+| `we_table` | `DataFrame` |  | Output of `build_we_table`. |
+| `return_as_pandas` | `bool` | `False` | Return `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+one row per observed state bucket. | Column | Type | Description | |---|---|---| | inning_capped | Int64 | Inning, capped at 9 | | half | Utf8 | `"top"` or `"bottom"` | | base_state | Utf8 | 3-char base occupancy | | outs_start | Int64 | Outs before the play (0-2) | | score_diff_bucket | Int64 | home - away score, clipped to [-6, 6] | | leverage_index | Float64 | Mean \|delta WE\| from this state, normalized to a 1.0 league average |
+
+| col_name | type | description |
+|---|---|---|
+| `inning_capped` | integer | Inning of the state bucket, capped at 9 (extra innings share the ninth's bucket). |
+| `half` | character | Half inning of the state bucket, top or bottom. |
+| `base_state` | character | Base occupancy of the state as three characters (first, second, third), e.g. 1_3 for runners on first and third. |
+| `outs_start` | integer | Outs before the play, 0-2. |
+| `score_diff_bucket` | integer | Home minus away score at the state, clipped to [-6, 6]. |
+| `leverage_index` | double | Leverage index quantifying the importance of the at-bat situation. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_win_expectancy import build_we_table, leverage_index
+table = build_we_table(states, results)
+li = leverage_index(states, table)
+```
+
 ### mae {#mae}
 
 `mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'`
@@ -1058,6 +1097,39 @@ P(over), in `[0, 1]`.
 ```python
 from sportsdataverse.mlb.mlb_prop_projection import prop_over_prob
 prop_over_prob(3.5, 4.5)
+```
+
+### run_value {#run_value}
+
+`run_value(before_state: 'str', before_outs: 'int', after_state: 'str', after_outs: 'int', runs_on_play: 'int', matrix: 'pl.DataFrame') -> 'float'`
+
+Run value of a single event: `re[after] - re[before] + runs_on_play`.
+
+The **exported denominator** the sibling Statcast spines (T6.1
+pitching, T6.2 hitting, T6.3 fielding/baserunning) call to score
+individual plays against this spine's RE24 matrix.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `before_state` | `str` |  | 3-char base occupancy before the event. |
+| `before_outs` | `int` |  | Outs before the event (0-2); `>= 3` treated as 0 RE. |
+| `after_state` | `str` |  | 3-char base occupancy after the event. |
+| `after_outs` | `int` |  | Outs after the event; `>= 3` (inning over) treated as 0 RE. |
+| `runs_on_play` | `int` |  | Runs scored on the event. |
+| `matrix` | `DataFrame` |  | An `mlb_run_expectancy_matrix` output (or any frame with matching `base_state`/`outs`/`re` columns). |
+
+**Returns**
+
+the run value of the event.
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_run_expectancy import run_value, mlb_run_expectancy_matrix
+matrix = mlb_run_expectancy_matrix(pbp=pbp)
+rv = run_value("___", 0, "1__", 0, 0, matrix)
 ```
 
 ### spearman_corr {#spearman_corr}

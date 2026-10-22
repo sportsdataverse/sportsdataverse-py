@@ -505,7 +505,7 @@ def _enrich_potential_assists(
     Returns:
         *df* with an added ``potential_assists`` column (``null`` where unresolved).
     """
-    from sportsdataverse.nba.nba_stats import nba_stats_playerdashptpass  # noqa: PLC0415
+    from sportsdataverse.nba.nba_stats import nba_stats_playerdashptpass
 
     fetch = _pass_get_fn if _pass_get_fn is not None else nba_stats_playerdashptpass
     top_ids = df.sort("passes", descending=True).head(max_players)["player_id"].to_list()
@@ -1122,7 +1122,7 @@ def _enrich_shotdefend_rim_band(
         *df* restricted to the players successfully enriched, with
         ``d_fga``/``d_fgm``/``d_fg_pct`` replaced by the rim-band figures.
     """
-    from sportsdataverse.nba.nba_stats import nba_stats_playerdashptshotdefend  # noqa: PLC0415
+    from sportsdataverse.nba.nba_stats import nba_stats_playerdashptshotdefend
 
     fetch = _defend_get_fn if _defend_get_fn is not None else nba_stats_playerdashptshotdefend
     top_ids = df.sort("d_fga", descending=True).head(max_players)["player_id"].to_list()

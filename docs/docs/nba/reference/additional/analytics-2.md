@@ -925,7 +925,7 @@ cross-checkpoint-window leaks; do not prune one without the other.
 |---|---|---|---|
 | `model` | `AnyModel` |  | A harness model conforming to `nba_model_validation.AnyModel` (a `RapmModel`, `RatingsModel`, or `PriorModel`). |
 | `possessions` | `DataFrame` |  | A possession+lineup frame that MUST carry a `game_date` (`pl.Date`) column (as emitted by `compile_nba_season`). |
-| `asof` | `date` |  | The through-date checkpoint (inclusive). |
+| `asof` | `date` |  | The through-date checkpoint (inclusive: `game_date <= asof`). A pregame consumer of a game on day D passes `D - 1 day`; the pregame surfaces (`nba_player_props`, `nba_team_ratings`) take a strict `as_of_date` instead. |
 
 **Returns**
 

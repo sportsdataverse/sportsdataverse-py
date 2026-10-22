@@ -347,7 +347,7 @@ espn_wbb_summary()
 
 _Last validated n/a._
 
-## espn_wbb_calendar
+## espn_wbb_calendar_site
 
 ESPN endpoint.
 
@@ -358,7 +358,7 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns {#espn_wbb_calendar-returns}
+### Returns {#espn_wbb_calendar_site-returns}
 
 **`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 
@@ -366,7 +366,7 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Raises {#espn_wbb_calendar-raises}
+### Raises {#espn_wbb_calendar_site-raises}
 
 | Exception | Description |
 |---|---|
@@ -374,10 +374,10 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
-### Example {#espn_wbb_calendar-example}
+### Example {#espn_wbb_calendar_site-example}
 
 ```python
-espn_wbb_calendar()
+espn_wbb_calendar_site()
 ```
 
 _Last validated n/a._
@@ -766,7 +766,7 @@ espn_wbb_team(team_id='4')
 
 _Last validated n/a._
 
-## espn_wbb_team_roster
+## espn_wbb_team_roster_site
 
 ESPN endpoint.
 
@@ -776,10 +776,10 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `team_id` | `team_id` |  | `Y` |  | ESPN team identifier (e.g. `2509` for UConn). |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
-### Returns {#espn_wbb_team_roster-returns}
+### Returns {#espn_wbb_team_roster_site-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 
@@ -830,7 +830,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Raises {#espn_wbb_team_roster-raises}
+### Raises {#espn_wbb_team_roster_site-raises}
 
 | Exception | Description |
 |---|---|
@@ -838,10 +838,10 @@ ESPN endpoint.
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
-### Example {#espn_wbb_team_roster-example}
+### Example {#espn_wbb_team_roster_site-example}
 
 ```python
-espn_wbb_team_roster(team_id='4')
+espn_wbb_team_roster_site(team_id='4')
 ```
 
 _Last validated n/a._
@@ -1300,7 +1300,7 @@ espn_wbb_player_news(athlete_id='4239')
 
 _Last validated n/a._
 
-## espn_wbb_standings
+## espn_wbb_standings_site
 
 ESPN endpoint.
 
@@ -1314,7 +1314,7 @@ ESPN endpoint.
 | `group` | `group` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
 | `type` | `standings_type` |  |  | `Y` | Standings variant (e.g. 'by-division' or 'by-conference'). |
 
-### Returns {#espn_wbb_standings-returns}
+### Returns {#espn_wbb_standings_site-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 
@@ -1350,7 +1350,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Raises {#espn_wbb_standings-raises}
+### Raises {#espn_wbb_standings_site-raises}
 
 | Exception | Description |
 |---|---|
@@ -1358,10 +1358,10 @@ ESPN endpoint.
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
-### Example {#espn_wbb_standings-example}
+### Example {#espn_wbb_standings_site-example}
 
 ```python
-espn_wbb_standings()
+espn_wbb_standings_site()
 ```
 
 _Last validated n/a._

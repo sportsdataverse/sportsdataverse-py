@@ -31,7 +31,7 @@ toc_max_heading_level: 2
 |---|---|
 | [espn_cfb_scoreboard](site/other.md#espn_cfb_scoreboard) | ESPN endpoint. |
 | [espn_cfb_summary](site/other.md#espn_cfb_summary) | ESPN endpoint. |
-| [espn_cfb_calendar](site/other.md#espn_cfb_calendar) | ESPN endpoint. |
+| [espn_cfb_calendar_site](site/other.md#espn_cfb_calendar_site) | ESPN endpoint. |
 | [espn_cfb_news](site/other.md#espn_cfb_news) | ESPN endpoint. |
 | [espn_cfb_injuries](site/other.md#espn_cfb_injuries) | ESPN endpoint. |
 | [espn_cfb_transactions](site/other.md#espn_cfb_transactions) | ESPN endpoint. |

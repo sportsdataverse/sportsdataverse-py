@@ -1,7 +1,9 @@
 {
  "athlete_contracts_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "athlete_core_nba": {
@@ -128,7 +130,9 @@
  },
  "athlete_seasons_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "athlete_splits_nba": {
@@ -145,12 +149,330 @@
  "athlete_statisticslog_nba": {
   "": {
    "statistics": "String",
-   "season_$ref": "String"
+   "season_$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
+  }
+ },
+ "athlete_stats_mbb": {
+  "": {
+   "category": "String",
+   "split_name": "String",
+   "split_category": "String",
+   "split_value": "String",
+   "season": "Int64",
+   "team_id": "Int64",
+   "position": "String",
+   "games_played": "String",
+   "games_started": "String",
+   "avg_minutes": "String",
+   "avg_field_goals_made_avg_field_goals_attempted": "String",
+   "field_goal_pct": "String",
+   "avg_three_point_field_goals_made_avg_three_point_field_goals_attempted": "String",
+   "three_point_field_goal_pct": "String",
+   "avg_free_throws_made_avg_free_throws_attempted": "String",
+   "free_throw_pct": "String",
+   "avg_offensive_rebounds": "String",
+   "avg_defensive_rebounds": "String",
+   "avg_rebounds": "String",
+   "avg_assists": "String",
+   "avg_blocks": "String",
+   "avg_steals": "String",
+   "avg_fouls": "String",
+   "avg_turnovers": "String",
+   "avg_points": "String",
+   "field_goals_made_field_goals_attempted": "String",
+   "three_point_field_goals_made_three_point_field_goals_attempted": "String",
+   "free_throws_made_free_throws_attempted": "String",
+   "offensive_rebounds": "String",
+   "defensive_rebounds": "String",
+   "total_rebounds": "String",
+   "assists": "String",
+   "blocks": "String",
+   "steals": "String",
+   "fouls": "String",
+   "turnovers": "String",
+   "points": "String",
+   "double_double": "String",
+   "triple_double": "String",
+   "disqualifications": "String",
+   "ejections": "String",
+   "technical_fouls": "String",
+   "flagrant_fouls": "String",
+   "assist_turnover_ratio": "String",
+   "steal_turnover_ratio": "String",
+   "rating": "String",
+   "scoring_efficiency": "String",
+   "shooting_efficiency": "String"
+  }
+ },
+ "athlete_stats_mlb": {
+  "": {
+   "category": "String",
+   "split_name": "String",
+   "split_category": "String",
+   "split_value": "String",
+   "season": "Int64",
+   "team_id": "Int64",
+   "position": "String",
+   "games_played": "String",
+   "at_bats": "String",
+   "runs": "String",
+   "hits": "String",
+   "doubles": "String",
+   "triples": "String",
+   "home_runs": "String",
+   "rb_is": "String",
+   "walks": "String",
+   "hit_by_pitch": "String",
+   "strikeouts": "String",
+   "stolen_bases": "String",
+   "caught_stealing": "String",
+   "avg": "String",
+   "on_base_pct": "String",
+   "slug_avg": "String",
+   "ops": "String",
+   "warbr": "String",
+   "plate_appearances": "String",
+   "pitches": "String",
+   "pitches_per_plate_appearance": "String",
+   "extra_base_hits": "String",
+   "total_bases": "String",
+   "intentional_walks": "String",
+   "gid_ps": "String",
+   "sac_hits": "String",
+   "sac_flies": "String",
+   "stolen_base_pct": "String",
+   "off_warbr": "String",
+   "runs_created": "String",
+   "runs_created_per27_outs": "String",
+   "isolated_power": "String",
+   "secondary_avg": "String",
+   "at_bats_per_home_run": "String",
+   "walks_per_plate_appearance": "String",
+   "walk_to_strikeout_ratio": "String",
+   "ground_balls": "String",
+   "fly_balls": "String",
+   "ground_to_fly_ratio": "String"
+  }
+ },
+ "athlete_stats_nba": {
+  "": {
+   "category": "String",
+   "split_name": "String",
+   "split_category": "String",
+   "split_value": "String",
+   "season": "Int64",
+   "team_id": "Int64",
+   "position": "String",
+   "games_played": "String",
+   "games_started": "String",
+   "avg_minutes": "String",
+   "avg_field_goals_made_avg_field_goals_attempted": "String",
+   "field_goal_pct": "String",
+   "avg_three_point_field_goals_made_avg_three_point_field_goals_attempted": "String",
+   "three_point_field_goal_pct": "String",
+   "avg_free_throws_made_avg_free_throws_attempted": "String",
+   "free_throw_pct": "String",
+   "avg_offensive_rebounds": "String",
+   "avg_defensive_rebounds": "String",
+   "avg_rebounds": "String",
+   "avg_assists": "String",
+   "avg_blocks": "String",
+   "avg_steals": "String",
+   "avg_fouls": "String",
+   "avg_turnovers": "String",
+   "avg_points": "String",
+   "field_goals_made_field_goals_attempted": "String",
+   "three_point_field_goals_made_three_point_field_goals_attempted": "String",
+   "free_throws_made_free_throws_attempted": "String",
+   "offensive_rebounds": "String",
+   "defensive_rebounds": "String",
+   "total_rebounds": "String",
+   "assists": "String",
+   "blocks": "String",
+   "steals": "String",
+   "fouls": "String",
+   "turnovers": "String",
+   "points": "String",
+   "double_double": "String",
+   "triple_double": "String",
+   "disqualifications": "String",
+   "ejections": "String",
+   "technical_fouls": "String",
+   "flagrant_fouls": "String",
+   "assist_turnover_ratio": "String",
+   "steal_turnover_ratio": "String",
+   "scoring_efficiency": "String",
+   "shooting_efficiency": "String"
+  }
+ },
+ "athlete_stats_nfl": {
+  "": {
+   "category": "String",
+   "split_name": "String",
+   "split_category": "String",
+   "split_value": "String",
+   "season": "Int64",
+   "team_id": "Int64",
+   "position": "String",
+   "games_played": "String",
+   "completions": "String",
+   "passing_attempts": "String",
+   "completion_pct": "String",
+   "passing_yards": "String",
+   "yards_per_pass_attempt": "String",
+   "passing_touchdowns": "String",
+   "interceptions": "String",
+   "long_passing": "String",
+   "sacks": "String",
+   "qb_rating": "String",
+   "adj_qbr": "String",
+   "rushing_attempts": "String",
+   "rushing_yards": "String",
+   "yards_per_rush_attempt": "String",
+   "rushing_touchdowns": "String",
+   "long_rushing": "String",
+   "rushing_first_downs": "String",
+   "rushing_fumbles": "String",
+   "rushing_fumbles_lost": "String",
+   "receptions": "String",
+   "receiving_targets": "String",
+   "receiving_yards": "String",
+   "yards_per_reception": "String",
+   "receiving_touchdowns": "String",
+   "long_reception": "String",
+   "receiving_first_downs": "String",
+   "receiving_fumbles": "String",
+   "receiving_fumbles_lost": "String",
+   "total_tackles": "String",
+   "solo_tackles": "String",
+   "assist_tackles": "String",
+   "fumbles_forced": "String",
+   "fumbles_recovered": "String",
+   "fumbles_recovered_yards": "String",
+   "interception_yards": "String",
+   "avg_interception_yards": "String",
+   "interception_touchdowns": "String",
+   "long_interception": "String",
+   "passes_defended": "String",
+   "stuffs": "String",
+   "stuff_yards": "String",
+   "kicks_blocked": "String",
+   "return_touchdowns": "String",
+   "total_touchdowns": "String",
+   "total_two_point_convs": "String",
+   "kick_extra_points": "String",
+   "field_goals": "String",
+   "total_points": "String"
+  }
+ },
+ "athlete_stats_wbb": {
+  "": {
+   "category": "String",
+   "split_name": "String",
+   "split_category": "String",
+   "split_value": "String",
+   "season": "Int64",
+   "team_id": "Int64",
+   "position": "String",
+   "games_played": "String",
+   "games_started": "String",
+   "avg_minutes": "String",
+   "avg_points": "String",
+   "avg_rebounds": "String",
+   "avg_assists": "String",
+   "avg_steals": "String",
+   "avg_blocks": "String",
+   "avg_turnovers": "String",
+   "avg_field_goals_made_avg_field_goals_attempted": "String",
+   "field_goal_pct": "String",
+   "avg_three_point_field_goals_made_avg_three_point_field_goals_attempted": "String",
+   "three_point_field_goal_pct": "String",
+   "avg_free_throws_made_avg_free_throws_attempted": "String",
+   "free_throw_pct": "String",
+   "avg_fouls": "String",
+   "avg_offensive_rebounds": "String",
+   "avg_defensive_rebounds": "String",
+   "points": "String",
+   "offensive_rebounds": "String",
+   "defensive_rebounds": "String",
+   "total_rebounds": "String",
+   "assists": "String",
+   "steals": "String",
+   "blocks": "String",
+   "turnovers": "String",
+   "field_goals_made_field_goals_attempted": "String",
+   "three_point_field_goals_made_three_point_field_goals_attempted": "String",
+   "free_throws_made_free_throws_attempted": "String",
+   "fouls": "String",
+   "double_double": "String",
+   "triple_double": "String",
+   "assist_turnover_ratio": "String",
+   "steal_turnover_ratio": "String",
+   "scoring_efficiency": "String",
+   "shooting_efficiency": "String",
+   "technical_fouls": "String",
+   "disqualifications": "String",
+   "ejections": "String"
+  }
+ },
+ "athlete_stats_wnba": {
+  "": {
+   "category": "String",
+   "split_name": "String",
+   "split_category": "String",
+   "split_value": "String",
+   "season": "Int64",
+   "team_id": "Int64",
+   "position": "String",
+   "games_played": "String",
+   "games_started": "String",
+   "avg_minutes": "String",
+   "avg_points": "String",
+   "avg_offensive_rebounds": "String",
+   "avg_defensive_rebounds": "String",
+   "avg_rebounds": "String",
+   "avg_assists": "String",
+   "avg_steals": "String",
+   "avg_blocks": "String",
+   "avg_turnovers": "String",
+   "avg_field_goals_made_avg_field_goals_attempted": "String",
+   "field_goal_pct": "String",
+   "avg_three_point_field_goals_made_avg_three_point_field_goals_attempted": "String",
+   "three_point_field_goal_pct": "String",
+   "avg_free_throws_made_avg_free_throws_attempted": "String",
+   "free_throw_pct": "String",
+   "avg_fouls": "String",
+   "points": "String",
+   "offensive_rebounds": "String",
+   "defensive_rebounds": "String",
+   "total_rebounds": "String",
+   "assists": "String",
+   "steals": "String",
+   "blocks": "String",
+   "turnovers": "String",
+   "field_goals_made_field_goals_attempted": "String",
+   "three_point_field_goals_made_three_point_field_goals_attempted": "String",
+   "free_throws_made_free_throws_attempted": "String",
+   "fouls": "String",
+   "double_double": "String",
+   "triple_double": "String",
+   "assist_turnover_ratio": "String",
+   "steal_turnover_ratio": "String",
+   "scoring_efficiency": "String",
+   "shooting_efficiency": "String",
+   "technical_fouls": "String",
+   "flagrant_fouls": "String",
+   "disqualifications": "String",
+   "ejections": "String"
   }
  },
  "athletes_index_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "award_nba": {
@@ -164,7 +486,9 @@
  },
  "awards_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "coach_mlb": {
@@ -227,7 +551,9 @@
    "type_id": "String",
    "type_long_name": "String",
    "type_short_name": "String",
-   "type_slug": "String"
+   "type_slug": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "event_competition_nba": {
@@ -342,6 +668,17 @@
    "ejected": "Boolean"
   }
  },
+ "event_competitor_statistics_nba": {
+  "": {
+   "split_name": "String",
+   "category_name": "String",
+   "stat_name": "String",
+   "stat_abbreviation": "String",
+   "stat_value": "Float64",
+   "stat_display_value": "String",
+   "stat_description": "String"
+  }
+ },
  "event_competitors_nba": {
   "": {
    "$ref": "String",
@@ -357,7 +694,9 @@
    "roster_$ref": "String",
    "score_$ref": "String",
    "statistics_$ref": "String",
-   "team_$ref": "String"
+   "team_$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "event_nba": {
@@ -553,7 +892,9 @@
    "provider_id": "String",
    "provider_name": "String",
    "provider_priority": "Int64",
-   "prop_bets_$ref": "String"
+   "prop_bets_$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "event_official_detail_nba": {
@@ -581,7 +922,9 @@
    "order": "Int64",
    "position_display_name": "String",
    "position_id": "String",
-   "position_name": "String"
+   "position_name": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "event_play_nba": {
@@ -682,7 +1025,9 @@
    "play_$ref": "String",
    "source_description": "String",
    "source_id": "String",
-   "source_state": "String"
+   "source_state": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "event_situation_nba": {
@@ -720,12 +1065,16 @@
  },
  "events_core_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "events_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "fpi_nba": {
@@ -801,7 +1150,9 @@
  },
  "franchises_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "injuries_cfb": {
@@ -1435,7 +1786,9 @@
  },
  "positions_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "rankings_cfb": {
@@ -1618,7 +1971,9 @@
    "athlete_weight": "Float64",
    "status_description": "String",
    "status_id": "Int64",
-   "athlete_hometown_zip_code": "String"
+   "athlete_hometown_zip_code": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "recruiting_athletes_mbb_2026": {
@@ -1655,27 +2010,37 @@
    "athlete_position_id": "String",
    "athlete_position_abbreviation": "String",
    "status_id": "Int64",
-   "status_description": "String"
+   "status_description": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "recruiting_rankings_cfb": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "recruiting_rankings_mbb_2026": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "recruiting_years_cfb": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "recruiting_years_mbb": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "scoreboard_cfb": {
@@ -1787,6 +2152,60 @@
   }
  },
  "scoreboard_mbb": {
+  "": {
+   "game_id": "String",
+   "uid": "String",
+   "date": "String",
+   "name": "String",
+   "short_name": "String",
+   "season_year": "Int64",
+   "season_type": "Int64",
+   "season_slug": "String",
+   "status_type_id": "String",
+   "status_type_name": "String",
+   "status_type_state": "String",
+   "status_type_completed": "Boolean",
+   "status_type_description": "String",
+   "status_type_detail": "String",
+   "status_type_short_detail": "String",
+   "status_clock": "Float64",
+   "status_display_clock": "String",
+   "status_period": "Int64",
+   "neutral_site": "Boolean",
+   "conference_competition": "Boolean",
+   "attendance": "Int64",
+   "venue_id": "String",
+   "venue_full_name": "String",
+   "venue_city": "String",
+   "venue_state": "String",
+   "venue_indoor": "Boolean",
+   "broadcast": "String",
+   "note": "String",
+   "home_id": "String",
+   "home_name": "String",
+   "home_abbreviation": "String",
+   "home_display_name": "String",
+   "home_location": "String",
+   "home_color": "String",
+   "home_alternate_color": "String",
+   "home_logo": "String",
+   "home_score": "String",
+   "home_winner": "Boolean",
+   "home_rank": "Int64",
+   "away_id": "String",
+   "away_name": "String",
+   "away_abbreviation": "String",
+   "away_display_name": "String",
+   "away_location": "String",
+   "away_color": "String",
+   "away_alternate_color": "String",
+   "away_logo": "String",
+   "away_score": "String",
+   "away_winner": "Boolean",
+   "away_rank": "Int64"
+  }
+ },
+ "scoreboard_mbb_dates_2024": {
   "": {
    "game_id": "String",
    "uid": "String",
@@ -2220,17 +2639,52 @@
  },
  "season_athletes_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_awards_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_coaches_nba": {
   "": {
    "$ref": "String"
+  }
+ },
+ "season_draft_nba": {
+  "": {
+   "$ref": "String",
+   "display_name": "String",
+   "links": "String",
+   "number_of_rounds": "Int64",
+   "positions": "String",
+   "short_display_name": "String",
+   "uid": "String",
+   "year": "Int64",
+   "athletes_$ref": "String",
+   "rounds_$ref": "String",
+   "status_$ref": "String"
+  }
+ },
+ "season_draft_nfl": {
+  "": {
+   "$ref": "String",
+   "display_name": "String",
+   "links": "String",
+   "needs": "String",
+   "number_of_rounds": "Int64",
+   "positions": "String",
+   "short_display_name": "String",
+   "uid": "String",
+   "year": "Int64",
+   "athletes_$ref": "String",
+   "rounds_$ref": "String",
+   "status_$ref": "String"
   }
  },
  "season_futures_nba": {
@@ -2240,7 +2694,9 @@
    "futures": "String",
    "id": "Int64",
    "name": "String",
-   "type": "String"
+   "type": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_group_cfb": {
@@ -2263,17 +2719,23 @@
  },
  "season_group_children_cfb": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_group_teams_cfb": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_groups_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_info_nba": {
@@ -2353,7 +2815,9 @@
   "": {
    "display_name": "String",
    "leaders": "String",
-   "name": "String"
+   "name": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_powerindex_nba": {
@@ -2366,7 +2830,9 @@
    "season_type": "Int64",
    "stats": "String",
    "league_$ref": "String",
-   "team_$ref": "String"
+   "team_$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_qbr_week_nfl": {
@@ -2377,12 +2843,16 @@
    "splits_categories": "String",
    "splits_id": "String",
    "splits_name": "String",
-   "team_$ref": "String"
+   "team_$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_recruits_cfb": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_team_nba": {
@@ -2431,7 +2901,9 @@
  },
  "season_teams_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_type_corrections_nfl": {
@@ -2442,7 +2914,9 @@
    "split_stats_categories": "String",
    "split_stats_id": "String",
    "split_stats_name": "String",
-   "team_$ref": "String"
+   "team_$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_type_nba": {
@@ -2467,12 +2941,16 @@
  },
  "season_types_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_week_events_nfl": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_week_nba": {
@@ -2528,17 +3006,23 @@
  },
  "season_week_rankings_cfb": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_weeks_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "seasons_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "standings_cfb": {
@@ -4941,7 +5425,9 @@
    "pick_person_last_name": "String",
    "week_record_display_value": "String",
    "week_record_season_$ref": "String",
-   "week_record_stats": "String"
+   "week_record_stats": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "team_core_nba": {
@@ -5769,7 +6255,9 @@
  },
  "tournaments_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "transactions_nba": {
@@ -5800,12 +6288,16 @@
  },
  "venues_core_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "venues_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  }
 }

@@ -24,11 +24,13 @@ to vote on it. That is what ``{cfb,nfl}/cbs_pbp/to_espn_summary.py`` own.
 from __future__ import annotations
 
 import re
+import time
 from datetime import datetime, timezone
 from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 from zoneinfo import ZoneInfo
 
 from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import NoDataError
 
 # the same "ESPN never zero-pads the minutes" formatter both leagues' CBS modules already use
 from sportsdataverse.football.yahoo_common import _clock
@@ -54,9 +56,13 @@ _LOGO_RE = re.compile(r"team-logos/alt/(\d+)\.svg")
 #: is ~1-5 MB and one week is read once per worker.
 _PAGE_CACHE: Dict[str, List[Dict[str, Any]]] = {}
 
-#: URLs whose page came back unreadable or with no cards. A miss is remembered too: a worker
-#: that has already failed this week hands over to the next source immediately instead.
-_PAGE_MISSES: set = set()
+#: URL -> ``time.monotonic()`` until which the page is not read again. A page that ANSWERED with
+#: no cards (a 404, or a 200 without a card) is remembered for the life of the process; a failed
+#: read (a 403 / 5xx after retries, a dead connection) only for :data:`_FAILURE_TTL_SECONDS`, so
+#: a burst of games does not re-bill a dead page and one bad minute does not switch CBS id
+#: lookup off for the life of a worker.
+_PAGE_MISSES: Dict[str, float] = {}
+_FAILURE_TTL_SECONDS = 300.0
 
 #: Retries for the scoreboard page. The default 15 is sized for an asset a whole job depends
 #: on; this one is a best-effort lookup with a fall-through behind it, so it fails fast.
@@ -195,7 +201,8 @@ def _fetch_cbs_game(cbs_game_id: str, *, optional: Sequence[str] = ("drives",), 
     and ``scoreboard`` are required; everything in ``optional`` is a degradation rather than a
     failure and comes back None when CBS 404s it -- ``drives`` (absent in the early era, and
     rebuilt from the plays' own ``drive_id``), ``odds`` (the NFL's consensus line) and
-    ``game`` (the CFB venue).
+    ``game`` (the CFB venue). Any other failure of an optional resource raises: a fetch that
+    failed is not a resource CBS lacks.
     """
     from sportsdataverse.cbs.cbs_napi import (
         cbs_game,
@@ -214,7 +221,9 @@ def _fetch_cbs_game(cbs_game_id: str, *, optional: Sequence[str] = ("drives",), 
     for key in optional:
         try:
             out[key] = getters[key](cbs_game_id, return_parsed=False, **kwargs)
-        except Exception:  # noqa: BLE001 -- an optional resource is a degradation, not a failure
+        except NoDataError:
+            # a 404 is CBS saying "absent"; any other failure is unknown and propagates, so the
+            # adapter hands over instead of recording the resource as absent (false provenance)
             out[key] = None
     return out
 
@@ -280,22 +289,34 @@ def _week_cards(
     transport: Callable[..., Any] = download,
     **kwargs: Any,
 ) -> List[Dict[str, Any]]:
-    """Cards for one scoreboard page, read at most once per process. Any failure is an empty week."""
+    """Cards for one scoreboard page. Any failure is an empty week, never a raise.
+
+    An answer (cards, a 404, a 200 without a card) is kept for the life of the process; a failed
+    read is skipped for :data:`_FAILURE_TTL_SECONDS` and then tried again (see :data:`_PAGE_MISSES`).
+    """
     if url in _PAGE_CACHE:
         return _PAGE_CACHE[url]
-    if url in _PAGE_MISSES:
+    if time.monotonic() < _PAGE_MISSES.get(url, float("-inf")):
         return []
     kwargs.setdefault("num_retries", _SCOREBOARD_RETRIES)
+    retry_at = time.monotonic() + _FAILURE_TTL_SECONDS
     try:
         response = transport(url=url, **kwargs)
-    except Exception:  # noqa: BLE001 -- an unreachable page is a miss, never a raise
-        _PAGE_MISSES.add(url)
+    except NoDataError:
+        _PAGE_MISSES[url] = float("inf")
+        return []
+    except Exception:  # noqa: BLE001 -- an unreachable page is a miss for a while, never a raise
+        _PAGE_MISSES[url] = retry_at
+        return []
+    if getattr(response, "status_code", 200) != 200:
+        # download() hands back the last response once its 403/429/5xx budget is spent
+        _PAGE_MISSES[url] = retry_at
         return []
     cards = _parse_scoreboard(getattr(response, "text", "") or "", card_re)
     if cards:
         _PAGE_CACHE[url] = cards
     else:
-        _PAGE_MISSES.add(url)
+        _PAGE_MISSES[url] = float("inf")
     return cards
 
 

@@ -2,10 +2,10 @@ api: cbs_napi
 docstring:
   example_import: true
   raises:
+  - 'NoDataError: The id is unknown -- NAPI answers it with HTTP 200 plus a ``warnings``
+    entry whose ``code`` is 404 (or with an HTTP 404).'
   - 'AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after
-    retries, or an empty or unreadable 200 body). An unknown id is NOT an exception --
-    NAPI answers it with HTTP 200 plus an ``{error|errors|warnings}`` envelope, which
-    parses to a zero-row frame.'
+    retries, or an empty or unreadable 200 body).'
   see_also:
   - name: CBS Sports NAPI registry
     note: the API's own self-documenting endpoint catalog (data origin)
@@ -1399,6 +1399,7 @@ endpoints:
   returns_schema: native/cbs_napi/venue_metadata
   short: venue_metadata
   summary: Get a venues metadata resource
+getter_module: sportsdataverse.cbs.cbs_napi_runtime
 host: https://api.cbssports.com/napi
 module: cbs_napi
 name_pattern: cbs_{short}

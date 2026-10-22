@@ -8,14 +8,16 @@ import re
 import time
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
+from urllib.parse import urlsplit
 from itertools import chain, starmap
+from typing import Any
 
 import numpy as np
 import polars as pl
 import requests
 from requests.adapters import HTTPAdapter
 
-from sportsdataverse.errors import NoDataError, _redact_secrets, no_espn_data
+from sportsdataverse.errors import NoDataError, _is_data_body, _may_be_json, _redact_secrets, no_espn_data
 
 logger = logging.getLogger("sdv.dl_utils")
 logger.addHandler(logging.NullHandler())
@@ -43,8 +45,27 @@ _URLLIB3_LOGGERS = ("urllib3.connectionpool", "urllib3.connection", "urllib3.uti
 for _urllib3_logger in _URLLIB3_LOGGERS:
     logging.getLogger(_urllib3_logger).addFilter(_RedactSecretsFilter())
 
-# Request headers that carry a credential; dropped from an exception's request.
-_SECRET_HEADERS = frozenset({"authorization", "proxy-authorization", "cookie"})
+# A request header that carries a credential (``Authorization``, ``Cookie``, ``X-Api-Key``,
+# ``x-api-secret``, ``X-Authorization``, ...): dropped from an exception's request, and a
+# request that sends one is never cached. ponytail: name-based; a credential under an unrelated
+# header name would still be cached -- add the name here.
+_SECRET_HEADER = re.compile(r"auth|cookie|key|secret|token|password", re.IGNORECASE)
+
+
+def _carries_credential(headers: Any, session: Any) -> bool:
+    """True when the request authenticates outside its URL: a credential header, or a caller's
+    own session holding cookies, ``auth`` or a credential header.
+
+    The cache key is the URL and params only, so such a body would be served to a different
+    credential in the same process or cache dir (A-M8), and keying on the credential would store
+    it. A key in the URL is part of the key already (and scrubbed from the entry).
+    """
+    names = [str(h) for h in (headers or {})]
+    if session is not None:  # the caller's own; the shared session holds no credential of ours
+        if getattr(session, "auth", None) or getattr(session, "cookies", None):
+            return True
+        names += [str(h) for h in (getattr(session, "headers", None) or {})]
+    return any(_SECRET_HEADER.search(n) for n in names)
 
 
 def _redact_exception(exc: BaseException) -> None:
@@ -87,7 +108,7 @@ def _redact_exception(exc: BaseException) -> None:
         headers = getattr(request, "headers", None)
         if headers is not None:
             try:
-                for name in [h for h in headers if str(h).lower() in _SECRET_HEADERS]:
+                for name in [h for h in headers if _SECRET_HEADER.search(str(h))]:
                     del headers[name]
             except (AttributeError, TypeError):
                 pass
@@ -113,12 +134,22 @@ _MAX_RETRY_AFTER = 120.0
 # Transient HTTP status codes worth retrying. 429 (rate limit) + 408 (request
 # timeout) + the 5xx server-error family are universally transient. 403 is
 # included because ESPN's Core v2 API returns it *under load* (not an auth
-# failure): ``download`` is the ESPN / nflverse gateway and does NOT serve the
-# auth'd endpoints — ``nfl_api`` (bearer), ``nba_stats`` / ``wnba_stats``
-# (curl_cffi runtime), and PFF (Clerk cookies) each have their own ``_get`` —
-# so a 403 seen here is far more likely rate-limiting than a permanent
-# forbidden. Retrying a genuine 403 only costs bounded backoff latency.
+# failure); it is NOT retried for the hosts in ``_PERMANENT_403_HOSTS``.
 _RETRYABLE_STATUS = frozenset({403, 408, 429, 500, 502, 503, 504})
+
+# Hosts whose 403 is a real "forbidden" (a bearer token, a session cookie or a
+# subscription the caller lacks), so a retry only burns the backoff (A-L19). Their
+# getters call ``download`` with the default ``retry_statuses``.
+_PERMANENT_403_HOSTS = frozenset({"api.nfl.com", "premium.pff.com", "comp.uefa.com", "kenpom.com", "herhoopstats.com"})
+
+# Total seconds one ``download`` call may sleep between retries (A-N11).
+# ``_MAX_RETRY_AFTER`` bounds ONE honoured ``Retry-After``; without a total, four of
+# them parked a call for 8 minutes that ``timeout`` does not bound. A retry whose wait
+# would cross it is not made: the last response is returned (or the last error raised).
+_MAX_TOTAL_RETRY_WAIT = 180.0
+
+# A single wait longer than this is logged at WARNING, so a long sleep is never silent.
+_LONG_RETRY_WAIT = 10.0
 
 # Status retries reuse the loop but get their OWN small cap so a genuinely
 # permanent 403/forbidden can't spin the full ``num_retries`` (16 requests /
@@ -181,6 +212,14 @@ def _retry_delay(
     delay = min(cap, base * (2**attempt))
     if jitter:
         delay *= 0.5 + random.random() * 0.5
+    return delay
+
+
+def _wait(delay: float, url: str, logger: logging.Logger) -> float:
+    """Sleep ``delay`` seconds before a retry (at WARNING when it is long); returns ``delay``."""
+    if delay > _LONG_RETRY_WAIT:
+        logger.warning("waiting %.0fs before retrying url (%s)", delay, _redact_secrets(str(url)))
+    time.sleep(delay)
     return delay
 
 
@@ -281,11 +320,18 @@ def download(
             when you need isolation (separate cookies / auth / proxy lifecycle).
         logger: Optional ``logging.Logger``. Defaults to the package
             logger ``"sdv.dl_utils"``.
+        cache_ttl: Response-cache lifetime (``timedelta`` or seconds; ``0`` never
+            caches); ``None`` uses the URL's tier. A request that authenticates
+            outside its URL -- a credential header (``Authorization``, ``Cookie``,
+            ``X-Api-Key``, ...) or a ``session`` holding cookies or ``auth`` -- is never
+            cached, whatever this says: the cache key holds no credential, so the body
+            would be served to another one.
         retry_statuses: Iterable of HTTP status codes to retry (with the same
             ``Retry-After``-aware backoff as connection failures). Defaults to
             :data:`_RETRYABLE_STATUS` (403/408/429/500/502/503/504). Pass a
             narrower set (e.g. ``{429, 503}``) for an auth'd endpoint where a
-            403 is a real forbidden rather than ESPN-under-load.
+            403 is a real forbidden rather than ESPN-under-load. A 403 from a host
+            in :data:`_PERMANENT_403_HOSTS` is never retried.
         data: Form body. When ``data`` or ``json_body`` is given the request is
             a ``POST`` and is never cached. A POST is retried exactly like a GET
             (same budget, statuses and backoff), which assumes the endpoint is an
@@ -300,6 +346,8 @@ def download(
             "no data", and retrying only adds load against a rate-limited host.
         requests.exceptions.RequestException: When the retry budget is exhausted
             on a connection-level failure; the most recent exception is re-raised.
+            A malformed request (``MissingSchema``, ``InvalidURL``, ``InvalidHeader``,
+            all ``ValueError`` subclasses) is raised at once, without a retry.
 
     Note:
         Precedence for ``timeout`` / ``num_retries`` is **explicit argument >
@@ -308,6 +356,11 @@ def download(
         malformed or non-positive env value is ignored in favour of the default
         rather than raising -- this runs on every request, so a typo must not take
         the process down.
+
+        The waits between retries share one budget of
+        :data:`_MAX_TOTAL_RETRY_WAIT` seconds per call (a single ``Retry-After`` is
+        capped at :data:`_MAX_RETRY_AFTER`); a retry whose wait would cross it is not
+        made, and a wait over :data:`_LONG_RETRY_WAIT` seconds is logged at WARNING.
 
     Returns:
         The final ``requests.Response``. When the retry budget is exhausted on
@@ -367,6 +420,9 @@ def download(
         # is accepted; it takes nothing away.
         num_retries = _env_int(_ENV_RETRIES, _DEFAULT_RETRIES)
 
+    # An authenticated request is never cached (A-M8): checked before the shared session
+    # stands in for a missing one.
+    credentialed = _carries_credential(headers, session)
     session, params, logger = init_request_settings(params, session, logger)
 
     # Cache lookup (mode=off → no-op; LIVE-tier URLs → no-op).
@@ -375,6 +431,7 @@ def download(
     # downstream works unchanged.
     from sportsdataverse.cache import (
         CachedResponse,
+        _resolve_ttl,
         cache_get,
         cache_set,
         get_cache_mode,
@@ -382,16 +439,21 @@ def download(
 
     # A POST body is not part of the cache key, so a body request is never cached.
     body = {k: v for k, v in (("data", data), ("json", json_body)) if v is not None}
-    use_cache = get_cache_mode() != "off" and not body
-    if use_cache:
-        # Build a hashable params dict (drop None values + ignore the
-        # batters_lookup[] convention which is request-shaped)
-        _cache_params = {k: v for k, v in (params or {}).items() if v is not None}
+    # Decided once: a body is decoded for the cache only when it could be stored -- a cache mode
+    # is on, the request sends no body, the URL's TTL (or ``cache_ttl``) is not zero, and the
+    # request carries no credential. Otherwise every 2xx body (a multi-MB binary asset included)
+    # was JSON-decoded for nothing.
+    _cache_params = {k: v for k, v in (params or {}).items() if v is not None}
+    cacheable = (
+        get_cache_mode() != "off"
+        and not credentialed
+        and not body
+        and _resolve_ttl(url, cache_ttl, params=_cache_params).total_seconds() > 0
+    )
+    if cacheable:
         cached = cache_get(url, _cache_params, ttl=cache_ttl)
         if cached is not None:
             return CachedResponse(cached, url=url, status_code=200, from_cache=True)
-    else:
-        _cache_params = None
 
     # Iterative retry loop. Defensive `response = None` so the exception
     # handler can log without UnboundLocalError when `session.get()` itself
@@ -404,7 +466,12 @@ def download(
     response = None
     last_exc: Exception | None = None
     status_retries = 0
+    waited = 0.0
+    permanent_403 = urlsplit(str(url)).hostname in _PERMANENT_403_HOSTS
     for attempt in range(attempts):
+        # A connection error must not reuse the previous attempt's response: its Retry-After would
+        # be honoured again and spend the wait budget on a stale answer.
+        response = None
         try:
             send = session.post if body else session.get
             response = send(url, params=params, proxies=proxy, headers=headers, timeout=timeout, **body)
@@ -415,14 +482,20 @@ def download(
             # capped at `status_budget` (see `_MAX_STATUS_RETRIES`); once spent,
             # return the response unchanged so callers can key on `.status_code`.
             status = getattr(response, "status_code", None)
-            retryable = status in retry_statuses
+            retryable = status in retry_statuses and not (status == 403 and permanent_403)
             # `attempt < attempts - 1` is load-bearing, not redundant with the
             # budget: when status_budget == attempts-1 (small num_retries) a
             # status retry could otherwise `continue` on the FINAL iteration,
             # exhausting the loop into the post-loop `raise last_exc` — which
             # would raise a STALE connection exception from an earlier attempt
             # instead of returning this response. Never retry on the last attempt.
-            if retryable and status_retries < status_budget and attempt < attempts - 1:
+            delay = _retry_delay(response, attempt) if retryable else 0.0
+            if (
+                retryable
+                and status_retries < status_budget
+                and attempt < attempts - 1
+                and waited + delay <= _MAX_TOTAL_RETRY_WAIT
+            ):
                 status_retries += 1
                 logger.warning(
                     "retryable status %s - %s for url (%s) [status retry %d/%d]",
@@ -432,7 +505,7 @@ def download(
                     status_retries,
                     status_budget,
                 )
-                time.sleep(_retry_delay(response, attempt))
+                waited += _wait(delay, url, logger)
                 continue
             if retryable:
                 # Budget spent: surface a terminal line so a persistent
@@ -447,10 +520,14 @@ def download(
             # Persist only successful (2xx) responses to the cache — never cache a
             # 429/5xx body. Catches any body-parse error so a cache write never
             # breaks the call.
-            if use_cache and status is not None and 200 <= status < 300:
+            if cacheable and status is not None and 200 <= status < 300 and _may_be_json(response):
                 try:
-                    cache_set(url, _cache_params, response.json(), ttl=cache_ttl)
-                except Exception:  # noqa: BLE001
+                    body = response.json()
+                    # A 2xx error envelope or JSON scalar is a failed fetch the chokepoint raises on; cached,
+                    # it would re-raise for the whole TTL instead of being fetched again (R880-4).
+                    if _is_data_body(url, body):
+                        cache_set(url, _cache_params, body, ttl=cache_ttl)
+                except (ValueError, OSError):  # a body that is not JSON, or a cache that cannot be written
                     pass
             return response
         except NoDataError:
@@ -458,7 +535,13 @@ def download(
             # answer — retrying cannot change it and only amplifies load against a
             # rate-limited host. Fail fast instead of burning the retry budget.
             raise
-        except Exception as e:  # noqa: BLE001
+        except ValueError as e:
+            # A malformed request (requests' MissingSchema / InvalidURL / InvalidSchema /
+            # InvalidHeader are all ValueErrors) fails the same way every time: raise it
+            # now instead of retrying it with backoff for ~50 s (A-L30).
+            _redact_exception(e)
+            raise
+        except Exception as e:  # noqa: BLE001 -- the retry loop: redacted, retried, and the last one raised after the loop
             # Before anything logs or re-raises it: requests quotes the URL, key and all.
             _redact_exception(e)
             last_exc = e
@@ -468,7 +551,8 @@ def download(
             if hasattr(e, "code") and getattr(e, "code") == 404:
                 logger.error(_redact_secrets(f"404: {url} \nparams: {params}"))
 
-            if remaining <= 0:
+            delay = _retry_delay(response, attempt)
+            if remaining <= 0 or waited + delay > _MAX_TOTAL_RETRY_WAIT:
                 logger.error(_redact_secrets(f"Retry Limit Exceeded: {url} \nparams: {params}\n {e}"))
                 break
 
@@ -495,7 +579,7 @@ def download(
                     attempt + 1,
                     num_retries,
                 )
-            time.sleep(_retry_delay(response, attempt))
+            waited += _wait(delay, url, logger)
 
     # Retry budget exhausted. Re-raise the last captured exception so
     # callers can react (and the test suite can assert on the failure

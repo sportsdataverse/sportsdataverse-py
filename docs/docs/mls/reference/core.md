@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # MLS — ESPN core API (v2)
 
-`sportsdataverse.mls` — 82 endpoints.
+`sportsdataverse.soccer.mls` — 82 endpoints.
 
 ## Game
 

@@ -738,6 +738,7 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 |---|---|
 | `ValueError` | `season_type` is not `"regular"`/`"postseason"`. |
 | `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+| `sportsdataverse.errors.AssetFetchError` | The statistics, athlete or team fetch failed (403, 429, 5xx, a dead connection); only a 404 on the athlete or team node leaves those columns null. |
 
 **Example**
 
@@ -766,7 +767,7 @@ espn_cfb_schedule - look up the college football schedule for a given season
 
 **Returns**
 
-Polars dataframe containing schedule dates for the requested season. Returns None if no games
+Polars dataframe containing schedule dates for the requested season. A day with no games returns a zero-row frame carrying the documented columns.
 
 | col_name | type | description |
 |---|---|---|
@@ -852,13 +853,14 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `away_logo_dark` | character |  |
 | `home_winner` | logical |  |
 | `away_winner` | logical |  |
+| `status_type_alt_detail` | character | ESPN's short extra-time label on a final ("OT", "SO"); null when the game ended in regulation. |
 
 **Example**
 
 ```python
 from sportsdataverse.cfb import espn_cfb_schedule
 slate = espn_cfb_schedule()
-print(slate.shape if slate is not None else "no games")
+print(slate.shape)  # (0, n) on a day with no games
 
 # Pull a specific week of FBS games
 

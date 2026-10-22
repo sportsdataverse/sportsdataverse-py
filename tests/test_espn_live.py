@@ -327,9 +327,9 @@ def test_parse_standings_handles_wnba_payload():
     import polars as pl
 
     from sportsdataverse._common_espn_parsers import parse_standings
-    from sportsdataverse.wnba.wnba_espn_ext import espn_wnba_standings
+    from sportsdataverse.wnba.wnba_espn_ext import espn_wnba_standings_site
 
-    raw = espn_wnba_standings(return_parsed=False)
+    raw = espn_wnba_standings_site(return_parsed=False)
     df = parse_standings(raw)
     assert isinstance(df, pl.DataFrame)
     # WNBA standings have one row per team; minimum 12 across history
@@ -500,7 +500,7 @@ def test_espn_mbb_team_roster_live():
 
 
 def test_espn_wbb_team_roster_live():
-    from sportsdataverse.wbb.wbb_espn_ext import espn_wbb_team_roster
+    from sportsdataverse.wbb.wbb_espn_ext import espn_wbb_team_roster_site as espn_wbb_team_roster
 
     # WBB hits the same offseason-empty window as MBB, just on a different date.
     athletes = _published_roster(espn_wbb_team_roster, 41, "WBB")  # UConn

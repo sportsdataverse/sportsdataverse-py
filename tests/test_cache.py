@@ -17,6 +17,7 @@ import requests
     "url,expected",
     [
         ("https://api-web.nhle.com/v1/scoreboard/now", "LIVE"),
+        ("https://api-web.nhle.com/v1/scoreboard/TOR/now", "LIVE"),  # nhl_scoreboard(team=...) (B-M11)
         ("https://api-web.nhle.com/v1/standings/now", "LIVE"),
         ("https://api-web.nhle.com/v1/gamecenter/2023030417/play-by-play", "IMMUTABLE"),
         ("https://api-web.nhle.com/v1/gamecenter/2023030417/boxscore", "IMMUTABLE"),
@@ -408,3 +409,269 @@ def test_cache_hit_equals_live_body_for_credential_like_text(reset_cache):
     body = {"note": "key: 1234 token=abc", "title": "password=reset day"}
     cache.cache_set("https://x.example/text", None, body)
     assert cache.cache_get("https://x.example/text") == body  # only URL-like strings are pattern-redacted
+
+
+# ---------------------------------------------------------------------------
+# Task 4.7: a keyed URL never reaches the cache dir; an authenticated request is never cached
+# (every credential below is a fake)
+# ---------------------------------------------------------------------------
+
+_FAKE_SECRET = "FAKE-not-a-real-credential-0001"
+
+
+def _count_gets(monkeypatch, body):
+    """Stub ``requests.Session.get`` with a 200 JSON answer; returns the list of calls."""
+    import json as _json
+
+    calls = []
+
+    def fake_get(self, url, params=None, headers=None, **kwargs):
+        calls.append((url, dict(headers or {})))
+        resp = requests.Response()
+        resp.status_code = 200
+        resp._content = _json.dumps(body).encode("utf-8")
+        resp.headers["Content-Type"] = "application/json"
+        resp.url = url
+        return resp
+
+    monkeypatch.setattr("requests.Session.get", fake_get)
+    return calls
+
+
+def test_redact_keyed_thesportsdb_entry_never_reaches_disk(monkeypatch, tmp_cache_dir, reset_cache):
+    """A-N1 / A-L66: the premium key rides in the URL path; the filesystem entry holds none of it."""
+    from sportsdataverse import cache
+    from sportsdataverse.thesportsdb import thesportsdb_runtime as rt
+
+    cache.set_cache_mode("filesystem")
+    monkeypatch.setenv("THESPORTSDB_API_KEY", _FAKE_SECRET)
+    body = {"sports": [{"idSport": "102", "strSport": "Soccer"}]}
+    calls = _count_gets(monkeypatch, body)
+    url = "https://www.thesportsdb.com/api/v1/json/{key}/all_sports.php"
+    assert rt._get(url) == body
+    assert _FAKE_SECRET in calls[0][0]  # the key was sent ...
+    on_disk = "".join(p.read_text(encoding="utf-8") for p in tmp_cache_dir.glob("*.json"))
+    assert on_disk and _FAKE_SECRET not in on_disk  # ... and never stored
+    assert rt._get(url) == body and len(calls) == 1  # still a read-through hit
+
+
+_AUTH_REQUESTS = {
+    "authorization": {"headers": {"Authorization": f"Bearer {_FAKE_SECRET}"}},
+    "cookie": {"headers": {"Cookie": f"_premium_key={_FAKE_SECRET}"}},
+    "api-key-header": {"headers": {"X-Api-Key": _FAKE_SECRET}},
+}
+
+
+@pytest.mark.parametrize("mode", ["memory", "filesystem"])
+@pytest.mark.parametrize("how", [*_AUTH_REQUESTS, "session-cookie"])
+def test_no_cache_authenticated_request(how, mode, monkeypatch, tmp_cache_dir, reset_cache):
+    """A-M8: the cache key holds no credential, so an authenticated body would be served to a
+    second credential; such a request is fetched every time and nothing is stored."""
+    from sportsdataverse import cache
+    from sportsdataverse.dl_utils import download
+
+    cache.set_cache_mode(mode)
+    calls = _count_gets(monkeypatch, {"entitled": True})
+    if how == "session-cookie":
+        sess = requests.Session()
+        sess.cookies.set("sessionid", _FAKE_SECRET)
+        kwargs = {"session": sess}
+    else:
+        kwargs = dict(_AUTH_REQUESTS[how])
+    for _ in range(2):
+        assert download("https://api.example.com/premium", **kwargs).json() == {"entitled": True}
+    assert len(calls) == 2
+    assert not cache._MEMORY_CACHE and not list(tmp_cache_dir.glob("*.json"))
+
+
+def test_no_cache_authenticated_leaves_plain_requests_cached(monkeypatch, reset_cache):
+    from sportsdataverse import cache
+    from sportsdataverse.dl_utils import download
+
+    cache.set_cache_mode("memory")
+    calls = _count_gets(monkeypatch, {"ok": 1})
+    for _ in range(2):
+        download("https://api.example.com/public", headers={"User-Agent": "x", "Accept": "application/json"})
+    assert len(calls) == 1
+
+
+def test_no_cache_authenticated_runtimes(monkeypatch, reset_cache):
+    """The legacy cookie PFF transport and the bearer api.nfl.com getter go through download()
+    with their credential in a header: neither body is cached."""
+    from sportsdataverse import cache
+    from sportsdataverse.nfl import nfl_api_runtime, pff_runtime
+    from sportsdataverse.nfl.nfl_games import nfl_headers_gen
+
+    cache.set_cache_mode("memory")
+    calls = _count_gets(monkeypatch, {"data": []})
+    for _ in range(2):
+        pff_runtime._default_transport("https://premium.pff.com/api/v1/x", {}, {}, {"_premium_key": _FAKE_SECRET})
+        nfl_api_runtime._get("https://api.nfl.com/football/v2/x", headers=nfl_headers_gen(token=_FAKE_SECRET))
+    assert len(calls) == 4
+    assert not cache._MEMORY_CACHE
+
+
+def test_no_cache_authenticated_runtimes_spell_it_cache_ttl_0(monkeypatch, reset_cache):
+    """The basketball runtimes pass ``cache_ttl=0`` (an int): with a cache mode on that reached
+    ``.total_seconds()`` and raised AttributeError before any request was made."""
+    from sportsdataverse import cache
+    from sportsdataverse.dl_utils import download
+
+    cache.set_cache_mode("memory")
+    calls = _count_gets(monkeypatch, {"ok": 1})
+    for _ in range(2):
+        assert download("https://api.example.com/x", cache_ttl=0).json() == {"ok": 1}
+    assert len(calls) == 2 and not cache._MEMORY_CACHE
+    download("https://api.example.com/y", cache_ttl=3600)  # seconds work too
+    download("https://api.example.com/y", cache_ttl=3600)
+    assert len(calls) == 3
+
+
+# --- review-897: what is decoded, what the scrub touches ------------------------------------------
+
+
+def _counting_get(monkeypatch, content: bytes, ctype: str):
+    """Stub ``requests.Session.get`` with a 200 answer whose ``.json()`` calls are counted."""
+    decodes = []
+
+    class _Resp(requests.Response):
+        def json(self, **kwargs):
+            decodes.append(1)
+            return super().json(**kwargs)
+
+    def fake_get(self, url, params=None, headers=None, **kwargs):
+        resp = _Resp()
+        resp.status_code = 200
+        resp._content = content
+        resp.headers["Content-Type"] = ctype
+        resp.url = url
+        return resp
+
+    monkeypatch.setattr("requests.Session.get", fake_get)
+    return decodes
+
+
+@pytest.mark.parametrize(
+    "kwargs",
+    [{"cache_ttl": 0}, {"headers": {"Authorization": f"Bearer {_FAKE_SECRET}"}}],
+    ids=["cache_ttl_0", "credentialed"],
+)
+def test_no_cache_authenticated_body_is_not_decoded_for_the_cache(kwargs, monkeypatch, reset_cache):
+    """R897-2: a body that cannot be stored is decoded once (the ESPN envelope probe), not twice."""
+    from sportsdataverse import cache
+    from sportsdataverse.dl_utils import download
+
+    cache.set_cache_mode("memory")
+    decodes = _counting_get(monkeypatch, b'{"ok": 1}', "application/json")
+    download("https://api.example.com/x", **kwargs)
+    assert len(decodes) == 1 and not cache._MEMORY_CACHE
+
+
+def test_binary_body_is_never_decoded(monkeypatch, reset_cache):
+    """R897-2: a multi-MB release asset is not JSON-decoded by the envelope probe or the cache."""
+    from sportsdataverse import cache
+    from sportsdataverse.dl_utils import download
+
+    cache.set_cache_mode("memory")
+    decodes = _counting_get(monkeypatch, b"PAR1" + b"\x00" * 4096, "application/octet-stream")
+    resp = download("https://github.com/x/releases/download/t/a.parquet")
+    assert resp.content.startswith(b"PAR1")
+    assert decodes == [] and not cache._MEMORY_CACHE
+
+
+def test_cacheable_json_is_still_decoded_and_cached(monkeypatch, reset_cache):
+    from sportsdataverse import cache
+    from sportsdataverse.dl_utils import download
+
+    cache.set_cache_mode("memory")
+    _counting_get(monkeypatch, b'{"ok": 1}', "text/plain; charset=utf-8")  # JSON served as text stays cached
+    download("https://api.example.com/plain")
+    assert list(cache._MEMORY_CACHE.values())[0]["body"] == {"ok": 1}
+
+
+def test_cache_hit_keeps_signed_media_urls(reset_cache):
+    """R897-4: a signed S3 / CloudFront URL in the body is data, not the request's credential."""
+    from sportsdataverse import cache
+
+    cache.set_cache_mode("memory")
+    body = {
+        "headshot": "https://bucket.s3.amazonaws.com/a.png?X-Amz-Algorithm=AWS4-HMAC-SHA256"
+        "&X-Amz-Credential=FAKEAKIA%2F20261018&X-Amz-Signature=fakesig0123456789abcdef",
+        "video": "https://d111.cloudfront.net/v.mp4?Expires=1760000000&Signature=FAKEsig~abc&Key-Pair-Id=FAKEKP",
+    }
+    cache.cache_set("https://api.example.com/media", None, body)
+    assert cache.cache_get("https://api.example.com/media") == body
+
+
+def test_redact_prefixed_credential_params_from_the_filesystem_entry(tmp_cache_dir, reset_cache):
+    """R897-5: ``api_token=`` / ``user_key=`` params echoed in the body never reach disk."""
+    from sportsdataverse import cache
+
+    cache.set_cache_mode("filesystem")
+    tok, key = "FAKE-api-token-0001", "FAKE-user-key-00002"
+    params = {"api_token": tok, "user_key": key, "season": 2025}
+    body = {"request": {"api_token": tok, "user_key": key}, "note": f"called with {tok} and {key}"}
+    cache.cache_set("https://api.example.com/feed", params, body)
+    on_disk = "".join(p.read_text(encoding="utf-8") for p in tmp_cache_dir.glob("*.json"))
+    assert on_disk and tok not in on_disk and key not in on_disk
+
+
+def test_memory_cache_copy_on_hit(reset_cache):
+    """A-M20: a memory hit returned the stored dict, so one caller's edit reached every later hit."""
+    from sportsdataverse import cache
+
+    cache.set_cache_mode("memory")
+    cache.cache_set("https://x.example/a", None, {"teams": [{"id": 1}]})
+    hit = cache.cache_get("https://x.example/a")
+    hit["teams"].append({"id": "junk"})
+    hit["junk"] = True
+    assert cache.cache_get("https://x.example/a") == {"teams": [{"id": 1}]}
+
+
+def test_filesystem_clear_cache_removes_only_key_named_entries(reset_cache, monkeypatch, tmp_path):
+    """C-M24: the bare clear_cache() rmtree'd cache_dir: ~/.cache/sportsdataverse holds the NFL cache
+    and its downloaded models, and an SDV_PY_CACHE_DIR may hold anything."""
+    from sportsdataverse import cache
+
+    monkeypatch.setenv("SDV_PY_CACHE_DIR", str(tmp_path))
+    cache.set_cache_mode("filesystem")
+    for i in range(3):
+        cache.cache_set(f"https://x.example/{i}", None, {"i": i})
+    md5_named = tmp_path / ("0" * 32 + ".json")  # a user's own file that happens to look like a key
+    foreign = [tmp_path / "notes.json", md5_named, tmp_path / "nfl" / "models" / "xyac_model.ubj"]
+    foreign.append(tmp_path / "thesis.docx")
+    for path in foreign:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("keep")
+
+    assert cache.clear_cache() == 3
+
+    assert sorted(p.name for p in tmp_path.glob("*.json")) == sorted(["notes.json", md5_named.name])
+    assert all(p.read_text() == "keep" for p in foreign)
+
+
+def test_filesystem_clear_cache_skips_a_locked_entry(reset_cache, monkeypatch, tmp_path):
+    """A file another process holds open (Windows) is skipped, not counted, and named in a warning."""
+    from pathlib import Path
+
+    from sportsdataverse import cache
+
+    monkeypatch.setenv("SDV_PY_CACHE_DIR", str(tmp_path))
+    cache.set_cache_mode("filesystem")
+    for i in range(3):
+        cache.cache_set(f"https://x.example/{i}", None, {"i": i})
+    locked = tmp_path / f"{cache._cache_key('https://x.example/1', None)}.json"
+    real_unlink = Path.unlink
+
+    def unlink(self, missing_ok=False):
+        if self == locked:
+            raise PermissionError(f"[WinError 32] being used by another process: {self}")
+        return real_unlink(self, missing_ok=missing_ok)
+
+    monkeypatch.setattr(Path, "unlink", unlink)
+    with pytest.warns(RuntimeWarning, match=f"{locked.name} is in use by another process"):
+        assert cache.clear_cache(url="https://x.example/1") == 0
+    with pytest.warns(RuntimeWarning, match=f"{locked.name} is in use by another process"):
+        assert cache.clear_cache() == 2
+    assert [p.name for p in tmp_path.glob("*.json")] == [locked.name]
+    assert cache.clear_cache(url="https://x.example/0") == 0  # already gone

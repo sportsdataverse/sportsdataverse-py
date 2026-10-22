@@ -4,7 +4,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
+from typing import Dict, List, Optional, Union  # noqa: F401
+
+# Imported at runtime, not under TYPE_CHECKING: typing.get_type_hints() evaluates the
+# annotations below and raised NameError on ``pl`` / ``pd`` (R858-4).
+import pandas as pd  # noqa: F401
+import polars as pl  # noqa: F401
 
 from sportsdataverse._codegen_runtime import _get, format_nhl_season
 from sportsdataverse.nhl.nhl_api_web_parsers import (
@@ -27,10 +32,6 @@ from sportsdataverse.nhl.nhl_api_web_parsers import (
     parse_nhl_web_standings,
     parse_nhl_web_standings_season,
 )
-
-if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
-    import pandas as pd
-    import polars as pl
 
 __all__ = [
     "nhl_web_pbp",
@@ -198,7 +199,7 @@ def nhl_right_rail(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Pull the gamecenter right-rail payload (in-game widgets).
 
     Endpoint: ``GET https://api-web.nhle.com/v1/gamecenter/{game_id}/right-rail``
@@ -666,7 +667,7 @@ def nhl_club_stats(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Pull a team's season stat block.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/club-stats/{team}/{season}/{game_type}``
@@ -717,7 +718,7 @@ def nhl_club_stats_season(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """Pull the seasons a team has stats for.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/club-stats-season/{team}``

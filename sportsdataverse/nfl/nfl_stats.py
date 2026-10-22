@@ -493,7 +493,7 @@ def build_nfl_player_stats(
     if season_type not in ("REG", "POST", "REG+POST"):
         raise ValueError(f"Invalid season_type {season_type!r}; expected 'REG', 'POST', or 'REG+POST'.")
 
-    from sportsdataverse.nfl.nfl_loaders import load_nfl_pbp, load_nfl_players  # noqa: PLC0415
+    from sportsdataverse.nfl.nfl_loaders import load_nfl_pbp, load_nfl_players
 
     pbp = load_nfl_pbp(seasons, source=source)
 
@@ -1464,7 +1464,7 @@ def build_nfl_team_stats(
     if season_type not in ("REG", "POST", "REG+POST"):
         raise ValueError(f"Invalid season_type {season_type!r}; expected 'REG', 'POST', or 'REG+POST'.")
 
-    from sportsdataverse.nfl.nfl_loaders import load_nfl_pbp  # noqa: PLC0415
+    from sportsdataverse.nfl.nfl_loaders import load_nfl_pbp
 
     pbp = load_nfl_pbp(seasons, source=source)
     # The SDV-native nfl_model_pbp now carries the special-teams return-detail
@@ -2282,7 +2282,7 @@ def build_nfl_player_stats_def(
     )
     player_df = player_df.join(s_type, on=["season", "week"], how="left")
 
-    from sportsdataverse.nfl.nfl_loaders import load_nfl_players  # noqa: PLC0415
+    from sportsdataverse.nfl.nfl_loaders import load_nfl_players
 
     # Unlike build_nfl_player_stats, the def-stats source never derives a
     # player_name from pbp itself (per the R source, player_name/
@@ -2794,7 +2794,7 @@ def build_nfl_player_stats_kicking(
             [pl.when(pl.col(c).str.len_chars() == 0).then(None).otherwise(pl.col(c)).alias(c) for c in str_list_cols]
         )
 
-    from sportsdataverse.nfl.nfl_loaders import load_nfl_players  # noqa: PLC0415
+    from sportsdataverse.nfl.nfl_loaders import load_nfl_players
 
     # Deliberate divergence from R: R's calculate_player_stats_kicking yields
     # NA for a kicker missing from load_players(); _join_player_meta's

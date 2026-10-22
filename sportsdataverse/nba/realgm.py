@@ -63,6 +63,7 @@ from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Sequence
 import polars as pl
 
 from sportsdataverse._html_tables import html_tables
+from sportsdataverse.errors import AssetFetchError
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only import
     import pandas as pd
@@ -227,7 +228,8 @@ def _playwright_html(path: str, proxy: Optional[str] = None) -> str:
             when ``None``.
 
     Returns:
-        The rendered page HTML (the interstitial itself, if the challenge never cleared).
+        The rendered page HTML (the interstitial itself, if the challenge never cleared;
+        :func:`_fetch` raises ``AssetFetchError`` on it).
 
     Raises:
         ImportError: When the optional ``playwright`` dependency is not installed.
@@ -264,8 +266,20 @@ def _playwright_html(path: str, proxy: Optional[str] = None) -> str:
 
 
 def _fetch(path: str, fetcher: Optional[Fetcher], proxy: Optional[str]) -> str:
-    """Run *fetcher* (default: the headless-browser fetch) and return the page HTML."""
-    return (fetcher or _playwright_html)(path, proxy)
+    """Run *fetcher* (default: the headless-browser fetch) and return the page HTML.
+
+    Raises:
+        AssetFetchError: The page is still Cloudflare's challenge (B-M8). It holds no
+            table, so parsing it would return a zero-row frame for a fetch that failed.
+    """
+    html = (fetcher or _playwright_html)(path, proxy)
+    title = re.search(r"<title[^>]*>(.*?)</title>", html, re.IGNORECASE | re.DOTALL)
+    if title and _CHALLENGE_TITLE.search(title.group(1)):
+        raise AssetFetchError(
+            f"{BASE_URL}{path} is still the Cloudflare challenge page (title {title.group(1).strip()!r}); "
+            f"the challenge did not clear within {_WAIT_ENV}"
+        )
+    return html
 
 
 def _tables(html: str, min_rows: int = 1) -> List[pl.DataFrame]:
@@ -352,6 +366,8 @@ def realgm_players(
 
     Raises:
         ImportError: When Playwright is missing and no ``fetcher`` was supplied.
+        AssetFetchError: The page was still Cloudflare's challenge page (it never cleared).
+            It is a failed fetch, never a zero-row answer.
 
     Example:
         Quick start (launches headless Chromium)::
@@ -408,6 +424,8 @@ def realgm_players_abroad(
 
     Raises:
         ImportError: When Playwright is missing and no ``fetcher`` was supplied.
+        AssetFetchError: The page was still Cloudflare's challenge page (it never cleared).
+            It is a failed fetch, never a zero-row answer.
 
     Example:
         Quick start::
@@ -454,6 +472,8 @@ def realgm_future_free_agents(
 
     Raises:
         ImportError: When Playwright is missing and no ``fetcher`` was supplied.
+        AssetFetchError: The page was still Cloudflare's challenge page (it never cleared).
+            It is a failed fetch, never a zero-row answer.
 
     Example:
         Quick start::
@@ -502,6 +522,8 @@ def realgm_coaches(
 
     Raises:
         ImportError: When Playwright is missing and no ``fetcher`` was supplied.
+        AssetFetchError: The page was still Cloudflare's challenge page (it never cleared).
+            It is a failed fetch, never a zero-row answer.
 
     Example:
         Quick start::
@@ -547,6 +569,8 @@ def realgm_gms(
 
     Raises:
         ImportError: When Playwright is missing and no ``fetcher`` was supplied.
+        AssetFetchError: The page was still Cloudflare's challenge page (it never cleared).
+            It is a failed fetch, never a zero-row answer.
 
     Example:
         Quick start::
@@ -595,6 +619,8 @@ def realgm_standings(
 
     Raises:
         ImportError: When Playwright is missing and no ``fetcher`` was supplied.
+        AssetFetchError: The page was still Cloudflare's challenge page (it never cleared).
+            It is a failed fetch, never a zero-row answer.
 
     Example:
         Quick start::
@@ -647,6 +673,8 @@ def realgm_teams(
 
     Raises:
         ImportError: When Playwright is missing and no ``fetcher`` was supplied.
+        AssetFetchError: The page was still Cloudflare's challenge page (it never cleared).
+            It is a failed fetch, never a zero-row answer.
 
     Example:
         Quick start::
@@ -727,6 +755,8 @@ def realgm_player_stats(
 
     Raises:
         ImportError: When Playwright is missing and no ``fetcher`` was supplied.
+        AssetFetchError: The page was still Cloudflare's challenge page (it never cleared).
+            It is a failed fetch, never a zero-row answer.
 
     Example:
         Quick start::
@@ -782,6 +812,8 @@ def realgm_team_stats(
 
     Raises:
         ImportError: When Playwright is missing and no ``fetcher`` was supplied.
+        AssetFetchError: The page was still Cloudflare's challenge page (it never cleared).
+            It is a failed fetch, never a zero-row answer.
 
     Example:
         Quick start::
@@ -847,6 +879,8 @@ def realgm_individual_seasons(
 
     Raises:
         ImportError: When Playwright is missing and no ``fetcher`` was supplied.
+        AssetFetchError: The page was still Cloudflare's challenge page (it never cleared).
+            It is a failed fetch, never a zero-row answer.
 
     Example:
         Quick start::
@@ -892,6 +926,8 @@ def realgm_individual_games(
 
     Raises:
         ImportError: When Playwright is missing and no ``fetcher`` was supplied.
+        AssetFetchError: The page was still Cloudflare's challenge page (it never cleared).
+            It is a failed fetch, never a zero-row answer.
 
     Example:
         Quick start::
@@ -943,6 +979,8 @@ def realgm_draft(
 
     Raises:
         ImportError: When Playwright is missing and no ``fetcher`` was supplied.
+        AssetFetchError: The page was still Cloudflare's challenge page (it never cleared).
+            It is a failed fetch, never a zero-row answer.
 
     Example:
         Quick start::
@@ -1002,6 +1040,8 @@ def realgm_draft_prospects(
 
     Raises:
         ImportError: When Playwright is missing and no ``fetcher`` was supplied.
+        AssetFetchError: The page was still Cloudflare's challenge page (it never cleared).
+            It is a failed fetch, never a zero-row answer.
 
     Example:
         Quick start::
@@ -1048,6 +1088,8 @@ def realgm_early_entry(
 
     Raises:
         ImportError: When Playwright is missing and no ``fetcher`` was supplied.
+        AssetFetchError: The page was still Cloudflare's challenge page (it never cleared).
+            It is a failed fetch, never a zero-row answer.
 
     Example:
         Quick start::
@@ -1091,6 +1133,8 @@ def realgm_salary_cap(
 
     Raises:
         ImportError: When Playwright is missing and no ``fetcher`` was supplied.
+        AssetFetchError: The page was still Cloudflare's challenge page (it never cleared).
+            It is a failed fetch, never a zero-row answer.
 
     Example:
         Quick start::
@@ -1141,6 +1185,8 @@ def realgm_rookie_scale(
 
     Raises:
         ImportError: When Playwright is missing and no ``fetcher`` was supplied.
+        AssetFetchError: The page was still Cloudflare's challenge page (it never cleared).
+            It is a failed fetch, never a zero-row answer.
 
     Example:
         Quick start::
@@ -1187,6 +1233,8 @@ def realgm_transactions(
 
     Raises:
         ImportError: When Playwright is missing and no ``fetcher`` was supplied.
+        AssetFetchError: The page was still Cloudflare's challenge page (it never cleared).
+            It is a failed fetch, never a zero-row answer.
 
     Example:
         Quick start::

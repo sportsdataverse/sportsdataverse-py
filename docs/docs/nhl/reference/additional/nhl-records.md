@@ -49,6 +49,12 @@ Wraps:
 
 Games where the team overcame a deficit to win.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | *scope* is not `"league"` or `"franchise"`. |
+
 ### nhl_records_consecutive_goal_seasons {#nhl_records_consecutive_goal_seasons}
 
 `nhl_records_consecutive_goal_seasons(goals: 'int' = 50, **filters) -> 'Dict'`

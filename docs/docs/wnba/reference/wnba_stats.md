@@ -192,5 +192,5 @@ toc_max_heading_level: 2
 | [wnba_stats_infographicfanduelplayer](wnba_stats/other.md#wnba_stats_infographicfanduelplayer) | GET /stats/infographicfanduelplayer |
 | [wnba_stats_leaderstiles](wnba_stats/other.md#wnba_stats_leaderstiles) | GET /stats/leaderstiles |
 | [wnba_stats_playbyplayv2](wnba_stats/other.md#wnba_stats_playbyplayv2) | GET /stats/playbyplayv2 |
-| [wnba_stats_playbyplayv3](wnba_stats/other.md#wnba_stats_playbyplayv3) | GET /stats/playbyplayv3 |
-| [wnba_stats_videostatus](wnba_stats/other.md#wnba_stats_videostatus) | GET /stats/videostatus |
+| [wnba_stats_playbyplayv3](wnba_stats/other-2.md#wnba_stats_playbyplayv3) | GET /stats/playbyplayv3 |
+| [wnba_stats_videostatus](wnba_stats/other-2.md#wnba_stats_videostatus) | GET /stats/videostatus |

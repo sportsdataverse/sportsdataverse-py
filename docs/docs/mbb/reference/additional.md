@@ -27,6 +27,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 
 | Function | Summary |
 |---|---|
+| [espn_mbb_calendar](additional/espn.md#espn_mbb_calendar) | espn_mbb_calendar - look up the men's college basketball calendar for a given season |
 | [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | Flatten one ESPN scoreboard event for the schedule frame, in place. |
 
 ## stats.ncaa.org
@@ -82,7 +83,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [duration_from_period](additional/stats-ncaa-org.md#duration_from_period) | The game duration (minutes elapsed) once `period` has completed |
 | [enrich_and_reverse_game_events](additional/stats-ncaa-org.md#enrich_and_reverse_game_events) | Inserts game-break events and turns descending per-row times into |
 | [enrich_lineup](additional/stats-ncaa-org.md#enrich_lineup) | Populate `pts`/`plus_minus` from the score delta, then run the |
-| [enrich_shot_events_with_pbp](additional/stats-ncaa-org.md#enrich_shot_events_with_pbp) | Enrich each shot with its play-by-play event + on-floor lineup |
+| [enrich_shot_events_with_pbp](additional/stats-ncaa-org-2.md#enrich_shot_events_with_pbp) | Enrich each shot with its play-by-play event + on-floor lineup |
 | [enrich_stats](additional/stats-ncaa-org-2.md#enrich_stats) | Fold a lineup's raw events into a counting-stat tree (``protected def |
 | [enrich_sub_error](additional/stats-ncaa-org-2.md#enrich_sub_error) | Adds top-level location information to a single sub-error, returning a |
 | [enrich_sub_errors](additional/stats-ncaa-org-2.md#enrich_sub_errors) | Adds top-level location information to a list of sub-errors generated |
@@ -113,6 +114,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [is_gen2](additional/stats-ncaa-org-2.md#is_gen2) | Detect the new/"gen2" NCAA event format (`EventUtils.is_gen2`, |
 | [is_scramble](additional/stats-ncaa-org-2.md#is_scramble) | Figure out if (each event of) the current clump is part of a |
 | [is_team_shooting_left_to_start](additional/stats-ncaa-org-2.md#is_team_shooting_left_to_start) | Infers which side of the SVG court the team under analysis shoots |
+| [is_transition](additional/stats-ncaa-org-2.md#is_transition) | Figure out if the current clump is part of a transition offense |
 | [is_women_game](additional/stats-ncaa-org-2.md#is_women_game) | Infers men's vs. women's game from timing evidence |
 | [jsoup_text](additional/stats-ncaa-org-2.md#jsoup_text) | JSoup `Element.text()`: all descendant text, whitespace-collapsed. |
 | [lineup_stats_bucket](additional/stats-ncaa-org-2.md#lineup_stats_bucket) | Assemble one lineup's full 254-field `{value}` bucket. |
@@ -124,8 +126,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [ncaa_mbb_box_scores](additional/stats-ncaa-org-2.md#ncaa_mbb_box_scores) | Box scores for one or more NCAA games (bigballR `get_box_scores` port). |
 | [ncaa_mbb_date_games](additional/stats-ncaa-org-2.md#ncaa_mbb_date_games) | Discover every NCAA MBB game played on a date (bigballR `get_date_games`). |
 | [ncaa_mbb_join_pbp_shots](additional/stats-ncaa-org-2.md#ncaa_mbb_join_pbp_shots) | Attach shot-chart coordinates to play-by-play rows (bigballR |
-| [ncaa_mbb_player_stats](additional/stats-ncaa-org-2.md#ncaa_mbb_player_stats) | Aggregate bigballR-contract play-by-play into per-player box stats. |
-| [ncaa_mbb_possessions](additional/stats-ncaa-org-2.md#ncaa_mbb_possessions) | Aggregate bigballR-contract play-by-play into one row per possession. |
+| [ncaa_mbb_player_stats](additional/stats-ncaa-org-3.md#ncaa_mbb_player_stats) | Aggregate bigballR-contract play-by-play into per-player box stats. |
+| [ncaa_mbb_possessions](additional/stats-ncaa-org-3.md#ncaa_mbb_possessions) | Aggregate bigballR-contract play-by-play into one row per possession. |
 | [ncaa_mbb_shot_locations](additional/stats-ncaa-org-3.md#ncaa_mbb_shot_locations) | Scrape MBB shot locations for one or more games (bigballR |
 | [ncaa_mbb_team_stats](additional/stats-ncaa-org-3.md#ncaa_mbb_team_stats) | Aggregate bigballR-contract play-by-play into per-team game stats. |
 | [phase1_shot_event_enrichment](additional/stats-ncaa-org-3.md#phase1_shot_event_enrichment) | The court-geometry enrichment pass: ascending time, coordinate |
@@ -141,6 +143,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [select_matching](additional/stats-ncaa-org-3.md#select_matching) | JSoup `root.select(sel + ":matches(regex)")`: candidates whose full |
 | [select_matching_own](additional/stats-ncaa-org-3.md#select_matching_own) | JSoup `root.select(sel + ":matchesOwn(regex)")`: candidates whose |
 | [shot_js_to_html](additional/stats-ncaa-org-3.md#shot_js_to_html) | Converts client-side `addShot(...)` JS calls into parseable |
+| [shot_value](additional/stats-ncaa-org-3.md#shot_value) | Classify a play-by-play event string as a 3, a 2, or an assist |
 | [start_time_from_period](additional/stats-ncaa-org-3.md#start_time_from_period) | The game-clock time (minutes elapsed) a period starts at |
 | [sum_event_stats](additional/stats-ncaa-org-3.md#sum_event_stats) | Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models |
 | [sum_shot_infos](additional/stats-ncaa-org-3.md#sum_shot_infos) | Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models |
@@ -233,6 +236,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [RapmProcessingInputs](additional/models-and-calculators.md#RapmProcessingInputs) | Port of `RapmProcessingInputs` (`RapmUtils.ts:196-203`). |
 | [RawGameEvent](additional/models-and-calculators.md#RawGameEvent) | A single NCAA play-by-play event line (`LineupEvent.RawGameEvent`, |
 | [RosterEntry](additional/models-and-calculators.md#RosterEntry) | An entry in an NCAA team roster (`RosterEntry`, ``models/ncaa |
+| [Score](additional/models-and-calculators.md#Score) | Points scored / allowed (`Game.Score`, `Game.scala:22`). |
 | [ScoreInfo](additional/models-and-calculators.md#ScoreInfo) | Score context at the start/end of a lineup event |
 | [ShotClockStats](additional/models-and-calculators.md#ShotClockStats) | Counting stats broken down by shot-clock segment |
 | [ShotEvent](additional/models-and-calculators.md#ShotEvent) | Info about one shot taken during a game, all distances in feet |
@@ -240,6 +244,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [ShotLocation](additional/models-and-calculators.md#ShotLocation) | A shot's court-relative coordinates, in feet (`ShotEvent.ShotLocation`, |
 | [TeamId](additional/models-and-calculators.md#TeamId) | CBB team identifier (`TeamId`, `TeamId.scala`, `AnyVal`). |
 | [TeamSeasonId](additional/models-and-calculators.md#TeamSeasonId) | A team's season identifier (`TeamSeasonId`, `TeamSeasonId.scala`). |
+| [Year](additional/models-and-calculators.md#Year) | CBB season, named by the year it ends (`Year`, `Year.scala`). |
 | [adjust_efficiency](additional/models-and-calculators.md#adjust_efficiency) | Iterative opponent-adjusted efficiency -> AdjO / AdjD / AdjEM per team-season. |
 | [adjust_off_rating_stats](additional/models-and-calculators.md#adjust_off_rating_stats) | Apply a missing-possession correction factor to an `ORtgDiagnostics` dict in place. |
 | [adjust_tempo](additional/models-and-calculators.md#adjust_tempo) | Opponent-adjusted tempo (possessions/40) per team-season. |
@@ -254,7 +259,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [build_net_points](additional/models-and-calculators.md#build_net_points) | Decompose ORtg/DRtg + RAPM into a Net-Points-like breakdown. |
 | [build_o_rtg](additional/models-and-calculators.md#build_o_rtg) | Individual offensive rating (Dean-Oliver ORtg) + diagnostics. |
 | [build_player_context](additional/models-and-calculators.md#build_player_context) | Build the context object the RAPM matrix-solve layer consumes. |
-| [build_priors](additional/models-and-calculators.md#build_priors) | Build strong/weak per-player RAPM priors for every column. |
+| [build_priors](additional/models-and-calculators-2.md#build_priors) | Build strong/weak per-player RAPM priors for every column. |
 | [build_productivity](additional/models-and-calculators-2.md#build_productivity) | Public port of `RatingUtils.buildProductivity` (`RatingUtils.ts:963-990`). |
 | [build_weak_prior_from_rapm](additional/models-and-calculators-2.md#build_weak_prior_from_rapm) | Wrap a flat RAPM-estimate vector into `playersWeak`-shaped dicts. |
 | [calc_collinearity_diag](additional/models-and-calculators-2.md#calc_collinearity_diag) | Multi-collinearity diagnostic between the players in an off/def design matrix. |
@@ -297,9 +302,9 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [raw_game_efficiency](additional/models-and-calculators-2.md#raw_game_efficiency) | Per-team, per-game possessions + raw offensive/defensive efficiency. |
 | [ridge_cv_lambda](additional/models-and-calculators-2.md#ridge_cv_lambda) | Pick lambda by leave-one-group-out CV (groups = seasons/classes). |
 | [ridge_fit](additional/models-and-calculators-2.md#ridge_fit) | Closed-form ridge with an unpenalized intercept (coefficient 0). |
-| [roc_auc](additional/models-and-calculators-2.md#roc_auc) | Area under the ROC curve via the rank-sum (Mann-Whitney) identity. |
-| [save_artifact](additional/models-and-calculators-2.md#save_artifact) | Write a bundled artifact (dev/fitter use -- writes into the source tree). |
-| [score_to_tuple](additional/models-and-calculators-2.md#score_to_tuple) | Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`, |
+| [roc_auc](additional/models-and-calculators-3.md#roc_auc) | Area under the ROC curve via the rank-sum (Mann-Whitney) identity. |
+| [save_artifact](additional/models-and-calculators-3.md#save_artifact) | Write a bundled artifact (dev/fitter use -- writes into the source tree). |
+| [score_to_tuple](additional/models-and-calculators-3.md#score_to_tuple) | Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`, |
 | [simulate_game](additional/models-and-calculators-3.md#simulate_game) | Sample one game outcome: margin `~ Normal(exp_margin, margin_sd)`. |
 | [slow_regression](additional/models-and-calculators-3.md#slow_regression) | Build the Tikhonov (ridge) regression solver matrix. |
 | [spearman_corr](additional/models-and-calculators-3.md#spearman_corr) | Spearman rank correlation between two arrays. |

@@ -349,7 +349,7 @@ def compare_game(
         reference = _process_game(
             league, espn_id, source="espn", fallthrough=False, payloads={"espn": summary}, odds_override=odds
         )
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:  # noqa: BLE001 -- any processor failure is this row's recorded error
         row["error"] = f"espn: {type(exc).__name__}: {exc}"
         return row, None
     try:

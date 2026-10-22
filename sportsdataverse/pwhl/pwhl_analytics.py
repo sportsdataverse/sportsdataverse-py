@@ -114,7 +114,7 @@ def pwhl_game_corsi(game_id: int, return_as_pandas: bool = False) -> "Union[pl.D
         - ``corsi_for_per60`` (Float64)
         - ``corsi_includes_missed`` (Boolean, always False)
     """
-    from sportsdataverse.pwhl.pwhl_api import pwhl_pbp  # noqa: PLC0415 (local import avoids circular at module init)
+    from sportsdataverse.pwhl.pwhl_api import pwhl_pbp  # local import avoids circular at module init
 
     pbp = pwhl_pbp(game_id)
     corsi = corsi_fenwick_on_ice(pbp)

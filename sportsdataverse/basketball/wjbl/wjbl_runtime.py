@@ -131,7 +131,7 @@ def _route(url: str) -> str:
 def _fetch(url: str, params: Optional[Mapping[str, Any]], **kwargs: Any) -> Any:
     """GET ``url`` through the polite session; an error envelope (HTTP 200) is ``AssetFetchError``."""
     kwargs.setdefault("session", _bb.SESSION)
-    body = _bb._get(url, dict(params or {}), **kwargs)
+    body = _bb._fetch_json(url, dict(params or {}), **kwargs)
     err = _obj(body).get("error") if isinstance(body, dict) else None
     if isinstance(err, dict):
         code = str(err.get("error_code"))[:20]
@@ -156,6 +156,7 @@ def _leagues(**kwargs: Any) -> List[Mapping[str, Any]]:
     return _CACHE[key]
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-1)
 def league_id(season: Any, **kwargs: Any) -> int:
     """The opaque ``league_id`` of the league edition whose END year is ``season``.
 
@@ -182,6 +183,7 @@ def league_id(season: Any, **kwargs: Any) -> int:
     return by_end[end]
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _final_header(gid: int, **kwargs: Any) -> Mapping[str, Any]:
     """The ``/play-schedule/detail`` header of a game, which must be final (cached once it is)."""
     key = ("header", gid)
@@ -333,6 +335,7 @@ def _seasons(where: str, route: str, ids: str, data: Any) -> None:
 # --- the getter -----------------------------------------------------------------------------------------------------
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET a W League route, refuse the empty, partial, non-final and out-of-scope answers and stamp the request.
 

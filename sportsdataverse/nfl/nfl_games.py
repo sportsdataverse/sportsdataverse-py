@@ -33,6 +33,10 @@ from typing import Dict, Optional
 
 import requests
 
+from sportsdataverse._codegen_runtime import _download_json, _json_body, _transport_errors, _where
+from sportsdataverse.dl_utils import _DEFAULT_TIMEOUT, _ENV_TIMEOUT, _env_int, download
+from sportsdataverse.errors import AssetFetchError as _AssetFetchError  # private: this module has no __all__
+
 API_HOST = "https://api.nfl.com"
 
 # NFL.com web-app (WEB_DESKTOP) client credentials -- shipped publicly in the
@@ -77,7 +81,13 @@ def _jwt_exp(token: str) -> Optional[float]:
 
 
 def _mint_token(key: str, secret: str) -> str:
-    """POST the anonymous device-token grant and return the bearer ``accessToken``."""
+    """POST the anonymous device-token grant and return the bearer ``accessToken``.
+
+    Raises the error vocabulary (B-M21): 400 / 422 -> ``ValueError``, 404 -> ``NoDataError``,
+    any other non-2xx, a connection failure, or a 2xx without a string ``accessToken`` ->
+    ``AssetFetchError``. A POST, so it is not retried (``download`` is GET-only).
+    """
+    url = API_HOST + "/identity/v3/token"
     data = {
         "clientKey": key,
         "clientSecret": secret,
@@ -85,14 +95,18 @@ def _mint_token(key: str, secret: str) -> str:
         "deviceInfo": _DEFAULT_DEVICE_INFO,
         "networkType": "other",
     }
-    resp = requests.post(
-        API_HOST + "/identity/v3/token",
-        data=data,
-        headers={"User-Agent": _DEFAULT_UA, "X-Domain-Id": "100"},
-        timeout=30,
-    )
-    resp.raise_for_status()
-    return resp.json()["accessToken"]
+    with _transport_errors(url):
+        resp = requests.post(
+            url,
+            data=data,
+            headers={"User-Agent": _DEFAULT_UA, "X-Domain-Id": "100"},
+            timeout=_env_int(_ENV_TIMEOUT, _DEFAULT_TIMEOUT),
+        )
+    body = _json_body(resp, url)
+    token = body.get("accessToken") if isinstance(body, dict) else None
+    if not isinstance(token, str) or not token:
+        raise _AssetFetchError(f"{_where(url)} answered HTTP {resp.status_code} without an accessToken")
+    return token
 
 
 def nfl_clear_token_cache() -> None:
@@ -129,6 +143,12 @@ def nfl_token_gen(
 
     Returns:
         str: The bearer ``accessToken`` string.
+
+    Raises:
+        ValueError: ``/identity/v3/token`` answered 400 / 422 (the credentials are rejected).
+        NoDataError: ``/identity/v3/token`` answered 404.
+        AssetFetchError: Any other non-2xx or a connection failure while minting, or a
+            2xx body without a string ``accessToken``.
 
     Example:
         Token is minted once and reused across calls::
@@ -227,6 +247,12 @@ def nfl_game_schedule(
         Each game carries ``id`` (the uuid game id used by :func:`nfl_game_details`),
         ``homeTeam``/``awayTeam``, ``date``, ``status``, ``externalIds`` (gsis etc.).
 
+    Raises:
+        NoDataError: api.nfl.com answered 404.
+        ValueError: api.nfl.com answered 400 / 422.
+        AssetFetchError: Any other non-2xx or a connection failure after retries (the
+            token mint's included), or a 2xx whose body is not a JSON object or array.
+
     Example:
         Week 1 of the 2024 regular season::
 
@@ -237,9 +263,7 @@ def nfl_game_schedule(
     if headers is None:
         headers = nfl_headers_gen()
     url = f"{API_HOST}/football/v2/games/season/{season}/seasonType/{season_type}/week/{week}"
-    resp = requests.get(url, headers=headers, params={"withExternalIds": "true"}, timeout=30)
-    resp.raise_for_status()
-    return resp.json()
+    return _download_json(download, url, params={"withExternalIds": "true"}, headers=headers)
 
 
 def nfl_game_details(
@@ -261,7 +285,15 @@ def nfl_game_details(
 
     Returns:
         Dict: the ``gameDetail`` object (or the raw envelope when ``raw=True``).
-        Empty ``dict`` if the game has no detail payload.
+        Empty ``dict`` if ``gameDetail`` is ``null`` (the game has no detail payload).
+
+    Raises:
+        NoDataError: api.nfl.com answered 404.
+        ValueError: api.nfl.com answered 400 / 422.
+        AssetFetchError: Any other non-2xx or a connection failure after retries (the
+            token mint's included), a 2xx whose body is not a JSON object or array, or
+            a body with no ``data.viewer.gameDetail`` or carrying any GraphQL ``errors``
+            list, even alongside a populated ``gameDetail`` (a partial answer is an unknown one).
 
     Example:
         Quick start::
@@ -278,12 +310,18 @@ def nfl_game_details(
     """
     if headers is None:
         headers = nfl_headers_gen()
-    resp = requests.get(f"{API_HOST}/experience/v1/gamedetails/{game_id}", headers=headers, timeout=30)
-    resp.raise_for_status()
-    payload = resp.json()
+    url = f"{API_HOST}/experience/v1/gamedetails/{game_id}"
+    payload = _download_json(download, url, headers=headers)
+    data = payload.get("data") if isinstance(payload, dict) else None
+    viewer = data.get("viewer") if isinstance(data, dict) else None
+    errors = payload.get("errors") if isinstance(payload, dict) else None
+    # A GraphQL ``errors`` envelope, or a body with no ``data.viewer.gameDetail``, is a failed
+    # fetch, never an empty game (B-GB-03): it unwrapped to {} and a (0, 0) pbp frame.
+    if errors or not isinstance(viewer, dict) or "gameDetail" not in viewer:
+        raise _AssetFetchError(f"{_where(url)} answered without data.viewer.gameDetail: errors={str(errors)[:200]}")
     if raw:
         return payload
-    return ((payload or {}).get("data", {}) or {}).get("viewer", {}).get("gameDetail", {}) or {}
+    return viewer["gameDetail"] or {}
 
 
 def _to_frame(records: list, return_as_pandas: bool):

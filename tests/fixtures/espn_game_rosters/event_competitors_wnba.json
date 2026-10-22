@@ -1,0 +1,68 @@
+{
+ "count": 2,
+ "pageIndex": 1,
+ "pageSize": 25,
+ "pageCount": 1,
+ "items": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401620308/competitions/401620308/competitors/16?lang=en&region=us",
+   "id": "16",
+   "uid": "s:40~l:59~t:16",
+   "type": "team",
+   "order": 0,
+   "homeAway": "home",
+   "winner": true,
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/teams/16?lang=en&region=us"
+   },
+   "score": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401620308/competitions/401620308/competitors/16/score?lang=en&region=us"
+   },
+   "linescores": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401620308/competitions/401620308/competitors/16/linescores?lang=en&region=us"
+   },
+   "roster": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401620308/competitions/401620308/competitors/16/roster?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401620308/competitions/401620308/competitors/16/statistics?lang=en&region=us"
+   },
+   "leaders": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401620308/competitions/401620308/competitors/16/leaders?lang=en&region=us"
+   },
+   "record": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401620308/competitions/401620308/competitors/16/records?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401620308/competitions/401620308/competitors/3?lang=en&region=us",
+   "id": "3",
+   "uid": "s:40~l:59~t:3",
+   "type": "team",
+   "order": 1,
+   "homeAway": "away",
+   "winner": false,
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/2024/teams/3?lang=en&region=us"
+   },
+   "score": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401620308/competitions/401620308/competitors/3/score?lang=en&region=us"
+   },
+   "linescores": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401620308/competitions/401620308/competitors/3/linescores?lang=en&region=us"
+   },
+   "roster": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401620308/competitions/401620308/competitors/3/roster?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401620308/competitions/401620308/competitors/3/statistics?lang=en&region=us"
+   },
+   "leaders": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401620308/competitions/401620308/competitors/3/leaders?lang=en&region=us"
+   },
+   "record": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/401620308/competitions/401620308/competitors/3/records?lang=en&region=us"
+   }
+  }
+ ]
+}

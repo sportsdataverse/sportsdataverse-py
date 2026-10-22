@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # UCL — ESPN CDN API (cdn.espn.com)
 
-`sportsdataverse.ucl` — 1 endpoint.
+`sportsdataverse.soccer.ucl` — 1 endpoint.
 
 ## espn_ucl_cdn_scoreboard
 

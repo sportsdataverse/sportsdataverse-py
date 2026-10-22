@@ -18,6 +18,7 @@ quietly pass against a same-schema pair.
 
 from __future__ import annotations
 
+import io
 from pathlib import Path
 
 import polars as pl
@@ -54,8 +55,8 @@ _ADDED_IN_2023 = [
 ]
 
 
-# Bound before any monkeypatching: ``_loaders.pl`` IS the polars module, so
-# patching ``pl.read_parquet`` there patches it here too.
+# The committed fixtures are read with the real polars reader (the release fetch is stubbed at
+# ``_release_bytes``, R898-9).
 _read_parquet = pl.read_parquet
 
 
@@ -75,15 +76,20 @@ def no_cache():
 
 @pytest.fixture()
 def offline_participation(monkeypatch):
-    """Serve the committed per-season fixtures instead of hitting the release."""
+    """Serve the committed per-season fixtures' bytes at the transport, instead of the release.
 
-    def fake_read_parquet(source, *args, **kwargs):
+    The release read fetches the bytes (``_release_bytes``) and parses them apart (R898-9), so
+    the real parse runs on the real captures.
+    """
+    from sportsdataverse import _codegen_runtime
+
+    def fake_release_bytes(url):
         for season in (2016, 2023):
-            if str(season) in str(source):
-                return _fixture(season)
-        raise AssertionError(f"unexpected read_parquet source: {source!r}")
+            if str(season) in url:
+                return io.BytesIO((FIXTURES / f"pbp_participation_{season}_head3.parquet").read_bytes())
+        raise AssertionError(f"unexpected release url: {url!r}")
 
-    monkeypatch.setattr(_loaders.pl, "read_parquet", fake_read_parquet)
+    monkeypatch.setattr(_codegen_runtime, "_release_bytes", fake_release_bytes)
 
 
 def test_fixtures_really_do_drift():
@@ -192,14 +198,27 @@ _read_csv = pl.read_csv
 
 @pytest.fixture()
 def offline_ff_csvs(monkeypatch):
-    """Serve the committed real CSV slices in place of the DynastyProcess URLs."""
+    """Serve the committed real CSV slices in place of the DynastyProcess URLs.
+
+    The CSVs are fetched through the HTTP gateway (A-M11), so the slice is answered
+    at the transport: a real ``requests.Response`` carrying the committed bytes.
+    """
+    import requests
+
+    from sportsdataverse import _codegen_runtime
+
     seen: list = []
 
-    def fake_read_csv(source, **kwargs):
-        seen.append(source)
-        return _read_csv(_FF_SLICES[source], **kwargs)
+    def fake_download(url, **kwargs):
+        seen.append(url)
+        resp = requests.Response()
+        resp.status_code = 200
+        resp.url = url
+        resp.encoding = "utf-8"
+        resp._content = _FF_SLICES[url].read_bytes()
+        return resp
 
-    monkeypatch.setattr(_loaders.pl, "read_csv", fake_read_csv)
+    monkeypatch.setattr(_codegen_runtime, "download", fake_download)
     return seen
 
 
@@ -297,11 +316,19 @@ def test_ff_loaders_return_string_ids_as_pandas(load, id_cols, padded, no_cache,
 
 
 @pytest.mark.parametrize("kind", ["draft", "week"])
-def test_ff_rankings_types_a_column_empty_in_its_first_100_rows(kind, tmp_path, monkeypatch, no_cache):
+def test_ff_rankings_types_a_column_empty_in_its_first_100_rows(kind, monkeypatch, no_cache):
     """Early in a season the first 100+ ``rank_delta`` cells are empty. With polars'
     default 100-row inference the column read as String; the whole file is scanned."""
     rows = ["player,rank_delta"] + [f"p{i}," for i in range(120)] + [f"q{i},{i - 5}" for i in range(30)]
-    path = tmp_path / "ff.csv"
-    path.write_text("\n".join(rows) + "\n")
-    monkeypatch.setattr(_loaders.pl, "read_csv", lambda source, **kw: _read_csv(path, **kw))
+    import requests
+
+    from sportsdataverse import _codegen_runtime
+
+    def fake_download(url, **kwargs):  # the CSV is fetched through the gateway (A-M11): stub it there
+        resp = requests.Response()
+        resp.status_code, resp.url, resp.encoding = 200, url, "utf-8"
+        resp._content = ("\n".join(rows) + "\n").encode()
+        return resp
+
+    monkeypatch.setattr(_codegen_runtime, "download", fake_download)
     assert load_nfl_ff_rankings(kind=kind).schema["rank_delta"] == pl.Int64

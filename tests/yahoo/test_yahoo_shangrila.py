@@ -104,7 +104,7 @@ def test_get_caller_locale_overrides_default(rt, monkeypatch):
 
 def test_get_raises_on_404_and_non_json(rt, monkeypatch):
     # A 404 is NoDataError and a body that is not JSON is a failed fetch (both were ``{}``);
-    # a JSON body that is not an object is still ``{}``.
+    # a JSON array where Yahoo's object belongs is a failed fetch too (A-L18; it was ``{}``).
     from sportsdataverse.errors import AssetFetchError, NoDataError
 
     def raiser(**kwargs):
@@ -121,7 +121,8 @@ def test_get_raises_on_404_and_non_json(rt, monkeypatch):
         rt._get("https://x/y")
 
     monkeypatch.setattr(rt, "download", lambda **kw: _Resp([1, 2]))
-    assert rt._get("https://x/y") == {}
+    with pytest.raises(AssetFetchError, match="JSON array where an object was expected"):
+        rt._get("https://x/y")
 
 
 # ===========================================================================

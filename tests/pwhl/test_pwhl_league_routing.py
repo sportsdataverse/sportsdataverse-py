@@ -1,8 +1,8 @@
 """PWHL ratings and props must read PWHL data, never the NHL loaders (supp-001; fixed by task 2.13).
 
-`pwhl_team_ratings` / `pwhl_player_props` delegate to the NHL engines, which call `load_nhl_pbp_full`,
-`load_nhl_schedules` and `load_nhl_skater_boxscores` whatever `league` says: the public PWHL functions
-return NHL ratings computed with PWHL constants. Every NHL loader is replaced by one that fails the test
+Before 2.13 `pwhl_team_ratings` / `pwhl_player_props` ran the NHL engines on `load_nhl_pbp_full`,
+`load_nhl_schedules` and `load_nhl_skater_boxscores` whatever `league` said: NHL ratings computed with
+PWHL constants. Every NHL loader is replaced by one that fails the test
 naming itself, and sockets are closed, so the check never reaches the network.
 """
 
@@ -40,11 +40,6 @@ def _nhl_loaders_fail(monkeypatch):
     monkeypatch.setattr(socket.socket, "connect", no_network)
 
 
-@pytest.mark.xfail(
-    strict=True,
-    raises=AssertionError,
-    reason="supp-001 -> task 2.13: pwhl_team_ratings / pwhl_player_props load NHL data",
-)
 @pytest.mark.parametrize("fn", [pwhl_team_ratings, pwhl_player_props], ids=["team_ratings", "player_props"])
 def test_pwhl_engines_never_read_nhl_data(fn):
     try:

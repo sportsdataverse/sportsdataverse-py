@@ -349,7 +349,7 @@ One row per rostered player: `number`, `player`, `pos`, `height`, `weight`, `bir
 
 | col_name | type | description |
 |---|---|---|
-| `number` | double | Number. |
+| `number` | character | Number. |
 | `player` | character | Player name. |
 | `pos` | character | Position. |
 | `height` | character | Player height (string e.g. '6-2' or inches). |

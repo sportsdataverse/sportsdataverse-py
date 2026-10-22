@@ -538,7 +538,6 @@ def test_team_shell_is_nodata_and_a_team_page_is_stamped(site):
         (_Resp(404, "nope"), NoDataError, "404"),
         (_Resp(400, "bad"), ValueError, "400"),
         (_Resp(403, "denied"), AssetFetchError, "403"),
-        (_Resp(204, ""), AssetFetchError, "not 200"),
         (_Resp(200, '{"status": "error"}', ctype="application/json"), AssetFetchError, "non-HTML"),
         (_Resp(200, "   "), AssetFetchError, "empty body"),
         (_Resp(200, "Торос".encode("cp1251")), AssetFetchError, "not valid 'UTF-8'"),
@@ -553,6 +552,12 @@ def test_runtime_refusals(site, resp, error, match):
     site.pages[f"{HOST}/en/players/34418/"] = resp
     with pytest.raises(error, match=match):
         R._get(f"{HOST}/en/players/34418/", {})
+
+
+def test_no_content_is_an_empty_answer(site):
+    # EX-SYNC-a: a 204 is {} (zero rows), as from every runtime; it was AssetFetchError.
+    site.pages[f"{HOST}/en/players/34418/"] = _Resp(204, "")
+    assert R._get(f"{HOST}/en/players/34418/", {}) == {}
 
 
 def test_broadcast_redirect_to_the_online_index_is_nodata(site):

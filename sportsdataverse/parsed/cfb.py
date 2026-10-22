@@ -25,6 +25,7 @@ warnings.warn(
 
 from sportsdataverse.cfb import espn_cfb_award as _raw_espn_cfb_award
 from sportsdataverse.cfb import espn_cfb_awards as _raw_espn_cfb_awards
+from sportsdataverse.cfb import espn_cfb_calendar_site as _raw_espn_cfb_calendar_site
 from sportsdataverse.cfb import espn_cfb_cdn_boxscore as _raw_espn_cfb_cdn_boxscore
 from sportsdataverse.cfb import espn_cfb_cdn_playbyplay as _raw_espn_cfb_cdn_playbyplay
 from sportsdataverse.cfb import espn_cfb_cdn_rankings as _raw_espn_cfb_cdn_rankings
@@ -578,6 +579,7 @@ __all__ = [
     "espn_cfb_award",
     "espn_cfb_awards",
     "espn_cfb_calendar",
+    "espn_cfb_calendar_site",
     "espn_cfb_cdn_boxscore",
     "espn_cfb_cdn_playbyplay",
     "espn_cfb_cdn_rankings",
@@ -1016,6 +1018,20 @@ def espn_cfb_awards(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_cfb_awards(*args, **kwargs)
+
+
+def espn_cfb_calendar_site(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.espn_cfb_calendar_site``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.espn_cfb_calendar_site` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.espn_cfb_calendar_site` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_cfb_calendar_site(*args, **kwargs)
 
 
 def espn_cfb_cdn_boxscore(*args, **kwargs):

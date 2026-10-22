@@ -1,0 +1,347 @@
+{
+ "sectionList": [
+  {
+   "title": "Playoffs",
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42767",
+     "eventTime": "2025-12-20T01:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42767",
+        "homeUri": "football/cfb/teams/36",
+        "awayUri": "football/cfb/teams/101"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/101",
+      "stackedNameTop": "Alabama",
+      "stackedNameBottom": "Crimson Tide",
+      "longName": "Alabama",
+      "name": "ALA"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/36",
+      "stackedNameTop": "Oklahoma",
+      "stackedNameBottom": "Sooners",
+      "longName": "Oklahoma",
+      "name": "OU"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42771",
+     "eventTime": "2025-12-20T17:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42771",
+        "homeUri": "football/cfb/teams/39",
+        "awayUri": "football/cfb/teams/11"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/11",
+      "stackedNameTop": "Miami (FL)",
+      "stackedNameBottom": "Hurricanes",
+      "longName": "Miami (FL)",
+      "name": "MIA"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/39",
+      "stackedNameTop": "Texas A&M",
+      "stackedNameBottom": "Aggies",
+      "longName": "Texas A&M",
+      "name": "TXA&M"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42773",
+     "eventTime": "2025-12-20T20:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42773",
+        "homeUri": "football/cfb/teams/105",
+        "awayUri": "football/cfb/teams/54"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/54",
+      "stackedNameTop": "Tulane",
+      "stackedNameBottom": "Green Wave",
+      "longName": "Tulane",
+      "name": "TULANE"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/105",
+      "stackedNameTop": "Ole Miss",
+      "stackedNameBottom": "Rebels",
+      "longName": "Ole Miss",
+      "name": "MISS"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42770",
+     "eventTime": "2025-12-21T00:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42770",
+        "homeUri": "football/cfb/teams/88",
+        "awayUri": "football/cfb/teams/117"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/117",
+      "stackedNameTop": "James Madison",
+      "stackedNameBottom": "Dukes",
+      "longName": "James Madison",
+      "name": "JMU"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/88",
+      "stackedNameTop": "Oregon",
+      "stackedNameBottom": "Ducks",
+      "longName": "Oregon",
+      "name": "ORE"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42826",
+     "eventTime": "2026-01-01T00:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42826",
+        "homeUri": "football/cfb/teams/25",
+        "awayUri": "football/cfb/teams/11"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/11",
+      "stackedNameTop": "Miami (FL)",
+      "stackedNameBottom": "Hurricanes",
+      "longName": "Miami (FL)",
+      "name": "MIA"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/25",
+      "stackedNameTop": "Ohio State",
+      "stackedNameBottom": "Buckeyes",
+      "longName": "Ohio State",
+      "name": "OSU"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42787",
+     "eventTime": "2026-01-01T17:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42787",
+        "homeUri": "football/cfb/teams/40",
+        "awayUri": "football/cfb/teams/88"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/88",
+      "stackedNameTop": "Oregon",
+      "stackedNameBottom": "Ducks",
+      "longName": "Oregon",
+      "name": "ORE"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/40",
+      "stackedNameTop": "Texas Tech",
+      "stackedNameBottom": "Red Raiders",
+      "longName": "Texas Tech",
+      "name": "TEXTCH"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42788",
+     "eventTime": "2026-01-01T21:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42788",
+        "homeUri": "football/cfb/teams/19",
+        "awayUri": "football/cfb/teams/101"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/101",
+      "stackedNameTop": "Alabama",
+      "stackedNameBottom": "Crimson Tide",
+      "longName": "Alabama",
+      "name": "ALA"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/19",
+      "stackedNameTop": "Indiana",
+      "stackedNameBottom": "Hoosiers",
+      "longName": "Indiana",
+      "name": "IND"
+     }
+    },
+    {
+     "contentUri": "football/cfb/events/42797",
+     "eventTime": "2026-01-02T01:00:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42797",
+        "homeUri": "football/cfb/teams/96",
+        "awayUri": "football/cfb/teams/105"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/105",
+      "stackedNameTop": "Ole Miss",
+      "stackedNameBottom": "Rebels",
+      "longName": "Ole Miss",
+      "name": "MISS"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/96",
+      "stackedNameTop": "Georgia",
+      "stackedNameBottom": "Bulldogs",
+      "longName": "Georgia",
+      "name": "UGA"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42822",
+     "eventTime": "2026-01-09T00:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42822",
+        "homeUri": "football/cfb/teams/105",
+        "awayUri": "football/cfb/teams/11"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/11",
+      "stackedNameTop": "Miami (FL)",
+      "stackedNameBottom": "Hurricanes",
+      "longName": "Miami (FL)",
+      "name": "MIA"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/105",
+      "stackedNameTop": "Ole Miss",
+      "stackedNameBottom": "Rebels",
+      "longName": "Ole Miss",
+      "name": "MISS"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42838",
+     "eventTime": "2026-01-10T00:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42838",
+        "homeUri": "football/cfb/teams/19",
+        "awayUri": "football/cfb/teams/88"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/88",
+      "stackedNameTop": "Oregon",
+      "stackedNameBottom": "Ducks",
+      "longName": "Oregon",
+      "name": "ORE"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/19",
+      "stackedNameTop": "Indiana",
+      "stackedNameBottom": "Hoosiers",
+      "longName": "Indiana",
+      "name": "IND"
+     }
+    }
+   ]
+  },
+  {
+   "title": null,
+   "events": [
+    {
+     "contentUri": "football/cfb/events/42792",
+     "eventTime": "2026-01-20T00:30:00Z",
+     "statusLine": "FINAL",
+     "entityLink": {
+      "layout": {
+       "tokens": {
+        "id": "42792",
+        "homeUri": "football/cfb/teams/19",
+        "awayUri": "football/cfb/teams/11"
+       }
+      }
+     },
+     "upperTeam": {
+      "uri": "football/cfb/teams/11",
+      "stackedNameTop": "Miami (FL)",
+      "stackedNameBottom": "Hurricanes",
+      "longName": "Miami (FL)",
+      "name": "MIA"
+     },
+     "lowerTeam": {
+      "uri": "football/cfb/teams/19",
+      "stackedNameTop": "Indiana",
+      "stackedNameBottom": "Hoosiers",
+      "longName": "Indiana",
+      "name": "IND"
+     }
+    }
+   ]
+  }
+ ]
+}

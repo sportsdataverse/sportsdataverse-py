@@ -169,6 +169,7 @@ def _scope(url: str, params: Optional[Mapping[str, Any]], body: Any) -> None:
                     raise AssetFetchError(f"{where}: game date {date!r} is outside season {end} ({lo}..{hi})")
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET a Liiga route as JSON, refuse the error / empty / out-of-scope answers, stamp the request.
 
@@ -195,7 +196,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     if tournament is not None and tournament not in TOURNAMENTS:
         raise ValueError(f"tournament must be one of {TOURNAMENTS!r}; got {tournament!r}")
     kwargs.setdefault("retry_statuses", RETRY_STATUSES)
-    body = euro_hockey_runtime._get(url, params, **kwargs)
+    body = euro_hockey_runtime._fetch_json(url, params, **kwargs)
     _error(url, body)
     if _is_empty(body):
         raise NoDataError(f"{_rt._where(url)}: Liiga answered no rows")

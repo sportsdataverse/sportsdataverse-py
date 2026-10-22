@@ -44,6 +44,7 @@ import re
 from typing import Any, Callable, Dict, List, Mapping, NamedTuple, Optional, Tuple
 from urllib.parse import urlsplit
 
+from sportsdataverse import _codegen_runtime as _rt
 from sportsdataverse._codegen_runtime import _where
 from sportsdataverse.basketball import basketball_runtime as _bb
 from sportsdataverse.errors import AssetFetchError, NoDataError
@@ -213,10 +214,8 @@ def _year(ddmmyyyy: Any) -> Optional[int]:
 def _fetch(url: str, params: Optional[Mapping[str, Any]], **kwargs: Any) -> Any:
     """GET ``url`` through the polite session; an Infobasket error answer is ``AssetFetchError``."""
     kwargs.setdefault("session", _bb.SESSION)
-    try:
-        body = _bb._get(url, dict(params or {}), **kwargs)
-    except ValueError as exc:  # HTTP 400 / 422: the request is wrong
-        raise AssetFetchError(str(exc)) from None
+    # a 400 / 422 stays ValueError: the request is wrong (EX-SYNC-b, the repo-wide vocabulary)
+    body = _bb._fetch_json(url, dict(params or {}), **kwargs)
     where = _where(url)
     if isinstance(body, dict) and {"MessageType", "Message"} <= set(body):
         raise AssetFetchError(f"{where}: Infobasket error envelope: {str(body.get('Message'))[:80]!r}")
@@ -227,6 +226,7 @@ def _fetch(url: str, params: Optional[Mapping[str, Any]], **kwargs: Any) -> Any:
     return body
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-1)
 def season_table(tag: str = DEFAULT_TAG, **kwargs: Any) -> Dict[int, int]:
     """``{END year: season CompID}`` of a competition tag, from ``/Comp/GetSeasonsForTag`` (cached for the process).
 
@@ -392,6 +392,7 @@ def _side_is(game_row: Mapping[str, Any], team: Any) -> bool:
 # --- the getter ---------------------------------------------------------------------------------------------------------
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[Mapping[str, Any]] = None, **kwargs: Any) -> Any:
     """GET one wrapped route; return its (scrubbed) body with the request stamped under ``_request``.
 

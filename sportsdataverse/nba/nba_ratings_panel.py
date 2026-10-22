@@ -44,7 +44,10 @@ def ratings_as_of(model: AnyModel, possessions: pl.DataFrame, asof: datetime.dat
             (a ``RapmModel``, ``RatingsModel``, or ``PriorModel``).
         possessions: A possession+lineup frame that MUST carry a ``game_date``
             (``pl.Date``) column (as emitted by ``compile_nba_season``).
-        asof: The through-date checkpoint (inclusive).
+        asof: The through-date checkpoint (inclusive: ``game_date <= asof``).
+            A pregame consumer of a game on day D passes ``D - 1 day``; the
+            pregame surfaces (``nba_player_props``, ``nba_team_ratings``) take a
+            strict ``as_of_date`` instead.
 
     Returns:
         ``RatingsFit`` with per-player offense/defense ratings (per-100-possession

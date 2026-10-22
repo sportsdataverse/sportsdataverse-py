@@ -52,6 +52,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
+from sportsdataverse._codegen_runtime import _id_text
 from sportsdataverse.cfb.cbs_pbp.teams import _cbs_team
 from sportsdataverse.football.cbs_common import (
     _admin_row,
@@ -611,8 +612,8 @@ def _cbs_cfb_to_espn_summary(
             not be attributed to either club).
     """
     notes: List[str] = []
-    event_id = str(idmap_row["espn_event_id"])
-    home_id, away_id = str(idmap_row["home_espn_team_id"]), str(idmap_row["away_espn_team_id"])
+    event_id = _id_text(idmap_row["espn_event_id"])
+    home_id, away_id = _id_text(idmap_row["home_espn_team_id"]), _id_text(idmap_row["away_espn_team_id"])
     home_cbs = str((scoreboard.get("hometeam") or {}).get("id") or "")
     away_cbs = str((scoreboard.get("awayteam") or {}).get("id") or "")
     if not home_cbs or not away_cbs or home_cbs == away_cbs:
@@ -972,7 +973,8 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
 
     row = dict(ctx.idmap_row or {})
     row.setdefault("espn_event_id", str(espn_id))
-    if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):
+    # ids through _id_text first: a NaN id is truthy and pandas.NA raises on truthiness
+    if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):
         raise SourceUnavailable(f"cfb {espn_id}: id-map row carries no ESPN team ids")
 
     cbs_game_id = str(payload.get("cbs_game_id")) if payload is not None and payload.get("cbs_game_id") else None
@@ -988,8 +990,8 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
         cbs_game_id, scoreboard_provenance = _resolve_cbs_game_id(
             int(row["season"]),
             int(row["week"]),
-            row["home_espn_team_id"],
-            row["away_espn_team_id"],
+            _id_text(row["home_espn_team_id"]),
+            _id_text(row["away_espn_team_id"]),
             kickoff_utc=row.get("kickoff_utc"),
             season_type=int(row.get("season_type") or 2),
         )
@@ -1003,7 +1005,7 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
         except NoDataError as exc:
             # NAPI's own 404 envelope: CBS states it has no play-by-play for this game.
             raise SourceUnavailable(f"cfb {espn_id}: cbs carries no play-by-play for game {cbs_game_id}") from exc
-        except Exception as exc:  # noqa: BLE001 -- network / JSON -> the next source
+        except Exception as exc:  # network / JSON -> the next source
             raise SourceUnavailable(f"cbs napi fetch failed: {type(exc).__name__}: {exc}") from exc
         if not _has_coverage(payload):
             raise SourceUnavailable(f"cfb {espn_id}: cbs carries no play-by-play for game {cbs_game_id}")

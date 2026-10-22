@@ -71,7 +71,8 @@ session = herhoopstats_login(proxy="http://user:pw@proxy.example:8080")
 The player roster table from one Her Hoop Stats team page.
 
 Port of wehoop's `hhs_team_roster()`: picks the table carrying a player /
-name column, falling back to the tallest table on the page.
+name column. A page without one has no roster: it answers a zero-row frame with the
+roster columns, never another table (wehoop falls back to the tallest table).
 
 **Parameters**
 
@@ -84,7 +85,7 @@ name column, falling back to the tallest table on the page.
 
 **Returns**
 
-One row per player. A zero-row frame when the page carried no roster.
+One row per player. A zero-row frame with the roster columns when the page carried no roster.
 
 | col_name | type | description |
 |---|---|---|
@@ -108,6 +109,7 @@ One row per player. A zero-row frame when the page carried no roster.
 | Exception | Description |
 |---|---|
 | `RuntimeError` | When credentials cannot be resolved or are rejected. |
+| `AssetFetchError` | The fetch failed, or the page was the free-tier teaser (the session expired or the subscription lapsed), never returned as data. |
 
 **Example**
 
@@ -145,6 +147,7 @@ position), so a single fetch covers the whole page.
 | Exception | Description |
 |---|---|
 | `RuntimeError` | When credentials cannot be resolved or are rejected. |
+| `AssetFetchError` | The fetch failed, or the page was the free-tier teaser (the session expired or the subscription lapsed), never returned as data. |
 
 **Example**
 
@@ -205,6 +208,7 @@ One row per team-season, plus a `team_link` column carrying each team's page pat
 | Exception | Description |
 |---|---|
 | `RuntimeError` | When credentials cannot be resolved or are rejected. |
+| `AssetFetchError` | The fetch failed, or the page was the free-tier teaser (the session expired or the subscription lapsed), never returned as data. |
 
 **Example**
 

@@ -749,13 +749,14 @@ def test_a_key_the_api_keeps_rejecting_is_a_fetch_failure(site):
     assert R.DEFAULT_KEY not in str(exc.value)
 
 
-def test_404_and_204_are_no_data_and_400_is_a_value_error(site):
+def test_404_is_no_data_204_is_zero_rows_and_400_is_a_value_error(site):
     site(_serve(lambda u: "not found", status=404, headers=TEXT))
     with pytest.raises(NoDataError):
         acb_pkg.acb_lineup(match_id=1)
     site(_serve(lambda u: b"", status=204, headers={}))
-    with pytest.raises(NoDataError, match="204"):
-        acb_pkg.acb_serie(match_id=MATCH)  # a game outside a playoff series
+    # a game outside a playoff series: {} -> zero rows, as every runtime answers a 204 (EX-SYNC-a; was NoDataError)
+    assert acb_pkg.acb_serie(match_id=MATCH, return_parsed=False) == {}
+    assert acb_pkg.acb_serie(match_id=MATCH).height == 0
     site(_serve(lambda u: json.dumps({"title": "Bad Request", "status": 400}), status=400, headers=PROBLEM))
     with pytest.raises(ValueError, match="HTTP 400"):
         acb_pkg.acb_team_leaders(club_id=2, number_of_players=0)

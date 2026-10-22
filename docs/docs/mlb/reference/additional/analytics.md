@@ -1164,3 +1164,36 @@ feats = add_sequence_features(pitch_features(raw_pitches))
 out = tto_penalty_table(feats)
 print(out.sort("times_through_order"))
 ```
+
+### x_era {#x_era}
+
+`x_era(pitches: 'pl.DataFrame', season: 'int', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+
+Parametric xERA from Statcast expected wOBA allowed.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pitches` | `DataFrame` |  | Raw (or feature-substrate) pitch frame carrying `pitcher` and `estimated_woba_using_speedangle`. |
+| `season` | `int` |  | Season year (selects the league baseline via `sportsdataverse.mlb.mlb_pitching_constants.get_baselines`). |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+`pitcher`, `season`, `x_woba`, `x_era`. Empty input returns a zero-row frame with this schema.
+
+| col_name | type | description |
+|---|---|---|
+| `pitcher` | integer | Whether the position is a pitcher. |
+| `season` | integer | Season year. |
+| `x_woba` | double | Expected wOBA allowed, the mean of Statcast estimated_woba_using_speedangle over the pitcher's pitches that carry one (batted balls). |
+| `x_era` | double | Parametric xERA, league ERA + (x_woba - league wOBA) / wOBA scale * PA per 9, from the season's league baselines. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_pitch_era import x_era
+out = x_era(raw_pitches, 2024)
+print(out.sort("x_era").head())
+```

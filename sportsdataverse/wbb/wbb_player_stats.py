@@ -96,6 +96,8 @@ def espn_wbb_player_stats(
         ValueError: ``season_type`` is not ``"regular"``/``"postseason"``.
         sportsdataverse.errors.NoDataError: ESPN returned 404 (no season
             line for that athlete/season).
+        sportsdataverse.errors.AssetFetchError: the statistics, athlete or team fetch failed (403,
+            429, 5xx, a dead connection); only a 404 on the athlete or team node leaves those columns null.
 
     Example:
         Pull a player's 2025 season line as a single wide row::

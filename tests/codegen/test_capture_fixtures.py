@@ -84,7 +84,9 @@ def test_an_auto_espn_schema_is_written_generic_from_its_one_capture(tmp_path, m
     monkeypatch.setattr(generate, "_auto_espn_schemas", lambda: {"venues": generate._espn_parser("venues")})
     assert generate._write_auto_espn_schemas(fix, out) == 1
     doc = yaml.safe_load((out / "venues.yaml").read_text())
-    assert doc["kind"] == "dataframe" and [c["name"] for c in doc["columns"]] == ["$ref"]
+    # parse_items appends the page envelope (codegen 4.2), typed even when the payload carries none.
+    assert doc["kind"] == "dataframe" and [c["name"] for c in doc["columns"]] == ["$ref", "count", "page_count"]
+    assert [c["type"] for c in doc["columns"]][1:] == ["integer", "integer"]
 
 
 def test_an_auto_espn_schema_with_no_capture_writes_nothing(tmp_path, monkeypatch):

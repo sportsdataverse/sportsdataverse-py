@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # MCH — ESPN site API (v2)
 
-`sportsdataverse.mch` — 25 endpoints.
+`sportsdataverse.hockey.mch` — 25 endpoints.
 
 ## espn_mch_scoreboard
 
