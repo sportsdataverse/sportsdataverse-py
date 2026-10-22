@@ -205,6 +205,22 @@ def test_half_end_home_wp_is_continuous_into_the_next_real_play(game_id, sfx):
     assert gap.select("id", "type.text", after, "_next_home_wp").rows() == []
 
 
+@pytest.mark.parametrize("game_id", CAPTURES)
+def test_naive_home_wp_is_continuous_into_the_next_real_play(game_id):
+    # 2.27 (R973-1/4): nflverse's naive home_wpa is lead(home_wp) - home_wp, so on EVERY real play the
+    # naive home WP after is the next real play's home WP before. Two ways it broke: home_wp_after_naive
+    # keyed on the end team, which flipped it twice on every punt and turnover (every capture), and a
+    # play before a Timeout reading the Timeout's own wp, flipped when ESPN filed it to the other team.
+    f = run(game_id).plays
+    real = ~pl.col("type.text").is_in(clock_stoppage_vec)
+    rows = f.with_columns(
+        _next_home_wp=pl.when(real).then(pl.col("home_wp_before_naive")).shift(-1).backward_fill()
+    ).filter(real & pl.col("_next_home_wp").is_not_null() & pl.col("start.pos_team.id").is_not_null())
+    assert rows.filter(pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).height >= 1  # a punt or turnover
+    gap = rows.filter((pl.col("home_wp_after_naive") - pl.col("_next_home_wp")).abs() > 1e-6)
+    assert gap.select("id", "type.text", "home_wp_after_naive", "_next_home_wp").rows() == []
+
+
 # Games whose last real play is a scored try (fixtures/try_endings/, from nfl-raw; not whole-game captures)
 _TRY_ENDINGS = {291122008: "Extra Point Good", 271021004: "Two Point Pass"}
 

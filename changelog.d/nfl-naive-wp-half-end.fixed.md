@@ -1,3 +1,3 @@
-- **NFL:** a half-ending play's `wp_after_naive`/`wpa_naive` follow the next real play's naive WP (1 of 37 captures, 3 of 268
-  held-out 2003-24 games), and `home_`/`away_wp_after_naive` split on the start team: keyed on the end team, every punt
-  or turnover flipped home WP twice (522 rows in 37 captures). Half-end naive continuity breaks 28 -> 0 held out. (#973)
+- **NFL:** released `home_`/`away_wp_after_naive` were flipped on every change of possession (3,671 rows, ~14 a game, in
+  268 held-out games), and `wp_after_naive`/`wpa_naive` read the next row (a Timeout, or a half's end), not the next real play (1,855 rows in
+  256 games, max 0.38). Naive home WP is now continuous into the next real play (breaks 5,438 -> 0), as nflfastR. (#973)

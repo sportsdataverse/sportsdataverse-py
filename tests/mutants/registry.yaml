@@ -3204,18 +3204,18 @@
     instead of its try: 261022011/1629 wpa -0.136 (try -0.171, nflverse -0.275) and 271209034/1856 0.001 (try 0.101,
     nflverse 0.116). Task 2.25 measured the td_play gate and rejected it on this evidence.
 
-- id: nfl-naive-half-end-hands-to-next-real-play
+- id: nfl-naive-wp-after-flips-on-next-real-play-team
   group: nfl-end-of-half
   finding: nfl 2.27
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: 'half_end = (pl.col("end_of_half") == True) & (stoppage == False)  # noqa: E712'
-  mutant: 'half_end = pl.lit(False)'
-  test: tests/nfl/test_nfl_whole_game_oracle.py -k "half_end_home_wp_is_continuous and _naive"
+  snippet: '.when(team != naive_next_team)'
+  mutant: '.when(pl.col("change_of_pos_team") == True)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "home_wp_is_continuous and naive"
   expected: kill
   note: >-
-    devel-nfl had no half-end branch in the naive family: a half-ending play that kept the ball read the next ROW's
-    wp through its own possession change, so a kneel before the other team's kickoff, or before a Timeout, broke
-    home_wp_after_naive's continuity into the next real play.
+    devel-nfl flipped the naive lead on the play's own possession change: a half-ending kneel before the other
+    team's second-half kickoff took that kickoff's wp unflipped, and a play before a Timeout that ESPN filed to the
+    other team flipped the next snap's wp by mistake (400791686/154: 0.009 against 0.202, R973-4).
 
 - id: nfl-naive-half-end-reads-past-stoppage-rows
   group: nfl-end-of-half
@@ -3223,11 +3223,11 @@
   file: sportsdataverse/nfl/nfl_pbp.py
   snippet: 'naive_next_team, naive_next_wb = _next_play(team, stoppage), _next_play(pl.col("wp_before_naive"), stoppage)'
   mutant: 'naive_next_team, naive_next_wb = team.shift(-1), pl.col("wp_before_naive").shift(-1)'
-  test: tests/nfl/test_nfl_whole_game_oracle.py -k "half_end_home_wp_is_continuous and _naive"
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "home_wp_is_continuous and naive"
   expected: kill
   note: >-
-    Read from the next ROW, a Timeout after the half-ending play hands over the Timeout's own naive wp and team, not
-    the second-half kickoff's (400791590 among the captures).
+    Read from the next ROW, a play followed by a Timeout, Official Timeout or Two-minute warning hands over the
+    stoppage row's own naive wp and team, not the next snap's (400791590's half-ending kneel among the captures).
 
 - id: nfl-naive-home-wp-after-keys-on-start-team
   group: nfl-end-of-half
@@ -3239,4 +3239,17 @@
   expected: kill
   note: >-
     wp_after_naive is stated in the START team's frame; keyed on the end team, every punt or turnover flipped
-    home_wp_after_naive twice (767 rows in the 59 fixture games), half-ending punts and missed field goals included.
+    home_wp_after_naive twice (848 start != end rows in the 59 fixture games), half-ending punts and missed field
+    goals included.
+
+- id: nfl-naive-home-wp-after-start-team-off-half-ends
+  group: nfl-end-of-half
+  finding: R973-1
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'home_wp_after_naive=pl.when(team == pl.col("homeTeamId"))'
+  mutant: 'home_wp_after_naive=pl.when(pl.when(pl.col("end_of_half") == True).then(team).otherwise(pl.col("end.pos_team.id")) == pl.col("homeTeamId"))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "naive_home_wp_is_continuous"
+  expected: kill
+  note: >-
+    Review #973 mutant H1: the start-team key only at half ends, the end-team key elsewhere, survived the half-end
+    test and all of tests/nfl + tests/football; every punt and turnover outside a half end flips home WP twice.
