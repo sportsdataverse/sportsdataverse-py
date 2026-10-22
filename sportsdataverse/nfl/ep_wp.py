@@ -2487,6 +2487,11 @@ _WPA_REQUIRED_COLUMNS: tuple[str, ...] = (
 )
 
 
+def _next_play(col: pl.Expr, skip: pl.Expr) -> pl.Expr:
+    # ``col`` on the first row after this one that is not ``skip``; also NFLPlayProcess's naive WP family
+    return pl.when(skip).then(None).otherwise(col).backward_fill().shift(-1).over("game_id")
+
+
 def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
     """Derive win probability added (WPA) from pre-scored WP point estimates.
 
@@ -2667,10 +2672,6 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
     # the try's team. After a try the next row is the kickoff, whose wp_before is the
     # receiver's touchback view; a try that ends a half hands to the second-half kickoff.
     # The model's own end state scored ESPN's placeholder for the try's end.
-    def _next_play(col: pl.Expr, skip: pl.Expr) -> pl.Expr:
-        # ``col`` on the first row after this one that is not ``skip``
-        return pl.when(skip).then(None).otherwise(col).backward_fill().shift(-1).over("game_id")
-
     team = pl.col("start.pos_team.id")
     _stoppage = pl.col("type.text").is_in(clock_stoppage_vec)
     # A penalty walked off on the kickoff spot after the try is dead-ball the same way: the
