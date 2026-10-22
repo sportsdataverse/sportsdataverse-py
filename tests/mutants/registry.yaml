@@ -6772,3 +6772,16 @@
   note: >-
     The pre-3.10 behaviour: `league="cfl"` passes validation and both entry points run end to end, scoring a
     110-yard, 3-down game with the NFL boosters (158/159 plays scored on the XFL fixture relabelled CFL).
+
+# --- supp-005 / C-L31 (task 3.10): fitting-script citations resolve to tracked files or documented gaps ----
+- id: model-lineage-untracked-citation
+  group: model-lineage
+  finding: supp-005
+  file: sportsdataverse/mbb/mbb_ncaa_rapm_league.py
+  snippet: '#: game-grouped 5-fold CV (``tools/fit_ncaa_rapm_lambda.py``) on the'
+  mutant: '#: game-grouped 5-fold CV (``dev/ncaa_rapm/fit_lambda_league.py``) on the'
+  test: tests/test_model_lineage.py
+  expected: kill
+  note: >-
+    The pre-3.10 citation: a gitignored script that exists only on the maintainer's disk, so the refit
+    instruction for DEFAULT_RIDGE_LAMBDA was not reproducible from a clone.

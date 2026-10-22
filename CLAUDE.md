@@ -1166,6 +1166,11 @@ code at the source; never blanket-ignore a category.
   blind spots. Don't add new regex extraction; extend the participants
   module instead.
 
+- **Model lineage: cite a tracked fitting script.** Every bundled booster and fitted constant is
+  registered in `docs/docs/architecture/model-lineage.md` (one row per `.ubj`, plus the known-gap table of
+  cited scripts that are lost or only on the maintainer's disk). Put a new fitter under `tools/fit_<what>.py`,
+  never the gitignored `dev/`, and label a seeded value as seeded. `tests/test_model_lineage.py` fails on a
+  cited script that is neither tracked nor in the gap table, and on a booster without a row.
 - **Cache invalidation when modifying loaders.** The `@cached_loader`
   decorator hashes `(qualified_name, args, sorted_kwargs)` — it does NOT
   hash the URL or function body. If you change a loader's URL or
