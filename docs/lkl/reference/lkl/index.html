@@ -1,0 +1,2030 @@
+<!doctype html><html lang=en dir=ltr class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-lkl/reference/lkl" data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.1"><title data-rh=true>LKL — LKL site API (lkl.lt, Lithuania) | sdv-py</title><meta data-rh=true name=viewport content="width=device-width, initial-scale=1.0"/><meta data-rh=true name=twitter:card content=summary_large_image /><meta data-rh=true property=og:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true name=twitter:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true property=og:url content=https://py.sportsdataverse.org/docs/lkl/reference/lkl /><meta data-rh=true property=og:locale content=en /><meta data-rh=true name=docusaurus_locale content=en /><meta data-rh=true name=docsearch:language content=en /><meta data-rh=true property=og:type content=website /><meta data-rh=true property=og:site_name content="sdv-py | SportsDataverse"/><meta data-rh=true property=og:image:width content=1080 /><meta data-rh=true property=og:image:height content=540 /><meta data-rh=true property=og:image:alt content=SportsDataverse /><meta data-rh=true name=twitter:site content=@sportsdataverse /><meta data-rh=true name=twitter:creator content=@saiemgilani /><meta data-rh=true name=twitter:image:alt content=SportsDataverse /><meta data-rh=true name=docusaurus_version content=current /><meta data-rh=true name=docusaurus_tag content=docs-default-current /><meta data-rh=true name=docsearch:version content=current /><meta data-rh=true name=docsearch:docusaurus_tag content=docs-default-current /><meta data-rh=true property=og:title content="LKL — LKL site API (lkl.lt, Lithuania) | sdv-py"/><meta data-rh=true name=description content="LKL — LKL site API (lkl.lt, Lithuania) — endpoint reference in sdv-py, the SportsDataverse Python package."/><meta data-rh=true property=og:description content="LKL — LKL site API (lkl.lt, Lithuania) — endpoint reference in sdv-py, the SportsDataverse Python package."/><link data-rh=true rel=icon href=/img/favicon.ico /><link data-rh=true rel=canonical href=https://py.sportsdataverse.org/docs/lkl/reference/lkl /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/lkl/reference/lkl hreflang=en /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/docs/lkl/reference/lkl hreflang=x-default /><script data-rh=true type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/leagues/basketball","name":"Basketball","position":1},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/lkl/","name":"LKL","position":2},{"@type":"ListItem","item":"https://py.sportsdataverse.org/docs/lkl/reference/lkl","name":"LKL site API (lkl.lt, Lithuania)","position":3}]}</script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}},plausible.init()</script><link rel=preload href=/fonts/inter-latin-wght-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><link rel=preload href=/fonts/barlow-condensed-latin-700-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><script src=https://plausible.io/js/pa-weWpHgIcVfaVUEgwwTBHX.js async></script><link rel=stylesheet href=/assets/css/styles.7d2f2015.css /><script src=/assets/js/runtime~main.4466848f.js defer></script><script src=/assets/js/main.d707ba24.js defer></script></head><body><svg style="display: none;"><defs>
+<symbol id=theme-svg-external-link viewBox="0 0 24 24"><path fill=currentColor d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-a54")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id=__docusaurus><div role=region aria-label="Skip to main content"><a class=skipToContent_fXgn href=#__docusaurus_skipToContent_fallback>Skip to main content</a></div><nav aria-label=Main class="theme-layout-navbar navbar navbar--fixed-top navbarHideable_m1mJ navbar--dark"><div class=navbar__inner><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded=false class="navbar__toggle clean-btn" type=button><svg width=30 height=30 viewBox="0 0 30 30" aria-hidden=true><path stroke=currentColor stroke-linecap=round stroke-miterlimit=10 stroke-width=2 d="M4 7h22M4 15h22M4 23h22"/></svg></button><a class=navbar__brand href=/><div class=navbar__logo><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/></div><b class="navbar__title text--truncate">sdv-py</b></a><a aria-current=page class="navbar__item navbar__link navbar__link--active" href=/docs/intro>Docs</a><a class="navbar__item navbar__link" href=/CHANGELOG>News</a><div class="navbar__item dropdown dropdown--hoverable"><a href=# aria-haspopup=true aria-expanded=false role=button class="navbar__link sdv-packages-dropdown">SDV</a><ul class=dropdown__menu><li><a href=https://sportsdataverse.org target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">SportsDataverse<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportsdataverse.org/cheatsheets/sportsdataverse-py.pdf target=_self rel="noopener noreferrer" class=dropdown__link>Cheat Sheet (PDF)<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">Python Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-py<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportypy.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportypy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://collegebaseball.readthedocs.io/en/latest/index.html target=_self rel="noopener noreferrer" class=dropdown__link>collegebaseball<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslpy target=_self rel="noopener noreferrer" class=dropdown__link>nwslpy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">R Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-R<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbfastR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbfastR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://hoopR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>hoopR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://wehoop.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>wehoop<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://fastRhockey.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>fastRhockey<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://BillPetti.github.io/baseballr/ target=_self rel="noopener noreferrer" class=dropdown__link>baseballr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportyR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportyR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://abhiamishra.github.io/ggshakeR/ target=_self rel="noopener noreferrer" class=dropdown__link>ggshakeR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/Dato-Futbol/soccerAnimate target=_self rel="noopener noreferrer" class=dropdown__link>soccerAnimate<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://oddsapiR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>oddsapiR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://camdenk.github.io/mlbplotR/ target=_self rel="noopener noreferrer" class=dropdown__link>mlbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfb4th.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfb4th<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbseedR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbseedR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/sportsdataverse/softballR/ target=_self rel="noopener noreferrer" class=dropdown__link>softballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslR/ target=_self rel="noopener noreferrer" class=dropdown__link>nwslR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://usfootballR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>usfootballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://recruitR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>recruitR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://puntalytics.github.io/puntr/ target=_self rel="noopener noreferrer" class=dropdown__link>puntr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://jaseziv.github.io/chessR/ target=_self rel="noopener noreferrer" class=dropdown__link>chessR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">Node.js Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse.js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://plot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot-js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nntrn/nfl-nerd/ target=_self rel="noopener noreferrer" class=dropdown__link>nfl-nerd<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a class=navbar__link aria-haspopup=true aria-expanded=false role=button href=/docs/lkl/reference/lkl>main (latest)</a><ul class=dropdown__menu><li><a aria-current=page class="dropdown__link dropdown__link--active" href=/docs/lkl/reference/lkl>main (latest)</a><li><a class=dropdown__link href=/docs/0.1.5/intro>0.1.5</a><li><a class=dropdown__link href=/docs/0.0.75/intro>0.0.75</a><li><a class=dropdown__link href=/docs/0.0.74/intro>0.0.74</a></ul></div><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><a href=https://github.com/sportsdataverse/sportsdataverse-py/ target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS darkNavbarColorModeToggle_X3D1" type=button disabled title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill=currentColor d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill=currentColor d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill=currentColor d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"/></svg></button></div><div class=navbarSearchContainer_Bca1><div class="navbar__search searchBarContainer_NW3z" dir=ltr><svg aria-hidden=true class=searchIcon_T3tP focusable=false viewBox="0 0 16 16"><path fill=currentColor d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"/></svg><input placeholder=Search aria-label=Search class="navbar__search-input searchInput_YFbd" value="" /><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role=presentation class=navbar-sidebar__backdrop></div></nav><div id=__docusaurus_skipToContent_fallback class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class=docsWrapper_hBAB><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type=button></button><div class=docRoot_UBD9><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class=sidebarViewport_aRkj><div class="sidebar_njMd sidebarWithHideableNavbar_wUlq"><a tabindex=-1 class=sidebarLogo_isFc href=/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/><b>sdv-py</b></a><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/intro><span title="Getting Started" class=linkLabel_WmDU>Getting Started</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/ecosystem><span title="Ecosystem & philosophy" class=linkLabel_WmDU>Ecosystem & philosophy</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/quality-of-life><span title=Quality-of-life class=linkLabel_WmDU>Quality-of-life</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/architecture/espn-cross-league><span title="ESPN cross-league architecture" class=linkLabel_WmDU>ESPN cross-league architecture</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/architecture/http-auth-config><span title="HTTP, auth & proxy config" class=linkLabel_WmDU>HTTP, auth & proxy config</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/architecture/metric-registry><span title="Metric registry" class=linkLabel_WmDU>Metric registry</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/parsers/><span title=Parsers class=linkLabel_WmDU>Parsers</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/docs/reference/parameters><span title=Parameters class=linkLabel_WmDU>Parameters</span></a><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/reference/python-helpers><span title="Package helpers" class=categoryLinkLabel_W154>Package helpers</span></a><button aria-label="Expand sidebar category 'Package helpers'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/football><span title=Football class=categoryLinkLabel_W154>Football</span></a><button aria-label="Expand sidebar category 'Football'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" href=/docs/leagues/basketball><span title=Basketball class=categoryLinkLabel_W154>Basketball</span></a><button aria-label="Collapse sidebar category 'Basketball'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/nba/><span title=NBA class=categoryLinkLabel_W154>NBA</span></a><button aria-label="Expand sidebar category 'NBA'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/wnba/><span title=WNBA class=categoryLinkLabel_W154>WNBA</span></a><button aria-label="Expand sidebar category 'WNBA'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/nbagl/><span title="NBA G League" class=categoryLinkLabel_W154>NBA G League</span></a><button aria-label="Expand sidebar category 'NBA G League'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/nbl/><span title=NBL class=categoryLinkLabel_W154>NBL</span></a><button aria-label="Expand sidebar category 'NBL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/fiba/><span title=FIBA class=categoryLinkLabel_W154>FIBA</span></a><button aria-label="Expand sidebar category 'FIBA'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/olympics_mbk/><span title="Olympics men's basketball" class=categoryLinkLabel_W154>Olympics men's basketball</span></a><button aria-label="Expand sidebar category 'Olympics men's basketball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/olympics_wbk/><span title="Olympics women's basketball" class=categoryLinkLabel_W154>Olympics women's basketball</span></a><button aria-label="Expand sidebar category 'Olympics women's basketball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/nbasl_lv/><span title="NBA Summer League (Las Vegas)" class=categoryLinkLabel_W154>NBA Summer League (Las Vegas)</span></a><button aria-label="Expand sidebar category 'NBA Summer League (Las Vegas)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/nbasl_ut/><span title="NBA Summer League (Utah)" class=categoryLinkLabel_W154>NBA Summer League (Utah)</span></a><button aria-label="Expand sidebar category 'NBA Summer League (Utah)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/nbasl_ca/><span title="NBA Summer League (California)" class=categoryLinkLabel_W154>NBA Summer League (California)</span></a><button aria-label="Expand sidebar category 'NBA Summer League (California)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/nbasl_sac/><span title="NBA Summer League (Sacramento)" class=categoryLinkLabel_W154>NBA Summer League (Sacramento)</span></a><button aria-label="Expand sidebar category 'NBA Summer League (Sacramento)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/nbasl_orl/><span title="NBA Summer League (Orlando)" class=categoryLinkLabel_W154>NBA Summer League (Orlando)</span></a><button aria-label="Expand sidebar category 'NBA Summer League (Orlando)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/nbasl_gs/><span title="NBA Summer League (Golden State)" class=categoryLinkLabel_W154>NBA Summer League (Golden State)</span></a><button aria-label="Expand sidebar category 'NBA Summer League (Golden State)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/mbb/><span title=MBB class=categoryLinkLabel_W154>MBB</span></a><button aria-label="Expand sidebar category 'MBB'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/wbb/><span title=WBB class=categoryLinkLabel_W154>WBB</span></a><button aria-label="Expand sidebar category 'WBB'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/fiba_hub/><span title="FIBA (digital API and game pages)" class=categoryLinkLabel_W154>FIBA (digital API and game pages)</span></a><button aria-label="Expand sidebar category 'FIBA (digital API and game pages)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/genius/><span title="Genius Sports LiveStats" class=categoryLinkLabel_W154>Genius Sports LiveStats</span></a><button aria-label="Expand sidebar category 'Genius Sports LiveStats'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/atrium/><span title="Sportradar Atrium" class=categoryLinkLabel_W154>Sportradar Atrium</span></a><button aria-label="Expand sidebar category 'Sportradar Atrium'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/nbl_au/><span title="NBL Australia (Rosetta)" class=categoryLinkLabel_W154>NBL Australia (Rosetta)</span></a><button aria-label="Expand sidebar category 'NBL Australia (Rosetta)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/feb/><span title="Spanish FEB" class=categoryLinkLabel_W154>Spanish FEB</span></a><button aria-label="Expand sidebar category 'Spanish FEB'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/scb/><span title="BBL / DBBL (SCB)" class=categoryLinkLabel_W154>BBL / DBBL (SCB)</span></a><button aria-label="Expand sidebar category 'BBL / DBBL (SCB)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/lba/><span title="Lega Basket Serie A" class=categoryLinkLabel_W154>Lega Basket Serie A</span></a><button aria-label="Expand sidebar category 'Lega Basket Serie A'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/acb/><span title=ACB class=categoryLinkLabel_W154>ACB</span></a><button aria-label="Expand sidebar category 'ACB'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/ibba/><span title="Israeli Premier League" class=categoryLinkLabel_W154>Israeli Premier League</span></a><button aria-label="Expand sidebar category 'Israeli Premier League'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/wjbl/><span title="W League (Japan)" class=categoryLinkLabel_W154>W League (Japan)</span></a><button aria-label="Expand sidebar category 'W League (Japan)'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/vtb/><span title=VTB class=categoryLinkLabel_W154>VTB</span></a><button aria-label="Expand sidebar category 'VTB'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/kbl/><span title=KBL class=categoryLinkLabel_W154>KBL</span></a><button aria-label="Expand sidebar category 'KBL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/bleague/><span title=B.LEAGUE class=categoryLinkLabel_W154>B.LEAGUE</span></a><button aria-label="Expand sidebar category 'B.LEAGUE'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/kzs/><span title=KZS class=categoryLinkLabel_W154>KZS</span></a><button aria-label="Expand sidebar category 'KZS'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex=0 href=/docs/lkl/><span title=LKL class=categoryLinkLabel_W154>LKL</span></a><button aria-label="Collapse sidebar category 'LKL'" aria-expanded=true type=button class="clean-btn menu__caret"></button></div><ul class=menu__list><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link menu__link--active" aria-current=page tabindex=0 href=/docs/lkl/reference/lkl><span title="LKL site API (lkl.lt, Lithuania)" class=linkLabel_WmDU>LKL site API (lkl.lt, Lithuania)</span></a></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/tbf/><span title=TBF class=categoryLinkLabel_W154>TBF</span></a><button aria-label="Expand sidebar category 'TBF'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/cebl/><span title=CEBL class=categoryLinkLabel_W154>CEBL</span></a><button aria-label="Expand sidebar category 'CEBL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/aba/><span title="ABA League" class=categoryLinkLabel_W154>ABA League</span></a><button aria-label="Expand sidebar category 'ABA League'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/easl/><span title=EASL class=categoryLinkLabel_W154>EASL</span></a><button aria-label="Expand sidebar category 'EASL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/bnxt/><span title="BNXT League" class=categoryLinkLabel_W154>BNXT League</span></a><button aria-label="Expand sidebar category 'BNXT League'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/tpbl/><span title=TPBL class=categoryLinkLabel_W154>TPBL</span></a><button aria-label="Expand sidebar category 'TPBL'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/plg/><span title="P. LEAGUE+" class=categoryLinkLabel_W154>P. LEAGUE+</span></a><button aria-label="Expand sidebar category 'P. LEAGUE+'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/cba/><span title=CBA class=categoryLinkLabel_W154>CBA</span></a><button aria-label="Expand sidebar category 'CBA'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex=0 href=/docs/dbl/><span title=Basketligaen class=categoryLinkLabel_W154>Basketligaen</span></a><button aria-label="Expand sidebar category 'Basketligaen'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/hockey><span title=Hockey class=categoryLinkLabel_W154>Hockey</span></a><button aria-label="Expand sidebar category 'Hockey'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/baseball><span title=Baseball class=categoryLinkLabel_W154>Baseball</span></a><button aria-label="Expand sidebar category 'Baseball'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/soccer><span title=Soccer class=categoryLinkLabel_W154>Soccer</span></a><button aria-label="Expand sidebar category 'Soccer'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/leagues/other><span title=Other class=categoryLinkLabel_W154>Other</span></a><button aria-label="Expand sidebar category 'Other'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class=menu__list-item-collapsible><a class="categoryLink_byQd menu__link menu__link--sublist" href=/docs/category/tutorials><span title=Tutorials class=categoryLinkLabel_W154>Tutorials</span></a><button aria-label="Expand sidebar category 'Tutorials'" aria-expanded=false type=button class="clean-btn menu__caret"></button></div></ul></nav><button type=button title="Collapse sidebar" aria-label="Collapse sidebar" class="button button--secondary button--outline collapseSidebarButton_PEFL"><svg width=20 height=20 aria-hidden=true class=collapseSidebarButtonIcon_kv0_><g fill=#7a7a7a><path d="M9.992 10.023c0 .2-.062.399-.172.547l-4.996 7.492a.982.982 0 01-.828.454H1c-.55 0-1-.453-1-1 0-.2.059-.403.168-.551l4.629-6.942L.168 3.078A.939.939 0 010 2.528c0-.548.45-.997 1-.997h2.996c.352 0 .649.18.828.45L9.82 9.472c.11.148.172.347.172.55zm0 0"/><path d="M19.98 10.023c0 .2-.058.399-.168.547l-4.996 7.492a.987.987 0 01-.828.454h-3c-.547 0-.996-.453-.996-1 0-.2.059-.403.168-.551l4.625-6.942-4.625-6.945a.939.939 0 01-.168-.55 1 1 0 01.996-.997h3c.348 0 .649.18.828.45l4.996 7.492c.11.148.168.347.168.55zm0 0"/></g></svg></button></div></div></aside><main class=docMainContainer_TBSr><div class="container padding-top--md padding-bottom--lg"><div class=row><div class="col docItemCol_VOVn"><div class=docItemContainer_Djhp><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label=Breadcrumbs><ul class=breadcrumbs><li class=breadcrumbs__item><a aria-label="Home page" class=breadcrumbs__link href=/><svg viewBox="0 0 24 24" class=breadcrumbHomeIcon_YNFT><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill=currentColor /></svg></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/leagues/basketball><span>Basketball</span></a><li class=breadcrumbs__item><a class=breadcrumbs__link href=/docs/lkl/><span>LKL</span></a><li class="breadcrumbs__item breadcrumbs__item--active"><span class=breadcrumbs__link>LKL site API (lkl.lt, Lithuania)</span></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type=button class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>LKL — LKL site API (lkl.lt, Lithuania)</h1></header>
+<p><code>sportsdataverse.basketball.lkl</code> — 14 endpoints.</p>
+<blockquote>
+<p><strong>Note:</strong> Unofficial and unsupported: these are the routes lkl.lt's own game page calls (found in its front-end bundle) and its server-rendered pages. The site's robots.txt allows everything and sets no crawl-delay; <code>lkl_runtime</code> still spaces requests at least 1 s apart. SportsDataverse has not ruled on the site's terms, so payloads are not redistributed as release assets.</p>
+</blockquote>
+<blockquote>
+<p><strong>Note:</strong> Coverage: game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). The box score, summary, score line, statistics and leaders answer for every season from 1993-94 (before 2024-25 the scoring splits and lead statistics are 0). Play-by-play and shots exist from 2024-25 only; an earlier finished game raises NoDataError. From 2016-17 the results season id is also the Genius LiveStats competition id (see the <code>genius</code> family) which holds play-by-play for older games; lkl.lt game, team and player ids are lkl.lt's own and do not join Genius ids. The King Mindaugas Cup shares the routes but is not wrapped. Text fields are Lithuanian.</p>
+</blockquote>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_game_info>lkl_game_info<a href=#lkl_game_info class=hash-link aria-label="Direct link to lkl_game_info" title="Direct link to lkl_game_info" translate=no>​</a></h2>
+<p>Game header from the game page: status, tip-off, venue, attendance, officials and both teams.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://lkl.lt/rungtynes/{game_id}</code></p>
+<p><strong>Valid URL:</strong> <a href=https://lkl.lt/rungtynes/11446 target=_blank rel="noopener noreferrer" class="">https://lkl.lt/rungtynes/11446</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>game_id</code><td><code>game_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>Required. lkl.lt game id (integer), e.g. 11446; <code>game_id</code> in lkl_results. Not sequential by season before 2018-19. Only a finished game is served.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_game_info-returns>Returns<a href=#lkl_game_info-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>integer<td>lkl.lt game id (key space: LKL games; the {gameId} of every route). Not sequential by season before 2018-19; not the Genius matchId. A frame parsed from a bare body has a null game_id when the body does not echo it (the runtime stamps it under _request).<tr><td><code>game_status</code><td>character<td>Game state label in Lithuanian: 'Pasibaigė' = finished, the only value served (the runtime refuses an unfinished game).<tr><td><code>start_date</code><td>character<td>Game date (Europe/Vilnius), parsed from the page header 'YYYY m. <month> D d., HH:MM'.</month><tr><td><code>start_time</code><td>character<td>Tip-off 'HH:MM' local time (Europe/Vilnius by the site's wording; the page carries no offset).<tr><td><code>arena</code><td>character<td>Arena name as printed on the game page header.<tr><td><code>attendance</code><td>character<td>Attendance text as printed ('1097 žiūrovai' = 1097 spectators).<tr><td><code>attendance_count</code><td>integer<td>Attendance as an integer, parsed from the attendance text; null when the page has none.<tr><td><code>referees</code><td>character<td>Referee names, comma-separated, crew chief first; 'Nepaskelbta' = not announced (old games). Names only: the site publishes no official's contact or birth data.<tr><td><code>has_actions</code><td>logical<td>True when the game has play-by-play events (2024-25 onward); false on older games.<tr><td><code>is_streaming</code><td>logical<td>True while a live stream is on; false on finished games.<tr><td><code>home_team_id</code><td>integer<td>Home team id (key space: lkl.lt clubs, stable across seasons and renamings; joins the team_id of every other frame). Not the Genius team id.<tr><td><code>home_team</code><td>character<td>Home team name as of that game (historical: 'Lietuvos Rytas' in 2007-08).<tr><td><code>home_short_name</code><td>character<td>Home three-letter team code ('RYT'); can be the club's current code on old games.<tr><td><code>home_slug</code><td>character<td>Home team slug (key space: lkl.lt clubs; the {slug} of lkl.lt/komandos/{slug}); joins the team slugs of lkl_results and lkl_standings.<tr><td><code>home_winner</code><td>logical<td>True when the home team won the game.<tr><td><code>home_coach</code><td>character<td>Home head coach's full name as stored for the team: on old games the CURRENT coach, not the historical one.<tr><td><code>home_assistant_coach</code><td>character<td>Home assistant coach's full name (same caveat as the head coach: current staff on old games).<tr><td><code>away_team_id</code><td>integer<td>Away team id (key space: lkl.lt clubs, stable across seasons and renamings; joins the team_id of every other frame). Not the Genius team id.<tr><td><code>away_team</code><td>character<td>Away team name as of that game (historical: 'Lietuvos Rytas' in 2007-08).<tr><td><code>away_short_name</code><td>character<td>Away three-letter team code ('RYT'); can be the club's current code on old games.<tr><td><code>away_slug</code><td>character<td>Away team slug (key space: lkl.lt clubs; the {slug} of lkl.lt/komandos/{slug}); joins the team slugs of lkl_results and lkl_standings.<tr><td><code>away_winner</code><td>logical<td>True when the away team won the game.<tr><td><code>away_coach</code><td>character<td>Away head coach's full name as stored for the team: on old games the CURRENT coach, not the historical one.<tr><td><code>away_assistant_coach</code><td>character<td>Away assistant coach's full name (same caveat as the head coach: current staff on old games).</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw body (<code>dict</code>): the JSON of a game route, the game page record, or the merged results / standings record, plus <code>_request</code> (the game id, team ids and slug -> player id map, or the season asked for).</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_game_info-raises>Raises<a href=#lkl_game_info-raises class=hash-link aria-label="Direct link to Raises" title="Direct link to Raises" translate=no>​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Exception<th>Description<tbody><tr><td><code>NoDataError</code><td>The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).<tr><td><code>AssetFetchError</code><td>The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).<tr><td><code>ValueError</code><td>The host answered 400 / 422 -- the request is wrong; retrying cannot help.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_game_info-example>Example<a href=#lkl_game_info-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">lkl_game_info</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">game_id</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>11446</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_game_players>lkl_game_players<a href=#lkl_game_players class=hash-link aria-label="Direct link to lkl_game_players" title="Direct link to lkl_game_players" translate=no>​</a></h2>
+<p>Game roster from the game page: every player on either team sheet with the lkl.lt player id and slug.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://lkl.lt/rungtynes/{game_id}</code></p>
+<p><strong>Valid URL:</strong> <a href=https://lkl.lt/rungtynes/11446 target=_blank rel="noopener noreferrer" class="">https://lkl.lt/rungtynes/11446</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>game_id</code><td><code>game_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>Required. lkl.lt game id (integer), e.g. 11446; <code>game_id</code> in lkl_results. Not sequential by season before 2018-19. Only a finished game is served.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_game_players-returns>Returns<a href=#lkl_game_players-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>integer<td>lkl.lt game id (key space: LKL games; the {gameId} of every route). Not sequential by season before 2018-19; not the Genius matchId. A frame parsed from a bare body has a null game_id when the body does not echo it (the runtime stamps it under _request).<tr><td><code>team_side</code><td>character<td>Side of the game the row belongs to: home or away (the game page's teams_info side; the box score, leaders and plays say home / away, and gameStatistics is keyed by team id so the runtime supplies the side).<tr><td><code>team_id</code><td>integer<td>lkl.lt team id (key space: lkl.lt clubs, STABLE across seasons and renamings: 6 = Rytas). Joins lkl_game_info home_team_id / away_team_id; not the Genius team id. Null on a frame parsed from a bare body.<tr><td><code>player_id</code><td>integer<td>lkl.lt player id (key space: lkl.lt persons, stable across seasons). Joins the shot chart's player_id; the box score, leaders and play-by-play carry the slug, which this frame maps.<tr><td><code>player</code><td>character<td>Full player name as the game page prints it.<tr><td><code>jersey</code><td>character<td>Shirt number as a string (so '00' and '0' stay distinct).<tr><td><code>slug</code><td>character<td>Player slug (key space: lkl.lt persons; the {slug} of lkl.lt/zaidejai/{slug}). Join key to the player_slug of the box score, leaders and play-by-play.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw body (<code>dict</code>): the JSON of a game route, the game page record, or the merged results / standings record, plus <code>_request</code> (the game id, team ids and slug -> player id map, or the season asked for).</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_game_players-raises>Raises<a href=#lkl_game_players-raises class=hash-link aria-label="Direct link to Raises" title="Direct link to Raises" translate=no>​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Exception<th>Description<tbody><tr><td><code>NoDataError</code><td>The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).<tr><td><code>AssetFetchError</code><td>The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).<tr><td><code>ValueError</code><td>The host answered 400 / 422 -- the request is wrong; retrying cannot help.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_game_players-example>Example<a href=#lkl_game_players-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">lkl_game_players</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">game_id</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>11446</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_player_box>lkl_player_box<a href=#lkl_player_box class=hash-link aria-label="Direct link to lkl_player_box" title="Direct link to lkl_player_box" translate=no>​</a></h2>
+<p>Per-player box score of a finished game: minutes, points, shooting splits, rebounds, assists and plus/minus.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://lkl.lt/api/livestream/boxscore/{game_id}</code></p>
+<p><strong>Valid URL:</strong> <a href=https://lkl.lt/api/livestream/boxscore/11446 target=_blank rel="noopener noreferrer" class="">https://lkl.lt/api/livestream/boxscore/11446</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>game_id</code><td><code>game_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>Required. lkl.lt game id (integer), e.g. 11446; <code>game_id</code> in lkl_results. Not sequential by season before 2018-19. Only a finished game is served.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_player_box-returns>Returns<a href=#lkl_player_box-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>integer<td>lkl.lt game id (key space: LKL games; the {gameId} of every route). Not sequential by season before 2018-19; not the Genius matchId. A frame parsed from a bare body has a null game_id when the body does not echo it (the runtime stamps it under _request).<tr><td><code>team_side</code><td>character<td>Side of the game the row belongs to: home or away (the game page's teams_info side; the box score, leaders and plays say home / away, and gameStatistics is keyed by team id so the runtime supplies the side).<tr><td><code>team_id</code><td>integer<td>lkl.lt team id (key space: lkl.lt clubs, STABLE across seasons and renamings: 6 = Rytas). Joins lkl_game_info home_team_id / away_team_id; not the Genius team id. Null on a frame parsed from a bare body.<tr><td><code>player_slug</code><td>character<td>lkl.lt player slug (key space: lkl.lt persons; the {slug} of lkl.lt/zaidejai/{slug}, stable across seasons). Join key to lkl_game_players.slug.<tr><td><code>player_id</code><td>integer<td>lkl.lt player id (key space: lkl.lt persons, stable across seasons). Resolved from the player slug through the game roster the runtime stamps from the game page; null on a bare body or a slug the roster lacks.<tr><td><code>player</code><td>character<td>Player name as the site prints it in this route (the box score short form 'I. Surname', other routes the full name).<tr><td><code>jersey</code><td>character<td>Cell: Shirt number, a STRING ('77'); page column # (Marškinėlių numeris).<tr><td><code>is_starter</code><td>logical<td>True for the five starters.<tr><td><code>is_captain</code><td>logical<td>True for the team captain.<tr><td><code>is_active</code><td>logical<td>False in every sample, finished games included; by name the player is on court right now (live games), unverified.<tr><td><code>seconds_played</code><td>integer<td>Time on court in seconds (the page's 'mm:ss' minutes: 32:54 = 1974).<tr><td><code>points</code><td>integer<td>Cell: Points (TŠK, Taškai).<tr><td><code>fg_made</code><td>integer<td>Field goals made, 2PT + 3PT (the 'made' half of the 'made/attempted' cell).<tr><td><code>fg_attempted</code><td>integer<td>Field goals attempted, 2PT + 3PT.<tr><td><code>fg_pct</code><td>numeric<td>Field-goal percentage, 0-100 (the site's one-decimal string; 0 when there were no attempts).<tr><td><code>fg2_made</code><td>integer<td>Two-point field goals made.<tr><td><code>fg2_attempted</code><td>integer<td>Two-point field goals attempted.<tr><td><code>fg2_pct</code><td>numeric<td>Two-point percentage, 0-100 (one-decimal string on the site; 0 when there were no attempts).<tr><td><code>fg3_made</code><td>integer<td>Three-point field goals made.<tr><td><code>fg3_attempted</code><td>integer<td>Three-point field goals attempted.<tr><td><code>fg3_pct</code><td>numeric<td>Three-point percentage, 0-100 (one-decimal string on the site; 0 when there were no attempts).<tr><td><code>ft_made</code><td>integer<td>Free throws made.<tr><td><code>ft_attempted</code><td>integer<td>Free throws attempted.<tr><td><code>ft_pct</code><td>numeric<td>Free-throw percentage, 0-100 (one-decimal string on the site; 0 when there were no attempts).<tr><td><code>total_rebounds</code><td>integer<td>Cell: Total rebounds (AK, Atkovoti kamuoliai).<tr><td><code>offensive_rebounds</code><td>integer<td>Cell: Offensive rebounds (AKP, Atkovoti kamuoliai puolime).<tr><td><code>defensive_rebounds</code><td>integer<td>Cell: Defensive rebounds (AKG, Atkovoti kamuoliai gynyboje).<tr><td><code>assists</code><td>integer<td>Cell: Assists (RP, Rezultatyvūs perdavimai).<tr><td><code>steals</code><td>integer<td>Cell: Steals (PK, Perimti kamuoliai).<tr><td><code>turnovers</code><td>integer<td>Cell: Turnovers (KL, Klaidos).<tr><td><code>blocks</code><td>integer<td>Cell: Blocks made (BL, Blokai).<tr><td><code>blocks_received</code><td>integer<td>Cell: Shots of this player/team that were blocked (GB, Gauti blokai).<tr><td><code>fouls</code><td>integer<td>Cell: Personal fouls committed (AP, Asmeninės pražangos).<tr><td><code>fouls_on</code><td>integer<td>Cell: Fouls drawn (IP, Išprovokuotos pražangos).<tr><td><code>plus_minus</code><td>integer<td>Cell: Plus/minus while on court (+/- rodiklis).<tr><td><code>efficiency</code><td>integer<td>Cell: Efficiency rating (EF, Efektyvumas; see gameStatistics efficiency).</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw body (<code>dict</code>): the JSON of a game route, the game page record, or the merged results / standings record, plus <code>_request</code> (the game id, team ids and slug -> player id map, or the season asked for).</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_player_box-raises>Raises<a href=#lkl_player_box-raises class=hash-link aria-label="Direct link to Raises" title="Direct link to Raises" translate=no>​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Exception<th>Description<tbody><tr><td><code>NoDataError</code><td>The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).<tr><td><code>AssetFetchError</code><td>The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).<tr><td><code>ValueError</code><td>The host answered 400 / 422 -- the request is wrong; retrying cannot help.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_player_box-example>Example<a href=#lkl_player_box-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">lkl_player_box</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">game_id</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>11446</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_team_box>lkl_team_box<a href=#lkl_team_box class=hash-link aria-label="Direct link to lkl_team_box" title="Direct link to lkl_team_box" translate=no>​</a></h2>
+<p>Team game totals of both teams: shooting, rebounds, assists, turnovers, fouls, paint, bench and fast-break points.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://lkl.lt/api/livestream/boxscore/{game_id}</code></p>
+<p><strong>Valid URL:</strong> <a href=https://lkl.lt/api/livestream/boxscore/11446 target=_blank rel="noopener noreferrer" class="">https://lkl.lt/api/livestream/boxscore/11446</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>game_id</code><td><code>game_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>Required. lkl.lt game id (integer), e.g. 11446; <code>game_id</code> in lkl_results. Not sequential by season before 2018-19. Only a finished game is served.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_team_box-returns>Returns<a href=#lkl_team_box-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>integer<td>lkl.lt game id (key space: LKL games; the {gameId} of every route). Not sequential by season before 2018-19; not the Genius matchId. A frame parsed from a bare body has a null game_id when the body does not echo it (the runtime stamps it under _request).<tr><td><code>team_id</code><td>integer<td>lkl.lt team id (key space: lkl.lt clubs, STABLE across seasons and renamings: 6 = Rytas). Joins lkl_game_info home_team_id / away_team_id; not the Genius team id. Null on a frame parsed from a bare body.<tr><td><code>team_side</code><td>character<td>Side of the game the row belongs to: home or away (the game page's teams_info side; the box score, leaders and plays say home / away, and gameStatistics is keyed by team id so the runtime supplies the side).<tr><td><code>points</code><td>integer<td>Team points: the final score (the capture banks finished games only).<tr><td><code>seconds_played</code><td>integer<td>Summed playing time of all the team's players in seconds (12000 = 5 x 40:00; 13500 with one overtime).<tr><td><code>field_goals_made_total</code><td>integer<td>Field goals made, 2PT + 3PT.<tr><td><code>field_goals_attempted_total</code><td>integer<td>Field goals attempted, 2PT + 3PT.<tr><td><code>field_goals_made_2pt</code><td>integer<td>Two-point field goals made.<tr><td><code>field_goals_attempted_2pt</code><td>integer<td>Two-point field goals attempted.<tr><td><code>field_goals_made_3pt</code><td>integer<td>Three-point field goals made.<tr><td><code>field_goals_attempted_3pt</code><td>integer<td>Three-point field goals attempted.<tr><td><code>free_throws_made</code><td>integer<td>Free throws made by the team in the game (count).<tr><td><code>free_throws_attempted</code><td>integer<td>Free throws attempted by the team in the game (count).<tr><td><code>offensive_rebounds</code><td>integer<td>Team offensive rebounds in the game (count).<tr><td><code>defensive_rebounds</code><td>integer<td>Team defensive rebounds in the game (count).<tr><td><code>total_rebounds</code><td>integer<td>Team rebounds, offensive + defensive (count).<tr><td><code>assists</code><td>integer<td>Team assists in the game (count).<tr><td><code>steals</code><td>integer<td>Team steals in the game (count).<tr><td><code>blocks</code><td>integer<td>Blocks made by the team in the game (count).<tr><td><code>blocks_received</code><td>integer<td>Shots of this team that were blocked.<tr><td><code>turnovers</code><td>integer<td>Team turnovers in the game (count).<tr><td><code>fouls</code><td>integer<td>Fouls committed.<tr><td><code>fouls_on</code><td>integer<td>Fouls drawn (fouls committed on this team).<tr><td><code>efficiency</code><td>integer<td>Team efficiency rating (Efektyvumas), a PIR-style index (points + rebounds + assists + steals + blocks + fouls drawn - missed shots - turnovers - shots blocked - fouls). The exact formula is unverified: game 11590 home gives 121 where that formula gives 122.<tr><td><code>points_off_turnovers</code><td>integer<td>Points off the opponent's turnovers; 0 on the 2007-08 sample (not tracked then).<tr><td><code>fast_break_points</code><td>integer<td>Fast-break points; 0 on the 2007-08 sample.<tr><td><code>second_chance_points</code><td>integer<td>Second-chance points (after an offensive rebound); 0 on the 2007-08 sample.<tr><td><code>points_in_paint</code><td>integer<td>Points in the paint; 0 on the 2007-08 sample.<tr><td><code>bench_points</code><td>integer<td>Points by players who did not start.<tr><td><code>biggest_lead</code><td>integer<td>This team's biggest lead in points (0 when it never led).<tr><td><code>biggest_scoring_run</code><td>integer<td>This team's longest unanswered scoring run, in points.<tr><td><code>lead_changes</code><td>integer<td>Lead changes in the game (the same value on both rows).<tr><td><code>tie_results</code><td>integer<td>Times the score was tied (the same value on both rows).<tr><td><code>time_leading</code><td>integer<td>Seconds this team led during the game (the site sends it as a string; 1892 = 31:32).<tr><td><code>field_goals_percentage</code><td>numeric<td>Field-goal percentage, 0-100 float (the site sends a two-decimal string).<tr><td><code>field_goals_2pt_percentage</code><td>numeric<td>Two-point percentage, 0-100 float (the site sends a two-decimal string).<tr><td><code>field_goals_3pt_percentage</code><td>numeric<td>Three-point percentage, 0-100 float (the site sends a two-decimal string).<tr><td><code>free_throws_percentage</code><td>numeric<td>Free-throw percentage, 0-100 float (the site sends a two-decimal string).</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw body (<code>dict</code>): the JSON of a game route, the game page record, or the merged results / standings record, plus <code>_request</code> (the game id, team ids and slug -> player id map, or the season asked for).</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_team_box-raises>Raises<a href=#lkl_team_box-raises class=hash-link aria-label="Direct link to Raises" title="Direct link to Raises" translate=no>​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Exception<th>Description<tbody><tr><td><code>NoDataError</code><td>The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).<tr><td><code>AssetFetchError</code><td>The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).<tr><td><code>ValueError</code><td>The host answered 400 / 422 -- the request is wrong; retrying cannot help.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_team_box-example>Example<a href=#lkl_team_box-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">lkl_team_box</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">game_id</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>11446</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_period_scores>lkl_period_scores<a href=#lkl_period_scores class=hash-link aria-label="Direct link to lkl_period_scores" title="Direct link to lkl_period_scores" translate=no>​</a></h2>
+<p>Points each team scored in each period of a game, overtime included.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://lkl.lt/api/livestream/boxscore/{game_id}</code></p>
+<p><strong>Valid URL:</strong> <a href=https://lkl.lt/api/livestream/boxscore/11446 target=_blank rel="noopener noreferrer" class="">https://lkl.lt/api/livestream/boxscore/11446</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>game_id</code><td><code>game_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>Required. lkl.lt game id (integer), e.g. 11446; <code>game_id</code> in lkl_results. Not sequential by season before 2018-19. Only a finished game is served.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_period_scores-returns>Returns<a href=#lkl_period_scores-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>integer<td>lkl.lt game id (key space: LKL games; the {gameId} of every route). Not sequential by season before 2018-19; not the Genius matchId. A frame parsed from a bare body has a null game_id when the body does not echo it (the runtime stamps it under _request).<tr><td><code>team_id</code><td>integer<td>lkl.lt team id (key space: lkl.lt clubs, STABLE across seasons and renamings: 6 = Rytas). Joins lkl_game_info home_team_id / away_team_id; not the Genius team id. Null on a frame parsed from a bare body.<tr><td><code>team_side</code><td>character<td>Side of the game the row belongs to: home or away (the game page's teams_info side; the box score, leaders and plays say home / away, and gameStatistics is keyed by team id so the runtime supplies the side).<tr><td><code>period</code><td>integer<td>Period number: 1-4 regulation, 5 the first overtime, 6 the second.<tr><td><code>period_type</code><td>character<td>regular for periods 1-4, overtime from period 5.<tr><td><code>points</code><td>integer<td>Points the team scored IN this period (not cumulative); keyed by period in the site's quarter_scores.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw body (<code>dict</code>): the JSON of a game route, the game page record, or the merged results / standings record, plus <code>_request</code> (the game id, team ids and slug -> player id map, or the season asked for).</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_period_scores-raises>Raises<a href=#lkl_period_scores-raises class=hash-link aria-label="Direct link to Raises" title="Direct link to Raises" translate=no>​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Exception<th>Description<tbody><tr><td><code>NoDataError</code><td>The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).<tr><td><code>AssetFetchError</code><td>The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).<tr><td><code>ValueError</code><td>The host answered 400 / 422 -- the request is wrong; retrying cannot help.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_period_scores-example>Example<a href=#lkl_period_scores-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">lkl_period_scores</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">game_id</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>11446</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_summary>lkl_summary<a href=#lkl_summary class=hash-link aria-label="Direct link to lkl_summary" title="Direct link to lkl_summary" translate=no>​</a></h2>
+<p>Summary tab: the head-to-head comparison of both teams (shooting, rebounds, assists, bench points...).</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://lkl.lt/api/livestream/summary/{game_id}</code></p>
+<p><strong>Valid URL:</strong> <a href=https://lkl.lt/api/livestream/summary/11446 target=_blank rel="noopener noreferrer" class="">https://lkl.lt/api/livestream/summary/11446</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>game_id</code><td><code>game_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>Required. lkl.lt game id (integer), e.g. 11446; <code>game_id</code> in lkl_results. Not sequential by season before 2018-19. Only a finished game is served.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_summary-returns>Returns<a href=#lkl_summary-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>integer<td>lkl.lt game id (key space: LKL games; the {gameId} of every route). Not sequential by season before 2018-19; not the Genius matchId. A frame parsed from a bare body has a null game_id when the body does not echo it (the runtime stamps it under _request).<tr><td><code>group</code><td>character<td>Always null here: the flat comparison list has no groups (lkl_game_stats labels them).<tr><td><code>stat</code><td>character<td>English code for the site's Lithuanian label (field_goals, two_pointers, three_pointers, free_throws, rebounds, assists, steals, blocks, turnovers, fouls, points, ...); null for a label this package does not know.<tr><td><code>label</code><td>character<td>Row label in LITHUANIAN: 'Metimai iš žaidimo' = field goals, 'Dvitaškiai metimai' = 2PT, 'Tritaškiai metimai' = 3PT, 'Baudų metimai' = free throws, 'Atkovoti kamuoliai' = rebounds, 'Atkovoti kamuoliai gynyboje' = defensive rebounds, 'Atkovoti kamuoliai puolime' = offensive rebounds, 'Rezultatyvūs perdavimai' = assists, 'Perimti kamuoliai' = steals, 'Blokai' = blocks, 'Klaidos' = turnovers, 'Pražangos' = fouls, 'Taškai' = points, 'Taškai po klaidų' = points off turnovers, 'Taškai greitose atakose' = fast-break points, 'Taškai antru bandymu' = second-chance points, 'Atsarginių žaidėjų taškai' = bench points.<tr><td><code>home_value</code><td>character<td>Shooting rows: 'made/attempted' string ('25/35'); counting rows: integer.<tr><td><code>home_percentage</code><td>numeric<td>Shooting rows only (absent on counting rows): percentage with ONE decimal and a % sign ('71.4%').<tr><td><code>home_graph_length</code><td>numeric<td>Bar length in percent: shooting rows = the percentage as a string ('71.4'); counting rows = this side's share of the two values, 0-100, a number (43 vs 37 -> 53.75).<tr><td><code>home_winning</code><td>logical<td>True when this side's bar is highlighted as the better one (both false on a tie).<tr><td><code>away_value</code><td>character<td>Shooting rows: 'made/attempted' string ('25/35'); counting rows: integer.<tr><td><code>away_percentage</code><td>numeric<td>Shooting rows only (absent on counting rows): percentage with ONE decimal and a % sign ('71.4%').<tr><td><code>away_graph_length</code><td>numeric<td>Bar length in percent: shooting rows = the percentage as a string ('71.4'); counting rows = this side's share of the two values, 0-100, a number (43 vs 37 -> 53.75).<tr><td><code>away_winning</code><td>logical<td>True when this side's bar is highlighted as the better one (both false on a tie).</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw body (<code>dict</code>): the JSON of a game route, the game page record, or the merged results / standings record, plus <code>_request</code> (the game id, team ids and slug -> player id map, or the season asked for).</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_summary-raises>Raises<a href=#lkl_summary-raises class=hash-link aria-label="Direct link to Raises" title="Direct link to Raises" translate=no>​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Exception<th>Description<tbody><tr><td><code>NoDataError</code><td>The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).<tr><td><code>AssetFetchError</code><td>The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).<tr><td><code>ValueError</code><td>The host answered 400 / 422 -- the request is wrong; retrying cannot help.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_summary-example>Example<a href=#lkl_summary-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">lkl_summary</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">game_id</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>11446</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_game_score>lkl_game_score<a href=#lkl_game_score class=hash-link aria-label="Direct link to lkl_game_score" title="Direct link to lkl_game_score" translate=no>​</a></h2>
+<p>Score line of a game: both scores and the clock text.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://lkl.lt/api/livestream/game-score/{game_id}</code></p>
+<p><strong>Valid URL:</strong> <a href=https://lkl.lt/api/livestream/game-score/11446 target=_blank rel="noopener noreferrer" class="">https://lkl.lt/api/livestream/game-score/11446</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>game_id</code><td><code>game_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>Required. lkl.lt game id (integer), e.g. 11446; <code>game_id</code> in lkl_results. Not sequential by season before 2018-19. Only a finished game is served.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_game_score-returns>Returns<a href=#lkl_game_score-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>integer<td>lkl.lt game id (key space: LKL games; the {gameId} of every route). Not sequential by season before 2018-19; not the Genius matchId. A frame parsed from a bare body has a null game_id when the body does not echo it (the runtime stamps it under _request).<tr><td><code>home_score</code><td>integer<td>Home team points on the score line.<tr><td><code>away_score</code><td>integer<td>Away team points on the score line.<tr><td><code>clock</code><td>character<td>Clock text, NOT a state flag: an old game keeps '1 KĖLINYS - 10:00' after the final; a finished overtime game reads '1 pratęsimas - 00:00'.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw body (<code>dict</code>): the JSON of a game route, the game page record, or the merged results / standings record, plus <code>_request</code> (the game id, team ids and slug -> player id map, or the season asked for).</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_game_score-raises>Raises<a href=#lkl_game_score-raises class=hash-link aria-label="Direct link to Raises" title="Direct link to Raises" translate=no>​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Exception<th>Description<tbody><tr><td><code>NoDataError</code><td>The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).<tr><td><code>AssetFetchError</code><td>The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).<tr><td><code>ValueError</code><td>The host answered 400 / 422 -- the request is wrong; retrying cannot help.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_game_score-example>Example<a href=#lkl_game_score-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">lkl_game_score</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">game_id</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>11446</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_game_stats>lkl_game_stats<a href=#lkl_game_stats class=hash-link aria-label="Direct link to lkl_game_stats" title="Direct link to lkl_game_stats" translate=no>​</a></h2>
+<p>Statistics tab: the head-to-head comparison of both teams, one row per statistic.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://lkl.lt/api/livestream/game-stats/{game_id}</code></p>
+<p><strong>Valid URL:</strong> <a href=https://lkl.lt/api/livestream/game-stats/11446 target=_blank rel="noopener noreferrer" class="">https://lkl.lt/api/livestream/game-stats/11446</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>game_id</code><td><code>game_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>Required. lkl.lt game id (integer), e.g. 11446; <code>game_id</code> in lkl_results. Not sequential by season before 2018-19. Only a finished game is served.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_game_stats-returns>Returns<a href=#lkl_game_stats-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>integer<td>lkl.lt game id (key space: LKL games; the {gameId} of every route). Not sequential by season before 2018-19; not the Genius matchId. A frame parsed from a bare body has a null game_id when the body does not echo it (the runtime stamps it under _request).<tr><td><code>group</code><td>character<td>Bar group the tab also shows the line in: shooting (2PT, 3PT, free throws) or main (rebounds, assists, steals); null for lines only in the full list.<tr><td><code>stat</code><td>character<td>English code for the site's Lithuanian label (field_goals, two_pointers, three_pointers, free_throws, rebounds, assists, steals, blocks, turnovers, fouls, points, ...); null for a label this package does not know.<tr><td><code>label</code><td>character<td>Row label in LITHUANIAN: 'Metimai iš žaidimo' = field goals, 'Dvitaškiai metimai' = 2PT, 'Tritaškiai metimai' = 3PT, 'Baudų metimai' = free throws, 'Atkovoti kamuoliai' = rebounds, 'Atkovoti kamuoliai gynyboje' = defensive rebounds, 'Atkovoti kamuoliai puolime' = offensive rebounds, 'Rezultatyvūs perdavimai' = assists, 'Perimti kamuoliai' = steals, 'Blokai' = blocks, 'Klaidos' = turnovers, 'Pražangos' = fouls, 'Taškai' = points, 'Taškai po klaidų' = points off turnovers, 'Taškai greitose atakose' = fast-break points, 'Taškai antru bandymu' = second-chance points, 'Atsarginių žaidėjų taškai' = bench points.<tr><td><code>home_value</code><td>character<td>Shooting rows: 'made/attempted' string ('25/35'); counting rows: integer.<tr><td><code>home_percentage</code><td>numeric<td>Shooting rows only (absent on counting rows): percentage with ONE decimal and a % sign ('71.4%').<tr><td><code>home_graph_length</code><td>numeric<td>Bar length in percent: shooting rows = the percentage as a string ('71.4'); counting rows = this side's share of the two values, 0-100, a number (43 vs 37 -> 53.75).<tr><td><code>home_winning</code><td>logical<td>True when this side's bar is highlighted as the better one (both false on a tie).<tr><td><code>away_value</code><td>character<td>Shooting rows: 'made/attempted' string ('25/35'); counting rows: integer.<tr><td><code>away_percentage</code><td>numeric<td>Shooting rows only (absent on counting rows): percentage with ONE decimal and a % sign ('71.4%').<tr><td><code>away_graph_length</code><td>numeric<td>Bar length in percent: shooting rows = the percentage as a string ('71.4'); counting rows = this side's share of the two values, 0-100, a number (43 vs 37 -> 53.75).<tr><td><code>away_winning</code><td>logical<td>True when this side's bar is highlighted as the better one (both false on a tie).</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw body (<code>dict</code>): the JSON of a game route, the game page record, or the merged results / standings record, plus <code>_request</code> (the game id, team ids and slug -> player id map, or the season asked for).</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_game_stats-raises>Raises<a href=#lkl_game_stats-raises class=hash-link aria-label="Direct link to Raises" title="Direct link to Raises" translate=no>​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Exception<th>Description<tbody><tr><td><code>NoDataError</code><td>The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).<tr><td><code>AssetFetchError</code><td>The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).<tr><td><code>ValueError</code><td>The host answered 400 / 422 -- the request is wrong; retrying cannot help.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_game_stats-example>Example<a href=#lkl_game_stats-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">lkl_game_stats</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">game_id</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>11446</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_lead_chart>lkl_lead_chart<a href=#lkl_lead_chart class=hash-link aria-label="Direct link to lkl_lead_chart" title="Direct link to lkl_lead_chart" translate=no>​</a></h2>
+<p>Lead chart of a game: the score margin at each chart point of each period.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://lkl.lt/api/livestream/game-stats/{game_id}</code></p>
+<p><strong>Valid URL:</strong> <a href=https://lkl.lt/api/livestream/game-stats/11446 target=_blank rel="noopener noreferrer" class="">https://lkl.lt/api/livestream/game-stats/11446</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>game_id</code><td><code>game_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>Required. lkl.lt game id (integer), e.g. 11446; <code>game_id</code> in lkl_results. Not sequential by season before 2018-19. Only a finished game is served.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_lead_chart-returns>Returns<a href=#lkl_lead_chart-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>integer<td>lkl.lt game id (key space: LKL games; the {gameId} of every route). Not sequential by season before 2018-19; not the Genius matchId. A frame parsed from a bare body has a null game_id when the body does not echo it (the runtime stamps it under _request).<tr><td><code>period</code><td>integer<td>Period number: 1-4 regulation, 5 the first overtime, 6 the second.<tr><td><code>diff</code><td>integer<td>Home minus away score at that chart point (signed integer).<tr><td><code>clock</code><td>character<td>Clock REMAINING in the period as the site's 'mm:ss:00' text (a trailing ':00'): '10:00:00' is the period start.<tr><td><code>score_home</code><td>integer<td>Home cumulative score at that point (the site sends a string).<tr><td><code>score_away</code><td>integer<td>Away cumulative score at that point (the site sends a string).<tr><td><code>column_height</code><td>numeric<td>Bar height for the site's chart: |diff| / maxDiff x 50 (percent of the chart).</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw body (<code>dict</code>): the JSON of a game route, the game page record, or the merged results / standings record, plus <code>_request</code> (the game id, team ids and slug -> player id map, or the season asked for).</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_lead_chart-raises>Raises<a href=#lkl_lead_chart-raises class=hash-link aria-label="Direct link to Raises" title="Direct link to Raises" translate=no>​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Exception<th>Description<tbody><tr><td><code>NoDataError</code><td>The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).<tr><td><code>AssetFetchError</code><td>The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).<tr><td><code>ValueError</code><td>The host answered 400 / 422 -- the request is wrong; retrying cannot help.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_lead_chart-example>Example<a href=#lkl_lead_chart-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">lkl_lead_chart</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">game_id</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>11446</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_leaders>lkl_leaders<a href=#lkl_leaders class=hash-link aria-label="Direct link to lkl_leaders" title="Direct link to lkl_leaders" translate=no>​</a></h2>
+<p>Leaders tab: each team's top players in points, rebounds, assists, efficiency, steals and blocks.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://lkl.lt/api/livestream/leaders/{game_id}</code></p>
+<p><strong>Valid URL:</strong> <a href=https://lkl.lt/api/livestream/leaders/11446 target=_blank rel="noopener noreferrer" class="">https://lkl.lt/api/livestream/leaders/11446</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>game_id</code><td><code>game_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>Required. lkl.lt game id (integer), e.g. 11446; <code>game_id</code> in lkl_results. Not sequential by season before 2018-19. Only a finished game is served.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_leaders-returns>Returns<a href=#lkl_leaders-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>integer<td>lkl.lt game id (key space: LKL games; the {gameId} of every route). Not sequential by season before 2018-19; not the Genius matchId. A frame parsed from a bare body has a null game_id when the body does not echo it (the runtime stamps it under _request).<tr><td><code>category</code><td>character<td>Leader category: points, total_rebounds, assists, efficiency, steals or blocks.<tr><td><code>category_label</code><td>character<td>Category label in Lithuanian ('Pelnomi taškai' = points scored, 'Naudingumas' = efficiency rating).<tr><td><code>team_side</code><td>character<td>Side of the game the row belongs to: home or away (the game page's teams_info side; the box score, leaders and plays say home / away, and gameStatistics is keyed by team id so the runtime supplies the side).<tr><td><code>team_id</code><td>integer<td>lkl.lt team id (key space: lkl.lt clubs, STABLE across seasons and renamings: 6 = Rytas). Joins lkl_game_info home_team_id / away_team_id; not the Genius team id. Null on a frame parsed from a bare body.<tr><td><code>rank</code><td>integer<td>Place in the team's category list: 1 = the category leader, 2 and up = the runners-up in the order the site lists them (up to 4).<tr><td><code>player</code><td>character<td>Player name as the site prints it in this route (the box score short form 'I. Surname', other routes the full name).<tr><td><code>player_slug</code><td>character<td>lkl.lt player slug (key space: lkl.lt persons; the {slug} of lkl.lt/zaidejai/{slug}, stable across seasons). Join key to lkl_game_players.slug.<tr><td><code>player_id</code><td>integer<td>lkl.lt player id (key space: lkl.lt persons, stable across seasons). Resolved from the player slug through the game roster the runtime stamps from the game page; null on a bare body or a slug the roster lacks.<tr><td><code>value</code><td>integer<td>The player's count in the row's category.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw body (<code>dict</code>): the JSON of a game route, the game page record, or the merged results / standings record, plus <code>_request</code> (the game id, team ids and slug -> player id map, or the season asked for).</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_leaders-raises>Raises<a href=#lkl_leaders-raises class=hash-link aria-label="Direct link to Raises" title="Direct link to Raises" translate=no>​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Exception<th>Description<tbody><tr><td><code>NoDataError</code><td>The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).<tr><td><code>AssetFetchError</code><td>The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).<tr><td><code>ValueError</code><td>The host answered 400 / 422 -- the request is wrong; retrying cannot help.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_leaders-example>Example<a href=#lkl_leaders-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">lkl_leaders</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">game_id</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>11446</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_pbp>lkl_pbp<a href=#lkl_pbp class=hash-link aria-label="Direct link to lkl_pbp" title="Direct link to lkl_pbp" translate=no>​</a></h2>
+<p>Play-by-play of a finished game (2024-25 onward), oldest first, with the running score and the lkl.lt player id.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://lkl.lt/api/livestream/play-by-play/{game_id}</code></p>
+<p><strong>Valid URL:</strong> <a href=https://lkl.lt/api/livestream/play-by-play/11446 target=_blank rel="noopener noreferrer" class="">https://lkl.lt/api/livestream/play-by-play/11446</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>game_id</code><td><code>game_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>Required. lkl.lt game id (integer), e.g. 11446; <code>game_id</code> in lkl_results. Not sequential by season before 2018-19. Only a finished game is served.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_pbp-returns>Returns<a href=#lkl_pbp-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>integer<td>lkl.lt game id (key space: LKL games; the {gameId} of every route). Not sequential by season before 2018-19; not the Genius matchId. A frame parsed from a bare body has a null game_id when the body does not echo it (the runtime stamps it under _request).<tr><td><code>event_num</code><td>integer<td>Play sequence number the parser assigns, 1 = the first play of the game (the site lists plays newest first per period, with no id).<tr><td><code>period</code><td>integer<td>Period of the play. Regulation lines carry it in the site's body; overtime lines come as one merged list without it, so the parser derives it (oldest overtime = 5, each period-end line closes one): checked on a one-overtime game only, so multi-overtime numbering is unverified.<tr><td><code>period_type</code><td>character<td>regular for periods 1-4, overtime from period 5.<tr><td><code>clock</code><td>character<td>Game clock REMAINING in the period as 'mm:ss' (it counts down from 10:00, from 05:00 in overtime).<tr><td><code>clock_seconds</code><td>integer<td>The clock REMAINING as whole seconds (08:34 = 514), derived by the parser.<tr><td><code>team_side</code><td>character<td>Side of the acting team (the line's is_home flag): home or away.<tr><td><code>team_id</code><td>integer<td>lkl.lt team id (key space: lkl.lt clubs, STABLE across seasons and renamings: 6 = Rytas). Joins lkl_game_info home_team_id / away_team_id; not the Genius team id. Null on a frame parsed from a bare body.<tr><td><code>player</code><td>character<td>Player name as the site prints it in this route (the box score short form 'I. Surname', other routes the full name).<tr><td><code>player_slug</code><td>character<td>lkl.lt player slug (key space: lkl.lt persons; the {slug} of lkl.lt/zaidejai/{slug}, stable across seasons). Join key to lkl_game_players.slug.<tr><td><code>player_id</code><td>integer<td>lkl.lt player id (key space: lkl.lt persons, stable across seasons). Resolved from the player slug through the game roster the runtime stamps from the game page; null on a bare body or a slug the roster lacks.<tr><td><code>type</code><td>character<td>Event type (English code): 2pt, 3pt, freethrow, rebound, assist, steal, block, turnover, foul, foulon (foul drawn), substitution, timeout, jumpball, headcoachchallenge, period, game.<tr><td><code>subtype</code><td>character<td>Event subtype (English code; '' when none). 2pt/3pt: shot kind (jumpshot, layup, drivinglayup, reverselayup, dunk, alleyoop, alleyoopdunk, tipinlayup, tipindunk, hookshot, fadeaway, floatingjumpshot, pullupjumpshot, stepbackjumpshot, turnaroundjumpshot, eurostep). freethrow: 'NofM' = attempt N of M (1of1, 1of2, 2of2, 1of3, 2of3, 3of3). rebound: offensive / defensive. foul: personal, offensive, technical, benchTechnical. turnover: badpass, ballhandling, offensive, outofbounds, travel, backcourt (backcourt violation), 3sec, 24sec. substitution: in / out. timeout: full (team), officials. jumpball: startperiod, won, lost, heldball. headcoachchallenge: the challenged call (foul, outofbounds). period / game: start, end.<tr><td><code>description</code><td>character<td>Event text in Lithuanian, one fixed phrase per type and subtype ('3 taškų metimas pataikytas' = 3-point shot made).<tr><td><code>success</code><td>logical<td>Shots and free throws: true = made. Every other type: always true.<tr><td><code>is_points_info</code><td>logical<td>True on lines that changed the score (made shots and free throws).<tr><td><code>score_home</code><td>integer<td>Home points after the play (on every line, not only scoring lines).<tr><td><code>score_away</code><td>integer<td>Away points after the play (on every line, not only scoring lines).</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw body (<code>dict</code>): the JSON of a game route, the game page record, or the merged results / standings record, plus <code>_request</code> (the game id, team ids and slug -> player id map, or the season asked for).</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_pbp-raises>Raises<a href=#lkl_pbp-raises class=hash-link aria-label="Direct link to Raises" title="Direct link to Raises" translate=no>​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Exception<th>Description<tbody><tr><td><code>NoDataError</code><td>The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).<tr><td><code>AssetFetchError</code><td>The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).<tr><td><code>ValueError</code><td>The host answered 400 / 422 -- the request is wrong; retrying cannot help.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_pbp-example>Example<a href=#lkl_pbp-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">lkl_pbp</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">game_id</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>11446</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_shots>lkl_shots<a href=#lkl_shots class=hash-link aria-label="Direct link to lkl_shots" title="Direct link to lkl_shots" translate=no>​</a></h2>
+<p>Every field-goal attempt of a finished game (2024-25 onward) with its court position (Genius LiveStats data).</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://lkl.lt/api/livestream/shot-chart/{game_id}</code></p>
+<p><strong>Valid URL:</strong> <a href=https://lkl.lt/api/livestream/shot-chart/11446 target=_blank rel="noopener noreferrer" class="">https://lkl.lt/api/livestream/shot-chart/11446</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>game_id</code><td><code>game_id</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>Required. lkl.lt game id (integer), e.g. 11446; <code>game_id</code> in lkl_results. Not sequential by season before 2018-19. Only a finished game is served.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_shots-returns>Returns<a href=#lkl_shots-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>game_id</code><td>integer<td>lkl.lt game id (key space: LKL games; the {gameId} of every route). Not sequential by season before 2018-19; not the Genius matchId. A frame parsed from a bare body has a null game_id when the body does not echo it (the runtime stamps it under _request).<tr><td><code>shot_id</code><td>integer<td>Shot event id (key space: lkl.lt shot events, increasing over time); joins nothing else and is not the Genius action number.<tr><td><code>period</code><td>integer<td>Period number: 1-4 regulation, 5 the first overtime, 6 the second.<tr><td><code>period_type</code><td>character<td>regular for periods 1-4, overtime from period 5.<tr><td><code>team_side</code><td>character<td>Side of the shooter's team (the line's is_home flag): home or away.<tr><td><code>team_id</code><td>integer<td>lkl.lt team id (key space: lkl.lt clubs, STABLE across seasons and renamings: 6 = Rytas). Joins lkl_game_info home_team_id / away_team_id; not the Genius team id. Null on a frame parsed from a bare body.<tr><td><code>player_id</code><td>integer<td>lkl.lt player id (key space: lkl.lt persons, stable across seasons). Resolved from the player slug through the game roster the runtime stamps from the game page; null on a bare body or a slug the roster lacks.<tr><td><code>player_slug</code><td>character<td>lkl.lt player slug (key space: lkl.lt persons; the {slug} of lkl.lt/zaidejai/{slug}, stable across seasons). Join key to lkl_game_players.slug.<tr><td><code>type</code><td>character<td>2pt or 3pt (free throws are not in the chart).<tr><td><code>made</code><td>logical<td>True when the shot was made, false when missed.<tr><td><code>x</code><td>numeric<td>Court x position: percent (0-100) of the LENGTH of a horizontal full court from the left baseline (baskets near 5 and 95). Teams switch baskets at half-time; metres (x / 100 x 28) are an inference.<tr><td><code>y</code><td>numeric<td>Court y position: percent (0-100) of the court WIDTH (baskets at 50). Metres (y / 100 x 15) are an inference; which sideline is y = 0 is unverified.<tr><td><code>side</code><td>character<td>Basket half the shot is at: LEFT (x &lt; 50) or RIGHT, except backcourt heaves (area backcourt).<tr><td><code>area</code><td>character<td>Court zone code (e.g. inthepaint, underbasket, outsideleft); left and right are from the shooter's view, so zones are point-symmetric between the two baskets.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw body (<code>dict</code>): the JSON of a game route, the game page record, or the merged results / standings record, plus <code>_request</code> (the game id, team ids and slug -> player id map, or the season asked for).</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_shots-raises>Raises<a href=#lkl_shots-raises class=hash-link aria-label="Direct link to Raises" title="Direct link to Raises" translate=no>​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Exception<th>Description<tbody><tr><td><code>NoDataError</code><td>The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).<tr><td><code>AssetFetchError</code><td>The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).<tr><td><code>ValueError</code><td>The host answered 400 / 422 -- the request is wrong; retrying cannot help.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_shots-example>Example<a href=#lkl_shots-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">lkl_shots</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">game_id</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>11446</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_results>lkl_results<a href=#lkl_results class=hash-link aria-label="Direct link to lkl_results" title="Direct link to lkl_results" translate=no>​</a></h2>
+<p>Every played game of one LKL season (all pages of the site's results list, merged), newest first.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://lkl.lt/loadResults</code></p>
+<p><strong>Valid URL:</strong> <a href="https://lkl.lt/loadResults?season=2026" target=_blank rel="noopener noreferrer" class="">https://lkl.lt/loadResults?season=2026</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>Required. Season END year (2026 = the 2025-26 season). The site keys a season by two opaque ids (a results id and a standings id, neither a year); <code>lkl_runtime</code> reads them from the site's season selects by the label <code>YYYY-YYYY m. sezonas</code>. A year the selects do not list raises NoDataError.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_results-returns>Returns<a href=#lkl_results-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>season_id</code><td>integer<td>Results season id (key space: lkl.lt championships; LKL 2026-27 = 49436). From 2016-17 it is the Genius LiveStats competition id (leagueId 110).<tr><td><code>season_end_year</code><td>integer<td>Season END year (2026 = 2025-26), read from the season label 'YYYY-YYYY m. sezonas'.<tr><td><code>game_id</code><td>integer<td>lkl.lt game id (key space: LKL games; the {gameId} of every route). Not sequential by season before 2018-19; not the Genius matchId. A frame parsed from a bare body has a null game_id when the body does not echo it (the runtime stamps it under _request).<tr><td><code>date</code><td>character<td>Game date from the site's Lithuanian day header; checked to fall in the season (Aug 1 - Jul 31).<tr><td><code>weekday</code><td>character<td>Weekday of the header, translated to English ('šeštadienis' -> 'Saturday').<tr><td><code>time</code><td>character<td>Tip-off 'HH:MM', Europe/Vilnius.<tr><td><code>arena</code><td>character<td>Arena name ('Arena dar nežinoma' = arena not yet known, on some 2007-08 games).<tr><td><code>city</code><td>character<td>City, from 'Arena , City'; null when the venue line has no city (2007-08 'Arena dar nežinoma').<tr><td><code>home_slug</code><td>character<td>Home team: Team slug (key space: lkl.lt clubs; the {slug} of <a href=https://lkl.lt/komandos/%7Bslug%7D target=_blank rel="noopener noreferrer" class="">https://lkl.lt/komandos/{slug}</a>; one per club, stable across renamings: 'rytas' for Lietuvos Rytas / Rytas). The results and standings rows carry only this; the game page teams_info gives slug + id.<tr><td><code>home_code</code><td>character<td>Home three-letter team code ('LIE').<tr><td><code>home_name</code><td>character<td>Home team name as printed (the logo alt text; the CURRENT club name even on old games: 2007-08 'Rytas').<tr><td><code>home_score</code><td>integer<td>Home team points in the game (the final score).<tr><td><code>away_slug</code><td>character<td>Away team: Team slug (key space: lkl.lt clubs; the {slug} of <a href=https://lkl.lt/komandos/%7Bslug%7D target=_blank rel="noopener noreferrer" class="">https://lkl.lt/komandos/{slug}</a>; one per club, stable across renamings: 'rytas' for Lietuvos Rytas / Rytas). The results and standings rows carry only this; the game page teams_info gives slug + id.<tr><td><code>away_code</code><td>character<td>Away three-letter team code.<tr><td><code>away_name</code><td>character<td>Away team name as printed.<tr><td><code>away_score</code><td>integer<td>Away team points in the game (the final score).<tr><td><code>winner_highlighted</code><td>character<td>Which side's score the page sets in bold: home or away (the winner).</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw body (<code>dict</code>): the JSON of a game route, the game page record, or the merged results / standings record, plus <code>_request</code> (the game id, team ids and slug -> player id map, or the season asked for).</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_results-raises>Raises<a href=#lkl_results-raises class=hash-link aria-label="Direct link to Raises" title="Direct link to Raises" translate=no>​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Exception<th>Description<tbody><tr><td><code>NoDataError</code><td>The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).<tr><td><code>AssetFetchError</code><td>The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).<tr><td><code>ValueError</code><td>The host answered 400 / 422 -- the request is wrong; retrying cannot help.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_results-example>Example<a href=#lkl_results-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">lkl_results</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">season</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>2026</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_standings>lkl_standings<a href=#lkl_standings class=hash-link aria-label="Direct link to lkl_standings" title="Direct link to lkl_standings" translate=no>​</a></h2>
+<p>League table of one LKL season: overall, home and away records, and the final ranking once it is set.</p>
+<p><strong>Endpoint URL:</strong> <code>GET https://lkl.lt/loadStandings/{season}</code></p>
+<p><strong>Valid URL:</strong> <a href=https://lkl.lt/loadStandings/2026 target=_blank rel="noopener noreferrer" class="">https://lkl.lt/loadStandings/2026</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>API Parameter<th>Python<th style=text-align:center>Pattern<th style=text-align:center>Required<th style=text-align:center>Nullable<th>Description<tbody><tr><td><code>season</code><td><code>season</code><td style=text-align:center><td style=text-align:center><code>Y</code><td style=text-align:center><td>Required. Season END year (2026 = the 2025-26 season). The site keys a season by two opaque ids (a results id and a standings id, neither a year); <code>lkl_runtime</code> reads them from the site's season selects by the label <code>YYYY-YYYY m. sezonas</code>. A year the selects do not list raises NoDataError.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_standings-returns>Returns<a href=#lkl_standings-returns class=hash-link aria-label="Direct link to Returns" title="Direct link to Returns" translate=no>​</a></h3>
+<p><strong><code>return_parsed=True</code></strong> (default) — a tidy <code>polars.DataFrame</code> with the columns below; pass <code>return_as_pandas=True</code> for a <code>pandas.DataFrame</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>col_name<th>type<th>description<tbody><tr><td><code>season_id</code><td>integer<td>STANDINGS season id (a separate small key space: 35 = 2026-27, 1 = 2016-17, 24 = 1993-94); NOT the results season id.<tr><td><code>season_end_year</code><td>integer<td>Season END year (2026 = 2025-26), read from the season label 'YYYY-YYYY m. sezonas'.<tr><td><code>table</code><td>character<td>Which table the row comes from: full (overall), home, away or final (the final ranking).<tr><td><code>position</code><td>integer<td>Rank in the table (Poz.); in the final table the final place.<tr><td><code>team_slug</code><td>character<td>Team slug (key space: lkl.lt clubs; the {slug} of <a href=https://lkl.lt/komandos/%7Bslug%7D target=_blank rel="noopener noreferrer" class="">https://lkl.lt/komandos/{slug}</a>; one per club, stable across renamings: 'rytas' for Lietuvos Rytas / Rytas). The results and standings rows carry only this; the game page teams_info gives slug + id.<tr><td><code>team_name</code><td>character<td>Team name as printed for that season ('Lietuvos Rytas' in 2007-08).<tr><td><code>played</code><td>integer<td>Games played (Rng., rungtynės); null in the final table.<tr><td><code>won</code><td>integer<td>Wins (Per., pergalės); null in the final table.<tr><td><code>lost</code><td>integer<td>Losses (Pr., pralaimėjimai); null in the final table.<tr><td><code>win_pct</code><td>numeric<td>Win percentage 0-100 (Laim.%); null in the home, away and final tables and when the site prints '-' (2007-08).<tr><td><code>streak</code><td>integer<td>Current streak (Serija) as a signed integer: 27 = 27 wins in a row, -1 = one loss. Null outside the full table.<tr><td><code>points_for_avg</code><td>numeric<td>Points scored per game (first number of Tšk. vid.); null in the final table.<tr><td><code>points_against_avg</code><td>numeric<td>Points allowed per game (second number of Tšk. vid.); null in the final table.<tr><td><code>last5</code><td>character<td>Last five results (Paskutinės 5) as W / L letters in the order the page renders them, left to right; fewer than five early in a season; null in the final table.</table>
+<p><strong><code>return_parsed=False</code></strong> — the raw body (<code>dict</code>): the JSON of a game route, the game page record, or the merged results / standings record, plus <code>_request</code> (the game id, team ids and slug -> player id map, or the season asked for).</p>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_standings-raises>Raises<a href=#lkl_standings-raises class=hash-link aria-label="Direct link to Raises" title="Direct link to Raises" translate=no>​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Exception<th>Description<tbody><tr><td><code>NoDataError</code><td>The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).<tr><td><code>AssetFetchError</code><td>The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).<tr><td><code>ValueError</code><td>The host answered 400 / 422 -- the request is wrong; retrying cannot help.</table>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=lkl_standings-example>Example<a href=#lkl_standings-example class=hash-link aria-label="Direct link to Example" title="Direct link to Example" translate=no>​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style=--prism-color:#0e1626;--prism-background-color:#ffffff><div class=codeBlockContent_QJqH><pre tabindex=0 class="prism-code language-python codeBlock_bY9V thin-scrollbar" style=color:#0e1626;background-color:#ffffff><code class=codeBlockLines_e6Vv><div class=token-line style=color:#0e1626><span class="token plain">lkl_standings</span><span class="token punctuation" style=color:#4d5b74>(</span><span class="token plain">season</span><span class="token operator" style=color:#4d5b74>=</span><span class="token number" style=color:#be123c>2026</span><span class="token punctuation" style=color:#4d5b74>)</span><br/></div></code></pre></div></div>
+<p><em>Last validated n/a.</em></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href=https://github.com/sportsdataverse/sportsdataverse-py/edit/main/docs/docs/lkl/reference/lkl.md target=_blank rel="noopener noreferrer" class=theme-edit-this-page><svg fill=currentColor height=20 width=20 viewBox="0 0 40 40" class=iconEdit_Z9Sw aria-hidden=true><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"/></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href=/docs/lkl/><div class=pagination-nav__sublabel>Previous</div><div class=pagination-nav__label>LKL</div></a><a class="pagination-nav__link pagination-nav__link--next" href=/docs/tbf/><div class=pagination-nav__sublabel>Next</div><div class=pagination-nav__label>TBF</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href=#lkl_game_info class="table-of-contents__link toc-highlight">lkl_game_info</a><li><a href=#lkl_game_players class="table-of-contents__link toc-highlight">lkl_game_players</a><li><a href=#lkl_player_box class="table-of-contents__link toc-highlight">lkl_player_box</a><li><a href=#lkl_team_box class="table-of-contents__link toc-highlight">lkl_team_box</a><li><a href=#lkl_period_scores class="table-of-contents__link toc-highlight">lkl_period_scores</a><li><a href=#lkl_summary class="table-of-contents__link toc-highlight">lkl_summary</a><li><a href=#lkl_game_score class="table-of-contents__link toc-highlight">lkl_game_score</a><li><a href=#lkl_game_stats class="table-of-contents__link toc-highlight">lkl_game_stats</a><li><a href=#lkl_lead_chart class="table-of-contents__link toc-highlight">lkl_lead_chart</a><li><a href=#lkl_leaders class="table-of-contents__link toc-highlight">lkl_leaders</a><li><a href=#lkl_pbp class="table-of-contents__link toc-highlight">lkl_pbp</a><li><a href=#lkl_shots class="table-of-contents__link toc-highlight">lkl_shots</a><li><a href=#lkl_results class="table-of-contents__link toc-highlight">lkl_results</a><li><a href=#lkl_standings class="table-of-contents__link toc-highlight">lkl_standings</a></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Docs</div><ul class="footer__items clean-list"><li class=footer__item><a class=footer__link-item href=/docs/intro>Getting started</a><li class=footer__item><a class=footer__link-item href=/>Leagues</a><li class=footer__item><a class=footer__link-item href=/docs/category/tutorials>Tutorials</a><li class=footer__item><a class=footer__link-item href=/CHANGELOG>Changelog</a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Community</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://github.com/sportsdataverse/sportsdataverse-py target=_blank rel="noopener noreferrer" class=footer__link-item>GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://bsky.app/profile/sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>Bluesky<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://twitter.com/sportsdataverse target=_blank rel="noopener noreferrer" class=footer__link-item>X<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>SportsDataverse</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sportsdataverse.org<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sdvplot.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sdvplot<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://r.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>R packages<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class=footer__link-item>Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="footer__bottom text--center"><div class=footer__copyright>Copyright © 2026 <strong>sportsdataverse-py</strong>, developed by <a href=https://twitter.com/saiemgilani>Saiem Gilani</a>, part of the <a href=https://sportsdataverse.org>SportsDataverse</a>.</div></div></div></footer></div></body>

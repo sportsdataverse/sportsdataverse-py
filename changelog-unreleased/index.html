@@ -1,0 +1,908 @@
+<!doctype html><html lang=en dir=ltr class="mdx-wrapper mdx-page plugin-pages plugin-id-default" data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.1"><title data-rh=true>Unreleased changes | sdv-py</title><meta data-rh=true name=viewport content="width=device-width, initial-scale=1.0"/><meta data-rh=true name=twitter:card content=summary_large_image /><meta data-rh=true property=og:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true name=twitter:image content=https://py.sportsdataverse.org/img/Sportsdataverse_gh.png /><meta data-rh=true property=og:url content=https://py.sportsdataverse.org/changelog-unreleased /><meta data-rh=true property=og:locale content=en /><meta data-rh=true name=docusaurus_locale content=en /><meta data-rh=true name=docusaurus_tag content=default /><meta data-rh=true name=docsearch:language content=en /><meta data-rh=true name=docsearch:docusaurus_tag content=default /><meta data-rh=true property=og:type content=website /><meta data-rh=true property=og:site_name content="sdv-py | SportsDataverse"/><meta data-rh=true property=og:image:width content=1080 /><meta data-rh=true property=og:image:height content=540 /><meta data-rh=true property=og:image:alt content=SportsDataverse /><meta data-rh=true name=twitter:site content=@sportsdataverse /><meta data-rh=true name=twitter:creator content=@saiemgilani /><meta data-rh=true name=twitter:image:alt content=SportsDataverse /><meta data-rh=true property=og:title content="Unreleased changes | sdv-py"/><meta data-rh=true name=description content="Merged to main since 0.1.5 and not yet released. Released versions are on the Changelog."/><meta data-rh=true property=og:description content="Merged to main since 0.1.5 and not yet released. Released versions are on the Changelog."/><link data-rh=true rel=icon href=/img/favicon.ico /><link data-rh=true rel=canonical href=https://py.sportsdataverse.org/changelog-unreleased /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/changelog-unreleased hreflang=en /><link data-rh=true rel=alternate href=https://py.sportsdataverse.org/changelog-unreleased hreflang=x-default /><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}},plausible.init()</script><link rel=preload href=/fonts/inter-latin-wght-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><link rel=preload href=/fonts/barlow-condensed-latin-700-normal.woff2 as=font type=font/woff2 crossorigin=anonymous><script src=https://plausible.io/js/pa-weWpHgIcVfaVUEgwwTBHX.js async></script><link rel=stylesheet href=/assets/css/styles.7d2f2015.css /><script src=/assets/js/runtime~main.4466848f.js defer></script><script src=/assets/js/main.d707ba24.js defer></script></head><body><svg style="display: none;"><defs>
+<symbol id=theme-svg-external-link viewBox="0 0 24 24"><path fill=currentColor d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-a54")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id=__docusaurus><div role=region aria-label="Skip to main content"><a class=skipToContent_fXgn href=#__docusaurus_skipToContent_fallback>Skip to main content</a></div><nav aria-label=Main class="theme-layout-navbar navbar navbar--fixed-top navbarHideable_m1mJ navbar--dark"><div class=navbar__inner><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded=false class="navbar__toggle clean-btn" type=button><svg width=30 height=30 viewBox="0 0 30 30" aria-hidden=true><path stroke=currentColor stroke-linecap=round stroke-miterlimit=10 stroke-width=2 d="M4 7h22M4 15h22M4 23h22"/></svg></button><a class=navbar__brand href=/><div class=navbar__logo><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/logo.png alt="sportsdataverse-py Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/></div><b class="navbar__title text--truncate">sdv-py</b></a><a class="navbar__item navbar__link" href=/docs/intro>Docs</a><a class="navbar__item navbar__link" href=/CHANGELOG>News</a><div class="navbar__item dropdown dropdown--hoverable"><a href=# aria-haspopup=true aria-expanded=false role=button class="navbar__link sdv-packages-dropdown">SDV</a><ul class=dropdown__menu><li><a href=https://sportsdataverse.org target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">SportsDataverse<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportsdataverse.org/cheatsheets/sportsdataverse-py.pdf target=_self rel="noopener noreferrer" class=dropdown__link>Cheat Sheet (PDF)<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class="dropdown__link sdv-section-header">Python Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://py.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-py<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportypy.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportypy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://collegebaseball.readthedocs.io/en/latest/index.html target=_self rel="noopener noreferrer" class=dropdown__link>collegebaseball<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslpy target=_self rel="noopener noreferrer" class=dropdown__link>nwslpy<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">R Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://r.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse-R<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sdvplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbfastR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbfastR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://hoopR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>hoopR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://wehoop.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>wehoop<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://fastRhockey.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>fastRhockey<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://BillPetti.github.io/baseballr/ target=_self rel="noopener noreferrer" class=dropdown__link>baseballr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://sportyR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportyR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://abhiamishra.github.io/ggshakeR/ target=_self rel="noopener noreferrer" class=dropdown__link>ggshakeR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/Dato-Futbol/soccerAnimate target=_self rel="noopener noreferrer" class=dropdown__link>soccerAnimate<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://oddsapiR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>oddsapiR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://camdenk.github.io/mlbplotR/ target=_self rel="noopener noreferrer" class=dropdown__link>mlbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbplotR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbplotR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfb4th.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfb4th<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://cfbseedR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>cfbseedR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/sportsdataverse/softballR/ target=_self rel="noopener noreferrer" class=dropdown__link>softballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nwslR/nwslR/ target=_self rel="noopener noreferrer" class=dropdown__link>nwslR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://usfootballR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>usfootballR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://recruitR.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>recruitR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://puntalytics.github.io/puntr/ target=_self rel="noopener noreferrer" class=dropdown__link>puntr<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://jaseziv.github.io/chessR/ target=_self rel="noopener noreferrer" class=dropdown__link>chessR<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_blank rel="noopener noreferrer" class="dropdown__link sdv-section-header">Node.js Packages<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://js.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sportsdataverse.js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://plot.sportsdataverse.org/ target=_self rel="noopener noreferrer" class=dropdown__link>sdvplot-js<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li><a href=https://github.com/nntrn/nfl-nerd/ target=_self rel="noopener noreferrer" class=dropdown__link>nfl-nerd<svg width=12 height=12 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a class=navbar__link aria-haspopup=true aria-expanded=false role=button href=/docs/intro>main (latest)</a><ul class=dropdown__menu><li><a class=dropdown__link href=/docs/intro>main (latest)</a><li><a class=dropdown__link href=/docs/0.1.5/intro>0.1.5</a><li><a class=dropdown__link href=/docs/0.0.75/intro>0.0.75</a><li><a class=dropdown__link href=/docs/0.0.74/intro>0.0.74</a></ul></div><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><a href=https://github.com/sportsdataverse/sportsdataverse-py/ target=_blank rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS darkNavbarColorModeToggle_X3D1" type=button disabled title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill=currentColor d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill=currentColor d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 aria-hidden=true class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill=currentColor d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"/></svg></button></div><div class=navbarSearchContainer_Bca1><div class="navbar__search searchBarContainer_NW3z" dir=ltr><svg aria-hidden=true class=searchIcon_T3tP focusable=false viewBox="0 0 16 16"><path fill=currentColor d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"/></svg><input placeholder=Search aria-label=Search class="navbar__search-input searchInput_YFbd" value="" /><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role=presentation class=navbar-sidebar__backdrop></div></nav><div id=__docusaurus_skipToContent_fallback class="theme-layout-main main-wrapper mainWrapper_z2l0"><main class="container container--fluid margin-vert--lg"><div class="row mdxPageWrapper_j9I6"><div class="col col--8"><article><header><h1>Unreleased changes</h1></header>
+<p>Merged to <code>main</code> since 0.1.5 and not yet released. Released versions are on the <a class="" href=/CHANGELOG>Changelog</a>.</p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=unreleased>Unreleased<a href=#unreleased class=hash-link aria-label="Direct link to Unreleased" title="Direct link to Unreleased" translate=no>​</a></h2>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=breaking-changes>Breaking changes<a href=#breaking-changes class=hash-link aria-label="Direct link to Breaking changes" title="Direct link to Breaking changes" translate=no>​</a></h3>
+<ul>
+<li class=""><strong>247Sports site pages:</strong> <code>primary_color</code>, <code>jersey</code> and <code>postal_code</code> are String (were Int64 when every value
+was digits, so event <code>"000000"</code> was <code>0</code>); a (0, 0) <code>latitude</code> / <code>longitude</code> pair, 247's no-location sentinel, is null. (#928)</li>
+<li class=""><strong><code>fox_nfl_pbp</code> / <code>fox_cfb_pbp</code>:</strong> <code>play_team</code> is now the club code of the drive group the play is
+filed under (e.g. <code>"NYG"</code>); it held the name of the player Fox credits the play to, which moves to
+the new <code>play_player</code> column. (#922)</li>
+<li class=""><strong><code>ncaa_{mbb,wbb}_play_by_play</code> / <code>ncaa_{mbb,wbb}_box_scores</code></strong> raise <code>AssetFetchError</code> when a fetch fails (a ban, an
+exhausted pool, an uncleared challenge) instead of dropping that game, which made a ban read as a smaller season;
+<code>errors="skip"</code> keeps going and adds a <code>scrape_status</code> column with one row per dropped game saying why. (#924)</li>
+<li class=""><strong><code>nfl.update_config(cache_mode=...)</code></strong> raises <code>ValueError</code> for a mode other than <code>"memory"</code>,
+<code>"filesystem"</code> or <code>"off"</code> (an unknown mode used to switch caching off silently).</li>
+<li class=""><strong><code>nfl_players_crosswalk()</code></strong> raises <code>AssetFetchError</code> when the nflverse players master cannot be
+fetched; it used to return a zero-row frame ("never a raise"), which nulled every id in a join. An
+absent asset still gives zero rows, and a failed DynastyProcess load now warns (yahoo/cbs ids null).</li>
+<li class=""><strong>Bart Torvik:</strong> <code>torvik_player_stats()</code> / <code>parse_torvik_player_stats()</code> return <code>number</code> as String (was Int64);
+the 8 <code>"00"</code> jerseys of 2025 no longer merge into the 291 <code>0</code> rows. (#928)</li>
+<li class=""><strong>Basketball-Reference:</strong> <code>bref_team_roster()</code> returns <code>number</code> as String (was Float64), so Robert Parish's
+<code>"00"</code> is no longer <code>0.0</code>; any other zero-padded column also stays String. (#928)</li>
+<li class=""><strong>ESPN game rosters:</strong> <code>espn_&lt;lg>_game_rosters(raw=True)</code> (mbb, wbb, nba, wnba, nfl, nhl, cfb) returns the Core v2 competitors payload (a dict); <code>raw=</code> was accepted and ignored, so it returned the parsed frame. (#878)</li>
+<li class=""><strong>ESPN schedules:</strong> the six copies that sent <code>seasonType</code> now send <code>seasontype</code>. ESPN ignored the camelCase key, so <code>season_type=</code> with <code>dates=YYYY&week=N</code> (NFL, NHL, WNBA, NBA, MBB, WBB) never filtered; it does now, and those calls return different rows. (#855)</li>
+<li class=""><strong>KenPom:</strong> the jersey column is String on every page and renamed to <code>jersey</code>: <code>team</code> / <code>team_players_expanded</code>
+<code>player_table*</code> <code>column_0</code> -> <code>jersey</code> (was Float64) and <code>box</code> <code>table_*</code> <code>column_0_rk</code> -> <code>jersey</code> (was Int64). A season of pages stacks
+without a String / Float64 clash, and no jersey reads <code>"2.0"</code>. (#928)</li>
+<li class=""><strong>NBA / WNBA / MBB / WBB pbp:</strong> <code>espn_&lt;lg>_pbp</code> plays keep the names <code>coordinate.x</code> /
+<code>coordinate.y</code> but change their meaning and dtype. They were ESPN's raw feet (hoop at (25, 0));
+they are now the hoopR / wehoop full-court frame the published files use (<code>x = y - 41.75</code>,
+<code>y = x - 25</code>, both negated on home-team plays), always Float64. ESPN's values move to the new
+<code>coordinate.x.raw</code> / <code>coordinate.y.raw</code> (<code>coordinate_x_raw</code> / <code>coordinate_y_raw</code> once
+snake-cased), except on the free throws hoopR / wehoop's "Free Throw" match finds (NBA / WNBA),
+where the raw pair holds the pinned (25, 13.75), as in the published files. ESPN's
+missing-location sentinel reads about +-2.1e8 after the transform; filter on
+<code>coordinate_x_raw > nba_game_page.COORD_SENTINEL</code>. The release converters
+(<code>helper_&lt;lg>_play_by_play</code>) rebuild from the raw pair, so a processed payload converts once.</li>
+<li class=""><strong>NFL, CFB:</strong> processed plays keep their documented Float64 for the EP/WP family, <code>first_down_prob</code>, <code>prob_2pt</code> and
+<code>drive_start</code> (they were Float32 when a model scored), with no value change, and NFL <code>teamParticipants</code> has one struct
+field order; <code>create_box_score(plays_frame)</code> still reproduces <code>advBoxScore</code> exactly. (#797)</li>
+<li class=""><strong>NFL:</strong> <code>sportsdataverse.nfl.model_vars.qbr_vars</code> is in the QBR trainer's order (<code>qbr_epa</code>, <code>pass_epa</code>, <code>rush_epa</code>,
+<code>sack_epa</code>, <code>pen_epa</code>, <code>spread</code>), and <code>nfl/models/qbr_model.ubj</code> is re-saved with those feature names (same trees), so
+a frame in the old column order raises instead of scoring permuted inputs. (#795)</li>
+<li class=""><strong>NFL:</strong> the current season flips on the Wednesday after Labor Day and week 1 starts on the Thursday after it (nflreadr's
+rules; week read one high in 2015-16, 2020-22, 2026-27); <code>nfl_schedule.most_recent_nfl_season</code> and <code>nfl_schedule.get_current_week</code>
+are that one rule, so from September 1 to that Wednesday they give the previous season (week 22), not the new one. (#791)</li>
+<li class=""><strong>polars 2 required.</strong> The runtime pin is now <code>polars>=2.0,&lt;3</code> (conda recipe mirrored); polars 1.x is no
+longer supported, so code may use 2.x-only API such as the <code>bin_*</code> replacements for <code>cut</code>/<code>qcut</code>. The lock
+already resolved polars 2.0 on every supported Python, so nothing tested 1.x.</li>
+<li class=""><strong>PWHL:</strong> <code>pwhl_player_box(game_id)</code> returns <code>{"skaters": DataFrame, "goalies": DataFrame}</code>, as
+fastRhockey's <code>pwhl_player_box</code> does and as the <code>fastRhockey-pwhl-raw</code> producer reads it. It used
+to return a single (always empty) DataFrame.</li>
+<li class=""><strong>stats.ncaa.org fetch layer:</strong> a real 404 raises <code>NoDataError</code> after one request; a banned or exhausted proxy pool,
+an uncleared bm-verify challenge or the Terms gate raises <code>AssetFetchError</code> naming which. Both were <code>RuntimeError</code>;
+catch <code>AssetFetchError</code> instead (a missing proxy configuration is still <code>RuntimeError</code>). (#920)</li>
+</ul>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=added>Added<a href=#added class=hash-link aria-label="Direct link to Added" title="Direct link to Added" translate=no>​</a></h3>
+<ul>
+<li class=""><strong><code>fox_nfl_pbp</code> / <code>fox_cfb_pbp</code>:</strong> new <code>play_player</code> column, the player Fox credits the play to. (#922)</li>
+<li class=""><strong>Basketball crosswalks:</strong> <code>genius_game_crosswalk</code>, <code>genius_team_crosswalk</code>, <code>ibba_segev_game_crosswalk</code> and
+<code>pleague_team_crosswalk</code> (exported from the genius, ibba and plg homes) map provider ids onto the Genius,
+Segev and Preciser ids by shared keys, never by name. (#862)</li>
+<li class=""><strong>Basketball:</strong> nine more FIBA competition families, each family id verified against the live GDAP API: <code>fiba_eurobasket_*</code>, <code>fiba_americup_*</code>, <code>fiba_asiacup_*</code>, <code>fiba_icup_*</code> (Intercontinental Cup), <code>fiba_bcla_*</code> (BCL Americas), and the women's <code>fiba_ecw_*</code> (EuroCup Women), <code>fiba_wamericup_*</code>, <code>fiba_wasiacup_*</code> and <code>fiba_wafrobasket_*</code>. (#864)</li>
+<li class=""><strong>Basketball:</strong> per-competition functions minted from <code>tools/codegen/basketball_competitions.yaml</code>: <code>fiba_wc_*</code>, <code>fiba_oly_*</code>, <code>fiba_bcl_*</code> and
+more (FIBA), <code>wbbl_*</code>, <code>bal_*</code>, <code>lfb_*</code> and more (Genius), <code>lnb_*</code>, <code>nbl1_*</code>, <code>lpb_*</code> and more (Atrium). Each takes an END-year
+<code>season</code>; <code>comp=</code> (FIBA), <code>comp_id=</code> (Genius) or <code>season_id=</code> / <code>competition_id=</code> (Atrium) override it. (#862)</li>
+<li class=""><strong>CFB / NFL:</strong> the advanced box's <code>drives</code> rows carry <code>avg_start_ep</code>, the team's drive starts in
+expected points: each drive valued at its first scrimmage snap's <code>start.yardsToEndzone</code> on the
+league's bundled field-position curve (<code>cfb_field_position_ep</code> / <code>nfl_field_position_ep</code>), averaged
+over the team's drives. It is Game on Paper's Drives-table EP row and Paper Index field-position
+input, moved into the package. On a window of a game (<code>create_box_score</code> on a slice of
+<code>plays_frame</code>, as Game on Paper's quarter and half boxes do) each drive with a snap in the window
+is valued at its first snap of the whole game, so a drive carried over from the previous quarter
+keeps its real start. Only scrimmage snaps count (Game on Paper's definition), so a drive with no
+scrimmage snap is not averaged. The <code>espn_{cfb,nfl}_adv_drives</code> releases pick it up on their next rebuild.</li>
+<li class=""><strong>CFB / NFL:</strong> the advanced box's team rows carry <code>yards_per_dropback</code>, sack-inclusive yards per
+dropback: <code>(pass_yards + sack_yards) / passes</code>, over the same dropbacks as <code>yards_per_pass</code>, which
+is unchanged and still counts a sack as 0 yards. It is the basis of SDV's <code>yardsdropback</code>
+percentiles, so Game on Paper's Binion box can rank the number it shows against them. The
+<code>espn_{cfb,nfl}_adv_team</code> (and CFB <code>adv_team_gamelog</code>) releases pick it up on their next rebuild. (#740)</li>
+<li class=""><strong>CFB / NFL:</strong> the advanced box's turnover rows carry <code>passes_defended</code>, the opponent's ESPN box
+passes defended against the team's throws (CFB adds <code>Int</code>; ESPN's college PD excludes it), null
+where the box has none. (#737)</li>
+<li class=""><strong>CFB CBS ids:</strong> the CBS scoreboard resolver reads FCS and postseason pages for the id map, a new
+offline <code>_match_cbs_card</code> joins a season's stored CBS cards to ESPN games (either home/away
+order, within three days), and the ESPN -> CBS team map gains five FCS schools (325 teams). (#815)</li>
+<li class=""><strong>CFB play-by-play:</strong> <code>errors.PlayOrderWarning</code>, warned when the processed plays step back a period (the row
+order or ESPN's period label is wrong there; 401628439 files an overtime touchdown as period 2). (#837)</li>
+<li class=""><strong>CFB:</strong> an <code>overUnderAvailable</code> play column and payload key say whether <code>overUnder</code> is a market total or the 55.5
+default (a line with a spread and no total). <code>odds_override</code> accepts it (a missing key is unknown: a null flag), so a
+rebuild keeps it and warns <code>DefaultOddsWarning</code> again instead of relabelling the default as injected. (#895)</li>
+<li class=""><strong>CFB:</strong> every bundled model card states its holdout status: <code>qbr_model</code> names its disjoint holdout
+(2026 regular season, weeks 1-4), <code>wp_ot_reach</code> already did, and the other nine say <code>in_sample: true</code>
+with the reason (fit on every season they score). <code>fg_model</code> / <code>two_pt_model</code> / <code>xpass_model</code> now
+record the rows actually fitted (42,617 / 1,628 / 1,902,481) instead of the training frame's height.
+Each booster now ships <code>&lt;model>.importance.json</code> (gain / cover / split counts read off the booster by
+<code>tools/cfb_model_importance.py</code>), and <code>cfb_cp_model_air_yards</code> gains the card it shipped without.
+No model bytes changed.</li>
+<li class=""><strong>Cricket:</strong> <code>cricket_win_probability</code> selects the ODI fielding-restriction regime from the match date
+(<code>cricket_match_state</code> now carries <code>match_date</code>; <code>cricket_model_constants.ODI_REGIMES</code> / <code>cricket_regime</code>:
+pre-2005, 2005 powerplays, 2011 window, 2012 two new balls, 2015+) and applies a regime whole -- its own
+resource grid and <code>REGIME_CONSTANTS</code> par/sigma -- or falls back to the pooled 2002-2026 fit (a grid with
+fewer than 100 cells of 30+ states, or no fitted constants: the 13-month 2011 window). Output gains <code>regime</code>.</li>
+<li class=""><strong>Crosswalk history harvest:</strong> private <code>sportsdataverse._crosswalk_history</code> captures Fox, Yahoo and CBS raw game
+listings and per-game box payloads into the <code>*-alt-raw</code> repos: resumable, atomic, season-checked, and paced by
+<code>XWALK_RPS</code> / <code>XWALK_&lt;PROVIDER>_RPS</code> only; a 403 or 429 stops the run. (#805)</li>
+<li class=""><strong>Czech Extraliga:</strong> 9 <code>elh_*</code> wrappers in <code>sportsdataverse.hockey.elh</code> (play-by-play, shots,
+events, scoreboard), plus <code>elh_game_ids</code>. (#826)</li>
+<li class=""><strong>Dependencies:</strong> <code>pyyaml</code> joins the <code>all</code> extra. (#752)</li>
+<li class=""><strong>Errors:</strong> <code>sportsdataverse.errors.SchemaDriftWarning</code>. The NHL api-web / EDGE / Stats REST / Records, MLB Stats API,
+stats.nba.com and ESPN parsers still return zero rows for a payload whose shape they do not recognise, but now warn
+<code>SchemaDriftWarning</code> naming the parser and payload path, so an upstream schema change no longer reads as "no data".
+<code>warnings.filterwarnings("error", category=SchemaDriftWarning)</code> turns it into a failure. (A-L60)</li>
+<li class=""><strong>ESPN Core v2 lists:</strong> every wrapper <code>parse_items</code> parses (<code>athletes_index</code>, <code>venues</code>, <code>season_athletes</code>, ...) returns
+two Int64 page-envelope columns, <code>count</code> (items across every page) and <code>page_count</code>, polars and pandas alike, so one
+page of several shows in the frame; null where the payload has no envelope (<code>athlete_statisticslog</code>).</li>
+<li class=""><strong>ESPN international basketball wrappers:</strong> <code>leagues.yaml</code> registers ten more ESPN basketball leagues, so codegen
+emits the universal <code>espn_&lt;prefix>_*</code> family for each: <code>nbl</code> (Australian NBL), <code>fiba</code> (FIBA events, e.g. the
+2026 Women's World Cup), <code>olympics_mbk</code> / <code>olympics_wbk</code> (Olympic men's / women's basketball), and the NBA Summer
+League sites <code>nbasl_lv</code>, <code>nbasl_ut</code>, <code>nbasl_ca</code>, <code>nbasl_sac</code>, <code>nbasl_orl</code>, <code>nbasl_gs</code>. Every slug was checked against
+ESPN's live teams and scoreboard endpoints. ESPN's <code>nbl</code> carries box scores but no play-by-play for 2025-26 (the
+NBL moved stats provider); that gap is filled by the NBL Rosetta family, not by these wrappers.</li>
+<li class=""><strong>eSports hokejovyzapis:</strong> 41 wrappers over the DEL (12), ICE Hockey League (12), EIHL (9) and
+Metal Ligaen (8) feeds, in <code>sportsdataverse.hockey.{del_,icehl,eihl,metal}</code>. (#826)</li>
+<li class=""><strong>Hockey:</strong> <code>khl_club_crosswalk</code> (KHL club id &lt;-> per-tournament team-season id, read from a covering set of game headers),
+<code>khl_club_crosswalk_from_frames</code>, and <code>ha_player_crosswalk</code> (HockeyAllsvenskan player id == SHL isa id, plus the SHL athlete uuid). (#865)</li>
+<li class=""><strong>Hockey:</strong> <code>sportsdataverse.hockey.sihf</code> wraps the keyless Swiss Ice Hockey Federation statistics
+API (<code>data.sihf.ch</code>), covering every SIHF league (National League, Swiss League, MyHockey
+League, the amateur, junior and women's leagues). There are eleven <code>sihf_*</code> wrappers. Four return
+season tables: <code>sihf_results</code>, <code>sihf_standings</code>, <code>sihf_player_stats</code> and <code>sihf_goalie_stats</code>.
+<code>sihf_phases</code> lists the <code>phase_id</code> values those four take for a league and season (the ids
+differ by league, season and table), with each phase's name and game count.
+Six read one game: <code>sihf_pbp</code> (goals, penalties, goaltender changes, revoked goals and
+shootout attempts), <code>sihf_game_info</code>, <code>sihf_game_player_stats</code>, <code>sihf_game_goalie_stats</code>,
+<code>sihf_game_team_stats</code> and <code>sihf_game_lineups</code>. SIHF answers an unknown season, league or
+phase with another one (<code>Season=1890</code> returns the current season), and only the body's
+filter echo shows it. The runtime compares that echo with the request and raises
+<code>NoDataError</code> when they differ, so a wrong season is never returned under the requested label.
+<code>sihf_standings</code> counts every game by default (<code>venue="All"</code>; asked nothing, SIHF answers the
+away-games table), and a table body with fewer rows than it announces raises <code>AssetFetchError</code>.</li>
+<li class=""><strong>HockeyAllsvenskan:</strong> 11 <code>ha_*</code> wrappers in <code>sportsdataverse.hockey.ha</code> (schedule, play-by-play,
+standings, skater/goalie/team stats, leaders, players). (#826)</li>
+<li class=""><strong>International basketball:</strong> 530 wrappers over 24 providers (28 flat-API stems), each family in its own
+<code>sportsdataverse.basketball.&lt;home></code> package with parsers and a throttled runtime: FIBA (<code>fiba_gdap</code>,
+<code>fiba_gamepage</code>), Genius Sports LiveStats, Sportradar Atrium, NBL Australia, FEB, BBL/DBBL (<code>scb</code>), Lega Basket,
+ACB, IBBA, KZS, LKL, ABA League, BNXT (<code>sportpress</code>), Basketligaen (<code>sportality</code>), VTB, W League, KBL, B.LEAGUE,
+CBA, TBF, CEBL, TPBL, P. LEAGUE+ and EASL. Payloads are fetched from public sources and are not redistributed
+as release assets; each family's docstring notes carry its terms-of-use flag.</li>
+<li class=""><strong>KHL:</strong> 23 wrappers in <code>sportsdataverse.hockey.khl</code>: 14 <code>khl_*</code> over the khl.ru REST and 9
+<code>khl_webcaster_*</code> over the webcaster API. (#826)</li>
+<li class=""><strong>Ligue Magnus:</strong> 11 <code>magnus_*</code> wrappers in <code>sportsdataverse.hockey.magnus</code> (competitions, schedule,
+standings, game sheet, play-by-play, lineups, shootout). (#826)</li>
+<li class=""><strong>Liiga:</strong> 23 <code>liiga_*</code> wrappers in <code>sportsdataverse.hockey.liiga</code> (schedule, box scores, shot map,
+standings, team and player stats). (#826)</li>
+<li class=""><strong>MLB:</strong> <code>load_mlb_schedule(seasons)</code> reads the <code>mlb_schedules</code> release (statsapi schedule, every game type,
+1988+).</li>
+<li class=""><strong>MLB:</strong> <code>load_mlb_statcast(seasons)</code> reads the <code>mlb_statcast</code> release (Baseball Savant pitch-level data, one
+parquet per season, 2015+; spring training and exhibition pitches included). The <code>on_1b</code> / <code>on_2b</code> / <code>on_3b</code>
+runner ids are published as floats and cast to Int64 at the loader boundary.</li>
+<li class=""><strong>National League:</strong> 17 <code>nl_*</code> wrappers in <code>sportsdataverse.hockey.nl</code> (games, box scores, shots
+with xG, standings, player and team stats). (#826)</li>
+<li class=""><strong>NBA / WNBA / MBB / WBB crosswalks:</strong> <code>{nba,wnba,mbb,wbb}_schedule_crosswalk(fox=True)</code> fills
+<code>fox_game_id</code> (and the NBA/WNBA <code>fox_home_team_id</code> / <code>fox_away_team_id</code>) from Fox's per-date
+scoreboard, matched on US-Eastern date and teams in either home/away order (a late West-coast tip
+ESPN files at 23:59 ET matches Fox's 00:00 ET a day apart); <code>nba_crosswalks_from_archive</code> /
+<code>wnba_crosswalks_from_archive(fox_games=True)</code> fill them for any season Fox serves. <code>yahoo=True</code> on the
+WNBA / MBB / WBB team and schedule crosswalks fills <code>yahoo_team_id</code> (Yahoo's listing joined to ESPN
+by full name, short name, then nickname where the school names agree; unmatched Yahoo teams are logged) and
+<code>yahoo_game_id</code> = <code>{lg}.g.{YYYYMMDD ET}{home Yahoo id}</code>, checked against the ids Yahoo lists so a
+neutral-site game takes Yahoo's home side. Both legs are opt-in and fail-soft: any Fox or Yahoo failure logs a
+warning and leaves the columns null.</li>
+<li class=""><strong>NBA / WNBA crosswalks:</strong> <code>nba_crosswalks_from_archive</code> / <code>wnba_crosswalks_from_archive</code> take <code>fox=True</code>:
+<code>fox_team_id</code> by team name for any season, and the Fox player columns for the current season
+only (Fox rosters are today's). A failed Fox fetch warns and leaves them null. (#786)</li>
+<li class=""><strong>NBA / WNBA:</strong> <code>nba_crosswalks_from_archive()</code> / <code>wnba_crosswalks_from_archive()</code> build a past season's team, schedule
+and player crosswalks offline from the ESPN schedule and game-roster parquet plus the local stats box-score archive;
+the live builders only reach the current season.</li>
+<li class=""><strong>NBA:</strong> <code>load_nba_stats_draft(seasons)</code> reads the <code>nba_stats_draft</code> release; <code>seasons</code> is the draft year. (#780)</li>
+<li class=""><strong>NBA:</strong> loaders for the multi-file <code>nba_stats</code> releases: <code>load_nba_stats_synergy</code>, <code>_hustle_player</code> / <code>_team</code>,
+<code>_matchups</code> / <code>_matchups_rollup</code> and five <code>_draft_combine_*</code> tables. Each unions a season's files, stamps
+<code>season_type</code> / <code>per_mode</code> from the file name where rows lack them, and takes START-year <code>seasons</code>. (#780)</li>
+<li class=""><strong>NBA:</strong> the team and schedule crosswalks now compute <code>yahoo_team_id</code> (<code>nba.t.{espn id}</code>) and <code>yahoo_game_id</code>
+(<code>nba.g.{YYYYMMDD ET}{home id}</code>) from 2014 on, where they were null.</li>
+<li class=""><strong>NCAA:</strong> <code>scrape.ncaa.espn_player_xwalk</code> maps NCAA roster player ids to ESPN athlete ids per
+(season, ESPN team) for MBB, WBB and MFB, in four tiers that leave ties unmatched; the <code>-raw</code>
+repos run it as stage 07. (#813)</li>
+<li class=""><strong>SHL:</strong> 27 <code>shl_*</code> wrappers in <code>sportsdataverse.hockey.shl</code>, plus <code>shl_ssgt_uuid</code> and
+<code>shl_player_crosswalk</code>. (#826)</li>
+<li class=""><strong>SIHF:</strong> 22 more <code>sihf_*</code> table wrappers (team, skater and goalie goals, shots, special teams,
+penalties, shootouts, faceoffs, time on ice, attendance), 33 in the family. (#826)</li>
+<li class=""><strong>Validation:</strong> <code>pbp_invariants</code> checks basketball clock seconds: <code>end &lt;= start</code> on every
+<code>*_seconds_remaining</code> pair, and <code>end</code> equals the next play's <code>start</code> within a period. (#841)</li>
+<li class=""><strong>Validation:</strong> <code>pbp_invariants</code> holds a period's last basketball play to the period's 0:00
+(<code>seconds.&lt;scope>_period_last_row_ends_at_zero</code>), so a producer that clamps <code>end</code> to
+<code>min(end, start)</code> no longer passes.</li>
+<li class=""><strong>VHL:</strong> 13 <code>vhl_*</code> wrappers in <code>sportsdataverse.hockey.vhl</code> (schedule, game report, play-by-play,
+standings, skater/goalie stats, players, rosters), plus <code>vhl_tn</code>. (#826)</li>
+<li class=""><strong>WNBA crosswalks:</strong> <code>wnba_crosswalks_from_archive(..., yahoo=True)</code> fills <code>yahoo_team_*</code> and
+<code>yahoo_game_id</code> for a past season through the live builders' Yahoo code; a failed Yahoo fetch
+leaves the columns null with a warning. (#803)</li>
+<li class=""><code>_crosswalk_alt.match_season(known_teams=)</code> takes fixed ESPN -> provider team pairs, and <code>known_teams("cbs", "cfb")</code> serves the CFB CBS resolver's static map. Date co-occurrence cannot separate teams that share every game date: an FCS team with one FBS opponent, or any team early in a season. With the map, CBS CFB games match 99% of ESPN's schedule in most seasons (2026 so far: 101 to 445 of 448), and matched players rise from about 7,500 to 10,000-12,300 a season.</li>
+<li class=""><code>_crosswalk_alt.with_alt_game_legs()</code> / <code>fill_game_legs()</code> fill a basketball schedule crosswalk's Fox game and team ids (and any null Yahoo game id) from the parsed <code>*-alt-data</code> history, only where the game id is null. On the published NBA crosswalks it fills 1,260 of 1,379 games for 2002 and 1,326 of 1,405 for 2025; the rest are preseason and All-Star games, which Fox does not list.</li>
+<li class=""><code>nba_crosswalks_from_archive()</code> / <code>wnba_crosswalks_from_archive()</code> take <code>alt_root=</code>: the
+<code>*-alt-data</code> checkout whose parsed Fox / Yahoo history fills the player crosswalk's
+<code>fox_athlete_id</code> / <code>fox_player</code> and <code>yahoo_player_id</code> / <code>yahoo_player_name</code> offline, only
+where they are null. The new private <code>sportsdataverse._crosswalk_alt</code> parses the stored
+Fox / Yahoo / CBS payloads into per-season <code>games</code> and <code>game_rosters</code> parquet
+(<code>python -m sportsdataverse._crosswalk_alt</code>) and matches them to ESPN: teams by
+(date, side) co-occurrence, games on (US-Eastern date, team pair), players inside each
+game and team, voted across the season.</li>
+<li class=""><code>ncaa_wbb_shot_locations</code> takes <code>season=</code>, resolved through <code>wbb_period_model</code> (halves through 2014-15, quarters from 2015-16) instead of binding quarters unconditionally; the default stays quarters because stats.ncaa.org shot locations only exist from 2019. (sdv-internal-refs <code>rules/wbb.yaml#wbb-2016-four-quarters</code>)</li>
+<li class=""><code>parse_soccer_scoreboard</code> (every <code>espn_&lt;league>_scoreboard</code>) carries the event's <code>season_type</code> and <code>season_slug</code>, and both it and the summary <code>header</code> frame carry a derived <code>tournament</code> column (<code>"apertura"</code> / <code>"clausura"</code>, null for single-tournament leagues) so Liga MX's two competitions per ESPN season id can be split. (sdv-internal-refs <code>rules/ligamx.yaml#ligamx-1996-two-short-tournaments-per-season</code>)</li>
+<li class=""><code>sportsdataverse.nba.nba_game_page</code> scores WNBA, men's and women's college basketball game pages as well as the NBA's: a <code>league</code> argument ("nba", "wnba", "mbb", "wbb"; <code>league_id="00"/"10"</code> still work), regulation periods read per game (the WNBA before 2006 and women's college before 2015-16 played halves, men's college always does), the men's and women's college in-game models and priors, no home-court advantage at a neutral site (prior source "neutral"), the men's college period clock, college free throws kept off the shot chart, and the women's college turnover eras (2009-12 from team turnovers; null before 2009, and in any season for a game whose two teams together show fewer than 5 turnovers, as 99 games of 2008-09 do). New warehouse-path and fetch-pair helpers for the sdv-db stage and the Game on Paper processor.</li>
+<li class=""><code>sportsdataverse.nba.nba_game_page</code>: per-play in-game win probability with deltas and an overtime regime, the pregame prior from the spread, shot coordinates in the court frame, team four factors / ratings / pace, and player TS% / usage (NBA 48-minute and WNBA 40-minute regulation via <code>league_id</code>; only <code>"00"</code> and <code>"10"</code> are scored, anything else raises <code>ValueError</code>), for the Game on Paper NBA game page and the sdv-db nightly stage. Team turnovers repair ESPN's duplicated pre-2013 team turnover (<code>team_turnovers == turnovers</code>, <code>total_turnovers == 2 * turnovers</code>) and its null 2018 <code>total_turnovers</code>, and the win probability settles to 1.0 / 0.0 on the "End Game" / "End Period" row of a decided game from the 4th period on. A null score on a play is carried forward before scoring, and <code>game_page_frames</code> returns the rate frames with their documented columns (zero rows) before both team box rows exist.</li>
+<li class="">NFL Fox event ids resolve through <code>sportsdataverse.nfl.fox_pbp.game_id._resolve_fox_game_id</code>, the Fox twin of the CBS week-scoreboard resolver (same arguments, light import), so sdv-db's nightly id map can fill <code>fox_event_id</code>; the football id map's team table now carries <code>fox_team_id</code>.</li>
+</ul>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=changed>Changed<a href=#changed class=hash-link aria-label="Direct link to Changed" title="Direct link to Changed" translate=no>​</a></h3>
+<ul>
+<li class=""><strong><code>download()</code>:</strong> a 403 from api.nfl.com, premium.pff.com, comp.uefa.com, kenpom.com or herhoopstats.com is no
+longer retried; a malformed URL (<code>MissingSchema</code>, <code>InvalidURL</code>, <code>InvalidHeader</code>) raises at once instead of
+retrying for ~50 s; the waits between retries share a 180 s budget per call, and a wait over 10 s logs a WARNING;
+a 2xx error envelope or JSON scalar is never written to the response cache.</li>
+<li class=""><strong>Basketball / hockey runtimes:</strong> in the 34 international basketball and European hockey getters a route's own data request's 204 / 205 returns <code>{}</code> (was <code>NoDataError</code> / <code>AssetFetchError</code>);
+a 204 on a lookup (token, session or key page, season list, finished-game or scope check) or mid-way through a multi-request answer is <code>AssetFetchError</code>;
+a 400 is <code>ValueError</code> in EASL, KBL, KZS and VTB Infobasket; IBBA's blank 200 is <code>AssetFetchError</code>. (#929)</li>
+<li class=""><strong>CFB play-by-play:</strong> the kickoff touchback and out-of-bounds spots (2012 kickoff rule) come from one
+catalogued table, <code>sportsdataverse.cfb.model_vars.TOUCHBACK_YARDLINE_BY_SEASON</code> (+ <code>cfb_touchback_yardline_expr</code>).
+A refactor: no output value changes. (#829)</li>
+<li class=""><strong>CFB validation:</strong> the box-score parity harness grades penalties (accepted fouls, committing team),
+fumbles lost (offense and defense) and net passing (total minus rushing) the way ESPN counts them, and
+adds a player-level check and a per-game integrity screen. (#764)</li>
+<li class=""><strong>CFB:</strong> the team summaries, percentiles, passing, receiving and advanced-box column descriptions
+match the republished definitions: run-stuff and opportunity rates over rushes, per-drive drive
+metrics, passer success over dropbacks, per-target receiving rates null for 2021-2024. (#741)</li>
+<li class=""><strong>Codegen:</strong> endpoint YAML can declare path/query transforms (<code>transform: {offset: -1}</code>, <code>{fn: ..., with: [...]}</code>),
+a per-route <code>getter:</code>, typed <code>choices:</code> (int / date, checked typed by the wrapper) and a family <code>no_r_fallback:</code> flag. (#865)</li>
+<li class=""><strong>Codegen:</strong> flat-API endpoints take <code>body: query|form|json</code> and per-param <code>in: query|body</code>; CBA, KHL REST and HockeyAllsvenskan
+use it, with a curl example in the docs. A caller <code>params=</code> entry that names a body field overrides the body; any other
+<code>params=</code> entry goes to the query string. (#862)</li>
+<li class=""><strong>Dependencies:</strong> <code>urllib3 >= 2.8.0</code> is a direct runtime floor (three open advisories below it) and the
+<code>tests</code>/<code>all</code> extras need <code>curl_cffi >= 0.15.0</code> (redirect SSRF). <code>recipe/meta.yaml</code> is re-mirrored from
+<code>pyproject.toml</code> (<code>scikit-learn</code>, <code>urllib3</code>, <code>tomli</code> were missing); <code>tools/check_recipe_mirror.py</code> diffs the two. (#751)</li>
+<li class=""><strong>Docs and codegen:</strong> reference and "Additional functions" pages now render a <strong>Raises</strong> table from the
+function's docstring (generated wrappers: the error vocabulary of their runtime, with any endpoint YAML <code>raises:</code>
+qualifier added to the same row; the <code>nba_stats</code> / <code>wnba_stats</code> wrappers included). The table has one row per
+exception, never a <code>None</code> row (a parser's "empty payload gives a zero-row frame" note now sits in its Returns).
+The parameter table of a POST body endpoint (<code>body: form|json</code>: CBA, KHL, HockeyAllsvenskan) gains an <strong>In</strong>
+column (<code>path</code> / <code>query</code> / <code>body</code>). Pages that mostly list per-competition functions minted from the competition
+registry no longer call them "hand-written wrappers", and a split family page never ends on a lone function. An
+endpoint YAML can name a <code>body_builder:</code> (a runtime callable, imported from the module it lives in) that turns
+the flat body into the nested JSON an API wants; only top-level <code>None</code> fields are dropped, so a builder handles
+<code>None</code> inside what it nests. The shared getter <code>_codegen_runtime._get</code> (through <code>dl_utils.download</code>, which now
+POSTs when given <code>data=</code> / <code>json_body=</code> and never caches a body request) sends form and JSON bodies, so a body
+endpoint no longer needs its own runtime getter. A POST through <code>download</code> is retried like a GET, so it is for
+idempotent read APIs only. (#864)</li>
+<li class=""><strong>ESPN schedules:</strong> <code>espn_cfb_schedule</code> and <code>espn_mlb_schedule</code> return an empty frame with the documented columns on a day with no games; they returned <code>None</code>. (#855)</li>
+<li class=""><strong>ESPN schedules:</strong> the seven scoreboard-backed <code>espn_&lt;lg>_schedule</code> emit their documented columns in documented order on every day (a column the day left empty is a typed null, not absent); columns ESPN adds later follow. A documented integer column no longer arrives as Float64 when one event lacks it (<code>tournament_id</code>). (#855)</li>
+<li class=""><strong>ESPN wrappers:</strong> a collection as a path value raises <code>ValueError</code>, and a float id is sent as its integer (<code>"13"</code>,
+not <code>"13.0"</code>).</li>
+<li class=""><strong>ESPN wrappers:</strong> a keyword the wrapper does not take raises <code>TypeError</code> naming the wrapper, before any request.</li>
+<li class=""><strong>ESPN:</strong> <code>parse_team_roster</code> on a position-grouped roster returns zero rows with a <code>SchemaDriftWarning</code> when any
+group or player is not an object; 0.1.5 returned the other groups' rows. (#941)</li>
+<li class=""><strong>ESPN:</strong> the 12 generated site-v2 wrappers whose name a hand-written function held are now public as
+<code>espn_&lt;lg>_calendar_site</code> (cfb, nfl, mlb, nba, wnba, mbb, wbb) and <code>espn_{wbb,wnba}_{standings,team_roster}_site</code> /
+<code>espn_wnba_draft_site</code>. The package names still run the hand-written functions; other leagues keep theirs. (B-M31)</li>
+<li class=""><strong>ESPN:</strong> the scoreboard <code>broadcast</code> column keeps every network name, ", "-joined in feed order and deduplicated
+("ESPNU, ESPN+"); it kept only the first name of each broadcast entry. (#865)</li>
+<li class=""><strong>Generated wrappers:</strong> a <code>bool_str</code> flag (ESPN <code>active=</code>, Fox <code>include_answers=</code>, MLS <code>is_live=</code>) raises <code>ValueError</code>
+for any string other than <code>true</code>/<code>false</code>/<code>1</code>/<code>0</code>; <code>"yes"</code> was sent as <code>"true"</code> and <code>""</code> as <code>"false"</code>.</li>
+<li class=""><strong>HTTP chokepoints:</strong> a 2xx JSON <code>null</code>, number, string or boolean body now raises <code>AssetFetchError</code> instead of
+reaching a parser as data (or <code>{}</code>), except OpenLigaDB's <code>/getlastchangedate</code>, which answers a bare ISO string
+by design; a 2xx <code>{"code": 400-599, "message"}</code> error envelope is classified by its code
+(404 <code>NoDataError</code>, 400/422 <code>ValueError</code>, else <code>AssetFetchError</code>); barttorvik and the Savant CSV leaderboards
+refuse an HTML page as <code>AssetFetchError</code>; Yahoo and On3 data routes refuse a JSON array where an object belongs.</li>
+<li class=""><strong>KHL:</strong> <code>khl_player_stats</code> documents goalie <code>sv_pct</code> as a 0-100 percentage (92.2 = .922), <code>gaa</code>
+as goals against per 60 minutes and <code>toi</code> as total "minutes:seconds" text.</li>
+<li class=""><strong>MBB/WBB:</strong> <code>ncaa_espn_team_crosswalk(league=)</code> reads the <code>{mbb,wbb}_crosswalk</code> sportsdataverse-data release
+(built weekly by sdv-reference-data), so a new season no longer waits for an sdv-py release; it warns and falls back
+to the bundled CSV when the release cannot be read. (#770)</li>
+<li class=""><strong>MBB:</strong> <code>load_mbb_player_crosswalk()</code> documents <code>kp_player_id</code>, the KenPom player id hoopR-mbb-data now
+publishes after <code>yahoo_player_name</code> (18 columns), and <code>kp_game_id</code> on <code>load_mbb_schedule_crosswalk()</code> is
+described as filled. The live <code>mbb_player_crosswalk()</code> builder stays at 17 columns. (#787)</li>
+<li class=""><strong>MLB:</strong> <code>fit_zone_model</code> (the umpire-zone and catcher-framing called-strike logistic) excludes 2026+
+pitches with a <code>UserWarning</code> -- Savant reports their location at the middle of the plate against the ABS zone
+and the calls are challengeable -- and <code>mlb_umpire_called_strike_prob</code> / <code>mlb_umpire_bias</code> / <code>mlb_catcher_framing</code>
+carry an <code>abs_era</code> flag (per-umpire and per-catcher rows split by era).</li>
+<li class=""><strong>NFL fourth-down getters</strong> (<code>get_go_wp</code>, <code>get_fg_wp</code>, <code>get_punt_wp</code>, <code>get_2pt_wp</code>, <code>get_2pt_probs</code>,
+<code>get_4th_down_probs</code>) treat only a model that cannot be obtained (<code>FileNotFoundError</code>) as missing. A
+corrupt cached booster (<code>XGBoostError</code>) or a model card that disagrees with the applier (<code>ValueError</code>)
+now propagates instead of silently yielding NaN; <code>enrich_nfl_pbp</code> and <code>NFLPlayProcess</code> still catch it
+and skip the step with a <code>RuntimeWarning</code> unless strict mode is on.</li>
+<li class=""><strong>NFL models:</strong> when the download-on-demand nfl4th models (<code>fd_model.ubj</code>, <code>wp_model.ubj</code>) cannot be
+obtained, the fourth-down step warns once per artifact (it returned all-null <code>go_wp</code> / <code>fg_wp</code> /
+<code>punt_wp</code> silently). <code>enrich_nfl_pbp(strict=True)</code> or <code>SDV_PY_MODELS_STRICT=1</code> raises
+<code>FileNotFoundError</code> naming the missing model instead of nulling its columns (xYAC, xpass and the
+fourth-down step; the ESPN <code>NFLPlayProcess</code> path honours the environment variable).</li>
+<li class=""><strong>NFL:</strong> <code>nfl_pro_*</code>, the <code>api.nfl.com</code> token mint, <code>nfl_game_schedule</code> / <code>nfl_game_details</code> / <code>nfl_game_pbp</code> and <code>nfl_ngs_*</code> raise <code>NoDataError</code> (404), <code>ValueError</code> (400/422) or <code>AssetFetchError</code> (429/5xx after retries, dead connection, empty/HTML/scalar 2xx, pro.nfl.com's empty-200 rejection) instead of <code>HTTPError</code> / <code>KeyError</code> / <code>JSONDecodeError</code> / <code>ValueError</code>;
+<code>NFLProAuthError</code> is an <code>AssetFetchError</code> (still a <code>RuntimeError</code>); a GraphQL <code>errors</code> envelope or a body without <code>data.viewer.gameDetail</code> raises instead of an empty pbp frame; NGS retries 408/429/5xx but not its 403 deny, the schedule / details GETs retry;
+the NFL getters honour <code>SDV_PY_HTTP_TIMEOUT</code>, a string pro.nfl.com <code>limit</code> pages correctly, and an NFL Pro token that does not decode is logged. (#918)</li>
+<li class=""><strong>NHL Records:</strong> <code>nhl_records_comeback_wins(scope=)</code> raises <code>ValueError</code> for anything but <code>"league"</code> or
+<code>"franchise"</code>; <code>"Franchise"</code> or <code>"team"</code> returned the league-wide table. (#928)</li>
+<li class=""><strong>Possession cache:</strong> <code>nba_season_compile.PIPELINE_VERSION</code> is 5, so per-game caches keyed by it
+(<code>compile_nba_season</code>, and WNBA builders that import <code>_game_cache_key</code>) recompile once. (#818)</li>
+<li class=""><strong>PWHL:</strong> <code>pwhl_team_ratings</code> forwards to <code>pwhl_ratings_from_proxy</code> (its <code>league</code> argument is ignored);
+<code>nhl_player_props</code> takes <code>load_skater_boxscores=</code> and <code>team_ratings=</code>, and the NHL impact engines take
+<code>xg_scored=</code>, so another league binds its own data and xG model. (#846)</li>
+<li class=""><strong>Runtimes:</strong> The Odds API raises <code>AssetFetchError</code> on a dead connection (was <code>ConnectionError</code>) or a scalar 2xx body;
+the deprecated <code>on3_*_rankings</code> shims raise <code>ValueError</code> on a malformed <code>year</code> / <code>sport_slug</code> (was <code>{}</code>); LEGACY <code>pff_*</code>
+raises <code>AssetFetchError</code> on a JSON array (was <code>{}</code>); <code>pff_*</code> and the 247Sports getters honour <code>SDV_PY_HTTP_TIMEOUT</code>. (#921)</li>
+<li class=""><strong>Season loaders (generated, and <code>load_nfl_team_group_seasons</code>):</strong> a fractional season (<code>[2024.5]</code>, which
+loaded 2024) raises <code>ValueError</code>, as does a bool season; <code>seasons=None</code> raises <code>ValueError</code> where it raised
+<code>TypeError</code>.</li>
+<li class=""><strong>Spring football:</strong> <code>enrich_spring_football_pbp</code> threads the league-season <code>touchback_yardline</code> and
+<code>ep_point_values</code> from <code>get_sf_constants</code> into <code>enrich_nfl_pbp</code> (new keyword-only <code>league=</code>, <code>touchback_yardline=</code>,
+<code>ep_point_values=</code>; NFL defaults unchanged), so XFL / UFL kickoffs are scored from their own touchback spot.</li>
+<li class=""><strong>Tests:</strong> warnings are errors. A test asserts an expected warning with <code>pytest.warns(..., match=...)</code> or
+filters an incidental one by exact message; live tests skip on a timeout or upstream 429/5xx, the
+live job runs on Ubuntu, and the <code>tests</code> extra needs pytest >= 8.0. (#726)</li>
+<li class=""><code>load_cfb_teams_crosswalk</code> / <code>load_cfb_schedule_crosswalk</code> accept 2013. The <code>cfb_crosswalk</code> release now carries 2013 (Yahoo and Fox legs), which the old 2014 floor hid.</li>
+<li class=""><code>load_nfl_player_stats(True)</code>, an old positional call written for the removed kicking flag, used to raise <code>TypeError</code> and now loads every season of the non-kicking stats; pass <code>kicking=True</code> for kicking stats. <code>load_nfl_player_stats(False)</code> still raises <code>TypeError</code>.</li>
+<li class=""><code>load_wnba_stats_shots</code> and <code>load_wnba_stats_player_game_logs</code> accept 1997 onward, and <code>load_nba_player_crosswalk</code> and <code>load_wnba_player_crosswalk</code> accept 2002 onward. Their releases publish those seasons, which the old 2026 / 2025 floors hid.</li>
+<li class=""><code>sportsdataverse.nba.nba_game_page.game_page_frames</code> now reads the game's neutral site, so a lineless neutral-site NBA game (the All-Star Game, Rising Stars) starts from a 0.5 prior (prior source "neutral") instead of home-court advantage: its win probabilities move by up to 0.08 for existing NBA callers.</li>
+<li class="">NFL loaders follow nflreadpy's <code>seasons</code> contract: <code>seasons=None</code> loads the current season, <code>seasons=True</code> loads every season from the loader's first through the current one (skipping only a current season that is not published yet), and <code>seasons=[]</code> returns an empty frame without a request. <code>None</code> used to raise <code>TypeError</code> in every helper-backed loader, and in <code>load_nfl_player_stats</code> (where it is the default) it loaded every season since 1999 (~28 assets); <code>load_nfl_player_stats(False)</code> still raises <code>TypeError</code>. <code>load_nfl_rosters</code> and <code>load_nfl_depth_charts</code> take the current season on the roster calendar (the year turns on March 15), as nflreadpy's <code>load_rosters</code> / <code>load_depth_charts</code> do. <code>[]</code> used to return every season from <code>load_nfl_schedule</code>, <code>load_nfl_nextgen_stats</code>, season-level <code>load_nfl_pfr_advstats</code> and <code>load_nfl_espn_qbr</code>, and to raise from <code>load_nfl_ratings_weekly</code> / <code>load_nfl_ngs</code>. A mistyped season (<code>2024.5</code>, <code>True</code> in a list, <code>"2024x"</code>) raises <code>ValueError</code> naming <code>seasons</code>. <code>load_nfl_nextgen_stats</code> now raises <code>SeasonNotFoundError</code> for a season before 2016, like every other NFL loader.</li>
+</ul>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=deprecated>Deprecated<a href=#deprecated class=hash-link aria-label="Direct link to Deprecated" title="Direct link to Deprecated" translate=no>​</a></h3>
+<ul>
+<li class=""><strong>ESPN teams:</strong> <code>espn_&lt;lg>_teams.cache_clear()</code> (the eight leagues) is kept for one deprecation cycle as a no-op that warns <code>DeprecationWarning</code>; it will be removed in 0.2.0. The functions no longer cache, so there is nothing to clear. (#888)</li>
+<li class=""><strong>ESPN:</strong> the old names of those 12 wrappers in <code>*_espn_ext</code> (<code>from sportsdataverse.cfb.cfb_espn_ext import espn_cfb_calendar</code>, ...) still return the wrapper but warn <code>DeprecationWarning</code> naming the <code>*_site</code> name; they
+will be removed in the next release. (B-M31)</li>
+<li class=""><strong>MBB / WBB:</strong> <code>sportsdataverse.scrape.ncaa.league_config</code> (<code>NcaaLeagueConfig</code>, <code>MBB</code>, <code>WBB</code>, <code>by_league</code>)
+warns <code>DeprecationWarning</code> on access and goes in 0.2.0. Nothing read it, and <code>WBB.periods = 4</code> is wrong
+before 2015-16; pass the league slug and use <code>scrape.ncaa.parse.wbb_period_model(season)</code>. (#853)</li>
+<li class=""><strong>NBA / WNBA:</strong> <code>load_nba_stats_{pbp,possessions,lineups}_v3</code> and the four <code>load_wnba_stats_*</code> shims
+(<code>lineups</code>, <code>player_season_stats</code>, <code>standings</code>, <code>team_season_stats</code>) now say they will be removed in
+0.2.0; they named 0.1.0, which has shipped. A test fails if a removal version falls behind again. (#726)</li>
+<li class=""><strong>PWHL:</strong> <code>pwhl_team_ratings(league=...)</code> is deprecated and ignored (the ratings are always PWHL);
+passing it raises a <code>DeprecationWarning</code>. (#846)</li>
+</ul>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=removed>Removed<a href=#removed class=hash-link aria-label="Direct link to Removed" title="Direct link to Removed" translate=no>​</a></h3>
+<ul>
+<li class=""><strong>Dependencies:</strong> <code>matplotlib</code>, <code>pyjanitor</code>, <code>inflection</code> and <code>attrs</code> are no longer runtime dependencies
+(nothing imported them; <code>tests/test_import_sweep.py</code> imports every module with them blocked). <code>black</code>, <code>flake8</code>,
+<code>isort</code>, <code>pycln</code> and <code>pydocstyle</code> leave the <code>tests</code>/<code>all</code> extras; the <code>models</code> extra is empty (already base deps). (#752)</li>
+<li class=""><strong>MBB / WBB:</strong> the NCAA &lt;-> ESPN team-crosswalk builder <code>tools/crosswalk/</code> is gone; sdv-reference-data
+(<code>sdv_reference/crosswalks/</code>) builds and publishes the <code>{mbb,wbb}_crosswalk</code> asset that
+<code>ncaa_espn_team_crosswalk()</code> reads first (#770). The bundled fallback copies stay. (#788)</li>
+<li class=""><strong>Python 3.9 dropped.</strong> <code>requires-python</code> is now <code>>=3.10</code> (3.9 is end-of-life and HEAD no longer
+imported on it: <code>cfb/cfb_drive_summary.py</code> evaluates <code>set[int] | str | None</code> at def time). The lock
+now resolves polars 2.0 on every supported Python; <code>scrape/ncaa/canary.py</code> imports on 3.10. (#748)</li>
+</ul>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=fixed>Fixed<a href=#fixed class=hash-link aria-label="Direct link to Fixed" title="Direct link to Fixed" translate=no>​</a></h3>
+<ul>
+<li class=""><strong><code>espn_injuries_snapshot</code> / <code>espn_depthcharts_snapshot</code></strong> warn and keep the other leagues / teams when one fetch
+fails; one failure discarded the whole day, which cannot be re-taken. Every fetch failing still raises. (#924)</li>
+<li class=""><strong><code>fox_nfl_pbp</code> / <code>fox_cfb_pbp</code>:</strong> rows come back oldest-first on a live game too (Fox serves
+newest-first until FINAL). (#922)</li>
+<li class=""><strong><code>load_proxybonanza_pool</code></strong> raises <code>AssetFetchError</code> on a 200 that is not the package JSON, not <code>KeyError</code>. (#920)</li>
+<li class=""><strong><code>ncaa_mbb_date_games</code> / <code>ncaa_wbb_date_games</code></strong> close the browser they open; a lingering one made the next
+browser fetch in the process fail. (#920)</li>
+<li class=""><strong><code>scrape.espn.persist.write_payload</code></strong> writes through a temp file and <code>os.replace</code>, so a crash mid-write no longer
+leaves a truncated <code>.json</code> that counts as captured and is never re-fetched; ESPN's <code>{code, message}</code> error body is
+refused like the other error shapes. (#924)</li>
+<li class=""><strong>Atrium / FIBA game wrappers:</strong> a FIBA game page asked under a <code>comp</code> that does not list the game raises <code>AssetFetchError</code> (wrong scope) when GDAP knows the game, and <code>NoDataError</code> when it does not. An Atrium game the site does not serve (an unknown fixture id, or another site's game: the API answers both with an empty fixture) raises <code>NoDataError</code> instead of an echo <code>AssetFetchError</code>; the minted Atrium game functions no longer refuse a game whose season the site's (incomplete) season list omits. (#864)</li>
+<li class=""><strong>Basketball game pages:</strong> <code>game_page_frames</code> no longer raises when ESPN's <code>format</code> is not an object (a string, or a
+<code>regulation</code> that is not one); the game's regulation falls back to the league's season era. (#900)</li>
+<li class=""><strong>Basketball:</strong> the minted per-competition game functions now refuse a game of another competition with <code>AssetFetchError</code>. Genius (<code>esake_pbp</code> and the rest) reads the game's LiveStats <code>/u/</code> shell, one cached request per game, and applies the entry's label rule to its competition name; when that request is refused or fails twice (only a dead connection or a 429/5xx is retried), or the shell names no competition, the call raises <code>AssetFetchError</code> saying the scope check could not run rather than returning the game unchecked. FIBA checks that a <code>comp=</code> override is an edition of the bound family (a competition GDAP gives no family is refused with that reason). The minted game functions need <code>season</code> or <code>comp</code>, and their docs say so. The per-process listing cache keeps at most 1,024 entries (least recently used evicted), so a backfill does not grow it without bound. <code>lfb_schedule(season=2019)</code> (and <code>genius_schedule</code> of any page holding an unfilled play-off slot) no longer fails its scope check: a <code>To be determined</code> block, which has no team or match link, takes the competition the page's other blocks prove, and a page of nothing but such blocks raises <code>AssetFetchError</code>. <code>lfb_*</code> covers the two seasons Genius hosts, 2018 and 2019. The parameterised <code>genius_*</code> / <code>fiba_gamepage_*</code> / <code>atrium_*</code> wrappers are otherwise unchanged. (#864)</li>
+<li class=""><strong>Basketligaen (<code>sportality</code>):</strong> five returns-table descriptions are no longer cut mid-parenthesis
+(<code>ppg</code> read "Points per game (a number or."; also <code>3_p_perc</code>, <code>blkpg</code>, <code>ec</code>, <code>ft_perc</code>), and the
+<code>standings_standings</code> test samples keep their whole <code>dataColumns</code> header so the runtime's column
+check accepts them. (#892)</li>
+<li class=""><strong>BBL / DBBL (<code>scb</code>):</strong> <code>tv_channel</code> on <code>scb_games_recent</code> and <code>scb_game</code> joins the channel names
+(<code>"DYN,Sport Bild Stream"</code>) instead of writing Python dict text; null entries and null names are
+skipped, never written as <code>"None"</code>. (#892)</li>
+<li class=""><strong>Caches:</strong> a memory-cache hit returns a copy (NFL loaders and the HTTP response cache), so editing a
+returned frame or payload in place no longer changes what the next call gets; <code>clear_cache()</code> (both)
+deletes only the entries the cache wrote (key-named files; for the HTTP cache, also shaped like an
+entry), never other files in the cache directory; a corrupt NFL
+cache entry that cannot be unlinked no longer escapes as <code>PermissionError</code>.</li>
+<li class=""><strong>CBA numbers:</strong> the display strings the API sends (<code>'21.6'</code> per-game averages, <code>'39.4%'</code> percentages; about 100
+columns across the season lists, team tables, advanced box and shot zones) are parsed to Float64. A percent string
+is always stored as a FRACTION 0-1, like the player box percentages and the <code>*_sort</code> columns; the scale is per
+table, so <code>cba_player_offensive.turnovers_rate</code> ('13.5%') is 0.135 while <code>cba_team_four.turnovers_rate</code>, which the
+API sends as the number 13.5, stays 0-100. Thousands commas are dropped (<code>'1,234'</code>), <code>'12.0'</code> in an integer column
+is 12, and <code>'nan'</code> / <code>'inf'</code> are null. <code>season</code> and the schedule win/loss counts are Int64; jersey
+numbers and code-table values stay text. Columns null in every capture take the family's dtype. (#864)</li>
+<li class=""><strong>CBA:</strong> without <code>CBA_PROXY</code> a request from a datacenter now fails in seconds (a 5 s connect timeout, no retry of a
+connection refused or timed out at connect; a read timeout or a connection reset mid-response is still retried, and
+so is every failure through a proxy) instead of after about three minutes; set <code>CBA_DIRECT=1</code> where direct access works
+for the full timeout and retries. A POST route called without <code>json=</code> raises <code>TypeError</code> (the generated wrappers
+always send it, so their behaviour is unchanged). (#864)</li>
+<li class=""><strong>CBS football adapter:</strong> a failed scoreboard page (a dead connection, a 403/5xx after retries) is
+read again after 5 minutes instead of being remembered as "no games" for the life of the process;
+a failed (non-404) optional NAPI resource raises instead of reading as absent, and the NFL adapter
+does not fetch CBS's odds when the caller already supplies the line. (#922)</li>
+<li class=""><strong>CBS NAPI:</strong> an unknown id (HTTP 200 with a <code>warnings</code> entry of code 404) raises <code>NoDataError</code>; it
+parsed to a zero-row frame. (#919)</li>
+<li class=""><strong>CFB / NFL fumble attribution:</strong> a recovery-less fumble behind ESPN's degenerate end block that kept the ball
+(non-scoring, <code>change_of_pos_team</code> False) is no longer lost: CFB 401856674165 (EPA unchanged); NFL is unchanged
+except 2810260184707, a 2008 fumble out of the end zone for a safety, correctly no longer a lost fumble. (EX-3.4-d) (#911)</li>
+<li class=""><strong>CFB / NFL:</strong> the advanced box's <code>expected_turnovers</code> takes its pass term from ESPN's box passes
+defended, not from "broken up by" text whose coverage swings by season (2025 CFB weeks 1-8 vs
+9-15: 0.68 vs 1.45 before, 1.26 vs 1.46 now); text stays the fallback where the box has no PD. (#737)</li>
+<li class=""><strong>CFB <code>advBoxScore</code> row order:</strong> <code>team</code> / <code>situational</code> / <code>defensive</code> / <code>drives</code> list the home team first, and the
+usage and special-teams sections (CFB and NFL) sort by their keys, so a game serialises to the same box in every
+process; before, these rows reshuffled from run to run. Values are unchanged. (R828-4)</li>
+<li class=""><strong>CFB play-by-play:</strong> <code>lag_half</code> and <code>game_play_number</code> follow the final row order (15 captures moved); a play
+filed under an id outside the feed's numbering is placed by its period and clock (401425418's third-quarter
+kickoff was the game's first row). (#837)</li>
+<li class=""><strong>CFB play-by-play:</strong> a feed whose plays all lack the <code>end</code> block or the scores processes instead of raising
+<code>ColumnNotFoundError</code> (NFL too, for <code>start</code>, <code>end</code>, <code>clock</code> and the scores); a pickcenter with no spread on any
+provider takes the no-pickcenter path instead of raising <code>IndexError</code>. (#837)</li>
+<li class=""><strong>CFB play-by-play:</strong> a fumble recovered by a team written mixed-case ("recovered by AlbSt") or in
+parentheses ("recovered by Omar Jacobs (BGSU)") is charged to the right team; 2014-20 team
+fumbles lost now match ESPN's box in 97-98% of team-games, from 86-90%. (#767)</li>
+<li class=""><strong>CFB play-by-play:</strong> a missing pregame total is 55.5 on every odds path (the pickcenter path used 55.0) and warns
+<code>errors.DefaultOddsWarning</code>; ESPN's literal play text "null" is no longer a player name. (#837)</li>
+<li class=""><strong>CFB play-by-play:</strong> kneel-downs ("Kneel down by TEAM ... (team loss of 2)", "takes a knee") and rushes no
+yardage reader matched (2004-13 "rush up the middle for 21 yards", yardless vendor rows) carry
+rushing yards; 2025 team rushing yards match ESPN's box in 64% of team-games, from 46%. (#768)</li>
+<li class=""><strong>CFB play-by-play:</strong> pre-2014 extra-point rows ("Extra point by Dave Rayner (MSU) is good.", "Felipe
+Macias extra point GOOD.") set <code>xp_attempt</code>, <code>xp_made</code> and <code>xp_kicker_player_name</code>; all 46,762 had
+none. (#771)</li>
+<li class=""><strong>CFB play-by-play:</strong> pre-2014 penalties ("HAWAII penalty 15 yard personal foul accepted") are charged
+to the team named in the text; 2006-13 team penalties match ESPN's box in 72-83% of team-games,
+from 21-25%. (#769)</li>
+<li class=""><strong>CFB play-by-play:</strong> regex-fallback player names no longer carry the clause they ran into
+("Tommylee Lewistackled b", "Logan Hall, clock:32", a spot read as a fumbler); garbled names fall
+below 0.3% in every role and era, from up to 21%. (#772)</li>
+<li class=""><strong>CFB:</strong> <code>cfb_rosters_crosswalk(providers=(..., "yahoo"))</code> fills <code>yahoo_athlete_id</code> from Yahoo's team roster,
+matched by name + jersey, then by a unique name; it read the ~200-player stat-leaders feed and found 0-2 per team.
+New optional <code>yahoo_team_id</code> skips the Yahoo team lookup. (#762)</li>
+<li class=""><strong>CFB:</strong> <code>CFBPlayProcess(odds_override=...)</code> reads <code>homeFavorite</code> and <code>gameSpreadAvailable</code> strictly, as <code>overUnderAvailable</code> already was: <code>"False"</code>/<code>"0"</code> are False (<code>bool("False")</code> read them as True), and a value that is not True/False, 1/0 or <code>"true"</code>/<code>"false"</code>/<code>"1"</code>/<code>"0"</code>, None included, raises <code>ValueError</code>. (#946)</li>
+<li class=""><strong>CFB:</strong> <code>CFBPlayProcess</code> logs through its own <code>sdv.cfb_pbp</code> logger; its root-module <code>logging.debug</code> calls ran
+<code>logging.basicConfig()</code> and installed a stderr handler on the host application's root logger. (#895)</li>
+<li class=""><strong>CFB:</strong> <code>firstHalfKickoffTeamId</code> is the opening kicker and <code>pos_team_receives_2H_kickoff</code> true only on its first-half possessions (inverted on every first-half row of home-kicked games, and set after halftime).
+The WP boosters learned that flag as <code>1 - is_home</code> and are still fed that, so published WP stays as it was (each game's first row aside);
+WP keeps the as-trained flag (the <code>_as_trained_2h_flag</code> shim) until the WP boosters are retrained on the corrected flag. No retrain has shipped (task 3.8 changed no model bytes); whether to retrain is an open owner decision. (#781)</li>
+<li class=""><strong>CFB:</strong> <code>fox_cfb_play_process</code> reads Fox's absolute <code>yardStart</code> through <code>fox_common</code>'s geometry, so
+away-offense snaps are no longer mirrored (EP/EPA/WPA); an uncovered game raises <code>NoDataError</code>, the
+backup makes no ESPN request, and the source contract rejects an adapted summary with a mirrored field.</li>
+<li class=""><strong>CFB:</strong> <code>get_go_wp</code> returns NaN for a 4th-down row with no <code>yards_to_goal</code> or <code>distance</code>, instead of
+a garbage go-for-it value from casting NaN to an integer; other plays are unchanged. (#726)</li>
+<li class=""><strong>CFB:</strong> <code>parse_cfb_ncaa_scoring_summary</code> reads <code>team</code> from the "Has Ball" logo's alt text; it was null on
+every scoring row of every stats.ncaa.org football box score.</li>
+<li class=""><strong>CFB:</strong> <code>yds_rushed</code> (and the line-yards split) is read from rush texts that left it null: "for 1 yard", "rush for loss of N",
+"Banyard rush" (matched "Yard Rush"), "1 Yd Run (... Run for Two-Point Conversion)", and directional gains on fumbled or
+flagged rushes. Only nulls change; EPA/WP do not move. A rush whose text names no carry stays null. (#854)</li>
+<li class=""><strong>CFB:</strong> a defensive Timeout row's <code>pos_team</code> is the offense, as nflfastR's <code>posteam</code> (owner ruling), so its <code>wp_before</code> adds the offense's
+margin to the offense's EP; its EPA stays 0 (1,803 Timeout rows in the sweep).</li>
+<li class=""><strong>CFB:</strong> a fumble play the offense kept (<code>change_of_pos_team</code> False), whose ESPN end block sits at yardLine 0 / yardsToEndzone 0, no longer
+scores as a goal-line turnover: its end state is the next snap's start. 401856682's Q4 Fumble Recovery (Own) moves from EPA -5.91 to -0.41
+(Yahoo and CBS: -0.39); across all 20,719 cfb-raw games 20 rows in 18 games move (2024-2026), each onto the feed's next snap. (#834)</li>
+<li class=""><strong>CFB:</strong> a half-ending play keys <code>wp_after</code> on the next real play's team (cfbfastR's rule), not its own possession change. A play that kept the ball took the model's end
+state when the other team snaps next; it now takes 1 - that play's <code>wp_before</code> (401858224's tying FG 0.476 -> 0.498). Mostly first-half endings: 64 rows in 62/132 captures, 230 in
+222/580 held-out 2014-23 games, max |Δ| 0.161, in <code>wp_after</code>, <code>wpa</code>, <code>def/home/away_wp_after</code> and their <code>_naive</code> twins. (#966)</li>
+<li class=""><strong>CFB:</strong> a play ESPN files twice under two ids is booked once when the id sort strands one copy outside its drive
+(401420836's 11:58 rush and 10:44 punt now match ESPN's box score); a clock half its period shares is never compared.
+Across the 23,024 cfb-raw games: 489 fewer rows in 235 games, each removed row's twin kept (R908-3, #925)</li>
+<li class=""><strong>CFB:</strong> a play ESPN files under an out-of-scheme id (a 10-digit <code>&lt;game_id>0</code> among 18-digit ids) now goes right after the last play
+that precedes it by period, clock and, on a clock tie, ESPN's feed order, instead of after a count of such plays. 400548110's
+post-touchdown personal foul now follows the 9:41 touchdown, and 401420836's 11:58 rush follows the 13:23 pass; across all 23,024
+cfb-raw games the rule still fires in the same 17, and 4 of them change order after the full processor (R837-1).</li>
+<li class=""><strong>CFB:</strong> a rush, pass, sack or penalty whose ESPN end block is <code>{down 0, yardLine 0, yardsToEndzone 0}</code> takes the next snap's down, distance
+and spot when the same team snaps next in the period (401754585's 2nd & 5 incompletion: EPA -1.85 -> -0.95); not a 4th-down play short of the
+line to gain (still a turnover on downs). A sweep of 2,591 cfb-raw games moved 1,695 such rows (1,335 EPA); supp-002 covered fumbles only.</li>
+<li class=""><strong>CFB:</strong> a Timeout row (filed under the team that called it) is no longer a change of possession, and the next play reads the last real
+play's possession and score, a play's <code>wp_after</code> the next real board. Penalty rows after a defensive timeout lose a phantom <code>EP_between</code>,
+so their EPA moves by up to 6.2 points (4 of the 128 committed captures); <code>firstD_by_*</code> flags and WP columns move with it, and
+<code>lead_wp_before2</code> is the second real row's board, skipping timeouts. (#834)</li>
+<li class=""><strong>CFB:</strong> an overtime try is a two-point shootout attempt only under its season's rule set (<code>model_vars.OT_SHOOTOUT_FROM_PERIOD</code>:
+none before 2019, from the fifth overtime in 2019-20, the third from 2021), and one ESPN files after a touchdown
+still counts inside the shootout (401112489, 401628439): shootout win probability, no kick recommendation. (#792)</li>
+<li class=""><strong>CFB:</strong> an untyped overtime shootout attempt ("Sam Howell Two-Point Rush Attempt Failed") is a missed attempt, not a
+scrimmage snap; every attempt of a shootout period that does not open tied on ESPN's scores (401628439's 50-42, 401677180's
+2-point drift) has null <code>wp_before</code> / <code>wp_after</code> instead of a value read off them; the game-ending attempt keeps the result. (#890)</li>
+<li class=""><strong>CFB:</strong> overtime win probability values the forced two-point try after a touchdown (the third
+overtime on before 2021, the second from 2021; <code>cfb_wp_overtime.OT_TWO_POINT_FORCED_FROM</code>) instead of a
+kicked extra point in every period; <code>get_2pt_probs</code> recommends the try there with <code>xp_wp</code> null.</li>
+<li class=""><strong>CFB:</strong> scoring zero rows (QBR on a live game's opening drive, <code>predict_from_card</code> on an empty frame)
+no longer logs XGBoost's "Empty dataset" warning. (#726)</li>
+<li class=""><strong>CFB:</strong> the fourth-down (go, punt, field goal) and two-point decision surfaces put a post-score
+kickoff at the season's touchback spot, 80 to go through 2011 and 75 from 2012; they used 75 for
+every season. 2012+ values are unchanged. (#842)</li>
+<li class=""><strong>CFB:</strong> the mirrored-end repair reads across a Timeout or End Period row to the next real snap when that snap starts where the play's
+<code>statYardage</code> ends it (401856797's Q3-closing rush to the 1: EPA -4.62 -> 0.46; 91 rows in the sweep).</li>
+<li class=""><strong>CFB:</strong> the payload's <code>pickcenter</code> odds are plain numbers (they were one-element arrays) and include <code>homeFavorite</code>, so they
+feed straight back into <code>CFBPlayProcess(odds_override=...)</code>; values and play columns are unchanged. A game with no pregame
+spread (<code>gameSpreadAvailable</code> False, rebuilds included) warns the new <code>errors.DefaultOddsWarning</code>. (#828)</li>
+<li class=""><strong>Codegen:</strong> each <code>generate.py --check</code> gate renders into its own temp dir, so two concurrent checks no
+longer delete each other's files. (#761)</li>
+<li class=""><strong>Crosswalks:</strong> <code>{mbb,wbb,nba,wnba}_player_crosswalk(season=)</code> for a past season reads that season's
+ESPN player box scores; ESPN's team-roster endpoint ignores <code>?season=</code>, so past seasons shipped
+the current roster under their own label (MBB 2025, WBB 2014-2025). (#782)</li>
+<li class=""><strong>Docs build:</strong> reference-page front matter now quotes a <code>title</code> or <code>sidebar_label</code> only when plain YAML would misread it. The ABA and TBF pages (labels containing <code>: </code>) failed the Docusaurus build after #859. Split-page category labels are read back as YAML, and new tests check every page's front matter and every <code>_category_.json</code>. The scb <code>x-api-secret</code> note no longer claims to mirror the site's own front-end code.</li>
+<li class=""><strong>Docs:</strong> <code>espn_&lt;lg>_calendar</code> in seven leagues, and the wbb/wnba <code>standings</code> / <code>team_roster</code> / <code>draft</code>, are
+documented as the hand-written functions those names run, not as the generated wrappers they shadow.</li>
+<li class=""><strong>Docs:</strong> <code>nba_live_boxscore</code> / <code>wnba_live_boxscore</code> document their six returned frames, one table each, and
+the <code>nba_stats</code> / <code>wnba_stats</code> wrappers list the <code>NoDataError</code> / <code>ValueError</code> / <code>AssetFetchError</code> they raise.</li>
+<li class=""><strong>Docs:</strong> a function counts as documented only by its own reference block, not by a mention in a table or note,
+so 19 public functions (<code>load_pbp</code>, <code>atrium_end_year</code>, <code>shot_value</code>, ...) and two classes now have entries.</li>
+<li class=""><strong>Docs:</strong> a reST literal that starts with an underscore (<code>``_request``</code>, <code>``_PBP_COLS``</code>) no longer loses its backtick on the generated pages. (#862)</li>
+<li class=""><strong>Docs:</strong> Examples and page titles name each league's home module (<code>sportsdataverse.soccer.mls</code>), not its
+deprecated alias; the NFL Pro page has a title, and <code>parse_summary</code> gives the right section count.</li>
+<li class=""><strong>ESPN game rosters:</strong> the seven Core v2 <code>espn_&lt;lg>_game_rosters</code> (mbb, wbb, nba, wnba, nfl, nhl, cfb) keep the athlete's <code>position_id</code> (integer), <code>position_name</code>, <code>position_display_name</code>, <code>position_abbreviation</code> and <code>position_leaf</code> (football and hockey also <code>position_parent_href</code>), as hoopR and wehoop do; only the position's <code>$ref</code> is dropped. One athlete <code>$ref</code> that answers 404 drops that athlete with a <code>UserWarning</code> instead of failing the game. A team with a single logo keeps it as <code>logo_href</code>, and a logo shape the flattening cannot read warns instead of silently writing <code>""</code>. <code>espn_mlb_game_rosters</code> returns a zero-row frame with its columns when ESPN lists no competitor roster; it returned <code>None</code>. (#878)</li>
+<li class=""><strong>ESPN parsers:</strong> <code>parse_athlete_stats</code> reads the Web v3 per-season rows (it returned an empty frame for every
+athlete), <code>parse_event_competitor_statistics</code> reads Core v2's single <code>splits</code> object and <code>parse_draft</code> parses the
+Core v2 season-draft index to one row (both raised <code>AttributeError</code> on every real call); their returns tables are
+now documented from real captures.</li>
+<li class=""><strong>ESPN parsers:</strong> the 30 <code>_common_espn_parsers</code> parsers that raised <code>AttributeError</code> on a non-dict body, or
+turned ESPN's 200 error envelope into a one-row frame, now return zero rows; <code>parse_items</code> warns when ESPN
+answered one page of several (<code>espn_nba_athletes_index()</code> returns 100 of 610 athletes by default); the
+<code>nhl_scoreboard(team=...)</code> route is never cached, like <code>/scoreboard/now</code>.</li>
+<li class=""><strong>ESPN rankings parsed to an empty frame.</strong> <code>espn_{cfb,mbb,wbb,mch,wch}_rankings()</code> ran the Site v2
+payload through <code>parse_items</code>, which reads a Core v2 <code>items</code> list; the polls sit in a top-level
+<code>rankings</code> list, so every league returned zero rows. A dedicated <code>parse_rankings</code> now gives one row
+per ranked or vote-receiving team per poll (live 2026-10-08: cfb 208 rows over 5 polls, mbb 77, wbb
+75, mch 35, wch 20), with <code>poll_id</code>, <code>season</code>, <code>season_type</code>, <code>week</code> (the week within the season
+type, which ESPN's Core v2 rankings URL uses), <code>rank</code> (null on vote-receiving rows), <code>previous_rank</code>,
+<code>points</code>, <code>first_place_votes</code> and the team fields; <code>team_id</code> is a string. The college baseball and
+softball wrappers route through it too, but ESPN answers their rankings URL with a 404. (#732)</li>
+<li class=""><strong>ESPN schedules:</strong> <code>espn_mbb_schedule(dates=2024)</code> returns the whole 2023-24 season, November through the title game (one calendar request plus one request per game day, ~150 in all, sorted by date; a failed day, or one that fills its <code>limit</code>, raises <code>AssetFetchError</code>, and a day never asks for more than 1000 events because ESPN answers 25 above that); it returned Jan 1-13 2024 only. <code>espn_mbb_calendar</code> / <code>espn_wbb_calendar</code> accept <code>season=None</code> (current season) and a float <code>2024.0</code>. (#855)</li>
+<li class=""><strong>ESPN schedules:</strong> all eight <code>espn_&lt;lg>_schedule</code> return a zero-row frame with the documented columns on an empty slate; one malformed event no longer discards the day; <code>Canceled</code> games get null linescores like <code>Postponed</code>; NFL <code>*_current_rank</code> is a null integer (was the CFB default 99); parsing the same payload twice no longer raises. (#855)</li>
+<li class=""><strong>ESPN soccer/cricket:</strong> the 68 wrappers that parse through <code>parse_soccer_*</code> / <code>parse_cricket_*</code> now document
+those parsers and their returns tables (the 12 headline soccer leagues showed the generic tables), and every
+ESPN wrapper is annotated <code>Union[pl.DataFrame, pd.DataFrame, Dict]</code> instead of <code>Dict</code>. (#858)</li>
+<li class=""><strong>ESPN teams:</strong> the eight <code>espn_&lt;lg>_teams</code> (mbb, wbb, nba, wnba, nfl, nhl, cfb, mlb) no longer sit behind a process-lifetime <code>functools.lru_cache</code>. Passing <code>headers={...}</code> (any unhashable keyword) raised <code>TypeError: unhashable type</code> before any request; every caller got the same frame object, so one caller's edit changed the next caller's result; and the cache never expired. Each call now fetches and returns its own frame (the package response cache, <code>sportsdataverse.cache</code>, is the opt-in TTL cache). A payload without <code>sports[0].leagues[0].teams</code> returns a zero-row frame with the documented columns instead of raising <code>TypeError</code>/<code>IndexError</code>. The docstrings named a <code>clear_cache()</code> that never existed. (#888)</li>
+<li class=""><strong>ESPN:</strong> <code>espn_&lt;lg>_player_stats</code> raises <code>AssetFetchError</code> when the athlete or team dereference fails (403, 429, 5xx,
+a dead connection) instead of returning a row with null identity columns; only a 404 leaves those columns null. (B-M1)</li>
+<li class=""><strong>Fox / CBS / Yahoo / Shield / NCAA adapters:</strong> an id-map row with float ids adapts like one with text ids (<code>"401671775"</code>,
+not <code>"401671775.0"</code>); a None / NaN / <code>pd.NA</code> id counts as missing. (#928)</li>
+<li class=""><strong>Fox CFB / college basketball:</strong> a failed Fox CFP group fetch in <code>fox_cfb_schedule(season)</code> is
+retried once and then warns (it was a log line; a 404 is taken as "no CFP group" without either);
+<code>fox_{mbb,wbb}_teams_all</code> warn when <code>max_calls</code> runs out while the last fetch that answered was
+still finding teams. (#922)</li>
+<li class=""><strong>Fox football adapter:</strong> an event-less "No Play" penalty (a club-charged Delay of Game) is typed
+Penalty (8) and starts at the flag's spot, not End Period with the next snap's; a sack for a safety
+is a Safety scored by the defence; the last regulation snap of an overtime game no longer takes the
+OT kickoff's spot as its end state (23 of the 32 OT games of 2024-25); a punt, kickoff or missed
+field goal with no next snap (the end of a half, of regulation, or the newest row of a live poll)
+ends with the receiving team at 1st & 10 (or with the kicking team when it recovers a muff), not
+in the kicking team's frame; a live poll no longer
+marks both clubs <code>winner</code>. (#922)</li>
+<li class=""><strong>Fox:</strong> an empty standings (or polls, events, nav, header, search, trending, roster) table parses to a
+zero-row frame instead of rows from another list in the body.</li>
+<li class=""><strong>Generated loaders and wrappers:</strong> <code>seasons=np.int64(2024)</code> and <code>seasons=2024.0</code> load the 2024 season (they raised
+<code>TypeError</code>), and a fractional year raises <code>ValueError</code> instead of loading the truncated one. <code>bool_str("false")</code>
+is <code>"false"</code>; ESPN path params are URL-quoted; a misspelled ESPN wrapper kwarg names the wrapper.</li>
+<li class=""><strong>Generated wrappers:</strong> <code>typing.get_type_hints()</code> resolves every generated ESPN and flat-API wrapper (it raised
+<code>NameError</code> on <code>pl</code>), and wrappers that return a dict of frames (<code>espn_*_summary</code>, the CDN game payloads,
+multi-result-set <code>nba_stats</code> endpoints) are annotated <code>Dict[str, pl.DataFrame]</code>, as their docstrings say.</li>
+<li class=""><strong>Genius hosted pages:</strong> the HTTP 500 "A website error has occurred" page is now reported as an intermittent
+Genius host-side failure marked <code>transient</code> (retry later), not as "the org has no plain hosted site": on
+2026-10-18 the same WBBL, SLB, BAL and NZNBL schedule URLs answered it and then a full schedule, and ESAKE
+answered it too. (#870)</li>
+<li class=""><strong>Genius:</strong> HTML pages served without a declared charset are read as UTF-8, so accented competition and team names (French, Greek) no longer come out garbled (<code>requests</code> assumed ISO-8859-1). (#864)</li>
+<li class=""><strong>Helpers:</strong> <code>find_athlete</code> raises <code>AssetFetchError</code> when a roster fetch fails (403, rate limit, 5xx)
+instead of reporting "no such player", and skips only a 404 roster; <code>find_athlete</code> / <code>find_event</code> raise
+<code>ValueError</code> (not <code>KeyError</code>) for an unknown league. The <code>sdv</code> CLI prints <code>sdv: &lt;msg></code> and exits 2 on a
+<code>NoDataError</code> / <code>AssetFetchError</code> instead of a traceback. <code>sportsdataverse_upload</code> stops retrying a
+permanent <code>gh</code> failure (HTTP 400/401/404, a 403 that is not a rate limit, a 422 other than
+<code>already_exists</code>, a missing release), judged on gh's stderr, instead of sleeping ~645 s.</li>
+<li class=""><strong>Her Hoop Stats:</strong> <code>herhoopstats_team_roster</code> answers a zero-row frame with the roster columns when the
+page has no roster; it returned the page's tallest table. (#919)</li>
+<li class=""><strong>Hockey:</strong> <code>sihf_phases</code> gives a null <code>phase_name</code> when a phase's name is missing, blank or not
+a string, like the other SIHF parsers; it gave <code>""</code> for a missing or blank name and the
+stringified value (<code>"['x']"</code>) for a list or object.</li>
+<li class=""><strong>Hockey:</strong> a <code>{"data": null}</code> body parses to a zero-row frame (it was one all-null row) in the generic
+KHL webcaster, Liiga and National League parsers; <code>khl_playoff_bracket.game_ids</code> is <code>List(Int64)</code> (it was a comma-joined string). (#865)</li>
+<li class=""><strong>Hockey:</strong> the European hockey throttle now leaves at least 1 s from the END of one response to the start of the next
+request to the same host, with one request in flight per host (it spaced request starts, so a 0.8 s answer let the
+next request go 0.2 s later). Every transport path records the finish, error answers and exceptions included. (#865)</li>
+<li class=""><strong>HockeyTech derived coordinates put home-team events off the rink.</strong> <code>add_coord_transforms</code>
+(every <code>&lt;league>_pbp</code> and <code>pwhl_pbp</code>) flipped home events with a 0-200 x 0-85 mirror applied
+to centre-origin feet, so home <code>x_coord_right</code> ran 191 to 290 ft and <code>y_coord_right</code> 49 to
+125 ft (PWHL game 42), and <code>y_coord_fixed</code> applied the y transform twice. The feed puts the
+home team's attack toward x = 0 in every period (320 PWHL games; sdv-internal-refs #50), and
+the columns are now rotations of the feet frame (#51): <code>x_coord_fixed</code> / <code>y_coord_fixed</code> =
+(-x, -y), home team shooting right; <code>x_coord_right</code> / <code>y_coord_right</code> = home (-x, -y),
+visitor (x, y); <code>x_coord_vertical</code> / <code>y_coord_vertical</code> = (-y_right, x_right). The right and
+vertical columns are null when an event's side is unknown (no team, as on faceoffs, or a null
+or empty home team id) instead of defaulting to the visitor's. <code>shot_distance</code>, <code>shot_angle</code>
+and xG are unchanged. The published PWHL play-by-play releases keep the old values until they
+are rebuilt.</li>
+<li class=""><strong>HockeyTech empty-net goals from a team's own half were measured to the wrong net.</strong>
+<code>add_shot_distance_angle</code> measures to the nearer net (<code>89 - |x|</code>), which per-event validation
+showed is right for own-half events with a goalie in net: they are near-net events whose
+coordinates the feed mirrored (own-half quality shots match ordinary ones at 10 / 24 / 35 ft).
+An own-half empty-net goal is a genuine long shot (27 in 320 PWHL games; median 126 ft,
+measured 59 ft). Empty-net goals (<code>empty_net</code> "1") now measure to the net their team attacks;
+every other event is unchanged (sdv-internal-refs #52). <code>shot_distance</code>, <code>shot_angle</code>,
+<code>scoring_chance</code> and the xG features of those goals change.</li>
+<li class=""><strong>HockeyTech schedules returned other seasons' games.</strong> <code>&lt;league>_schedule(season=...)</code> for
+the 19 HockeyTech league families, and <code>pwhl_schedule</code>, read <code>modulekit/scorebar</code>. That view
+ignores the <code>season_id</code> it is sent, returns games oldest-first and stops at its 10,000-row
+limit, so <code>ahl_schedule(season=2026)</code> returned 10,000 AHL games from 1995 to 2012 and none
+from 2025-26; OHL and ECHL failed the same way, and PWHL returned every season's games. The
+schedule functions now read <code>modulekit/schedule&season_id=&lt;id></code>, which the feed scopes to one
+season (live 2026-10-08: AHL 2025-26 = 1,152 games, OHL = 682, PWHL = 120, each in that season
+alone), and <code>parse_schedule(..., season_id=)</code> drops any row from another season (#727).
+Behaviour changes:
+<ul>
+<li class="">With neither <code>season</code> nor <code>season_id</code>, the schedule is the newest regular season, as in the
+other season-aware functions. It used to be the feed's whole window.</li>
+<li class=""><code>game_status</code> now reads the schedule view's strings: <code>Final OT</code> where scorebar said
+<code>Final 1st OT</code>, and the start time (<code>7:00 pm EST</code>) for an unplayed game.</li>
+<li class="">A season's playoffs and preseason are separate HockeyTech season ids; pass <code>season_id</code> for
+them.</li>
+<li class="">An empty reply, or a season filter that keeps nothing, is zero rows with the 12 columns.</li>
+</ul>
+</li>
+<li class=""><strong>HockeyTech:</strong> the 0.4 s request spacing holds when several threads call <code>hockeytech_api</code> at once; they could all
+read one stale timestamp and fire together. (#924)</li>
+<li class=""><strong>International basketball dtypes:</strong> a column name now has one dtype across a family's tables.
+<code>fiba_gamepage_box_teams.blocks_received</code> is Int64 (it was String because every sample was null), and
+<code>utc_offset</code> is Float64 on every GDAP table (a half-hour zone such as India +5.5 is a fraction); likewise VTB Infobasket <code>plus_minus</code> / <code>player_position</code> / <code>height</code> / <code>weight</code> and the KZS
+match <code>season</code> are Int64. SCB <code>shirt_number</code> is always String (a <code>00</code> jersey survives), Sportality per-game
+averages (<code>blkpg</code>, <code>orpg</code>, <code>plus_minus_pg</code>) are Float64, and the TBF team-box <code>efficiency</code> is Int64. (#864)</li>
+<li class=""><strong>KBL:</strong> the docs say an earlier (pre-2006-07) game's shot chart is a zero-row frame, as the code
+returns, not <code>NoDataError</code>. (#892)</li>
+<li class=""><strong>KenPom / Her Hoop Stats:</strong> a failed login request raises the package's error vocabulary
+(<code>AssetFetchError</code> / <code>NoDataError</code> / <code>ValueError</code>) instead of a bare <code>requests</code> error. (#919)</li>
+<li class=""><strong>KenPom / Her Hoop Stats:</strong> a member page answered with the login form or Her Hoop Stats' free-tier
+teaser (expired, replaced or unsubscribed session) raises <code>AssetFetchError</code> and drops the cached session. (#919)</li>
+<li class=""><strong>KenPom:</strong> <code>parse_kenpom_page()</code> keeps a jersey <code>"00"</code> (team and box pages): <code>read_html</code> typed the jersey column,
+so <code>"00"</code> became 0. Any other zero-padded text column also stays text. (#928)</li>
+<li class=""><strong>KHL:</strong> <code>khl_player_stats(position="goalies")</code> declares the goalie columns (<code>w</code>, <code>l</code>, <code>sop</code>, <code>ga</code>, <code>sv</code>, <code>sv_pct</code>,
+<code>gaa</code>, <code>so</code>, <code>toi</code>), fetches every page and returns one list sorted by games played, then wins, then name (khl.ru
+orders goalies by goals-against average ascending and ignores sort fields, so page 1 was the goalies without a
+game). A partial page set raises <code>AssetFetchError</code>. (#865)</li>
+<li class=""><strong>KHL:</strong> a khl.ru answer that is ServicePipe's anti-bot JS-challenge page now raises
+<code>AssetFetchError</code> naming the block (retry later or from another network) instead of
+"answered HTTP 200 without a sessid". (#866)</li>
+<li class=""><strong>Lega Basket:</strong> the play-by-play <code>side</code> is documented as what it is, the basket the court zone is measured from
+(0 = x 0, 1 = x 100), not the home/visitor team (that is <code>team_side</code>). (#864)</li>
+<li class=""><strong>MBB / WBB:</strong> <code>ncaa_mbb_play_by_play</code> / <code>ncaa_wbb_play_by_play</code> fetch a page the format guard rejects once and
+warn once; they re-fetched it as an empty scrape, a second stats.ncaa.org request and a second warning. (#887)</li>
+<li class=""><strong>MBB / WBB:</strong> <code>ncaa_mbb_play_by_play</code> / <code>ncaa_wbb_play_by_play</code> raise an <code>UnsupportedPageFormatWarning</code> the
+caller escalated to an error; they swallowed it, re-fetched the page and returned 0 rows. (#853)</li>
+<li class=""><strong>MBB / WBB:</strong> <code>parse_ncaa_bb_game_pbp</code> on a 2018-format page and <code>parse_ncaa_bb_team_schedule</code> on the
+older team page (2016) return the zero-row frame with an <code>errors.UnsupportedPageFormatWarning</code> naming the
+format; they returned 0 rows silently, or crashed / mis-paired half the games. (#853)</li>
+<li class=""><strong>MBB / WBB:</strong> the bigballR-port parsers (<code>parse_ncaa_bb_box</code>, <code>_team_schedule</code>, <code>_team_roster</code>,
+<code>_game_pbp</code>, <code>_shots</code>) return a zero-row frame for a non-HTML payload, and <code>parse_ncaa_bb_box</code> for another
+stats.ncaa.org page type, instead of raising.</li>
+<li class=""><strong>MBB / WBB:</strong> the stats.ncaa.org pbp / shots / box drivers turn a float contest id into <code>"6470186"</code>, never
+<code>contests/6470186.0/</code>; box-score failures are logged, not printed; one owner for the WBB period model. (#853)</li>
+<li class=""><strong>MLB docs:</strong> the <code>pitcher</code> column in the <code>load_mlb_xera</code>, <code>load_mlb_stuff_plus</code>, <code>load_mlb_command_plus</code>,
+<code>mlb_statcast_search</code> (+ <code>_minors</code> / <code>_wbc</code>), <code>as_of_split</code> and <code>bip_trajectory_features</code> returns tables now reads
+"MLBAM player id of the pitcher" instead of the inherited "Whether the position is a pitcher". On the Statcast-search,
+<code>as_of_split</code> and <code>bip_trajectory_features</code> pages, <code>home_score</code> / <code>away_score</code> are the score before the pitch (not
+after the play) and <code>player_name</code> follows <code>player_type</code> (the batter by default). On <code>espn_mlb_schedule</code>,
+<code>home_score</code> / <code>away_score</code> are now described as the ESPN scoreboard score rather than a per-play run total.</li>
+<li class=""><strong>MLB Stats API:</strong> <code>mlb_api_extra</code> sends a set, numpy array or float <code>league_id</code> / <code>sport_ids</code> through the shared <code>_csv</code>
+(<code>"103,104"</code>, <code>"103"</code>); a set went out as <code>"{103, 104}"</code>. (#928)</li>
+<li class=""><strong>MLB:</strong> <code>pitch_features</code> standardizes velocity, spin, movement and release within pitcher AND season
+(<code>game_year</code>, else the year of <code>game_date</code>), so PITCHf/x speeds (2008-16) and Statcast out-of-hand speeds
+(2017+, about +0.5-1 mph) never share one mean.</li>
+<li class=""><strong>NBA / WNBA / MBB / WBB pbp:</strong> <code>home_score</code> / <code>away_score</code> are rebuilt from the scoring plays when that reproduces the official final (late-keyed plays, 2013-19 free throws, neutral-site side swaps); new <code>score_source</code> (<code>"rebuilt"</code> / <code>"espn"</code>) says which (#830).</li>
+<li class=""><strong>NBA / WNBA / MBB / WBB pbp:</strong> a period's first play ends where the next play starts, not at the
+full period length after it started (WNBA Q2 at 9:41: 1781 -> 1800); a period's last play ends at
+0:00. Clock minutes are Int32 (WBB seconds Int32, NBA / WNBA Float64), not Float32. (#841)</li>
+<li class=""><strong>NBA / WNBA crosswalks:</strong> the archive team and player crosswalks no longer carry All-Star and
+other exhibition sides (e.g. WNBA 2026 TEAM SPOON / TEAM COOP); their games stay in the schedule
+crosswalk. (#786)</li>
+<li class=""><strong>NBA / WNBA player props:</strong> <code>nba_player_props()</code> raises its documented <code>ValueError</code> when the
+player box logs carry no <code>game_date</code>; it used to fail with polars' <code>ColumnNotFoundError</code> before the
+check ran. (#943)</li>
+<li class=""><strong>NBA/WNBA:</strong> <code>nba_availability</code> imputes missing GP% with the train-season median stored in the
+bundled artifact, not a median over the seasons being scored. (#850)</li>
+<li class=""><strong>NBA/WNBA:</strong> <code>nba_player_props(as_of_date=)</code> uses only box lines and ratings games dated strictly
+before the cut; the default is the target game's date (box logs, else schedule; else a new
+<code>errors.AsOfCutWarning</code>), so a played game never sees its own or later lines. (#850)</li>
+<li class=""><strong>NBA:</strong> <code>logistic_fit_irls</code> no longer overflows on separable data, and <code>nba_rapm</code> fits a single
+possession without a divide-by-zero warning. (#726)</li>
+<li class=""><strong>NCAA discover / roster sweeps:</strong> a team whose page 404s is skipped without counting toward the "ban-suspect"
+abort after 5 failures in a row, as the capture stage already did. (#924)</li>
+<li class=""><strong>NCAA ESPN game crosswalk:</strong> a crosswalk written in this process is read back instead of the cached empty
+answer from before it existed. (#924)</li>
+<li class=""><strong>NCAA parse stage:</strong> a family whose parser crashed is recorded in a <code>parse_errors</code> field of the game's JSON (it was
+an empty list, like a game with no shots), and the stage exits 1 when any game failed or carries one. (#924)</li>
+<li class=""><strong>NCAA:</strong> <code>ncaa_espn_team_crosswalk</code> falls back to the bundled copy only on a failed or absent release fetch or a
+drifted asset; any other error raises. <code>ncaa_mbb_box_scores</code> reports a dropped game through the module logger, not
+<code>print</code>. (MD-4, B-L41)</li>
+<li class=""><strong>NFL / CFB play-by-play:</strong> <code>line_yards</code> follows the standard adjusted-line-yards band (losses 120%,
+yards 0-4 100%, 5-10 50%, nothing past 10; cap 7), and line + second-level + open-field yards now sum
+to the carry (NFL was half a yard short on every 4+ carry). <code>adj_rush_yardage</code> caps at 10. (#843)</li>
+<li class=""><strong>NFL / CFB:</strong> <code>clean_nfl_pbp</code> now matches nflfastR's 15 <code>fix_weird_pass_plays</code> keys on nflverse pbp, whose <code>play_id</code>
+is Float64: the key cast goes through Int64, so it reads <code>..._1611</code>, not <code>..._1611.0</code>. On the real
+nflverse 1999-2020 files the 15 keyed rows now read <code>pass</code> 0, as nflverse's own column does (C-NF-8).
+The NFL processor's summary-pickcenter odds are Python scalars (they were shape-(1,) arrays), so a
+payload's odds round-trip through <code>odds_override</code>, and an all-null pickcenter spread takes the
+default path instead of raising IndexError (the CFB C-M19 / C-NF-10(b) twin; play frames unchanged
+on 84 nfl-raw games). <code>CFBPlayProcess.cfb_pbp_disk()</code> documents that an offline rebuild needs
+<code>join_participants=False</code> and <code>odds_override</code> (C-L3). (#852)</li>
+<li class=""><strong>NFL <code>advBoxScore</code> row order:</strong> <code>team</code> / <code>situational</code> / <code>defensive</code> / <code>drives</code> list the home team first, so these
+four tables serialise in the same order in every process; before, their rows reshuffled from run to run. Values
+are unchanged. (#917)</li>
+<li class=""><strong>NFL, CFB:</strong> a half or game that ends on a timeout row ends on the play before it, which now takes
+<code>end_of_half</code> and <code>EPA == -EP_start</code>; the timeout row took it (EPA 0.0). (#832)</li>
+<li class=""><strong>NFL.com Shield / 247Sports / MLS parsers:</strong> <code>parse_nfl_standings</code> no longer raises on a non-object week or a
+non-list <code>standings</code>; <code>parse_sports247_teams</code>, <code>_institution_rankings</code> and <code>parse_mls_entity</code> read a scalar array
+(or a non-list <code>list</code>) as drift, not invented rows; 247Sports keeps a pandas-2 gap null, never <code>"nan"</code>. (#945)</li>
+<li class=""><strong>NFL.com Shield and Statcast parsers:</strong> records that are not a list, or a record that is not an object
+(<code>parse_nfl_team(["a"])</code>, <code>{"rosters": 5}</code>), are zero rows with a <code>SchemaDriftWarning</code> on pandas 2 and 3; it was
+an N x 0 frame on pandas 2, a raise on pandas 3. A null row (<code>None</code> / <code>NaN</code> / <code>pd.NA</code>) is no row. (#945)</li>
+<li class=""><strong>NFL:</strong> <code>end_of_half</code> is true on a finished game's last play and on the play that ends regulation, so a
+non-scoring game-ending play scores <code>EPA == -EP_start</code> and the last drive's <code>fixed_drive_result</code> fills; the
+2002-05 feeds' untyped "End of the game." row is no longer a play. (#832)</li>
+<li class=""><strong>NFL:</strong> <code>exp_qbr</code> feeds the bundled QBR booster in its trainer's order; it scored sack EPA as pass EPA,
+pass as rush and rush as sack. (#795)</li>
+<li class=""><strong>NFL:</strong> <code>get_go_wp</code> on a full nflverse frame no longer raises pandas <code>PerformanceWarning</code>s; output is
+unchanged. (#726)</li>
+<li class=""><strong>NFL:</strong> <code>NFLPlayProcess</code> (ESPN and the CBS/Fox/Yahoo/Shield adapters) takes a play's end team/down/distance from
+the next play in the game and half, and keeps a half-ending plain snap's possession, not ESPN's <code>end</code> (corrupt
+2014-2021); the published 2014-2021 ESPN NFL pbp and everything built from it need the reprocess. (#785)</li>
+<li class=""><strong>NFL:</strong> <code>NFLPlayProcess</code> reads a first down by penalty from the 2009+ NFL foul text (2002-2008 text names no accepted
+foul, so those seasons stay unrecovered), and <code>series</code> / <code>fixed_drive</code> follow nflfastR on muffed punts, timeout rows
+and the kickoff after a defensive touchdown; the ESPN NFL pbp and its series tables need the reprocess. (#806)</li>
+<li class=""><strong>NFL:</strong> <code>td_play</code> keeps a scored "TOUCHDOWN NULLIFIED" row the try follows (foul enforced on the kickoff),
+and clears a touchdown reversed into a safety and, from 2009, an unscored "Kickoff/Punt Return Touchdown" with
+no touchdown in its text (2024 onside/short kicks): 34 rows 2006-2024 move, all to nflverse. (#840)</li>
+<li class=""><strong>NFL:</strong> <code>td_play</code>, <code>pass_td</code> and <code>rush_td</code> are False on a touchdown that did not stand: "TOUCHDOWN
+NULLIFIED by Penalty" and a replay-REVERSED score ESPN leaves unscored but still types "Passing/Rushing
+Touchdown". Team box TD counts now equal ESPN's box (291018018 NO passing 4, 401671740 TB rushing 2). (#808)</li>
+<li class=""><strong>NFL:</strong> a half-ending play's <code>wp_after</code>, <code>def_wp_after</code>, <code>home_</code>/<code>away_wp_after</code>, <code>wpa</code> and <code>prog_drive_WPA</code> follow
+the next real play's WP (nflfastR <code>lead(home_wp)</code>): 20 half-end rows in 18 of 37 captures, plus <code>prog_drive_WPA</code> on
+400791590's Timeout after its half end; 140 rows in 139 of 268 held-out 2003-24 games, max 0.325. (#969)</li>
+<li class=""><strong>NFL:</strong> a kickoff the kicking team recovers (a muff, an onside kick) ends at the kicking team's next snap and is
+scored from the receiver's side, so its EPA is the loss nflverse gives it (2010 muff: +0.63 -> -3.82, nflverse
+-3.89). (#831)</li>
+<li class=""><strong>NFL:</strong> a kickoff's net spot is read from the receiving team's next snap only; ESPN sometimes files a kickoff
+inside the kicking team's drive, whose next snap was read as the receiver's. (#831)</li>
+<li class=""><strong>NFL:</strong> a pre-2009 punt (ESPN's bare "Punt" feed) ends at the receiver's next snap, like a kickoff, not at ESPN's end
+yard line: summed |EPA - nflverse| on the 93 pre-2009 punts #856 moved (644 sample games) goes 86.2 -> 11.3 (74.2
+before #856), and on all 3,315 pre-2009 punts there 1,520 -> 525. (#963)</li>
+<li class=""><strong>NFL:</strong> a pre-2009 return ESPN types "Punt/Kickoff Return Touchdown" with no try after it is no longer a touchdown:
+17 rows over all 6,749 nfl-raw games, all 2005-08, summed |EPA - nflverse| 103.4 -> 2.1. (#975)</li>
+<li class=""><strong>NFL:</strong> a punt from 2009 on also ends at the receiver's next snap, and every punt takes that snap's clocks, so published
+2009-2026 punt EPA changes (269 sampled games, summed |EPA - nflverse|: 2009-15 434 -> 151, 2016-25 216 -> 146), as do
+the rows after a punt (EP_between, lag_EP_end, prog_drive_EPA; 6 penalty snaps 15.72 -> 0.71) and 4 pre-2009 punts. (#971)</li>
+<li class=""><strong>NFL:</strong> a quarterback with no sack, rush or penalty play gets 0 for that <code>exp_qbr</code> input, as the QBR trainer
+did, instead of 0/0 = NaN, which the booster read as missing. Spearman of <code>exp_qbr</code> vs ESPN Total QBR over
+the 573 rated 2023 quarterback-games rises from 0.807 to 0.834. (#802)</li>
+<li class=""><strong>NFL:</strong> a safety typed otherwise, left unscored or with no "safety" in its text takes the -2 overlay and keeps its
+2 points: all nfl-raw, 60 rows 211.2 -> 13.3 (48 before 2009, 10 in 2009-15, 2 in 2025), every nflverse-matched
+row closer, 148 score rows in 8 games now nflverse's. Seasons 2002-15 and 2025 change. (#975)</li>
+<li class=""><strong>NFL:</strong> a touchback kickoff (its text says touchback, or the receiver next snaps at the touchback spot) scores
+<code>EP_end</code> at its start clock, so ESPN's end clock no longer moves its EPA (2007 KC kickoff at 0:23 with a 1:08 end
+clock: +0.52 -> 0, nflverse 0), at the touchback spot when ESPN's end clock is 0; WPA is unchanged. (#856)</li>
+<li class=""><strong>NFL:</strong> a touchback kickoff ends at the season's touchback spot, not a fixed 75, so its EPA is 0 in every season (it
+read +0.35 before 2016, -0.25 / -0.48 in 2024 / 2025); a 2024+ landing-zone touchback keeps its next snap at the 20.
+nflverse still scores 2024+ kickoffs from 75: its touchback <code>epa</code> is +0.26 / +0.35 over the 2024 / 2025 seasons. (#831)</li>
+<li class=""><strong>NFL:</strong> before 2014, a play ESPN files under a later period than the plays on both sides of it takes their period
+(727 rows 2002-13, every one that joins agreeing with nflverse <code>qtr</code>), so a half no longer "ends" on a misfiled
+kickoff and its drives, clock and EPA follow; 261022011 now has one first-half end. (#856)</li>
+<li class=""><strong>NFL:</strong> kickoff and missed field goal EPA score the next possession's 1st & 10: an unscored kickoff
+at the receiver's next snap (1st & goal inside the 10), a missed field goal at the spot of the kick
+(the 20 when that is inside it), not ESPN's down -1 or stale end. (#810)</li>
+<li class=""><strong>NFL:</strong> overtime <code>wp</code> / <code>vegas_wp</code> now follow the season's overtime rule format (<code>model_vars.OVERTIME_FORMATS</code>):
+sudden death, nflfastR's One_FG form with a per-game <code>Drive_Diff</code>, or a both-teams-possess form (postseason 2022+,
+regular season 2025+) under which an opening-drive touchdown no longer ends the game; spring-football overtime gets null.</li>
+<li class=""><strong>NFL:</strong> released <code>home_</code>/<code>away_wp_after_naive</code> were flipped on every change of possession (3,671 rows, ~14 a game, in
+268 held-out games), and <code>wp_after_naive</code>/<code>wpa_naive</code> read the next row (a Timeout, or a half's end), not the next real play (1,855 rows in
+256 games, max 0.38). Naive home WP is now continuous into the next real play (breaks 5,438 -> 0), as nflfastR. (#973)</li>
+<li class=""><strong>NFL:</strong> the EPA scoring overlay reads the corrected touchdown flags: a kicking-team recovery returned for a score
+takes the kicker's touchdown (2010: +6.30 -> -7.54, nflverse -7.67), and a touchdown-typed row whose score did not
+stand takes no touchdown value (2024 short and onside kicks: 5.13 / 5.75 -> 0.67 / 1.02, nflverse 0.93 / 1.42). (#856)</li>
+<li class=""><strong>NFL:</strong> the kickoff-touchback spot is now the rule spot per season (<code>model_vars.touchback_yardline</code>: 80 / 75 / 70
+for 2024 / 65 from 2025) in the EP feature substitution, the overtime re-score and the ESPN <code>yds_kickoff_return</code>;
+nflfastR still scores 2024+ kickoffs at 75, so kickoff-row <code>ep</code> diverges from nflverse there by design.</li>
+<li class=""><strong>NHL / PWHL player impact:</strong> <code>build_stints</code> credits a shot or goal at a line-change second to the line on the ice
+before the change, not the one after it (scorer on ice: 11 -> 22 of 25 PWHL and 1 -> 13 of 14 NHL fixture goals;
+PWHL xG off the shooter's stint 6.73 -> 3.30 of 25.0). RAPM, WAR, unit and special-teams values move. (#960)</li>
+<li class=""><strong>NHL:</strong> <code>espn_nhl_pbp</code> reads ESPN's NHL clock as elapsed time, so <code>start/end.*_seconds_remaining</code>
+count down within each period (playoff OT 20 min, regular-season 5, shootout 0; in OT the game clock is
+the OT period clock, as in fastRhockey) and no row ends after it starts. (#857)</li>
+<li class=""><strong>NHL:</strong> <code>load_nhl_game_rosters()</code> accepts published roster seasons from 2010 instead
+of rejecting seasons before 2024.</li>
+<li class=""><strong>NHL:</strong> <code>nhl_skater_war</code> no longer emits a <code>player_id</code> 0 row when a faceoff or penalty names
+no player on one side. (#846)</li>
+<li class=""><strong>NHL:</strong> twelve release loaders rejected seasons their releases publish:
+<code>load_nhl_game_info()</code>, <code>load_nhl_goalie_boxscores()</code>, <code>load_nhl_linescore()</code>,
+<code>load_nhl_penalties()</code>, <code>load_nhl_scoring()</code>, <code>load_nhl_scratches()</code>,
+<code>load_nhl_skater_boxscores()</code> and <code>load_nhl_three_stars()</code> started at 2024, and
+<code>load_nhl_officials()</code>, <code>load_nhl_shifts()</code>, <code>load_nhl_shootout()</code> and
+<code>load_nhl_shots_by_period()</code> at 2025. Every NHL release publishes from 2010
+(the 2009-10 season), and all of them now accept it. <code>load_nhl_pbp_lite()</code> reads
+the release's current <code>play_by_play_lite_&lt;season></code> files, now published for
+2010-2027. The legacy <code>play_by_play_&lt;season>_lite</code> files stopped at 2026, so the
+current season was missing. The current files hold every legacy column, plus
+<code>game_date</code>.</li>
+<li class=""><strong>P. LEAGUE+ (<code>pleague</code>):</strong> <code>action_en</code> in the play-by-play is read from each row's own phrase, so
+free throws say which throw of how many (<code>"free throw 2, made"</code>) instead of every one reading
+<code>"free throw 1 of 3 awarded, ..."</code>. (#892)</li>
+<li class=""><strong>Parsers:</strong> 153 provider parsers (HockeyTech, NFL.com Shield, Fox, CBS, 247Sports, EuroLeague, Sleeper, NFL Pro, Kalshi,
+Polymarket, soccer, international basketball, European hockey) return zero rows for an error envelope, an empty <code>{}</code> record
+or a wrong-typed body; HockeyTech <code>parse_game_summary</code> adds its <code>game</code> stub row only with a <code>game_id</code> or data. (#923)</li>
+<li class=""><strong>Parsers:</strong> a <code>null</code> row in a row list is dropped wherever it sits, instead of becoming an all-null row, raising,
+or (as the first row) changing the frame's shape; a list holding only nulls reads as an empty one. Any other row
+that is not an object is still schema drift. Covers the ESPN, NHL and MLB Stats API parsers. (#953)</li>
+<li class=""><strong>Parsers:</strong> the NHL api-web / EDGE, MLB Stats API and stats.nba.com parsers return zero rows for a <code>None</code>, <code>""</code>,
+list or <code>{code, message}</code> error-envelope body instead of raising or flattening it into a row. (EX-1.3-a)</li>
+<li class=""><strong>Parsers:</strong> with pandas 2 installed, a row list that stops holding objects now warns <code>SchemaDriftWarning</code> and
+returns zero rows, as with pandas 3; it came back as an N x 0 frame with no warning. Covers the ESPN, NHL api-web
+/ EDGE / Stats REST / Records and MLB Stats API parsers, and <code>parse_draft</code>'s inline rounds no longer raise. (#941)</li>
+<li class=""><strong>PWHL:</strong> <code>pwhl_game_info</code>, <code>pwhl_player_box</code> and <code>pwhl_player_info</code> return data again. They read
+the <code>statviewfeed</code> <code>gameSummary</code> / <code>player</code> replies, which are bare JSON objects, as <code>SiteKit</code>
+envelopes and so returned an empty frame for every game and player. <code>pwhl_game_info</code> now returns
+the published <code>load_pwhl_game_info</code> columns, <code>pwhl_player_box</code> the fastRhockey skater and goalie
+frames (ids Int64), and <code>pwhl_player_info</code> one row of player bio. The HockeyTech client also
+unwraps a JSONP body that ends in <code>);</code>.</li>
+<li class=""><strong>PWHL:</strong> <code>pwhl_skater_rapm</code>, <code>pwhl_unit_ratings</code>, <code>pwhl_special_teams_value</code> and <code>pwhl_skater_war</code>
+run on <code>load_pwhl_pbp</code> + <code>load_pwhl_shifts</code> output; they raised <code>ColumnNotFoundError: "secondary_type"</code>.
+<code>pwhl_team_ratings</code> / <code>pwhl_player_props</code> read PWHL data; they returned NHL ratings and props. (#846)</li>
+<li class=""><strong>Python 3.9:</strong> <code>sportsdataverse.cfb</code> imports on 3.9 again (<code>cfb_drive_summary</code> and <code>cfb_situational_stats</code> used
+runtime <code>X | Y</code> annotations); a test walks every module for runtime PEP 604/585 annotations. (#865)</li>
+<li class=""><strong>RealGM:</strong> every <code>realgm_*</code> function raises <code>AssetFetchError</code> when the page is still Cloudflare's
+"Just a moment..." challenge; it returned a zero-row frame. (#919)</li>
+<li class=""><strong>Runtimes:</strong> the Data API id-map lookup no longer returns an error body as the row (dispatch falls back);
+<code>pff_api_*</code> returns <code>{}</code> on a 204/205; with the opt-in cache on, statcast / torvik return the same JSON on a hit as on
+the first call; the On3, The Odds API and statcast player parsers return zero rows for a hostile body. (#921)</li>
+<li class=""><strong>sdv-docs index:</strong> stdlib and third-party objects a module re-exports (<code>typing.Any</code>, <code>xgboost.Booster</code>,
+<code>tqdm</code>, <code>functools.lru_cache</code>, 14 in all) are no longer indexed as sdv-py functions. SDV partials and
+type aliases whose <code>__module__</code> is <code>functools</code> or <code>typing</code> stay indexed.</li>
+<li class=""><strong>sdv-docs:</strong> the server opens an index whose path contains <code>?</code>, <code>#</code> or <code>%</code>; such a path used to end
+the SQLite URI early and silently open a different, empty file. A corrupt or foreign <code>SDV_DOCS_DB</code>
+now gets an <code>index unreadable: …</code> answer instead of a raised <code>DatabaseError</code>.</li>
+<li class=""><strong>sdv-docs:</strong> when the <code>mcp</code> import fails, <code>sdv-docs</code> prints the import error after the install hint,
+so an installed but incompatible <code>mcp</code> is visible.</li>
+<li class=""><strong>Statcast search:</strong> a 200 chunk that is not a Statcast CSV (an HTML or error page) raises
+<code>AssetFetchError</code> instead of adding a junk row or reading as "no games"; a dropped connection does too. (#919)</li>
+<li class=""><strong>stats.nba.com / stats.wnba.com:</strong> a float or numpy <code>GameID</code> is sent as <code>"0022400001"</code>; it was sent as
+<code>"22400001.0"</code>, which the host rejects with HTTP 400. A malformed <code>SDV_PY_NBA_STATS_*</code> value raises naming the variable. (#928)</li>
+<li class=""><strong>stats.ncaa.org / ProxyBonanza:</strong> an HTTP 400 or 422 (without a WAF ban or challenge page) raises <code>ValueError</code> after
+one request; it rotated the whole proxy pool and ended in <code>AssetFetchError</code>. (#920)</li>
+<li class=""><strong>stats.ncaa.org cache:</strong> a cached bm-verify shell, sub-1 KB stub or Access Denied page is re-fetched; it was served
+forever, so every parser read zero rows for that game until <code>force=True</code>. (#920)</li>
+<li class=""><strong>TheSportsDB:</strong> the default free key is <code>123</code> (key <code>3</code> now answers HTTP 403), and a free-key list that
+reaches the key's row cap warns that it is probably truncated. (#919)</li>
+<li class=""><strong>Validation:</strong> <code>validate_game</code> no longer crashes under polars 2.0 when the score columns are Float64,
+and a failure building the standing-scrimmage frame is reported as <code>box.standing_scrimmage_built</code>
+(warning) instead of silently lowering coverage.</li>
+<li class=""><strong>VTB Infobasket:</strong> an empty string in an id, rank or number column is null; the roster <code>rank</code> (blank in every
+sample) is documented as unobserved and typed Int64. (#864)</li>
+<li class=""><strong>WBB/WNBA release helpers:</strong> <code>helper_wbb_officials</code> / <code>helper_wnba_officials</code> skip a null element of the officials list (was <code>AttributeError</code>), return a zero-row frame with their columns when there are no officials (was zero columns), and no longer collapse two id-less officials whose other fields are equal. <code>helper_wbb_game_rosters</code> reads the strings <code>"false"</code>/<code>"F"</code> as false (R <code>as.logical</code>); <code>bool("false")</code> made them true. The ESPN stat pivot's float coercion maps NaN to null. (#878)</li>
+<li class=""><strong>WBB:</strong> <code>ncaa_wbb_game_pbp</code> / <code>ncaa_wbb_play_by_play</code> infer the era from the page for a NaN or blank <code>season</code>,
+as for <code>None</code>; they bound the quarters model and a halves-era game returned 0 rows. (#887)</li>
+<li class=""><strong>WBB:</strong> <code>ncaa_wbb_game_pbp</code> / <code>ncaa_wbb_shot_locations</code> read <code>season=2015.0</code> as 2015 (halves); it became
+<code>"2015.0"</code>, bound the quarters model and a halves-era game returned 0 rows. (#853)</li>
+<li class=""><strong>WBB:</strong> <code>period_and_sec_left</code> (the NCAA shots' <code>period</code> / <code>sec_left</code>) reads <code>season=2015.0</code> as 2015
+(halves); it became <code>"2015.0"</code> and labelled a halves-era shot with the quarters model. (#887)</li>
+<li class=""><strong>WNBA / Summer League lineups:</strong> rotation lineups are timed on the league's own periods (WNBA
+10-minute quarters, halves before 2006; Summer League 10-minute quarters), not NBA 12-minute ones; a
+malformed rotation returns an empty frame and every engine falls back to pbp lineups. (#818)</li>
+<li class=""><code>_crosswalk_alt</code> CBS parse skips a box score whose <code>playerStats</code> is a list: CBS answers a few college football game ids with a basketball box (CFB 2017 and 2021), which used to stop the whole season's parse.</li>
+<li class=""><code>cfb_schedule_crosswalk</code> builds the same rows from the same upstream data. A Yahoo scoreboard week that answered HTTP 200 with a cut-off JSON body was skipped, so its Yahoo ids and Yahoo-only games came and went between nightly builds (1,565 vs 1,608 rows for 2026). <code>_download_json</code> (and the Yahoo Shangrila getter) now re-fetches a truncated JSON body up to twice, and a full-season build raises <code>CrosswalkSourceError</code> on any failed ESPN calendar, ESPN week or Yahoo week instead of skipping it.</li>
+<li class=""><code>espn_wbb_calendar</code> accepts season 2001 (ESPN serves a women's college basketball calendar from 2000-01); it refused every season before 2002, which kept the older-seasons backfill from fetching WBB 2001.</li>
+<li class=""><code>ncaa_wbb_game_pbp</code> / <code>ncaa_wbb_play_by_play</code> bind the WBB period model for the game's era (halves through 2014-15, quarters from 2015-16) instead of quarters unconditionally; a pre-2016 game no longer parses to zero rows. New <code>season=</code> argument pins the era; without it <code>infer_wbb_period_model</code> reads it from the page's first-period clock. (sdv-internal-refs <code>rules/wbb.yaml#wbb-2016-four-quarters</code>)</li>
+<li class=""><code>parse_soccer_summary</code> (so <code>espn_&lt;league>_summary</code> for every ESPN soccer league) warns (<code>UserWarning</code>, naming the event id) when a payload carries a match header but <code>key_events</code>, <code>commentary</code> and <code>lineups</code> are all empty, instead of returning the zero-row frames silently. ESPN lists usa.nwsl 2014-2018 but ships no detail for those seasons. (sdv-internal-refs <code>rules/nwsl.yaml#nwsl-2013-espn-season-coverage-start</code>)</li>
+<li class="">CFB pbp: <code>fumble_lost</code> / <code>fumble_recovered</code> read the recovering team from the text (a punt returner recovering his own fumble is no loss; a muffed punt the kicking team recovers is one), kickoff touchbacks come out to the 25 from 2012 (they switched only after 2013, in <code>yds_kickoff_return</code> and the EP touchback yardline), and <code>yds_fumble_return</code> reads the 2004-06 "returned for a N yard touchdown".</li>
+<li class="">CFB pbp: pre-2014 onside recoveries (<code>Kickoff Return (Defense)</code>) are typed <code>Kickoff</code> before the kickoff possession flip, so they carry <code>kickoff_play</code> / <code>kickoff_onside</code> and the right kicking / receiving team; and <code>td_play</code> follows a touchdown type that 2014+ scoring-summary text never spells out ("12 Yd Interception Return (X Kick)").</li>
+<li class="">Era-dependent behaviour catalogued in sdv-internal-refs <code>rules/</code> is now honoured at the code sites it flagged: ESPN soccer summaries null the <code>(0.0, 0.0)</code> "no location" coordinate pairs and strip trailing spaces from names (<code>rules/epl.yaml</code>); <code>cricket_match_state</code> reads a DLS-reduced innings' revised over allocation from the score string instead of the format's full ball budget (<code>rules/cricket.yaml#cricket-1999-duckworth-lewis</code>); <code>mlb_statcast_search</code> clamps a pre-2008-03-25 window to the tracking floor with a warning and <code>get_baselines</code> warns when it falls back to the nearest committed season (<code>rules/mlb.yaml</code>); <code>get_court(league_id, season=)</code> returns the three-point geometry in force that season (NBA 22-ft arc 1994-97, WNBA 19'9" / 20'6.25" / FIBA eras); <code>get_sf_constants(league, season=)</code> resolves the UFL 2024 / 2025 / 2026, XFL and CFL rulesets; HockeyTech <code>ot_period_length</code> carries the sourced regular-season OT length for PWHL (300), ECHL and USHL (420) and BCHL (600).</li>
+<li class="">NFL play-by-play <code>opportunity_run</code> now marks a carry that gained 4 or more yards; it was inverted (<code>&lt;= 4</code>), so short runs counted as opportunities and the box's <code>rushing_opportunity_rate</code> ran about 0.62 instead of about 0.46. <code>opportunity_run</code>, <code>highlight_run</code> and <code>adj_rush_yardage</code> now gate on <code>rush</code>, as the CFB processor does, so rushing touchdowns and fumbled rushes are no longer dropped.</li>
+<li class="">Release loaders classify every failure: a refused or reset connection raises <code>AssetFetchError</code> (it leaked <code>requests.ConnectionError</code>). A failed read is checked with a one-byte ranged GET instead of a full re-download; a reachable asset whose read failed in transit is read again, and a failure on that second read is classified too (404 <code>NoDataError</code>, anything else <code>AssetFetchError</code>). A body that arrived whole but does not parse is re-raised at once, without a second fetch. The NFL CSV loaders (<code>load_nfl_teams</code>, <code>load_nfl_ff_playerids</code>, <code>load_nfl_ff_rankings</code>) fetch through the HTTP gateway, so a 404 is <code>NoDataError</code>, a 400 <code>ValueError</code>, a rate limit is retried and then <code>AssetFetchError</code>, and a challenge page is refused (on polars 2.0 every failure was a bare <code>OSError</code>). <code>download()</code> no longer decodes an <code>application/octet-stream</code> body as JSON.</li>
+<li class="">The archive crosswalks' team pairing (date and home/away co-occurrence) leaves a team
+unpaired when two candidates tie, instead of taking the lower id. A full season never
+ties; a slice of a few dates could pair the wrong franchises.</li>
+<li class="">The fourth-down surface's PAT make probability (<code>get_2pt_wp</code> / <code>get_2pt_probs</code>, <code>conv_1pt</code>) scores the FG model at nflfastR's pre-2015 spot (<code>yardline_100 = 3</code>, the kick snapped from the 2) for seasons before 2015 instead of the modern 15 for every season; new <code>PAT_YARDLINE_PRE_2015</code> / <code>PAT_YARDLINE_POST_2015</code> / <code>PAT_FIRST_SEASON_FROM_15</code> constants in <code>nfl.model_vars</code>. (sdv-internal-refs <code>rules/nfl.yaml#nfl-2015-pat-snap-from-15</code>)</li>
+</ul>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=security>Security<a href=#security class=hash-link aria-label="Direct link to Security" title="Direct link to Security" translate=no>​</a></h3>
+<ul>
+<li class=""><strong>Cache:</strong> the opt-in response cache stores bodies after credential scrubbing, not before, so a token or API key
+echoed in a body or URL never lands on disk. (#865)</li>
+<li class=""><strong>Cached bodies:</strong> only the request's own credential values are scrubbed from a stored body (now
+including <code>api_token=</code> / <code>user_key=</code> params), so a signed media URL in the body (<code>X-Amz-Signature=</code>,
+<code>Signature=</code>) is served from the cache exactly as the live call returned it.</li>
+<li class=""><strong>Redaction:</strong> error messages, retry log lines and cached URLs now also hide a URL's <code>user:password@</code>,
+<code>appkey=</code>, <code>access_key=</code>, <code>subscription-key=</code>, <code>sig=</code>, <code>signature=</code>, <code>auth=</code>, <code>pass=</code> and <code>Authorization</code>
+values, a <code>Bearer</code> / <code>Basic</code> credential and a whole <code>Cookie:</code> header line; a failed request's <code>X-Api-Key</code> / <code>x-api-secret</code> / <code>X-Authorization</code>
+headers are dropped with <code>Authorization</code> and <code>Cookie</code>.</li>
+<li class=""><strong>Response cache:</strong> a request that authenticates outside its URL (an <code>Authorization</code>, <code>Cookie</code>,
+<code>X-Api-Key</code> or other credential header, or a <code>session=</code> holding cookies) is never cached, so a second
+credential in the same process or cache dir is no longer served the first one's body (legacy PFF
+Premium, <code>api.nfl.com</code>, NFL Pro, the Data API id map, KenPom / Her Hoop Stats sessions). <code>cache_ttl=0</code>
+given as an <code>int</code> no longer raises <code>AttributeError</code> when a cache mode is on (every basketball runtime
+passes it). A body that cannot be cached, or a binary one (<code>application/octet-stream</code>, images,
+parquet, ...), is no longer JSON-decoded on every download.</li>
+<li class=""><strong>Subscription logins:</strong> the KenPom / Her Hoop Stats session cache tells passwords apart (a changed
+password logs in again instead of reusing the old session for 30 minutes), and threads that miss it
+together log in once. The 247Sports guest token and the On3 buildId are minted once under a lock.</li>
+</ul>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id=data>Data<a href=#data class=hash-link aria-label="Direct link to Data" title="Direct link to Data" translate=no>​</a></h3>
+<ul>
+<li class=""><strong>Cricket:</strong> the win-probability artifacts are refit on Cricsheet male internationals 2002-2026 (3,581 T20I +
+2,589 ODI): the surface is regime-keyed with per-cell support, the calibrator is fitted on the regime-aware raw
+probabilities, pooled constants move to T20 149.5/42/33 and ODI 249.3/76/59, and both holdout fixtures carry
+<code>match_date</code>. Holdout Brier 0.1898 -> 0.1882, max per-decile gap 0.0326 -> 0.0369 (gate 0.05).</li>
+<li class=""><strong>MBB / WBB pbp:</strong> free throws of the 2014-2026 seasons (ESPN types made and missed ones alike
+"MadeFreeThrow") now sit on the line in <code>coordinate_x/_y</code>, transformed from (25, 13.75) like
+NBA / WNBA's; <code>coordinate_x_raw/_y_raw</code> keep ESPN's (25, 0), as the published files do. hoopR /
+wehoop's case-sensitive "Free Throw" match never caught them, so the published MBB / WBB files
+keep ESPN's coordinates on those rows (39, 44 and 26 rows in the three committed MBB games, 37
+in the WBB one); they are corrected at the next republish (REPROCESS run #3).</li>
+<li class="">NCAA 2026-27 MBB (365) and WBB (363) team ids added to the bundled <code>ncaa_teamids_{mbb,wbb}.csv</code>, captured from stats.ncaa.org's Division I team list, and their 2026-27 rows to the bundled NCAA ↔ ESPN team crosswalks (every team matched; West Florida joins in the ASUN, New Orleans is now LSU New Orleans, Saint Francis left Division I).</li>
+</ul></article></div><div class="col col--2"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href=#unreleased class="table-of-contents__link toc-highlight">Unreleased</a><ul><li><a href=#breaking-changes class="table-of-contents__link toc-highlight">Breaking changes</a><li><a href=#added class="table-of-contents__link toc-highlight">Added</a><li><a href=#changed class="table-of-contents__link toc-highlight">Changed</a><li><a href=#deprecated class="table-of-contents__link toc-highlight">Deprecated</a><li><a href=#removed class="table-of-contents__link toc-highlight">Removed</a><li><a href=#fixed class="table-of-contents__link toc-highlight">Fixed</a><li><a href=#security class="table-of-contents__link toc-highlight">Security</a><li><a href=#data class="table-of-contents__link toc-highlight">Data</a></ul></ul></div></div></div></main></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Docs</div><ul class="footer__items clean-list"><li class=footer__item><a class=footer__link-item href=/docs/intro>Getting started</a><li class=footer__item><a class=footer__link-item href=/>Leagues</a><li class=footer__item><a class=footer__link-item href=/docs/category/tutorials>Tutorials</a><li class=footer__item><a class=footer__link-item href=/CHANGELOG>Changelog</a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>Community</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://github.com/sportsdataverse/sportsdataverse-py target=_blank rel="noopener noreferrer" class=footer__link-item>GitHub<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://bsky.app/profile/sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>Bluesky<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://twitter.com/sportsdataverse target=_blank rel="noopener noreferrer" class=footer__link-item>X<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div><div class="theme-layout-footer-column col footer__col"><div class=footer__title>SportsDataverse</div><ul class="footer__items clean-list"><li class=footer__item><a href=https://sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sportsdataverse.org<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sdvplot.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>sdvplot<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://r.sportsdataverse.org target=_blank rel="noopener noreferrer" class=footer__link-item>R packages<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a><li class=footer__item><a href=https://sportsdataverse.org/status target=_blank rel="noopener noreferrer" class=footer__link-item>Data status<svg width=13.5 height=13.5 aria-label="(opens in new tab)" class=iconExternalLink_nPIU><use href=#theme-svg-external-link /></svg></a></ul></div></div><div class="footer__bottom text--center"><div class=footer__copyright>Copyright © 2026 <strong>sportsdataverse-py</strong>, developed by <a href=https://twitter.com/saiemgilani>Saiem Gilani</a>, part of the <a href=https://sportsdataverse.org>SportsDataverse</a>.</div></div></div></footer></div></body>
