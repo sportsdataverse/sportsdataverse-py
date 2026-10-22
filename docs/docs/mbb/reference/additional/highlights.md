@@ -8,7 +8,7 @@ description: "MBB — additional Python functions — Highlights — function re
 
 ### espn_mbb_game_rosters {#espn_mbb_game_rosters}
 
-`espn_mbb_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+`espn_mbb_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame | pd.DataFrame | dict'`
 
 espn_mbb_game_rosters() - Pull the game by id.
 
@@ -17,12 +17,12 @@ espn_mbb_game_rosters() - Pull the game by id.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `int` |  | Unique game_id, can be obtained from mbb_schedule(). |
-| `raw` |  | `False` |  |
+| `raw` | `bool` | `False` | If True, returns the Core v2 competitors payload (dict) as ESPN sent it; its roster, team and athlete `$ref` links are not followed. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**
 
-Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 'athlete_guid', 'athlete_type', 'first_name', 'last_name', 'full_name', 'athlete_display_name', 'short_name', 'weight', 'display_weight', 'height', 'display_height', 'age', 'date_of_birth', 'slug', 'jersey', 'linked', 'active', 'alternate_ids_sdr', 'birth_place_city', 'birth_place_state', 'birth_place_country', 'headshot_href', 'headshot_alt', 'experience_years', 'experience_display_value', 'experience_abbreviation', 'status_id', 'status_name', 'status_type', 'status_abbreviation', 'hand_type', 'hand_abbreviation', 'hand_display_value', 'draft_display_text', 'draft_round', 'draft_year', 'draft_selection', 'player_id', 'starter', 'valid', 'did_not_play', 'display_name', 'ejected', 'athlete_href', 'position_href', 'statistics_href', 'team_id', 'team_guid', 'team_uid', 'team_slug', 'team_location', 'team_name', 'team_nickname', 'team_abbreviation', 'team_display_name', 'team_short_display_name', 'team_color', 'team_alternate_color', 'is_active', 'is_all_star', 'team_alternate_ids_sdr', 'logo_href', 'logo_dark_href', 'game_id'
+Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 'athlete_guid', 'athlete_type', 'first_name', 'last_name', 'full_name', 'athlete_display_name', 'short_name', 'weight', 'display_weight', 'height', 'display_height', 'age', 'date_of_birth', 'slug', 'jersey', 'linked', 'active', 'alternate_ids_sdr', 'birth_place_city', 'birth_place_state', 'birth_place_country', 'headshot_href', 'headshot_alt', 'experience_years', 'experience_display_value', 'experience_abbreviation', 'status_id', 'status_name', 'status_type', 'status_abbreviation', 'hand_type', 'hand_abbreviation', 'hand_display_value', 'draft_display_text', 'draft_round', 'draft_year', 'draft_selection', 'player_id', 'starter', 'valid', 'did_not_play', 'display_name', 'ejected', 'athlete_href', 'position_href', 'statistics_href', 'team_id', 'team_guid', 'team_uid', 'team_slug', 'team_location', 'team_name', 'team_nickname', 'team_abbreviation', 'team_display_name', 'team_short_display_name', 'team_color', 'team_alternate_color', 'is_active', 'is_all_star', 'team_alternate_ids_sdr', 'logo_href', 'logo_dark_href', 'game_id' plus the athlete's `position_id`, `position_name`, `position_display_name`, `position_abbreviation` and `position_leaf`. With `raw=True`, the competitors payload (dict).
 
 | col_name | type | description |
 |---|---|---|
@@ -63,6 +63,11 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `status_name` | character | Status label. |
 | `status_type` | character | Status type. |
 | `status_abbreviation` | character | Status abbreviation. |
+| `position_id` | integer | ESPN's numeric identifier of the athlete's listed position (the Core v2 position resource id). |
+| `position_name` | character | Name of the athlete's listed position from ESPN's position resource, e.g. Guard or Forward. |
+| `position_display_name` | character | Display form of the athlete's listed position as ESPN renders it; usually equal to position_name. |
+| `position_abbreviation` | character | Short code of the athlete's listed position (e.g. G, F, RW, OL), from ESPN's position resource. |
+| `position_leaf` | logical | Whether the position is a leaf of ESPN's position tree; False marks a grouping, not a specific role. |
 | `hand_type` | character | Hand type. |
 | `hand_abbreviation` | character | Hand abbreviation. |
 | `hand_display_value` | character | Hand display value. |
@@ -96,6 +101,13 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `logo_href` | character | Team or league logo URL. |
 | `logo_dark_href` | character | Logo URL for dark backgrounds. |
 | `game_id` | integer | Unique game identifier. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | ESPN has no competitors, roster or athlete resource for the game (404), or every rostered athlete's `$ref` answered 404. A single 404 athlete is left out with a `UserWarning` and the rest of the roster is returned. |
+| `AssetFetchError` | A fetch failed (403, 429, 5xx, a dropped connection); never treated as a missing athlete. |
 
 **Example**
 
@@ -325,6 +337,7 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 |---|---|
 | `ValueError` | `season_type` is not `"regular"`/`"postseason"`. |
 | `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+| `sportsdataverse.errors.AssetFetchError` | The statistics, athlete or team fetch failed (403, 429, 5xx, a dead connection); only a 404 on the athlete or team node leaves those columns null. |
 
 **Example**
 
@@ -344,15 +357,15 @@ espn_mbb_schedule - look up the men's college basketball scheduler for a given s
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `dates` | `int` | `None` | Used to define different seasons. 2002 is the earliest available season. |
+| `dates` | `int` | `None` | A date (`YYYYMMDD`) or a season (`YYYY`, 2002 or later). A season reads that season's game days from ESPN's scoreboard calendar and requests each day in turn (one calendar request plus ~150 day requests), keeping the games ESPN files under the season, sorted by date. A day that fails raises `AssetFetchError`. |
 | `groups` | `int` | `50` | Used to define different divisions. 50 is Division I, 51 is Division II/Division III. |
 | `season_type` | `int` | `None` | 2 for regular season, 3 for post-season, 4 for off-season. |
-| `limit` | `int` | `500` | number of records to return, default: 500. |
+| `limit` | `int` | `500` | number of records to return, default: 500. A season pull sends it per day, capped at 1000 (ESPN answers 25 events above that), and raises `AssetFetchError` for a day that fills it. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**
 
-Polars dataframe containing schedule dates for the requested season. Returns None if no games
+Polars dataframe containing schedule dates for the requested season. A day or season with no games returns a zero-row frame carrying the documented columns.
 
 | col_name | type | description |
 |---|---|---|
@@ -442,7 +455,7 @@ print(day.shape)
 
 # Season-level pull (2024 season)
 
-season = espn_mbb_schedule(dates=2024, limit=1500)
+season = espn_mbb_schedule(dates=2024)
 print(season.shape)
 
 # Filter to a specific team (Duke ``team_id=150``)
@@ -473,7 +486,7 @@ espn_mbb_teams - look up the men's college basketball teams
 
 **Returns**
 
-Polars dataframe containing teams for the requested league. This function caches by default, so if you want to refresh the data, use the command sportsdataverse.mbb.espn_mbb_teams.clear_cache().
+Polars dataframe of the men's college basketball teams, one row per team, with the columns in the returns table. A payload without teams returns a zero-row frame with those columns. The result is not cached: every call fetches (through the package's opt-in TTL response cache, `sportsdataverse.cache`, when it is on).
 
 | col_name | type | description |
 |---|---|---|
@@ -491,6 +504,13 @@ Polars dataframe containing teams for the requested league. This function caches
 | `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |
 | `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
 | `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | ESPN answered 404 for the teams resource. |
+| `AssetFetchError` | The fetch failed (403, 429, 5xx, a dropped connection); never returned as an empty frame. |
 
 **Example**
 
@@ -535,7 +555,7 @@ sched = espn_mbb_schedule(dates=season)
 
 ### ncaa_mbb_play_by_play {#ncaa_mbb_play_by_play}
 
-`ncaa_mbb_play_by_play(game_ids: "'Sequence[object]'", *, fetcher: 'Optional[_SupportsFetchGamePbp]' = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"`
+`ncaa_mbb_play_by_play(game_ids: "'Sequence[object]'", *, fetcher: 'Optional[_SupportsFetchGamePbp]' = None, return_as_pandas: 'bool' = False, errors: "Literal['raise', 'skip']" = 'raise') -> "'Union[pl.DataFrame, Any]'"`
 
 Scrape many MBB games' play-by-play (bigballR `get_play_by_play`).
 
@@ -551,10 +571,11 @@ re-fetch), row-binds the survivors, and logs the removed ids.
 | `game_ids` | `Sequence[object]` |  | NCAA contest ids; `None`/NaN entries and non-integral floats (`6470186.5`) are dropped, an integral float (`6470186.0`) is read as `"6470186"`. |
 | `fetcher` | `Optional[_SupportsFetchGamePbp]` | `None` | Optional injected fetcher exposing `fetch_game_pbp`. Defaults to one shared `NcaaFetcher.with_browser()` context. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+| `errors` | `Literal['raise', 'skip']` | `'raise'` | `"raise"` (default): a failed fetch (a ban, an exhausted proxy pool, an uncleared challenge) raises `AssetFetchError`. `"skip"`: it is dropped like a missing game, and the frame gains a `scrape_status` column -- `"ok"` on every play row, plus one row per dropped game (`game_id` and why: `fetch_failed: ...`, `no_data: ...`, `request_error: ...`, `parse_failed: ...` or `empty`). |
 
 **Returns**
 
-Row-bound play-by-play for every game that scraped successfully (zero-row contract frame when none did).
+Row-bound play-by-play for every game that scraped successfully (zero-row contract frame when none did). A missing game or a page the parser cannot read is dropped and logged (bigballR parity).
 
 | col_name | type | description |
 |---|---|---|
@@ -593,6 +614,13 @@ Row-bound play-by-play for every game that scraped successfully (zero-row contra
 | `status` | character | Status label. |
 | `is_garbage_time` | logical |  |
 | `sub_deviate` | integer |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | A fetch failed and `errors="raise"`. |
+| `ValueError` | `errors` is not `"raise"` or `"skip"`. |
 
 **Example**
 

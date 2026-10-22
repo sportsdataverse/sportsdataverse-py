@@ -6,6 +6,54 @@ description: "CFB — additional Python functions — Models and calculators: cf
 ---
 # CFB — additional Python functions — Models and calculators: cfb_adjusted–fit_field
 
+### cfb_adjusted_epa {#cfb_adjusted_epa}
+
+`cfb_adjusted_epa(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Season opponent-adjusted per-team EPA from a season's play-by-play.
+
+Fits one ridge of per-play `EPA` on offense-team, defense-team, and
+home-field indicators (every team shrunk toward the league average by its own
+play count) over the `0.05 <= wp_before_naive <= 0.95` pass
+and rush plays, nets each team's per-game raw EPA against the opponent's
+fitted strength, and averages to a season figure. In-sample/descriptive (the
+fit uses the whole season); for leak-free per-game values use
+`cfb_adjusted_epa_by_game`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the columns listed in the module docstring. One season at a time. |
+| `ridge_lambda` | `float \| None` | `None` | Ridge penalty. Under `method="current"` it is per play of a full team season: each team keeps `n / (n + ridge_lambda * 577)` of its own signal for its `n` fit plays and is shrunk toward the league average by the rest (~7% at a full season, most of it on a handful of plays); must be > 0. Under `method="pre598"` it is passed unscaled to the old standardized ridge (the per-observation penalty; no 577 scaling, no positivity check). `None` (default) means 0.075 for `"current"` (the owner's choice, `_ADJ_EPA_LAMBDA`) and 0.035 for `"pre598"`. |
+| `method` | `Literal['current', 'pre598']` | `'current'` | `"current"` (default) or `"pre598"`, the fit this function used before #598 (`0.1 <= wp_before <= 0.9` band, standardized ridge with the first team id as the reference level, lambda 0.035). pre598 reads `wp_before` instead of `wp_before_naive`. It exists for nfl-data's NFL team summaries, is not validated for NFL either, and is kept only for continuity until NFL is validated. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
+
+**Returns**
+
+One row per team (>= 2 valid games): `team_id`, `pos_team`, `valid_games`, `adj_off_epa`, `adj_def_epa`, `off_strength_faced`, `def_strength_faced`, `net_adj_epa` and their `*_rank` columns.
+
+No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `plays` is missing a required column. |
+| `ValueError` | If `method` is unknown, or (`"current"`) if `ridge_lambda` is not positive or no play falls in the `wp_before_naive` fit band. |
+
+**Example**
+
+```python
+import sportsdataverse.cfb as cfb
+pbp = cfb.load_cfb_pbp(seasons=[2023])
+cfb.cfb_adjusted_epa(pbp).sort("net_adj_epa_rank").head()
+
+# NFL team summaries (the pre-#598 method; reads wp_before)
+
+cfb.cfb_adjusted_epa(nfl_plays, method="pre598")
+```
+
 ### cfb_adjusted_epa_by_game {#cfb_adjusted_epa_by_game}
 
 `cfb_adjusted_epa_by_game(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -174,6 +222,34 @@ print(df.shape)
 # Pipeline next step (one line)
 
 df.sort("fp_margin", descending=True).head()
+```
+
+### cfb_kickoff_out_of_bounds_spot_expr {#cfb_kickoff_out_of_bounds_spot_expr}
+
+`cfb_kickoff_out_of_bounds_spot_expr(season: polars.expr.expr.Expr) -> polars.expr.expr.Expr`
+
+The receiving team's yardline after a kickoff out of bounds: the 40 through 2011, the 35 from 2012.
+
+Reads `KICKOFF_OUT_OF_BOUNDS_SPOT_BY_SEASON` (the NCAA 2012 kickoff rule).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Expr` |  | Integer season expression (`pl.col("season")`). |
+
+**Returns**
+
+An integer expression of the out-of-bounds spot per row.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb import cfb_kickoff_out_of_bounds_spot_expr
+
+df = pl.DataFrame({"season": [2011, 2012]})
+print(df.select(cfb_kickoff_out_of_bounds_spot_expr(pl.col("season"))).to_series().to_list())  # [40, 35]
 ```
 
 ### cfb_predict_games {#cfb_predict_games}
@@ -462,6 +538,36 @@ print(out["overall"].sort("won_cfp", descending=True).head())
 
 out = cfb_simulations(games, teams, simulations=100,
                       sim_include="REG", seed=1)
+```
+
+### cfb_touchback_yardline_expr {#cfb_touchback_yardline_expr}
+
+`cfb_touchback_yardline_expr(season: polars.expr.expr.Expr) -> polars.expr.expr.Expr`
+
+Kickoff-touchback yards-to-endzone per row: 80 through 2011, 75 from 2012.
+
+Reads `TOUCHBACK_YARDLINE_BY_SEASON` (the NCAA 2012 kickoff rule). Named with the `cfb_`
+prefix so the top-level `sportsdataverse` namespace keeps NFL's `touchback_yardline_expr`
+(2016 cut) distinct from this one.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Expr` |  | Integer season expression (`pl.col("season")`). |
+
+**Returns**
+
+An integer expression of the touchback yards-to-endzone per row.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb import cfb_touchback_yardline_expr
+
+df = pl.DataFrame({"season": [2011, 2012]})
+print(df.select(cfb_touchback_yardline_expr(pl.col("season"))).to_series().to_list())  # [80, 75]
 ```
 
 ### efficiency_ratings {#efficiency_ratings}

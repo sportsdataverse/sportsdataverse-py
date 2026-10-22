@@ -104,3 +104,52 @@ def test_basketball_homes_nest_under_basketball_and_register_every_stem():
     pkg = importlib.import_module("sportsdataverse.basketball")
     for home in generate._BASKETBALL_HOMES:
         assert hasattr(pkg, home) and importlib.import_module(f"sportsdataverse.basketball.{home}")
+
+
+def test_every_flat_api_page_has_a_label_and_every_label_a_page():
+    """A-L43: nflpro had no ``_FLAT_API_DOC`` entry (its page was titled "NFL — nflpro") while a dead
+    ``pff`` key survived because a test read it. The renderer looks labels up by ``fa.module``."""
+    params = generate.spec.load_parameters(generate.ENDPOINTS / "parameters.yaml")
+    modules = {
+        generate.spec.load_flat_api(generate.ENDPOINTS / f"{stem}.yaml", params).module
+        for stem, _ in generate.FLAT_APIS
+        if (generate.ENDPOINTS / f"{stem}.yaml").exists()
+    }
+    assert sorted(modules - set(generate._FLAT_API_DOC)) == []
+    assert sorted(set(generate._FLAT_API_DOC) - modules) == []
+
+
+def test_hockeytech_module_leagues_are_the_registry_minus_pwhl():
+    """A-L45: one codegen list, and it equals ``hockeytech._leagues.LEAGUES`` minus the top-level pwhl."""
+    from sportsdataverse.hockeytech._leagues import LEAGUES
+
+    assert generate._HOCKEYTECH_MODULE_LEAGUES == [lg for lg in LEAGUES if lg != "pwhl"]
+    hockey = [lg for lg, pkg in generate._LEAGUE_R_PACKAGE.items() if pkg == "fastRhockey"]
+    assert set(generate._HOCKEYTECH_MODULE_LEAGUES) <= set(hockey)
+
+
+def test_no_generated_page_or_example_names_a_deprecated_import_path():
+    """A-L42: four renderers built ``sportsdataverse.{prefix}`` instead of the league's home, so 21
+    generated Examples imported (and 146 pages named) a path that warns. Every committed generated
+    docs page and module names the home (``sportsdataverse.soccer.mls``), never the alias. The
+    hand-authored pages (a tutorial explaining the back-compat aliases) are not the generator's."""
+    import re
+
+    from sportsdataverse import _MOVED
+
+    alias = re.compile(r"\bsportsdataverse\.(" + "|".join(map(re.escape, _MOVED)) + r")\b")
+    roots = generate._generated_docs_roots()
+    files = [p for p in sorted(generate.DOCS.rglob("*.md")) if p.relative_to(generate.DOCS).parts[0] in roots]
+    files += [
+        p
+        for p in (generate.ROOT / "sportsdataverse").rglob("*.py")
+        if "GENERATED" in p.read_text(encoding="utf-8")[:400]
+    ]
+    hits = [
+        f"{p.relative_to(generate.ROOT)}: {m.group(0)}"
+        for p in files
+        for m in alias.finditer(p.read_text(encoding="utf-8"))
+    ]
+    assert hits == [], f"{len(hits)} deprecated paths, e.g. {hits[:5]}"
+    for prefix, home in _MOVED.items():
+        assert generate._home_module(prefix) == f"sportsdataverse.{home}"

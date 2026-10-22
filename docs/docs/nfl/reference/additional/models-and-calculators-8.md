@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Models and calculators: get_4th"
 sidebar_label: "Models and calculators: get_4th"
-sidebar_position: 21
+sidebar_position: 22
 description: "NFL — additional Python functions — Models and calculators: get_4th — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Models and calculators: get_4th
@@ -19,9 +19,8 @@ fourth-down rows and adds the combined option columns plus:
   punt_wp))` in percentage points (a NaN `punt_wp` is treated as 0).
 * `fourth_down_recommendation` -- the max-WP choice among `{go, punt,
   field_goal}` (NaN options are excluded).
-* `go_wp_diff` / `punt_wp_diff` / `fg_wp_diff` -- each option's WP minus
-  the recommended option's WP (the recommended option's diff is 0, the others
-  <= 0).  NaN where the option WP is NaN.
+* `go_wp_diff` / `punt_wp_diff` / `fg_wp_diff` -- each option's WP minus the recommended option's WP
+  (0 for the recommended option, <= 0 for the others; NaN where the option WP is NaN).
 
 **Parameters**
 
@@ -364,6 +363,14 @@ A pandas copy of `pbp_df` with the decision columns added. Empty input returns t
 | `punt_wp_diff` | double |  |
 | `fg_wp_diff` | double |  |
 | `fourth_down_recommendation` | character |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | In strict mode, for a missing nfl4th model (warns otherwise; see `get_go_wp`). |
+| `XGBoostError` | A cached nfl4th booster is corrupt. |
+| `ValueError` | A model card beside a booster disagrees with the applier's fitted constants. |
 
 **Example**
 

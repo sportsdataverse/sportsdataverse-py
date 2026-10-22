@@ -170,8 +170,9 @@ _GAME_STATS_STR = {
     "game_stats",
 }
 _GAME_STATS_INT = {"type", "quad", "year", "overtimes"}
-_PLAYER_STATS_STR = {"player_name", "team", "conf", "class", "height", "hometown", "role", "recruit_date"}
-_PLAYER_STATS_INT = {"games", "number", "year", "player_id"}
+# ``number`` is the jersey: text, so "00" (8 players in 2025) stays apart from "0" (B-M19).
+_PLAYER_STATS_STR = {"player_name", "team", "conf", "class", "height", "number", "hometown", "role", "recruit_date"}
+_PLAYER_STATS_INT = {"games", "year", "player_id"}
 
 
 def _reject_html(text: str, what: str) -> None:
@@ -256,8 +257,9 @@ def parse_torvik_player_stats(payload: Any, return_as_pandas: bool = False) -> U
     """Parse ``getadvstats.php?year=&csv=1`` into one row per player.
 
     The payload is a headerless 67-column CSV, so the column names are
-    positional (:data:`PLAYER_STATS_COLS`). ``player_id`` is ``Int64``; splits
-    Torvik leaves blank are null.
+    positional (:data:`PLAYER_STATS_COLS`). ``player_id`` is ``Int64``; the
+    jersey ``number`` is text (``"00"`` is not ``"0"``); splits Torvik leaves
+    blank are null.
 
     Args:
         payload: Raw CSV text.

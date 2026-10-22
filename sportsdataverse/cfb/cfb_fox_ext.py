@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import logging
 import re
+import warnings
 from typing import TYPE_CHECKING, Any, Dict, List, Literal, Optional, Sequence, Union, overload
 
 import polars as pl
@@ -24,7 +25,9 @@ if TYPE_CHECKING:
 
 from sportsdataverse._codegen_runtime import _get
 from sportsdataverse._fox_layout import DATA_KEY as FOX_DATA_KEY
+from sportsdataverse._fox_layout import parse_drive_pbp
 from sportsdataverse._fox_layout import register_league_endpoints  # single source of truth for the public Fox key
+from sportsdataverse.errors import NoDataError
 
 logger = logging.getLogger(__name__)
 
@@ -124,6 +127,7 @@ _PBP_COLUMNS: Sequence[str] = (
     "field_position",
     "play_text",
     "play_team",
+    "play_player",
 )
 _TEAM_ROSTER_COLUMNS: Sequence[str] = (
     "team_id",
@@ -321,12 +325,23 @@ def _fox_segment_ids(season: int, group_id: Union[int, str], **kwargs: Any) -> L
     postseason — is stable year to year).
     """
     mains = [_fox_get("cfb/scoreboard/main", params={"groupId": group_id}, **kwargs)]
-    try:
-        # The CFP lives under its own group; it is supplemental (the bowls segment
-        # already carries CFP games), so a failure here must not abort enumeration.
-        mains.append(_fox_get("cfb/scoreboard/main", params={"groupId": "cfp"}, **kwargs))
-    except Exception as exc:
-        logger.warning("Fox CFP group enumeration failed for %s (continuing without it): %s", season, exc)
+    # The CFP lives under its own group; it is supplemental (the bowls segment already carries
+    # every CFP game: 11 of 11 in the committed 2025 captures), so a failure here must not abort
+    # enumeration. It is retried once, then reported as a warning the caller can see.
+    for attempt in (1, 2):
+        try:
+            mains.append(_fox_get("cfb/scoreboard/main", params={"groupId": "cfp"}, **kwargs))
+            break
+        except NoDataError:
+            break  # a 404 is an answer (no CFP group), not a failure to retry or warn about
+        except Exception as exc:  # noqa: BLE001 -- supplemental group; the bowls segment covers it
+            if attempt == 2:
+                warnings.warn(
+                    f"Fox CFP group enumeration failed twice for {season} (continuing with the bowls "
+                    f"segment, which carries the CFP games): {type(exc).__name__}: {exc}",
+                    UserWarning,
+                    stacklevel=3,  # the fox_cfb_schedule caller
+                )
     ids: List[str] = []
     seen: set[str] = set()
     for main in mains:
@@ -482,7 +497,7 @@ def fox_cfb_pbp(
     return_as_pandas: bool = False,
     **kwargs: Any,
 ) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
-    """Fox Sports CFB play-by-play (one row per play).
+    """Fox Sports CFB play-by-play (one row per play, oldest first, live or final).
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/cfb/event/{game_id}/data``
 
@@ -508,28 +523,7 @@ def fox_cfb_pbp(
     raw = _fox_get(f"cfb/event/{game_id}/data", **kwargs)
     if not return_parsed:
         return raw
-    rows: List[Dict] = []
-    for sec in (raw.get("pbp", {}) or {}).get("sections", []) or []:
-        quarter = sec.get("title")
-        for drv in sec.get("groups", []) or []:
-            for p in drv.get("plays", []) or []:
-                rows.append(
-                    {
-                        "game_id": str(game_id),
-                        "quarter": quarter,
-                        "drive_id": drv.get("id"),
-                        "drive_result": drv.get("title"),
-                        "drive_summary": drv.get("subtitle"),
-                        "drive_team": (drv.get("entityLink") or {}).get("title"),
-                        "play_id": p.get("id"),
-                        "period": p.get("periodOfPlay"),
-                        "clock": p.get("timeOfPlay"),
-                        "field_position": p.get("title"),
-                        "play_text": p.get("playDescription"),
-                        "play_team": (p.get("entityLink") or {}).get("title"),
-                    }
-                )
-    return _frame(rows, return_as_pandas, _PBP_COLUMNS)
+    return _frame(parse_drive_pbp(raw, game_id), return_as_pandas, _PBP_COLUMNS)
 
 
 @overload

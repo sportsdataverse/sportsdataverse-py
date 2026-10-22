@@ -12,7 +12,8 @@ module, following two **binding user directives** (Saiem, 2026-07-03 /
 1. **Every stats.ncaa.org request routes through a configured proxy.**
    stats.ncaa.org is IP-ban-happy; there is deliberately **no direct-fetch
    mode**. :meth:`NcaaFetcher.fetch_html` raises a clear ``RuntimeError`` if
-   no proxy is configured (:func:`test_no_proxy_configured_raises
+   no proxy is configured (a setup error; a failed fetch raises
+   ``AssetFetchError`` and a real 404 ``NoDataError``) (:func:`test_no_proxy_configured_raises
    <tests.mbb.test_mbb_ncaa_fetch>` in the test module pins this down).
 2. **Cache-by-default / fetch-once.** Every fetched page is written to a
    local cache before being returned; every fetch checks the cache first and
@@ -111,6 +112,9 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, Callable, Optional
 from urllib.parse import urlsplit
+
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
 
 logger = logging.getLogger(__name__)
 
@@ -404,7 +408,9 @@ def load_proxybonanza_pool(
         One ``http://login:password@ip:port`` URL per IP in the package.
 
     Raises:
-        RuntimeError: Non-200 response.
+        ValueError: HTTP 400 / 422 (the request itself is wrong).
+        AssetFetchError: Any other non-200 response, or a 200 whose body is not
+            the package JSON (an error or HTML page).
 
     Example:
         Offline (injected transport)::
@@ -416,11 +422,19 @@ def load_proxybonanza_pool(
     url = f"https://api.proxybonanza.com/v1/userpackages/{pkg}.json"
     _transport = transport or _default_pool_transport
     status, text = _transport(url, {"Authorization": api_key})
+    if status in (400, 422):
+        # The request itself is wrong (repo-wide rule); a 404 or 401 stays a failed setup fetch below.
+        raise ValueError(f"api.proxybonanza.com rejected /v1/userpackages/{pkg}.json: HTTP {status}")
     if status != 200:
-        raise RuntimeError(f"ProxyBonanza pool fetch failed: status={status}")
-    data = json.loads(text)["data"]
-    login, password = data["login"], data["password"]
-    return [f"http://{login}:{password}@{pk['ip']}:{pk['port_http']}" for pk in data["ippacks"]]
+        raise AssetFetchError(f"ProxyBonanza pool fetch failed: status={status}")
+    try:
+        data = json.loads(text)["data"]
+        login, password = data["login"], data["password"]
+        return [f"http://{login}:{password}@{pk['ip']}:{pk['port_http']}" for pk in data["ippacks"]]
+    except (ValueError, KeyError, TypeError):
+        # Never chain: the JSONDecodeError's .doc is the whole body, which may carry creds.
+        pass
+    raise AssetFetchError(f"ProxyBonanza pool fetch returned a 200 that is not the package JSON ({len(text)} bytes)")
 
 
 def _ban_check(text: str) -> str:
@@ -466,6 +480,18 @@ def _browser_response_unsolved(text: str) -> bool:
     responses from every transport, where a small body may be legitimate.
     """
     return _is_challenge(text) or not text or len(text) < _MIN_CONTENT_BYTES
+
+
+def _cached_page_usable(text: str) -> bool:
+    """Is a CACHED body a real page, not a challenge shell, stub or Terms gate?
+
+    A cache hit makes zero transport calls, so a shell that reached the cache
+    (an older fetcher, a copied tree, a transport that returned it) would be
+    served forever and every parser would read 0 rows for that game. The size
+    floor is safe here (every stats.ncaa.org page worth caching is >= 10 KB) and
+    also rejects the ~400-byte Akamai "Access Denied" page.
+    """
+    return len(text) >= _MIN_CONTENT_BYTES and not _is_challenge(text) and not _is_terms_gate(text)
 
 
 def _normalize_path(path_or_url: str) -> str:
@@ -571,7 +597,7 @@ _TERMS_DWELL_MS = 10_000
 _ACCEPT_FAILURES_MAX = 3
 
 
-class _TermsGateError(RuntimeError):
+class _TermsGateError(AssetFetchError):
     """stats.ncaa.org served its Terms gate and it could not be passed. A fresh
     proxy/browser does not get past it, so the fetch layer never rotates on it."""
 
@@ -598,7 +624,7 @@ _DROPPED_FETCH = "TypeError: Failed to fetch"
 def _fetch_in_page(page: Any, url: str) -> "tuple[int, str]":
     try:
         result = page.evaluate(_RAW_FETCH_JS, url)
-    except Exception as exc:  # noqa: BLE001 - only a dropped request is retried
+    except Exception as exc:  # only a dropped request is retried
         if _DROPPED_FETCH not in str(exc):
             raise
         logger.debug("in-page fetch dropped, retrying once on the same browser: %s", url)
@@ -1096,7 +1122,7 @@ class NcaaFetcher:
                 time.sleep(self.config.rotation_backoff)
             proxy = self._pick_proxy(pool)
             if proxy is None:
-                raise RuntimeError(
+                raise AssetFetchError(
                     f"NCAA fetch failed: every proxy in the pool is banned "
                     f"({len(self._dead)}/{len(pool)}): {url}: {last_err}"
                 )
@@ -1114,7 +1140,7 @@ class NcaaFetcher:
                 raise
             except _TermsGateError:
                 raise  # same reasoning: no proxy rotation gets past the Terms gate
-            except Exception as exc:  # noqa: BLE001 - rotate on any transport failure
+            except Exception as exc:  # rotate on any transport failure
                 last_err = str(exc)
                 # Which error rotated (and relaunched the browser) is otherwise
                 # invisible until the pool is exhausted. Scrub any user:pass@.
@@ -1149,6 +1175,13 @@ class NcaaFetcher:
                 last_err = "bm-verify challenge not cleared"
                 self._rotate("challenge not cleared")
                 continue
+            if status == 404 and _ban_check(text) == "clean" and not _is_challenge(text):
+                # A real "no such page": the host answered, and no other proxy
+                # answers differently -- rotating the whole pool on it reads as a ban.
+                raise NoDataError(f"stats.ncaa.org has no page at {url} (HTTP 404)")
+            if status in (400, 422) and _ban_check(text) == "clean" and not _is_challenge(text):
+                # The request itself is wrong (repo-wide rule): no proxy answers it differently.
+                raise ValueError(f"stats.ncaa.org rejected {url}: HTTP {status}; not retried")
             if status == 200 and _ban_check(text) == "clean":
                 self._since_rotate += 1
                 if self.config.rotate_every and self._since_rotate >= self.config.rotate_every:
@@ -1160,6 +1193,7 @@ class NcaaFetcher:
             last_err = f"status={status} {marker}"
             if proxy and (status == 403 or marker != "clean"):
                 # Burned: never hand this IP out again this session.
+                last_err = f"ban suspected: {last_err}"
                 self._dead.add(proxy)
                 logger.warning(
                     "proxy %s looks banned (%s) -- retiring it for this session (%d/%d dead)",
@@ -1169,7 +1203,9 @@ class NcaaFetcher:
                     len(pool),
                 )
             self._rotate("ban/failed response")
-        raise RuntimeError(f"NCAA fetch failed after rotating proxies: {url}: {last_err}")
+        raise AssetFetchError(
+            f"NCAA fetch failed after rotating proxies (pool exhausted, {attempts} attempts): {url}: {last_err}"
+        )
 
     def _rotate(self, why: str) -> None:
         """Advance to the next proxy and reset the per-proxy fetch counter."""
@@ -1202,10 +1238,15 @@ class NcaaFetcher:
 
         Raises:
             ValueError: *path* is a full URL for a host other than
-                ``stats.ncaa.org``.
+                ``stats.ncaa.org``, or stats.ncaa.org answered HTTP 400 / 422
+                with no ban or challenge page (one request, no rotation).
             RuntimeError: No proxy is configured (the binding directive --
-                there is no direct-fetch mode), or every proxy in the pool
-                failed / looked banned.
+                there is no direct-fetch mode).
+            NoDataError: stats.ncaa.org answered HTTP 404 (one request, no rotation).
+            AssetFetchError: The fetch failed and the answer is unknown: every
+                proxy in the pool looked banned, the pool was exhausted on
+                transport errors or bm-verify challenges that did not clear, or
+                the Terms gate could not be passed.
             ImportError: An optional dependency the selected transport needs is
                 not installed -- patchright for the browser transport. Raised
                 immediately rather than rotated on: no amount of proxy rotation
@@ -1215,8 +1256,9 @@ class NcaaFetcher:
         cache_file = cached_path(path, cache_dir=self.config.cache_dir)
         if cache_file.exists() and not force:
             text = cache_file.read_text(encoding="utf-8")
-            if not _is_terms_gate(text):  # a cached Terms gate is a miss
+            if _cached_page_usable(text):  # a cached shell / stub / Terms gate is a miss
                 return text
+            logger.info("cached %s is not a usable page (%d bytes) -- re-fetching", cache_file.name, len(text))
         if self.config.transport is None and not self._pool:
             raise RuntimeError(
                 "NcaaFetcher has no proxy configured. The default curl_cffi transport "

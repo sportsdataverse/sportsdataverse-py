@@ -168,7 +168,7 @@ def strength_of_schedule(
 
 
 def _norm_cdf(s: pl.Series) -> pl.Series:
-    from scipy.stats import norm  # noqa: PLC0415
+    from scipy.stats import norm
 
     return pl.Series(norm.cdf(s.to_numpy()))
 
@@ -224,7 +224,7 @@ def mbb_strength_of_schedule(
         * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
         * `wehoop <https://wehoop.sportsdataverse.org>`_ -- women's basketball (R)
     """
-    from sportsdataverse.mbb.mbb_team_ratings import (  # noqa: PLC0415
+    from sportsdataverse.mbb.mbb_team_ratings import (
         _league_loaders,
         _normalize_schedule,
         adjust_efficiency,

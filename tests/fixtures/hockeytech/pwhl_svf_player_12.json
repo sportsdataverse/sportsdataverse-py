@@ -1,0 +1,2154 @@
+{
+ "info": {
+  "jerseyNumber": "5",
+  "firstName": "Megan",
+  "lastName": "Keller",
+  "playerId": "12",
+  "personId": "14",
+  "position": "LD",
+  "shoots": "L",
+  "catches": "L",
+  "height": "5'11",
+  "height_sans_hyphen": "5'11",
+  "height_hyphenated": "5-11",
+  "weight": "0",
+  "birthDate": "1996-05-01",
+  "profileImage": "https://assets.leaguestat.com/pwhl/240x240/12.jpg",
+  "teamImage": "https://assets.leaguestat.com/pwhl/logos/1.png",
+  "bio": "<ul><li><p>Named Captain of the Fleet for the 2025-26 season.&nbsp;Served as Alternate Captain for the 2024 and 2024-25 seasons.</p></li><li><p>Signed a two-year contract extension with Boston on Aug. 4, 2025, through the 2027-28 season.</p></li><li><p>Keller scored two goals, one unassisted, in the 3rd period of the Fleet&rsquo;s first matchup of the season against New York, helping the Fleet defeat the Sirens 4-2. Her performance earned her the first star of the game honor.</p></li><li><p>Recorded a four-game point streak from Dec. 27, 2024 &ndash; Jan. 5, 2025, earning at least one assist in each game for the Fleet.</p></li><li><p>Registered a season-high six hits in the Fleet&rsquo;s 3-2 win against the Charge on Feb. 20, 2025. Ranked 2nd in the PWHL in hits (49).</p></li><li><p>During the inaugural season, Keller ranked eighth overall in the PWHL with a plus-minus rating of 9. Also finished 18th overall in the PWHL in regular season points with 16 in 24 games.</p></li><li><p>Top three finalist for 2024 PWHL Defender of the Year.</p></li><li><p>Recorded her first PWHL goal in Boston&rsquo;s inaugural game against Minnesota on January 3, 2024.</p></li><li><p>Represented the U.S. in two Olympic Winter Games (gold in 2018, silver in 2022).</p></li><li><p>Played in nine International IIHF Women&rsquo;s World Championship with the U.S. Women&rsquo;s National Team (gold in 2015, 2016, 2017, 2019, 2023, 2025; silver in 2021, 2022, 2024), as well as four Four Nations Cups (finishing 1s in 2016, 2017, 2018 and 2nd in 2014).</p></li><li><p>Played in the 2014 IIHF Under-18 Women&rsquo;s World Championship (silver), three Under-22 Series vs. Canada (2014, 2015, 2016) and the 2013 Under-18 Series vs. Canada.</p></li><li><p>U.S. Women&rsquo;s National Team alternate captain for 2023-24 seasons.&nbsp;</p></li><li><p>Represented the U.S. at international events, including the 2021 My Why Tour, presented by Toyota, 2019-20 Rivalry Series, and The Time Is Now Tour, presented by Toyota (2017).&nbsp;</p></li><li><p>At Boston College, she set the record for single-season points and goals scored for a defender and held the record for conference career and single-season points, goals and assists by a defender.&nbsp;</p></li><li><p>Won the Cammi Granato Award as Hockey East&rsquo;s top player and earned First-Team Hockey East honors in her junior year at Boston College.&nbsp;</p></li><li><p>College awards and honors: Hockey East Player of the Year for the 2018-2019 season, First Team All-American (2016-2017), First Team All-American (2015-2016), Voted Hockey East Best Defensemen (2015-2016), Hockey East First Team All-Star (2015-2016), Hockey East All-Star First Team (2014-2015), Hockey East All-Rookie Team (2014-2015).</p><p>&nbsp;</p></li></ul>",
+  "teamName": "Boston Fleet",
+  "nickName": "Fleet",
+  "division": "PWHL",
+  "drafts": [],
+  "draft_type": "extended",
+  "display_drafts": false,
+  "commitment": false,
+  "currentTeam": "",
+  "suspension_games_remaining": "",
+  "birthPlace": "Farmington, Michigan, United States",
+  "nationality": {
+   "name": "American",
+   "flag_image": "https://assets.leaguestat.com/leaguestat/country_flags/United_States.png"
+  },
+  "playerType": "skater",
+  "mostRecentTeam": {
+   "teamName": "Boston Fleet",
+   "teamNickname": "Fleet",
+   "jerseyNumber": "5",
+   "teamLogo": "https://assets.leaguestat.com/pwhl/logos/1.png"
+  }
+ },
+ "currentSeason": "10",
+ "careerStats": [
+  {
+   "sections": [
+    {
+     "title": "Regular Season",
+     "headers": {
+      "season_name": {
+       "properties": {
+        "key": "season_name",
+        "hidden": false,
+        "class": "",
+        "label": "Season",
+        "title": "Season",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "team_name": {
+       "properties": {
+        "key": "team_name",
+        "hidden": false,
+        "class": "",
+        "label": "Team",
+        "title": "Team",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "games_played": {
+       "properties": {
+        "key": "games_played",
+        "hidden": false,
+        "class": "",
+        "label": "GP",
+        "title": "Games Played",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "goals": {
+       "properties": {
+        "key": "goals",
+        "hidden": false,
+        "class": "",
+        "label": "G",
+        "title": "Goals",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "assists": {
+       "properties": {
+        "key": "assists",
+        "hidden": false,
+        "class": "",
+        "label": "A",
+        "title": "Assists",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "points": {
+       "properties": {
+        "key": "points",
+        "hidden": false,
+        "class": "",
+        "label": "PTS",
+        "title": "Points",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "plus_minus": {
+       "properties": {
+        "key": "plus_minus",
+        "hidden": false,
+        "class": "",
+        "label": "+/-",
+        "title": "Plus/Minus",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": "plus_minus"
+       }
+      },
+      "penalty_minutes": {
+       "properties": {
+        "key": "penalty_minutes",
+        "hidden": false,
+        "class": "",
+        "label": "PIM",
+        "title": "Penalty Minutes",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "faceoff_wins": {
+       "properties": {
+        "key": "faceoff_wins",
+        "hidden": false,
+        "class": "",
+        "label": "FOW",
+        "title": "WON",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": "faceoff_wins"
+       }
+      },
+      "faceoff_attempts": {
+       "properties": {
+        "key": "faceoff_attempts",
+        "hidden": false,
+        "class": "",
+        "label": "FO",
+        "title": "Faceoff Attempts",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": "faceoff_attempts"
+       }
+      },
+      "faceoff_pct": {
+       "properties": {
+        "key": "faceoff_pct",
+        "hidden": false,
+        "class": "",
+        "label": "WF%",
+        "title": "Won faceoffs percentage",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": "faceoff_pct"
+       }
+      },
+      "power_play_goals": {
+       "properties": {
+        "key": "power_play_goals",
+        "hidden": false,
+        "class": "",
+        "label": "PPG",
+        "title": "Power Play Goals",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "short_handed_goals": {
+       "properties": {
+        "key": "short_handed_goals",
+        "hidden": false,
+        "class": "",
+        "label": "SHG",
+        "title": "Short Handed Goals",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "game_winning_goals": {
+       "properties": {
+        "key": "game_winning_goals",
+        "hidden": false,
+        "class": "",
+        "label": "GWG",
+        "title": "Game Winning Goals",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": "game_winning_goals"
+       }
+      },
+      "shootout_goals": {
+       "properties": {
+        "key": "shootout_goals",
+        "hidden": false,
+        "class": "",
+        "label": "SOG",
+        "title": "Shootout Goals",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "shootout_attempts": {
+       "properties": {
+        "key": "shootout_attempts",
+        "hidden": false,
+        "class": "",
+        "label": "SOA",
+        "title": "Shootout Attempts",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "shootout_percentage": {
+       "properties": {
+        "key": "shootout_percentage",
+        "hidden": false,
+        "class": "",
+        "label": "SO%",
+        "title": "Shootout Percentage",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "shots_blocked_by_player": {
+       "properties": {
+        "key": "shots_blocked_by_player",
+        "hidden": false,
+        "class": "",
+        "label": "BLK",
+        "title": "Blocked shots",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "shots": {
+       "properties": {
+        "key": "shots",
+        "hidden": false,
+        "class": "",
+        "label": "SH",
+        "title": "Shots",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": "shots"
+       }
+      },
+      "shooting_percentage": {
+       "properties": {
+        "key": "shooting_percentage",
+        "hidden": false,
+        "class": "",
+        "label": "SH%",
+        "title": "Shooting Percentage",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      }
+     },
+     "data": [
+      {
+       "prop": [],
+       "row": {
+        "season_name": "2025-26 Regular Season",
+        "goals": "7",
+        "games_played": "30",
+        "assists": "15",
+        "points": "22",
+        "plus_minus": "10",
+        "penalty_minutes": "8",
+        "power_play_goals": "4",
+        "shots": "68",
+        "shootout_attempts": "0",
+        "shootout_goals": "0",
+        "shootout_percentage": "0.0",
+        "shooting_percentage": "10.3",
+        "short_handed_goals": "1",
+        "game_winning_goals": "3",
+        "faceoff_wins": "0",
+        "faceoff_attempts": "0",
+        "faceoff_pct": "0.0",
+        "team_name": "Boston Fleet",
+        "shots_blocked_by_player": "23"
+       }
+      },
+      {
+       "prop": [],
+       "row": {
+        "season_name": "2024-25 Regular Season",
+        "goals": "5",
+        "games_played": "30",
+        "assists": "8",
+        "points": "13",
+        "plus_minus": "-5",
+        "penalty_minutes": "18",
+        "power_play_goals": "0",
+        "shots": "50",
+        "shootout_attempts": "0",
+        "shootout_goals": "0",
+        "shootout_percentage": "0.0",
+        "shooting_percentage": "10.0",
+        "short_handed_goals": "0",
+        "game_winning_goals": "1",
+        "faceoff_wins": "0",
+        "faceoff_attempts": "0",
+        "faceoff_pct": "0.0",
+        "team_name": "Boston Fleet",
+        "shots_blocked_by_player": "43"
+       }
+      },
+      {
+       "prop": [],
+       "row": {
+        "season_name": "2024 Regular Season",
+        "goals": "4",
+        "games_played": "24",
+        "assists": "11",
+        "points": "15",
+        "plus_minus": "9",
+        "penalty_minutes": "12",
+        "power_play_goals": "1",
+        "shots": "53",
+        "shootout_attempts": "0",
+        "shootout_goals": "0",
+        "shootout_percentage": "0.0",
+        "shooting_percentage": "7.5",
+        "short_handed_goals": "0",
+        "game_winning_goals": "0",
+        "faceoff_wins": "0",
+        "faceoff_attempts": "0",
+        "faceoff_pct": "0.0",
+        "team_name": "PWHL Boston",
+        "shots_blocked_by_player": "22"
+       }
+      },
+      {
+       "prop": [],
+       "row": {
+        "season_name": "Total",
+        "goals": 16,
+        "games_played": 84,
+        "assists": 34,
+        "points": 50,
+        "plus_minus": 14,
+        "penalty_minutes": 38,
+        "power_play_goals": 5,
+        "shots": 171,
+        "shootout_attempts": 0,
+        "shootout_goals": 0,
+        "shootout_percentage": "0.0",
+        "shooting_percentage": "9.4",
+        "short_handed_goals": 1,
+        "game_winning_goals": 4,
+        "faceoff_wins": 0,
+        "faceoff_attempts": 0,
+        "faceoff_pct": "0.0",
+        "shots_blocked_by_player": 88
+       }
+      }
+     ]
+    },
+    {
+     "title": "Playoffs",
+     "headers": {
+      "season_name": {
+       "properties": {
+        "key": "season_name",
+        "hidden": false,
+        "class": "",
+        "label": "Season",
+        "title": "Season",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "team_name": {
+       "properties": {
+        "key": "team_name",
+        "hidden": false,
+        "class": "",
+        "label": "Team",
+        "title": "Team",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "games_played": {
+       "properties": {
+        "key": "games_played",
+        "hidden": false,
+        "class": "",
+        "label": "GP",
+        "title": "Games Played",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "goals": {
+       "properties": {
+        "key": "goals",
+        "hidden": false,
+        "class": "",
+        "label": "G",
+        "title": "Goals",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "assists": {
+       "properties": {
+        "key": "assists",
+        "hidden": false,
+        "class": "",
+        "label": "A",
+        "title": "Assists",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "points": {
+       "properties": {
+        "key": "points",
+        "hidden": false,
+        "class": "",
+        "label": "PTS",
+        "title": "Points",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "plus_minus": {
+       "properties": {
+        "key": "plus_minus",
+        "hidden": false,
+        "class": "",
+        "label": "+/-",
+        "title": "Plus/Minus",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": "plus_minus"
+       }
+      },
+      "penalty_minutes": {
+       "properties": {
+        "key": "penalty_minutes",
+        "hidden": false,
+        "class": "",
+        "label": "PIM",
+        "title": "Penalty Minutes",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "faceoff_wins": {
+       "properties": {
+        "key": "faceoff_wins",
+        "hidden": false,
+        "class": "",
+        "label": "FOW",
+        "title": "WON",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": "faceoff_wins"
+       }
+      },
+      "faceoff_attempts": {
+       "properties": {
+        "key": "faceoff_attempts",
+        "hidden": false,
+        "class": "",
+        "label": "FO",
+        "title": "Faceoff Attempts",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": "faceoff_attempts"
+       }
+      },
+      "faceoff_pct": {
+       "properties": {
+        "key": "faceoff_pct",
+        "hidden": false,
+        "class": "",
+        "label": "WF%",
+        "title": "Won faceoffs percentage",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": "faceoff_pct"
+       }
+      },
+      "power_play_goals": {
+       "properties": {
+        "key": "power_play_goals",
+        "hidden": false,
+        "class": "",
+        "label": "PPG",
+        "title": "Power Play Goals",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "short_handed_goals": {
+       "properties": {
+        "key": "short_handed_goals",
+        "hidden": false,
+        "class": "",
+        "label": "SHG",
+        "title": "Short Handed Goals",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "game_winning_goals": {
+       "properties": {
+        "key": "game_winning_goals",
+        "hidden": false,
+        "class": "",
+        "label": "GWG",
+        "title": "Game Winning Goals",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": "game_winning_goals"
+       }
+      },
+      "shootout_goals": {
+       "properties": {
+        "key": "shootout_goals",
+        "hidden": false,
+        "class": "",
+        "label": "SOG",
+        "title": "Shootout Goals",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "shootout_attempts": {
+       "properties": {
+        "key": "shootout_attempts",
+        "hidden": false,
+        "class": "",
+        "label": "SOA",
+        "title": "Shootout Attempts",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "shootout_percentage": {
+       "properties": {
+        "key": "shootout_percentage",
+        "hidden": false,
+        "class": "",
+        "label": "SO%",
+        "title": "Shootout Percentage",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "shots_blocked_by_player": {
+       "properties": {
+        "key": "shots_blocked_by_player",
+        "hidden": false,
+        "class": "",
+        "label": "BLK",
+        "title": "Blocked shots",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "shots": {
+       "properties": {
+        "key": "shots",
+        "hidden": false,
+        "class": "",
+        "label": "SH",
+        "title": "Shots",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": "shots"
+       }
+      },
+      "shooting_percentage": {
+       "properties": {
+        "key": "shooting_percentage",
+        "hidden": false,
+        "class": "",
+        "label": "SH%",
+        "title": "Shooting Percentage",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      }
+     },
+     "data": [
+      {
+       "prop": [],
+       "row": {
+        "season_name": "2026 Playoffs",
+        "goals": "2",
+        "games_played": "4",
+        "assists": "0",
+        "points": "2",
+        "plus_minus": "0",
+        "penalty_minutes": "2",
+        "power_play_goals": "1",
+        "shots": "10",
+        "shootout_attempts": "0",
+        "shootout_goals": "0",
+        "shootout_percentage": "0.0",
+        "shooting_percentage": "20.0",
+        "short_handed_goals": "0",
+        "game_winning_goals": "0",
+        "faceoff_wins": "0",
+        "faceoff_attempts": "0",
+        "faceoff_pct": "0.0",
+        "team_name": "Boston Fleet",
+        "shots_blocked_by_player": "0"
+       }
+      },
+      {
+       "prop": [],
+       "row": {
+        "season_name": "2024 Playoffs",
+        "goals": "0",
+        "games_played": "8",
+        "assists": "4",
+        "points": "4",
+        "plus_minus": "2",
+        "penalty_minutes": "10",
+        "power_play_goals": "0",
+        "shots": "12",
+        "shootout_attempts": "0",
+        "shootout_goals": "0",
+        "shootout_percentage": "0.0",
+        "shooting_percentage": "0.0",
+        "short_handed_goals": "0",
+        "game_winning_goals": "0",
+        "faceoff_wins": "0",
+        "faceoff_attempts": "0",
+        "faceoff_pct": "0.0",
+        "team_name": "PWHL Boston",
+        "shots_blocked_by_player": "11"
+       }
+      },
+      {
+       "prop": [],
+       "row": {
+        "season_name": "Total",
+        "goals": 2,
+        "games_played": 12,
+        "assists": 4,
+        "points": 6,
+        "plus_minus": 2,
+        "penalty_minutes": 12,
+        "power_play_goals": 1,
+        "shots": 22,
+        "shootout_attempts": 0,
+        "shootout_goals": 0,
+        "shootout_percentage": "0.0",
+        "shooting_percentage": "9.1",
+        "short_handed_goals": 0,
+        "game_winning_goals": 0,
+        "faceoff_wins": 0,
+        "faceoff_attempts": 0,
+        "faceoff_pct": "0.0",
+        "shots_blocked_by_player": 11
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "currentSeasonStats": [
+  {
+   "sections": [
+    {
+     "title": "",
+     "headers": {
+      "season_name": {
+       "properties": {
+        "key": "season_name",
+        "hidden": false,
+        "class": "",
+        "label": "Season",
+        "title": "Season",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "games_played": {
+       "properties": {
+        "key": "games_played",
+        "hidden": false,
+        "class": "",
+        "label": "GP",
+        "title": "Games Played",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "goals": {
+       "properties": {
+        "key": "goals",
+        "hidden": false,
+        "class": "",
+        "label": "G",
+        "title": "Goals",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "assists": {
+       "properties": {
+        "key": "assists",
+        "hidden": false,
+        "class": "",
+        "label": "A",
+        "title": "Assists",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "points": {
+       "properties": {
+        "key": "points",
+        "hidden": false,
+        "class": "",
+        "label": "PTS",
+        "title": "Points",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "penalty_minutes": {
+       "properties": {
+        "key": "penalty_minutes",
+        "hidden": false,
+        "class": "",
+        "label": "PIM",
+        "title": "Penalty Minutes",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      }
+     },
+     "data": [
+      {
+       "prop": [],
+       "row": {
+        "season_name": "2026 Playoffs",
+        "games_played": "4",
+        "goals": "2",
+        "assists": "0",
+        "points": "2",
+        "penalty_minutes": "2"
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "gameByGame": [
+  {
+   "sections": [
+    {
+     "title": "",
+     "headers": {
+      "game": {
+       "properties": {
+        "key": "game",
+        "hidden": false,
+        "class": "",
+        "label": "Game",
+        "title": "Game",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "date_played": {
+       "properties": {
+        "key": "date_played",
+        "hidden": false,
+        "class": "",
+        "label": "Date",
+        "title": "Date Played",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "goals": {
+       "properties": {
+        "key": "goals",
+        "hidden": false,
+        "class": "",
+        "label": "G",
+        "title": "Goals",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "assists": {
+       "properties": {
+        "key": "assists",
+        "hidden": false,
+        "class": "",
+        "label": "A",
+        "title": "Assists",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "points": {
+       "properties": {
+        "key": "points",
+        "hidden": false,
+        "class": "",
+        "label": "PTS",
+        "title": "Points",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "plusminus": {
+       "properties": {
+        "key": "plusminus",
+        "hidden": false,
+        "class": "",
+        "label": "+/-",
+        "title": "Plus/Minus",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "shots": {
+       "properties": {
+        "key": "shots",
+        "hidden": false,
+        "class": "",
+        "label": "SH",
+        "title": "Shots",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": "shots"
+       }
+      },
+      "penalty_minutes": {
+       "properties": {
+        "key": "penalty_minutes",
+        "hidden": false,
+        "class": "",
+        "label": "PIM",
+        "title": "Penalty Minutes",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "faceoffsTaken": {
+       "properties": {
+        "key": "faceoffsTaken",
+        "hidden": false,
+        "class": "",
+        "label": "FO",
+        "title": "Faceoffs",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "faceoffPercentage": {
+       "properties": {
+        "key": "faceoffPercentage",
+        "hidden": false,
+        "class": "",
+        "label": "WF%",
+        "title": "Won faceoffs percentage",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "pp": {
+       "properties": {
+        "key": "pp",
+        "hidden": false,
+        "class": "",
+        "label": "PPG",
+        "title": "Power Play Goals",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "sh": {
+       "properties": {
+        "key": "sh",
+        "hidden": false,
+        "class": "",
+        "label": "SHG",
+        "title": "Short Handed Goals",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "gw": {
+       "properties": {
+        "key": "gw",
+        "hidden": false,
+        "class": "",
+        "label": "GWG",
+        "title": "Game Winning Goals",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "shootout_goals": {
+       "properties": {
+        "key": "shootout_goals",
+        "hidden": false,
+        "class": "",
+        "label": "SOG",
+        "title": "Shootout Goals",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "shootout_attempts": {
+       "properties": {
+        "key": "shootout_attempts",
+        "hidden": false,
+        "class": "",
+        "label": "SOA",
+        "title": "Shootout Attempts",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": "shootout_attempts"
+       }
+      },
+      "shots_blocked_by_player": {
+       "properties": {
+        "key": "shots_blocked_by_player",
+        "hidden": false,
+        "class": "",
+        "label": "BLK",
+        "title": "Blocked shots",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "ice_time_minutes_seconds": {
+       "properties": {
+        "key": "ice_time_minutes_seconds",
+        "hidden": false,
+        "class": "",
+        "label": "TOI",
+        "title": "TOI",
+        "sortable": true,
+        "align": "left",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "hits": {
+       "properties": {
+        "key": "hits",
+        "hidden": false,
+        "class": "",
+        "label": "Hits",
+        "title": "Hits",
+        "sortable": true,
+        "align": "left",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "game_id": {
+       "properties": {
+        "key": "game_id",
+        "hidden": true,
+        "class": "",
+        "label": "",
+        "title": "",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      }
+     },
+     "data": [
+      {
+       "prop": {
+        "game": {
+         "gameLink": "338"
+        }
+       },
+       "row": {
+        "date_played": "2026-04-30",
+        "shots": "2",
+        "goals": 0,
+        "pp": 0,
+        "sh": 0,
+        "gw": 0,
+        "ice_time_minutes_seconds": "30:29",
+        "hits": "2",
+        "shots_blocked_by_player": "0",
+        "plusminus": "1",
+        "assists": 0,
+        "shootout_goals": "0",
+        "shootout_attempts": "0",
+        "penalty_minutes": "0",
+        "points": 0,
+        "game": "OTT @ BOS",
+        "faceoffsTaken": 0,
+        "faceoffPercentage": "0"
+       }
+      },
+      {
+       "prop": {
+        "game": {
+         "gameLink": "339"
+        }
+       },
+       "row": {
+        "date_played": "2026-05-02",
+        "shots": "2",
+        "goals": "1",
+        "pp": 0,
+        "sh": 0,
+        "gw": 0,
+        "ice_time_minutes_seconds": "29:11",
+        "hits": "3",
+        "shots_blocked_by_player": "0",
+        "plusminus": "-1",
+        "assists": 0,
+        "shootout_goals": "0",
+        "shootout_attempts": "0",
+        "penalty_minutes": "2",
+        "points": 1,
+        "game": "OTT @ BOS",
+        "faceoffsTaken": 0,
+        "faceoffPercentage": "0"
+       }
+      },
+      {
+       "prop": {
+        "game": {
+         "gameLink": "343"
+        }
+       },
+       "row": {
+        "date_played": "2026-05-08",
+        "shots": "2",
+        "goals": 0,
+        "pp": 0,
+        "sh": 0,
+        "gw": 0,
+        "ice_time_minutes_seconds": "30:48",
+        "hits": "1",
+        "shots_blocked_by_player": "0",
+        "plusminus": "-1",
+        "assists": 0,
+        "shootout_goals": "0",
+        "shootout_attempts": "0",
+        "penalty_minutes": "0",
+        "points": 0,
+        "game": "BOS @ OTT",
+        "faceoffsTaken": 0,
+        "faceoffPercentage": "0"
+       }
+      },
+      {
+       "prop": {
+        "game": {
+         "gameLink": "344"
+        }
+       },
+       "row": {
+        "date_played": "2026-05-10",
+        "shots": "4",
+        "goals": "1",
+        "pp": "1",
+        "sh": 0,
+        "gw": 0,
+        "ice_time_minutes_seconds": "43:34",
+        "hits": "1",
+        "shots_blocked_by_player": "0",
+        "plusminus": "1",
+        "assists": 0,
+        "shootout_goals": "0",
+        "shootout_attempts": "0",
+        "penalty_minutes": "0",
+        "points": 1,
+        "game": "BOS @ OTT",
+        "faceoffsTaken": 0,
+        "faceoffPercentage": "0"
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "playerShots": [
+  {
+   "game_id": "338",
+   "x_location": "220",
+   "y_location": "246",
+   "orientation": "0"
+  },
+  {
+   "game_id": "338",
+   "x_location": "530",
+   "y_location": "266",
+   "orientation": "1"
+  },
+  {
+   "game_id": "339",
+   "x_location": "148",
+   "y_location": "92",
+   "orientation": "0"
+  },
+  {
+   "game_id": "339",
+   "x_location": "491",
+   "y_location": "123",
+   "orientation": "1"
+  },
+  {
+   "game_id": "343",
+   "x_location": "97",
+   "y_location": "103",
+   "orientation": "1"
+  },
+  {
+   "game_id": "343",
+   "x_location": "181",
+   "y_location": "18",
+   "orientation": "1"
+  },
+  {
+   "game_id": "344",
+   "x_location": "153",
+   "y_location": "326",
+   "orientation": "1"
+  },
+  {
+   "game_id": "344",
+   "x_location": "210",
+   "y_location": "170",
+   "orientation": "1"
+  },
+  {
+   "game_id": "344",
+   "x_location": "193",
+   "y_location": "179",
+   "orientation": "1"
+  },
+  {
+   "game_id": "344",
+   "x_location": "494",
+   "y_location": "229",
+   "orientation": "0"
+  }
+ ],
+ "seasonId": "9",
+ "seasonStartDate": "2026-04-28",
+ "seasonEndDate": "2026-05-28",
+ "opponentTeamIds": [
+  5
+ ],
+ "media": {
+  "images": [
+   {
+    "id": "727",
+    "person_id": "14",
+    "media_type": "jpg",
+    "lang_id": "1",
+    "title": "BOS_Keller_5",
+    "uploaded": "2025-11-27 19:45:45",
+    "is_primary": "1",
+    "uploaded_name": "BOS_Keller_5.jpg",
+    "file_name": "004c47922f6cb6df4e2dce6ad16f966d.jpg",
+    "modified": "2025-11-27 19:45:46",
+    "deleted": "0",
+    "height": "600",
+    "width": "400",
+    "invalidation_requested": "",
+    "last_invalidated_date": "",
+    "player_id": "12",
+    "thumb": "https://lscluster.hockeytech.com/player-media/pwhl/004c47922f6cb6df4e2dce6ad16f966d.jpg",
+    "url": "https://lscluster.hockeytech.com/player-media/pwhl/004c47922f6cb6df4e2dce6ad16f966d.jpg"
+   },
+   {
+    "id": "519",
+    "person_id": "14",
+    "media_type": "jpg",
+    "lang_id": "1",
+    "title": "BOS_Keller_5",
+    "uploaded": "2025-11-26 20:54:32",
+    "is_primary": "0",
+    "uploaded_name": "BOS_Keller_5.jpg",
+    "file_name": "fdcd3aab407d334449d74fb66d2ab767.jpg",
+    "modified": "2025-11-27 19:45:47",
+    "deleted": "0",
+    "height": "1200",
+    "width": "864",
+    "invalidation_requested": "",
+    "last_invalidated_date": "",
+    "player_id": "12",
+    "thumb": "https://lscluster.hockeytech.com/player-media/pwhl/fdcd3aab407d334449d74fb66d2ab767.jpg",
+    "url": "https://lscluster.hockeytech.com/player-media/pwhl/fdcd3aab407d334449d74fb66d2ab767.jpg"
+   },
+   {
+    "id": "287",
+    "person_id": "14",
+    "media_type": "jpg",
+    "lang_id": "1",
+    "title": "Keller",
+    "uploaded": "2024-11-28 03:57:32",
+    "is_primary": "0",
+    "uploaded_name": "Keller.jpg",
+    "file_name": "2c009aa63d4713bdb697bc496a903695.jpg",
+    "modified": "2025-11-26 20:54:37",
+    "deleted": "0",
+    "height": "3896",
+    "width": "3117",
+    "invalidation_requested": "",
+    "last_invalidated_date": "",
+    "player_id": "12",
+    "thumb": "https://lscluster.hockeytech.com/player-media/pwhl/2c009aa63d4713bdb697bc496a903695.jpg",
+    "url": "https://lscluster.hockeytech.com/player-media/pwhl/2c009aa63d4713bdb697bc496a903695.jpg"
+   },
+   {
+    "id": "91",
+    "person_id": "14",
+    "media_type": "jpg",
+    "lang_id": "1",
+    "title": "Keller_Megan",
+    "uploaded": "2023-11-25 20:42:20",
+    "is_primary": "0",
+    "uploaded_name": "Keller_Megan.jpg",
+    "file_name": "9d86179a594ca60e8cca09f17b0414a4.jpg",
+    "modified": "2024-11-28 03:57:38",
+    "deleted": "0",
+    "height": "2988",
+    "width": "1992",
+    "invalidation_requested": "",
+    "last_invalidated_date": "",
+    "player_id": "12",
+    "thumb": "https://lscluster.hockeytech.com/player-media/pwhl/9d86179a594ca60e8cca09f17b0414a4.jpg",
+    "url": "https://lscluster.hockeytech.com/player-media/pwhl/9d86179a594ca60e8cca09f17b0414a4.jpg"
+   }
+  ]
+ },
+ "seasons": [
+  {
+   "id": 10,
+   "name": "2026-27 Pre-Season"
+  },
+  {
+   "id": 9,
+   "name": "2026 Playoffs"
+  },
+  {
+   "id": 8,
+   "name": "2025-26 Regular Season"
+  },
+  {
+   "id": 7,
+   "name": "2025-26 Preseason"
+  },
+  {
+   "id": 5,
+   "name": "2024-25 Regular Season"
+  },
+  {
+   "id": 4,
+   "name": "2024-25 Preseason"
+  },
+  {
+   "id": 3,
+   "name": "2024 Playoffs"
+  },
+  {
+   "id": 1,
+   "name": "2024 Regular Season"
+  },
+  {
+   "id": 2,
+   "name": "2024 Preseason"
+  }
+ ],
+ "playerProfileHeaders": [
+  {
+   "sections": [
+    {
+     "title": "",
+     "headers": {
+      "player_biography": {
+       "properties": {
+        "key": "player_biography",
+        "hidden": false,
+        "class": "",
+        "label": "Biography",
+        "title": "Biography",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "player_stats": {
+       "properties": {
+        "key": "player_stats",
+        "hidden": false,
+        "class": "",
+        "label": "Player Stats",
+        "title": "Player Stats",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "player_game_by_game": {
+       "properties": {
+        "key": "player_game_by_game",
+        "hidden": false,
+        "class": "",
+        "label": "Game by Game",
+        "title": "Game by Game",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      }
+     },
+     "data": []
+    }
+   ]
+  }
+ ],
+ "playerProfileBioHeaders": [
+  {
+   "sections": [
+    {
+     "title": "",
+     "headers": {
+      "position": {
+       "properties": {
+        "key": "position",
+        "hidden": false,
+        "class": "",
+        "label": "Position",
+        "title": "Position",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "birthDate": {
+       "properties": {
+        "key": "birthDate",
+        "hidden": false,
+        "class": "",
+        "label": "Birthdate",
+        "title": "Birthdate",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "catches": {
+       "properties": {
+        "key": "catches",
+        "hidden": false,
+        "class": "",
+        "label": "Catches",
+        "title": "Catches",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "shoots": {
+       "properties": {
+        "key": "shoots",
+        "hidden": false,
+        "class": "",
+        "label": "Shoots",
+        "title": "Shoots",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "height": {
+       "properties": {
+        "key": "height",
+        "hidden": false,
+        "class": "",
+        "label": "Height",
+        "title": "Height",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "hometown": {
+       "properties": {
+        "key": "hometown",
+        "hidden": false,
+        "class": "",
+        "label": "Home town",
+        "title": "Home town",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "birthPlace": {
+       "properties": {
+        "key": "birthPlace",
+        "hidden": false,
+        "class": "",
+        "label": "Birth place",
+        "title": "Birth place",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "nationality": {
+       "properties": {
+        "key": "nationality",
+        "hidden": false,
+        "class": "",
+        "label": "Nationality",
+        "title": "Nationality",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      }
+     },
+     "data": []
+    }
+   ]
+  }
+ ],
+ "gameByGameTotals": {
+  "goals": 2,
+  "assists": 0,
+  "points": 2,
+  "shots": 10,
+  "penalty_minutes": 2,
+  "plusminus": 0,
+  "pp": 1,
+  "sh": 0,
+  "en": 0,
+  "ig": 0,
+  "fg": 0,
+  "gw": 0,
+  "gt": 0,
+  "shootout_goals": 0,
+  "shootout_attempts": 0,
+  "shootout_goals_win": 0,
+  "hits": 7,
+  "shots_blocked_by_player": 0,
+  "fo": 0,
+  "fo_won": 0,
+  "games_played": 4,
+  "game": "Totals",
+  "date_played": "",
+  "shooting_percentage": "20.00",
+  "plus_minus": 0,
+  "faceoffsTaken": 0,
+  "faceoffPercentage": "0",
+  "ice_time_minutes_seconds": "134:02"
+ },
+ "showPlayerDraft": null,
+ "draftInfo": [
+  {
+   "sections": [
+    {
+     "title": "",
+     "headers": {
+      "draft_year": {
+       "properties": {
+        "key": "draft_year",
+        "hidden": false,
+        "class": "",
+        "label": "Year",
+        "title": "Year",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "draft_league": {
+       "properties": {
+        "key": "draft_league",
+        "hidden": false,
+        "class": "",
+        "label": "League",
+        "title": "League",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "draft_team": {
+       "properties": {
+        "key": "draft_team",
+        "hidden": false,
+        "class": "",
+        "label": "Team",
+        "title": "Team",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "draft_round": {
+       "properties": {
+        "key": "draft_round",
+        "hidden": false,
+        "class": "",
+        "label": "Round",
+        "title": "Round",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "draft_rank": {
+       "properties": {
+        "key": "draft_rank",
+        "hidden": false,
+        "class": "",
+        "label": "Rank",
+        "title": "Rank",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "draft_junior_team": {
+       "properties": {
+        "key": "draft_junior_team",
+        "hidden": false,
+        "class": "",
+        "label": "Last Jr/College Team",
+        "title": "Last Jr/College Team",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "draft_team_id": {
+       "properties": {
+        "key": "draft_team_id",
+        "hidden": true,
+        "class": "",
+        "label": "",
+        "title": "",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "draft_logo": {
+       "properties": {
+        "key": "draft_logo",
+        "hidden": false,
+        "class": "",
+        "label": "Logo",
+        "title": "Logo",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      },
+      "draft_logo_caption": {
+       "properties": {
+        "key": "draft_logo_caption",
+        "hidden": false,
+        "class": "",
+        "label": "Logo Caption",
+        "title": "Logo Caption",
+        "sortable": true,
+        "align": "center",
+        "highlight": false,
+        "sortKey": ""
+       }
+      }
+     },
+     "data": []
+    }
+   ]
+  }
+ ],
+ "translations": {
+  "coach_stats": {
+   "abbreviation": "stats",
+   "fullText": "Coach Stats"
+  },
+  "gamesPlayed": {
+   "abbreviation": "GP",
+   "fullText": "Games Played"
+  },
+  "goals": {
+   "abbreviation": "G",
+   "fullText": "Goals"
+  },
+  "assists": {
+   "abbreviation": "A",
+   "fullText": "Assists"
+  },
+  "nationality": {
+   "abbreviation": "Nationality",
+   "fullText": "Nationality"
+  },
+  "points": {
+   "abbreviation": "PTS",
+   "fullText": "Points"
+  },
+  "plus_minus": {
+   "abbreviation": "+/-",
+   "fullText": "Plus/Minus"
+  },
+  "shots": {
+   "abbreviation": "SH",
+   "fullText": "Shots"
+  },
+  "points_per_game": {
+   "abbreviation": "Pt/G",
+   "fullText": "Pt/G"
+  },
+  "player_stats": {
+   "abbreviation": "stats",
+   "fullText": "Player Stats"
+  },
+  "game_by_game": {
+   "abbreviation": "Game by Game",
+   "fullText": "Game by Game"
+  },
+  "position": {
+   "abbreviation": "Pos",
+   "fullText": "Position"
+  },
+  "shoots": {
+   "abbreviation": "SH",
+   "fullText": "Shoots"
+  },
+  "height": {
+   "abbreviation": "H",
+   "fullText": "Height"
+  },
+  "weight": {
+   "abbreviation": "W",
+   "fullText": "Weight"
+  },
+  "birthDate": {
+   "abbreviation": "DOB",
+   "fullText": "Birthdate"
+  },
+  "birthPlace": {
+   "abbreviation": "Birth place",
+   "fullText": "Birth place"
+  },
+  "hometown": {
+   "abbreviation": "Home town",
+   "fullText": "Home town"
+  },
+  "player_season_shots": {
+   "abbreviation": "Season Shots",
+   "fullText": "Season Shots"
+  },
+  "biography": {
+   "abbreviation": "Bio",
+   "fullText": "Biography"
+  },
+  "wins": {
+   "abbreviation": "W",
+   "fullText": "Wins"
+  },
+  "losses": {
+   "abbreviation": "L",
+   "fullText": "Losses"
+  },
+  "ties": {
+   "abbreviation": "T",
+   "fullText": "Ties"
+  },
+  "shutouts": {
+   "abbreviation": "SO",
+   "fullText": "Shutouts"
+  },
+  "goals_against_average": {
+   "abbreviation": "GAA",
+   "fullText": "Goals Against Average"
+  },
+  "save_percentage": {
+   "abbreviation": "SV%",
+   "fullText": "Save Percentage"
+  },
+  "drafted": {
+   "abbreviation": "Drafted",
+   "fullText": "Drafted"
+  },
+  "nhl_draft": {
+   "abbreviation": "NHL Draft",
+   "fullText": "NHL Draft"
+  },
+  "draft_info": {
+   "abbreviation": "Draft Info",
+   "fullText": "Draft Info"
+  },
+  "round": {
+   "abbreviation": "Round",
+   "fullText": "Round"
+  },
+  "committedTo": {
+   "abbreviation": "Committed To",
+   "fullText": "School Name"
+  },
+  "committedFor": {
+   "abbreviation": "Committed For",
+   "fullText": "Season"
+  },
+  "catches": {
+   "abbreviation": "CA",
+   "fullText": "Catches"
+  },
+  "shootout_losses": {
+   "abbreviation": "SOL",
+   "fullText": "Shootout Losses"
+  },
+  "ot_losses": {
+   "abbreviation": "OTL",
+   "fullText": "OT Losses"
+  },
+  "game_winning_goals": {
+   "abbreviation": "GWG",
+   "fullText": "Game Winning Goals"
+  }
+ },
+ "display": {
+  "plusMinus": true,
+  "shots": true,
+  "shootout": true,
+  "faceoffs": false
+ },
+ "svfLang": {
+  "Submit": "Submit",
+  "SUBMIT": "SUBMIT",
+  "English": "English",
+  "French": "French",
+  "SEARCH": "SEARCH",
+  "FILTER": "FILTER",
+  "Opponent": "Opponent",
+  "All_Teams": "All Teams",
+  "From": "From",
+  "To": "To",
+  "Totals": "Totals",
+  "Clear": "Clear",
+  "Schedule": "Schedule",
+  "Daily_Schedule": "Daily Schedule and Scores",
+  "Team_Stats": "Team Stats",
+  "Skater_Stats": "Skater Stats",
+  "Goalie_Stats": "Goalie Stats",
+  "Alt_Skater_Stats": "All-Time Skater Stats",
+  "Alt_Goalie_Stats": "All-Time Goalie Stats",
+  "Streaks": "Streaks",
+  "Person_Search": "Person Search",
+  "Transactions": "Transactions",
+  "Playoff_Brackets": "Playoff Brackets",
+  "Team_Attendance": "Team Attendance",
+  "Home": "Home",
+  "Away": "Away",
+  "Home_Away": "Home & Away",
+  "Next": "Next",
+  "Previous": "Previous",
+  "Today": "Today",
+  "Stats": "Stats",
+  "League": "League",
+  "Division": "Division",
+  "Conference": "Conference",
+  "Overall": "Overall",
+  "Special_Teams": "Special Teams",
+  "Rookie": "Rookie",
+  "Standard": "Standard",
+  "Expanded": "Expanded",
+  "Skater": "Skater",
+  "Goalie": "Goalie",
+  "Goalie_min1": "Goalies must have",
+  "Goalie_min2": "minutes to be considered qualified",
+  "Regular_Season": "Regular Season",
+  "Team": "Team",
+  "Player": "Player",
+  "Goals": "Goals",
+  "Assists": "Assists",
+  "Points": "Points",
+  "Active": "Active",
+  "All_Players": "All Players",
+  "Playoff_Tracker": "Playoff Tracker",
+  "Playoffs": "Playoffs",
+  "Round": "Round",
+  "Matchup": "Match Up",
+  "Schedulescores": "Schedule/Results",
+  "Game": "Game",
+  "Roster": "Roster",
+  "Round_Robin": "Round Robin",
+  "Games": "Games",
+  "Games_Played": "Games Played",
+  "Group_Division": "Groups by Division",
+  "Scoring": "Scoring",
+  "Shots": "Shots",
+  "View_All": "View All",
+  "Loading_Scoreboard": "Loading Scoreboard...",
+  "Tickets": "Tickets",
+  "Boxscore": "Boxscore",
+  "wins": "wins",
+  "series": "series",
+  "if_necessary": "If necessary",
+  "NO_GAMES": "NO GAMES MATCH THE SELECTED CRITERIA",
+  "NO_GAMES_SCHEDULE": "NO GAMES MATCH THE SELECTED CRITERIA",
+  "NO_PLAYERS": "NO PLAYERS MATCH THE SELECTED CRITERIA",
+  "NO_PLAYER": "NO DATA WAS FOUND",
+  "NO_IMAGE": "NO DATA WAS FOUND",
+  "NO_VIDEO": "NO DATA WAS FOUND",
+  "NO_AUDIO": "NO DATA WAS FOUND",
+  "NO_TRANSACTIONS": "NO TRANSACTIONS MATCH THE SELECTED CRITERIA",
+  "NO_DATA": "NO DATA WAS FOUND",
+  "Coach_Stats": "Coach Stats",
+  "Coach_Media": "Coach Media",
+  "Player_Stats": "Player Stats",
+  "Player_Media": "Player Media",
+  "Images": "Images",
+  "Video": "Video",
+  "Audio": "Audio",
+  "Game_Game": "Game by Game",
+  "Player_Awards": "Player Awards",
+  "Tap_Game_Summary": "Tap to see Game Summary",
+  "Tap_Game_Details": "Tap to see Game Details",
+  "Schedule_Changes": "Schedule Changes",
+  "Note_Players_Starting_Lineup": "NOTE: Players listed in Italics are the starting lineup.",
+  "No_Scoring": "No Scoring",
+  "Plus": "plus",
+  "Minus": "minus",
+  "Penalties": "Penalties",
+  "No_Penalties": "No Penalties",
+  "Penalty_Shots": "Penalty Shots",
+  "Shooter": "Shooter",
+  "Goaltender": "Goaltender",
+  "Goaltenders": "Goaltenders",
+  "Period": "Period",
+  "Time": "Time",
+  "Goal": "Goal",
+  "Yes": "Yes",
+  "No": "No",
+  "Shootout": "Shootout",
+  "Shootout_Abbrev": "SO",
+  "No_Goal": "No Goal",
+  "Total": "Total",
+  "TOI": "TOI",
+  "SV_SH": "SV",
+  "G": "G",
+  "A": "A",
+  "PIM": "PIM",
+  "SA": "SA",
+  "SV": "SV",
+  "Three_Stars": "Three Stars",
+  "Team_Stars": "Team Stars of Game",
+  "home_team_star": "Home Team Star",
+  "visiting_team_star": "Visiting Team Star",
+  "first": "1st",
+  "second": "2nd",
+  "third": "3rd",
+  "PP": "PP",
+  "SO": "SO",
+  "FO": "FO",
+  "PS": "PS",
+  "SH": "SH",
+  "SHAND": "SH",
+  "EN": "EN",
+  "Bench": "Bench",
+  "Served_By": "Served by",
+  "Player_of_the_Game": "Player of the Game",
+  "PTS": "PTS",
+  "Arena": "Arena",
+  "Officials": "OFFICIALS",
+  "Off_Ice_Officials": "Off-Ice Officials",
+  "Attendance": "Attendance",
+  "Start": "Start",
+  "End": "End",
+  "Length": "Length",
+  "Public_Notes": "Public Notes",
+  "Min": "min",
+  "Inf": "inf",
+  "Game_Report": "Game Report",
+  "Text_Boxscore": "Text Box Score",
+  "Leaders": "Leaders",
+  "Error_Loading": "Error in loading data.",
+  "College_Commitments": "College Commitments",
+  "lbs": "lbs",
+  "Leaders_Extended": "Leaders Extended",
+  "Media_Kit": "Media Kit",
+  "Game_Day": "Game Day",
+  "POS": "Pos",
+  "GA": "GA",
+  "MIN": "Mins",
+  "SVS": "SVS",
+  "See_All_Leaders": "See All Leaders",
+  "See_Full_Standings": "See Full Standings",
+  "Player_seoTitle": "Stats and Player Profile",
+  "Select": "-- Select --",
+  "TLP_Select": "Please select your Season, Division and Team",
+  "TLP_Select2": "Please select your Playoff's Season and Division",
+  "NEXT_DAY": "Next Day",
+  "PREV_DAY": "Previous Day",
+  "ADD_TO_CAL": "Add to Calendar",
+  "ALL_GAMES_TO_CAL": "Add All Games to Calendar",
+  "PLAYOFFS": "Playoffs",
+  "SEL_SDT_REG": "Please select your Season, Division and Team:",
+  "SEL_SDT_PO": "Please select your Playoff's Season and Division:",
+  "GO": "Go",
+  "Visiting_Audio": "Visiting Audio",
+  "Home_Audio": "Home Audio",
+  "Watch_Live": "Watch Live",
+  "Shots_on_Goal": "Shots on Goal",
+  "On": "On",
+  "Off": "Off",
+  "Name": "Name",
+  "Role": "Role",
+  "Head_to_Head": "Head to Head",
+  "Previous_Meetings_This_Season": "Previous Meetings This Season",
+  "Top_Scorers": "Top Scorers",
+  "Last_5_Games": "Last 5 Games",
+  "Last_10_Games": "Last 10 Games",
+  "Streak": "Streak",
+  "Last_Game": "Last Game",
+  "Home_Record": "Home Record",
+  "Away_Record": "Away Record",
+  "Goals_For": "Goals For",
+  "Goals_Against": "Goals Against",
+  "Penalty_Killing": "Penalty Killing",
+  "Penalty_Killing_Home": "Penalty Killing (Home)",
+  "Penalty_Killing_Away": "Penalty Killing (Away)",
+  "Leading_Rookie": "Leading Rookie",
+  "Team_PIM_GM": "Team PIM/GM",
+  "Play_by_Play": "Play By Play",
+  "Hits": "Hits",
+  "GS_Hits": "Hits",
+  "Faceoffs": "Faceoffs",
+  "Goalie_Change": "Goalie Change",
+  "In": "IN",
+  "Faceoff": "Faceoff",
+  "Shot": "Shot",
+  "Penalty": "Penalty",
+  "None": "None",
+  "None_Fem": "None",
+  "Power_Play": "Power Play",
+  "Short_Handed": "SHORT HANDED",
+  "Empty_Net": "Empty Net",
+  "Penalty_Shot": "Penalty shot",
+  "Hit": "Hit",
+  "HitBy": "Hit By",
+  "Most_PIM": "Most PIM",
+  "Previous_Season": "Previous Season",
+  "Current_Season": "Current Season",
+  "Last_5_Seasons": "Last 5 Seasons",
+  "Season_Record": "Season Record",
+  "Power_Plays": "Power Plays",
+  "Power_Plays_Home": "Power Plays (Home)",
+  "Power_Plays_Away": "Power Plays (Away)",
+  "Most_Penalty_Minutes": "Most Penalty Minutes",
+  "shoots_on": "shoots on",
+  "shootout_attempt_on": "shootout attempt on",
+  "Game_Winning": "Game Winning",
+  "Game_Center": "Game Center",
+  "Game_Summary": "Game Summary",
+  "Insurance_Goal": "Insurance Goal",
+  "Summary": "Summary",
+  "Standings": "Standings",
+  "Preview": "Preview",
+  "By": "By",
+  "Timeout": "Timeout",
+  "Timeouts": "Timeouts",
+  "Icing": "Icing",
+  "Icings": "Icings",
+  "Offside": "Offside",
+  "Offsides": "Offsides",
+  "Blocked_Shot": "Blocked shot",
+  "Blocked_Shots": "Blocked shots",
+  "Blocked_By": "Blocked By",
+  "Wide_Shot": "Wide shot",
+  "Wide_Shots": "Wide shots",
+  "Breakout": "Breakout",
+  "Breakouts": "Breakouts",
+  "Odd_Man_Rush": "Odd Man Rush",
+  "Offense": "Offense",
+  "Defense": "Defense",
+  "Watch_On_HTV": "Watch this game on HockeyTV",
+  "Watch_On_USHL": "Watch on USHLTV",
+  "Watch_On_NAHL": "Watch on NAHLTV",
+  "Watch_On_Flo": "Watch on FloHockey",
+  "Discipline": "Discipline",
+  "No_Games_Today": "No games scheduled for this date",
+  "BLK": "BLK",
+  "Season": "Season",
+  "Game_Type": "Game Type"
+ }
+}

@@ -57,3 +57,73 @@ def test_draft_safe_chr_is_the_same_emulation():
     assert _safe_chr(True) == "TRUE"  # the draft's pick_traded column
     assert _safe_chr(2.0) == "2"  # R: as.character(2) == "2", not "2.0"
     assert _safe_chr(3.4000000000000057) == "3.40000000000001"  # the fix it was missing
+
+
+@pytest.mark.parametrize(
+    ("value", "expected"),
+    [
+        # ?logical (R 4.x): c("T", "TRUE", "true", "True") are true, c("F", "FALSE", "false", "False")
+        # false, every other string NA; numbers: 0 is FALSE, NaN NA, anything else TRUE.
+        ("false", False),  # B-GB-20: bool("false") was True
+        ("FALSE", False),
+        ("F", False),
+        ("False", False),
+        ("true", True),
+        ("T", True),
+        ("yes", None),
+        ("", None),
+        (0, False),
+        (2, True),
+        (float("nan"), None),
+        (True, True),
+        (False, False),
+        (None, None),
+    ],
+)
+def test_rel_bool_follows_r_as_logical(value, expected):
+    from sportsdataverse.wbb.wbb_game_rosters import _rel_bool
+
+    assert _rel_bool(value) is expected
+
+
+# --- helper_wbb_officials on ESPN's real Core v2 officials page (tests/fixtures/espn/event_officials_nba.json)
+
+
+def _officials_page():
+    import json
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[1] / "fixtures" / "espn" / "event_officials_nba.json"
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _officials(payload):
+    from sportsdataverse.wbb.wbb_game_officials import helper_wbb_officials
+
+    return helper_wbb_officials(payload, season=2024, game_id=401584793)
+
+
+def test_officials_null_element_is_skipped():
+    page = _officials_page()
+    df = _officials({**page, "items": [page["items"][0], None, *page["items"][1:]]})  # B-L8: AttributeError
+    assert df["official_id"].to_list() == [int(o["id"]) for o in page["items"]]
+
+
+def test_officials_empty_page_carries_the_columns():
+    import polars as pl
+
+    from sportsdataverse.wbb.wbb_game_officials import _OFFICIAL_COLS
+
+    full = _officials(_officials_page())
+    empty = _officials({**_officials_page(), "items": []})  # B-L8: was a zero-column frame
+    assert empty.height == 0 and empty.schema == full.schema
+    assert empty.columns == list(_OFFICIAL_COLS) and full.schema["official_id"] == pl.Int32
+
+
+def test_officials_without_ids_are_not_collapsed():
+    page = _officials_page()
+    idless = {"position": page["items"][0]["position"]}  # every mapped field equal, no id
+    df = _officials({**page, "items": [*page["items"], dict(idless), dict(idless)]})  # B-GB-18: kept one
+    assert df.height == len(page["items"]) + 2
+    # the same official listed twice is still one row (R distinct())
+    assert _officials({**page, "items": [*page["items"], page["items"][0]]}).height == len(page["items"])

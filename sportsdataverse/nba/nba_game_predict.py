@@ -333,7 +333,7 @@ def _load_in_game_artifact(league_id: str = "00") -> dict[str, Any]:
     if name.endswith(".json"):
         return {"kind": "logistic", **json.loads(path.read_text(encoding="utf-8"))[league_id]}
     try:
-        import xgboost as xgb  # noqa: PLC0415 -- optional dep, only the tree artifact needs it
+        import xgboost as xgb  # optional dep, only the tree artifact needs it
     except ImportError as exc:  # pragma: no cover - exercised only when xgboost is absent
         raise ImportError(
             "nba_in_game_win_prob needs xgboost for the bundled tree artifact; "

@@ -9,8 +9,8 @@ proxy is needed.
 What the live API does (sdv-internal-refs ``kbl/``, probed 2026-10-12):
 
 * **Two headers must be present**, with any value: ``Channel`` and ``TeamCode`` (the site sends ``WEB`` and ``XX``).
-  Without them the API answers HTTP 400 ``{"resultCode": "Fail", ...}``; the runtime always sends them, so a 400 here
-  is an unknown answer (``AssetFetchError``), never the caller's fault.
+  Without them the API answers HTTP 400 ``{"resultCode": "Fail", ...}``; the runtime always sends them. A 400 is
+  ``ValueError`` all the same, as everywhere in the package (the error vocabulary).
 * **Errors** are an envelope ``{"resultCode": "Fail", "message": ..., "errorCode": N}`` with HTTP 400 or 500. An
   unknown or malformed id is a **500** ("a server error occurred"), so 500 is never retried (only 429, 502, 503, 504).
   An unknown ``gameNo`` on ``player-stat`` is a 200 ``[]`` and on ``match-chart`` a 200 with empty arrays: the game
@@ -43,6 +43,7 @@ from __future__ import annotations
 
 import datetime as dt
 import re
+from contextlib import nullcontext
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from sportsdataverse import _codegen_runtime as _rt
@@ -168,10 +169,8 @@ def _fetch(path: str, params: Optional[Mapping[str, Any]], **kwargs: Any) -> Any
     headers = dict(HEADERS)
     headers.update(kwargs.pop("headers", None) or {})
     url = BASE + path
-    try:
-        body = _bb._get(url, dict(params or {}), headers=headers, **kwargs)
-    except ValueError as exc:  # HTTP 400 / 422: the headers are always sent, so the answer is unknown
-        raise AssetFetchError(str(exc)) from None
+    # a 400 / 422 stays ValueError: the request is wrong (EX-SYNC-b, the repo-wide vocabulary)
+    body = _bb._fetch_json(url, dict(params or {}), headers=headers, **kwargs)
     if isinstance(body, dict) and (body.get("resultCode") == "Fail" or ("errorCode" in body and "resultCode" in body)):
         raise AssetFetchError(
             f"{_rt._where(url)} answered the KBL error envelope (errorCode={body.get('errorCode')!r})"
@@ -261,7 +260,8 @@ def _game(gmkey: str, **kw: Any) -> Tuple[Dict[str, Any], Any, Any]:
             raise AssetFetchError(
                 f"{where}: the game is not final (isEnded={ctx['is_ended']!r}, gameDate={date!r}, points={ctx['totals']})"
             )
-        text = _fetch(f"/match/{gmkey}/text-cast", {"quarterList": QUARTERS}, **kw)
+        with _rt._no_content_unknown(f"{where}/text-cast (the final-game proof)"):  # a lookup, even for the header
+            text = _fetch(f"/match/{gmkey}/text-cast", {"quarterList": QUARTERS}, **kw)
         _check_text_cast(where, ctx, text)  # raises unless it reached the end of the last period
     _CACHE[key] = ctx
     return ctx, header, text
@@ -311,7 +311,11 @@ def _game_route(name: str, gmkey: str, **kw: Any) -> Any:
     where = (
         f"api.kbl.or.kr/match/{gmkey}/{name.replace('_', '-')}" if name != "header" else f"api.kbl.or.kr/match/{gmkey}"
     )
-    ctx, header, text = _game(gmkey, **kw)
+    if name == "header":  # the header IS the answer here; on the other match routes the final check is a lookup
+        ctx, header, text = _game(gmkey, **kw)
+    else:
+        with _rt._no_content_unknown(f"{where} (the final-game check)"):
+            ctx, header, text = _game(gmkey, **kw)
     if name == "header":
         if header is None:
             header = _fetch(f"/match/{gmkey}", None, **kw)
@@ -368,10 +372,12 @@ def _match_list(params: Mapping[str, Any], **kw: Any) -> Tuple[List[Any], Dict[s
     season = params.get("season")
     wins = _windows(None if season is None else _season_arg(season), params.get("fromDate"), params.get("toDate"))
     rows: List[Any] = []
-    for lo, hi in wins:
-        part = _list("api.kbl.or.kr/match/list", _fetch("/match/list", {"fromDate": lo, "toDate": hi}, **kw))
-        _same_window("api.kbl.or.kr/match/list", _rows(part), lo, hi)
-        rows.extend(part)
+    # one window is one request (its 204 is the route's {}); several windows leave a season incomplete on a 204
+    with _rt._no_content_unknown("api.kbl.or.kr/match/list (a window of several)") if len(wins) > 1 else nullcontext():
+        for lo, hi in wins:
+            part = _list("api.kbl.or.kr/match/list", _fetch("/match/list", {"fromDate": lo, "toDate": hi}, **kw))
+            _same_window("api.kbl.or.kr/match/list", _rows(part), lo, hi)
+            rows.extend(part)
     stamp: Dict[str, Any] = {"from_date": wins[0][0], "to_date": wins[-1][1]}
     if season is not None:
         stamp["season"] = _season_arg(season)
@@ -444,6 +450,7 @@ def _wrap(data: Any, stamp: Mapping[str, Any]) -> Dict[str, Any]:
     return out
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET a KBL route, refuse the partial or out-of-scope answers and stamp the request.
 

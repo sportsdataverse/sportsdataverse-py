@@ -21,6 +21,10 @@ from sportsdataverse.football.sources.dispatch import (
 
 from .conftest import CFB_GAME_ID, NFL_GAME_ID
 
+# Processing a default-odds capture warns DefaultOddsWarning incidentally;
+# tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
+pytestmark = pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")
+
 
 def test_espn_offline_dispatch_runs_the_real_pipeline(nfl_processed: ProcessedGame):
     """The ESPN path serves a stored summary through the real pipeline, with full provenance."""
@@ -221,6 +225,7 @@ def test_stored_closing_line_becomes_odds_override(nfl_summary, fast_processor):
         "overUnder": 40.5,
         "homeFavorite": True,
         "gameSpreadAvailable": True,
+        "overUnderAvailable": True,
     }
     assert out.provenance["odds"]["from_idmap"] is True
     # an explicit odds_override wins over the stored line

@@ -1,0 +1,4659 @@
+{
+ "header": {
+  "alternateLeftColor": "1, 0, 87, 244",
+  "alternateRightColor": "1, 192, 192, 192",
+  "eventStatus": 3,
+  "eventTime": "2025-09-14T17:00:00Z",
+  "id": "10777",
+  "leftColor": "1, 0, 87, 244",
+  "leftTeam": {
+   "imageAltText": "New York Giants",
+   "isLoser": true,
+   "longName": "Giants",
+   "name": "NYG",
+   "score": 37,
+   "stackedNameBottom": "Giants",
+   "stackedNameTop": "New York",
+   "uri": "football/nfl/teams/16"
+  },
+  "rightColor": "1, 192, 192, 192",
+  "rightTeam": {
+   "imageAltText": "Dallas Cowboys",
+   "isLoser": false,
+   "longName": "Cowboys",
+   "name": "DAL",
+   "score": 40,
+   "stackedNameBottom": "Cowboys",
+   "stackedNameTop": "Dallas",
+   "uri": "football/nfl/teams/15"
+  },
+  "statusLine": "FINAL / OT"
+ },
+ "pbp": {
+  "sections": [
+   {
+    "title": "1ST QUARTER",
+    "groups": [
+     {
+      "id": "8614",
+      "subtitle": "16 plays · 60 yards · 8:49",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/16"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "3",
+        "title": "NYG"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "1",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Aubrey kicks 64 yards from DAL 35 to the NYG 1. G.Olszewski returns the kickoff. Tackled by R.Flournoy at NYG 30. PENALTY on NYG-S.Bozeman, Offensive Holding, 10 yards, accepted.",
+        "timeOfPlay": "15:00",
+        "title": "DAL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 1,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 20,
+            "yardStart": 1
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "2",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Singletary rushed left tackle for 4 yards. Tackled by D.Fowler; K.Clark at NYG 24.",
+        "timeOfPlay": "14:48",
+        "title": "1st & 10 · NYG 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 24,
+            "yardStart": 20
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "3",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Wilson pass short right complete. Catch made by M.Nabers for 5 yards. Tackled by K.Elam at NYG 29.",
+        "timeOfPlay": "14:19",
+        "title": "2nd & 6 · NYG 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 29,
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "4",
+        "periodOfPlay": "1ST",
+        "playDescription": "C.Skattebo rushed left tackle for 3 yards. Tackled by T.Diggs; D.Clark at NYG 32.",
+        "timeOfPlay": "13:45",
+        "title": "3rd & 1 · NYG 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 32,
+            "yardStart": 29
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "5",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Wilson pass short left complete. Catch made by T.Tracy for 9 yards. Tackled by D.Clark; J.Sanborn at NYG 41.",
+        "timeOfPlay": "13:07",
+        "title": "1st & 10 · NYG 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 41,
+            "yardStart": 32
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "6",
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Tracy rushed left tackle for 9 yards. Pushed out of bounds by K.Elam at NYG 50. PENALTY on NYG-D.Slayton, Offensive Holding, 10 yards, accepted.",
+        "timeOfPlay": "12:22",
+        "title": "2nd & 1 · NYG 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 40,
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "7",
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Tracy rushed left tackle for 2 yards. Tackled by M.Kneeland; S.Thomas at NYG 42.",
+        "timeOfPlay": "12:04",
+        "title": "2nd & 2 · NYG 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 42,
+            "yardStart": 40
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "8",
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Tracy rushed right guard for 0 yards. Tackled by S.Thomas; R.Steward at NYG 42.",
+        "timeOfPlay": "11:23",
+        "title": "1st & 10 · NYG 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 42,
+            "yardStart": 42
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "9",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Wilson pass short left complete. Catch made by T.Johnson for 6 yards. Tackled by J.Sanborn at NYG 48.",
+        "timeOfPlay": "10:45",
+        "title": "2nd & 10 · NYG 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 48,
+            "yardStart": 42
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "10",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Wilson pass short middle complete. Catch made by T.Johnson for 14 yards. Tackled by T.Diggs at DAL 38.",
+        "timeOfPlay": "10:01",
+        "title": "3rd & 4 · NYG 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 62,
+            "yardStart": 48
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "11",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Wilson steps back to pass. Sacked at DAL 43 for -5 yards (J.Houston).",
+        "timeOfPlay": "9:09",
+        "title": "1st & 10 · DAL 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 57,
+            "yardStart": 62
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "12",
+        "periodOfPlay": "1ST",
+        "playDescription": "C.Skattebo rushed right guard for yards. Tackled by D.Wilson at DAL 33. PENALTY on NYG-J.Hudson, Personal Foul / Offense, 15 yards, accepted. No Play.",
+        "timeOfPlay": "8:31",
+        "title": "2nd & 15 · DAL 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 42,
+            "yardStart": 57
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "13",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Wilson pass short left complete. Catch made by W.Robinson for 11 yards. Tackled by R.Steward at DAL 47.",
+        "timeOfPlay": "8:14",
+        "title": "2nd & 30 · NYG 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 53,
+            "yardStart": 42
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "14",
+        "playDescription": "Timeout #1 by DAL.",
+        "timeOfPlay": "7:47",
+        "title": "Timeout"
+       },
+       {
+        "id": "15",
+        "periodOfPlay": "1ST",
+        "playDescription": "PENALTY on NYG-J.Hudson, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "7:47",
+        "title": "3rd & 19 · DAL 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 48,
+            "yardStart": 53
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "16",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Wilson pass deep middle complete. Catch made by W.Robinson for 50 yards. Tackled by M.Hooker at DAL 2. PENALTY on NYG-J.Hudson, Unnecessary Roughness / Offense, 15 yards, accepted.",
+        "timeOfPlay": "7:47",
+        "title": "3rd & 24 · NYG 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 83,
+            "yardStart": 48
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "17",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Wilson rushed left end for 2 yards. Tackled by D.Wilson at DAL 15.",
+        "timeOfPlay": "7:22",
+        "title": "1st & 10 · DAL 17",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 85,
+            "yardStart": 83
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "18",
+        "periodOfPlay": "1ST",
+        "playDescription": "PENALTY on NYG-J.Hudson, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "6:39",
+        "title": "2nd & 8 · DAL 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 80,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "19",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Wilson steps back to pass. Pass incomplete short left intended for T.Johnson.",
+        "timeOfPlay": "6:30",
+        "title": "2nd & 13 · DAL 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 80
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "20",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Wilson steps back to pass. Pass incomplete deep right intended for M.Nabers.",
+        "timeOfPlay": "6:21",
+        "title": "3rd & 13 · DAL 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 80
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "21",
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Gano 38 yard field goal attempt is good, Center-C.Kreiter, Holder-J.Gillan.",
+        "timeOfPlay": "6:15",
+        "title": "4th & 13 · DAL 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 80
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8636",
+      "subtitle": "3 plays · 4 yards · 1:24",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/15"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "3",
+        "title": "NYG"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "23",
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Gano kicks 56 yards from NYG 35 to the DAL 9. J.Tolbert returns the kickoff. Tackled by D.Belton at DAL 32.",
+        "timeOfPlay": "6:11",
+        "title": "NYG 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 91,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 68,
+            "yardStart": 91
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "24",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Prescott pass short left complete. Catch made by J.Williams for 7 yards. Tackled by P.Adebo at DAL 39.",
+        "timeOfPlay": "6:06",
+        "title": "1st & 10 · DAL 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 61,
+            "yardStart": 68
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "25",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Williams rushed right guard for 2 yards. Tackled by D.Lawrence at DAL 41.",
+        "timeOfPlay": "5:34",
+        "title": "2nd & 3 · DAL 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 59,
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "26",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Prescott steps back to pass. Pass incomplete short right intended for J.Ferguson (C.Flott).",
+        "timeOfPlay": "5:04",
+        "title": "3rd & 1 · DAL 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 59
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "27",
+        "periodOfPlay": "1ST",
+        "playDescription": "PENALTY on DAL-D.Prescott, Delay of Game, 5 yards, accepted. No Play.",
+        "timeOfPlay": "4:59",
+        "title": "4th & 1 · DAL 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 64,
+            "yardStart": 59
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "28",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Anger punts 41 yards to NYG 23, Center-T.Sieg. G.Olszewski returned punt from the NYG 23. Tackled by J.Thomas; B.Spann-Ford at NYG 31.",
+        "timeOfPlay": "4:59",
+        "title": "4th & 6 · DAL 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 23,
+            "yardStart": 64
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 31,
+            "yardStart": 23
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "30",
+        "periodOfPlay": "1ST",
+        "playDescription": "PENALTY on NYG-D.Bellinger, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "4:47",
+        "title": "1st & 10 · NYG 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 26,
+            "yardStart": 31
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8645",
+      "subtitle": "8 plays · 60 yards · 3:42",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/16"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "6",
+        "title": "NYG"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "31",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Wilson pass short left complete. Catch made by M.Nabers for 9 yards. Tackled by J.Sanborn; K.Elam at NYG 35.",
+        "timeOfPlay": "4:47",
+        "title": "1st & 15 · NYG 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 35,
+            "yardStart": 26
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "32",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Wilson pass short left complete. Catch made by C.Skattebo for 5 yards. Pushed out of bounds by K.Elam at NYG 40.",
+        "timeOfPlay": "4:14",
+        "title": "2nd & 6 · NYG 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 40,
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "33",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Wilson pass deep left complete. Catch made by M.Nabers for 28 yards. Tackled by T.Diggs at DAL 32.",
+        "timeOfPlay": "3:37",
+        "title": "3rd & 1 · NYG 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 68,
+            "yardStart": 40
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "34",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Wilson pass short left complete. Catch made by M.Nabers for 15 yards. Pushed out of bounds by D.Wilson at DAL 17.",
+        "timeOfPlay": "3:07",
+        "title": "1st & 10 · DAL 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 83,
+            "yardStart": 68
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "35",
+        "periodOfPlay": "1ST",
+        "playDescription": "C.Skattebo rushed up the middle for 2 yards. Tackled by K.Clark at DAL 15.",
+        "timeOfPlay": "2:40",
+        "title": "1st & 10 · DAL 17",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 85,
+            "yardStart": 83
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "36",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Wilson pass short left complete. Catch made by T.Johnson for 1 yards. Tackled by K.Murray at DAL 14.",
+        "timeOfPlay": "1:57",
+        "title": "2nd & 8 · DAL 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 86,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "37",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Wilson steps back to pass. Pass incomplete short left intended for W.Robinson (R.Steward).",
+        "timeOfPlay": "1:16",
+        "title": "3rd & 7 · DAL 14",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 86
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "38",
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Gano 33 yard field goal attempt is good, Center-C.Kreiter, Holder-J.Gillan.",
+        "timeOfPlay": "1:09",
+        "title": "4th & 7 · DAL 14",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 86
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "2ND QUARTER",
+    "groups": [
+     {
+      "id": "8651",
+      "subtitle": "3 plays · 2 yards · 1:56",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/15"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "6",
+        "title": "NYG"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "40",
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Gano kicks 59 yards from NYG 35 to the DAL 6. K.Turpin returns the kickoff. Tackled by B.Collins; D.Belton at DAL 31.",
+        "timeOfPlay": "1:05",
+        "title": "NYG 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 94,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 69,
+            "yardStart": 94
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "41",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Williams rushed right tackle for 3 yards. Tackled by D.Lawrence at DAL 34.",
+        "timeOfPlay": "1:00",
+        "title": "1st & 10 · DAL 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 66,
+            "yardStart": 69
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "42",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Prescott pass short right complete. Catch made by J.Ferguson for 0 yards. Tackled by J.Holland at DAL 34.",
+        "timeOfPlay": "0:30",
+        "title": "2nd & 7 · DAL 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 66,
+            "yardStart": 66
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "43",
+        "playDescription": "End Quarter 1",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "44",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott steps back to pass. Sacked at DAL 33 for -1 yards (B.Burns).",
+        "timeOfPlay": "15:00",
+        "title": "3rd & 7 · DAL 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 67,
+            "yardStart": 66
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "45",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Anger punts 48 yards to NYG 19, Center-T.Sieg. Fair catch by G.Olszewski.",
+        "timeOfPlay": "14:20",
+        "title": "4th & 8 · DAL 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 19,
+            "yardStart": 67
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8659",
+      "subtitle": "3 plays · 6 yards · 1:55",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/16"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "6",
+        "title": "NYG"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "46",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Tracy rushed up the middle for 1 yards. Tackled by K.Clark; D.Wilson at NYG 20.",
+        "timeOfPlay": "14:09",
+        "title": "1st & 10 · NYG 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 20,
+            "yardStart": 19
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "47",
+        "periodOfPlay": "2ND",
+        "playDescription": "R.Wilson pass short left complete. Catch made by T.Tracy for 2 yards. Tackled by K.Murray at NYG 22.",
+        "timeOfPlay": "13:47",
+        "title": "2nd & 9 · NYG 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 22,
+            "yardStart": 20
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "48",
+        "periodOfPlay": "2ND",
+        "playDescription": "R.Wilson pass short right complete. Catch made by W.Robinson for 3 yards. Tackled by K.Murray at NYG 25.",
+        "timeOfPlay": "13:05",
+        "title": "3rd & 7 · NYG 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 25,
+            "yardStart": 22
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "49",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Gillan punts 50 yards to DAL 25, Center-C.Kreiter. Fair catch by K.Turpin.",
+        "timeOfPlay": "12:24",
+        "title": "4th & 4 · NYG 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 75,
+            "yardStart": 25
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8664",
+      "subtitle": "8 plays · 42 yards · 3:49",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/15"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "6",
+        "title": "NYG"
+       },
+       {
+        "changed": true,
+        "score": "3",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "51",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Williams rushed up the middle for 4 yards. Tackled by B.Okereke at DAL 29.",
+        "timeOfPlay": "12:14",
+        "title": "1st & 10 · DAL 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 71,
+            "yardStart": 75
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "52",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott pass deep left complete [D.Alexander]. Catch made by C.Lamb for 33 yards. Tackled by P.Adebo at NYG 38.",
+        "timeOfPlay": "11:48",
+        "title": "2nd & 6 · DAL 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 38,
+            "yardStart": 71
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "53",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott pass short left complete. Catch made by J.Ferguson for 7 yards. Tackled by P.Adebo at NYG 31.",
+        "timeOfPlay": "11:11",
+        "title": "1st & 10 · NYG 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 31,
+            "yardStart": 38
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "54",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Williams rushed right end for 6 yards. Tackled by B.Okereke at NYG 25.",
+        "timeOfPlay": "10:34",
+        "title": "2nd & 3 · NYG 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 25,
+            "yardStart": 31
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "55",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Williams rushed right guard for 0 yards. Tackled by D.Muasau at NYG 25.",
+        "timeOfPlay": "9:57",
+        "title": "1st & 10 · NYG 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 25,
+            "yardStart": 25
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "56",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott steps back to pass. Pass incomplete deep right intended for G.Pickens (P.Adebo).",
+        "timeOfPlay": "9:20",
+        "title": "2nd & 10 · NYG 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 25
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "57",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott steps back to pass. Sacked at NYG 33 for -8 yards (K.Thibodeaux).",
+        "timeOfPlay": "9:10",
+        "title": "3rd & 10 · NYG 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 33,
+            "yardStart": 25
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "58",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Aubrey 51 yard field goal attempt is good, Center-T.Sieg, Holder-B.Anger.",
+        "timeOfPlay": "8:30",
+        "title": "4th & 18 · NYG 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "FG - GOOD",
+            "yardEnd": -5,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8672",
+      "subtitle": "5 plays · 70 yards · 2:48",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/16"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "13",
+        "title": "NYG"
+       },
+       {
+        "changed": false,
+        "score": "3",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "60",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Aubrey kicks 60 yards from DAL 35 to the NYG 5. T.Tracy returns the kickoff. Tackled by R.Flournoy at NYG 30.",
+        "timeOfPlay": "8:25",
+        "title": "DAL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 5,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 30,
+            "yardStart": 5
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "61",
+        "periodOfPlay": "2ND",
+        "playDescription": "C.Skattebo rushed left end for 5 yards. Tackled by S.Thomas; O.Odighizuwa at NYG 35.",
+        "timeOfPlay": "8:20",
+        "title": "1st & 10 · NYG 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 35,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "62",
+        "periodOfPlay": "2ND",
+        "playDescription": "C.Skattebo rushed left tackle for 2 yards. Tackled by K.Murray; J.Houston at NYG 37.",
+        "timeOfPlay": "7:44",
+        "title": "2nd & 5 · NYG 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 37,
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "63",
+        "periodOfPlay": "2ND",
+        "playDescription": "R.Wilson pass short right complete. Catch made by W.Robinson for 9 yards. Tackled by K.Elam at NYG 46.",
+        "timeOfPlay": "7:08",
+        "title": "3rd & 3 · NYG 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 46,
+            "yardStart": 37
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "64",
+        "periodOfPlay": "2ND",
+        "playDescription": "R.Wilson pass deep middle complete. Catch made by W.Robinson for 25 yards. Tackled by J.Sanborn at DAL 29.",
+        "timeOfPlay": "6:28",
+        "title": "1st & 10 · NYG 46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 71,
+            "yardStart": 46
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "65",
+        "periodOfPlay": "2ND",
+        "playDescription": "R.Wilson pass deep left complete. Catch made by M.Nabers for 29 yards. TOUCHDOWN.",
+        "timeOfPlay": "5:43",
+        "title": "1st & 10 · DAL 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 71
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "66",
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Gano extra point is good.",
+        "timeOfPlay": "5:37",
+        "title": "DAL 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8683",
+      "subtitle": "8 plays · 64 yards · 3:26",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/15"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "13",
+        "title": "NYG"
+       },
+       {
+        "changed": true,
+        "score": "10",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "68",
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Gano kicks 58 yards from NYG 35 to the DAL 7. K.Turpin returns the kickoff. Tackled by J.Holland at DAL 36.",
+        "timeOfPlay": "5:37",
+        "title": "NYG 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 93,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 64,
+            "yardStart": 93
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "69",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott pass short left complete. Catch made by G.Pickens for 12 yards. Tackled by P.Adebo at DAL 48.",
+        "timeOfPlay": "5:30",
+        "title": "1st & 10 · DAL 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 52,
+            "yardStart": 64
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "70",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott pass deep middle complete. Catch made by J.Ferguson for 19 yards. Tackled by J.Holland at NYG 33.",
+        "timeOfPlay": "4:55",
+        "title": "1st & 10 · DAL 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 33,
+            "yardStart": 52
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "71",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott pass short left complete. Catch made by K.Turpin for 9 yards. Tackled by T.Nubin at NYG 24.",
+        "timeOfPlay": "4:19",
+        "title": "1st & 10 · NYG 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 24,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "72",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Sanders rushed left tackle for yards. Tackled by R.Robertson-Harris at NYG 24. PENALTY on NYG-A.Carter, Defensive Offside, 5 yards, accepted. No Play.",
+        "timeOfPlay": "3:45",
+        "title": "2nd & 1 · NYG 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 19,
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "73",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott steps back to pass. Pass incomplete deep right intended for G.Pickens.",
+        "timeOfPlay": "3:31",
+        "title": "1st & 10 · NYG 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 19
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "74",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott pass short right complete. Catch made by C.Lamb for -2 yards. Tackled by D.Phillips at NYG 21. PENALTY on NYG-D.Phillips, Personal Foul / Defense, 10 yards, accepted. ",
+        "timeOfPlay": "3:24",
+        "title": "2nd & 10 · NYG 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 11,
+            "yardStart": 19
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "75",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Williams rushed right tackle for 1 yards. Tackled by J.Holland; B.Okereke at NYG 10.",
+        "timeOfPlay": "3:17",
+        "title": "1st & 10 · NYG 11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 10,
+            "yardStart": 11
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "76",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott steps back to pass. Pass incomplete short right intended for G.Pickens (C.Flott).",
+        "timeOfPlay": "2:32",
+        "title": "2nd & 9 · NYG 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 10
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "77",
+        "playDescription": "Timeout #1 by NYG.",
+        "timeOfPlay": "2:24",
+        "title": "Timeout"
+       },
+       {
+        "id": "78",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott steps back to pass. Pass incomplete short left intended for C.Lamb [R.Robertson-Harris]. PENALTY on NYG-R.Robertson-Harris, Roughing the Passer, 15 yards, offset. PENALTY on DAL-C.Lamb, Unsportsmanlike Conduct / Offense, 15 yards, offset. No Play.",
+        "timeOfPlay": "2:24",
+        "title": "3rd & 9 · NYG 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 10,
+            "yardStart": 10
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "79",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott pass short middle complete. Catch made by K.Turpin for 10 yards. TOUCHDOWN. PENALTY on NYG-R.Robertson-Harris, Defensive Offside, 5 yards, declined.",
+        "timeOfPlay": "2:16",
+        "title": "3rd & 9 · NYG 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 10
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "80",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Aubrey extra point is good.",
+        "timeOfPlay": "2:11",
+        "title": "NYG 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8694",
+      "subtitle": "3 plays · 5 yards · 0:35",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/16"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "13",
+        "title": "NYG"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "81",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Aubrey kicks 64 yards from DAL 35 to the NYG 1. T.Tracy returns the kickoff. Tackled by R.Rochell; J.Thomas at NYG 23.",
+        "timeOfPlay": "2:11",
+        "title": "DAL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 1,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 23,
+            "yardStart": 1
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "82",
+        "periodOfPlay": "2ND",
+        "playDescription": "C.Skattebo rushed left end for 0 yards. Tackled by O.Odighizuwa; K.Murray at NYG 23.",
+        "timeOfPlay": "2:07",
+        "title": "1st & 10 · NYG 23",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 23,
+            "yardStart": 23
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "83",
+        "playDescription": "Two minute warning.",
+        "timeOfPlay": "2:00",
+        "title": "Two Minute Warning"
+       },
+       {
+        "id": "84",
+        "periodOfPlay": "2ND",
+        "playDescription": "R.Wilson steps back to pass. Sacked at NYG 14 for -9 yards (K.Clark).",
+        "timeOfPlay": "2:00",
+        "title": "2nd & 10 · NYG 23",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 14,
+            "yardStart": 23
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "85",
+        "playDescription": "Timeout #2 by DAL.",
+        "timeOfPlay": "1:54",
+        "title": "Timeout"
+       },
+       {
+        "id": "86",
+        "periodOfPlay": "2ND",
+        "playDescription": "R.Wilson pass short right complete [D.Fowler]. Catch made by T.Tracy for 14 yards. Tackled by R.Steward; S.Williams at NYG 28.",
+        "timeOfPlay": "1:54",
+        "title": "3rd & 19 · NYG 14",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 28,
+            "yardStart": 14
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "87",
+        "playDescription": "Timeout #3 by DAL.",
+        "timeOfPlay": "1:46",
+        "title": "Timeout"
+       },
+       {
+        "id": "88",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Gillan punts 44 yards to DAL 28, Center-C.Kreiter. K.Turpin returned punt from the DAL 28. Tackled by D.Belton; C.Board at DAL 30. PENALTY on DAL-R.Flournoy, Offensive Holding, 10 yards, accepted.",
+        "timeOfPlay": "1:46",
+        "title": "4th & 5 · NYG 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 72,
+            "yardStart": 28
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 80,
+            "yardStart": 72
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8700",
+      "subtitle": "8 plays · 27 yards · 1:36",
+      "title": "END OF HALF",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/15"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "13",
+        "title": "NYG"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "89",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott pass short right complete. Catch made by C.Lamb for 6 yards. Tackled by D.Phillips at DAL 26.",
+        "timeOfPlay": "1:36",
+        "title": "1st & 10 · DAL 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 74,
+            "yardStart": 80
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "90",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott pass short right complete. Catch made by J.Ferguson for 10 yards. Tackled by J.Holland at DAL 36.",
+        "timeOfPlay": "1:18",
+        "title": "2nd & 4 · DAL 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 64,
+            "yardStart": 74
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "91",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott pass short right complete. Catch made by J.Tolbert for yards. Pushed out of bounds by C.Flott at DAL 44. PENALTY on DAL-T.Guyton, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "0:59",
+        "title": "1st & 10 · DAL 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 74,
+            "yardStart": 64
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "92",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott pass short left complete. Catch made by J.Williams for 8 yards. Pushed out of bounds by P.Adebo at DAL 34.",
+        "timeOfPlay": "0:57",
+        "title": "1st & 20 · DAL 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 66,
+            "yardStart": 74
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "93",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott steps back to pass. Pass incomplete short left intended for L.Schoonmaker (D.Belton). PENALTY on DAL-K.Turpin, Illegal Shift, 5 yards, declined.",
+        "timeOfPlay": "0:49",
+        "title": "2nd & 12 · DAL 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 66
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "94",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott pass deep middle complete. Catch made by K.Turpin for 16 yards. Tackled by D.Phillips at NYG 50.",
+        "timeOfPlay": "0:45",
+        "title": "3rd & 12 · DAL 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 50,
+            "yardStart": 66
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "95",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott steps back to pass. Pass incomplete deep middle intended for J.Ferguson.",
+        "timeOfPlay": "0:25",
+        "title": "1st & 10 ·  50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 50
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "96",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott steps back to pass. Pass incomplete short right intended for C.Lamb.",
+        "timeOfPlay": "0:19",
+        "title": "2nd & 10 ·  50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 50
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "97",
+        "playDescription": "Timeout #2 by NYG.",
+        "timeOfPlay": "0:15",
+        "title": "Timeout"
+       },
+       {
+        "id": "98",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Prescott pass short right complete. Catch made by J.Ferguson for 2 yards. Tackled by C.Flott at NYG 48.",
+        "timeOfPlay": "0:15",
+        "title": "3rd & 10 ·  50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 48,
+            "yardStart": 50
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "99",
+        "periodOfPlay": "2ND",
+        "playDescription": "PENALTY on DAL-C.Lamb, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "0:01",
+        "title": "4th & 8 · NYG 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 53,
+            "yardStart": 48
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "100",
+        "playDescription": "End Quarter 2",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "3RD QUARTER",
+    "groups": [
+     {
+      "id": "8717",
+      "subtitle": "2 plays · 0 yards · 0:18",
+      "title": "INTERCEPTION",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/15"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "13",
+        "title": "NYG"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "101",
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Gano kicks 61 yards from NYG 35 to the DAL 4. K.Turpin returns the kickoff. Tackled by B.Collins; S.Bozeman at DAL 21.",
+        "timeOfPlay": "15:00",
+        "title": "NYG 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 96,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 79,
+            "yardStart": 96
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "102",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Prescott steps back to pass. Pass incomplete short middle intended for L.Schoonmaker (B.Okereke).",
+        "timeOfPlay": "14:53",
+        "title": "1st & 10 · DAL 21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 79
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "103",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Prescott pass deep middle INTERCEPTED at DAL 40 [A.Carter]. Intercepted by D.Phillips at DAL 40. Tackled by C.Lamb at DAL 40.",
+        "timeOfPlay": "14:50",
+        "title": "2nd & 10 · DAL 21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INT",
+            "yardEnd": 60,
+            "yardStart": 79
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 60,
+            "yardStart": 60
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8720",
+      "subtitle": "8 plays · 30 yards · 4:22",
+      "title": "DOWNS",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/16"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "13",
+        "title": "NYG"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "104",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Wilson pass short right complete. Catch made by T.Tracy for 11 yards. Tackled by O.Odighizuwa; K.Elam at DAL 29.",
+        "timeOfPlay": "14:42",
+        "title": "1st & 10 · DAL 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 71,
+            "yardStart": 60
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "105",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Wilson steps back to pass. Pass incomplete short right intended for T.Tracy.",
+        "timeOfPlay": "14:07",
+        "title": "1st & 10 · DAL 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 71
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "106",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Wilson pass short left complete. Catch made by W.Robinson for 5 yards. Tackled by T.Diggs at DAL 24.",
+        "timeOfPlay": "14:03",
+        "title": "2nd & 10 · DAL 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 76,
+            "yardStart": 71
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "107",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Wilson pass short right complete. Catch made by W.Robinson for 7 yards. Tackled by R.Steward at DAL 17.",
+        "timeOfPlay": "13:20",
+        "title": "3rd & 5 · DAL 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 83,
+            "yardStart": 76
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "108",
+        "periodOfPlay": "3RD",
+        "playDescription": "C.Skattebo rushed left end for 1 yards. Tackled by S.Thomas at DAL 16.",
+        "timeOfPlay": "12:37",
+        "title": "1st & 10 · DAL 17",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 84,
+            "yardStart": 83
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "109",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Wilson rushed up the middle for 6 yards. Tackled by S.Thomas at DAL 10.",
+        "timeOfPlay": "11:58",
+        "title": "2nd & 9 · DAL 16",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 90,
+            "yardStart": 84
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "110",
+        "periodOfPlay": "3RD",
+        "playDescription": "C.Skattebo rushed left guard for 0 yards. Tackled by S.Thomas, J.Sanborn at DAL 10.",
+        "timeOfPlay": "11:16",
+        "title": "3rd & 3 · DAL 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 90,
+            "yardStart": 90
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "111",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Wilson steps back to pass. Pass incomplete short right intended for C.Skattebo [S.Thomas].",
+        "timeOfPlay": "10:30",
+        "title": "4th & 3 · DAL 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardEnd": 94,
+            "yardStart": 90
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8729",
+      "subtitle": "6 plays · 90 yards · 3:00",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/15"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "13",
+        "title": "NYG"
+       },
+       {
+        "changed": true,
+        "score": "17",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "113",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Sanders rushed left guard for 4 yards. Tackled by D.Lawrence at DAL 14.",
+        "timeOfPlay": "10:20",
+        "title": "1st & 10 · DAL 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 86,
+            "yardStart": 90
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "114",
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Turpin rushed right end for 7 yards. Pushed out of bounds by D.Banks at DAL 21.",
+        "timeOfPlay": "9:44",
+        "title": "2nd & 6 · DAL 14",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 79,
+            "yardStart": 86
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "115",
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Turpin rushed right end for -1 yards. Tackled by D.Banks at DAL 20.",
+        "timeOfPlay": "9:14",
+        "title": "1st & 10 · DAL 21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 80,
+            "yardStart": 79
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "116",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Prescott pass short left complete. Catch made by K.Turpin for 12 yards. Pushed out of bounds by D.Phillips at DAL 32. PENALTY on NYG-B.Okereke, Roughing the Passer, 15 yards, accepted.",
+        "timeOfPlay": "8:26",
+        "title": "2nd & 11 · DAL 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 53,
+            "yardStart": 80
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "117",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Prescott pass short left complete. Catch made by M.Sanders for 1 yards. Tackled by B.Burns at DAL 48.",
+        "timeOfPlay": "8:02",
+        "title": "1st & 10 · DAL 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 52,
+            "yardStart": 53
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "118",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Prescott steps back to pass. Pass incomplete deep right intended for G.Pickens. PENALTY on NYG-D.Phillips, Defensive Pass Interference, 22 yards, accepted. No Play.",
+        "timeOfPlay": "7:35",
+        "title": "2nd & 9 · DAL 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 30,
+            "yardStart": 52
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "119",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Williams rushed right tackle for 30 yards. TOUCHDOWN.",
+        "timeOfPlay": "7:27",
+        "title": "1st & 10 · NYG 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "120",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Aubrey extra point is good.",
+        "timeOfPlay": "7:20",
+        "title": "NYG 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8739",
+      "subtitle": "5 plays · 52 yards · 1:42",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/16"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "16",
+        "title": "NYG"
+       },
+       {
+        "changed": false,
+        "score": "17",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "122",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Aubrey kicks 57 yards from DAL 35 to the NYG 8. T.Tracy returns the kickoff. Tackled by H.Luepke; C.Goodwin at NYG 33.",
+        "timeOfPlay": "7:20",
+        "title": "DAL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 8,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 33,
+            "yardStart": 8
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "123",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Wilson pass deep right complete. Catch made by D.Slayton for 52 yards. Tackled by M.Hooker at DAL 15.",
+        "timeOfPlay": "7:14",
+        "title": "1st & 10 · NYG 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 85,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "124",
+        "periodOfPlay": "3RD",
+        "playDescription": "C.Skattebo rushed up the middle for 5 yards. Tackled by S.Thomas; M.Hooker at DAL 10.",
+        "timeOfPlay": "6:34",
+        "title": "1st & 10 · DAL 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 90,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "125",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Wilson steps back to pass. Pass incomplete short right intended for D.Slayton [D.Ezeiruaku].",
+        "timeOfPlay": "5:54",
+        "title": "2nd & 5 · DAL 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 90
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "126",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Wilson steps back to pass. Pass incomplete short right intended for [D.Ezeiruaku].",
+        "timeOfPlay": "5:47",
+        "title": "3rd & 5 · DAL 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 90
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "127",
+        "periodOfPlay": "3RD",
+        "playDescription": "PENALTY on NYG-NYG, Delay of Game, 5 yards, accepted. No Play.",
+        "timeOfPlay": "5:41",
+        "title": "4th & 5 · DAL 10"
+       },
+       {
+        "id": "128",
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Gano 33 yard field goal attempt is good, Center-C.Kreiter, Holder-J.Gillan.",
+        "timeOfPlay": "5:41",
+        "title": "4th & 10 · DAL 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "4TH QUARTER",
+    "groups": [
+     {
+      "id": "8746",
+      "subtitle": "11 plays · 56 yards · 6:25",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/15"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "16",
+        "title": "NYG"
+       },
+       {
+        "changed": true,
+        "score": "20",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "130",
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Gano kicks 66 yards from NYG 35 to the DAL End Zone. K.Turpin returns the kickoff. Tackled by T.Nubin at DAL 28. PENALTY on DAL-M.Bell, Offensive Holding, 10 yards, accepted.",
+        "timeOfPlay": "5:38",
+        "title": "NYG 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 101,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 82,
+            "yardStart": 101
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "131",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Prescott pass short right complete. Catch made by J.Ferguson for 6 yards. Tackled by D.Phillips; B.Okereke at DAL 24.",
+        "timeOfPlay": "5:33",
+        "title": "1st & 10 · DAL 18",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 76,
+            "yardStart": 82
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "132",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Williams rushed left tackle for 6 yards. Tackled by P.Adebo at DAL 30.",
+        "timeOfPlay": "5:00",
+        "title": "2nd & 4 · DAL 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 70,
+            "yardStart": 76
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "133",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Prescott pass short left complete. Catch made by J.Williams for -1 yards. Tackled by B.Burns at DAL 29.",
+        "timeOfPlay": "4:21",
+        "title": "1st & 10 · DAL 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 71,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "134",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Prescott pass short right complete. Catch made by M.Sanders for 3 yards. Tackled by C.Flott; D.Belton at DAL 32.",
+        "timeOfPlay": "3:36",
+        "title": "2nd & 11 · DAL 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 68,
+            "yardStart": 71
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "135",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Prescott pass short middle complete. Catch made by J.Ferguson for 17 yards. Tackled by D.Belton; D.Phillips at DAL 49. PENALTY on NYG-A.Carter, Defensive Offside, 5 yards, declined.",
+        "timeOfPlay": "2:58",
+        "title": "3rd & 8 · DAL 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 51,
+            "yardStart": 68
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "136",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Prescott pass short left complete. Catch made by B.Spann-Ford for 3 yards. Tackled by C.Board at NYG 48.",
+        "timeOfPlay": "2:36",
+        "title": "1st & 10 · DAL 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 48,
+            "yardStart": 51
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "137",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Sanders rushed up the middle for 2 yards. Tackled by K.Thibodeaux at NYG 46.",
+        "timeOfPlay": "1:53",
+        "title": "2nd & 7 · NYG 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 46,
+            "yardStart": 48
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "138",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Prescott steps back to pass. Pass incomplete deep right intended for G.Pickens. PENALTY on NYG-P.Adebo, Defensive Pass Interference, 23 yards, accepted. No Play.",
+        "timeOfPlay": "1:11",
+        "title": "3rd & 5 · NYG 46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 23,
+            "yardStart": 46
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "139",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Williams rushed left tackle for 0 yards. Tackled by C.Golston at NYG 23.",
+        "timeOfPlay": "1:01",
+        "title": "1st & 10 · NYG 23",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 23,
+            "yardStart": 23
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "140",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Prescott pass short left complete. Catch made by J.Ferguson for -1 yards. Tackled by T.Nubin at NYG 24.",
+        "timeOfPlay": "0:22",
+        "title": "2nd & 10 · NYG 23",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 24,
+            "yardStart": 23
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "141",
+        "playDescription": "End Quarter 3",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "142",
+        "periodOfPlay": "4TH",
+        "playDescription": "PENALTY on DAL-T.Guyton, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "15:00",
+        "title": "3rd & 11 · NYG 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 29,
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "143",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Prescott scrambles left tackle for 3 yards. Tackled by B.Okereke at NYG 26.",
+        "timeOfPlay": "15:00",
+        "title": "3rd & 16 · NYG 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 26,
+            "yardStart": 29
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "144",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Aubrey 44 yard field goal attempt is good, Center-T.Sieg, Holder-B.Anger.",
+        "timeOfPlay": "14:17",
+        "title": "4th & 13 · NYG 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "FG - GOOD",
+            "yardEnd": -5,
+            "yardStart": 26
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8761",
+      "subtitle": "4 plays · 60 yards · 2:06",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/16"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "23",
+        "title": "NYG"
+       },
+       {
+        "changed": false,
+        "score": "20",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "146",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Aubrey kicks 65 yards from DAL 35 to the NYG End Zone. Touchback. PENALTY on DAL-M.Bell, Illegal Formation, 5 yards, accepted.",
+        "timeOfPlay": "14:13",
+        "title": "DAL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 40,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "147",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Skattebo rushed up the middle for 2 yards. Tackled by D.Wilson at NYG 42.",
+        "timeOfPlay": "14:13",
+        "title": "1st & 10 · NYG 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 42,
+            "yardStart": 40
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "148",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Wilson pass short left complete. Catch made by M.Nabers for 12 yards. Tackled by J.Sanborn at DAL 46.",
+        "timeOfPlay": "13:39",
+        "title": "2nd & 8 · NYG 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 54,
+            "yardStart": 42
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "149",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Wilson steps back to pass. Pass incomplete deep middle intended for D.Slayton. PENALTY on DAL-D.Wilson, Defensive Pass Interference, 21 yards, accepted. No Play.",
+        "timeOfPlay": "13:02",
+        "title": "1st & 10 · DAL 46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 75,
+            "yardStart": 54
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "150",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Skattebo rushed up the middle for 24 yards. Tackled by D.Wilson; J.Sanborn at DAL 1.",
+        "timeOfPlay": "12:51",
+        "title": "1st & 10 · DAL 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 99,
+            "yardStart": 75
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "151",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Skattebo rushed up the middle for 1 yards. TOUCHDOWN.",
+        "timeOfPlay": "12:09",
+        "title": "1st & 1 · DAL 1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 99
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "152",
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Gano extra point is good.",
+        "timeOfPlay": "12:07",
+        "title": "DAL 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8770",
+      "subtitle": "10 plays · 85 yards · 5:53",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/15"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "23",
+        "title": "NYG"
+       },
+       {
+        "changed": true,
+        "score": "27",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "154",
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Gano kicks 56 yards from NYG 35 to the DAL 9. J.Tolbert MUFFS catch. J.Tolbert returns the kickoff. Tackled by C.Golston at DAL 25. PENALTY on DAL-D.Clark, Offensive Illegal Block Above the Waist, 10 yards, accepted. ",
+        "timeOfPlay": "12:07",
+        "title": "NYG 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 85,
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "155",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Williams rushed left guard for 3 yards. Tackled by P.Adebo; B.Okereke at DAL 18.",
+        "timeOfPlay": "12:04",
+        "title": "1st & 10 · DAL 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 82,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "156",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Prescott pass short right complete. Catch made by J.Williams for 3 yards. Tackled by D.Lawrence at DAL 21.",
+        "timeOfPlay": "11:29",
+        "title": "2nd & 7 · DAL 18",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 79,
+            "yardStart": 82
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "157",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Prescott pass deep right complete. Catch made by C.Lamb for 16 yards. Tackled by D.Banks at DAL 37.",
+        "timeOfPlay": "10:46",
+        "title": "3rd & 4 · DAL 21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 63,
+            "yardStart": 79
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "158",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Sanders rushed right end for -1 yards. Pushed out of bounds by D.Banks at DAL 36.",
+        "timeOfPlay": "10:05",
+        "title": "1st & 10 · DAL 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 64,
+            "yardStart": 63
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "159",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Prescott pass short left complete. Catch made by C.Lamb for 25 yards. Pushed out of bounds by D.Phillips at NYG 39. PENALTY on NYG-R.Robertson-Harris, Roughing the Passer, 15 yards, accepted.",
+        "timeOfPlay": "9:27",
+        "title": "2nd & 11 · DAL 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 24,
+            "yardStart": 64
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "160",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Williams rushed up the middle for -2 yards. Tackled by D.Phillips at NYG 26.",
+        "timeOfPlay": "8:52",
+        "title": "1st & 10 · NYG 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 26,
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "161",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Prescott pass short middle complete. Catch made by C.Lamb for 7 yards. Tackled by P.Adebo at NYG 19.",
+        "timeOfPlay": "8:21",
+        "title": "2nd & 12 · NYG 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 19,
+            "yardStart": 26
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "162",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Prescott pass short left complete. Catch made by G.Pickens for 9 yards. Tackled by P.Adebo at NYG 10.",
+        "timeOfPlay": "7:43",
+        "title": "3rd & 5 · NYG 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 10,
+            "yardStart": 19
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "163",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Sanders rushed left tackle for 6 yards. Tackled by P.Adebo; B.Okereke at NYG 4.",
+        "timeOfPlay": "7:08",
+        "title": "1st & 10 · NYG 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 4,
+            "yardStart": 10
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "164",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Sanders rushed right guard for 4 yards. TOUCHDOWN.",
+        "timeOfPlay": "6:17",
+        "title": "2nd & 4 · NYG 4",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 4
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "165",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Aubrey extra point is good.",
+        "timeOfPlay": "6:14",
+        "title": "NYG 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8782",
+      "subtitle": "7 plays · 63 yards · 3:30",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/16"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "30",
+        "title": "NYG"
+       },
+       {
+        "changed": false,
+        "score": "27",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "167",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Aubrey kicks 58 yards from DAL 35 to the NYG 7. T.Tracy returns the kickoff. Tackled by C.Goodwin; B.Spann-Ford at NYG 37.",
+        "timeOfPlay": "6:14",
+        "title": "DAL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 7,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 37,
+            "yardStart": 7
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "168",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Wilson pass short middle complete. Catch made by C.Skattebo for 9 yards. Tackled by D.Clark at NYG 46.",
+        "timeOfPlay": "6:10",
+        "title": "1st & 10 · NYG 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 46,
+            "yardStart": 37
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "169",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Tracy rushed up the middle for 3 yards. Tackled by J.Sanborn at NYG 49.",
+        "timeOfPlay": "5:31",
+        "title": "2nd & 1 · NYG 46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 49,
+            "yardStart": 46
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "170",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Wilson pass short left complete. Catch made by T.Johnson for 13 yards. Tackled by M.Hooker at DAL 38.",
+        "timeOfPlay": "4:56",
+        "title": "1st & 10 · NYG 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 62,
+            "yardStart": 49
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "171",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Wilson pass short left complete. Catch made by D.Slayton for 9 yards. Tackled by K.Elam at DAL 29.",
+        "timeOfPlay": "4:24",
+        "title": "1st & 10 · DAL 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 71,
+            "yardStart": 62
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "172",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Dart rushed left end for -3 yards. Tackled by K.Murray at DAL 32.",
+        "timeOfPlay": "3:43",
+        "title": "2nd & 1 · DAL 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 68,
+            "yardStart": 71
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "173",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Wilson steps back to pass. Pass incomplete short left intended for M.Nabers.",
+        "timeOfPlay": "3:00",
+        "title": "3rd & 4 · DAL 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 68
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "174",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Wilson pass deep right complete. Catch made by W.Robinson for 32 yards. TOUCHDOWN.",
+        "timeOfPlay": "2:50",
+        "title": "4th & 4 · DAL 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 68
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "175",
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Gano extra point is good.",
+        "timeOfPlay": "2:44",
+        "title": "DAL 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8793",
+      "subtitle": "11 plays · 71 yards · 1:52",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/15"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "30",
+        "title": "NYG"
+       },
+       {
+        "changed": true,
+        "score": "34",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "177",
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Gano kicks 59 yards from NYG 35 to the DAL 6. J.Tolbert returns the kickoff. Tackled by A.Green at DAL 29.",
+        "timeOfPlay": "2:44",
+        "title": "NYG 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 94,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 71,
+            "yardStart": 94
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "178",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Prescott pass short left complete. Catch made by C.Lamb for 7 yards. Tackled by D.Belton at DAL 36.",
+        "timeOfPlay": "2:37",
+        "title": "1st & 10 · DAL 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 64,
+            "yardStart": 71
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "179",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Prescott steps back to pass. Pass incomplete short left intended for J.Williams (B.Burns).",
+        "timeOfPlay": "2:14",
+        "title": "2nd & 3 · DAL 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 64
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "180",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Prescott steps back to pass. Pass incomplete short left intended for J.Tolbert (D.Phillips).",
+        "timeOfPlay": "2:11",
+        "title": "3rd & 3 · DAL 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 64
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "181",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Prescott pass short middle complete. Catch made by J.Tolbert for 11 yards. Tackled by D.Phillips at DAL 47. PENALTY on NYG-J.Holland, Defensive Pass Interference, 15 yards, declined.",
+        "timeOfPlay": "2:06",
+        "title": "4th & 3 · DAL 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 53,
+            "yardStart": 64
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "182",
+        "playDescription": "Two minute warning.",
+        "timeOfPlay": "2:00",
+        "title": "Two Minute Warning"
+       },
+       {
+        "id": "183",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Prescott steps back to pass. Pass incomplete short left intended for J.Ferguson.",
+        "timeOfPlay": "2:00",
+        "title": "1st & 10 · DAL 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 53
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "184",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Prescott pass short left complete. Catch made by J.Williams for 5 yards. Tackled by K.Thibodeaux at NYG 48.",
+        "timeOfPlay": "1:55",
+        "title": "2nd & 10 · DAL 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 48,
+            "yardStart": 53
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "185",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Prescott pass short middle complete. Catch made by G.Pickens for 14 yards. Tackled by P.Adebo at NYG 34.",
+        "timeOfPlay": "1:31",
+        "title": "3rd & 5 · NYG 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 34,
+            "yardStart": 48
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "186",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Prescott pass short right complete. Catch made by C.Lamb for 12 yards. Pushed out of bounds by P.Adebo at NYG 22.",
+        "timeOfPlay": "1:12",
+        "title": "1st & 10 · NYG 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 22,
+            "yardStart": 34
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "187",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Williams rushed left end for 13 yards. Tackled by T.Nubin at NYG 9.",
+        "timeOfPlay": "1:07",
+        "title": "1st & 10 · NYG 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 9,
+            "yardStart": 22
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "188",
+        "playDescription": "Timeout #1 by NYG.",
+        "timeOfPlay": "0:59",
+        "title": "Timeout"
+       },
+       {
+        "id": "189",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Williams rushed right guard for 3 yards. Tackled by K.Thibodeaux; B.Okereke at NYG 6.",
+        "timeOfPlay": "0:59",
+        "title": "1st & 9 · NYG 9",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 6,
+            "yardStart": 9
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "190",
+        "playDescription": "Timeout #2 by NYG.",
+        "timeOfPlay": "0:56",
+        "title": "Timeout"
+       },
+       {
+        "id": "191",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Prescott pass short left complete. Catch made by G.Pickens for 6 yards. TOUCHDOWN.",
+        "timeOfPlay": "0:56",
+        "title": "2nd & 6 · NYG 6",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 6
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "192",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Aubrey extra point is good.",
+        "timeOfPlay": "0:52",
+        "title": "NYG 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8808",
+      "subtitle": "3 plays · 63 yards · 0:27",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/16"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "37",
+        "title": "NYG"
+       },
+       {
+        "changed": false,
+        "score": "34",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "194",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Aubrey kicks 58 yards from DAL 35 to the NYG 7. T.Tracy returns the kickoff. Tackled by H.Luepke; Z.Childress at NYG 37.",
+        "timeOfPlay": "0:52",
+        "title": "DAL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 7,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 37,
+            "yardStart": 7
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "195",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Wilson steps back to pass. Pass incomplete deep right intended for M.Nabers.",
+        "timeOfPlay": "0:48",
+        "title": "1st & 10 · NYG 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 37
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "196",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Wilson scrambles up the middle for 15 yards. Tackled by D.Clark at DAL 48.",
+        "timeOfPlay": "0:41",
+        "title": "2nd & 10 · NYG 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 52,
+            "yardStart": 37
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "197",
+        "playDescription": "Timeout #3 by NYG.",
+        "timeOfPlay": "0:33",
+        "title": "Timeout"
+       },
+       {
+        "id": "198",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Wilson pass deep right complete. Catch made by M.Nabers for 48 yards. TOUCHDOWN.",
+        "timeOfPlay": "0:33",
+        "title": "1st & 10 · DAL 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 52
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "199",
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Gano extra point is good.",
+        "timeOfPlay": "0:25",
+        "title": "DAL 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8811",
+      "subtitle": "4 plays · 21 yards · 0:25",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/15"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "37",
+        "title": "NYG"
+       },
+       {
+        "changed": true,
+        "score": "37",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "200",
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Gano kicks 62 yards from NYG 35 to the DAL 3. J.Tolbert returns the kickoff. Tackled by C.Board at DAL 33.",
+        "timeOfPlay": "0:25",
+        "title": "NYG 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 97,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 67,
+            "yardStart": 97
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "201",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Prescott steps back to pass. Pass incomplete short right intended for G.Pickens (K.Thibodeaux) [K.Thibodeaux].",
+        "timeOfPlay": "0:19",
+        "title": "1st & 10 · DAL 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 67
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "202",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Prescott pass deep middle complete. Catch made by J.Ferguson for 18 yards. Tackled by B.Okereke; D.Phillips at NYG 49.",
+        "timeOfPlay": "0:14",
+        "title": "2nd & 10 · DAL 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 49,
+            "yardStart": 67
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "203",
+        "playDescription": "Timeout #1 by DAL.",
+        "timeOfPlay": "0:09",
+        "title": "Timeout"
+       },
+       {
+        "id": "204",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Williams rushed left guard for 3 yards. Tackled by A.Carter at NYG 46.",
+        "timeOfPlay": "0:09",
+        "title": "1st & 10 · NYG 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 46,
+            "yardStart": 49
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "205",
+        "playDescription": "Timeout #2 by DAL.",
+        "timeOfPlay": "0:05",
+        "title": "Timeout"
+       },
+       {
+        "id": "206",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Aubrey 64 yard field goal attempt is good, Center-T.Sieg, Holder-B.Anger.",
+        "timeOfPlay": "0:05",
+        "title": "2nd & 7 · NYG 46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "FG - GOOD",
+            "yardEnd": -5,
+            "yardStart": 46
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "OVERTIME",
+    "groups": [
+     {
+      "id": "8814",
+      "subtitle": "6 plays · 23 yards · 3:14",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/15"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "37",
+        "title": "NYG"
+       },
+       {
+        "changed": false,
+        "score": "37",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "208",
+        "periodOfPlay": "OT",
+        "playDescription": "G.Gano kicks 60 yards from NYG 35 to the DAL 5. M.Sanders returns the kickoff. Tackled by B.Brade; D.Belton at DAL 29. PENALTY on DAL-H.Luepke, Offensive Holding, 10 yards, accepted.",
+        "timeOfPlay": "10:00",
+        "title": "NYG 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 95,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 81,
+            "yardStart": 95
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "209",
+        "periodOfPlay": "OT",
+        "playDescription": "D.Prescott pass short right complete. Catch made by C.Lamb for 8 yards. Tackled by D.Banks at DAL 27.",
+        "timeOfPlay": "9:54",
+        "title": "1st & 10 · DAL 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 73,
+            "yardStart": 81
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "210",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Williams rushed right tackle for 4 yards. Tackled by D.Banks at DAL 31.",
+        "timeOfPlay": "9:31",
+        "title": "2nd & 2 · DAL 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 69,
+            "yardStart": 73
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "211",
+        "periodOfPlay": "OT",
+        "playDescription": "D.Prescott pass short right complete. Catch made by J.Williams for 11 yards. Tackled by J.Holland at DAL 42.",
+        "timeOfPlay": "8:58",
+        "title": "1st & 10 · DAL 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 58,
+            "yardStart": 69
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "212",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Williams rushed up the middle for 1 yards. Tackled by B.Okereke at DAL 43.",
+        "timeOfPlay": "8:22",
+        "title": "1st & 10 · DAL 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 57,
+            "yardStart": 58
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "213",
+        "periodOfPlay": "OT",
+        "playDescription": "D.Prescott FUMBLES (aborted). Fumble RECOVERED by DAL-D.Prescott at DAL 42.",
+        "timeOfPlay": "7:47",
+        "title": "2nd & 9 · DAL 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 58,
+            "yardStart": 57
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "214",
+        "periodOfPlay": "OT",
+        "playDescription": "D.Prescott steps back to pass. Pass incomplete short right intended for J.Tolbert.",
+        "timeOfPlay": "7:00",
+        "title": "3rd & 10 · DAL 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 58
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "215",
+        "periodOfPlay": "OT",
+        "playDescription": "B.Anger punts 53 yards to NYG 5, Center-T.Sieg. G.Olszewski returned punt from the NYG 5. Tackled by C.Goodwin at NYG 14.",
+        "timeOfPlay": "6:56",
+        "title": "4th & 10 · DAL 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 5,
+            "yardStart": 58
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 14,
+            "yardStart": 5
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8817",
+      "subtitle": "4 plays · 7 yards · 1:54",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/16"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "37",
+        "title": "NYG"
+       },
+       {
+        "changed": false,
+        "score": "37",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "216",
+        "periodOfPlay": "OT",
+        "playDescription": "R.Wilson pass short left complete. Catch made by M.Nabers for 14 yards. Tackled by K.Elam at NYG 28.",
+        "timeOfPlay": "6:46",
+        "title": "1st & 10 · NYG 14",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 28,
+            "yardStart": 14
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "217",
+        "periodOfPlay": "OT",
+        "playDescription": "R.Wilson pass short left complete. Catch made by M.Nabers for 7 yards. Tackled by K.Elam; D.Wilson at NYG 35.",
+        "timeOfPlay": "6:17",
+        "title": "1st & 10 · NYG 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 35,
+            "yardStart": 28
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "218",
+        "periodOfPlay": "OT",
+        "playDescription": "R.Wilson steps back to pass. Sacked at NYG 21 for -14 yards (DAL). R.Wilson FUMBLES. R.Wilson FUMBLES, out of bounds. ",
+        "timeOfPlay": "5:43",
+        "title": "2nd & 3 · NYG 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 21,
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "219",
+        "periodOfPlay": "OT",
+        "playDescription": "R.Wilson steps back to pass. Pass incomplete deep right intended for W.Robinson.",
+        "timeOfPlay": "5:05",
+        "title": "3rd & 17 · NYG 21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 21
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "220",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Gillan punts 41 yards to DAL 38, Center-C.Kreiter. Fair catch by J.Tolbert.",
+        "timeOfPlay": "5:01",
+        "title": "4th & 17 · NYG 21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 62,
+            "yardStart": 21
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8819",
+      "subtitle": "3 plays · 0 yards · 2:03",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/15"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "37",
+        "title": "NYG"
+       },
+       {
+        "changed": false,
+        "score": "37",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "221",
+        "periodOfPlay": "OT",
+        "playDescription": "D.Prescott steps back to pass. Sacked at DAL 29 for -9 yards (E.Garcia).",
+        "timeOfPlay": "4:52",
+        "title": "1st & 10 · DAL 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 71,
+            "yardStart": 62
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "222",
+        "periodOfPlay": "OT",
+        "playDescription": "D.Prescott pass short left complete. Catch made by G.Pickens for yards. Tackled by P.Adebo at DAL 46. PENALTY on DAL-G.Pickens, Offensive Pass Interference, 10 yards, accepted. No Play.",
+        "timeOfPlay": "4:13",
+        "title": "2nd & 19 · DAL 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 81,
+            "yardStart": 71
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "223",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Williams rushed left tackle for 19 yards. Pushed out of bounds by T.Nubin at DAL 38.",
+        "timeOfPlay": "4:00",
+        "title": "2nd & 29 · DAL 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 62,
+            "yardStart": 81
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "224",
+        "playDescription": "Timeout #1 by DAL.",
+        "timeOfPlay": "3:52",
+        "title": "Timeout"
+       },
+       {
+        "id": "225",
+        "periodOfPlay": "OT",
+        "playDescription": "D.Prescott pass short right complete. Catch made by J.Tolbert for 5 yards. Tackled by D.Phillips at DAL 43.",
+        "timeOfPlay": "3:52",
+        "title": "3rd & 10 · DAL 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 57,
+            "yardStart": 62
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "226",
+        "periodOfPlay": "OT",
+        "playDescription": "PENALTY on DAL-DAL, Delay of Game, 5 yards, accepted. No Play.",
+        "timeOfPlay": "3:01",
+        "title": "4th & 5 · DAL 43"
+       },
+       {
+        "id": "227",
+        "periodOfPlay": "OT",
+        "playDescription": "B.Anger punts 49 yards to NYG 13, Center-T.Sieg. G.Olszewski returned punt from the NYG 13. Tackled by B.Spann-Ford; J.Thomas at NYG 34.",
+        "timeOfPlay": "3:01",
+        "title": "4th & 10 · DAL 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 13,
+            "yardStart": 62
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 34,
+            "yardStart": 13
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8823",
+      "subtitle": "2 plays · -4 yards · 0:49",
+      "title": "INTERCEPTION",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/16"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "37",
+        "title": "NYG"
+       },
+       {
+        "changed": false,
+        "score": "37",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "228",
+        "periodOfPlay": "OT",
+        "playDescription": "R.Wilson pass short left complete. Catch made by D.Singletary for -4 yards. Tackled by K.Murray at NYG 30.",
+        "timeOfPlay": "2:49",
+        "title": "1st & 10 · NYG 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 30,
+            "yardStart": 34
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "229",
+        "periodOfPlay": "OT",
+        "playDescription": "R.Wilson pass deep left INTERCEPTED at DAL 30. Intercepted by D.Wilson at DAL 30. Tackled by M.Nabers at DAL 30.",
+        "timeOfPlay": "2:16",
+        "title": "2nd & 14 · NYG 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INT",
+            "yardEnd": 70,
+            "yardStart": 30
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 70,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "8826",
+      "subtitle": "4 plays · 42 yards · 2:00",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/15"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "37",
+        "title": "NYG"
+       },
+       {
+        "changed": true,
+        "score": "40",
+        "title": "DAL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "231",
+        "periodOfPlay": "OT",
+        "playDescription": "D.Prescott pass deep right complete [B.Okereke]. Catch made by G.Pickens for 27 yards. Tackled by P.Adebo at NYG 43.",
+        "timeOfPlay": "2:00",
+        "title": "1st & 10 · DAL 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 43,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "232",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Williams rushed left guard for 1 yards. Tackled by K.Thibodeaux at NYG 42.",
+        "timeOfPlay": "1:18",
+        "title": "1st & 10 · NYG 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 42,
+            "yardStart": 43
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "233",
+        "periodOfPlay": "OT",
+        "playDescription": "D.Prescott scrambles up the middle for 14 yards. Tackled by J.Holland at NYG 28.",
+        "timeOfPlay": "0:39",
+        "title": "2nd & 9 · NYG 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 28,
+            "yardStart": 42
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "234",
+        "playDescription": "Timeout #2 by DAL.",
+        "timeOfPlay": "0:04",
+        "title": "Timeout"
+       },
+       {
+        "id": "235",
+        "playDescription": "Timeout #1 by NYG.",
+        "timeOfPlay": "0:04",
+        "title": "Timeout"
+       },
+       {
+        "id": "236",
+        "periodOfPlay": "OT",
+        "playDescription": "B.Aubrey 46 yard field goal attempt is good, Center-T.Sieg, Holder-B.Anger.",
+        "timeOfPlay": "0:04",
+        "title": "1st & 10 · NYG 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "FG - GOOD",
+            "yardEnd": -5,
+            "yardStart": 28
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+}

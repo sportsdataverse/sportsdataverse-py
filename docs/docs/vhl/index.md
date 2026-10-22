@@ -9,13 +9,15 @@ description: "sdv-py VHL: endpoint references, dataset loaders and parsers for V
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [VHL](#vhl) | `www.vhlru.ru` | 13 | none |
+| [VHL](#vhl) | `www.vhlru.ru` | 14 | none |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 1 | — |
 
 ## VHL {#vhl}
 
 | Reference | Functions |
 |---|---:|
 | [VHL (vhlru.ru server-rendered pages, parsed)](reference/vhl) | 13 |
+| [Hand-written wrappers](reference/additional) | 1 |
 
 ## Examples
 

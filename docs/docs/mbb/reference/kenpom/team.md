@@ -117,7 +117,7 @@ GET /team.php - a team's full season page. Returns EVERY table on it, so one cal
 
 | col_name | type | description |
 |---|---|---|
-| `column_0` | double |  |
+| `jersey` | character | Jersey number worn by the player. |
 | `column_0_rk` | character |  |
 | `ht` | character | Listed height. |
 | `wt` | double | Listed weight (lbs). |
@@ -205,7 +205,7 @@ GET /player-expanded.php - a team's expanded per-player table plus the minutes m
 
 | col_name | type | description |
 |---|---|---|
-| `column_0` | double |  |
+| `jersey` | character | Jersey number worn by the player. |
 | `column_0_rk` | character |  |
 | `ht` | character | Listed height. |
 | `wt` | double | Listed weight (lbs). |
@@ -237,7 +237,7 @@ GET /player-expanded.php - a team's expanded per-player table plus the minutes m
 
 | col_name | type | description |
 |---|---|---|
-| `column_0` | double |  |
+| `jersey` | character | Jersey number worn by the player. |
 | `column_0_rk` | character |  |
 | `ht` | character | Listed height. |
 | `wt` | double | Listed weight (lbs). |

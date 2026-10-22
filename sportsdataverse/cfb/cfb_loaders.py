@@ -303,6 +303,7 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         |homeFavorite                            |Boolean |
         |gameSpreadAvailable                     |Boolean |
         |overUnder                               |Float64 |
+        |overUnderAvailable                      |Boolean |
         |homeTeamSpread                          |Float64 |
         |clock.minutes                           |Int64   |
         |clock.seconds                           |Int64   |

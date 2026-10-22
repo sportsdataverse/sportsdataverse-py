@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # CFL — ESPN site API (v2)
 
-`sportsdataverse.cfl` — 24 endpoints.
+`sportsdataverse.football.cfl` — 24 endpoints.
 
 ## espn_cfl_scoreboard
 

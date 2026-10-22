@@ -1,0 +1,257 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/seasons/2025/athletes/3735?lang=en&region=us",
+ "id": "3735",
+ "uid": "s:70~l:90~a:3735",
+ "guid": "7646526a-8436-e728-6575-1b1f5d62e0bb",
+ "type": "hockey",
+ "alternateIds": {
+  "sdr": "2265565"
+ },
+ "alternateId": "2265565",
+ "firstName": "Patrick",
+ "lastName": "Kane",
+ "fullName": "Patrick Kane",
+ "displayName": "Patrick Kane",
+ "shortName": "P. Kane",
+ "weight": 176.0,
+ "displayWeight": "176 lbs",
+ "height": 70.0,
+ "displayHeight": "5' 10\"",
+ "age": 37,
+ "dateOfBirth": "1988-11-19T08:00Z",
+ "debutYear": 2007,
+ "links": [
+  {
+   "language": "en-US",
+   "rel": [
+    "playercard",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/nhl/player/_/id/3735",
+   "text": "Player Card",
+   "shortText": "Player Card",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "stats",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/nhl/player/stats/_/id/3735/patrick-kane",
+   "text": "Stats",
+   "shortText": "Stats",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "stats",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:70~l:90~a:3735&section=stats",
+   "text": "Stats",
+   "shortText": "Stats",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "splits",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/nhl/player/splits/_/id/3735/patrick-kane",
+   "text": "Splits",
+   "shortText": "Splits",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "gamelog",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/nhl/player/gamelog/_/id/3735/patrick-kane",
+   "text": "Game Log",
+   "shortText": "Game Log",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "gamelog",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:70~l:90~a:3735&section=gamelog",
+   "text": "Game Log",
+   "shortText": "Game Log",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "news",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/nhl/player/news/_/id/3735/patrick-kane",
+   "text": "News",
+   "shortText": "News",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "news",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:70~l:90~a:3735&section=news",
+   "text": "News",
+   "shortText": "News",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "bio",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/nhl/player/bio/_/id/3735/patrick-kane",
+   "text": "Bio",
+   "shortText": "Bio",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "bio",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:70~l:90~a:3735&section=bio",
+   "text": "Bio",
+   "shortText": "Bio",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "overview",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/nhl/player/_/id/3735/patrick-kane",
+   "text": "Overview",
+   "shortText": "Overview",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "overview",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:70~l:90~a:3735",
+   "text": "Overview",
+   "shortText": "Overview",
+   "isExternal": false,
+   "isPremium": false
+  }
+ ],
+ "birthPlace": {
+  "city": "Buffalo",
+  "state": "NY",
+  "country": "USA"
+ },
+ "birthCountry": {
+  "abbreviation": "USA"
+ },
+ "slug": "patrick-kane",
+ "headshot": {
+  "href": "https://a.espncdn.com/i/headshots/nhl/players/full/3735.png",
+  "alt": "Patrick Kane"
+ },
+ "jersey": "88",
+ "hand": {
+  "type": "LEFT",
+  "abbreviation": "L",
+  "displayValue": "Left"
+ },
+ "position": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/positions/3?lang=en&region=us",
+  "id": "3",
+  "name": "Right Wing",
+  "displayName": "Right Wing",
+  "abbreviation": "RW",
+  "leaf": true,
+  "parent": {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/positions/20?lang=en&region=us"
+  }
+ },
+ "injuries": [],
+ "linked": true,
+ "team": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/seasons/2025/teams/5?lang=en&region=us"
+ },
+ "teams": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/seasons/2025/teams/5?lang=en&region=us"
+  }
+ ],
+ "statistics": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/seasons/2025/types/2/athletes/3735/statistics?lang=en&region=us"
+ },
+ "notes": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/seasons/2025/athletes/3735/notes?lang=en&region=us"
+ },
+ "contracts": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/athletes/3735/contracts?lang=en&region=us"
+ },
+ "experience": {
+  "years": 20
+ },
+ "active": true,
+ "eventLog": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/seasons/2025/athletes/3735/eventlog?lang=en&region=us"
+ },
+ "draft": {
+  "displayText": "Year: 2007 Round: 1 Pick: 1",
+  "round": 1,
+  "year": 2007,
+  "selection": 1,
+  "team": {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/seasons/2007/teams/4?lang=en&region=us"
+  }
+ },
+ "status": {
+  "id": "1",
+  "name": "Active",
+  "type": "active",
+  "abbreviation": "Active"
+ }
+}

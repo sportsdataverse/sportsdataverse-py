@@ -34,6 +34,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
+from sportsdataverse._codegen_runtime import _id_text
 from sportsdataverse.cfb.yahoo_pbp.fetch import _fetch_playbook_boxscore, _game_block, _has_plays, _resolve_game_id
 from sportsdataverse.football.yahoo_common import (
     _clock,
@@ -371,7 +372,7 @@ def _yahoo_to_espn_summary(
             ``home_espn_team_id`` and ``away_espn_team_id`` are required -- Yahoo's team ids are
             its own, and ``CFBPlayProcess`` casts ``team.id`` to ``int`` and uses it for logos,
             possession and the box score, so they must be ESPN's.
-        odds: ``{gameSpread, overUnder, homeFavorite, gameSpreadAvailable}`` (a stored closing
+        odds: ``{gameSpread, overUnder, homeFavorite, gameSpreadAvailable, overUnderAvailable}`` (a stored closing
             line). Becomes the summary's one-provider ``pickcenter``; when None, Yahoo's own
             pregame line is used if it states one.
 
@@ -408,8 +409,8 @@ def _yahoo_to_espn_summary(
         raise ValueError("payload carries no shangrila game object")
     notes: List[str] = []
 
-    event_id = str(idmap_row["espn_event_id"])
-    home_id, away_id = str(idmap_row["home_espn_team_id"]), str(idmap_row["away_espn_team_id"])
+    event_id = _id_text(idmap_row["espn_event_id"])
+    home_id, away_id = _id_text(idmap_row["home_espn_team_id"]), _id_text(idmap_row["away_espn_team_id"])
     espn_by_yahoo = {str(game.get("homeTeamId")): home_id, str(game.get("awayTeamId")): away_id}
     if len(espn_by_yahoo) < 2 or "None" in espn_by_yahoo:
         # A null Yahoo team id must not become a dict KEY: with both sides null the mapping
@@ -685,7 +686,7 @@ def _yahoo_adapter(league: str, espn_id: int, ctx: Any) -> Any:
         live = str((ctx.idmap_row or {}).get("status") or "").upper() not in ("FINAL", "FINAL_OVERTIME")
         try:
             payload = _fetch_playbook_boxscore(game_id, live=live)
-        except Exception as exc:  # noqa: BLE001 -- network / JSON -> the next source
+        except Exception as exc:  # network / JSON -> the next source
             raise SourceUnavailable(f"yahoo playbookBoxscore fetch failed: {type(exc).__name__}: {exc}") from exc
     else:
         game_id, resolved_by = None, "payload"
@@ -710,7 +711,8 @@ def _yahoo_adapter(league: str, espn_id: int, ctx: Any) -> Any:
         # caller picked the payload. Yahoo echoes the id it served, so either way the mismatch
         # is checkable -- and serving it would file another game's plays under this ESPN event.
         raise SourceUnavailable(f"cfb {espn_id}: yahoo served game {served_id}, not {expected_id}")
-    if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):
+    # through _id_text first: a NaN id is truthy and pandas.NA raises on truthiness
+    if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):
         raise SourceUnavailable(f"cfb {espn_id}: id-map row carries no ESPN team ids")
 
     odds = ctx.odds_override or _odds_override_from_row(ctx.idmap_row)

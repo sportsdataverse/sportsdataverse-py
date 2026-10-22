@@ -12,6 +12,7 @@ retries, a connection failure after retries, an empty 200 or a non-JSON 2xx ->
 
 from __future__ import annotations
 
+import time
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Tuple, Union
 
@@ -90,6 +91,44 @@ def test_empty_200_is_a_failed_fetch(monkeypatch):
     _serve(monkeypatch, 200, "  ")
     with pytest.raises(AssetFetchError, match="example.test/x answered HTTP 200 with an empty body"):
         _get("https://example.test/x")
+
+
+def test_a_json_array_where_a_yahoo_object_belongs_is_a_failed_fetch(monkeypatch):
+    # A-L18: it became {} ("nothing here").
+    from sportsdataverse.yahoo import yahoo_shangrila_runtime as rt
+
+    _serve(monkeypatch, 200, "[]")
+    with pytest.raises(AssetFetchError, match="JSON array where an object was expected"):
+        rt._get("https://graphite-secure.sports.yahoo.com/v1/query/shangrila/leagueNames")
+
+
+def test_statcast_html_leaderboards_still_return_their_page(monkeypatch):
+    # A-L63 refuses a page from a CSV endpoint; the two HTML leaderboards keep theirs.
+    from sportsdataverse.mlb import mlb_statcast_runtime as rt
+
+    page = (FIX.parent / "mlb_statcast" / "player_page.html").read_text(encoding="utf-8")
+    _serve(monkeypatch, 200, page, "text/html")
+    assert rt._get("https://baseballsavant.mlb.com/leaderboard/fielding-run-value") == page
+    with pytest.raises(AssetFetchError, match="a page, not data"):
+        rt._get("https://baseballsavant.mlb.com/leaderboard/expected_statistics")
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "https://baseballsavant.mlb.com/leaderboard/expected_statistics?next=/leaderboard/fielding-run-value",
+        "https://baseballsavant.mlb.com/leaderboard/fielding-run-value-extra",
+    ],
+)
+def test_statcast_html_allowance_is_the_path_not_a_substring(monkeypatch, url):
+    # A query or a longer path that merely names an HTML leaderboard is still a CSV endpoint.
+    from sportsdataverse.mlb import mlb_statcast_runtime as rt
+
+    _serve(
+        monkeypatch, 200, (FIX.parent / "mlb_statcast" / "player_page.html").read_text(encoding="utf-8"), "text/html"
+    )
+    with pytest.raises(AssetFetchError, match="a page, not data"):
+        rt._get(url)
 
 
 @pytest.mark.parametrize(
@@ -513,124 +552,71 @@ _KWARGS: Dict[str, Callable[[], Dict[str, Any]]] = {
     "ibba_segev_runtime": lambda: {"params": {"method": "getGameInfo", "game_id": 1}},
 }
 _HTML_IS_DATA = {"kenpom_runtime"}  # its pages are the payload
-_SCALAR = "B-GB-16: a 2xx scalar JSON body is returned as data; task 4.1 (_json_body: dict or list only)"
-_SCALAR_EMPTY = "A-L18: a 2xx scalar body becomes {} ('nothing here'); task 4.1"
-_NFLPRO = "A-M4: nflpro_runtime._fetch skips _check_status/_json_body; task 4.1b"
-_KNOWN: Dict[Tuple[str, str], str] = {
-    **{
-        (rt, "scalar_200"): _SCALAR
-        for rt in (
-            "_codegen_runtime",
-            "euroleague_runtime",
-            "football_data_runtime",
-            "mls_api_runtime",
-            "mlb_statcast_runtime",
-            "nba_stats_runtime",
-            "nfl_api_runtime",
-            "nwsl_api_runtime",
-            "thesportsdb_runtime",
-            "torvik_runtime",
-            "uefa_runtime",
-            "wnba_stats_runtime",
-        )
-    },
-    **{
-        (rt, "scalar_200"): _SCALAR_EMPTY
-        for rt in ("on3_runtime", "sports247_runtime", "sports247_site_pages_runtime", "yahoo_shangrila_runtime")
-    },
-    ("pff_runtime", "scalar_200"): "B-L75: the LEGACY PFF runtime turns a 200 non-object into {}; task 4.1b",
-    **{
-        (rt, "html_200"): "A-L63: _text_body accepts an HTML challenge page as CSV text; task 4.1"
-        for rt in ("mlb_statcast_runtime", "torvik_runtime")
-    },
-    **{
-        ("nflpro_runtime", case): _NFLPRO
-        for case in ("400", "403", "429", "503", "204", "empty_200", "html_200", "scalar_200")
-    },
-    ("pff_api_runtime", "204"): "A-L69: pff_api_runtime hand-rolls status, so a 204 is AssetFetchError; task 4.1b",
-}
+_KNOWN: Dict[Tuple[str, str], str] = {}  # task 4.1b closed nflpro (A-M4) and pff_api's 204 (A-L69)
 
 
-# Main's families merged 10-17 (#826 European hockey, #859/#862 international basketball) diverge from the
-# vocabulary here, measured 2026-10-18 on the sync tree: ``{(runtime, case): what the case fails with}``
-# (``pytest.fail.Exception`` = DID NOT RAISE). Strict, so each case fails the day its family is fixed.
-_FAILED = pytest.fail.Exception
-_SYNC_204 = (
-    "EX-SYNC-a: a 204 No Content raises instead of returning {} ('nothing'); task providers 4.1b runtime vocabulary"
-)
-_SYNC_400 = "EX-SYNC-b: an HTTP 400 is AssetFetchError, not ValueError; task providers 4.1b runtime vocabulary"
-_SYNC_SCALAR = "EX-SYNC-c: a 2xx scalar JSON body is data or NoDataError, not AssetFetchError; task providers 4.1b runtime vocabulary"
-_SYNC_EMPTY = (
-    "EX-SYNC-d: an empty 200 is NoDataError ('unknown id'), not AssetFetchError; task providers 4.1b runtime vocabulary"
-)
-_SYNC_1018: Dict[Tuple[str, str], Tuple[Any, str]] = {
-    **{
-        (f"{rt}_runtime", "204"): (AssetFetchError, _SYNC_204)
-        for rt in (
-            "aba",
-            "atrium",
-            "bleague",
-            "bnxt",
-            "cba",
-            "cebl",
-            "easl",
-            "feb",
-            "genius",
-            "ha",
-            "ibba",
-            "ibba_segev",
-            "khl",
-            "kzs",
-            "lkl",
-            "magnus",
-            "nbl_rosetta",
-            "pleague",
-            "pleague_preciser",
-            "scb",
-            "tbf",
-            "tpbl",
-            "vhl",
-            "vtb_infobasket",
-            "vtb_league",
-        )
-    },
-    **{
-        (f"{rt}_runtime", "204"): (NoDataError, _SYNC_204)
-        for rt in ("acb", "esports", "fiba", "kbl", "khl_webcaster", "liiga", "shl", "sportality", "wjbl")
-    },
-    **{
-        (f"{rt}_runtime", "400"): (AssetFetchError, _SYNC_400) for rt in ("easl", "kbl", "kzs", "scb", "vtb_infobasket")
-    },
-    **{
-        (f"{rt}_runtime", "scalar_200"): (_FAILED, _SYNC_SCALAR)
-        for rt in (
-            "basketball",
-            "elh",
-            "euro_hockey",
-            "kbl",
-            "khl_webcaster",
-            "nationalleague",
-            "shl",
-            "sihf",
-            "sportality",
-        )
-    },
-    **{(f"{rt}_runtime", "scalar_200"): (NoDataError, _SYNC_SCALAR) for rt in ("esports", "liiga", "wjbl")},
-    ("ibba_runtime", "empty_200"): (NoDataError, _SYNC_EMPTY),
+# Main's families merged 10-17 (#826 European hockey, #859/#862 international basketball) diverged from the
+# vocabulary here (EX-SYNC-a/b/d); task 4.1b closed them all. Kept, empty, for the next divergence:
+# ``{(runtime, case): (what the case fails with, why)}``, strict, so a row fails the day it is fixed.
+_SYNC_1018: Dict[Tuple[str, str], Tuple[Any, str]] = {}
+
+
+def _seed_feb(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setitem(mod._tok, "value", "seeded.bearer.token")
+    monkeypatch.setitem(mod._tok, "exp", time.time() + 3600)
+
+
+def _seed_khl(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setitem(mod._sessions, "https://example.test", [mod._new_http(), "seeded-sessid"])
+
+
+def _seed_scb(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setattr(mod, "_secrets", {"key": "seeded-key", "secret": "seeded-secret"})
+
+
+def _seed_lkl(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setitem(mod._GAMES, 11446, {"game_status": "seeded"})  # the finished-game check is cached
+
+
+def _seed_vhl(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setattr(mod, "vhl_tn", lambda season, stage="regular": 1374)  # the calendar-index lookup
+
+
+class _Pointer:
+    status_code, text, headers, url = 200, "1", {}, ""
+
+
+def _seed_bleague(mod: Any, monkeypatch: Any) -> None:
+    real = mod._fetch
+    monkeypatch.setattr(
+        mod, "_fetch", lambda url, params=None: _Pointer() if url.endswith("/latestid") else real(url, params)
+    )
+
+
+def _seed_fiba(mod: Any, monkeypatch: Any) -> None:  # the game page URL is built from two GDAP lookups
+    monkeypatch.setattr(
+        mod, "_page_url", lambda game_id, comp: f"{mod.SITE_URL}/en/history/x/{comp}/games/{game_id}-A-B"
+    )
+
+
+# R4.1b-d-1: a runtime whose first request is a bootstrap or lookup (a token, session or key page, a snapshot
+# pointer, a finished-game check, a calendar index) is seeded, so every case reaches its DATA request; on the 204
+# row the bootstrap URL must then never be served. A bootstrap's or lookup's own 204 is an unknown answer
+# (AssetFetchError), pinned in each family's tests.
+_SEED: Dict[str, Tuple[Callable[[Any, Any], None], str]] = {
+    "feb_runtime": (_seed_feb, "https://baloncestoenvivo.feb.es/"),
+    "khl_runtime": (_seed_khl, "https://example.test/"),
+    "scb_runtime": (_seed_scb, "https://www.easycredit-bbl.de/"),
+    "lkl_runtime": (_seed_lkl, "https://lkl.lt/rungtynes/11446"),
+    "vhl_runtime": (_seed_vhl, "https://www.vhlru.ru/en/calendar/"),
+    "fiba_runtime": (_seed_fiba, "https://digital-api.fiba.basketball/hapi/getGdapCompetitionById"),
+    "bleague_runtime": (_seed_bleague, "https://b-league.s3.amazonaws.com/web_json/v2_genius_contexts/504734/latestid"),
 }
 
 
 def _raises(stem: str, case: str) -> Any:
     """What an open case fails with today: a getter that returns where it should raise fails
-    ``pytest.raises`` (DID NOT RAISE); nflpro raises its own types; pff_api raises on a 204."""
-    if stem == "nflpro_runtime" and case != "scalar_200":
-        from sportsdataverse.nfl.nflpro_runtime import NFLProAuthError
-
-        return {"403": NFLProAuthError, "204": ValueError, "empty_200": ValueError, "html_200": ValueError}.get(
-            case, requests.HTTPError
-        )
-    if stem == "pff_api_runtime":
-        return AssetFetchError
+    ``pytest.raises`` (DID NOT RAISE)."""
     return pytest.fail.Exception
 
 
@@ -733,7 +719,10 @@ def test_discovered_runtime_speaks_the_vocabulary(monkeypatch, mod, case):
     stem = mod.rsplit(".", 1)[1]
     status, body, ctype, want = _CASES[case]
     calls, blocked = _answer_every_transport(monkeypatch, status, body, ctype)
-    get = importlib.import_module(mod)._get
+    module = importlib.import_module(mod)
+    if stem in _SEED:
+        _SEED[stem][0](module, monkeypatch)
+    get = module._get
     kwargs = _KWARGS.get(stem, dict)()
     sig = inspect.signature(get).parameters
     if "num_retries" in sig or any(p.kind is p.VAR_KEYWORD for p in sig.values()):
@@ -762,4 +751,32 @@ def test_discovered_runtime_speaks_the_vocabulary(monkeypatch, mod, case):
             with pytest.raises(want):
                 call()
     assert calls, f"{mod}._get never reached the transport"
+    if stem in _SEED and case == "204":
+        assert _SEED[stem][1] not in calls, f"{mod}: the seeded bootstrap was fetched: {calls}"
     assert blocked == [], f"{mod}._get tried the network below the patched transports: {blocked}"
+
+
+def test_a_runtime_with_a_green_vocabulary_matrix_documents_its_raises():
+    """A-L13: a getter whose every matrix row passes raises the vocabulary, so its generated
+    wrappers must say so (``generate._VOCAB_GETTERS`` adds the ``Raises:`` lines)."""
+    from tools.codegen import generate
+
+    known = {stem for stem, _case in (*_KNOWN, *_SYNC_1018)}
+    green = {mod for mod in _RUNTIMES if mod.rsplit(".", 1)[1] not in known}
+    assert sorted(green - generate._VOCAB_GETTERS) == []
+
+
+def test_the_stats_wrappers_name_the_missing_curl_cffi_import_error():
+    """R901-7: the stats.nba.com / stats.wnba.com runtime raises ImportError without curl_cffi; every
+    generated wrapper on it says so, once (drafthistory's YAML ``raises:`` already names it)."""
+    import inspect
+
+    from sportsdataverse.nba import nba_stats
+    from sportsdataverse.wnba import wnba_stats
+
+    for mod, prefix in ((nba_stats, "nba_stats_"), (wnba_stats, "wnba_stats_")):
+        fns = [f for n, f in inspect.getmembers(mod, inspect.isfunction) if n.startswith(prefix)]
+        assert fns
+        for fn in fns:
+            raises = (fn.__doc__ or "").split("Raises:")[1].split("Example:")[0]
+            assert raises.count("ImportError:") == 1, fn.__name__

@@ -138,7 +138,7 @@ def _fetch(path: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]
     """
     url = f"{API}{path}"
     body = _rt._download_json(
-        download,
+        _rt._no_content_transport(download),  # a 204 / 205 raises _rt._NoContent: ``_get`` answers {} (EX-SYNC-a)
         url,
         params={k: v for k, v in (params or {}).items() if v is not None},
         session=SESSION,
@@ -194,6 +194,7 @@ def _prefix_rows(competition: str) -> List[Dict[str, Any]]:
     return _PREFIX[competition]
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _league(season: Any, competition: Any) -> Tuple[int, int, str, int]:
     """``(season_id, activity_id, competition, season)`` of an END year; ``NoDataError`` when the list lacks it."""
     year, comp = _int_arg(season, "season"), _competition("bsl" if competition is None else competition)
@@ -283,13 +284,13 @@ def _matches_page(sid: int, aid: int, week: str) -> List[Dict[str, Any]]:
 
 def _schedule(params: Dict[str, Any]) -> Dict[str, Any]:
     sid, aid, comp, year = _league(params.get("season"), params.get("competition"))
-    if params.get("week") is not None:
-        weeks = [str(_int_arg(params["week"], "week"))]
-    else:
-        weeks = [str(w.get("sezon_Hafta")) for w in _weeks_list(sid, aid)]
     rows: List[Dict[str, Any]] = []
-    for w in weeks:
-        rows += _matches_page(sid, aid, w)
+    if params.get("week") is not None:  # one request: its 204 is the route's {}
+        rows += _matches_page(sid, aid, str(_int_arg(params["week"], "week")))
+    else:  # the week list and one page per week: a 204 anywhere leaves the season incomplete, an unknown answer
+        with _rt._no_content_unknown(f"{_where('/Match/get-all-matches-for-filter')} (a season's weeks)"):
+            for w in [str(w.get("sezon_Hafta")) for w in _weeks_list(sid, aid)]:
+                rows += _matches_page(sid, aid, w)
     _need_rows("/Match/get-all-matches-for-filter", rows, "games")
     return _stamp(_envelope(rows), season=year, competition=comp)
 
@@ -516,9 +517,11 @@ def _game_route(route: str, kind: str) -> Any:
 
     def handler(params: Dict[str, Any]) -> Dict[str, Any]:
         mid = _int_arg(params.get("match_id"), "match_id")
-        g = _game(mid)
-        if kind == "header":
+        if kind == "header":  # the header IS the answer here; on the other match routes it is a lookup
+            g = _game(mid)
             return _stamp(dict(g["body"]), **g["request"])
+        with _rt._no_content_unknown(f"{_where('/Match/mac-header')} (the finished-game check)"):
+            g = _game(mid)
         body = _fetch(path, {"matchId": mid})
         d = body["data"] if isinstance(body["data"], dict) else {}
         if kind == "stats":
@@ -574,6 +577,7 @@ _ROUTES: Dict[str, Any] = {
 _PROFILE = re.compile(r"^/Player/get-player-detail-profile-and-career-info/([^/]+)$")
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> Dict[str, Any]:
     """GET a TBF wrapper route: map season / competition, check the answer's scope, stamp the request.
 

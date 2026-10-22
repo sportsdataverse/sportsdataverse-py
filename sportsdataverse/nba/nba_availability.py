@@ -204,7 +204,7 @@ def nba_availability(
             # there's no start/end distinction to derive) -- unaffected by
             # the NBA end-year migration; wnba_stats mirrors the nba_stats
             # parameter shape on its own host.
-            from sportsdataverse.wnba.wnba_stats import wnba_stats_leaguedashplayerstats  # noqa: PLC0415
+            from sportsdataverse.wnba.wnba_stats import wnba_stats_leaguedashplayerstats
 
             bulk = wnba_stats_leaguedashplayerstats(season=str(end_year))
         elif league == "gleague":

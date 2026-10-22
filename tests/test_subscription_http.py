@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import polars as pl
 import pytest
+import requests
 
 from sportsdataverse._html_tables import _clean_name, _dedupe_headers, html_tables
 from sportsdataverse._subscription_http import (
@@ -68,13 +69,14 @@ LOGIN_FORM = (
 LOGGED_IN = "<html><body>Welcome back</body></html>"
 
 
-class FakeResponse:
-    def __init__(self, text: str) -> None:
-        self.text = text
-        self.status_code = 200
-
-    def raise_for_status(self) -> None:
-        return None
+def FakeResponse(text: str, status: int = 200) -> requests.Response:
+    """A real ``requests.Response``: the login GET now goes through ``download`` (A-L64)."""
+    resp = requests.Response()
+    resp.status_code = status
+    resp._content = text.encode("utf-8")
+    resp.encoding = "utf-8"
+    resp.headers["Content-Type"] = "text/html"
+    return resp
 
 
 class FakeSession:
@@ -276,3 +278,123 @@ def test_session_is_cached_per_credentials(monkeypatch):
     second = login(KENPOM)
     assert first is second
     assert len(created) == 1  # the second call did not log in again
+
+
+# --- A-L64: the session cache knows the password; concurrent misses log in once ---
+
+
+def test_changed_password_logs_in_again(monkeypatch):
+    created = []
+
+    def _fake_session():
+        created.append(FakeSession())
+        return created[-1]
+
+    monkeypatch.setattr("sportsdataverse._subscription_http.requests.Session", _fake_session)
+    login(KENPOM, "u@example.com", "fake-old-pw")
+    login(KENPOM, "u@example.com", "fake-new-pw")
+    assert len(created) == 2  # the old password's session was not reused for the new one
+    assert created[-1].posted["data"]["password"] == "fake-new-pw"
+    from sportsdataverse import _subscription_http as sh
+
+    assert "fake-new-pw" not in repr(list(sh._sessions))  # keyed on a digest, never the password
+
+
+def test_concurrent_cache_misses_log_in_once(monkeypatch):
+    import threading
+    import time
+
+    created = []
+
+    class SlowLoginSession(FakeSession):
+        def post(self, url, data=None, headers=None, **kwargs):
+            time.sleep(0.2)  # a second thread arrives while this login is in flight
+            return super().post(url, data=data, headers=headers, **kwargs)
+
+    def _fake_session():
+        created.append(SlowLoginSession())
+        return created[-1]
+
+    monkeypatch.setattr("sportsdataverse._subscription_http.requests.Session", _fake_session)
+    got = []
+    threads = [threading.Thread(target=lambda: got.append(login(KENPOM, "u@example.com", "fake-pw"))) for _ in range(3)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    assert len(created) == 1 and len(got) == 3 and all(s is got[0] for s in got)
+
+
+# --- 4.4 / A-L64: the login round trip answers in the error vocabulary ------------
+
+
+class _FailingSession(FakeSession):
+    """The login form GET or the credentials POST fails."""
+
+    def __init__(self, get_status: int = 200, post: "int | Exception" = 200) -> None:
+        super().__init__()
+        self._get_status = get_status
+        self._post = post
+
+    def get(self, url, **kwargs):
+        return FakeResponse(LOGIN_FORM, self._get_status)
+
+    def post(self, url, data=None, headers=None, **kwargs):
+        if isinstance(self._post, Exception):
+            raise self._post
+        return FakeResponse("<html>Server Error</html>", self._post)
+
+
+@pytest.fixture
+def _no_retry_wait(monkeypatch):
+    monkeypatch.setattr("sportsdataverse.dl_utils.time.sleep", lambda *a, **k: None)
+
+
+def test_login_form_get_failure_is_asset_fetch_error(_no_retry_wait):
+    from sportsdataverse.errors import AssetFetchError
+
+    with pytest.raises(AssetFetchError, match="kenpom.com/index.php answered HTTP 503"):
+        login(KENPOM, "u@example.com", "pw", session=_FailingSession(get_status=503), use_cache=False)
+
+
+def test_login_post_failure_is_asset_fetch_error():
+    from sportsdataverse.errors import AssetFetchError
+
+    with pytest.raises(AssetFetchError, match="login_handler.php answered HTTP 500"):
+        login(KENPOM, "u@example.com", "pw", session=_FailingSession(post=500), use_cache=False)
+
+
+def test_login_post_dropped_connection_is_asset_fetch_error():
+    from sportsdataverse.errors import AssetFetchError
+
+    dropped = requests.ConnectionError("connection reset")
+    with pytest.raises(AssetFetchError):
+        login(KENPOM, "u@example.com", "pw", session=_FailingSession(post=dropped), use_cache=False)
+
+
+def test_login_form_is_never_served_from_the_response_cache(monkeypatch):
+    """R4.4-2: the login form's CSRF token belongs to the session that fetched it, so a cached form
+    would make every re-login post a stale token. ``download`` caches only JSON bodies, so the HTML
+    form is never stored; this pins that if the cache ever starts storing HTML."""
+    import itertools
+
+    import sportsdataverse.cache as cache
+
+    tokens = itertools.count(1)
+
+    class _TokenSession(FakeSession):
+        def get(self, url, **kwargs):
+            return FakeResponse(LOGIN_FORM.replace("TOK123", f"TOK{next(tokens)}"))
+
+    before = cache.get_cache_mode()
+    cache.set_cache_mode("memory")
+    cache.clear_cache()
+    try:
+        first, second = _TokenSession(), _TokenSession()
+        login(HERHOOPSTATS, "u@example.com", "fake-pw", session=first, use_cache=False)
+        login(HERHOOPSTATS, "u@example.com", "fake-pw", session=second, use_cache=False)
+    finally:
+        cache.clear_cache()
+        cache.set_cache_mode(before)
+    assert first.posted["data"]["csrfmiddlewaretoken"] == "TOK1"
+    assert second.posted["data"]["csrfmiddlewaretoken"] == "TOK2"  # its own form, not the cached one

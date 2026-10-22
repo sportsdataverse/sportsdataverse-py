@@ -286,7 +286,7 @@ GET /getadvstats.php?year=&csv=1 — men's player advanced stats (one row per pl
 | `ftr` | numeric | Free-throw rate (FTA per FGA, in percent). |
 | `class` | character | Class year (Fr, So, Jr, Sr). |
 | `height` | character | Listed height as feet-inches, e.g. 6-4. |
-| `number` | integer | Jersey number as listed (Int64). |
+| `number` | character | Jersey number as listed, as text ("00" is not "0"). |
 | `porpag` | numeric | Points over replacement per adjusted game (Torvik's PRPG!). |
 | `adj_oe` | numeric | Player's adjusted offensive efficiency. |
 | `pfr` | numeric | Personal fouls committed per 40 minutes. |

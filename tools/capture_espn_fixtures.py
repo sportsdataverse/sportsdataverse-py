@@ -186,7 +186,7 @@ def main() -> None:
                 print(f"wrote {path} ({path.stat().st_size:,} bytes)")
                 written += 1
 
-            except Exception as e:  # noqa: BLE001
+            except Exception as e:  # noqa: BLE001 -- a capture tool: each failure is printed and counted, the rest still run
                 msg = f"{league}/{stem}: {e}"
                 print(f"FAIL  {msg}")
                 failed.append(msg)

@@ -25,8 +25,9 @@ and swaps the host. Measured against the live API (sdv-internal-refs ``scb/``, 2
   partial season would look complete.
 * **Refusals.**
 
-  * 404, an empty 204 (a game before 2002-03 has no box score; an unknown season-player), a 400
-    ``"not a valid gameId"``, ``[]``, a page with no ``items``, an all-empty bracket: :class:`NoDataError`.
+  * An empty 204 / 205 (a game before 2002-03 has no box score; an unknown season-player): ``{}``, which
+    parses to zero rows, as every runtime answers a no-content status.
+  * 404, a 400 ``"not a valid gameId"``, ``[]``, a page with no ``items``, an all-empty bracket: :class:`NoDataError`.
   * Any other 400 / 422: :class:`ValueError` (the request is wrong).
   * 401 / 403 after one re-derive, any other non-2xx, an HTML or non-JSON body, an error envelope
     (``{"status": "error", ...}`` or a bare string) and a truncated page: :class:`AssetFetchError`.
@@ -133,7 +134,8 @@ def _fetch_key() -> str:
     """Scrape the page key; ``SESSION`` throttles this request like any other (it carries no credential header)."""
     resp = download(url=KEY_PAGE, headers={"Accept": "text/html"}, session=SESSION, retry_statuses=RETRY_STATUSES)
     status = getattr(resp, "status_code", None)
-    if not (isinstance(status, int) and 200 <= status < 300):
+    # a 204 here is no page to read the key from, not the data request's "nothing": an unknown answer
+    if not (isinstance(status, int) and 200 <= status < 300) or status in (204, 205):
         raise AssetFetchError(f"{_rt._where(KEY_PAGE)} answered HTTP {status}: the API key could not be read")
     return _page_key(getattr(resp, "text", "") or "")
 
@@ -334,6 +336,7 @@ def _stamp(body: Any, request: Mapping[str, Any]) -> Any:
     return body
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET a BBL / DBBL route as JSON: authenticate, refuse the empty / error / out-of-scope answers, stamp the request.
 
@@ -344,10 +347,10 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         **kwargs: forwarded to ``dl_utils.download`` (``retry_statuses`` defaults to :data:`RETRY_STATUSES`).
 
     Returns:
-        The parsed JSON body, with the request stamped under :data:`REQUEST_KEY`.
+        The parsed JSON body, with the request stamped under :data:`REQUEST_KEY`; ``{}`` for a 204 / 205.
 
     Raises:
-        NoDataError: 404, a 204, a 400 ``"not a valid gameId"``, a body without rows, or the box score of a
+        NoDataError: 404, a 400 ``"not a valid gameId"``, a body without rows, or the box score of a
             game that has not started.
         ValueError: ``league`` is not ``"bbl"`` / ``"dbbl"``, or the host answered another 400 / 422.
         AssetFetchError: a refused secret (after one re-derive), any other non-2xx, an HTML / non-JSON / error-shaped
@@ -363,9 +366,8 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     route, path_id = _route(url)
     resp = _send(url, clean, **kwargs)
     status = getattr(resp, "status_code", None)
+    _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a); it was NoDataError
     text = _redact(getattr(resp, "text", "") or "")
-    if status == 204:
-        raise NoDataError(f"{where} answered HTTP 204: no content for this id")
     if status == 400 and "not a valid" in text:
         raise NoDataError(f"{where} answered 400 {text.strip()[:60]}: no such record")
     body = _rt._json_text(url, status, text)

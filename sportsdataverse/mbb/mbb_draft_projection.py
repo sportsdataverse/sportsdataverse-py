@@ -46,9 +46,9 @@ def _load_roster_class(seasons: "list[int]", league: str = "mens") -> pl.DataFra
     class year because the release drops already-departed players.
     """
     if league == "womens":
-        from sportsdataverse.wbb.wbb_loaders import load_wbb_rosters as loader  # noqa: PLC0415
+        from sportsdataverse.wbb.wbb_loaders import load_wbb_rosters as loader
     else:
-        from sportsdataverse.mbb.mbb_loaders import load_mbb_rosters as loader  # noqa: PLC0415
+        from sportsdataverse.mbb.mbb_loaders import load_mbb_rosters as loader
 
     frames = []
     for s in seasons:
@@ -158,8 +158,8 @@ def mbb_draft_projection(
     if "team_net" in art["feature_cols"] or "pos_score" in art["feature_cols"]:
         # women's upside proxies: program strength + position (WNBA classes
         # are senior-constant and roster height drops departed players)
-        from sportsdataverse.mbb.mbb_player_value_constants import aggregate_player_seasons  # noqa: PLC0415
-        from sportsdataverse.mbb.mbb_team_ratings import mbb_team_ratings  # noqa: PLC0415
+        from sportsdataverse.mbb.mbb_player_value_constants import aggregate_player_seasons
+        from sportsdataverse.mbb.mbb_team_ratings import mbb_team_ratings
 
         rat = mbb_team_ratings(seasons_list, league=league).filter(pl.col("games") >= 10)
         net = rat.with_columns(

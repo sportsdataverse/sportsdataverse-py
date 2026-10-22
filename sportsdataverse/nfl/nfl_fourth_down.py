@@ -65,6 +65,7 @@ model (``fg_model.ubj``) and punt distribution are all bundled under
 
 from __future__ import annotations
 
+import warnings
 from functools import lru_cache
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional, Union
@@ -75,14 +76,19 @@ import polars as pl
 
 from sportsdataverse.nfl.ep_wp import (
     _load_model,
+    _models_strict,
     calculate_expected_points,
     calculate_win_probability,
 )
 from sportsdataverse.nfl.model_vars import (
+    ERA_SEASON_CUTS,
     PAT_FIRST_SEASON_FROM_15,
     PAT_YARDLINE_POST_2015,
     PAT_YARDLINE_PRE_2015,
 )
+
+#: The nflfastR era one-hot cuts (rules/nfl.yaml#nfl-2002-nflfastr-era-bins).
+_ERA_CUT0, _ERA_CUT1, _ERA_CUT2, _ERA_CUT3 = ERA_SEASON_CUTS
 
 if TYPE_CHECKING:  # pragma: no cover
     from xgboost import Booster
@@ -260,16 +266,35 @@ def _load_punt_data() -> Optional[pl.DataFrame]:
     return pl.read_parquet(path)
 
 
+#: Artifacts :func:`_try_load` has already warned about in this process (one warning each).
+_WARNED_MISSING: set[str] = set()
+
+
 def _try_load(name: str) -> Optional["Booster"]:
     """Resolve a download-on-demand booster, returning ``None`` when unobtainable.
 
     On first call this may download + cache the model (via ``ep_wp._load_model``);
     subsequent calls hit the lru-cache.  Used by the ``get_*`` functions at call
     time — NOT at import time (see :data:`FD_MODEL_AVAILABLE`).
+
+    A model that cannot be obtained nulls every column it feeds, so it is never
+    silent: the first miss per artifact warns with a ``RuntimeWarning``
+    naming it, and ``SDV_PY_MODELS_STRICT=1`` raises the ``FileNotFoundError``
+    instead (what a producer that must not publish nulls turns on).
     """
     try:
         return _load_model(name)
-    except Exception:  # pragma: no cover - network/offline dependent
+    except FileNotFoundError as exc:
+        if _models_strict():
+            raise
+        if name not in _WARNED_MISSING:
+            _WARNED_MISSING.add(name)
+            warnings.warn(
+                f"nfl4th model {name} is unavailable, so the fourth-down decision columns it feeds are null: "
+                f"{exc} Set SDV_PY_MODELS_STRICT=1 to raise instead.",
+                RuntimeWarning,
+                stacklevel=2,
+            )
         return None
 
 
@@ -346,11 +371,11 @@ def _prepare(df: pd.DataFrame) -> pd.DataFrame:
     )
     d["model_roof"] = model_roof
     season = d["season"].to_numpy()
-    d["era0"] = (season <= 2001).astype(int)
-    d["era1"] = ((season > 2001) & (season <= 2005)).astype(int)
-    d["era2"] = ((season > 2005) & (season <= 2013)).astype(int)
-    d["era3"] = ((season > 2013) & (season <= 2017)).astype(int)
-    d["era4"] = (season > 2017).astype(int)
+    d["era0"] = (season <= _ERA_CUT0).astype(int)
+    d["era1"] = ((season > _ERA_CUT0) & (season <= _ERA_CUT1)).astype(int)
+    d["era2"] = ((season > _ERA_CUT1) & (season <= _ERA_CUT2)).astype(int)
+    d["era3"] = ((season > _ERA_CUT2) & (season <= _ERA_CUT3)).astype(int)
+    d["era4"] = (season > _ERA_CUT3).astype(int)
     # fg_model features (decision_models FG_FEATURES): yardline_100, fg_roof, and the
     # era0..era4 one-hot above. fg is era-aware across all kicking eras; the PAT path
     # (fg @ yardline_100 = 15) reads the modern era directly via era4.
@@ -622,6 +647,14 @@ def get_2pt_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
         A pandas frame with ``go_index``, ``yardline_100`` (always 0) and
         ``wp_td``.  ``wp_td`` is NaN when the WP / 2-pt models are unavailable.
 
+    Warns:
+        RuntimeWarning: once per unobtainable nfl4th model (``fd_model.ubj`` / ``wp_model.ubj``); its columns are NaN.
+
+    Raises:
+        FileNotFoundError: ``SDV_PY_MODELS_STRICT=1`` and an nfl4th model cannot be obtained.
+        XGBoostError: a cached nfl4th booster is corrupt.
+        ValueError: a model card beside a booster disagrees with the applier's fitted constants.
+
     Example:
         Quick start::
 
@@ -680,6 +713,14 @@ def get_2pt_probs(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
         ``two_pt_wp > xp_wp`` else ``"kick_xp"``) and ``two_pt_wp_diff``
         (``two_pt_wp - xp_wp``). All NaN / null when the models are unavailable.
 
+    Warns:
+        RuntimeWarning: once per unobtainable nfl4th model (``fd_model.ubj`` / ``wp_model.ubj``); its columns are NaN.
+
+    Raises:
+        FileNotFoundError: ``SDV_PY_MODELS_STRICT=1`` and an nfl4th model cannot be obtained.
+        XGBoostError: a cached nfl4th booster is corrupt.
+        ValueError: a model card beside a booster disagrees with the applier's fitted constants.
+
     Example:
         Quick start::
 
@@ -733,6 +774,14 @@ def get_go_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
         conversion outcomes) and ``wp_fail`` (mean WP over failure outcomes).
         All are NaN when the fourth-down / WP models are unavailable
         (:data:`FD_MODEL_AVAILABLE` / :data:`WP_MODEL_AVAILABLE`).
+
+    Warns:
+        RuntimeWarning: once per unobtainable nfl4th model (``fd_model.ubj`` / ``wp_model.ubj``); its columns are NaN.
+
+    Raises:
+        FileNotFoundError: ``SDV_PY_MODELS_STRICT=1`` and an nfl4th model cannot be obtained.
+        XGBoostError: a cached nfl4th booster is corrupt.
+        ValueError: a model card beside a booster disagrees with the applier's fitted constants.
 
     Example:
         Quick start::
@@ -880,6 +929,14 @@ def get_fg_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
         ``miss_fg_wp`` and ``fg_wp`` (from the kicking team's perspective).  All
         four are NaN when the FG model or WP model is unavailable.
 
+    Warns:
+        RuntimeWarning: once per unobtainable nfl4th model (``fd_model.ubj`` / ``wp_model.ubj``); its columns are NaN.
+
+    Raises:
+        FileNotFoundError: ``SDV_PY_MODELS_STRICT=1`` and an nfl4th model cannot be obtained.
+        XGBoostError: a cached nfl4th booster is corrupt.
+        ValueError: a model card beside a booster disagrees with the applier's fitted constants.
+
     Example:
         Quick start::
 
@@ -960,6 +1017,14 @@ def get_punt_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
         the punt distribution has no support for the play's ``yardline_100``
         (inside the punting team's own 31, where the table is empty — matching the
         R reference's left-join NA behavior) or when the WP model is unavailable.
+
+    Warns:
+        RuntimeWarning: once per unobtainable nfl4th model (``fd_model.ubj`` / ``wp_model.ubj``); its columns are NaN.
+
+    Raises:
+        FileNotFoundError: ``SDV_PY_MODELS_STRICT=1`` and an nfl4th model cannot be obtained.
+        XGBoostError: a cached nfl4th booster is corrupt.
+        ValueError: a model card beside a booster disagrees with the applier's fitted constants.
 
     Example:
         Quick start::
@@ -1046,18 +1111,21 @@ def get_4th_down_probs(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFr
       punt_wp))`` in percentage points (a NaN ``punt_wp`` is treated as 0).
     * ``fourth_down_recommendation`` -- the max-WP choice among ``{go, punt,
       field_goal}`` (NaN options are excluded).
-    * ``go_wp_diff`` / ``punt_wp_diff`` / ``fg_wp_diff`` -- each option's WP minus
-      the recommended option's WP (the recommended option's diff is 0, the others
-      <= 0).  NaN where the option WP is NaN.
+    * ``go_wp_diff`` / ``punt_wp_diff`` / ``fg_wp_diff`` -- each option's WP minus the recommended option's WP
+      (0 for the recommended option, <= 0 for the others; NaN where the option WP is NaN).
 
     Args:
-        pbp_df: Play-by-play frame (polars or pandas) of fourth-down situations
-            (the nflverse-shape output of :func:`load_nfl_pbp`; see module
-            docstring for required columns).
+        pbp_df: Play-by-play frame (polars or pandas) of fourth-down situations (the nflverse-shape output of
+            :func:`load_nfl_pbp`; see module docstring for required columns).
 
     Returns:
         A pandas copy of ``pbp_df`` with the decision columns added.  Empty input
         returns the input plus empty decision columns.
+
+    Raises:
+        FileNotFoundError: in strict mode, for a missing nfl4th model (warns otherwise; see :func:`get_go_wp`).
+        XGBoostError: a cached nfl4th booster is corrupt.
+        ValueError: a model card beside a booster disagrees with the applier's fitted constants.
 
     Example:
         Quick start::

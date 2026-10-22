@@ -56,7 +56,7 @@ columns:
 - name: height
   type: character
 - name: number
-  type: integer
+  type: character
 - name: porpag
   type: numeric
 - name: adj_oe

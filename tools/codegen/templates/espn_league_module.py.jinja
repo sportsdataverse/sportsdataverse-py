@@ -5,6 +5,11 @@ from __future__ import annotations
 
 from typing import Dict, Optional, Union  # noqa: F401
 
+# Imported at runtime, not under TYPE_CHECKING: typing.get_type_hints() evaluates the
+# annotations below and raised NameError on ``pl`` / ``pd`` (R858-4).
+import pandas as pd  # noqa: F401
+import polars as pl  # noqa: F401
+
 from sportsdataverse._codegen_runtime import {{ runtime_imports|join(", ") }}
 {% if parser_imports %}
 from sportsdataverse._common_espn_parsers import {{ parser_imports|join(", ") }}
@@ -47,9 +52,14 @@ def {{ ep.fn_name }}(
     return_as_pandas: bool = False,
 {% endif %}
     **kwargs,
-) -> Dict:
+{% if ep.parser %}
+) -> {{ ep.parsed_annotation }}:
+{% else %}
+) -> {{ ep.raw_annotation }}:
+{% endif %}
 {{ ep.docstring }}
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("{{ ep.fn_name }}", kwargs)
     _params = {
 {% for k, v in ep.fixed_params.items() %}
         "{{ k }}": {{ v|py_repr }},
@@ -80,3 +90,29 @@ def {{ ep.fn_name }}(
 {% endif %}
     return raw
 {% endfor %}
+{% if renamed %}
+
+
+# Old name -> new name for wrappers renamed because a hand-written function holds the old name
+# at package level (B-M31). Importing the old name from this module still works for one release.
+_RENAMED = {
+{% for old, new in renamed.items() %}
+    "{{ old }}": "{{ new }}",
+{% endfor %}
+}
+
+
+def __getattr__(name: str):
+    new = _RENAMED.get(name)
+    if new is None:
+        raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+    import warnings
+
+    warnings.warn(
+        f"{__name__}.{name} is deprecated and will be removed in the next release; use {new} "
+        f"({__name__.rsplit('.', 1)[0]}.{name} is a hand-written function, not this wrapper).",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    return globals()[new]
+{% endif %}

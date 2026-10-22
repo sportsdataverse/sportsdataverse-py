@@ -1,0 +1,3684 @@
+{
+ "header": {
+  "alternateLeftColor": "1, 255, 104, 53",
+  "alternateRightColor": "1, 0, 170, 150",
+  "eventStatus": 3,
+  "eventTime": "2024-09-15T17:00:00Z",
+  "id": "10431",
+  "leftColor": "1, 255, 104, 53",
+  "leftTeam": {
+   "imageAltText": "Cleveland Browns",
+   "isLoser": false,
+   "longName": "Browns",
+   "name": "CLE",
+   "score": 18,
+   "stackedNameBottom": "Browns",
+   "stackedNameTop": "Cleveland",
+   "uri": "football/nfl/teams/7"
+  },
+  "rightColor": "1, 0, 170, 150",
+  "rightTeam": {
+   "imageAltText": "Jacksonville Jaguars",
+   "isLoser": true,
+   "longName": "Jaguars",
+   "name": "JAX",
+   "score": 13,
+   "stackedNameBottom": "Jaguars",
+   "stackedNameTop": "Jacksonville",
+   "uri": "football/nfl/teams/31"
+  },
+  "statusLine": "FINAL"
+ },
+ "pbp": {
+  "sections": [
+   {
+    "title": "1ST QUARTER",
+    "groups": [
+     {
+      "id": "3789",
+      "subtitle": "5 plays · 15 yards · 3:17",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/31"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "CLE"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "JAX"
+       }
+      ],
+      "plays": [
+       {
+        "id": "1",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Hopkins kicks 57 yards from CLE 35 to the JAC 8. D.Duvernay returns the kickoff. Tackled by K.Hudson at JAC 20.",
+        "timeOfPlay": "15:00",
+        "title": "CLE 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 92,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 80,
+            "yardStart": 92
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "2",
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Lawrence pass short middle complete. Catch made by B.Strange for 9 yards. Tackled by J.Hicks, G.Delpit at JAC 29.",
+        "timeOfPlay": "14:55",
+        "title": "1st & 10 · JAX 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 71,
+            "yardStart": 80
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "3",
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Etienne rushed up the middle for -2 yards. Tackled by G.Delpit at JAC 27.",
+        "timeOfPlay": "14:24",
+        "title": "2nd & 1 · JAX 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 73,
+            "yardStart": 71
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "4",
+        "periodOfPlay": "1ST",
+        "playDescription": "PENALTY on CLE-M.Garrett, Neutral Zone Infraction, 5 yards, accepted. No Play.",
+        "timeOfPlay": "13:45",
+        "title": "3rd & 3 · JAX 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 68,
+            "yardStart": 73
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "5",
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Etienne rushed up the middle for 5 yards. Tackled by G.Delpit at JAC 37.",
+        "timeOfPlay": "13:27",
+        "title": "1st & 10 · JAX 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 63,
+            "yardStart": 68
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "6",
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Lawrence pass short left complete. Catch made by T.Etienne for -2 yards. Tackled by C.Mitchell, M.Emerson at JAC 35.",
+        "timeOfPlay": "12:48",
+        "title": "2nd & 5 · JAX 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 65,
+            "yardStart": 63
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "7",
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Lawrence steps back to pass. Pass incomplete deep right intended for G.Davis.",
+        "timeOfPlay": "12:02",
+        "title": "3rd & 7 · JAX 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 65
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "8",
+        "periodOfPlay": "1ST",
+        "playDescription": "L.Cooke punts 55 yards to CLE 10, Center-R.Matiscik. J.Proche returned punt from the CLE 10. Tackled by Y.Abdullah at CLE 11.",
+        "timeOfPlay": "11:57",
+        "title": "4th & 7 · JAX 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 10,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 11,
+            "yardStart": 10
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3790",
+      "subtitle": "16 plays · 89 yards · 9:14",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/7"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "7",
+        "title": "CLE"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "JAX"
+       }
+      ],
+      "plays": [
+       {
+        "id": "10",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Foreman rushed left end for 8 yards. Tackled by M.Brown, A.Cisco at CLE 19.",
+        "timeOfPlay": "11:43",
+        "title": "1st & 10 · CLE 11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 19,
+            "yardStart": 11
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "11",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Watson pass short middle complete. Catch made by E.Moore for 9 yards. Tackled by A.Cisco at CLE 28.",
+        "timeOfPlay": "11:06",
+        "title": "2nd & 2 · CLE 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 28,
+            "yardStart": 19
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "12",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Foreman rushed up the middle for 5 yards. Tackled by M.Brown at CLE 33.",
+        "timeOfPlay": "10:33",
+        "title": "1st & 10 · CLE 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 33,
+            "yardStart": 28
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "13",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Watson pass short right complete. Catch made by J.Ford for 0 yards. Tackled by D.Hamilton at CLE 33.",
+        "timeOfPlay": "9:59",
+        "title": "2nd & 5 · CLE 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 33,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "14",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Watson pass short left complete. Catch made by E.Moore for 22 yards. Pushed out of bounds by J.Jones at JAC 45.",
+        "timeOfPlay": "9:06",
+        "title": "3rd & 5 · CLE 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 55,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "15",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Jeudy rushed left end for 0 yards. Tackled by M.Brown at JAC 45. PENALTY on CLE-J.Hudson, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "8:30",
+        "title": "1st & 10 · JAX 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 45,
+            "yardStart": 55
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "16",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Watson steps back to pass. Pass incomplete short right intended for A.Cooper (R.Darby).",
+        "timeOfPlay": "8:17",
+        "title": "1st & 20 · CLE 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 45
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "17",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Watson pass deep right complete [J.Hines-Allen]. Catch made by J.Jeudy for 21 yards. Pushed out of bounds by A.Johnson at JAC 34.",
+        "timeOfPlay": "8:12",
+        "title": "2nd & 20 · CLE 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 66,
+            "yardStart": 45
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "18",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Watson pass short left complete. Catch made by J.Jeudy for 9 yards. Tackled by M.Brown at JAC 25.",
+        "timeOfPlay": "7:38",
+        "title": "1st & 10 · JAX 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 75,
+            "yardStart": 66
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "19",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Ford rushed up the middle for 1 yards. Tackled by J.Ledbetter; F.Oluokun at JAC 24.",
+        "timeOfPlay": "7:04",
+        "title": "2nd & 1 · JAX 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 76,
+            "yardStart": 75
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "20",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Foreman rushed up the middle for 2 yards. Tackled by R.Robertson-Harris at JAC 22.",
+        "timeOfPlay": "6:17",
+        "title": "1st & 10 · JAX 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 78,
+            "yardStart": 76
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "21",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Watson pass short left complete. Catch made by J.Akins for 10 yards. Pushed out of bounds by D.Lloyd; A.Cisco at JAC 12.",
+        "timeOfPlay": "5:36",
+        "title": "2nd & 8 · JAX 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 88,
+            "yardStart": 78
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "22",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Foreman rushed right end for 1 yards. Tackled by F.Oluokun; E.Otomewo at JAC 11.",
+        "timeOfPlay": "4:54",
+        "title": "1st & 10 · JAX 12",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 89,
+            "yardStart": 88
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "23",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Watson steps back to pass. Sacked at JAC 16 for -5 yards (J.Hines-Allen).",
+        "timeOfPlay": "4:15",
+        "title": "2nd & 9 · JAX 11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 84,
+            "yardStart": 89
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "24",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Watson pass short left complete. Catch made by D.Bell for 12 yards. Tackled by F.Oluokun at JAC 4. PENALTY on JAC-D.Lloyd, Roughing the Passer, 2 yards, accepted.",
+        "timeOfPlay": "3:31",
+        "title": "3rd & 14 · JAX 16",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 98,
+            "yardStart": 84
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "25",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Foreman rushed up the middle for 1 yards. D.Foreman FUMBLES, forced by D.Lloyd. Fumble RECOVERED by CLE-D.Foreman at JAC 1. Tackled by at JAC 1.",
+        "timeOfPlay": "3:16",
+        "title": "1st & 2 · JAX 2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 99,
+            "yardStart": 98
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "26",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Watson rushed up the middle for 1 yards. TOUCHDOWN.",
+        "timeOfPlay": "2:32",
+        "title": "2nd & 1 · JAX 1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 99
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "27",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Hopkins extra point is good.",
+        "timeOfPlay": "2:29",
+        "title": "JAX 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3791",
+      "subtitle": "3 plays · 5 yards · 1:02",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/31"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "CLE"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "JAX"
+       }
+      ],
+      "plays": [
+       {
+        "id": "29",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Hopkins kicks 65 yards from CLE 35 to the JAC End Zone. Touchback.",
+        "timeOfPlay": "2:29",
+        "title": "CLE 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "30",
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Etienne rushed left end for 5 yards. Tackled by S.Kamara, J.Owusu-Koramoah at JAC 35.",
+        "timeOfPlay": "2:29",
+        "title": "1st & 10 · JAX 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 65,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "31",
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Lawrence steps back to pass. Pass incomplete deep right intended for G.Davis (D.Ward).",
+        "timeOfPlay": "1:52",
+        "title": "2nd & 5 · JAX 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 65
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "32",
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Lawrence steps back to pass. Pass incomplete short left intended for G.Davis.",
+        "timeOfPlay": "1:44",
+        "title": "3rd & 5 · JAX 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 65
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "33",
+        "periodOfPlay": "1ST",
+        "playDescription": "L.Cooke punts 55 yards to CLE 10, Center-R.Matiscik. J.Proche returned punt from the CLE 10. Tackled by V.Miller, D.Johnson at CLE 24.",
+        "timeOfPlay": "1:39",
+        "title": "4th & 5 · JAX 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 10,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 24,
+            "yardStart": 10
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "2ND QUARTER",
+    "groups": [
+     {
+      "id": "3792",
+      "subtitle": "12 plays · 41 yards · 6:35",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/7"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "10",
+        "title": "CLE"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "JAX"
+       }
+      ],
+      "plays": [
+       {
+        "id": "35",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Watson steps back to pass. Pass incomplete deep left intended for A.Cooper [D.Lloyd].",
+        "timeOfPlay": "1:27",
+        "title": "1st & 10 · CLE 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "36",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Ford rushed right end for 12 yards. Tackled by A.Johnson, F.Oluokun at CLE 36.",
+        "timeOfPlay": "1:21",
+        "title": "2nd & 10 · CLE 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 36,
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "37",
+        "periodOfPlay": "1ST",
+        "playDescription": "D.Foreman rushed up the middle for 5 yards. Tackled by F.Oluokun; D.Lloyd at CLE 41.",
+        "timeOfPlay": "0:40",
+        "title": "1st & 10 · CLE 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 41,
+            "yardStart": 36
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "38",
+        "playDescription": "End Quarter 1",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "39",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Watson pass short right complete [D.Hamilton]. Catch made by D.Bell for 9 yards. Tackled by M.Brown at JAC 50.",
+        "timeOfPlay": "15:00",
+        "title": "2nd & 5 · CLE 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 50,
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "40",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Watson pass short middle complete. Catch made by D.Foreman for yards. Tackled by C.Muma, D.Hamilton at JAC 43. PENALTY on CLE-J.Jeudy, Illegal Shift, 5 yards, accepted. No Play.",
+        "timeOfPlay": "14:16",
+        "title": "1st & 10 ·  50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 45,
+            "yardStart": 50
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "41",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Watson pass short left complete. Catch made by E.Moore for 8 yards. Tackled by M.Cole at JAC 47.",
+        "timeOfPlay": "13:45",
+        "title": "1st & 15 · CLE 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 53,
+            "yardStart": 45
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "42",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Ford rushed up the middle for 4 yards. Tackled by A.Armstead, J.Ledbetter at JAC 43.",
+        "timeOfPlay": "13:02",
+        "title": "2nd & 7 · JAX 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 57,
+            "yardStart": 53
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "43",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Ford rushed left end for 2 yards. Pushed out of bounds by M.Brown, V.Miller at JAC 41.",
+        "timeOfPlay": "12:23",
+        "title": "3rd & 3 · JAX 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 59,
+            "yardStart": 57
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "44",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Winston rushed up the middle for 2 yards. Tackled by A.Cisco at JAC 39.",
+        "timeOfPlay": "11:42",
+        "title": "4th & 1 · JAX 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 61,
+            "yardStart": 59
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "45",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Watson pass short right complete. Catch made by E.Moore for -2 yards. Tackled by M.Brown at JAC 41.",
+        "timeOfPlay": "11:00",
+        "title": "1st & 10 · JAX 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 59,
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "46",
+        "playDescription": "Timeout #1 by CLE.",
+        "timeOfPlay": "10:26",
+        "title": "Timeout"
+       },
+       {
+        "id": "47",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Watson scrambles up the middle for 6 yards. Tackled by D.Lloyd at JAC 35.",
+        "timeOfPlay": "10:26",
+        "title": "2nd & 12 · JAX 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 65,
+            "yardStart": 59
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "48",
+        "playDescription": "Timeout #1 by JAC.",
+        "timeOfPlay": "10:02",
+        "title": "Timeout"
+       },
+       {
+        "id": "49",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Watson steps back to pass. Pass incomplete deep left intended for A.Cooper.",
+        "timeOfPlay": "10:02",
+        "title": "3rd & 6 · JAX 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 65
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "50",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Hopkins 53 yard field goal attempt is good, Center-C.Hughlett, Holder-C.Bojorquez.",
+        "timeOfPlay": "9:57",
+        "title": "4th & 6 · JAX 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 65
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3793",
+      "subtitle": "11 plays · 66 yards · 5:08",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/31"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "10",
+        "title": "CLE"
+       },
+       {
+        "changed": true,
+        "score": "3",
+        "title": "JAX"
+       }
+      ],
+      "plays": [
+       {
+        "id": "52",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Hopkins kicks yards from CLE 35 to the JAC End Zone. T.Bigsby returns the kickoff. T.Bigsby FUMBLES, forced by O.Okoronkwo. Fumble RECOVERED by CLE-O.Okoronkwo at JAC 27. Tackled by at JAC 25. PENALTY on CLE-D.Hopkins, Illegal Formation, 5 yards, accepted. No Play.",
+        "timeOfPlay": "9:52",
+        "title": "CLE 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 30,
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "53",
+        "playDescription": "TV Timeout",
+        "timeOfPlay": "9:45",
+        "title": "TV Timeout"
+       },
+       {
+        "id": "54",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Hopkins kicks 70 yards from CLE 30 to the JAC End Zone. Touchback.",
+        "timeOfPlay": "9:45",
+        "title": "CLE 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 30
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "55",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Lawrence pass short left complete. Catch made by C.Kirk for -1 yards. C.Kirk ran out of bounds.",
+        "timeOfPlay": "9:45",
+        "title": "1st & 10 · JAX 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 71,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "56",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Lawrence pass short right complete. Catch made by G.Davis for 10 yards. Tackled by G.Newsome at JAC 39.",
+        "timeOfPlay": "9:07",
+        "title": "2nd & 11 · JAX 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 61,
+            "yardStart": 71
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "57",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Etienne rushed up the middle for 3 yards. Tackled by D.Ward at JAC 42.",
+        "timeOfPlay": "8:32",
+        "title": "3rd & 1 · JAX 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 58,
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "58",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Etienne rushed right end for 20 yards. Tackled by R.Hickman at CLE 38.",
+        "timeOfPlay": "7:58",
+        "title": "1st & 10 · JAX 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 38,
+            "yardStart": 58
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "59",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Johnson rushed left end for 3 yards. Tackled by S.Kamara at CLE 35.",
+        "timeOfPlay": "7:15",
+        "title": "1st & 10 · CLE 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 35,
+            "yardStart": 38
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "60",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Lawrence steps back to pass. Pass incomplete short left intended for B.Thomas (J.Hicks, M.Emerson).",
+        "timeOfPlay": "6:33",
+        "title": "2nd & 7 · CLE 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "61",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Lawrence scrambles left end for 33 yards. Pushed out of bounds by R.McLeod at CLE 2.",
+        "timeOfPlay": "6:28",
+        "title": "3rd & 7 · CLE 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 2,
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "62",
+        "playDescription": "Timeout #2 by JAC.",
+        "timeOfPlay": "5:37",
+        "title": "Timeout"
+       },
+       {
+        "id": "63",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Etienne rushed up the middle for -2 yards. Tackled by J.Owusu-Koramoah at CLE 4.",
+        "timeOfPlay": "5:37",
+        "title": "1st & 2 · CLE 2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 4,
+            "yardStart": 2
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "64",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Lawrence steps back to pass. Pass incomplete short left intended for [J.Hicks].",
+        "timeOfPlay": "4:58",
+        "title": "2nd & 4 · CLE 4",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 4
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "65",
+        "playDescription": "Timeout #3 by JAC.",
+        "timeOfPlay": "4:51",
+        "title": "Timeout"
+       },
+       {
+        "id": "66",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Lawrence steps back to pass. Pass incomplete short middle intended for G.Davis.",
+        "timeOfPlay": "4:51",
+        "title": "3rd & 4 · CLE 4",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 4
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "67",
+        "periodOfPlay": "2ND",
+        "playDescription": "C.Little 22 yard field goal attempt is good, Center-R.Matiscik, Holder-L.Cooke.",
+        "timeOfPlay": "4:47",
+        "title": "4th & 4 · CLE 4",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "FG - GOOD",
+            "yardEnd": -5,
+            "yardStart": 4
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3794",
+      "subtitle": "8 plays · 52 yards · 4:17",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/7"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "13",
+        "title": "CLE"
+       },
+       {
+        "changed": false,
+        "score": "3",
+        "title": "JAX"
+       }
+      ],
+      "plays": [
+       {
+        "id": "69",
+        "periodOfPlay": "2ND",
+        "playDescription": "C.Little kicks 62 yards from JAC 35 to the CLE 3. P.Strong returns the kickoff. Tackled by C.Johnson at CLE 28.",
+        "timeOfPlay": "4:44",
+        "title": "JAX 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 3,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 28,
+            "yardStart": 3
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "70",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Watson steps back to pass. Pass incomplete short right intended for A.Cooper.",
+        "timeOfPlay": "4:38",
+        "title": "1st & 10 · CLE 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 28
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "71",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Ford rushed right guard for 7 yards. Tackled by D.Lloyd at CLE 35.",
+        "timeOfPlay": "4:32",
+        "title": "2nd & 10 · CLE 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 35,
+            "yardStart": 28
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "72",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Watson rushed left end for 2 yards. Tackled by J.Hines-Allen at CLE 37.",
+        "timeOfPlay": "3:48",
+        "title": "3rd & 3 · CLE 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 37,
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "73",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Ford rushed left end for 36 yards. Pushed out of bounds by A.Cisco at JAC 27.",
+        "timeOfPlay": "3:04",
+        "title": "4th & 1 · CLE 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 73,
+            "yardStart": 37
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "74",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Watson scrambles up the middle for 2 yards. Tackled by D.Hamilton, E.Otomewo at JAC 25.",
+        "timeOfPlay": "2:26",
+        "title": "1st & 10 · JAX 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 75,
+            "yardStart": 73
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "75",
+        "playDescription": "Two minute warning.",
+        "timeOfPlay": "2:00",
+        "title": "Two Minute Warning"
+       },
+       {
+        "id": "76",
+        "periodOfPlay": "2ND",
+        "playDescription": "P.Strong rushed right end for -5 yards. Tackled by R.Robertson-Harris at JAC 30.",
+        "timeOfPlay": "2:00",
+        "title": "2nd & 8 · JAX 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 70,
+            "yardStart": 75
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "77",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Watson pass short right complete. Catch made by P.Strong for 10 yards. Tackled by T.Flowers, D.Prince at JAC 20.",
+        "timeOfPlay": "1:19",
+        "title": "3rd & 13 · JAX 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 80,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "78",
+        "playDescription": "Timeout #2 by CLE.",
+        "timeOfPlay": "0:31",
+        "title": "Timeout"
+       },
+       {
+        "id": "79",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Hopkins 38 yard field goal attempt is good, Center-C.Hughlett, Holder-C.Bojorquez.",
+        "timeOfPlay": "0:31",
+        "title": "4th & 3 · JAX 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 80
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3795",
+      "subtitle": "1 plays · 0 yards · 0:27",
+      "title": "END OF HALF",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/31"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "13",
+        "title": "CLE"
+       },
+       {
+        "changed": false,
+        "score": "3",
+        "title": "JAX"
+       }
+      ],
+      "plays": [
+       {
+        "id": "81",
+        "periodOfPlay": "2ND",
+        "playDescription": "D.Hopkins kicks 65 yards from CLE 35 to the JAC End Zone. Touchback.",
+        "timeOfPlay": "0:27",
+        "title": "CLE 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "82",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Lawrence pass short left complete. Catch made by T.Etienne for 0 yards. Tackled by M.Garrett, A.Wright at JAC 30.",
+        "timeOfPlay": "0:27",
+        "title": "1st & 10 · JAX 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 70,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "83",
+        "playDescription": "End Quarter 2",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "3RD QUARTER",
+    "groups": [
+     {
+      "id": "3796",
+      "subtitle": "3 plays · 6 yards · 0:44",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/7"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "13",
+        "title": "CLE"
+       },
+       {
+        "changed": false,
+        "score": "3",
+        "title": "JAX"
+       }
+      ],
+      "plays": [
+       {
+        "id": "84",
+        "periodOfPlay": "3RD",
+        "playDescription": "C.Little kicks 65 yards from JAC 35 to the CLE End Zone. Touchback.",
+        "timeOfPlay": "15:00",
+        "title": "JAX 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 30,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "85",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Watson steps back to pass. Pass incomplete short left intended for P.Strong.",
+        "timeOfPlay": "15:00",
+        "title": "1st & 10 · CLE 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "86",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Watson steps back to pass. Pass incomplete short right intended for.",
+        "timeOfPlay": "14:53",
+        "title": "2nd & 10 · CLE 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "87",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Watson pass short left complete. Catch made by D.Bell for 6 yards. Tackled by A.Armstead at CLE 36.",
+        "timeOfPlay": "14:46",
+        "title": "3rd & 10 · CLE 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 36,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "88",
+        "playDescription": "TV Timeout",
+        "timeOfPlay": "14:26",
+        "title": "TV Timeout"
+       },
+       {
+        "id": "89",
+        "periodOfPlay": "3RD",
+        "playDescription": "C.Bojorquez punts 64 yards to JAC End Zone, Center-C.Hughlett. Touchback.",
+        "timeOfPlay": "14:26",
+        "title": "4th & 4 · CLE 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 100,
+            "yardStart": 36
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 80,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3797",
+      "subtitle": "3 plays · -7 yards · 1:40",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/31"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "13",
+        "title": "CLE"
+       },
+       {
+        "changed": false,
+        "score": "3",
+        "title": "JAX"
+       }
+      ],
+      "plays": [
+       {
+        "id": "90",
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Etienne rushed up the middle for -2 yards. Tackled by J.Owusu-Koramoah at JAC 18.",
+        "timeOfPlay": "14:16",
+        "title": "1st & 10 · JAX 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 82,
+            "yardStart": 80
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "91",
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Lawrence steps back to pass. Sacked at JAC 13 for -5 yards (J.Hicks).",
+        "timeOfPlay": "13:35",
+        "title": "2nd & 12 · JAX 18",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 87,
+            "yardStart": 82
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "92",
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Lawrence steps back to pass. Pass incomplete short right intended for P.Washington.",
+        "timeOfPlay": "12:53",
+        "title": "3rd & 17 · JAX 13",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 87
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "93",
+        "periodOfPlay": "3RD",
+        "playDescription": "L.Cooke punts 46 yards to CLE 41, Center-R.Matiscik. J.Proche returned punt from the CLE 41. Tackled by D.Thomas, C.Muma at JAC 49.",
+        "timeOfPlay": "12:48",
+        "title": "4th & 17 · JAX 13",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 41,
+            "yardStart": 87
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 51,
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3798",
+      "subtitle": "6 plays · 23 yards · 2:16",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/7"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "16",
+        "title": "CLE"
+       },
+       {
+        "changed": false,
+        "score": "3",
+        "title": "JAX"
+       }
+      ],
+      "plays": [
+       {
+        "id": "95",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Foreman rushed up the middle for 2 yards. Tackled by A.Johnson at JAC 42. PENALTY on CLE-J.Bitonio, Offensive Holding, 10 yards, accepted.",
+        "timeOfPlay": "12:36",
+        "title": "1st & 10 · JAX 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 43,
+            "yardStart": 51
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "96",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Watson steps back to pass. Pass incomplete deep left intended for A.Cooper. PENALTY on JAC-M.Brown, Defensive Pass Interference, 17 yards, accepted. No Play.",
+        "timeOfPlay": "12:11",
+        "title": "1st & 18 · CLE 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 60,
+            "yardStart": 43
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "97",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Watson pass short middle complete. Catch made by C.Tillman for 2 yards. Tackled by J.Jones at JAC 38. PENALTY on JAC-A.Johnson, Roughing the Passer, 14 yards, accepted.",
+        "timeOfPlay": "12:06",
+        "title": "1st & 10 · JAX 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 76,
+            "yardStart": 60
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "98",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Ford rushed left end for yards. Tackled by J.Ledbetter at JAC 20. PENALTY on CLE-E.Pocic, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "11:36",
+        "title": "1st & 10 · JAX 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 66,
+            "yardStart": 76
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "99",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Watson steps back to pass. Pass incomplete short left intended for J.Jeudy.",
+        "timeOfPlay": "11:16",
+        "title": "1st & 20 · JAX 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 66
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "100",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Watson steps back to pass. Pass incomplete short middle intended for E.Moore (D.Lloyd).",
+        "timeOfPlay": "11:12",
+        "title": "2nd & 20 · JAX 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 66
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "101",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Watson pass short left complete. Catch made by E.Moore for 8 yards. Tackled by M.Brown at JAC 26.",
+        "timeOfPlay": "11:07",
+        "title": "3rd & 20 · JAX 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 74,
+            "yardStart": 66
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "102",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Hopkins 44 yard field goal attempt is good, Center-C.Hughlett, Holder-C.Bojorquez.",
+        "timeOfPlay": "10:25",
+        "title": "4th & 12 · JAX 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 74
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3799",
+      "subtitle": "11 plays · 44 yards · 4:32",
+      "title": "MISSED FG",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/31"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "16",
+        "title": "CLE"
+       },
+       {
+        "changed": false,
+        "score": "3",
+        "title": "JAX"
+       }
+      ],
+      "plays": [
+       {
+        "id": "104",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Hopkins kicks 65 yards from CLE 35 to the JAC End Zone. Touchback.",
+        "timeOfPlay": "10:20",
+        "title": "CLE 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "105",
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Lawrence steps back to pass. Pass incomplete deep left intended for B.Strange.",
+        "timeOfPlay": "10:20",
+        "title": "1st & 10 · JAX 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "106",
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Lawrence steps back to pass. Pass incomplete short middle intended for B.Strange.",
+        "timeOfPlay": "10:14",
+        "title": "2nd & 10 · JAX 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "107",
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Lawrence pass deep right complete. Catch made by B.Strange for 26 yards. Tackled by R.McLeod at CLE 44.",
+        "timeOfPlay": "10:10",
+        "title": "3rd & 10 · JAX 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 44,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "108",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Johnson rushed right end for 9 yards. Tackled by M.Garrett at CLE 35.",
+        "timeOfPlay": "9:39",
+        "title": "1st & 10 · CLE 44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 35,
+            "yardStart": 44
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "109",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Johnson rushed up the middle for 4 yards. Tackled by D.Tomlinson at CLE 31.",
+        "timeOfPlay": "9:13",
+        "title": "2nd & 1 · CLE 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 31,
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "110",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Johnson rushed up the middle for 4 yards. Tackled by G.Delpit at CLE 27.",
+        "timeOfPlay": "8:50",
+        "title": "1st & 10 · CLE 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 27,
+            "yardStart": 31
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "111",
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Lawrence pass short left complete. Catch made by T.Etienne for 8 yards. Tackled by A.Wright, M.Emerson at CLE 19.",
+        "timeOfPlay": "8:07",
+        "title": "2nd & 6 · CLE 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 19,
+            "yardStart": 27
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "112",
+        "playDescription": "TV Timeout",
+        "timeOfPlay": "7:40",
+        "title": "TV Timeout"
+       },
+       {
+        "id": "113",
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Etienne rushed up the middle for 5 yards. Tackled by J.Owusu-Koramoah at CLE 14.",
+        "timeOfPlay": "7:40",
+        "title": "1st & 10 · CLE 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 14,
+            "yardStart": 19
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "114",
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Etienne rushed left end for -3 yards. Tackled by G.Delpit at CLE 17.",
+        "timeOfPlay": "7:17",
+        "title": "2nd & 5 · CLE 14",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 17,
+            "yardStart": 14
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "115",
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Lawrence steps back to pass. Sacked at CLE 26 for -9 yards (M.Garrett). T.Lawrence FUMBLES, forced by M.Garrett. Fumble RECOVERED by JAC-D.Johnson at CLE 25. Tackled by at CLE 25.",
+        "timeOfPlay": "6:35",
+        "title": "3rd & 8 · CLE 17",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 25,
+            "yardStart": 17
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "116",
+        "periodOfPlay": "3RD",
+        "playDescription": "C.Little 43 yard field goal attempt is no good, Center-R.Matiscik, Holder-L.Cooke.",
+        "timeOfPlay": "5:52",
+        "title": "4th & 16 · CLE 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "FG - NO GOOD",
+            "yardStart": 25
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3800",
+      "subtitle": "5 plays · 8 yards · 3:19",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/7"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "16",
+        "title": "CLE"
+       },
+       {
+        "changed": false,
+        "score": "3",
+        "title": "JAX"
+       }
+      ],
+      "plays": [
+       {
+        "id": "117",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Watson pass short right complete. Catch made by A.Cooper for 7 yards. Tackled by M.Brown at CLE 40.",
+        "timeOfPlay": "5:48",
+        "title": "1st & 10 · CLE 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 40,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "118",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Foreman rushed up the middle for 3 yards. Tackled by R.Robertson-Harris; F.Oluokun at CLE 43.",
+        "timeOfPlay": "5:05",
+        "title": "2nd & 3 · CLE 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 43,
+            "yardStart": 40
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "119",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Foreman rushed left end for -1 yards. Tackled by M.Brown at CLE 42.",
+        "timeOfPlay": "4:12",
+        "title": "1st & 10 · CLE 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 42,
+            "yardStart": 43
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "120",
+        "playDescription": "Timeout #1 by CLE.",
+        "timeOfPlay": "3:28",
+        "title": "Timeout"
+       },
+       {
+        "id": "121",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Watson pass short left complete. Catch made by E.Moore for -1 yards. Tackled by R.Darby at CLE 41.",
+        "timeOfPlay": "3:28",
+        "title": "2nd & 11 · CLE 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 41,
+            "yardStart": 42
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "122",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Watson steps back to pass. Pass incomplete short right intended for J.Ford.",
+        "timeOfPlay": "2:43",
+        "title": "3rd & 12 · CLE 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "123",
+        "periodOfPlay": "3RD",
+        "playDescription": "C.Bojorquez punts 31 yards to JAC 28, Center-C.Hughlett. Fair catch by D.Duvernay.",
+        "timeOfPlay": "2:37",
+        "title": "4th & 12 · CLE 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 72,
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3801",
+      "subtitle": "3 plays · 72 yards · 1:18",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/31"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "16",
+        "title": "CLE"
+       },
+       {
+        "changed": true,
+        "score": "10",
+        "title": "JAX"
+       }
+      ],
+      "plays": [
+       {
+        "id": "124",
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Lawrence pass deep middle complete. Catch made by B.Thomas for 66 yards. Tackled by G.Newsome at CLE 6.",
+        "timeOfPlay": "2:29",
+        "title": "1st & 10 · JAX 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 6,
+            "yardStart": 72
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "125",
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Etienne rushed up the middle for 2 yards. Tackled by D.Tomlinson at CLE 4.",
+        "timeOfPlay": "1:51",
+        "title": "1st & 6 · CLE 6",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 4,
+            "yardStart": 6
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "126",
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Etienne rushed up the middle for 4 yards. TOUCHDOWN.",
+        "timeOfPlay": "1:14",
+        "title": "2nd & 4 · CLE 4",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 4
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "127",
+        "periodOfPlay": "3RD",
+        "playDescription": "C.Little extra point is good.",
+        "timeOfPlay": "1:11",
+        "title": "CLE 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "4TH QUARTER",
+    "groups": [
+     {
+      "id": "3802",
+      "subtitle": "3 plays · 3 yards · 1:57",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/7"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "16",
+        "title": "CLE"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "JAX"
+       }
+      ],
+      "plays": [
+       {
+        "id": "128",
+        "periodOfPlay": "3RD",
+        "playDescription": "C.Little kicks 65 yards from JAC 35 to the CLE End Zone. Touchback.",
+        "timeOfPlay": "1:11",
+        "title": "JAX 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 30,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "129",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Foreman rushed up the middle for 3 yards. Tackled by J.Hines-Allen; D.Lloyd at CLE 33.",
+        "timeOfPlay": "1:11",
+        "title": "1st & 10 · CLE 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 33,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "130",
+        "periodOfPlay": "3RD",
+        "playDescription": "D.Watson steps back to pass. Sacked at CLE 24 for -9 yards (F.Oluokun).",
+        "timeOfPlay": "0:28",
+        "title": "2nd & 7 · CLE 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 24,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "131",
+        "playDescription": "End Quarter 3",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "132",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Watson pass short left complete. Catch made by D.Foreman for 9 yards. Pushed out of bounds by T.Flowers at CLE 33.",
+        "timeOfPlay": "15:00",
+        "title": "3rd & 16 · CLE 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 33,
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "133",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Bojorquez punts 56 yards to JAC 11, Center-C.Hughlett. D.Duvernay returned punt from the JAC 11. Tackled by M.Ford at JAC 20. PENALTY on JAC-T.Bigsby, Illegal Block Above the Waist, 9 yards, accepted.",
+        "timeOfPlay": "14:23",
+        "title": "4th & 7 · CLE 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 89,
+            "yardStart": 33
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 90,
+            "yardStart": 89
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3803",
+      "subtitle": "13 plays · 83 yards · 6:42",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/31"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "16",
+        "title": "CLE"
+       },
+       {
+        "changed": true,
+        "score": "13",
+        "title": "JAX"
+       }
+      ],
+      "plays": [
+       {
+        "id": "134",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence steps back to pass. Pass incomplete short middle intended for B.Thomas.",
+        "timeOfPlay": "14:14",
+        "title": "1st & 10 · JAX 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 90
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "135",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence pass short right complete. Catch made by T.Etienne for yards. Pushed out of bounds by J.Owusu-Koramoah at JAC 16. PENALTY on CLE-M.Garrett, Defensive Offside, 5 yards, accepted. No Play.",
+        "timeOfPlay": "14:10",
+        "title": "2nd & 10 · JAX 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 85,
+            "yardStart": 90
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "136",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence pass short right complete [S.Harris]. Catch made by L.Farrell for 7 yards. Tackled by G.Delpit at JAC 22.",
+        "timeOfPlay": "13:46",
+        "title": "2nd & 5 · JAX 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 78,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "137",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Etienne rushed up the middle for 5 yards. Tackled by C.Mitchell at JAC 27.",
+        "timeOfPlay": "13:15",
+        "title": "1st & 10 · JAX 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 73,
+            "yardStart": 78
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "138",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence steps back to pass. Sacked at JAC 27 for yards (S.Kamara). PENALTY on CLE-C.Mitchell, Defensive Holding, 5 yards, accepted. No Play.",
+        "timeOfPlay": "12:32",
+        "title": "2nd & 5 · JAX 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 68,
+            "yardStart": 73
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "139",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Duvernay rushed left end for 4 yards. Tackled by C.Mitchell at JAC 36.",
+        "timeOfPlay": "12:06",
+        "title": "1st & 10 · JAX 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 64,
+            "yardStart": 68
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "140",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence pass short left complete. Catch made by L.Farrell for 6 yards. Tackled by M.Emerson at JAC 42.",
+        "timeOfPlay": "11:27",
+        "title": "2nd & 6 · JAX 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 58,
+            "yardStart": 64
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "141",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence steps back to pass. Sacked at JAC 34 for -8 yards (Q.Jefferson).",
+        "timeOfPlay": "10:54",
+        "title": "1st & 10 · JAX 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 66,
+            "yardStart": 58
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "142",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence steps back to pass. Pass incomplete deep middle intended for C.Kirk. PENALTY on CLE-A.Wright, Defensive Offside, 5 yards, accepted. No Play.",
+        "timeOfPlay": "10:08",
+        "title": "2nd & 18 · JAX 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 61,
+            "yardStart": 66
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "143",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence pass deep left complete. Catch made by B.Strange for 30 yards. Tackled by R.Hickman at CLE 31.",
+        "timeOfPlay": "10:00",
+        "title": "2nd & 13 · JAX 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 31,
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "144",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Etienne rushed left end for 12 yards. Pushed out of bounds by J.Hicks at CLE 19.",
+        "timeOfPlay": "9:29",
+        "title": "1st & 10 · CLE 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 19,
+            "yardStart": 31
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "145",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence pass short left complete. Catch made by G.Davis for 11 yards. Pushed out of bounds by R.Hickman at CLE 8.",
+        "timeOfPlay": "9:02",
+        "title": "1st & 10 · CLE 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 8,
+            "yardStart": 19
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "146",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Johnson rushed right end for 6 yards. Pushed out of bounds by G.Newsome, R.McLeod at CLE 2.",
+        "timeOfPlay": "8:29",
+        "title": "1st & 8 · CLE 8",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 2,
+            "yardStart": 8
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "147",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence pass short left complete. Catch made by C.Kirk for yards. TOUCHDOWN. PENALTY on JAC-D.Johnson, Illegal Shift, 5 yards, accepted. No Play.",
+        "timeOfPlay": "7:52",
+        "title": "2nd & 2 · CLE 2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 7,
+            "yardStart": 2
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "148",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence steps back to pass. Pass incomplete short right intended for T.Etienne.",
+        "timeOfPlay": "7:46",
+        "title": "2nd & 7 · CLE 7",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 7
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "149",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence steps back to pass. Pass incomplete short right intended for B.Strange [O.Okoronkwo].",
+        "timeOfPlay": "7:39",
+        "title": "3rd & 7 · CLE 7",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 7
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "150",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Little 25 yard field goal attempt is good, Center-R.Matiscik, Holder-L.Cooke.",
+        "timeOfPlay": "7:34",
+        "title": "4th & 7 · CLE 7",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "FG - GOOD",
+            "yardEnd": -5,
+            "yardStart": 7
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3804",
+      "subtitle": "12 plays · 29 yards · 5:44",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/7"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "16",
+        "title": "CLE"
+       },
+       {
+        "changed": false,
+        "score": "13",
+        "title": "JAX"
+       }
+      ],
+      "plays": [
+       {
+        "id": "152",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Little kicks 65 yards from JAC 35 to the CLE End Zone. Touchback.",
+        "timeOfPlay": "7:32",
+        "title": "JAX 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 30,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "153",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Watson pass short left complete. Catch made by A.Cooper for 2 yards. Tackled by J.Hines-Allen at CLE 32.",
+        "timeOfPlay": "7:32",
+        "title": "1st & 10 · CLE 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 32,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "154",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Watson steps back to pass. Pass incomplete short left intended for A.Cooper [J.Hines-Allen].",
+        "timeOfPlay": "6:55",
+        "title": "2nd & 8 · CLE 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 32
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "155",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Watson pass short right complete. Catch made by J.Jeudy for 8 yards. Tackled by M.Brown at CLE 40.",
+        "timeOfPlay": "6:51",
+        "title": "3rd & 8 · CLE 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 40,
+            "yardStart": 32
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "156",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Foreman rushed up the middle for yards. Tackled by A.Johnson at JAC 47. PENALTY on CLE-E.Moore, Illegal Shift, 5 yards, accepted. No Play.",
+        "timeOfPlay": "6:09",
+        "title": "1st & 10 · CLE 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 35,
+            "yardStart": 40
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "157",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Watson pass deep left complete [T.Walker]. Catch made by J.Jeudy for 30 yards. Pushed out of bounds by A.Johnson at JAC 35.",
+        "timeOfPlay": "5:39",
+        "title": "1st & 15 · CLE 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 65,
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "158",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Watson pass short right complete. Catch made by J.Jeudy for 5 yards. J.Jeudy ran out of bounds.",
+        "timeOfPlay": "5:03",
+        "title": "1st & 10 · JAX 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 70,
+            "yardStart": 65
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "159",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Ford rushed up the middle for 2 yards. Tackled by J.Ledbetter at JAC 28.",
+        "timeOfPlay": "4:52",
+        "title": "2nd & 5 · JAX 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 72,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "160",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Watson pass short left complete. Catch made by A.Cooper for 2 yards. Tackled by J.Jones at JAC 26.",
+        "timeOfPlay": "4:09",
+        "title": "3rd & 3 · JAX 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 74,
+            "yardStart": 72
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "161",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Winston rushed up the middle for 2 yards. Tackled by D.Lloyd at JAC 24.",
+        "timeOfPlay": "3:23",
+        "title": "4th & 1 · JAX 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 76,
+            "yardStart": 74
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "162",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Foreman rushed left guard for 0 yards. Tackled by D.Lloyd at JAC 24.",
+        "timeOfPlay": "2:44",
+        "title": "1st & 10 · JAX 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 76,
+            "yardStart": 76
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "163",
+        "playDescription": "Timeout #1 by JAC.",
+        "timeOfPlay": "2:36",
+        "title": "Timeout"
+       },
+       {
+        "id": "164",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Foreman rushed up the middle for 9 yards. Tackled by A.Johnson at JAC 15. PENALTY on CLE-D.Foreman, Offensive Facemask, 15 yards, accepted.",
+        "timeOfPlay": "2:36",
+        "title": "2nd & 10 · JAX 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 70,
+            "yardStart": 76
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "165",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Watson steps back to pass. Pass incomplete short right intended for E.Moore (D.Lloyd).",
+        "timeOfPlay": "2:27",
+        "title": "2nd & 16 · JAX 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "166",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Watson scrambles left end for yards. Tackled by J.Hines-Allen at JAC 27. PENALTY on CLE-E.Pocic, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "2:23",
+        "title": "3rd & 16 · JAX 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 60,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "167",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Watson pass short middle complete. Catch made by J.Akins for yards. Tackled by A.Cisco, M.Brown at JAC 25. PENALTY on CLE-W.Teller, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "2:12",
+        "title": "3rd & 26 · JAX 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 50,
+            "yardStart": 60
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "168",
+        "playDescription": "Timeout #2 by CLE.",
+        "timeOfPlay": "2:03",
+        "title": "Timeout"
+       },
+       {
+        "id": "169",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Watson rushed left end for 9 yards. Tackled by M.Brown at JAC 41.",
+        "timeOfPlay": "2:03",
+        "title": "3rd & 36 ·  50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 59,
+            "yardStart": 50
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "170",
+        "playDescription": "Two minute warning.",
+        "timeOfPlay": "1:56",
+        "title": "Two Minute Warning"
+       },
+       {
+        "id": "171",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Bojorquez punts 39 yards to JAC 2, Center-C.Hughlett. Out of bounds.",
+        "timeOfPlay": "1:56",
+        "title": "4th & 27 · JAX 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 98,
+            "yardStart": 59
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3805",
+      "subtitle": "1 plays · -2 yards · 0:04",
+      "title": "SAFETY",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/31"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "18",
+        "title": "CLE"
+       },
+       {
+        "changed": false,
+        "score": "13",
+        "title": "JAX"
+       }
+      ],
+      "plays": [
+       {
+        "id": "172",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence steps back to pass. Sacked at JAC End Zone for -2 yards (A.Wright). SAFETY.",
+        "timeOfPlay": "1:48",
+        "title": "1st & 10 · JAX 2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 105,
+            "yardStart": 98
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3806",
+      "subtitle": "3 plays · 4 yards · 0:17",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/7"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "18",
+        "title": "CLE"
+       },
+       {
+        "changed": false,
+        "score": "13",
+        "title": "JAX"
+       }
+      ],
+      "plays": [
+       {
+        "id": "174",
+        "periodOfPlay": "4TH",
+        "playDescription": "L.Cooke kicks 22 yards from JAC 20 to the JAC 42. Fair catch by J.Proche.",
+        "timeOfPlay": "1:44",
+        "title": "JAX 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 58,
+            "yardStart": 80
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "175",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Foreman rushed up the middle for 3 yards. Tackled by T.Walker; F.Oluokun at JAC 39.",
+        "timeOfPlay": "1:44",
+        "title": "1st & 10 · JAX 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 61,
+            "yardStart": 58
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "176",
+        "playDescription": "Timeout #2 by JAC.",
+        "timeOfPlay": "1:40",
+        "title": "Timeout"
+       },
+       {
+        "id": "177",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Foreman rushed up the middle for 1 yards. Tackled by T.Walker at JAC 38.",
+        "timeOfPlay": "1:40",
+        "title": "2nd & 7 · JAX 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 62,
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "178",
+        "playDescription": "Timeout #3 by JAC.",
+        "timeOfPlay": "1:36",
+        "title": "Timeout"
+       },
+       {
+        "id": "179",
+        "periodOfPlay": "4TH",
+        "playDescription": "D.Watson steps back to pass. Pass incomplete short left intended for C.Tillman (J.Hines-Allen) [J.Hines-Allen].",
+        "timeOfPlay": "1:36",
+        "title": "3rd & 6 · JAX 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 62
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "180",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Bojorquez punts 28 yards to JAC 10, Center-C.Hughlett. Fair catch by D.Duvernay.",
+        "timeOfPlay": "1:33",
+        "title": "4th & 6 · JAX 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 90,
+            "yardStart": 62
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3807",
+      "subtitle": "7 plays · 57 yards · 1:27",
+      "title": "END OF GAME",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/31"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "18",
+        "title": "CLE"
+       },
+       {
+        "changed": false,
+        "score": "13",
+        "title": "JAX"
+       }
+      ],
+      "plays": [
+       {
+        "id": "181",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence steps back to pass. Pass incomplete short middle intended for C.Kirk (J.Hicks).",
+        "timeOfPlay": "1:27",
+        "title": "1st & 10 · JAX 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 90
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "182",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence pass deep middle complete. Catch made by G.Davis for 22 yards. Tackled by J.Owusu-Koramoah at JAC 32.",
+        "timeOfPlay": "1:22",
+        "title": "2nd & 10 · JAX 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 68,
+            "yardStart": 90
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "183",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence scrambles right end for 12 yards. Tackled by J.Owusu-Koramoah at JAC 44.",
+        "timeOfPlay": "1:10",
+        "title": "1st & 10 · JAX 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 56,
+            "yardStart": 68
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "184",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence steps back to pass. Pass incomplete short right intended for G.Davis. PENALTY on JAC-G.Davis, Illegal Shift, 5 yards, accepted. No Play.",
+        "timeOfPlay": "0:48",
+        "title": "1st & 10 · JAX 44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 61,
+            "yardStart": 56
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "185",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence steps back to pass. Pass incomplete deep left intended for C.Kirk (R.Hickman).",
+        "timeOfPlay": "0:38",
+        "title": "1st & 15 · JAX 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "186",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence pass deep left complete. Catch made by B.Thomas for 28 yards. Tackled by J.Owusu-Koramoah at CLE 33.",
+        "timeOfPlay": "0:26",
+        "title": "2nd & 15 · JAX 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 33,
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "187",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence spikes the ball.",
+        "timeOfPlay": "0:10",
+        "title": "1st & 10 · CLE 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 33,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "188",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Lawrence steps back to pass. Pass incomplete deep middle intended for.",
+        "timeOfPlay": "0:08",
+        "title": "2nd & 10 · CLE 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "189",
+        "playDescription": "End Game",
+        "timeOfPlay": "0:00",
+        "title": "Game End"
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+}

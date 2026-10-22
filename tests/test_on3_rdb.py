@@ -230,3 +230,40 @@ def test_parse_on3_rdb_scalar_array():
     # mixed scalar/dict rows: scalars wrap as {"value": ...}
     mixed = parse_on3_rdb([{"name": "x"}, "loose"])
     assert mixed.height == 2 and "value" in mixed.columns
+
+
+def test_concurrent_build_id_misses_discover_once(monkeypatch):
+    """A-L71: threads that find no buildId share one discovery instead of each scraping a page."""
+    import threading
+    import time
+
+    from sportsdataverse.cfb import on3_runtime as rt
+
+    monkeypatch.setattr(rt, "_build_id", None)
+    discovered = []
+
+    def slow_discover(page_url, **kwargs):
+        discovered.append(page_url)
+        time.sleep(0.2)  # the other threads arrive while this discovery is in flight
+        return "build-1"
+
+    data_urls = []
+
+    def fake_download(url=None, params=None, headers=None, **kwargs):
+        data_urls.append(url)
+        return _Resp(body={"pageProps": {"list": []}})
+
+    monkeypatch.setattr(rt, "_discover_build_id", slow_discover)
+    monkeypatch.setattr(rt, "download", fake_download)
+    url = "https://www.on3.com/rivals/rankings/industry-player/football/2026.json"
+    got = []
+    threads = [threading.Thread(target=lambda: got.append(rt._scrape_get(url))) for _ in range(3)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    assert len(discovered) == 1
+    assert got == [{"pageProps": {"list": []}}] * 3
+    assert set(data_urls) == {
+        "https://www.on3.com/_next/data/build-1/rivals/rankings/industry-player/football/2026.json"
+    }

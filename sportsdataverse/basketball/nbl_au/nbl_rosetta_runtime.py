@@ -213,6 +213,7 @@ def _check(url: str, route: str, groups: Mapping[str, str], body: Any, sent_limi
     return rows
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET a Rosetta route as JSON: gate headers, END->START season mapping, refusals, request stamp.
 
@@ -258,7 +259,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         if params.get("limit") is None:
             params["limit"] = sent_limit = PAGING[route][0]
     headers = {**GATE_HEADERS, **(kwargs.pop("headers", None) or {})}
-    body = basketball_runtime._get(url, params, headers=headers, **kwargs)
+    body = basketball_runtime._fetch_json(url, params, headers=headers, **kwargs)
     _check(url, route, groups, body, sent_limit)
     body[REQUEST_KEY] = stamp
     return body

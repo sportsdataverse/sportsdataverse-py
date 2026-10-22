@@ -393,7 +393,7 @@ espn_wnba_summary()
 
 _Last validated n/a._
 
-## espn_wnba_calendar
+## espn_wnba_calendar_site
 
 ESPN endpoint.
 
@@ -404,7 +404,7 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns {#espn_wnba_calendar-returns}
+### Returns {#espn_wnba_calendar_site-returns}
 
 **`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 
@@ -412,7 +412,7 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Raises {#espn_wnba_calendar-raises}
+### Raises {#espn_wnba_calendar_site-raises}
 
 | Exception | Description |
 |---|---|
@@ -420,10 +420,10 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
-### Example {#espn_wnba_calendar-example}
+### Example {#espn_wnba_calendar_site-example}
 
 ```python
-espn_wnba_calendar()
+espn_wnba_calendar_site()
 ```
 
 _Last validated n/a._
@@ -651,7 +651,7 @@ espn_wnba_statistics_league()
 
 _Last validated n/a._
 
-## espn_wnba_draft
+## espn_wnba_draft_site
 
 ESPN endpoint.
 
@@ -662,7 +662,7 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns {#espn_wnba_draft-returns}
+### Returns {#espn_wnba_draft_site-returns}
 
 **`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 
@@ -670,7 +670,7 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Raises {#espn_wnba_draft-raises}
+### Raises {#espn_wnba_draft_site-raises}
 
 | Exception | Description |
 |---|---|
@@ -678,10 +678,10 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
-### Example {#espn_wnba_draft-example}
+### Example {#espn_wnba_draft_site-example}
 
 ```python
-espn_wnba_draft()
+espn_wnba_draft_site()
 ```
 
 _Last validated n/a._
@@ -815,7 +815,7 @@ espn_wnba_team(team_id='4')
 
 _Last validated n/a._
 
-## espn_wnba_team_roster
+## espn_wnba_team_roster_site
 
 ESPN endpoint.
 
@@ -825,10 +825,10 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `team_id` | `team_id` |  | `Y` |  | ESPN WNBA team identifier (e.g. `3` for Dallas Wings). |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
-### Returns {#espn_wnba_team_roster-returns}
+### Returns {#espn_wnba_team_roster_site-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 
@@ -884,7 +884,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Raises {#espn_wnba_team_roster-raises}
+### Raises {#espn_wnba_team_roster_site-raises}
 
 | Exception | Description |
 |---|---|
@@ -892,10 +892,10 @@ ESPN endpoint.
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
-### Example {#espn_wnba_team_roster-example}
+### Example {#espn_wnba_team_roster_site-example}
 
 ```python
-espn_wnba_team_roster(team_id='4')
+espn_wnba_team_roster_site(team_id='4')
 ```
 
 _Last validated n/a._
@@ -1358,7 +1358,7 @@ espn_wnba_player_news(athlete_id='4239')
 
 _Last validated n/a._
 
-## espn_wnba_standings
+## espn_wnba_standings_site
 
 ESPN endpoint.
 
@@ -1372,7 +1372,7 @@ ESPN endpoint.
 | `group` | `group` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
 | `type` | `standings_type` |  |  | `Y` | Standings variant (e.g. 'by-division' or 'by-conference'). |
 
-### Returns {#espn_wnba_standings-returns}
+### Returns {#espn_wnba_standings_site-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 
@@ -1412,7 +1412,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Raises {#espn_wnba_standings-raises}
+### Raises {#espn_wnba_standings_site-raises}
 
 | Exception | Description |
 |---|---|
@@ -1420,10 +1420,10 @@ ESPN endpoint.
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
-### Example {#espn_wnba_standings-example}
+### Example {#espn_wnba_standings_site-example}
 
 ```python
-espn_wnba_standings()
+espn_wnba_standings_site()
 ```
 
 _Last validated n/a._

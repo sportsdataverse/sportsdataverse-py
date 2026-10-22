@@ -25,7 +25,7 @@ pre-2016 game parsed to zero rows); the catalog entry above records both.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Optional, Sequence, Union
+from typing import TYPE_CHECKING, Literal, Optional, Sequence, Union
 
 import polars as pl
 
@@ -146,6 +146,7 @@ def ncaa_wbb_play_by_play(
     season: Optional[object] = None,
     fetcher: Optional[_SupportsFetchGamePbp] = None,
     return_as_pandas: bool = False,
+    errors: Literal["raise", "skip"] = "raise",
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Scrape many WBB games' play-by-play (wbigballR ``get_play_by_play``, era-aware).
 
@@ -164,10 +165,21 @@ def ncaa_wbb_play_by_play(
         fetcher: Optional injected fetcher exposing ``fetch_game_pbp``.
             Defaults to one shared ``NcaaFetcher.with_browser()`` context.
         return_as_pandas: Return a pandas DataFrame instead of polars.
+        errors: ``"raise"`` (default): a failed fetch (a ban, an exhausted
+            proxy pool, an uncleared challenge) raises ``AssetFetchError``.
+            ``"skip"``: it is dropped like a missing game, and the frame gains a
+            ``scrape_status`` column -- ``"ok"`` on every play row, plus one row per
+            dropped game (``game_id`` and why: ``fetch_failed: ...``,
+            ``no_data: ...``, ``request_error: ...``, ``parse_failed: ...``
+            or ``empty``).
 
     Returns:
         Row-bound play-by-play for every game that scraped successfully
         (zero-row contract frame when none did).
+
+    Raises:
+        AssetFetchError: A fetch failed and ``errors="raise"``.
+        ValueError: ``errors`` is not ``"raise"`` or ``"skip"``.
 
     Warns:
         UnsupportedPageFormatWarning: Once per game whose page is in a layout
@@ -186,4 +198,5 @@ def ncaa_wbb_play_by_play(
         fetcher=fetcher,
         period_model=_period_model_for(season),
         return_as_pandas=return_as_pandas,
+        errors=errors,
     )

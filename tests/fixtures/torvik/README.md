@@ -23,6 +23,7 @@ rows (the game-stats capture also keeps the 2 rows whose `margin` is null). Used
 | `2025_getgamestats_head.json` | `https://barttorvik.com/getgamestats.php?year=2025&json=1` (men's per-team-game log; headerless JSON, 31 fields) |
 | `2025_getadvstats_head.csv` | `https://barttorvik.com/getadvstats.php?year=2025&csv=1` (men's player advanced stats; headerless CSV, 67 fields) |
 | `2025_super_sked_head.json` | `https://barttorvik.com/2025_super_sked.json` (men's season schedule/results; headerless JSON, 55 fields) |
+| `2025_getadvstats_jersey_00.csv` | `https://barttorvik.com/getadvstats.php?year=2025&csv=1` (HTTP 200, `text/csv`, 1,975,100 bytes, 5,060 rows), captured 2026-10-20: the rows kept verbatim are all 8 whose jersey (`number`, field 28) is `"00"` and the first 4 whose jersey is `"0"`, in file order (B-M19). Used by `tests/mbb/test_mbb_torvik.py`. |
 | `ncaaw_2025_team_results_head.csv` | `https://barttorvik.com/ncaaw/2025_team_results.csv` (women's T-Rank ratings) |
 
 Endpoint map + column schemas: `sdv-internal-refs/barttorvik/`

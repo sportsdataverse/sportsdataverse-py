@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # LIGAMX — ESPN FPI API (fitt v3)
 
-`sportsdataverse.ligamx` — 1 endpoint.
+`sportsdataverse.soccer.ligamx` — 1 endpoint.
 
 ## espn_ligamx_fpi
 

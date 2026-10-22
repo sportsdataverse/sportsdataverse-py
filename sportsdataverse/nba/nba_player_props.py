@@ -226,11 +226,11 @@ def team_pace_projection(
 def _load_player_logs(season: int, league_id: str) -> pl.DataFrame:
     """Live player box logs (the box loader is stubbed in tests); WNBA via league_id=10."""
     if league_id == "10":
-        from sportsdataverse.wnba.wnba_loaders import load_wnba_player_boxscore  # noqa: PLC0415
+        from sportsdataverse.wnba.wnba_loaders import load_wnba_player_boxscore
 
         box = load_wnba_player_boxscore([season])
     else:
-        from sportsdataverse.nba.nba_loaders import load_nba_player_boxscore  # noqa: PLC0415
+        from sportsdataverse.nba.nba_loaders import load_nba_player_boxscore
 
         box = load_nba_player_boxscore([season])
     # checked before the select, which would otherwise raise polars' ColumnNotFoundError
@@ -253,7 +253,7 @@ def _load_ratings(
     season: int, league_id: str, as_of_date: Union[dt.date, None] = None
 ) -> pl.DataFrame:  # pragma: no cover - live network
     """Live team ratings for pace, from games strictly before ``as_of_date`` (monkeypatched in tests)."""
-    from sportsdataverse.nba.nba_team_ratings import nba_team_ratings  # noqa: PLC0415
+    from sportsdataverse.nba.nba_team_ratings import nba_team_ratings
 
     return nba_team_ratings(season, league_id=league_id, as_of_date=as_of_date)
 

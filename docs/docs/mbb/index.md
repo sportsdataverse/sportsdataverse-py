@@ -10,13 +10,13 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
 | [Highlights](reference/additional#highlights) | curated "start here" functions | 9 | — |
-| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 128 | none |
+| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 129 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 34 | none |
-| [stats.ncaa.org](#stats-ncaa-org) | `stats.ncaa.org` | 118 | none (Terms gate + rate rotation) |
+| [stats.ncaa.org](#stats-ncaa-org) | `stats.ncaa.org` | 120 | none (Terms gate + rate rotation) |
 | [KenPom](#kenpom) | `kenpom.com` | 32 | subscription (KENPOM_EMAIL / KENPOM_PASSWORD) |
 | [Bart Torvik T-Rank](#bart-torvik-t-rank) | `barttorvik.com` | 5 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 320 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 325 | — |
 
 ## ESPN {#espn}
 
@@ -27,7 +27,7 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 | [ESPN core API (v2)](reference/core) | 87 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
 | [ESPN CDN API (cdn.espn.com)](reference/cdn) | 4 |
-| [Hand-written wrappers](reference/additional/highlights) | 6 |
+| [Hand-written wrappers](reference/additional/espn) | 7 |
 
 ## sportsdataverse-data releases {#sportsdataverse-data-releases}
 
@@ -39,7 +39,7 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 
 | Reference | Functions |
 |---|---:|
-| [Hand-written wrappers](reference/additional/stats-ncaa-org) | 118 |
+| [Hand-written wrappers](reference/additional/stats-ncaa-org) | 120 |
 
 ## KenPom {#kenpom}
 
@@ -102,6 +102,7 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 - [`RapmProcessingInputs`](reference/additional/models-and-calculators#RapmProcessingInputs)
 - [`RawGameEvent`](reference/additional/models-and-calculators#RawGameEvent)
 - [`RosterEntry`](reference/additional/models-and-calculators#RosterEntry)
+- [`Score`](reference/additional/models-and-calculators#Score)
 - [`ScoreInfo`](reference/additional/models-and-calculators#ScoreInfo)
 - [`ShotClockStats`](reference/additional/models-and-calculators#ShotClockStats)
 - [`ShotEvent`](reference/additional/models-and-calculators#ShotEvent)
@@ -109,6 +110,7 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 - [`ShotLocation`](reference/additional/models-and-calculators#ShotLocation)
 - [`TeamId`](reference/additional/models-and-calculators#TeamId)
 - [`TeamSeasonId`](reference/additional/models-and-calculators#TeamSeasonId)
+- [`Year`](reference/additional/models-and-calculators#Year)
 - [`adjust_efficiency`](reference/additional/models-and-calculators#adjust_efficiency)
 - [`adjust_off_rating_stats`](reference/additional/models-and-calculators#adjust_off_rating_stats)
 - [`adjust_tempo`](reference/additional/models-and-calculators#adjust_tempo)
@@ -123,7 +125,7 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 - [`build_net_points`](reference/additional/models-and-calculators#build_net_points)
 - [`build_o_rtg`](reference/additional/models-and-calculators#build_o_rtg)
 - [`build_player_context`](reference/additional/models-and-calculators#build_player_context)
-- [`build_priors`](reference/additional/models-and-calculators#build_priors)
+- [`build_priors`](reference/additional/models-and-calculators-2#build_priors)
 - [`build_productivity`](reference/additional/models-and-calculators-2#build_productivity)
 - [`build_weak_prior_from_rapm`](reference/additional/models-and-calculators-2#build_weak_prior_from_rapm)
 - [`calc_collinearity_diag`](reference/additional/models-and-calculators-2#calc_collinearity_diag)
@@ -166,9 +168,9 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 - [`raw_game_efficiency`](reference/additional/models-and-calculators-2#raw_game_efficiency)
 - [`ridge_cv_lambda`](reference/additional/models-and-calculators-2#ridge_cv_lambda)
 - [`ridge_fit`](reference/additional/models-and-calculators-2#ridge_fit)
-- [`roc_auc`](reference/additional/models-and-calculators-2#roc_auc)
-- [`save_artifact`](reference/additional/models-and-calculators-2#save_artifact)
-- [`score_to_tuple`](reference/additional/models-and-calculators-2#score_to_tuple)
+- [`roc_auc`](reference/additional/models-and-calculators-3#roc_auc)
+- [`save_artifact`](reference/additional/models-and-calculators-3#save_artifact)
+- [`score_to_tuple`](reference/additional/models-and-calculators-3#score_to_tuple)
 - [`simulate_game`](reference/additional/models-and-calculators-3#simulate_game)
 - [`slow_regression`](reference/additional/models-and-calculators-3#slow_regression)
 - [`spearman_corr`](reference/additional/models-and-calculators-3#spearman_corr)
@@ -267,7 +269,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | `sportsdataverse.mbb` (Python) | `hoopR` (R) |
 |---|---|
 | [`espn_mbb_award`](reference/core/other#espn_mbb_award) | [`espn_mbb_award`](https://hoopR.sportsdataverse.org/reference/espn_mbb_award.html) |
-| [`espn_mbb_calendar`](reference/site#espn_mbb_calendar) | [`espn_mbb_calendar`](https://hoopR.sportsdataverse.org/reference/espn_mbb_calendar.html) |
+| [`espn_mbb_calendar`](reference/additional/espn#espn_mbb_calendar) | [`espn_mbb_calendar`](https://hoopR.sportsdataverse.org/reference/espn_mbb_calendar.html) |
 | [`espn_mbb_coach`](reference/core/other#espn_mbb_coach) | [`espn_mbb_coach`](https://hoopR.sportsdataverse.org/reference/espn_mbb_coach.html) |
 | [`espn_mbb_coach_record`](reference/core/other#espn_mbb_coach_record) | [`espn_mbb_coach_record`](https://hoopR.sportsdataverse.org/reference/espn_mbb_coach_record.html) |
 | [`espn_mbb_coach_season`](reference/core/other#espn_mbb_coach_season) | [`espn_mbb_coach_season`](https://hoopR.sportsdataverse.org/reference/espn_mbb_coach_season.html) |

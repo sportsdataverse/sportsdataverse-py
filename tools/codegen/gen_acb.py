@@ -334,7 +334,7 @@ ENDPOINTS: Dict[str, Entry] = {
         P.parse_acb_serie,
         cap("matchdata__Overview__serie", match_id=MATCH_2016),
         ((_SE, "matches.[]."), (_SE, "")),
-        "The playoff series a game belongs to, one row per game of the series (HTTP 204 outside a series).",
+        "The playoff series a game belongs to, one row per game of the series (zero rows outside a series: HTTP 204).",
         {"extra_params": [_p("match_id", "matchId", "int", _D_MATCH, True)], "example_args": {"match_id": MATCH_2016}},
     ),
     "quickfacts": (
@@ -1391,8 +1391,8 @@ def main() -> None:
             "raw_doc": "the raw body (``dict``): the route's JSON plus ``_request`` (the ids asked for, in snake_case, "
             "with ``season`` the END year)",
             "raises": [
-                "sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, a game outside "
-                "a playoff series, play-by-play or shots before 2016-17, a club with no games that season).",
+                "sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown id, play-by-play or "
+                "shots before 2016-17, a club with no games that season); a game outside a playoff series is zero rows.",
                 "sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a "
                 "rejected key, an error envelope or stub, a body for another season, round, club or player, a game that "
                 "is not finished).",

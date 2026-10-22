@@ -48,6 +48,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
+from sportsdataverse._codegen_runtime import _id_text
 from sportsdataverse.football.yahoo_common import (
     _clock,
     _down_distance_text,
@@ -928,10 +929,10 @@ def _yahoo_to_espn_summary(
         raise ValueError("payload carries no shangrila game object")
     notes: List[str] = []
 
-    event_id = str(idmap_row["espn_event_id"])
+    event_id = _id_text(idmap_row["espn_event_id"])
     yahoo_home, yahoo_away = game.get("homeTeamId"), game.get("awayTeamId")
-    home_id = str(idmap_row.get("home_espn_team_id") or _espn_team_number(yahoo_home) or "")
-    away_id = str(idmap_row.get("away_espn_team_id") or _espn_team_number(yahoo_away) or "")
+    home_id = _id_text(idmap_row.get("home_espn_team_id")) or str(_espn_team_number(yahoo_home) or "")
+    away_id = _id_text(idmap_row.get("away_espn_team_id")) or str(_espn_team_number(yahoo_away) or "")
     espn_by_yahoo = {str(yahoo_home): home_id, str(yahoo_away): away_id}
     if not (home_id and away_id) or len(espn_by_yahoo) < 2 or "None" in espn_by_yahoo:
         # A null Yahoo team id must not become a dict KEY: with both sides null the mapping
@@ -1223,7 +1224,7 @@ def _yahoo_adapter(league: str, espn_id: int, ctx: Any) -> Any:
         live = str(row.get("status") or "").upper() not in ("FINAL", "FINAL_OVERTIME")
         try:
             payload = _fetch_playbook_boxscore(game_id, live=live)
-        except Exception as exc:  # noqa: BLE001 -- network / JSON -> the next source
+        except Exception as exc:  # network / JSON -> the next source
             raise SourceUnavailable(f"yahoo playbookBoxscore fetch failed: {type(exc).__name__}: {exc}") from exc
     else:
         row = dict(ctx.idmap_row or {})

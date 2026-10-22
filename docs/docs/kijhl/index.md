@@ -3,7 +3,7 @@ title: KIJHL
 sidebar_label: KIJHL
 description: "sdv-py KIJHL: endpoint references, dataset loaders and parsers for KIJHL in the SportsDataverse Python package."
 ---
-# KIJHL (`sportsdataverse.kijhl`)
+# KIJHL (`sportsdataverse.hockey.kijhl`)
 
 ## Data sources
 

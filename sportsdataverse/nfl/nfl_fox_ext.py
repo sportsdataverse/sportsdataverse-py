@@ -62,7 +62,7 @@ def fox_nfl_pbp(
 def fox_nfl_pbp(
     game_id: Union[int, str], *, return_parsed: bool = True, return_as_pandas: bool = False, **kwargs: Any
 ) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
-    """NFL play-by-play (one row per play; drive-based).
+    """NFL play-by-play (one row per play, oldest first, live or final; drive-based).
 
     Args:
         game_id: Fox Bifrost event id.

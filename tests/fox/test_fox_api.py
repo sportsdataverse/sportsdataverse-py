@@ -50,7 +50,7 @@ def test_no_public_name_collision() -> None:
             continue
         try:
             m = importlib.import_module(mod.name)
-        except Exception:  # optional-dependency modules
+        except ImportError:  # optional-dependency modules
             continue
         for attr in dir(m):
             if attr.startswith("fox_api") and getattr(m, attr, None) is not getattr(gen, attr, object()):
@@ -172,3 +172,34 @@ def test_pathologically_nested_payload_returns_empty_frame() -> None:
         node["n"] = {}
         node = node["n"]
     assert P.parse_fox_api({"rows": [deep]}).shape[0] == 0
+
+
+@pytest.mark.parametrize("stem", ["cfb_event_standings", "wcbk_team_11_standings"])
+def test_an_empty_standings_table_is_a_zero_row_frame_not_the_page_nav(stem: str) -> None:
+    """B-GB-02: emptying the table of a real standings capture returned the body's other lists
+    (11 x 7 nav/section rows on cfb_event_standings) through the largest-record-list fallback."""
+    raw = json.loads((ROOT / "tests" / "fixtures" / "fox" / f"{stem}.json").read_text(encoding="utf-8"))
+    assert P.parse_fox_api_standings(raw).height > 0
+    for sec in raw["standingsSections"]:
+        for tbl in sec["standings"]:
+            tbl["rows"] = []
+    assert P.parse_fox_api_standings(raw).height == 0
+
+
+def test_a_body_without_the_layout_keys_still_falls_back_to_the_flattener() -> None:
+    df = P.parse_fox_api_standings({"items": [{"id": 1}, {"id": 2}]})
+    assert df.height == 2
+
+
+@pytest.mark.parametrize("stem", ["cbk_league_conferences", "cbk_league_teamnav"])
+def test_an_empty_nav_layout_is_a_zero_row_frame(stem: str) -> None:
+    """R901-4: the nav parser reads ``navItems`` OR ``groups``; a body carrying either one, emptied, is
+    zero rows. conferences ships only ``groups``, so requiring every key would send it to the
+    flattener, which returns the emptied group itself as a row."""
+    raw = json.loads((ROOT / "tests" / "fixtures" / "fox" / f"{stem}.json").read_text(encoding="utf-8"))
+    assert P.parse_fox_api_nav(raw).height > 0
+    if "navItems" in raw:
+        raw["navItems"] = []
+    for group in raw.get("groups") or []:
+        group["items"] = []
+    assert P.parse_fox_api_nav(raw).height == 0

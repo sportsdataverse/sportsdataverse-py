@@ -106,6 +106,24 @@ columns:
 - name: status_abbreviation
   type: character
   description: ''
+- name: position_id
+  type: integer
+  description: ''
+- name: position_name
+  type: character
+  description: ''
+- name: position_display_name
+  type: character
+  description: ''
+- name: position_abbreviation
+  type: character
+  description: ''
+- name: position_leaf
+  type: logical
+  description: ''
+- name: position_parent_href
+  type: character
+  description: ''
 - name: hand_type
   type: character
   description: ''

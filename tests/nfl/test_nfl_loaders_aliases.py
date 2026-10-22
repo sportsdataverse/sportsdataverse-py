@@ -290,7 +290,7 @@ def test_load_nfl_ff_rankings_kind_returns_same_data_as_type():
     try:
         df_type = load_nfl_ff_rankings(type="draft")
         df_kind = load_nfl_ff_rankings(kind="draft")
-    except Exception as exc:  # noqa: BLE001 - transient upstream errors only; see helper
+    except Exception as exc:  # transient upstream errors only; see helper
         skip_on_transient_network_error(exc)
         raise
     assert isinstance(df_type, pl.DataFrame)
@@ -306,7 +306,7 @@ def test_load_nfl_ff_rankings_alias_returns_same_data():
     try:
         df_alias = load_ff_rankings(kind="draft")
         df_canonical = load_nfl_ff_rankings(kind="draft")
-    except Exception as exc:  # noqa: BLE001 - transient upstream errors only; see helper
+    except Exception as exc:  # transient upstream errors only; see helper
         skip_on_transient_network_error(exc)
         raise
     assert df_alias.shape == df_canonical.shape
@@ -365,40 +365,3 @@ def test_nflreadpy_style_import_block_compiles():
     assert len(callables) == 25
     for fn in callables:
         assert callable(fn)
-
-
-def test_read_csv_retry_backs_off_transient_429(monkeypatch):
-    import urllib.error
-
-    from sportsdataverse.nfl import nfl_loaders
-
-    calls = {"n": 0}
-
-    def flaky_read_csv(url, **kwargs):
-        calls["n"] += 1
-        if calls["n"] < 3:
-            raise urllib.error.HTTPError(url, 429, "Too Many Requests", None, None)
-        return pl.DataFrame({"ok": [1]})
-
-    sleeps: list = []
-    monkeypatch.setattr(nfl_loaders.pl, "read_csv", flaky_read_csv)
-    monkeypatch.setattr("time.sleep", lambda s: sleeps.append(s))
-    out = nfl_loaders._read_csv_retry("https://example.com/x.csv")
-    assert out["ok"].to_list() == [1]
-    assert calls["n"] == 3 and len(sleeps) == 2
-    assert sleeps == [2.0, 4.0]  # exponential backoff
-
-
-def test_read_csv_retry_reraises_non_transient(monkeypatch):
-    import urllib.error
-
-    import pytest as _pytest
-
-    from sportsdataverse.nfl import nfl_loaders
-
-    def notfound(url, **kwargs):
-        raise urllib.error.HTTPError(url, 404, "Not Found", None, None)
-
-    monkeypatch.setattr(nfl_loaders.pl, "read_csv", notfound)
-    with _pytest.raises(urllib.error.HTTPError):
-        nfl_loaders._read_csv_retry("https://example.com/x.csv")

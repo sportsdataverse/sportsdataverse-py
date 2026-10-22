@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # MLS — ESPN FPI API (fitt v3)
 
-`sportsdataverse.mls` — 1 endpoint.
+`sportsdataverse.soccer.mls` — 1 endpoint.
 
 ## espn_mls_fpi
 

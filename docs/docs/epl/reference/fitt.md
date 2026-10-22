@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # EPL — ESPN FPI API (fitt v3)
 
-`sportsdataverse.epl` — 1 endpoint.
+`sportsdataverse.soccer.epl` — 1 endpoint.
 
 ## espn_epl_fpi
 

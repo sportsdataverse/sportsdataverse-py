@@ -76,6 +76,7 @@ import polars as pl
 
 from sportsdataverse._codegen_runtime import _cast_ids_int64
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _data_only
 from sportsdataverse.hockey.ha._ha_schema import DTYPES
 
 __all__ = [
@@ -332,6 +333,7 @@ _GENERIC = {"player": "player_name", "team": "team_statnet_id"}
 # --- generic and stats tables -------------------------------------------------------------------
 
 
+@_data_only
 def parse_ha(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """Generic HockeyAllsvenskan body -> frame by the module's row rule.
 
@@ -363,6 +365,7 @@ def parse_ha(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequ
     return _table(raw, _GENERIC, columns, return_as_pandas)
 
 
+@_data_only
 def parse_ha_team_stats(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """``/api/all-time-teams-stats`` -> one row per team (``team_code`` is the display code).
 
@@ -424,6 +427,7 @@ def parse_ha_teams(raw: Any, *, return_as_pandas: bool = False, columns: Optiona
     return _finish(_frame(rows), columns, return_as_pandas)
 
 
+@_data_only
 def parse_ha_standings(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """``/api/league-standings-all-time`` -> one row per team, every count as Int64.
 
@@ -491,6 +495,7 @@ def _games_row(game: Mapping[str, Any]) -> Dict[str, Any]:
     return row
 
 
+@_data_only
 def parse_ha_games(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """``/api/all-time-games-stats`` -> one row per game of the season, played or not.
 
@@ -538,6 +543,7 @@ def _cms_game_row(game: Mapping[str, Any]) -> Dict[str, Any]:
     return {"season": int(m.group(1)) + 1 if m else None, **row}
 
 
+@_data_only
 def parse_ha_schedule(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """CMS game records (the schedule page's ``games``, ``/api/game``'s ``data``) -> one row per game.
 
@@ -619,6 +625,7 @@ def parse_ha_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Optional[
 # --- leaderboard and player directory -----------------------------------------------------------
 
 
+@_data_only
 def parse_ha_leaders(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """``/api/player-leaderboard`` -> one row per leader (the current season's top 25 of one metric).
 
@@ -649,6 +656,7 @@ def parse_ha_leaders(raw: Any, *, return_as_pandas: bool = False, columns: Optio
     return _table(raw, {"player": "player_name", "team_id": "team_statnet_id"}, columns, return_as_pandas)
 
 
+@_data_only
 def parse_ha_players(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """``/api/all-players`` -> one row per player of the CMS directory (one team per call).
 

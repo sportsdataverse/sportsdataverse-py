@@ -3,8 +3,15 @@
 """{{ api }} wrappers (host {{ host }}). Generated."""
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
+from typing import Dict, List, Optional, Union  # noqa: F401
 
+{% if parser_imports %}
+# Imported at runtime, not under TYPE_CHECKING: typing.get_type_hints() evaluates the
+# annotations below and raised NameError on ``pl`` / ``pd`` (R858-4).
+import pandas as pd  # noqa: F401
+import polars as pl  # noqa: F401
+
+{% endif %}
 {% if runtime_imports %}
 from {{ getter_module }} import {{ runtime_imports|join(", ") }}
 {% endif %}
@@ -16,10 +23,6 @@ from {{ mod }} import {{ fn }} as {{ alias }}
 {% endfor %}
 {% if parser_imports %}
 from sportsdataverse.{{ parser_module }} import {{ parser_imports|join(", ") }}
-
-if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
-    import pandas as pd
-    import polars as pl
 {% endif %}
 
 __all__ = [
@@ -71,7 +74,7 @@ def {{ ep.fn_name }}(
 {% endif %}
     **kwargs,
 {% if ep.parser %}
-) -> Union[pl.DataFrame, pd.DataFrame, {{ ep.raw_hint }}]:
+) -> {{ ep.parsed_annotation }}:
 {% else %}
 ) -> {{ ep.raw_annotation }}:
 {% endif %}

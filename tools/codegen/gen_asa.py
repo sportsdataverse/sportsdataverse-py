@@ -24,7 +24,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 from gen_soccer_common import (
     ROOT,
@@ -38,6 +38,7 @@ from gen_soccer_common import (
     spec_descriptions,
     write_yaml,
 )
+from openapi_params import _query_params
 
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.soccer.asa_parsers import parse_asa, parse_asa_goals_added
@@ -88,24 +89,6 @@ def _capture_for(refs: Path, short: str) -> Path | None:
     return None
 
 
-def _query_params(op: dict) -> List[Dict[str, Any]]:
-    """Query params as ``extra_params`` entries (ASA wire keys are already snake)."""
-    out: List[Dict[str, Any]] = []
-    for prm in op.get("parameters", []):
-        if prm.get("in") != "query":
-            continue
-        wire = prm["name"]
-        out.append(
-            {
-                "name": underscore(wire),
-                "query_key": wire,
-                "type": "str",
-                "description": str(prm.get("description") or "").strip(),
-            },
-        )
-    return out
-
-
 def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
     short = _short_from_path(path)
     entry: Dict[str, Any] = {
@@ -119,7 +102,7 @@ def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
         "returns_schema": f"native/asa/{short}",
         "example_args": dict(_EXAMPLE),
     }
-    qps = _query_params(op)
+    qps = _query_params(op, keep_empty_description=True)
     if qps:
         entry["extra_params"] = qps
     return entry

@@ -26,7 +26,7 @@ set or `run_cleaning_pipeline()` for a lighter clean.
 | `raw` |  | `False` | if True, espn_cfb_pbp() returns the (allowlisted) summary verbatim. |
 | `path_to_json` |  | `'/'` | directory for cfb_pbp_disk() offline loads. |
 | `return_keys` |  | `None` | optional subset of result keys to return. |
-| `odds_override` |  | `None` | optional dict {gameSpread, overUnder, homeFavorite, gameSpreadAvailable} that short-circuits odds resolution (sets odds_source="injected") so offline rebuilds never hit the live core-odds endpoint or fall back to defaults. Validated + coerced here. |
+| `odds_override` |  | `None` | optional dict {gameSpread, overUnder, homeFavorite, gameSpreadAvailable} that short-circuits odds resolution (sets odds_source="injected") so offline rebuilds never hit the live core-odds endpoint or fall back to defaults. Validated + coerced here. An optional `overUnderAvailable` key says whether `overUnder` is a market total (True/False, `"true"`/`"false"`/`"1"`/`"0"`, or None; anything else raises `ValueError`). A missing key means UNKNOWN: the payload value and the play column are null, never a guess, because a producer that filled 55.5 itself cannot say so without the key. EPA / WP are unchanged by the flag. External overrides should carry it; a rebuild of a game whose total was defaulted passes `overUnderAvailable=False` and warns. |
 | `game_roster` |  | `None` | optional pre-fetched game roster (the list of athlete records from `~sportsdataverse.cfb.cfb_game_rosters.espn_cfb_game_rosters`, or the `{"data": [...]}` wrapper). Used by `__attach_player_ids` to resolve a roster-backed `{type}_player_id` for each extracted `{type}_player_name` on games that lack a structured `participants[]` array (pre-2014). Passing it makes offline rebuilds fetch-free; when omitted the live path fetches the roster on demand only if needed. |
 | `participants` |  | `None` |  |
 | `join_participants` |  | `True` | when True (default) the pipeline coalesces ESPN per-play participant names over the regex-extracted names and resolves a roster-backed `{type}_player_id` -- both of which hit the network (the participants/playbyplay endpoints and the game roster). Set False (`CFBPlayProcess(..., join_participants=False)`) to skip those lookups for a ~20x faster, network-free run. EPA / WPA / CPOE are unaffected (the models key on game state, not player identity); the cost is that `{type}_player_id` columns go null and names fall back to regex-from-text instead of clean ESPN displays. |
@@ -129,6 +129,12 @@ Load a previously cached ESPN summary JSON for this game from disk.
 Reads `{path_to_json}/{gameId}.json` where `path_to_json` was passed
 to the `CFBPlayProcess` constructor.
 
+Reading from disk does not make the pipeline offline (C-L3): with the defaults,
+`run_processing_pipeline()` still requests ESPN participants for every play, and a summary
+with fewer than two pickcenter providers still requests ESPN's odds endpoint. For a rebuild
+that makes no request, pass `join_participants=False` and the persisted `odds_override`
+to the constructor, or hand the file to `espn_cfb_pbp(summary=...)`, which sets both.
+
 **Returns**
 
 Parsed JSON contents, also stored on `self.json`.
@@ -140,6 +146,14 @@ from sportsdataverse.cfb import CFBPlayProcess
 game = CFBPlayProcess(gameId=401628334, path_to_json="./cache")
 pbp = game.cfb_pbp_disk()
 print(list(pbp.keys()))
+
+# Offline rebuild (no network)
+
+odds = {"gameSpread": -4.0, "overUnder": 58.5, "homeFavorite": True, "gameSpreadAvailable": True}
+game = CFBPlayProcess(gameId=401628334, path_to_json="./cache", join_participants=False,
+                      odds_override=odds)
+game.cfb_pbp_disk()
+out = game.run_processing_pipeline()
 ```
 
 #### CFBPlayProcess.cfb_pbp_json
@@ -350,7 +364,7 @@ Idempotent -- subsequent calls return the cached `self.json`.
 
 **Returns**
 
-The fully-processed game payload. If the constructor was given `return_keys`, only those keys are returned.
+The fully-processed game payload. If the constructor was given `return_keys`, only those keys are returned. Its `plays` are the feed's plays without the administrative rows (coin toss, period and game markers, drive banners) and ESPN's duplicate copies, so there are fewer of them than the summary's drive plays. Key a play on `id`: before 2005 `sequenceNumber` restarts with every drive.
 
 **Example**
 
@@ -724,6 +738,7 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 |---|---|
 | `ValueError` | `season_type` is not `"regular"`/`"postseason"`. |
 | `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+| `sportsdataverse.errors.AssetFetchError` | The statistics, athlete or team fetch failed (403, 429, 5xx, a dead connection); only a 404 on the athlete or team node leaves those columns null. |
 
 **Example**
 
@@ -752,7 +767,7 @@ espn_cfb_schedule - look up the college football schedule for a given season
 
 **Returns**
 
-Polars dataframe containing schedule dates for the requested season. Returns None if no games
+Polars dataframe containing schedule dates for the requested season. A day with no games returns a zero-row frame carrying the documented columns.
 
 | col_name | type | description |
 |---|---|---|
@@ -838,13 +853,14 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `away_logo_dark` | character |  |
 | `home_winner` | logical |  |
 | `away_winner` | logical |  |
+| `status_type_alt_detail` | character | ESPN's short extra-time label on a final ("OT", "SO"); null when the game ended in regulation. |
 
 **Example**
 
 ```python
 from sportsdataverse.cfb import espn_cfb_schedule
 slate = espn_cfb_schedule()
-print(slate.shape if slate is not None else "no games")
+print(slate.shape)  # (0, n) on a day with no games
 
 # Pull a specific week of FBS games
 

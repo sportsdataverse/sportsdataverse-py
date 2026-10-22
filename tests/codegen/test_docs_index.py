@@ -54,10 +54,16 @@ def test_endpoint_row_serializes_params():
     assert row[5:] == ("espn_nba_team_roster", "", "codegen", "https://spec")
 
 
-@pytest.mark.xdist_group("docs_index_build")
-def test_codegen_wrappers_cover_espn_and_flat():
+@pytest.fixture(scope="module")
+def _codegen_wrappers():
+    """One ``codegen_wrappers`` build (every league's views) shared by the tests below."""
     rows = B.Rows()
-    w = B.codegen_wrappers("abc1234", rows)
+    return rows, B.codegen_wrappers("abc1234", rows)
+
+
+@pytest.mark.xdist_group("docs_index_build")
+def test_codegen_wrappers_cover_espn_and_flat(_codegen_wrappers):
+    rows, w = _codegen_wrappers
     assert (w["espn_nba_team_roster"].kind, w["espn_nba_team_roster"].league) == ("espn", "nba")
     assert (w["wnba_stats_shotchartdetail"].kind, w["wnba_stats_shotchartdetail"].league) == ("flat", "wnba")
     assert sum(1 for x in w.values() if x.kind == "espn") > 3000
@@ -71,6 +77,23 @@ def test_codegen_wrappers_cover_espn_and_flat():
     assert len(roster) == 1 and roster[0][2].startswith("https://site.api.espn.com/")
     shot = [r for r in rows.endpoints if r[0] == "wnba_stats" and r[5] == "wnba_stats_shotchartdetail"]
     assert len(shot) == 1 and shot[0][2].startswith("https://stats.wnba.com")
+
+
+@pytest.mark.xdist_group("docs_index_build")
+def test_soccer_wrapper_columns_come_from_the_sport_schema(_codegen_wrappers):
+    """R858-2: the index keys a sport-overridden wrapper's returns schema by sport, as the docs do.
+
+    ``epl`` has no per-league summary schema; keyed by its prefix the index would store the generic
+    cross-league sections (``boxscore_player``, ``plays``) for a function that returns soccer ones.
+    """
+    _, w = _codegen_wrappers
+    assert (w["espn_epl_summary"].league, w["espn_epl_summary"].schema_league) == ("epl", "soccer")
+    assert w["espn_nba_summary"].schema_league == "nba"
+    rows = B.Rows()
+    B.python_columns({"espn_epl_summary": "epl"}, w, {}, rows)
+    sections = {r[1] for r in rows.columns}
+    assert {"lineups", "key_events", "commentary"} <= sections
+    assert not sections & {"boxscore_player", "plays", "drives"}
 
 
 FIX = Path(__file__).parent / "fixtures" / "docs_index"

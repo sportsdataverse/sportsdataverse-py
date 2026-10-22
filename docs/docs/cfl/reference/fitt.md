@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # CFL — ESPN FPI API (fitt v3)
 
-`sportsdataverse.cfl` — 1 endpoint.
+`sportsdataverse.football.cfl` — 1 endpoint.
 
 ## espn_cfl_fpi
 

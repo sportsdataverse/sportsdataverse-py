@@ -5,8 +5,8 @@ docstring:
   - 'sportsdataverse.errors.NoDataError: TheSportsDB answered 404 (unknown id or route).'
   see_also:
   - name: TheSportsDB API docs
-    note: free test key 3 is the default (30 req/min); set $THESPORTSDB_API_KEY to
-      use your own
+    note: free test key 123 is the default (it returns a capped sample of each list);
+      set $THESPORTSDB_API_KEY to use your own
     url: https://www.thesportsdb.com/free_sports_api
 endpoints:
 - example_args:
@@ -166,7 +166,7 @@ endpoints:
   short: team_players
   summary: Players of a team.
 getter_module: sportsdataverse.thesportsdb.thesportsdb_runtime
-host: https://www.thesportsdb.com/api/v1/json/3
+host: https://www.thesportsdb.com/api/v1/json/123
 module: thesportsdb
 name_pattern: thesportsdb_{short}
 parser_module: thesportsdb.thesportsdb_parsers
