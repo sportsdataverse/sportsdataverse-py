@@ -166,9 +166,7 @@ def build_spring_football_pbp(summary: dict, *, league: str) -> pl.DataFrame:
         docstring).
 
     Raises:
-        ValueError: ``league`` is not a recognized spring-football league, or
-            is ``"cfl"`` (3 downs on a 110-yard field, outside the NFL
-            boosters' ``yardline_100`` 1-99 support; no CFL model ships).
+        ValueError: ``league`` is unknown, or is ``"cfl"`` (no CFL pipeline ships).
 
     Example:
         Quick start::
@@ -389,9 +387,7 @@ def enrich_spring_football_pbp(
         would drop 15 columns and break the nfl_parity column-set equality.
 
     Raises:
-        ValueError: ``league`` is not a recognized spring-football league, or
-            is ``"cfl"`` (3 downs on a 110-yard field, outside the NFL
-            boosters' ``yardline_100`` 1-99 support; no CFL model ships).
+        ValueError: ``league`` is unknown, or is ``"cfl"`` (no CFL pipeline ships).
 
     Example:
         Quick start::
