@@ -188,7 +188,6 @@ def test_advboxscore_is_identical_in_two_processes():
     second = _boxes_in_a_fresh_process("2", "8")
     assert first.keys() == second.keys()
     for game, box in first.items():
-        # NFL: only the shared usage sections; nfl_pbp's own team tables are a separate follow-up
-        sections = box.keys() | second[game].keys() if game.startswith("cfb") else set(SECTIONS)
+        sections = box.keys() | second[game].keys()
         differ = sorted(s for s in sections if box.get(s) != second[game].get(s))
         assert not differ, f"{game}: sections in a different order across processes: {differ}"
