@@ -237,17 +237,25 @@ def test_422_bad_params_is_a_value_error(monkeypatch):
 
 
 def test_outcome_point_dtype_is_float64_on_every_market():
-    """B-L90: the line is Float64 whether the frame holds only h2h (all null) or a whole-number spread.
+    """B-L90: the line is Float64 whether the frame holds only h2h (all null), the spec's alternate spreads, or only
+    its whole-number line (-22, which alone read Int64).
 
-    No live capture is committed (the API needs a key); the event shape is the API's documented one."""
+    The spread event is the provider's own published example (tests/fixtures/the_odds_api/README.md)."""
     import copy
+    import json
+    from pathlib import Path
 
-    spread = copy.deepcopy(_ODDS_EVENT)
-    spread["bookmakers"][0]["markets"] = [
-        {"key": "spreads", "outcomes": [{"name": "Houston Texans", "price": -110, "point": 3}]},
-    ]
-    for events in ([_ODDS_EVENT], [spread], [_ODDS_EVENT, spread]):
+    spec = json.loads(
+        (
+            Path(__file__).parents[1] / "fixtures" / "the_odds_api" / "event_odds_alternate_spreads_spec_example.json"
+        ).read_text(encoding="utf-8")
+    )
+    whole = copy.deepcopy(spec)
+    market = whole["bookmakers"][0]["markets"][0]
+    market["outcomes"] = [o for o in market["outcomes"] if o["point"] == -22]
+    for events in ([_ODDS_EVENT], [spec], [whole], [_ODDS_EVENT, spec]):
         df = toap.parse_toa_odds(events)
         assert df.schema["outcome_point"] == pl.Float64
         assert toap.parse_toa_odds(events, return_as_pandas=True)["outcome_point"].dtype == "float64"
-    assert toap.parse_toa_odds([spread])["outcome_point"].to_list() == [3.0]
+    assert toap.parse_toa_odds([spec])["outcome_point"].to_list() == [-23.0, -22.5, -22.0, 23.0, 22.5, 22.0]
+    assert toap.parse_toa_odds([whole])["outcome_point"].to_list() == [-22.0]

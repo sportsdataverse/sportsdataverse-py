@@ -1189,8 +1189,8 @@
   group: provider-gates
   finding: B-M33
   file: sportsdataverse/_common_espn_player_stats.py
-  snippet: 'out[col] = _coerce_float(stat.get("value"))'
-  mutant: 'out[col] = _coerce_float(stat.get("displayValue"))'
+  snippet: 'num = _coerce_float(stat.get("value"))'
+  mutant: 'num = _coerce_float(stat.get("displayValue"))'
   test: tests/test_common_espn_player_stats.py
   expected: kill
   note: the pinned capture values (ledger gate player-stats-offline); re-keyed in task 5.1 (B-L20), where the
@@ -6842,8 +6842,8 @@
   group: dtype-contract-5-1
   finding: B-L20
   file: sportsdataverse/_common_espn_player_stats.py
-  snippet: '            out[col] = _coerce_float(stat.get("value"))'
-  mutant: '            out[col] = _coerce_float(stat.get("value")) if stat.get("value") is not None else stat.get("displayValue")'
+  snippet: '            out[col] = num'
+  mutant: '            out[col] = num if num is not None else display'
   test: tests/test_common_espn_player_stats.py -k "null_float_not_its_display_value"
   expected: kill
   note: A stat with no value carries its "--" display string into a Float64 column again.
@@ -6909,3 +6909,63 @@
   test: tests/hockeytech/test_parsers.py -k "on_the_ice"
   expected: kill
   note: R978-4, a shift still on the ice makes end_s Float64.
+
+- id: pin-documented-float-back-to-int64
+  group: dtype-contract-5-1
+  finding: B-L83
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            if moved.null_count() == 0 and moved.cast(have, strict=False).equals(values):'
+  mutant: '            if moved.null_count() == 0 and moved.cast(have, strict=False).equals(values) and not want.is_integer():'
+  test: tests/mlb/test_mlb_statcast_extra.py -k "pinned_back"
+  expected: kill
+  note: R979-2, the headline direction (a whole-number column pandas read as float64) is never pinned back to Int64.
+
+- id: pin-documented-never-truncates
+  group: dtype-contract-5-1
+  finding: B-L83
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            if moved.null_count() == 0 and moved.cast(have, strict=False).equals(values):'
+  mutant: '            if moved.null_count() == 0:'
+  test: tests/mlb/test_mlb_statcast_extra.py -k "pinned_back"
+  expected: kill
+  note: R979-2/-4, a 1.5 in a documented-integer column would be truncated to 1.
+
+- id: pin-documented-all-null-columns
+  group: dtype-contract-5-1
+  finding: B-L83
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '        if values.len() == 0:'
+  mutant: '        if False:'
+  test: tests/mlb/test_mlb_statcast_extra.py -k "minors_and_wbc"
+  expected: kill
+  note: The WBC capture's all-null fielding alignment stays Float64 instead of the documented String.
+
+- id: statcast-minors-chunk-pinned
+  group: dtype-contract-5-1
+  finding: B-L83
+  file: sportsdataverse/mlb/mlb_statcast_extra.py
+  snippet: '        return _pin_documented("autodoc/mlb/mlb_statcast_search_minors", frame)'
+  mutant: '        return frame'
+  test: tests/mlb/test_mlb_statcast_extra.py -k "minors_and_wbc"
+  expected: kill
+  note: R979-2, a minors chunk with one missing zone reads Float64.
+
+- id: statcast-wbc-chunk-pinned
+  group: dtype-contract-5-1
+  finding: B-L83
+  file: sportsdataverse/mlb/mlb_statcast_extra.py
+  snippet: '        return _pin_documented("autodoc/mlb/mlb_statcast_search_wbc", frame)'
+  mutant: '        return frame'
+  test: tests/mlb/test_mlb_statcast_extra.py -k "minors_and_wbc"
+  expected: kill
+  note: R979-2, the WBC chunk's fielding alignment stays Float64 and a missing zone reads Float64.
+
+- id: espn-player-stat-plain-number-display
+  group: dtype-contract-5-1
+  finding: B-L20
+  file: sportsdataverse/_common_espn_player_stats.py
+  snippet: '                num = float(display)'
+  mutant: '                num = None'
+  test: tests/test_common_espn_player_stats.py -k "nhl_stat_with_a_numeric_display"
+  expected: kill
+  note: R979-5, McDavid's NHL stats with display "0" and no value become null instead of 0.0.

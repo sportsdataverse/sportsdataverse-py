@@ -1407,6 +1407,7 @@ _FIX_ROOT = Path(__file__).parent / "fixtures"
 # main #860).
 _NO_PARSER = {
     "athlete_statistics_core_nba_1966_2024",
+    "athlete_statistics_core_nhl_3895074_2024",
     "athlete_statslog_lbj",
     "depthcharts_mlb",
     "depthcharts_nba",
