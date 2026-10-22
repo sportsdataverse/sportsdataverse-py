@@ -307,6 +307,17 @@ def test_untyped_safety_read_stays_inside_its_game():
         assert two.select(s=_untyped_safety())["s"].sum() == 0, cut
 
 
+# R975-6: the free kick is the next REAL play. A timeout filed between a safety and its free kick (250918010/3832 and
+# 300912002/4199 on nfl-raw) must not hide it: copy one of 271021019's timeouts in right after 2661.
+def test_untyped_safety_reads_its_free_kick_past_a_timeout():
+    game = _plays(_era(271021019), 271021019)
+    i = _index(game, "2710210192661")
+    timeout = game.filter(pl.col("type.text") == "Timeout").head(1)
+    assert timeout.height == 1
+    frame = pl.concat([game[: i + 1], timeout, game[i + 1 :]])
+    assert frame.select(s=_untyped_safety())["s"][i] is True
+
+
 # R975-4: the try that keeps an unscored pre-2009 return touchdown is the next real play, and with no next play at all
 # (a walk-off return) ESPN's typing stands. 261022011/1629 (a punt return touchdown, its try 1662 next): a timeout
 # filed between them, or the game ending on the return, must not negate it.
