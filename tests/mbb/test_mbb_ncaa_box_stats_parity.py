@@ -193,6 +193,23 @@ def test_empty_html_returns_empty_schema() -> None:
     assert df.columns == list(ORACLE_TO_SNAKE.values())
 
 
+class _RecordingFetcher(_FixtureFetcher):
+    def __init__(self) -> None:
+        self.calls: "list[object]" = []
+
+    def fetch_game_individual_stats(self, contest_id: object) -> str:
+        self.calls.append(contest_id)
+        return super().fetch_game_individual_stats(contest_id)
+
+
+def test_driver_float_contest_ids_are_integer_strings() -> None:
+    """A float id fetches ``6470186``, never ``6470186.0``; NaN / None are dropped (R853-2)."""
+    fetcher = _RecordingFetcher()
+    got = ncaa_mbb_box_scores([6470186.0, float("nan"), None], fetcher=fetcher)
+    assert fetcher.calls == ["6470186"]
+    assert got["game_id"].unique().to_list() == ["6470186"]
+
+
 def test_failed_game_is_logged_not_printed(caplog, capsys) -> None:
     """B-L41: a game the driver drops is reported through the module logger (sibling drivers' convention)."""
     from sportsdataverse.errors import NoDataError

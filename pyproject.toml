@@ -877,6 +877,7 @@ files = [
     "sportsdataverse/scrape/stats/season_capture.py",
     "sportsdataverse/scrape/stats/refill.py",
     "sportsdataverse/scrape/ncaa/__init__.py",
+    "sportsdataverse/scrape/ncaa/_rules.py",
     "sportsdataverse/scrape/ncaa/league_config.py",
     "sportsdataverse/scrape/ncaa/bundle.py",
     "sportsdataverse/scrape/ncaa/reference.py",

@@ -2096,6 +2096,452 @@
     In a shallow history "the base lacks the upstream tip" can be a false positive (fail OPEN), so a
     history still shallow after the fetch must add no allowance (review R824-1).
 
+# --- 2.16: basketball period-boundary end seconds (C-M21) + clock-part dtypes (C-L7) -------------
+# Killer: tests/validation/test_basketball_clock_seconds.py on the committed MBB/NBA/WNBA/WBB
+# captures, through the public espn_<lg>_pbp and pbp_invariants group 13.
+- id: basketball-period-end-fill-on-first-row
+  group: basketball-end-seconds
+  finding: C-M21
+  file: sportsdataverse/_espn_basketball_pbp.py
+  snippet: '    ends_period = pl.col("period.number") != pl.col("period.number").shift(-1)'
+  mutant: '    ends_period = pl.col("period.number") != pl.col("period.number").shift(1)'
+  test: tests/validation/test_basketball_clock_seconds.py -k end_le_start
+  expected: kill
+  note: >-
+    The period-boundary fill back on a period's FIRST row (the pre-2.16 shape): a first play logged
+    after the opening second ends after it starts (WNBA 400927398 Q2 9:41, 1781 -> 1800).
+- id: basketball-period-end-row-test-dropped
+  group: basketball-end-seconds
+  finding: C-M21
+  file: sportsdataverse/_espn_basketball_pbp.py
+  snippet: '    ends_period = pl.col("period.number") != pl.col("period.number").shift(-1)'
+  mutant: '    ends_period = pl.lit(True)'
+  test: tests/validation/test_basketball_clock_seconds.py -k end_le_start
+  expected: kill
+  note: >-
+    Without the row test every row ends at its period's end, so no row ends where the next one
+    starts (seconds.*_end_is_next_start).
+- id: mbb-clock-minutes-int32
+  group: basketball-end-seconds
+  finding: C-L7
+  file: sportsdataverse/mbb/mbb_pbp.py
+  snippet: '            pl.col("clock.minutes").cast(pl.Float64).cast(pl.Int32),'
+  mutant: '            pl.col("clock.minutes").cast(pl.Float64),'
+  test: tests/validation/test_basketball_clock_seconds.py -k "release_dtypes and mbb"
+  expected: kill
+  note: The release documents clock_minutes Int32 in every MBB season file.
+- id: nba-clock-minutes-int32
+  group: basketball-end-seconds
+  finding: C-L7
+  file: sportsdataverse/nba/nba_pbp.py
+  snippet: '            pl.col("clock.minutes").cast(pl.Int32),'
+  mutant: '            pl.col("clock.minutes").cast(pl.Float32),'
+  test: tests/validation/test_basketball_clock_seconds.py -k "release_dtypes and nba and not wnba"
+  expected: kill
+  note: The pre-2.16 Float32; the release documents clock_minutes Int32 in every NBA season file.
+- id: wnba-clock-minutes-int32
+  group: basketball-end-seconds
+  finding: C-L7
+  file: sportsdataverse/wnba/wnba_pbp.py
+  snippet: '            pl.col("clock.minutes").cast(pl.Int32),'
+  mutant: '            pl.col("clock.minutes").cast(pl.Float32),'
+  test: tests/validation/test_basketball_clock_seconds.py -k "release_dtypes and wnba"
+  expected: kill
+  note: The pre-2.16 Float32; the release documents clock_minutes Int32 in every WNBA season file.
+- id: wbb-clock-minutes-int32
+  group: basketball-end-seconds
+  finding: C-L7
+  file: sportsdataverse/wbb/wbb_pbp.py
+  snippet: '            pl.col("clock.minutes").cast(pl.Int32),'
+  mutant: '            pl.col("clock.minutes").cast(pl.Float32),'
+  test: tests/validation/test_basketball_clock_seconds.py -k "release_dtypes and wbb"
+  expected: kill
+  note: The pre-2.16 Float32; the release documents clock_minutes Int32 in every WBB season file.
+- id: wbb-clock-seconds-int32
+  group: basketball-end-seconds
+  finding: C-L7
+  file: sportsdataverse/wbb/wbb_pbp.py
+  snippet: '            pl.col("clock.seconds").cast(pl.Float64).cast(pl.Int32),'
+  mutant: '            pl.col("clock.seconds").cast(pl.Float64),'
+  test: tests/validation/test_basketball_clock_seconds.py -k "release_dtypes and wbb"
+  expected: kill
+  note: >-
+    WBB clocks are whole seconds and the release documents clock_seconds Int32 (NBA / WNBA keep
+    Float64: their sub-minute clocks carry tenths).
+
+# --- 2.16 PR2: basketball coordinates in the hoopR / wehoop convention (C-M20) + R841-1 ---------
+# Killer: tests/validation/test_basketball_coordinates.py (R's case_when written row by row from
+# the committed captures) and the last-row rule's negative control in test_basketball_clock_seconds.
+- id: basketball-coords-ft-pin-dropped
+  group: basketball-coordinates
+  finding: C-M20
+  file: sportsdataverse/_espn_basketball_pbp.py
+  snippet: '    ft = pl.col("type.text").str.contains(FREE_THROW) if "type.text" in df.columns else pl.lit(False)'
+  mutant: '    ft = pl.lit(False)'
+  test: tests/validation/test_basketball_coordinates.py -k "hoopr_convention or free_throws"
+  expected: kill
+  note: Free throws keep ESPN's coordinates instead of hoopR's (25, 13.75) pin.
+- id: basketball-coords-ft-match-case-sensitive
+  group: basketball-coordinates
+  finding: R844-3
+  file: sportsdataverse/_espn_basketball_pbp.py
+  snippet: 'FREE_THROW = r"(?i)free ?throw"'
+  mutant: 'FREE_THROW = "Free Throw"'
+  test: tests/validation/test_basketball_coordinates.py -k "published_rows and mbb"
+  expected: kill
+  note: >-
+    R's case-sensitive str_detect(., "Free Throw"): MBB / WBB "MadeFreeThrow" rows stay at ESPN's
+    coordinates (the published files' shape) instead of on the line (owner ruling R844-3).
+- id: basketball-coords-raw-pair-pinned-on-ci-match
+  group: basketball-coordinates
+  finding: R844-3
+  file: sportsdataverse/_espn_basketball_pbp.py
+  snippet: '        (ft & ~pl.col("type.text").str.contains("Free Throw", literal=True)).fill_null(False)'
+  mutant: '        pl.lit(False)'
+  test: tests/validation/test_basketball_coordinates.py -k "published_rows and mbb"
+  expected: kill
+  note: >-
+    The raw pair pinned on the case-insensitive match too: MBB / WBB "MadeFreeThrow" raw columns read
+    (25, 13.75) instead of ESPN's rim value, so they depart from the published raw pair (R844-3 moves
+    only the transformed pair; main #848's college free-throw test reads the raw pair).
+- id: basketball-coords-home-flip-dropped
+  group: basketball-coordinates
+  finding: C-M20
+  file: sportsdataverse/_espn_basketball_pbp.py
+  snippet: '    is_home = pl.lit(False) if home_team_id is None else (team == home_team_id).fill_null(False)'
+  mutant: '    is_home = pl.lit(False)'
+  test: tests/validation/test_basketball_coordinates.py -k "hoopr_convention or free_throws"
+  expected: kill
+  note: Home plays not negated, so both teams shoot at the same end of the full court.
+- id: basketball-coords-x-offset
+  group: basketball-coordinates
+  finding: C-M20
+  file: sportsdataverse/_espn_basketball_pbp.py
+  snippet: '        .otherwise(pl.col("coordinate.y") - 41.75)'
+  mutant: '        .otherwise(pl.col("coordinate.y") - 47.0)'
+  test: tests/validation/test_basketball_coordinates.py -k hoopr_convention
+  expected: kill
+  note: Away x measured from half court of an NBA floor (47 ft) instead of hoopR's 41.75.
+- id: basketball-coords-transform-twice
+  group: basketball-coordinates
+  finding: C-M20
+  file: sportsdataverse/_espn_basketball_pbp.py
+  snippet: '    if "coordinate.x.raw" in df.columns and "coordinate.y.raw" in df.columns:'
+  mutant: '    if False:'
+  test: tests/validation/test_basketball_coordinates.py -k transform_twice
+  expected: kill
+  note: >-
+    The release converters read the processor's output; without starting over from the raw pair a
+    processed payload would be transformed a second time (or collide on the raw names).
+- id: mbb-pbp-coords-not-transformed
+  group: basketball-coordinates
+  finding: C-M20
+  file: sportsdataverse/mbb/mbb_pbp.py
+  snippet: '    pbp_txt["plays"] = _hoopr_coordinates(pbp_txt["plays"], init["homeTeamId"])'
+  mutant: '    pass'
+  test: tests/validation/test_basketball_coordinates.py -k hoopr_convention
+  expected: kill
+  note: The pre-2.16 processor, ESPN's raw coordinates under hoopR's transformed names.
+- id: nba-pbp-coords-not-transformed
+  group: basketball-coordinates
+  finding: C-M20
+  file: sportsdataverse/nba/nba_pbp.py
+  snippet: '    pbp_txt["plays"] = _hoopr_coordinates(pbp_txt["plays"], init["homeTeamId"])'
+  mutant: '    pass'
+  test: tests/validation/test_basketball_coordinates.py -k "hoopr_convention or game_page"
+  expected: kill
+  note: >-
+    The pre-2.16 processor; nba_game_page.shot_coordinates (#749) then finds no coordinate_x_raw on
+    the library frame.
+- id: wbb-pbp-coords-not-transformed
+  group: basketball-coordinates
+  finding: C-M20
+  file: sportsdataverse/wbb/wbb_pbp.py
+  snippet: '    pbp_txt["plays"] = _hoopr_coordinates(pbp_txt["plays"], init["homeTeamId"])'
+  mutant: '    pass'
+  test: tests/validation/test_basketball_coordinates.py -k hoopr_convention
+  expected: kill
+  note: The pre-2.16 processor, ESPN's raw coordinates under wehoop's transformed names.
+- id: wnba-pbp-coords-not-transformed
+  group: basketball-coordinates
+  finding: C-M20
+  file: sportsdataverse/wnba/wnba_pbp.py
+  snippet: '    pbp_txt["plays"] = _hoopr_coordinates(pbp_txt["plays"], init["homeTeamId"])'
+  mutant: '    pass'
+  test: tests/validation/test_basketball_coordinates.py -k hoopr_convention
+  expected: kill
+  note: The pre-2.16 processor, ESPN's raw coordinates under wehoop's transformed names.
+- id: basketball-period-last-row-rule-scope-dropped
+  group: basketball-end-seconds
+  finding: R841-1
+  file: sportsdataverse/validation/pbp_invariants.py
+  snippet: '                c("__same_period").fill_null(False) == False,'
+  mutant: '                pl.lit(False),'
+  test: tests/validation/test_basketball_clock_seconds.py -k clamp
+  expected: kill
+  note: The last-row rule checks nothing; a min(end, start) producer clamp passes group 13 again.
+- id: basketball-period-last-row-skips-final-row
+  group: basketball-end-seconds
+  finding: R844-9
+  file: sportsdataverse/validation/pbp_invariants.py
+  snippet: '                c("__same_period").fill_null(False) == False,'
+  mutant: '                c("__same_period") == False,'
+  test: tests/validation/test_basketball_clock_seconds.py -k clamp
+  expected: kill
+  note: The game's final row (no next row) left out of the last-row rule (4 checked -> 3).
+- id: basketball-period-last-row-held-only-to-end-le-start
+  group: basketball-end-seconds
+  finding: R841-1
+  file: sportsdataverse/validation/pbp_invariants.py
+  snippet: '                (c(end) - (c(start) - c(clock))).abs() > _FLOAT32_EPS,'
+  mutant: '                c(end) > c(start) + _FLOAT32_EPS,'
+  test: tests/validation/test_basketball_clock_seconds.py -k clamp
+  expected: kill
+  note: The pre-R841-1 hold on a period's last row (end <= start only), which the clamp passes.
+
+# --- C-M10 / C-L35: NBA props + availability as-of boundaries (task 3.7) ---------------------------
+# Killers: tests/nba/test_nba_player_props_asof.py and test_nba_player_props.py on the committed real 2023-24 corpus and
+# tests/nba/test_nba_availability.py on the committed nba_draft/wnba_draft corpora.
+- id: nba-props-asof-inclusive
+  group: nba-props-asof
+  finding: C-M10
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        logs = logs.filter(pl.col("game_date") < as_of_date)'
+  mutant: '        logs = logs.filter(pl.col("game_date") <= as_of_date)'
+  test: tests/nba/test_nba_player_props_asof.py
+  expected: kill
+  note: The target game's own line moves its projection again (own-line probe red).
+- id: nba-props-asof-no-default-cut
+  group: nba-props-asof
+  finding: C-M10
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        as_of_date = own.min() if own.len() else _load_game_date(season, league_id, game_id)'
+  mutant: '        as_of_date = None'
+  test: tests/nba/test_nba_player_props_asof.py
+  expected: kill
+  note: The default call reads the whole season (own and later lines leak).
+- id: nba-props-asof-drop-only-own-game
+  group: nba-props-asof
+  finding: C-M10
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        logs = logs.filter(pl.col("game_date") < as_of_date)'
+  mutant: '        logs = logs.filter(pl.col("game_date") != as_of_date)'
+  test: tests/nba/test_nba_player_props_asof.py
+  expected: kill
+  note: R774-3's shape -- the target date dropped but every later game kept (later-line probe red).
+- id: nba-props-asof-ratings-uncut
+  group: nba-props-asof
+  finding: C-M10
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '    ratings = _load_ratings(season, league_id, as_of_date=as_of_date)'
+  mutant: '    ratings = _load_ratings(season, league_id)'
+  test: tests/nba/test_nba_player_props_asof.py
+  expected: kill
+  note: The pace ratings snapshot is full-season while the box logs are cut.
+- id: nba-props-asof-silent-without-date
+  group: nba-props-asof
+  finding: C-M10
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '    if "game_date" not in box.columns:'
+  mutant: '    if False:'
+  test: tests/nba/test_nba_player_props.py -k without_game_date
+  expected: kill
+  note: >-
+    Box logs without game_date reach _load_player_logs' select, which raises polars
+    ColumnNotFoundError instead of the documented ValueError the test matches (NBA and WNBA loaders
+    stubbed, the real function run). The guard only names the failure (R850-2, WB-basketball-5).
+- id: nba-props-logs-guard-always-raises
+  group: nba-props-asof
+  finding: R943-2
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '    if "game_date" not in box.columns:'
+  mutant: '    if True:'
+  test: tests/nba/test_nba_player_props.py -k with_game_date_returns
+  expected: kill
+  note: Every live call raises; the well-formed box (real game_date from results_2024) must pass through.
+- id: nba-props-logs-guard-wrong-column
+  group: nba-props-asof
+  finding: R943-2
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '    if "game_date" not in box.columns:'
+  mutant: '    if "game_datetime" not in box.columns:'
+  test: tests/nba/test_nba_player_props.py -k with_game_date_returns
+  expected: kill
+  note: The guard keyed on a column the loader never ships raises on every well-formed box.
+- id: nba-props-asof-no-schedule-fallback
+  group: nba-props-asof
+  finding: R850-1
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        as_of_date = own.min() if own.len() else _load_game_date(season, league_id, game_id)'
+  mutant: '        as_of_date = own.min() if own.len() else None'
+  test: tests/nba/test_nba_player_props_asof.py -k schedule_date
+  expected: kill
+  note: A played game missing from the box logs is projected with no cut (its later lines leak).
+- id: nba-availability-median-ref-from-scored-rows
+  group: nba-props-asof
+  finding: C-L35
+  file: sportsdataverse/nba/nba_availability.py
+  snippet: 'median_ref=_load_artifact(league).get("median_ref"))'
+  mutant: 'median_ref=None)'
+  test: tests/nba/test_nba_availability.py -k scored_seasons_own_gp
+  expected: kill
+  note: Imputation medians taken from the scored seasons' own GP (the label) again.
+
+# --- 3.6: NCAA era leftovers (B-L26, B-L29, B-GB-27, B-L38) --------------------------------------
+- id: ncaa-wbb-period-tuple-second-copy
+  group: ncaa-era
+  finding: B-L26
+  file: sportsdataverse/wbb/wbb_ncaa_shots.py
+  snippet: "logger = logging.getLogger(__name__)\n"
+  mutant: "logger = logging.getLogger(__name__)\n_WBB_PERIOD_MODEL = (4, 600, 300)\n"
+  test: tests/scrape/test_scrape_ncaa_league.py -k one_owner
+  expected: kill
+  note: The pre-3.6 second copy of the quarters tuple in wbb_ncaa_shots.py.
+- id: ncaa-league-config-no-deprecation
+  group: ncaa-era
+  finding: B-L29
+  file: sportsdataverse/scrape/ncaa/league_config.py
+  snippet: "        warn_deprecated(\n"
+  mutant: "        (lambda *a, **k: None)(\n"
+  test: tests/test_deprecations.py -k league_config
+  expected: kill
+  note: league_config.WBB (periods=4, wrong before 2015-16) resolves without a DeprecationWarning.
+- id: ncaa-pbp-format-guard-silent
+  group: ncaa-era
+  finding: B-GB-27
+  file: sportsdataverse/mbb/mbb_ncaa_game_pbp.py
+  snippet: "        warnings.warn(\n            f\"parse_ncaa_bb_game_pbp: game"
+  mutant: "        (lambda *a, **k: None)(\n            f\"parse_ncaa_bb_game_pbp: game"
+  test: tests/mbb/test_mbb_ncaa_game_pbp.py -k format_guard
+  expected: kill
+  note: The real 2018-format page parses to (0, 35) with nothing said.
+- id: ncaa-schedule-format-guard-removed
+  group: ncaa-era
+  finding: B-GB-27
+  file: sportsdataverse/mbb/mbb_ncaa_schedule.py
+  snippet: "    if data_rows and not any("
+  mutant: "    if False and not any("
+  test: tests/mbb/test_mbb_ncaa_schedule.py -k format_guard
+  expected: kill
+  note: The 2016 team page mis-pairs (36 of 73 games, shifted ids) instead of warning.
+- id: ncaa-schedule-str-team-id
+  group: ncaa-era
+  finding: B-GB-27
+  file: sportsdataverse/mbb/mbb_ncaa_schedule.py
+  snippet: 'crosswalk.filter(pl.col("id") == int(team_id))'
+  mutant: 'crosswalk.filter(pl.col("id") == team_id)'
+  test: tests/mbb/test_mbb_ncaa_schedule.py -k format_guard
+  expected: kill
+  note: A str team id raises ComputeError (string vs i64) on a supported page.
+- id: ncaa-pbp-float-contest-id
+  group: ncaa-era
+  finding: B-L38
+  file: sportsdataverse/mbb/mbb_ncaa_game_pbp.py
+  snippet: "    out = _utf8_id(game_id)\n"
+  mutant: "    out = str(game_id)\n"
+  test: tests/mbb/test_mbb_ncaa_game_pbp.py -k contest_id
+  expected: kill
+  note: A float id builds contests/6470186.0/ and a "6470186.0" game_id cell.
+- id: ncaa-pbp-driver-float-contest-ids
+  group: ncaa-era
+  finding: B-L38
+  file: sportsdataverse/mbb/mbb_ncaa_game_pbp.py
+  snippet: "    ids = [g for g in map(_utf8_id, game_ids) if g is not None]\n"
+  mutant: "    ids = [g for g in game_ids if g is not None and g == g]\n"
+  test: tests/mbb/test_mbb_ncaa_game_pbp.py -k contest_id
+  expected: kill
+  note: The multi-game driver passes 6470186.0 through to the fetcher and the game_id column.
+- id: ncaa-pbp-driver-escalated-format-guard
+  group: ncaa-era
+  finding: B-GB-27
+  file: sportsdataverse/mbb/mbb_ncaa_game_pbp.py
+  snippet: "    except UnsupportedPageFormatWarning:\n"
+  mutant: "    except ():\n"
+  test: tests/mbb/test_mbb_ncaa_game_pbp.py -k escalated
+  expected: kill
+  note: Under warnings "error" the driver's broad except swallows the guard, re-fetches, and returns 0 rows (R853-1).
+- id: ncaa-shots-driver-float-contest-ids
+  group: ncaa-era
+  finding: B-L38
+  file: sportsdataverse/mbb/mbb_ncaa_shots.py
+  snippet: "    ids = [g for g in map(_utf8_id, game_ids) if g is not None]\n"
+  mutant: "    ids = [g for g in game_ids if g is not None and g == g]\n"
+  test: tests/mbb/test_mbb_ncaa_shots_parity.py -k float_contest_ids
+  expected: kill
+  note: The MBB shots driver fetches contests/6470186.0/ for a float id (R853-2).
+- id: ncaa-wbb-shots-driver-float-contest-ids
+  group: ncaa-era
+  finding: B-L38
+  file: sportsdataverse/wbb/wbb_ncaa_shots.py
+  snippet: "    ids = [g for g in map(_utf8_id, game_ids) if g is not None]\n"
+  mutant: "    ids = [g for g in game_ids if g is not None and g == g]\n"
+  test: tests/wbb/test_wbb_ncaa_shots_shim.py -k float_contest_ids
+  expected: kill
+  note: The WBB shots driver fetches contests/5728709.0/ for a float id (R853-2).
+- id: ncaa-box-driver-float-contest-ids
+  group: ncaa-era
+  finding: B-L38
+  file: sportsdataverse/mbb/mbb_ncaa_box_stats.py
+  snippet: "    ids = [g for g in map(_utf8_id, game_ids) if g is not None]\n"
+  mutant: "    ids = [g for g in game_ids if g is not None and g == g]\n"
+  test: tests/mbb/test_mbb_ncaa_box_stats_parity.py -k float_contest_ids
+  expected: kill
+  note: The box-score driver fetches contests/6470186.0/ for a float id (R853-2).
+- id: ncaa-wbb-pbp-float-season
+  group: ncaa-era
+  finding: B-L26
+  file: sportsdataverse/wbb/wbb_ncaa_game_pbp.py
+  snippet: "    sid = _utf8_id(season)\n"
+  mutant: "    sid = None if season is None else str(season)\n"
+  test: tests/wbb/test_wbb_ncaa_bigballr_family.py -k float_season
+  expected: kill
+  note: season=2015.0 becomes "2015.0", binds quarters and a halves-era page parses to 0 rows (R853-5).
+- id: ncaa-wbb-shots-float-season
+  group: ncaa-era
+  finding: B-L26
+  file: sportsdataverse/wbb/wbb_ncaa_shots.py
+  snippet: "    period_model = wbb_period_model(_utf8_id(season))\n"
+  mutant: "    period_model = wbb_period_model(None if season is None else str(season))\n"
+  test: tests/wbb/test_wbb_ncaa_shots_shim.py -k float_season
+  expected: kill
+  note: season=2015.0 becomes "2015.0" and binds the quarters model for a halves-era season (R853-5).
+- id: ncaa-wbb-shots-adapter-float-season
+  group: ncaa-era
+  finding: B-L26
+  file: sportsdataverse/mbb/mbb_shots_adapter.py
+  snippet: "wbb_period_model(_utf8_id(season))"
+  mutant: "wbb_period_model(str(season))"
+  test: tests/mbb/test_mbb_shots_period.py -k float_season
+  expected: kill
+  note: season=2015.0 becomes "2015.0", binds the quarters model and labels a halves-era shot quarter 3 (R853-6).
+- id: ncaa-wbb-pbp-missing-season-infers
+  group: ncaa-era
+  finding: B-L26
+  file: sportsdataverse/wbb/wbb_ncaa_game_pbp.py
+  snippet: "infer_wbb_period_model if sid is None else"
+  mutant: "infer_wbb_period_model if season is None else"
+  test: tests/wbb/test_wbb_ncaa_bigballr_family.py -k missing_season
+  expected: kill
+  note: A NaN / "" season binds the quarters model instead of inferring the era, and a halves-era page parses to 0 rows (R853-7).
+- id: ncaa-pbp-driver-guarded-page-not-refetched
+  group: ncaa-era
+  finding: B-GB-27
+  file: sportsdataverse/mbb/mbb_ncaa_game_pbp.py
+  snippet: "            if df.height == 0 and retry:\n"
+  mutant: "            if df.height == 0:\n"
+  test: tests/mbb/test_mbb_ncaa_game_pbp.py -k not_refetched
+  expected: kill
+  note: A page the format guard rejected gets the empty-result retry, a second stats.ncaa.org fetch and a second warning (R853-8).
+- id: ncaa-pbp-driver-failed-scrape-retried
+  group: ncaa-era
+  finding: B-GB-27
+  file: sportsdataverse/mbb/mbb_ncaa_game_pbp.py
+  snippet: "        return _empty_pbp(), f\"{_failure_kind(exc, fetched=html is not None)}: {exc}\", True\n"
+  mutant: "        return _empty_pbp(), f\"{_failure_kind(exc, fetched=html is not None)}: {exc}\", False\n"
+  test: tests/mbb/test_mbb_ncaa_game_pbp.py -k retried_once
+  expected: kill
+  note: A fetch that raises is dropped after one try instead of getting R's tryCatch -> NULL retry (:1870-1878) (R887-1).
+
 # --- A-M21 / A-M22 / A-M23: the generator documents what runs (task 3.9 PR 1) ---------------------
 - id: codegen-sport-parser-override-before-view
   group: codegen-runtime

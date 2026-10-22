@@ -331,6 +331,45 @@ class EraCoverageWarning(UserWarning):
     """
 
 
+class AsOfCutWarning(UserWarning):
+    """Warned when a pregame projection could not place its target game in time.
+
+    :func:`sportsdataverse.nba.nba_player_props.nba_player_props` defaults its
+    ``as_of_date`` to the target game's date, read from the box logs and then
+    the schedule. When the game id is in neither, no as-of cut is applied and
+    every logged game feeds the projection, so a played game missing from both
+    (a box-score gap, a wrong ``season``) could see its own line. Pass
+    ``as_of_date`` explicitly to cut anyway.
+
+    Example:
+        Make it an error in a backtest::
+
+            import warnings
+            from sportsdataverse.errors import AsOfCutWarning
+
+            warnings.filterwarnings("error", category=AsOfCutWarning)
+    """
+
+
+class UnsupportedPageFormatWarning(UserWarning):
+    """Warned when a scraped page is in a layout its parser does not read.
+
+    The stats.ncaa.org basketball parsers read one page layout each (see their
+    docstrings). A page in another layout -- the 2018-format play-by-play page,
+    the 2016-era team page -- would otherwise parse to an empty or mis-paired
+    frame with nothing said, so the parser returns its documented zero-row
+    frame and this warning names the format it saw.
+
+    Example:
+        Make it an error in a pipeline::
+
+            import warnings
+            from sportsdataverse.errors import UnsupportedPageFormatWarning
+
+            warnings.filterwarnings("error", category=UnsupportedPageFormatWarning)
+    """
+
+
 class SchemaDriftWarning(UserWarning):
     """Warned when a parser meets a payload whose shape it does not recognise and returns zero rows.
 

@@ -197,9 +197,11 @@ def period_and_sec_left(minute: float, *, league: str, season: int) -> "tuple[in
     # "mbb"/"wbb". Accept BOTH -- matching only one vocabulary would silently
     # give women's games the men's halves schedule and mislabel every quarter.
     if str(league).lower() in ("wbb", "womens", "women", "w"):
+        from sportsdataverse.scrape.ncaa.identity import _utf8_id
         from sportsdataverse.scrape.ncaa.parse import wbb_period_model
 
-        periods, reg_seconds, ot_seconds = wbb_period_model(str(season))
+        # _utf8_id, never str(): season=2015.0 must read "2015" (halves), not "2015.0" (quarters)
+        periods, reg_seconds, ot_seconds = wbb_period_model(_utf8_id(season))
     else:
         periods, reg_seconds, ot_seconds = 2, 1200, 300
 

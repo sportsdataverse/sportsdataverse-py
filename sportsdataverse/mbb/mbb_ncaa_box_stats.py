@@ -47,6 +47,7 @@ from bs4 import Tag
 from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
 from sportsdataverse.mbb.mbb_ncaa_html import parse_html
+from sportsdataverse.scrape.ncaa.identity import _utf8_id
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -518,9 +519,9 @@ def ncaa_mbb_box_scores(
         raise ValueError("errors='skip' adds per-game status rows, which multi_games cannot aggregate")
     if isinstance(game_ids, (str, int)):
         game_ids = [game_ids]
-    # g == g drops float("nan") ids (they would stringify to "nan" and hit the
+    # NaN and non-integral floats map to None (never "nan" or "6470186.0" in a
     # fetch path); matches the ncaa_mbb_game_pbp / _shots driver guard.
-    ids = [str(g) for g in game_ids if g is not None and g == g]
+    ids = [g for g in map(_utf8_id, game_ids) if g is not None]
 
     if fetcher is None:
         with NcaaFetcher.with_browser() as browser_fetcher:

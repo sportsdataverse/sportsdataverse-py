@@ -560,14 +560,15 @@ sched = espn_mbb_schedule(dates=season)
 Scrape many MBB games' play-by-play (bigballR `get_play_by_play`).
 
 Ports `bigballR/R/all_functions.R:1857-1897`: drops missing ids, shares
-one fetcher session across games, retries each empty/failed game once,
-row-binds the survivors, and logs the removed ids.
+one fetcher session across games, retries each empty/failed game once
+(except a page the format guard rejected: its layout cannot change on a
+re-fetch), row-binds the survivors, and logs the removed ids.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_ids` | `Sequence[object]` |  | NCAA contest ids; `None`/NaN entries are dropped. |
+| `game_ids` | `Sequence[object]` |  | NCAA contest ids; `None`/NaN entries and non-integral floats (`6470186.5`) are dropped, an integral float (`6470186.0`) is read as `"6470186"`. |
 | `fetcher` | `Optional[_SupportsFetchGamePbp]` | `None` | Optional injected fetcher exposing `fetch_game_pbp`. Defaults to one shared `NcaaFetcher.with_browser()` context. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 | `errors` | `Literal['raise', 'skip']` | `'raise'` | `"raise"` (default): a failed fetch (a ban, an exhausted proxy pool, an uncleared challenge) raises `AssetFetchError`. `"skip"`: it is dropped like a missing game, and the frame gains a `scrape_status` column -- `"ok"` on every play row, plus one row per dropped game (`game_id` and why: `fetch_failed: ...`, `no_data: ...`, `request_error: ...`, `parse_failed: ...` or `empty`). |

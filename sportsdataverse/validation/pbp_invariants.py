@@ -25,11 +25,12 @@ The invariants are grouped by number (``invariant`` on each result):
 1. timeouts  2. field position  3. score  4. possession  5. down/distance
 6. EP/WP     7. play-type flags 8. dropped/duplicated plays  9. box score
 10. player attribution coverage  11. play order / type identity
-12. game-level aggregations
+12. game-level aggregations  13. clock seconds remaining (basketball)
 """
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -1553,6 +1554,88 @@ def _attribution(df: pl.DataFrame) -> list[RuleResult | None]:
 
 
 # ---------------------------------------------------------------------------
+# 13. clock seconds remaining (basketball)
+# ---------------------------------------------------------------------------
+
+
+def _seconds_remaining(df: pl.DataFrame) -> list[RuleResult | None]:
+    """A row never ends after it starts, and it ends where the next row of its period starts.
+
+    Every ``start.<scope>_seconds_remaining`` / ``end.<scope>_seconds_remaining`` pair is
+    checked (basketball: quarter / period / half / game; a published file spells them
+    ``start_<scope>_...``). ``end`` is the next row's ``start`` while the next row is in
+    the same period; a period's last row ends at the period's own end, 0:00 on the period
+    clock (``quarter`` / ``period``), so its ``end`` is ``start`` less that clock (a
+    ``min(end, start)`` clamp leaves it at ``start`` and fails). Rows are read in processor order, by ``game_id`` when the frame
+    holds several games (a season file). The pair is the gate a basketball producer runs
+    before publishing: one file whose ``end`` is the PREVIOUS row's start fails the second
+    rule on most rows and the first on every row the clock moved.
+    """
+    out: list[RuleResult | None] = []
+    period = next((p for p in ("period.number", "period_number", "period") if p in df.columns), None)
+    by_game = ["game_id"] if "game_id" in df.columns else []
+    for end in df.columns:
+        m = re.fullmatch(r"end([._])(\w+)_seconds_remaining", end)
+        start = f"start{m[1]}{m[2]}_seconds_remaining" if m else ""
+        if not m or start not in df.columns:
+            continue
+        scope = m[2]
+        out.append(
+            _row_rule(
+                df,
+                f"seconds.{scope}_end_not_after_start",
+                13,
+                f"{scope} seconds remaining at a play's end never exceed those at its start",
+                pl.lit(True),
+                c(end) > c(start) + _FLOAT32_EPS,
+                (start, end),
+            )
+        )
+        if period is None:
+            continue
+        nxt_start, nxt_period = c(start).shift(-1), c(period).shift(-1)
+        if by_game:
+            nxt_start, nxt_period = nxt_start.over(by_game), nxt_period.over(by_game)
+        f = df.with_columns(__next_start=nxt_start, __same_period=nxt_period == c(period))
+        out.append(
+            _row_rule(
+                f,
+                f"seconds.{scope}_end_is_next_start",
+                13,
+                f"a play's end {scope} seconds equal the next play's start within a period",
+                c("__same_period"),
+                (c(end) - c("__next_start")).abs() > _FLOAT32_EPS,
+                (period, start, end, "__next_start"),
+            )
+        )
+        clock = next(
+            (
+                f"start{m[1]}{p}_seconds_remaining"
+                for p in ("quarter", "period")
+                if f"start{m[1]}{p}_seconds_remaining" in df.columns
+            ),
+            None,
+        )
+        if clock is None:
+            continue
+        # the next row is in another period, or there is none (the game's final row): this row
+        # ends at its period's 0:00. A null end (a processor leaves the final row open) is
+        # undecidable and leaves the denominator.
+        out.append(
+            _row_rule(
+                f,
+                f"seconds.{scope}_period_last_row_ends_at_zero",
+                13,
+                f"a period's last play ends at the period's 0:00 ({scope} seconds: start less the period clock)",
+                c("__same_period").fill_null(False) == False,
+                (c(end) - (c(start) - c(clock))).abs() > _FLOAT32_EPS,
+                (period, clock, start, end),
+            )
+        )
+    return out
+
+
+# ---------------------------------------------------------------------------
 # entry points
 # ---------------------------------------------------------------------------
 
@@ -1593,6 +1676,7 @@ def evaluate(
     groups += _attribution(plays)
     groups += _order(plays)
     groups += _next_snap_continuity(plays)
+    groups += _seconds_remaining(plays)
     groups += _aggregations(plays, summary, box)
     groups += evaluate_box(plays, box, league)
     return [r for r in groups if r is not None]
