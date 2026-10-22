@@ -7,9 +7,8 @@
 * Architecture (factory + shim): https://py.sportsdataverse.org/docs/architecture/espn-cross-league
 * Reusable patterns: https://py.sportsdataverse.org/docs/architecture/building-blocks
 
-Each parser accepts the raw ``Dict`` returned by the corresponding
-``_common_espn`` helper (or any per-league wrapper that delegates to it)
-and returns a tidy ``polars.DataFrame``.
+Each parser accepts the raw ``Dict`` returned by the corresponding generated
+``espn_<league>_<short>`` wrapper (``return_parsed=False``) and returns a tidy ``polars.DataFrame``.
 
 All parsers:
 
@@ -282,9 +281,9 @@ def parse_scoreboard(payload: Dict, return_as_pandas: bool = False) -> pl.DataFr
         Parse a pre-fetched payload::
 
             from sportsdataverse._common_espn_parsers import parse_scoreboard
-            from sportsdataverse._common_espn import _site_v2_scoreboard
+            from sportsdataverse.nba import espn_nba_scoreboard
 
-            raw = _site_v2_scoreboard("basketball", "nba", dates=20240101)
+            raw = espn_nba_scoreboard(dates=20240101, return_parsed=False)
             df = parse_scoreboard(raw)
             print(df.shape)
     """
@@ -2597,17 +2596,13 @@ def parse_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFram
 # Endpoint -> parser registry
 # ===========================================================================
 #
-# Maps the *short name* used in sportsdataverse._common_espn's wrapper
-# tables (_UNIVERSAL_WRAPPERS, _NCAA_WRAPPERS, _FOOTBALL_WRAPPERS,
-# _MLB_WRAPPERS) to the parser that turns its raw payload into a tidy
-# polars DataFrame.
+# Maps the *short name* of each ESPN endpoint (the ``short:`` keys of the
+# ``tools/codegen/endpoints/espn_*.yaml`` families) to the parser that turns
+# its raw payload into a tidy polars DataFrame.
 #
-# Keys here MUST match the first element of the tuples in those tables.
-# Helpers without a registered parser pass through as raw Dict.
-#
-# This registry is the dispatch table for the ``return_parsed=True`` kwarg
-# wired into every bound wrapper by ``make_league_module()`` -- see
-# ``sportsdataverse._common_espn._bind``.
+# Every generated ``espn_<league>_<short>`` wrapper looks its parser up here
+# for ``return_parsed=True``; a short name without a registered parser passes
+# through as raw Dict.
 
 ENDPOINT_PARSERS = {
     # Site v2 (rich nested)

@@ -327,9 +327,8 @@ from sportsdataverse.nhl import nhl_web_pbp, parse_nhl_web_pbp
 df = parse_nhl_web_pbp(nhl_web_pbp(2023030417))                 # 331 plays
 ```
 
-**`ENDPOINT_PARSERS` invariant**: every wrapper short name across
-`_UNIVERSAL_WRAPPERS` + `_NCAA_WRAPPERS` + `_FOOTBALL_WRAPPERS` +
-`_MLB_WRAPPERS` is in the registry. Three generic fall-throughs
+**`ENDPOINT_PARSERS` invariant**: every wrapper short name in the five
+ESPN endpoint YAMLs (`generate.ESPN_APIS`) is in the registry. Three generic fall-throughs
 cover the long tail:
 
 - `parse_single_entity` — Core v2 single-resource payloads

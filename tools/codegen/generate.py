@@ -2190,8 +2190,7 @@ def _is_loader_tag(tag: str) -> bool:
 def gh_release_tags(repo: str = "sportsdataverse/sportsdataverse-data", limit: int = 400) -> list[str]:
     """Live release tags for ``repo`` via the ``gh`` CLI (network).
 
-    Defined here (not in the legacy runtime-capture ``extract.py``, which is
-    import-broken post-factory-retirement) so the audit has no dead dependency.
+    Defined here so the audit has no dependency outside this module.
     Raises ``subprocess.CalledProcessError`` if ``gh`` is missing/unauthenticated."""
     out = subprocess.run(
         ["gh", "release", "list", "-R", repo, "--limit", str(limit)],
