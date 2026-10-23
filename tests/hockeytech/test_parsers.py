@@ -432,6 +432,7 @@ _ID_CASES = [
     ("parse_player_box", "pwhl_svf_gamesummary_164", {}),
     ("parse_player_info", "pwhl_svf_player_12", {}),
     ("parse_seasons", "pwhl_seasons", {}),
+    ("parse_scorebar", "pwhl_schedule_2025", {}),
 ]
 
 

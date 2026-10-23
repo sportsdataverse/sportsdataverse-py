@@ -50,7 +50,7 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
     one with leading zeros that would change meaning, is left exactly as-is rather
     than corrupted or nulled. Float-origin ids go straight to Int64 rather than
     through a string (which would yield ``"123.0"``), and only when every value is
-    integral. Surrounding whitespace in a String id is stripped first. An empty frame
+    integral. Surrounding whitespace in a String id is stripped first and an empty one is null. An empty frame
     is cast too (A-L55), so a result with no rows joins like one with rows.
 
     Args:
@@ -65,7 +65,9 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
             continue
         src = df[col]
         if src.dtype == pl.String:
+            # "" is a feed's "no id" (HockeyTech's FloCoreEventId on every scorebar row): null, not a refusal
             src = src.str.strip_chars()
+            src = src.set(src == "", None)
         cast = src.cast(pl.Int64, strict=False)
         # Refuse if the cast would invent nulls -- a value did not survive, so the
         # column is not really an integer id.
