@@ -1,0 +1,52 @@
+{
+ "id": "e912304de2b2ce35b473ce2ecd3d1502",
+ "sport_key": "americanfootball_nfl",
+ "sport_title": "NFL",
+ "commence_time": "2023-10-11T23:10:00Z",
+ "home_team": "Houston Texans",
+ "away_team": "Kansas City Chiefs",
+ "bookmakers": [
+  {
+   "key": "draftkings",
+   "title": "DraftKings",
+   "markets": [
+    {
+     "key": "alternate_spreads",
+     "last_update": "2023-10-10T12:10:29Z",
+     "outcomes": [
+      {
+       "name": "Houston Texans",
+       "price": 5.08,
+       "point": -23.0
+      },
+      {
+       "name": "Houston Texans",
+       "price": 4.82,
+       "point": -22.5
+      },
+      {
+       "name": "Houston Texans",
+       "price": 4.66,
+       "point": -22
+      },
+      {
+       "name": "Kansas City Chiefs",
+       "price": 1.15,
+       "point": 23.0
+      },
+      {
+       "name": "Kansas City Chiefs",
+       "price": 1.17,
+       "point": 22.5
+      },
+      {
+       "name": "Kansas City Chiefs",
+       "price": 1.17,
+       "point": 22.0
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

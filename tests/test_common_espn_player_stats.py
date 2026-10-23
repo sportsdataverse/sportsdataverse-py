@@ -109,3 +109,19 @@ def test_stat_without_a_number_is_a_null_float_not_its_display_value(monkeypatch
     col = underscore(f"{payload['splits']['categories'][0]['name']}_{stat['name']}")
     df = _lebron()
     assert df.schema[col] == pl.Float64 and df[col][0] is None
+
+
+def test_nhl_stat_with_a_numeric_display_but_no_value_keeps_the_number(monkeypatch):
+    """R979-5: McDavid 2023-24 (real capture) ships 11 stats with no ``value``: the plain "0" displays become 0.0,
+    ``timeBetweenFights`` ("0:00", a clock) is null; every stat column is Float64."""
+    from sportsdataverse.nhl import espn_nhl_player_stats
+
+    nhl = (FIX / "espn" / "athlete_statistics_core_nhl_3895074_2024.json").read_text(encoding="utf-8")
+    _serve(monkeypatch, stats=nhl)
+    row = espn_nhl_player_stats(athlete_id=3895074, season=2024)
+    stats = [(c["name"], s) for c in json.loads(nhl)["splits"]["categories"] for s in c["stats"]]
+    blank = {underscore(f"{cat}_{s['name']}"): s["displayValue"] for cat, s in stats if s.get("value") is None}
+    assert len(blank) == 11
+    assert all(row.schema[underscore(f"{cat}_{s['name']}")] == pl.Float64 for cat, s in stats)
+    assert row["defensive_shootout_saves"][0] == 0.0 and row["general_ties"][0] == 0.0
+    assert row["penalties_time_between_fights"][0] is None and blank["penalties_time_between_fights"] == "0:00"
