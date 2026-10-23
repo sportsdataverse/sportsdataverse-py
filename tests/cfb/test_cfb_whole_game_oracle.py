@@ -149,7 +149,7 @@ RUSH_YARDS_ABS_TOL = 1e-9
 #: supp-002's bound (addendum W-M6): the fixed EPA within 0.1 of the next-snap value
 SUPP_002_EPA_ABS_TOL = 0.1
 #: committed row count of tests/cfb/schema_allowlist.yaml: it may only go down
-SCHEMA_ALLOWLIST_MAX_ROWS = 49
+SCHEMA_ALLOWLIST_MAX_ROWS = 41
 
 # Processing a default-odds capture warns DefaultOddsWarning incidentally;
 # tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.

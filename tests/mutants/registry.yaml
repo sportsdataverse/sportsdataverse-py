@@ -6969,3 +6969,24 @@
   test: tests/test_common_espn_player_stats.py -k "nhl_stat_with_a_numeric_display"
   expected: kill
   note: R979-5, McDavid's NHL stats with display "0" and no value become null instead of 0.0.
+
+# --- task 5.1 part (c): CFB drive columns of a feed with no drive end keep their dtype (C-L5)
+- id: cfb-drive-columns-without-an-end-keep-their-dtype
+  group: dtype-contract-5-1
+  finding: C-L5
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '        pl.col(c).cast(t) for c, t in documented.items() if c.startswith("drive.") and plays.schema.get(c) == pl.Null'
+  mutant: '        pl.col(c) for c, t in documented.items() if c.startswith("drive.") and plays.schema.get(c) == pl.Null'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "schema_is_identical and 252532751"
+  expected: kill
+  note: The eight drive.* columns of 252532751 (2005, drives without an end) are dtype Null again.
+
+- id: cfb-drive-columns-every-documented-drive-key
+  group: dtype-contract-5-1
+  finding: C-L5
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '        pl.col(c).cast(t) for c, t in documented.items() if c.startswith("drive.") and plays.schema.get(c) == pl.Null'
+  mutant: '        pl.col(c).cast(t) for c, t in documented.items() if c.startswith("drive.") and not c.startswith("drive.team.") and plays.schema.get(c) == pl.Null'
+  test: tests/cfb/test_cfb_pbp_processor_fixes.py -k "no_drive_carries and 400547808"
+  expected: kill
+  note: R980-1, one entry (here the four drive.team.* columns) dropped from the typed list leaves 400547808's team columns Null.

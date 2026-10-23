@@ -152,6 +152,10 @@ docstrings of the tests that read them: `cbs_cfb/` (`tests/cfb/cbs_pbp/test_to_e
 from `cfbfastR-cfb-raw` at `98deb3f091`) for the supp-002 candidate count
 (`tests/cfb/test_cfb_supp002_degenerate_end.py`); they are not `summary_*` files, so the whole-game
 oracle does not pick them up.
+`drive_meta/` holds 2 trimmed captures (the `trimmed` form above, from `cfbfastR-cfb-raw/cfb/json/raw/<id>.json`
+at `ee755dc65a`, trimmed 2026-10-22) whose drives never carry one key: 272560120 (2007, no `start.clock`) and
+400547808 (2014, no `team`). They drive `test_drive_columns_no_drive_carries_keep_the_documented_type`
+(task 5.1, C-L5 / R980-1); they are not `summary_*` files at the top level, so the whole-game oracle does not pick them up.
 `rush_forms/282782655_trimmed.json.gz` (Tulane @ Army, 2008) is one more trimmed capture, from
 `cfbfastR-cfb-raw/cfb/json/raw/282782655.json` at `9c61a436cc`, for the directional rush-loss reader
 (`test_stated_rush_yardage_is_read`, EX-1.2-a, play 282782655087); it is not a `summary_*` file either.

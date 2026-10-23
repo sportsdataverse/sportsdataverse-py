@@ -177,6 +177,19 @@ _MANGLED_ENTITY = r"(amp|apos|quot|#39);"
 _MANGLED_ENTITY_RE = re.compile("(?<!&)" + _MANGLED_ENTITY)
 
 
+def _drive_dtypes(plays: pl.DataFrame) -> list[pl.Expr]:
+    """C-L5 / R980-1: type every ``drive.*`` column a game's drives never carry (all null, dtype ``Null``).
+
+    ``json_normalize`` builds such a column for any drive key no drive in the game has (no ``end`` block in
+    2005, no ``start.clock`` in 39 games, no ``team`` in 2); each gets the type the returns table documents.
+    A column that arrived typed is left alone.
+    """
+    documented = _empty_from_schema("autodoc/cfb/normalize_pbp_columns").schema
+    return [
+        pl.col(c).cast(t) for c, t in documented.items() if c.startswith("drive.") and plays.schema.get(c) == pl.Null
+    ]
+
+
 def _repair_entities(text: str) -> str:
     """Restore a stripped ``&`` and unescape: ``"Patrick Oapos;Bryan"`` -> ``"Patrick O'Bryan"``."""
     return html.unescape(_MANGLED_ENTITY_RE.sub(r"&\1;", text))
@@ -381,7 +394,7 @@ from sportsdataverse.cfb.model_vars import (
     wp_start_columns,
     wp_start_touchback_columns,
 )
-from sportsdataverse._codegen_runtime import _download_json
+from sportsdataverse._codegen_runtime import _download_json, _empty_from_schema
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import DefaultOddsWarning as _DefaultOddsWarning  # private alias: cfb_pbp is star-imported
 from sportsdataverse.errors import PlayOrderWarning as _PlayOrderWarning  # private alias, as above
@@ -2946,6 +2959,7 @@ class CFBPlayProcess(object):
             for c in ("start.down", "start.distance", "end.down", "end.distance")
             if pbp_txt["plays"].schema.get(c, pl.Null).is_float()
         )
+        pbp_txt["plays"] = pbp_txt["plays"].with_columns(_drive_dtypes(pbp_txt["plays"]))
         pbp_txt["timeouts"] = {
             init["homeTeamId"]: {"1": [], "2": []},
             init["awayTeamId"]: {"1": [], "2": []},
