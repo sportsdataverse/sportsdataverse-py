@@ -104,7 +104,7 @@ Game header: teams, codes, coaches, score by quarter, venue, referees.
 | col_name | type | description |
 |---|---|---|
 | `live` | logical | Whether the game is in progress. |
-| `round` | character | Round label (e.g. Round 1). |
+| `round` | integer | Round number (Int64, as the v2 rounds and games routes carry it). |
 | `date` | character | Game date (venue local, dd/mm/yyyy). |
 | `hour` | character | Scheduled tip-off time (venue local, HH:MM). |
 | `stadium` | character | Venue name. |

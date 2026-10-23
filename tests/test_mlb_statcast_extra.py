@@ -278,7 +278,8 @@ def test_empty_window_result_widens_into_a_populated_one(monkeypatch):
 
     The header-only body has no values to infer dtypes from; read as String it would
     silently widen a populated frame's Float64 columns (``diagonal_relaxed``) or make a
-    strict concat raise. Null is polars' unknown dtype, so it widens the other way.
+    strict concat raise. Task 5.1 (R979-1) types it as the returns table does, so it
+    stacks onto a populated window under both relaxed concats.
     """
     from sportsdataverse.mlb import mlb_statcast_extra as ex
 
@@ -288,7 +289,8 @@ def test_empty_window_result_widens_into_a_populated_one(monkeypatch):
 
     offseason = ex.mlb_statcast_search("2024-01-15", "2024-01-15")
     june = ex.mlb_statcast_search("2024-06-15", "2024-06-15")
-    assert offseason.shape == (0, 119) and offseason.schema["release_speed"] == pl.Null
+    assert offseason.shape == (0, 119) and offseason.schema["release_speed"] == pl.Float64
+    assert offseason.schema == june.schema
     for how in ("vertical_relaxed", "diagonal_relaxed"):
         merged = pl.concat([offseason, june], how=how)
         assert merged.height == june.height, how

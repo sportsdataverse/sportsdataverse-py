@@ -97,6 +97,32 @@ def _empty_from_schema(name: str, return_as_pandas: bool = False, arrow: bool = 
     return df.to_pandas(use_pyarrow_extension_array=True) if arrow else df.to_pandas()
 
 
+def _pin_documented(name: str, df: pl.DataFrame) -> pl.DataFrame:
+    """Cast ``df``'s columns to the dtypes of the returns table ``name`` wherever no value can change (B-L83).
+
+    A column moves when it is all null (its dtype only reflects what a reader guessed) or when both
+    dtypes are numeric and every value survives the round trip (an integer column the pandas hop or a
+    missing value turned Float64, or the reverse). It never raises: a value the cast would change or
+    reject (a fraction, NaN or inf into an integer, an integer outside the target's range, an Int64
+    above 2**53 into Float64) leaves the whole column as it is, as does any non-numeric mismatch, which
+    is a parser question, not a cast (R979-4).
+    """
+    from sportsdataverse._returns_schemas import SCHEMAS
+
+    casts = []
+    for col, want in SCHEMAS[name].items():
+        if col not in df.columns or df.schema[col] == want:
+            continue
+        have, values = df.schema[col], df[col].drop_nulls()
+        if values.len() == 0:
+            casts.append(pl.col(col).cast(want))
+        elif have.is_numeric() and want.is_numeric():
+            moved = values.cast(want, strict=False)
+            if moved.null_count() == 0 and moved.cast(have, strict=False).equals(values):
+                casts.append(pl.col(col).cast(want))
+    return df.with_columns(casts) if casts else df
+
+
 def _league_tables(name: str) -> bool:
     """Whether the returns table ``name`` has per-league variants (``scoreboard/mbb``, ``summary/nfl:plays``)."""
     from sportsdataverse._returns_schemas import SCHEMAS

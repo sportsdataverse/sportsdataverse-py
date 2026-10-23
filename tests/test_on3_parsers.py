@@ -252,3 +252,21 @@ def test_all_four_wrappers_exported():
 
     for fn in (on3_player_rankings, on3_industry_player_rankings, on3_team_rankings, on3_industry_team_rankings):
         assert callable(fn)
+
+
+@pytest.mark.parametrize(
+    ("stem", "parser", "table"),
+    [
+        ("on3_player_rankings", "parse_on3_rankings", "on3_player_rankings"),
+        ("on3_team_rankings", "parse_on3_team_rankings", "on3_team_rankings"),
+    ],
+)
+def test_rankings_returns_table_types_match_the_capture(stem, parser, table):
+    """B-L94: every column the capture populates has the documented type (ranks and sizes are integers)."""
+    from sportsdataverse.cfb import on3_parsers
+    from tests.conftest import documented_schema
+
+    df = getattr(on3_parsers, parser)(_load(stem))
+    want = documented_schema(f"autodoc/cfb/{table}")
+    populated = [c for c in df.columns if c in want and df[c].null_count() < df.height]
+    assert populated and {c: df.schema[c] for c in populated} == {c: want[c] for c in populated}
