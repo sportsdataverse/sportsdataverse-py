@@ -25,7 +25,7 @@ from sportsdataverse.wnba.wnba_teams import *
 
 # Re-export espn_wnba_draft from the hand-written module *after*
 # wnba_espn_ext so the richer wrapper wins. The factory's generic
-# espn_<league>_draft (from _site_v2_draft in _common_espn.py) doesn't
+# espn_<league>_draft (from the retired runtime factory's _site_v2_draft) doesn't
 # know about WNBA's ?season=YYYY query string, forwards `season=` straight
 # to download() where it raises TypeError, and returns the raw Dict
 # instead of the flattened pick-per-row DataFrame the hand-written

@@ -21,8 +21,8 @@ added to `sportsdataverse-py` in the 0.0.59 ESPN expansion:
 | NCAA hockey | Men's College Hockey (`mch`), Women's College Hockey (`wch`) |
 
 Every league rides the same **cross-league ESPN wrapper surface** introduced in
-0.0.51 — a single parameterized core (`sportsdataverse._common_espn`) with
-thin per-league extension modules. That means **identical function naming** across
+0.0.51 — one code generator that writes a concrete `<prefix>_espn_ext.py` module
+per league from the same endpoint definitions. That means **identical function naming** across
 all leagues: `espn_{prefix}_scoreboard`, `espn_{prefix}_team_schedule`,
 `espn_{prefix}_standings`, `espn_{prefix}_team_roster`, `espn_{prefix}_summary`,
 and 80+ more short names per league.
@@ -898,31 +898,26 @@ _keys(injuries_cfl)
 
 ## 🏗️ The shared cross-league architecture
 
-All seven leagues share exactly **one** parameterized core:
-`sportsdataverse._common_espn`. The architecture is worth understanding
-because it makes every league behave identically:
+All seven leagues come out of **one** code generator. The architecture is worth
+understanding because it makes every league behave identically:
 
 ```
-_common_espn.py
-  ├── ~80 core functions, each parameterized on (sport, league) slugs
-  ├── _UNIVERSAL_WRAPPERS  — scoreboard, teams, standings, schedule, …
-  ├── _NCAA_WRAPPERS       — +rankings, +season_recruits  (CBB/CBS/MCH/WCH)
-  ├── _FOOTBALL_WRAPPERS   — +drives, +powerindex, +draft  (UFL/XFL/CFL)
-  └── make_league_module(sport, league, prefix, namespace)
-          └── _bind(core_fn, sport, league)  →  espn_{prefix}_{short}
+tools/codegen/endpoints/espn_site_v2.yaml  # + web_v3 / core_v2 / fitt_v3 / cdn: one entry per short name
+tools/codegen/endpoints/leagues.yaml       # one entry per league: sport, league, prefix, scopes
+        └── tools/codegen/generate.py  →  espn_{prefix}_{short}
 
-sportsdataverse/football/ufl.py        # 4 lines — calls make_league_module
-sportsdataverse/football/xfl.py        # 4 lines
-sportsdataverse/football/cfl.py        # 4 lines
-sportsdataverse/baseball/college_baseball.py  # 4 lines
-sportsdataverse/baseball/college_softball.py  # 4 lines
-sportsdataverse/hockey/mch.py          # 4 lines
-sportsdataverse/hockey/wch.py          # 4 lines
+sportsdataverse/football/ufl/ufl_espn_ext.py  # generated, never hand-edited
+sportsdataverse/football/xfl/xfl_espn_ext.py
+sportsdataverse/football/cfl/cfl_espn_ext.py
+sportsdataverse/baseball/college_baseball/college_baseball_espn_ext.py
+sportsdataverse/baseball/college_softball/college_softball_espn_ext.py
+sportsdataverse/hockey/mch/mch_espn_ext.py
+sportsdataverse/hockey/wch/wch_espn_ext.py
 ```
 
 This means:
 
-- Any bug fix in `_common_espn` applies to all 7 leagues at once.
+- Any fix to an endpoint definition or the template reaches all 7 leagues at once.
 - Every league has an identical `dir()` surface — the only difference
   is the prefix string (`ufl`, `xfl`, `cfl`, `college_baseball`, …).
 - The `` path routes through `ENDPOINT_PARSERS` — a

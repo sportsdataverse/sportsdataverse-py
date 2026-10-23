@@ -35,10 +35,10 @@ def test_the_retired_sphinx_instructions_are_gone():
     assert not (ROOT / "docs_instructions.md").exists()
 
 
-def test_the_page_names_the_six_build_stages():
+def test_the_page_names_the_five_build_stages():
     text = DOC.read_text(encoding="utf-8")
+    assert "`build()`" not in text  # the staging stage was deleted with tools/codegen/_generated (A-L1)
     for stage in (
-        "build()",
         "build_live()",
         "build_parsed_live()",
         "build_flat_live()",

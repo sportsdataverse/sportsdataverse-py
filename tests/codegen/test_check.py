@@ -2,7 +2,7 @@
 
 A gate that is only ever run on a clean tree is a gate nobody has seen fail. Each test
 below builds the stale state in a COPY of the repo (``tree``: every ``sportsdataverse``
-module, the committed staging tree and the schemas the render reads), points
+module and the schemas the render reads), points
 ``generate`` at the copy, runs one gate and asserts it goes red naming the file. The
 real checkout is never written. The docs gate gets a synthetic corpus instead of the
 ~40 s docs render: what is under test is its comparison, and the clean-tree
@@ -44,7 +44,6 @@ def tree(tmp_path_factory: pytest.TempPathFactory) -> Path:
     root = tmp_path_factory.mktemp("repo")
     shutil.copy2(ROOT / "pyproject.toml", root / "pyproject.toml")  # ruff finds the repo's format config
     shutil.copytree(ROOT / "sportsdataverse", root / "sportsdataverse", ignore=_py_only)
-    shutil.copytree(ROOT / "tools/codegen/_generated", root / "tools/codegen/_generated", ignore=_py_only)
     shutil.copytree(ROOT / "tools/codegen/schemas", root / "tools/codegen/schemas")
     return root
 
@@ -116,17 +115,6 @@ def test_red_path_stale_gate_lists_a_deleted_file(in_tree, gate, rel):
         assert run() == [_rel(rel)]
 
 
-def test_red_path_staging_check_fails_on_a_mutated_and_a_deleted_module(in_tree, capsys):
-    out = in_tree / "tools/codegen/_generated"
-    assert generate.check() == 0
-    with _restored(out / "nba_espn_ext.py") as f, _restored(out / "wnba_espn_ext.py") as gone:
-        f.write_text(f.read_text(encoding="utf-8") + "\nX = 1\n", encoding="utf-8", newline="\n")
-        gone.unlink()
-        assert generate.check() == 1
-    err = capsys.readouterr().err
-    assert "stale/missing generated files: nba_espn_ext.py, wnba_espn_ext.py" in err
-
-
 def test_red_path_docs_stale_lists_mutated_deleted_and_orphan_pages(in_tree, monkeypatch):
     rendered = {"nba/index.md": "# NBA\n", "nba/reference/a.md": "a\n", "reference/parameters.md": "p\n"}
     monkeypatch.setattr(generate, "_generated_docs_roots", lambda: {"nba", "reference"})
@@ -167,7 +155,6 @@ def test_red_path_is_documented_needs_a_reference_block_not_a_word_mention():
 # --------------------------------------------------------------------------------------
 
 _CLEAN = {
-    "check": 0,
     "_live_stale": [],
     "_parsed_stale": [],
     "_flat_stale": [],
@@ -178,7 +165,6 @@ _CLEAN = {
     "_returns_gaps": [],
 }
 _RED = {
-    "check": (1, ""),
     "_live_stale": (["sportsdataverse/x/x_espn_ext.py"], "stale live files: sportsdataverse/x/x_espn_ext.py"),
     "_parsed_stale": (["sportsdataverse/parsed/x.py"], "stale parsed files: sportsdataverse/parsed/x.py"),
     "_flat_stale": (["sportsdataverse/x/x_api.py"], "stale flat-API files: sportsdataverse/x/x_api.py"),
@@ -235,7 +221,6 @@ def test_main_check_rc_is_one_when_any_single_gate_is_red(monkeypatch, capsys, r
 # --------------------------------------------------------------------------------------
 
 _ORPHANS = {
-    "check": ("tools/codegen/_generated/zz_espn_ext.py", "tools/codegen/_generated/nba_espn_ext.py"),
     "live": ("sportsdataverse/zz/zz_espn_ext.py", "sportsdataverse/nba/nba_espn_ext.py"),
     "parsed": ("sportsdataverse/parsed/zz.py", "sportsdataverse/parsed/nba.py"),
     "flat": ("sportsdataverse/nba/zz_stats.py", "sportsdataverse/nba/nba_stats.py"),
@@ -244,8 +229,6 @@ _ORPHANS = {
 
 
 def _red(gate: str) -> bool:
-    if gate == "check":
-        return generate.check() != 0
     return bool(_GATES[gate][0]())
 
 
@@ -293,7 +276,6 @@ def test_stale_gates_never_delete_another_runs_tmp_dir(in_tree):
         for p in planted:
             p.parent.mkdir(parents=True, exist_ok=True)
             p.write_text("another run is using this dir\n", encoding="utf-8")
-        assert generate.check() == 0
         for gate in ("live", "parsed", "flat", "loaders"):
             assert _GATES[gate][0]() == []
         assert all(p.exists() for p in planted), [str(p) for p in planted if not p.exists()]
@@ -306,7 +288,7 @@ def test_stale_gates_never_delete_another_runs_tmp_dir(in_tree):
 
 
 def test_stale_gate_runs_that_overlap_both_stay_green(in_tree, monkeypatch):
-    """A-L2, for ANY fixed temp-dir name: a second ``check()`` starts and finishes inside the first one's render.
+    """A-L2, for ANY fixed temp-dir name: a second ``_live_stale()`` starts and finishes inside the first one's render.
 
     With a shared fixed dir the nested run deletes the outer run's rendered files, and the outer run then
     reports them stale (or crashes); with a per-run ``mkdtemp`` both are green.
@@ -318,12 +300,12 @@ def test_stale_gate_runs_that_overlap_both_stay_green(in_tree, monkeypatch):
         out = real()
         if not nested:  # the outer run's temp dir exists now; mark first, so the nested run does not recurse
             nested.append(None)
-            nested[0] = generate.check()
+            nested[0] = generate._live_stale()
         return out
 
     monkeypatch.setattr(generate, "_render_all", render_and_overlap)
-    assert generate.check() == 0
-    assert nested == [0]
+    assert generate._live_stale() == []
+    assert nested == [[]]
 
 
 # --------------------------------------------------------------------------------------
@@ -637,14 +619,13 @@ def test_a_full_run_renders_parsed_and_docs_in_a_fresh_interpreter(monkeypatch):
     docstrings, which this process imported before the module stages rewrote them, so they run
     in a child interpreter, after every module stage."""
     calls: list = []
-    for name in ("build", "build_live", "build_flat_live", "build_loaders_live"):
+    for name in ("build_live", "build_flat_live", "build_loaders_live"):
         monkeypatch.setattr(generate, name, lambda _n=name: calls.append(_n) or [])
     for name in ("build_parsed_live", "build_docs"):
         monkeypatch.setattr(generate, name, lambda _n=name: pytest.fail(f"{_n} ran in the stale process"))
     monkeypatch.setattr(generate.subprocess, "run", lambda cmd, **kw: calls.append(cmd[1:]))
     assert generate.main([]) == 0
     assert calls == [
-        "build",
         "build_live",
         "build_flat_live",
         "build_loaders_live",
@@ -656,7 +637,7 @@ def test_parsed_and_docs_flag_runs_only_those_two_stages(monkeypatch):
     calls: list = []
     for name in ("build_parsed_live", "build_docs"):
         monkeypatch.setattr(generate, name, lambda _n=name: calls.append(_n) or [])
-    for name in ("build", "build_live", "build_flat_live", "build_loaders_live"):
+    for name in ("build_live", "build_flat_live", "build_loaders_live"):
         monkeypatch.setattr(generate, name, lambda _n=name: pytest.fail(f"{_n} ran"))
     assert generate.main(["--parsed-and-docs"]) == 0
     assert calls == ["build_parsed_live", "build_docs"]

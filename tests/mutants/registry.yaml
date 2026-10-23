@@ -1040,17 +1040,6 @@
   test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and loaders"
   expected: kill
 
-- id: codegen-staging-check-returns-zero
-  group: codegen-gates
-  finding: A-M1
-  file: tools/codegen/generate.py
-  snippet: '    tmp = _check_tmp("_check_")'
-  mutant: |2-
-        return 0
-        tmp = _check_tmp("_check_")
-  test: tests/codegen/test_check.py -k red_path_staging_check
-  expected: kill
-
 - id: codegen-docs-stale-no-orphans
   group: codegen-gates
   finding: A-M1
@@ -1075,10 +1064,10 @@
   file: tools/codegen/generate.py
   snippet: |2-
             return rc
-        build()
+        n = len(build_live())
   mutant: |2-
             return 0
-        build()
+        n = len(build_live())
   test: tests/codegen/test_check.py -k rc_is_one
   expected: kill
 
