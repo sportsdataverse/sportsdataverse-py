@@ -220,7 +220,7 @@ def espn_wch_scoreboard(
         **kwargs,
     )
     if return_parsed:
-        return parse_scoreboard(raw, return_as_pandas=return_as_pandas)
+        return parse_scoreboard(raw, return_as_pandas=return_as_pandas, documented_table="scoreboard")
     return raw
 
 
@@ -270,7 +270,7 @@ def espn_wch_summary(
         **kwargs,
     )
     if return_parsed:
-        return parse_summary(raw, return_as_pandas=return_as_pandas)
+        return parse_summary(raw, return_as_pandas=return_as_pandas, documented_table="summary")
     return raw
 
 
@@ -364,7 +364,7 @@ def espn_wch_news(
         **kwargs,
     )
     if return_parsed:
-        return parse_news(raw, return_as_pandas=return_as_pandas)
+        return parse_news(raw, return_as_pandas=return_as_pandas, documented_table="news")
     return raw
 
 
@@ -409,7 +409,7 @@ def espn_wch_injuries(
         **kwargs,
     )
     if return_parsed:
-        return parse_injuries(raw, return_as_pandas=return_as_pandas)
+        return parse_injuries(raw, return_as_pandas=return_as_pandas, documented_table="injuries")
     return raw
 
 
@@ -458,7 +458,7 @@ def espn_wch_transactions(
         **kwargs,
     )
     if return_parsed:
-        return parse_transactions(raw, return_as_pandas=return_as_pandas)
+        return parse_transactions(raw, return_as_pandas=return_as_pandas, documented_table="transactions")
     return raw
 
 
@@ -503,7 +503,7 @@ def espn_wch_conferences(
         **kwargs,
     )
     if return_parsed:
-        return parse_groups(raw, return_as_pandas=return_as_pandas)
+        return parse_groups(raw, return_as_pandas=return_as_pandas, documented_table="conferences")
     return raw
 
 
@@ -642,7 +642,7 @@ def espn_wch_teams_site(
         **kwargs,
     )
     if return_parsed:
-        return parse_teams(raw, return_as_pandas=return_as_pandas)
+        return parse_teams(raw, return_as_pandas=return_as_pandas, documented_table="teams")
     return raw
 
 
@@ -740,7 +740,7 @@ def espn_wch_team_roster(
         **kwargs,
     )
     if return_parsed:
-        return parse_team_roster(raw, return_as_pandas=return_as_pandas)
+        return parse_team_roster(raw, return_as_pandas=return_as_pandas, documented_table="team_roster")
     return raw
 
 
@@ -791,7 +791,7 @@ def espn_wch_team_schedule(
         **kwargs,
     )
     if return_parsed:
-        return parse_team_schedule(raw, return_as_pandas=return_as_pandas)
+        return parse_team_schedule(raw, return_as_pandas=return_as_pandas, documented_table="team_schedule")
     return raw
 
 
@@ -932,7 +932,7 @@ def espn_wch_team_injuries(
         **kwargs,
     )
     if return_parsed:
-        return parse_injuries(raw, return_as_pandas=return_as_pandas)
+        return parse_injuries(raw, return_as_pandas=return_as_pandas, documented_table="injuries")
     return raw
 
 
@@ -1077,7 +1077,7 @@ def espn_wch_team_news(
         **kwargs,
     )
     if return_parsed:
-        return parse_news(raw, return_as_pandas=return_as_pandas)
+        return parse_news(raw, return_as_pandas=return_as_pandas, documented_table="news")
     return raw
 
 
@@ -1265,7 +1265,7 @@ def espn_wch_player_news(
         **kwargs,
     )
     if return_parsed:
-        return parse_news(raw, return_as_pandas=return_as_pandas)
+        return parse_news(raw, return_as_pandas=return_as_pandas, documented_table="news")
     return raw
 
 
@@ -1320,7 +1320,7 @@ def espn_wch_standings(
         **kwargs,
     )
     if return_parsed:
-        return parse_standings(raw, return_as_pandas=return_as_pandas)
+        return parse_standings(raw, return_as_pandas=return_as_pandas, documented_table="standings")
     return raw
 
 
@@ -1365,7 +1365,7 @@ def espn_wch_rankings(
         **kwargs,
     )
     if return_parsed:
-        return parse_rankings(raw, return_as_pandas=return_as_pandas)
+        return parse_rankings(raw, return_as_pandas=return_as_pandas, documented_table="rankings")
     return raw
 
 
@@ -1412,7 +1412,7 @@ def espn_wch_player_overview(
         **kwargs,
     )
     if return_parsed:
-        return parse_athlete_overview(raw, return_as_pandas=return_as_pandas)
+        return parse_athlete_overview(raw, return_as_pandas=return_as_pandas, documented_table="athlete_overview")
     return raw
 
 
@@ -1463,7 +1463,7 @@ def espn_wch_player_stats(
         **kwargs,
     )
     if return_parsed:
-        return parse_athlete_stats(raw, return_as_pandas=return_as_pandas)
+        return parse_athlete_stats(raw, return_as_pandas=return_as_pandas, documented_table="athlete_stats")
     return raw
 
 
@@ -1514,7 +1514,7 @@ def espn_wch_player_gamelog(
         **kwargs,
     )
     if return_parsed:
-        return parse_athlete_gamelog(raw, return_as_pandas=return_as_pandas)
+        return parse_athlete_gamelog(raw, return_as_pandas=return_as_pandas, documented_table="athlete_gamelog")
     return raw
 
 
@@ -1565,7 +1565,7 @@ def espn_wch_player_splits(
         **kwargs,
     )
     if return_parsed:
-        return parse_athlete_splits(raw, return_as_pandas=return_as_pandas)
+        return parse_athlete_splits(raw, return_as_pandas=return_as_pandas, documented_table="athlete_splits")
     return raw
 
 
@@ -1629,7 +1629,7 @@ def espn_wch_leaders(
         **kwargs,
     )
     if return_parsed:
-        return parse_leaders(raw, return_as_pandas=return_as_pandas)
+        return parse_leaders(raw, return_as_pandas=return_as_pandas, documented_table="leaders")
     return raw
 
 
@@ -2374,7 +2374,9 @@ def espn_wch_season_week_powerindex(
         **kwargs,
     )
     if return_parsed:
-        return parse_weekly_powerindex(raw, return_as_pandas=return_as_pandas)
+        return parse_weekly_powerindex(
+            raw, return_as_pandas=return_as_pandas, documented_table="season_week_powerindex"
+        )
     return raw
 
 
@@ -2637,7 +2639,7 @@ def espn_wch_season_coaches(
         **kwargs,
     )
     if return_parsed:
-        return parse_coaches(raw, return_as_pandas=return_as_pandas)
+        return parse_coaches(raw, return_as_pandas=return_as_pandas, documented_table="season_coaches")
     return raw
 
 
@@ -2684,7 +2686,7 @@ def espn_wch_season_draft(
         **kwargs,
     )
     if return_parsed:
-        return parse_draft(raw, return_as_pandas=return_as_pandas)
+        return parse_draft(raw, return_as_pandas=return_as_pandas, documented_table="season_draft")
     return raw
 
 
@@ -3464,7 +3466,7 @@ def espn_wch_player_injuries(
         **kwargs,
     )
     if return_parsed:
-        return parse_injuries(raw, return_as_pandas=return_as_pandas)
+        return parse_injuries(raw, return_as_pandas=return_as_pandas, documented_table="injuries")
     return raw
 
 
@@ -3867,7 +3869,9 @@ def espn_wch_game_team_roster(
         **kwargs,
     )
     if return_parsed:
-        return parse_event_competitor_roster(raw, return_as_pandas=return_as_pandas)
+        return parse_event_competitor_roster(
+            raw, return_as_pandas=return_as_pandas, documented_table="event_competitor_roster"
+        )
     return raw
 
 
@@ -3973,7 +3977,9 @@ def espn_wch_game_team_statistics(
         **kwargs,
     )
     if return_parsed:
-        return parse_event_competitor_statistics(raw, return_as_pandas=return_as_pandas)
+        return parse_event_competitor_statistics(
+            raw, return_as_pandas=return_as_pandas, documented_table="event_competitor_statistics"
+        )
     return raw
 
 
@@ -4240,7 +4246,7 @@ def espn_wch_game_plays(
         **kwargs,
     )
     if return_parsed:
-        return parse_event_plays(raw, return_as_pandas=return_as_pandas)
+        return parse_event_plays(raw, return_as_pandas=return_as_pandas, documented_table="event_plays")
     return raw
 
 
@@ -4910,7 +4916,7 @@ def espn_wch_teams_core(
         **kwargs,
     )
     if return_parsed:
-        return parse_teams(raw, return_as_pandas=return_as_pandas)
+        return parse_teams(raw, return_as_pandas=return_as_pandas, documented_table="teams")
     return raw
 
 
@@ -5580,7 +5586,7 @@ def espn_wch_standings_core(
         **kwargs,
     )
     if return_parsed:
-        return parse_standings(raw, return_as_pandas=return_as_pandas)
+        return parse_standings(raw, return_as_pandas=return_as_pandas, documented_table="standings")
     return raw
 
 
@@ -6021,5 +6027,5 @@ def espn_wch_fpi(
         **kwargs,
     )
     if return_parsed:
-        return parse_fpi(raw, return_as_pandas=return_as_pandas)
+        return parse_fpi(raw, return_as_pandas=return_as_pandas, documented_table="fpi")
     return raw

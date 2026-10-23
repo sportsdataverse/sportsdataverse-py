@@ -1192,8 +1192,8 @@
   group: provider-gates
   finding: B-M33
   file: sportsdataverse/_common_espn_player_stats.py
-  snippet: 'out[col] = _coerce_float(stat.get("value"))'
-  mutant: 'out[col] = _coerce_float(stat.get("displayValue"))'
+  snippet: 'num = _coerce_float(stat.get("value"))'
+  mutant: 'num = _coerce_float(stat.get("displayValue"))'
   test: tests/test_common_espn_player_stats.py
   expected: kill
   note: the pinned capture values (ledger gate player-stats-offline); re-keyed in task 5.1 (B-L20), where the
@@ -6718,9 +6718,9 @@
   group: dtype-contract-5-1
   finding: A-M12
   file: sportsdataverse/_codegen_runtime.py
-  snippet: '            if isinstance(out, pl.DataFrame) and out.width == 0:'
-  mutant: '            if False:'
-  test: tests/test_espn_universal_parsers.py -k "empty_schema_quiet_scoreboard"
+  snippet: '            return _empty_from_schema(table, return_as_pandas=not isinstance(out, pl.DataFrame), arrow=arrow)'
+  mutant: '            return out'
+  test: tests/test_espn_universal_parsers.py -k "empty_schema_quiet_scoreboard_day_keeps_each"
   expected: kill
   note: >-
     Without the swap a quiet scoreboard day is a (0, 0) frame again and `pl.col("home_id")` raises
@@ -6742,8 +6742,8 @@
   group: dtype-contract-5-1
   finding: MD-3
   file: sportsdataverse/nba/nba_loaders_extra.py
-  snippet: '@_documented_empty("autodoc/nba/load_nba_stats_synergy")'
-  mutant: '# @_documented_empty("autodoc/nba/load_nba_stats_synergy")'
+  snippet: '@_documented_empty("autodoc/nba/load_nba_stats_synergy", arrow=True)'
+  mutant: '# @_documented_empty("autodoc/nba/load_nba_stats_synergy", arrow=True)'
   test: tests/nba/test_nba_stats_multifile_loaders.py -k "empty_schema and synergy"
   expected: kill
   note: load_nba_stats_synergy with no published season returns (0, 0) again.
@@ -6845,19 +6845,141 @@
   group: dtype-contract-5-1
   finding: B-L20
   file: sportsdataverse/_common_espn_player_stats.py
-  snippet: '            out[col] = _coerce_float(stat.get("value"))'
-  mutant: '            out[col] = _coerce_float(stat.get("value")) if stat.get("value") is not None else stat.get("displayValue")'
+  snippet: '            out[col] = num'
+  mutant: '            out[col] = num if num is not None else display'
   test: tests/test_common_espn_player_stats.py -k "null_float_not_its_display_value"
   expected: kill
   note: A stat with no value carries its "--" display string into a Float64 column again.
+
+- id: league-wrapper-passes-its-own-table
+  group: dtype-contract-5-1
+  finding: A-M12
+  file: sportsdataverse/mbb/mbb_espn_ext.py
+  snippet: '        return parse_scoreboard(raw, return_as_pandas=return_as_pandas, documented_table="scoreboard/mbb")'
+  mutant: '        return parse_scoreboard(raw, return_as_pandas=return_as_pandas)'
+  test: tests/test_espn_universal_parsers.py -k "empty_schema_quiet_scoreboard_day_keeps_each"
+  expected: kill
+  note: >-
+    R978-1: without its league's table a quiet mbb day is (0, 0) again (and with the generic table it would turn
+    a season's home_rank String through diagonal_relaxed).
+
+- id: per-league-parser-without-a-table-keeps-zero-width
+  group: dtype-contract-5-1
+  finding: A-M12
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            table = documented_table or (None if _league_tables(name) else name)'
+  mutant: '            table = documented_table or name'
+  test: tests/test_espn_universal_parsers.py -k "empty_schema_hostile and parse_scoreboard-dict"
+  expected: kill
+  note: R978-1, a direct parse_scoreboard({}) would take the generic (NBA) table, whose rank columns are String.
+
+- id: documented-empty-swaps-zero-width-only
+  group: dtype-contract-5-1
+  finding: A-M12
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            if table is None or not hasattr(out, "columns") or len(out.columns):'
+  mutant: '            if table is None or not hasattr(out, "columns") or len(out):'
+  test: tests/test_espn_universal_parsers.py -k "empty_schema_zero_rows_with_columns"
+  expected: kill
+  note: R978-6, a zero-row result that already has its own columns would be replaced.
+
+- id: empty-pandas-is-arrow-backed-where-the-full-one-is
+  group: dtype-contract-5-1
+  finding: MD-3
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    return df.to_pandas(use_pyarrow_extension_array=True) if arrow else df.to_pandas()'
+  mutant: '    return df.to_pandas()'
+  test: tests/nba/test_nba_stats_multifile_loaders.py -k "empty_schema and synergy"
+  expected: kill
+  note: R978-3, an empty multi-file load would have numpy dtypes while a full one has Arrow dtypes.
+
+- id: enrich-pbp-zero-rows-with-columns-is-documented
+  group: dtype-contract-5-1
+  finding: B-GB-09
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '    df = df.select([c for c in order if c in df.columns] + [c for c in df.columns if c not in order])'
+  mutant: '    df = df'
+  test: tests/hockeytech/test_pbp_enrich.py -k "real_games_stack"
+  expected: kill
+  note: R978-4, the two payload dialects build their columns in different orders, so the leagues do not stack.
+
+- id: hockeytech-shift-end-stays-int64
+  group: dtype-contract-5-1
+  finding: B-L73
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '    df = df.with_columns(pl.col(c).cast(pl.Int64) for c in ("start_s", "end_s") if c in df.columns)'
+  mutant: '    df = df'
+  test: tests/hockeytech/test_parsers.py -k "on_the_ice"
+  expected: kill
+  note: R978-4, a shift still on the ice makes end_s Float64.
+
+- id: pin-documented-float-back-to-int64
+  group: dtype-contract-5-1
+  finding: B-L83
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            if moved.null_count() == 0 and moved.cast(have, strict=False).equals(values):'
+  mutant: '            if moved.null_count() == 0 and moved.cast(have, strict=False).equals(values) and not want.is_integer():'
+  test: tests/mlb/test_mlb_statcast_extra.py -k "pinned_back"
+  expected: kill
+  note: R979-2, the headline direction (a whole-number column pandas read as float64) is never pinned back to Int64.
+
+- id: pin-documented-never-truncates
+  group: dtype-contract-5-1
+  finding: B-L83
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            if moved.null_count() == 0 and moved.cast(have, strict=False).equals(values):'
+  mutant: '            if moved.null_count() == 0:'
+  test: tests/mlb/test_mlb_statcast_extra.py -k "pinned_back"
+  expected: kill
+  note: R979-2/-4, a 1.5 in a documented-integer column would be truncated to 1.
+
+- id: pin-documented-all-null-columns
+  group: dtype-contract-5-1
+  finding: B-L83
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '        if values.len() == 0:'
+  mutant: '        if False:'
+  test: tests/mlb/test_mlb_statcast_extra.py -k "minors_and_wbc"
+  expected: kill
+  note: The WBC capture's all-null fielding alignment stays Float64 instead of the documented String.
+
+- id: statcast-minors-chunk-pinned
+  group: dtype-contract-5-1
+  finding: B-L83
+  file: sportsdataverse/mlb/mlb_statcast_extra.py
+  snippet: '        return _pin_documented("autodoc/mlb/mlb_statcast_search_minors", frame)'
+  mutant: '        return frame'
+  test: tests/mlb/test_mlb_statcast_extra.py -k "minors_and_wbc"
+  expected: kill
+  note: R979-2, a minors chunk with one missing zone reads Float64.
+
+- id: statcast-wbc-chunk-pinned
+  group: dtype-contract-5-1
+  finding: B-L83
+  file: sportsdataverse/mlb/mlb_statcast_extra.py
+  snippet: '        return _pin_documented("autodoc/mlb/mlb_statcast_search_wbc", frame)'
+  mutant: '        return frame'
+  test: tests/mlb/test_mlb_statcast_extra.py -k "minors_and_wbc"
+  expected: kill
+  note: R979-2, the WBC chunk's fielding alignment stays Float64 and a missing zone reads Float64.
+
+- id: espn-player-stat-plain-number-display
+  group: dtype-contract-5-1
+  finding: B-L20
+  file: sportsdataverse/_common_espn_player_stats.py
+  snippet: '                num = float(display)'
+  mutant: '                num = None'
+  test: tests/test_common_espn_player_stats.py -k "nhl_stat_with_a_numeric_display"
+  expected: kill
+  note: R979-5, McDavid's NHL stats with display "0" and no value become null instead of 0.0.
 
 # --- task 5.1 part (c): CFB drive columns of a feed with no drive end keep their dtype (C-L5)
 - id: cfb-drive-columns-without-an-end-keep-their-dtype
   group: dtype-contract-5-1
   finding: C-L5
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: '            pl.col(c).cast(t) for c, t in _DRIVE_DTYPES.items() if pbp_txt["plays"].schema.get(c) == pl.Null'
-  mutant: '            pl.col(c) for c, t in _DRIVE_DTYPES.items() if pbp_txt["plays"].schema.get(c) == pl.Null'
+  snippet: '        pl.col(c).cast(t) for c, t in documented.items() if c.startswith("drive.") and plays.schema.get(c) == pl.Null'
+  mutant: '        pl.col(c) for c, t in documented.items() if c.startswith("drive.") and plays.schema.get(c) == pl.Null'
   test: tests/cfb/test_cfb_whole_game_oracle.py -k "schema_is_identical and 252532751"
   expected: kill
   note: The eight drive.* columns of 252532751 (2005, drives without an end) are dtype Null again.
@@ -7023,3 +7145,13 @@
   test: tests/nhl/test_nhl_edge_value.py -k "player_id_is_int64"
   expected: kill
   note: The skating value keeps the EDGE capture's text player ids, so it joins no NHL frame.
+
+- id: cfb-drive-columns-every-documented-drive-key
+  group: dtype-contract-5-1
+  finding: C-L5
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '        pl.col(c).cast(t) for c, t in documented.items() if c.startswith("drive.") and plays.schema.get(c) == pl.Null'
+  mutant: '        pl.col(c).cast(t) for c, t in documented.items() if c.startswith("drive.") and not c.startswith("drive.team.") and plays.schema.get(c) == pl.Null'
+  test: tests/cfb/test_cfb_pbp_processor_fixes.py -k "no_drive_carries and 400547808"
+  expected: kill
+  note: R980-1, one entry (here the four drive.team.* columns) dropped from the typed list leaves 400547808's team columns Null.

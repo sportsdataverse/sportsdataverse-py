@@ -962,7 +962,7 @@ def enrich_pbp(
     # ------------------------------------------------------------------
     df = df.with_columns(
         game_date=pl.lit(game_date),
-        game_season=pl.lit(game_season),
+        game_season=pl.lit(game_season, dtype=pl.Int64),  # the documented integer (R978-4)
         game_season_id=pl.lit(game_season_id, dtype=pl.Int64),
         home_team=pl.lit(home_team),
         home_team_id=pl.lit(home_team_id, dtype=pl.Int64),
@@ -1053,6 +1053,10 @@ def enrich_pbp(
             on_ice_away=pl.lit(None, dtype=pl.Utf8),
         )
 
+    # The documented column order for both payload dialects (R978-4): hockeytech_a and _b built the event
+    # columns in different orders, so a no-play game and two leagues' games would not stack vertically.
+    order = list(_empty_from_schema("autodoc/pwhl/pwhl_pbp").columns)
+    df = df.select([c for c in order if c in df.columns] + [c for c in df.columns if c not in order])
     if return_as_pandas:
         return df.to_pandas()
     return df

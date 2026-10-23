@@ -13,6 +13,7 @@ from typing import Any, Dict, Optional, Union
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _documented_empty
 from sportsdataverse.dl_utils import underscore
 
 
@@ -94,6 +95,7 @@ def _tournament(season_label: Optional[str]) -> Optional[str]:
     return None
 
 
+@_documented_empty("scoreboard")
 def parse_soccer_scoreboard(payload: Any, *, return_as_pandas: bool = False):
     events = (payload or {}).get("events") if isinstance(payload, dict) else None
     rows = []

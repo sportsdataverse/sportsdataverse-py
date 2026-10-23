@@ -946,3 +946,30 @@ def test_kickoff_touchback_end_spot_follows_the_era(game_id, spot):
 )
 def test_kickoff_out_of_bounds_spot_follows_the_era(game_id, needle, yards):
     assert _row(_fixture_plays(game_id), needle)["yds_kickoff_return"] == yards
+
+
+@pytest.mark.parametrize(
+    ("game_id", "missing"),
+    [
+        (272560120, ["drive.start.clock.displayValue"]),
+        (
+            400547808,
+            ["drive.team.shortDisplayName", "drive.team.displayName", "drive.team.name", "drive.team.abbreviation"],
+        ),
+    ],
+)
+def test_drive_columns_no_drive_carries_keep_the_documented_type(game_id, missing):
+    """C-L5 / R980-1: a drive key no drive of the game carries is an all-null column of the returns table's type,
+    never ``Null`` (real games from cfbfastR-cfb-raw, tests/cfb/fixtures/README.md)."""
+    from tests.conftest import documented_schema
+
+    with gzip.open(FIX / "drive_meta" / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
+        summary = json.load(fh)
+    proc = CFBPlayProcess(gameId=game_id, join_participants=False)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    frame = proc.plays_frame
+    want = documented_schema("autodoc/cfb/normalize_pbp_columns")
+    drive = {c: want[c] for c in want if c.startswith("drive.") and c in frame.columns}
+    assert all(frame[c].null_count() == frame.height for c in missing)
+    assert {c: frame.schema[c] for c in drive} == drive
