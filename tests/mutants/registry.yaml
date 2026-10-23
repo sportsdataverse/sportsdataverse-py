@@ -7155,3 +7155,44 @@
   test: tests/cfb/test_cfb_pbp_processor_fixes.py -k "no_drive_carries and 400547808"
   expected: kill
   note: R980-1, one entry (here the four drive.team.* columns) dropped from the typed list leaves 400547808's team columns Null.
+
+# --- task 5.2 part (c): HockeyTech ids are Int64 at the parser boundary (B-H5, B-L72)
+- id: hockeytech-parser-ids-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '    return _cast_id_columns(pl.from_pandas(pdf)) if len(pdf) else pl.DataFrame()'
+  mutant: '    return pl.from_pandas(pdf) if len(pdf) else pl.DataFrame()'
+  test: tests/hockeytech/test_parsers.py -k "hockeytech_ids_int64"
+  expected: kill
+  note: player_id is Float64 in pbp and String in roster / leaders / summary again; game_id copies the caller (B-L72).
+
+- id: hockeytech-meta-team-id-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '        home_team_id=pl.lit(home_team_id, dtype=pl.Int64),'
+  mutant: '        home_team_id=pl.lit(str(home_team_id or "")),'
+  test: tests/hockeytech/test_pbp_enrich.py -k "enriched_pbp_ids_int64"
+  expected: kill
+  note: enrich_pbp writes the game-summary home team as text ("" when absent) again.
+
+- id: hockeytech-corsi-player-id-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '    return _cast_ids_int64(out, ["player_id"])'
+  mutant: '    return out'
+  test: tests/hockeytech/test_public_surface.py -k "corsi_fenwick_on_ice_player_level"
+  expected: kill
+  note: The on-ice Corsi frame keys players by the text ids of the on-ice strings again.
+
+- id: id-cast-empty-string-is-null
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            src = src.set(src == "", None)'
+  mutant: '            pass'
+  test: tests/codegen/test_id_casts.py -k "stripped"
+  expected: kill
+  note: A feed's "" id (HockeyTech FloCoreEventId on every scorebar row) is refused, so the column stays String.

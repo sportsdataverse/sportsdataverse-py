@@ -30,7 +30,7 @@ One row per player on ice for a shot attempt: `player_id` (String), `corsi_for` 
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `corsi_for` | integer | Total shot attempts (goals, saves, missed shots, and blocked shots) directed toward the opposing team while the player was on the ice in the OHL game. |
 | `corsi_against` | integer | Total shot attempts (goals, saves, missed shots, and blocked shots) directed against the player's team while that player was on the ice in the OHL game. |
 | `corsi_for_pct` | double | Share of all shot attempts while the player was on the ice that were directed toward the opponent, expressed as a percentage (Corsi For / (Corsi For + Corsi Against)). |
@@ -116,10 +116,10 @@ One row per ranked skater (points and goals leaders): `rank` (Int64), `player_id
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | Rank of the streak. |
-| `player_id` | character | Unique player identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `jersey_number` | character | Jersey number. |
 | `name` | character | Team mascot name. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Team name. |
 | `team_code` | character | Team abbreviation. |
 | `team_logo` | character | URL to the team logo image. |
@@ -159,25 +159,25 @@ One row per event (shot, goal, penalty, faceoff, hit, goalie change ...): `game_
 |---|---|---|
 | `game_id` | integer | Unique game identifier. |
 | `event` | character | Event description label. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `period_of_game` | character | Period in which the event occurred. |
 | `time_of_period` | character | Elapsed time within the period (MM:SS). |
 | `x_coord` | double | Transformed x-coordinate of the event (feet scale). |
 | `y_coord` | double | Transformed y-coordinate of the event (feet scale). |
-| `player_id` | double | Unique player identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `player_name_first` | character | Primary player first name. |
 | `player_name_last` | character | Primary player last name. |
 | `player_position` | character | Primary player position. |
 | `goal` | logical | Flag for whether the event was a goal. |
 | `is_goal_twin` | logical | Boolean flag marking a shot row that duplicates a goal event on the same play — the HockeyTech feed emits both a shot row and a goal row for every goal. Shot rows (twins included) match the official boxscore shots-on-goal totals; drop rows with this flag set to get a deduplicated event stream. |
-| `goalie_id` | double | Goalie identifier on the play. |
+| `goalie_id` | integer | Goalie identifier on the play. |
 | `goalie_first` | character | Goalie first name. |
 | `goalie_last` | character | Goalie last name. |
 | `home_win` | character | Whether the home player won the faceoff. |
-| `player_team_id` | character | Unique team identifier of the primary player. |
+| `player_team_id` | integer | Unique team identifier of the primary player. |
 | `event_type` | character | Standardized event type code. |
 | `shot_quality` | character | Shot quality descriptor. |
-| `player_two_id` | double | Second player's unique identifier. |
+| `player_two_id` | integer | Second player's unique identifier. |
 | `player_two_name_first` | character | Second player first name. |
 | `player_two_name_last` | character | Second player last name. |
 | `player_two_position` | character | Second player position. |
@@ -188,57 +188,57 @@ One row per event (shot, goal, penalty, faceoff, hit, goalie change ...): `game_
 | `penalty_shot` | character | Whether the goal came on a penalty shot. |
 | `insurance` | character | Whether the goal was an insurance goal. |
 | `short_handed` | character | Whether the event occurred while short-handed. |
-| `player_three_id` | double | Third player's unique identifier. |
+| `player_three_id` | integer | Third player's unique identifier. |
 | `player_three_name_first` | character | Third player first name. |
 | `player_three_name_last` | character | Third player last name. |
 | `player_three_position` | character | Third player position. |
-| `plus_player_one_id` | double | On-ice plus player one unique identifier. |
+| `plus_player_one_id` | integer | On-ice plus player one unique identifier. |
 | `plus_player_one_first` | character | On-ice plus player one first name. |
 | `plus_player_one_last` | character | On-ice plus player one last name. |
 | `plus_player_one_position` | character | On-ice plus player one position. |
-| `plus_player_two_id` | double | On-ice plus player two unique identifier. |
+| `plus_player_two_id` | integer | On-ice plus player two unique identifier. |
 | `plus_player_two_first` | character | On-ice plus player two first name. |
 | `plus_player_two_last` | character | On-ice plus player two last name. |
 | `plus_player_two_position` | character | On-ice plus player two position. |
-| `plus_player_three_id` | double | On-ice plus player three unique identifier. |
+| `plus_player_three_id` | integer | On-ice plus player three unique identifier. |
 | `plus_player_three_first` | character | On-ice plus player three first name. |
 | `plus_player_three_last` | character | On-ice plus player three last name. |
 | `plus_player_three_position` | character | On-ice plus player three position. |
-| `plus_player_four_id` | double | On-ice plus player four unique identifier. |
+| `plus_player_four_id` | integer | On-ice plus player four unique identifier. |
 | `plus_player_four_first` | character | On-ice plus player four first name. |
 | `plus_player_four_last` | character | On-ice plus player four last name. |
 | `plus_player_four_position` | character | On-ice plus player four position. |
-| `plus_player_five_id` | double | On-ice plus player five unique identifier. |
+| `plus_player_five_id` | integer | On-ice plus player five unique identifier. |
 | `plus_player_five_first` | character | On-ice plus player five first name. |
 | `plus_player_five_last` | character | On-ice plus player five last name. |
 | `plus_player_five_position` | character | On-ice plus player five position. |
-| `minus_player_one_id` | double | On-ice minus player one unique identifier. |
+| `minus_player_one_id` | integer | On-ice minus player one unique identifier. |
 | `minus_player_one_first` | character | On-ice minus player one first name. |
 | `minus_player_one_last` | character | On-ice minus player one last name. |
 | `minus_player_one_position` | character | On-ice minus player one position. |
-| `minus_player_two_id` | double | On-ice minus player two unique identifier. |
+| `minus_player_two_id` | integer | On-ice minus player two unique identifier. |
 | `minus_player_two_first` | character | On-ice minus player two first name. |
 | `minus_player_two_last` | character | On-ice minus player two last name. |
 | `minus_player_two_position` | character | On-ice minus player two position. |
-| `minus_player_three_id` | double | On-ice minus player three unique identifier. |
+| `minus_player_three_id` | integer | On-ice minus player three unique identifier. |
 | `minus_player_three_first` | character | On-ice minus player three first name. |
 | `minus_player_three_last` | character | On-ice minus player three last name. |
 | `minus_player_three_position` | character | On-ice minus player three position. |
-| `minus_player_four_id` | double | On-ice minus player four unique identifier. |
+| `minus_player_four_id` | integer | On-ice minus player four unique identifier. |
 | `minus_player_four_first` | character | On-ice minus player four first name. |
 | `minus_player_four_last` | character | On-ice minus player four last name. |
 | `minus_player_four_position` | character | On-ice minus player four position. |
-| `minus_player_five_id` | double | On-ice minus player five unique identifier. |
+| `minus_player_five_id` | integer | On-ice minus player five unique identifier. |
 | `minus_player_five_first` | character | On-ice minus player five first name. |
 | `minus_player_five_last` | character | On-ice minus player five last name. |
 | `minus_player_five_position` | character | On-ice minus player five position. |
 | `game_date` | character | Game date. |
 | `game_season` | integer | Season (concluding year, YYYY). |
-| `game_season_id` | character | HockeyTech season identifier. |
+| `game_season_id` | integer | HockeyTech season identifier. |
 | `home_team` | character | Home team name. |
-| `home_team_id` | character | Home team identifier. |
+| `home_team_id` | integer | Home team identifier. |
 | `away_team` | character | Away team name. |
-| `away_team_id` | character | Away team identifier. |
+| `away_team_id` | integer | Away team identifier. |
 | `x_coord_original` | double | Original raw x-coordinate from the feed. |
 | `y_coord_original` | double | Original raw y-coordinate from the feed. |
 | `x_coord_neutral` | double | Neutral-zone-centered x-coordinate. |
@@ -285,7 +285,7 @@ One row per season (and team) the player played: `season_id`, `season_name`, `pl
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | character | Season identifier. |
+| `season_id` | integer | Season identifier. |
 | `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
 | `shortname` | character | Player short name. |
 | `playoff` | character | Whether the row is playoff statistics. |
@@ -324,7 +324,7 @@ One row per season (and team) the player played: `season_id`, `season_name`, `pl
 | `team_code` | character | Team abbreviation. |
 | `team_city` | character | Team city. |
 | `team_nickname` | character | Team nickname. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `active` | character | Whether athlete is currently active. |
 | `first_goals` | character | First goals of a game. |
 | `insurance_goals` | character | Insurance goals. |
@@ -398,17 +398,17 @@ One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_tea
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
+| `game_id` | integer | Unique game identifier. |
 | `game_date` | character | Game date. |
 | `game_status` | character | Game status text. |
 | `home_team` | character | Home team name. |
-| `home_team_id` | character | Home team identifier. |
+| `home_team_id` | integer | Home team identifier. |
 | `home_score` | character | Home team final score. |
 | `away_team` | character | Away team name. |
-| `away_team_id` | character | Away team identifier. |
+| `away_team_id` | integer | Away team identifier. |
 | `away_score` | character | Away team final score. |
 | `venue` | character | Venue where the game was played. |
-| `season_id` | character | Season identifier. |
+| `season_id` | integer | Season identifier. |
 | `game_type` | character | Game type the row belongs to. |
 
 **Raises**
@@ -515,7 +515,7 @@ One row per team: `team_id`, `team_name`, `team_code`, `team_nickname`, `team_la
 | col_name | type | description |
 |---|---|---|
 | `team_name` | character | Team name. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `team_code` | character | Team abbreviation. |
 | `team_nickname` | character | Team nickname. |
 | `team_label` | character | Short city label. |

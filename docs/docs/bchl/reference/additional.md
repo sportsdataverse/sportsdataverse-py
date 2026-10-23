@@ -199,17 +199,17 @@ One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_tea
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
+| `game_id` | integer | Unique game identifier. |
 | `game_date` | character | Game date. |
 | `game_status` | character | Game status text. |
 | `home_team` | character | Home team name. |
-| `home_team_id` | character | Home team identifier. |
+| `home_team_id` | integer | Home team identifier. |
 | `home_score` | character | Home team final score. |
 | `away_team` | character | Away team name. |
-| `away_team_id` | character | Away team identifier. |
+| `away_team_id` | integer | Away team identifier. |
 | `away_score` | character | Away team final score. |
 | `venue` | character | Venue where the game was played. |
-| `season_id` | character | Season identifier. |
+| `season_id` | integer | Season identifier. |
 | `game_type` | character | Game type the row belongs to. |
 
 **Raises**
@@ -311,7 +311,7 @@ One row per team: `team_id`, `team_name`, `team_code`, `team_nickname`, `team_la
 | col_name | type | description |
 |---|---|---|
 | `team_name` | character | Team name. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `team_code` | character | Team abbreviation. |
 | `team_nickname` | character | Team nickname. |
 | `team_label` | character | Short city label. |

@@ -8,7 +8,7 @@ columns:
   type: character
   description: ''
 - name: team_id
-  type: character
+  type: integer
   description: ''
 - name: period_of_game
   type: character
@@ -23,7 +23,7 @@ columns:
   type: double
   description: ''
 - name: player_id
-  type: double
+  type: integer
   description: ''
 - name: player_name_first
   type: character
@@ -41,7 +41,7 @@ columns:
   type: logical
   description: ''
 - name: goalie_id
-  type: double
+  type: integer
   description: ''
 - name: goalie_first
   type: character
@@ -53,7 +53,7 @@ columns:
   type: character
   description: ''
 - name: player_team_id
-  type: character
+  type: integer
   description: ''
 - name: event_type
   type: character
@@ -62,7 +62,7 @@ columns:
   type: character
   description: ''
 - name: player_two_id
-  type: double
+  type: integer
   description: ''
 - name: player_two_name_first
   type: character
@@ -95,7 +95,7 @@ columns:
   type: character
   description: ''
 - name: player_three_id
-  type: double
+  type: integer
   description: ''
 - name: player_three_name_first
   type: character
@@ -107,7 +107,7 @@ columns:
   type: character
   description: ''
 - name: plus_player_one_id
-  type: double
+  type: integer
   description: ''
 - name: plus_player_one_first
   type: character
@@ -119,7 +119,7 @@ columns:
   type: character
   description: ''
 - name: plus_player_two_id
-  type: double
+  type: integer
   description: ''
 - name: plus_player_two_first
   type: character
@@ -131,7 +131,7 @@ columns:
   type: character
   description: ''
 - name: plus_player_three_id
-  type: double
+  type: integer
   description: ''
 - name: plus_player_three_first
   type: character
@@ -143,7 +143,7 @@ columns:
   type: character
   description: ''
 - name: plus_player_four_id
-  type: double
+  type: integer
   description: ''
 - name: plus_player_four_first
   type: character
@@ -155,7 +155,7 @@ columns:
   type: character
   description: ''
 - name: plus_player_five_id
-  type: double
+  type: integer
   description: ''
 - name: plus_player_five_first
   type: character
@@ -167,7 +167,7 @@ columns:
   type: character
   description: ''
 - name: minus_player_one_id
-  type: double
+  type: integer
   description: ''
 - name: minus_player_one_first
   type: character
@@ -179,7 +179,7 @@ columns:
   type: character
   description: ''
 - name: minus_player_two_id
-  type: double
+  type: integer
   description: ''
 - name: minus_player_two_first
   type: character
@@ -191,7 +191,7 @@ columns:
   type: character
   description: ''
 - name: minus_player_three_id
-  type: double
+  type: integer
   description: ''
 - name: minus_player_three_first
   type: character
@@ -203,7 +203,7 @@ columns:
   type: character
   description: ''
 - name: minus_player_four_id
-  type: double
+  type: integer
   description: ''
 - name: minus_player_four_first
   type: character
@@ -215,7 +215,7 @@ columns:
   type: character
   description: ''
 - name: minus_player_five_id
-  type: double
+  type: integer
   description: ''
 - name: minus_player_five_first
   type: character
@@ -233,19 +233,19 @@ columns:
   type: integer
   description: ''
 - name: game_season_id
-  type: character
+  type: integer
   description: ''
 - name: home_team
   type: character
   description: ''
 - name: home_team_id
-  type: character
+  type: integer
   description: ''
 - name: away_team
   type: character
   description: ''
 - name: away_team_id
-  type: character
+  type: integer
   description: ''
 - name: x_coord_original
   type: double

@@ -5,7 +5,7 @@ columns:
   type: integer
   description: ''
 - name: player_id
-  type: character
+  type: integer
   description: ''
 - name: jersey_number
   type: character
@@ -14,7 +14,7 @@ columns:
   type: character
   description: ''
 - name: team_id
-  type: character
+  type: integer
   description: ''
 - name: team_name
   type: character
