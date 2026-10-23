@@ -2311,7 +2311,9 @@ def parse_summary_drive_plays(payload: Dict, return_as_pandas: bool = False) -> 
 
 
 @_zero_rows_unless_dict
-def parse_summary(payload: Dict, section: str = None, return_as_pandas: bool = False, documented_table: str = None):
+def parse_summary(
+    payload: Dict, section: str = None, return_as_pandas: bool = False, documented_table: str | None = None
+):
     """Dispatcher: parse one section of a Site v2 summary payload.
 
     With ``section=None`` (default), returns a ``dict`` of every parsable
@@ -2349,7 +2351,7 @@ def parse_summary(payload: Dict, section: str = None, return_as_pandas: bool = F
     }
 
 
-def _summary_section(name: str, payload: Dict, return_as_pandas: bool, documented_table: str = None):
+def _summary_section(name: str, payload: Dict, return_as_pandas: bool, documented_table: str | None = None):
     """One section, passed its league's table (``summary/mbb:plays``) when the wrapper named one (R978-1)."""
     kwargs = {"documented_table": f"{documented_table}:{name}"} if documented_table else {}
     return SUMMARY_SECTION_PARSERS[name](payload, return_as_pandas=return_as_pandas, **kwargs)
@@ -2394,7 +2396,9 @@ def _cdn_content(payload: Any) -> dict:
     return content if isinstance(content, dict) else {}
 
 
-def parse_cdn_game(payload: Dict, section: str = None, return_as_pandas: bool = False, documented_table: str = None):
+def parse_cdn_game(
+    payload: Dict, section: str = None, return_as_pandas: bool = False, documented_table: str | None = None
+):
     """Parse a CDN ``playbyplay`` / ``boxscore`` page through :func:`parse_summary`.
 
     The page's ``gamepackageJSON`` block is a Site v2 summary payload, so this is
