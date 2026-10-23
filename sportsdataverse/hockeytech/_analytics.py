@@ -12,7 +12,7 @@ from typing import Any, Optional
 
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _empty_from_schema
+from sportsdataverse._codegen_runtime import _cast_ids_int64, _empty_from_schema
 
 # ---------------------------------------------------------------------------
 # PWHL PBP enrichment: clock + coordinate transforms
@@ -173,8 +173,8 @@ def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
     ----------
     pbp:
         Play-by-play frame with at least ``x_coord`` (Float64),
-        ``y_coord`` (Float64), ``team_id`` (Utf8), and ``home_team_id``
-        (Utf8 or castable) columns.
+        ``y_coord`` (Float64), ``team_id`` and ``home_team_id`` (Int64 since task 5.2;
+        a Utf8 id still compares) columns.
 
     Returns
     -------
@@ -215,8 +215,8 @@ def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
     # flips applied a 0-200 x 0-85 mirror to these centre-origin feet: home events landed
     # 100-300 ft out.) ``home_team_id`` arrives with the game-summary meta-join; without it,
     # or for an event with no team, the side is unknown and the right frame is null.
-    # enrich_pbp writes home_team_id as "" when the game summary is unavailable (MJHL's gc feed
-    # is access-denied), so an empty id is as unknown as a null one.
+    # enrich_pbp writes home_team_id null when the game summary is unavailable (MJHL's gc feed
+    # is access-denied; it wrote "" before task 5.2), so an empty id is as unknown as a null one.
     if {"team_id", "home_team_id"} <= set(pbp.columns):
         tid, hid = pl.col("team_id").cast(pl.Utf8), pl.col("home_team_id").cast(pl.Utf8)
         is_home = pl.when((tid.fill_null("") != "") & (hid.fill_null("") != "")).then(tid == hid)
@@ -599,7 +599,7 @@ def corsi_fenwick(pbp: pl.DataFrame) -> pl.DataFrame:
 
 
 _CORSI_FENWICK_ON_ICE_SCHEMA = {
-    "player_id": pl.Utf8,
+    "player_id": pl.Int64,
     "corsi_for": pl.Int64,
     "corsi_against": pl.Int64,
     "corsi_for_pct": pl.Float64,
@@ -618,8 +618,8 @@ def corsi_fenwick_on_ice(pbp: pl.DataFrame) -> pl.DataFrame:
     frame must carry:
 
     - ``event`` (Utf8): event type.
-    - ``team_id`` (Utf8): team that performed the event.
-    - ``home_team_id`` (Utf8): the home team for the game.
+    - ``team_id`` (Int64): team that performed the event.
+    - ``home_team_id`` (Int64): the home team for the game.
     - ``on_ice_home`` (Utf8): comma-joined player ids for the home side.
     - ``on_ice_away`` (Utf8): comma-joined player ids for the away side.
 
@@ -718,7 +718,9 @@ def corsi_fenwick_on_ice(pbp: pl.DataFrame) -> pl.DataFrame:
                 "corsi_includes_missed": False,
             }
         )
-    return pl.DataFrame(rows, schema=_CORSI_FENWICK_ON_ICE_SCHEMA)
+    # the on-ice strings carry the ids as text; the frame carries them Int64 like every HockeyTech id (task 5.2)
+    out = pl.DataFrame(rows, schema={**_CORSI_FENWICK_ON_ICE_SCHEMA, "player_id": pl.Utf8})
+    return _cast_ids_int64(out, ["player_id"])
 
 
 def backfill_power_play(df: pl.DataFrame) -> pl.DataFrame:
@@ -857,6 +859,12 @@ def backfill_power_play(df: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+def _meta_id(value: Any) -> Optional[int]:
+    """A game-summary id as an ``int`` (task 5.2); ``None`` when absent or not an integer (was ``""``)."""
+    text = str(value).strip() if value is not None else ""
+    return int(text) if text.lstrip("-").isdigit() else None
+
+
 def enrich_pbp(
     df: pl.DataFrame,
     league: str,
@@ -939,14 +947,14 @@ def enrich_pbp(
     away_raw = gs.get("visitor") or {}
 
     home_team: str = str(home_raw.get("name") or home_raw.get("city") or "")
-    home_team_id: str = str(gs_meta.get("home_team") or home_raw.get("id") or home_raw.get("team_id") or "")
+    home_team_id = _meta_id(gs_meta.get("home_team") or home_raw.get("id") or home_raw.get("team_id"))
     away_team: str = str(away_raw.get("name") or away_raw.get("city") or "")
-    away_team_id: str = str(gs_meta.get("visiting_team") or away_raw.get("id") or away_raw.get("team_id") or "")
+    away_team_id = _meta_id(gs_meta.get("visiting_team") or away_raw.get("id") or away_raw.get("team_id"))
 
     game_date: str = str(gs_meta.get("date_played") or gs.get("game_date_iso_8601") or gs.get("game_date") or "")
     game_season_raw = game_date[:4] if game_date else None
     game_season: Optional[int] = int(game_season_raw) if game_season_raw and game_season_raw.isdigit() else None
-    game_season_id: str = str(gs_meta.get("season_id") or "")
+    game_season_id = _meta_id(gs_meta.get("season_id"))
 
     # ------------------------------------------------------------------
     # Step 3: add game-meta literal columns BEFORE coord transforms
@@ -955,11 +963,11 @@ def enrich_pbp(
     df = df.with_columns(
         game_date=pl.lit(game_date),
         game_season=pl.lit(game_season),
-        game_season_id=pl.lit(game_season_id),
+        game_season_id=pl.lit(game_season_id, dtype=pl.Int64),
         home_team=pl.lit(home_team),
-        home_team_id=pl.lit(home_team_id),
+        home_team_id=pl.lit(home_team_id, dtype=pl.Int64),
         away_team=pl.lit(away_team),
-        away_team_id=pl.lit(away_team_id),
+        away_team_id=pl.lit(away_team_id, dtype=pl.Int64),
     )
 
     # ------------------------------------------------------------------

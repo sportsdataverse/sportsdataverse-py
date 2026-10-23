@@ -13,7 +13,7 @@ from typing import Any, Dict, List, Optional
 import pandas as pd
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _documented_empty
+from sportsdataverse._codegen_runtime import _cast_id_columns, _documented_empty
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import _data_only, _dict_only
 
@@ -46,7 +46,8 @@ def _to_frame(records: List[Dict[str, Any]], return_as_pandas: bool) -> Any:
             pdf[col] = pdf[col].map(lambda v: str(v) if isinstance(v, (int, float, bool)) else v)
     if return_as_pandas:
         return pdf
-    return pl.from_pandas(pdf) if len(pdf) else pl.DataFrame()
+    # every id Int64 from the raw integer (task 5.2: B-H5, B-L72); a text id is refused and keeps its dtype
+    return _cast_id_columns(pl.from_pandas(pdf)) if len(pdf) else pl.DataFrame()
 
 
 def _sitekit(payload: Any, key: str) -> Any:
@@ -173,7 +174,7 @@ def parse_schedule(payload: Any, return_as_pandas: bool = False, season_id: Opti
     if season_id is not None:
         rows = [r for r in rows if str(r["season_id"]) == str(season_id)]
     if not rows:
-        empty = pl.DataFrame(schema=dict.fromkeys(_SCHEDULE_RENAME.values(), pl.String))
+        empty = _cast_id_columns(pl.DataFrame(schema=dict.fromkeys(_SCHEDULE_RENAME.values(), pl.String)))
         return empty.to_pandas() if return_as_pandas else empty
     return _to_frame(rows, return_as_pandas)
 

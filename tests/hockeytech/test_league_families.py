@@ -79,7 +79,7 @@ def test_league_schedule(patched_api, lg):
     df = getattr(mod, f"{lg}_schedule")(season_id=8)
     assert isinstance(df, pl.DataFrame)
     assert df.height == 120
-    assert set(df["season_id"]) == {"8"}
+    assert set(df["season_id"]) == {8}
 
 
 @pytest.mark.parametrize(
