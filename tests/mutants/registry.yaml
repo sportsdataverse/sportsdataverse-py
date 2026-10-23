@@ -1153,13 +1153,16 @@
   finding: A-L55
   file: sportsdataverse/_codegen_runtime.py
   snippet: |2-
+        for col in cols:
+            if col not in df.columns or df.schema[col] == pl.Int64:
+  mutant: |2-
         if df.height == 0:
             return df
         for col in cols:
-  mutant: '    for col in cols:'
-  test: tests/codegen/test_id_casts.py -k empty_frame_keeps
+            if col not in df.columns or df.schema[col] == pl.Int64:
+  test: tests/codegen/test_id_casts.py -k empty_frame_cast
   expected: kill
-  note: casting the empty frame too is task 5.2's fix; the strict xfail turns XPASS (red), which is the kill
+  note: task 5.2 casts the empty frame too; the original skip leaves String ids on an empty result
 
 # --- task 1.4: hand-written provider gates (group provider-gates) -------------------------------
 - id: cfb-schedule-drop-null-competitor-guard
@@ -6980,6 +6983,127 @@
   test: tests/cfb/test_cfb_whole_game_oracle.py -k "schema_is_identical and 252532751"
   expected: kill
   note: The eight drive.* columns of 252532751 (2005, drives without an end) are dtype Null again.
+
+# --- task 5.2 part (a): ESPN ids are Int64 at the parser boundary (A-M14, A-M15, B-M15, B-GB-10, C-M8)
+- id: espn-parser-ids-int64-at-the-boundary
+  group: dtype-contract-5-2
+  finding: A-M15
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    return _ids_int64(out)'
+  mutant: '    return out'
+  test: tests/test_espn_universal_parsers.py -k "dtype_snapshot_matches_every_committed_capture"
+  expected: kill
+  note: The pandas-hop parsers hand back their ids as String (or Float64 with a missing value) again.
+
+- id: espn-fpi-team-id-joins-weekly-powerindex
+  group: dtype-contract-5-2
+  finding: A-M15
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    out = _ids_int64(pl.from_pandas(df))'
+  mutant: '    out = pl.from_pandas(df)'
+  test: tests/test_espn_universal_parsers.py -k "fpi_joins_weekly_powerindex"
+  expected: kill
+  note: parse_fpi emits team_id String again, so its join with parse_weekly_powerindex raises SchemaError.
+
+- id: id-cast-strips-string-ids
+  group: dtype-contract-5-2
+  finding: A-L55
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            src = src.str.strip_chars()'
+  mutant: '            pass'
+  test: tests/codegen/test_id_casts.py -k "stripped"
+  expected: kill
+  note: A String id with surrounding whitespace is refused and stays String.
+
+- id: espn-schedule-ids-int64
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/_espn_schedule.py
+  snippet: '    df = _schedule_ids(df).with_columns('
+  mutant: '    df = df.with_columns('
+  test: tests/nba/test_nba_schedule_teams_offline.py -k "schedule_offline and id_dtypes"
+  expected: kill
+  note: The seven scoreboard schedules emit home_id / venue_id / ... as String again.
+
+- id: espn-mlb-schedule-ids-int64
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/mlb/mlb_schedule.py
+  snippet: '    df = _schedule_ids(pl.from_pandas(pd.DataFrame(rows)))'
+  mutant: '    df = pl.from_pandas(pd.DataFrame(rows))'
+  test: tests/mlb/test_mlb_schedule_teams_offline.py -k "schedule_offline and id_dtypes"
+  expected: kill
+  note: espn_mlb_schedule emits game_id / venue_id / home_id / away_id as String again.
+
+- id: espn-teams-team-id-int64
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/_espn_teams.py
+  snippet: '    out = _cast_ids_int64(pl.from_pandas(frame), ["team_id"])'
+  mutant: '    out = pl.from_pandas(frame)'
+  test: tests/nba/test_nba_schedule_teams_offline.py -k "teams_offline and id_dtypes"
+  expected: kill
+  note: espn_<lg>_teams emits team_id String again.
+
+- id: espn-game-rosters-ids-int64
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/_espn_game_rosters.py
+  snippet: '    return _cast_ids_int64(rosters, [c for c in rosters.columns if c == "id" or c.endswith("_id")])'
+  mutant: '    return rosters'
+  test: tests/test_espn_game_rosters_family.py -k "ids_int64"
+  expected: kill
+  note: A game-rosters frame mixes Int32 team_id / position_id, Int64 athlete_id and String status_id again.
+
+- id: espn-snapshot-ids-int64
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/espn_snapshots.py
+  snippet: '        return int(text) if _INTEGER_ID.fullmatch(text) else None'
+  mutant: '        return text or None'
+  test: tests/test_espn_snapshots.py -k "as_id_coerces"
+  expected: kill
+  note: The injuries snapshot reads its ids as text again (the inverted Utf8 pin).
+
+- id: espn-content-ids-int64
+  group: dtype-contract-5-2
+  finding: B-GB-10
+  file: sportsdataverse/espn_content/espn_content_parsers.py
+  snippet: '_TEXT_ID = re.compile(r"^now_id$|(^|_)code$")'
+  mutant: '_TEXT_ID = _ID'
+  test: tests/espn_content/test_espn_content.py -k "id_columns_are_int64"
+  expected: kill
+  note: Every id-like column is pinned to text again, the Utf8 pin task 5.2 retired.
+
+- id: ncaa-espn-team-crosswalk-espn-id-int64
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/mbb/mbb_ncaa_espn_crosswalk.py
+  snippet: '    "espn_team_id": pl.Int64,'
+  mutant: '    "espn_team_id": pl.Utf8,'
+  test: tests/mbb/test_ncaa_espn_team_crosswalk.py -k "id_dtypes"
+  expected: kill
+  note: The NCAA -> ESPN crosswalk's espn_team_id is Utf8 again and joins no ESPN frame.
+
+- id: nfl-processor-ids-match-cfb
+  group: dtype-contract-5-2
+  finding: C-M8
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        play_df = _cast_ids_int64(play_df, ids)'
+  mutant: '        pass'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "shared_column_dtypes_match_nfl"
+  expected: kill
+  note: NFL *_player_id String and pos_team Int32 again; the vs_nfl allowlist no longer lists them.
+
+- id: ncaa-xwalk-tier-join-asserts-key-dtypes
+  group: dtype-contract-5-2
+  finding: B-GB-10
+  file: sportsdataverse/scrape/ncaa/espn_game_xwalk.py
+  snippet: '        assert pending.schema[k] == lookup.schema[k], f"{k}: {pending.schema[k]} vs {lookup.schema[k]}"'
+  mutant: '        pass'
+  test: tests/scrape/test_scrape_ncaa_league.py -k "xwalk_tier_join_asserts"
+  expected: kill
+  note: An Int32 key joins an Int64 one silently by supertype (a String one would match nothing).
 
 - id: cfb-drive-columns-every-documented-drive-key
   group: dtype-contract-5-1

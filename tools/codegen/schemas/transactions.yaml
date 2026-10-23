@@ -20,7 +20,7 @@ columns:
   type: character
   description: ''
 - name: team_id
-  type: character
+  type: integer
   description: ''
 - name: team_links
   type: character

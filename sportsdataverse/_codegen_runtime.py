@@ -49,7 +49,9 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
     value survives the cast. A String column holding a genuinely non-numeric id, or
     one with leading zeros that would change meaning, is left exactly as-is rather
     than corrupted or nulled. Float-origin ids go straight to Int64 rather than
-    through a string (which would yield ``"123.0"``).
+    through a string (which would yield ``"123.0"``), and only when every value is
+    integral. Surrounding whitespace in a String id is stripped first. An empty frame
+    is cast too (A-L55), so a result with no rows joins like one with rows.
 
     Args:
         df: frame to normalize (may be empty).
@@ -58,12 +60,12 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
     Returns:
         The frame with each named column cast to ``Int64`` where safe.
     """
-    if df.height == 0:
-        return df
     for col in cols:
         if col not in df.columns or df.schema[col] == pl.Int64:
             continue
         src = df[col]
+        if src.dtype == pl.String:
+            src = src.str.strip_chars()
         cast = src.cast(pl.Int64, strict=False)
         # Refuse if the cast would invent nulls -- a value did not survive, so the
         # column is not really an integer id.

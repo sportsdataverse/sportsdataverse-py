@@ -8,7 +8,8 @@ owns what happens to the events afterwards, so the contract is stated once:
 * the column set is the documented one on every day, never the set the day happened to fill
   (B-M16 shape half); a column ESPN adds later is appended after the documented ones;
 * ``Postponed`` and ``Canceled`` games carry null linescores (B-GB-21);
-* the caller's payload is never mutated, so it can be parsed twice (B-L2).
+* the caller's payload is never mutated, so it can be parsed twice (B-L2);
+* every ESPN id column is ``Int64``, cast from the raw integer (task 5.2, B-M15).
 
 The column lists mirror ``tools/codegen/schemas/autodoc/<lg>/espn_<lg>_schedule.yaml``; the
 offline schedule tests assert the two agree.
@@ -24,6 +25,7 @@ from typing import Any
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _cast_ids_int64
 from sportsdataverse.dl_utils import underscore
 
 _LINESCORES = pl.List(pl.Struct({"value": pl.Float64, "displayValue": pl.String, "period": pl.Int64}))
@@ -37,13 +39,13 @@ _NESTED = {
     "highlights": pl.List(pl.Null),
     "status_featured_athletes": pl.List(pl.Null),
 }
-_INT32 = {"game_id", "season", "season_type", "week"}  # cast explicitly by the parser
+_INT32 = {"season", "season_type", "week"}  # cast explicitly by the parser
 _DOC_DTYPES = {"character": pl.String, "logical": pl.Boolean, "double": pl.Float64, "integer": pl.Int64}
 
 _C, _L, _D, _I = "character", "logical", "double", "integer"
 
 _TEAM = [
-    ("id", _C),
+    ("id", _I),
     ("uid", _C),
     ("location", _C),
     ("name", _C),
@@ -53,7 +55,7 @@ _TEAM = [
     ("color", _C),
     ("alternate_color", _C),
     ("is_active", _L),
-    ("venue_id", _C),
+    ("venue_id", _I),
     ("logo", _C),
     ("score", _C),
     ("linescores", "list"),
@@ -62,7 +64,7 @@ _TEAM = [
 
 #: The 67 columns all seven ESPN-scoreboard schedules document, in documented order.
 _BASE: list[tuple] = [
-    ("id", _C),
+    ("id", _I),
     ("uid", _C),
     ("date", _C),
     ("attendance", _I),
@@ -76,9 +78,9 @@ _BASE: list[tuple] = [
     ("notes_headline", _C),
     ("broadcast_market", _C),
     ("broadcast_name", _C),
-    ("type_id", _C),
+    ("type_id", _I),
     ("type_abbreviation", _C),
-    ("venue_id", _C),
+    ("venue_id", _I),
     ("venue_full_name", _C),
     ("venue_address_city", _C),
     ("venue_address_state", _C),
@@ -86,7 +88,7 @@ _BASE: list[tuple] = [
     ("status_clock", _D),
     ("status_display_clock", _C),
     ("status_period", _I),
-    ("status_type_id", _C),
+    ("status_type_id", _I),
     ("status_type_name", _C),
     ("status_type_state", _C),
     ("status_type_completed", _L),
@@ -109,9 +111,9 @@ _COLLEGE_BB = [
     ("conference_competition", _L),
     ("tournament_id", _I),
     ("highlights", _C),
-    ("home_conference_id", _C),
+    ("home_conference_id", _I),
     *_WINNER,
-    ("away_conference_id", _C),
+    ("away_conference_id", _I),
     *_RANK,
 ]
 _EXTRA: dict[str, list[tuple]] = {
@@ -141,13 +143,13 @@ _EXTRA: dict[str, list[tuple]] = {
         ("conference_competition", _L),
         ("highlights", _I),
         ("venue_address_country", _C),
-        ("groups_id", _C),
+        ("groups_id", _I),
         ("groups_name", _C),
         ("groups_short_name", _C),
         ("groups_is_conference", _L),
-        ("home_conference_id", _C),
+        ("home_conference_id", _I),
         *_RANK,
-        ("away_conference_id", _C),
+        ("away_conference_id", _I),
         ("week", _I),
         *_WINNER,
         ("status_type_alt_detail", _C),
@@ -156,14 +158,14 @@ _EXTRA: dict[str, list[tuple]] = {
 
 #: ``espn_mlb_schedule`` builds its own fixed 23-key row; only its empty frame comes from here.
 _MLB: list[tuple] = [
-    ("game_id", _C),
+    ("game_id", _I),
     ("date", _C),
     ("season_year", _I),
     ("season_type", _I),
     ("status_type_state", _C),
     ("status_type_completed", _L),
     ("status_type_description", _C),
-    ("venue_id", _C),
+    ("venue_id", _I),
     ("venue_full_name", _C),
     ("venue_city", _C),
     ("venue_state", _C),
@@ -171,7 +173,7 @@ _MLB: list[tuple] = [
         (f"{side}_{n}", t)
         for side in ("home", "away")
         for n, t in (
-            ("id", _C),
+            ("id", _I),
             ("name", _C),
             ("abbreviation", _C),
             ("display_name", _C),
@@ -200,6 +202,11 @@ def _empty_schedule(league: str, return_as_pandas: bool = False) -> pl.DataFrame
     """A zero-row schedule frame carrying the documented columns."""
     df = pl.DataFrame(schema=_schedule_schema(league))
     return df.to_pandas() if return_as_pandas else df
+
+
+def _schedule_ids(df: pl.DataFrame) -> pl.DataFrame:
+    """Every ``id`` / ``*_id`` column as ``Int64``, from the raw integer (task 5.2, B-M15)."""
+    return _cast_ids_int64(df, [c for c in df.columns if c == "id" or c.endswith("_id")])
 
 
 def _competition(event: Any, parse_event: Callable[[dict], dict], league: str, week: bool) -> dict[str, Any] | None:
@@ -263,8 +270,8 @@ def _schedule_frame(
     df = pl.from_pandas(pd.json_normalize(rows, sep="_"))
     df = df.rename({c: underscore(c) for c in df.columns})
     masked = pl.col("status_type_description").is_in(["Postponed", "Canceled"])
-    df = df.with_columns(
-        game_id=pl.col("id").cast(pl.Int32),
+    df = _schedule_ids(df).with_columns(
+        game_id=pl.col("id"),
         **{c: pl.col(c).cast(pl.Int32) for c in ("season", "season_type", "week") if c in df.columns},
         **{
             c: pl.when(masked).then(None).otherwise(pl.col(c))

@@ -244,7 +244,7 @@ Polars Data frame of game roster data with columns: 'athlete_id', 'athlete_uid',
 | `contracts_href` | character |  |
 | `experience_years` | integer | Experience years. |
 | `college_athlete_href` | character |  |
-| `status_id` | character | Status identifier. |
+| `status_id` | integer | Status identifier. |
 | `status_name` | character | Status label. |
 | `status_type` | character | Status type. |
 | `status_abbreviation` | character | Status abbreviation. |
@@ -560,7 +560,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Unique play identification number |
+| `id` | integer | Unique play identification number |
 | `uid` | character | ESPN UID string. |
 | `date` | character | Date in YYYY-MM-DD format. |
 | `attendance` | integer | Reported attendance. |
@@ -576,9 +576,9 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `notes_headline` | character | Notes headline. |
 | `broadcast_market` | character | Broadcast market label (e.g. 'national', 'home'). |
 | `broadcast_name` | character | Broadcast name. |
-| `type_id` | character | Type identifier (numeric). |
+| `type_id` | integer | Type identifier (numeric). |
 | `type_abbreviation` | character | Play type abbreviation |
-| `venue_id` | character | Unique venue identifier. |
+| `venue_id` | integer | Unique venue identifier. |
 | `venue_full_name` | character | Venue full name. |
 | `venue_address_city` | character | Venue address city. |
 | `venue_address_state` | character | Venue address state / region. |
@@ -586,7 +586,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `status_clock` | double | Status clock. |
 | `status_display_clock` | character | Status display clock. |
 | `status_period` | integer | Status period. |
-| `status_type_id` | character | Unique identifier for status type. |
+| `status_type_id` | integer | Unique identifier for status type. |
 | `status_type_name` | character | Status type name. |
 | `status_type_state` | character | Status type state. |
 | `status_type_completed` | logical | Status type completed. |
@@ -594,7 +594,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `status_type_detail` | character | Status type detail. |
 | `status_type_short_detail` | character | Status type short detail. |
 | `format_regulation_periods` | integer | Format regulation periods. |
-| `home_id` | character | Unique identifier for home. |
+| `home_id` | integer | Unique identifier for home. |
 | `home_uid` | character | Home team's uid. |
 | `home_location` | character | Home team's location. |
 | `home_name` | character | Home name. |
@@ -604,13 +604,13 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `home_color` | character | Color code (hex) for home. |
 | `home_alternate_color` | character | Color code (hex) for home alternate. |
 | `home_is_active` | logical | Home team's is active. |
-| `home_venue_id` | character | Unique identifier for home venue. |
+| `home_venue_id` | integer | Unique identifier for home venue. |
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home team score at the time of the play. |
 | `home_winner` | logical | Home team's winner. |
 | `home_linescores` | list | Period-by-period point totals for the home team, stored as a list of integer scores. |
 | `home_records` | character | Win-loss record strings for the home team across relevant splits (e.g., overall, home/away, conference). |
-| `away_id` | character | Unique identifier for away. |
+| `away_id` | integer | Unique identifier for away. |
 | `away_uid` | character | Away team's uid. |
 | `away_location` | character | Away team's location. |
 | `away_name` | character | Away name. |
@@ -620,7 +620,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `away_color` | character | Color code (hex) for away. |
 | `away_alternate_color` | character | Color code (hex) for away alternate. |
 | `away_is_active` | logical | Away team's is active. |
-| `away_venue_id` | character | Unique identifier for away venue. |
+| `away_venue_id` | integer | Unique identifier for away venue. |
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away team score at the time of the play. |
 | `away_winner` | logical | Away team's winner. |
@@ -884,7 +884,7 @@ Polars dataframe of the WNBA teams, one row per team, with the columns in the re
 | `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
 | `team_color` | character | Team primary color (hex without leading '#'). |
 | `team_display_name` | character | Full team display name. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `team_is_active` | logical | TRUE if the team is currently active. |
 | `team_is_all_star` | logical | TRUE if the row represents an All-Star team. |
 | `team_location` | character | Team city or location string. |

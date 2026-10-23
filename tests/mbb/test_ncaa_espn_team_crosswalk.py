@@ -56,8 +56,9 @@ def test_rejects_unknown_league():
 def test_id_dtypes(crosswalks, league):
     df = crosswalks[league]
     assert df.schema["ncaa_team_id"] == pl.Int64
-    assert df.schema["espn_team_id"] == pl.Utf8, "ESPN ids are Utf8 everywhere else in sdv-py"
-    assert df.schema["espn_conference_id"] == pl.Utf8
+    assert df.schema["espn_team_id"] == pl.Int64, "ESPN ids are Int64 everywhere in sdv-py (task 5.2)"
+    assert df.schema["espn_conference_id"] == pl.Int64
+    assert df.schema["conference_id"] == pl.Utf8  # the SDV group id, "mbb:big-ten"
     assert df.schema["season"] == pl.Utf8
 
 
@@ -129,13 +130,13 @@ def test_known_hard_cases(crosswalks):
     mbb = crosswalks["mbb"].filter(pl.col("season") == "2025-26")
     lookup = dict(zip(mbb["ncaa_team"], mbb["espn_team_id"]))
     expected = {
-        "Ohio St.": "194",  # trailing "St." is State
-        "St. John's (NY)": "2599",  # leading "St." is Saint
-        "Saint Mary's (CA)": "2608",
-        "Saint Francis": "2598",  # NCAA dropped the (PA) qualifier
-        "CSU Bakersfield": "2934",  # Cal State Bakersfield
-        "Queens (NC)": "2511",
-        "Southern Ind.": "88",
+        "Ohio St.": 194,  # trailing "St." is State
+        "St. John's (NY)": 2599,  # leading "St." is Saint
+        "Saint Mary's (CA)": 2608,
+        "Saint Francis": 2598,  # NCAA dropped the (PA) qualifier
+        "CSU Bakersfield": 2934,  # Cal State Bakersfield
+        "Queens (NC)": 2511,
+        "Southern Ind.": 88,
     }
     assert {k: lookup.get(k) for k in expected} == expected
 

@@ -1244,7 +1244,7 @@ _RANKINGS_SCHEMA = {
     "week_display": pl.Utf8,
     "poll_date": pl.Utf8,
     "ranked": pl.Boolean,
-    "team_id": pl.Utf8,
+    "team_id": pl.Int64,
     "rank": pl.Int64,
     "previous_rank": pl.Int64,
     "points": pl.Float64,
@@ -1281,7 +1281,7 @@ def test_rankings_one_row_per_ranked_or_vote_receiving_team(league):
         rows = df.filter(pl.col("poll_id") == int(poll["id"]))
         ranked = rows.filter(pl.col("ranked") == True)
         assert ranked["rank"].to_list() == [e["current"] for e in poll["ranks"]]
-        assert ranked["team_id"].to_list() == [e["team"]["id"] for e in poll["ranks"]]
+        assert ranked["team_id"].to_list() == [int(e["team"]["id"]) for e in poll["ranks"]]
         others = rows.filter(pl.col("ranked") == False)
         assert others.height == len(poll["others"])
         # ESPN ships current=0 for a vote-receiving team; 0 is not a rank.
@@ -1294,7 +1294,7 @@ def test_rankings_first_row_is_the_ap_number_one():
     row = parse_rankings(_load("rankings_cfb")).row(0, named=True)
     assert row["poll_name"] == "AP Top 25"
     assert (row["season"], row["season_type"], row["week"]) == (2026, 2, 6)
-    assert (row["rank"], row["team_id"], row["team_abbreviation"]) == (1, "251", "TEX")
+    assert (row["rank"], row["team_id"], row["team_abbreviation"]) == (1, 251, "TEX")
     assert row["first_place_votes"] == 61
 
 
@@ -1336,7 +1336,7 @@ def test_rankings_team_color_null_sentinel_is_null():
 
     payload = _load("rankings_mch")
     sentinel = {
-        e["team"]["id"]
+        int(e["team"]["id"])
         for p in payload["rankings"]
         for k in ("ranks", "others")
         for e in p[k]
@@ -1394,9 +1394,9 @@ _SNAPSHOT = Path(__file__).parent / "espn_parser_dtype_snapshot.json"
 # empty summary sections) pin zero columns: those tables differ by league, so a parser called directly cannot pick
 # one. The league wrappers pass theirs (task 5.1, test_empty_schema_every_league_wrapper_passes_its_own_table).
 # scoreboard_cfb_2014_placeholder carries ESPN's real `{}` placeholder event, which has no ids: its row comes back
-# all-null, so its id columns keep the String dtype of every other scoreboard (A-M15, task 5.2), but the pandas hop
-# turns six Int64 columns Float64 (season_year, season_type, status_period, attendance, home_rank, away_rank;
-# A-M14's class, task 5.2). The snapshot pins that measured state.
+# all-null, and its id columns are Int64 like every other scoreboard's (task 5.2). The pandas hop still turns six
+# non-id Int64 columns Float64 there (season_year, season_type, status_period, attendance, home_rank, away_rank);
+# they are not ids, so task 5.2 leaves them. The snapshot pins that measured state.
 _ESPN_FIX = Path(__file__).parent / "fixtures" / "espn"
 _FIX_ROOT = Path(__file__).parent / "fixtures"
 # Captures no registered parser reads (kept for other tests): ``athlete_statistics_core_*`` feeds the
@@ -1812,55 +1812,33 @@ def _id_cols(name: str) -> Dict[str, str]:
     }
 
 
-# Parsers whose id columns are not Int64 on their captures today (String; parse_summary also
-# Float64). Task 5.2 makes every ESPN id Int64 at the parser boundary.
-_IDS_NOT_INT64 = {
-    "parse_athlete_gamelog",
-    "parse_athlete_overview",
-    "parse_event_plays",
-    "parse_fpi",
-    "parse_groups",
-    "parse_injuries",
-    "parse_items",
-    "parse_leaders",
-    "parse_news",
-    "parse_rankings",
-    "parse_scoreboard",
-    "parse_single_entity",
-    "parse_standings",
-    "parse_summary",
-    "parse_team_roster",
-    "parse_team_schedule",
-    "parse_teams",
-    "parse_transactions",
-}
+# Task 5.2: every ESPN ``id`` / ``*_id`` column is Int64 at the parser boundary (``_ids_int64``), except the
+# content id ``now_id`` ("1-44686270"), which is not an integer and stays String.
+_TEXT_IDS = {"now_id"}
 
 
-def _id_params(open_ids: set, reason: str) -> List[Any]:
-    return [
-        pytest.param(
-            name,
-            marks=[pytest.mark.xfail(strict=True, raises=AssertionError, reason=reason)] if name in open_ids else [],
-        )
-        for name in sorted(_parsers())
-    ]
-
-
-@pytest.mark.parametrize(
-    "name",
-    _id_params(_IDS_NOT_INT64, "A-M15: ESPN ids are String here but Int64 in parse_weekly_powerindex; task 5.2"),
-)
+@pytest.mark.parametrize("name", sorted(_parsers()))
 def test_dtype_snapshot_ids_are_int64(name):
-    assert {k: v for k, v in _id_cols(name).items() if v != "Int64"} == {}
+    """A-M15: one id dtype across the ESPN parsers, so ``parse_fpi`` joins ``parse_weekly_powerindex``."""
+    assert {k: v for k, v in _id_cols(name).items() if v != "Int64" and k.rsplit("/", 1)[1] not in _TEXT_IDS} == {}
 
 
-@pytest.mark.parametrize(
-    "name",
-    _id_params({"parse_summary"}, "A-M14: the pandas hop turns point_after_attempt_id into Float64; task 5.2"),
-)
+@pytest.mark.parametrize("name", sorted(_parsers()))
 def test_dtype_snapshot_ids_are_never_float(name):
     """A float id stringifies as ``"123.0"`` and joins nothing."""
     assert {k: v for k, v in _id_cols(name).items() if v.startswith("Float")} == {}
+
+
+def test_fpi_joins_weekly_powerindex_on_team_id():
+    """A-M15: ``parse_fpi`` emitted ``team_id`` String and ``parse_weekly_powerindex`` Int64, so the join raised."""
+    from sportsdataverse._common_espn_parsers import parse_fpi, parse_weekly_powerindex
+
+    fpi = parse_fpi(_load("fpi_nba"))
+    weekly = parse_weekly_powerindex(_load("season_week_powerindex_nfl"))
+    assert fpi.schema["team_id"] == weekly.schema["team_id"] == pl.Int64
+    joined = fpi.select("team_id").join(weekly.select("team_id", "season"), on="team_id", how="inner")
+    # the two captures are different leagues, so only the overlapping numbers match; the dtype is the point
+    assert joined.height == len(set(fpi["team_id"]) & set(weekly["team_id"])) > 0
 
 
 if __name__ == "__main__":  # regenerate the snapshot after a deliberate dtype change

@@ -20,7 +20,7 @@ columns:
   type: character
   description: ''
 - name: id
-  type: character
+  type: integer
   description: ''
 - name: is_active
   type: logical
@@ -110,7 +110,7 @@ columns:
   type: character
   description: ''
 - name: venue_id
-  type: character
+  type: integer
   description: ''
 - name: venue_images
   type: character

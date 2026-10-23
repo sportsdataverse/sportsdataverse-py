@@ -94,8 +94,9 @@ def espn_wnba_game_rosters(
     teams_rosters = team_rosters.join(teams_df, how="left", on="team_id")
     athletes = helper_wnba_athlete_items(teams_rosters=team_rosters, **kwargs)
     rosters = athletes.join(teams_rosters, how="left", left_on="athlete_id", right_on="player_id")
-    rosters = rosters.with_columns(game_id=pl.lit(game_id).cast(pl.Int32))
+    rosters = rosters.with_columns(game_id=pl.lit(game_id).cast(pl.Int64))
     rosters.columns = [underscore(c) for c in rosters.columns]
+    rosters = _espn_game_rosters.roster_ids(rosters)
     return rosters.to_pandas() if return_as_pandas else rosters
 
 

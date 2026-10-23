@@ -2,7 +2,7 @@ schema: athlete_gamelog
 kind: dataframe
 columns:
 - name: season_type_id
-  type: character
+  type: integer
   description: ''
 - name: season_type_name
   type: character
@@ -11,7 +11,7 @@ columns:
   type: character
   description: ''
 - name: event_id
-  type: character
+  type: integer
   description: ''
 - name: event_date
   type: character
@@ -23,7 +23,7 @@ columns:
   type: character
   description: ''
 - name: opponent_id
-  type: character
+  type: integer
   description: ''
 - name: opponent_abbreviation
   type: character

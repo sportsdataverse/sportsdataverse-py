@@ -39,7 +39,7 @@ ESPN endpoint.
 | `gamecast_available` | logical |  |
 | `guid` | character | Athlete global unique identifier. |
 | `highlights_available` | logical |  |
-| `id` | character | Unique player identifier. |
+| `id` | integer | Unique player identifier. |
 | `lineup_available` | logical |  |
 | `links` | character |  |
 | `live_available` | logical |  |
@@ -62,7 +62,7 @@ ESPN endpoint.
 | `uid` | character | Competitor uid string. |
 | `wallclock_available` | logical |  |
 | `boxscore_source_description` | character |  |
-| `boxscore_source_id` | character |  |
+| `boxscore_source_id` | integer |  |
 | `boxscore_source_state` | character |  |
 | `broadcasts_$ref` | character |  |
 | `details_$ref` | character |  |
@@ -74,15 +74,15 @@ ESPN endpoint.
 | `format_regulation_periods` | integer |  |
 | `format_regulation_slug` | character |  |
 | `game_source_description` | character |  |
-| `game_source_id` | character |  |
+| `game_source_id` | integer |  |
 | `game_source_state` | character |  |
 | `linescore_source_description` | character |  |
-| `linescore_source_id` | character |  |
+| `linescore_source_id` | integer |  |
 | `linescore_source_state` | character |  |
 | `odds_$ref` | character |  |
 | `officials_$ref` | character |  |
 | `play_by_play_source_description` | character |  |
-| `play_by_play_source_id` | character |  |
+| `play_by_play_source_id` | integer |  |
 | `play_by_play_source_state` | character |  |
 | `power_indexes_$ref` | character |  |
 | `predictor_$ref` | character |  |
@@ -90,11 +90,11 @@ ESPN endpoint.
 | `relevancy_$ref` | character |  |
 | `situation_$ref` | character |  |
 | `stats_source_description` | character |  |
-| `stats_source_id` | character |  |
+| `stats_source_id` | integer |  |
 | `stats_source_state` | character |  |
 | `status_$ref` | character |  |
 | `type_abbreviation` | character | Play type abbreviation. |
-| `type_id` | character | Play type id. |
+| `type_id` | integer | Play type id. |
 | `type_slug` | character | Broadcast type slug. |
 | `type_text` | character | Play type label (e.g. "Goal", "Shot", "Face Off"). |
 | `type_type` | character |  |
@@ -104,7 +104,7 @@ ESPN endpoint.
 | `venue_full_name` | character | Venue full name. |
 | `venue_grass` | logical |  |
 | `venue_guid` | character |  |
-| `venue_id` | character | Venue identifier. |
+| `venue_id` | integer | Venue identifier. |
 | `venue_images` | character |  |
 | `venue_indoor` | logical | Whether the venue is indoors. |
 
@@ -147,7 +147,7 @@ ESPN endpoint.
 |---|---|---|
 | `$ref` | character |  |
 | `home_away` | character | Home or away indicator. |
-| `id` | character | Unique player identifier. |
+| `id` | integer | Unique player identifier. |
 | `order` | integer | Display order within officials list. |
 | `type` | character | Competitor type (e.g. "team"). |
 | `uid` | character | Competitor uid string. |
@@ -202,7 +202,7 @@ ESPN endpoint.
 |---|---|---|
 | `$ref` | character |  |
 | `home_away` | character | Home or away indicator. |
-| `id` | character | Unique player identifier. |
+| `id` | integer | Unique player identifier. |
 | `order` | integer | Display order within officials list. |
 | `type` | character | Competitor type (e.g. "team"). |
 | `uid` | character | Competitor uid string. |
@@ -627,7 +627,7 @@ ESPN endpoint.
 | `open_under_fraction` | character |  |
 | `open_under_value` | double |  |
 | `provider_$ref` | character |  |
-| `provider_id` | character | ESPN provider id parsed from the `$ref` URL. |
+| `provider_id` | integer | ESPN provider id parsed from the `$ref` URL. |
 | `provider_name` | character | Betting provider name (e.g. "ESPN BET"). |
 | `provider_priority` | integer | Provider display priority. |
 | `prop_bets_$ref` | character |  |
@@ -686,7 +686,7 @@ ESPN endpoint.
 | `home_team_$ref` | character |  |
 | `play_$ref` | character |  |
 | `source_description` | character |  |
-| `source_id` | character | Data source identifier. |
+| `source_id` | integer | Data source identifier. |
 | `source_state` | character |  |
 | `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
 | `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
@@ -737,7 +737,7 @@ ESPN endpoint.
 | `coordinate_x` | integer | X coordinate on the ice surface. |
 | `coordinate_y` | integer | Y coordinate on the ice surface. |
 | `home_score` | integer | Home team final score. |
-| `id` | character | Unique player identifier. |
+| `id` | integer | Unique player identifier. |
 | `modified` | character |  |
 | `period_display_value` | character | Period display label (e.g. "1st Period"). |
 | `period_number` | integer | Period number (1-3 regulation, 4+ OT). |
@@ -750,7 +750,7 @@ ESPN endpoint.
 | `shooting_play` | logical | Whether this is a shot on goal. |
 | `team_$ref` | character |  |
 | `text` | character | Full play description text. |
-| `type_id` | character | Play type id. |
+| `type_id` | integer | Play type id. |
 | `type_text` | character | Play type label (e.g. "Goal", "Shot", "Face Off"). |
 | `valid` | logical |  |
 | `wallclock` | character | Wall-clock UTC timestamp of the play. |
@@ -799,7 +799,7 @@ ESPN endpoint.
 | `alternative_text` | character |  |
 | `away_score` | integer | Away team final score. |
 | `home_score` | integer | Home team final score. |
-| `id` | character | Unique player identifier. |
+| `id` | integer | Unique player identifier. |
 | `modified` | character |  |
 | `participants` | character |  |
 | `points_attempted` | integer |  |
@@ -819,7 +819,7 @@ ESPN endpoint.
 | `period_number` | integer | Period number (1-3 regulation, 4+ OT). |
 | `probability_$ref` | character |  |
 | `team_$ref` | character |  |
-| `type_id` | character | Play type id. |
+| `type_id` | integer | Play type id. |
 | `type_text` | character | Play type label (e.g. "Goal", "Shot", "Face Off"). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -956,7 +956,7 @@ ESPN endpoint.
 | `type_completed` | logical | Whether the game is complete. |
 | `type_description` | character | Status description (e.g. "Final"). |
 | `type_detail` | character | Status detail string. |
-| `type_id` | character | Play type id. |
+| `type_id` | integer | Play type id. |
 | `type_name` | character | Status type name (e.g. "STATUS_FINAL"). |
 | `type_short_detail` | character | Short status detail string. |
 | `type_state` | character | Status state (e.g. "pre", "in", "post"). |
@@ -1002,11 +1002,11 @@ ESPN endpoint.
 | `display_name` | character | Player display name. |
 | `first_name` | character | Player first name. |
 | `full_name` | character | Player full name. |
-| `id` | character | Unique player identifier. |
+| `id` | integer | Unique player identifier. |
 | `last_name` | character | Player last name. |
 | `order` | integer | Display order within officials list. |
 | `position_display_name` | character | Position display name. |
-| `position_id` | character | Official position identifier. |
+| `position_id` | integer | Official position identifier. |
 | `position_name` | character | Official position name (e.g. "Referee", "Linesman"). |
 | `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
 | `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
@@ -1056,16 +1056,16 @@ ESPN endpoint.
 | `slug` | character | URL slug. |
 | `station` | character | Station full name (e.g. "FanDuel Sports Network Detroit"). |
 | `competition_$ref` | character |  |
-| `market_id` | character | Market identifier. |
+| `market_id` | integer | Market identifier. |
 | `market_type` | character | Market type. |
 | `media_$ref` | character |  |
 | `media_call_letters` | character | Media outlet call letters. |
-| `media_id` | character | Media outlet identifier. |
+| `media_id` | integer | Media outlet identifier. |
 | `media_logos` | character |  |
 | `media_name` | character | Media outlet full name. |
 | `media_short_name` | character | Media outlet short name. |
 | `media_slug` | character | Media outlet slug. |
-| `type_id` | character | Play type id. |
+| `type_id` | integer | Play type id. |
 | `type_long_name` | character | Broadcast type long name (e.g. "Television"). |
 | `type_short_name` | character | Broadcast type short name (e.g. "TV"). |
 | `type_slug` | character | Broadcast type slug. |
@@ -1313,11 +1313,11 @@ ESPN endpoint.
 | `display_name` | character | Player display name. |
 | `first_name` | character | Player first name. |
 | `full_name` | character | Player full name. |
-| `id` | character | Unique player identifier. |
+| `id` | integer | Unique player identifier. |
 | `last_name` | character | Player last name. |
 | `order` | integer | Display order within officials list. |
 | `position_display_name` | character | Position display name. |
-| `position_id` | character | Official position identifier. |
+| `position_id` | integer | Official position identifier. |
 | `position_name` | character | Official position name (e.g. "Referee", "Linesman"). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

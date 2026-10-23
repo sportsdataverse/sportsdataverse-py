@@ -30,7 +30,7 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `athlete_uid` | character |  |
 | `athlete_guid` | character |  |
 | `athlete_type` | character |  |
-| `alternate_id` | character | Alternate player identifier. |
+| `alternate_id` | integer | Alternate player identifier. |
 | `first_name` | character | Player first name. |
 | `last_name` | character | Player last name. |
 | `full_name` | character | Player full name. |
@@ -64,7 +64,7 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `draft_year` | integer | Draft year the lottery applies to. |
 | `draft_selection` | integer |  |
 | `draft_team_href` | character | ESPN API hypermedia URL linking to the team that originally drafted this player. |
-| `status_id` | character | Status identifier. |
+| `status_id` | integer | Status identifier. |
 | `status_name` | character | Status name. |
 | `status_type` | character | Status type. |
 | `status_abbreviation` | character | Status abbreviation. |
@@ -360,7 +360,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Unique player identifier. |
+| `id` | integer | Unique player identifier. |
 | `uid` | character | Competitor uid string. |
 | `date` | character | Game date (ISO 8601 datetime string). |
 | `attendance` | integer | Game attendance. |
@@ -375,9 +375,9 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `notes_headline` | character |  |
 | `broadcast_market` | character |  |
 | `broadcast_name` | character |  |
-| `type_id` | character | Play type id. |
+| `type_id` | integer | Play type id. |
 | `type_abbreviation` | character | Play type abbreviation. |
-| `venue_id` | character | Venue identifier. |
+| `venue_id` | integer | Venue identifier. |
 | `venue_full_name` | character | Venue full name. |
 | `venue_address_city` | character |  |
 | `venue_address_state` | character |  |
@@ -386,7 +386,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `status_clock` | double | Game clock in seconds. |
 | `status_display_clock` | character | Display clock string. |
 | `status_period` | integer | Current period. |
-| `status_type_id` | character | Status type identifier. |
+| `status_type_id` | integer | Status type identifier. |
 | `status_type_name` | character | Status type name. |
 | `status_type_state` | character | Status state (pre/in/post). |
 | `status_type_completed` | logical | Whether the game is complete. |
@@ -394,7 +394,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `status_type_detail` | character | Status detail text. |
 | `status_type_short_detail` | character | Short status detail. |
 | `format_regulation_periods` | integer |  |
-| `home_id` | character | Home team ESPN identifier. |
+| `home_id` | integer | Home team ESPN identifier. |
 | `home_uid` | character |  |
 | `home_location` | character | Home team city. |
 | `home_name` | character | Home team display name. |
@@ -404,12 +404,12 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `home_color` | character | Home team primary color hex. |
 | `home_alternate_color` | character | Home team alternate color hex. |
 | `home_is_active` | logical |  |
-| `home_venue_id` | character |  |
+| `home_venue_id` | integer |  |
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home team final score. |
 | `home_linescores` | list | Period-by-period goal totals for the home team, stored as an array of integer scores indexed by period. |
 | `home_records` | character | Serialized win-loss-overtime record string for the home team at the time of the scheduled game. |
-| `away_id` | character | Away team ESPN identifier. |
+| `away_id` | integer | Away team ESPN identifier. |
 | `away_uid` | character |  |
 | `away_location` | character | Away team city. |
 | `away_name` | character | Away team display name. |
@@ -419,7 +419,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `away_color` | character | Away team primary color hex. |
 | `away_alternate_color` | character | Away team alternate color hex. |
 | `away_is_active` | logical |  |
-| `away_venue_id` | character |  |
+| `away_venue_id` | integer |  |
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away team final score. |
 | `away_linescores` | list | Period-by-period goal totals for the away team, stored as an array of integer scores indexed by period. |
@@ -474,7 +474,7 @@ Polars dataframe of the NHL teams, one row per team, with the columns in the ret
 | `team_alternate_color` | character | Team alternate color hex. |
 | `team_color` | character | Team primary color hex. |
 | `team_display_name` | character | Team display name. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `team_is_active` | logical |  |
 | `team_is_all_star` | logical |  |
 | `team_location` | character | Team city/location. |

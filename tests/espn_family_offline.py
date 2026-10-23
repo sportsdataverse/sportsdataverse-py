@@ -43,23 +43,23 @@ CAPTURE_DATES = {
     "mlb": 20241025,
 }
 
-#: Explicit id-column allowlist per family: column -> the dtype its returns table documents
-#: (``character`` -> String, ``integer`` -> Int32/Int64). An id column the parser emits that is
-#: not listed here fails the check, so a new id column needs a decision, not a silent dtype.
+#: Explicit id-column list per family: column -> the dtype its returns table documents. Every ESPN id is
+#: ``Int64`` (task 5.2, B-M15); an id column the parser emits that is not listed here fails the check, so a
+#: new id column needs a decision, not a silent dtype.
 _STR = (pl.String,)
-_INT = (pl.Int32, pl.Int64)
+_INT = (pl.Int64,)
 _SCHEDULE_IDS_COMMON = {
-    "id": _STR,
+    "id": _INT,
     "game_id": _INT,
-    "type_id": _STR,
-    "venue_id": _STR,
-    "status_type_id": _STR,
-    "home_id": _STR,
-    "home_venue_id": _STR,
-    "away_id": _STR,
-    "away_venue_id": _STR,
+    "type_id": _INT,
+    "venue_id": _INT,
+    "status_type_id": _INT,
+    "home_id": _INT,
+    "home_venue_id": _INT,
+    "away_id": _INT,
+    "away_venue_id": _INT,
 }
-_COLLEGE_IDS = {"home_conference_id": _STR, "away_conference_id": _STR, "tournament_id": _INT}
+_COLLEGE_IDS = {"home_conference_id": _INT, "away_conference_id": _INT, "tournament_id": _INT}
 SCHEDULE_IDS: Dict[str, Dict[str, tuple]] = {
     "mbb": {**_SCHEDULE_IDS_COMMON, **_COLLEGE_IDS},
     "wbb": {**_SCHEDULE_IDS_COMMON, **_COLLEGE_IDS},
@@ -67,10 +67,10 @@ SCHEDULE_IDS: Dict[str, Dict[str, tuple]] = {
     "wnba": dict(_SCHEDULE_IDS_COMMON),
     "nfl": dict(_SCHEDULE_IDS_COMMON),
     "nhl": dict(_SCHEDULE_IDS_COMMON),
-    "cfb": {**_SCHEDULE_IDS_COMMON, **_COLLEGE_IDS, "groups_id": _STR},
-    "mlb": {"game_id": _STR, "venue_id": _STR, "home_id": _STR, "away_id": _STR},
+    "cfb": {**_SCHEDULE_IDS_COMMON, **_COLLEGE_IDS, "groups_id": _INT},
+    "mlb": {"game_id": _INT, "venue_id": _INT, "home_id": _INT, "away_id": _INT},
 }
-TEAMS_IDS = {"team_id": _STR, "team_uid": _STR}
+TEAMS_IDS = {"team_id": _INT, "team_uid": _STR}  # a uid ("s:40~l:46~t:1") is not an integer id
 
 
 def _documented(league: str, family: str) -> List[str]:
@@ -159,7 +159,7 @@ def check_schedule(league: str, case: str, monkeypatch) -> None:
         assert df[_season_col(df)].cast(pl.Int64).to_list() == [e["season"]["year"] for e in events]
         assert df["season_type"].cast(pl.Int64).to_list() == [e["season"]["type"] for e in events]
         home = [next(c for c in e["competitions"][0]["competitors"] if c["homeAway"] == "home") for e in events]
-        assert df["home_id"].to_list() == [c["team"]["id"] for c in home]
+        assert df["home_id"].to_list() == [int(c["team"]["id"]) for c in home]
         assert [str(s) for s in df["home_score"].to_list()] == [str(c["score"]) for c in home]
     elif case == "id_dtypes":
         df, _ = _call(league, "schedule", monkeypatch, body, **kwargs)
@@ -248,7 +248,7 @@ def check_teams(league: str, case: str, monkeypatch) -> None:
     df, calls = _call(league, "teams", monkeypatch, body)
     if case == "snapshot":
         assert df.height == len(teams) > 0
-        assert df["team_id"].to_list() == [t["id"] for t in teams]
+        assert df["team_id"].to_list() == [int(t["id"]) for t in teams]
         assert df["team_abbreviation"].to_list() == [t["abbreviation"] for t in teams]
         assert df["team_display_name"].to_list() == [t["displayName"] for t in teams]
         assert list(df.columns) == _documented(league, "teams")

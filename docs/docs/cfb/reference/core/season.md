@@ -43,7 +43,7 @@ ESPN endpoint.
 | `type_has_groups` | logical |  |
 | `type_has_legs` | logical |  |
 | `type_has_standings` | logical |  |
-| `type_id` | character | Play-type id. |
+| `type_id` | integer | Play-type id. |
 | `type_name` | character | Broadcast-type name (e.g. `TV`, `Streaming`, `Radio`). |
 | `type_slug` | character | Broadcast-type slug (e.g. `streaming`, `tv`). |
 | `type_start_date` | character |  |
@@ -112,7 +112,7 @@ ESPN endpoint.
 | `type_has_groups` | logical |  |
 | `type_has_legs` | logical |  |
 | `type_has_standings` | logical |  |
-| `type_id` | character | Play-type id. |
+| `type_id` | integer | Play-type id. |
 | `type_leaders_$ref` | character |  |
 | `type_name` | character | Broadcast-type name (e.g. `TV`, `Streaming`, `Radio`). |
 | `type_slug` | character | Broadcast-type slug (e.g. `streaming`, `tv`). |
@@ -210,7 +210,7 @@ ESPN endpoint.
 | `has_groups` | logical | Whether the season type exposes a groups resource. |
 | `has_legs` | logical |  |
 | `has_standings` | logical | Whether the season type exposes standings. |
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `name` | character | Position name (e.g. `Quarterback`). |
 | `slug` | character | URL slug for the team. |
 | `start_date` | character | Season start timestamp (ISO 8601, UTC). |
@@ -260,7 +260,7 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `is_conference` | logical | `TRUE` for an actual conference, `FALSE` for a division roll-up. |
 | `links` | character |  |
 | `midsize_name` | character |  |
@@ -438,7 +438,7 @@ ESPN endpoint.
 | `competition_$ref` | character |  |
 | `split_stats_abbreviation` | character |  |
 | `split_stats_categories` | character |  |
-| `split_stats_id` | character |  |
+| `split_stats_id` | integer |  |
 | `split_stats_name` | character |  |
 | `team_$ref` | character |  |
 | `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
@@ -735,7 +735,7 @@ ESPN endpoint.
 | `color` | character | Primary team color (hex, no `#`). |
 | `display_name` | character | Human-readable metric name. |
 | `guid` | character | ESPN athlete GUID. |
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `is_active` | logical | Whether the team is currently active. |
 | `is_all_star` | logical | Whether the team is an all-star team. |
 | `links` | character |  |
@@ -765,7 +765,7 @@ ESPN endpoint.
 | `venue_full_name` | character |  |
 | `venue_grass` | logical | Whether the home venue has a grass surface. |
 | `venue_guid` | character |  |
-| `venue_id` | character | Referencing venue id. |
+| `venue_id` | integer | Referencing venue id. |
 | `venue_images` | character |  |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
 | `venue_short_name` | character |  |
@@ -1137,7 +1137,7 @@ ESPN endpoint.
 | `season_$ref` | character |  |
 | `splits_abbreviation` | character |  |
 | `splits_categories` | character |  |
-| `splits_id` | character |  |
+| `splits_id` | integer |  |
 | `splits_name` | character |  |
 | `team_$ref` | character |  |
 | `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |

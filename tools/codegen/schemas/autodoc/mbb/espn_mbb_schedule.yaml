@@ -2,7 +2,7 @@ schema: espn_mbb_schedule
 kind: dataframe
 columns:
 - name: id
-  type: character
+  type: integer
   description: ''
 - name: uid
   type: character
@@ -53,13 +53,13 @@ columns:
   type: character
   description: ''
 - name: type_id
-  type: character
+  type: integer
   description: ''
 - name: type_abbreviation
   type: character
   description: ''
 - name: venue_id
-  type: character
+  type: integer
   description: ''
 - name: venue_full_name
   type: character
@@ -83,7 +83,7 @@ columns:
   type: integer
   description: ''
 - name: status_type_id
-  type: character
+  type: integer
   description: ''
 - name: status_type_name
   type: character
@@ -107,7 +107,7 @@ columns:
   type: integer
   description: ''
 - name: home_id
-  type: character
+  type: integer
   description: ''
 - name: home_uid
   type: character
@@ -137,13 +137,13 @@ columns:
   type: logical
   description: ''
 - name: home_venue_id
-  type: character
+  type: integer
   description: ''
 - name: home_logo
   type: character
   description: ''
 - name: home_conference_id
-  type: character
+  type: integer
   description: ''
 - name: home_score
   type: character
@@ -161,7 +161,7 @@ columns:
   type: character
   description: ''
 - name: away_id
-  type: character
+  type: integer
   description: ''
 - name: away_uid
   type: character
@@ -191,13 +191,13 @@ columns:
   type: logical
   description: ''
 - name: away_venue_id
-  type: character
+  type: integer
   description: ''
 - name: away_logo
   type: character
   description: ''
 - name: away_conference_id
-  type: character
+  type: integer
   description: ''
 - name: away_score
   type: character

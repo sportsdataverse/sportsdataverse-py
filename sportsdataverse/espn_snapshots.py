@@ -91,24 +91,23 @@ ESPN_INJURY_LEAGUES: tuple[str, ...] = (
 #: The frame contract. An empty payload yields these columns with zero rows, so a
 #: caller can concat/append without null-checking the shape first.
 #:
-#: Every id is ``Utf8``. ESPN ships them as numeric strings here, but the same ids
-#: arrive as ints from other ESPN families, and a float-origin id stringifies as
-#: ``"123.0"`` — so ids are pinned to Utf8 at this boundary via :func:`_as_id`,
-#: which goes through ``int`` and never through ``float``.
+#: Every id is ``Int64``, like every ESPN id the package emits (task 5.2, B-M15). ESPN
+#: ships them as numeric strings here and as ints in other ESPN families; :func:`_as_id`
+#: reads the integer at this boundary and never goes through ``float``.
 INJURY_SNAPSHOT_SCHEMA: Dict[str, Any] = {
     "as_of_date": pl.Date,
     "league": pl.Utf8,
-    "team_id": pl.Utf8,
+    "team_id": pl.Int64,
     "team_display_name": pl.Utf8,
-    "injury_id": pl.Utf8,
-    "athlete_id": pl.Utf8,
+    "injury_id": pl.Int64,
+    "athlete_id": pl.Int64,
     "athlete_display_name": pl.Utf8,
     "athlete_short_name": pl.Utf8,
     "athlete_position": pl.Utf8,
     "athlete_position_name": pl.Utf8,
     "status": pl.Utf8,
     "injury_date": pl.Utf8,
-    "type_id": pl.Utf8,
+    "type_id": pl.Int64,
     "type_name": pl.Utf8,
     "type_abbreviation": pl.Utf8,
     "type_description": pl.Utf8,
@@ -120,7 +119,7 @@ INJURY_SNAPSHOT_SCHEMA: Dict[str, Any] = {
     "detail_fantasy_status": pl.Utf8,
     "short_comment": pl.Utf8,
     "long_comment": pl.Utf8,
-    "source_id": pl.Utf8,
+    "source_id": pl.Int64,
     "source_description": pl.Utf8,
 }
 
@@ -138,21 +137,26 @@ _ATHLETE_ID_RE = re.compile(r"/id/(\d+)")
 _HEADSHOT_ID_RE = re.compile(r"/(\d+)\.png")
 
 
-def _as_id(value: Any) -> Optional[str]:
-    """Coerce an ESPN id to ``Utf8``, never via ``float``.
+_INTEGER_ID = re.compile(r"-?\d+")
 
-    ``str(123.0)`` is ``"123.0"``, which silently fails every downstream join, so
-    a float id is routed through ``int`` and a non-integral one is dropped rather
-    than stringified wrong. ``bool`` is rejected because it is an ``int`` subclass.
+
+def _as_id(value: Any) -> Optional[int]:
+    """Read an ESPN id as an ``int``, never via ``float``.
+
+    A numeric string (ESPN's injury ids are negative: ``"-1975351"``) and an int are read as
+    they are; a float id is kept only when it is integral, so ``123.0`` is ``123`` and never
+    ``"123.0"``; anything else (text, ``12.5``) is ``None`` rather than a wrong id. ``bool`` is
+    rejected because it is an ``int`` subclass.
     """
     if value is None or isinstance(value, bool):
         return None
     if isinstance(value, str):
-        return value.strip() or None
+        text = value.strip()
+        return int(text) if _INTEGER_ID.fullmatch(text) else None
     if isinstance(value, int):
-        return str(value)
+        return value
     if isinstance(value, float):
-        return str(int(value)) if value.is_integer() else None
+        return int(value) if value.is_integer() else None
     return None
 
 
@@ -177,7 +181,7 @@ def _list(value: Any) -> List[Any]:
     return value if isinstance(value, list) else []
 
 
-def _athlete_id(athlete: Mapping[str, Any]) -> Optional[str]:
+def _athlete_id(athlete: Mapping[str, Any]) -> Optional[int]:
     """Athlete id from ``athlete.id``, else the player-card link, else the headshot.
 
     ESPN omits ``athlete.id`` from the injuries payload on every record, so the
@@ -187,14 +191,14 @@ def _athlete_id(athlete: Mapping[str, Any]) -> Optional[str]:
     fallback for that day.
     """
     direct = _as_id(athlete.get("id"))
-    if direct:
+    if direct is not None:
         return direct
     for link in _list(athlete.get("links")):
         match = _ATHLETE_ID_RE.search(str(_mapping(link).get("href") or ""))
         if match:
-            return match.group(1)
+            return int(match.group(1))
     headshot = _HEADSHOT_ID_RE.search(str(_mapping(athlete.get("headshot")).get("href") or ""))
-    return headshot.group(1) if headshot else None
+    return int(headshot.group(1)) if headshot else None
 
 
 def _text(container: Any, key: str) -> Optional[str]:
@@ -393,24 +397,24 @@ ESPN_DEPTHCHART_LEAGUES: tuple[str, ...] = ("nfl", "nba", "mlb")
 #: that all carry position id ``1`` and abbreviation ``WR``, so a row keyed only
 #: on the position cannot say which receiver spot it describes.
 #:
-#: Ids are ``Utf8`` for the same reason the injuries schema pins them: ESPN's own
-#: wire form, coerced through ``int`` and never through ``float``.
+#: Ids are ``Int64`` for the same reason as the injuries schema (task 5.2): ESPN's own
+#: wire form, read as an integer and never through ``float``.
 DEPTHCHART_SNAPSHOT_SCHEMA: Dict[str, Any] = {
     "as_of_date": pl.Date,
     "league": pl.Utf8,
     "season": pl.Int64,
     "season_type": pl.Int64,
-    "team_id": pl.Utf8,
+    "team_id": pl.Int64,
     "team_display_name": pl.Utf8,
     "team_abbreviation": pl.Utf8,
-    "group_id": pl.Utf8,
+    "group_id": pl.Int64,
     "group_name": pl.Utf8,
     "position_slot": pl.Utf8,
-    "position_id": pl.Utf8,
+    "position_id": pl.Int64,
     "position_abbreviation": pl.Utf8,
     "position_name": pl.Utf8,
     "depth_rank": pl.Int64,
-    "athlete_id": pl.Utf8,
+    "athlete_id": pl.Int64,
     "athlete_display_name": pl.Utf8,
     "athlete_short_name": pl.Utf8,
     "espn_timestamp": pl.Utf8,

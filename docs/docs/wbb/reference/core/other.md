@@ -30,7 +30,7 @@ ESPN endpoint.
 | `display_name` | character | Display name. |
 | `gender` | character |  |
 | `guid` | character | Stable cross-league team GUID. |
-| `id` | character | Unique play identification number |
+| `id` | integer | Unique play identification number |
 | `is_tournament` | logical |  |
 | `links` | character |  |
 | `logos` | character | Logos. |
@@ -67,7 +67,7 @@ ESPN endpoint.
 | `season_type_has_groups` | logical |  |
 | `season_type_has_legs` | logical |  |
 | `season_type_has_standings` | logical |  |
-| `season_type_id` | character | Unique identifier for season type. |
+| `season_type_id` | integer | Unique identifier for season type. |
 | `season_type_name` | character | Season type name. |
 | `season_type_slug` | character |  |
 | `season_type_start_date` | character |  |
@@ -205,7 +205,7 @@ ESPN endpoint.
 | `$ref` | character |  |
 | `competitions` | character |  |
 | `date` | character | Date in YYYY-MM-DD format. |
-| `id` | character | Unique play identification number |
+| `id` | integer | Unique play identification number |
 | `links` | character |  |
 | `name` | character | Display name. |
 | `short_name` | character | Short display name. |
@@ -257,7 +257,7 @@ ESPN endpoint.
 | `team_alternate_color` | character | Secondary team color as a hex string (no leading '#'). |
 | `team_color` | character | Primary team color as a hex string (no leading '#'). |
 | `team_display_name` | character | Full team display name (location + nickname). |
-| `team_id` | character | ESPN team id (stable join key across ESPN endpoints). |
+| `team_id` | integer | ESPN team id (stable join key across ESPN endpoints). |
 | `team_is_active` | logical | Whether the team is currently active. |
 | `team_is_all_star` | logical | Whether the entry is an all-star squad rather than a franchise. |
 | `team_location` | character | Team location / city (e.g. "Boston"). |
@@ -310,7 +310,7 @@ ESPN endpoint.
 | `color` | character | Primary color (hex without leading '#'). |
 | `display_name` | character | Display name. |
 | `guid` | character | Stable cross-league team GUID. |
-| `id` | character | Unique play identification number |
+| `id` | integer | Unique play identification number |
 | `is_active` | logical | Whether the team was active in this season. |
 | `is_all_star` | logical | Is all star. |
 | `links` | character |  |
@@ -340,7 +340,7 @@ ESPN endpoint.
 | `venue_full_name` | character | Venue full name. |
 | `venue_grass` | logical |  |
 | `venue_guid` | character |  |
-| `venue_id` | character | Unique venue identifier. |
+| `venue_id` | integer | Unique venue identifier. |
 | `venue_images` | character |  |
 | `venue_indoor` | logical | TRUE if the venue is indoors. |
 | `venue_short_name` | character |  |
@@ -425,7 +425,7 @@ ESPN endpoint.
 | `full_name` | character | Player's full name. |
 | `grass` | logical | Grass. |
 | `guid` | character | Stable cross-league team GUID. |
-| `id` | character | Unique play identification number |
+| `id` | integer | Unique play identification number |
 | `images` | character |  |
 | `indoor` | logical | Indoor. |
 
@@ -509,7 +509,7 @@ ESPN endpoint.
 | `abbreviation` | character | Short abbreviation. |
 | `color` | character | Primary color (hex without leading '#'). |
 | `display_name` | character | Display name. |
-| `id` | character | Unique play identification number |
+| `id` | integer | Unique play identification number |
 | `is_active` | logical | Whether the team was active in this season. |
 | `location` | character | Filter results by game location. |
 | `name` | character | Display name. |
@@ -523,7 +523,7 @@ ESPN endpoint.
 | `venue_full_name` | character | Venue full name. |
 | `venue_grass` | logical |  |
 | `venue_guid` | character |  |
-| `venue_id` | character | Unique venue identifier. |
+| `venue_id` | integer | Unique venue identifier. |
 | `venue_images` | character |  |
 | `venue_indoor` | logical | TRUE if the venue is indoors. |
 | `venue_short_name` | character |  |
@@ -569,7 +569,7 @@ ESPN endpoint.
 | `coach_seasons` | character |  |
 | `experience` | integer | Years of professional experience. |
 | `first_name` | character | Player's first name. |
-| `id` | character | Unique play identification number |
+| `id` | integer | Unique play identification number |
 | `last_name` | character | Player's last name. |
 | `uid` | character | ESPN UID string. |
 | `birth_place_city` | character | Birth place city. |
@@ -614,7 +614,7 @@ ESPN endpoint.
 |---|---|---|
 | `$ref` | character |  |
 | `display_value` | character | Display-formatted value. |
-| `id` | character | Unique play identification number |
+| `id` | integer | Unique play identification number |
 | `name` | character | Display name. |
 | `stats` | character | Stats. |
 | `summary` | character | Summary. |
@@ -737,7 +737,7 @@ ESPN endpoint.
 | `$ref` | character |  |
 | `abbreviation` | character | Short abbreviation. |
 | `display_name` | character | Display name. |
-| `id` | character | Unique play identification number |
+| `id` | integer | Unique play identification number |
 | `leaf` | logical |  |
 | `name` | character | Display name. |
 | `parent_$ref` | character |  |
@@ -901,7 +901,7 @@ ESPN endpoint.
 |---|---|---|
 | `group_name` | character | Group name. |
 | `group_abbreviation` | character | Group abbreviation. |
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_name` | character | Team name. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |
@@ -1039,7 +1039,7 @@ ESPN endpoint.
 | `pick_person_first_name` | character |  |
 | `pick_person_headshot_alt` | character |  |
 | `pick_person_headshot_href` | character |  |
-| `pick_person_id` | character |  |
+| `pick_person_id` | integer |  |
 | `pick_person_last_name` | character |  |
 | `week_record_display_value` | character |  |
 | `week_record_season_$ref` | character |  |
@@ -1132,7 +1132,7 @@ ESPN endpoint.
 | `grade_display_value` | character |  |
 | `recruiting_class` | integer |  |
 | `schools` | character |  |
-| `athlete_alternate_id` | character |  |
+| `athlete_alternate_id` | integer |  |
 | `athlete_display_name` | character | Athlete display name (full). |
 | `athlete_first_name` | character |  |
 | `athlete_full_name` | character |  |
@@ -1142,17 +1142,17 @@ ESPN endpoint.
 | `athlete_high_school_address_state` | character |  |
 | `athlete_high_school_address_state_abbreviation` | character |  |
 | `athlete_high_school_address_zip_code` | character |  |
-| `athlete_high_school_id` | character |  |
+| `athlete_high_school_id` | integer |  |
 | `athlete_high_school_name` | character |  |
 | `athlete_high_school_proper_name` | character |  |
 | `athlete_hometown_city` | character |  |
 | `athlete_hometown_state` | character |  |
 | `athlete_hometown_state_abbreviation` | character |  |
-| `athlete_id` | character | Unique athlete identifier (ESPN). |
+| `athlete_id` | integer | Unique athlete identifier (ESPN). |
 | `athlete_last_name` | character |  |
 | `athlete_links` | character |  |
 | `athlete_position_abbreviation` | character | Athlete position abbreviation (G / F / C). |
-| `athlete_position_id` | character |  |
+| `athlete_position_id` | integer |  |
 | `athlete_short_name` | character | Athlete short display name. |
 | `athlete_weight` | double |  |
 | `status_description` | character |  |

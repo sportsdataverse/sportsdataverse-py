@@ -26,7 +26,7 @@ columns:
   type: integer
   description: ''
 - name: id
-  type: character
+  type: integer
   description: ''
 - name: modified
   type: character
@@ -65,7 +65,7 @@ columns:
   type: character
   description: ''
 - name: type_id
-  type: character
+  type: integer
   description: ''
 - name: type_text
   type: character
