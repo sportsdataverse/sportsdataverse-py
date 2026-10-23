@@ -6,6 +6,7 @@ These are PURE frame->frame functions (no network) ported from fastRhockey's
 
 from __future__ import annotations
 
+import pandas as pd
 import polars as pl
 import pytest
 
@@ -405,3 +406,38 @@ def test_add_coord_transforms_shots_populated_on_real_data():
     # All shots should have x_coord_original populated
     assert shots["x_coord_original"].drop_nulls().len() == shots.height
     assert shots["y_coord_original"].drop_nulls().len() == shots.height
+
+
+@pytest.mark.parametrize("payload", [{}, None, {"GC": {"Pxpverbose": []}}])
+def test_empty_schema_enrich_pbp_on_a_game_with_no_plays(payload):
+    """B-GB-09: a game with no plays is the documented pbp table with zero rows (no phantom row on polars 1.x)."""
+    from sportsdataverse.hockeytech import _parsers as P
+    from sportsdataverse.hockeytech._analytics import enrich_pbp
+    from tests.conftest import documented_schema
+
+    df = P.parse_pbp(payload, game_id=42)
+    meta, shifts = load_fixture("hockeytech", "pwhl_game_summary_42"), load_fixture("hockeytech", "pwhl_gameshifts_42")
+    out = enrich_pbp(df, "pwhl", 42, meta_payload=meta, shifts_payload=shifts)
+    assert out.height == 0 and dict(out.schema) == documented_schema("autodoc/pwhl/pwhl_pbp")
+    pdf = enrich_pbp(df, "pwhl", 42, meta_payload=meta, shifts_payload=shifts, return_as_pandas=True)
+    assert isinstance(pdf, pd.DataFrame) and len(pdf) == 0
+    assert list(pdf.columns) == list(documented_schema("autodoc/pwhl/pwhl_pbp"))
+
+
+def test_empty_schema_enrich_pbp_zero_rows_with_columns_and_real_games_stack():
+    """R978-4/-6: a game whose plays all filter out (zero rows, parser columns) is the documented table too, and
+    a no-play game, a PWHL game and an OHL game (the other payload dialect) stack vertically."""
+    from sportsdataverse.hockeytech import _parsers as P
+    from sportsdataverse.hockeytech._analytics import enrich_pbp
+    from tests.conftest import documented_schema
+
+    meta, shifts = load_fixture("hockeytech", "pwhl_game_summary_42"), load_fixture("hockeytech", "pwhl_gameshifts_42")
+    played = enrich_pbp(_pbp(), "pwhl", 42, meta_payload=meta, shifts_payload=shifts)
+    none = enrich_pbp(_pbp().head(0), "pwhl", 42, meta_payload=meta, shifts_payload=shifts)
+    ohl = P.parse_pbp(load_fixture("hockeytech", "ohl_pbp_27225"), pbp_style="hockeytech_b", game_id=27225)
+    other = enrich_pbp(ohl, "ohl", 27225, meta_payload={}, shifts_payload={})
+    want = documented_schema("autodoc/pwhl/pwhl_pbp")
+    assert none.height == 0 and dict(none.schema) == want
+    assert dict(played.schema) == want
+    assert played.columns == other.columns
+    assert pl.concat([played, none, other], how="vertical_relaxed").height == played.height + other.height

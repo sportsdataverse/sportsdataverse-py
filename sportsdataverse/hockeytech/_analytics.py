@@ -12,6 +12,8 @@ from typing import Any, Optional
 
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _empty_from_schema
+
 # ---------------------------------------------------------------------------
 # PWHL PBP enrichment: clock + coordinate transforms
 # Ported faithfully from fastRhockey R/pwhl_pbp.R
@@ -916,6 +918,11 @@ def enrich_pbp(
     from sportsdataverse.hockeytech import _parsers as P
     from sportsdataverse.hockeytech._client import hockeytech_api
 
+    if df.height == 0:
+        # A game with no plays: the documented columns, never literals added to a (0, 0) frame,
+        # which polars 1.x turns into one all-null phantom row (B-GB-09).
+        return _empty_from_schema("autodoc/pwhl/pwhl_pbp", return_as_pandas)
+
     # ------------------------------------------------------------------
     # Step 1: fetch meta if not provided
     # ------------------------------------------------------------------
@@ -947,7 +954,7 @@ def enrich_pbp(
     # ------------------------------------------------------------------
     df = df.with_columns(
         game_date=pl.lit(game_date),
-        game_season=pl.lit(game_season),
+        game_season=pl.lit(game_season, dtype=pl.Int64),  # the documented integer (R978-4)
         game_season_id=pl.lit(game_season_id),
         home_team=pl.lit(home_team),
         home_team_id=pl.lit(home_team_id),
@@ -1038,6 +1045,10 @@ def enrich_pbp(
             on_ice_away=pl.lit(None, dtype=pl.Utf8),
         )
 
+    # The documented column order for both payload dialects (R978-4): hockeytech_a and _b built the event
+    # columns in different orders, so a no-play game and two leagues' games would not stack vertically.
+    order = list(_empty_from_schema("autodoc/pwhl/pwhl_pbp").columns)
+    df = df.select([c for c in order if c in df.columns] + [c for c in df.columns if c not in order])
     if return_as_pandas:
         return df.to_pandas()
     return df
