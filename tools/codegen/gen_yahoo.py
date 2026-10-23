@@ -233,7 +233,7 @@ def _summary(op: dict, qname: str, props: Optional[Dict[str, Any]]) -> str:
         return f"Yahoo shangrila persisted query `{qname}` (response body not captured; shape unknown)"
     if len(props) == 1:
         key, node = next(iter(props.items()))
-        final, _, path = _descend(key, node)
+        _, _, path = _descend(key, node)
         return f"Yahoo shangrila persisted query `{qname}` -> one row per `{'.'.join(path)}` entry"
     tables = ", ".join(underscore(k) for k in props)
     return f"Yahoo shangrila persisted query `{qname}` -> tables: {tables}"

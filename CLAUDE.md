@@ -240,8 +240,8 @@ CONTRIBUTING.md             # uv workflow + new-module standards
 
 The cross-league ESPN wrapper surface is **codegen output**, not a runtime factory:
 
-- `sportsdataverse/_common_espn.py` is **40 lines** — the host constants and a
-  `_get` re-export. Nothing is minted at import time.
+- Nothing is minted at import time: the generated modules import `_get` from
+  `sportsdataverse/_codegen_runtime.py` and their parsers from `_common_espn_parsers.py`.
 - Each `sportsdataverse/<league>/<prefix>_espn_ext.py` is a **generated module of
   ~5,700 lines**, written by `build_live()` from the five ESPN endpoint YAMLs in
   `generate.ESPN_APIS`. Every wrapper is spelled out, so `help()`, IDE
@@ -251,9 +251,10 @@ The cross-league ESPN wrapper surface is **codegen output**, not a runtime facto
   [`docs/docs/architecture/codegen.md`](docs/docs/architecture/codegen.md).
 
 The old runtime wrapper factory — one core module of partials bound into tiny
-per-league ext modules at import time — was retired when codegen took over. Only
-`tools/codegen/extract.py`, a historical bootstrap that no longer runs, still
-expects it. If you find a description of that pattern anywhere, it predates 0.1.x.
+per-league ext modules at import time — was retired when codegen took over, and its
+last remnants (`_common_espn.py`, the `extract*.py` bootstraps and the committed
+`tools/codegen/_generated/` staging copies) were deleted in 0.1.6. If you find a
+description of that pattern anywhere, it predates 0.1.x.
 
 Total cross-league surface: **126 short names** (from the five ESPN
 endpoint YAMLs in `generate.ESPN_APIS`) emitted across 30 league modules
@@ -326,9 +327,8 @@ from sportsdataverse.nhl import nhl_web_pbp, parse_nhl_web_pbp
 df = parse_nhl_web_pbp(nhl_web_pbp(2023030417))                 # 331 plays
 ```
 
-**`ENDPOINT_PARSERS` invariant**: every wrapper short name across
-`_UNIVERSAL_WRAPPERS` + `_NCAA_WRAPPERS` + `_FOOTBALL_WRAPPERS` +
-`_MLB_WRAPPERS` is in the registry. Three generic fall-throughs
+**`ENDPOINT_PARSERS` invariant**: every wrapper short name in the five
+ESPN endpoint YAMLs (`generate.ESPN_APIS`) is in the registry. Three generic fall-throughs
 cover the long tail:
 
 - `parse_single_entity` — Core v2 single-resource payloads
@@ -1166,6 +1166,11 @@ code at the source; never blanket-ignore a category.
   blind spots. Don't add new regex extraction; extend the participants
   module instead.
 
+- **Model lineage: cite a tracked fitting script.** Every bundled booster and fitted constant is
+  registered in `docs/docs/architecture/model-lineage.md` (one row per `.ubj`, plus the known-gap table of
+  cited scripts that are lost or only on the maintainer's disk). Put a new fitter under `tools/fit_<what>.py`,
+  never the gitignored `dev/`, and label a seeded value as seeded. `tests/test_model_lineage.py` fails on a
+  cited script that is neither tracked nor in the gap table, and on a booster without a row.
 - **Cache invalidation when modifying loaders.** The `@cached_loader`
   decorator hashes `(qualified_name, args, sorted_kwargs)` — it does NOT
   hash the URL or function body. If you change a loader's URL or
@@ -1365,7 +1370,7 @@ crosswalks, `validation`, `wexp`, and the release utilities.
 ## Codegen
 
 Both the API wrappers and the docs site come out of `tools/codegen/generate.py`.
-The full pipeline — inputs, the six build stages, the docs-site renderers, the
+The full pipeline — inputs, the five build stages, the docs-site renderers, the
 family split and anchor map, the league registry, the changelog render, the
 coverage and sources gates, and the sdv-docs index downstream — is documented
 once in [`docs/docs/architecture/codegen.md`](docs/docs/architecture/codegen.md).

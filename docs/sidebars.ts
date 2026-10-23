@@ -47,6 +47,7 @@ const sidebars: SidebarsConfig = {
     {type: 'doc', id: 'architecture/espn-cross-league', label: 'How it works'},
     {type: 'doc', id: 'architecture/http-auth-config', label: 'HTTP, auth & proxy config'},
     {type: 'doc', id: 'architecture/metric-registry', label: 'Metric registry'},
+    {type: 'doc', id: 'architecture/model-lineage', label: 'Model lineage'},
     {type: 'doc', id: 'parsers/index', label: 'Parser layer'},
     {type: 'doc', id: 'reference/parameters', label: 'Parameter reference'},
     {

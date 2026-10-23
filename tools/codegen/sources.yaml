@@ -23,7 +23,6 @@ providers:
     espn_apis: [espn_site_v2, espn_web_v3, espn_core_v2, espn_fitt_v3, espn_cdn]
     flat_apis: [espn_content]  # content.core.api.espn.com/v1 news (sportsdataverse.espn_content)
     modules:
-      - sportsdataverse._common_espn
       - sportsdataverse._common_espn_player_stats
       - sportsdataverse._espn_basketball_pbp
       - sportsdataverse.espn_snapshots

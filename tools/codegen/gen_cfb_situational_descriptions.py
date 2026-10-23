@@ -34,10 +34,6 @@ SIT = {
 PLAY = {"pass": " on pass plays", "rush": " on rush plays"}
 
 
-def _sit_phrase(key: str) -> str | None:
-    return SIT.get(key)
-
-
 def describe(col: str) -> str | None:
     # --- play-mix counts / rates: {situation}_{pass|rush}[_rate], {situation}s
     m = re.fullmatch(r"(early_down|late_down|middle_8)_(pass|rush)(_rate)?", col)

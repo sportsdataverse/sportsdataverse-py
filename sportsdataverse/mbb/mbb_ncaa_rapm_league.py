@@ -110,7 +110,7 @@ __all__ = [
 ]
 
 #: Ridge penalty on the possession-weighted per-100 scale. Fitted by
-#: game-grouped 5-fold CV (``dev/ncaa_rapm/fit_lambda_league.py``) on the
+#: game-grouped 5-fold CV (``tools/fit_ncaa_rapm_lambda.py``) on the
 #: real 2024 seasons: BOTH leagues minimize weighted OOS MSE at 1000
 #: (mbb 5145.33 over a 50..5000 grid; wbb 4910.74). Refit with that script;
 #: do not tune ad hoc.

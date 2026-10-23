@@ -26,6 +26,8 @@ from tools.hooks import sync_docs_changelog  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 ENDPOINTS = ROOT / "tools" / "codegen" / "endpoints"
+# Scratch root for the ``--check`` gates' per-run temp dirs (gitignored). It sits inside the
+# repo so ruff discovers the repo's format config; nothing is committed under it (A-L1).
 OUT = ROOT / "tools" / "codegen" / "_generated"
 LIVE = ROOT / "sportsdataverse"
 
@@ -2182,8 +2184,7 @@ def _is_loader_tag(tag: str) -> bool:
 def gh_release_tags(repo: str = "sportsdataverse/sportsdataverse-data", limit: int = 400) -> list[str]:
     """Live release tags for ``repo`` via the ``gh`` CLI (network).
 
-    Defined here (not in the legacy runtime-capture ``extract.py``, which is
-    import-broken post-factory-retirement) so the audit has no dead dependency.
+    Defined here so the audit has no dependency outside this module.
     Raises ``subprocess.CalledProcessError`` if ``gh`` is missing/unauthenticated."""
     out = subprocess.run(
         ["gh", "release", "list", "-R", repo, "--limit", str(limit)],
@@ -2911,15 +2912,6 @@ def _render_all() -> dict[str, str]:
     return {f"{lg.prefix}_espn_ext.py": _league_module_source(lg, apis, cfg.hosts) for lg in cfg.leagues}
 
 
-def build() -> list[Path]:
-    OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / "__init__.py").write_text("", encoding="utf-8", newline="\n")
-    for name, src in _render_all().items():
-        (OUT / name).write_text(src, encoding="utf-8", newline="\n")
-    _ruff_format_dir(OUT)
-    return sorted(OUT.glob("*_espn_ext.py"))
-
-
 def _ensure_init_import(pkg_dir: Path, prefix: str, dotted: str) -> None:
     """Idempotently make ``pkg_dir/__init__.py`` re-export the generated ext.
 
@@ -3106,29 +3098,6 @@ def _live_stale() -> list[str]:
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     return stale
-
-
-def check() -> int:
-    # Render + format in a temp subdir *inside* OUT so ruff discovers the same repo
-    # config, then compare byte-for-byte against the committed generated files.
-    tmp = _check_tmp("_check_")
-    try:
-        rendered = _render_all()
-        for name, src in rendered.items():
-            (tmp / name).write_text(src, encoding="utf-8", newline="\n")
-        _ruff_format_dir(tmp)
-        stale = [
-            name
-            for name in rendered
-            if not (OUT / name).exists()
-            or (OUT / name).read_text(encoding="utf-8") != (tmp / name).read_text(encoding="utf-8")
-        ]
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
-    if stale:
-        print("codegen --check: stale/missing generated files:", ", ".join(sorted(stale)), file=sys.stderr)
-        return 1
-    return 0
 
 
 # ===========================================================================
@@ -5867,7 +5836,7 @@ def _docs_stale(rendered: dict[str, str] | None = None) -> list[str]:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="generate.py")
-    ap.add_argument("--check", action="store_true", help="fail if any generated (staging or live) file is stale")
+    ap.add_argument("--check", action="store_true", help="fail if any generated file is stale")
     ap.add_argument(
         "--audit-releases",
         action="store_true",
@@ -5919,7 +5888,7 @@ def main(argv=None) -> int:
         print(f"codegen --docs: wrote {d} doc files to {DOCS}")
         return 0
     if args.check:
-        rc = check()
+        rc = 0
         live = _live_stale()
         if live:
             print("codegen --check: stale live files:", ", ".join(sorted(live)), file=sys.stderr)
@@ -5968,11 +5937,10 @@ def main(argv=None) -> int:
         if rc == 0:
             print("codegen --check: all generated files current")
         return rc
-    build()
     n = len(build_live())
     f = len(build_flat_live())
     ldr = len(build_loaders_live())
-    print(f"codegen: wrote {n} live + {f} flat-API + {ldr} loader modules + refreshed staging at {OUT}", flush=True)
+    print(f"codegen: wrote {n} live + {f} flat-API + {ldr} loader modules", flush=True)
     # The parsed aliases and the docs read the package's live signatures and docstrings, and this
     # process imported the package (and cached what it read) before the stages above rewrote it.
     # Rendering them here took a second run to converge (A-L10); a fresh interpreter reads what

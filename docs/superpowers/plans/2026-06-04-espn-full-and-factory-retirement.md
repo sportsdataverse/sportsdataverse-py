@@ -17,6 +17,8 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+> **Superseded (historical record).** This document describes the codegen design as it was planned in June 2026. The bootstraps it names (`extract.py`, `extract_native.py`, `openapi_to_endpoints.py`, `extract_releases.py`), the `tools/codegen/_generated/` staging copies and `sportsdataverse/_common_espn.py` have since been deleted. The current pipeline is documented in `docs/docs/architecture/codegen.md`.
+
 # ESPN Full Surface + Factory Retirement Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking. **Prerequisite:** Plan 1 (`2026-06-04-codegen-engine-foundation.md`) is complete — the engine (`tools/codegen/{spec,render,generate}.py`, templates, `_codegen_runtime.py`) exists and the site-v2 slice generates + parity-tests green.

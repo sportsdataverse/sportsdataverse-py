@@ -79,10 +79,7 @@ def first_render() -> Callable[[Callable[[], Dict[str, str]]], Dict[str, str]]:
 
 @pytest.fixture(scope="session")
 def espn_ext_dir(tmp_path_factory: pytest.TempPathFactory) -> Path:
-    """``generate.build()`` output, built once per worker into a temp dir.
-
-    ``build()`` rewrites the committed staging tree ``tools/codegen/_generated/``;
-    run against the real tree it raced every parallel test reading those modules.
+    """A fresh render of every ``<prefix>_espn_ext.py``, built once per worker into a temp dir.
 
     Returns:
         The directory holding ``__init__.py`` and one ``<prefix>_espn_ext.py`` per league.
@@ -90,7 +87,8 @@ def espn_ext_dir(tmp_path_factory: pytest.TempPathFactory) -> Path:
     from tools.codegen import generate
 
     out = tmp_path_factory.mktemp("_generated")
-    with pytest.MonkeyPatch.context() as mp:
-        mp.setattr(generate, "OUT", out)
-        generate.build()
+    (out / "__init__.py").write_text("", encoding="utf-8", newline="\n")
+    for name, src in generate._render_all().items():
+        (out / name).write_text(src, encoding="utf-8", newline="\n")
+    generate._ruff_format_dir(out)
     return out

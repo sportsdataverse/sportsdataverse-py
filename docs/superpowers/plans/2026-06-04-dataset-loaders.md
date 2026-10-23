@@ -14,6 +14,8 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+> **Superseded (historical record).** This document describes the codegen design as it was planned in June 2026. The bootstraps it names (`extract.py`, `extract_native.py`, `openapi_to_endpoints.py`, `extract_releases.py`), the `tools/codegen/_generated/` staging copies and `sportsdataverse/_common_espn.py` have since been deleted. The current pipeline is documented in `docs/docs/architecture/codegen.md`.
+
 # 404-Safe Dataset Loaders Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans. Steps use checkbox (`- [ ]`) syntax. **Prerequisite:** Plans 1–3 complete — the engine renders flat modules, `_codegen_runtime` exists, `spec.py` supports the param/transform model.
