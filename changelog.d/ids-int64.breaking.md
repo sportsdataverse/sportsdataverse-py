@@ -13,3 +13,6 @@
 - **NHL API parsers (`parse_nhl_web_*`, `parse_nhl_records`, `parse_nhl_stats_rest`, `parse_nhl_edge_*`) and
   `nhl_edge_skating_value`:** every `id` / `*_id` is `Int64` (was Float64 / String by payload, `player_id` a
   Utf8 pin); stats-rest `formatted_season_id` and the country `id` are text and stay String. (#986)
+- **HockeyTech (PWHL + 19 leagues: parsers, `<lg>_pbp`, schedules, rosters, leaders, summaries):** every `id` /
+  `*_id` is `Int64` (`player_id` was Float64 in pbp, `team_id` / `game_id` String or the caller's dtype); the
+  game-summary `home_team_id` / `away_team_id` / `game_season_id` are null, not `""`, when it is unavailable. (#PRC)

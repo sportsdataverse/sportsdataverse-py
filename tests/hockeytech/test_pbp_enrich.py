@@ -441,3 +441,20 @@ def test_empty_schema_enrich_pbp_zero_rows_with_columns_and_real_games_stack():
     assert dict(played.schema) == want
     assert played.columns == other.columns
     assert pl.concat([played, none, other], how="vertical_relaxed").height == played.height + other.height
+
+
+def test_enriched_pbp_ids_int64():
+    """B-H5 (task 5.2): the enriched pbp (``<lg>_pbp``) carries every id Int64, the parser's and the game-summary
+    meta's alike; an OHL game with no summary has null meta ids, not ``""``."""
+    from sportsdataverse.hockeytech import _parsers as P
+    from sportsdataverse.hockeytech._analytics import enrich_pbp
+
+    meta, shifts = load_fixture("hockeytech", "pwhl_game_summary_42"), load_fixture("hockeytech", "pwhl_gameshifts_42")
+    played = enrich_pbp(_pbp(), "pwhl", 42, meta_payload=meta, shifts_payload=shifts)
+    ohl = P.parse_pbp(load_fixture("hockeytech", "ohl_pbp_27225"), pbp_style="hockeytech_b", game_id=27225)
+    other = enrich_pbp(ohl, "ohl", 27225, meta_payload={}, shifts_payload={})
+    for df in (played, other):
+        ids = {c: df.schema[c] for c in df.columns if c == "id" or c.endswith("_id")}
+        assert {"game_id", "team_id", "player_id", "home_team_id", "away_team_id", "game_season_id"} <= set(ids)
+        assert {c: t for c, t in ids.items() if t != pl.Int64} == {}
+    assert played["home_team_id"].null_count() == 0 and other["home_team_id"].null_count() == other.height
