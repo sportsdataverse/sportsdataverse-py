@@ -8,7 +8,7 @@ columns:
   type: integer
   description: ''
 - name: player_current_team_id
-  type: double
+  type: integer
   description: ''
 - name: player_first_name
   type: character

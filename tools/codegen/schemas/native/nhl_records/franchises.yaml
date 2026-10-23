@@ -11,7 +11,7 @@ columns:
   type: character
   description: ''
 - name: last_season_id
-  type: double
+  type: integer
   description: ''
 - name: most_recent_team_id
   type: integer

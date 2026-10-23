@@ -187,3 +187,43 @@ def test_schema_drift_warns_instead_of_reading_as_no_data(module, parser, direct
     assert parse({**raw, "data": [None] * len(raw["data"])}).height == 0
     with pytest.warns(SchemaDriftWarning, match=f"{parser}: data"):
         assert parse({**raw, "data": [str(row) for row in raw["data"]]}).height == 0
+
+
+# ---------------------------------------------------------------------------
+# Task 5.2 (B-H5): every NHL id is Int64 at the parser boundary
+# ---------------------------------------------------------------------------
+#: Id columns whose values are text on a capture, kept as they come: the stats-rest season label "1971-72" and
+#: the country endpoint's ISO code "DEU".
+_NHL_TEXT_IDS = {("stats_rest_country.json", "id")}
+_NHL_TEXT_ID_COLUMNS = {"formatted_season_id"}
+
+
+def _nhl_native_cases():
+    import yaml
+
+    from tools.codegen import generate, spec
+
+    nat = yaml.safe_load((generate.ROOT / "tools" / "codegen" / "native_fixture_map.yaml").read_text("utf-8"))
+    params = spec.load_parameters(generate.ENDPOINTS / "parameters.yaml")
+    for api in ("nhl_api_web", "nhl_records", "nhl_stats_rest", "nhl_edge"):
+        fa = spec.load_flat_api(generate.ENDPOINTS / f"{api}.yaml", params)
+        by_short = {e.short: e for e in fa.endpoints}
+        for fname, short in nat[api].items():
+            ep = by_short.get(short)
+            if ep is not None and ep.parser:
+                yield pytest.param(api, fa.parser_module, ep.parser, fname, id=f"{api}/{fname}")
+
+
+@pytest.mark.parametrize(("api", "module", "parser", "fname"), list(_nhl_native_cases()))
+def test_nhl_ids_int64(api, module, parser, fname):
+    """B-H5: ``details_player_id`` was Float64 on the full-game pbp, ``player_id`` Int64 / Float64 / String by records
+    payload ('8445802.0' once stringified). One dtype per id, from the raw integer."""
+    import importlib
+
+    raw = load_fixture(api, fname.removesuffix(".json"))
+    out = getattr(importlib.import_module(f"sportsdataverse.{module}"), parser)(raw)
+    for sec, df in (out if isinstance(out, dict) else {"": out}).items():
+        ids = {c: df.schema[c] for c in df.columns if c == "id" or c.endswith("_id")}
+        text = {c for c in ids if c in _NHL_TEXT_ID_COLUMNS or (fname, c) in _NHL_TEXT_IDS}
+        assert {c: t for c, t in ids.items() if c not in text and t != pl.Int64} == {}, sec
+        assert all(ids[c] == pl.String for c in text), sec

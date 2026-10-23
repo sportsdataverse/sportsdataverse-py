@@ -7105,6 +7105,47 @@
   expected: kill
   note: An Int32 key joins an Int64 one silently by supertype (a String one would match nothing).
 
+# --- task 5.2 part (b): NHL ids are Int64 at the parser boundary (B-H5, B-GB-10)
+- id: nhl-web-parser-ids-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  snippet: '        return _cast_id_columns(pl.from_pandas(df))'
+  mutant: '        return pl.from_pandas(df)'
+  test: tests/test_nhl_aux_parsers.py -k "ids_int64 and pbp_2024_scf_g7"
+  expected: kill
+  note: parse_nhl_web_pbp emits details_player_id and the other event ids as Float64 again.
+
+- id: nhl-records-parser-ids-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/nhl/nhl_records_parsers.py
+  snippet: '        return _cast_id_columns(pl.from_pandas(df))'
+  mutant: '        return pl.from_pandas(df)'
+  test: tests/test_nhl_aux_parsers.py -k "ids_int64 and nhl_records"
+  expected: kill
+  note: records player_id / franchise_id are Int64, Float64 ('8445802.0') or String by payload again.
+
+- id: nhl-edge-value-player-id-int64
+  group: dtype-contract-5-2
+  finding: B-GB-10
+  file: sportsdataverse/nhl/nhl_edge_value.py
+  snippet: '    "player_id": pl.Int64,'
+  mutant: '    "player_id": pl.Utf8,'
+  test: tests/nhl/test_nhl_edge_value.py -k "player_id_is_int64"
+  expected: kill
+  note: The PWHL / empty skating-value frame pins player_id Utf8 again (the retired pin).
+
+- id: nhl-edge-value-casts-detail-ids
+  group: dtype-contract-5-2
+  finding: B-GB-10
+  file: sportsdataverse/nhl/nhl_edge_value.py
+  snippet: '    out = _cast_ids_int64(scored, ["player_id"]).with_columns(pl.col("season").cast(pl.Int64)).select(select_cols)'
+  mutant: '    out = scored.with_columns(pl.col("season").cast(pl.Int64)).select(select_cols)'
+  test: tests/nhl/test_nhl_edge_value.py -k "player_id_is_int64"
+  expected: kill
+  note: The skating value keeps the EDGE capture's text player ids, so it joins no NHL frame.
+
 - id: cfb-drive-columns-every-documented-drive-key
   group: dtype-contract-5-1
   finding: C-L5

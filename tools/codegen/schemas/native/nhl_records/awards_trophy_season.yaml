@@ -29,7 +29,7 @@ columns:
   type: logical
   description: ''
 - name: player_id
-  type: character
+  type: integer
   description: ''
 - name: player_image_caption
   type: character

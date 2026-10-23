@@ -28,7 +28,7 @@ Goaltender career statistics (regular season).
 | `active_player` | logical | Indicator of whether the player is active. |
 | `first_name` | character | Player first name. |
 | `first_season_for_game_type` | integer | First season ID for the game type. |
-| `franchise_id` | double | Unique franchise identifier. |
+| `franchise_id` | integer | Unique franchise identifier. |
 | `game_seven_games_played` | character | Game seven games played. |
 | `game_seven_losses` | character | Game seven losses. |
 | `game_seven_wins` | character | Game seven wins. |
@@ -100,7 +100,7 @@ Goaltender career stats inclusive of regular season and playoffs.
 | `id` | integer | Unique player identifier. |
 | `active_player` | integer | Indicator of whether the player is active. |
 | `first_name` | character | Player first name. |
-| `franchise_id` | double | Unique franchise identifier. |
+| `franchise_id` | integer | Unique franchise identifier. |
 | `games_played` | integer | Games played. |
 | `goals_against` | integer | Goals against. |
 | `goals_against_average` | double | Goals against average. |
@@ -158,7 +158,7 @@ Goaltender single-season statistics.
 | `id` | integer | Unique player identifier. |
 | `active_player` | logical | Indicator of whether the player is active. |
 | `first_name` | character | Player first name. |
-| `franchise_id` | double | Unique franchise identifier. |
+| `franchise_id` | integer | Unique franchise identifier. |
 | `game_seven_games_played` | character | Game seven games played. |
 | `game_seven_losses` | character | Game seven losses. |
 | `game_seven_wins` | character | Game seven wins. |
@@ -230,7 +230,7 @@ Goaltenders with the longest consecutive-win streaks.
 | `active_streak` | logical | Indicator of whether the streak is active. |
 | `end_date` | character | Season end date. |
 | `first_name` | character | Player first name. |
-| `franchise_id` | double | Unique franchise identifier. |
+| `franchise_id` | integer | Unique franchise identifier. |
 | `game_type_id` | integer | Game type identifier (regular/playoffs). |
 | `last_name` | character | Player last name. |
 | `player_id` | integer | Unique player identifier. |
@@ -334,7 +334,7 @@ Goaltenders who reached each win plateau (100, 200, 300 …).
 | `active_player` | logical | Indicator of whether the player is active. |
 | `first_name` | character | Player first name. |
 | `forty_win_seasons` | integer | Number of seasons in which the goalie recorded 40 or more wins, a rare single-season achievement. |
-| `franchise_id` | double | Unique franchise identifier. |
+| `franchise_id` | integer | Unique franchise identifier. |
 | `last_name` | character | Player last name. |
 | `player_id` | integer | Unique player identifier. |
 | `seasons_played` | integer | Number of seasons played. |
@@ -384,7 +384,7 @@ Goaltender consecutive playoff-win streaks.
 | `consecutive_playoff_seasons` | integer | Number of consecutive playoff seasons in which the goalie appeared for the franchise during this streak. |
 | `end_season` | integer | Last season (in YYYYYYYY format) of the goalie's consecutive playoff appearance streak. |
 | `first_name` | character | Player first name. |
-| `franchise_id` | double | Unique franchise identifier. |
+| `franchise_id` | integer | Unique franchise identifier. |
 | `last_name` | character | Player last name. |
 | `player_id` | integer | Unique player identifier. |
 | `playoff_seasons` | integer | Number of playoff seasons. |
@@ -432,7 +432,7 @@ Goaltender longest undefeated streaks (wins + ties).
 | `active_streak` | logical | Indicator of whether the streak is active. |
 | `end_date` | character | Season end date. |
 | `first_name` | character | Player first name. |
-| `franchise_id` | double | Unique franchise identifier. |
+| `franchise_id` | integer | Unique franchise identifier. |
 | `game_type_id` | integer | Game type identifier (regular/playoffs). |
 | `last_name` | character | Player last name. |
 | `player_id` | integer | Unique player identifier. |

@@ -47,6 +47,7 @@ from typing import Dict, List
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _cast_id_columns
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _object_rows, _warn_schema_drift
 
@@ -68,14 +69,14 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool):
     if return_as_pandas:
         return df
     try:
-        return pl.from_pandas(df)
+        return _cast_id_columns(pl.from_pandas(df))
     except _FROM_PANDAS_ERRORS:
         # A mixed-type object column (e.g. ints and strings) fails the Arrow conversion:
         # stringify the object columns rather than lose the frame.
         df2 = df.copy()
         for col in [c for c in df2.columns if df2[c].dtype == "object"]:
             df2[col] = df2[col].astype(str)
-        return pl.from_pandas(df2)
+        return _cast_id_columns(pl.from_pandas(df2))
 
 
 def _empty_frame(return_as_pandas: bool = False):
