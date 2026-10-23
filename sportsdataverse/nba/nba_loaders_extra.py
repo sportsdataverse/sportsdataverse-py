@@ -349,7 +349,7 @@ def _load_season_assets(
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
-@_documented_empty("autodoc/nba/load_nba_stats_synergy")
+@_documented_empty("autodoc/nba/load_nba_stats_synergy", arrow=True)
 def load_nba_stats_synergy(
     seasons: int | Iterable[int],
     season_type: _Choice = None,
@@ -460,7 +460,7 @@ def _hustle(
     )
 
 
-@_documented_empty("autodoc/nba/load_nba_stats_hustle_player")
+@_documented_empty("autodoc/nba/load_nba_stats_hustle_player", arrow=True)
 def load_nba_stats_hustle_player(
     seasons: int | Iterable[int],
     season_type: _Choice = None,
@@ -514,7 +514,7 @@ def load_nba_stats_hustle_player(
     return _hustle("player", seasons, season_type, per_mode, return_as_pandas)
 
 
-@_documented_empty("autodoc/nba/load_nba_stats_hustle_team")
+@_documented_empty("autodoc/nba/load_nba_stats_hustle_team", arrow=True)
 def load_nba_stats_hustle_team(
     seasons: int | Iterable[int],
     season_type: _Choice = None,
@@ -568,7 +568,7 @@ def load_nba_stats_hustle_team(
     return _hustle("team", seasons, season_type, per_mode, return_as_pandas)
 
 
-@_documented_empty("autodoc/nba/load_nba_stats_matchups")
+@_documented_empty("autodoc/nba/load_nba_stats_matchups", arrow=True)
 def load_nba_stats_matchups(
     seasons: int | Iterable[int],
     per_mode: _Choice = None,
@@ -627,7 +627,7 @@ def load_nba_stats_matchups(
     return _load_season_assets("load_nba_stats_matchups", "nba_stats_matchups", assets, seasons, 2017, return_as_pandas)
 
 
-@_documented_empty("autodoc/nba/load_nba_stats_matchups_rollup")
+@_documented_empty("autodoc/nba/load_nba_stats_matchups_rollup", arrow=True)
 def load_nba_stats_matchups_rollup(
     seasons: int | Iterable[int],
     season_type: _Choice = None,
@@ -703,7 +703,7 @@ def _combine(
     )
 
 
-@_documented_empty("autodoc/nba/load_nba_stats_draft_combine_stats")
+@_documented_empty("autodoc/nba/load_nba_stats_draft_combine_stats", arrow=True)
 def load_nba_stats_draft_combine_stats(
     seasons: int | Iterable[int], return_as_pandas: bool = False
 ) -> pl.DataFrame | pd.DataFrame:
@@ -747,7 +747,7 @@ def load_nba_stats_draft_combine_stats(
     return _combine("draftcombinestats", "load_nba_stats_draft_combine_stats", seasons, return_as_pandas)
 
 
-@_documented_empty("autodoc/nba/load_nba_stats_draft_combine_anthro")
+@_documented_empty("autodoc/nba/load_nba_stats_draft_combine_anthro", arrow=True)
 def load_nba_stats_draft_combine_anthro(
     seasons: int | Iterable[int], return_as_pandas: bool = False
 ) -> pl.DataFrame | pd.DataFrame:
@@ -790,7 +790,7 @@ def load_nba_stats_draft_combine_anthro(
     return _combine("draftcombineplayeranthro", "load_nba_stats_draft_combine_anthro", seasons, return_as_pandas)
 
 
-@_documented_empty("autodoc/nba/load_nba_stats_draft_combine_drills")
+@_documented_empty("autodoc/nba/load_nba_stats_draft_combine_drills", arrow=True)
 def load_nba_stats_draft_combine_drills(
     seasons: int | Iterable[int], return_as_pandas: bool = False
 ) -> pl.DataFrame | pd.DataFrame:
@@ -833,7 +833,7 @@ def load_nba_stats_draft_combine_drills(
     return _combine("draftcombinedrillresults", "load_nba_stats_draft_combine_drills", seasons, return_as_pandas)
 
 
-@_documented_empty("autodoc/nba/load_nba_stats_draft_combine_spot_shooting")
+@_documented_empty("autodoc/nba/load_nba_stats_draft_combine_spot_shooting", arrow=True)
 def load_nba_stats_draft_combine_spot_shooting(
     seasons: int | Iterable[int], return_as_pandas: bool = False
 ) -> pl.DataFrame | pd.DataFrame:
@@ -877,7 +877,7 @@ def load_nba_stats_draft_combine_spot_shooting(
     return _combine("draftcombinespotshooting", "load_nba_stats_draft_combine_spot_shooting", seasons, return_as_pandas)
 
 
-@_documented_empty("autodoc/nba/load_nba_stats_draft_combine_nonstationary_shooting")
+@_documented_empty("autodoc/nba/load_nba_stats_draft_combine_nonstationary_shooting", arrow=True)
 def load_nba_stats_draft_combine_nonstationary_shooting(
     seasons: int | Iterable[int], return_as_pandas: bool = False
 ) -> pl.DataFrame | pd.DataFrame:

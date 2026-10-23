@@ -1,3 +1,3 @@
-- **Empty results keep their columns:** empty ESPN parser results, generated loaders and multi-file
-  `load_nba_stats_*` loaders with no published season, four HockeyTech parsers and `<league>_pbp` for a
-  game with no plays return zero rows with their returns table's columns and dtypes, not (0, 0). (#978)
+- **Empty results keep their columns:** the ESPN league wrappers of 45 dedicated parsers and the soccer / cricket
+  scoreboards, generated and multi-file NBA stats loaders, 3 HockeyTech parsers and `enrich_pbp` return their table,
+  not (0, 0); `parse_items`, `parse_single_entity` and cdn rankings still return (0, 0). (#978)

@@ -1163,11 +1163,7 @@
   }
  },
  "injuries_mbb": {
-  "": {
-   "id": "Int64",
-   "display_name": "String",
-   "injuries": "String"
-  }
+  "": {}
  },
  "injuries_mlb": {
   "": {
@@ -1198,11 +1194,7 @@
   }
  },
  "injuries_wbb": {
-  "": {
-   "id": "Int64",
-   "display_name": "String",
-   "injuries": "String"
-  }
+  "": {}
  },
  "injuries_wnba": {
   "": {
@@ -3426,28 +3418,7 @@
    "stat_display_value": "String",
    "stat_value": "String"
   },
-  "plays": {
-   "id": "Int64",
-   "sequence_number": "String",
-   "text": "String",
-   "away_score": "Int64",
-   "home_score": "Int64",
-   "scoring_play": "Boolean",
-   "score_value": "Int64",
-   "participants": "String",
-   "wallclock": "String",
-   "shooting_play": "Boolean",
-   "points_attempted": "Int64",
-   "short_description": "String",
-   "type_id": "Int64",
-   "type_text": "String",
-   "period_number": "Int64",
-   "period_display_value": "String",
-   "clock_display_value": "String",
-   "team_id": "Int64",
-   "coordinate_x": "Int64",
-   "coordinate_y": "Int64"
-  },
+  "plays": {},
   "winprobability": {
    "home_win_percentage": "Float64",
    "tie_percentage": "Float64",
@@ -3477,14 +3448,7 @@
    "venue_address_country": "String",
    "venue_grass": "Boolean"
   },
-  "officials": {
-   "full_name": "String",
-   "display_name": "String",
-   "order": "Int64",
-   "position_name": "String",
-   "position_display_name": "String",
-   "position_id": "Int64"
-  },
+  "officials": {},
   "header": {
    "id": "Int64",
    "uid": "String",
@@ -3506,18 +3470,7 @@
    "league_links": "String",
    "league_logos": "String"
   },
-  "season_series": {
-   "type": "String",
-   "title": "String",
-   "description": "String",
-   "summary": "String",
-   "completed": "Boolean",
-   "total_competitions": "Int64",
-   "series_label": "String",
-   "series_score": "String",
-   "short_summary": "String",
-   "events": "String"
-  },
+  "season_series": {},
   "against_the_spread": {},
   "standings": {
    "group_header": "String",
@@ -3588,16 +3541,7 @@
    "links_api_self_href": "String",
    "links_app_sportscenter_href": "String"
   },
-  "injuries": {
-   "injuries": "String",
-   "team_id": "Int64",
-   "team_uid": "String",
-   "team_display_name": "String",
-   "team_abbreviation": "String",
-   "team_links": "String",
-   "team_logo": "String",
-   "team_logos": "String"
-  },
+  "injuries": {},
   "news": {
    "id": "Int64",
    "now_id": "String",
@@ -3838,18 +3782,7 @@
    "league_links": "String",
    "league_logos": "String"
   },
-  "season_series": {
-   "type": "String",
-   "title": "String",
-   "description": "String",
-   "summary": "String",
-   "completed": "Boolean",
-   "total_competitions": "Int64",
-   "series_label": "String",
-   "series_score": "String",
-   "short_summary": "String",
-   "events": "String"
-  },
+  "season_series": {},
   "against_the_spread": {},
   "standings": {
    "group_header": "String",
@@ -3906,16 +3839,7 @@
    "links_api_self_href": "String",
    "links_app_sportscenter_href": "String"
   },
-  "injuries": {
-   "injuries": "String",
-   "team_id": "Int64",
-   "team_uid": "String",
-   "team_display_name": "String",
-   "team_abbreviation": "String",
-   "team_links": "String",
-   "team_logo": "String",
-   "team_logos": "String"
-  },
+  "injuries": {},
   "news": {
    "id": "Int64",
    "now_id": "String",
@@ -4042,19 +3966,7 @@
    "tie_percentage": "Float64",
    "play_id": "Int64"
   },
-  "leaders": {
-   "team_id": "Int64",
-   "team_abbreviation": "String",
-   "category_name": "String",
-   "category_display_name": "String",
-   "athlete_id": "Int64",
-   "athlete_display_name": "String",
-   "athlete_position": "String",
-   "value": "Float64",
-   "display_value": "String",
-   "main_stat": "String",
-   "summary": "String"
-  },
+  "leaders": {},
   "game_info": {
    "attendance": "Int64",
    "venue_id": "Int64",
@@ -4472,64 +4384,11 @@
    "stat_display_value": "String",
    "stat_value": "String"
   },
-  "plays": {
-   "id": "Int64",
-   "sequence_number": "String",
-   "text": "String",
-   "away_score": "Int64",
-   "home_score": "Int64",
-   "scoring_play": "Boolean",
-   "score_value": "Int64",
-   "participants": "String",
-   "wallclock": "String",
-   "shooting_play": "Boolean",
-   "points_attempted": "Int64",
-   "short_description": "String",
-   "type_id": "Int64",
-   "type_text": "String",
-   "period_number": "Int64",
-   "period_display_value": "String",
-   "clock_display_value": "String",
-   "team_id": "Int64",
-   "coordinate_x": "Int64",
-   "coordinate_y": "Int64"
-  },
-  "winprobability": {
-   "home_win_percentage": "Float64",
-   "tie_percentage": "Float64",
-   "play_id": "Int64"
-  },
-  "leaders": {
-   "team_id": "Int64",
-   "team_abbreviation": "String",
-   "category_name": "String",
-   "category_display_name": "String",
-   "athlete_id": "Int64",
-   "athlete_display_name": "String",
-   "athlete_position": "String",
-   "value": "Float64",
-   "display_value": "String",
-   "main_stat": "String",
-   "summary": "String"
-  },
-  "game_info": {
-   "attendance": "Int64",
-   "venue_id": "Int64",
-   "venue_guid": "String",
-   "venue_full_name": "String",
-   "venue_short_name": "String",
-   "venue_address_city": "String",
-   "venue_address_state": "String",
-   "venue_grass": "Boolean"
-  },
-  "officials": {
-   "full_name": "String",
-   "display_name": "String",
-   "order": "Int64",
-   "position_name": "String",
-   "position_display_name": "String",
-   "position_id": "Int64"
-  },
+  "plays": {},
+  "winprobability": {},
+  "leaders": {},
+  "game_info": {},
+  "officials": {},
   "header": {
    "id": "Int64",
    "uid": "String",
@@ -4547,105 +4406,16 @@
    "league_is_tournament": "Boolean",
    "league_links": "String"
   },
-  "season_series": {
-   "type": "String",
-   "title": "String",
-   "description": "String",
-   "summary": "String",
-   "completed": "Boolean",
-   "total_competitions": "Int64",
-   "series_label": "String",
-   "series_score": "String",
-   "short_summary": "String",
-   "events": "String"
-  },
+  "season_series": {},
   "against_the_spread": {},
-  "standings": {
-   "group_header": "String",
-   "conference_header": "String",
-   "division_header": "String",
-   "team_id": "Int64",
-   "team_uid": "String",
-   "team_location": "String",
-   "games_behind": "String",
-   "losses": "String",
-   "streak": "String",
-   "win_percent": "String",
-   "wins": "String"
-  },
+  "standings": {},
   "broadcasts": {},
-  "format": {
-   "regulation_periods": "Int64",
-   "regulation_display_name": "String",
-   "regulation_slug": "String",
-   "regulation_clock": "Float64",
-   "overtime_display_name": "String",
-   "overtime_slug": "String",
-   "overtime_clock": "Float64"
-  },
+  "format": {},
   "pickcenter": {},
   "odds": {},
-  "article": {
-   "id": "Int64",
-   "now_id": "String",
-   "content_key": "String",
-   "data_source_identifier": "String",
-   "publishedkey": "String",
-   "type": "String",
-   "game_id": "Int64",
-   "headline": "String",
-   "description": "String",
-   "link_text": "String",
-   "categorized": "String",
-   "originally_posted": "String",
-   "last_modified": "String",
-   "published": "String",
-   "section": "String",
-   "source": "String",
-   "images": "String",
-   "video": "String",
-   "categories": "String",
-   "keywords": "String",
-   "story": "String",
-   "premium": "Boolean",
-   "is_live_blog": "Boolean",
-   "allow_comments": "Boolean",
-   "allow_search": "Boolean",
-   "allow_content_reactions": "Boolean",
-   "links_web_href": "String",
-   "links_mobile_href": "String",
-   "links_api_self_href": "String",
-   "links_app_sportscenter_href": "String"
-  },
-  "injuries": {
-   "injuries": "String",
-   "team_id": "Int64",
-   "team_uid": "String",
-   "team_display_name": "String",
-   "team_abbreviation": "String",
-   "team_links": "String",
-   "team_logo": "String",
-   "team_logos": "String"
-  },
-  "news": {
-   "id": "Int64",
-   "now_id": "String",
-   "content_key": "String",
-   "data_source_identifier": "String",
-   "type": "String",
-   "headline": "String",
-   "description": "String",
-   "last_modified": "String",
-   "published": "String",
-   "images": "String",
-   "categories": "String",
-   "premium": "Boolean",
-   "byline": "String",
-   "links_web_href": "String",
-   "links_mobile_href": "String",
-   "links_api_self_href": "String",
-   "links_app_sportscenter_href": "String"
-  },
+  "article": {},
+  "injuries": {},
+  "news": {},
   "drives": {},
   "drive_plays": {},
   "scoring_plays": {}
@@ -4730,28 +4500,7 @@
    "stat_display_value": "String",
    "stat_value": "String"
   },
-  "plays": {
-   "id": "Int64",
-   "sequence_number": "String",
-   "text": "String",
-   "away_score": "Int64",
-   "home_score": "Int64",
-   "scoring_play": "Boolean",
-   "score_value": "Int64",
-   "participants": "String",
-   "wallclock": "String",
-   "shooting_play": "Boolean",
-   "points_attempted": "Int64",
-   "short_description": "String",
-   "type_id": "Int64",
-   "type_text": "String",
-   "period_number": "Int64",
-   "period_display_value": "String",
-   "clock_display_value": "String",
-   "team_id": "Int64",
-   "coordinate_x": "Int64",
-   "coordinate_y": "Int64"
-  },
+  "plays": {},
   "winprobability": {
    "home_win_percentage": "Float64",
    "tie_percentage": "Float64",
@@ -4809,18 +4558,7 @@
    "league_links": "String",
    "league_logos": "String"
   },
-  "season_series": {
-   "type": "String",
-   "title": "String",
-   "description": "String",
-   "summary": "String",
-   "completed": "Boolean",
-   "total_competitions": "Int64",
-   "series_label": "String",
-   "series_score": "String",
-   "short_summary": "String",
-   "events": "String"
-  },
+  "season_series": {},
   "against_the_spread": {},
   "standings": {
    "group_header": "String",
@@ -5094,11 +4832,7 @@
    "shot_info_text": "String",
    "shot_info_abbreviation": "String"
   },
-  "winprobability": {
-   "home_win_percentage": "Float64",
-   "tie_percentage": "Float64",
-   "play_id": "Int64"
-  },
+  "winprobability": {},
   "leaders": {
    "team_id": "Int64",
    "team_abbreviation": "String",
@@ -5384,18 +5118,7 @@
    "league_links": "String",
    "league_logos": "String"
   },
-  "season_series": {
-   "type": "String",
-   "title": "String",
-   "description": "String",
-   "summary": "String",
-   "completed": "Boolean",
-   "total_competitions": "Int64",
-   "series_label": "String",
-   "series_score": "String",
-   "short_summary": "String",
-   "events": "String"
-  },
+  "season_series": {},
   "against_the_spread": {},
   "standings": {
    "group_header": "String",
@@ -5434,48 +5157,8 @@
   },
   "pickcenter": {},
   "odds": {},
-  "article": {
-   "id": "Int64",
-   "now_id": "String",
-   "content_key": "String",
-   "data_source_identifier": "String",
-   "publishedkey": "String",
-   "type": "String",
-   "game_id": "Int64",
-   "headline": "String",
-   "description": "String",
-   "link_text": "String",
-   "categorized": "String",
-   "originally_posted": "String",
-   "last_modified": "String",
-   "published": "String",
-   "section": "String",
-   "source": "String",
-   "images": "String",
-   "video": "String",
-   "categories": "String",
-   "keywords": "String",
-   "story": "String",
-   "premium": "Boolean",
-   "is_live_blog": "Boolean",
-   "allow_comments": "Boolean",
-   "allow_search": "Boolean",
-   "allow_content_reactions": "Boolean",
-   "links_web_href": "String",
-   "links_mobile_href": "String",
-   "links_api_self_href": "String",
-   "links_app_sportscenter_href": "String"
-  },
-  "injuries": {
-   "injuries": "String",
-   "team_id": "Int64",
-   "team_uid": "String",
-   "team_display_name": "String",
-   "team_abbreviation": "String",
-   "team_links": "String",
-   "team_logo": "String",
-   "team_logos": "String"
-  },
+  "article": {},
+  "injuries": {},
   "news": {
    "id": "Int64",
    "now_id": "String",
@@ -6293,21 +5976,7 @@
   }
  },
  "team_schedule_cfb": {
-  "": {
-   "id": "Int64",
-   "date": "String",
-   "name": "String",
-   "short_name": "String",
-   "time_valid": "Boolean",
-   "competitions": "String",
-   "links": "String",
-   "season_year": "Int64",
-   "season_display_name": "String",
-   "season_type_id": "Int64",
-   "season_type_type": "Int64",
-   "season_type_name": "String",
-   "season_type_abbreviation": "String"
-  }
+  "": {}
  },
  "team_schedule_mbb": {
   "": {
@@ -6384,21 +6053,7 @@
   }
  },
  "team_schedule_nhl": {
-  "": {
-   "id": "Int64",
-   "date": "String",
-   "name": "String",
-   "short_name": "String",
-   "time_valid": "Boolean",
-   "competitions": "String",
-   "links": "String",
-   "season_year": "Int64",
-   "season_display_name": "String",
-   "season_type_id": "Int64",
-   "season_type_type": "Int64",
-   "season_type_name": "String",
-   "season_type_abbreviation": "String"
-  }
+  "": {}
  },
  "team_schedule_wbb": {
   "": {

@@ -238,4 +238,8 @@ def test_empty_schema_no_published_season_is_the_documented_table(fn, monkeypatc
     assert out.height == 0 and dict(out.schema) == want
     with pytest.warns(UserWarning, match="no data"):
         pdf = getattr(x, fn)(2024, return_as_pandas=True)
-    assert len(pdf) == 0 and list(pdf.columns) == list(want)
+    import pandas as pd
+
+    # R978-3: pandas, with the Arrow-backed dtypes a non-empty multi-file load has
+    assert isinstance(pdf, pd.DataFrame) and len(pdf) == 0 and list(pdf.columns) == list(want)
+    assert all(str(t).endswith("[pyarrow]") for t in pdf.dtypes)
