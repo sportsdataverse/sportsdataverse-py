@@ -325,10 +325,12 @@ Fit a logistic P(called strike | zone coordinates) on called pitches.
 
 Compute-on-demand -- **no artifact is bundled or cached to disk.**
 L2-regularized (`1e-4`) mean log-loss, minimized via
-`scipy.optimize.minimize(method="L-BFGS-B")`. Pitches from 2026 on
-(`game_year` / `game_date`) are excluded with a `UserWarning`: their
-locations are middle-of-plate against the ABS zone, not the frame the rest
-of the corpus is in (`rules/mlb.yaml#mlb-2026-savant-plate-location-middle-of-plate`).
+`scipy.optimize.minimize(method="L-BFGS-B")`. When the frame spans 2026
+(`game_year` / `game_date`), the 2026+ pitches are excluded with a
+`UserWarning`: their locations are middle-of-plate against the ABS zone,
+not the frame the rest of the corpus is in
+(`rules/mlb.yaml#mlb-2026-savant-plate-location-middle-of-plate`). A frame
+entirely from 2026 on is fit on its own pitches.
 
 **Parameters**
 
@@ -338,7 +340,7 @@ of the corpus is in (`rules/mlb.yaml#mlb-2026-savant-plate-location-middle-of-pl
 
 **Returns**
 
-`{"coef": list[float] (7,), "intercept": float, "features": list[str]}`. `{"coef": [], "intercept": 0.0, "features": [...]}` if fewer than 2 called pitches are available (degenerate fit).
+`{"coef": list[float] (7,), "intercept": float, "features": list[str]}`. All-zero `coef` and `intercept` 0.0 (P = 0.5 for every pitch), with a `UserWarning`, if fewer than 2 called pitches are available (degenerate fit).
 
 **Example**
 

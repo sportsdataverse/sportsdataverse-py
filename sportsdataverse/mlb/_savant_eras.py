@@ -71,23 +71,27 @@ def abs_era_expr(columns: Iterable[str]) -> pl.Expr:
 
 
 def drop_abs_era_rows(pitches: pl.DataFrame, *, what: str) -> pl.DataFrame:
-    """The rows a pre-2026 plate-location fit may use.
+    """The rows a single-frame plate-location fit may use.
 
     Pitches from :data:`ABS_SEASON` on are measured at the middle of the plate against an
-    ABS zone, so they are excluded from a called-strike / framing fit with a
-    :class:`UserWarning` naming the catalogue entries. Scoring is not affected: callers
-    still score every row and flag it ``abs_era``.
+    ABS zone, so a frame that spans the boundary keeps only its pre-2026 rows for a
+    called-strike / framing fit, with a :class:`UserWarning` naming the catalogue entries.
+    A frame entirely from 2026 on is one frame and is kept whole (a 2026 season build fits
+    its own pitches). Scoring is not affected: callers still score every row and flag it
+    ``abs_era``.
 
     Args:
         pitches: A Savant pitch frame.
         what: The fit being guarded, for the warning.
 
     Returns:
-        ``pitches`` without its 2026+ rows; unchanged when it has no season column.
+        ``pitches`` without its 2026+ rows when it also has earlier ones; otherwise unchanged.
     """
     if season_expr(pitches.columns) is None:
         return pitches
     kept = pitches.filter(~abs_era_expr(pitches.columns))
+    if kept.height == 0:
+        return pitches
     dropped = pitches.height - kept.height
     if dropped:
         warnings.warn(
