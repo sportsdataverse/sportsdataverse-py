@@ -51,8 +51,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_leagues()
 ```
 
-_Last validated n/a._
-
 ## pff_teams
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Teams / franchise groups + games for a league-season
@@ -92,8 +90,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_teams()
 ```
-
-_Last validated n/a._
 
 ## pff_teams_overview
 
@@ -153,8 +149,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_teams_overview()
 ```
 
-_Last validated n/a._
-
 ## pff_games
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Games list for league-season(-week)
@@ -205,5 +199,3 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_games()
 ```
-
-_Last validated n/a._

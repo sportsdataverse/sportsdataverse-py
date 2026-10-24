@@ -93,8 +93,6 @@ One game's team lines: the team totals, the team-level counts and the game aggre
 atrium_team_box_score(fixture_id='5423072b-6715-11f0-bd8b-9ffadebc148f', website_id=12)
 ```
 
-_Last validated n/a._
-
 ## atrium_teams
 
 The teams of a season.
@@ -138,8 +136,6 @@ The teams of a season.
 ```python
 atrium_teams(website_id=12)
 ```
-
-_Last validated n/a._
 
 ## atrium_team
 
@@ -212,8 +208,6 @@ A team page (summary tab): the team and its last and next game.
 atrium_team(entity_id='f43b1b0f-55bc-11f0-84d9-01499d2f0a07', website_id=12)
 ```
 
-_Last validated n/a._
-
 ## atrium_team_stats
 
 Team season statistics in long form (one row per team, table and statistic).
@@ -265,5 +259,3 @@ Team season statistics in long form (one row per team, table and statistic).
 ```python
 atrium_team_stats(website_id=12)
 ```
-
-_Last validated n/a._

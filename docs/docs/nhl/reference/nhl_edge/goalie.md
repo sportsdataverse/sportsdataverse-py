@@ -82,8 +82,6 @@ Pull EDGE detail stats for a single goalie.
 nhl_edge_goalie_detail(player_id=8480801)
 ```
 
-_Last validated n/a._
-
 ## nhl_edge_goalie_5v5_detail
 
 Pull EDGE 5-on-5 detail stats for a single goalie.
@@ -133,8 +131,6 @@ Pull EDGE 5-on-5 detail stats for a single goalie.
 ```python
 nhl_edge_goalie_5v5_detail(player_id=8480801)
 ```
-
-_Last validated n/a._
 
 ## nhl_edge_goalie_5v5_top_10
 
@@ -194,8 +190,6 @@ Pull the EDGE top-10 goalies by 5-on-5 metrics.
 ```python
 nhl_edge_goalie_5v5_top_10(sort_by='save-pctg', season=20242025)
 ```
-
-_Last validated n/a._
 
 ## nhl_edge_goalie_comparison
 
@@ -268,8 +262,6 @@ Pull EDGE comparison data for a single goalie.
 nhl_edge_goalie_comparison(player_id=8480801)
 ```
 
-_Last validated n/a._
-
 ## nhl_edge_goalie_save_percentage_detail
 
 Pull EDGE save-percentage detail for a single goalie.
@@ -314,8 +306,6 @@ Pull EDGE save-percentage detail for a single goalie.
 nhl_edge_goalie_save_percentage_detail(player_id=8480801)
 ```
 
-_Last validated n/a._
-
 ## nhl_edge_goalie_edge_save_pctg_top_10
 
 Pull the EDGE top-10 goalies by save-percentage.
@@ -351,8 +341,6 @@ No returns table is published for this endpoint: no capture: every value tried 4
 ```python
 nhl_edge_goalie_edge_save_pctg_top_10(sort_by='points')
 ```
-
-_Last validated n/a._
 
 ## nhl_edge_goalie_shot_location_detail
 
@@ -400,8 +388,6 @@ Pull EDGE shot-location detail for a single goalie.
 nhl_edge_goalie_shot_location_detail(player_id=8480801)
 ```
 
-_Last validated n/a._
-
 ## nhl_edge_goalie_shot_location_top_10
 
 Pull the EDGE top-10 goalies for a shot-location category.
@@ -438,8 +424,6 @@ No returns table is published for this endpoint: no capture: every value tried 4
 ```python
 nhl_edge_goalie_shot_location_top_10(category='shots', sort_by='points')
 ```
-
-_Last validated n/a._
 
 ## nhl_edge_goalie_landing
 
@@ -554,5 +538,3 @@ Pull the EDGE goalie landing page (summary across all goalies).
 ```python
 nhl_edge_goalie_landing()
 ```
-
-_Last validated n/a._

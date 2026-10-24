@@ -196,8 +196,6 @@ GET /stats/scoreboardv2
 wnba_stats_scoreboardv2(league_id='10')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_scoreboardv3
 
 GET /stats/scoreboardv3
@@ -314,5 +312,3 @@ GET /stats/scoreboardv3
 ```python
 wnba_stats_scoreboardv3(league_id='10')
 ```
-
-_Last validated n/a._

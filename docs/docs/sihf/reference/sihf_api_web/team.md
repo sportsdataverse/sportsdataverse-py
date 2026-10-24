@@ -69,8 +69,6 @@ Team goals for and against per season: totals and per game, even strength, power
 sihf_team_goals(season=2026, league_id=1)
 ```
 
-_Last validated n/a._
-
 ## sihf_team_goals_by_position
 
 Team goals by scorer: forwards, defensemen and import players (totals and shares), plus shootout-winning goals for and against.
@@ -125,8 +123,6 @@ Team goals by scorer: forwards, defensemen and import players (totals and shares
 ```python
 sihf_team_goals_by_position(season=2026, league_id=1)
 ```
-
-_Last validated n/a._
 
 ## sihf_team_shots
 
@@ -189,8 +185,6 @@ Team shots per season: on goal (total, slot, shooting percentage), missed, post,
 sihf_team_shots(season=2026, league_id=1)
 ```
 
-_Last validated n/a._
-
 ## sihf_team_power_play
 
 Team power play per season: opportunities, goals, conversion percentage, power-play time, and short-handed goals against.
@@ -245,8 +239,6 @@ Team power play per season: opportunities, goals, conversion percentage, power-p
 ```python
 sihf_team_power_play(season=2026, league_id=1)
 ```
-
-_Last validated n/a._
 
 ## sihf_team_penalty_kill
 
@@ -303,8 +295,6 @@ Team penalty kill per season: times short-handed, goals against, kill percentage
 sihf_team_penalty_kill(season=2026, league_id=1)
 ```
 
-_Last validated n/a._
-
 ## sihf_team_penalties
 
 Team penalties per season: 2-, 5- and 10-minute penalties, game misconducts, match penalties and penalty minutes.
@@ -356,8 +346,6 @@ Team penalties per season: 2-, 5- and 10-minute penalties, game misconducts, mat
 ```python
 sihf_team_penalties(season=2026, league_id=1)
 ```
-
-_Last validated n/a._
 
 ## sihf_team_shootouts
 
@@ -415,8 +403,6 @@ Team shootouts per season: shootout wins and losses, attempts, goals and percent
 sihf_team_shootouts(season=2026, league_id=1)
 ```
 
-_Last validated n/a._
-
 ## sihf_team_faceoffs
 
 Team faceoffs per season: taken, won, lost, per game, and win percentage overall and by zone.
@@ -472,8 +458,6 @@ Team faceoffs per season: taken, won, lost, per game, and win percentage overall
 ```python
 sihf_team_faceoffs(season=2026, league_id=1)
 ```
-
-_Last validated n/a._
 
 ## sihf_team_faceoffs_by_zone
 
@@ -533,8 +517,6 @@ Team faceoffs by zone (offensive, neutral, defensive) per season: taken, won, lo
 sihf_team_faceoffs_by_zone(season=2026, league_id=1)
 ```
 
-_Last validated n/a._
-
 ## sihf_team_faceoffs_by_zone_per_game
 
 Team faceoffs by zone (offensive, neutral, defensive) per game: taken, won and lost.
@@ -590,8 +572,6 @@ Team faceoffs by zone (offensive, neutral, defensive) per game: taken, won and l
 sihf_team_faceoffs_by_zone_per_game(season=2026, league_id=1)
 ```
 
-_Last validated n/a._
-
 ## sihf_team_attendance
 
 Team home attendance per season: home games, total and average spectators, average arena capacity and utilisation.
@@ -641,5 +621,3 @@ Team home attendance per season: home games, total and average spectators, avera
 ```python
 sihf_team_attendance(season=2026, league_id=1)
 ```
-
-_Last validated n/a._

@@ -202,8 +202,6 @@ GET /stats/playerdashboardbyyearoveryear
 nba_stats_playerdashboardbyyearoveryear(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_playerdashptpass
 
 GET /stats/playerdashptpass
@@ -303,8 +301,6 @@ GET /stats/playerdashptpass
 ```python
 nba_stats_playerdashptpass(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_playerdashptreb
 
@@ -465,8 +461,6 @@ GET /stats/playerdashptreb
 nba_stats_playerdashptreb(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_playerdashptshotdefend
 
 GET /stats/playerdashptshotdefend
@@ -529,8 +523,6 @@ GET /stats/playerdashptshotdefend
 ```python
 nba_stats_playerdashptshotdefend(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_playerdashptshots
 
@@ -749,5 +741,3 @@ GET /stats/playerdashptshots
 ```python
 nba_stats_playerdashptshots(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._

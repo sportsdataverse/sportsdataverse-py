@@ -71,8 +71,6 @@ One row per finished game: period and clock state, both teams' names, codes and 
 genius_game(match_id=2902690)
 ```
 
-_Last validated n/a._
-
 ## genius_team_box
 
 Team box score of a finished game: score by period, fouls, timeouts and the team totals.
@@ -173,8 +171,6 @@ Team box score of a finished game: score by period, fouls, timeouts and the team
 genius_team_box(match_id=2902690)
 ```
 
-_Last validated n/a._
-
 ## genius_player_box
 
 Player box score of a finished game: minutes, shooting, rebounds, assists and the efficiency formulas.
@@ -261,8 +257,6 @@ Player box score of a finished game: minutes, shooting, rebounds, assists and th
 genius_player_box(match_id=2902690)
 ```
 
-_Last validated n/a._
-
 ## genius_pbp
 
 Play-by-play of a finished game, newest action first, with the running score and lead.
@@ -323,8 +317,6 @@ Play-by-play of a finished game, newest action first, with the running score and
 genius_pbp(match_id=2902690)
 ```
 
-_Last validated n/a._
-
 ## genius_shots
 
 Shot chart of a finished game: court x/y (percent of the full court), result and shooter.
@@ -372,8 +364,6 @@ Shot chart of a finished game: court x/y (percent of the full court), result and
 ```python
 genius_shots(match_id=2902690)
 ```
-
-_Last validated n/a._
 
 ## genius_competition_games
 
@@ -430,8 +420,6 @@ The recent-games window of a competition, with the global Genius team ids.
 genius_competition_games(comp_id=49915)
 ```
 
-_Last validated n/a._
-
 ## genius_match_competition
 
 The competition (comp_id and name) a game belongs to, from its LiveStats HTML shell.
@@ -473,8 +461,6 @@ The competition (comp_id and name) a game belongs to, from its LiveStats HTML sh
 ```python
 genius_match_competition(match_id=2902690, org='ESAKE')
 ```
-
-_Last validated n/a._
 
 ## genius_competitions
 
@@ -518,8 +504,6 @@ Every competition of an org from the hosted WebStats chooser, with its END-year 
 ```python
 genius_competitions(org='ESAKE')
 ```
-
-_Last validated n/a._
 
 ## genius_schedule
 
@@ -574,8 +558,6 @@ Every match of a competition (hosted WebStats): ids, status, venue, teams and sc
 genius_schedule(comp_id=47852, org='CEBL')
 ```
 
-_Last validated n/a._
-
 ## genius_schedule_embed
 
 Every match of a competition from the JSON-wrapped embed page (orgs whose plain pages answer 500).
@@ -629,8 +611,6 @@ Every match of a competition from the JSON-wrapped embed page (orgs whose plain 
 genius_schedule_embed(comp_id=49946, org='HKS')
 ```
 
-_Last validated n/a._
-
 ## genius_widget_games
 
 The latest games a league site's results widget shows (needs no proxy).
@@ -676,5 +656,3 @@ The latest games a league site's results widget shows (needs no proxy).
 ```python
 genius_widget_games(widget_key='RFJIN037I07QV520B7WEXKV1GYNA31')
 ```
-
-_Last validated n/a._

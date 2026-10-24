@@ -205,8 +205,6 @@ A team's cumulative season statistics: totals, per-game rates and the opponent's
 easl_team_stats(season=2026, team_id='865489e8-b0f5-11ed-8b3f-c199a9dea184')
 ```
 
-_Last validated n/a._
-
 ## easl_team_leaders
 
 A team's top-5 player leaders per category in one season, shaped like easl_leaders.
@@ -258,5 +256,3 @@ A team's top-5 player leaders per category in one season, shaped like easl_leade
 ```python
 easl_team_leaders(season=2026, team_id='865489e8-b0f5-11ed-8b3f-c199a9dea184')
 ```
-
-_Last validated n/a._

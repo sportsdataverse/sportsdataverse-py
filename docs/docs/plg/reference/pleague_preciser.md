@@ -75,8 +75,6 @@ Every field-goal attempt of one finished game with court x / y (vendor frame), z
 pleague_preciser_shots(uuid='e6f98675-3e5b-11ed-949e-5d17350689cf')
 ```
 
-_Last validated n/a._
-
 ## pleague_preciser_summary_teams
 
 Post-game team comparison of one finished game: totals, situational points, lead tracker and top performer.
@@ -141,8 +139,6 @@ Post-game team comparison of one finished game: totals, situational points, lead
 pleague_preciser_summary_teams(uuid='e6f98675-3e5b-11ed-949e-5d17350689cf')
 ```
 
-_Last validated n/a._
-
 ## pleague_preciser_score_log
 
 Scoring log of one finished game (scoring events only, with the running score).
@@ -186,8 +182,6 @@ Scoring log of one finished game (scoring events only, with the running score).
 ```python
 pleague_preciser_score_log(uuid='e6f98675-3e5b-11ed-949e-5d17350689cf')
 ```
-
-_Last validated n/a._
 
 ## pleague_preciser_lead_flow
 
@@ -234,8 +228,6 @@ Score at each minute mark of one finished game, with the score difference (the l
 pleague_preciser_lead_flow(uuid='e6f98675-3e5b-11ed-949e-5d17350689cf')
 ```
 
-_Last validated n/a._
-
 ## pleague_preciser_win_probability
 
 The vendor's home-team win probability by minute for one finished game.
@@ -274,8 +266,6 @@ The vendor's home-team win probability by minute for one finished game.
 ```python
 pleague_preciser_win_probability(uuid='e6f98675-3e5b-11ed-949e-5d17350689cf')
 ```
-
-_Last validated n/a._
 
 ## pleague_preciser_rotation
 
@@ -325,8 +315,6 @@ On-court stints of every player of one finished game (the rotation chart).
 pleague_preciser_rotation(uuid='e6f98675-3e5b-11ed-949e-5d17350689cf')
 ```
 
-_Last validated n/a._
-
 ## pleague_preciser_injury
 
 Injury report of one finished game: one row per team.
@@ -370,5 +358,3 @@ Injury report of one finished game: one row per team.
 ```python
 pleague_preciser_injury(uuid='e6f98675-3e5b-11ed-949e-5d17350689cf')
 ```
-
-_Last validated n/a._

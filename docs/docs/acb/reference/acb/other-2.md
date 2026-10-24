@@ -68,8 +68,6 @@ Every round of a season with its games: one call lists every game id.
 acb_calendar(season=2027)
 ```
 
-_Last validated n/a._
-
 ## acb_league_zones
 
 League-wide shooting by court zone for a season.
@@ -113,8 +111,6 @@ League-wide shooting by court zone for a season.
 ```python
 acb_league_zones(season=2027)
 ```
-
-_Last validated n/a._
 
 ## acb_next_matches
 
@@ -184,8 +180,6 @@ A club's most recent and upcoming games.
 acb_next_matches(club_id=2, number_of_matches=5)
 ```
 
-_Last validated n/a._
-
 ## acb_club_data
 
 Club profile: arena, contacts and links.
@@ -243,8 +237,6 @@ Club profile: arena, contacts and links.
 acb_club_data(club_id=2)
 ```
 
-_Last validated n/a._
-
 ## acb_current_roster
 
 A club's players and staff for an edition (default: the current one).
@@ -299,8 +291,6 @@ A club's players and staff for an edition (default: the current one).
 acb_current_roster(club_id=2, season=2027)
 ```
 
-_Last validated n/a._
-
 ## acb_career_stints
 
 A player's club stints, one row per stint.
@@ -346,8 +336,6 @@ A player's club stints, one row per stint.
 acb_career_stints(player_id=20209407)
 ```
 
-_Last validated n/a._
-
 ## acb_career_trophies
 
 A player's trophies, one row per competition.
@@ -386,8 +374,6 @@ A player's trophies, one row per competition.
 ```python
 acb_career_trophies(player_id=20209407)
 ```
-
-_Last validated n/a._
 
 ## acb_search
 
@@ -436,5 +422,3 @@ Search players, teams and coaches by name.
 ```python
 acb_search(limit=5, search_term='tavares')
 ```
-
-_Last validated n/a._

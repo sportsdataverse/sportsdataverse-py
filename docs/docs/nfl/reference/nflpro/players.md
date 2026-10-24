@@ -106,8 +106,6 @@ GET /api/secured/stats/players-offense/passing/season — one row per passer for
 nfl_pro_players_offense_passing_season(season=2024, season_type='REG')
 ```
 
-_Last validated n/a._
-
 ## nfl_pro_players_offense_passing_week
 
 GET /api/secured/stats/players-offense/passing/week — one row per passer per week — quarterback passing incl. Next Gen time-to-throw, aggressiveness and CPOE.
@@ -215,8 +213,6 @@ GET /api/secured/stats/players-offense/passing/week — one row per passer per w
 nfl_pro_players_offense_passing_week(season=2024, season_type='REG')
 ```
 
-_Last validated n/a._
-
 ## nfl_pro_players_offense_rushing_season
 
 GET /api/secured/stats/players-offense/rushing/season — one row per rusher for the season — rushing incl. Next Gen efficiency, yards over expected and defenders-in-box.
@@ -310,8 +306,6 @@ GET /api/secured/stats/players-offense/rushing/season — one row per rusher for
 ```python
 nfl_pro_players_offense_rushing_season(season=2024, season_type='REG')
 ```
-
-_Last validated n/a._
 
 ## nfl_pro_players_offense_rushing_week
 
@@ -415,8 +409,6 @@ GET /api/secured/stats/players-offense/rushing/week — one row per rusher per w
 nfl_pro_players_offense_rushing_week(season=2024, season_type='REG')
 ```
 
-_Last validated n/a._
-
 ## nfl_pro_players_offense_receiving_season
 
 GET /api/secured/stats/players-offense/receiving/season — one row per receiver for the season — receiving incl. Next Gen separation, cushion and catch rate over expected.
@@ -517,8 +509,6 @@ GET /api/secured/stats/players-offense/receiving/season — one row per receiver
 ```python
 nfl_pro_players_offense_receiving_season(season=2024, season_type='REG')
 ```
-
-_Last validated n/a._
 
 ## nfl_pro_players_offense_receiving_week
 
@@ -628,5 +618,3 @@ GET /api/secured/stats/players-offense/receiving/week — one row per receiver p
 ```python
 nfl_pro_players_offense_receiving_week(season=2024, season_type='REG')
 ```
-
-_Last validated n/a._

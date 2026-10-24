@@ -81,8 +81,6 @@ Header of one finished game: round, date, venue, attendance, both clubs with the
 aba_game(game_no=6, season=2026)
 ```
 
-_Last validated n/a._
-
 ## aba_periods
 
 Points each team scored in each quarter and overtime of one finished game.
@@ -127,8 +125,6 @@ Points each team scored in each quarter and overtime of one finished game.
 ```python
 aba_periods(game_no=6, season=2026)
 ```
-
-_Last validated n/a._
 
 ## aba_box_players
 
@@ -206,8 +202,6 @@ Player box score of one finished game (2001-02 on): minutes, points, shooting sp
 aba_box_players(game_no=6, season=2026)
 ```
 
-_Last validated n/a._
-
 ## aba_box_teams
 
 Team totals of one finished game: the Team Compare table, home then away.
@@ -279,8 +273,6 @@ Team totals of one finished game: the Team Compare table, home then away.
 aba_box_teams(game_no=6, season=2026)
 ```
 
-_Last validated n/a._
-
 ## aba_pbp
 
 Play-by-play of one finished game (2017-18 on), in game order: shots, rebounds, fouls, substitutions, timeouts and period markers.
@@ -336,8 +328,6 @@ Play-by-play of one finished game (2017-18 on), in game order: shots, rebounds, 
 aba_pbp(game_no=6, season=2026)
 ```
 
-_Last validated n/a._
-
 ## aba_shots
 
 Shot chart of one finished game (2017-18 on): every field-goal attempt with its court position.
@@ -385,8 +375,6 @@ Shot chart of one finished game (2017-18 on): every field-goal attempt with its 
 aba_shots(game_no=6, season=2026)
 ```
 
-_Last validated n/a._
-
 ## aba_score_flow
 
 Score after every whole minute of one finished game (the Result Graph; 2017-18 on).
@@ -431,8 +419,6 @@ Score after every whole minute of one finished game (the Result Graph; 2017-18 o
 aba_score_flow(game_no=6, season=2026)
 ```
 
-_Last validated n/a._
-
 ## aba_score_difference
 
 Score after every whole minute of one finished game, from the Score difference chart (2017-18 on); the same rows as aba_score_flow.
@@ -476,8 +462,6 @@ Score after every whole minute of one finished game, from the Score difference c
 ```python
 aba_score_difference(game_no=6, season=2026)
 ```
-
-_Last validated n/a._
 
 ## aba_calendar
 
@@ -535,8 +519,6 @@ Full schedule and results of one season of one league: every round and game.
 aba_calendar(season=2026)
 ```
 
-_Last validated n/a._
-
 ## aba_standings
 
 Standings tables of one season of one league: regular season groups, Top 8 and Play-out.
@@ -589,8 +571,6 @@ Standings tables of one season of one league: regular season groups, Top 8 and P
 aba_standings(season=2026)
 ```
 
-_Last validated n/a._
-
 ## aba_player
 
 One player's bio for one season and league: club, position, height, birth date and place, nationality and the career line.
@@ -640,8 +620,6 @@ One player's bio for one season and league: club, position, height, birth date a
 ```python
 aba_player(player_id=4807, season=2026)
 ```
-
-_Last validated n/a._
 
 ## aba_player_games
 
@@ -713,5 +691,3 @@ One player's game log for one season and league: one row per game with the box-s
 ```python
 aba_player_games(player_id=4807, season=2026)
 ```
-
-_Last validated n/a._

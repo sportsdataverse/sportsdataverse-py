@@ -155,8 +155,6 @@ GET /stats/playoffpicture
 nba_stats_playoffpicture(league_id='00')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_synergyplaytypes
 
 GET /stats/synergyplaytypes
@@ -222,5 +220,3 @@ GET /stats/synergyplaytypes
 ```python
 nba_stats_synergyplaytypes(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._

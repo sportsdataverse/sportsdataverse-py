@@ -193,8 +193,6 @@ GET /stats/teamplayerdashboard
 nba_stats_teamplayerdashboard(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_teamplayeronoffdetails
 
 GET /stats/teamplayeronoffdetails
@@ -438,8 +436,6 @@ GET /stats/teamplayeronoffdetails
 nba_stats_teamplayeronoffdetails(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_teamplayeronoffsummary
 
 GET /stats/teamplayeronoffsummary
@@ -590,5 +586,3 @@ GET /stats/teamplayeronoffsummary
 ```python
 nba_stats_teamplayeronoffsummary(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._

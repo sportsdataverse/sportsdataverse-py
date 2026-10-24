@@ -1,7 +1,7 @@
 ---
 title: "MBB — additional Python functions — Models and calculators: AssistEvent–build_player"
 sidebar_label: "Models and calculators: AssistEvent–build_player"
-sidebar_position: 9
+sidebar_position: 10
 description: "MBB — additional Python functions — Models and calculators: AssistEvent–build_player — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # MBB — additional Python functions — Models and calculators: AssistEvent–build_player

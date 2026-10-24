@@ -995,5 +995,3 @@ League-wide passing detail leaderboard
 ```python
 pff_api_facet_passing_detail(league='nfl', season='2022')
 ```
-
-_Last validated n/a._

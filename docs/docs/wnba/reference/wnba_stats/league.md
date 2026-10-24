@@ -158,8 +158,6 @@ GET /stats/leaguegamefinder
 wnba_stats_leaguegamefinder(league_id='10', season_nullable='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_leaguegamelog
 
 GET /stats/leaguegamelog
@@ -233,8 +231,6 @@ GET /stats/leaguegamelog
 wnba_stats_leaguegamelog(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_leagueleaders
 
 GET /stats/leagueleaders
@@ -301,8 +297,6 @@ GET /stats/leagueleaders
 ```python
 wnba_stats_leagueleaders(league_id='10', season='2024')
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_leaguelineupviz
 
@@ -390,8 +384,6 @@ GET /stats/leaguelineupviz
 ```python
 wnba_stats_leaguelineupviz(league_id='10', season='2024')
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_leagueplayerondetails
 
@@ -508,8 +500,6 @@ GET /stats/leagueplayerondetails
 wnba_stats_leagueplayerondetails(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_leagueseasonmatchups
 
 GET /stats/leagueseasonmatchups
@@ -578,8 +568,6 @@ GET /stats/leagueseasonmatchups
 ```python
 wnba_stats_leagueseasonmatchups(league_id='10', season='2024')
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_leaguestandingsv3
 
@@ -711,5 +699,3 @@ GET /stats/leaguestandingsv3
 ```python
 wnba_stats_leaguestandingsv3(league_id='10', season='2024')
 ```
-
-_Last validated n/a._

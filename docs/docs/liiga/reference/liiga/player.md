@@ -67,8 +67,6 @@ Roster and bio of every player in a season range.
 liiga_players_info(season_from=2026, season_to=2026)
 ```
 
-_Last validated n/a._
-
 ## liiga_player
 
 One player's bio, teams by season and active seasons.
@@ -121,8 +119,6 @@ One player's bio, teams by season and active seasons.
 ```python
 liiga_player(player_id=21870028)
 ```
-
-_Last validated n/a._
 
 ## liiga_player_career
 
@@ -197,8 +193,6 @@ One player's career: season totals by tournament.
 ```python
 liiga_player_career(player_id=21870028)
 ```
-
-_Last validated n/a._
 
 ## liiga_player_game_log
 
@@ -277,8 +271,6 @@ One player's game log for a season, every tournament.
 ```python
 liiga_player_game_log(player_id=21870028, season=2026)
 ```
-
-_Last validated n/a._
 
 ## liiga_player_stats
 
@@ -362,5 +354,3 @@ Player stat table summed over a season range, by data_type (the whole league, un
 ```python
 liiga_player_stats(season_from=2026, season_to=2026, tournament='runkosarja')
 ```
-
-_Last validated n/a._

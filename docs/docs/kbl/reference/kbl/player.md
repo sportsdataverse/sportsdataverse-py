@@ -113,8 +113,6 @@ Player box score of a final game with the vendor's advanced rates, one row per p
 kbl_player_box(gmkey='S47G01N49')
 ```
 
-_Last validated n/a._
-
 ## kbl_player_totals
 
 Season player totals of one competition (every player with at least one game).
@@ -203,8 +201,6 @@ Season player totals of one competition (every player with at least one game).
 kbl_player_totals(season=2025)
 ```
 
-_Last validated n/a._
-
 ## kbl_players
 
 The site's player directory (current and former players) with their current or last team.
@@ -248,5 +244,3 @@ The site's player directory (current and former players) with their current or l
 ```python
 kbl_players()
 ```
-
-_Last validated n/a._

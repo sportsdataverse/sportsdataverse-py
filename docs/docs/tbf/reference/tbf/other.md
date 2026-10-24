@@ -47,8 +47,6 @@ The 20 most recent TBF seasons, domestic and international (a server cap), newes
 tbf_seasons()
 ```
 
-_Last validated n/a._
-
 ## tbf_leagues
 
 The featured leagues (league-season activities) of one TBF season: BSL, TBL, KBSL and the others.
@@ -93,8 +91,6 @@ The featured leagues (league-season activities) of one TBF season: BSL, TBL, KBS
 tbf_leagues(season=2027)
 ```
 
-_Last validated n/a._
-
 ## tbf_league_seasons
 
 Every season of one TBF league (bsl back to 1966-67) with its activity and season ids.
@@ -136,8 +132,6 @@ Every season of one TBF league (bsl back to 1966-67) with its activity and seaso
 ```python
 tbf_league_seasons(competition='bsl')
 ```
-
-_Last validated n/a._
 
 ## tbf_weeks
 
@@ -182,8 +176,6 @@ The weeks (rounds) of one league-season, playoff rounds included.
 ```python
 tbf_weeks(competition='bsl', season=2027)
 ```
-
-_Last validated n/a._
 
 ## tbf_standings
 
@@ -239,8 +231,6 @@ League table of one league-season after a week (default the latest), one row per
 ```python
 tbf_standings(competition='bsl', season=2027)
 ```
-
-_Last validated n/a._
 
 ## tbf_schedule
 
@@ -303,8 +293,6 @@ Schedule and results of one league-season: the games of one week, or of every we
 ```python
 tbf_schedule(competition='bsl', season=2027, week=1)
 ```
-
-_Last validated n/a._
 
 ## tbf_daily_matches
 
@@ -370,8 +358,6 @@ Every TBF game played on one date, grouped by competition, optionally for one le
 tbf_daily_matches(match_date='2026-10-11')
 ```
 
-_Last validated n/a._
-
 ## tbf_pbp
 
 Play-by-play of a finished game (2025-26 onward), in game order, with the running score and an English gloss.
@@ -420,8 +406,6 @@ Play-by-play of a finished game (2025-26 onward), in game order, with the runnin
 tbf_pbp(match_id=346279)
 ```
 
-_Last validated n/a._
-
 ## tbf_shots
 
 Every field-goal attempt of a finished game (2025-26 onward) with its court position.
@@ -467,8 +451,6 @@ Every field-goal attempt of a finished game (2025-26 onward) with its court posi
 tbf_shots(match_id=346279)
 ```
 
-_Last validated n/a._
-
 ## tbf_period_scores
 
 Points each side scored in each period of a finished game, overtime included.
@@ -508,8 +490,6 @@ Points each side scored in each period of a finished game, overtime included.
 ```python
 tbf_period_scores(match_id=346279)
 ```
-
-_Last validated n/a._
 
 ## tbf_highlights
 
@@ -552,5 +532,3 @@ Team comparison of a finished game: rebounds, paint points, fast-break points, l
 ```python
 tbf_highlights(match_id=346279)
 ```
-
-_Last validated n/a._

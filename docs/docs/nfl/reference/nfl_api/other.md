@@ -98,8 +98,6 @@ GET /football/v2/standings — one row per team standing across the returned wee
 nfl_standings(season=2024, season_type='REG', week=18)
 ```
 
-_Last validated n/a._
-
 ## nfl_rosters
 
 GET /football/v2/rosters — one row per team roster for the season.
@@ -151,8 +149,6 @@ GET /football/v2/rosters — one row per team roster for the season.
 nfl_rosters(season=2024)
 ```
 
-_Last validated n/a._
-
 ## nfl_teams_history
 
 GET /football/v2/teams/history — one row per team for a season.
@@ -201,8 +197,6 @@ GET /football/v2/teams/history — one row per team for a season.
 ```python
 nfl_teams_history(season=2024)
 ```
-
-_Last validated n/a._
 
 ## nfl_team
 
@@ -254,8 +248,6 @@ GET /football/v2/teams/{team_id} — single-team detail (one row).
 nfl_team(team_id='10403800-517c-7b8c-65a3-c61b95d86123')
 ```
 
-_Last validated n/a._
-
 ## nfl_weeks
 
 GET /football/v2/weeks/season/{season}/seasonType/{season_type} — week calendar (one row per week).
@@ -299,8 +291,6 @@ GET /football/v2/weeks/season/{season}/seasonType/{season_type} — week calenda
 nfl_weeks(season=2024, season_type='REG')
 ```
 
-_Last validated n/a._
-
 ## nfl_weeks_by_date
 
 GET /football/v2/weeks/date/{YYYY-MM-DD} — the week containing a date (one row).
@@ -342,8 +332,6 @@ GET /football/v2/weeks/date/{YYYY-MM-DD} — the week containing a date (one row
 ```python
 nfl_weeks_by_date(date='2024-09-08')
 ```
-
-_Last validated n/a._
 
 ## nfl_combine_profiles
 
@@ -437,8 +425,6 @@ GET /football/v2/combine/profiles — one row per combine prospect.
 nfl_combine_profiles(year=2024)
 ```
 
-_Last validated n/a._
-
 ## nfl_draft_picks
 
 GET /football/v2/draft/picks/report — one row per draft pick.
@@ -484,8 +470,6 @@ GET /football/v2/draft/picks/report — one row per draft pick.
 ```python
 nfl_draft_picks(year=2024)
 ```
-
-_Last validated n/a._
 
 ## nfl_injuries
 
@@ -542,8 +526,6 @@ GET /football/v2/injuries — one row per injured player.
 ```python
 nfl_injuries(season=2024, season_type='REG', week=1)
 ```
-
-_Last validated n/a._
 
 ## nfl_weekly_game_details
 
@@ -661,5 +643,3 @@ GET /football/v2/experience/weekly-game-details — one row per game (bare list)
 ```python
 nfl_weekly_game_details(season=2024, season_type='REG', week=1)
 ```
-
-_Last validated n/a._

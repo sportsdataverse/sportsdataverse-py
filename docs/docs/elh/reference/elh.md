@@ -51,8 +51,6 @@ Cumulative shot attempts and shots on goal of one game, per team and game minute
 elh_events(match_id=2928321)
 ```
 
-_Last validated n/a._
-
 ## elh_list_objects
 
 One page (up to 1,000 keys) of the hokej.cz S3 bucket listing; match keys carry the hokej.cz game id. The bucket is not Extraliga-only.
@@ -97,8 +95,6 @@ One page (up to 1,000 keys) of the hokej.cz S3 bucket listing; match keys carry 
 ```python
 elh_list_objects(max_keys='3', prefix='match/2026/full/')
 ```
-
-_Last validated n/a._
 
 ## elh_pbp
 
@@ -175,8 +171,6 @@ Play-by-play commentary of one game, every entry, oldest first: goals and penalt
 elh_pbp(match_id=2928321, season=2027)
 ```
 
-_Last validated n/a._
-
 ## elh_pbp_goals
 
 Players on the ice at each goal of one game (onlajny ids), one row per player, with the strength.
@@ -229,8 +223,6 @@ Players on the ice at each goal of one game (onlajny ids), one row per player, w
 ```python
 elh_pbp_goals(match_id=2928321, season=2027)
 ```
-
-_Last validated n/a._
 
 ## elh_pbp_latest
 
@@ -307,8 +299,6 @@ The newest 20 play-by-play entries of one game (same columns as elh_pbp).
 elh_pbp_latest(match_id=2928321, season=2027)
 ```
 
-_Last validated n/a._
-
 ## elh_pbp_mobile
 
 Play-by-play of one game as plain text (no team or player ids), oldest first.
@@ -348,8 +338,6 @@ Play-by-play of one game as plain text (no team or player ids), oldest first.
 ```python
 elh_pbp_mobile(match_id=2928321, season=2027)
 ```
-
-_Last validated n/a._
 
 ## elh_scoreboard
 
@@ -409,8 +397,6 @@ Extraliga games of one recent day with both id spaces (hokej.cz and onlajny) for
 elh_scoreboard(date='2026-10-11')
 ```
 
-_Last validated n/a._
-
 ## elh_shots
 
 Shot attempts of one game with rink coordinates and result code (hokej.cz ids).
@@ -468,5 +454,3 @@ Shot attempts of one game with rink coordinates and result code (hokej.cz ids).
 ```python
 elh_shots(match_id=2928321)
 ```
-
-_Last validated n/a._

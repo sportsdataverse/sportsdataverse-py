@@ -123,8 +123,6 @@ League-wide receiving-by-scheme leaderboard
 pff_api_facet_receiving_scheme(league='nfl', season='2022')
 ```
 
-_Last validated n/a._
-
 ## pff_api_facet_receiving_summary
 
 League-wide receiving summary leaderboard
@@ -217,8 +215,6 @@ League-wide receiving summary leaderboard
 pff_api_facet_receiving_summary(league='nfl', season='2022')
 ```
 
-_Last validated n/a._
-
 ## pff_api_facet_rushing_direction
 
 League-wide rushing-by-direction leaderboard
@@ -270,8 +266,6 @@ League-wide rushing-by-direction leaderboard
 ```python
 pff_api_facet_rushing_direction(league='nfl', season='2022')
 ```
-
-_Last validated n/a._
 
 ## pff_api_facet_rushing_summary
 
@@ -365,8 +359,6 @@ League-wide rushing summary leaderboard
 pff_api_facet_rushing_summary(league='nfl', season='2022')
 ```
 
-_Last validated n/a._
-
 ## pff_api_facet_defense_coverage
 
 League-wide coverage leaderboard
@@ -451,8 +443,6 @@ League-wide coverage leaderboard
 ```python
 pff_api_facet_defense_coverage(league='nfl', season='2022')
 ```
-
-_Last validated n/a._
 
 ## pff_api_facet_defense_coverage_scheme
 
@@ -563,8 +553,6 @@ League-wide coverage-by-scheme leaderboard
 ```python
 pff_api_facet_defense_coverage_scheme(league='nfl', season='2022')
 ```
-
-_Last validated n/a._
 
 ## pff_api_facet_defense_coverage_matchup
 
@@ -694,8 +682,6 @@ League-wide coverage matchup leaderboard
 pff_api_facet_defense_coverage_matchup(league='nfl', season='2022')
 ```
 
-_Last validated n/a._
-
 ## pff_api_facet_defense_pass_rush
 
 League-wide pass-rush leaderboard
@@ -775,8 +761,6 @@ League-wide pass-rush leaderboard
 pff_api_facet_defense_pass_rush(league='nfl', season='2022')
 ```
 
-_Last validated n/a._
-
 ## pff_api_facet_defense_run
 
 League-wide run-defense leaderboard
@@ -845,8 +829,6 @@ League-wide run-defense leaderboard
 ```python
 pff_api_facet_defense_run(league='nfl', season='2022')
 ```
-
-_Last validated n/a._
 
 ## pff_api_facet_defense_summary
 
@@ -947,5 +929,3 @@ League-wide defense summary leaderboard
 ```python
 pff_api_facet_defense_summary(league='nfl', season='2022')
 ```
-
-_Last validated n/a._

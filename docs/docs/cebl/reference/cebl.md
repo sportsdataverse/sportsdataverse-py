@@ -55,8 +55,6 @@ Every CEBL season (2019 on), with the active and live flags.
 cebl_seasons()
 ```
 
-_Last validated n/a._
-
 ## cebl_teams
 
 Every franchise identity, past and present (15 team ids; a relocated franchise has a second id).
@@ -98,8 +96,6 @@ Every franchise identity, past and present (15 team ids; a relocated franchise h
 ```python
 cebl_teams()
 ```
-
-_Last validated n/a._
 
 ## cebl_standings
 
@@ -166,8 +162,6 @@ Standings of one season, one row per team: record, home/away splits, games behin
 cebl_standings(season=2025)
 ```
 
-_Last validated n/a._
-
 ## cebl_roster
 
 One team's roster in one season: player, nationality, birth date, position and jersey.
@@ -212,8 +206,6 @@ One team's roster in one season: player, nationality, birth date, position and j
 ```python
 cebl_roster(season=2025, team_id=14)
 ```
-
-_Last validated n/a._
 
 ## cebl_team_stats
 
@@ -297,8 +289,6 @@ Team statistic table (totals or per game) with a league row; filter by season, c
 cebl_team_stats(competition='REGULAR', mode='TOTALS', season=2025)
 ```
 
-_Last validated n/a._
-
 ## cebl_games
 
 Schedule and results of one season (regular season and finals), with the Genius match id that joins play-by-play and shots; optionally one team's games.
@@ -361,8 +351,6 @@ Schedule and results of one season (regular season and finals), with the Genius 
 ```python
 cebl_games(season=2025)
 ```
-
-_Last validated n/a._
 
 ## cebl_player_stats
 
@@ -440,8 +428,6 @@ Player statistic table (totals or per game) for a season or all-time; filter by 
 cebl_player_stats(mode='PER_GAME', season=2025)
 ```
 
-_Last validated n/a._
-
 ## cebl_player_leaders
 
 Top five players per requested statistic (long frame, one row per statistic and leader).
@@ -496,8 +482,6 @@ Top five players per requested statistic (long frame, one row per statistic and 
 ```python
 cebl_player_leaders(mode='PER_GAME', season=2025, statistics='POINTS,ASSISTS')
 ```
-
-_Last validated n/a._
 
 ## cebl_player_seasons
 
@@ -572,8 +556,6 @@ One player's per-season rows and career row (totals or per game).
 cebl_player_seasons(mode='PER_GAME', player_id=570965)
 ```
 
-_Last validated n/a._
-
 ## cebl_player
 
 One player's profile and current team: name, nationality, birth date, position, jersey.
@@ -624,8 +606,6 @@ One player's profile and current team: name, nationality, birth date, position, 
 ```python
 cebl_player(player_id=570965)
 ```
-
-_Last validated n/a._
 
 ## cebl_player_gamelog
 
@@ -694,8 +674,6 @@ One player's game log: one row per game played, with the Genius match id of the 
 cebl_player_gamelog(player_id=570965, season=2025)
 ```
 
-_Last validated n/a._
-
 ## cebl_news
 
 News articles in one language. The API answered an empty list on every probe, so this raises NoDataError.
@@ -737,5 +715,3 @@ News articles in one language. The API answered an empty list on every probe, so
 ```python
 cebl_news(language='en')
 ```
-
-_Last validated n/a._

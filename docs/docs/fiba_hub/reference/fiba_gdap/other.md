@@ -59,8 +59,6 @@ Awards of a competition (MVP, All-Star Five...).
 fiba_gdap_awards(comp=208182)
 ```
 
-_Last validated n/a._
-
 ## fiba_gdap_competition
 
 One competition (edition): season, dates, hosts, zone, category and competition family.
@@ -124,8 +122,6 @@ One competition (edition): season, dates, hosts, zone, category and competition 
 ```python
 fiba_gdap_competition(comp=208182)
 ```
-
-_Last validated n/a._
 
 ## fiba_gdap_editions
 
@@ -193,8 +189,6 @@ Every edition of a competition family between two seasons.
 fiba_gdap_editions(family_id=201, season=2023)
 ```
 
-_Last validated n/a._
-
 ## fiba_gdap_final_standings
 
 Final ranking of a competition.
@@ -238,8 +232,6 @@ Final ranking of a competition.
 ```python
 fiba_gdap_final_standings(comp=208182)
 ```
-
-_Last validated n/a._
 
 ## fiba_gdap_game
 
@@ -326,8 +318,6 @@ One game's header: teams, score, venue, attendance and status codes (no box scor
 fiba_gdap_game(game_id=100720)
 ```
 
-_Last validated n/a._
-
 ## fiba_gdap_gateway_competition_ids
 
 Ids of the competitions that run in a date window.
@@ -364,8 +354,6 @@ Ids of the competitions that run in a date window.
 ```python
 fiba_gdap_gateway_competition_ids(end_date='2025-01-16', start_date='2025-01-14')
 ```
-
-_Last validated n/a._
 
 ## fiba_gdap_gateway_federation_ranking
 
@@ -417,8 +405,6 @@ FIBA world ranking from the server-side gateway (same items as fiba_gdap_federat
 fiba_gdap_gateway_federation_ranking(as_of_date='2025-09-15', gender='men', zone_id=1)
 ```
 
-_Last validated n/a._
-
 ## fiba_gdap_medal_count
 
 All-time medal table of a competition family.
@@ -463,8 +449,6 @@ All-time medal table of a competition family.
 fiba_gdap_medal_count(family_id=201)
 ```
 
-_Last validated n/a._
-
 ## fiba_gdap_national_teams
 
 Every national federation FIBA lists.
@@ -508,8 +492,6 @@ Every national federation FIBA lists.
 ```python
 fiba_gdap_national_teams()
 ```
-
-_Last validated n/a._
 
 ## fiba_gdap_nominations
 
@@ -563,8 +545,6 @@ Officials nominated for a competition.
 fiba_gdap_nominations(comp=208182)
 ```
 
-_Last validated n/a._
-
 ## fiba_gdap_ranking_zones
 
 FIBA world-ranking zones.
@@ -601,8 +581,6 @@ FIBA world-ranking zones.
 ```python
 fiba_gdap_ranking_zones()
 ```
-
-_Last validated n/a._
 
 ## fiba_gdap_roster
 
@@ -665,8 +643,6 @@ A team's roster at a competition.
 fiba_gdap_roster(team_id=279569)
 ```
 
-_Last validated n/a._
-
 ## fiba_gdap_roster_coaches
 
 A team's coaches on its roster at a competition.
@@ -721,8 +697,6 @@ A team's coaches on its roster at a competition.
 ```python
 fiba_gdap_roster_coaches(team_id=279569)
 ```
-
-_Last validated n/a._
 
 ## fiba_gdap_roster_latest
 
@@ -784,8 +758,6 @@ A team's latest roster (same shape as the roster).
 fiba_gdap_roster_latest(team_id=282183)
 ```
 
-_Last validated n/a._
-
 ## fiba_gdap_round_gamedays
 
 Rounds of a competition with their game days.
@@ -840,8 +812,6 @@ Rounds of a competition with their game days.
 ```python
 fiba_gdap_round_gamedays(comp=208182)
 ```
-
-_Last validated n/a._
 
 ## fiba_gdap_round_standings
 
@@ -900,5 +870,3 @@ Group standings of every round of a competition.
 ```python
 fiba_gdap_round_standings(comp=208182)
 ```
-
-_Last validated n/a._

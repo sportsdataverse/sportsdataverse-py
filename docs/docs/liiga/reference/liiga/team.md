@@ -66,8 +66,6 @@ Every team's regular-season record, one row per team and season since 1976.
 liiga_teams_history()
 ```
 
-_Last validated n/a._
-
 ## liiga_teams
 
 Team directory: every current and past team with logos, venue capacity and club info.
@@ -115,8 +113,6 @@ Team directory: every current and past team with logos, venue capacity and club 
 ```python
 liiga_teams()
 ```
-
-_Last validated n/a._
 
 ## liiga_team_stats
 
@@ -222,5 +218,3 @@ Team stat table of a season range, by data_type.
 ```python
 liiga_team_stats(data_type='shots', season_from=2026, season_to=2026)
 ```
-
-_Last validated n/a._

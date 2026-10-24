@@ -254,8 +254,6 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 espn_wbb_cdn_playbyplay(game_id='401725017')
 ```
 
-_Last validated n/a._
-
 ## espn_wbb_cdn_boxscore
 
 One game's espn.com box-score page data, parsed like a Site v2 summary. For football the drives and scoring plays are only on the playbyplay page.
@@ -501,8 +499,6 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 espn_wbb_cdn_boxscore(game_id='401725017')
 ```
 
-_Last validated n/a._
-
 ## espn_wbb_cdn_schedule
 
 espn.com schedule page data, one row per game: up to 7 days starting at `date` (mbb and wbb: that day only; cfb and nfl: one week).
@@ -591,8 +587,6 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 espn_wbb_cdn_schedule(date='20250115')
 ```
 
-_Last validated n/a._
-
 ## espn_wbb_cdn_scoreboard
 
 espn.com scoreboard page data for one day (one week for football), one row per game. The page's sbData block is a Site v2 scoreboard payload.
@@ -680,5 +674,3 @@ espn.com scoreboard page data for one day (one week for football), one row per g
 ```python
 espn_wbb_cdn_scoreboard(date='20250115')
 ```
-
-_Last validated n/a._

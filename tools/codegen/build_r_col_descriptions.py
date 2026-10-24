@@ -29,7 +29,6 @@ Output YAML shape::
     fastRhockey: { ... }
     nflreadr: { ... }   # mined from data-raw/dictionary_*.csv
     nflfastR: { ... }   # mined from data-raw/variable_list.txt
-    _merged: { ... }  # union across all packages, most-frequent globally
 """
 
 from __future__ import annotations
@@ -343,27 +342,6 @@ def mine_item_list(txt_path: Path) -> dict[str, str]:
 
 
 # ---------------------------------------------------------------------------
-# Merged dictionary
-# ---------------------------------------------------------------------------
-
-
-def build_merged(per_package: dict[str, dict[str, str]]) -> dict[str, str]:
-    """Build a global col_name -> best description across all packages."""
-    global_freq: dict[str, Counter] = defaultdict(Counter)
-
-    for pkg_dict in per_package.values():
-        for col_name, description in pkg_dict.items():
-            global_freq[col_name][description] += 1
-
-    merged: dict[str, str] = {}
-    for col_name, counter in global_freq.items():
-        best = max(counter, key=lambda d: (counter[d], len(d)))
-        merged[col_name] = best
-
-    return merged
-
-
-# ---------------------------------------------------------------------------
 # YAML serialisation helpers
 # ---------------------------------------------------------------------------
 
@@ -413,15 +391,11 @@ def main() -> None:
         per_package[pkg_name] = _sorted_str_dict(result)
         print(f"  {pkg_name}: {len(result)} unique col_name descriptions")
 
-    merged = _sorted_str_dict(build_merged(per_package))
-    print(f"  _merged: {len(merged)} unique col_name descriptions")
-
     # Build the YAML document.  Use a custom representer so strings stay
     # single-line (no block scalars for short strings).
     output_data: dict = {}
     for pkg_name in (*PACKAGES, *CSV_DICT_PACKAGES, *ITEM_LIST_PACKAGES):
         output_data[pkg_name] = per_package[pkg_name]
-    output_data["_merged"] = merged
 
     header = (
         "# Mined from SDV R packages' @return tables (col_name -> description).\n"

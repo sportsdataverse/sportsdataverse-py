@@ -329,8 +329,6 @@ GET /stats/playerdashboardbyshootingsplits
 wnba_stats_playerdashboardbyshootingsplits(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_playerdashboardbyteamperformance
 
 GET /stats/playerdashboardbyteamperformance
@@ -663,5 +661,3 @@ GET /stats/playerdashboardbyteamperformance
 ```python
 wnba_stats_playerdashboardbyteamperformance(league_id='10', season='2024')
 ```
-
-_Last validated n/a._

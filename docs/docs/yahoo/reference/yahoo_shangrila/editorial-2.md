@@ -616,5 +616,3 @@ Scoreboard: games + teams + leagues + odds (fat payload)
 ```python
 yahoo_editorial_scoreboard()
 ```
-
-_Last validated n/a._

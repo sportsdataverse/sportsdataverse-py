@@ -151,8 +151,6 @@ GET /football/v2/stats/live/team-statistics/{game_id} — one row per side (away
 nfl_live_team_statistics(game_id='a9a890ed-4feb-11f1-abca-2c54536568a9')
 ```
 
-_Last validated n/a._
-
 ## nfl_live_player_statistics
 
 GET /football/v2/stats/live/player-statistics/{game_id} — one row per player per side: the live player box score.
@@ -309,5 +307,3 @@ GET /football/v2/stats/live/player-statistics/{game_id} — one row per player p
 ```python
 nfl_live_player_statistics(game_id='a9a890ed-4feb-11f1-abca-2c54536568a9')
 ```
-
-_Last validated n/a._

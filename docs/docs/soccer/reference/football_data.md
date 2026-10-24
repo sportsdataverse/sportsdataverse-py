@@ -69,8 +69,6 @@ All seasons of one 'extra' league (BRA, ARG, USA, ...).
 football_data_extra_league(country='BRA')
 ```
 
-_Last validated n/a._
-
 ## football_data_fixtures
 
 Upcoming fixtures with odds.
@@ -198,8 +196,6 @@ Upcoming fixtures with odds.
 ```python
 football_data_fixtures()
 ```
-
-_Last validated n/a._
 
 ## football_data_league_season
 
@@ -368,5 +364,3 @@ One league-season of results + closing odds (main leagues).
 ```python
 football_data_league_season(div='E0', season='2526')
 ```
-
-_Last validated n/a._

@@ -261,8 +261,6 @@ League-wide passing-under-pressure leaderboard
 pff_api_facet_passing_pressure(league='nfl', season='2022')
 ```
 
-_Last validated n/a._
-
 ## pff_api_facet_passing_summary
 
 League-wide passing summary leaderboard
@@ -351,8 +349,6 @@ League-wide passing summary leaderboard
 ```python
 pff_api_facet_passing_summary(league='nfl', season='2022')
 ```
-
-_Last validated n/a._
 
 ## pff_api_facet_receiving_concept
 
@@ -469,8 +465,6 @@ League-wide receiving-by-concept leaderboard
 ```python
 pff_api_facet_receiving_concept(league='nfl', season='2022')
 ```
-
-_Last validated n/a._
 
 ## pff_api_facet_receiving_coverage
 
@@ -599,5 +593,3 @@ League-wide receiving-versus-coverage leaderboard
 ```python
 pff_api_facet_receiving_coverage(league='nfl', season='2022')
 ```
-
-_Last validated n/a._

@@ -91,8 +91,6 @@ View All-Star Ballots per league.
 mlb_all_star_ballot(league_id='103', season='2023')
 ```
 
-_Last validated n/a._
-
 ## mlb_all_star_write_ins
 
 View All-Star Write-ins per league.
@@ -172,8 +170,6 @@ View All-Star Write-ins per league.
 ```python
 mlb_all_star_write_ins(league_id='103', season='2023')
 ```
-
-_Last validated n/a._
 
 ## mlb_all_star_final_vote
 
@@ -258,5 +254,3 @@ View All-Star Final Vote per league.
 ```python
 mlb_all_star_final_vote(league_id='103', season='2023')
 ```
-
-_Last validated n/a._

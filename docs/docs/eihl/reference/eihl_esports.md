@@ -75,8 +75,6 @@ Schedule and results of one competition season, one row per match, played or not
 eihl_schedule(league_id=3, season=2027)
 ```
 
-_Last validated n/a._
-
 ## eihl_team_player_stats
 
 Season player stats of one team in one competition, one row per player.
@@ -163,8 +161,6 @@ Season player stats of one team in one competition, one row per player.
 eihl_team_player_stats(league_id=3, season=2027, team_id=96)
 ```
 
-_Last validated n/a._
-
 ## eihl_top_scorers
 
 Skater scoring leaderboard of one competition season.
@@ -216,8 +212,6 @@ Skater scoring leaderboard of one competition season.
 ```python
 eihl_top_scorers(league_id=3, season=2027)
 ```
-
-_Last validated n/a._
 
 ## eihl_game_info
 
@@ -282,8 +276,6 @@ Game info of one match: state, arena, attendance, officials, coaches, period sco
 ```python
 eihl_game_info(match_id=4440)
 ```
-
-_Last validated n/a._
 
 ## eihl_pbp
 
@@ -373,8 +365,6 @@ Play-by-play of one match: goals, penalties, goalie changes and timeouts, one ro
 eihl_pbp(match_id=4440)
 ```
 
-_Last validated n/a._
-
 ## eihl_player_box
 
 Player boxscore of one team in one match, one row per player.
@@ -460,8 +450,6 @@ Player boxscore of one team in one match, one row per player.
 eihl_player_box(match_id=4440, team_id=96)
 ```
 
-_Last validated n/a._
-
 ## eihl_goalie_box
 
 Goalie lines of one match, one row per goalie who played.
@@ -524,8 +512,6 @@ Goalie lines of one match, one row per goalie who played.
 ```python
 eihl_goalie_box(match_id=4440)
 ```
-
-_Last validated n/a._
 
 ## eihl_standings
 
@@ -590,8 +576,6 @@ Standings of one competition season, one row per team.
 eihl_standings(league_id=3, season=2027)
 ```
 
-_Last validated n/a._
-
 ## eihl_shots
 
 Shots of one match with rink coordinates and result, one row per shot.
@@ -651,5 +635,3 @@ Shots of one match with rink coordinates and result, one row per shot.
 ```python
 eihl_shots(match_id=4440)
 ```
-
-_Last validated n/a._

@@ -49,8 +49,6 @@ The regular-season finish that seeds the playoffs (the top six).
 kbl_playoff_seeds(season=2025)
 ```
 
-_Last validated n/a._
-
 ## kbl_playoff_series
 
 The playoff series (quarterfinals, semifinals, final): wins and losses of each team in each series.
@@ -96,8 +94,6 @@ The playoff series (quarterfinals, semifinals, final): wins and losses of each t
 ```python
 kbl_playoff_series(season=2025)
 ```
-
-_Last validated n/a._
 
 ## kbl_playoff_games
 
@@ -148,5 +144,3 @@ The games of the playoff bracket (2024-25 on; the older bracket format lists no 
 ```python
 kbl_playoff_games(season=2025)
 ```
-
-_Last validated n/a._

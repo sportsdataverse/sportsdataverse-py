@@ -1,0 +1,9 @@
+schema: observed_pairs
+kind: dataframe
+columns:
+- name: team
+  type: character
+  description: ''
+- name: player
+  type: character
+  description: ''

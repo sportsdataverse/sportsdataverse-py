@@ -50,6 +50,7 @@ from __future__ import annotations
 
 from sportsdataverse.mbb.mbb_ncaa_html import (
     attr_regex_filter,
+    current_ncaa_team_alts,
     filter_matching_own,
     jsoup_text,
     parse_html,
@@ -68,4 +69,5 @@ __all__ = [
     "attr_regex_filter",
     "select_contains",
     "filter_matching_own",
+    "current_ncaa_team_alts",
 ]

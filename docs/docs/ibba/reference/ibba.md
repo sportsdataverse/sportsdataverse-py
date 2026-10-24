@@ -56,8 +56,6 @@ Season settings: the season label, round counters and the standings cut line.
 ibba_configuration(season=2026)
 ```
 
-_Last validated n/a._
-
 ## ibba_boards
 
 Competitions (boards) of a season: league, cup, playoff rounds, play-in, Supercup.
@@ -98,8 +96,6 @@ Competitions (boards) of a season: league, cup, playoff rounds, play-in, Supercu
 ibba_boards(season=2026)
 ```
 
-_Last validated n/a._
-
 ## ibba_boards_ex
 
 External competitions a club played in during a season (European cups, national team, pre-season).
@@ -137,8 +133,6 @@ External competitions a club played in during a season (European cups, national 
 ```python
 ibba_boards_ex(season=2026, team_uid=10)
 ```
-
-_Last validated n/a._
 
 ## ibba_teams
 
@@ -201,8 +195,6 @@ Teams of a board and season with their standings line and club profile fields.
 ```python
 ibba_teams(season=2026)
 ```
-
-_Last validated n/a._
 
 ## ibba_team
 
@@ -274,8 +266,6 @@ One team-season: standings line and club profile (colours, sponsors, social link
 ibba_team(season=2026, team_id=1109, team_uid=10)
 ```
 
-_Last validated n/a._
-
 ## ibba_players
 
 The roster of a team-season: jersey, names, position, height and birth date.
@@ -326,8 +316,6 @@ The roster of a team-season: jersey, names, position, height and birth date.
 ibba_players(season=2026, team_id=1109, team_uid=10)
 ```
 
-_Last validated n/a._
-
 ## ibba_player
 
 One player-season row: jersey, team, names and photo.
@@ -372,8 +360,6 @@ One player-season row: jersey, team, names and photo.
 ```python
 ibba_player(player_id=21912, season=2026)
 ```
-
-_Last validated n/a._
 
 ## ibba_coaches
 
@@ -420,8 +406,6 @@ The coaching staff of a team-season (birth dates are dropped).
 ```python
 ibba_coaches(season=2026, team_id=1109, team_uid=10)
 ```
-
-_Last validated n/a._
 
 ## ibba_box_score
 
@@ -492,8 +476,6 @@ Box score of a finished game: player lines, a team-credited line per side and th
 ibba_box_score(game_id=26392, season=2026)
 ```
 
-_Last validated n/a._
-
 ## ibba_player_stats
 
 A player-season's totals, or per-game averages with is_averages=True.
@@ -561,8 +543,6 @@ A player-season's totals, or per-game averages with is_averages=True.
 ibba_player_stats(player_id=21912, season=2026)
 ```
 
-_Last validated n/a._
-
 ## ibba_stats_types
 
 The stat categories ibba_leaders accepts (the stat_type codes) with their Hebrew names.
@@ -598,8 +578,6 @@ The stat categories ibba_leaders accepts (the stat_type codes) with their Hebrew
 ```python
 ibba_stats_types()
 ```
-
-_Last validated n/a._
 
 ## ibba_leaders
 
@@ -645,8 +623,6 @@ The top five players of a season in one stat category, for all teams or one team
 ```python
 ibba_leaders(season=2026, stat_type='pts')
 ```
-
-_Last validated n/a._
 
 ## ibba_team_stats
 
@@ -712,8 +688,6 @@ A team-season's totals, or per-game averages with is_averages=True.
 ```python
 ibba_team_stats(season=2026, team_id=1109)
 ```
-
-_Last validated n/a._
 
 ## ibba_games
 
@@ -785,8 +759,6 @@ Games (schedule and results) of a season filtered by board, round, team and game
 ibba_games(board_id=5, board_round=1, season=2026)
 ```
 
-_Last validated n/a._
-
 ## ibba_games_ex
 
 A club's games of a season in external competitions (BoardsEx boards: European cups, pre-season).
@@ -839,8 +811,6 @@ A club's games of a season in external competitions (BoardsEx boards: European c
 ```python
 ibba_games_ex(season=2026, team_uid=10)
 ```
-
-_Last validated n/a._
 
 ## ibba_games_by_team
 
@@ -907,5 +877,3 @@ Every game of a club in a season, domestic and external, in one frame.
 ```python
 ibba_games_by_team(season=2026, team_uid=10)
 ```
-
-_Last validated n/a._

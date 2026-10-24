@@ -76,8 +76,6 @@ Box score with jersey and Genius shirt numbers (2023/24 on).
 sportality_player_box(game_uuid='c4hh5nig6t')
 ```
 
-_Last validated n/a._
-
 ## sportality_player_h2h
 
 Player head-to-head of a matchup with per-game and season lines.
@@ -169,5 +167,3 @@ Player head-to-head of a matchup with per-game and season lines.
 ```python
 sportality_player_h2h(away_team_uuid='gvvuxe9ysw', game_uuid='c4hh5nig6t', home_team_uuid='rfo82vr830', ssgt_uuid='xs07bd3fmp')
 ```
-
-_Last validated n/a._

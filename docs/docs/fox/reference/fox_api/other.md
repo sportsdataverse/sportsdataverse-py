@@ -52,8 +52,6 @@ GET /bifrost/v1/{sport}/scoreboard/main -- Fox Sports API scoreboard.
 fox_api_scoreboard(sport='nfl')
 ```
 
-_Last validated n/a._
-
 ## fox_api_scorechip
 
 GET /bifrost/v1/{sport}/scorechip/{chip_id} -- one game's score chip (this route 400s if api-version is sent).
@@ -144,8 +142,6 @@ GET /bifrost/v1/{sport}/scorechip/{chip_id} -- one game's score chip (this route
 fox_api_scorechip(sport='nfl', chip_id='nfl11195')
 ```
 
-_Last validated n/a._
-
 ## fox_api_topevents_scoreboard_segment
 
 GET /bifrost/v1/topevents/scoreboard/segment/{segment} -- Fox Sports API topevents scoreboard segment.
@@ -204,8 +200,6 @@ GET /bifrost/v1/topevents/scoreboard/segment/{segment} -- Fox Sports API topeven
 fox_api_topevents_scoreboard_segment(segment='1')
 ```
 
-_Last validated n/a._
-
 ## fox_api_explore_browse
 
 GET /bifrost/v1/explore/browse/{section}/main -- Fox Sports API explore browse.
@@ -251,8 +245,6 @@ GET /bifrost/v1/explore/browse/{section}/main -- Fox Sports API explore browse.
 ```python
 fox_api_explore_browse(section='sports')
 ```
-
-_Last validated n/a._
 
 ## fox_api_explore_odds
 
@@ -301,8 +293,6 @@ GET /bifrost/v1/explore/odds/main -- Fox Sports API explore odds.
 fox_api_explore_odds()
 ```
 
-_Last validated n/a._
-
 ## fox_api_search_content
 
 GET /bifrost/v1/search/content -- Fox Sports API search content.
@@ -349,8 +339,6 @@ GET /bifrost/v1/search/content -- Fox Sports API search content.
 ```python
 fox_api_search_content(text='mahomes')
 ```
-
-_Last validated n/a._
 
 ## fox_api_search_entities
 
@@ -399,8 +387,6 @@ GET /bifrost/v1/search/entities -- Fox Sports API search entities.
 fox_api_search_entities(text='mahomes')
 ```
 
-_Last validated n/a._
-
 ## fox_api_search_popular
 
 GET /bifrost/v1/search/popular -- Fox Sports API search popular.
@@ -446,8 +432,6 @@ GET /bifrost/v1/search/popular -- Fox Sports API search popular.
 ```python
 fox_api_search_popular()
 ```
-
-_Last validated n/a._
 
 ## fox_api_trending_articles
 
@@ -498,8 +482,6 @@ GET /bifrost/v1/general/trending/articles -- Fox Sports API trending articles.
 fox_api_trending_articles()
 ```
 
-_Last validated n/a._
-
 ## fox_api_trending_videos
 
 GET /bifrost/v1/general/trending/videos -- Fox Sports API trending videos.
@@ -548,8 +530,6 @@ GET /bifrost/v1/general/trending/videos -- Fox Sports API trending videos.
 ```python
 fox_api_trending_videos()
 ```
-
-_Last validated n/a._
 
 ## fox_api_foxpolls
 
@@ -615,5 +595,3 @@ GET /foxpolls/v1/polls -- Fox Sports API foxpolls.
 ```python
 fox_api_foxpolls()
 ```
-
-_Last validated n/a._

@@ -258,6 +258,7 @@ from sportsdataverse.mbb import adjust_efficiency as adjust_efficiency  # noqa: 
 from sportsdataverse.mbb import adjust_off_rating_stats as adjust_off_rating_stats  # noqa: F401
 from sportsdataverse.mbb import adjust_tempo as adjust_tempo  # noqa: F401
 from sportsdataverse.mbb import aggregate_player_seasons as aggregate_player_seasons  # noqa: F401
+from sportsdataverse.mbb import aggregate_stints as aggregate_stints  # noqa: F401
 from sportsdataverse.mbb import alias_combos as alias_combos  # noqa: F401
 from sportsdataverse.mbb import analyze_and_fix_clumps as analyze_and_fix_clumps  # noqa: F401
 from sportsdataverse.mbb import apply_relative_positional_overrides as apply_relative_positional_overrides  # noqa: F401
@@ -285,8 +286,10 @@ from sportsdataverse.mbb import build_net_points as build_net_points  # noqa: F4
 from sportsdataverse.mbb import build_new_player_list as build_new_player_list  # noqa: F401
 from sportsdataverse.mbb import build_o_rtg as build_o_rtg  # noqa: F401
 from sportsdataverse.mbb import build_partial_lineup_list as build_partial_lineup_list  # noqa: F401
+from sportsdataverse.mbb import build_person_keys as build_person_keys  # noqa: F401
 from sportsdataverse.mbb import build_player_code as build_player_code  # noqa: F401
 from sportsdataverse.mbb import build_player_context as build_player_context  # noqa: F401
+from sportsdataverse.mbb import build_player_xwalk as build_player_xwalk  # noqa: F401
 from sportsdataverse.mbb import build_position as build_position  # noqa: F401
 from sportsdataverse.mbb import build_position_confidences as build_position_confidences  # noqa: F401
 from sportsdataverse.mbb import build_positional_aware_filter as build_positional_aware_filter  # noqa: F401
@@ -332,6 +335,7 @@ from sportsdataverse.mbb import count_matching as count_matching  # noqa: F401
 from sportsdataverse.mbb import create_lineup_data as create_lineup_data  # noqa: F401
 from sportsdataverse.mbb import create_player_events as create_player_events  # noqa: F401
 from sportsdataverse.mbb import create_shot_event_data as create_shot_event_data  # noqa: F401
+from sportsdataverse.mbb import current_ncaa_team_alts as current_ncaa_team_alts  # noqa: F401
 from sportsdataverse.mbb import display_name_to_roster_key as display_name_to_roster_key  # noqa: F401
 from sportsdataverse.mbb import download as download  # noqa: F401
 from sportsdataverse.mbb import duration_from_period as duration_from_period  # noqa: F401
@@ -349,6 +353,7 @@ from sportsdataverse.mbb import espn_mbb_player_stats as espn_mbb_player_stats  
 from sportsdataverse.mbb import espn_mbb_schedule as espn_mbb_schedule  # noqa: F401
 from sportsdataverse.mbb import espn_mbb_teams as espn_mbb_teams  # noqa: F401
 from sportsdataverse.mbb import espn_shots_to_canonical as espn_shots_to_canonical  # noqa: F401
+from sportsdataverse.mbb import expand_xwalk_aliases as expand_xwalk_aliases  # noqa: F401
 from sportsdataverse.mbb import extract_player_from_ev as extract_player_from_ev  # noqa: F401
 from sportsdataverse.mbb import field_keys as field_keys  # noqa: F401
 from sportsdataverse.mbb import filter_matching_own as filter_matching_own  # noqa: F401
@@ -517,7 +522,9 @@ from sportsdataverse.mbb import ncaa_mbb_team_ids as ncaa_mbb_team_ids  # noqa: 
 from sportsdataverse.mbb import ncaa_mbb_team_roster as ncaa_mbb_team_roster  # noqa: F401
 from sportsdataverse.mbb import ncaa_mbb_team_schedule as ncaa_mbb_team_schedule  # noqa: F401
 from sportsdataverse.mbb import ncaa_mbb_team_stats as ncaa_mbb_team_stats  # noqa: F401
+from sportsdataverse.mbb import normalize_player_key as normalize_player_key  # noqa: F401
 from sportsdataverse.mbb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
+from sportsdataverse.mbb import observed_pairs as observed_pairs  # noqa: F401
 from sportsdataverse.mbb import order_lineup as order_lineup  # noqa: F401
 from sportsdataverse.mbb import parse_any_play as parse_any_play  # noqa: F401
 from sportsdataverse.mbb import parse_assist as parse_assist  # noqa: F401
@@ -592,6 +599,7 @@ from sportsdataverse.mbb import player_per100_features as player_per100_features
 from sportsdataverse.mbb import playwright_transport as playwright_transport  # noqa: F401
 from sportsdataverse.mbb import pos_class_to_score as pos_class_to_score  # noqa: F401
 from sportsdataverse.mbb import poss_calc_fragment_sum as poss_calc_fragment_sum  # noqa: F401
+from sportsdataverse.mbb import possession_deciles as possession_deciles  # noqa: F401
 from sportsdataverse.mbb import predict_margin as predict_margin  # noqa: F401
 from sportsdataverse.mbb import predict_total as predict_total  # noqa: F401
 from sportsdataverse.mbb import project_bracket as project_bracket  # noqa: F401
@@ -604,6 +612,7 @@ from sportsdataverse.mbb import remove_html_encoding as remove_html_encoding  # 
 from sportsdataverse.mbb import reorder_and_reverse as reorder_and_reverse  # noqa: F401
 from sportsdataverse.mbb import reset_config as reset_config  # noqa: F401
 from sportsdataverse.mbb import resolve_ncaa_team_id as resolve_ncaa_team_id  # noqa: F401
+from sportsdataverse.mbb import resolve_possessions as resolve_possessions  # noqa: F401
 from sportsdataverse.mbb import ridge_cv_lambda as ridge_cv_lambda  # noqa: F401
 from sportsdataverse.mbb import ridge_fit as ridge_fit  # noqa: F401
 from sportsdataverse.mbb import right_kind_of_shot as right_kind_of_shot  # noqa: F401
@@ -613,21 +622,28 @@ from sportsdataverse.mbb import same_school as same_school  # noqa: F401
 from sportsdataverse.mbb import save_artifact as save_artifact  # noqa: F401
 from sportsdataverse.mbb import score_to_tuple as score_to_tuple  # noqa: F401
 from sportsdataverse.mbb import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
+from sportsdataverse.mbb import season_slice as season_slice  # noqa: F401
 from sportsdataverse.mbb import select_contains as select_contains  # noqa: F401
 from sportsdataverse.mbb import select_matching as select_matching  # noqa: F401
 from sportsdataverse.mbb import select_matching_own as select_matching_own  # noqa: F401
 from sportsdataverse.mbb import shot_events_to_frame as shot_events_to_frame  # noqa: F401
 from sportsdataverse.mbb import shot_js_to_html as shot_js_to_html  # noqa: F401
 from sportsdataverse.mbb import shot_value as shot_value  # noqa: F401
+from sportsdataverse.mbb import sides_from_box as sides_from_box  # noqa: F401
 from sportsdataverse.mbb import simulate_game as simulate_game  # noqa: F401
 from sportsdataverse.mbb import slow_regression as slow_regression  # noqa: F401
+from sportsdataverse.mbb import solve_rapm_league as solve_rapm_league  # noqa: F401
 from sportsdataverse.mbb import spearman_corr as spearman_corr  # noqa: F401
+from sportsdataverse.mbb import split_half_se_check as split_half_se_check  # noqa: F401
+from sportsdataverse.mbb import stack_seasons as stack_seasons  # noqa: F401
 from sportsdataverse.mbb import start_time_from_period as start_time_from_period  # noqa: F401
+from sportsdataverse.mbb import stint_exposure as stint_exposure  # noqa: F401
 from sportsdataverse.mbb import strength_of_schedule as strength_of_schedule  # noqa: F401
 from sportsdataverse.mbb import sum_event_stats as sum_event_stats  # noqa: F401
 from sportsdataverse.mbb import sum_shot_infos as sum_shot_infos  # noqa: F401
 from sportsdataverse.mbb import talent_split_mse as talent_split_mse  # noqa: F401
 from sportsdataverse.mbb import td_at as td_at  # noqa: F401
+from sportsdataverse.mbb import team_aggregate as team_aggregate  # noqa: F401
 from sportsdataverse.mbb import test_positional_aware_filter as test_positional_aware_filter  # noqa: F401
 from sportsdataverse.mbb import tidy_player as tidy_player  # noqa: F401
 from sportsdataverse.mbb import transfer_cohort as transfer_cohort  # noqa: F401
@@ -710,6 +726,7 @@ __all__ = [
     "adjust_off_rating_stats",
     "adjust_tempo",
     "aggregate_player_seasons",
+    "aggregate_stints",
     "alias_combos",
     "analyze_and_fix_clumps",
     "apply_relative_positional_overrides",
@@ -737,8 +754,10 @@ __all__ = [
     "build_new_player_list",
     "build_o_rtg",
     "build_partial_lineup_list",
+    "build_person_keys",
     "build_player_code",
     "build_player_context",
+    "build_player_xwalk",
     "build_position",
     "build_position_confidences",
     "build_positional_aware_filter",
@@ -784,6 +803,7 @@ __all__ = [
     "create_lineup_data",
     "create_player_events",
     "create_shot_event_data",
+    "current_ncaa_team_alts",
     "display_name_to_roster_key",
     "download",
     "duration_from_period",
@@ -923,6 +943,7 @@ __all__ = [
     "espn_mbb_venue",
     "espn_mbb_venues",
     "espn_shots_to_canonical",
+    "expand_xwalk_aliases",
     "extract_player_from_ev",
     "field_keys",
     "filter_matching_own",
@@ -1130,7 +1151,9 @@ __all__ = [
     "ncaa_mbb_team_roster",
     "ncaa_mbb_team_schedule",
     "ncaa_mbb_team_stats",
+    "normalize_player_key",
     "normalize_team_roster_columns",
+    "observed_pairs",
     "order_lineup",
     "parse_any_play",
     "parse_assist",
@@ -1205,6 +1228,7 @@ __all__ = [
     "playwright_transport",
     "pos_class_to_score",
     "poss_calc_fragment_sum",
+    "possession_deciles",
     "predict_margin",
     "predict_total",
     "project_bracket",
@@ -1217,6 +1241,7 @@ __all__ = [
     "reorder_and_reverse",
     "reset_config",
     "resolve_ncaa_team_id",
+    "resolve_possessions",
     "ridge_cv_lambda",
     "ridge_fit",
     "right_kind_of_shot",
@@ -1226,21 +1251,28 @@ __all__ = [
     "save_artifact",
     "score_to_tuple",
     "scoreboard_event_parsing",
+    "season_slice",
     "select_contains",
     "select_matching",
     "select_matching_own",
     "shot_events_to_frame",
     "shot_js_to_html",
     "shot_value",
+    "sides_from_box",
     "simulate_game",
     "slow_regression",
+    "solve_rapm_league",
     "spearman_corr",
+    "split_half_se_check",
+    "stack_seasons",
     "start_time_from_period",
+    "stint_exposure",
     "strength_of_schedule",
     "sum_event_stats",
     "sum_shot_infos",
     "talent_split_mse",
     "td_at",
+    "team_aggregate",
     "test_positional_aware_filter",
     "tidy_player",
     "torvik_game_schedule",

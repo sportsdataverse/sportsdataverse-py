@@ -72,8 +72,6 @@ Team totals of a game per period: everything the team did, and the part credited
 acb_team_box(match_id=105401)
 ```
 
-_Last validated n/a._
-
 ## acb_team_comparison
 
 Team-versus-team comparison bars of a game per period.
@@ -120,8 +118,6 @@ Team-versus-team comparison bars of a game per period.
 acb_team_comparison(match_id=105401)
 ```
 
-_Last validated n/a._
-
 ## acb_teams
 
 Teams entered in a competition edition.
@@ -166,8 +162,6 @@ Teams entered in a competition edition.
 ```python
 acb_teams(season=2027)
 ```
-
-_Last validated n/a._
 
 ## acb_team_matches
 
@@ -236,8 +230,6 @@ A club's games in a competition edition.
 acb_team_matches(club_id=2, season=2027)
 ```
 
-_Last validated n/a._
-
 ## acb_team_leaders
 
 A club's statistical leaders for an edition and all-time.
@@ -289,8 +281,6 @@ A club's statistical leaders for an edition and all-time.
 ```python
 acb_team_leaders(club_id=2, number_of_players=3, season=2027)
 ```
-
-_Last validated n/a._
 
 ## acb_team_stats
 
@@ -426,8 +416,6 @@ A club's player season statistics for an edition: totals, averages and per-40 si
 acb_team_stats(club_id=2, season=2027)
 ```
 
-_Last validated n/a._
-
 ## acb_team_totals
 
 A club's team season totals, averages and per-40 values for an edition.
@@ -556,8 +544,6 @@ A club's team season totals, averages and per-40 values for an edition.
 acb_team_totals(club_id=2, season=2027)
 ```
 
-_Last validated n/a._
-
 ## acb_team_records
 
 A club's single-game records (best performance per statistic).
@@ -611,5 +597,3 @@ A club's single-game records (best performance per statistic).
 ```python
 acb_team_records(club_id=2)
 ```
-
-_Last validated n/a._

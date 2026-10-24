@@ -71,8 +71,6 @@ Skater and goalie box score per team (2023/24 on).
 shl_boxscore(game_uuid='bdhvuc5tex')
 ```
 
-_Last validated n/a._
-
 ## shl_last_game_day
 
 Games of the last played match day of an ssgt.
@@ -148,8 +146,6 @@ Games of the last played match day of an ssgt.
 shl_last_game_day()
 ```
 
-_Last validated n/a._
-
 ## shl_layout_info
 
 Directory of every SHL ssgt (season + series + game type) with teams and the stats modules.
@@ -194,8 +190,6 @@ Directory of every SHL ssgt (season + series + game type) with teams and the sta
 ```python
 shl_layout_info()
 ```
-
-_Last validated n/a._
 
 ## shl_next_game_day
 
@@ -271,8 +265,6 @@ Games of the next match day of an ssgt.
 ```python
 shl_next_game_day()
 ```
-
-_Last validated n/a._
 
 ## shl_pbp
 
@@ -376,8 +368,6 @@ Play-by-play events with shot coordinates (2023/24 on).
 shl_pbp(game_uuid='bdhvuc5tex')
 ```
 
-_Last validated n/a._
-
 ## shl_player_box
 
 Extended skater and goalie game stats per team (2023/24 on).
@@ -449,8 +439,6 @@ Extended skater and goalie game stats per team (2023/24 on).
 ```python
 shl_player_box(game_uuid='bdhvuc5tex')
 ```
-
-_Last validated n/a._
 
 ## shl_player_h2h
 
@@ -544,8 +532,6 @@ Player head-to-head for a matchup.
 shl_player_h2h(away_team_uuid='41c4-41c4BiYZU', game_uuid='bdhvuc5tex', home_team_uuid='087a-087aTQv9u', ssgt_uuid='iuzqg7dqk9')
 ```
 
-_Last validated n/a._
-
 ## shl_post_game_team_stats
 
 Post-game team comparison.
@@ -598,8 +584,6 @@ Post-game team comparison.
 shl_post_game_team_stats(away_team_uuid='41c4-41c4BiYZU', game_uuid='bdhvuc5tex', home_team_uuid='087a-087aTQv9u', ssgt_uuid='iuzqg7dqk9')
 ```
 
-_Last validated n/a._
-
 ## shl_roster
 
 Current roster of a team, grouped by position.
@@ -645,8 +629,6 @@ Current roster of a team, grouped by position.
 ```python
 shl_roster(team_uuid='087a-087aTQv9u')
 ```
-
-_Last validated n/a._
 
 ## shl_schedule
 
@@ -726,8 +708,6 @@ Schedule and results of one season + series + game type.
 shl_schedule(season=2026)
 ```
 
-_Last validated n/a._
-
 ## shl_season_filter
 
 Series, seasons (1975/76 on) and game types with their uuids, plus the default ssgt.
@@ -769,8 +749,6 @@ Series, seasons (1975/76 on) and game types with their uuids, plus the default s
 shl_season_filter(season_uuid='xs4m9qupsi', series_uuid='qQ9-bb0bzEWUk')
 ```
 
-_Last validated n/a._
-
 ## shl_sites
 
 Teams (sites) taking part in an ssgt.
@@ -811,8 +789,6 @@ Teams (sites) taking part in an ssgt.
 shl_sites(ssgt_uuid='iuzqg7dqk9')
 ```
 
-_Last validated n/a._
-
 ## shl_ssgt_provider
 
 Stats provider of an ssgt, a bare string such as statnet.
@@ -848,5 +824,3 @@ Stats provider of an ssgt, a bare string such as statnet.
 ```python
 shl_ssgt_provider(ssgt_uuid='iuzqg7dqk9')
 ```
-
-_Last validated n/a._

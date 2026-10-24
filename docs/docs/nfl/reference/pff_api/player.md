@@ -47,8 +47,6 @@ List the seasons a player has data for
 pff_api_player_seasons(league='nfl', player_id=28022, season=2022)
 ```
 
-_Last validated n/a._
-
 ## pff_api_player_snaps_summary
 
 Snap counts for a player, broken out by position
@@ -111,8 +109,6 @@ Snap counts for a player, broken out by position
 pff_api_player_snaps_summary(league='nfl', player_id=28022, season=2022)
 ```
 
-_Last validated n/a._
-
 ## pff_api_player_position_pivot
 
 Player snap counts pivoted by position
@@ -154,8 +150,6 @@ Player snap counts pivoted by position
 ```python
 pff_api_player_position_pivot(league='nfl', player_id=28022, season=2022)
 ```
-
-_Last validated n/a._
 
 ## pff_api_player_offense_summary
 
@@ -235,8 +229,6 @@ Offense summary for one player
 ```python
 pff_api_player_offense_summary(league='nfl', player_id=28022, season=2022)
 ```
-
-_Last validated n/a._
 
 ## pff_api_player_offense_blocking
 
@@ -326,8 +318,6 @@ Blocking report for one player
 pff_api_player_offense_blocking(league='nfl', player_id=28022, season=2022)
 ```
 
-_Last validated n/a._
-
 ## pff_api_player_offense_pass_blocking
 
 Pass-blocking report for one player
@@ -415,8 +405,6 @@ Pass-blocking report for one player
 pff_api_player_offense_pass_blocking(league='nfl', player_id=28022, season=2022)
 ```
 
-_Last validated n/a._
-
 ## pff_api_player_offense_run_blocking
 
 Run-blocking report for one player
@@ -492,8 +480,6 @@ Run-blocking report for one player
 ```python
 pff_api_player_offense_run_blocking(league='nfl', player_id=28022, season=2022)
 ```
-
-_Last validated n/a._
 
 ## pff_api_player_passing_summary
 
@@ -599,8 +585,6 @@ Passing summary for one player
 ```python
 pff_api_player_passing_summary(league='nfl', player_id=28022, season=2022)
 ```
-
-_Last validated n/a._
 
 ## pff_api_player_passing_concept
 
@@ -856,5 +840,3 @@ Passing by play concept for one player
 ```python
 pff_api_player_passing_concept(league='nfl', player_id=28022, season=2022)
 ```
-
-_Last validated n/a._

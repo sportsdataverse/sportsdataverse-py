@@ -82,8 +82,6 @@ GET /api/secured/stats/defense/overview/season — one row per defender for the 
 nfl_pro_defense_overview_season(season=2024, season_type='REG')
 ```
 
-_Last validated n/a._
-
 ## nfl_pro_defense_overview_week
 
 GET /api/secured/stats/defense/overview/week — one row per defender per week — defensive overview incl. snap counts, pressures and havoc stops.
@@ -167,8 +165,6 @@ GET /api/secured/stats/defense/overview/week — one row per defender per week �
 nfl_pro_defense_overview_week(season=2024, season_type='REG')
 ```
 
-_Last validated n/a._
-
 ## nfl_pro_defense_nearest_season
 
 GET /api/secured/stats/defense/nearest/season — one row per defender for the season — nearest-defender coverage incl. targets, catch rate and CROE allowed.
@@ -243,8 +239,6 @@ GET /api/secured/stats/defense/nearest/season — one row per defender for the s
 ```python
 nfl_pro_defense_nearest_season(season=2024, season_type='REG')
 ```
-
-_Last validated n/a._
 
 ## nfl_pro_defense_nearest_week
 
@@ -328,5 +322,3 @@ GET /api/secured/stats/defense/nearest/week — one row per defender per week �
 ```python
 nfl_pro_defense_nearest_week(season=2024, season_type='REG')
 ```
-
-_Last validated n/a._

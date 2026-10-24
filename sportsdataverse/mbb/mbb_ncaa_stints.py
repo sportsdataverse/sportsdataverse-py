@@ -208,6 +208,7 @@ __all__ = [
     "build_lineup_id",
     "start_time_from_period",
     "duration_from_period",
+    "sides_from_box",
 ]
 
 #: Max total length of a player code (``ExtractorUtils.scala:12``).

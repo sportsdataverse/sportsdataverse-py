@@ -71,8 +71,6 @@ Schedule and results for one season: NL plus exhibitions.
 nl_schedule(season=2026)
 ```
 
-_Last validated n/a._
-
 ## nl_current_games
 
 The current or next game day.
@@ -136,8 +134,6 @@ The current or next game day.
 ```python
 nl_current_games(season=2027)
 ```
-
-_Last validated n/a._
 
 ## nl_playoffs
 
@@ -213,8 +209,6 @@ Playoff and play-in series by round: one row per game, with its series score.
 nl_playoffs(season=2026)
 ```
 
-_Last validated n/a._
-
 ## nl_playouts
 
 Playout and league-qualification series by round: one row per game, with its series score.
@@ -288,8 +282,6 @@ Playout and league-qualification series by round: one row per game, with its ser
 ```python
 nl_playouts(season=2026)
 ```
-
-_Last validated n/a._
 
 ## nl_game_overview
 
@@ -373,8 +365,6 @@ One game's header: teams, date, status, final and per-period score, coaches, ref
 nl_game_overview(game_id=20261105000325)
 ```
 
-_Last validated n/a._
-
 ## nl_pbp
 
 One game's event timeline: goals with assists, penalties, goaltender changes, revoked goals.
@@ -444,8 +434,6 @@ One game's event timeline: goals with assists, penalties, goaltender changes, re
 nl_pbp(game_id=20261105000325)
 ```
 
-_Last validated n/a._
-
 ## nl_lineups
 
 One game's lineups: every dressed player by unit, with licence number, position and line.
@@ -493,8 +481,6 @@ One game's lineups: every dressed player by unit, with licence number, position 
 ```python
 nl_lineups(game_id=20261105000325)
 ```
-
-_Last validated n/a._
 
 ## nl_shots
 
@@ -550,8 +536,6 @@ One game's shot attempts with rink location (metres) and expected goals (xG); NL
 ```python
 nl_shots(game_id=20261105000325)
 ```
-
-_Last validated n/a._
 
 ## nl_top_scorers
 
@@ -735,8 +719,6 @@ Top scorers (same row shape as /player).
 nl_top_scorers(phase=4940, season=2026, take=3)
 ```
 
-_Last validated n/a._
-
 ## nl_standings
 
 Standings with team season stats.
@@ -895,5 +877,3 @@ Standings with team season stats.
 ```python
 nl_standings(phase=4940, season=2026)
 ```
-
-_Last validated n/a._

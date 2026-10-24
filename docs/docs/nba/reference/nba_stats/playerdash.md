@@ -809,5 +809,3 @@ GET /stats/playerdashboardbyclutch
 ```python
 nba_stats_playerdashboardbyclutch(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._

@@ -308,8 +308,6 @@ GET /stats/teamdashboardbyshootingsplits
 nba_stats_teamdashboardbyshootingsplits(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_teamdashboardbyteamperformance
 
 GET /stats/teamdashboardbyteamperformance
@@ -607,8 +605,6 @@ GET /stats/teamdashboardbyteamperformance
 nba_stats_teamdashboardbyteamperformance(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_teamdashboardbyyearoveryear
 
 GET /stats/teamdashboardbyyearoveryear
@@ -781,5 +777,3 @@ GET /stats/teamdashboardbyyearoveryear
 ```python
 nba_stats_teamdashboardbyyearoveryear(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._

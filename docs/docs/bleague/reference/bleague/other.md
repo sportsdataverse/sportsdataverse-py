@@ -146,8 +146,6 @@ Game header: competition, round, venue, officials, tip-off, both teams and the s
 bleague_game_info(schedule_key=504734)
 ```
 
-_Last validated n/a._
-
 ## bleague_period_scores
 
 Points each team scored in each period of a game, overtime included.
@@ -190,8 +188,6 @@ Points each team scored in each period of a game, overtime included.
 ```python
 bleague_period_scores(schedule_key=504734)
 ```
-
-_Last validated n/a._
 
 ## bleague_player_box
 
@@ -279,8 +275,6 @@ Player box score per period category: minutes, points, shooting, rebounds, assis
 bleague_player_box(schedule_key=504734)
 ```
 
-_Last validated n/a._
-
 ## bleague_pbp
 
 Play-by-play of a finished game in game order, with decoded action codes and x / y from 2022-23.
@@ -354,8 +348,6 @@ Play-by-play of a finished game in game order, with decoded action codes and x /
 bleague_pbp(schedule_key=504734)
 ```
 
-_Last validated n/a._
-
 ## bleague_shots
 
 Field-goal attempts with court position (2022-23 onward, v2 feed).
@@ -415,8 +407,6 @@ Field-goal attempts with court position (2022-23 onward, v2 feed).
 bleague_shots(schedule_key=504734)
 ```
 
-_Last validated n/a._
-
 ## bleague_leaders
 
 Team leaders per statistic and period category (v1 feed only).
@@ -470,8 +460,6 @@ Team leaders per statistic and period category (v1 feed only).
 bleague_leaders(schedule_key=504734)
 ```
 
-_Last validated n/a._
-
 ## bleague_score_track
 
 Running score after each scoring event (v1 feed only).
@@ -514,8 +502,6 @@ Running score after each scoring event (v1 feed only).
 ```python
 bleague_score_track(schedule_key=504734)
 ```
-
-_Last validated n/a._
 
 ## bleague_standings
 
@@ -574,5 +560,3 @@ Standings of one season and division, per conference / division table and wild c
 ```python
 bleague_standings(season=2026, tab=1)
 ```
-
-_Last validated n/a._

@@ -134,8 +134,6 @@ Recent, live and upcoming games, one row per game with its past / present / futu
 scb_games_recent()
 ```
 
-_Last validated n/a._
-
 ## scb_game_players
 
 Box score of a finished game: one row per player line of both teams (2002-03 on).
@@ -216,8 +214,6 @@ Box score of a finished game: one row per player line of both teams (2002-03 on)
 ```python
 scb_game_players(game_id='2006920')
 ```
-
-_Last validated n/a._
 
 ## scb_game_teams
 
@@ -318,8 +314,6 @@ Box score of a finished game: one row per team, with the head coach and the team
 scb_game_teams(game_id='2006920')
 ```
 
-_Last validated n/a._
-
 ## scb_game_actions
 
 Play-by-play of a finished game with shot x/y (BBL 2008-09 on, DBBL 2024-25 on).
@@ -375,5 +369,3 @@ Play-by-play of a finished game with shot x/y (BBL 2008-09 on, DBBL 2024-25 on).
 ```python
 scb_game_actions(game_id='2006920')
 ```
-
-_Last validated n/a._

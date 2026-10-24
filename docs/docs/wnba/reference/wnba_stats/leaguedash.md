@@ -126,8 +126,6 @@ GET /stats/leaguedashlineups
 wnba_stats_leaguedashlineups(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_leaguedashplayerbiostats
 
 GET /stats/leaguedashplayerbiostats
@@ -216,8 +214,6 @@ GET /stats/leaguedashplayerbiostats
 ```python
 wnba_stats_leaguedashplayerbiostats(league_id='10', season='2024')
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_leaguedashplayerclutch
 
@@ -360,8 +356,6 @@ GET /stats/leaguedashplayerclutch
 wnba_stats_leaguedashplayerclutch(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_leaguedashplayershotlocations
 
 GET /stats/leaguedashplayershotlocations
@@ -465,8 +459,6 @@ GET /stats/leaguedashplayershotlocations
 ```python
 wnba_stats_leaguedashplayershotlocations(league_id='10', season='2024')
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_leaguedashplayerstats
 
@@ -606,8 +598,6 @@ GET /stats/leaguedashplayerstats
 wnba_stats_leaguedashplayerstats(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_leaguedashptdefend
 
 GET /stats/leaguedashptdefend
@@ -687,8 +677,6 @@ GET /stats/leaguedashptdefend
 ```python
 wnba_stats_leaguedashptdefend(league_id='10', season='2024')
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_leaguedashteamclutch
 
@@ -810,5 +798,3 @@ GET /stats/leaguedashteamclutch
 ```python
 wnba_stats_leaguedashteamclutch(league_id='10', season='2024')
 ```
-
-_Last validated n/a._

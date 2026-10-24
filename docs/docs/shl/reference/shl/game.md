@@ -89,8 +89,6 @@ Game header: StatNet extId, arena, state, teams, scores.
 shl_game_header(game_uuid='bdhvuc5tex')
 ```
 
-_Last validated n/a._
-
 ## shl_game_overview
 
 Score, state, clock, StatNet gameId and gameSourceId.
@@ -148,8 +146,6 @@ Score, state, clock, StatNet gameId and gameSourceId.
 shl_game_overview(game_uuid='bdhvuc5tex')
 ```
 
-_Last validated n/a._
-
 ## shl_game_summary
 
 Goals by period, head-to-head summary, best scorers.
@@ -191,5 +187,3 @@ Goals by period, head-to-head summary, best scorers.
 ```python
 shl_game_summary(game_uuid='bdhvuc5tex')
 ```
-
-_Last validated n/a._

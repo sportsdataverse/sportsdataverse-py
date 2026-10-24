@@ -80,8 +80,6 @@ Single club detail (stats-api).
 mls_club(club_id='MLS-CLU-000001')
 ```
 
-_Last validated n/a._
-
 ## mls_competition_seasons
 
 List seasons for a competition (stats-api).
@@ -118,8 +116,6 @@ List seasons for a competition (stats-api).
 ```python
 mls_competition_seasons(competition_id='MLS-COM-000001')
 ```
-
-_Last validated n/a._
 
 ## mls_competitions
 
@@ -159,8 +155,6 @@ List competitions (stats-api).
 ```python
 mls_competitions()
 ```
-
-_Last validated n/a._
 
 ## mls_content_season
 
@@ -229,8 +223,6 @@ Season content entity by slug (dapi / Contentful).
 mls_content_season(slug='mls-regular-season-2026')
 ```
 
-_Last validated n/a._
-
 ## mls_content_seasons
 
 Query season content entities (dapi / Contentful).
@@ -292,8 +284,6 @@ Query season content entities (dapi / Contentful).
 ```python
 mls_content_seasons()
 ```
-
-_Last validated n/a._
 
 ## mls_match
 
@@ -363,8 +353,6 @@ Single match detail incl. lineups + referees (stats-api).
 ```python
 mls_match(match_id='MLS-MAT-0009H8')
 ```
-
-_Last validated n/a._
 
 ## mls_season_matches
 
@@ -448,8 +436,6 @@ List matches in a season, date-windowed (stats-api).
 mls_season_matches(season_id='MLS-SEA-0001KA')
 ```
 
-_Last validated n/a._
-
 ## mls_sportapi_club_players
 
 Club roster with player Sportec ids (sportapi).
@@ -510,8 +496,6 @@ Club roster with player Sportec ids (sportapi).
 mls_sportapi_club_players(club_id='MLS-CLU-000001')
 ```
 
-_Last validated n/a._
-
 ## mls_sportapi_clubs_by_sportec_ids
 
 Batch club detail by Sportec ids (sportapi).
@@ -558,8 +542,6 @@ Batch club detail by Sportec ids (sportapi).
 ```python
 mls_sportapi_clubs_by_sportec_ids(ids='MLS-MAT-0009H8')
 ```
-
-_Last validated n/a._
 
 ## mls_sportapi_match
 
@@ -674,8 +656,6 @@ Single match detail (sportapi / .NET).
 mls_sportapi_match(match_id='MLS-MAT-0009H8')
 ```
 
-_Last validated n/a._
-
 ## mls_sportapi_matches_by_sportec_ids
 
 Batch match detail by Sportec ids (sportapi).
@@ -787,8 +767,6 @@ Batch match detail by Sportec ids (sportapi).
 mls_sportapi_matches_by_sportec_ids(ids='MLS-MAT-0009H8')
 ```
 
-_Last validated n/a._
-
 ## mls_standings
 
 Standings table for a competition season (stats-api).
@@ -853,5 +831,3 @@ Standings table for a competition season (stats-api).
 ```python
 mls_standings(competition_id='MLS-COM-000001', season_id='MLS-SEA-0001KA')
 ```
-
-_Last validated n/a._

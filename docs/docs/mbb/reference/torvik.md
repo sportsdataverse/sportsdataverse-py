@@ -89,8 +89,6 @@ GET /{year}_team_results.csv — men's T-Rank team ratings (adjoe/adjde/barthag,
 torvik_ratings(year=2025)
 ```
 
-_Last validated n/a._
-
 ## torvik_team_factors
 
 GET /{year}_fffinal.csv — men's four-factors splits (eFG%/FTR/OR%/TO% offense + defense, with per-stat ranks).
@@ -167,8 +165,6 @@ GET /{year}_fffinal.csv — men's four-factors splits (eFG%/FTR/OR%/TO% offense 
 torvik_team_factors(year=2025)
 ```
 
-_Last validated n/a._
-
 ## torvik_game_stats
 
 GET /getgamestats.php?year=&json=1 — men's per-team-game efficiency and four-factors log (one row per team-game, 31 positional fields).
@@ -237,8 +233,6 @@ GET /getgamestats.php?year=&json=1 — men's per-team-game efficiency and four-f
 ```python
 torvik_game_stats(year=2025)
 ```
-
-_Last validated n/a._
 
 ## torvik_player_stats
 
@@ -343,8 +337,6 @@ GET /getadvstats.php?year=&csv=1 — men's player advanced stats (one row per pl
 torvik_player_stats(year=2025)
 ```
 
-_Last validated n/a._
-
 ## torvik_game_schedule
 
 GET /{year}_super_sked.json — men's season schedule/results with T-Rank projections (one row per game, 55 positional fields).
@@ -437,5 +429,3 @@ GET /{year}_super_sked.json — men's season schedule/results with T-Rank projec
 ```python
 torvik_game_schedule(year=2025)
 ```
-
-_Last validated n/a._

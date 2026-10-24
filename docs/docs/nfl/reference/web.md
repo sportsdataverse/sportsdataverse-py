@@ -65,8 +65,6 @@ ESPN endpoint.
 espn_nfl_player_overview(athlete_id='4239')
 ```
 
-_Last validated n/a._
-
 ## espn_nfl_player_stats_v3
 
 ESPN endpoint.
@@ -159,8 +157,6 @@ ESPN endpoint.
 espn_nfl_player_stats_v3(athlete_id='3139477')
 ```
 
-_Last validated n/a._
-
 ## espn_nfl_player_gamelog
 
 ESPN endpoint.
@@ -223,8 +219,6 @@ ESPN endpoint.
 espn_nfl_player_gamelog(athlete_id='4239')
 ```
 
-_Last validated n/a._
-
 ## espn_nfl_player_splits
 
 ESPN endpoint.
@@ -267,8 +261,6 @@ ESPN endpoint.
 ```python
 espn_nfl_player_splits(athlete_id='4239')
 ```
-
-_Last validated n/a._
 
 ## espn_nfl_leaders
 
@@ -347,5 +339,3 @@ ESPN endpoint.
 ```python
 espn_nfl_leaders()
 ```
-
-_Last validated n/a._

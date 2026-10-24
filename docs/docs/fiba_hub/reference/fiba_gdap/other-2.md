@@ -60,8 +60,6 @@ Rounds of a competition (group stage, knockout rounds).
 fiba_gdap_rounds(comp=208182)
 ```
 
-_Last validated n/a._
-
 ## fiba_gdap_schedule
 
 Schedule and results of one competition (edition): one row per game.
@@ -182,5 +180,3 @@ Schedule and results of one competition (edition): one row per game.
 ```python
 fiba_gdap_schedule(comp=208182)
 ```
-
-_Last validated n/a._

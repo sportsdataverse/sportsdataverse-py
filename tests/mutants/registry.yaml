@@ -2396,6 +2396,69 @@
   test: tests/test_deprecations.py -k league_config
   expected: kill
   note: league_config.WBB (periods=4, wrong before 2015-16) resolves without a DeprecationWarning.
+- id: dl-utils-espnhttp-access-silent
+  group: dead-public
+  finding: A-L32
+  file: sportsdataverse/dl_utils.py
+  snippet: "        warn_deprecated(\n            f\"sportsdataverse.dl_utils.{name}\","
+  mutant: "        (lambda *a, **k: None)(\n            f\"sportsdataverse.dl_utils.{name}\","
+  test: tests/test_deprecations.py -k dl_utils_http_classes
+  expected: kill
+  note: dl_utils.ESPNHTTP / ESPNResponse resolve without a DeprecationWarning.
+- id: janitor-to-pascal-case-silent
+  group: dead-public
+  finding: C-L59
+  file: sportsdataverse/dl_utils.py
+  snippet: "        warn_deprecated(\n            \"DataFrame.janitor.to_pascal_case\","
+  mutant: "        (lambda *a, **k: None)(\n            \"DataFrame.janitor.to_pascal_case\","
+  test: tests/test_deprecations.py -k "janitor_case_methods and to_pascal_case"
+  expected: kill
+  note: df.janitor.to_pascal_case() renames without a DeprecationWarning.
+- id: janitor-to-camel-case-silent
+  group: dead-public
+  finding: C-L59
+  file: sportsdataverse/dl_utils.py
+  snippet: "        warn_deprecated(\n            \"DataFrame.janitor.to_camel_case\","
+  mutant: "        (lambda *a, **k: None)(\n            \"DataFrame.janitor.to_camel_case\","
+  test: tests/test_deprecations.py -k "janitor_case_methods and to_camel_case"
+  expected: kill
+  note: df.janitor.to_camel_case() renames without a DeprecationWarning.
+- id: janitor-to-kebab-case-silent
+  group: dead-public
+  finding: C-L59
+  file: sportsdataverse/dl_utils.py
+  snippet: "        warn_deprecated(\n            \"DataFrame.janitor.to_kebab_case\","
+  mutant: "        (lambda *a, **k: None)(\n            \"DataFrame.janitor.to_kebab_case\","
+  test: tests/test_deprecations.py -k "janitor_case_methods and to_kebab_case"
+  expected: kill
+  note: df.janitor.to_kebab_case() renames without a DeprecationWarning.
+- id: record-time-usage-not-deprecated
+  group: dead-public
+  finding: C-L46
+  file: sportsdataverse/decorators.py
+  snippet: "@deprecated(replacement=\"sportsdataverse.decorators.timer(number=1)\", since=\"0.1.6\", removed_in=\"0.2.0\")\n"
+  mutant: "@(lambda f: f)\n"
+  test: tests/test_deprecations.py -k record_time_usage
+  expected: kill
+  note: record_time_usage applies without a DeprecationWarning.
+- id: record-mem-usage-not-deprecated
+  group: dead-public
+  finding: C-L46
+  file: sportsdataverse/decorators.py
+  snippet: "@deprecated(\n    replacement=\"tracemalloc or psutil.Process().memory_info() directly\",\n    since=\"0.1.6\",\n    removed_in=\"0.2.0\",\n)\n"
+  mutant: "@(lambda f: f)\n"
+  test: tests/test_deprecations.py -k record_mem_usage
+  expected: kill
+  note: record_mem_usage applies without a DeprecationWarning.
+- id: config-dead-url-access-silent
+  group: dead-public
+  finding: C-L45
+  file: sportsdataverse/config.py
+  snippet: "        warn_deprecated(\n            f\"sportsdataverse.config.{name}\","
+  mutant: "        (lambda *a, **k: None)(\n            f\"sportsdataverse.config.{name}\","
+  test: tests/test_deprecations.py -k config_dead_urls
+  expected: kill
+  note: config.NBA_BASE_URL (unread since the generated loaders) resolves without a DeprecationWarning.
 - id: ncaa-pbp-format-guard-silent
   group: ncaa-era
   finding: B-GB-27

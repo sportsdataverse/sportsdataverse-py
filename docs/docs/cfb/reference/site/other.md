@@ -96,8 +96,6 @@ ESPN endpoint.
 espn_cfb_scoreboard(dates='20240115')
 ```
 
-_Last validated n/a._
-
 ## espn_cfb_summary
 
 ESPN endpoint.
@@ -482,8 +480,6 @@ ESPN endpoint.
 espn_cfb_summary()
 ```
 
-_Last validated n/a._
-
 ## espn_cfb_calendar_site
 
 ESPN endpoint.
@@ -516,8 +512,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_cfb_calendar_site()
 ```
-
-_Last validated n/a._
 
 ## espn_cfb_news
 
@@ -575,8 +569,6 @@ ESPN endpoint.
 espn_cfb_news()
 ```
 
-_Last validated n/a._
-
 ## espn_cfb_injuries
 
 ESPN endpoint.
@@ -613,8 +605,6 @@ ESPN endpoint.
 ```python
 espn_cfb_injuries()
 ```
-
-_Last validated n/a._
 
 ## espn_cfb_transactions
 
@@ -662,8 +652,6 @@ ESPN endpoint.
 espn_cfb_transactions()
 ```
 
-_Last validated n/a._
-
 ## espn_cfb_conferences
 
 ESPN endpoint.
@@ -706,8 +694,6 @@ ESPN endpoint.
 espn_cfb_conferences()
 ```
 
-_Last validated n/a._
-
 ## espn_cfb_statistics_league
 
 ESPN endpoint.
@@ -741,8 +727,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 espn_cfb_statistics_league()
 ```
 
-_Last validated n/a._
-
 ## espn_cfb_draft
 
 ESPN endpoint.
@@ -775,8 +759,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 ```python
 espn_cfb_draft()
 ```
-
-_Last validated n/a._
 
 ## espn_cfb_player_info
 
@@ -812,8 +794,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 espn_cfb_player_info(athlete_id='4239')
 ```
 
-_Last validated n/a._
-
 ## espn_cfb_player_bio
 
 ESPN endpoint.
@@ -847,8 +827,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_cfb_player_bio(athlete_id='4239')
 ```
-
-_Last validated n/a._
 
 ## espn_cfb_player_news
 
@@ -905,8 +883,6 @@ ESPN endpoint.
 ```python
 espn_cfb_player_news(athlete_id='4239')
 ```
-
-_Last validated n/a._
 
 ## espn_cfb_standings
 
@@ -971,8 +947,6 @@ ESPN endpoint.
 espn_cfb_standings()
 ```
 
-_Last validated n/a._
-
 ## espn_cfb_rankings
 
 ESPN endpoint.
@@ -1031,5 +1005,3 @@ ESPN endpoint.
 ```python
 espn_cfb_rankings()
 ```
-
-_Last validated n/a._

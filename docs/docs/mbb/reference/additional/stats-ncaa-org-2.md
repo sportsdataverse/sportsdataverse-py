@@ -1,10 +1,134 @@
 ---
-title: "MBB — additional Python functions — stats.ncaa.org: enrich_shot–ncaa_mbb"
-sidebar_label: "stats.ncaa.org: enrich_shot–ncaa_mbb"
+title: "MBB — additional Python functions — stats.ncaa.org: current_ncaa–ncaa_mbb"
+sidebar_label: "stats.ncaa.org: current_ncaa–ncaa_mbb"
 sidebar_position: 4
-description: "MBB — additional Python functions — stats.ncaa.org: enrich_shot–ncaa_mbb — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — stats.ncaa.org: current_ncaa–ncaa_mbb — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — stats.ncaa.org: enrich_shot–ncaa_mbb
+# MBB — additional Python functions — stats.ncaa.org: current_ncaa–ncaa_mbb
+
+### current_ncaa_team_alts {#current_ncaa_team_alts}
+
+`current_ncaa_team_alts(doc: 'Tag') -> 'list[str]'`
+
+The two team names from a *current* (2026) stats.ncaa.org game page.
+
+Both team logos render as `a.skipMask > img[alt]` on the modern
+play-by-play / box-score / individual-stats pages -- the `alt` is the
+short team name (e.g. `"Illinois"`), in `[home_or_first, second]`
+document order, deduped (the individual-stats page repeats each team).
+
+This is the current-markup counterpart to the cbb-explorer `:2018+`
+`team_finder` selectors (`div.card-header img[alt]` for the box,
+`table[align=center] > tbody a > img[alt]` for the pbp), which no
+longer match: NCAA's markup drifted since cbb-explorer's ~2020 capture.
+The v1 `team_finder`\ s try their ported selector first, then fall
+back here, so both the vendored-era and current pages resolve.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `doc` | `Tag` |  | A parsed stats.ncaa.org game page (`parse_html`). |
+
+**Returns**
+
+The distinct team-logo `alt` texts in document order: `[]` when the page carries no team logos, one name when only one team has a logo.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import current_ncaa_team_alts, parse_html
+
+html = '<a class="skipMask"><img alt="Illinois"></a><a class="skipMask"><img alt="Purdue"></a>'
+current_ncaa_team_alts(parse_html(html))
+# ['Illinois', 'Purdue']
+```
+
+### duration_from_period {#duration_from_period}
+
+`duration_from_period(period: 'int', is_women_game: 'bool') -> 'float'`
+
+The game duration (minutes elapsed) once `period` has completed
+
+(`ExtractorUtils.scala:286-287`: `start_time_from_period(period + 1,
+...)`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `period` | `int` |  | The 1-indexed period number. |
+| `is_women_game` | `bool` |  | Whether to use the women's or men's period schedule. |
+
+**Returns**
+
+The game-clock minute at the end of `period`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_stints import duration_from_period
+duration_from_period(2, is_women_game=False)  # 40.0 (end of men's regulation)
+duration_from_period(4, is_women_game=True)  # 40.0 (end of women's regulation)
+```
+
+### enrich_and_reverse_game_events {#enrich_and_reverse_game_events}
+
+`enrich_and_reverse_game_events(in_events: 'list[PlayByPlayEvent]') -> 'list[PlayByPlayEvent]'`
+
+Inserts game-break events and turns descending per-row times into
+
+ascending game-clock minutes, returning the whole list latest-to-earliest
+(`PlayByPlayParser.enrich_and_reverse_game_events`, `:297-370`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `in_events` | `list[PlayByPlayEvent]` |  | The raw parsed events, earliest to latest, with each `.min` still a per-period DESCENDING clock reading. |
+
+**Returns**
+
+`in_events` with `~sportsdataverse.mbb.mbb_ncaa_stints .GameBreakEvent`\ s inserted at every period boundary, every `.min` converted to an ASCENDING whole-game reading, and a trailing (once reversed, LEADING) `~sportsdataverse.mbb .mbb_ncaa_stints.GameEndEvent` -- the whole list in LATEST-TO-EARLIEST order (the caller is expected to `reversed(...)` it back when chronological order is wanted, exactly like `get_sorted_pbp_events` does).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_models import Score
+from sportsdataverse.mbb.mbb_ncaa_pbp_parser import enrich_and_reverse_game_events
+from sportsdataverse.mbb.mbb_ncaa_stints import OtherTeamEvent
+
+events = [OtherTeamEvent(18.0, Score(1, 1), "tipoff")]
+reversed_enriched = enrich_and_reverse_game_events(events)
+reversed_enriched[0].__class__.__name__  # 'GameEndEvent'
+```
+
+### enrich_lineup {#enrich_lineup}
+
+`enrich_lineup(lineup: 'LineupEvent') -> 'LineupEvent'`
+
+Populate `pts`/`plus_minus` from the score delta, then run the
+
+full stat-tree enrichment (`enrich_lineup`, `LineupUtils.scala:29-46`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineup` | `LineupEvent` |  | The lineup event to enrich (not mutated -- see the module docstring's "Scala idiom decisions"). |
+
+**Returns**
+
+A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEvent` with `team_stats`/`opponent_stats` fully populated.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import enrich_lineup
+
+enriched = enrich_lineup(lineup)
+enriched.team_stats.pts
+```
 
 ### enrich_shot_events_with_pbp {#enrich_shot_events_with_pbp}
 
@@ -164,6 +288,42 @@ under `==` (`ensure_ev_uniqueness`, `LineupUtils.scala:105-111`).
 **Returns**
 
 A new `~sportsdataverse.mbb.mbb_ncaa_possessions.ConcurrentClump` with each event's `min` incremented by `1e-6 * index`.
+
+### expand_xwalk_aliases {#expand_xwalk_aliases}
+
+`expand_xwalk_aliases(xwalk: 'pl.DataFrame', observed: 'pl.DataFrame', *, name_changes: "'pl.DataFrame | None'" = None) -> 'pl.DataFrame'`
+
+Add alias rows for on-floor names the exact key misses.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `xwalk` | `DataFrame` |  | Output of `build_player_xwalk`. |
+| `observed` | `DataFrame` |  | Frame with `team` and `player` -- the distinct (team, player) pairs seen in the possessions slots. |
+| `name_changes` | `DataFrame \| None` | `None` | Optional frame with `team`, `name_game_time` and `name_current` -- the id-bound crosswalk built from the `box_score` page (`dev/ncaa_rapm/build_name_changes.py`). Injected rather than loaded so this stays pure and testable. |
+
+**Returns**
+
+`xwalk` plus one row per confidently-resolved alias. Never fewer rows than the input, and idempotent.
+
+| col_name | type | description |
+|---|---|---|
+| `team` | character | Team-side label or team identifier. |
+| `player_key` | character | Normalized name-code (diacritics folded, upper-cased, trailing dots dropped) that joins possessions to rosters. |
+| `player_id` | character | Unique player identifier. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_rapm_input import (
+    build_player_xwalk, expand_xwalk_aliases, observed_pairs,
+)
+
+xwalk = expand_xwalk_aliases(
+    build_player_xwalk(team_rosters), observed_pairs(possessions)
+)
+```
 
 ### extract_player_from_ev {#extract_player_from_ev}
 
@@ -1456,100 +1616,4 @@ acc_pd = ncaa_mbb_date_games("02/01/2025", conference="ACC",
 # Pipeline next step (one line)
 
 games.filter(pl.col("game_id").is_not_null())["game_id"].to_list()
-```
-
-### ncaa_mbb_join_pbp_shots {#ncaa_mbb_join_pbp_shots}
-
-`ncaa_mbb_join_pbp_shots(pbp: 'pl.DataFrame', shots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"`
-
-Attach shot-chart coordinates to play-by-play rows (bigballR
-
-`join_pbp_shots`, `get_shot_locations.R:93-135`).
-
-FG attempts (`shot_value` 2/3) are matched to chart shots on
-`(game_id, game_seconds, event_result == shot_result, shot_no)` where
-`shot_no` is the within-second same-result sequence number on BOTH
-sides — free throws and non-shot rows are deliberately excluded from
-matching (the chart plots FGs only) and pass through NA-filled. Row
-count and per-game row order are preserved; the explicit `shot_dist`
-carry-through is fork-skew fix #11 (wbigballR's unexported copy drops
-it). Works identically for the WBB extension — feed it quarter-model
-pbp + shots frames.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | The 35-column snake_case pbp contract frame (see `~sportsdataverse.mbb.mbb_ncaa_game_pbp.PBP_SCHEMA`). |
-| `shots` | `DataFrame` |  | A `SHOTS_SCHEMA` frame (from `parse_ncaa_bb_shots` / `ncaa_mbb_shot_locations`) covering exactly the same game ids. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-The input pbp frame + `team`, `player`, `x`, `y`, `shot_dist` (null on non-FG rows and unmatched FG rows), sorted by (game_id, original per-game row order) exactly as R's `arrange(row, .by_group = TRUE)`.
-
-| col_name | type | description |
-|---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `home` | character | Home. |
-| `away` | character | Away record. |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `clock` | character | Game clock value. |
-| `game_time` | character | Game start time. |
-| `game_seconds` | integer |  |
-| `home_score` | integer | Home team score at the time of the play. |
-| `away_score` | integer | Away team score at the time of the play. |
-| `event_team` | character |  |
-| `event_description` | character |  |
-| `player_1` | character |  |
-| `player_2` | character |  |
-| `event_type` | character | Event / play type code (V2 PBP). |
-| `event_result` | character |  |
-| `shot_value` | integer | Point value of the shot (2 or 3). |
-| `event_length` | integer |  |
-| `poss_num` | integer |  |
-| `poss_team` | character |  |
-| `poss_length` | integer |  |
-| `is_transition` | logical |  |
-| `home_1` | character |  |
-| `home_2` | character |  |
-| `home_3` | character |  |
-| `home_4` | character |  |
-| `home_5` | character |  |
-| `away_1` | character |  |
-| `away_2` | character |  |
-| `away_3` | character |  |
-| `away_4` | character |  |
-| `away_5` | character |  |
-| `status` | character | Status label. |
-| `is_garbage_time` | logical |  |
-| `sub_deviate` | integer |  |
-| `team` | character | Team-side label or team identifier. |
-| `player` | character | Player name. |
-| `x` | double | X. |
-| `y` | double | Y. |
-| `shot_dist` | double |  |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If the pbp and shots game-id sets differ (R `stop("PBP and Shot Locations do not match.")`, `:97-99`), or if a join-key dtype disagrees between the two frames. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_game_pbp import ncaa_mbb_play_by_play
-from sportsdataverse.mbb.mbb_ncaa_shots import (
-    ncaa_mbb_join_pbp_shots,
-    ncaa_mbb_shot_locations,
-)
-pbp = ncaa_mbb_play_by_play(["6470186"])
-shots = ncaa_mbb_shot_locations(["6470186"])
-joined = ncaa_mbb_join_pbp_shots(pbp, shots)
-
-# Pipeline next step (one line)
-
-joined.filter(pl.col("x").is_not_null()).head()
 ```

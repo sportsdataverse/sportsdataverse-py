@@ -112,8 +112,6 @@ Receiving summary for one player
 pff_api_player_receiving_summary(league='nfl', player_id=28022, season=2022)
 ```
 
-_Last validated n/a._
-
 ## pff_api_player_defense_summary
 
 Defense summary for one player
@@ -225,8 +223,6 @@ Defense summary for one player
 pff_api_player_defense_summary(league='nfl', player_id=28022, season=2022)
 ```
 
-_Last validated n/a._
-
 ## pff_api_player_field_goal_summary
 
 Field-goal kicking for one player
@@ -311,8 +307,6 @@ Field-goal kicking for one player
 pff_api_player_field_goal_summary(league='nfl', player_id=28022, season=2022)
 ```
 
-_Last validated n/a._
-
 ## pff_api_player_kickoff_summary
 
 Kickoffs for one player
@@ -389,8 +383,6 @@ Kickoffs for one player
 ```python
 pff_api_player_kickoff_summary(league='nfl', player_id=28022, season=2022)
 ```
-
-_Last validated n/a._
 
 ## pff_api_player_punting_summary
 
@@ -475,8 +467,6 @@ Punting for one player
 pff_api_player_punting_summary(league='nfl', player_id=28022, season=2022)
 ```
 
-_Last validated n/a._
-
 ## pff_api_player_return_summary
 
 Kick and punt returns for one player
@@ -559,8 +549,6 @@ Kick and punt returns for one player
 pff_api_player_return_summary(league='nfl', player_id=28022, season=2022)
 ```
 
-_Last validated n/a._
-
 ## pff_api_player_special_summary
 
 Special-teams summary for one player
@@ -637,5 +625,3 @@ Special-teams summary for one player
 ```python
 pff_api_player_special_summary(league='nfl', player_id=28022, season=2022)
 ```
-
-_Last validated n/a._

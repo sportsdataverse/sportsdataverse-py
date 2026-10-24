@@ -49,8 +49,6 @@ GET /api/v1/venues/{venueId} — single venue detail.
 mlb_venue(venue_id=15)
 ```
 
-_Last validated n/a._
-
 ## mlb_meta
 
 GET /api/v1/{metaType} — enum lookup (the API's self-describing surface).
@@ -81,8 +79,6 @@ GET /api/v1/{metaType} — enum lookup (the API's self-describing surface).
 ```python
 mlb_meta(meta_type='leagueLeaderTypes')
 ```
-
-_Last validated n/a._
 
 ## mlb_awards
 
@@ -128,8 +124,6 @@ GET /api/v1/awards — list award IDs (call with no params to enumerate).
 ```python
 mlb_awards()
 ```
-
-_Last validated n/a._
 
 ## mlb_award_recipients
 
@@ -183,8 +177,6 @@ GET /api/v1/awards/{awardId}/recipients — historical winners of one award.
 mlb_award_recipients(award_id='MLBHOF')
 ```
 
-_Last validated n/a._
-
 ## mlb_umpires
 
 GET /api/v1/jobs/umpires — current umpire crew assignments.
@@ -225,8 +217,6 @@ GET /api/v1/jobs/umpires — current umpire crew assignments.
 ```python
 mlb_umpires()
 ```
-
-_Last validated n/a._
 
 ## mlb_conferences
 
@@ -275,8 +265,6 @@ View all PCL conferences.
 mlb_conferences()
 ```
 
-_Last validated n/a._
-
 ## mlb_conference
 
 View PCL conferences by conferenceId.
@@ -324,8 +312,6 @@ View PCL conferences by conferenceId.
 mlb_conference(conference_id=301)
 ```
 
-_Last validated n/a._
-
 ## mlb_analytics_games
 
 View timestamps of most recent data corrections made to games.
@@ -366,8 +352,6 @@ No returns table is published for this endpoint: no capture: statsapi.mlb.com an
 mlb_analytics_games()
 ```
 
-_Last validated n/a._
-
 ## mlb_analytics_guids
 
 View timestamps of most recent data corrections made to GUIDs.
@@ -407,8 +391,6 @@ No returns table is published for this endpoint: no capture: statsapi.mlb.com an
 ```python
 mlb_analytics_guids()
 ```
-
-_Last validated n/a._
 
 ## mlb_high_low
 
@@ -472,8 +454,6 @@ View high/low stats by player or team.
 mlb_high_low(org_type='player', stat_group='hitting', sort_stat='homeRuns', season='2023')
 ```
 
-_Last validated n/a._
-
 ## mlb_free_agents
 
 View biographical information and stats for Free Agents.
@@ -529,8 +509,6 @@ View biographical information and stats for Free Agents.
 mlb_free_agents(season='2023')
 ```
 
-_Last validated n/a._
-
 ## mlb_jobs
 
 View directory by jobType.
@@ -575,8 +553,6 @@ View directory by jobType.
 ```python
 mlb_jobs(job_type='UMPR')
 ```
-
-_Last validated n/a._
 
 ## mlb_datacasters
 
@@ -623,8 +599,6 @@ View datacasters directory.
 mlb_datacasters()
 ```
 
-_Last validated n/a._
-
 ## mlb_official_scorers
 
 View official scorer directory.
@@ -670,8 +644,6 @@ View official scorer directory.
 mlb_official_scorers()
 ```
 
-_Last validated n/a._
-
 ## mlb_umpire_games
 
 Get umpires and associated game for umpireId.
@@ -708,8 +680,6 @@ No returns table is published for this endpoint: no capture: statsapi.mlb.com an
 ```python
 mlb_umpire_games(umpire_id=596809, season='2023')
 ```
-
-_Last validated n/a._
 
 ## mlb_seasons_all
 
@@ -771,8 +741,6 @@ View information for all seasons based on id.
 mlb_seasons_all(sport_id=1)
 ```
 
-_Last validated n/a._
-
 ## mlb_sport
 
 View information for any given sportId.
@@ -815,8 +783,6 @@ View information for any given sportId.
 ```python
 mlb_sport(sport_id=1)
 ```
-
-_Last validated n/a._
 
 ## mlb_stats_metrics
 
@@ -865,5 +831,3 @@ No returns table is published for this endpoint: no capture: statsapi.mlb.com an
 ```python
 mlb_stats_metrics()
 ```
-
-_Last validated n/a._

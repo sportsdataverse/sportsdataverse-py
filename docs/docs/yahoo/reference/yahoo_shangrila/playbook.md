@@ -215,8 +215,6 @@ Yahoo shangrila persisted query `playbookBoxscore` -> tables: football_positions
 yahoo_playbook_boxscore()
 ```
 
-_Last validated n/a._
-
 ## yahoo_playbook_boxscore_poll
 
 Yahoo shangrila persisted query `playbookBoxscorePoll` -> tables: football_positions, football_stat_types, games
@@ -387,8 +385,6 @@ Yahoo shangrila persisted query `playbookBoxscorePoll` -> tables: football_posit
 yahoo_playbook_boxscore_poll()
 ```
 
-_Last validated n/a._
-
 ## yahoo_playbook_boxscore_social_share
 
 Yahoo shangrila persisted query `playbookBoxscoreSocialShare` -> one row per `games` entry
@@ -438,8 +434,6 @@ Yahoo shangrila persisted query `playbookBoxscoreSocialShare` -> one row per `ga
 yahoo_playbook_boxscore_social_share()
 ```
 
-_Last validated n/a._
-
 ## yahoo_playbook_combat_match
 
 Yahoo shangrila persisted query `playbookCombatMatch` -> one row per `games` entry
@@ -474,8 +468,6 @@ Yahoo shangrila persisted query `playbookCombatMatch` -> one row per `games` ent
 ```python
 yahoo_playbook_combat_match()
 ```
-
-_Last validated n/a._
 
 ## yahoo_playbook_game
 
@@ -598,8 +590,6 @@ Yahoo shangrila persisted query `playbookGame` -> one row per `games` entry
 yahoo_playbook_game()
 ```
 
-_Last validated n/a._
-
 ## yahoo_playbook_game_odds_poll
 
 Yahoo shangrila persisted query `playbookGameOddsPoll` -> one row per `games` entry
@@ -639,8 +629,6 @@ Yahoo shangrila persisted query `playbookGameOddsPoll` -> one row per `games` en
 yahoo_playbook_game_odds_poll()
 ```
 
-_Last validated n/a._
-
 ## yahoo_playbook_golf_tournament
 
 Yahoo shangrila persisted query `playbookGolfTournament` (response body not captured; shape unknown)
@@ -675,8 +663,6 @@ Yahoo shangrila persisted query `playbookGolfTournament` (response body not capt
 ```python
 yahoo_playbook_golf_tournament()
 ```
-
-_Last validated n/a._
 
 ## yahoo_playbook_league_odds
 
@@ -719,8 +705,6 @@ Yahoo shangrila persisted query `playbookLeagueOdds` -> one row per `leagues` en
 ```python
 yahoo_playbook_league_odds()
 ```
-
-_Last validated n/a._
 
 ## yahoo_playbook_player
 
@@ -805,8 +789,6 @@ Yahoo shangrila persisted query `playbookPlayer` -> one row per `players` entry
 yahoo_playbook_player()
 ```
 
-_Last validated n/a._
-
 ## yahoo_playbook_player_social_share
 
 Yahoo shangrila persisted query `playbookPlayerSocialShare` -> one row per `players` entry
@@ -848,8 +830,6 @@ Yahoo shangrila persisted query `playbookPlayerSocialShare` -> one row per `play
 yahoo_playbook_player_social_share()
 ```
 
-_Last validated n/a._
-
 ## yahoo_playbook_race
 
 Yahoo shangrila persisted query `playbookRace` -> one row per `games` entry
@@ -882,8 +862,6 @@ Yahoo shangrila persisted query `playbookRace` -> one row per `games` entry
 ```python
 yahoo_playbook_race()
 ```
-
-_Last validated n/a._
 
 ## yahoo_playbook_team
 
@@ -973,8 +951,6 @@ Yahoo shangrila persisted query `playbookTeam` -> tables: teams, leagues
 yahoo_playbook_team()
 ```
 
-_Last validated n/a._
-
 ## yahoo_playbook_team_basic
 
 Yahoo shangrila persisted query `playbookTeamBasic` -> one row per `teams` entry
@@ -1050,5 +1026,3 @@ Yahoo shangrila persisted query `playbookTeamBasic` -> one row per `teams` entry
 ```python
 yahoo_playbook_team_basic()
 ```
-
-_Last validated n/a._

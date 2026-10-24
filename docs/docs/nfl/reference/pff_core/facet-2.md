@@ -262,8 +262,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_facet_passing_concept()
 ```
 
-_Last validated n/a._
-
 ## pff_facet_coverage_scheme
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
@@ -372,5 +370,3 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_facet_coverage_scheme()
 ```
-
-_Last validated n/a._

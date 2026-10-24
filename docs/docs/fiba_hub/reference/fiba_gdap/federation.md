@@ -126,8 +126,6 @@ A federation's recent and upcoming national-team games.
 fiba_gdap_federation_games(federation_id=64)
 ```
 
-_Last validated n/a._
-
 ## fiba_gdap_federation_ranking
 
 FIBA world ranking of national teams.
@@ -175,5 +173,3 @@ FIBA world ranking of national teams.
 ```python
 fiba_gdap_federation_ranking(as_of_date='2025-09-15', category='men', zone_id=1)
 ```
-
-_Last validated n/a._

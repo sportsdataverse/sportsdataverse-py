@@ -11,11 +11,11 @@ description: "sdv-py WBB: endpoint references, dataset loaders and parsers for W
 |---|---|---:|---|
 | [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 132 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 34 | none |
-| [stats.ncaa.org](#stats-ncaa-org) | `stats.ncaa.org` | 113 | none (Terms gate + rate rotation) |
+| [stats.ncaa.org](#stats-ncaa-org) | `stats.ncaa.org` | 114 | none (Terms gate + rate rotation) |
 | [Bart Torvik Women's T-Rank](#bart-torvik-women-s-t-rank) | `barttorvik.com` | 1 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
 | [Her Hoop Stats](#her-hoop-stats) | `herhoopstats.com` | 5 | subscription |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 324 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 325 | — |
 
 ## ESPN {#espn}
 
@@ -38,7 +38,7 @@ description: "sdv-py WBB: endpoint references, dataset loaders and parsers for W
 
 | Reference | Functions |
 |---|---:|
-| [Hand-written wrappers](reference/additional/stats-ncaa-org) | 113 |
+| [Hand-written wrappers](reference/additional/stats-ncaa-org) | 114 |
 
 ## Bart Torvik Women's T-Rank {#bart-torvik-women-s-t-rank}
 

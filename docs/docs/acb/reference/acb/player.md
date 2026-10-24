@@ -81,8 +81,6 @@ Per-player box score of a game, per period (quarter 0 = the whole game).
 acb_player_box(match_id=105401)
 ```
 
-_Last validated n/a._
-
 ## acb_player_advanced_stats
 
 One player's advanced statistics in a game against his season and win/loss splits.
@@ -129,8 +127,6 @@ One player's advanced statistics in a game against his season and win/loss split
 ```python
 acb_player_advanced_stats(match_id=105401, player_id=20212243)
 ```
-
-_Last validated n/a._
 
 ## acb_player_data
 
@@ -194,8 +190,6 @@ Player biography: birth, nationality, height, current team and social links.
 ```python
 acb_player_data(player_id=20209407)
 ```
-
-_Last validated n/a._
 
 ## acb_player_stats
 
@@ -330,8 +324,6 @@ A player's season statistics, one row per team and edition.
 acb_player_stats(player_id=20209407)
 ```
 
-_Last validated n/a._
-
 ## acb_player_totals
 
 A player's career totals, averages and per-40 values.
@@ -462,8 +454,6 @@ A player's career totals, averages and per-40 values.
 acb_player_totals(player_id=20209407)
 ```
 
-_Last validated n/a._
-
 ## acb_player_matches
 
 A player's game log for an edition (default: the current one).
@@ -541,5 +531,3 @@ A player's game log for an edition (default: the current one).
 ```python
 acb_player_matches(player_id=20209407, season=2027)
 ```
-
-_Last validated n/a._

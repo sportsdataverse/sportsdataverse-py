@@ -101,8 +101,6 @@ ESPN endpoint.
 espn_cricket_league_root(league='eng.1')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_seasons
 
 ESPN endpoint.
@@ -140,8 +138,6 @@ ESPN endpoint.
 ```python
 espn_cricket_seasons(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_games
 
@@ -181,8 +177,6 @@ ESPN endpoint.
 ```python
 espn_cricket_games(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_game
 
@@ -231,8 +225,6 @@ ESPN endpoint.
 ```python
 espn_cricket_game(league='eng.1', event_id='401584793')
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_teams_core
 
@@ -283,8 +275,6 @@ ESPN endpoint.
 ```python
 espn_cricket_teams_core(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_team_core
 
@@ -361,8 +351,6 @@ ESPN endpoint.
 espn_cricket_team_core(league='eng.1', team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_venues
 
 ESPN endpoint.
@@ -400,8 +388,6 @@ ESPN endpoint.
 ```python
 espn_cricket_venues(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_venue
 
@@ -445,8 +431,6 @@ ESPN endpoint.
 espn_cricket_venue(league='eng.1', venue_id='3663')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_franchises
 
 ESPN endpoint.
@@ -484,8 +468,6 @@ ESPN endpoint.
 ```python
 espn_cricket_franchises(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_franchise
 
@@ -544,8 +526,6 @@ ESPN endpoint.
 espn_cricket_franchise(league='eng.1', franchise_id='2')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_coach
 
 ESPN endpoint.
@@ -591,8 +571,6 @@ ESPN endpoint.
 espn_cricket_coach(league='eng.1', coach_id='1')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_coach_record
 
 ESPN endpoint.
@@ -637,8 +615,6 @@ ESPN endpoint.
 espn_cricket_coach_record(league='eng.1', coach_id='1')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_coach_season
 
 ESPN endpoint.
@@ -673,8 +649,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_cricket_coach_season(league='eng.1', coach_id='1', season=2024)
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_positions
 
@@ -713,8 +687,6 @@ ESPN endpoint.
 ```python
 espn_cricket_positions(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_position
 
@@ -758,8 +730,6 @@ ESPN endpoint.
 espn_cricket_position(league='eng.1', position_id='1')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_tournaments
 
 ESPN endpoint.
@@ -798,8 +768,6 @@ ESPN endpoint.
 espn_cricket_tournaments(league='eng.1')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_awards
 
 ESPN endpoint.
@@ -837,8 +805,6 @@ ESPN endpoint.
 ```python
 espn_cricket_awards(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_award
 
@@ -879,8 +845,6 @@ ESPN endpoint.
 ```python
 espn_cricket_award(league='eng.1', award_id='1')
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_standings_core
 
@@ -931,8 +895,6 @@ ESPN endpoint.
 espn_cricket_standings_core(league='eng.1')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_leaders_core
 
 ESPN endpoint.
@@ -966,8 +928,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 espn_cricket_leaders_core(league='eng.1')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_league_notes
 
 ESPN endpoint.
@@ -1000,8 +960,6 @@ No returns table is published for this endpoint: no capture: the page holds zero
 ```python
 espn_cricket_league_notes(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_talentpicks
 
@@ -1050,5 +1008,3 @@ ESPN endpoint.
 ```python
 espn_cricket_talentpicks(league='eng.1')
 ```
-
-_Last validated n/a._

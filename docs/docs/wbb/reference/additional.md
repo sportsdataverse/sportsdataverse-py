@@ -75,6 +75,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [create_lineup_data](additional/stats-ncaa-org.md#create_lineup_data) | Combines the different methods to build a set of lineup events |
 | [create_player_events](additional/stats-ncaa-org.md#create_player_events) | Split a lineup event into one :class:`~sportsdataverse.mbb |
 | [create_shot_event_data](additional/stats-ncaa-org.md#create_shot_event_data) | Parses a game page's SVG shot map into a list of :class:`~sportsdataverse |
+| [current_ncaa_team_alts](additional/stats-ncaa-org.md#current_ncaa_team_alts) | The two team names from a *current* (2026) stats.ncaa.org game page. |
 | [duration_from_period](additional/stats-ncaa-org.md#duration_from_period) | The game duration (minutes elapsed) once `period` has completed |
 | [enrich_and_reverse_game_events](additional/stats-ncaa-org.md#enrich_and_reverse_game_events) | Inserts game-break events and turns descending per-row times into |
 | [enrich_lineup](additional/stats-ncaa-org.md#enrich_lineup) | Populate `pts`/`plus_minus` from the score delta, then run the |

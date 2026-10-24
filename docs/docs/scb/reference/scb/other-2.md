@@ -64,8 +64,6 @@ Single-game records: the season's and the all-time ones, one row per record.
 scb_records_per_game(season=2026)
 ```
 
-_Last validated n/a._
-
 ## scb_records_season_averages
 
 All-time season-average records (points, rebounds, assists, ...), one row per record.
@@ -114,5 +112,3 @@ All-time season-average records (points, rebounds, assists, ...), one row per re
 ```python
 scb_records_season_averages()
 ```
-
-_Last validated n/a._

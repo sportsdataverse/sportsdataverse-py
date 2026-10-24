@@ -604,5 +604,3 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_facet_passing_depth()
 ```
-
-_Last validated n/a._

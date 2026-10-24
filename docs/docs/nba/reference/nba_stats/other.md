@@ -233,8 +233,6 @@ GET /stats/alltimeleadersgrids
 nba_stats_alltimeleadersgrids(league_id='00')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_assistleaders
 
 GET /stats/assistleaders
@@ -283,8 +281,6 @@ GET /stats/assistleaders
 ```python
 nba_stats_assistleaders(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_assisttracker
 
@@ -350,8 +346,6 @@ GET /stats/assisttracker
 nba_stats_assisttracker(league_id='00', season_nullable='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_drafthistory
 
 GET /stats/drafthistory
@@ -408,8 +402,6 @@ GET /stats/drafthistory
 ```python
 nba_stats_drafthistory(league_id='00', season_year_nullable='2024')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_fantasywidget
 
@@ -485,8 +477,6 @@ GET /stats/fantasywidget
 nba_stats_fantasywidget(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_gamerotation
 
 GET /stats/gamerotation
@@ -554,8 +544,6 @@ GET /stats/gamerotation
 ```python
 nba_stats_gamerotation(league_id='00')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_homepageleaders
 
@@ -635,8 +623,6 @@ GET /stats/homepageleaders
 ```python
 nba_stats_homepageleaders(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_homepagev2
 
@@ -789,8 +775,6 @@ GET /stats/homepagev2
 nba_stats_homepagev2(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_hustlestatsboxscore
 
 GET /stats/hustlestatsboxscore
@@ -888,8 +872,6 @@ GET /stats/hustlestatsboxscore
 nba_stats_hustlestatsboxscore()
 ```
 
-_Last validated n/a._
-
 ## nba_stats_infographicfanduelplayer
 
 GET /stats/infographicfanduelplayer
@@ -958,8 +940,6 @@ GET /stats/infographicfanduelplayer
 ```python
 nba_stats_infographicfanduelplayer()
 ```
-
-_Last validated n/a._
 
 ## nba_stats_leaderstiles
 
@@ -1048,8 +1028,6 @@ GET /stats/leaderstiles
 nba_stats_leaderstiles(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_matchupsrollup
 
 GET /stats/matchupsrollup
@@ -1115,8 +1093,6 @@ GET /stats/matchupsrollup
 nba_stats_matchupsrollup(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_playbyplayv3
 
 GET /stats/playbyplayv3
@@ -1153,5 +1129,3 @@ No returns table is published for this endpoint: the committed capture tests/fix
 ```python
 nba_stats_playbyplayv3()
 ```
-
-_Last validated n/a._

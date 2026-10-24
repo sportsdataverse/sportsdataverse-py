@@ -470,8 +470,6 @@ GET /stats/playerdashboardbylastngames
 nba_stats_playerdashboardbylastngames(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_playerdashboardbyopponent
 
 GET /stats/playerdashboardbyopponent
@@ -798,5 +796,3 @@ GET /stats/playerdashboardbyopponent
 ```python
 nba_stats_playerdashboardbyopponent(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._

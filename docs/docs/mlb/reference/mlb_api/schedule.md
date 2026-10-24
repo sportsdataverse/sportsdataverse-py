@@ -104,8 +104,6 @@ GET /api/v1/schedule/postseason — postseason-only schedule for a season.
 mlb_schedule_postseason()
 ```
 
-_Last validated n/a._
-
 ## mlb_schedule_tied
 
 View tied game schedule info.
@@ -201,8 +199,6 @@ View tied game schedule info.
 mlb_schedule_tied(season='2016')
 ```
 
-_Last validated n/a._
-
 ## mlb_schedule_postseason_series
 
 View schedule info for postseason based on series.
@@ -252,8 +248,6 @@ View schedule info for postseason based on series.
 mlb_schedule_postseason_series(season='2023')
 ```
 
-_Last validated n/a._
-
 ## mlb_schedule_postseason_tunein
 
 View schedule info for the tuneIn application.
@@ -288,5 +282,3 @@ View schedule info for the tuneIn application.
 ```python
 mlb_schedule_postseason_tunein(season='2023')
 ```
-
-_Last validated n/a._

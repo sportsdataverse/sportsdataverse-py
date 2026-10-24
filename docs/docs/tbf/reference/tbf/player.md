@@ -75,8 +75,6 @@ Player box score of a finished game: minutes, shooting splits, rebounds, assists
 tbf_player_box(match_id=346279)
 ```
 
-_Last validated n/a._
-
 ## tbf_players
 
 Every player registered in one league-season (birth dates are not returned).
@@ -123,8 +121,6 @@ Every player registered in one league-season (birth dates are not returned).
 ```python
 tbf_players(competition='bsl', season=2027)
 ```
-
-_Last validated n/a._
 
 ## tbf_player_career
 
@@ -190,5 +186,3 @@ One player's career: a row per season and competition with totals (birth date is
 ```python
 tbf_player_career(player_id=196413)
 ```
-
-_Last validated n/a._

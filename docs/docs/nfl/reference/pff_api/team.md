@@ -50,8 +50,6 @@ List a season's teams, franchise groups and schedule
 pff_api_team_list(league='nfl', season=2022)
 ```
 
-_Last validated n/a._
-
 ## pff_api_team_overview
 
 Season-to-date team report, one row per team
@@ -111,8 +109,6 @@ Season-to-date team report, one row per team
 ```python
 pff_api_team_overview(league='nfl', season=2022)
 ```
-
-_Last validated n/a._
 
 ## pff_api_team_summary
 
@@ -177,8 +173,6 @@ Per-game team report for one franchise, one row per game
 pff_api_team_summary(franchise_id=7, league='nfl', season=2022)
 ```
 
-_Last validated n/a._
-
 ## pff_api_team_directory
 
 The league's teams for a season, with ids, slugs, colours and groups
@@ -224,8 +218,6 @@ The league's teams for a season, with ids, slugs, colours and groups
 ```python
 pff_api_team_directory(league='nfl', season=2022)
 ```
-
-_Last validated n/a._
 
 ## pff_api_team_stats
 
@@ -527,8 +519,6 @@ Team stats table for one category, every value ranked against the scope
 pff_api_team_stats(league='nfl', season=2022)
 ```
 
-_Last validated n/a._
-
 ## pff_api_team_roster
 
 A team's depth-chart roster with grades, ranks and snap counts
@@ -583,8 +573,6 @@ A team's depth-chart roster with grades, ranks and snap counts
 ```python
 pff_api_team_roster(league='nfl', season=2022, team='cincinnati-bengals')
 ```
-
-_Last validated n/a._
 
 ## pff_api_team_schedule
 
@@ -641,5 +629,3 @@ A team's season schedule, with results and strength of schedule
 ```python
 pff_api_team_schedule(league='nfl', season=2022, team='cincinnati-bengals')
 ```
-
-_Last validated n/a._

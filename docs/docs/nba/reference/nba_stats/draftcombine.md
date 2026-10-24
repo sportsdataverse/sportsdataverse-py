@@ -56,8 +56,6 @@ GET /stats/draftcombinedrillresults
 nba_stats_draftcombinedrillresults(league_id='00', season_year='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_draftcombinenonstationaryshooting
 
 GET /stats/draftcombinenonstationaryshooting
@@ -125,8 +123,6 @@ GET /stats/draftcombinenonstationaryshooting
 nba_stats_draftcombinenonstationaryshooting(league_id='00', season_year='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_draftcombineplayeranthro
 
 GET /stats/draftcombineplayeranthro
@@ -181,8 +177,6 @@ GET /stats/draftcombineplayeranthro
 ```python
 nba_stats_draftcombineplayeranthro(league_id='00', season_year='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_draftcombinespotshooting
 
@@ -272,8 +266,6 @@ GET /stats/draftcombinespotshooting
 nba_stats_draftcombinespotshooting(league_id='00', season_year='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_draftcombinestats
 
 GET /stats/draftcombinestats
@@ -357,5 +349,3 @@ GET /stats/draftcombinestats
 ```python
 nba_stats_draftcombinestats(league_id='00', season_all_time='2024-25')
 ```
-
-_Last validated n/a._

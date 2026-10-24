@@ -1744,6 +1744,44 @@ box_lineup = get_box_lineup("test_p1.html", box_html, TeamId("TeamA"), format_ve
 shots = create_shot_event_data("test_p1.html", box_html, box_lineup)
 ```
 
+### current_ncaa_team_alts {#current_ncaa_team_alts}
+
+`current_ncaa_team_alts(doc: 'Tag') -> 'list[str]'`
+
+The two team names from a *current* (2026) stats.ncaa.org game page.
+
+Both team logos render as `a.skipMask > img[alt]` on the modern
+play-by-play / box-score / individual-stats pages -- the `alt` is the
+short team name (e.g. `"Illinois"`), in `[home_or_first, second]`
+document order, deduped (the individual-stats page repeats each team).
+
+This is the current-markup counterpart to the cbb-explorer `:2018+`
+`team_finder` selectors (`div.card-header img[alt]` for the box,
+`table[align=center] > tbody a > img[alt]` for the pbp), which no
+longer match: NCAA's markup drifted since cbb-explorer's ~2020 capture.
+The v1 `team_finder`\ s try their ported selector first, then fall
+back here, so both the vendored-era and current pages resolve.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `doc` | `Tag` |  | A parsed stats.ncaa.org game page (`parse_html`). |
+
+**Returns**
+
+The distinct team-logo `alt` texts in document order: `[]` when the page carries no team logos, one name when only one team has a logo.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import current_ncaa_team_alts, parse_html
+
+html = '<a class="skipMask"><img alt="Illinois"></a><a class="skipMask"><img alt="Purdue"></a>'
+current_ncaa_team_alts(parse_html(html))
+# ['Illinois', 'Purdue']
+```
+
 ### duration_from_period {#duration_from_period}
 
 `duration_from_period(period: 'int', is_women_game: 'bool') -> 'float'`

@@ -174,8 +174,6 @@ GET /rdb/v1/commits/latest
 on3_commits_latest()
 ```
 
-_Last validated n/a._
-
 ## on3_commits_organizations_latest_commits
 
 GET /rdb/v1/commits/organizations/{orgKey}/latest-commits
@@ -210,8 +208,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 on3_commits_organizations_latest_commits(org_key=1867)
 ```
 
-_Last validated n/a._
-
 ## on3_commits_organizations_org_key
 
 GET /rdb/v1/commits/organizations/{orgKey}
@@ -245,5 +241,3 @@ No returns table is published for this endpoint: no committed capture with rows;
 ```python
 on3_commits_organizations_org_key(org_key=1867)
 ```
-
-_Last validated n/a._

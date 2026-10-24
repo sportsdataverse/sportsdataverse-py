@@ -537,5 +537,3 @@ GET /stats/playerdashboardbygeneralsplits
 ```python
 nba_stats_playerdashboardbygeneralsplits(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._

@@ -140,8 +140,6 @@ Pull EDGE detail stats for a single skater.
 nhl_edge_skater_detail(player_id=8480801)
 ```
 
-_Last validated n/a._
-
 ## nhl_edge_skater_comparison
 
 Pull EDGE comparison data for a single skater.
@@ -284,8 +282,6 @@ Pull EDGE comparison data for a single skater.
 nhl_edge_skater_comparison(player_id=8480801)
 ```
 
-_Last validated n/a._
-
 ## nhl_edge_skater_shot_location_detail
 
 Pull EDGE shot-location detail for a single skater.
@@ -330,8 +326,6 @@ Pull EDGE shot-location detail for a single skater.
 nhl_edge_skater_shot_location_detail(player_id=8480801)
 ```
 
-_Last validated n/a._
-
 ## nhl_edge_skater_shot_location_top_10
 
 Pull the EDGE top-10 skaters for a shot-location category.
@@ -369,8 +363,6 @@ No returns table is published for this endpoint: no capture: every value tried 4
 ```python
 nhl_edge_skater_shot_location_top_10(position='forwards', category='shots', sort_by='points')
 ```
-
-_Last validated n/a._
 
 ## nhl_edge_skater_shot_speed_detail
 
@@ -445,8 +437,6 @@ Pull EDGE shot-speed detail for a single skater.
 nhl_edge_skater_shot_speed_detail(player_id=8480801)
 ```
 
-_Last validated n/a._
-
 ## nhl_edge_skater_shot_speed_top_10
 
 Pull the EDGE top-10 skaters by shot speed.
@@ -519,8 +509,6 @@ Pull the EDGE top-10 skaters by shot speed.
 nhl_edge_skater_shot_speed_top_10(positions='defense', sort_by='max', season=20242025)
 ```
 
-_Last validated n/a._
-
 ## nhl_edge_skater_skating_distance_detail
 
 Pull EDGE skating-distance detail for a single skater.
@@ -559,8 +547,6 @@ Pull EDGE skating-distance detail for a single skater.
 ```python
 nhl_edge_skater_skating_distance_detail(player_id=8480801)
 ```
-
-_Last validated n/a._
 
 ## nhl_edge_skater_skating_speed_detail
 
@@ -626,8 +612,6 @@ Pull EDGE skating-speed detail for a single skater.
 ```python
 nhl_edge_skater_skating_speed_detail(player_id=8480801)
 ```
-
-_Last validated n/a._
 
 ## nhl_edge_skater_speed_top_10
 
@@ -699,8 +683,6 @@ Pull the EDGE top-10 skaters by skating speed.
 ```python
 nhl_edge_skater_speed_top_10(positions='defense', sort_by='max', season=20242025)
 ```
-
-_Last validated n/a._
 
 ## nhl_edge_skater_distance_top_10
 
@@ -786,5 +768,3 @@ Pull the EDGE top-10 skaters by skating distance.
 ```python
 nhl_edge_skater_distance_top_10(positions='defense', strength='all', sort_by='total', season=20242025)
 ```
-
-_Last validated n/a._

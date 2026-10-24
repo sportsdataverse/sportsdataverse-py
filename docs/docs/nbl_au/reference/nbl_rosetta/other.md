@@ -54,8 +54,6 @@ Every season of an organisation: regular, preseason, in-season cups and test sea
 nbl_rosetta_seasons(org='nbl')
 ```
 
-_Last validated n/a._
-
 ## nbl_rosetta_seasons_current
 
 The season in progress (empty between seasons: NoDataError).
@@ -102,8 +100,6 @@ The season in progress (empty between seasons: NoDataError).
 ```python
 nbl_rosetta_seasons_current(org='nbl')
 ```
-
-_Last validated n/a._
 
 ## nbl_rosetta_matches
 
@@ -203,8 +199,6 @@ Matches of a season: ids, teams, venue, status, scores and start time (UTC).
 nbl_rosetta_matches(org='nbl', season=2026, season_type='regular')
 ```
 
-_Last validated n/a._
-
 ## nbl_rosetta_match
 
 One match's header: status, scores, clock, venue, season and teams. Box score and play-by-play: the match_* frames.
@@ -292,8 +286,6 @@ One match's header: status, scores, clock, venue, season and teams. Box score an
 nbl_rosetta_match(match_id='b217a699-4bef-11f0-bc08-933162362355')
 ```
 
-_Last validated n/a._
-
 ## nbl_rosetta_standings
 
 Regular-season ladder: position, record, points for and against, home and away splits and form.
@@ -355,8 +347,6 @@ Regular-season ladder: position, record, points for and against, home and away s
 nbl_rosetta_standings(org='nbl', season=2026)
 ```
 
-_Last validated n/a._
-
 ## nbl_rosetta_outcomes
 
 Win-loss record and last 10, 5 and 3 results per team, keyed by team name.
@@ -401,8 +391,6 @@ Win-loss record and last 10, 5 and 3 results per team, keyed by team name.
 ```python
 nbl_rosetta_outcomes(org='nbl', season=2026, season_type='regular')
 ```
-
-_Last validated n/a._
 
 ## nbl_rosetta_stats_leaders
 
@@ -520,5 +508,3 @@ Player season totals and averages of a season (the leaderboard), one row per pla
 ```python
 nbl_rosetta_stats_leaders(org='nbl', season_id='1f8e4a79-e98b-457b-85a5-e4b898c6c0bd')
 ```
-
-_Last validated n/a._
