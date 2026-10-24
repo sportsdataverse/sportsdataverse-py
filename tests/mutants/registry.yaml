@@ -5090,9 +5090,9 @@
   file: sportsdataverse/_espn_schedule.py
   snippet: 'elif dtype == pl.Int64 and df.schema[name].is_float():'
   mutant: 'elif False:'
-  test: tests/wbb/test_wbb_schedule_teams_offline.py -k id_dtypes
+  test: tests/wbb/test_wbb_schedule_teams_offline.py -k integer_with_a_missing_value
   expected: kill
-  note: 'tournament_id arrives Float64 when one event lacks it (the pandas hop); documented integer'
+  note: 'attendance arrives Float64 when one event lacks it (the pandas hop); documented integer. Re-pointed in task 5.2 (R981-1): ids are cast before this branch, so tournament_id no longer reaches it'
 
 - id: nfl-schedule-rank-default-99
   group: espn-schedule

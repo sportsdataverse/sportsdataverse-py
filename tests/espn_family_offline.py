@@ -129,8 +129,8 @@ def schedule_cases(league: str) -> List[Any]:
     """The schedule case ids for one league (task 2.9 fixed every known defect these pinned)."""
     cases: List[Any] = ["snapshot", "id_dtypes", "query_key", "returns_table_columns", "empty_slate"]
     cases += list(EVENT_MUTATIONS)
-    if league != "mlb":  # mlb emits no linescores
-        cases += ["canceled_masked", "parse_twice"]
+    if league != "mlb":  # mlb emits no linescores (nor attendance)
+        cases += ["canceled_masked", "parse_twice", "integer_with_a_missing_value"]
     if league == "nfl":
         cases.append("rank_not_default")
     if league == "cfb":
@@ -214,6 +214,18 @@ def check_schedule(league: str, case: str, monkeypatch) -> None:
         second = getattr(module, f"espn_{league}_schedule")(**kwargs)
         assert first.height == len(events) and first.equals(second)
         assert body == _payload(f"scoreboard_{league}.json")
+    elif case == "integer_with_a_missing_value":
+        # B-M16 / R981-1: one event without ``attendance`` turns the column Float64 on the pandas hop; the frame
+        # restores the documented integer (ids no longer reach that branch: they are cast first, task 5.2)
+        bad = copy.deepcopy(body)
+        if len(_events(bad)) < 2:  # a one-event capture borrows a sibling's real event
+            sibling = "wbb" if league == "mbb" else "nba"
+            bad["events"].append(copy.deepcopy(_payload(f"scoreboard_{sibling}.json")["events"][0]))
+        bad["events"][0]["competitions"][0].pop("attendance", None)
+        want = [c.get("attendance") for e in _events(bad) for c in e["competitions"][:1]]
+        df, _ = _call(league, "schedule", monkeypatch, bad, **kwargs)
+        assert df.schema["attendance"] == pl.Int64, df.schema["attendance"]
+        assert df["attendance"].to_list() == want
     elif case == "rank_not_default":
         df, _ = _call(league, "schedule", monkeypatch, body, **kwargs)
         # NFL competitors carry no curatedRank (0 of 15 in the capture): the columns are all null, and
