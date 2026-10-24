@@ -1,0 +1,33 @@
+schema: possession_deciles
+kind: dataframe
+columns:
+- name: decile
+  type: integer
+  description: ''
+- name: n
+  type: integer
+  description: ''
+- name: poss_min
+  type: integer
+  description: ''
+- name: poss_max
+  type: integer
+  description: ''
+- name: median_orapm_se
+  type: double
+  description: ''
+- name: median_drapm_se
+  type: double
+  description: ''
+- name: median_rapm_net_se
+  type: double
+  description: ''
+- name: median_orapm_se_sampling
+  type: double
+  description: ''
+- name: median_drapm_se_sampling
+  type: double
+  description: ''
+- name: median_rapm_net_se_sampling
+  type: double
+  description: ''

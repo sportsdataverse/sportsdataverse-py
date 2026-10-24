@@ -38,8 +38,6 @@ NFL_SDV_PLAYER_URL = SDVRELEASES + "nfl_players/players.parquet"
 # The live weekly player-stats release. nflverse FROZE the `player_stats` tag in
 # 2025-05 and publishes here instead -- one asset per season, 1999-2026.
 NFL_PLAYER_STATS_WEEK_URL = NFLVERSEGITHUB + "stats_player/stats_player_week_{season}.parquet"
-# FROZEN 2025-05 (1999-2024 only) and no longer read by `load_nfl_player_stats`.
-# Kept because they are importable public constants.
 NFL_SDV_PLAYER_STATS_URL = SDVRELEASES + "nfl_player_stats/player_stats.parquet"
 NFL_PFR_SEASON_DEF_URL = f"{NFLVERSEGITHUB}pfr_advstats/advstats_season_def.parquet"
 NFL_PFR_WEEK_DEF_URL = NFLVERSEGITHUB + "pfr_advstats/advstats_week_def_{season}.parquet"
@@ -133,6 +131,8 @@ _DEPRECATED: dict[str, str] = {
     "WNBA_TEAM_BOX_URL": SDVRELEASES + "espn_wnba_team_boxscores/team_box_{season}.parquet",
     "WNBA_PLAYER_BOX_URL": SDVRELEASES + "espn_wnba_player_boxscores/player_box_{season}.parquet",
     "WNBA_TEAM_SCHEDULE_URL": SDVRELEASES + "espn_wnba_schedules/wnba_schedule_{season}.parquet",
+    # nflverse FROZE the `player_stats` tag in 2025-05 (1999-2024 only); `load_nfl_player_stats`
+    # reads NFL_PLAYER_STATS_WEEK_URL instead.
     "NFL_PLAYER_STATS_URL": f"{NFLVERSEGITHUB}player_stats/player_stats.parquet",
     "NFL_PLAYER_KICKING_STATS_URL": f"{NFLVERSEGITHUB}player_stats/player_stats_kicking.parquet",
 }

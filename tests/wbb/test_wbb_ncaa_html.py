@@ -15,13 +15,14 @@ def test_wbb_ncaa_html_shim_is_mbb_core():
     assert w.attr_regex_filter is m.attr_regex_filter
     assert w.select_contains is m.select_contains
     assert w.filter_matching_own is m.filter_matching_own
+    assert w.current_ncaa_team_alts is m.current_ncaa_team_alts
 
 
 def test_wbb_ncaa_html_all_matches_reexported_symbols():
     from sportsdataverse.wbb import wbb_ncaa_html as w
 
     assert set(w.__all__) == {name for name in w.__all__ if hasattr(w, name)}
-    assert len(w.__all__) == 8
+    assert len(w.__all__) == 9
 
 
 def test_wbb_ncaa_html_all_matches_mbb_all():

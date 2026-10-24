@@ -1,0 +1,12 @@
+schema: expand_xwalk_aliases
+kind: dataframe
+columns:
+- name: team
+  type: character
+  description: ''
+- name: player_key
+  type: character
+  description: ''
+- name: player_id
+  type: character
+  description: ''
