@@ -8,6 +8,7 @@ injectable transport, RealGM being behind a Cloudflare JS challenge.
 from __future__ import annotations
 
 import sys
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import polars as pl
@@ -501,3 +502,42 @@ def test_proxy_falls_back_to_the_environment(monkeypatch):
     assert realgm._resolve_proxy("http://explicit:1") == "http://explicit:1"
     monkeypatch.setenv("SDV_PY_REALGM_PROXY", "http://realgm.example:3128")
     assert realgm._resolve_proxy(None) == "http://realgm.example:3128"
+
+
+# ---------------------------------------------------------------------------
+# The real Cloudflare challenge page (B-M8, B-L93): tests/fixtures/realgm/just_a_moment.html is
+# what the package's headless Chromium got for /nba/players from a residential IP on 2026-10-11
+# (the challenge never cleared). It parses to zero tables, so every realgm_* call reads it as an
+# empty answer instead of a failed fetch.
+# ---------------------------------------------------------------------------
+
+_CHALLENGE = (Path(__file__).resolve().parents[1] / "fixtures" / "realgm" / "just_a_moment.html").read_text(
+    encoding="utf-8"
+)
+
+
+def test_the_captured_challenge_page_matches_the_challenge_title() -> None:
+    import re
+
+    title = re.search(r"<title>(.*?)</title>", _CHALLENGE, re.S).group(1)
+    assert title == "Just a moment..."
+    assert realgm._CHALLENGE_TITLE.search(title)
+    assert realgm._tables(_CHALLENGE) == []
+
+
+def test_a_challenge_page_is_a_failed_fetch() -> None:
+    from sportsdataverse.errors import AssetFetchError
+
+    with pytest.raises(AssetFetchError, match=r"/nba/players is still the Cloudflare challenge page.*Just a moment"):
+        realgm.realgm_players(fetcher=lambda path, proxy: _CHALLENGE)
+
+
+def test_a_challenge_page_raises_from_every_endpoint() -> None:
+    # B-M8 is at the shared fetch boundary, so no realgm_* call parses the challenge page.
+    from sportsdataverse.errors import AssetFetchError
+
+    endpoints = [getattr(realgm, name) for name in realgm.__all__ if name != "realgm_close_browser"]
+    assert len(endpoints) == 17
+    for endpoint in endpoints:
+        with pytest.raises(AssetFetchError, match="Cloudflare challenge"):
+            endpoint(fetcher=lambda path, proxy: _CHALLENGE)

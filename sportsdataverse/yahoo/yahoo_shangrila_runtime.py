@@ -26,8 +26,9 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
-from sportsdataverse._codegen_runtime import _download_json
+from sportsdataverse._codegen_runtime import _download_json, _where
 from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import AssetFetchError
 
 __all__ = ["_get"]
 
@@ -55,15 +56,14 @@ def _get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> Di
             (``timeout``, ``proxy``, ``num_retries``, extra ``headers``).
 
     Returns:
-        The parsed JSON ``dict``; ``{}`` for a 204/205 or a JSON body that is not
-        an object.
+        The parsed JSON ``dict``; ``{}`` for a 204/205.
 
     Raises:
         NoDataError: the route answered 404.
         ValueError: Yahoo answered 400 / 422 -- e.g. the HTTP 400
             ``{"errors": [...]}`` a bad persisted query gets. An error body is not data.
         AssetFetchError: any other non-2xx or a connection failure after retries, or
-            a 2xx whose body is empty (not 204/205) or not JSON.
+            a 2xx whose body is empty (not 204/205), not JSON, or not a JSON object.
 
     Example:
         Quick start::
@@ -75,4 +75,6 @@ def _get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> Di
     headers = {**_HEADERS, **(kwargs.pop("headers", None) or {})}
     query = {**_LOCALE, **{k: v for k, v in (params or {}).items() if v is not None}}
     body = _download_json(download, url, params=query, headers=headers, **kwargs)
-    return body if isinstance(body, dict) else {}
+    if not isinstance(body, dict):  # every Shangrila route answers {"data": ...}
+        raise AssetFetchError(f"{_where(url)} answered a JSON array where an object was expected")
+    return body

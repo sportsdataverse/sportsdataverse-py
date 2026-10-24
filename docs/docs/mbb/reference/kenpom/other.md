@@ -857,7 +857,7 @@ GET /box.php - box-score detail for one game (per-team four factors, player line
 | col_name | type | description |
 |---|---|---|
 | `column_0` | character |  |
-| `column_0_rk` | integer |  |
+| `jersey` | character | Jersey number worn by the player. |
 | `name` | character | Display name. |
 | `min` | integer | Minutes played. |
 | `o_rtg` | integer | O rtg. |
@@ -879,7 +879,7 @@ GET /box.php - box-score detail for one game (per-team four factors, player line
 | col_name | type | description |
 |---|---|---|
 | `column_0` | character |  |
-| `column_0_rk` | integer |  |
+| `jersey` | character | Jersey number worn by the player. |
 | `name` | character | Display name. |
 | `min` | integer | Minutes played. |
 | `o_rtg` | integer | O rtg. |

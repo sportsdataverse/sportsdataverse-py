@@ -173,6 +173,17 @@ def test_parse_player_stats_real_capture():
     assert df["year"].unique().to_list() == [2025]
 
 
+def test_parse_player_stats_jersey_00_stays_text():
+    """B-M19: the 2025 file has 8 "00" jerseys; as Int64 they merged into the 291 "0" rows."""
+    from sportsdataverse.mbb.torvik_parsers import parse_torvik_player_stats
+
+    df = parse_torvik_player_stats(_read("2025_getadvstats_jersey_00.csv"))
+    assert df.schema["number"] == pl.Utf8
+    assert df["number"].value_counts().sort("number").rows() == [("0", 4), ("00", 8)]
+    assert df.filter(pl.col("player_name") == "Otega Oweh")["number"].to_list() == ["00"]
+    assert df.schema["player_id"] == pl.Int64  # the real id stays an integer
+
+
 def test_parse_game_schedule_real_capture():
     from sportsdataverse._crosswalk_basketball_sources import SUPER_SKED_FIELDS
     from sportsdataverse.mbb.torvik_parsers import parse_torvik_game_schedule

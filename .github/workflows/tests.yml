@@ -13,9 +13,11 @@
 #            only job that exercises the xgboost/libomp import path -- and keeps
 #            the live coverage, off the critical path.
 #
-# SCOPE (still narrowed, unchanged by this split): Python 3.9 (the declared floor)
-# and Windows are NOT exercised. CONTRIBUTING.md promises the floor is covered; it
-# is not. Restore by re-adding a matrix `include:` block.
+# SCOPE (still narrowed, unchanged by this split): the suite runs on 3.13.2 only and
+# Windows is NOT exercised; the `floor-import` job below imports the package on the
+# 3.10 floor so a 3.11+-only construct cannot ship again, and runs the parser tests
+# there on pandas 2. Restore a full version
+# sweep by re-adding a matrix `include:` block.
 #
 # Uses `uv sync --all-extras --all-groups` against the committed uv.lock.
 name: tests
@@ -69,12 +71,12 @@ jobs:
       #
       # No --cov here: coverage instruments every call and this job exists for fast
       # feedback. It runs in the live job, which is not on the critical path.
-      # Excluded here because codegen.yml ALREADY runs both, on ubuntu, on the same
-      # triggers -- running them again costs ~11 min per CI run for no extra signal:
+      # Excluded here because codegen.yml ALREADY runs it, on ubuntu, on the same
+      # triggers -- running it again costs ~11 min per CI run for no extra signal:
       #   tests/codegen/                     <- codegen.yml "Codegen test suite"
-      #   test_codegen_drift_clean           <- codegen.yml "Codegen drift check"
-      #                                         (it shells out to generate.py --check)
-      # This is a CI-level dedupe only. A bare `uv run pytest` locally still runs
+      # (that includes tests/codegen/test_check.py::test_codegen_drift_clean, the
+      # subprocess generate.py --check, which codegen.yml deselects because its own
+      # "Codegen drift check" step already runs --check). This is a CI-level dedupe only. A bare `uv run pytest` locally still runs
       # everything, and the pre-push hook still gates the drift check.
       #
       # HOW "offline" IS ENFORCED -- there is deliberately no `-m` marker filter here.
@@ -85,11 +87,67 @@ jobs:
       # Verified offline under bubblewrap with --unshare-net: 0 network-reaching tests
       # as of 2026-09-18. If you add a test that fetches, gate it in conftest.py or
       # mock the fetch -- do not add a marker here.
+      #
+      # The one `-m` here is not a network gate: `whole_game` (pytest.ini) marks the
+      # oracle-anchored whole-game suites, which run every committed capture through its
+      # processor (tests/cfb/test_cfb_whole_game_oracle.py added ~3 min, +43%, to this
+      # step). They run in the `whole-game` job below, in parallel; the two jobs together
+      # are the offline suite, and every test runs in exactly one of them.
       - name: Run tests (offline)
         run: >
           uv run --frozen pytest -n auto --dist loadgroup --maxfail=10 -q
+          -m "not whole_game"
           --ignore=tests/codegen
-          --deselect tests/test_mlb_statcast_codegen.py::test_codegen_drift_clean
+
+  whole-game:
+    name: pytest (whole-game oracles)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - name: Set up Python
+        run: uv python install 3.13.2
+      - name: Install project + extras + dep groups
+        run: uv sync --all-extras --all-groups --frozen --python 3.13.2
+      # --dist loadgroup is load-bearing here too: each capture's tests share an
+      # xdist_group, so a worker processes a game once and every check on it reads the cache.
+      - name: Run the whole-game oracle suites
+        run: uv run --frozen pytest -n auto --dist loadgroup -q -m whole_game
+
+  floor-import:
+    name: import on the 3.10 floor
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - name: Set up Python
+        run: uv python install 3.10
+      # The package once stopped importing on the 3.9 floor without CI noticing
+      # (a `set[int] | str | None` evaluated at def time). tests/test_import_sweep.py
+      # imports every module under sportsdataverse/ in a subprocess, so a 3.11+-only
+      # construct anywhere in the package fails here. Every extra is installed so the
+      # sweep imports the extra-gated modules too (it treats a missing optional
+      # extra as a skip, not a failure, which would otherwise leave them unchecked).
+      - name: Install project + extras + dep groups on 3.10
+        run: uv sync --all-extras --all-groups --frozen --python 3.10
+      - name: Import every module on 3.10
+        run: uv run --python 3.10 --frozen pytest tests/test_import_sweep.py -q -p no:cacheprovider
+      # 3.10 resolves pandas 2 (3.13 resolves pandas 3), and pd.json_normalize differs between
+      # them: pandas 2 reads a row that is not an object as an empty row instead of raising, which
+      # once hid every parser's schema-drift warning (WB-1). The offline parser tests are the
+      # pandas-2 coverage; they need no network and run in about a minute.
+      - name: Parser tests on 3.10 (pandas 2)
+        run: uv run --python 3.10 --frozen pytest tests/test_*parsers.py -n auto -q -p no:cacheprovider
 
   live:
     name: pytest (live APIs)

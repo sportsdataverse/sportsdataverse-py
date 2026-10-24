@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # LALIGA — ESPN FPI API (fitt v3)
 
-`sportsdataverse.laliga` — 1 endpoint.
+`sportsdataverse.soccer.laliga` — 1 endpoint.
 
 ## espn_laliga_fpi
 

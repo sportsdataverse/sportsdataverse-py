@@ -26,8 +26,8 @@ docstring:
     false) raises AssetFetchError for the routes that report it.'
   raises:
   - 'sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown
-    id, a game outside a playoff series, play-by-play or shots before 2016-17, a club
-    with no games that season).'
+    id, play-by-play or shots before 2016-17, a club with no games that season); a
+    game outside a playoff series is zero rows.'
   - 'sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not
     the one asked for (a rejected key, an error envelope or stub, a body for another
     season, round, club or player, a game that is not finished).'
@@ -259,8 +259,8 @@ endpoints:
   path: /matchdata/Overview/serie
   returns_schema: native/acb/serie
   short: serie
-  summary: The playoff series a game belongs to, one row per game of the series (HTTP
-    204 outside a series).
+  summary: 'The playoff series a game belongs to, one row per game of the series (zero
+    rows outside a series: HTTP 204).'
 - example_args:
     match_id: 105401
   extra_params:

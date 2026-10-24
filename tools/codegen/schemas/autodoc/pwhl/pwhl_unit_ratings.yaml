@@ -1,5 +1,5 @@
 schema: pwhl_unit_ratings
 kind: dataframe
 columns: []
-unverified: 'no capture: it expects NHL-style play-by-play columns (secondary_type, x_fixed, strength_state) that no PWHL
-  loader provides, so it raises ColumnNotFoundError on real PWHL games'
+unverified: 'no capture: since #846 it runs on the published PWHL pbp and shift releases (tested on five real 2025
+  games) and returns the same schema as its NHL engine, which has no capture of its own'

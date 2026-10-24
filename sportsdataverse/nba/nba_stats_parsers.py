@@ -10,7 +10,9 @@ feed (also one row per game), and the video endpoints'
 (``videodetailsasset``/``videoevents``/``videoeventsasset``) dict envelope
 ``{Meta: {videoUrls: [...]}, playlist: [...]}`` (returned as a
 ``{"videoUrls": ..., "playlist": ...}`` dict of frames). Honors the universal parser contract: polars by default, pandas
-via flag, empty/malformed returns a zero-row frame, columns snake_cased via dl_utils.underscore.
+via flag, empty/malformed returns a zero-row frame, columns snake_cased via dl_utils.underscore. A result set
+polars cannot build a frame from (an upstream schema change) is a zero-row frame too, and warns
+:class:`~sportsdataverse.errors.SchemaDriftWarning` naming it, so drift never reads as "no data".
 """
 
 from __future__ import annotations
@@ -21,6 +23,7 @@ from typing import TYPE_CHECKING, Optional, Union
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _warn_schema_drift
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -43,7 +46,10 @@ def _result_sets(raw: dict) -> list:
 
     Returns:
         A list of result-set dicts, each containing ``name``, ``headers``, and ``rowSet``.
+        Empty for a body that is not an object (``None``, ``""``, a list).
     """
+    if not isinstance(raw, dict):
+        return []
     if isinstance(raw.get("resultSets"), list):
         return raw["resultSets"]
     if isinstance(raw.get("resultSets"), dict):
@@ -316,8 +322,8 @@ def _to_frame(rs: dict) -> pl.DataFrame:
             # payload into an empty frame (observed: WNBA 1998 leaguegamelog,
             # PLUS_MINUS null until late in the season).
             return pl.DataFrame(norm, schema=headers, orient="row", infer_schema_length=None)
-        except Exception:
-            pass
+        except (TypeError, ValueError, pl.exceptions.PolarsError) as exc:  # e.g. duplicate headers
+            _warn_schema_drift(f"parse_nba_stats_result_sets: {rs.get('name', 'resultSet')}.rowSet", exc)
     return pl.DataFrame(schema={h: pl.Utf8 for h in headers})
 
 
@@ -382,7 +388,14 @@ def parse_nba_stats_result_sets(
         .. _hoopR: https://hoopR.sportsdataverse.org
         .. _wehoop: https://wehoop.sportsdataverse.org
     """
-    sets = _result_sets(raw)
+    sets = []
+    for rs in _result_sets(raw):
+        if isinstance(rs, dict):
+            sets.append(rs)
+        else:  # a result set that is not an object is dropped, but never silently (A-L60)
+            _warn_schema_drift(
+                "parse_nba_stats_result_sets: resultSets[]", TypeError(f"a result set is {type(rs).__name__}")
+            )
     frames: dict[str, pl.DataFrame] = {rs.get("name", f"set_{i}"): _to_frame(rs) for i, rs in enumerate(sets)}
 
     def _maybe_pandas(df: pl.DataFrame) -> Union[pl.DataFrame, "pd.DataFrame"]:

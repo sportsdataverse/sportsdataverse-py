@@ -92,10 +92,11 @@ including the conda-forge feedstock submission flow.
 
 ## Python version support
 
-Supported: 3.9, 3.10, 3.11, 3.12, 3.13, 3.14. CI runs **3.13.2 only**
-and ceiling (3.14) at minimum. New modules use modern type syntax
+Supported: 3.10, 3.11, 3.12, 3.13, 3.14. The suite runs on **3.13.2 only**; a separate
+job installs every extra and imports every module on the **3.10 floor** (`tests.yml`
+`floor-import`). No other version runs the full suite. New modules use modern type syntax
 (`dict[str, X]`, `X | None`). DO add `from __future__ import annotations` — 682 of
-729 modules already do, and it keeps `X | None` valid on the 3.9 floor.
+729 modules already do, and it keeps `X | None` valid on the 3.10 floor.
 
 ## Code standards for new modules
 
@@ -104,7 +105,7 @@ stricter typed baseline; legacy modules stay un-typed for the time being.
 The rules below apply to **new modules** (and to legacy modules that you
 are intentionally migrating).
 
-- **Python target:** 3.9–3.14. `pyproject.toml` `[tool.ruff]` pins
+- **Python target:** 3.10–3.14. `pyproject.toml` `[tool.ruff]` pins
   `line-length = 120` and `fix = true`; the `[project]` classifiers
   cover through py314. Linting + formatting run via Ruff
   (`ruff check --fix` and `ruff format`) — see `.pre-commit-config.yaml`
@@ -131,8 +132,8 @@ standalone import-sorting hook is inactive — plus
   per-module strictness but can't scope the gate, so it would pull the
   whole package into checking (~95 pre-existing legacy errors) and the
   gate would never be green.
-- **Polars 1.x and 2.x.** Runtime is `polars>=1.0,<3`; the lock resolves 2.0 (Python >= 3.10) and
-  1.36 (Python 3.9), so new code must run on both (see `CLAUDE.md`, "Polars version"). New code uses
+- **Polars 2.x.** Runtime is `polars>=2.0,<3`; polars 1.x is not supported, so new code may use
+  2.x-only API (see `CLAUDE.md`, "Polars version"). New code uses
   the modern API surface (`group_by`, `with_row_index`, `map_elements`,
   varargs `pl.struct(*cols)`, etc.). The 0.18 → 1.x migration of the
   legacy `*_pbp.py` modules landed in May 2026; if you see lingering

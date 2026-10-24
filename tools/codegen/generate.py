@@ -11,6 +11,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 from urllib.parse import urlencode
 
@@ -44,6 +45,14 @@ _PATH_TOKEN = re.compile(r"\{(\w+)\}")
 def _path_token_first(s: str) -> str:
     m = _PATH_TOKEN.search(s)
     return m.group(1) if m else ""
+
+
+def _quote_path_tokens(path: str) -> str:
+    """Each runtime ``{token}`` of a wrapper's URL f-string as ``{_path_seg(token)}`` (A-N2).
+
+    ``_path_seg`` percent-quotes the value, so ``team_id="13/roster"`` stays one segment.
+    """
+    return _PATH_TOKEN.sub(lambda m: "{_path_seg(" + m.group(1) + ")}", path)
 
 
 def _sub_slugs(path: str, sport: str, league: str) -> str:
@@ -216,7 +225,9 @@ def _returns_dict(schema_doc: dict) -> bool:
 # Getters that raise the package error vocabulary (sportsdataverse/errors.py): a 404 is
 # ``NoDataError``, a 400/422 is ``ValueError``, any other failed fetch is ``AssetFetchError``
 # -- never ``{}``. Every generated wrapper on one of them names all three in ``Raises:``. Absent on purpose:
-# nflpro raises its own types.
+# nflpro raises its own types. tests/codegen/test_runtime_errors.py holds the evidence: a runtime whose
+# vocabulary matrix has no known-failing row must be listed here (A-L13: nba_stats / wnba_stats raised
+# the vocabulary for months while 237 of their 239 wrappers documented no ``Raises:``).
 _VOCAB_GETTERS = frozenset(
     {
         "sportsdataverse._codegen_runtime",
@@ -277,10 +288,27 @@ _VOCAB_GETTERS = frozenset(
         "sportsdataverse.nfl.pff_runtime",
         "sportsdataverse.soccer.mls.mls_api_runtime",
         "sportsdataverse.soccer.nwsl.nwsl_api_runtime",
+        "sportsdataverse.wnba.wnba_stats_runtime",
         "sportsdataverse.yahoo.yahoo_shangrila_runtime",
+        # 4.1b
+        "sportsdataverse.nfl.nflpro_runtime",
+        # 4.4
+        "sportsdataverse.cbs.cbs_napi_runtime",
     }
 )
 # (error name, aliases a YAML ``raises:`` line may already use for it, line to add)
+# Errors a getter raises beyond the vocabulary, named in ``Raises:`` the same way (skipped when the YAML
+# ``raises:`` already names them). R901-7: the stats.nba.com / stats.wnba.com runtime imports curl_cffi lazily.
+_GETTER_RAISES: dict[str, tuple] = {
+    m: (
+        (
+            ("ImportError",),
+            "ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain "
+            "``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).",
+        ),
+    )
+    for m in ("sportsdataverse.nba.nba_stats_runtime", "sportsdataverse.wnba.wnba_stats_runtime")
+}
 _VOCAB_RAISES = (
     (
         ("NoDataError", "NoESPNDataError"),
@@ -320,6 +348,7 @@ def _build_docstring(
     import_from: str = "",
     returns_frames: bool = False,
     vocab_raises: bool = False,
+    getter_raises: tuple = (),
     curl_example: str = "",
 ) -> str:
     """Build a function docstring as a 4-space-indented block (precise indentation).
@@ -340,7 +369,8 @@ def _build_docstring(
     endpoint YAML sets no ``parsed_doc``, so the generic phrases say "dict", not "DataFrame".
     ``vocab_raises`` (the family's getter is in :data:`_VOCAB_GETTERS`) adds the
     ``NoDataError`` / ``ValueError`` / ``AssetFetchError`` lines, merged with any ``raises:``
-    line naming the same error (see :func:`_raises_lines`).
+    line naming the same error (see :func:`_raises_lines`); ``getter_raises`` (:data:`_GETTER_RAISES`)
+    adds the getter's other errors the same way.
     """
     extras = doc_extras or {}
     raw_doc = str(extras.get("raw_doc") or "")
@@ -348,7 +378,7 @@ def _build_docstring(
     # parser returns something other than a single DataFrame (e.g. the video
     # endpoints' dict of ``videoUrls``/``playlist`` frames).
     parsed_doc = str(extras.get("parsed_doc") or "")
-    lines = [f'"""{ep.summary}', ""]
+    lines = [ep.summary, ""]
     if not flat:
         if league_param:
             lines.append(f"Bound to sport={sport!r}; ``league`` is a required argument (e.g. {league!r}).")
@@ -416,7 +446,22 @@ def _build_docstring(
         )
     else:
         lines.append(f"    {raw_doc.capitalize() if raw_doc else 'The raw JSON ``Dict``'}.")
-    raises = _raises_lines(extras, vocab_raises)
+    raises = _raises_lines(extras, vocab_raises, getter_raises)
+    if vocab_raises and not flat:  # an ESPN wrapper checks its inputs before the request (A-M17, A-N2, A-N3)
+        checks = []
+        if any(p.transform == "bool_str" for p in ep.query_params):
+            checks.append("a flag is a string other than 'true'/'false'/'1'/'0'")
+        if ep.path_params or league_param:
+            checks.append("a path value is a collection")
+        if checks:
+            raises = [
+                f"{r} Also raised before any request when {' or '.join(checks)}." if r.startswith("ValueError:") else r
+                for r in raises
+            ]
+        raises.append(
+            "TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), "
+            "raised before any request."
+        )
     if raises:
         lines.append("")
         lines.append("Raises:")
@@ -446,20 +491,31 @@ def _build_docstring(
         lines.append("")
         lines.append("Notes:")
         lines += [f"    * {n}" for n in notes]
+    # YAML text lands inside a ``"""`` literal: a backslash would be read as an escape (``\d`` is a
+    # SyntaxWarning) and a ``"""`` would close the docstring early (A-L40). Escape both, so the
+    # runtime ``__doc__`` reads exactly what the YAML says.
+    lines = [_docstring_escape(ln) for ln in lines]
+    lines[0] = '"""' + lines[0]
     lines.append('"""')
     return "\n".join(("    " + ln) if ln else "" for ln in lines)
 
 
-def _raises_lines(extras: dict, vocab_raises: bool) -> list[str]:
+def _docstring_escape(text: str) -> str:
+    """``text`` made safe inside a ``\"\"\"`` string literal: backslashes doubled, and every quote of a run of
+    three or more escaped (escaping only the first of ``\"\"\"\"`` leaves three bare quotes that close it)."""
+    return re.sub(r'"{3,}', lambda m: '\\"' * len(m.group()), text.replace("\\", "\\\\"))
+
+
+def _raises_lines(extras: dict, vocab_raises: bool, getter_raises: tuple = ()) -> list[str]:
     """The ``Raises:`` lines of a generated wrapper: the YAML ``raises:`` merged with the vocabulary.
 
     A vocabulary error the YAML also names keeps both: the standard meaning, then the YAML
-    qualifier, in one line (see :func:`_merge_raises`)."""
+    qualifier, in one line (see :func:`_merge_raises`). ``getter_raises`` (:data:`_GETTER_RAISES`)
+    merges the getter's other errors the same way."""
     rows = [_raises_row(str(r)) for r in extras.get("raises") or []]
-    if vocab_raises:
-        for names, line in _VOCAB_RAISES:
-            at = next((i for i, r in enumerate(rows) if r["exc"].rsplit(".", 1)[-1] in names), len(rows))
-            rows.insert(at, _raises_row(line))
+    for names, line in (_VOCAB_RAISES if vocab_raises else ()) + tuple(getter_raises):
+        at = next((i for i, r in enumerate(rows) if r["exc"].rsplit(".", 1)[-1] in names), len(rows))
+        rows.insert(at, _raises_row(line))
     return [f"{r['exc']}: {r['description']}" for r in _merge_raises(rows)]
 
 
@@ -522,23 +578,18 @@ def _docstring_param_descs(league_prefix: str, fn_name: str) -> dict[str, str]:
     directly from ``sportsdataverse.{league_prefix}`` for flat-API wrappers) and
     delegates to :func:`_doc_view` to extract the per-param descriptions.
 
-    Returns an empty dict when the function is not importable (stub / not yet
-    wired) so callers always get a safe fallback.  Results are cached per
+    Returns an empty dict when the league package does not exist yet or the function is not
+    defined there (stub / not yet wired); any other import failure raises (A-L11).  Results are cached per
     ``(league_prefix, fn_name)`` so repeated endpoint views inside the same
     codegen run share one import + parse.
     """
-    import importlib
-
-    try:
-        mod = importlib.import_module(f"sportsdataverse.{_league_module(league_prefix)}") if league_prefix else None
-    except Exception:  # noqa: BLE001
-        return {}
+    mod = _import_league_package(league_prefix) if league_prefix else None
     fn = getattr(mod, fn_name, None) if mod is not None else None
     if fn is None or not callable(fn):
         return {}
     try:
         view = _doc_view(fn)
-    except Exception:  # noqa: BLE001
+    except (TypeError, ValueError):  # inspect.signature has no signature for this callable
         return {}
     return {p["name"]: p["description"] for p in view["params"]}
 
@@ -599,6 +650,34 @@ def _param_rows(ep: spec.Endpoint, league_prefix: str = "", fn_name: str = "") -
 
 _R_DICT_FILE = ROOT / "tools" / "codegen" / "r_column_descriptions.yaml"
 
+# The hand-written HockeyTech junior/minor league modules under
+# ``sportsdataverse.hockey.*`` (PWHL is separate — it lives at the top level with a
+# richer loader surface). SINGLE SOURCE OF TRUTH: every codegen list that enumerates
+# these leagues references this, so promoting a league (a hockeytech/_leagues.py entry
+# + a hockey/<lg>/ module) only needs it added HERE — no per-list drift.
+_HOCKEYTECH_MODULE_LEAGUES = [
+    "ahl",
+    "ohl",
+    "whl",
+    "qmjhl",
+    "echl",
+    "sphl",
+    "chl",
+    "ushl",
+    "bchl",
+    "ajhl",
+    "sjhl",
+    "ojhl",
+    "cchl",
+    "gojhl",
+    "mhl",
+    "nojhl",
+    "vijhl",
+    "kijhl",
+    "mjhl",
+]
+
+
 # League prefix -> R package whose column docs describe its columns. nfl maps to
 # nflreadr (canonical nflverse dictionaries); nflfastR's variable list is its
 # sibling (``_R_SIBLING_PACKAGES``). A league absent here gets no R fallback.
@@ -614,32 +693,7 @@ _LEAGUE_R_PACKAGE = {
     # NCAA hoops loaders (``load_ncaa_*``, men's and women's): hoopR, then its sibling wehoop.
     "ncaa": "hoopR",
     # Hockey: the HockeyTech league families, PWHL/PHF and the NHL all read fastRhockey.
-    **{
-        lg: "fastRhockey"
-        for lg in (
-            "ahl",
-            "ohl",
-            "whl",
-            "qmjhl",
-            "pwhl",
-            "phf",
-            "echl",
-            "sphl",
-            "chl",
-            "ushl",
-            "bchl",
-            "ajhl",
-            "sjhl",
-            "ojhl",
-            "cchl",
-            "gojhl",
-            "mhl",
-            "nojhl",
-            "vijhl",
-            "kijhl",
-            "mjhl",
-        )
-    },
+    **{lg: "fastRhockey" for lg in ("pwhl", "phf", *_HOCKEYTECH_MODULE_LEAGUES)},
 }
 
 # The European hockey league homes (sdv-internal-refs Phase A intake): one docs/registry prefix
@@ -708,8 +762,12 @@ _NESTED_HOMES = {
 
 
 def _home_module(prefix: str) -> str:
-    """The import path the docs and Examples name for ``prefix`` (``sportsdataverse.<prefix>`` unless nested)."""
-    return f"sportsdataverse.{_NESTED_HOMES.get(prefix, prefix)}"
+    """The import path the docs and Examples name for ``prefix``: its home, never a deprecated alias.
+
+    ``_league_module`` resolves a moved name (``mls`` -> ``soccer.mls``, ``ahl`` -> ``hockey.ahl``)
+    and a nested home, so no page title, module line or Example names an import path that warns
+    (A-L42: 21 Examples and 146 pages named ``sportsdataverse.<moved>``)."""
+    return f"sportsdataverse.{_league_module(prefix)}"
 
 
 # Flat-API families with NO R counterpart. Their columns never passed through an R package,
@@ -1223,8 +1281,13 @@ class _EndpointView:
         raw_types: list[str] | None = None,
         doc_extras: dict | None = None,
         getter_module: str = "sportsdataverse._codegen_runtime",
+        schema_league: str | None = None,
         route_getter: tuple[str, str] | None = None,
     ):
+        # ``schema_league`` keys the per-league returns-schema lookup (``_schema_doc``);
+        # a sport-specific parser override documents its sport's schema, not the prefix's.
+        schema_key = schema_league or league.prefix
+        self.schema_league = schema_key
         # A league-specific example (spec.Endpoint.league_example_args) replaces the default.
         if league.prefix in ep.league_example_args:
             ep = dataclasses.replace(ep, example_args=ep.league_example_args[league.prefix])
@@ -1284,15 +1347,18 @@ class _EndpointView:
             or any(p.has_transform for p in ep.path_params)
         )
         self.has_dynamic_path = needs_build
+        # ESPN wrappers quote every runtime path token (A-N2); the flat families keep their own contract.
+        quote_path = not flat
         if needs_build:
-            self.path_build_expr = self._build_path_expr(ep, ep_host, league)
+            self.path_build_expr = self._build_path_expr(ep, ep_host, league, quote_path)
             self.url_literal = "__url"
         else:
             self.path_build_expr = ""
             # f-string whenever a runtime token is present: an endpoint path param OR
             # (param mode) the {league} token.
             needs_fstring = bool(ep.path_params) or league.league_param
-            self.url_literal = ('f"' + url + '"') if needs_fstring else ('"' + url + '"')
+            literal = _quote_path_tokens(url) if quote_path else url
+            self.url_literal = ('f"' + literal + '"') if needs_fstring else ('"' + url + '"')
 
         # The route's own getter (``getter:``) as (module, call name); default the family's ``_get``.
         route_module, self.getter_name = route_getter or (getter_module, "_get")
@@ -1323,8 +1389,9 @@ class _EndpointView:
             league_param=league.league_param,
             doc_extras=doc_extras,
             import_from=_home_module(league.prefix) if league.prefix else "",
-            returns_frames=_returns_dict(_schema_doc(ep.returns_schema, league.prefix)),
+            returns_frames=_returns_dict(_schema_doc(ep.returns_schema, schema_key)),
             vocab_raises=route_module in _VOCAB_GETTERS,
+            getter_raises=_GETTER_RAISES.get(route_module, ()),
             curl_example=self.curl_example,
         )
 
@@ -1334,11 +1401,21 @@ class _EndpointView:
         self.http_method = ep.method.upper()
         self.valid_url = self.example_url  # empty for a body endpoint (a GET would 405): its docs show the curl request
         self.param_rows = _param_rows(ep, league.prefix, fn_name)
-        self.raises_rows = _raises_rows(_raises_lines(doc_extras or {}, getter_module in _VOCAB_GETTERS))
-        self.return_table = _return_table(ep.returns_schema, league.prefix)
-        schema_doc = _schema_doc(ep.returns_schema, league.prefix)
+        self.raises_rows = _raises_rows(
+            _raises_lines(doc_extras or {}, route_module in _VOCAB_GETTERS, _GETTER_RAISES.get(route_module, ()))
+        )
+        self.return_table = _return_table(ep.returns_schema, schema_key)
+        schema_doc = _schema_doc(ep.returns_schema, schema_key)
         self.return_frames = schema_doc.get("kind") == "frames"
         self.returns_dict = _returns_dict(schema_doc)
+        # The parsed return the signature names follows the docstring: a dict of frames when the
+        # docstring says one (a ``parsed_doc`` or a dict-of-frames schema), else one frame (R858-4).
+        parsed = (
+            "Dict[str, pl.DataFrame], Dict[str, pd.DataFrame]"
+            if (self.parsed_doc_md or self.returns_dict)
+            else "pl.DataFrame, pd.DataFrame"
+        )
+        self.parsed_annotation = f"Union[{parsed}, {self.raw_hint}]"
         self.frames_by = str(schema_doc.get("frames_by") or "")
         self.unverified = str(schema_doc.get("unverified") or "")
         self.returns_prose = _normalize_rst(ep.summary or "")
@@ -1348,10 +1425,15 @@ class _EndpointView:
         self.api_name = ""  # set by _espn_league_views for per-API docs filtering
 
     @staticmethod
-    def _build_path_expr(ep: spec.Endpoint, ep_host: str, league: spec.League) -> str:
+    def _build_path_expr(ep: spec.Endpoint, ep_host: str, league: spec.League, quote_path: bool = False) -> str:
         """Emit Python statements (newline+4-space joined) that assign ``__url``."""
         sport = league.sport
         lg = "{league}" if league.league_param else league.league
+
+        def _sub(path: str) -> str:
+            out = _sub_slugs(path, sport, lg)
+            return _quote_path_tokens(out) if quote_path else out
+
         lines: list[str] = []
         for p in ep.path_params:
             if p.default_from:
@@ -1364,9 +1446,9 @@ class _EndpointView:
             head, rest = ep.path.split("[", 1)
             seg, tail = rest.split("]", 1)  # seg e.g. "/{stat_type}" or "/groups/{group_id}"; tail may be ""
             seg_param = _path_token_first(seg)
-            head_f = _sub_slugs(head, sport, lg)
-            seg_f = _sub_slugs(seg, sport, lg)
-            tail_f = _sub_slugs(tail, sport, lg)
+            head_f = _sub(head)
+            seg_f = _sub(seg)
+            tail_f = _sub(tail)
             lines.append(f'__seg = f"{seg_f}" if {seg_param} is not None else ""')
             url_expr = f'f"{ep_host}{head_f}" + __seg'
             if tail_f:
@@ -1374,8 +1456,8 @@ class _EndpointView:
             lines.append(f"__url = {url_expr}")
         elif ep.now_variant:
             toggle = _now_toggle(ep)
-            now_f = ep_host + _sub_slugs(ep.now_variant, sport, lg)
-            full_f = ep_host + _sub_slugs(ep.path, sport, lg)
+            now_f = ep_host + _sub(ep.now_variant)
+            full_f = ep_host + _sub(ep.path)
             # Emit the now-variant as an f-string only when it still has path-param
             # placeholders to interpolate (e.g. /club-schedule-season/{team}/now);
             # placeholder-free now-variants (e.g. /score/now) stay plain literals so
@@ -1383,21 +1465,30 @@ class _EndpointView:
             now_literal = f'f"{now_f}"' if "{" in now_f else f'"{now_f}"'
             lines.append(f'__url = {now_literal} if {toggle} is None else f"{full_f}"')
         else:
-            full_f = _sub_slugs(ep.path, sport, lg)
+            full_f = _sub(ep.path)
             lines.append(f'__url = f"{ep_host}{full_f}"')
         return "\n    ".join(lines)
+
+
+def _ruff_format(*paths: Path) -> None:
+    """``ruff format`` the given files / directories; raise when ruff fails (A-L9).
+
+    ruff exits non-zero when a rendered file is not valid Python (or ruff itself is missing).
+    Ignoring that wrote the file unformatted and let ``--check`` compare invalid output with
+    invalid output, so the error surfaced only later as an import failure.
+    """
+    proc = subprocess.run([*_RUFF, "format", *map(str, paths)], capture_output=True, text=True, check=False)
+    if proc.returncode != 0:
+        raise RuntimeError(f"ruff format failed (exit {proc.returncode}): {(proc.stderr or proc.stdout).strip()}")
 
 
 def _ruff_format_dir(path: Path) -> None:
     """Format every ``.py`` under ``path`` with ruff *file-based*, so the repo's
     ``[tool.ruff.format]`` config (line-length=120, etc.) is discovered and applied --
     byte-for-byte identical to the pre-commit ruff hook. (Stdin formatting ignores the
-    per-directory config and diverges from the hook.) No-op if ruff isn't installed.
+    per-directory config and diverges from the hook.) Raises when ruff fails.
     """
-    try:
-        subprocess.run([*_RUFF, "format", str(path)], capture_output=True, text=True, check=False)
-    except FileNotFoundError:
-        pass
+    _ruff_format(path)
 
 
 _ESPN_RENAME_FILE = ROOT / "tools" / "codegen" / "espn_rename_map.yaml"
@@ -1468,8 +1559,19 @@ def _convention_rename(short: str) -> str:
 # ``player_stats_v3`` alongside a bare ``player_stats`` -- but only WHEN that bare
 # name is taken. When no bare sibling exists (most leagues) it keeps the bare
 # ``player_stats`` name, so a lone endpoint is never left orphaned as ``*_v3``.
+#
+# The same rule renames a generated wrapper whose bare name a hand-written function already
+# holds at package level (B-M31): ``sportsdataverse.cfb.espn_cfb_calendar`` runs the
+# hand-written calendar, so the site-v2 wrapper becomes ``espn_cfb_calendar_site`` (the
+# ``_site`` qualifier ``teams_site`` already uses). Only the shadowed leagues rename; a league
+# with no hand-written sibling keeps the bare name. The old ext-module import keeps working
+# for one release through the module's ``__getattr__`` and warns (``_RENAMED``).
 _ESPN_COLLISION_VERSIONED: dict[str, str] = {
     "athlete_stats": "player_stats_v3",
+    "calendar": "calendar_site",
+    "draft": "draft_site",
+    "standings": "standings_site",
+    "team_roster": "team_roster_site",
 }
 
 # Per-sport parser-name overrides: when rendering a league of sport S, endpoint short K
@@ -1505,17 +1607,33 @@ def _versioned_on_collision(short: str, prefix: str) -> str | None:
     return f"espn_{prefix}_{suffix}" if suffix else None
 
 
+def _import_league_package(prefix: str):
+    """``sportsdataverse.<league module>``, or ``None`` only when that package does not exist yet.
+
+    Bootstrapping a new league is the one import failure that means "no names here". Any other
+    failure (a syntax error mid-edit, a missing optional dependency, a module the package imports
+    that is gone) re-raises: an empty answer would quietly change public names (undo the B-M31
+    renames, R903-3) or drop documented parameters on a local regen (A-L11).
+    """
+    import importlib
+
+    target = f"sportsdataverse.{_league_module(prefix)}"
+    try:
+        return importlib.import_module(target)
+    except ModuleNotFoundError as e:
+        if e.name and (target == e.name or target.startswith(f"{e.name}.")):
+            return None
+        raise
+
+
 def _handwritten_espn_names(prefix: str) -> set[str]:
     """``espn_<prefix>_*`` public names NOT provided by the generated *_espn_ext module.
 
     Resolves each public name on the package and keeps those whose ``__module__`` is
     a sibling (or unknown, e.g. decorated/partial) -- robust to decorators that the
     per-module ``vars()`` scan misses (e.g. cached ``espn_cfb_teams``)."""
-    import importlib
-
-    try:
-        pkg = importlib.import_module(f"sportsdataverse.{_league_module(prefix)}")
-    except Exception:
+    pkg = _import_league_package(prefix)
+    if pkg is None:
         return set()
     out: set[str] = set()
     for n in dir(pkg):
@@ -1543,6 +1661,7 @@ def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
     renames = _load_espn_renames()
     drops = _load_espn_drops()
     handwritten = _handwritten_espn_names(league.prefix)
+    overrides = _SPORT_PARSER_OVERRIDES.get(league.sport, {})
     collected = []  # (ep, ep_host, base, api_name)
     for api in apis:
         host_url = hosts[api.host]
@@ -1573,16 +1692,48 @@ def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
                     _ESPN_RENAME_SKIPPED[base] = f"{new} (collision)"
             else:
                 fn_name = new
+        renamed_from = None
+        if fn_name in handwritten:
+            # B-M31: the package name runs a hand-written function, so this wrapper was reachable
+            # only through ``*_espn_ext``. Version-qualify it; the old ext import is deprecated.
+            versioned = _versioned_on_collision(ep.short, league.prefix)
+            if versioned and versioned not in base_names and versioned not in handwritten and versioned not in used:
+                renamed_from, fn_name = fn_name, versioned
         used.add(fn_name)
-        view = _EndpointView(ep, fn_name, ep_host, league, doc_extras=ep.docstring)
+        # The sport parser override is applied BEFORE the view is built: the view renders
+        # the docstring and the returns table from ``ep``, so a later swap left 68 soccer and
+        # cricket wrappers documenting ``parse_scoreboard`` (and the generic tables) while
+        # calling ``parse_soccer_*`` / ``parse_cricket_*`` (A-M21).
+        schema_league = None
+        if ep.short in overrides:
+            ep = dataclasses.replace(ep, parser=overrides[ep.short])
+            schema_league = league.sport
+        doc_extras = ep.docstring
+        if renamed_from:  # say why two functions exist (R903-5)
+            doc_extras = dict(ep.docstring or {})
+            doc_extras["notes"] = [
+                *(doc_extras.get("notes") or []),
+                f"``sportsdataverse.{_league_module(league.prefix)}.{renamed_from}`` is a different, hand-written "
+                f"function. This generated ESPN wrapper used that name inside ``{league.prefix}_espn_ext``; "
+                "importing it from there under the old name is deprecated.",
+            ]
+        view = _EndpointView(ep, fn_name, ep_host, league, doc_extras=doc_extras, schema_league=schema_league)
         view.api_name = api_name
+        view.renamed_from = renamed_from
         views.append(view)
-    overrides = _SPORT_PARSER_OVERRIDES.get(league.sport, {})
-    if overrides:
-        for v in views:
-            if v.short in overrides:
-                v.parser = overrides[v.short]
     return views
+
+
+def _documented_espn_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
+    """The ESPN views whose package-level name runs the generated wrapper: what the docs describe.
+
+    Where a hand-written function holds the same name (``espn_cfb_calendar``, ``espn_wbb_standings``,
+    ...), ``sportsdataverse.<lg>.<name>`` resolves to it, so documenting the generated wrapper's
+    signature and table under that name documents a function the name never runs (B-M31). The
+    autodoc page documents the hand-written one instead; the generated wrapper keeps its name in
+    the ``*_espn_ext`` module (renaming it is an owner decision)."""
+    shadowed = _handwritten_espn_names(league.prefix)
+    return [v for v in _espn_league_views(league, apis, hosts) if v.fn_name not in shadowed]
 
 
 def _league_module_source(league: spec.League, apis, hosts) -> str:
@@ -1600,7 +1751,8 @@ def _league_module_source(league: spec.League, apis, hosts) -> str:
         for p in (*v.path_params, *v.query_params):
             if p.transform:
                 transforms.add(p.transform)  # a bare ``offset:`` has no name, so imports nothing
-    runtime_imports = ["_get"] + sorted(transforms)
+    uses_path_seg = any("_path_seg(" in f"{v.url_literal}{v.path_build_expr}" for v in views)
+    runtime_imports = ["_check_kwargs", "_get"] + (["_path_seg"] if uses_path_seg else []) + sorted(transforms)
     template = render.ENV.get_template("espn_league_module.py.jinja")
     return template.render(
         prefix=league.prefix,
@@ -1611,6 +1763,7 @@ def _league_module_source(league: spec.League, apis, hosts) -> str:
         sport_parser_imports=sport_parser_imports,
         sport_parser_module=sport_parser_module,
         runtime_imports=runtime_imports,
+        renamed={v.renamed_from: v.fn_name for v in views if v.renamed_from},
     )
 
 
@@ -1625,11 +1778,8 @@ def reserved_names(prefix: str, exclude_modules: tuple[str, ...] = ()) -> set[st
     ``exclude_modules`` drops names whose ``__module__`` ends with one of the
     given module names -- used so a flat module being regenerated does not treat
     its own (about-to-be-replaced) names as reserved (the bootstrapping case)."""
-    import importlib
-
-    try:
-        mod = importlib.import_module(f"sportsdataverse.{_league_module(prefix)}")
-    except Exception:
+    mod = _import_league_package(prefix)
+    if mod is None:
         return set()
     out: set[str] = set()
     for n in dir(mod):
@@ -1992,16 +2142,23 @@ def build_loaders_live() -> list[Path]:
             init.write_text(init.read_text(encoding="utf-8").rstrip() + "\n" + line, encoding="utf-8", newline="\n")
         written.append(dest)
     if written:
-        subprocess.run([*_RUFF, "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
+        _ruff_format(*written)
     return sorted(written)
+
+
+def _check_tmp(prefix: str) -> Path:
+    """A fresh temp dir inside ``OUT`` for one ``--check`` gate run.
+
+    Inside ``OUT`` so ruff discovers the repo config; unique per run, so two concurrent
+    ``--check`` runs never delete each other's files (a fixed name was rmtree'd on entry).
+    """
+    OUT.mkdir(parents=True, exist_ok=True)
+    return Path(tempfile.mkdtemp(prefix=prefix, dir=OUT))
 
 
 def _loaders_stale() -> list[str]:
     """Live generated {league}_loaders.py files that differ from a fresh render."""
-    tmp = OUT / "_check_loaders_tmp"
-    if tmp.exists():
-        shutil.rmtree(tmp)
-    tmp.mkdir(parents=True, exist_ok=True)
+    tmp = _check_tmp("_check_loaders_")
     try:
         rendered = _render_loaders_all()
         for lg, src in rendered.items():
@@ -2079,6 +2236,9 @@ def _return_schema_parsers():
         "team_schedule": (P.parse_team_schedule, "dataframe"),
         "news": (P.parse_news, "dataframe"),
         "injuries": (P.parse_injuries, "dataframe"),
+        # stat columns named from each sport's `names` / NFL-only `needs`: one schema per captured league
+        "athlete_stats": (P.parse_athlete_stats, "dataframe"),
+        "season_draft": (P.parse_draft, "dataframe"),
     }
 
 
@@ -2276,18 +2436,20 @@ def _refresh_sport_specific_return_schemas() -> int:
     return written
 
 
-def _write_native_schemas(nat: dict) -> int:
+def _write_native_schemas(nat: dict) -> tuple[int, list[str]]:
     """Introspect each flat-API parser on its captured fixture -> ``schemas/native/<api>/<short>.yaml``.
 
     ``nat`` is ``native_fixture_map.yaml``: ``{api: {fixture file: short}}``. A value may also be
     a list of shorts, for one capture that several endpoints parse (the SIHF game page feeds six
-    parsers). Returns the number of schemas written."""
+    parsers). Returns ``(schemas written, failures)``: a parser that crashes on its own committed
+    capture is a failure ``--schemas`` exits 1 on, never a quiet skip that leaves a stale schema
+    behind (A-N14)."""
     import importlib
     import json
 
     import yaml
 
-    written = 0
+    written, failed = 0, []
     params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
     for api, files in nat.items():
         fa = spec.load_flat_api(ENDPOINTS / f"{api}.yaml", params)
@@ -2311,15 +2473,15 @@ def _write_native_schemas(nat: dict) -> int:
                         }
                     else:
                         doc = {"schema": key, "kind": "dataframe", "columns": _cols_from_frame(df, {})}
-                except Exception as e:  # noqa: BLE001
-                    print(f"  native skip {api}/{short} ({fname}): {e}")
+                except Exception as e:  # noqa: BLE001 -- any parser crash is collected; --schemas exits 1 on it
+                    failed.append(f"{api}/{short} ({fname}): {type(e).__name__}: {e}")
                     continue
                 outdir.mkdir(parents=True, exist_ok=True)
                 (outdir / f"{short}.yaml").write_text(
                     yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n"
                 )
                 written += 1
-    return written
+    return written, failed
 
 
 def refresh_return_schemas() -> int:
@@ -2367,14 +2529,17 @@ def refresh_return_schemas() -> int:
 
     # --- natives ---
     nat = yaml.safe_load((ROOT / "tools" / "codegen" / "native_fixture_map.yaml").read_text("utf-8")) or {}
-    written += _write_native_schemas(nat)
+    native_written, native_failed = _write_native_schemas(nat)
+    written += native_written
 
     # --- sport-specific ESPN parsers (soccer/cricket) ---
     sport_written = _refresh_sport_specific_return_schemas()
     written += sport_written
 
     print(f"return schemas: {written} written ({sport_written} sport-specific), {skipped} skipped (no fixture)")
-    return 0
+    for failure in native_failed:
+        print(f"  native parser failed on its capture: {failure}", file=sys.stderr)
+    return 1 if native_failed else 0
 
 
 def _remote_parquet_schema(url: str):
@@ -2399,8 +2564,9 @@ def refresh_loader_schemas() -> int:
     import yaml
 
     rel = _releases_cfg()
+    prev = _loader_schemas()  # a loader whose footers could not be read keeps its committed schema
     out: dict = {}
-    failed = []
+    failed, errors = [], []
     for ld in rel.loaders:
         if ld.stub:
             continue
@@ -2413,14 +2579,20 @@ def refresh_loader_schemas() -> int:
         # NOT unioned: test_declared_schema_matches_the_published_parquet
         # asserts the declared schema equals ONE published season's columns, so
         # a union would document a shape no single asset has. min_season is the
-        # last resort; a season whose footer read raises is skipped.
+        # last resort; a season that is not published (404) is skipped. Any other failed
+        # read (403, rate limit, 5xx, a dead connection) is unknown, not absent: the
+        # loader keeps its committed schema and the run exits 1 (A-L11).
         seasons = [2026, 2025, 2024, 2023, 2022, ld.min_season or 2024]
         got = None
         for s in dict.fromkeys(seasons):
             try:
                 sch = _remote_parquet_schema(spec.fill_season(f"{rel.bases[ld.base]}{ld.url}", s))
-            except Exception:  # noqa: BLE001
+            except FileNotFoundError:  # fsspec's HTTP 404: this season is not published
                 continue
+            except Exception as e:  # noqa: BLE001 -- any failed read is reported and the run exits 1
+                errors.append(f"{ld.fn} {s}: {type(e).__name__}: {e}")
+                got = None
+                break
             if got is None or len(sch) > len(got):
                 got = [{"name": k, "type": str(v)} for k, v in sch.items()]
         # id_int64 columns are cast at the loader boundary AFTER read, so the
@@ -2432,6 +2604,8 @@ def refresh_loader_schemas() -> int:
                     entry["type"] = "Int64"
         if got is None:
             failed.append(ld.fn)
+            if ld.fn in prev:
+                out[ld.fn] = prev[ld.fn]
         else:
             out[ld.fn] = got
     dest = ENDPOINTS.parent / "schemas" / "loader_schemas.yaml"
@@ -2439,7 +2613,9 @@ def refresh_loader_schemas() -> int:
     dest.write_text(yaml.safe_dump(out, sort_keys=True, width=120), encoding="utf-8", newline="\n")
     _loader_schemas.cache_clear()
     print(f"loader schemas: {len(out)} introspected" + (f"; {len(failed)} failed: {failed}" if failed else ""))
-    return 0
+    for error in errors:
+        print(f"  footer read failed: {error}", file=sys.stderr)
+    return 1 if errors else 0
 
 
 def audit_releases() -> int:
@@ -2456,7 +2632,7 @@ def audit_releases() -> int:
     manifest = {ld.tag for ld in rel.loaders if ld.base == "sdv_releases"}
     try:
         live = {t for t in gh_release_tags() if _is_loader_tag(t)}
-    except Exception as e:  # noqa: BLE001
+    except (subprocess.CalledProcessError, FileNotFoundError) as e:  # gh failed, or is not installed
         print(f"--audit-releases: could not query gh release list ({e})", file=sys.stderr)
         return 2
     missing = sorted(live - manifest)
@@ -2542,7 +2718,7 @@ def build_parsed_live() -> list[Path]:
         dest.write_text(src, encoding="utf-8", newline="\n")
         written.append(dest)
     if written:
-        subprocess.run([*_RUFF, "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
+        _ruff_format(*written)
     return sorted(written)
 
 
@@ -2687,16 +2863,13 @@ def build_flat_live() -> list[Path]:
         dest.write_text(src, encoding="utf-8", newline="\n")
         written.append(dest)
     if written:
-        subprocess.run([*_RUFF, "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
+        _ruff_format(*written)
     return sorted(written)
 
 
 def _flat_stale() -> list[str]:
     """Live flat-API modules that differ from a fresh render."""
-    tmp = OUT / "_check_flat_tmp"
-    if tmp.exists():
-        shutil.rmtree(tmp)
-    tmp.mkdir(parents=True, exist_ok=True)
+    tmp = _check_tmp("_check_flat_")
     try:
         rendered = _render_flat_all()
         prefixes = {}
@@ -2718,10 +2891,7 @@ def _flat_stale() -> list[str]:
 
 def _parsed_stale() -> list[str]:
     """Live ``parsed/{league}.py`` files that differ from a fresh render."""
-    tmp = OUT / "_check_parsed_tmp"
-    if tmp.exists():
-        shutil.rmtree(tmp)
-    tmp.mkdir(parents=True, exist_ok=True)
+    tmp = _check_tmp("_check_parsed_")
     try:
         rendered = _render_parsed_all()
         for name, src in rendered.items():
@@ -2847,34 +3017,6 @@ def _container_init_body(group: str, members: list[str], has_ext: bool) -> str:
     return "\n".join(lines)
 
 
-# The hand-written HockeyTech junior/minor league modules under
-# ``sportsdataverse.hockey.*`` (PWHL is separate — it lives at the top level with a
-# richer loader surface). SINGLE SOURCE OF TRUTH: every codegen list that enumerates
-# these leagues references this, so promoting a league (a hockeytech/_leagues.py entry
-# + a hockey/<lg>/ module) only needs it added HERE — no per-list drift.
-_HOCKEYTECH_MODULE_LEAGUES = [
-    "ahl",
-    "ohl",
-    "whl",
-    "qmjhl",
-    "echl",
-    "sphl",
-    "chl",
-    "ushl",
-    "bchl",
-    "ajhl",
-    "sjhl",
-    "ojhl",
-    "cchl",
-    "gojhl",
-    "mhl",
-    "nojhl",
-    "vijhl",
-    "kijhl",
-    "mjhl",
-]
-
-
 def _container_groups(groups_map: dict[str, str]) -> dict[str, list[str]]:
     """Build group → sorted-members mapping from the prefix→group dict.
 
@@ -2934,16 +3076,13 @@ def build_live() -> list[Path]:
         body = _container_init_body(group, members, has_ext)
         (container / "__init__.py").write_text(body, encoding="utf-8", newline="\n")
     if written:
-        subprocess.run([*_RUFF, "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
+        _ruff_format(*written)
     return sorted(written)
 
 
 def _live_stale() -> list[str]:
     """Live ``{prefix}_espn_ext.py`` and container ``__init__.py`` files that differ from a fresh render."""
-    tmp = OUT / "_check_live_tmp"
-    if tmp.exists():
-        shutil.rmtree(tmp)
-    tmp.mkdir(parents=True, exist_ok=True)
+    tmp = _check_tmp("_check_live_")
     try:
         rendered = _render_all()
         for name, src in rendered.items():
@@ -2978,10 +3117,7 @@ def _live_stale() -> list[str]:
 def check() -> int:
     # Render + format in a temp subdir *inside* OUT so ruff discovers the same repo
     # config, then compare byte-for-byte against the committed generated files.
-    tmp = OUT / "_check_tmp"
-    if tmp.exists():
-        shutil.rmtree(tmp)
-    tmp.mkdir(parents=True, exist_ok=True)
+    tmp = _check_tmp("_check_")
     try:
         rendered = _render_all()
         for name, src in rendered.items():
@@ -3143,29 +3279,31 @@ def _docs_corpus(league: str | None) -> str:
     return "\n".join(f.read_text(encoding="utf-8") for f in sorted(base.rglob("*.md")))
 
 
+# A function's reference block opens with a heading that is exactly its name: ``## name``
+# (reference, loader and autodoc pages) or ``### name {#name}`` (family split pages).
+_REFERENCE_HEADING = re.compile(r"^#{2,6}[ \t]+`?([\w.]+)`?(?:[ \t]+\{#[^}\n]*\})?[ \t]*$", re.M)
+
+
 @functools.lru_cache(maxsize=8)
-def _corpus_words(corpus: str) -> frozenset[str]:
-    """Every maximal run of word characters in ``corpus``, computed once per corpus.
+def _corpus_headings(corpus: str) -> frozenset[str]:
+    """Every name that heads a reference block in ``corpus``, computed once per corpus.
 
     A handful of corpora (one per league, the whole tree, the per-league render) are each
     queried thousands of times, so one scan per corpus replaces one regex pass per name.
     The cache is keyed on the string itself: Python caches a str's hash, so a hit on the
     same object costs nothing, and 8 entries bound the memory to 8 corpora."""
-    return frozenset(re.findall(r"\w+", corpus))
+    return frozenset(_REFERENCE_HEADING.findall(corpus))
 
 
 def _is_documented(name: str, corpus: str) -> bool:
-    """True when ``name`` appears as a whole word in ``corpus``.
+    """True when ``name`` has a reference block (a heading that is exactly the name) in ``corpus``.
 
-    A word-boundary match (``_`` counts as a word character) so ``player_stats``
-    is NOT considered documented merely because ``player_stats_v3`` appears, while
-    surrounding punctuation/backticks/whitespace still count as a match. For a name
-    made only of word characters (every Python identifier), ``\\bname\\b`` matches exactly
-    when ``name`` is one of the corpus's maximal word runs, so a set lookup gives the
-    same answer as the regex; any other name keeps the regex."""
-    if re.fullmatch(r"\w+", name) is None:
-        return re.search(r"\b" + re.escape(name) + r"\b", corpus) is not None
-    return name in _corpus_words(corpus)
+    A mention is not documentation (A-M3): a returns-table cell, a parity row, a companion
+    note or a cross-reference naming ``load_pbp`` says nothing about where ``load_pbp`` is
+    documented, and counting it left 21 public names with no reference block while the
+    coverage gate stayed green. ``player_stats`` is not documented by a
+    ``## player_stats_v3`` heading either: the heading must be the whole name."""
+    return name in _corpus_headings(corpus)
 
 
 def _coverage_gaps() -> list[tuple[str, list[str]]]:
@@ -3394,14 +3532,14 @@ _FLAT_API_DOC = {
     "mlb_api": "MLB Stats API",
     "mlb_statcast": "MLB Statcast (Baseball Savant)",
     "nfl_api": "NFL.com API",
+    "nflpro": "NFL Pro API (pro.nfl.com, NFL+ Premium account)",
     "nba_stats": "NBA Stats API (stats.nba.com)",
     "wnba_stats": "WNBA Stats API (stats.wnba.com)",
     "on3": "On3 Recruit Database (api.on3.com)",
     "sports247": "247Sports Recruit Database (ipa.247sports.com)",
     "sports247_site_pages": "247Sports Site Pages (247sports.com)",
-    # keyed twice: "pff" matches the FLAT_APIS stem; "pff_core" matches the rendered
-    # module name the docs renderer looks up (api.module).
-    "pff": "PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API)",
+    # keyed by the rendered module name the docs renderer looks up (``fa.module``), not the
+    # FLAT_APIS stem: the ``pff`` stem renders module ``pff_core``.
     "pff_core": "PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API)",
     "pff_api": "PFF Developer API (api.pff.com, API key)",
     "torvik": "Bart Torvik T-Rank (barttorvik.com)",
@@ -3582,7 +3720,7 @@ def _apis_for(prefix: str) -> list[dict]:
     league = next((lg for lg in cfg.leagues if lg.prefix == prefix), None)
     if league is not None:
         espn_apis = [spec.load_espn_api(ENDPOINTS / f"{a}.yaml", params) for a in ESPN_APIS]
-        views = _espn_league_views(league, espn_apis, cfg.hosts)
+        views = _documented_espn_views(league, espn_apis, cfg.hosts)
         for api_obj, name in zip(espn_apis, ESPN_APIS):
             count = sum(1 for v in views if v.api_name == name)
             if count:
@@ -3632,7 +3770,7 @@ def render_reference_page(prefix: str, api: str, position: int = 1) -> str:
         cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
         league = next(lg for lg in cfg.leagues if lg.prefix == prefix)
         espn_apis = [spec.load_espn_api(ENDPOINTS / f"{a}.yaml", params) for a in ESPN_APIS]
-        endpoints = [v for v in _espn_league_views(league, espn_apis, cfg.hosts) if v.api_name == api]
+        endpoints = [v for v in _documented_espn_views(league, espn_apis, cfg.hosts) if v.api_name == api]
         _slug, label = _ESPN_API_DOC[api]
     else:
         fa = spec.load_flat_api(ENDPOINTS / f"{api}.yaml", params)
@@ -3939,6 +4077,19 @@ def _autodoc_return_columns(scope: str, fn: str) -> tuple:
     return tuple(d.get("columns", []) or [])
 
 
+def _autodoc_return_frames(scope: str, fn: str) -> list:
+    """``[{section, columns}]`` from a ``kind: frames`` autodoc schema (a function returning a dict of
+    frames, one table per key), else ``[]``. A dict of frames documented as one flat table of
+    ``key.column`` names described a frame the function never returns (B-M32)."""
+    p = _AUTODOC_SCHEMA_DIR / scope / f"{fn}.yaml"
+    if not p.exists():
+        return []
+    import yaml
+
+    d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+    return list(d.get("frames") or []) if d.get("kind") == "frames" else []
+
+
 def _autodoc_unverified(scope: str, fn: str) -> str:
     """The committed ``unverified:`` reason for an autodoc function with no capturable table, or ``""``."""
     p = _AUTODOC_SCHEMA_DIR / scope / f"{fn}.yaml"
@@ -3959,6 +4110,8 @@ _PARSER_SUFFIX_LEAK_EXCEPTIONS = frozenset(
     {
         "sportsdataverse.mbb.mbb_ncaa_team_parsers",
         "sportsdataverse.wbb.wbb_ncaa_team_parsers",
+        # ``atrium_end_year`` is user-facing: every atrium wrapper's docstring tells callers to use it
+        "sportsdataverse.basketball.atrium.atrium_parsers",
     },
 )
 
@@ -4196,81 +4349,79 @@ def _fallback_doc_sections(raw: str) -> dict:
     Returns ``{"params": [...], "returns": str, "example": str}`` where each
     param is ``{"arg_name", "type_name", "description"}``. Continuation lines
     (lines that do NOT open a new ``name (...):`` / ``name:`` entry) are
-    space-joined onto the previous param's description. Never raises; returns
-    empty pieces when it cannot parse."""
+    space-joined onto the previous param's description. Returns empty pieces when
+    it finds no section; it is plain string work, so an exception here is a bug and
+    propagates (A-L11) instead of silently dropping a page's Args/Returns."""
     out = {"params": [], "returns": "", "example": ""}
     if not raw:
         return out
-    try:
-        lines = raw.splitlines()
-        # Group lines into sections keyed by header name. Anything before the
-        # first header is preamble (short/long description) and ignored here.
-        sections: dict[str, list[str]] = {}
-        current: str | None = None
-        for ln in lines:
-            m = _FALLBACK_HEADER_RE.match(ln)
-            if m:
-                current = m.group(1).strip().lower()
-                sections.setdefault(current, [])
-                trailing = m.group(2).strip()
-                if trailing:
-                    sections[current].append("    " + trailing)
-                continue
-            if current is not None:
-                sections[current].append(ln)
+    lines = raw.splitlines()
+    # Group lines into sections keyed by header name. Anything before the
+    # first header is preamble (short/long description) and ignored here.
+    sections: dict[str, list[str]] = {}
+    current: str | None = None
+    for ln in lines:
+        m = _FALLBACK_HEADER_RE.match(ln)
+        if m:
+            current = m.group(1).strip().lower()
+            sections.setdefault(current, [])
+            trailing = m.group(2).strip()
+            if trailing:
+                sections[current].append("    " + trailing)
+            continue
+        if current is not None:
+            sections[current].append(ln)
 
-        def section(*keys: str) -> list[str]:
-            for k in keys:
-                if k in sections:
-                    return sections[k]
-            return []
+    def section(*keys: str) -> list[str]:
+        for k in keys:
+            if k in sections:
+                return sections[k]
+        return []
 
-        # --- Args / Parameters ---------------------------------------------
-        arg_lines = section("args", "arguments", "parameters", "param")
-        params: list[dict] = []
-        for raw_line in arg_lines:
-            s = raw_line.strip()
-            if not s:
-                continue
-            am = _ARG_LINE_RE.match(s)
-            if am and (am.group("type") is not None or " " not in am.group("name")):
-                # New entry. Guard: a continuation line like "4 for all-star: x"
-                # would falsely match name="4"? No -- name must be an identifier
-                # (\w starting with a letter/underscore), so leading-digit
-                # continuations are treated as continuations below.
-                params.append(
-                    {
-                        "arg_name": am.group("name"),
-                        "type_name": (am.group("type") or "").strip(),
-                        "description": am.group("desc").strip(),
-                    },
-                )
-            elif params:
-                # Continuation of the previous param's description.
-                joined = (params[-1]["description"] + " " + s).strip()
-                params[-1]["description"] = joined
-            # else: stray line before any param -- ignore.
-        for p in params:
-            p["description"] = _normalize_rst(" ".join(p["description"].split()))
-        out["params"] = params
+    # --- Args / Parameters ---------------------------------------------
+    arg_lines = section("args", "arguments", "parameters", "param")
+    params: list[dict] = []
+    for raw_line in arg_lines:
+        s = raw_line.strip()
+        if not s:
+            continue
+        am = _ARG_LINE_RE.match(s)
+        if am and (am.group("type") is not None or " " not in am.group("name")):
+            # New entry. Guard: a continuation line like "4 for all-star: x"
+            # would falsely match name="4"? No -- name must be an identifier
+            # (\w starting with a letter/underscore), so leading-digit
+            # continuations are treated as continuations below.
+            params.append(
+                {
+                    "arg_name": am.group("name"),
+                    "type_name": (am.group("type") or "").strip(),
+                    "description": am.group("desc").strip(),
+                },
+            )
+        elif params:
+            # Continuation of the previous param's description.
+            joined = (params[-1]["description"] + " " + s).strip()
+            params[-1]["description"] = joined
+        # else: stray line before any param -- ignore.
+    for p in params:
+        p["description"] = _normalize_rst(" ".join(p["description"].split()))
+    out["params"] = params
 
-        # --- Returns / Yields ----------------------------------------------
-        ret_lines = section("returns", "return", "yields", "yield")
-        if ret_lines:
-            ret = textwrap_dedent_join(ret_lines)
-            ret = " ".join(ret.split())
-            # Strip a leading ``pl.DataFrame:`` / ``type:`` prefix if present.
-            rm = re.match(r"^[A-Za-z_][\w.\[\], |]*\s*:\s*(.*)$", ret)
-            if rm and rm.group(1):
-                ret = rm.group(1).strip()
-            out["returns"] = _normalize_rst(ret)
+    # --- Returns / Yields ----------------------------------------------
+    ret_lines = section("returns", "return", "yields", "yield")
+    if ret_lines:
+        ret = textwrap_dedent_join(ret_lines)
+        ret = " ".join(ret.split())
+        # Strip a leading ``pl.DataFrame:`` / ``type:`` prefix if present.
+        rm = re.match(r"^[A-Za-z_][\w.\[\], |]*\s*:\s*(.*)$", ret)
+        if rm and rm.group(1):
+            ret = rm.group(1).strip()
+        out["returns"] = _normalize_rst(ret)
 
-        # --- Example / Examples --------------------------------------------
-        ex_lines = section("examples", "example")
-        if ex_lines:
-            out["example"] = textwrap_dedent_join(ex_lines).strip()
-    except Exception:  # noqa: BLE001 -- never raise on odd docstrings.
-        return {"params": [], "returns": "", "example": ""}
+    # --- Example / Examples --------------------------------------------
+    ex_lines = section("examples", "example")
+    if ex_lines:
+        out["example"] = textwrap_dedent_join(ex_lines).strip()
     return out
 
 
@@ -4401,12 +4552,12 @@ def _parse_doc_params(raw: str) -> dict:
     Strict ``docstring_parser`` first; the lenient ``_fallback_doc_sections``
     recovery only when the strict parse yields no params (wrapped multi-line
     Google ``Args`` defeat the strict parser)."""
-    from docstring_parser import parse
+    from docstring_parser import ParseError, parse
 
     raw = raw or ""
     try:
         ds = parse(raw)
-    except Exception:  # noqa: BLE001 -- AUTO parse can raise on malformed sections.
+    except ParseError:  # a malformed section: _fallback_doc_sections recovers it below
         ds = None
     out: dict[str, dict] = {}
     ds_params = list(ds.params) if ds is not None else []
@@ -4483,12 +4634,12 @@ def _doc_view(obj) -> dict:
     empty ``methods`` list."""
     import inspect
 
-    from docstring_parser import parse
+    from docstring_parser import ParseError, parse
 
     raw = inspect.getdoc(obj) or ""
     try:
         ds = parse(raw)
-    except Exception:  # noqa: BLE001 -- AUTO parse can raise on malformed sections.
+    except ParseError:  # a malformed section: _fallback_doc_sections recovers it below
         ds = None
 
     # Lenient recovery for docstrings the strict parser drops (wrapped multi-line
@@ -4660,11 +4811,19 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
         # (league-aware; ``global`` scope has no R fallback, league=None);
         # a non-empty captured description is preserved.
         return_columns = [dict(c) for c in _autodoc_return_columns(scope, n)]
-        for c in return_columns:
+        return_frames = [
+            {"section": f["section"], "columns": [dict(c) for c in f.get("columns") or []]}
+            for f in _autodoc_return_frames(scope, n)
+        ]
+        cells = [("", c) for c in return_columns] + [(f["section"], c) for f in return_frames for c in f["columns"]]
+        for section, c in cells:
             raw_name = str(c.get("name", ""))
-            c["description"] = _table_cell_desc(
-                str(c.get("description", "")), league, raw_name, getattr(obj, "__sdv_base__", n)
-            )
+            stored, desc_schema = str(c.get("description", "")), getattr(obj, "__sdv_base__", n)
+            # a frame's column reads its ``<section>.<col>`` manual key first: a player's and an
+            # official's ``person_id`` are described differently
+            c["description"] = (
+                section and _table_cell_desc(stored, league, f"{section}.{raw_name}", desc_schema)
+            ) or _table_cell_desc(stored, league, raw_name, desc_schema)
             c["name"] = raw_name.replace("|", "\\|")
             c["type"] = str(c.get("type", "")).replace("|", "\\|")
         by_family.setdefault(_autodoc_family(n, highlighted, module=getattr(obj, "__module__", "")), []).append(
@@ -4672,7 +4831,8 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
                 "name": n,
                 "signature": _autodoc_signature(obj),
                 "return_columns": return_columns,
-                "return_unverified": "" if return_columns else _autodoc_unverified(scope, n),
+                "return_frames": return_frames,
+                "return_unverified": "" if return_columns or return_frames else _autodoc_unverified(scope, n),
                 "minted": hasattr(obj, "__sdv_base__"),
                 **view,
             },
@@ -4930,7 +5090,7 @@ def refresh_autodoc_schemas() -> int:
                 df = _call_with_timeout(
                     lambda: obj(**{k: _resolve_autodoc_arg(v, memo) for k, v in kwargs.items()}), timeout
                 )
-            except (Exception, _CallTimeout) as e:  # noqa: BLE001
+            except (Exception, _CallTimeout) as e:  # noqa: BLE001 -- a live call of any public fn; every skip is reported
                 msg = str(e).splitlines()[0][:120] if str(e) else type(e).__name__
                 print(f"  autodoc skip {scope_key}.{fn}: {msg}")
                 skip_reasons.append(f"{scope_key}.{fn}: {msg}")
@@ -5512,11 +5672,6 @@ _INTRO_MARKERS = (
     "<!-- BEGIN generated: leagues-and-sources -->",
     "<!-- END generated: leagues-and-sources -->",
 )
-# League prefix -> the import path shown in intro.md, where it is not sportsdataverse.<prefix>.
-_INTRO_MODULE = {
-    **{lg: f"sportsdataverse.hockey.{lg}" for lg in _HOCKEYTECH_MODULE_LEAGUES},
-    **{lg: _home_module(lg) for lg in _NESTED_HOMES},
-}
 
 
 def _patch_between_markers(text: str, begin: str, end: str, body: str) -> str:
@@ -5543,7 +5698,7 @@ def render_intro_sources_table(autodoc_by_scope: dict[str | None, list[str]]) ->
         if not rows:
             continue
         cell = ", ".join(f"{r['label']} ({r['count']})" for r in rows)
-        module = _INTRO_MODULE.get(prefix, f"sportsdataverse.{prefix}")
+        module = _home_module(prefix)
         lines.append(f"| [{_LEAGUE_LABELS.get(prefix, prefix.upper())}]({prefix}/) | `{module}` | {cell} |")
     return "\n".join(lines)
 
@@ -5749,7 +5904,12 @@ def main(argv=None) -> int:
         action="store_true",
         help="report user-facing functions that never reach the rendered docs (offline; report-only)",
     )
+    ap.add_argument("--parsed-and-docs", action="store_true", help=argparse.SUPPRESS)
     args = ap.parse_args(argv)
+    if args.parsed_and_docs:
+        p, d = len(build_parsed_live()), len(build_docs())
+        print(f"codegen: wrote {p} parsed modules + {d} doc files")
+        return 0
     if args.coverage:
         return coverage_report()
     if args.autodoc_schemas:
@@ -5816,14 +5976,14 @@ def main(argv=None) -> int:
         return rc
     build()
     n = len(build_live())
-    p = len(build_parsed_live())
     f = len(build_flat_live())
     ldr = len(build_loaders_live())
-    d = len(build_docs())
-    print(
-        f"codegen: wrote {n} live + {p} parsed + {f} flat-API + {ldr} loader modules "
-        f"+ {d} doc files + refreshed staging at {OUT}",
-    )
+    print(f"codegen: wrote {n} live + {f} flat-API + {ldr} loader modules + refreshed staging at {OUT}", flush=True)
+    # The parsed aliases and the docs read the package's live signatures and docstrings, and this
+    # process imported the package (and cached what it read) before the stages above rewrote it.
+    # Rendering them here took a second run to converge (A-L10); a fresh interpreter reads what
+    # was just written.
+    subprocess.run([sys.executable, str(Path(__file__).resolve()), "--parsed-and-docs"], check=True)
     return 0
 
 

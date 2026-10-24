@@ -6,6 +6,243 @@ description: "MBB — additional Python functions — stats.ncaa.org: ncaa_mbb�
 ---
 # MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–validate_lineup
 
+### ncaa_mbb_player_stats {#ncaa_mbb_player_stats}
+
+`ncaa_mbb_player_stats(pbp: 'pl.DataFrame', *, multi_games: 'bool' = False, simple: 'bool' = False, fix_tip_in: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Aggregate bigballR-contract play-by-play into per-player box stats.
+
+Port of bigballR `get_player_stats` (`all_functions.R:2810-3177`) +
+its `get_mins` helper (`:3240-3263`). Counting stats are summarised
+per (game, team, player), assists counted from `player_2`, minutes and
+offensive possessions derived from the ten on-court columns, and rates
+(FG%, TS%, eFG%, rim/mid splits, ...) computed from the counters and
+rounded to 3 decimals with R's `round` semantics. With
+`multi_games=True` the per-game rows are summed per (player, team),
+every rate is recomputed from the summed counters (never averaged), and
+`GP`/`GS` are appended.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame in the sdv-py 35-column snake_case bigballR contract. May span multiple games. |
+| `multi_games` | `bool` | `False` | When True, aggregate across games per (player, team) — the season-stat surface. When False (default, R parity), treat each game separately and keep the game id columns. |
+| `simple` | `bool` | `False` | When True, return the reduced 33-column (multi) / 35-column (per-game) surface without the transition / assisted / putback / block-location splits. |
+| `fix_tip_in` | `bool` | `True` | When True (default), rim and putback stats count the scrape engine's real `"Tip In"` vocabulary. When False, reproduce R's literal `"Tip-In"` test (`all_functions.R:2827`) — tip-ins silently excluded — for oracle parity. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+`pl.DataFrame` (or `pd.DataFrame`): one row per player+team (+game when `multi_games=False`). Columns follow `PLAYER_STATS_COLUMNS` / `PLAYER_STATS_SIMPLE_COLUMNS` / `PLAYER_GAME_STATS_COLUMNS` / `PLAYER_GAME_STATS_SIMPLE_COLUMNS`. Rows sorted by the group keys (byte order, matching dplyr's C-locale group order). Empty input yields an empty frame with the documented schema.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `team` | character | Team-side label or team identifier. |
+| `player` | character | Player name. |
+| `mins` | double |  |
+| `o_poss` | double |  |
+| `pts` | double | Points scored. |
+| `orb` | double |  |
+| `drb` | double |  |
+| `ast` | double | Assists. |
+| `stl` | double | Steals. |
+| `blk` | double | Blocks. |
+| `tov` | double | Turnovers. |
+| `pf` | double | Personal fouls. |
+| `ts_pct` | double | True shooting percentage (0-1). |
+| `efg_pct` | double |  |
+| `fgm` | double | Field goals made. |
+| `fga` | double | Field goal attempts. |
+| `fg_pct` | double | Field goal percentage (0-1). |
+| `tpm` | double |  |
+| `tpa` | double |  |
+| `tp_pct` | double |  |
+| `ftm` | double | Free throws made. |
+| `fta` | double | Free throw attempts. |
+| `ft_pct` | double | Free throw percentage (0-1). |
+| `rimm` | double |  |
+| `rima` | double |  |
+| `rim_pct` | double |  |
+| `midm` | double |  |
+| `mida` | double |  |
+| `mid_pct` | double |  |
+| `pbackm` | double |  |
+| `pbacka` | double |  |
+| `pback_pct` | double |  |
+| `blk_rim` | double |  |
+| `blk_mid` | double |  |
+| `blk_three` | double |  |
+| `pct_fga_trans` | double |  |
+| `pct_tpa_trans` | double |  |
+| `pct_rima_trans` | double |  |
+| `pct_fgm_trans` | double |  |
+| `pct_tpm_trans` | double |  |
+| `pct_rimm_trans` | double |  |
+| `pct_fgm_ast` | double |  |
+| `pct_tpm_ast` | double |  |
+| `pct_rimm_ast` | double |  |
+| `pts_trans` | double |  |
+| `orb_trans` | double |  |
+| `drb_trans` | double |  |
+| `ast_trans` | double |  |
+| `stl_trans` | double |  |
+| `blk_trans` | double |  |
+| `tov_trans` | double |  |
+| `ts_pct_trans` | double |  |
+| `efg_pct_trans` | double |  |
+| `fgm_trans` | double |  |
+| `fga_trans` | double |  |
+| `fg_pct_trans` | double |  |
+| `tpm_trans` | double |  |
+| `tpa_trans` | double |  |
+| `tp_pct_trans` | double |  |
+| `ftm_trans` | double |  |
+| `fta_trans` | double |  |
+| `ft_pct_trans` | double |  |
+| `rimm_trans` | double |  |
+| `rima_trans` | double |  |
+| `rim_pct_trans` | double |  |
+| `midm_trans` | double |  |
+| `mida_trans` | double |  |
+| `mid_pct_trans` | double |  |
+| `pts_half` | double |  |
+| `orb_half` | double |  |
+| `drb_half` | double |  |
+| `ast_half` | double |  |
+| `stl_half` | double |  |
+| `blk_half` | double |  |
+| `tov_half` | double |  |
+| `ts_pct_half` | double |  |
+| `efg_pct_half` | double |  |
+| `fgm_half` | double |  |
+| `fga_half` | double |  |
+| `fg_pct_half` | double |  |
+| `tpm_half` | double |  |
+| `tpa_half` | double |  |
+| `tp_pct_half` | double |  |
+| `ftm_half` | double |  |
+| `fta_half` | double |  |
+| `ft_pct_half` | double |  |
+| `rimm_half` | double |  |
+| `rima_half` | double |  |
+| `rim_pct_half` | double |  |
+| `midm_half` | double |  |
+| `mida_half` | double |  |
+| `mid_pct_half` | double |  |
+| `pts_ast` | double |  |
+| `fgm_ast` | double |  |
+| `tpm_ast` | double |  |
+| `rimm_ast` | double |  |
+| `midm_ast` | double |  |
+| `pts_unast` | double |  |
+| `efg_pct_unast` | double |  |
+| `fgm_unast` | double |  |
+| `fga_unast` | double |  |
+| `fg_pct_unast` | double |  |
+| `tpm_unast` | double |  |
+| `tpa_unast` | double |  |
+| `tp_pct_unast` | double |  |
+| `rimm_unast` | double |  |
+| `rima_unast` | double |  |
+| `rim_pct_unast` | double |  |
+| `midm_unast` | double |  |
+| `mida_unast` | double |  |
+| `mid_pct_unast` | double |  |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_stats_agg import ncaa_mbb_player_stats
+season = ncaa_mbb_player_stats(pbp, multi_games=True)
+print(season.shape)
+
+# Reduced surface, pandas out
+
+df_pd = ncaa_mbb_player_stats(pbp, multi_games=True, simple=True, return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+season.filter(pl.col("mins") > 50).sort("pts", descending=True).head()
+```
+
+### ncaa_mbb_possessions {#ncaa_mbb_possessions}
+
+`ncaa_mbb_possessions(pbp: 'pl.DataFrame', *, simple: 'bool' = False, fix_cross_game_leak: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Aggregate bigballR-contract play-by-play into one row per possession.
+
+Port of bigballR `get_possessions` (`all_functions.R:3686-3745`).
+Groups by the possession keys stamped upstream by the scrape engine
+(`poss_num`, `poss_team`, the ten on-court lineup columns, plus game
+identity), drops possessions with any missing on-court player, and — in
+the full variant — sorts each row's home/away lineup alphabetically so a
+given lineup always occupies the same columns.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame in the sdv-py 35-column snake_case bigballR contract (`parse_ncaa_bb_game_pbp` output). May span multiple games; rows must be in scrape order. |
+| `simple` | `bool` | `False` | When True, return only the 17-column possession/points frame (`all_functions.R:3687-3694`) with lineups in on-court order. When False (default), return the full 28-column frame with per-possession context columns and alpha-sorted lineups. |
+| `fix_cross_game_leak` | `bool` | `True` | When True (default, and the CORRECT behavior), window the `start_event_type` lag with `.over("game_id")` so a game's first possession has a null start event instead of inheriting the PREVIOUS game's last event. When False, reproduce R's ungrouped `dplyr::lag` (`all_functions.R:3698`) and its cross-game leak. Parity tests pass False. Ignored when `simple=True` (that variant emits no `start_event_type`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+`pl.DataFrame` (or `pd.DataFrame`) with one row per possession — 28 columns per `POSSESSION_SEG_SCHEMA` (full) or 17 per `POSSESSIONS_SIMPLE_SCHEMA` (simple). Empty input yields an empty frame carrying the documented schema.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `poss_num` | integer |  |
+| `poss_team` | character |  |
+| `home_1` | character |  |
+| `home_2` | character |  |
+| `home_3` | character |  |
+| `home_4` | character |  |
+| `home_5` | character |  |
+| `away_1` | character |  |
+| `away_2` | character |  |
+| `away_3` | character |  |
+| `away_4` | character |  |
+| `away_5` | character |  |
+| `home_score` | integer | Home team score at the time of the play. |
+| `away_score` | integer | Away team score at the time of the play. |
+| `pts` | integer | Points scored. |
+| `is_assisted` | integer |  |
+| `is_transition` | integer |  |
+| `is_garbage_time` | integer |  |
+| `start_event_type` | character |  |
+| `first_shot_time` | integer |  |
+| `first_shot_type` | character |  |
+| `last_event_time` | integer |  |
+| `last_event_type` | character |  |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_possession_seg import ncaa_mbb_possessions
+poss = ncaa_mbb_possessions(pbp)
+print(poss.shape)
+
+# Simple points-per-possession variant
+
+poss_pd = ncaa_mbb_possessions(pbp, simple=True, return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+poss.group_by("poss_team").agg(pl.col("pts").mean())
+```
+
 ### ncaa_mbb_shot_locations {#ncaa_mbb_shot_locations}
 
 `ncaa_mbb_shot_locations(game_ids: "'Sequence[object]'", *, fetcher: 'Optional[_SupportsFetchGameBox]' = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"`
@@ -633,6 +870,37 @@ The `circle.shot` elements reconstructed from every matching line (non-matching 
 from sportsdataverse.mbb.mbb_ncaa_shot_parser import shot_js_to_html
 js = "addShot(27.0, 77.0, 392, false, 1, 'title text', 'class', false);"
 circles = shot_js_to_html(js)
+```
+
+### shot_value {#shot_value}
+
+`shot_value(event_str: 'str') -> 'int'`
+
+Classify a play-by-play event string as a 3, a 2, or an assist
+
+(`ShotEnrichmentUtils.shot_value`, `PlayByPlayUtils.scala:534-542`).
+
+Ported as an ordered first-match cascade, exactly mirroring the Scala
+`match` arm order (assist is tested first, so an assist string never
+falls through to a shot classifier).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `event_str` | `str` |  | The raw play-by-play event string. |
+
+**Returns**
+
+`0` for an assist, `3` for any 3-pointer (made or missed), `2` for any 2-pointer (made or missed), or `-1` for anything else (rebounds, turnovers, unparseable, ...).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_pbp_glue import shot_value
+shot_value("18:28:00,0-0,Eric Ayala, 3pt jumpshot made")   # 3
+shot_value("18:28:00,0-0,Kyle Guy, assist")                # 0
+shot_value("04:28:0,52-59,Team, rebound deadballdeadball")  # -1
 ```
 
 ### start_time_from_period {#start_time_from_period}

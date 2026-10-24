@@ -1,3 +1,11 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [genius fixtures](#genius-fixtures)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # genius fixtures
 
 Genius Sports / FIBA LiveStats (`fibalivestats.dcd.shared.geniussports.com`, `hosted.dcd.shared.geniussports.com`,

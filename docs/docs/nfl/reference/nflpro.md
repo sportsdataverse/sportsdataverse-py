@@ -1,11 +1,11 @@
 ---
-title: NFL — nflpro
-sidebar_label: nflpro
-description: "NFL — nflpro — endpoint reference in sdv-py, the SportsDataverse Python package."
+title: NFL — NFL Pro API (pro.nfl.com, NFL+ Premium account)
+sidebar_label: NFL Pro API (pro.nfl.com, NFL+ Premium account)
+description: "NFL — NFL Pro API (pro.nfl.com, NFL+ Premium account) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 11
 toc_max_heading_level: 2
 ---
-# NFL — nflpro
+# NFL — NFL Pro API (pro.nfl.com, NFL+ Premium account)
 
 `sportsdataverse.nfl` — 16 endpoints.
 

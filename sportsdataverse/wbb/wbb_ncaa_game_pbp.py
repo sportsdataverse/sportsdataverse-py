@@ -4,7 +4,7 @@ Thin shims over :mod:`sportsdataverse.mbb.mbb_ncaa_game_pbp` that bind the
 **right WBB period model for the game's era**:
 
 * ``(2, 1200, 300)`` -- two 20-minute halves, seasons through 2014-15;
-* ``(4, 600, 300)`` -- four 10-minute quarters, 2015-16 onward
+* four 10-minute quarters with 5-minute overtimes, 2015-16 onward
   (``rules/wbb.yaml#wbb-2016-four-quarters`` in sdv-internal-refs).
 
 Feeding the wrong model to the parser does not raise -- it silently yields a
@@ -25,7 +25,7 @@ pre-2016 game parsed to zero rows); the catalog entry above records both.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Optional, Sequence, Union
+from typing import TYPE_CHECKING, Literal, Optional, Sequence, Union
 
 import polars as pl
 
@@ -37,6 +37,8 @@ from sportsdataverse.mbb.mbb_ncaa_game_pbp import (
     _SupportsFetchGamePbp,
     _time_in_seconds,
 )
+from sportsdataverse.scrape.ncaa._rules import WBB_HALVES_MODEL, WBB_QUARTERS_MODEL
+from sportsdataverse.scrape.ncaa.identity import _utf8_id
 from sportsdataverse.scrape.ncaa.parse import wbb_period_model
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -47,11 +49,6 @@ __all__ = [
     "ncaa_wbb_game_pbp",
     "ncaa_wbb_play_by_play",
 ]
-
-#: WBB quarters model (2015-16+): 4 regulation quarters x 600s, 300s overtimes.
-_WBB_PERIOD_MODEL: "tuple[int, int, int]" = (4, 600, 300)
-#: WBB halves model (through 2014-15): 2 regulation halves x 1200s, 300s overtimes.
-_WBB_HALVES_MODEL: "tuple[int, int, int]" = (2, 1200, 300)
 
 
 def infer_wbb_period_model(html: str) -> "tuple[int, int, int]":
@@ -68,7 +65,7 @@ def infer_wbb_period_model(html: str) -> "tuple[int, int, int]":
 
     Returns:
         ``(2, 1200, 300)`` when a first-period clock above 10:00 is present,
-        otherwise ``(4, 600, 300)`` (an unreadable page falls through to the
+        otherwise the quarters model (an unreadable page falls through to the
         modern model, matching :func:`~sportsdataverse.scrape.ncaa.parse.wbb_period_model`).
 
     Example:
@@ -79,16 +76,19 @@ def infer_wbb_period_model(html: str) -> "tuple[int, int, int]":
     """
     tables = _extract_tables(html)
     if len(tables) < 4:
-        return _WBB_PERIOD_MODEL
+        return WBB_QUARTERS_MODEL
     for row in tables[3][1:]:
         secs = _time_in_seconds((row[0] or "")[:5]) if row else None
         if secs is not None and secs > 600:
-            return _WBB_HALVES_MODEL
-    return _WBB_PERIOD_MODEL
+            return WBB_HALVES_MODEL
+    return WBB_QUARTERS_MODEL
 
 
 def _period_model_for(season: Optional[object]) -> PeriodModel:
-    return infer_wbb_period_model if season is None else wbb_period_model(str(season))
+    # _utf8_id, never str(): season=2015.0 must read "2015" (halves), not "2015.0" (quarters);
+    # a NaN / "" season is no season, so it infers the era like None (R853-7)
+    sid = _utf8_id(season)
+    return infer_wbb_period_model if sid is None else wbb_period_model(sid)
 
 
 def ncaa_wbb_game_pbp(
@@ -107,7 +107,7 @@ def ncaa_wbb_game_pbp(
     Args:
         game_id: NCAA contest id (e.g. ``"5722355"``).
         season: Season as an ending year (``2015``) or span (``"2014-15"``).
-            When omitted the era is inferred from the page's first-period clock
+            When omitted, NaN or blank, the era is inferred from the page's first-period clock
             (:func:`infer_wbb_period_model`).
         fetcher: Optional injected fetcher exposing ``fetch_game_pbp`` (for
             tests/offline use). Defaults to a fresh
@@ -116,6 +116,10 @@ def ncaa_wbb_game_pbp(
 
     Returns:
         The 35-column play-by-play frame (zero rows when the game is not found).
+
+    Raises:
+        ValueError: ``game_id`` is not an integral contest id (``None``,
+            NaN, ``5722355.5``); a float such as ``5722355.0`` is accepted.
 
     Example:
         Quick start::
@@ -142,25 +146,45 @@ def ncaa_wbb_play_by_play(
     season: Optional[object] = None,
     fetcher: Optional[_SupportsFetchGamePbp] = None,
     return_as_pandas: bool = False,
+    errors: Literal["raise", "skip"] = "raise",
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Scrape many WBB games' play-by-play (wbigballR ``get_play_by_play``, era-aware).
 
     Same driver as :func:`sportsdataverse.mbb.mbb_ncaa_game_pbp.ncaa_mbb_play_by_play`
-    (drop missing ids, shared fetcher session, one retry per empty scrape) with
+    (drop missing ids, shared fetcher session, one retry per empty or failed scrape
+    except a page the format guard rejected) with
     the WBB period model for each game's era bound.
 
     Args:
-        game_ids: NCAA contest ids; ``None``/NaN entries are dropped.
+        game_ids: NCAA contest ids; ``None``/NaN entries and non-integral
+            floats (``5722355.5``) are dropped, an integral float
+            (``5722355.0``) is read as ``"5722355"``.
         season: Season shared by every id, as an ending year or span. When
-            omitted each page's era is inferred from its first-period clock, so
+            omitted, NaN or blank, each page's era is inferred from its first-period clock, so
             ids from both eras may be mixed.
         fetcher: Optional injected fetcher exposing ``fetch_game_pbp``.
             Defaults to one shared ``NcaaFetcher.with_browser()`` context.
         return_as_pandas: Return a pandas DataFrame instead of polars.
+        errors: ``"raise"`` (default): a failed fetch (a ban, an exhausted
+            proxy pool, an uncleared challenge) raises ``AssetFetchError``.
+            ``"skip"``: it is dropped like a missing game, and the frame gains a
+            ``scrape_status`` column -- ``"ok"`` on every play row, plus one row per
+            dropped game (``game_id`` and why: ``fetch_failed: ...``,
+            ``no_data: ...``, ``request_error: ...``, ``parse_failed: ...``
+            or ``empty``).
 
     Returns:
         Row-bound play-by-play for every game that scraped successfully
         (zero-row contract frame when none did).
+
+    Raises:
+        AssetFetchError: A fetch failed and ``errors="raise"``.
+        ValueError: ``errors`` is not ``"raise"`` or ``"skip"``.
+
+    Warns:
+        UnsupportedPageFormatWarning: Once per game whose page is in a layout
+            the parser does not read (the 2018 format); that game is not
+            re-fetched. Escalated to an error, it propagates instead.
 
     Example:
         Quick start::
@@ -174,4 +198,5 @@ def ncaa_wbb_play_by_play(
         fetcher=fetcher,
         period_model=_period_model_for(season),
         return_as_pandas=return_as_pandas,
+        errors=errors,
     )

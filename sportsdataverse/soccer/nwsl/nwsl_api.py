@@ -4,7 +4,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
+from typing import Dict, List, Optional, Union  # noqa: F401
+
+# Imported at runtime, not under TYPE_CHECKING: typing.get_type_hints() evaluates the
+# annotations below and raised NameError on ``pl`` / ``pd`` (R858-4).
+import pandas as pd  # noqa: F401
+import polars as pl  # noqa: F401
 
 from sportsdataverse.soccer.nwsl.nwsl_api_runtime import _get
 from sportsdataverse.soccer.nwsl.nwsl_api_parsers import (
@@ -13,10 +18,6 @@ from sportsdataverse.soccer.nwsl.nwsl_api_parsers import (
     parse_nwsl_standings,
     parse_nwsl_stats,
 )
-
-if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
-    import pandas as pd
-    import polars as pl
 
 __all__ = [
     "nwsl_competitions",
@@ -60,7 +61,7 @@ def nwsl_competitions(
     Example:
         Quick start::
 
-            from sportsdataverse.nwsl import nwsl_competitions
+            from sportsdataverse.soccer.nwsl import nwsl_competitions
             nwsl_competitions()
 
         See Also:
@@ -118,7 +119,7 @@ def nwsl_match_lineups(
     Example:
         Quick start::
 
-            from sportsdataverse.nwsl import nwsl_match_lineups
+            from sportsdataverse.soccer.nwsl import nwsl_match_lineups
             nwsl_match_lineups(match_id='nwsl::Football_Match::0b6761e4701749f593690c0f338da74c', season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
 
         See Also:
@@ -174,7 +175,7 @@ def nwsl_matchdays(
     Example:
         Quick start::
 
-            from sportsdataverse.nwsl import nwsl_matchdays
+            from sportsdataverse.soccer.nwsl import nwsl_matchdays
             nwsl_matchdays(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
 
         See Also:
@@ -240,7 +241,7 @@ def nwsl_player_stats(
     Example:
         Quick start::
 
-            from sportsdataverse.nwsl import nwsl_player_stats
+            from sportsdataverse.soccer.nwsl import nwsl_player_stats
             nwsl_player_stats(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
 
         See Also:
@@ -305,7 +306,7 @@ def nwsl_season_matches(
     Example:
         Quick start::
 
-            from sportsdataverse.nwsl import nwsl_season_matches
+            from sportsdataverse.soccer.nwsl import nwsl_season_matches
             nwsl_season_matches()
 
         See Also:
@@ -364,7 +365,7 @@ def nwsl_stages(
     Example:
         Quick start::
 
-            from sportsdataverse.nwsl import nwsl_stages
+            from sportsdataverse.soccer.nwsl import nwsl_stages
             nwsl_stages(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
 
         See Also:
@@ -424,7 +425,7 @@ def nwsl_standings(
     Example:
         Quick start::
 
-            from sportsdataverse.nwsl import nwsl_standings
+            from sportsdataverse.soccer.nwsl import nwsl_standings
             nwsl_standings(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
 
         See Also:
@@ -484,7 +485,7 @@ def nwsl_team_stats(
     Example:
         Quick start::
 
-            from sportsdataverse.nwsl import nwsl_team_stats
+            from sportsdataverse.soccer.nwsl import nwsl_team_stats
             nwsl_team_stats(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
 
         See Also:
@@ -541,7 +542,7 @@ def nwsl_teams(
     Example:
         Quick start::
 
-            from sportsdataverse.nwsl import nwsl_teams
+            from sportsdataverse.soccer.nwsl import nwsl_teams
             nwsl_teams(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
 
         See Also:

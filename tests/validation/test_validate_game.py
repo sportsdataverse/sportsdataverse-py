@@ -26,6 +26,10 @@ from sportsdataverse.validation import (
 from sportsdataverse.validation import pbp_invariants as inv
 from sportsdataverse.validation.findings import Severity
 
+# Processing a default-odds capture warns DefaultOddsWarning incidentally;
+# tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
+pytestmark = pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")
+
 FIXTURES = Path(__file__).resolve().parents[1]
 
 #: Games whose processed output carries no ``error``-severity finding on main.
@@ -392,3 +396,74 @@ def test_a_challenge_quote_is_not_an_incomplete_pass():
     (result,) = [r for r in inv.evaluate(frame, league="cfb") if r.rule == "flags.completion_on_incomplete_text"]
     assert (result.n_checked, result.n_violations) == (3, 1)
     assert result.samples[0]["id"] == 2
+
+
+# --- C-L51: a real processed game driven red -----------------------------------------------------
+# Every real-game test above asserts the gate stays GREEN; none shows it can go red on a real frame.
+# Each case takes 401872922's real processed plays, plants one processor-shaped defect, and requires
+# the named error-severity rule to fire on exactly the planted rows.
+
+
+@pytest.fixture(scope="module")
+def nfl_401872922():
+    proc, game = _process("nfl", 401872922, "nfl/fixtures/summary_401872922.json")
+    return proc.plays_frame, game
+
+
+def _plant_on_first(frame: pl.DataFrame, where: pl.Expr, **set_cols) -> tuple[pl.DataFrame, object]:
+    target = frame.filter(where)["id"][0]
+    hit = pl.col("id") == target
+    return (
+        frame.with_columns([pl.when(hit).then(v).otherwise(pl.col(c)).alias(c) for c, v in set_cols.items()]),
+        target,
+    )
+
+
+@pytest.mark.parametrize(
+    ("rule", "where", "plant", "row_level"),
+    [
+        # One scrimmage play's EPA off by a point: the team EPA total no longer reconciles with the box
+        # (a model-column defect; the finding is per team, so no play id is sampled).
+        (
+            "epa.team_sum_matches_box",
+            (pl.col("scrimmage_play") == True) & pl.col("EPA").is_not_null(),  # noqa: E712
+            {"EPA": pl.col("EPA") + 1.0},
+            False,
+        ),
+        # A completed pass also flagged as a rush (a play-type flag defect).
+        (
+            "flags.rush_and_pass",
+            (pl.col("pass") == True) & (pl.col("completion") == True),  # noqa: E712
+            {"rush": pl.lit(True)},
+            True,
+        ),
+    ],
+    ids=["epa-team-sum", "rush-and-pass"],
+)
+def test_a_planted_defect_in_a_real_game_goes_red(nfl_401872922, rule, where, plant, row_level):
+    frame, game = nfl_401872922
+    clean = validate_game(frame, "nfl", header=game["header"], summary=game, box=game.get("advBoxScore"))
+    assert clean.ok and rule not in clean.counts_by_rule
+    bad, target = _plant_on_first(frame, where, **plant)
+    report = validate_game(bad, "nfl", header=game["header"], summary=game, box=game.get("advBoxScore"))
+    fired = [f for f in report.errors if f.rule_id == rule]
+    assert not report.ok and len(fired) == 1, (rule, [f.to_dict() for f in report.errors])
+    assert fired[0].n_rows == 1, fired[0].to_dict()
+    if row_level:
+        assert target in fired[0].sample_row_ids, fired[0].to_dict()
+    print("VALIDATE_GAME_RED_OK", rule)
+
+
+def test_float_scores_validate_like_int_scores():
+    """C-M9: a pandas hop or float parquet makes the four score columns Float64; under polars 2.0 the
+    ``score.delta_value`` rule's ``is_in([0, 1, ...])`` raised InvalidOperationError and the gate crashed.
+    Real NFL 401872922 (the processor's own output), scores cast to Float64: the same verdict as Int64."""
+    proc, game = _process("nfl", 401872922, "nfl/fixtures/summary_401872922.json")
+    score = list(inv._SCORE)
+    floats = proc.plays_frame.with_columns(pl.col(score).cast(pl.Float64))
+    assert all(floats.schema[c] == pl.Float64 for c in score)
+    kw = {"header": game["header"], "summary": game, "box": game.get("advBoxScore")}
+    as_int = validate_game(proc.plays_frame, "nfl", **kw)
+    as_float = validate_game(floats, "nfl", **kw)
+    assert as_float.errors == [] and as_float.ok
+    assert as_float.counts_by_rule == as_int.counts_by_rule

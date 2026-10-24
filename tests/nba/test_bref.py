@@ -9,6 +9,9 @@ over-header whose rendered names are useless.
 
 from __future__ import annotations
 
+import gzip
+import io
+from pathlib import Path
 from typing import Any, Dict, List
 
 import polars as pl
@@ -388,3 +391,55 @@ def test_throttle_sleeps_between_consecutive_requests(monkeypatch: pytest.Monkey
     monkeypatch.setattr(bref, "_LAST_REQUEST", bref.time.monotonic())
     bref._throttle()
     assert slept and 0 < slept[0] <= 3
+
+
+# ---------------------------------------------------------------------------
+# A real page (B-L93, B-M19): tests/fixtures/bref/teams_BOS_1986.html.gz is
+# basketball-reference.com/teams/BOS/1986.html as served on 2026-10-11. The oracle is the page's
+# own roster table read by pandas, with every cell kept as text.
+# ---------------------------------------------------------------------------
+
+_BOS_1986 = gzip.decompress(
+    (Path(__file__).resolve().parents[1] / "fixtures" / "bref" / "teams_BOS_1986.html.gz").read_bytes()
+).decode("utf-8")
+
+
+def _page_roster() -> Any:
+    import pandas as pd
+
+    (table,) = pd.read_html(io.StringIO(_BOS_1986), attrs={"id": "roster"}, converters={"No.": str})
+    return table
+
+
+def test_real_team_page_roster_matches_the_page(calls: _Transport) -> None:
+    calls.serve("/teams/BOS/1986.html", _BOS_1986)
+    df = bref.bref_team_roster(team="BOS", season=1986)
+    page = _page_roster()
+    assert df.height == len(page) == 13
+    assert df["player"].to_list() == page["Player"].tolist()
+    assert df["pos"].to_list() == page["Pos"].tolist()
+    assert df["college"].to_list()[:2] == page["College"].tolist()[:2]
+
+
+def test_real_team_page_keeps_jersey_00_as_text(calls: _Transport) -> None:
+    """B-M19: ``_finish`` cast the all-numeric jersey column, so Robert Parish's "00" became 0.0."""
+    calls.serve("/teams/BOS/1986.html", _BOS_1986)
+    df = bref.bref_team_roster(team="BOS", season=1986)
+    page = _page_roster()
+    assert "00" in page["No."].tolist()
+    assert df.schema["number"] == pl.Utf8
+    assert df["number"].to_list() == page["No."].tolist()
+    assert df.filter(pl.col("player") == "Robert Parish")["number"].to_list() == ["00"]
+
+
+def test_finish_keeps_a_zero_padded_column_as_text() -> None:
+    """The guard is not just the ``number`` name: any zero-padded column keeps its zeros."""
+    df = bref._finish(pl.DataFrame({"code": ["007", "12"], "one_zero": ["07", "12"], "pts": ["7", "12"]}))
+    assert df.schema["code"] == pl.Utf8 and df["code"].to_list() == ["007", "12"]
+    assert df.schema["one_zero"] == pl.Utf8 and df["one_zero"].to_list() == ["07", "12"]  # a single leading zero
+    assert df.schema["pts"] == pl.Float64  # a plain numeric column still casts
+
+
+def test_finish_keeps_the_jersey_column_text_without_a_00() -> None:
+    """``number`` is text on every roster, not only on the ones that carry a "00" (one dtype per column)."""
+    assert bref._finish(pl.DataFrame({"number": ["44", "33"]})).schema["number"] == pl.Utf8

@@ -42,6 +42,8 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 import pandas as pd
 import polars as pl
 
+from sportsdataverse.errors import _data_only
+
 __all__ = [
     "parse_cebl_games",
     "parse_cebl_news",
@@ -429,6 +431,7 @@ _DOC_RAW = (
 )
 
 
+@_data_only
 def parse_cebl_seasons(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """Parse ``GET /seasons/``: every CEBL season, with the active and live flags.
 
@@ -450,6 +453,7 @@ def parse_cebl_seasons(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     return _parse_list("seasons", raw, return_as_pandas)
 
 
+@_data_only
 def parse_cebl_teams(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """Parse ``GET /teams/``: every franchise identity, past and present.
 
@@ -470,6 +474,7 @@ def parse_cebl_teams(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     return _parse_list("teams", raw, return_as_pandas)
 
 
+@_data_only
 def parse_cebl_standings(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """Parse ``GET /teams/{season}/``: the standings of one season, one row per team.
 
@@ -493,6 +498,7 @@ def parse_cebl_standings(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     return _parse_list("standings", raw, return_as_pandas)
 
 
+@_data_only
 def parse_cebl_roster(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """Parse ``GET /teams/{team_id}/roster/{season}/``: one team's roster in one season.
 
@@ -516,6 +522,7 @@ def parse_cebl_roster(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     return _parse_list("roster", raw, return_as_pandas)
 
 
+@_data_only
 def parse_cebl_team_stats(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """Parse ``GET /teams/statistics/aggregated/``: a team statistic table plus the league row.
 
@@ -540,6 +547,7 @@ def parse_cebl_team_stats(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     return _parse_list("team_stats", raw, return_as_pandas)
 
 
+@_data_only
 def parse_cebl_games(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """Parse ``GET /games/{season}/``: the schedule and results of one season.
 
@@ -565,6 +573,7 @@ def parse_cebl_games(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     return _parse_list("games", raw, return_as_pandas)
 
 
+@_data_only
 def parse_cebl_player_stats(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """Parse ``GET /players/statistics/aggregated/``: a player statistic table.
 
@@ -588,6 +597,7 @@ def parse_cebl_player_stats(raw: Any, *, return_as_pandas: bool = False) -> Fram
     return _parse_list("player_stats", raw, return_as_pandas)
 
 
+@_data_only
 def parse_cebl_player_seasons(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """Parse ``GET /players/{player_id}/statistics/``: one player's per-season rows and career row.
 
@@ -635,6 +645,7 @@ def parse_cebl_player(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     return _finish(_frame("player", [body], ctx), return_as_pandas)
 
 
+@_data_only
 def parse_cebl_player_gamelog(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """Parse ``GET /players/{player_id}/gamelog/``: one player's game log.
 
@@ -687,6 +698,7 @@ def parse_cebl_player_leaders(raw: Any, *, return_as_pandas: bool = False) -> Fr
     return _finish(_frame("player_leaders", rows, ctx), return_as_pandas)
 
 
+@_data_only
 def parse_cebl_news(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """Parse ``GET /news/articles/{language}/``: news articles in one language.
 

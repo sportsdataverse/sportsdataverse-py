@@ -213,6 +213,7 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `homeFavorite` | Boolean | True when the home team was favoured by the spread. |
 | `gameSpreadAvailable` | Boolean | True when a spread was available for the game. |
 | `overUnder` | Float64 | Over/under total used as a model input. |
+| `overUnderAvailable` | Boolean | False when overUnder is the 55.5 default (the line had a spread and no total), True for a market total; null when an odds_override did not say. Absent from releases built before the column existed. |
 | `homeTeamSpread` | Float64 | ESPN's home-team Spread for the game, stamped on every play. |
 | `clock.minutes` | Int64 | Minutes remaining on the game clock at the play. |
 | `clock.seconds` | Int64 | Seconds component of the game clock at the play. |
@@ -250,7 +251,7 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `start.defPosTeamTimeouts` | Int64 | ESPN's `defPosTeamTimeouts` value for the play state at the start of the play. |
 | `end.posTeamTimeouts` | Int64 | ESPN's `posTeamTimeouts` value for the play state at the end of the play. |
 | `end.defPosTeamTimeouts` | Int64 | ESPN's `defPosTeamTimeouts` value for the play state at the end of the play. |
-| `firstHalfKickoffTeamId` | Int64 | ESPN id of the team that received the opening kickoff. |
+| `firstHalfKickoffTeamId` | Int64 | ESPN id of the team that kicked the opening kickoff (it receives the second-half kickoff), one value per game. |
 | `start.yard` | Int64 | ESPN's `yard` value for the play state at the start of the play. |
 | `end.yard` | Int64 | ESPN's `yard` value for the play state at the end of the play. |
 | `lag_scoringPlay` | Boolean | Value of scoringPlay on the previous play, used for sequence-aware derivations. |
@@ -362,10 +363,10 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `stopped_run` | Boolean | True when the rush was stopped at or behind the line of scrimmage. |
 | `opportunity_run` | Boolean | True when a rush reached 4 yards -- the carries on which the blocking did its job. Matches cfbfastR's espn_cfb_15 definition. Assets published before the 2026-08 fix carry the inverted (4 yards or fewer) flag. |
 | `highlight_run` | Boolean | True when the rush gained 8 or more yards. |
-| `adj_rush_yardage` | Int64 | Rushing yards capped at 8, the input to the line-yards decomposition. |
-| `line_yards` | Float64 | Yards credited to the offensive line on a rush, using the standard sliding scale: 1.2x the capped yardage on a loss, all of it through 3 yards, half of each yard from 4 to 8, and a 5.5-yard ceiling beyond that. |
-| `second_level_yards` | Float64 | Rushing yards earned from 4 to 8, split evenly between line and carrier under the line-yards decomposition. |
-| `open_field_yards` | Int64 | Rushing yards gained beyond 8, credited to the ball carrier rather than the line. |
+| `adj_rush_yardage` | Int64 | Rushing yards capped at 10, the input to the line-yards decomposition. Assets published before the 2026-10 line-yards fix cap at 8. |
+| `line_yards` | Float64 | Yards credited to the offensive line on a rush, on the standard adjusted-line-yards band: 1.2x the yardage on a loss, all of yards 0-4, half of each yard from 5 to 10, and nothing beyond 10 (a 7-yard ceiling). Line, second-level and open-field yards sum to the carry on every gain. Assets published before the 2026-10 line-yards fix carry the old band (all of yards 0-3, half of 4-8, a 5.5-yard ceiling). |
+| `second_level_yards` | Float64 | The ball carrier's half of yards 5-10 of a rush (the line takes the other half); 0 on carries of 4 yards or fewer. Assets published before the 2026-10 line-yards fix carry the old band here: half of yards 4-8 in college football, half of yards 5-8 in the NFL (where the old parts came up half a yard short of the carry). |
+| `open_field_yards` | Int64 | Rushing yards gained beyond 10, credited to the ball carrier rather than the line. Assets published before the 2026-10 line-yards fix count the yards beyond 8. |
 | `highlight_yards` | Float64 | Second-level plus open-field yards -- the yardage credited to the carrier. |
 | `opp_highlight_yards` | Float64 | Highlight yards earned on opportunity runs, isolating carrier production on carries where the blocking succeeded. Assets published before the 2026-08 fix are identically 0 here, because the inverted opportunity_run gate could never co-occur with non-zero highlight yards. |
 | `short_rush_success` | Boolean | True when a short-yardage rush gained the yardage needed. |

@@ -49,14 +49,14 @@ def _load_recruits(seasons: "list[int]", league: str = "mens") -> pl.DataFrame:
     skipped; a failed fetch is skipped and tallied, and raises once every
     recruit of the run failed.
     """
-    from sportsdataverse._codegen_runtime import _download_json  # noqa: PLC0415
-    from sportsdataverse._crosswalk_basketball_sources import FetchTally  # noqa: PLC0415
-    from sportsdataverse.dl_utils import download  # noqa: PLC0415
+    from sportsdataverse._codegen_runtime import _download_json
+    from sportsdataverse._crosswalk_basketball_sources import FetchTally
+    from sportsdataverse.dl_utils import download
 
     if league == "womens":
-        from sportsdataverse.wbb import espn_wbb_season_recruits as season_recruits  # noqa: PLC0415
+        from sportsdataverse.wbb import espn_wbb_season_recruits as season_recruits
     else:
-        from sportsdataverse.mbb import espn_mbb_season_recruits as season_recruits  # noqa: PLC0415
+        from sportsdataverse.mbb import espn_mbb_season_recruits as season_recruits
 
     tally = FetchTally(f"espn_{'wbb' if league == 'womens' else 'mbb'}_recruit")
     rows = []

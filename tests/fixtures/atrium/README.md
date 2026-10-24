@@ -1,3 +1,11 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Sportradar Atrium embed API fixtures (`embed-api.eui.connect.sportradar.com/v1/embed`)](#sportradar-atrium-embed-api-fixtures-embed-apieuiconnectsportradarcomv1embed)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Sportradar Atrium embed API fixtures (`embed-api.eui.connect.sportradar.com/v1/embed`)
 
 **Per-route captures** (`<websiteId>__<type>[__<sub>].json` in this directory): copied verbatim from

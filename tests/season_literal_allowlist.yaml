@@ -1,0 +1,155 @@
+# Inline season-era literals allowed outside a constants module (tests/test_no_inline_season_literals.py).
+# Measured on the 1.2 branch point (36f7a02f1b). Rows are keyed on (file, scope, snippet) -- never a line
+# number -- with the exact count. id: the finding, or C-T3, the tier-C era-literal class, when the literal
+# has no graded finding of its own. rule: the sdv-internal-refs rules/*.yaml id, when the catalogue has one.
+# The list may only shrink: main's #778 removed the C-H4 touchback rows (now cfb/model_vars.py
+# TOUCHBACK_YARDLINE_BY_SEASON, plan task 3.1); plan task 3.11 moved the CFB processor era cuts
+# (cfb/model_vars.py CFB_MODEL_ERA_CUTS, CFB_ESPN_TRY_ON_TD_ROW_FROM, CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM)
+# and the NFL nflfastR era bins (nfl/model_vars.py ERA_SEASON_CUTS) out, 71 -> 21 rows. A literal that moves
+# into a constant fails the gate until its row's count is lowered to the inline occurrences left, or the row
+# is deleted when none remain.
+- file: sportsdataverse/basketball/nbl_au/nbl_rosetta_runtime.py
+  scope: 'start_year'
+  snippet: 'season <= 1998'
+  count: 1
+  id: C-T3
+  reason: 'Rosetta keys the NBL / WNBL winter seasons through 1998 by calendar year, then by START year; landed with main''s #859, reached this branch in the 10-18 main sync; no catalogue rule yet'
+- file: sportsdataverse/cfb/cfb_pbp.py
+  scope: '_derive_special_teams_from_field_position'
+  snippet: 'pl.col("season") <= 2004'
+  count: 1
+  id: C-T3
+  reason: '2004 feeds spot every kickoff from the 35 (65 to go): a feed quirk with no rules/cfb.yaml entry (cfb-2004-release-coverage-floors is the loader floor), so task 3.11 left it inline'
+- file: sportsdataverse/cfb/cfb_pbp.py
+  scope: '_derive_special_teams_from_field_position'
+  snippet: 'pl.col("season") > 2004'
+  count: 2
+  id: C-T3
+  reason: '2004 feeds spot every kickoff from the 35 (65 to go): a feed quirk with no rules/cfb.yaml entry (cfb-2004-release-coverage-floors is the loader floor), so task 3.11 left it inline'
+- file: sportsdataverse/football/attribution.py
+  scope: 'add_attribution_cols'
+  snippet: 'pl.col("season") >= 2014'
+  count: 1
+  id: C-T3
+  reason: 'college penalty-yardage sanity cap: 25 from 2014, 50 before (old spot-foul pass interference); no catalogue rule yet'
+- file: sportsdataverse/mbb/mbb_schedule.py
+  scope: 'espn_mbb_calendar'
+  snippet: 'season < 2002'
+  count: 1
+  id: C-T3
+  rule: mbb-2002-espn-pbp-coverage
+  reason: 'ESPN calendar floor (2002)'
+- file: sportsdataverse/nfl/cbs_pbp/game_id.py
+  scope: '_regular_season_weeks'
+  snippet: 'int(season) >= 2021'
+  count: 1
+  id: C-T3
+  rule: nfl-2021-seventeen-game-season
+  reason: '17 / 18 regular-season weeks'
+- file: sportsdataverse/nfl/cbs_pbp/to_espn_summary.py
+  scope: '_cbs_nfl_to_espn_summary'
+  snippet: 'season < 2019'
+  count: 1
+  id: C-T3
+  rule: nfl-2019-cbs-play-ids-gsis
+  reason: 'CBS play ids carry GSIS ids from 2019'
+- file: sportsdataverse/nfl/ep_wp.py
+  scope: 'calculate_xpass'
+  snippet: 'pl.col("season") >= 2006'
+  count: 1
+  id: C-T3
+  rule: nfl-2006-scramble-air-yards-charting
+  reason: 'xpass valid-play floor: scrambles and air yards charted from 2006'
+- file: sportsdataverse/nfl/nfl_clean.py
+  scope: 'clean_nfl_pbp'
+  snippet: 'pl.col("season") <= 2003'
+  count: 2
+  id: C-T3
+  reason: 'nflfastR clean_pbp name fix: ''Van Pelt'' is A.Van Pelt through 2003, B.Van Pelt after (a roster fact, not a rule)'
+- file: sportsdataverse/nfl/nfl_clean.py
+  scope: 'clean_nfl_pbp'
+  snippet: 'pl.col("season") <= 2005'
+  count: 1
+  id: C-T3
+  rule: nfl-2006-scramble-air-yards-charting
+  reason: 'nflfastR clean_pbp: the scramble passer-from-rusher fallback through 2005'
+- file: sportsdataverse/nfl/nfl_clean.py
+  scope: 'clean_nfl_pbp'
+  snippet: 'pl.col("season") > 2003'
+  count: 2
+  id: C-T3
+  reason: 'nflfastR clean_pbp name fix: ''Van Pelt'' is A.Van Pelt through 2003, B.Van Pelt after (a roster fact, not a rule)'
+- file: sportsdataverse/nfl/nfl_ngs.py
+  scope: 'scrape_ngs_season'
+  snippet: 'season >= 2021'
+  count: 1
+  id: C-T3
+  rule: nfl-2021-seventeen-game-season
+  reason: '17 / 18 regular-season weeks'
+- file: sportsdataverse/nfl/nfl_pbp.py
+  scope: 'NFLPlayProcess.__process_wpa'
+  snippet: 'pl.col("season") <= 2013'
+  count: 3
+  id: C-T3
+  reason: 'the +0.92 expected-try adjustment while ESPN writes the try as its own row (through 2013), ported from the CFB processor, whose twin reads cfb/model_vars.py CFB_ESPN_TRY_ON_TD_ROW_FROM; no rules/nfl.yaml entry yet, so it stays inline'
+- file: sportsdataverse/nfl/nfl_roster_builder.py
+  scope: '_relocate_team'
+  snippet: 'season >= 2016'
+  count: 1
+  id: C-T3
+  rule: nfl-2016-rams-relocate-to-los-angeles
+  reason: 'franchise relocation season'
+- file: sportsdataverse/nfl/nfl_roster_builder.py
+  scope: '_relocate_team'
+  snippet: 'season >= 2017'
+  count: 1
+  id: C-T3
+  rule: nfl-2017-chargers-relocate-to-los-angeles
+  reason: 'franchise relocation season'
+- file: sportsdataverse/nfl/nfl_roster_builder.py
+  scope: '_relocate_team'
+  snippet: 'season >= 2020'
+  count: 1
+  id: C-T3
+  rule: nfl-2020-raiders-relocate-to-las-vegas
+  reason: 'franchise relocation season'
+- file: sportsdataverse/nfl/nfl_standings_calc.py
+  scope: '_default_playoff_seeds'
+  snippet: 'season <= 2019'
+  count: 1
+  id: C-T3
+  rule: nfl-2020-fourteen-team-playoffs
+  reason: 'playoff seeds 6 through 2019, 7 from 2020'
+- file: sportsdataverse/nfl/shield_pbp/build.py
+  scope: '_game_id_of'
+  snippet: 'int(season) <= 2020'
+  count: 1
+  id: C-T3
+  rule: nfl-2021-seventeen-game-season
+  reason: '17 / 18 regular-season weeks'
+- file: sportsdataverse/nfl/shield_pbp/parse.py
+  scope: '_resolve_teams_and_game_id'
+  snippet: 'season <= 2020'
+  count: 1
+  id: C-T3
+  rule: nfl-2021-seventeen-game-season
+  reason: '17 / 18 regular-season weeks'
+- file: sportsdataverse/nfl/shield_pbp/repairs.py
+  scope: 'fix_scrambles'
+  snippet: 'min_season > 2005'
+  count: 1
+  id: C-T3
+  rule: nfl-2006-scramble-air-yards-charting
+  reason: 'nflfastR fix_scrambles applies only to seasons through 2005'
+- file: sportsdataverse/nfl/shield_pbp/to_espn_summary.py
+  scope: 'shield_to_espn_summary'
+  snippet: 'int(season) < 2014'
+  count: 1
+  id: C-T3
+  reason: 'ESPN play ids line up with GSIS ids only from 2014 (Shield-to-ESPN coverage study); no catalogue rule yet'
+- file: sportsdataverse/wbb/wbb_schedule.py
+  scope: 'espn_wbb_calendar'
+  snippet: 'season < 2001'
+  count: 1
+  id: C-T3
+  reason: 'ESPN calendar floor (2001; main #860 lowered it from 2002); wbb-2004-espn-pbp-coverage covers pbp, not the calendar'

@@ -1,0 +1,3879 @@
+{
+ "data": {
+  "leagues": [
+   {
+    "sport": {
+     "sportId": 1,
+     "name": "Football"
+    },
+    "shortName": "NCAAF",
+    "fullName": "ncaaf",
+    "name": "College Football",
+    "footballStats": [
+     {
+      "team": {
+       "alias": {
+        "url": "https://sports.yahoo.com/ncaaf/teams/clemson/"
+       },
+       "displayName": "Clemson",
+       "abbreviation": "CLEM",
+       "nickname": "Tigers",
+       "fullName": "Clemson Tigers"
+      },
+      "stats": [
+       {
+        "value": "7",
+        "statId": "PASSING_INTERCEPTIONS",
+        "statType": {
+         "abbreviation": "Int",
+         "displayName": "Interceptions",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "1.6",
+        "statId": "PASSING_TOUCHDOWNS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "TD/G",
+         "displayName": "Passing Touchdowns Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "2249",
+        "statId": "RUSHING_YARDS_ALLOWED",
+        "statType": {
+         "abbreviation": "RushYds",
+         "displayName": "Rushing Yards Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "12",
+        "statId": "FOURTH_DOWN_CONVERSIONS",
+        "statType": {
+         "abbreviation": "4thM",
+         "displayName": "Fourth Down Conversions",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "11.8",
+        "statId": "RECEIVING_YARDS_PER_RECEPTION",
+        "statType": {
+         "abbreviation": "Y/R",
+         "displayName": "Yards per Reception",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "139",
+        "statId": "RUSHING_FIRST_DOWNS",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "Rushing First Downs",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "18",
+        "statId": "RUSHING_TOUCHDOWNS_ALLOWED",
+        "statType": {
+         "abbreviation": "TD",
+         "displayName": "Rushing Touchdowns Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "76",
+        "statId": "LONGEST_PASS",
+        "statType": {
+         "abbreviation": "Long",
+         "displayName": "Longest Pass",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "473",
+        "statId": "RUSHING_ATTEMPTS",
+        "statType": {
+         "abbreviation": "Att",
+         "displayName": "Rushing Attempts",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "486",
+        "statId": "POINTS",
+        "statType": {
+         "abbreviation": "Pts",
+         "displayName": "Points",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "83",
+        "statId": "LONGEST_RUSH",
+        "statType": {
+         "abbreviation": "Long",
+         "displayName": "Longest Rush",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "2989",
+        "statId": "RECEIVING_YARDS_ALLOWED",
+        "statType": {
+         "abbreviation": "RecYds",
+         "displayName": "Receiving Yards Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "21",
+        "statId": "FOURTH_DOWN_ATTEMPTS",
+        "statType": {
+         "abbreviation": "4thA",
+         "displayName": "Fourth Down Attempts",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "56.3",
+        "statId": "COMPLETION_PERCENTAGE_ALLOWED",
+        "statType": {
+         "abbreviation": "Pct",
+         "displayName": "Completion Percentage Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "22",
+        "statId": "PASSING_TOUCHDOWNS_ALLOWED",
+        "statType": {
+         "abbreviation": "TD",
+         "displayName": "Passing Touchdowns Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "7.3",
+        "statId": "PASSING_YARDS_PER_ATTEMPT",
+        "statType": {
+         "abbreviation": "Y/A",
+         "displayName": "Passing Yards per Attempt",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "4.7",
+        "statId": "RUSHING_YARDS_ALLOWED_PER_ATTEMPT",
+        "statType": {
+         "abbreviation": "Y/A",
+         "displayName": "Rushing Yards Allowed per Attempt",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "331",
+        "statId": "RECEPTIONS",
+        "statType": {
+         "abbreviation": "Rec",
+         "displayName": "Receptions",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "14",
+        "statId": "GAMES_DEFENSE",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "6326",
+        "statId": "TOTAL_OFFENSIVE_YARDS",
+        "statType": {
+         "abbreviation": "Yds",
+         "displayName": "Total Offensive Yards",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "477",
+        "statId": "RUSHING_ATTEMPTS_ALLOWED",
+        "statType": {
+         "abbreviation": "Att",
+         "displayName": "Rushing Attempts Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "24",
+        "statId": "INTERCEPTIONS_FORCED_RANK",
+        "statType": {
+         "abbreviation": "Int Rank",
+         "displayName": "Interceptions Forced Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "14",
+        "statId": "GAMES_KICKING",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Kicking",
+          "statTypeGroupId": "KICKING"
+         }
+        }
+       },
+       {
+        "value": "34.1",
+        "statId": "RUSHING_ATTEMPTS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "Att/G",
+         "displayName": "Rushing Attempts Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "331",
+        "statId": "PASSING_COMPLETIONS",
+        "statType": {
+         "abbreviation": "Comp",
+         "displayName": "Completions",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "18.8",
+        "statId": "PASSING_COMPLETIONS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "Comp/G",
+         "displayName": "Completions Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "57.1",
+        "statId": "FOURTH_DOWN_CONVERSION_PERCENTAGE",
+        "statType": {
+         "abbreviation": "4thD%",
+         "displayName": "Fourth Down Conversion Percentage",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "14",
+        "statId": "GAMES_PASSING",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "23.4",
+        "statId": "POINTS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "Pts/G",
+         "displayName": "Points Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "96",
+        "statId": "POINTS_ALLOWED_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "PA/G Rank",
+         "displayName": "Points Allowed per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "161",
+        "statId": "TOTAL_YARDS_ALLOWED_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Tot/G Rank",
+         "displayName": "Total Yards Allowed per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "14",
+        "statId": "GAMES_RUSHING",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "34.7",
+        "statId": "POINTS_PER_GAME",
+        "statType": {
+         "abbreviation": "Pts/G",
+         "displayName": "Points per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "33.4",
+        "statId": "PASSING_ATTEMPTS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "Att/G",
+         "displayName": "Attempts Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "24.1",
+        "statId": "FIRST_DOWNS_PER_GAME",
+        "statType": {
+         "abbreviation": "1stD/G",
+         "displayName": "First Downs per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "32",
+        "statId": "POINTS_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Pts/G Rank",
+         "displayName": "Points per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "69",
+        "statId": "TEAM_PENALTIES",
+        "statType": {
+         "abbreviation": "PEN",
+         "displayName": "Team Penalties",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Penalties",
+          "statTypeGroupId": "PENALTIES"
+         }
+        }
+       },
+       {
+        "value": "170",
+        "statId": "RECEIVING_FIRST_DOWNS",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "Receiving First Downs",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "213.5",
+        "statId": "RECEIVING_YARDS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "RecYds/G",
+         "displayName": "Receiving Yards Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "62.1",
+        "statId": "COMPLETION_PERCENTAGE",
+        "statType": {
+         "abbreviation": "Pct",
+         "displayName": "Completion Percentage",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "15",
+        "statId": "RECEIVING_YARDS_RANK",
+        "statType": {
+         "abbreviation": "Rec Rank",
+         "displayName": "Receiving Yards Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "2427",
+        "statId": "RUSHING_YARDS",
+        "statType": {
+         "abbreviation": "Yds",
+         "displayName": "Rushing Yards",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "2",
+        "statId": "INTERCEPTION_RETURN_TOUCHDOWNS",
+        "statType": {
+         "abbreviation": "IntTD",
+         "displayName": "Interception Return Touchdowns",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "5.1",
+        "statId": "RUSHING_YARDS_PER_ATTEMPT",
+        "statType": {
+         "abbreviation": "Y/A",
+         "displayName": "Rushing Yards per Attempt",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "23.6",
+        "statId": "PASSING_COMPLETIONS_PER_GAME",
+        "statType": {
+         "abbreviation": "Comp/G",
+         "displayName": "Completions per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "3899",
+        "statId": "PASSING_YARDS",
+        "statType": {
+         "abbreviation": "Yds",
+         "displayName": "Passing Yards",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "278.5",
+        "statId": "PASSING_YARDS_PER_GAME",
+        "statType": {
+         "abbreviation": "PasY/G",
+         "displayName": "Passing Yards per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "143",
+        "statId": "PASSING_YARDS_ALLOWED_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Pass/G Rank",
+         "displayName": "Passing Yards Allowed per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "33.8",
+        "statId": "RUSHING_ATTEMPTS_PER_GAME",
+        "statType": {
+         "abbreviation": "Att/G",
+         "displayName": "Rushing Attempts per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "170",
+        "statId": "PASSING_FIRST_DOWNS",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "Passing First Downs",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "263",
+        "statId": "RECEPTIONS_ALLOWED",
+        "statType": {
+         "abbreviation": "Rec",
+         "displayName": "Receptions Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "87",
+        "statId": "THIRD_DOWN_CONVERSIONS",
+        "statType": {
+         "abbreviation": "3rdM",
+         "displayName": "Third Down Conversions",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "69",
+        "statId": "OFFENSIVE_PENALTIES",
+        "statType": {
+         "abbreviation": "PEN",
+         "displayName": "Offensive Penalties",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "2989",
+        "statId": "PASSING_YARDS_ALLOWED",
+        "statType": {
+         "abbreviation": "PassYds",
+         "displayName": "Passing Yards Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "374.1",
+        "statId": "TOTAL_YARDS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "Yds/G",
+         "displayName": "Total Yards Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "36",
+        "statId": "SACKS_RANK",
+        "statType": {
+         "abbreviation": "Sack Rank",
+         "displayName": "Sacks Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "160.6",
+        "statId": "RUSHING_YARDS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "RushYds/G",
+         "displayName": "Rushing Yards Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "1.6",
+        "statId": "RECEIVING_TOUCHDOWNS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "TD/G",
+         "displayName": "Receiving Touchdowns Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "37",
+        "statId": "PASSING_TOUCHDOWNS",
+        "statType": {
+         "abbreviation": "TD",
+         "displayName": "Passing Touchdowns",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "16",
+        "statId": "PASSING_YARDS_RANK",
+        "statType": {
+         "abbreviation": "Pass Rank",
+         "displayName": "Passing Yards Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "173.4",
+        "statId": "RUSHING_YARDS_PER_GAME",
+        "statType": {
+         "abbreviation": "RusY/G",
+         "displayName": "Rushing Yards per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "119",
+        "statId": "RUSHING_FIRST_DOWNS_ALLOWED",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "Rushing First Downs Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "38.1",
+        "statId": "PASSING_ATTEMPTS_PER_GAME",
+        "statType": {
+         "abbreviation": "Att/G",
+         "displayName": "Attempts per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "16",
+        "statId": "INTERCEPTIONS_FORCED",
+        "statType": {
+         "abbreviation": "Int",
+         "displayName": "Interceptions",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "-170",
+        "statId": "SACKS_YARDS_LOST",
+        "statType": {
+         "abbreviation": "YdsL",
+         "displayName": "Yards Lost",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Sacked",
+          "statTypeGroupId": "SACKED"
+         }
+        }
+       },
+       {
+        "value": "24",
+        "statId": "PASSING_YARDS_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Pass/G Rank",
+         "displayName": "Passing Yards per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "328",
+        "statId": "POINTS_ALLOWED",
+        "statType": {
+         "abbreviation": "PA",
+         "displayName": "Points Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "337",
+        "statId": "FIRST_DOWNS",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "First Downs",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "48",
+        "statId": "RUSHING_YARDS_RANK",
+        "statType": {
+         "abbreviation": "Rush Rank",
+         "displayName": "Rushing Yards Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "197",
+        "statId": "THIRD_DOWN_ATTEMPTS",
+        "statType": {
+         "abbreviation": "3rdA",
+         "displayName": "Third Down Attempts",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "279.1",
+        "statId": "RECEIVING_YARDS_PER_GAME",
+        "statType": {
+         "abbreviation": "Y/G",
+         "displayName": "Receiving Yards per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "191",
+        "statId": "POINTS_ALLOWED_RANK",
+        "statType": {
+         "abbreviation": "PA Rank",
+         "displayName": "Points Allowed Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "133",
+        "statId": "PASSING_FIRST_DOWNS_ALLOWED",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "Passing First Downs Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "37",
+        "statId": "RECEIVING_TOUCHDOWNS",
+        "statType": {
+         "abbreviation": "TD",
+         "displayName": "Receiving Touchdowns",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "1.3",
+        "statId": "RUSHING_TOUCHDOWNS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "TD/G",
+         "displayName": "Rushing Touchdowns Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "14",
+        "statId": "GAMES_OFFENSE",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "667",
+        "statId": "OFFENSIVE_PENALTY_YARDS_LOST",
+        "statType": {
+         "abbreviation": "PYds",
+         "displayName": "Offensive Penalty Yards Lost",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "667",
+        "statId": "TEAM_PENALTY_YARDS_LOST",
+        "statType": {
+         "abbreviation": "PYds",
+         "displayName": "Team Penalty Yards Lost",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Penalties",
+          "statTypeGroupId": "PENALTIES"
+         }
+        }
+       },
+       {
+        "value": "18.8",
+        "statId": "RECEPTIONS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "Rec/G",
+         "displayName": "Receptions Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "20",
+        "statId": "POINTS_RANK",
+        "statType": {
+         "abbreviation": "Pts Rank",
+         "displayName": "Points Scored Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "44.2",
+        "statId": "THIRD_DOWN_CONVERSION_PERCENTAGE",
+        "statType": {
+         "abbreviation": "3rdD%",
+         "displayName": "Third Down Conversion Percentage",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "14",
+        "statId": "GAMES_RECEIVING",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "23",
+        "statId": "RUSHING_TOUCHDOWNS",
+        "statType": {
+         "abbreviation": "TD",
+         "displayName": "Rushing Touchdowns",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "12",
+        "statId": "TOTAL_OFFENSIVE_YARDS_RANK",
+        "statType": {
+         "abbreviation": "Tot Rank",
+         "displayName": "Total Offensive Yards Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "23.6",
+        "statId": "RECEPTIONS_PER_GAME",
+        "statType": {
+         "abbreviation": "Rec/G",
+         "displayName": "Receptions per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "22",
+        "statId": "RECEIVING_TOUCHDOWNS_ALLOWED",
+        "statType": {
+         "abbreviation": "TD",
+         "displayName": "Receiving Touchdowns Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "533",
+        "statId": "PASSING_ATTEMPTS",
+        "statType": {
+         "abbreviation": "Att",
+         "displayName": "Attempts",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "14",
+        "statId": "GAMES_PUNTING",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Punting",
+          "statTypeGroupId": "PUNTING"
+         }
+        }
+       },
+       {
+        "value": "25",
+        "statId": "SACKS_TAKEN",
+        "statType": {
+         "abbreviation": "Sacks",
+         "displayName": "Sacks",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Sacked",
+          "statTypeGroupId": "SACKED"
+         }
+        }
+       },
+       {
+        "value": "51",
+        "statId": "TIME_OF_POSSESSION_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "ToP/G Rank",
+         "displayName": "Time of Possession per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "17",
+        "statId": "TOTAL_OFFENSIVE_YARDS_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Tot/G Rank",
+         "displayName": "Total Offensive Yards per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "3908",
+        "statId": "RECEIVING_YARDS",
+        "statType": {
+         "abbreviation": "Yds",
+         "displayName": "Receiving Yards",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "133",
+        "statId": "RECEIVING_FIRST_DOWNS_ALLOWED",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "Receiving First Downs Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "30:31",
+        "statId": "TIME_OF_POSSESSION_PER_GAME",
+        "statType": {
+         "abbreviation": "ToP/G",
+         "displayName": "Time of Possession per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "213.5",
+        "statId": "PASSING_YARDS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "PassYds/G",
+         "displayName": "Passing Yards Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "85",
+        "statId": "RUSHING_YARDS_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Rush/G Rank",
+         "displayName": "Rushing Yards per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "183",
+        "statId": "RUSHING_YARDS_ALLOWED_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Rush/G Rank",
+         "displayName": "Rushing Yards Allowed per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "451.9",
+        "statId": "TOTAL_OFFENSIVE_YARDS_PER_GAME",
+        "statType": {
+         "abbreviation": "Yds/G",
+         "displayName": "Total Offensive Yards per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       }
+      ]
+     },
+     {
+      "team": {
+       "alias": {
+        "url": "https://sports.yahoo.com/ncaaf/teams/duke/"
+       },
+       "displayName": "Duke",
+       "abbreviation": "DUKE",
+       "nickname": "Blue Devils",
+       "fullName": "Duke Blue Devils"
+      },
+      "stats": [
+       {
+        "value": "13",
+        "statId": "PASSING_INTERCEPTIONS",
+        "statType": {
+         "abbreviation": "Int",
+         "displayName": "Interceptions",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "1.5",
+        "statId": "PASSING_TOUCHDOWNS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "TD/G",
+         "displayName": "Passing Touchdowns Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "1945",
+        "statId": "RUSHING_YARDS_ALLOWED",
+        "statType": {
+         "abbreviation": "RushYds",
+         "displayName": "Rushing Yards Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "7",
+        "statId": "FOURTH_DOWN_CONVERSIONS",
+        "statType": {
+         "abbreviation": "4thM",
+         "displayName": "Fourth Down Conversions",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "11.4",
+        "statId": "RECEIVING_YARDS_PER_RECEPTION",
+        "statType": {
+         "abbreviation": "Y/R",
+         "displayName": "Yards per Reception",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "60",
+        "statId": "RUSHING_FIRST_DOWNS",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "Rushing First Downs",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "15",
+        "statId": "RUSHING_TOUCHDOWNS_ALLOWED",
+        "statType": {
+         "abbreviation": "TD",
+         "displayName": "Rushing Touchdowns Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "86",
+        "statId": "LONGEST_PASS",
+        "statType": {
+         "abbreviation": "Long",
+         "displayName": "Longest Pass",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "381",
+        "statId": "RUSHING_ATTEMPTS",
+        "statType": {
+         "abbreviation": "Att",
+         "displayName": "Rushing Attempts",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "342",
+        "statId": "POINTS",
+        "statType": {
+         "abbreviation": "Pts",
+         "displayName": "Points",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "44",
+        "statId": "LONGEST_RUSH",
+        "statType": {
+         "abbreviation": "Long",
+         "displayName": "Longest Rush",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "2775",
+        "statId": "RECEIVING_YARDS_ALLOWED",
+        "statType": {
+         "abbreviation": "RecYds",
+         "displayName": "Receiving Yards Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "18",
+        "statId": "FOURTH_DOWN_ATTEMPTS",
+        "statType": {
+         "abbreviation": "4thA",
+         "displayName": "Fourth Down Attempts",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "58.0",
+        "statId": "COMPLETION_PERCENTAGE_ALLOWED",
+        "statType": {
+         "abbreviation": "Pct",
+         "displayName": "Completion Percentage Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "19",
+        "statId": "PASSING_TOUCHDOWNS_ALLOWED",
+        "statType": {
+         "abbreviation": "TD",
+         "displayName": "Passing Touchdowns Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "6.8",
+        "statId": "PASSING_YARDS_PER_ATTEMPT",
+        "statType": {
+         "abbreviation": "Y/A",
+         "displayName": "Passing Yards per Attempt",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "3.7",
+        "statId": "RUSHING_YARDS_ALLOWED_PER_ATTEMPT",
+        "statType": {
+         "abbreviation": "Y/A",
+         "displayName": "Rushing Yards Allowed per Attempt",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "280",
+        "statId": "RECEPTIONS",
+        "statType": {
+         "abbreviation": "Rec",
+         "displayName": "Receptions",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "13",
+        "statId": "GAMES_DEFENSE",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "4378",
+        "statId": "TOTAL_OFFENSIVE_YARDS",
+        "statType": {
+         "abbreviation": "Yds",
+         "displayName": "Total Offensive Yards",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "519",
+        "statId": "RUSHING_ATTEMPTS_ALLOWED",
+        "statType": {
+         "abbreviation": "Att",
+         "displayName": "Rushing Attempts Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "65",
+        "statId": "INTERCEPTIONS_FORCED_RANK",
+        "statType": {
+         "abbreviation": "Int Rank",
+         "displayName": "Interceptions Forced Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "13",
+        "statId": "GAMES_KICKING",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Kicking",
+          "statTypeGroupId": "KICKING"
+         }
+        }
+       },
+       {
+        "value": "39.9",
+        "statId": "RUSHING_ATTEMPTS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "Att/G",
+         "displayName": "Rushing Attempts Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "280",
+        "statId": "PASSING_COMPLETIONS",
+        "statType": {
+         "abbreviation": "Comp",
+         "displayName": "Completions",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "18.9",
+        "statId": "PASSING_COMPLETIONS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "Comp/G",
+         "displayName": "Completions Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "38.9",
+        "statId": "FOURTH_DOWN_CONVERSION_PERCENTAGE",
+        "statType": {
+         "abbreviation": "4thD%",
+         "displayName": "Fourth Down Conversion Percentage",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "13",
+        "statId": "GAMES_PASSING",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "24.5",
+        "statId": "POINTS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "Pts/G",
+         "displayName": "Points Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "121",
+        "statId": "POINTS_ALLOWED_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "PA/G Rank",
+         "displayName": "Points Allowed per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "139",
+        "statId": "TOTAL_YARDS_ALLOWED_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Tot/G Rank",
+         "displayName": "Total Yards Allowed per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "13",
+        "statId": "GAMES_RUSHING",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "26.3",
+        "statId": "POINTS_PER_GAME",
+        "statType": {
+         "abbreviation": "Pts/G",
+         "displayName": "Points per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "32.6",
+        "statId": "PASSING_ATTEMPTS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "Att/G",
+         "displayName": "Attempts Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "17.6",
+        "statId": "FIRST_DOWNS_PER_GAME",
+        "statType": {
+         "abbreviation": "1stD/G",
+         "displayName": "First Downs per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "137",
+        "statId": "POINTS_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Pts/G Rank",
+         "displayName": "Points per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "67",
+        "statId": "TEAM_PENALTIES",
+        "statType": {
+         "abbreviation": "PEN",
+         "displayName": "Team Penalties",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Penalties",
+          "statTypeGroupId": "PENALTIES"
+         }
+        }
+       },
+       {
+        "value": "141",
+        "statId": "RECEIVING_FIRST_DOWNS",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "Receiving First Downs",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "213.5",
+        "statId": "RECEIVING_YARDS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "RecYds/G",
+         "displayName": "Receiving Yards Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "60.0",
+        "statId": "COMPLETION_PERCENTAGE",
+        "statType": {
+         "abbreviation": "Pct",
+         "displayName": "Completion Percentage",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "46",
+        "statId": "RECEIVING_YARDS_RANK",
+        "statType": {
+         "abbreviation": "Rec Rank",
+         "displayName": "Receiving Yards Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "1202",
+        "statId": "RUSHING_YARDS",
+        "statType": {
+         "abbreviation": "Yds",
+         "displayName": "Rushing Yards",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "1",
+        "statId": "INTERCEPTION_RETURN_TOUCHDOWNS",
+        "statType": {
+         "abbreviation": "IntTD",
+         "displayName": "Interception Return Touchdowns",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "3.2",
+        "statId": "RUSHING_YARDS_PER_ATTEMPT",
+        "statType": {
+         "abbreviation": "Y/A",
+         "displayName": "Rushing Yards per Attempt",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "21.5",
+        "statId": "PASSING_COMPLETIONS_PER_GAME",
+        "statType": {
+         "abbreviation": "Comp/G",
+         "displayName": "Completions per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "3176",
+        "statId": "PASSING_YARDS",
+        "statType": {
+         "abbreviation": "Yds",
+         "displayName": "Passing Yards",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "244.3",
+        "statId": "PASSING_YARDS_PER_GAME",
+        "statType": {
+         "abbreviation": "PasY/G",
+         "displayName": "Passing Yards per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "142",
+        "statId": "PASSING_YARDS_ALLOWED_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Pass/G Rank",
+         "displayName": "Passing Yards Allowed per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "29.3",
+        "statId": "RUSHING_ATTEMPTS_PER_GAME",
+        "statType": {
+         "abbreviation": "Att/G",
+         "displayName": "Rushing Attempts per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "141",
+        "statId": "PASSING_FIRST_DOWNS",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "Passing First Downs",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "246",
+        "statId": "RECEPTIONS_ALLOWED",
+        "statType": {
+         "abbreviation": "Rec",
+         "displayName": "Receptions Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "52",
+        "statId": "THIRD_DOWN_CONVERSIONS",
+        "statType": {
+         "abbreviation": "3rdM",
+         "displayName": "Third Down Conversions",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "67",
+        "statId": "OFFENSIVE_PENALTIES",
+        "statType": {
+         "abbreviation": "PEN",
+         "displayName": "Offensive Penalties",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "2775",
+        "statId": "PASSING_YARDS_ALLOWED",
+        "statType": {
+         "abbreviation": "PassYds",
+         "displayName": "Passing Yards Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "363.1",
+        "statId": "TOTAL_YARDS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "Yds/G",
+         "displayName": "Total Yards Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "5",
+        "statId": "SACKS_RANK",
+        "statType": {
+         "abbreviation": "Sack Rank",
+         "displayName": "Sacks Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "149.6",
+        "statId": "RUSHING_YARDS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "RushYds/G",
+         "displayName": "Rushing Yards Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "1.5",
+        "statId": "RECEIVING_TOUCHDOWNS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "TD/G",
+         "displayName": "Receiving Touchdowns Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "28",
+        "statId": "PASSING_TOUCHDOWNS",
+        "statType": {
+         "abbreviation": "TD",
+         "displayName": "Passing Touchdowns",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "46",
+        "statId": "PASSING_YARDS_RANK",
+        "statType": {
+         "abbreviation": "Pass Rank",
+         "displayName": "Passing Yards Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "92.5",
+        "statId": "RUSHING_YARDS_PER_GAME",
+        "statType": {
+         "abbreviation": "RusY/G",
+         "displayName": "Rushing Yards per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "113",
+        "statId": "RUSHING_FIRST_DOWNS_ALLOWED",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "Rushing First Downs Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "35.9",
+        "statId": "PASSING_ATTEMPTS_PER_GAME",
+        "statType": {
+         "abbreviation": "Att/G",
+         "displayName": "Attempts per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "13",
+        "statId": "INTERCEPTIONS_FORCED",
+        "statType": {
+         "abbreviation": "Int",
+         "displayName": "Interceptions",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "-94",
+        "statId": "SACKS_YARDS_LOST",
+        "statType": {
+         "abbreviation": "YdsL",
+         "displayName": "Yards Lost",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Sacked",
+          "statTypeGroupId": "SACKED"
+         }
+        }
+       },
+       {
+        "value": "70",
+        "statId": "PASSING_YARDS_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Pass/G Rank",
+         "displayName": "Passing Yards per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "318",
+        "statId": "POINTS_ALLOWED",
+        "statType": {
+         "abbreviation": "PA",
+         "displayName": "Points Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "229",
+        "statId": "FIRST_DOWNS",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "First Downs",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "130",
+        "statId": "RUSHING_YARDS_RANK",
+        "statType": {
+         "abbreviation": "Rush Rank",
+         "displayName": "Rushing Yards Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "176",
+        "statId": "THIRD_DOWN_ATTEMPTS",
+        "statType": {
+         "abbreviation": "3rdA",
+         "displayName": "Third Down Attempts",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "244.6",
+        "statId": "RECEIVING_YARDS_PER_GAME",
+        "statType": {
+         "abbreviation": "Y/G",
+         "displayName": "Receiving Yards per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "177",
+        "statId": "POINTS_ALLOWED_RANK",
+        "statType": {
+         "abbreviation": "PA Rank",
+         "displayName": "Points Allowed Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "123",
+        "statId": "PASSING_FIRST_DOWNS_ALLOWED",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "Passing First Downs Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "28",
+        "statId": "RECEIVING_TOUCHDOWNS",
+        "statType": {
+         "abbreviation": "TD",
+         "displayName": "Receiving Touchdowns",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "1.2",
+        "statId": "RUSHING_TOUCHDOWNS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "TD/G",
+         "displayName": "Rushing Touchdowns Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "13",
+        "statId": "GAMES_OFFENSE",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "651",
+        "statId": "OFFENSIVE_PENALTY_YARDS_LOST",
+        "statType": {
+         "abbreviation": "PYds",
+         "displayName": "Offensive Penalty Yards Lost",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "651",
+        "statId": "TEAM_PENALTY_YARDS_LOST",
+        "statType": {
+         "abbreviation": "PYds",
+         "displayName": "Team Penalty Yards Lost",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Penalties",
+          "statTypeGroupId": "PENALTIES"
+         }
+        }
+       },
+       {
+        "value": "18.9",
+        "statId": "RECEPTIONS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "Rec/G",
+         "displayName": "Receptions Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "80",
+        "statId": "POINTS_RANK",
+        "statType": {
+         "abbreviation": "Pts Rank",
+         "displayName": "Points Scored Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "29.5",
+        "statId": "THIRD_DOWN_CONVERSION_PERCENTAGE",
+        "statType": {
+         "abbreviation": "3rdD%",
+         "displayName": "Third Down Conversion Percentage",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "13",
+        "statId": "GAMES_RECEIVING",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "13",
+        "statId": "RUSHING_TOUCHDOWNS",
+        "statType": {
+         "abbreviation": "TD",
+         "displayName": "Rushing Touchdowns",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "110",
+        "statId": "TOTAL_OFFENSIVE_YARDS_RANK",
+        "statType": {
+         "abbreviation": "Tot Rank",
+         "displayName": "Total Offensive Yards Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "21.5",
+        "statId": "RECEPTIONS_PER_GAME",
+        "statType": {
+         "abbreviation": "Rec/G",
+         "displayName": "Receptions per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "19",
+        "statId": "RECEIVING_TOUCHDOWNS_ALLOWED",
+        "statType": {
+         "abbreviation": "TD",
+         "displayName": "Receiving Touchdowns Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "467",
+        "statId": "PASSING_ATTEMPTS",
+        "statType": {
+         "abbreviation": "Att",
+         "displayName": "Attempts",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "13",
+        "statId": "GAMES_PUNTING",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Punting",
+          "statTypeGroupId": "PUNTING"
+         }
+        }
+       },
+       {
+        "value": "12",
+        "statId": "SACKS_TAKEN",
+        "statType": {
+         "abbreviation": "Sacks",
+         "displayName": "Sacks",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Sacked",
+          "statTypeGroupId": "SACKED"
+         }
+        }
+       },
+       {
+        "value": "124",
+        "statId": "TIME_OF_POSSESSION_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "ToP/G Rank",
+         "displayName": "Time of Possession per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "191",
+        "statId": "TOTAL_OFFENSIVE_YARDS_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Tot/G Rank",
+         "displayName": "Total Offensive Yards per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "3180",
+        "statId": "RECEIVING_YARDS",
+        "statType": {
+         "abbreviation": "Yds",
+         "displayName": "Receiving Yards",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "123",
+        "statId": "RECEIVING_FIRST_DOWNS_ALLOWED",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "Receiving First Downs Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "27:05",
+        "statId": "TIME_OF_POSSESSION_PER_GAME",
+        "statType": {
+         "abbreviation": "ToP/G",
+         "displayName": "Time of Possession per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "213.5",
+        "statId": "PASSING_YARDS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "PassYds/G",
+         "displayName": "Passing Yards Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "260",
+        "statId": "RUSHING_YARDS_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Rush/G Rank",
+         "displayName": "Rushing Yards per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "146",
+        "statId": "RUSHING_YARDS_ALLOWED_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Rush/G Rank",
+         "displayName": "Rushing Yards Allowed per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "336.8",
+        "statId": "TOTAL_OFFENSIVE_YARDS_PER_GAME",
+        "statType": {
+         "abbreviation": "Yds/G",
+         "displayName": "Total Offensive Yards per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       }
+      ]
+     },
+     {
+      "team": {
+       "alias": {
+        "url": "https://sports.yahoo.com/ncaaf/teams/florida-state/"
+       },
+       "displayName": "Florida St.",
+       "abbreviation": "FSU",
+       "nickname": "Seminoles",
+       "fullName": "Florida State Seminoles"
+      },
+      "stats": [
+       {
+        "value": "13",
+        "statId": "PASSING_INTERCEPTIONS",
+        "statType": {
+         "abbreviation": "Int",
+         "displayName": "Interceptions",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "1.3",
+        "statId": "PASSING_TOUCHDOWNS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "TD/G",
+         "displayName": "Passing Touchdowns Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "2216",
+        "statId": "RUSHING_YARDS_ALLOWED",
+        "statType": {
+         "abbreviation": "RushYds",
+         "displayName": "Rushing Yards Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "20",
+        "statId": "FOURTH_DOWN_CONVERSIONS",
+        "statType": {
+         "abbreviation": "4thM",
+         "displayName": "Fourth Down Conversions",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "12.1",
+        "statId": "RECEIVING_YARDS_PER_RECEPTION",
+        "statType": {
+         "abbreviation": "Y/R",
+         "displayName": "Yards per Reception",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "64",
+        "statId": "RUSHING_FIRST_DOWNS",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "Rushing First Downs",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "21",
+        "statId": "RUSHING_TOUCHDOWNS_ALLOWED",
+        "statType": {
+         "abbreviation": "TD",
+         "displayName": "Rushing Touchdowns Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "71",
+        "statId": "LONGEST_PASS",
+        "statType": {
+         "abbreviation": "Long",
+         "displayName": "Longest Pass",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "378",
+        "statId": "RUSHING_ATTEMPTS",
+        "statType": {
+         "abbreviation": "Att",
+         "displayName": "Rushing Attempts",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "185",
+        "statId": "POINTS",
+        "statType": {
+         "abbreviation": "Pts",
+         "displayName": "Points",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "42",
+        "statId": "LONGEST_RUSH",
+        "statType": {
+         "abbreviation": "Long",
+         "displayName": "Longest Rush",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "2415",
+        "statId": "RECEIVING_YARDS_ALLOWED",
+        "statType": {
+         "abbreviation": "RecYds",
+         "displayName": "Receiving Yards Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "32",
+        "statId": "FOURTH_DOWN_ATTEMPTS",
+        "statType": {
+         "abbreviation": "4thA",
+         "displayName": "Fourth Down Attempts",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "62.6",
+        "statId": "COMPLETION_PERCENTAGE_ALLOWED",
+        "statType": {
+         "abbreviation": "Pct",
+         "displayName": "Completion Percentage Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "16",
+        "statId": "PASSING_TOUCHDOWNS_ALLOWED",
+        "statType": {
+         "abbreviation": "TD",
+         "displayName": "Passing Touchdowns Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "6.1",
+        "statId": "PASSING_YARDS_PER_ATTEMPT",
+        "statType": {
+         "abbreviation": "Y/A",
+         "displayName": "Passing Yards per Attempt",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "4.6",
+        "statId": "RUSHING_YARDS_ALLOWED_PER_ATTEMPT",
+        "statType": {
+         "abbreviation": "Y/A",
+         "displayName": "Rushing Yards Allowed per Attempt",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "179",
+        "statId": "RECEPTIONS",
+        "statType": {
+         "abbreviation": "Rec",
+         "displayName": "Receptions",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "12",
+        "statId": "GAMES_DEFENSE",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "3243",
+        "statId": "TOTAL_OFFENSIVE_YARDS",
+        "statType": {
+         "abbreviation": "Yds",
+         "displayName": "Total Offensive Yards",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "477",
+        "statId": "RUSHING_ATTEMPTS_ALLOWED",
+        "statType": {
+         "abbreviation": "Att",
+         "displayName": "Rushing Attempts Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "238",
+        "statId": "INTERCEPTIONS_FORCED_RANK",
+        "statType": {
+         "abbreviation": "Int Rank",
+         "displayName": "Interceptions Forced Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "12",
+        "statId": "GAMES_KICKING",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Kicking",
+          "statTypeGroupId": "KICKING"
+         }
+        }
+       },
+       {
+        "value": "39.8",
+        "statId": "RUSHING_ATTEMPTS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "Att/G",
+         "displayName": "Rushing Attempts Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "179",
+        "statId": "PASSING_COMPLETIONS",
+        "statType": {
+         "abbreviation": "Comp",
+         "displayName": "Completions",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "17.0",
+        "statId": "PASSING_COMPLETIONS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "Comp/G",
+         "displayName": "Completions Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "62.5",
+        "statId": "FOURTH_DOWN_CONVERSION_PERCENTAGE",
+        "statType": {
+         "abbreviation": "4thD%",
+         "displayName": "Fourth Down Conversion Percentage",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "12",
+        "statId": "GAMES_PASSING",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "28.0",
+        "statId": "POINTS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "Pts/G",
+         "displayName": "Points Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "175",
+        "statId": "POINTS_ALLOWED_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "PA/G Rank",
+         "displayName": "Points Allowed per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "187",
+        "statId": "TOTAL_YARDS_ALLOWED_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Tot/G Rank",
+         "displayName": "Total Yards Allowed per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "12",
+        "statId": "GAMES_RUSHING",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "15.4",
+        "statId": "POINTS_PER_GAME",
+        "statType": {
+         "abbreviation": "Pts/G",
+         "displayName": "Points per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "27.2",
+        "statId": "PASSING_ATTEMPTS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "Att/G",
+         "displayName": "Attempts Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "15.2",
+        "statId": "FIRST_DOWNS_PER_GAME",
+        "statType": {
+         "abbreviation": "1stD/G",
+         "displayName": "First Downs per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "269",
+        "statId": "POINTS_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Pts/G Rank",
+         "displayName": "Points per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "67",
+        "statId": "TEAM_PENALTIES",
+        "statType": {
+         "abbreviation": "PEN",
+         "displayName": "Team Penalties",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Penalties",
+          "statTypeGroupId": "PENALTIES"
+         }
+        }
+       },
+       {
+        "value": "103",
+        "statId": "RECEIVING_FIRST_DOWNS",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "Receiving First Downs",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "201.3",
+        "statId": "RECEIVING_YARDS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "RecYds/G",
+         "displayName": "Receiving Yards Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "50.4",
+        "statId": "COMPLETION_PERCENTAGE",
+        "statType": {
+         "abbreviation": "Pct",
+         "displayName": "Completion Percentage",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "118",
+        "statId": "RECEIVING_YARDS_RANK",
+        "statType": {
+         "abbreviation": "Rec Rank",
+         "displayName": "Receiving Yards Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "1079",
+        "statId": "RUSHING_YARDS",
+        "statType": {
+         "abbreviation": "Yds",
+         "displayName": "Rushing Yards",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "0",
+        "statId": "INTERCEPTION_RETURN_TOUCHDOWNS",
+        "statType": {
+         "abbreviation": "IntTD",
+         "displayName": "Interception Return Touchdowns",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "2.9",
+        "statId": "RUSHING_YARDS_PER_ATTEMPT",
+        "statType": {
+         "abbreviation": "Y/A",
+         "displayName": "Rushing Yards per Attempt",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "14.9",
+        "statId": "PASSING_COMPLETIONS_PER_GAME",
+        "statType": {
+         "abbreviation": "Comp/G",
+         "displayName": "Completions per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "2164",
+        "statId": "PASSING_YARDS",
+        "statType": {
+         "abbreviation": "Yds",
+         "displayName": "Passing Yards",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "180.3",
+        "statId": "PASSING_YARDS_PER_GAME",
+        "statType": {
+         "abbreviation": "PasY/G",
+         "displayName": "Passing Yards per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "110",
+        "statId": "PASSING_YARDS_ALLOWED_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Pass/G Rank",
+         "displayName": "Passing Yards Allowed per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "31.5",
+        "statId": "RUSHING_ATTEMPTS_PER_GAME",
+        "statType": {
+         "abbreviation": "Att/G",
+         "displayName": "Rushing Attempts per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "103",
+        "statId": "PASSING_FIRST_DOWNS",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "Passing First Downs",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "204",
+        "statId": "RECEPTIONS_ALLOWED",
+        "statType": {
+         "abbreviation": "Rec",
+         "displayName": "Receptions Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "46",
+        "statId": "THIRD_DOWN_CONVERSIONS",
+        "statType": {
+         "abbreviation": "3rdM",
+         "displayName": "Third Down Conversions",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "67",
+        "statId": "OFFENSIVE_PENALTIES",
+        "statType": {
+         "abbreviation": "PEN",
+         "displayName": "Offensive Penalties",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "2415",
+        "statId": "PASSING_YARDS_ALLOWED",
+        "statType": {
+         "abbreviation": "PassYds",
+         "displayName": "Passing Yards Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "385.9",
+        "statId": "TOTAL_YARDS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "Yds/G",
+         "displayName": "Total Yards Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "93",
+        "statId": "SACKS_RANK",
+        "statType": {
+         "abbreviation": "Sack Rank",
+         "displayName": "Sacks Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "184.7",
+        "statId": "RUSHING_YARDS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "RushYds/G",
+         "displayName": "Rushing Yards Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "1.3",
+        "statId": "RECEIVING_TOUCHDOWNS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "TD/G",
+         "displayName": "Receiving Touchdowns Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "11",
+        "statId": "PASSING_TOUCHDOWNS",
+        "statType": {
+         "abbreviation": "TD",
+         "displayName": "Passing Touchdowns",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "118",
+        "statId": "PASSING_YARDS_RANK",
+        "statType": {
+         "abbreviation": "Pass Rank",
+         "displayName": "Passing Yards Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "89.9",
+        "statId": "RUSHING_YARDS_PER_GAME",
+        "statType": {
+         "abbreviation": "RusY/G",
+         "displayName": "Rushing Yards per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "116",
+        "statId": "RUSHING_FIRST_DOWNS_ALLOWED",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "Rushing First Downs Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "29.6",
+        "statId": "PASSING_ATTEMPTS_PER_GAME",
+        "statType": {
+         "abbreviation": "Att/G",
+         "displayName": "Attempts per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "4",
+        "statId": "INTERCEPTIONS_FORCED",
+        "statType": {
+         "abbreviation": "Int",
+         "displayName": "Interceptions",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "-287",
+        "statId": "SACKS_YARDS_LOST",
+        "statType": {
+         "abbreviation": "YdsL",
+         "displayName": "Yards Lost",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Sacked",
+          "statTypeGroupId": "SACKED"
+         }
+        }
+       },
+       {
+        "value": "212",
+        "statId": "PASSING_YARDS_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Pass/G Rank",
+         "displayName": "Passing Yards per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "336",
+        "statId": "POINTS_ALLOWED",
+        "statType": {
+         "abbreviation": "PA",
+         "displayName": "Points Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "182",
+        "statId": "FIRST_DOWNS",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "First Downs",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "131",
+        "statId": "RUSHING_YARDS_RANK",
+        "statType": {
+         "abbreviation": "Rush Rank",
+         "displayName": "Rushing Yards Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "160",
+        "statId": "THIRD_DOWN_ATTEMPTS",
+        "statType": {
+         "abbreviation": "3rdA",
+         "displayName": "Third Down Attempts",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "180.3",
+        "statId": "RECEIVING_YARDS_PER_GAME",
+        "statType": {
+         "abbreviation": "Y/G",
+         "displayName": "Receiving Yards per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "202",
+        "statId": "POINTS_ALLOWED_RANK",
+        "statType": {
+         "abbreviation": "PA Rank",
+         "displayName": "Points Allowed Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "110",
+        "statId": "PASSING_FIRST_DOWNS_ALLOWED",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "Passing First Downs Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "11",
+        "statId": "RECEIVING_TOUCHDOWNS",
+        "statType": {
+         "abbreviation": "TD",
+         "displayName": "Receiving Touchdowns",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "1.8",
+        "statId": "RUSHING_TOUCHDOWNS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "TD/G",
+         "displayName": "Rushing Touchdowns Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "12",
+        "statId": "GAMES_OFFENSE",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "575",
+        "statId": "OFFENSIVE_PENALTY_YARDS_LOST",
+        "statType": {
+         "abbreviation": "PYds",
+         "displayName": "Offensive Penalty Yards Lost",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "575",
+        "statId": "TEAM_PENALTY_YARDS_LOST",
+        "statType": {
+         "abbreviation": "PYds",
+         "displayName": "Team Penalty Yards Lost",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Penalties",
+          "statTypeGroupId": "PENALTIES"
+         }
+        }
+       },
+       {
+        "value": "17.0",
+        "statId": "RECEPTIONS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "Rec/G",
+         "displayName": "Receptions Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "133",
+        "statId": "POINTS_RANK",
+        "statType": {
+         "abbreviation": "Pts Rank",
+         "displayName": "Points Scored Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "28.8",
+        "statId": "THIRD_DOWN_CONVERSION_PERCENTAGE",
+        "statType": {
+         "abbreviation": "3rdD%",
+         "displayName": "Third Down Conversion Percentage",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "12",
+        "statId": "GAMES_RECEIVING",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "8",
+        "statId": "RUSHING_TOUCHDOWNS",
+        "statType": {
+         "abbreviation": "TD",
+         "displayName": "Rushing Touchdowns",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "134",
+        "statId": "TOTAL_OFFENSIVE_YARDS_RANK",
+        "statType": {
+         "abbreviation": "Tot Rank",
+         "displayName": "Total Offensive Yards Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "14.9",
+        "statId": "RECEPTIONS_PER_GAME",
+        "statType": {
+         "abbreviation": "Rec/G",
+         "displayName": "Receptions per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "16",
+        "statId": "RECEIVING_TOUCHDOWNS_ALLOWED",
+        "statType": {
+         "abbreviation": "TD",
+         "displayName": "Receiving Touchdowns Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "355",
+        "statId": "PASSING_ATTEMPTS",
+        "statType": {
+         "abbreviation": "Att",
+         "displayName": "Attempts",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Passing",
+          "statTypeGroupId": "PASSING"
+         }
+        }
+       },
+       {
+        "value": "12",
+        "statId": "GAMES_PUNTING",
+        "statType": {
+         "abbreviation": "G",
+         "displayName": "Games",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Punting",
+          "statTypeGroupId": "PUNTING"
+         }
+        }
+       },
+       {
+        "value": "49",
+        "statId": "SACKS_TAKEN",
+        "statType": {
+         "abbreviation": "Sacks",
+         "displayName": "Sacks",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Sacked",
+          "statTypeGroupId": "SACKED"
+         }
+        }
+       },
+       {
+        "value": "122",
+        "statId": "TIME_OF_POSSESSION_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "ToP/G Rank",
+         "displayName": "Time of Possession per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "260",
+        "statId": "TOTAL_OFFENSIVE_YARDS_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Tot/G Rank",
+         "displayName": "Total Offensive Yards per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "2164",
+        "statId": "RECEIVING_YARDS",
+        "statType": {
+         "abbreviation": "Yds",
+         "displayName": "Receiving Yards",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Receiving",
+          "statTypeGroupId": "RECEIVING"
+         }
+        }
+       },
+       {
+        "value": "110",
+        "statId": "RECEIVING_FIRST_DOWNS_ALLOWED",
+        "statType": {
+         "abbreviation": "1stD",
+         "displayName": "Receiving First Downs Allowed",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "27:11",
+        "statId": "TIME_OF_POSSESSION_PER_GAME",
+        "statType": {
+         "abbreviation": "ToP/G",
+         "displayName": "Time of Possession per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       },
+       {
+        "value": "201.3",
+        "statId": "PASSING_YARDS_ALLOWED_PER_GAME",
+        "statType": {
+         "abbreviation": "PassYds/G",
+         "displayName": "Passing Yards Allowed per Game",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "262",
+        "statId": "RUSHING_YARDS_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Rush/G Rank",
+         "displayName": "Rushing Yards per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Rushing",
+          "statTypeGroupId": "RUSHING"
+         }
+        }
+       },
+       {
+        "value": "237",
+        "statId": "RUSHING_YARDS_ALLOWED_PER_GAME_RANK",
+        "statType": {
+         "abbreviation": "Rush/G Rank",
+         "displayName": "Rushing Yards Allowed per Game Rank",
+         "sortOrder": "ASCENDING",
+         "statTypeGroup": {
+          "displayName": "Defense",
+          "statTypeGroupId": "DEFENSE"
+         }
+        }
+       },
+       {
+        "value": "270.3",
+        "statId": "TOTAL_OFFENSIVE_YARDS_PER_GAME",
+        "statType": {
+         "abbreviation": "Yds/G",
+         "displayName": "Total Offensive Yards per Game",
+         "sortOrder": "DESCENDING",
+         "statTypeGroup": {
+          "displayName": "Offense",
+          "statTypeGroupId": "OFFENSE"
+         }
+        }
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "extensions": {}
+}

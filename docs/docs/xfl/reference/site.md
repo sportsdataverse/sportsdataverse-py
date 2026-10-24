@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # XFL — ESPN site API (v2)
 
-`sportsdataverse.xfl` — 24 endpoints.
+`sportsdataverse.football.xfl` — 24 endpoints.
 
 ## espn_xfl_scoreboard
 

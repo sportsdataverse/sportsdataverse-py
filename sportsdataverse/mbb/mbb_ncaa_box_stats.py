@@ -34,21 +34,27 @@ Divergences from R (documented):
 
 from __future__ import annotations
 
+import logging
 import math
 import re
+import warnings
 from fractions import Fraction
 from typing import TYPE_CHECKING, Iterable, Literal, Optional, Protocol, Union, overload
 
 import polars as pl
 from bs4 import Tag
 
+from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
 from sportsdataverse.mbb.mbb_ncaa_html import parse_html
+from sportsdataverse.scrape.ncaa.identity import _utf8_id
 
 if TYPE_CHECKING:
     import pandas as pd
 
 __all__ = ["ncaa_mbb_box_scores", "parse_ncaa_bb_box"]
+
+logger = logging.getLogger(__name__)
 
 # R: gsub("[^[:alnum:] ]", "", x) under a UTF-8 locale keeps unicode letters;
 # \w (unicode) minus underscore is the Python equivalent.
@@ -254,7 +260,8 @@ def parse_ncaa_bb_box(html: str, game_id: str) -> pl.DataFrame:
         ``game_id, box_id, player, clean_name, team, mp, pts, orb, drb, trb,
         ast, to, stl, blk, fga, fgm, fg_pct, tpa, tpm, tp_pct, fta, ftm,
         ft_pct, ts_pct, efg_pct, fouls, dq, tech``. Zero-row frame with that
-        schema when the page has no tables.
+        schema when the page has no tables, and (with a ``UserWarning`` naming
+        the game id) when it is another page type.
 
     Example:
         Parse a saved page::
@@ -277,6 +284,15 @@ def parse_ncaa_bb_box(html: str, game_id: str) -> pl.DataFrame:
         return _empty_frame()
 
     background = _table_rows(tables[0])
+    # Another page type (lineups, a football box score) has >= 5 tables but not this layout: zero rows, not a raise.
+    if len(background) < 4 or not all(rows and "Name" in rows[0] for rows in map(_table_rows, tables[3:5])):
+        # bigballR's get_box_scores tryCatch reports this game as "Error with game id ... removed"; say so too.
+        warnings.warn(
+            f"parse_ncaa_bb_box: game id {game_id} is not an individual_stats page; returning zero rows",
+            UserWarning,
+            stacklevel=2,
+        )
+        return _empty_frame()
     away_team = background[2][0]  # R background[3,1] (issue96, 10/17/2025)
     home_team = background[3][0]  # R background[4,1]
 
@@ -362,18 +378,43 @@ def _aggregate_multi_games(df: pl.DataFrame) -> pl.DataFrame:
     return out.select(c for c in order if c in out.columns).sort(keys)
 
 
-def _scrape_many(game_ids: "list[str]", fetcher: _SupportsFetchIndividualStats) -> "list[pl.DataFrame]":
-    """Per-game loop with R's error isolation (all_functions.R:3614-3634)."""
+def _scrape_many(
+    game_ids: "list[str]", fetcher: _SupportsFetchIndividualStats, errors: str = "raise"
+) -> "list[pl.DataFrame]":
+    """Per-game loop with R's error isolation (all_functions.R:3614-3634).
+
+    A failed fetch (``AssetFetchError``) raises unless ``errors="skip"``: swallowing it
+    made a ban read as a smaller season. A missing game or an unreadable page is
+    reported and skipped (R tryCatch). With ``errors="skip"`` every frame carries a
+    ``scrape_status`` column and each skipped game adds one row saying why.
+    """
     frames: "list[pl.DataFrame]" = []
     removed: "list[str]" = []
     for gid in game_ids:
+        html = None
         try:
-            frames.append(parse_ncaa_bb_box(fetcher.fetch_game_individual_stats(gid), gid))
-        except Exception as exc:  # noqa: BLE001 -- R tryCatch: report and continue
-            print(f"Error with game id: {gid} // {exc}")
+            html = fetcher.fetch_game_individual_stats(gid)
+            df = parse_ncaa_bb_box(html, gid)
+        except Exception as exc:  # R tryCatch: report and continue (a failed fetch re-raises below)
+            if isinstance(exc, AssetFetchError) and errors == "raise":
+                raise
+            logger.warning("Error with game id: %s // %s", gid, exc)
             removed.append(gid)
+            if errors == "skip":
+                kind = (
+                    "fetch_failed"
+                    if isinstance(exc, AssetFetchError)
+                    else "no_data"
+                    if isinstance(exc, NoDataError)
+                    else "parse_failed"
+                    if html is not None
+                    else "request_error"  # the fetch raised, e.g. a 400 / 422 ValueError
+                )
+                frames.append(pl.DataFrame({"game_id": [gid], "scrape_status": [f"{kind}: {exc}"]}))
+            continue
+        frames.append(df.with_columns(pl.lit("ok").alias("scrape_status")) if errors == "skip" else df)
     if removed:
-        print(f"{','.join(removed)} removed")
+        logger.warning("%s removed", ",".join(removed))
     return frames
 
 
@@ -384,6 +425,7 @@ def ncaa_mbb_box_scores(
     multi_games: bool = ...,
     fetcher: Optional[_SupportsFetchIndividualStats] = ...,
     return_as_pandas: Literal[False] = ...,
+    errors: Literal["raise", "skip"] = ...,
 ) -> pl.DataFrame: ...
 
 
@@ -394,6 +436,7 @@ def ncaa_mbb_box_scores(
     multi_games: bool = ...,
     fetcher: Optional[_SupportsFetchIndividualStats] = ...,
     return_as_pandas: Literal[True],
+    errors: Literal["raise", "skip"] = ...,
 ) -> "pd.DataFrame": ...
 
 
@@ -404,6 +447,7 @@ def ncaa_mbb_box_scores(
     multi_games: bool = False,
     fetcher: Optional[_SupportsFetchIndividualStats] = None,
     return_as_pandas: bool = False,
+    errors: Literal["raise", "skip"] = "raise",
 ) -> "Union[pl.DataFrame, pd.DataFrame]": ...
 def ncaa_mbb_box_scores(
     game_ids: Union[str, int, Iterable[Union[str, int]]],
@@ -411,6 +455,7 @@ def ncaa_mbb_box_scores(
     multi_games: bool = False,
     fetcher: Optional[_SupportsFetchIndividualStats] = None,
     return_as_pandas: bool = False,
+    errors: Literal["raise", "skip"] = "raise",
 ) -> "Union[pl.DataFrame, pd.DataFrame]":
     """Box scores for one or more NCAA games (bigballR ``get_box_scores`` port).
 
@@ -431,11 +476,23 @@ def ncaa_mbb_box_scores(
             call -- stats.ncaa.org sits behind an Akamai challenge that the
             plain transport cannot clear.
         return_as_pandas: Return a pandas DataFrame instead of polars.
+        errors: ``"raise"`` (default): a failed fetch (a ban, an exhausted
+            proxy pool, an uncleared challenge) raises ``AssetFetchError``.
+            ``"skip"``: it is skipped like a missing game, and the frame gains a
+            ``scrape_status`` column -- ``"ok"`` on every player row, plus one row per
+            skipped game (``game_id`` and why: ``fetch_failed: ...``,
+            ``no_data: ...``, ``request_error: ...`` or ``parse_failed: ...``). Not combinable with
+            ``multi_games``.
 
     Returns:
         polars.DataFrame (or pandas with ``return_as_pandas=True``): per-game
         rows in the :func:`parse_ncaa_bb_box` contract, or the aggregated
         ``multi_games`` contract.
+
+    Raises:
+        AssetFetchError: A fetch failed and ``errors="raise"``.
+        ValueError: ``errors`` is not ``"raise"`` or ``"skip"``, or
+            ``errors="skip"`` with ``multi_games=True``.
 
     Example:
         Quick start::
@@ -456,18 +513,24 @@ def ncaa_mbb_box_scores(
         * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's college basketball (R)
         * `wehoop <https://wehoop.sportsdataverse.org>`_ -- women's college basketball (R)
     """
+    if errors not in ("raise", "skip"):
+        raise ValueError(f"errors must be 'raise' or 'skip', not {errors!r}")
+    if errors == "skip" and multi_games:
+        raise ValueError("errors='skip' adds per-game status rows, which multi_games cannot aggregate")
     if isinstance(game_ids, (str, int)):
         game_ids = [game_ids]
-    # g == g drops float("nan") ids (they would stringify to "nan" and hit the
+    # NaN and non-integral floats map to None (never "nan" or "6470186.0" in a
     # fetch path); matches the ncaa_mbb_game_pbp / _shots driver guard.
-    ids = [str(g) for g in game_ids if g is not None and g == g]
+    ids = [g for g in map(_utf8_id, game_ids) if g is not None]
 
     if fetcher is None:
         with NcaaFetcher.with_browser() as browser_fetcher:
-            frames = _scrape_many(ids, browser_fetcher)
+            frames = _scrape_many(ids, browser_fetcher, errors)
     else:
-        frames = _scrape_many(ids, fetcher)
+        frames = _scrape_many(ids, fetcher, errors)
 
+    if errors == "skip":
+        frames = [_empty_frame(), *frames]  # the contract columns even when every game was skipped
     df = pl.concat(frames, how="diagonal_relaxed") if frames else _empty_frame()
     if multi_games:
         df = _aggregate_multi_games(df)

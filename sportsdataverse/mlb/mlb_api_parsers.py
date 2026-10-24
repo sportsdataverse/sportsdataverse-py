@@ -15,7 +15,10 @@ DataFrames. Mirrors the design of
 * Every parser returns ``polars.DataFrame`` by default; pass
   ``return_as_pandas=True`` for pandas.
 * Empty / malformed payloads return a zero-row frame instead of
-  raising.
+  raising. A row list whose rows are not objects (an upstream schema
+  change) also gives zero rows, and warns
+  :class:`~sportsdataverse.errors.SchemaDriftWarning` naming the payload
+  path, so drift never reads as "no data".
 * Output columns are snake-cased via
   :func:`sportsdataverse.dl_utils.underscore`.
 * Most parsers use :func:`pandas.json_normalize` for one-pass
@@ -49,6 +52,11 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _first_row, _object_rows, _warn_schema_drift
+
+# What ``pl.from_pandas`` raises on a mixed-type object column: pyarrow's ArrowInvalid (ValueError),
+# ArrowTypeError (TypeError), ArrowNotImplementedError (NotImplementedError), or a polars error.
+_FROM_PANDAS_ERRORS = (TypeError, ValueError, NotImplementedError, pl.exceptions.PolarsError)
 
 # ---------------------------------------------------------------------------
 # Internal helpers (mirror _common_espn_parsers conventions)
@@ -65,7 +73,9 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool):
         return df
     try:
         return pl.from_pandas(df)
-    except Exception:
+    except _FROM_PANDAS_ERRORS:
+        # A mixed-type object column (e.g. ints and strings) fails the Arrow conversion:
+        # stringify the object columns rather than lose the frame.
         df2 = df.copy()
         for col in [c for c in df2.columns if df2[c].dtype == "object"]:
             df2[col] = df2[col].astype(str)
@@ -77,17 +87,28 @@ def _empty_frame(return_as_pandas: bool = False):
     return df if return_as_pandas else pl.DataFrame()
 
 
-def _flatten_rows(items, return_as_pandas: bool):
+def _as_dict(payload) -> dict:
+    """``payload`` when it is a data object; ``{}`` for a non-dict body or an error envelope."""
+    return payload if isinstance(payload, dict) and _error_envelope_code(payload) is None else {}
+
+
+def _flatten_rows(items, return_as_pandas: bool, where: str):
     """Generic: ``pd.json_normalize`` a list of dicts → tidy frame.
 
     Stringifies any list-valued cells so polars can ingest the frame.
-    Returns a zero-row frame when ``items`` is missing or empty.
+    Returns a zero-row frame when ``items`` is missing or empty. ``where`` names the
+    parser and payload path in the :class:`~sportsdataverse.errors.SchemaDriftWarning`
+    warned when the list holds something other than objects (A-L60).
     """
-    if not isinstance(items, list) or not items:
+    if not isinstance(items, list):
+        return _empty_frame(return_as_pandas)
+    items = [item for item in items if item not in (None, {})]  # an empty object carries no row
+    if not items:
         return _empty_frame(return_as_pandas)
     try:
-        df = pd.json_normalize(items, sep="_")
-    except Exception:
+        df = pd.json_normalize(_object_rows(items), sep="_")
+    except _SHAPE_ERRORS as exc:
+        _warn_schema_drift(where, exc)
         return _empty_frame(return_as_pandas)
     for col in df.columns:
         if df[col].apply(lambda v: isinstance(v, list)).any():
@@ -156,8 +177,8 @@ def parse_mlb_api_list(payload: Dict, return_as_pandas: bool = False) -> pl.Data
         return _empty_frame(return_as_pandas)
     for key in _LIST_KEYS:
         candidate = payload.get(key)
-        if isinstance(candidate, list) and candidate and isinstance(candidate[0], dict):
-            return _flatten_rows(candidate, return_as_pandas)
+        if isinstance(candidate, list) and isinstance(_first_row(candidate), dict):
+            return _flatten_rows(candidate, return_as_pandas, where="parse_mlb_api_list: candidate")
     return _empty_frame(return_as_pandas)
 
 
@@ -197,7 +218,7 @@ def parse_mlb_api_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.
             for k, v in (game or {}).items():
                 row[k] = v
             rows.append(row)
-    return _flatten_rows(rows, return_as_pandas)
+    return _flatten_rows(rows, return_as_pandas, where="parse_mlb_api_schedule: rows")
 
 
 # ---------------------------------------------------------------------------
@@ -207,7 +228,7 @@ def parse_mlb_api_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.
 
 def parse_mlb_api_teams(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``mlb_api_teams()`` into one row per team."""
-    return _flatten_rows((payload or {}).get("teams"), return_as_pandas)
+    return _flatten_rows(_as_dict(payload).get("teams"), return_as_pandas, where="parse_mlb_api_teams: teams")
 
 
 def parse_mlb_api_team_roster(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -218,7 +239,7 @@ def parse_mlb_api_team_roster(payload: Dict, return_as_pandas: bool = False) -> 
     sub-dicts are flattened (``person_id``, ``position_abbreviation``,
     ``status_code``).
     """
-    return _flatten_rows((payload or {}).get("roster"), return_as_pandas)
+    return _flatten_rows(_as_dict(payload).get("roster"), return_as_pandas, where="parse_mlb_api_team_roster: roster")
 
 
 # ---------------------------------------------------------------------------
@@ -263,7 +284,7 @@ def parse_mlb_api_standings(payload: Dict, return_as_pandas: bool = False) -> pl
             for k, v in (team_row or {}).items():
                 row[k] = v
             rows.append(row)
-    return _flatten_rows(rows, return_as_pandas)
+    return _flatten_rows(rows, return_as_pandas, where="parse_mlb_api_standings: rows")
 
 
 # ---------------------------------------------------------------------------
@@ -311,7 +332,7 @@ def parse_mlb_api_person_stats(payload: Dict, return_as_pandas: bool = False) ->
             for k, v in (split or {}).items():
                 row[k] = v
             rows.append(row)
-    return _flatten_rows(rows, return_as_pandas)
+    return _flatten_rows(rows, return_as_pandas, where="parse_mlb_api_person_stats: rows")
 
 
 def parse_mlb_api_boxscore(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -345,7 +366,7 @@ def parse_mlb_api_boxscore(payload: Dict, return_as_pandas: bool = False) -> pl.
             for k, v in (player or {}).items():
                 row[k] = v
             rows.append(row)
-    return _flatten_rows(rows, return_as_pandas)
+    return _flatten_rows(rows, return_as_pandas, where="parse_mlb_api_boxscore: rows")
 
 
 def parse_mlb_api_linescore(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -364,7 +385,7 @@ def parse_mlb_api_linescore(payload: Dict, return_as_pandas: bool = False) -> pl
     """
     if not isinstance(payload, dict):
         return _empty_frame(return_as_pandas)
-    return _flatten_rows(payload.get("innings"), return_as_pandas)
+    return _flatten_rows(payload.get("innings"), return_as_pandas, where="parse_mlb_api_linescore: innings")
 
 
 def parse_mlb_api_play_by_play(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -383,7 +404,7 @@ def parse_mlb_api_play_by_play(payload: Dict, return_as_pandas: bool = False) ->
     """
     if not isinstance(payload, dict):
         return _empty_frame(return_as_pandas)
-    return _flatten_rows(payload.get("allPlays"), return_as_pandas)
+    return _flatten_rows(payload.get("allPlays"), return_as_pandas, where="parse_mlb_api_play_by_play: allPlays")
 
 
 def parse_mlb_api_win_probability(payload, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -403,7 +424,7 @@ def parse_mlb_api_win_probability(payload, return_as_pandas: bool = False) -> pl
     """
     if not isinstance(payload, list):
         return _empty_frame(return_as_pandas)
-    return _flatten_rows(payload, return_as_pandas)
+    return _flatten_rows(payload, return_as_pandas, where="parse_mlb_api_win_probability: payload")
 
 
 # ---------------------------------------------------------------------------
@@ -424,10 +445,11 @@ def parse_mlb_api_draft_latest(payload: Dict, return_as_pandas: bool = False) ->
     ``copyright`` boilerplate dropped). The nested ``pick`` sub-dict is unrolled
     into ``pick_*`` columns.
     """
-    if not isinstance(payload, dict) or not payload:
+    payload = _as_dict(payload)
+    if not payload:
         return _empty_frame(return_as_pandas)
     row = {k: v for k, v in payload.items() if k != "copyright"}
-    return _flatten_rows([row], return_as_pandas)
+    return _flatten_rows([row], return_as_pandas, where="parse_mlb_api_draft_latest: row")
 
 
 def parse_mlb_api_timecodes(payload, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -437,9 +459,15 @@ def parse_mlb_api_timecodes(payload, return_as_pandas: bool = False) -> pl.DataF
     a bare JSON array of timecode strings (e.g. ``"20230929_215457"``). This
     parser shapes that into a single ``timecode`` column, one row per timestamp.
     """
-    if not isinstance(payload, list) or not payload:
+    if not isinstance(payload, list):
         return _empty_frame(return_as_pandas)
-    return _flatten_rows([{"timecode": t} for t in payload], return_as_pandas)
+    payload = [t for t in payload if t not in (None, {})]  # an empty entry carries no timecode
+    codes = [t for t in payload if isinstance(t, str)]
+    if len(codes) < len(payload):
+        bad = next(t for t in payload if not isinstance(t, str))
+        _warn_schema_drift("parse_mlb_api_timecodes: payload[]", TypeError(f"a timecode is {type(bad).__name__}"))
+        return _empty_frame(return_as_pandas)
+    return _flatten_rows([{"timecode": t} for t in codes], return_as_pandas, where="parse_mlb_api_timecodes: timecode")
 
 
 # ---------------------------------------------------------------------------

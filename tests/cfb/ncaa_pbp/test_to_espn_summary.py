@@ -21,9 +21,13 @@ import pytest
 
 from sportsdataverse.cfb.ncaa_pbp.fetch import _archive_bundle, _has_plays, _resolve_contest_id
 from sportsdataverse.cfb.ncaa_pbp.to_espn_summary import _fill_end_state, _ncaa_to_espn_summary
-from sportsdataverse.football.sources.contract import _validate_summary
 from sportsdataverse.errors import NoDataError
+from sportsdataverse.football.sources.contract import _validate_summary
 from sportsdataverse.football.sources.dispatch import AllSourcesFailed, SourceUnavailable, _process_game
+
+# Processing a default-odds capture warns DefaultOddsWarning incidentally;
+# tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
+pytestmark = pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -739,3 +743,78 @@ def test_neither_archive_nor_data_api_fails_closed_naming_both(monkeypatch):
     with pytest.raises(SourceUnavailable, match="neither the local archive nor the Data API"):
         adapter(401762505, _Ctx(idmap_row=idmap_row("final_fbs_6386337")))
     assert _time.monotonic() - t0 < 1.0
+
+
+#: supp-012: observed 2026-10-11 against ESPN's own summaries (fbs 401762505: 191 / 191 plays, 159
+#: paired; fcs 401767513: 178 / 176, 139 paired). Floors, never lowered.
+ESPN_REFERENCE_PINNED = {
+    # agreement fbs / fcs: type.id .9811 / .9640, type.text .9811 / .9496, type.abbreviation .9874 /
+    # .9640, rush .9937 / .9856, pass 1.0 / .9928, td_play .9874 / 1.0, yardLine + end team 1.0
+    "final_fbs_6386337": {
+        "paired_share": 0.99,
+        "agreement": {
+            "type.id": 0.98,
+            "type.text": 0.98,
+            "type.abbreviation": 0.98,
+            "start.yardLine": 0.99,
+            "end.pos_team.id": 0.99,
+            "rush": 0.99,
+            "pass": 0.99,
+            "td_play": 0.98,
+        },
+        # corr EP_start 1.0, EP_end .9955, EPA .9925, wp_before 1.0, wp_after 1.0
+        "correlation": {"EP_start": 0.999, "EP_end": 0.995, "EPA": 0.99, "wp_before": 0.999, "wp_after": 0.999},
+    },
+    "final_fcs_6386315": {
+        "paired_share": 0.97,
+        "agreement": {
+            "type.id": 0.96,
+            "type.text": 0.94,
+            "type.abbreviation": 0.96,
+            "start.yardLine": 0.99,
+            "end.pos_team.id": 0.99,
+            "rush": 0.98,
+            "pass": 0.99,
+            "td_play": 0.99,
+        },
+        # corr EP_start .9998, EP_end .9993, EPA .9971, wp_before .9997, wp_after .9993
+        "correlation": {"EP_start": 0.999, "EP_end": 0.999, "EPA": 0.995, "wp_before": 0.999, "wp_after": 0.999},
+    },
+}
+
+
+@pytest.mark.parametrize("name", sorted(ESPN_REFERENCE_PINNED))
+def test_ncaa_espn_reference_parity(name):
+    """NCAA vs ESPN's own summary of the same contest (supp-012): per-play floors."""
+    from tests.football.sources._espn_reference import espn_reference_report
+
+    report = espn_reference_report("cfb", int(GAMES[name][0]), "ncaa", bundle(name), idmap_row(name), None)
+    assert report.check(ESPN_REFERENCE_PINNED[name]) == [], report.gates()
+    print("NCAA_ESPN_REFERENCE_OK", name, report.gates()["paired_share"])
+
+
+def test_a_float_id_map_row_adapts_exactly_like_the_text_row():
+    """B-GB-22: a pandas-built id-map row carries float ids; ``str`` sent ``"401856682.0"``, which matches no ESPN id."""
+    name = "final_fbs_6386337"
+    row = idmap_row(name)
+    floats = {**row, **{k: float(row[k]) for k in ("espn_event_id", "home_espn_team_id", "away_espn_team_id")}}
+    good = _ncaa_to_espn_summary(bundle(name), row)[0]
+    adapted = _ncaa_to_espn_summary(bundle(name), floats)[0]
+    assert adapted["header"]["id"] == row["espn_event_id"]
+    assert json.dumps(adapted, sort_keys=True) == json.dumps(good, sort_keys=True)
+
+
+#: How a pandas-built id-map row carries a missing team id: NaN is truthy, ``pandas.NA`` raises on truthiness.
+_MISSING_IDS = pytest.mark.parametrize(
+    "missing", [float("nan"), __import__("pandas").NA, None, ""], ids=["nan", "pd_na", "none", "blank"]
+)
+
+
+@_MISSING_IDS
+def test_a_missing_team_id_falls_back_to_the_crosswalk_whatever_form_it_takes(missing):
+    """A NaN id passed the raw-truthiness guard, skipped the crosswalk and became "" in the summary
+    (handed over); pandas.NA raised. Missing in any form, the crosswalk resolves the club."""
+    row = {**idmap_row("final_fbs_6386337"), "home_espn_team_id": missing}
+    adapted = adapter(401762505, _Ctx(payload=bundle("final_fbs_6386337"), idmap_row=row))
+    competitors = adapted.summary["header"]["competitions"][0]["competitors"]
+    assert [c["team"]["id"] for c in competitors] == ["2226", "202"]

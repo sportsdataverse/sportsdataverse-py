@@ -267,6 +267,10 @@ def test_ep_wp():
     assert _fires(_game(**{"home_wp_before": (3, 0.9)}), "wp.home_wp_continuity") == 1
     assert _fires(_game(), "wp.final_home_wp_matches_result", summary=_summary()) == 0
     assert _fires(_game(), "wp.final_home_wp_matches_result", summary=_summary(home=0, away=7)) == 1
+    # the last play carries wp_after only (a CFB shootout attempt left unknown that ends the game,
+    # 401309856): the rule reads it, not the row before (0.8)
+    one_sided = _game(**{"home_wp_before": (5, None)})
+    assert _fires(one_sided, "wp.final_home_wp_matches_result", summary=_summary()) == 0
     # home-signed wpa: +.05 +.15 -.02 +.02 -0 +.25 = .45; result 1 - first .5 = .5 -> drift -.05
     assert _fires(_game(), "wp.wpa_sums_to_result", summary=_summary()) == 0
     assert _fires(_game(**{"wpa": (5, 0.6)}), "wp.wpa_sums_to_result", summary=_summary()) == 1

@@ -65,6 +65,7 @@ import polars as pl
 
 from sportsdataverse._codegen_runtime import _cast_ids_int64
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _data_only
 from sportsdataverse.hockey._esports_schemas import SCHEMAS
 
 __all__ = [
@@ -236,6 +237,7 @@ def _person(prefix: str, p: Any) -> Row:
     }
 
 
+@_data_only
 def parse_esports(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """Generic eSports body -> frame: a list is one row per object, any other object is one row.
 
@@ -401,6 +403,7 @@ def parse_esports_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Opti
     return _frame(rows, columns, return_as_pandas)
 
 
+@_data_only
 def parse_esports_player_stats(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
@@ -562,6 +565,7 @@ def parse_esports_standings(
     return _frame(rows, columns, return_as_pandas)
 
 
+@_data_only
 def parse_esports_shifts(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """DEL ``shiftsSC`` body -> one row per shift.
 
@@ -646,6 +650,7 @@ def parse_esports_lineup(raw: Any, *, return_as_pandas: bool = False, columns: O
     return _frame(rows, columns, return_as_pandas)
 
 
+@_data_only
 def parse_esports_game_info(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:

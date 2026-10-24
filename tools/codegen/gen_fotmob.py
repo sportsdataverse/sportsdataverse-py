@@ -27,7 +27,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from gen_soccer_common import (
     ROOT,
@@ -41,6 +41,7 @@ from gen_soccer_common import (
     spec_descriptions,
     write_yaml,
 )
+from openapi_params import _query_params
 
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.soccer.fotmob_parsers import parse_fotmob
@@ -94,19 +95,6 @@ def _capture_for(refs: Path, path: str) -> Optional[Path]:
     return candidate if candidate.exists() else None
 
 
-def _query_params(op: dict) -> List[Dict[str, Any]]:
-    out: List[Dict[str, Any]] = []
-    for prm in op.get("parameters", []):
-        if prm.get("in") != "query":
-            continue
-        wire = prm["name"]
-        desc = str(prm.get("description") or "").strip()
-        if prm.get("required"):
-            desc = f"Required. {desc}".strip()
-        out.append({"name": underscore(wire), "query_key": wire, "type": "str", "description": desc})
-    return out
-
-
 def _example_args(op: dict) -> Dict[str, str]:
     return {underscore(prm["name"]): str(prm["example"]) for prm in op.get("parameters", []) if "example" in prm}
 
@@ -129,7 +117,7 @@ def _endpoint_entry(spec: dict, path: str, op: dict) -> Dict[str, Any]:
         entry["host"] = servers[0]["url"]
     if path_names:
         entry["path_params"] = [{"name": underscore(t), "type": "str", "required": True} for t in sorted(path_names)]
-    qps = _query_params(op)
+    qps = _query_params(op, keep_empty_description=True, required="note")
     if qps:
         entry["extra_params"] = qps
     example = _example_args(op)

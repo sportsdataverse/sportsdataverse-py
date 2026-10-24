@@ -1,0 +1,850 @@
+{
+ "categories": [
+  {
+   "descriptions": [
+    "Games Played",
+    "The number of games started by an athlete.",
+    "The average number of minutes per game.",
+    "The average field goals made per game.-The average field goals attempted per game.",
+    "The ratio of field goals made to field goals attempted: FGM / FGA",
+    "The average three point field goals made per game.-The average three point field goals attempted per game.",
+    "The ratio of 3pt field goals made to 3pt field goals attempted: 3PM / 3PA.",
+    "The average free throw shots made per game.-The average free throw shots attempted per game.",
+    "The ratio of free throws made to free throws attempted: FTM / FTA",
+    "The average offensive rebounds per game.",
+    "The average defensive rebounds per game.",
+    "The average rebounds per game.",
+    "The average assists per game.",
+    "The average blocks per game.",
+    "The average steals per game.",
+    "The average fouls committed per game.",
+    "The average turnovers committed per game.",
+    "The average number of points scored per game."
+   ],
+   "displayName": "Season Averages",
+   "displayNames": [
+    "Games Played",
+    "Games Started",
+    "Minutes Per Game",
+    "Field Goals Made-Attempted Per Game",
+    "Field Goal Percentage",
+    "3-Point Field Goals Made-Attempted Per Game",
+    "3-Point Field Goal Percentage",
+    "Free Throws Made-Attempted Per Game",
+    "Free Throw Percentage",
+    "Offensive Rebounds Per Game",
+    "Defensive Rebounds Per Game",
+    "Rebounds Per Game",
+    "Assists Per Game",
+    "Blocks Per Game",
+    "Steals Per Game",
+    "Fouls Per Game",
+    "Turnovers Per Game",
+    "Points Per Game"
+   ],
+   "labels": [
+    "GP",
+    "GS",
+    "MIN",
+    "FG",
+    "FG%",
+    "3PT",
+    "3P%",
+    "FT",
+    "FT%",
+    "OR",
+    "DR",
+    "REB",
+    "AST",
+    "BLK",
+    "STL",
+    "PF",
+    "TO",
+    "PTS"
+   ],
+   "name": "averages",
+   "names": [
+    "gamesPlayed",
+    "gamesStarted",
+    "avgMinutes",
+    "avgFieldGoalsMade-avgFieldGoalsAttempted",
+    "fieldGoalPct",
+    "avgThreePointFieldGoalsMade-avgThreePointFieldGoalsAttempted",
+    "threePointFieldGoalPct",
+    "avgFreeThrowsMade-avgFreeThrowsAttempted",
+    "freeThrowPct",
+    "avgOffensiveRebounds",
+    "avgDefensiveRebounds",
+    "avgRebounds",
+    "avgAssists",
+    "avgBlocks",
+    "avgSteals",
+    "avgFouls",
+    "avgTurnovers",
+    "avgPoints"
+   ],
+   "sortKey": "averages",
+   "statistics": [
+    {
+     "position": "F",
+     "season": {
+      "displayName": "2022-23",
+      "year": 2023
+     },
+     "stats": [
+      "36",
+      "36",
+      "29.2",
+      "5.3-11.9",
+      "44.1",
+      "1.0-3.4",
+      "28.2",
+      "3.6-4.7",
+      "76.5",
+      "2.5",
+      "6.4",
+      "8.9",
+      "1.6",
+      "0.7",
+      "1.3",
+      "2.6",
+      "2.5",
+      "15.1"
+     ],
+     "teamId": "150",
+     "teamSlug": "duke-blue-devils"
+    },
+    {
+     "position": "F",
+     "season": {
+      "displayName": "2023-24",
+      "year": 2024
+     },
+     "stats": [
+      "36",
+      "36",
+      "30.4",
+      "6.1-12.1",
+      "50.5",
+      "1.1-3.1",
+      "34.8",
+      "3.1-4.6",
+      "67.1",
+      "2.2",
+      "6.1",
+      "8.3",
+      "2.8",
+      "1.5",
+      "1.1",
+      "3.0",
+      "2.1",
+      "16.4"
+     ],
+     "teamId": "150",
+     "teamSlug": "duke-blue-devils"
+    }
+   ],
+   "totals": [
+    "72",
+    "72",
+    "29.8",
+    "5.7-12.0",
+    "47.3",
+    "1.0-3.3",
+    "31.4",
+    "3.4-4.7",
+    "71.8",
+    "2.4",
+    "6.3",
+    "8.6",
+    "2.2",
+    "1.1",
+    "1.2",
+    "2.8",
+    "2.3",
+    "15.8"
+   ]
+  },
+  {
+   "descriptions": [
+    "The number of times a 2pt field goal was made.-The number of times a 2pt field goal was attempted.",
+    "The ratio of field goals made to field goals attempted: FGM / FGA",
+    "The number of times a 3pt field goal was made.-The number of times a 3pt field goal was attempted.",
+    "The ratio of 3pt field goals made to 3pt field goals attempted: 3PM / 3PA.",
+    "The number of times a free throw was made.-The number of times a free throw was attempted.",
+    "The ratio of free throws made to free throws attempted: FTM / FTA",
+    "The number of times when the offense obtains the possession of the ball after a missed shot.",
+    "The number of times when the defense obtains the possession of the ball after a missed shot by the offense.",
+    "The total number of rebounds for a team or player",
+    "The number of times a player who passes the ball to a teammate in a way that leads to a score by field goal, meaning that he or she was \"assisting\" in the basket. There is some judgment involved in deciding whether a passer should be credited with an assist.",
+    "Short for blocked shot, number of times when a defensive player legally deflects a field goal attempt from an offensive player.",
+    "The number of times a defensive player forced a turnover by intercepting or deflecting a pass or a dribble of an offensive player.",
+    "The number of times a player had illegal contact with the opponent.",
+    "The number of times a player loses possession to the other team.",
+    "The number of points scored."
+   ],
+   "displayName": "Season Totals",
+   "displayNames": [
+    "Field Goals Made-Attempted",
+    "Field Goal Percentage",
+    "3-Point Field Goals Made-Attempted",
+    "3-Point Field Goal Percentage",
+    "Free Throws Made-Attempted",
+    "Free Throw Percentage",
+    "Offensive Rebounds",
+    "Defensive Rebounds",
+    "Rebounds",
+    "Assists",
+    "Blocks",
+    "Steals",
+    "Fouls",
+    "Turnovers",
+    "Points"
+   ],
+   "labels": [
+    "FG",
+    "FG%",
+    "3PT",
+    "3P%",
+    "FT",
+    "FT%",
+    "OR",
+    "DR",
+    "REB",
+    "AST",
+    "BLK",
+    "STL",
+    "PF",
+    "TO",
+    "PTS"
+   ],
+   "name": "totals",
+   "names": [
+    "fieldGoalsMade-fieldGoalsAttempted",
+    "fieldGoalPct",
+    "threePointFieldGoalsMade-threePointFieldGoalsAttempted",
+    "threePointFieldGoalPct",
+    "freeThrowsMade-freeThrowsAttempted",
+    "freeThrowPct",
+    "offensiveRebounds",
+    "defensiveRebounds",
+    "totalRebounds",
+    "assists",
+    "blocks",
+    "steals",
+    "fouls",
+    "turnovers",
+    "points"
+   ],
+   "sortKey": "totals",
+   "statistics": [
+    {
+     "position": "F",
+     "season": {
+      "displayName": "2022-23",
+      "year": 2023
+     },
+     "stats": [
+      "189-429",
+      "44.1",
+      "35-124",
+      "28.2",
+      "130-170",
+      "76.5",
+      "90",
+      "232",
+      "322",
+      "56",
+      "26",
+      "47",
+      "93",
+      "89",
+      "543"
+     ],
+     "teamId": "150",
+     "teamSlug": "duke-blue-devils"
+    },
+    {
+     "position": "F",
+     "season": {
+      "displayName": "2023-24",
+      "year": 2024
+     },
+     "stats": [
+      "220-436",
+      "50.5",
+      "39-112",
+      "34.8",
+      "112-167",
+      "67.1",
+      "80",
+      "218",
+      "298",
+      "100",
+      "54",
+      "41",
+      "109",
+      "76",
+      "591"
+     ],
+     "teamId": "150",
+     "teamSlug": "duke-blue-devils"
+    }
+   ],
+   "totals": [
+    "409-865",
+    "47.3",
+    "74-236",
+    "31.4",
+    "242-337",
+    "71.8",
+    "170",
+    "450",
+    "620",
+    "156",
+    "80",
+    "88",
+    "202",
+    "165",
+    "1134"
+   ]
+  },
+  {
+   "descriptions": [
+    "The number of times double digit values were accumulated in 2 of the following categories: points, rebounds, assists, steals, and blocked shots",
+    "The number of times double digit values were accumulated in 3 of the following categories: points, rebounds, assists, steals, and blocked shots",
+    "The number of times a player reached the foul limit.",
+    "The number of times a player or coach is removed from the game as a result of a serious offense.",
+    "The number of times an player or coach was called for a technical foul (unsportsmanlike conduct or violations).",
+    "The number of fouls that the officials thought were unnecessary or excessive.",
+    "The average number of assists a player or team records per turnover",
+    "The number of steals per turnover",
+    "The rating of a player or team.",
+    "The efficiency with which a team or player scores the basketball.",
+    "The efficiency with which a team or player shoots the basketball."
+   ],
+   "displayName": "Season Misc Totals",
+   "displayNames": [
+    "Double Double",
+    "Triple Double",
+    "Disqualifications",
+    "Ejections",
+    "Technical Fouls",
+    "Flagrant Fouls",
+    "Assist To Turnover Ratio",
+    "Steal To Turnover Ratio",
+    "Rating",
+    "Scoring Efficiency",
+    "Shooting Efficiency"
+   ],
+   "labels": [
+    "DD2",
+    "TD3",
+    "DQ",
+    "EJECT",
+    "TECH",
+    "FLAG",
+    "AST/TO",
+    "STL/TO",
+    "RAT",
+    "SC-EFF",
+    "SH-EFF"
+   ],
+   "name": "miscellaneous",
+   "names": [
+    "doubleDouble",
+    "tripleDouble",
+    "disqualifications",
+    "ejections",
+    "technicalFouls",
+    "flagrantFouls",
+    "assistTurnoverRatio",
+    "stealTurnoverRatio",
+    "rating",
+    "scoringEfficiency",
+    "shootingEfficiency"
+   ],
+   "sortKey": "miscellaneous",
+   "statistics": [
+    {
+     "position": "F",
+     "season": {
+      "displayName": "2022-23",
+      "year": 2023
+     },
+     "stats": [
+      "16",
+      "0",
+      "2",
+      "0",
+      "0",
+      "0",
+      "0.6",
+      "0.5",
+      "-",
+      "1.266",
+      "0.48"
+     ],
+     "teamId": "150",
+     "teamSlug": "duke-blue-devils"
+    },
+    {
+     "position": "F",
+     "season": {
+      "displayName": "2023-24",
+      "year": 2024
+     },
+     "stats": [
+      "9",
+      "0",
+      "3",
+      "0",
+      "0",
+      "0",
+      "1.3",
+      "0.5",
+      "-",
+      "1.356",
+      "0.55"
+     ],
+     "teamId": "150",
+     "teamSlug": "duke-blue-devils"
+    }
+   ],
+   "totals": [
+    "25",
+    "0",
+    "5",
+    "0",
+    "0",
+    "0",
+    "0.9",
+    "0.5",
+    "-",
+    "1.311",
+    "0.52"
+   ]
+  }
+ ],
+ "filters": [
+  {
+   "displayName": "League",
+   "name": "league",
+   "options": [
+    {
+     "displayValue": "NCAA Men's Basketball",
+     "shortDisplayName": "NCAAM",
+     "value": "mens-college-basketball"
+    },
+    {
+     "displayValue": "National Basketball Association",
+     "shortDisplayName": "NBA",
+     "value": "nba"
+    }
+   ],
+   "value": "mens-college-basketball"
+  }
+ ],
+ "glossary": [
+  {
+   "abbreviation": "3P%",
+   "displayName": "3-Point Field Goal Percentage"
+  },
+  {
+   "abbreviation": "3PT",
+   "displayName": "3-Point Field Goals Made-Attempted Per Game"
+  },
+  {
+   "abbreviation": "AST",
+   "displayName": "Assists Per Game"
+  },
+  {
+   "abbreviation": "AST/TO",
+   "displayName": "Assist To Turnover Ratio"
+  },
+  {
+   "abbreviation": "BLK",
+   "displayName": "Blocks Per Game"
+  },
+  {
+   "abbreviation": "DD2",
+   "displayName": "Double Double"
+  },
+  {
+   "abbreviation": "DQ",
+   "displayName": "Disqualifications"
+  },
+  {
+   "abbreviation": "DR",
+   "displayName": "Defensive Rebounds Per Game"
+  },
+  {
+   "abbreviation": "EJECT",
+   "displayName": "Ejections"
+  },
+  {
+   "abbreviation": "FG",
+   "displayName": "Field Goals Made-Attempted Per Game"
+  },
+  {
+   "abbreviation": "FG%",
+   "displayName": "Field Goal Percentage"
+  },
+  {
+   "abbreviation": "FLAG",
+   "displayName": "Flagrant Fouls"
+  },
+  {
+   "abbreviation": "FT",
+   "displayName": "Free Throws Made-Attempted Per Game"
+  },
+  {
+   "abbreviation": "FT%",
+   "displayName": "Free Throw Percentage"
+  },
+  {
+   "abbreviation": "GP",
+   "displayName": "Games Played"
+  },
+  {
+   "abbreviation": "GS",
+   "displayName": "Games Started"
+  },
+  {
+   "abbreviation": "MIN",
+   "displayName": "Minutes Per Game"
+  },
+  {
+   "abbreviation": "OR",
+   "displayName": "Offensive Rebounds Per Game"
+  },
+  {
+   "abbreviation": "PF",
+   "displayName": "Fouls Per Game"
+  },
+  {
+   "abbreviation": "PTS",
+   "displayName": "Points Per Game"
+  },
+  {
+   "abbreviation": "RAT",
+   "displayName": "Rating"
+  },
+  {
+   "abbreviation": "REB",
+   "displayName": "Rebounds Per Game"
+  },
+  {
+   "abbreviation": "SC-EFF",
+   "displayName": "Scoring Efficiency"
+  },
+  {
+   "abbreviation": "SH-EFF",
+   "displayName": "Shooting Efficiency"
+  },
+  {
+   "abbreviation": "STL",
+   "displayName": "Steals Per Game"
+  },
+  {
+   "abbreviation": "STL/TO",
+   "displayName": "Steal To Turnover Ratio"
+  },
+  {
+   "abbreviation": "TD3",
+   "displayName": "Triple Double"
+  },
+  {
+   "abbreviation": "TECH",
+   "displayName": "Technical Fouls"
+  },
+  {
+   "abbreviation": "TO",
+   "displayName": "Turnovers Per Game"
+  }
+ ],
+ "teams": {
+  "duke-blue-devils": {
+   "abbreviation": "DUKE",
+   "againstTheSpreadRecords": {},
+   "alternateColor": "ffffff",
+   "athletes": {},
+   "coaches": {},
+   "college": {},
+   "color": "00539b",
+   "displayName": "Duke Blue Devils",
+   "franchise": {},
+   "groups": {},
+   "guid": "c4430c6c-5998-47d5-7c45-1cdb7ca0befc",
+   "id": "150",
+   "isActive": true,
+   "isAllStar": false,
+   "links": [
+    {
+     "href": "https://www.espn.com/mens-college-basketball/team/_/id/150/duke-blue-devils",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "clubhouse",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Clubhouse",
+     "text": "Clubhouse"
+    },
+    {
+     "href": "https://www.espn.com/mens-college-basketball/team/roster/_/id/150",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:41~t:150&section=roster",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "https://www.espn.com/mens-college-basketball/team/stats/_/id/150",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:41~t:150&section=stats",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "https://www.espn.com/mens-college-basketball/team/schedule/_/id/150",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:41~t:150&section=scores",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "https://www.espn.com/mens-college-basketball/team/photos/_/id/150",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "photos",
+      "desktop",
+      "team"
+     ],
+     "shortText": "photos",
+     "text": "photos"
+    }
+   ],
+   "location": "Duke",
+   "logos": [
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png",
+     "rel": [
+      "full",
+      "default"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/150.png",
+     "rel": [
+      "full",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/c4430c6c-5998-47d5-7c45-1cdb7ca0befc/logos/primary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/c4430c6c-5998-47d5-7c45-1cdb7ca0befc/logos/primary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/c4430c6c-5998-47d5-7c45-1cdb7ca0befc/logos/primary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/c4430c6c-5998-47d5-7c45-1cdb7ca0befc/logos/primary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/c4430c6c-5998-47d5-7c45-1cdb7ca0befc/logos/primary_logo_black.png",
+     "rel": [
+      "full",
+      "primary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/c4430c6c-5998-47d5-7c45-1cdb7ca0befc/logos/primary_logo_white.png",
+     "rel": [
+      "full",
+      "primary_logo_white"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/c4430c6c-5998-47d5-7c45-1cdb7ca0befc/logos/secondary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/c4430c6c-5998-47d5-7c45-1cdb7ca0befc/logos/secondary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/c4430c6c-5998-47d5-7c45-1cdb7ca0befc/logos/secondary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/c4430c6c-5998-47d5-7c45-1cdb7ca0befc/logos/secondary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/c4430c6c-5998-47d5-7c45-1cdb7ca0befc/logos/secondary_logo_black.png",
+     "rel": [
+      "full",
+      "secondary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/c4430c6c-5998-47d5-7c45-1cdb7ca0befc/logos/secondary_logo_white.png",
+     "rel": [
+      "full",
+      "secondary_logo_white"
+     ],
+     "width": 4096
+    }
+   ],
+   "name": "Blue Devils",
+   "nickname": "Duke",
+   "ranks": {},
+   "record": {},
+   "shortDisplayName": "Duke",
+   "slug": "duke-blue-devils",
+   "uid": "s:40~l:41~t:150",
+   "venue": {
+    "address": {
+     "city": "Durham",
+     "state": "NC"
+    },
+    "fullName": "Cameron Indoor Stadium",
+    "grass": false,
+    "id": "1914",
+    "images": [
+     {
+      "height": 1125,
+      "href": "https://a.espncdn.com/i/venues/mens-college-basketball/day/1914.jpg",
+      "rel": [
+       "full",
+       "day"
+      ],
+      "width": 2000
+     }
+    ],
+    "indoor": true
+   }
+  }
+ }
+}

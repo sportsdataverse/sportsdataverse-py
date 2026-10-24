@@ -33,7 +33,7 @@ from __future__ import annotations
 import gzip
 import json
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 import polars as pl
@@ -311,6 +311,77 @@ def test_upload_retries_on_failure(monkeypatch, tmp_path):
     assert len(attempts) == 5
 
 
+@pytest.mark.parametrize(
+    ("stderr", "calls"),
+    [
+        ("HTTP 404: Not Found (https://api.github.com/repos/x/y/releases/tags/t)", 1),
+        ("release not found", 1),
+        ("HTTP 401: Bad credentials (https://api.github.com/graphql)", 1),
+        ("HTTP 403: Resource not accessible by integration (https://api.github.com/repos/x/y/releases)", 1),
+        ("HTTP 422: Validation Failed (https://uploads.github.com/repos/x/y/releases/1/assets) name is invalid", 1),
+        ("HTTP 502: Bad Gateway (https://uploads.github.com/repos/x/y/releases/1/assets)", 4),
+        ("HTTP 403: API rate limit exceeded for user ID 1.", 4),
+        ("HTTP 422: Validation Failed\n[{'resource': 'ReleaseAsset', 'code': 'already_exists', 'field': 'name'}]", 4),
+    ],
+    ids=["404", "no-release", "401", "permission-403", "422", "502", "rate-limit-403", "422-already-exists"],
+)
+def test_upload_retries_only_transient_gh_errors(monkeypatch, tmp_path, stderr, calls):
+    """A permanent gh failure raises at once (every gh error used to retry, ~645 s of sleeps on a 404).
+
+    A 422 ``already_exists`` retries: the next attempt clobbers the asset an earlier attempt landed.
+    """
+    attempts: list[int] = []
+    sleeps: list[float] = []
+
+    def failing_invoke(args, **kwargs):
+        attempts.append(1)
+        raise release._GhCliError(f"The GitHub CLI errored (exit 1) for 'gh {' '.join(args)}': {stderr}", stderr)
+
+    monkeypatch.setattr(release, "_invoke_gh", failing_invoke)
+    monkeypatch.setattr(release.time, "sleep", sleeps.append)
+    monkeypatch.setenv("SPORTSDATAVERSE.UPLOAD.MAX_TIMES", "4")
+
+    data_file = tmp_path / "d.csv"
+    data_file.write_text("a\n1\n")
+    with pytest.raises(RuntimeError, match="GitHub CLI errored"):
+        release.sportsdataverse_upload([data_file], tag="t")
+    assert len(attempts) == calls and len(sleeps) == calls - 1
+
+
+def test_upload_judges_gh_stderr_not_the_command_line(monkeypatch, tmp_path):
+    """A tag or path that reads like a permanent error must not stop the retries of a 502."""
+    attempts: list[int] = []
+    monkeypatch.setattr(release.time, "sleep", lambda s: None)
+    monkeypatch.setenv("SPORTSDATAVERSE.UPLOAD.MAX_TIMES", "3")
+
+    def failing_invoke(args, **kwargs):
+        attempts.append(1)
+        stderr = "HTTP 502: Bad Gateway"
+        raise release._GhCliError(f"... for 'gh release upload HTTP 404 release not found': {stderr}", stderr)
+
+    monkeypatch.setattr(release, "_invoke_gh", failing_invoke)
+    data_file = tmp_path / "d.csv"
+    data_file.write_text("a\n1\n")
+    with pytest.raises(RuntimeError):
+        release.sportsdataverse_upload([data_file], tag="t")
+    assert len(attempts) == 3
+
+
+def test_invoke_gh_error_carries_stderr(monkeypatch):
+    """The subprocess chokepoint hands the classifier gh's stderr, not the joined command line."""
+
+    class _Proc:
+        returncode = 1
+        stdout = ""
+        stderr = "HTTP 404: Not Found\n"
+
+    monkeypatch.setattr(release, "gh_cli_available", lambda: True)
+    monkeypatch.setattr(release.subprocess, "run", lambda *a, **k: _Proc())
+    with pytest.raises(release._GhCliError) as info:
+        release._invoke_gh(["release", "view", "t"])
+    assert info.value.stderr == "HTTP 404: Not Found\n" and release._gh_permanent(info.value)
+
+
 def test_upload_insist_off_raises_immediately(monkeypatch, tmp_path):
     attempts: list[int] = []
 
@@ -577,3 +648,29 @@ def test_upload_release_sidecars_passes_as_of_through():
     )
 
     assert json.loads(seen["timestamp.json"])["last_updated"].startswith("2023-03-05")
+
+
+def test_rds_branch_byte_golden(tmp_path):
+    """C-L58: the byte oracles above cover int / double / string / logical only.
+
+    ``rds_golden_branches.rds`` is R 4.6.1's ``saveRDS(compress = FALSE, version = 2)`` of the R
+    value each remaining writer branch must produce (``make_branch_golden.R``, which also checks
+    ``readRDS`` round-trips every column): Date, POSIXct with a ``tzone`` and without one, an Int64
+    column outside int32 (a double in R), an all-null column (logical NA) and a Categorical (character).
+    """
+    df = pl.DataFrame(
+        {
+            "d": pl.Series([date(2024, 1, 2), None, date(1969, 12, 31)], dtype=pl.Date),
+            "t_utc": pl.Series([1_704_164_400_000_000, None, -86_400_500_000], dtype=pl.Int64).cast(
+                pl.Datetime("us", "UTC")
+            ),
+            "t_naive": pl.Series([1_704_164_400_000_000, 0, None], dtype=pl.Int64).cast(pl.Datetime("us")),
+            "big": pl.Series([3_000_000_000, None, -3_000_000_001], dtype=pl.Int64),
+            "nul": pl.Series([None, None, None], dtype=pl.Null),
+            "cat": pl.Series(["a", "b", None], dtype=pl.Categorical),
+        }
+    )
+    out = tmp_path / "py_branches.rds"
+    write_rds(df, out, compress=False)
+    expected = (FIXTURE_DIR / "rds_golden_branches.rds").read_bytes()
+    assert out.read_bytes()[14:] == expected[14:]

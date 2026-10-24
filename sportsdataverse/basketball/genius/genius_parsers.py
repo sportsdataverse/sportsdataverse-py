@@ -51,6 +51,8 @@ from urllib.parse import urlsplit
 import pandas as pd
 import polars as pl
 
+from sportsdataverse.errors import _data_only
+
 __all__ = [
     "parse_genius_competition_games",
     "parse_genius_competitions",
@@ -746,6 +748,7 @@ _COMPETITION_MAP = {
 }
 
 
+@_data_only
 def parse_genius_competition_games(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:

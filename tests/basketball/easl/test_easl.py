@@ -560,11 +560,19 @@ def test_malformed_ids_are_value_errors_before_any_request(transport):
 ENVELOPE = {"error": "Internal server error"}
 
 
-@pytest.mark.parametrize("status", [200, 400, 500, 403])
+@pytest.mark.parametrize("status", [200, 500, 403])
 def test_error_envelopes_and_error_statuses_are_asset_fetch_errors(transport, status):
     transport({"/health": _resp(status, ENVELOPE)})
     with pytest.raises(AssetFetchError):
         rt._get(f"{API}/health")
+
+
+def test_a_400_is_a_value_error(transport):
+    # EX-SYNC-b: a 400 is the request's fault repo-wide; it was AssetFetchError.
+    transport({"/health": _resp(400, ENVELOPE)})
+    with pytest.raises(ValueError) as err:
+        rt._get(f"{API}/health")
+    assert not isinstance(err.value, AssetFetchError)
 
 
 def test_a_500_is_not_retried(transport):

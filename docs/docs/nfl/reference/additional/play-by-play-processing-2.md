@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Play-by-play processing: build_nfl–calculate_nfl"
 sidebar_label: "Play-by-play processing: build_nfl–calculate_nfl"
-sidebar_position: 11
+sidebar_position: 12
 description: "NFL — additional Python functions — Play-by-play processing: build_nfl–calculate_nfl — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Play-by-play processing: build_nfl–calculate_nfl
@@ -38,7 +38,7 @@ different column sets merge cleanly.
 
 **Returns**
 
-All plays from the requested games/seasons, concatenated with schema-union semantics (missing columns are `null`). Returns a zero-row frame if every game failed (ESPN source only). When *return_as_pandas* is `True`, returns a `pandas.DataFrame` instead. For `source="shield"` the frame carries the nflverse base columns (233; a superset of the EP/WP/CP training contract) with the same names, types and meanings as `sportsdataverse.nfl.load_nfl_model_pbp` minus the EP/WP/CP enrichment columns: identifiers (`game_id`, `play_id`, `posteam`, `defteam`), game state (`down`, `ydstogo`, `yardline_100`, `qtr`, `half_seconds_remaining`, `game_seconds_remaining`, `score_differential`, `posteam_timeouts_remaining`), play classification (`play_type`, `pass`, `rush`, `desc`, `yards_gained`, `touchdown`, `field_goal_result`), drive/series (`fixed_drive`, `fixed_drive_result`, `series`, `series_result`), schedule fields (`roof`, `spread_line`, `total_line`) and game outcome (`home_score`, `away_score`, `result`).
+All plays from the requested games/seasons, concatenated with schema-union semantics (missing columns are `null`). Returns a zero-row frame if every game failed (ESPN source only). When *return_as_pandas* is `True`, returns a `pandas.DataFrame` instead. For `source="shield"` the frame carries the nflverse base columns (233; a superset of the EP/WP/CP training contract) with the same names, types and meanings as `sportsdataverse.nfl.load_nfl_model_pbp` minus the EP/WP/CP enrichment columns: identifiers (`game_id`, `play_id`, `posteam`, `defteam`), game state (`down`, `ydstogo`, `yardline_100`, `qtr`, `half_seconds_remaining`, `game_seconds_remaining`, `score_differential`, `posteam_timeouts_remaining`), play classification (`play_type`, `pass`, `rush`, `desc`, `yards_gained`, `touchdown`, `field_goal_result`), drive/series (`fixed_drive`, `fixed_drive_result`, `series`, `series_result`), schedule fields (`roof`, `spread_line`, `total_line`) and game outcome (`home_score`, `away_score`, `result`). When no requested season has a regular-season or postseason game in `raw_dir`, the shield frame is empty with no columns: the column set comes from the games built, so check `frame.height` (or `frame.width`) before selecting columns.
 
 | col_name | type | description |
 |---|---|---|
@@ -164,7 +164,7 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `start.defPosTeamTimeouts` | integer | ESPN's `defPosTeamTimeouts` value for the play state at the start of the play. |
 | `end.posTeamTimeouts` | integer | ESPN's `posTeamTimeouts` value for the play state at the end of the play. |
 | `end.defPosTeamTimeouts` | integer | ESPN's `defPosTeamTimeouts` value for the play state at the end of the play. |
-| `firstHalfKickoffTeamId` | integer | ESPN id of the team that received the opening kickoff. |
+| `firstHalfKickoffTeamId` | integer | ESPN id of the team that kicked the opening kickoff (it receives the second-half kickoff), one value per game. |
 | `period` | integer |  |
 | `start.yard` | integer | ESPN's `yard` value for the play state at the start of the play. |
 | `end.yard` | integer | ESPN's `yard` value for the play state at the end of the play. |
@@ -372,10 +372,10 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `stopped_run` | logical | True when the rush was stopped at or behind the line of scrimmage. |
 | `opportunity_run` | logical |  |
 | `highlight_run` | logical | True when the rush gained 8 or more yards. |
-| `adj_rush_yardage` | integer | Rushing yards capped at 8, the input to the line-yards decomposition. |
-| `line_yards` | double | Yards credited to the offensive line on a rush, using the standard sliding scale: 1.2x the capped yardage on a loss, all of it through 3 yards, half of each yard from 4 to 8, and a 5.5-yard ceiling beyond that. |
-| `second_level_yards` | double | Rushing yards earned from 4 to 8, split evenly between line and carrier under the line-yards decomposition. |
-| `open_field_yards` | integer | Rushing yards gained beyond 8, credited to the ball carrier rather than the line. |
+| `adj_rush_yardage` | integer | Rushing yards capped at 10, the input to the line-yards decomposition. Assets published before the 2026-10 line-yards fix cap at 8. |
+| `line_yards` | double | Yards credited to the offensive line on a rush, on the standard adjusted-line-yards band: 1.2x the yardage on a loss, all of yards 0-4, half of each yard from 5 to 10, and nothing beyond 10 (a 7-yard ceiling). Line, second-level and open-field yards sum to the carry on every gain. Assets published before the 2026-10 line-yards fix carry the old band (all of yards 0-3, half of 4-8, a 5.5-yard ceiling). |
+| `second_level_yards` | double | The ball carrier's half of yards 5-10 of a rush (the line takes the other half); 0 on carries of 4 yards or fewer. Assets published before the 2026-10 line-yards fix carry the old band here: half of yards 4-8 in college football, half of yards 5-8 in the NFL (where the old parts came up half a yard short of the carry). |
+| `open_field_yards` | integer | Rushing yards gained beyond 10, credited to the ball carrier rather than the line. Assets published before the 2026-10 line-yards fix count the yards beyond 8. |
 | `highlight_yards` | double | Second-level plus open-field yards -- the yardage credited to the carrier. |
 | `opp_highlight_yards` | double | Highlight yards earned on opportunity runs, isolating carrier production on carries where the blocking succeeded. Assets published before the 2026-08 fix are identically 0 here, because the inverted opportunity_run gate could never co-occur with non-zero highlight yards. |
 | `short_rush_success` | logical | True when a short-yardage rush gained the yardage needed. |

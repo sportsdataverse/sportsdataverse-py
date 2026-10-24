@@ -9,11 +9,14 @@ Verified while writing (see the module for line refs):
   * late_down   = (3rd or 4th down) and a scrimmage play
   * standard/passing_down split on down-and-distance thresholds
   * havoc       = pass_breakup OR TFL OR interception OR forced_fumble
-  * the line-yards decomposition uses adj_rush_yardage = min(rush yards, 8):
-      line_yards        <0 -> 1.2*adj; 0-3 -> adj; 4-8 -> 3+0.5*(adj-3); >=8 -> 5.5
+  * the line-yards decomposition (the standard band since the 2026-10 fix) uses
+    adj_rush_yardage = min(rush yards, 10):
+      line_yards        <0 -> 1.2*adj; 0-4 -> adj; 5-10 -> 4+0.5*(adj-4); >10 -> 7
       second_level      >=4 -> 0.5*(adj-4) else 0
-      open_field        >8  -> yards-adj  else 0
-      highlight_yards   = second_level + open_field
+      open_field        >10 -> yards-adj  else 0
+      highlight_yards   = second_level + open_field (= yards - line_yards on a gain)
+    Before the fix: adj capped at 8, line 0-3 / 4-8 at 3+0.5*(adj-3) / 5.5 cap, open field >8,
+    second level 0.5*(adj-3) (CFB; NFL used adj-4, half a yard short of the carry).
   * opportunity_run WAS `rush AND yards <= 4` -- the inverse of the cfbfastR
     oracle. FIXED (2026-08) to `rush AND yards >= 4`; the column descriptions
     scope the old behaviour to assets published before that fix.
@@ -68,13 +71,21 @@ STATIC: dict[str, str] = {
         "other non-action rows."
     ),
     # --- rushing decomposition, exact formulas from cfb_pbp.py -------------
-    "adj_rush_yardage": "Rushing yards capped at 8, the input to the line-yards decomposition.",
-    "line_yards": (
-        "Yards credited to the offensive line on a rush, using the standard sliding scale: 1.2x the "
-        "capped yardage on a loss, all of it through 3 yards, half of each yard from 4 to 8, and a "
-        "5.5-yard ceiling beyond that."
+    "adj_rush_yardage": (
+        "Rushing yards capped at 10, the input to the line-yards decomposition. Assets published before "
+        "the 2026-10 line-yards fix cap at 8."
     ),
-    "open_field_yards": "Rushing yards gained beyond 8, credited to the ball carrier rather than the line.",
+    "line_yards": (
+        "Yards credited to the offensive line on a rush, on the standard adjusted-line-yards band: 1.2x "
+        "the yardage on a loss, all of yards 0-4, half of each yard from 5 to 10, and nothing beyond 10 "
+        "(a 7-yard ceiling). Line, second-level and open-field yards sum to the carry on every gain. "
+        "Assets published before the 2026-10 line-yards fix carry the old band (all of yards 0-3, half "
+        "of 4-8, a 5.5-yard ceiling)."
+    ),
+    "open_field_yards": (
+        "Rushing yards gained beyond 10, credited to the ball carrier rather than the line. Assets "
+        "published before the 2026-10 line-yards fix count the yards beyond 8."
+    ),
     "highlight_yards": "Second-level plus open-field yards -- the yardage credited to the carrier.",
     "highlight_run": "True when the rush gained 8 or more yards.",
     "opportunity_run": (
@@ -109,11 +120,16 @@ STATIC: dict[str, str] = {
     "gameSpread": "Point spread used as an input to the win-probability model.",
     "gameSpreadAvailable": "True when a spread was available for the game.",
     "overUnder": "Over/under total used as a model input.",
+    "overUnderAvailable": (
+        "False when overUnder is the 55.5 default (the line had a spread and no total), True for a market total; null when an odds_override did not say. Absent from releases built before the column existed."
+    ),
     "homeFavorite": "True when the home team was favoured by the spread.",
     # --- game / clock metadata --------------------------------------------
     "playType": "ESPN's play-type label for the play.",
     "period.number": "Period (quarter) number in which the play occurred.",
-    "firstHalfKickoffTeamId": "ESPN id of the team that received the opening kickoff.",
+    "firstHalfKickoffTeamId": (
+        "ESPN id of the team that kicked the opening kickoff (it receives the second-half kickoff), one value per game."
+    ),
     "homeTimeoutCalled": "True when the home team called a timeout on the play.",
     "awayTimeoutCalled": "True when the away team called a timeout on the play.",
     "new_down": "Down after the play, including any penalty enforcement.",
@@ -133,7 +149,10 @@ STATIC: dict[str, str] = {
         "fewer than 8, or third/fourth down needing fewer than 5."
     ),
     "second_level_yards": (
-        "Rushing yards earned from 4 to 8, split evenly between line and carrier under the line-yards decomposition."
+        "The ball carrier's half of yards 5-10 of a rush (the line takes the other half); 0 on carries "
+        "of 4 yards or fewer. Assets published before the 2026-10 line-yards fix carry the old band here: half "
+        "of yards 4-8 in college football, half of yards 5-8 in the NFL (where the old parts came up half a "
+        "yard short of the carry)."
     ),
     "short_rush_attempt": "True when the play is a rush in a short-yardage situation.",
     "short_rush_success": "True when a short-yardage rush gained the yardage needed.",

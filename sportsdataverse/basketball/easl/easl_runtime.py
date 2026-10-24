@@ -45,6 +45,7 @@ import re
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
+from sportsdataverse import _codegen_runtime as _rt
 from sportsdataverse.basketball import basketball_runtime as _bb
 from sportsdataverse.errors import AssetFetchError, NoDataError
 
@@ -179,15 +180,13 @@ def _check_body(where: str, body: Any) -> Any:
 
 
 def _fetch(path: str, params: Optional[Mapping[str, Any]] = None, **kwargs: Any) -> Any:
-    """GET ``BASE + path`` through the polite session; ``ValueError`` (HTTP 400 / 422) becomes ``AssetFetchError``."""
+    """GET ``BASE + path`` through the polite session; HTTP 400 / 422 is ``ValueError``, a 204 / 205 ``_rt._NoContent``."""
     kwargs.setdefault("session", _bb.SESSION)
     kwargs.setdefault("retry_statuses", RETRY_STATUSES)
     headers = {"Accept": "application/json"}
     headers.update(kwargs.pop("headers", None) or {})
-    try:
-        body = _bb._get(BASE + path, dict(params or {}), headers=headers, **kwargs)
-    except ValueError as exc:  # the server answered 400 / 422: the request was built here, so the answer is unknown
-        raise AssetFetchError(str(exc)) from None
+    # a 400 / 422 stays ValueError: the request is wrong (EX-SYNC-b, the repo-wide vocabulary)
+    body = _bb._fetch_json(BASE + path, dict(params or {}), headers=headers, **kwargs)
     return _check_body(f"easl.joshricha.com/api/v1{path}", body)
 
 
@@ -221,6 +220,7 @@ def _seasons(**kw: Any) -> List[Mapping[str, Any]]:
     return _CACHE[("seasons",)]
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _season(season: Any, **kw: Any) -> Tuple[Mapping[str, Any], int]:
     """``(season row, END year)`` of a public ``season`` (``None`` = the ACTIVE season); ``ValueError`` if unknown."""
     rows = _seasons(**kw)
@@ -251,6 +251,7 @@ def _fresh(**kw: Any) -> datetime:
     return server
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _no_stale(rows: List[Mapping[str, Any]], **kw: Any) -> None:
     """Refuse an ACTIVE-season fixture list in which a game is still SCHEDULED a day after its tip-off."""
     server = _fresh(**kw)
@@ -307,11 +308,12 @@ def _period_table(fid: str, ctx: Mapping[str, Any], **kw: Any) -> List[Mapping[s
 
 
 def _game_route(name: str, fid: str, **kw: Any) -> Any:
-    ctx = _header(fid, **kw)
+    if name == "match":  # the header IS the answer here; on the other routes it is a lookup
+        return _header(fid, **kw)["body"]
+    with _rt._no_content_unknown(f"easl.joshricha.com/api/v1/matches/{fid} (the header check)"):
+        ctx = _header(fid, **kw)
     teams, scores = ctx["teams"], ctx["scores"]
     where = f"easl.joshricha.com/api/v1/matches/{fid}"
-    if name == "match":
-        return ctx["body"]
     if name == "boxscore":
         body = _obj(_fetch(f"/matches/{fid}/boxscore", None, **kw))
         rows, tms = _rows(body.get("boxScore")), _rows(body.get("teams"))
@@ -350,7 +352,9 @@ def _game_route(name: str, fid: str, **kw: Any) -> Any:
             raise AssetFetchError(
                 f"{where}/playbyplay: the last event is in period {pids[-1]!r}, not the final period (4 or more)"
             )
-        table = _period_table(fid, ctx, **kw)
+        # the per-period route's own answer elsewhere; here a check of the play-by-play, so its 204 is unknown (R4.1b-d-11)
+        with _rt._no_content_unknown(f"{where}/teamstats/by/period (the play-by-play's period check)"):
+            table = _period_table(fid, ctx, **kw)
         if max(_periods(table)) != max(known):
             raise AssetFetchError(
                 f"{where}/playbyplay: ends in period {max(known)}, the period table in {max(_periods(table))}"
@@ -482,6 +486,7 @@ def _simple_route(name: str, ids: Mapping[str, str], wire: Mapping[str, Any], **
 # --- the getter -----------------------------------------------------------------------------------------------------
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET an EASL route, refuse the partial or out-of-scope answers and stamp the request.
 

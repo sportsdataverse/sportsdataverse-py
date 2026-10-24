@@ -84,7 +84,9 @@ def test_an_auto_espn_schema_is_written_generic_from_its_one_capture(tmp_path, m
     monkeypatch.setattr(generate, "_auto_espn_schemas", lambda: {"venues": generate._espn_parser("venues")})
     assert generate._write_auto_espn_schemas(fix, out) == 1
     doc = yaml.safe_load((out / "venues.yaml").read_text())
-    assert doc["kind"] == "dataframe" and [c["name"] for c in doc["columns"]] == ["$ref"]
+    # parse_items appends the page envelope (codegen 4.2), typed even when the payload carries none.
+    assert doc["kind"] == "dataframe" and [c["name"] for c in doc["columns"]] == ["$ref", "count", "page_count"]
+    assert [c["type"] for c in doc["columns"]][1:] == ["integer", "integer"]
 
 
 def test_an_auto_espn_schema_with_no_capture_writes_nothing(tmp_path, monkeypatch):
@@ -130,6 +132,26 @@ def test_every_espn_wrapper_calls_the_parser_the_registry_names():
         if ep.parser and ep.short in ENDPOINT_PARSERS and ep.parser != ENDPOINT_PARSERS[ep.short].__name__
     ]
     assert not bad, "\n".join(bad)
+
+
+# Registry keys no endpoint YAML declares. Kept pending the owner's ruling on A-L14 (sportsdataverse-js
+# parity); the equality below fails on any OTHER drift in either direction.
+_REGISTRY_ONLY = {"calendar_offseason", "calendar_ondays", "calendar_postseason", "calendar_regular_season", "coaches"}
+
+
+def test_endpoint_parsers_equality_with_the_yaml_shorts():
+    """A-L14: ``ENDPOINT_PARSERS`` is exactly the ESPN YAML shorts (plus the named extras), never a superset."""
+    from sportsdataverse._common_espn_parsers import ENDPOINT_PARSERS
+    from tools.codegen import generate, spec
+
+    params = spec.load_parameters(generate.ENDPOINTS / "parameters.yaml")
+    shorts = {
+        ep.short
+        for api in generate.ESPN_APIS
+        for ep in spec.load_espn_api(generate.ENDPOINTS / f"{api}.yaml", params).endpoints
+    }
+    assert set(ENDPOINT_PARSERS) - _REGISTRY_ONLY == shorts
+    assert _REGISTRY_ONLY <= set(ENDPOINT_PARSERS)
 
 
 def test_register_native_scopes_to_its_own_api_block(tmp_path, monkeypatch):

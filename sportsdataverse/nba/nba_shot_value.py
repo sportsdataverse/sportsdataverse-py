@@ -467,8 +467,8 @@ def _fetch_scored(
     zero-pads to ``"0000000000"``, a nonexistent game filter that returns 0
     shots. Returns ``(scored_shots, league_avgs)``.
     """
-    from sportsdataverse.nba.nba_stats import nba_stats_shotchartdetail  # noqa: PLC0415
-    from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets  # noqa: PLC0415
+    from sportsdataverse.nba.nba_stats import nba_stats_shotchartdetail
+    from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
 
     shot_frames, league_avgs = [], None
     for pid in player_ids:
@@ -553,8 +553,8 @@ def nba_shot_value(
         "zones": zone_value_map(scored),
     }
     if include_context:
-        from sportsdataverse.nba.nba_stats import nba_stats_playerdashptshots  # noqa: PLC0415
-        from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets  # noqa: PLC0415
+        from sportsdataverse.nba.nba_stats import nba_stats_playerdashptshots
+        from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
 
         rows = []
         # playerdashptshots needs the player's own team (TeamID "0" with a season is HTTP 500, and the
@@ -637,8 +637,8 @@ def nba_shot_value_lineups(
     See Also:
         * `nba_api <https://github.com/swar/nba_api>`_ -- NBA/WNBA (Python)
     """
-    from sportsdataverse.nba.nba_stats import nba_stats_shotchartlineupdetail  # noqa: PLC0415
-    from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets  # noqa: PLC0415
+    from sportsdataverse.nba.nba_stats import nba_stats_shotchartlineupdetail
+    from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
 
     raw = nba_stats_shotchartlineupdetail(
         group_id=str(group_id),

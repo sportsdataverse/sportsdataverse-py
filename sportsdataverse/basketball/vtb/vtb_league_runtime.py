@@ -30,6 +30,7 @@ import re
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 from urllib.parse import urlsplit
 
+from sportsdataverse import _codegen_runtime as _rt
 from sportsdataverse._codegen_runtime import _where
 from sportsdataverse.basketball import basketball_runtime as _bb
 from sportsdataverse.errors import AssetFetchError, NoDataError
@@ -103,6 +104,7 @@ def _check_scope(where: str, route: str, ids: Mapping[str, Any], data: List[Mapp
             )
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[Mapping[str, Any]] = None, **kwargs: Any) -> Any:
     """GET one wrapped route; return its envelope with the request stamped under ``_request``.
 
@@ -122,7 +124,7 @@ def _get(url: str, params: Optional[Mapping[str, Any]] = None, **kwargs: Any) ->
     """
     route, ids = _route(url)
     where = _where(url)
-    body = _bb._get(url, dict(params or {}), **kwargs)
+    body = _bb._fetch_json(url, dict(params or {}), **kwargs)
     meta = _check_envelope(where, body)
     data = body["data"]
     if not data:

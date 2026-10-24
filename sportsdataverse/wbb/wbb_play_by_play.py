@@ -35,6 +35,7 @@ from typing import Any
 
 import polars as pl
 
+from sportsdataverse._espn_basketball_pbp import hoopr_coordinates
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.wbb.wbb_team_box import _game_datetime, _to_int
 
@@ -248,34 +249,9 @@ def _basketball_play_by_play(
         order.pop(drop, None)
     df = pl.DataFrame({k: [p.get(k) for p in plays] for k in order}, strict=False)
 
-    # Coordinate transform (R lines 3058-3090): FT plays pinned to (25, 13.75),
-    # then home plays flipped about center court; raw values kept in place and
-    # the transformed pair appended.
+    # Coordinate transform (R lines 3058-3090), shared with the four pbp processors.
     has_coords = "coordinate.x" in df.columns and "coordinate.y" in df.columns
-    if has_coords:
-        ft = pl.col("type.text").str.contains("Free Throw")
-        df = df.with_columns(
-            pl.when(ft).then(pl.lit(25.0)).otherwise(pl.col("coordinate.x").cast(pl.Float64)).alias("coordinate.x"),
-            pl.when(ft).then(pl.lit(13.75)).otherwise(pl.col("coordinate.y").cast(pl.Float64)).alias("coordinate.y"),
-        )
-        is_home = pl.col("team.id").cast(pl.Int64, strict=False) == home_id
-        df = df.with_columns(
-            pl.when(is_home)
-            .then(-1 * (pl.col("coordinate.y") - 41.75))
-            .otherwise(pl.col("coordinate.y") - 41.75)
-            .alias("coordinate_x_transformed"),
-            pl.when(is_home)
-            .then(-1 * (pl.col("coordinate.x") - 25))
-            .otherwise(pl.col("coordinate.x") - 25)
-            .alias("coordinate_y_transformed"),
-        ).rename(
-            {
-                "coordinate.x": "coordinate.x.raw",
-                "coordinate.y": "coordinate.y.raw",
-                "coordinate_x_transformed": "coordinate.x",
-                "coordinate_y_transformed": "coordinate.y",
-            }
-        )
+    df = hoopr_coordinates(df, home_id)
 
     # R id_vars fallback: bound only when plays lack the team columns.
     if "homeTeamName" not in df.columns:

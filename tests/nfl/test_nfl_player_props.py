@@ -2,8 +2,10 @@
 
 import datetime as dt
 import importlib
+from pathlib import Path
 
 import polars as pl
+import pytest
 
 from sportsdataverse.nfl.nfl_player_props import player_usage_efficiency
 from sportsdataverse.nfl.nfl_prediction_constants import get_prop_constants
@@ -252,3 +254,54 @@ def test_props_null_projection_yields_null_p_over_not_nan(monkeypatch):
     assert wr2["line"] == 60.5
     assert wr2["p_over"] is None or not math.isnan(wr2["p_over"])
     assert wr2["p_over"] is None  # null, not NaN
+
+
+# --- supp-009: a real load_nfl_player_stats slice -------------------------------------------------------
+# Every test above builds its inputs from literals. The committed slice is nflverse's 2023 regular-season
+# weekly player stats, weeks 1-9, QB/RB/WR/TE of KC/SF/DET/BUF (342 rows, 60 players; provenance in
+# tests/fixtures/nfl_prediction/README.md). It drives the leakage boundary and the shrinkage on real rows.
+
+_REAL = Path(__file__).resolve().parents[1] / "fixtures" / "nfl_prediction" / "player_stats_2023_w1_9_4teams.parquet"
+
+
+def test_real_slice_reads_only_weeks_before_as_of_week():
+    stats = pl.read_parquet(_REAL)
+    base = player_usage_efficiency(stats, as_of_week=6).sort("player_id")
+    later = stats.with_columns(
+        pl.when(pl.col("week") >= 6).then(pl.col("passing_yards") + 500).otherwise(pl.col("passing_yards"))
+    )
+    assert player_usage_efficiency(later, as_of_week=6).sort("player_id").equals(base)
+    qb = stats.filter((pl.col("position") == "QB") & (pl.col("week") == 5) & (pl.col("attempts") > 10))["player_id"][0]
+    earlier = stats.with_columns(
+        pl.when((pl.col("week") == 5) & (pl.col("player_id") == qb))
+        .then(pl.col("passing_yards") + 500)
+        .otherwise(pl.col("passing_yards"))
+    )
+    moved = player_usage_efficiency(earlier, as_of_week=6)
+    assert moved.filter(pl.col("player_id") == qb)["ypa"][0] > base.filter(pl.col("player_id") == qb)["ypa"][0]
+    print("NFL_PROPS_REAL_BOUNDARY_OK", base.height)
+
+
+def test_real_slice_shrinks_each_player_toward_the_position_prior():
+    cfg = get_prop_constants("modern")
+    stats = pl.read_parquet(_REAL)
+    out = player_usage_efficiency(stats, as_of_week=6)
+    past = (
+        stats.filter(pl.col("week") < 6)
+        .group_by(pl.col("player_id").cast(pl.Utf8))
+        .agg(pl.col("week").n_unique().alias("n"), *[pl.col(c).sum() for c in ("attempts", "carries", "targets")])
+    )
+    j = out.join(past, on="player_id", how="inner")
+    assert j.height == out.height >= 40
+    checked = 0
+    for stat, kappa_attr in (("attempts", "shrink_pass"), ("carries", "shrink_rush"), ("targets", "shrink_rec")):
+        kappa = float(getattr(cfg, kappa_attr))
+        for row in j.iter_rows(named=True):
+            raw, prior = row[stat] / row["n"], cfg.pos_priors[row["position"]].get(stat, 0.0)
+            exp = row[f"exp_{stat}"]
+            assert min(raw, prior) - 1e-9 <= exp <= max(raw, prior) + 1e-9, (row["player_id"], stat, raw, prior, exp)
+            if abs(prior - raw) > 1e-6:
+                assert (exp - raw) / (prior - raw) == pytest.approx(kappa / (row["n"] + kappa), abs=1e-9)
+                checked += 1
+    assert checked >= 100
+    print("NFL_PROPS_REAL_SHRINK_OK", checked)

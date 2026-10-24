@@ -30,6 +30,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional, Union
 
+from sportsdataverse.errors import NoDataError
+
 # Map each league to its raw site-v2 teams + scoreboard wrappers. We use the
 # raw-Dict ``espn_<league>_teams_site`` endpoint (not the parsed-DataFrame
 # ``espn_<league>_teams``) because this resolver walks the raw JSON. Lazy-import
@@ -49,14 +51,17 @@ _LEAGUE_SLUG = {
 _TEAM_CACHE: Dict[str, List[Dict[str, Any]]] = {}
 
 
+def _slugs(league: str) -> tuple[str, str, str]:
+    """``(module, teams wrapper, scoreboard wrapper)`` for ``league``; ``ValueError`` on an unknown one."""
+    try:
+        return _LEAGUE_SLUG[league.lower()]
+    except KeyError:
+        raise ValueError(f"Unknown league {league!r}. Choose one of {sorted(_LEAGUE_SLUG)}.") from None
+
+
 def _resolve_league_callable(league: str, fn_attr: str):
     """Lazy-import the league module and return its named callable."""
-    league = league.lower()
-    if league not in _LEAGUE_SLUG:
-        raise ValueError(
-            f"Unknown league {league!r}. Choose one of {sorted(_LEAGUE_SLUG)}.",
-        )
-    league_attr, *_ = _LEAGUE_SLUG[league]
+    league_attr, *_ = _slugs(league)
     import importlib
 
     mod = importlib.import_module(f"sportsdataverse.{league_attr}")
@@ -65,15 +70,11 @@ def _resolve_league_callable(league: str, fn_attr: str):
 
 def _list_teams(league: str) -> List[Dict[str, Any]]:
     """Return a flat list of team dicts for the league (cached)."""
+    _, teams_attr, _ = _slugs(league)
     league = league.lower()
-    if league not in _LEAGUE_SLUG:
-        raise ValueError(
-            f"Unknown league {league!r}. Choose one of {sorted(_LEAGUE_SLUG)}.",
-        )
     if league in _TEAM_CACHE:
         return _TEAM_CACHE[league]
 
-    _, teams_attr, _ = _LEAGUE_SLUG[league]
     teams_fn = _resolve_league_callable(league, teams_attr)
     # return_parsed=False: this resolver walks the raw JSON, so we need the raw
     # Dict, not the parser-backed DataFrame default (0.0.54 contract).
@@ -128,6 +129,12 @@ def find_team(
         Single team dict (``{id, displayName, abbreviation, location, ...}``)
         or ``None`` when nothing matches; or a list of all matches when
         ``multi=True``.
+
+    Raises:
+        ValueError: ``league`` is not one of the supported slugs.
+        NoDataError: the teams endpoint answered 404.
+        AssetFetchError: the teams fetch failed (403, rate limit, 5xx, dead
+            connection), so the answer is unknown.
 
     Examples::
 
@@ -188,6 +195,12 @@ def find_athlete(
         immediately call ``espn_{league}_athlete_overview(athlete_id=...)``
         or other athlete-scoped wrappers).
 
+    Raises:
+        ValueError: ``league`` is not one of the supported slugs.
+        AssetFetchError: a roster fetch failed (403, rate limit, 5xx, dead
+            connection), so whether the athlete exists is unknown. A roster that
+            answers 404 is skipped.
+
     Examples::
 
         find_athlete("lebron", league="nba", team="lakers")["id"]
@@ -195,8 +208,8 @@ def find_athlete(
         find_athlete("Aaron Judge", league="mlb", team="Yankees")["id"]
         '33192'
     """
+    league_attr, *_ = _slugs(league)
     league = league.lower()
-    league_attr, *_ = _LEAGUE_SLUG[league]
     roster_fn = _resolve_league_callable(league, f"espn_{league_attr}_team_roster")
 
     candidate_teams: List[Dict[str, Any]]
@@ -214,8 +227,8 @@ def find_athlete(
         try:
             # return_parsed=False: walk the raw roster JSON (0.0.54 contract).
             payload = roster_fn(team_id=team_id, return_parsed=False)
-        except Exception:
-            continue
+        except NoDataError:
+            continue  # a 404 roster has no athletes; a failed fetch (AssetFetchError) propagates
         # Roster shape varies — handle both flat and position-grouped
         raw_athletes = payload.get("athletes") or []
         flat_athletes: List[Dict[str, Any]] = []
@@ -278,6 +291,13 @@ def find_event(
         ``espn_{league}_summary(event_id=...)`` / ``espn_{league}_pbp(game_id=...)``)
         or a list when ``multi=True``.
 
+    Raises:
+        ValueError: ``league`` is not one of the supported slugs, or ``date``
+            is not ``YYYYMMDD`` / ``YYYY-MM-DD``.
+        NoDataError: the scoreboard endpoint answered 404.
+        AssetFetchError: the scoreboard fetch failed (403, rate limit, 5xx,
+            dead connection), so the answer is unknown.
+
     Examples::
 
         find_event("2024-06-17", league="nba", home="Boston")["id"]
@@ -285,8 +305,8 @@ def find_event(
         find_event("20250209", league="nfl", away="KC")["name"]
         'Kansas City Chiefs at Philadelphia Eagles'
     """
+    _, _, sb_attr = _slugs(league)
     league = league.lower()
-    _, _, sb_attr = _LEAGUE_SLUG[league]
     scoreboard_fn = _resolve_league_callable(league, sb_attr)
     date_int = int(date.replace("-", ""))
     # return_parsed=False: this resolver walks the raw scoreboard JSON, so we

@@ -23,6 +23,7 @@ from typing import Callable, List, Optional, Union
 
 import polars as pl
 
+from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.mbb.mbb_ncaa_schedule import parse_ncaa_bb_team_schedule
 
 # The schedules dataset tree is a pure side effect of the sweep below: this
@@ -101,14 +102,33 @@ def _team_contest_ids(
 ) -> List[str]:
     try:
         html = fetch_fn(team_id)
-    except RuntimeError:
-        # NcaaFetcher raises RuntimeError on a ban-suspect / exhausted-proxy
+    except AssetFetchError:
+        # NcaaFetcher raises AssetFetchError on a ban-suspect / exhausted-proxy
         # response ("BAN-SUSPECT:<marker>" is folded into the message). The
         # sweep in discover_season decides retry/skip/abort -- one flaky
         # bm-verify solve must not read as a ban.
         logger.warning("fetch failed for team_id=%s (bm-verify / ban-suspect)", team_id)
         raise
     return _contest_ids_from_html(html, team_id, league, season, root)
+
+
+def _sweep_team(
+    team_id: int, fetch_fn: FetchFn, league: str, season: int, root: str | Path | None
+) -> tuple[list[str] | None, bool]:
+    """``(contest_ids, missing)``: None after ``_TEAM_TRIES`` failed fetches.
+
+    ``missing`` is True for a 404, which is not retried and -- as in the capture stage --
+    is not a step toward the ban-suspect abort: the host answered.
+    """
+    for _ in range(_TEAM_TRIES):
+        try:
+            return _team_contest_ids(team_id, fetch_fn, league, season, root), False
+        except NoDataError:
+            logger.warning("team_id=%s has no team page (HTTP 404) -- skipped", team_id)
+            return None, True
+        except AssetFetchError:
+            continue
+    return None, False
 
 
 def discover_season(
@@ -258,13 +278,10 @@ def discover_season(
             # the HTML is gone. The ids still stand; the dataset row does not.
             contest_ids.update(checkpointed[team_id])
             continue
-        got: Optional[List[str]] = None
-        for _ in range(_TEAM_TRIES):
-            try:
-                got = _team_contest_ids(team_id, fn, league, season, root)
-                break
-            except RuntimeError:
-                continue
+        got, missing = _sweep_team(team_id, fn, league, season, root)
+        if missing:
+            skipped.append(team_id)
+            continue
         if got is None:
             consecutive += 1
             skipped.append(team_id)

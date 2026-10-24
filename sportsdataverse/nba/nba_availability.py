@@ -43,8 +43,9 @@ def availability_features(
             scalars. When the FIT script splits into train/holdout it must
             pass **train-derived** medians here so the holdout distribution
             never leaks into the imputed values baked across the split. When
-            ``None`` (the runtime-inference path, where every row passed IS a
-            row being scored) the medians are computed from ``career`` itself.
+            ``None`` the medians are computed from ``career`` itself, scored
+            seasons included; :func:`nba_availability` therefore passes the
+            bundled artifact's stored ``median_ref`` (train seasons only).
 
     Returns:
         Frame ``player_id, season, age, prior_gp_pct, career_gp_pct, age_sq,
@@ -203,7 +204,7 @@ def nba_availability(
             # there's no start/end distinction to derive) -- unaffected by
             # the NBA end-year migration; wnba_stats mirrors the nba_stats
             # parameter shape on its own host.
-            from sportsdataverse.wnba.wnba_stats import wnba_stats_leaguedashplayerstats  # noqa: PLC0415
+            from sportsdataverse.wnba.wnba_stats import wnba_stats_leaguedashplayerstats
 
             bulk = wnba_stats_leaguedashplayerstats(season=str(end_year))
         elif league == "gleague":
@@ -254,7 +255,9 @@ def nba_availability(
             assert career.schema["player_id"] == bridge.schema["player_id"]
             career = career.join(bridge, on=["player_id", "season"], how="left")
 
-    feats = availability_features(career, league=league)
+    # Impute with the artifact's stored train-season medians: medians taken from `career` here would
+    # include the scored seasons' own GP (the label) in their own features (C-L35).
+    feats = availability_features(career, league=league, median_ref=_load_artifact(league).get("median_ref"))
     scored = score_availability(feats, league=league)
     out = scored.filter(pl.col("season").is_in(season_list))
     return out.to_pandas() if return_as_pandas else out

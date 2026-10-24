@@ -9,7 +9,6 @@ outer envelope, not that ``data`` is the game itself.
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 import pytest
@@ -20,27 +19,24 @@ FIX = Path(__file__).resolve().parents[1] / "fixtures" / "nfl_api" / "game_detai
 GAME = "a8fc1728-4feb-11f1-abca-2c54536568a9"
 
 
-class _Resp:
-    def __init__(self, payload: dict) -> None:
-        self._payload = payload
-
-    def raise_for_status(self) -> None:
-        return None
-
-    def json(self) -> dict:
-        return self._payload
-
-
 @pytest.fixture
 def seen_urls(monkeypatch) -> list:
-    payload = json.loads(FIX.read_text(encoding="utf-8"))
+    """Serve the fixture below ``requests.Session.request``, so ``download`` and the chokepoints run."""
+    import requests
+
+    import sportsdataverse.cache as cache
+
+    body = FIX.read_text(encoding="utf-8")
     seen: list = []
 
-    def fake_get(url, headers=None, timeout=None, **kwargs):
+    def fake_request(self, method, url, *args, **kwargs):
         seen.append(url)
-        return _Resp(payload)
+        resp = requests.Response()
+        resp.status_code, resp._content, resp.encoding, resp.url = 200, body.encode("utf-8"), "utf-8", url
+        return resp
 
-    monkeypatch.setattr(nfl_games.requests, "get", fake_get)
+    monkeypatch.setattr(cache, "get_cache_mode", lambda: "off")
+    monkeypatch.setattr(requests.Session, "request", fake_request)
     return seen
 
 

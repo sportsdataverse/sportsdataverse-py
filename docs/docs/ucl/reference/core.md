@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # UCL — ESPN core API (v2)
 
-`sportsdataverse.ucl` — 82 endpoints.
+`sportsdataverse.soccer.ucl` — 82 endpoints.
 
 ## Game
 

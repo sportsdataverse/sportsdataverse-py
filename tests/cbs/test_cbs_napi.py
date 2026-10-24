@@ -469,3 +469,27 @@ def test_capture_id_dtype_is_consistent_across_leagues():
     for family, cols in dtypes.items():
         for col, seen in cols.items():
             assert seen <= {"Int64", "Null"}, f"{family}.{col} has mixed dtypes across leagues: {sorted(seen)}"
+
+
+# B-L60: NAPI answers an unknown game id with HTTP 200 and a `warnings` envelope whose code is
+# 404 (tests/fixtures/cbs_napi/warnings_404.json, captured from /resource/game/scoring/plays/1).
+# That answer is "nothing here", so it must reach the caller as NoDataError, not a 0-row frame.
+_WARNINGS_404 = (Path(__file__).resolve().parents[1] / "fixtures" / "cbs_napi" / "warnings_404.json").read_text(
+    encoding="utf-8"
+)
+
+
+def test_the_captured_unknown_game_body_is_a_404_warning():
+    body = json.loads(_WARNINGS_404)
+    assert [(w["code"], w["type"]) for w in body["warnings"]] == [(404, "NotFoundException")]
+
+
+@pytest.mark.parametrize("return_parsed", [True, False])
+def test_warnings_404_body_raises_no_data(monkeypatch, return_parsed):
+    from sportsdataverse.cbs.cbs_napi import cbs_game_scoring_plays
+    from sportsdataverse.errors import NoDataError
+    from tests.codegen.test_runtime_errors import _serve
+
+    _serve(monkeypatch, 200, _WARNINGS_404)
+    with pytest.raises(NoDataError, match="404 warning: No scoring plays data for that game"):
+        cbs_game_scoring_plays(1, return_parsed=return_parsed)

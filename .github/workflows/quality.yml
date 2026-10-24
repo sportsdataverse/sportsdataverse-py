@@ -1,20 +1,47 @@
-# Static quality gate: lint (ruff), format check (ruff format), and type
+# Static quality gate: lint (ruff), format check (ruff format), type
 # checking (mypy on the curated, fully-typed module set configured in
-# pyproject.toml's [tool.mypy] `files`). These run on pre-commit locally, but
-# enforcing them in CI makes the bar real for every PR — not just for
-# contributors who installed the hooks. Fast (no test execution); the test
-# matrix lives in tests.yml.
+# pyproject.toml's [tool.mypy] `files`), and the quality scoreboard ratchet
+# (tools/quality_scoreboard.py against baseline/). These run on pre-commit
+# locally, but enforcing them in CI makes the bar real for every PR — not just
+# for contributors who installed the hooks. The lint job is fast (no test
+# execution); the parallel coverage job runs the offline suite once with
+# pytest-cov and posts the coverage delta to the step summary. The test matrix
+# lives in tests.yml.
+#
+# On a pull request the baselines are read from the BASE branch, so a PR cannot
+# lower its own bar by editing baseline/; the only way a baseline moves is a
+# merged change to it. A PR into `devel-<topic>` is held to
+# `baseline/scoreboard-<topic>-base.json` (the topic's branch-point snapshot)
+# when the base branch has one, else to `baseline/scoreboard-devel.json`.
+#
+# A sync PR (the upstream branch merged into its topic: devel-program-setup ->
+# devel-test-harness -> devel-<topic>) carries metrics the upstream already
+# accepted and re-seeded, so tools/upstream_baseline.sh adds the UPSTREAM
+# branch's baseline too, and a metric fails only when it is worse than both.
+# It does so only when the PR head contains the upstream tip and the base does
+# not yet; an ordinary task PR gets no allowance. main keeps no baseline/, so
+# a main -> devel-program-setup sync still has the base's baseline only.
+# The allowance covers the WHOLE PR: one that merges the upstream tip AND
+# carries task commits is treated as a sync, so never merge the upstream into
+# a task PR. With two baselines the scoreboard table shows the change against
+# each, so whatever the allowance absorbs reads WORSE in the Base column.
 name: quality
 on:
   pull_request:
+    branches: [main, "devel-*"]
   push:
-    branches: [main]
+    branches: [main, "devel-*"]
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 permissions:
   contents: read
+defaults:
+  run:
+    # Explicit `bash` is what turns on `-o pipefail`; the default shell only
+    # has `-e`, which would let `... | tee` mask a scoreboard exit 1.
+    shell: bash
 jobs:
   lint-typecheck:
     name: ruff + mypy
@@ -31,6 +58,47 @@ jobs:
         run: uv python install 3.13.2
       - name: Install project + extras + dep groups (fails if uv.lock is stale)
         run: uv sync --all-extras --all-groups --locked --python 3.13.2
+      - name: Baselines from the base branch (a pull request cannot lower its own bar)
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          mkdir -p /tmp/baseline
+          if [ -z "$BASE_REF" ]; then
+            cp baseline/scoreboard-devel.json /tmp/baseline/scoreboard-devel.json
+            cp baseline/scoreboard-devel.json /tmp/baseline/gate.json
+            exit 0
+          fi
+          git fetch --depth=1 origin "$BASE_REF"
+          if git cat-file -e "FETCH_HEAD:baseline/scoreboard-devel.json" 2>/dev/null; then
+            git show "FETCH_HEAD:baseline/scoreboard-devel.json" > /tmp/baseline/scoreboard-devel.json
+          else
+            echo "::warning::BOOTSTRAP: baseline taken from this PR (origin/$BASE_REF has no baseline/scoreboard-devel.json yet). This is the only case where the PR's own file is trusted; once merged, every later PR reads the base branch."
+            cp baseline/scoreboard-devel.json /tmp/baseline/scoreboard-devel.json
+          fi
+          topic="${BASE_REF#devel-}"
+          if [ "$topic" != "$BASE_REF" ] && git cat-file -e "FETCH_HEAD:baseline/scoreboard-$topic-base.json" 2>/dev/null; then
+            git show "FETCH_HEAD:baseline/scoreboard-$topic-base.json" > /tmp/baseline/gate.json
+            echo "Scoreboard gate: baseline/scoreboard-$topic-base.json at $BASE_REF" | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            cp /tmp/baseline/scoreboard-devel.json /tmp/baseline/gate.json
+            echo "Scoreboard gate: baseline/scoreboard-devel.json at ${BASE_REF}" | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
+          bash tools/upstream_baseline.sh scoreboard-devel.json /tmp/baseline/upstream-gate.json
+      - name: quality scoreboard (no metric may get worse than the base branch's baseline)
+        # Runs BEFORE `ruff lint`: the repo config sets `fix = true`, so that
+        # step rewrites the checkout, and the scoreboard must measure the code
+        # as pushed (it passes --no-fix itself).
+        run: |
+          set -o pipefail
+          extra=()
+          if [ -f /tmp/baseline/upstream-gate.json ]; then extra=(--baseline /tmp/baseline/upstream-gate.json); fi
+          uv run --frozen python tools/quality_scoreboard.py --check --baseline /tmp/baseline/gate.json "${extra[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: warn when this pull request loosens baseline/scoreboard-devel.json
+        if: github.event_name == 'pull_request'
+        run: |
+          set -o pipefail
+          uv run --frozen python tools/quality_scoreboard.py --check --baseline /tmp/baseline/scoreboard-devel.json --current baseline/scoreboard-devel.json \
+            || echo "::warning file=baseline/scoreboard-devel.json::This PR loosens the quality baseline. Reviewers: check the diff of baseline/scoreboard-devel.json."
       - name: ruff lint
         run: uv run --frozen ruff check sportsdataverse/ tests/ tools/
       - name: ruff format check
@@ -41,3 +109,117 @@ jobs:
         run: uv run --frozen mypy
       - name: validation harness contract tests
         run: uv run --frozen pytest tests/contracts/ -q
+
+  coverage:
+    # Option A (owner decision 2026-10-09): a parallel job, not a step of the
+    # lint job, so the ~13 min suite never delays the fast lint feedback. The
+    # offline suite is enforced exactly as in tests.yml: live tests skip at
+    # collection time because SDV_PY_LIVE_TESTS is unset here, and
+    # tests/codegen + the drift test are left to codegen.yml.
+    name: coverage delta (offline suite)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - name: Set up Python
+        run: uv python install 3.13.2
+      - name: Install project + extras + dep groups
+        run: uv sync --all-extras --all-groups --locked --python 3.13.2
+      - name: Coverage baseline from the base branch (a pull request cannot lower its own bar)
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          mkdir -p /tmp/baseline
+          if [ -n "$BASE_REF" ]; then
+            git fetch --depth=1 origin "$BASE_REF"
+            if git cat-file -e "FETCH_HEAD:baseline/coverage-devel.json" 2>/dev/null; then
+              git show "FETCH_HEAD:baseline/coverage-devel.json" > /tmp/baseline/coverage-devel.json
+              echo "Coverage gate: baseline/coverage-devel.json at $BASE_REF" | tee -a "$GITHUB_STEP_SUMMARY"
+              bash tools/upstream_baseline.sh coverage-devel.json /tmp/baseline/upstream-coverage.json
+              exit 0
+            fi
+            echo "::warning::BOOTSTRAP: baseline taken from this PR (origin/$BASE_REF has no baseline/coverage-devel.json yet). This is the only case where the PR's own file is trusted; once merged, every later PR reads the base branch."
+          fi
+          cp baseline/coverage-devel.json /tmp/baseline/coverage-devel.json
+          echo "Coverage gate: baseline/coverage-devel.json of this checkout" | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Run the offline suite with coverage
+        run: >
+          uv run --frozen pytest -n auto --dist loadgroup -q
+          --ignore=tests/codegen
+          --cov=sportsdataverse --cov-report=json:coverage.json
+      - name: coverage delta (no metric may get worse than the base branch's baseline)
+        run: |
+          set -o pipefail
+          extra=()
+          if [ -f /tmp/baseline/upstream-coverage.json ]; then extra=(--baseline /tmp/baseline/upstream-coverage.json); fi
+          uv run --frozen python tools/quality_scoreboard.py --check --baseline /tmp/baseline/coverage-devel.json --coverage-json coverage.json "${extra[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: snapshot the CI numbers (re-seed baseline/ from this artifact)
+        if: ${{ !cancelled() && hashFiles('coverage.json') != '' }}
+        run: uv run --frozen python tools/quality_scoreboard.py --write scoreboard-ci.json --coverage-json coverage.json > /dev/null
+      - uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() && hashFiles('coverage.json') != '' }}
+        with:
+          name: coverage-scoreboard
+          path: |
+            coverage.json
+            scoreboard-ci.json
+
+  mutants:
+    # The mutation registry (tests/mutants/registry.yaml): each row applies a text mutant to a
+    # source file and runs the test that must go red. A `kill` row whose test stays green fails
+    # the job; `survive_until` rows document audit-measured test gaps until their plan task lands.
+    # Per-row timings are printed. Every row runs on every PR, split round-robin into the matrix's
+    # shards (`run_mutants.py --shard I/N`, I/N taken from strategy.job-index/job-total; a shard that
+    # selects no rows fails; tests/tools/test_run_mutants.py asserts the shards partition the
+    # registry). Measured: 71 rows = 1023 s of rows serially (run 38156528933, 17m04s job), ~4-5 min per
+    # shard at 4 shards. By 10-18 the topic registries had grown and 4-shard jobs hit the 15-min timeout
+    # (EX-CI-a), so the matrix went to 6: 74 rows ran in 4-6 min per shard (#879). By 10-19 the registry
+    # held 191 rows (211 with #898) and 6-shard jobs hit the timeout again (R898-19). Measured on run
+    # 39195638017 (191 rows, 6 shards): 4240 s of rows serially, 22.2 s/row mean, a heavy tail (max
+    # 113 s), ~25 s setup per job, slowest shard 14m22s. Replaying those per-row times through the
+    # round-robin split, N=8 puts the slowest shard at 12.1 min at 211 rows (avg 10.2) and 13.6 min at
+    # 250 rows (avg 12.0); N=11 would give 8.7. The owner chose 8 shards with a 20-min timeout: fewer
+    # runners held at once over the fastest feedback. Add a shard or raise the timeout when the slowest
+    # shard nears ~16 min. 10-21: the providers sync (#962, 386 rows) ran shard 8 to the 20-min limit
+    # (48 rows, finished OK at 20:08 and was cancelled), so the timeout went to 30 at 8 shards, keeping
+    # the runner count; at ~22 s/row that holds to roughly 600 rows.
+    # 10-21: the main -> providers sync brought the registry to 574 rows, so the matrix went to 10
+    # shards, keeping the 30-min timeout.
+    # 10-22: the main -> nfl sync (#982) brought it to 661 rows and shard 1/10 hit the 30-min limit
+    # (every row it reached was killed), so the matrix went to 12 shards (~55 rows each).
+    name: mutation registry (${{ matrix.shard }}/${{ strategy.job-total }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # pytest runs PR-controlled code; it must not inherit the checkout token
+          persist-credentials: false
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - name: Set up Python
+        run: uv python install 3.13.2
+      - name: Install project + extras + dep groups
+        run: uv sync --all-extras --all-groups --locked --python 3.13.2
+      - name: run the registry (a `kill` row that survives fails the job)
+        env:
+          PYTHONUNBUFFERED: "1"
+          # I/N from the strategy itself, so editing the matrix list can never leave rows in no shard
+          SHARD: ${{ strategy.job-index }}/${{ strategy.job-total }}
+        run: |
+          set -o pipefail
+          SHARD="$(( ${SHARD%/*} + 1 ))/${SHARD#*/}"
+          uv run --frozen python tools/run_mutants.py --shard "$SHARD" | tee -a "$GITHUB_STEP_SUMMARY"

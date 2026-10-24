@@ -708,7 +708,7 @@ NOTES = [
     "and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, "
     "person_id the person behind it.",
     "Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises "
-    "AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation "
+    "ValueError for it, never an empty frame. List routes default to 150 rows with no truncation "
     "signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score "
     "wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match "
     "header or the competition) to prove the answer is the one asked for and the game is final.",
@@ -748,9 +748,9 @@ def main() -> None:
             "raises": [
                 "sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a "
                 "competition without standings, a final game with no play-by-play or box score).",
-                "sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP "
-                "400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that "
-                "is not final, an envelope whose status is not OK, or a body for another competition, match, team, "
+                "ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).",
+                "sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full "
+                "list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, "
                 "player or season than the one asked for.",
             ],
             "see_also": [

@@ -40,6 +40,7 @@ fixtures and against the ratings engine never hit a dtype mismatch.
 | `pbp_sample_2024.parquet` | 6396 | `load_nba_pbp([2024])` (ESPN) | Phase-3 in-game-WP calibration sample (see the earlier row). |
 | `wnba_results_2024.parquet` | 264 | `load_wnba_schedule([2024])` (ESPN) | WNBA (league_id=10) Phase-6 gate. Cols mirror `results_2024`; ESPN wnba team_id. |
 | `wnba_team_box_2024.parquet` | 528 | `load_wnba_team_boxscore([2024])` (ESPN) | WNBA possession inputs; cols mirror `team_box_2024`. |
+| `wnba_pbp_sample_2024.parquet` | 10024 | `load_wnba_pbp([2024])` (ESPN; sportsdataverse-data `espn_wnba_pbp` release, read 2026-10-11) | supp-013 real-slice gate for `build_wnba_season_wp`: every 10th play (`game_play_number % 10 == 0`) of all 264 games, cols `game_id, game_play_number, start_game_seconds_remaining, home_score, away_score, team_id, home_team_id` + `home_win` (each game's last-play home score > away score). |
 | `wnba_team_ratings_oracle_2024.parquet` | 12 | `wnba_stats_leaguedashteamstats(season="2024", Advanced)` (stats.wnba.com) | WNBA NET_RATING/PACE crosswalked to the ESPN wnba team_id by full team display name (12/12 matched). Phase-6 ratings gate: AdjNet vs NET_RATING spearman 0.965, mae 0.753. stats.wnba.com season string is the plain year `"2024"` (NOT `"2023-24"`). |
 
 ## Oracle notes

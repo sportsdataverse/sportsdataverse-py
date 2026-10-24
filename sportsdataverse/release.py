@@ -86,6 +86,33 @@ def _gh_env() -> dict[str, str]:
     return env
 
 
+class _GhCliError(RuntimeError):
+    """A non-zero ``gh`` exit; ``stderr`` is what gh printed, apart from the command line."""
+
+    def __init__(self, message: str, stderr: str) -> None:
+        super().__init__(message)
+        self.stderr = stderr
+
+
+def _gh_permanent(exc: Exception) -> bool:
+    """True for a gh failure no retry can fix, judged on gh's stderr only.
+
+    purrr::insistently retries everything; sleeping ~645 s on a 404 is not parity worth keeping.
+    Permanent: HTTP 400 / 401 / 404, a missing release, a 403 that is not a rate limit (a
+    permission such as "Resource not accessible by integration"), a 422 other than
+    ``already_exists`` (the next attempt clobbers that asset), and no gh at all. Anything else
+    (5xx, 429, a rate-limit 403, a dropped connection, a timeout) is retried.
+    """
+    if not isinstance(exc, _GhCliError):
+        return "not available on your machine" in str(exc)
+    err = exc.stderr
+    if re.search(r"HTTP 403\b", err):
+        return not re.search(r"rate limit", err, re.IGNORECASE)
+    if re.search(r"HTTP 422\b", err):
+        return "already_exists" not in err
+    return bool(re.search(r"HTTP (?:400|401|404)\b|release not found", err, re.IGNORECASE))
+
+
 # generous ceiling: multi-hundred-MB release assets legitimately upload for
 # minutes; the timeout only guards against an indefinite network stall
 _GH_TIMEOUT_SECONDS = 600.0
@@ -110,8 +137,9 @@ def _invoke_gh(args: list[str]) -> str:
             f"The GitHub CLI timed out after {_GH_TIMEOUT_SECONDS:.0f}s for 'gh {' '.join(args)}'"
         ) from exc
     if proc.returncode != 0:
-        raise RuntimeError(
-            f"The GitHub CLI errored (exit {proc.returncode}) for 'gh {' '.join(args)}': {proc.stderr.strip()}"
+        raise _GhCliError(
+            f"The GitHub CLI errored (exit {proc.returncode}) for 'gh {' '.join(args)}': {proc.stderr.strip()}",
+            proc.stderr,
         )
     return proc.stdout
 
@@ -322,7 +350,7 @@ def _timestamp_now(as_of: datetime | None = None) -> str:
             if as_of.tzinfo is None:
                 as_of = as_of.replace(tzinfo=timezone.utc)
             moment = as_of.astimezone(zone)
-    except Exception:  # ponytail: no tzdata on this box -> local time is fine
+    except (ImportError, KeyError):  # ponytail: no tzdata on this box (ZoneInfoNotFoundError) -> local time is fine
         moment = datetime.now().astimezone() if as_of is None else as_of.astimezone()
     return moment.strftime("%Y-%m-%d %H:%M:%S %Z")
 
@@ -480,8 +508,10 @@ def sportsdataverse_upload(
 
     Port of ``sportsdataverse_upload`` (upload.R L11-44) including the
     ``zzz.R`` retry wrapping: the whole upload (sidecar creation included) is
-    retried with exponential backoff, configured by the same env vars the R
-    package reads — ``SPORTSDATAVERSE.UPLOAD.INSIST`` (default ``"true"``),
+    retried with exponential backoff (a permanent gh failure -- HTTP
+    400/401/404, a non-rate-limit 403, a 422 other than ``already_exists``, a
+    missing release, no gh -- raises at once), configured by
+    the same env vars the R package reads — ``SPORTSDATAVERSE.UPLOAD.INSIST`` (default ``"true"``),
     ``.PAUSE_BASE`` (0.05), ``.PAUSE_MIN`` (1), ``.MAX_TIMES`` (20).
 
     Args:
@@ -498,7 +528,8 @@ def sportsdataverse_upload(
         True when files were uploaded, False when none existed.
 
     Raises:
-        RuntimeError: When every retry attempt failed.
+        RuntimeError: When every retry attempt failed, or on the first attempt
+            that hits a permanent gh failure (see above) or finds no ``gh``.
 
     Example:
         Quick start::
@@ -534,8 +565,8 @@ def sportsdataverse_upload(
     for attempt in range(1, max_times + 1):
         try:
             return _upload_once(force_clobber=attempt > 1)
-        except Exception:
-            if attempt == max_times:
+        except Exception as exc:
+            if attempt == max_times or _gh_permanent(exc):
                 raise
             # purrr::rate_backoff: pause after the k-th failure is
             # pause_base * 2^k, floored at pause_min, capped at 60s.
@@ -583,7 +614,8 @@ def sportsdataverse_save(
 
     Raises:
         ValueError: On unknown or R-only file types.
-        RuntimeError: When the upload fails after all retries.
+        RuntimeError: When the upload fails after all retries, or at once on
+            a permanent gh failure (see :func:`sportsdataverse_upload`).
 
     Example:
         Quick start::

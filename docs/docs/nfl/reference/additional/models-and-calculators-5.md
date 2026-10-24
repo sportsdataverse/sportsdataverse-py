@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Models and calculators: calculate_wpa"
 sidebar_label: "Models and calculators: calculate_wpa"
-sidebar_position: 18
+sidebar_position: 19
 description: "NFL — additional Python functions — Models and calculators: calculate_wpa — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Models and calculators: calculate_wpa
@@ -46,12 +46,15 @@ Derivation rules (mirror the original `__process_wpa`):
   to the defense `def_wp_before`).
 * `wp_after` is rewritten by the end-of-half / end-of-game / OT two-path:
   timeouts hold `wp_before`; a completed final play resolves to `1.0` /
-  `0.0` by the winner; end-of-half and `End Period` / `End of Half`
-  lead plays take `lead_wp_before` (or `1 - lead_wp_before` on a
-  possession change); a possession change otherwise flips the lead;
+  `0.0` by the winner; the play that ends a half takes the next real
+  play's `wp_before` (past clock stoppages), flipped when that play is
+  the other team's; `End Period` / `End of Half` lead plays take
+  `lead_wp_before` (or `1 - lead_wp_before` on a possession change);
+  a possession change otherwise flips the lead;
   everything else keeps the model `wp_after`.
 * `def_wp_after = 1 - wp_after`; `home_wp_after` / `away_wp_after`
-  use the **end** possession team for the perspective flip.
+  use the **start** possession team for the perspective flip (every
+  `wp_after` branch above is stated in that team's frame).
 * `wpa = wp_after - wp_before`.
 
 **Every** `shift` / forward reference is grouped `.over("game_id")` so a
@@ -195,7 +198,7 @@ The input frame with the WPA derivation applied: `wp_before` rewritten by the ki
 | `start.defPosTeamTimeouts` | integer | ESPN's `defPosTeamTimeouts` value for the play state at the start of the play. |
 | `end.posTeamTimeouts` | integer | ESPN's `posTeamTimeouts` value for the play state at the end of the play. |
 | `end.defPosTeamTimeouts` | integer | ESPN's `defPosTeamTimeouts` value for the play state at the end of the play. |
-| `firstHalfKickoffTeamId` | integer | ESPN id of the team that received the opening kickoff. |
+| `firstHalfKickoffTeamId` | integer | ESPN id of the team that kicked the opening kickoff (it receives the second-half kickoff), one value per game. |
 | `period` | integer |  |
 | `start.yard` | integer | ESPN's `yard` value for the play state at the start of the play. |
 | `end.yard` | integer | ESPN's `yard` value for the play state at the end of the play. |
@@ -403,10 +406,10 @@ The input frame with the WPA derivation applied: `wp_before` rewritten by the ki
 | `stopped_run` | logical | True when the rush was stopped at or behind the line of scrimmage. |
 | `opportunity_run` | logical |  |
 | `highlight_run` | logical | True when the rush gained 8 or more yards. |
-| `adj_rush_yardage` | integer | Rushing yards capped at 8, the input to the line-yards decomposition. |
-| `line_yards` | double | Yards credited to the offensive line on a rush, using the standard sliding scale: 1.2x the capped yardage on a loss, all of it through 3 yards, half of each yard from 4 to 8, and a 5.5-yard ceiling beyond that. |
-| `second_level_yards` | double | Rushing yards earned from 4 to 8, split evenly between line and carrier under the line-yards decomposition. |
-| `open_field_yards` | integer | Rushing yards gained beyond 8, credited to the ball carrier rather than the line. |
+| `adj_rush_yardage` | integer | Rushing yards capped at 10, the input to the line-yards decomposition. Assets published before the 2026-10 line-yards fix cap at 8. |
+| `line_yards` | double | Yards credited to the offensive line on a rush, on the standard adjusted-line-yards band: 1.2x the yardage on a loss, all of yards 0-4, half of each yard from 5 to 10, and nothing beyond 10 (a 7-yard ceiling). Line, second-level and open-field yards sum to the carry on every gain. Assets published before the 2026-10 line-yards fix carry the old band (all of yards 0-3, half of 4-8, a 5.5-yard ceiling). |
+| `second_level_yards` | double | The ball carrier's half of yards 5-10 of a rush (the line takes the other half); 0 on carries of 4 yards or fewer. Assets published before the 2026-10 line-yards fix carry the old band here: half of yards 4-8 in college football, half of yards 5-8 in the NFL (where the old parts came up half a yard short of the carry). |
+| `open_field_yards` | integer | Rushing yards gained beyond 10, credited to the ball carrier rather than the line. Assets published before the 2026-10 line-yards fix count the yards beyond 8. |
 | `highlight_yards` | double | Second-level plus open-field yards -- the yardage credited to the carrier. |
 | `opp_highlight_yards` | double | Highlight yards earned on opportunity runs, isolating carrier production on carries where the blocking succeeded. Assets published before the 2026-08 fix are identically 0 here, because the inverted opportunity_run gate could never co-occur with non-zero highlight yards. |
 | `short_rush_success` | logical | True when a short-yardage rush gained the yardage needed. |

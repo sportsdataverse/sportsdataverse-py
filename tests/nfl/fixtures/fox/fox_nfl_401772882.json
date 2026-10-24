@@ -1,0 +1,4144 @@
+{
+ "header": {
+  "alternateLeftColor": "1, 82, 181, 255",
+  "alternateRightColor": "1, 240, 31, 65",
+  "eventStatus": 3,
+  "eventTime": "2025-11-16T18:00:00Z",
+  "id": "10766",
+  "leftColor": "1, 82, 181, 255",
+  "leftTeam": {
+   "imageAltText": "Carolina Panthers",
+   "isLoser": false,
+   "longName": "Panthers",
+   "name": "CAR",
+   "score": 30,
+   "stackedNameBottom": "Panthers",
+   "stackedNameTop": "Carolina",
+   "uri": "football/nfl/teams/32"
+  },
+  "rightColor": "1, 240, 31, 65",
+  "rightTeam": {
+   "imageAltText": "Atlanta Falcons",
+   "isLoser": true,
+   "longName": "Falcons",
+   "name": "ATL",
+   "score": 27,
+   "stackedNameBottom": "Falcons",
+   "stackedNameTop": "Atlanta",
+   "uri": "football/nfl/teams/25"
+  },
+  "statusLine": "FINAL / OT"
+ },
+ "pbp": {
+  "sections": [
+   {
+    "title": "1ST QUARTER",
+    "groups": [
+     {
+      "id": "11465",
+      "subtitle": "3 plays · -4 yards · 2:05",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "CAR"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "1",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Fitzgerald kicks 53 yards from CAR 35 to the ATL 12. J.Agnew returns the kickoff. Tackled by T.Incoom at ATL 31.",
+        "timeOfPlay": "15:00",
+        "title": "CAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 88,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 69,
+            "yardStart": 88
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "2",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Robinson rushed right tackle for yards. Tackled by C.Jackson at ATL 35. PENALTY on ATL-E.Wilkinson, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "14:55",
+        "title": "1st & 10 · ATL 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 79,
+            "yardStart": 69
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "3",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Robinson rushed right tackle for 4 yards. Tackled by T.Wharton; T.Moehrig at ATL 25.",
+        "timeOfPlay": "14:26",
+        "title": "1st & 20 · ATL 21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 75,
+            "yardStart": 79
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "4",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Penix pass short middle complete. Catch made by D.Mooney for 2 yards. D.Mooney FUMBLES, forced by C.Thornton. Fumble RECOVERED by ATL-R.Neuzil at ATL 27. Tackled by at ATL 27.",
+        "timeOfPlay": "13:43",
+        "title": "2nd & 16 · ATL 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 73,
+            "yardStart": 75
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "5",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete deep right intended for D.Mooney.",
+        "timeOfPlay": "13:14",
+        "title": "3rd & 14 · ATL 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 73
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "6",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Pinion punts 55 yards to CAR 18, Center-L.McCullough. T.Etienne returned punt from the CAR 18. Tackled by F.Franks at CAR 27.",
+        "timeOfPlay": "13:07",
+        "title": "4th & 14 · ATL 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 18,
+            "yardStart": 73
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 27,
+            "yardStart": 18
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "11468",
+      "subtitle": "12 plays · 73 yards · 7:30",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/32"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "7",
+        "title": "CAR"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "7",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Dowdle rushed left guard for 5 yards. Tackled by A.Terrell at CAR 32.",
+        "timeOfPlay": "12:55",
+        "title": "1st & 10 · CAR 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 32,
+            "yardStart": 27
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "8",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Young pass short left complete. Catch made by M.Evans for 3 yards. Tackled by K.Elliss at CAR 35.",
+        "timeOfPlay": "12:21",
+        "title": "2nd & 5 · CAR 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 35,
+            "yardStart": 32
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "9",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Young pass short middle complete. Catch made by J.Coker for 15 yards. Tackled by J.Bates at CAR 50.",
+        "timeOfPlay": "11:42",
+        "title": "3rd & 2 · CAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 50,
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "10",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Dowdle rushed right guard for 1 yards. Tackled by R.Orhorhoro at ATL 49.",
+        "timeOfPlay": "10:55",
+        "title": "1st & 10 ·  50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 51,
+            "yardStart": 50
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "11",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Young steps back to pass. Pass incomplete deep middle intended for T.McMillan (K.Kareem).",
+        "timeOfPlay": "10:10",
+        "title": "2nd & 9 · ATL 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 51
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "12",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Young pass short middle complete [R.Harrison]. Catch made by J.Sanders for 7 yards. Tackled by J.Bates at ATL 42.",
+        "timeOfPlay": "10:05",
+        "title": "3rd & 9 · ATL 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 58,
+            "yardStart": 51
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "13",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Young pass short left complete. Catch made by X.Legette for 22 yards. Tackled by A.Terrell at ATL 20.",
+        "timeOfPlay": "9:24",
+        "title": "4th & 2 · ATL 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 80,
+            "yardStart": 58
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "14",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Young pass short left complete. Catch made by R.Dowdle for 2 yards. Pushed out of bounds by K.Elliss at ATL 18.",
+        "timeOfPlay": "8:38",
+        "title": "1st & 10 · ATL 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 82,
+            "yardStart": 80
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "15",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Dowdle rushed left guard for 3 yards. Tackled by D.Onyemata at ATL 15.",
+        "timeOfPlay": "8:03",
+        "title": "2nd & 7 · ATL 18",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 85,
+            "yardStart": 82
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "16",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Young pass short left complete. Catch made by T.McMillan for 11 yards. Tackled by J.Walker at ATL 4.",
+        "timeOfPlay": "7:20",
+        "title": "3rd & 4 · ATL 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 96,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "17",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Young steps back to pass. Sacked at ATL 12 for -8 yards (J.Pearce).",
+        "timeOfPlay": "6:46",
+        "title": "1st & 4 · ATL 4",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 88,
+            "yardStart": 96
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "18",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Young scrambles left end for yards. Tackled by R.Harrison at ATL 9. PENALTY on ATL-J.Pearce, Defensive Offside, 5 yards, accepted. No Play.",
+        "timeOfPlay": "6:00",
+        "title": "2nd & 12 · ATL 12",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 93,
+            "yardStart": 88
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "19",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Young pass short right complete. Catch made by T.McMillan for 7 yards. TOUCHDOWN.",
+        "timeOfPlay": "5:31",
+        "title": "2nd & 7 · ATL 7",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 93
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "20",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Fitzgerald extra point is good.",
+        "timeOfPlay": "5:25",
+        "title": "ATL 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "11477",
+      "subtitle": "4 plays · 75 yards · 1:52",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "CAR"
+       },
+       {
+        "changed": true,
+        "score": "7",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "22",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Fitzgerald kicks 63 yards from CAR 35 to the ATL 2. N.Brooks returns the kickoff. Tackled by P.Umanmielen at ATL 25.",
+        "timeOfPlay": "5:25",
+        "title": "CAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 98,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 75,
+            "yardStart": 98
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "23",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Penix pass deep left complete. Catch made by D.London for 30 yards. Tackled by C.Rozeboom; T.Moehrig at CAR 45.",
+        "timeOfPlay": "5:19",
+        "title": "1st & 10 · ATL 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 45,
+            "yardStart": 75
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "24",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Robinson rushed left end for 0 yards. Tackled by A.Robinson; C.Cherelus at CAR 45.",
+        "timeOfPlay": "4:43",
+        "title": "1st & 10 · CAR 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 45,
+            "yardStart": 45
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "25",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Penix pass short left complete. Catch made by D.London for 41 yards. Tackled by T.Moehrig at CAR 4.",
+        "timeOfPlay": "4:13",
+        "title": "2nd & 10 · CAR 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 4,
+            "yardStart": 45
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "26",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Robinson rushed right end for 4 yards. TOUCHDOWN. PENALTY on CAR-T.Wharton, Defensive Holding, 5 yards, declined.",
+        "timeOfPlay": "3:39",
+        "title": "1st & 4 · CAR 4",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 4
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "27",
+        "periodOfPlay": "1ST",
+        "playDescription": "Z.Gonzalez extra point is good.",
+        "timeOfPlay": "3:33",
+        "title": "CAR 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "11482",
+      "subtitle": "4 plays · 11 yards · 2:34",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/32"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "CAR"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "29",
+        "periodOfPlay": "1ST",
+        "playDescription": "Z.Gonzalez kicks 65 yards from ATL 35 to the CAR End Zone. Touchback.",
+        "timeOfPlay": "3:33",
+        "title": "ATL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 35,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "30",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Young pass short right complete. Catch made by T.McMillan for 15 yards. Tackled by K.Elliss at CAR 50.",
+        "timeOfPlay": "3:33",
+        "title": "1st & 10 · CAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 50,
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "31",
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Etienne rushed left end for 2 yards. Tackled by R.Harrison at ATL 48.",
+        "timeOfPlay": "2:56",
+        "title": "1st & 10 ·  50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 52,
+            "yardStart": 50
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "32",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Dowdle rushed left tackle for 2 yards. Tackled by K.Street at ATL 46.",
+        "timeOfPlay": "2:15",
+        "title": "2nd & 8 · ATL 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 54,
+            "yardStart": 52
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "33",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Young steps back to pass. Sacked at CAR 46 for -8 yards (B.Bowman).",
+        "timeOfPlay": "1:29",
+        "title": "3rd & 6 · ATL 46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 46,
+            "yardStart": 54
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "34",
+        "playDescription": "TV Timeout",
+        "timeOfPlay": "1:06",
+        "title": "TV Timeout"
+       },
+       {
+        "id": "35",
+        "periodOfPlay": "1ST",
+        "playDescription": "S.Martin punts 49 yards to ATL 10, Center-J.Jansen. J.Agnew MUFFS catch. Out of bounds. ",
+        "timeOfPlay": "1:06",
+        "title": "4th & 14 · CAR 46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 95,
+            "yardStart": 46
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "2ND QUARTER",
+    "groups": [
+     {
+      "id": "11487",
+      "subtitle": "13 plays · 95 yards · 8:07",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "CAR"
+       },
+       {
+        "changed": true,
+        "score": "14",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "36",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Robinson rushed left guard for 5 yards. Tackled by N.Scott; C.Cherelus at ATL 10.",
+        "timeOfPlay": "0:59",
+        "title": "1st & 10 · ATL 5",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 90,
+            "yardStart": 95
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "37",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Robinson rushed left end for 19 yards. Tackled by T.Moehrig at ATL 29.",
+        "timeOfPlay": "0:19",
+        "title": "2nd & 5 · ATL 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 71,
+            "yardStart": 90
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "38",
+        "playDescription": "End Quarter 1",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "39",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed right end for 7 yards. Tackled by C.Rozeboom; N.Scott at ATL 36.",
+        "timeOfPlay": "15:00",
+        "title": "1st & 10 · ATL 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 64,
+            "yardStart": 71
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "40",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed left tackle for 6 yards. Tackled by C.Cherelus; N.Scott at ATL 42.",
+        "timeOfPlay": "14:31",
+        "title": "2nd & 4 · ATL 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 58,
+            "yardStart": 64
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "41",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Penix pass deep left complete. Catch made by D.Mooney for 20 yards. Tackled by J.Horn at CAR 38.",
+        "timeOfPlay": "13:58",
+        "title": "1st & 10 · ATL 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 38,
+            "yardStart": 58
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "42",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed left guard for 3 yards. Tackled by C.Rozeboom; B.Brown at CAR 35.",
+        "timeOfPlay": "13:22",
+        "title": "1st & 10 · CAR 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 35,
+            "yardStart": 38
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "43",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Penix pass short right complete. Catch made by D.London for 6 yards. Tackled by M.Jackson; C.Rozeboom at CAR 29.",
+        "timeOfPlay": "12:52",
+        "title": "2nd & 7 · CAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 29,
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "44",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed left tackle for yards. Tackled by B.Brown at CAR 30. PENALTY on CAR-B.Brown, Defensive Holding, 5 yards, accepted. No Play.",
+        "timeOfPlay": "12:13",
+        "title": "3rd & 1 · CAR 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 24,
+            "yardStart": 29
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "45",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Penix pass short left complete. Catch made by B.Robinson for 6 yards. Tackled by C.Rozeboom; T.Gipson at CAR 18.",
+        "timeOfPlay": "11:43",
+        "title": "1st & 10 · CAR 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 18,
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "46",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Allgeier rushed left tackle for yards. Tackled by M.Jackson at CAR 14. PENALTY on ATL-D.London, Illegal Block Above the Waist, 10 yards, declined. PENALTY on ATL-K.Pitts, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "11:00",
+        "title": "2nd & 4 · CAR 18",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 28,
+            "yardStart": 18
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "47",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Penix pass short left complete. Catch made by T.Allgeier for 4 yards. Tackled by C.Cherelus; D.Wonnum at CAR 24.",
+        "timeOfPlay": "10:30",
+        "title": "2nd & 14 · CAR 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 24,
+            "yardStart": 28
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "48",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Penix pass short right complete. Catch made by D.Mooney for 12 yards. Tackled by C.Thornton at CAR 12.",
+        "timeOfPlay": "9:42",
+        "title": "3rd & 10 · CAR 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 12,
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "49",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Penix pass short left complete. Catch made by B.Robinson for 11 yards. Tackled by N.Scott at CAR 1.",
+        "timeOfPlay": "8:57",
+        "title": "1st & 10 · CAR 12",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 1,
+            "yardStart": 12
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "50",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed left tackle for 0 yards. Tackled by N.Scourton at CAR 1.",
+        "timeOfPlay": "8:27",
+        "title": "1st & 1 · CAR 1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 1,
+            "yardStart": 1
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "51",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed left tackle for 1 yards. TOUCHDOWN.",
+        "timeOfPlay": "7:56",
+        "title": "2nd & 1 · CAR 1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 1
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "52",
+        "playDescription": "TV Timeout",
+        "timeOfPlay": "7:52",
+        "title": "TV Timeout"
+       },
+       {
+        "id": "53",
+        "periodOfPlay": "2ND",
+        "playDescription": "Z.Gonzalez extra point is good.",
+        "timeOfPlay": "7:52",
+        "title": "CAR 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "11500",
+      "subtitle": "3 plays · -11 yards · 2:28",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/32"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "CAR"
+       },
+       {
+        "changed": false,
+        "score": "14",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "54",
+        "periodOfPlay": "2ND",
+        "playDescription": "Z.Gonzalez kicks 65 yards from ATL 35 to the CAR End Zone. Touchback.",
+        "timeOfPlay": "7:52",
+        "title": "ATL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 35,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "55",
+        "periodOfPlay": "2ND",
+        "playDescription": "R.Dowdle rushed right end for yards. Tackled by K.Street at CAR 23. PENALTY on CAR-C.Zavala, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "7:52",
+        "title": "1st & 10 · CAR 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 10,
+            "yardStart": 20
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "56",
+        "periodOfPlay": "2ND",
+        "playDescription": "PENALTY on CAR-X.Legette, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "7:20",
+        "title": "1st & 20 · CAR 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 5,
+            "yardStart": 10
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "57",
+        "periodOfPlay": "2ND",
+        "playDescription": "R.Dowdle rushed right tackle for 2 yards. Tackled by J.Walker at CAR 7.",
+        "timeOfPlay": "6:55",
+        "title": "1st & 25 · CAR 5",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 7,
+            "yardStart": 5
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "58",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Young steps back to pass. Pass incomplete short left intended for T.McMillan.",
+        "timeOfPlay": "6:16",
+        "title": "2nd & 23 · CAR 7",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 7
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "59",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Young pass short right complete. Catch made by J.Sanders for 2 yards. Tackled by B.Bowman at CAR 9.",
+        "timeOfPlay": "6:11",
+        "title": "3rd & 23 · CAR 7",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 9,
+            "yardStart": 7
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "60",
+        "periodOfPlay": "2ND",
+        "playDescription": "S.Martin punts 50 yards to ATL 41, Center-J.Jansen. Out of bounds.",
+        "timeOfPlay": "5:35",
+        "title": "4th & 21 · CAR 9",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 59,
+            "yardStart": 9
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "11506",
+      "subtitle": "7 plays · 59 yards · 3:43",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "CAR"
+       },
+       {
+        "changed": true,
+        "score": "21",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "62",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed right tackle for 11 yards. Tackled by C.Rozeboom; N.Scott at CAR 48.",
+        "timeOfPlay": "5:24",
+        "title": "1st & 10 · ATL 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 48,
+            "yardStart": 59
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "63",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed right tackle for 4 yards. Tackled by C.Cherelus; C.Rozeboom at CAR 44.",
+        "timeOfPlay": "4:44",
+        "title": "1st & 10 · CAR 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 44,
+            "yardStart": 48
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "64",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed left tackle for 3 yards. Tackled by T.Moehrig at CAR 41.",
+        "timeOfPlay": "4:06",
+        "title": "2nd & 6 · CAR 44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 41,
+            "yardStart": 44
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "65",
+        "periodOfPlay": "2ND",
+        "playDescription": "PENALTY on ATL-C.Lindstrom, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "3:16",
+        "title": "3rd & 3 · CAR 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 46,
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "66",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Penix pass short left complete. Catch made by D.London for 9 yards. Tackled by C.Rozeboom; C.Cherelus at CAR 37.",
+        "timeOfPlay": "2:55",
+        "title": "3rd & 8 · CAR 46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 37,
+            "yardStart": 46
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "67",
+        "playDescription": "Timeout #1 by ATL.",
+        "timeOfPlay": "2:09",
+        "title": "Timeout"
+       },
+       {
+        "id": "68",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete deep right intended for D.London. PENALTY on CAR-T.Moehrig, Illegal Use of Hands / Defense, 5 yards, accepted. No Play.",
+        "timeOfPlay": "2:09",
+        "title": "1st & 10 · CAR 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 32,
+            "yardStart": 37
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "69",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed right end for 8 yards. Tackled by C.Rozeboom at CAR 24.",
+        "timeOfPlay": "2:04",
+        "title": "1st & 10 · CAR 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 24,
+            "yardStart": 32
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "70",
+        "playDescription": "Two minute warning.",
+        "timeOfPlay": "1:48",
+        "title": "Two Minute Warning"
+       },
+       {
+        "id": "71",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Penix pass deep left complete. Catch made by D.London for 22 yards. Tackled by N.Scott; C.Thornton at CAR 2. PENALTY on CAR-C.Thornton, Defensive Holding, 5 yards, declined.",
+        "timeOfPlay": "1:48",
+        "title": "2nd & 2 · CAR 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 2,
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "72",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete short right intended for. PENALTY on CAR-J.Horn, Defensive Holding, 1 yards, accepted. No Play.",
+        "timeOfPlay": "1:45",
+        "title": "1st & 2 · CAR 2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 1,
+            "yardStart": 2
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "73",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Allgeier rushed right tackle for 1 yards. TOUCHDOWN.",
+        "timeOfPlay": "1:45",
+        "title": "1st & 1 · CAR 1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 1
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "74",
+        "periodOfPlay": "2ND",
+        "playDescription": "Z.Gonzalez extra point is good.",
+        "timeOfPlay": "1:41",
+        "title": "CAR 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "11516",
+      "subtitle": "7 plays · 58 yards · 1:16",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/32"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "10",
+        "title": "CAR"
+       },
+       {
+        "changed": false,
+        "score": "21",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "76",
+        "periodOfPlay": "2ND",
+        "playDescription": "Z.Gonzalez kicks 60 yards from ATL 35 to the CAR 5. T.Etienne returns the kickoff. Tackled by R.Harrison at CAR 31.",
+        "timeOfPlay": "1:41",
+        "title": "ATL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 5,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 31,
+            "yardStart": 5
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "77",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Young pass short middle complete [J.Pearce]. Catch made by T.McMillan for 39 yards. Pushed out of bounds by B.Bowman at ATL 30.",
+        "timeOfPlay": "1:35",
+        "title": "1st & 10 · CAR 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 70,
+            "yardStart": 31
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "78",
+        "periodOfPlay": "2ND",
+        "playDescription": "C.Hubbard rushed left tackle for 6 yards. Tackled by R.Harrison at ATL 24.",
+        "timeOfPlay": "1:25",
+        "title": "1st & 10 · ATL 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 76,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "79",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Young pass short right complete. Catch made by C.Hubbard for 7 yards. Pushed out of bounds by J.Bates at ATL 17.",
+        "timeOfPlay": "0:47",
+        "title": "2nd & 4 · ATL 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 83,
+            "yardStart": 76
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "80",
+        "periodOfPlay": "2ND",
+        "playDescription": "C.Hubbard rushed right guard for 6 yards. Tackled by J.Bates at ATL 11.",
+        "timeOfPlay": "0:42",
+        "title": "1st & 10 · ATL 17",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 89,
+            "yardStart": 83
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "81",
+        "playDescription": "Timeout #1 by CAR.",
+        "timeOfPlay": "0:37",
+        "title": "Timeout"
+       },
+       {
+        "id": "82",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Young steps back to pass. Pass incomplete short left intended for C.Hubbard.",
+        "timeOfPlay": "0:37",
+        "title": "2nd & 4 · ATL 11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 89
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "83",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Young steps back to pass. Pass incomplete short middle intended for T.McMillan (X.Watts).",
+        "timeOfPlay": "0:32",
+        "title": "3rd & 4 · ATL 11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 89
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "84",
+        "periodOfPlay": "2ND",
+        "playDescription": "R.Fitzgerald 29 yard field goal attempt is good, Center-J.Jansen, Holder-S.Martin.",
+        "timeOfPlay": "0:28",
+        "title": "4th & 4 · ATL 11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 89
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "11525",
+      "subtitle": "2 plays · 18 yards · 0:25",
+      "title": "END OF HALF",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "10",
+        "title": "CAR"
+       },
+       {
+        "changed": false,
+        "score": "21",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "86",
+        "periodOfPlay": "2ND",
+        "playDescription": "R.Fitzgerald kicks 59 yards from CAR 35 to the ATL 6. N.Brooks returns the kickoff. Tackled by B.Martin-Scott at ATL 29.",
+        "timeOfPlay": "0:25",
+        "title": "CAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 94,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 71,
+            "yardStart": 94
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "87",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed right end for 3 yards. Tackled by C.Smith-Wade at ATL 32.",
+        "timeOfPlay": "0:19",
+        "title": "1st & 10 · ATL 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 68,
+            "yardStart": 71
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "88",
+        "playDescription": "Timeout #2 by ATL.",
+        "timeOfPlay": "0:09",
+        "title": "Timeout"
+       },
+       {
+        "id": "89",
+        "playDescription": "Timeout #2 by CAR.",
+        "timeOfPlay": "0:09",
+        "title": "Timeout"
+       },
+       {
+        "id": "90",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed left guard for 15 yards. Tackled by N.Scourton; C.Smith-Wade at ATL 47.",
+        "timeOfPlay": "0:09",
+        "title": "2nd & 7 · ATL 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 53,
+            "yardStart": 68
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "91",
+        "playDescription": "End Quarter 2",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "3RD QUARTER",
+    "groups": [
+     {
+      "id": "11534",
+      "subtitle": "5 plays · 68 yards · 2:56",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/32"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "16",
+        "title": "CAR"
+       },
+       {
+        "changed": false,
+        "score": "21",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "92",
+        "periodOfPlay": "3RD",
+        "playDescription": "Z.Gonzalez kicks 59 yards from ATL 35 to the CAR 6. C.Hubbard returns the kickoff. Tackled by D.Hellams at CAR 32.",
+        "timeOfPlay": "15:00",
+        "title": "ATL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 6,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 32,
+            "yardStart": 6
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "93",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Young pass short left complete. Catch made by R.Dowdle for 4 yards. Pushed out of bounds by J.Walker at CAR 36.",
+        "timeOfPlay": "14:55",
+        "title": "1st & 10 · CAR 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 36,
+            "yardStart": 32
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "94",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Young pass short right complete. Catch made by J.Coker for 5 yards. Tackled by A.Terrell at CAR 41.",
+        "timeOfPlay": "14:16",
+        "title": "2nd & 6 · CAR 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 41,
+            "yardStart": 36
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "95",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Dowdle rushed left guard for 2 yards. Tackled by R.Harrison at CAR 43.",
+        "timeOfPlay": "13:39",
+        "title": "3rd & 1 · CAR 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 43,
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "96",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Young pass deep left complete. Catch made by J.Coker for 21 yards. Tackled by N.Brooks at ATL 36.",
+        "timeOfPlay": "12:58",
+        "title": "1st & 10 · CAR 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 64,
+            "yardStart": 43
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "97",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Young pass deep left complete. Catch made by X.Legette for 36 yards. TOUCHDOWN.",
+        "timeOfPlay": "12:10",
+        "title": "1st & 10 · ATL 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 64
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "98",
+        "periodOfPlay": "3RD",
+        "playDescription": "TWO-POINT CONVERSION ATTEMPT. B.Young steps back to pass. Sacked at ATL 7 for yards (J.Pearce). TWO-POINT ATTEMPT FAILS.",
+        "timeOfPlay": "12:04",
+        "title": "ATL 2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "2-PT CONV - NO GOOD",
+            "yardStart": 98
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "11540",
+      "subtitle": "0 plays · 0 yards · 0:03",
+      "title": "UNKNOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "16",
+        "title": "CAR"
+       },
+       {
+        "changed": false,
+        "score": "21",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "100",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Fitzgerald kicks 50 yards from CAR 35 to the ATL 15. N.Brooks MUFFS catch. Fumble RECOVERED by CAR-N.Brooks at ATL 16. N.Brooks FUMBLES, forced by B.Martin-Scott. Fumble RECOVERED by CAR-P.Umanmielen at ATL 32.",
+        "timeOfPlay": "12:04",
+        "title": "CAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 68,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 68,
+            "yardStart": 68
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "11541",
+      "subtitle": "6 plays · 23 yards · 3:52",
+      "title": "DOWNS",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/32"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "16",
+        "title": "CAR"
+       },
+       {
+        "changed": false,
+        "score": "21",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "101",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Young pass short right complete. Catch made by X.Legette for 5 yards. Tackled by B.Bowman at ATL 27.",
+        "timeOfPlay": "12:01",
+        "title": "1st & 10 · ATL 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 73,
+            "yardStart": 68
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "102",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Dowdle rushed left end for yards. Tackled by L.London; D.Onyemata at ATL 28. PENALTY on CAR-J.Coker, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "11:25",
+        "title": "2nd & 5 · ATL 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 63,
+            "yardStart": 73
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "103",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Young pass short middle complete. Catch made by X.Legette for 20 yards. Pushed out of bounds by A.Terrell at ATL 17.",
+        "timeOfPlay": "10:57",
+        "title": "2nd & 15 · ATL 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 83,
+            "yardStart": 63
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "104",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Dowdle rushed right guard for 3 yards. Tackled by K.Kareem at ATL 14.",
+        "timeOfPlay": "10:13",
+        "title": "1st & 10 · ATL 17",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 86,
+            "yardStart": 83
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "105",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Dowdle rushed right end for 3 yards. Tackled by A.Terrell; K.Street at ATL 11.",
+        "timeOfPlay": "9:47",
+        "title": "2nd & 7 · ATL 14",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 89,
+            "yardStart": 86
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "106",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Young pass short right complete. Catch made by J.Sanders for 3 yards. Tackled by C.Bryant at ATL 8.",
+        "timeOfPlay": "9:03",
+        "title": "3rd & 4 · ATL 11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 92,
+            "yardStart": 89
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "107",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Young steps back to pass. Sacked at ATL 9 for -1 yards (K.Elliss).",
+        "timeOfPlay": "8:15",
+        "title": "4th & 1 · ATL 8",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 91,
+            "yardStart": 92
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "11548",
+      "subtitle": "6 plays · 18 yards · 2:57",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "16",
+        "title": "CAR"
+       },
+       {
+        "changed": false,
+        "score": "21",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "109",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Robinson rushed right end for 1 yards. Tackled by T.Moehrig; N.Scourton at ATL 10.",
+        "timeOfPlay": "8:09",
+        "title": "1st & 10 · ATL 9",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 90,
+            "yardStart": 91
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "110",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Penix pass short right complete. Catch made by K.Pitts for 7 yards. Pushed out of bounds by N.Scott at ATL 17.",
+        "timeOfPlay": "7:28",
+        "title": "2nd & 9 · ATL 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 83,
+            "yardStart": 90
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "111",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Penix pass short right complete. Catch made by D.London for 5 yards. Pushed out of bounds by T.Moehrig at ATL 22.",
+        "timeOfPlay": "6:48",
+        "title": "3rd & 2 · ATL 17",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 78,
+            "yardStart": 83
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "112",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Penix scrambles right end for 9 yards. Pushed out of bounds by N.Scourton at ATL 31.",
+        "timeOfPlay": "6:04",
+        "title": "1st & 10 · ATL 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 69,
+            "yardStart": 78
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "113",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Robinson rushed right end for yards. Tackled by A.Robinson at ATL 33. PENALTY on ATL-C.Lindstrom, Offensive Holding, 9 yards, accepted. No Play.",
+        "timeOfPlay": "5:56",
+        "title": "2nd & 1 · ATL 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 78,
+            "yardStart": 69
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "114",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete short left intended for D.Mooney.",
+        "timeOfPlay": "5:27",
+        "title": "2nd & 10 · ATL 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 78
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "115",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete short left intended for [T.Moehrig].",
+        "timeOfPlay": "5:22",
+        "title": "3rd & 10 · ATL 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 78
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "116",
+        "periodOfPlay": "3RD",
+        "playDescription": "PENALTY on CAR-I.Mukuamu, Neutral Zone Infraction, 5 yards, accepted. No Play.",
+        "timeOfPlay": "5:20",
+        "title": "4th & 10 · ATL 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 73,
+            "yardStart": 78
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "117",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Pinion punts 52 yards to CAR 21, Center-L.McCullough. Fair catch by T.Etienne.",
+        "timeOfPlay": "5:20",
+        "title": "4th & 5 · ATL 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 21,
+            "yardStart": 73
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "11552",
+      "subtitle": "10 plays · 63 yards · 4:14",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/32"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "19",
+        "title": "CAR"
+       },
+       {
+        "changed": false,
+        "score": "21",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "119",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Dowdle rushed right guard for 4 yards. Tackled by B.Dorlus; R.Harrison at CAR 25.",
+        "timeOfPlay": "5:12",
+        "title": "1st & 10 · CAR 21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 25,
+            "yardStart": 21
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "120",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Young pass short right complete. Catch made by R.Dowdle for 15 yards. Pushed out of bounds by J.Bates at CAR 40.",
+        "timeOfPlay": "4:36",
+        "title": "2nd & 6 · CAR 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 40,
+            "yardStart": 25
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "121",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Young steps back to pass. Pass incomplete short middle intended for.",
+        "timeOfPlay": "3:59",
+        "title": "1st & 10 · CAR 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 40
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "122",
+        "periodOfPlay": "3RD",
+        "playDescription": "C.Hubbard rushed left tackle for 6 yards. Tackled by R.Harrison; N.Brooks at CAR 46.",
+        "timeOfPlay": "3:56",
+        "title": "2nd & 10 · CAR 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 46,
+            "yardStart": 40
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "123",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Young pass short left complete. Catch made by T.McMillan for 9 yards. Tackled by A.Terrell at ATL 45.",
+        "timeOfPlay": "3:16",
+        "title": "3rd & 4 · CAR 46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 55,
+            "yardStart": 46
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "124",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Young pass deep left complete. Catch made by M.Evans for 25 yards. Tackled by X.Watts; N.Brooks at ATL 20.",
+        "timeOfPlay": "2:39",
+        "title": "1st & 10 · ATL 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 80,
+            "yardStart": 55
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "125",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Dowdle rushed right end for 4 yards. Tackled by A.Ebiketie; J.Bates at ATL 16.",
+        "timeOfPlay": "1:56",
+        "title": "1st & 10 · ATL 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 84,
+            "yardStart": 80
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "126",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Young steps back to pass. Pass incomplete short right intended for T.Tremble.",
+        "timeOfPlay": "1:08",
+        "title": "2nd & 6 · ATL 16",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 84
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "127",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Young steps back to pass. Pass incomplete deep left intended for X.Legette (A.Terrell).",
+        "timeOfPlay": "1:06",
+        "title": "3rd & 6 · ATL 16",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 84
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "128",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Fitzgerald 34 yard field goal attempt is good, Center-J.Jansen, Holder-S.Martin.",
+        "timeOfPlay": "1:01",
+        "title": "4th & 6 · ATL 16",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 84
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "4TH QUARTER",
+    "groups": [
+     {
+      "id": "11561",
+      "subtitle": "6 plays · 19 yards · 3:45",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "19",
+        "title": "CAR"
+       },
+       {
+        "changed": false,
+        "score": "21",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "130",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Fitzgerald kicks 61 yards from CAR 35 to the ATL 4. N.Brooks returns the kickoff. Tackled by M.Njongmeta at ATL 22.",
+        "timeOfPlay": "0:58",
+        "title": "CAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 96,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 78,
+            "yardStart": 96
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "131",
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Allgeier rushed left guard for 5 yards. Tackled by T.Moehrig at ATL 27.",
+        "timeOfPlay": "0:53",
+        "title": "1st & 10 · ATL 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 73,
+            "yardStart": 78
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "132",
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Allgeier rushed right guard for 4 yards. Tackled by T.Gipson; T.Moehrig at ATL 31.",
+        "timeOfPlay": "0:17",
+        "title": "2nd & 5 · ATL 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 69,
+            "yardStart": 73
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "133",
+        "playDescription": "End Quarter 3",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "134",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Cousins rushed up the middle for 2 yards. Tackled by B.Brown; C.Cherelus at ATL 33.",
+        "timeOfPlay": "15:00",
+        "title": "3rd & 1 · ATL 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 67,
+            "yardStart": 69
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "135",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Cousins pass short left complete. Catch made by T.Allgeier for 2 yards. Tackled by T.Moehrig at ATL 35.",
+        "timeOfPlay": "14:30",
+        "title": "1st & 10 · ATL 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 65,
+            "yardStart": 67
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "136",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Cousins pass short left complete. Catch made by K.Pitts for 7 yards. Tackled by J.Horn at ATL 42.",
+        "timeOfPlay": "13:47",
+        "title": "2nd & 8 · ATL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 58,
+            "yardStart": 65
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "137",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Robinson rushed right guard for -1 yards. Tackled by C.Rozeboom, L.Ray at ATL 41.",
+        "timeOfPlay": "13:06",
+        "title": "3rd & 1 · ATL 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 59,
+            "yardStart": 58
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "138",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Pinion punts 43 yards to CAR 16, Center-L.McCullough. Fair catch by T.Etienne.",
+        "timeOfPlay": "12:20",
+        "title": "4th & 2 · ATL 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 16,
+            "yardStart": 59
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "11571",
+      "subtitle": "4 plays · 25 yards · 1:59",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/32"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "19",
+        "title": "CAR"
+       },
+       {
+        "changed": false,
+        "score": "21",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "140",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Young pass deep left complete. Catch made by T.McMillan for 29 yards. Pushed out of bounds by N.Brooks at CAR 45.",
+        "timeOfPlay": "12:13",
+        "title": "1st & 10 · CAR 16",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 45,
+            "yardStart": 16
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "141",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Dowdle rushed left guard for 3 yards. Tackled by K.Street at CAR 48.",
+        "timeOfPlay": "11:38",
+        "title": "1st & 10 · CAR 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 48,
+            "yardStart": 45
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "142",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Young steps back to pass. Pass incomplete short right intended for X.Legette (N.Brooks).",
+        "timeOfPlay": "10:59",
+        "title": "2nd & 7 · CAR 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 48
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "143",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Young steps back to pass. Sacked at CAR 41 for -7 yards (R.Harrison).",
+        "timeOfPlay": "10:56",
+        "title": "3rd & 7 · CAR 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 41,
+            "yardStart": 48
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "144",
+        "periodOfPlay": "4TH",
+        "playDescription": "S.Martin punts 41 yards to ATL 18, Center-J.Jansen. Downed by N.Scott.",
+        "timeOfPlay": "10:21",
+        "title": "4th & 14 · CAR 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 82,
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "11575",
+      "subtitle": "6 plays · 21 yards · 2:20",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "19",
+        "title": "CAR"
+       },
+       {
+        "changed": false,
+        "score": "21",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "146",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Robinson rushed left tackle for 7 yards. Tackled by C.Thornton; N.Scott at ATL 25.",
+        "timeOfPlay": "10:14",
+        "title": "1st & 10 · ATL 18",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 75,
+            "yardStart": 82
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "147",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Robinson rushed right end for -5 yards. Tackled by N.Scourton at ATL 20.",
+        "timeOfPlay": "9:46",
+        "title": "2nd & 3 · ATL 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 80,
+            "yardStart": 75
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "148",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Cousins steps back to pass. Pass incomplete short middle intended for D.London. PENALTY on CAR-J.Horn, Defensive Pass Interference, 8 yards, accepted. No Play.",
+        "timeOfPlay": "9:05",
+        "title": "3rd & 8 · ATL 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 72,
+            "yardStart": 80
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "149",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Cousins pass short left complete. Catch made by B.Robinson for 11 yards. Tackled by M.Jackson at ATL 39.",
+        "timeOfPlay": "9:01",
+        "title": "1st & 10 · ATL 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 61,
+            "yardStart": 72
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "150",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Cousins steps back to pass. Pass incomplete short right intended for B.Robinson.",
+        "timeOfPlay": "8:17",
+        "title": "1st & 10 · ATL 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "151",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Cousins steps back to pass. Pass incomplete short middle intended for D.Mooney (C.Thornton).",
+        "timeOfPlay": "8:11",
+        "title": "2nd & 10 · ATL 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "152",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Cousins steps back to pass. Pass incomplete deep middle intended for D.Mooney (C.Thornton).",
+        "timeOfPlay": "8:06",
+        "title": "3rd & 10 · ATL 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "153",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Pinion punts 54 yards to CAR 7, Center-L.McCullough. Out of bounds.",
+        "timeOfPlay": "8:01",
+        "title": "4th & 10 · ATL 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 7,
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "11584",
+      "subtitle": "11 plays · 32 yards · 4:52",
+      "title": "DOWNS",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/32"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "19",
+        "title": "CAR"
+       },
+       {
+        "changed": false,
+        "score": "21",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "155",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Dowdle rushed right tackle for 6 yards. Tackled by R.Harrison at CAR 13.",
+        "timeOfPlay": "7:54",
+        "title": "1st & 10 · CAR 7",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 13,
+            "yardStart": 7
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "156",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Young steps back to pass. Pass incomplete short right intended for X.Legette [A.Ebiketie].",
+        "timeOfPlay": "7:10",
+        "title": "2nd & 4 · CAR 13",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 13
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "157",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Young pass short middle complete [J.Walker]. Catch made by J.Coker for 11 yards. Tackled by N.Brooks at CAR 24.",
+        "timeOfPlay": "7:05",
+        "title": "3rd & 4 · CAR 13",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 24,
+            "yardStart": 13
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "158",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Dowdle rushed left end for 1 yards. Tackled by L.London at CAR 25.",
+        "timeOfPlay": "6:27",
+        "title": "1st & 10 · CAR 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 25,
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "159",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Young steps back to pass. Pass incomplete short left intended for T.McMillan (A.Terrell).",
+        "timeOfPlay": "5:42",
+        "title": "2nd & 9 · CAR 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 25
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "160",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Young pass short right complete. Catch made by T.McMillan for 9 yards. Tackled by J.Walker at CAR 34. Atlanta challenged the first down and the play was overturned. B.Young pass short right complete [J.Pearce]. Catch made by T.McMillan for 8 yards. Tackled by J.Walker at CAR 33.",
+        "timeOfPlay": "5:38",
+        "title": "3rd & 9 · CAR 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 33,
+            "yardStart": 25
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "161",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Dowdle rushed left guard for 2 yards. Tackled by R.Harrison at CAR 35.",
+        "timeOfPlay": "5:13",
+        "title": "4th & 1 · CAR 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 35,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "162",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Young steps back to pass. Pass incomplete short right intended for X.Legette (N.Brooks).",
+        "timeOfPlay": "4:37",
+        "title": "1st & 10 · CAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "163",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Young pass short right complete. Catch made by R.Dowdle for 6 yards. Tackled by J.Bates; D.Onyemata at CAR 41.",
+        "timeOfPlay": "4:34",
+        "title": "2nd & 10 · CAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 41,
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "164",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Hubbard rushed left tackle for 3 yards. Tackled by R.Harrison at CAR 44.",
+        "timeOfPlay": "3:51",
+        "title": "3rd & 4 · CAR 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 44,
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "165",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Young steps back to pass. Sacked at CAR 39 for -5 yards (L.London).",
+        "timeOfPlay": "3:07",
+        "title": "4th & 1 · CAR 44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 39,
+            "yardStart": 44
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "11591",
+      "subtitle": "4 plays · 5 yards · 0:19",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "19",
+        "title": "CAR"
+       },
+       {
+        "changed": true,
+        "score": "24",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "167",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Robinson rushed right end for 2 yards. Tackled by J.Horn; A.Robinson at CAR 37.",
+        "timeOfPlay": "3:02",
+        "title": "1st & 10 · CAR 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 37,
+            "yardStart": 39
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "168",
+        "playDescription": "Timeout #1 by CAR.",
+        "timeOfPlay": "2:57",
+        "title": "Timeout"
+       },
+       {
+        "id": "169",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Robinson rushed left end for 3 yards. Tackled by C.Cherelus at CAR 34.",
+        "timeOfPlay": "2:57",
+        "title": "2nd & 8 · CAR 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 34,
+            "yardStart": 37
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "170",
+        "playDescription": "Timeout #2 by CAR.",
+        "timeOfPlay": "2:52",
+        "title": "Timeout"
+       },
+       {
+        "id": "171",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Cousins steps back to pass. Pass incomplete short left intended for D.London (C.Cherelus).",
+        "timeOfPlay": "2:52",
+        "title": "3rd & 5 · CAR 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 34
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "172",
+        "periodOfPlay": "4TH",
+        "playDescription": "Z.Gonzalez 52 yard field goal attempt is good, Center-L.McCullough, Holder-B.Pinion.",
+        "timeOfPlay": "2:48",
+        "title": "4th & 5 · CAR 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "FG - GOOD",
+            "yardEnd": -5,
+            "yardStart": 34
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "11595",
+      "subtitle": "9 plays · 65 yards · 1:35",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/32"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "27",
+        "title": "CAR"
+       },
+       {
+        "changed": false,
+        "score": "24",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "173",
+        "periodOfPlay": "4TH",
+        "playDescription": "Z.Gonzalez kicks 65 yards from ATL 35 to the CAR End Zone. Touchback.",
+        "timeOfPlay": "2:43",
+        "title": "ATL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 35,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "174",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Young steps back to pass. Pass incomplete short left intended for R.Dowdle (R.Harrison).",
+        "timeOfPlay": "2:43",
+        "title": "1st & 10 · CAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "175",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Young pass short middle complete. Catch made by B.Tremayne for 6 yards. Tackled by R.Harrison at CAR 41.",
+        "timeOfPlay": "2:38",
+        "title": "2nd & 10 · CAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 41,
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "176",
+        "playDescription": "Two minute warning.",
+        "timeOfPlay": "2:00",
+        "title": "Two Minute Warning"
+       },
+       {
+        "id": "177",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Young steps back to pass. Pass incomplete short right intended for C.Hubbard.",
+        "timeOfPlay": "2:00",
+        "title": "3rd & 4 · CAR 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "178",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Young pass short middle complete. Catch made by J.Sanders for 10 yards. Tackled by X.Watts at ATL 49.",
+        "timeOfPlay": "1:54",
+        "title": "4th & 4 · CAR 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 51,
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "179",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Young pass short left complete. Catch made by B.Tremayne for 11 yards. B.Tremayne ran out of bounds.",
+        "timeOfPlay": "1:32",
+        "title": "1st & 10 · ATL 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 62,
+            "yardStart": 51
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "180",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Young pass short left complete. Catch made by R.Dowdle for 38 yards. TOUCHDOWN. The Replay Official reviewed the runner was in bounds and the play was overturned. B.Young pass short left complete. Catch made by R.Dowdle for 28 yards. Pushed out of bounds by J.Bates at ATL 10.",
+        "timeOfPlay": "1:29",
+        "title": "1st & 10 · ATL 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 90,
+            "yardStart": 62
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "181",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Dowdle rushed left guard for -2 yards. Tackled by R.Orhorhoro at ATL 12.",
+        "timeOfPlay": "1:23",
+        "title": "1st & 10 · ATL 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 88,
+            "yardStart": 90
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "182",
+        "playDescription": "Timeout #1 by ATL.",
+        "timeOfPlay": "1:19",
+        "title": "Timeout"
+       },
+       {
+        "id": "183",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Young steps back to pass. Pass incomplete short left intended for R.Dowdle.",
+        "timeOfPlay": "1:19",
+        "title": "2nd & 12 · ATL 12",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 88
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "184",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Young pass short left complete. Catch made by T.McMillan for 12 yards. TOUCHDOWN.",
+        "timeOfPlay": "1:15",
+        "title": "3rd & 12 · ATL 12",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 88
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "185",
+        "periodOfPlay": "4TH",
+        "playDescription": "TWO-POINT CONVERSION ATTEMPT. B.Young steps back to pass. Catch made by J.Coker for yards. TWO-POINT ATTEMPT SUCCEEDS.",
+        "timeOfPlay": "1:08",
+        "title": "ATL 2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "2-PT CONV - GOOD",
+            "yardEnd": 105,
+            "yardStart": 98
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "11605",
+      "subtitle": "6 plays · 28 yards · 0:52",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "27",
+        "title": "CAR"
+       },
+       {
+        "changed": true,
+        "score": "27",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "186",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Fitzgerald kicks 59 yards from CAR 35 to the ATL 6. J.Agnew returns the kickoff. Tackled by C.Smith-Wade at ATL 45.",
+        "timeOfPlay": "1:08",
+        "title": "CAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 94,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 55,
+            "yardStart": 94
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "187",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Cousins pass short right complete. Catch made by D.Sills for 11 yards. Pushed out of bounds by J.Horn at CAR 44.",
+        "timeOfPlay": "1:01",
+        "title": "1st & 10 · ATL 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 44,
+            "yardStart": 55
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "188",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Cousins pass short middle complete. Catch made by B.Robinson for 11 yards. Tackled by C.Cherelus at CAR 33.",
+        "timeOfPlay": "0:56",
+        "title": "1st & 10 · CAR 44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 33,
+            "yardStart": 44
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "189",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Cousins steps back to pass. Pass incomplete short left intended for D.Sills (T.Wharton).",
+        "timeOfPlay": "0:35",
+        "title": "1st & 10 · CAR 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "190",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Cousins pass short right complete. Catch made by D.London for 6 yards. Tackled by C.Thornton at CAR 27.",
+        "timeOfPlay": "0:30",
+        "title": "2nd & 10 · CAR 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 27,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "191",
+        "playDescription": "Timeout #2 by ATL.",
+        "timeOfPlay": "0:26",
+        "title": "Timeout"
+       },
+       {
+        "id": "192",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Cousins steps back to pass. Pass incomplete deep left intended for D.London (M.Jackson).",
+        "timeOfPlay": "0:26",
+        "title": "3rd & 4 · CAR 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 27
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "193",
+        "periodOfPlay": "4TH",
+        "playDescription": "Z.Gonzalez 45 yard field goal attempt is good, Center-L.McCullough, Holder-B.Pinion.",
+        "timeOfPlay": "0:21",
+        "title": "4th & 4 · CAR 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "FG - GOOD",
+            "yardEnd": -5,
+            "yardStart": 27
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "11610",
+      "subtitle": "1 plays · -1 yard · 0:16",
+      "title": "END OF HALF",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/32"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "27",
+        "title": "CAR"
+       },
+       {
+        "changed": false,
+        "score": "27",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "194",
+        "periodOfPlay": "4TH",
+        "playDescription": "Z.Gonzalez kicks 62 yards from ATL 35 to the CAR 3. C.Hubbard returns the kickoff. Tackled by J.Bertrand; K.Hodge at CAR 28.",
+        "timeOfPlay": "0:16",
+        "title": "ATL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 3,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 28,
+            "yardStart": 3
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "195",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Young kneels at the CAR 27.",
+        "timeOfPlay": "0:11",
+        "title": "1st & 10 · CAR 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 27,
+            "yardStart": 28
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "196",
+        "playDescription": "End Quarter 4",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "OVERTIME",
+    "groups": [
+     {
+      "id": "11615",
+      "subtitle": "3 plays · -1 yard · 1:15",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "27",
+        "title": "CAR"
+       },
+       {
+        "changed": false,
+        "score": "27",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "197",
+        "periodOfPlay": "OT",
+        "playDescription": "R.Fitzgerald kicks 65 yards from CAR 35 to the ATL End Zone. Touchback.",
+        "timeOfPlay": "10:00",
+        "title": "CAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 65,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "198",
+        "periodOfPlay": "OT",
+        "playDescription": "B.Robinson rushed left tackle for 4 yards. Tackled by C.Cherelus; T.Moehrig at ATL 24.",
+        "timeOfPlay": "10:00",
+        "title": "1st & 10 · ATL 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 76,
+            "yardStart": 80
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "199",
+        "periodOfPlay": "OT",
+        "playDescription": "K.Cousins pass short right complete. Catch made by B.Robinson for yards. Tackled by C.Thornton at ATL 37. PENALTY on ATL-R.Neuzil, Ineligible Downfield Pass, 5 yards, accepted. No Play.",
+        "timeOfPlay": "9:28",
+        "title": "2nd & 6 · ATL 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 81,
+            "yardStart": 76
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "200",
+        "periodOfPlay": "OT",
+        "playDescription": "K.Cousins steps back to pass. Pass incomplete short left intended for K.Pitts.",
+        "timeOfPlay": "9:06",
+        "title": "2nd & 11 · ATL 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 81
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "201",
+        "periodOfPlay": "OT",
+        "playDescription": "K.Cousins steps back to pass. Pass incomplete deep middle intended for K.Hodge.",
+        "timeOfPlay": "9:02",
+        "title": "3rd & 11 · ATL 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 81
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "202",
+        "periodOfPlay": "OT",
+        "playDescription": "B.Pinion punts 51 yards to CAR 30, Center-L.McCullough. Downed by D.Hellams.",
+        "timeOfPlay": "8:57",
+        "title": "4th & 11 · ATL 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 30,
+            "yardStart": 81
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "11616",
+      "subtitle": "6 plays · 60 yards · 3:35",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/32"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "30",
+        "title": "CAR"
+       },
+       {
+        "changed": false,
+        "score": "27",
+        "title": "ATL"
+       }
+      ],
+      "plays": [
+       {
+        "id": "203",
+        "periodOfPlay": "OT",
+        "playDescription": "R.Dowdle rushed left guard for 1 yards. Tackled by D.Onyemata at CAR 31.",
+        "timeOfPlay": "8:45",
+        "title": "1st & 10 · CAR 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 31,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "204",
+        "periodOfPlay": "OT",
+        "playDescription": "B.Young pass short right complete. Catch made by T.Tremble for 54 yards. Tackled by K.Elliss at ATL 15.",
+        "timeOfPlay": "8:06",
+        "title": "2nd & 9 · CAR 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 85,
+            "yardStart": 31
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "205",
+        "periodOfPlay": "OT",
+        "playDescription": "R.Dowdle rushed left guard for 3 yards. Tackled by L.London at ATL 12.",
+        "timeOfPlay": "7:14",
+        "title": "1st & 10 · ATL 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 88,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "206",
+        "periodOfPlay": "OT",
+        "playDescription": "R.Dowdle rushed left guard for 1 yards. Tackled by K.Street at ATL 11.",
+        "timeOfPlay": "6:33",
+        "title": "2nd & 7 · ATL 12",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 89,
+            "yardStart": 88
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "207",
+        "periodOfPlay": "OT",
+        "playDescription": "R.Dowdle rushed left guard for 1 yards. Tackled by D.Onyemata; J.Pearce at ATL 10.",
+        "timeOfPlay": "5:57",
+        "title": "3rd & 6 · ATL 11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 90,
+            "yardStart": 89
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "208",
+        "periodOfPlay": "OT",
+        "playDescription": "R.Fitzgerald 28 yard field goal attempt is good, Center-J.Jansen, Holder-S.Martin.",
+        "timeOfPlay": "5:13",
+        "title": "4th & 5 · ATL 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 90
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+}

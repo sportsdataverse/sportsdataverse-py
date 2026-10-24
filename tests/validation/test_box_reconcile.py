@@ -104,6 +104,23 @@ def _mutate(box: dict, fn) -> dict:
     return out
 
 
+def test_standing_builder_crash_is_a_marker_not_lower_coverage(nfl_game, monkeypatch):
+    """C-L52: the guard turned a builder crash into fewer checks with no trace (106 -> 88 on this game)."""
+    import sportsdataverse.football.usage_box as usage_box
+
+    plays, _s, box = nfl_game
+
+    def boom(frame):
+        raise pl.exceptions.SchemaError("builder broke")
+
+    monkeypatch.setattr(usage_box, "_standing_scrimmage", boom)
+    results = _by_rule(plays, box)
+    marker = results["box.standing_scrimmage_built"]
+    assert (marker.n_checked, marker.n_violations, marker.severity) == (1, 1, Severity.WARN)
+    assert marker.samples == [{"error": "SchemaError: builder broke"}]
+    assert set(results) == set(RULES) | {"box.standing_scrimmage_built"}
+
+
 def test_team_total_that_disagrees_with_the_plays_fires(nfl_game):
     plays, _s, box = nfl_game
     bad = _mutate(box, lambda b: b["team"][0].update(scrimmage_plays=b["team"][0]["scrimmage_plays"] + 3))

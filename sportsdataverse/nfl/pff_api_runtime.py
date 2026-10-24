@@ -21,7 +21,7 @@ logged. The account has a per-minute read budget shared by every client holding 
 details}}``): 404 -> :class:`~sportsdataverse.errors.NoDataError`; 400/422 ->
 :class:`ValueError` (the request itself was rejected); 401/403/429/5xx that outlive the
 retries -> :class:`~sportsdataverse.errors.AssetFetchError` -- a refused or failed fetch is
-an unknown answer, never an empty frame.
+an unknown answer, never an empty frame; a 204/205 (no content by definition) -> ``{}``.
 
 **Withheld columns.** A view-only entitlement answers ``200`` with some columns REMOVED and a
 ``restricted`` list naming them. By default the partial body is returned with a
@@ -40,7 +40,7 @@ from typing import Any, Callable, Dict, Optional
 
 from sportsdataverse._codegen_runtime import _transport_errors
 from sportsdataverse.dl_utils import download
-from sportsdataverse.errors import AssetFetchError
+from sportsdataverse.errors import AssetFetchError, NoDataError
 
 __all__ = ["_get"]
 
@@ -132,13 +132,13 @@ def _get(
         **kwargs: Accepted for forward-compatibility with generated callers; unused.
 
     Returns:
-        The decoded JSON ``dict``.
+        The decoded JSON ``dict``; ``{}`` for a 204/205.
 
     Raises:
         RuntimeError: No API key could be resolved.
         ValueError: PFF rejected the request (400 ``invalid_parameter`` / 422).
-        NoDataError: PFF answered 404 (raised by the transport).
-        AssetFetchError: 401/403/429/5xx, a connection failure after retries, a 200 whose
+        NoDataError: PFF answered 404.
+        AssetFetchError: 401/403/429/5xx, a connection failure after retries, a 2xx whose
             body is not a JSON object, or (strict mode) a body with columns withheld -- the
             answer is unknown or partial.
 
@@ -177,7 +177,11 @@ def _get(
     clean = {k: v for k, v in (params or {}).items() if v is not None}
     with _transport_errors(url):
         status, text = (transport or _default_transport)(url, clean, hdrs)
-    if status == 200:
+    if status in (204, 205):  # no content by definition: a deliberate nothing (A-L69)
+        return {}
+    if status == 404:  # ``download`` raises this itself; an injected transport hands it back (A-L69)
+        raise NoDataError(f"PFF {url} -> HTTP 404: {_error_detail(text)}")
+    if isinstance(status, int) and 200 <= status < 300:
         # every PFF operation answers a JSON object: anything else (a CDN interstitial, a
         # truncated body) is an UNKNOWN answer, never an empty one
         try:
@@ -185,7 +189,7 @@ def _get(
         except json.JSONDecodeError:
             body = None
         if not isinstance(body, dict):
-            raise AssetFetchError(f"PFF {url} -> HTTP 200 with a non-object body: {(text or '').strip()[:120]!r}")
+            raise AssetFetchError(f"PFF {url} -> HTTP {status} with a non-object body: {(text or '').strip()[:120]!r}")
         restricted = body.get("restricted")
         if restricted:
             # A view-only entitlement answers 200 with these columns REMOVED (PFF spec,

@@ -869,8 +869,8 @@ def main() -> None:
         "docstring": {
             "example_import": True,
             "raises": [
-                "sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a game "
-                "before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn).",
+                "sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a game not "
+                "yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows.",
             ],
             "see_also": [
                 {

@@ -1,10 +1,91 @@
 ---
-title: "NFL — additional Python functions — nflverse data releases: nfl_ff–nfl_schedule"
-sidebar_label: "nflverse data releases: nfl_ff–nfl_schedule"
+title: "NFL — additional Python functions — nflverse data releases: nfl_espn–nfl_players"
+sidebar_label: "nflverse data releases: nfl_espn–nfl_players"
 sidebar_position: 6
-description: "NFL — additional Python functions — nflverse data releases: nfl_ff–nfl_schedule — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — additional Python functions — nflverse data releases: nfl_espn–nfl_players — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NFL — additional Python functions — nflverse data releases: nfl_ff–nfl_schedule
+# NFL — additional Python functions — nflverse data releases: nfl_espn–nfl_players
+
+### load_nfl_espn_qbr {#load_nfl_espn_qbr}
+
+`load_nfl_espn_qbr(seasons: 'List[int]', summary_type: 'str' = 'season', return_as_pandas: 'bool' = False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'`
+
+Load ESPN Total QBR (Quarterback Rating) data going back to 2006.
+
+Mirrors nflreadpy / nflreadr `load_espn_qbr` -- the lone nflreadpy dataset
+that previously had no sdv-py loader. ESPN publishes Total QBR only from 2006
+onward, so 2006 is the earliest available season (unlike the 1999 floor on
+play-by-play). nflverse republishes ESPN's QBR through the `espn_data`
+release as two combined files (one per `summary_type`), each covering all
+seasons; this loader reads the requested file once and post-filters by
+`season` (the same access pattern as `load_nfl_schedule`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `list` |  | Seasons to return. 2006 is the earliest available season. `None` loads the current season, `True` every published season, and `[]` an empty frame (no request). |
+| `summary_type` | `str` | `'season'` | Aggregation level. `"season"` (default) returns one row per quarterback-season; `"week"` returns one row per quarterback-game. Any other value raises `ValueError`. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+| `source` | `str` | `'nflverse'` | Which QBR release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse `espn_data` release. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_espn_qbr` release (built by `nfl-data` from ESPN's QBR web endpoint -- the same source nflverse's espnscrapeR uses). Any other value raises `ValueError`. |
+
+**Returns**
+
+Polars dataframe containing ESPN Total QBR for the requested seasons, summarized per `summary_type`. `seasons=[]` gives an empty frame with no columns; schema'd empty frames come with the dtype contract.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | NFL season (year) the Total QBR record covers. |
+| `season_type` | character | Season segment for the record -- regular season or postseason. |
+| `game_week` | character | Week scope of the QBR aggregation; for season-level rows this is the season-summary tag. |
+| `team_abb` | character | Team abbreviation for the quarterback's team during the period. |
+| `player_id` | character | ESPN athlete identifier for the quarterback. |
+| `name_short` | character | Abbreviated display name of the quarterback (e.g. 'P. Mahomes'). |
+| `rank` | double | Quarterback's rank by Total QBR among qualified passers for the period. |
+| `qbr_total` | double | ESPN Total QBR on a 0-100 scale -- the headline opponent-adjusted quarterback rating. |
+| `pts_added` | double | Points the quarterback added versus a league-average passer (ESPN QBR points-added component). |
+| `qb_plays` | double | Count of qualifying quarterback action plays used to compute QBR. |
+| `epa_total` | double | Total expected points added across the quarterback's plays (ESPN QBR EPA component). |
+| `pass` | double | QBR points contribution from pass plays. |
+| `run` | double | QBR points contribution from designed runs and scrambles. |
+| `exp_sack` | double | QBR points contribution adjustment from expected sacks. |
+| `penalty` | double | QBR points contribution from penalties attributed to the quarterback. |
+| `qbr_raw` | double | Raw (non-opponent-adjusted) QBR for the period. |
+| `sack` | double | QBR points contribution from sacks taken. |
+| `name_first` | character | Quarterback's first name. |
+| `name_last` | character | Quarterback's last name. |
+| `name_display` | character | Quarterback's full display name. |
+| `headshot_href` | character | URL of the quarterback's ESPN headshot image. |
+| `team` | character | Full team name for the quarterback's team during the period. |
+| `qualified` | logical | Whether the quarterback met ESPN's minimum action-play threshold to qualify for ranking. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `summary_type` is not `"season"` / `"week"`, or if `source` is not one of `"nflverse"`, `None`, `"sportsdataverse"`, or `"sdv"`. |
+| `SeasonNotFoundError` | If any requested season is before 2006. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_espn_qbr
+qbr = load_nfl_espn_qbr(seasons=[2024])
+qbr.shape
+
+# Week-level QBR
+
+qbr_week = load_nfl_espn_qbr(seasons=[2024], summary_type="week")
+
+# Multi-season range
+
+qbr = load_nfl_espn_qbr(seasons=range(2020, 2025))
+
+# Pandas round-trip
+
+qbr_pd = load_nfl_espn_qbr(seasons=[2024], return_as_pandas=True)
+qbr_pd[["season", "team_abb", "qbr_total"]].head()
+```
 
 ### load_nfl_ff_opportunity {#load_nfl_ff_opportunity}
 
@@ -16,14 +97,14 @@ Load NFL fantasy football opportunity data from ffverse/ffopportunity
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list` |  | Used to define different seasons. 2006 is the earliest available season. |
+| `seasons` | `list` |  | Used to define different seasons. 2006 is the earliest available season. `None` loads the current season, `True` every published season, and `[]` an empty frame (no request). |
 | `stat_type` | `str` | `'weekly'` | One of "weekly", "pbp_pass", "pbp_rush". Defaults to "weekly". |
 | `model_version` | `str` | `'latest'` | One of "latest", "v1.0.0". Defaults to "latest". |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**
 
-Polars dataframe containing fantasy football opportunity data for the requested seasons.
+Polars dataframe containing fantasy football opportunity data for the requested seasons. `seasons=[]` gives an empty frame with no columns; schema'd empty frames come with the dtype contract.
 
 | col_name | type | description |
 |---|---|---|
@@ -366,13 +447,13 @@ changing call sites.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list[int]` |  | Seasons to filter to. The upstream parquet covers a single combined file per stat type — `seasons` is applied as a post-filter on the `season` column. |
+| `seasons` | `list[int]` |  | Seasons to filter to. The upstream parquet covers a single combined file per stat type — `seasons` is applied as a post-filter on the `season` column. `None` loads the current season, `True` every published season, and `[]` an empty frame (no request). |
 | `stat_type` | `str` | `'passing'` | One of `"passing"`, `"rushing"`, `"receiving"`. Defaults to `"passing"`. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**
 
-Polars dataframe containing NextGen Stats data for the requested `stat_type` and `seasons`.
+Polars dataframe containing NextGen Stats data for the requested `stat_type` and `seasons`. `seasons=[]` gives an empty frame with no columns; schema'd empty frames come with the dtype contract.
 
 | col_name | type | description |
 |---|---|---|
@@ -411,6 +492,7 @@ Polars dataframe containing NextGen Stats data for the requested `stat_type` and
 | Exception | Description |
 |---|---|
 | `ValueError` | If `stat_type` is not one of the allowed values. |
+| `SeasonNotFoundError` | If any season is less than 2016. |
 
 **Example**
 
@@ -493,14 +575,14 @@ changing call sites.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list[int]` |  | Seasons to load. For `summary_level='week'` this drives the per-season parquet fan-out; for `summary_level='season'` it post-filters the combined parquet by the `season` column. |
+| `seasons` | `list[int]` |  | Seasons to load. For `summary_level='week'` this drives the per-season parquet fan-out; for `summary_level='season'` it post-filters the combined parquet by the `season` column. `None` loads the current season, `True` every published season, and `[]` an empty frame (no request). |
 | `stat_type` | `str` | `'pass'` | One of `"pass"`, `"rush"`, `"rec"`, `"def"`. Defaults to `"pass"`. |
 | `summary_level` | `str` | `'week'` | One of `"week"` or `"season"`. Defaults to `"week"`. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**
 
-Polars dataframe containing PFR advanced stats data for the requested `stat_type`, `summary_level`, and `seasons`.
+Polars dataframe containing PFR advanced stats data for the requested `stat_type`, `summary_level`, and `seasons`. `seasons=[]` gives an empty frame with no columns; schema'd empty frames come with the dtype contract.
 
 | col_name | type | description |
 |---|---|---|
@@ -600,14 +682,14 @@ schema -- the legacy column set, in the legacy order, at the legacy dtypes:
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list` | `None` | Seasons to load. 1999 is the earliest available season. `None` (the default) loads every season from 1999 through the current one, matching the old whole-file behavior. |
+| `seasons` | `list` | `None` | Seasons to load. 1999 is the earliest available season. `None` (the default) loads the current season, `True` every published season from 1999, and `[]` an empty frame (no request); nflreadpy's contract (`None` used to load every season from 1999). |
 | `kicking` | `bool` | `False` | If True, load kicking stats. If False, load all other stats. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 | `source` | `str` | `'nflverse'` | Which player-stats release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse published `stats_player` weekly release, reconciled to the legacy schema described above. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_player_stats` release built by `sportsdataverse.nfl.build_nfl_player_stats` from SDV-native play-by-play (1999-present, week-level, REG+POST) with its own columns, season-filtered but otherwise untouched. Any other value raises `ValueError`. |
 
 **Returns**
 
-Polars dataframe containing player stats.
+Polars dataframe containing player stats. `seasons=[]` gives the contracted columns with no rows (nflverse source) or an empty frame with no columns (SDV source).
 
 | col_name | type | description |
 |---|---|---|
@@ -670,7 +752,7 @@ Polars dataframe containing player stats.
 | Exception | Description |
 |---|---|
 | `SeasonNotFoundError` | If any requested season is less than 1999. |
-| `TypeError` | If `seasons` is a bool -- the first positional argument used to be `kicking`, so `load_nfl_player_stats(True)` is rejected loudly rather than read as "seasons=True". |
+| `TypeError` | If `seasons` is `False` -- the first positional argument used to be `kicking`, so `load_nfl_player_stats(False)` is rejected loudly. `True` is nflreadpy's "every season". |
 | `ValueError` | If `source` is not one of `"nflverse"`, `None`, `"sportsdataverse"`, or `"sdv"`; or if `kicking=True` is combined with the SDV source (the SDV play-by-play surface lacks a `kicker_player_id`, so kicking stats are nflverse-only). |
 
 **Example**
@@ -795,98 +877,4 @@ players_sdv.select(["display_name", "position", "espn_id"]).head()
 
 import polars as pl
 load_nfl_players().select(["gsis_id", "display_name", "position"]).head()
-```
-
-### load_nfl_schedule {#load_nfl_schedule}
-
-`load_nfl_schedule(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
-
-Load NFL schedule data
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `list` |  | Used to define different seasons. 1999 is the earliest available season. |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
-
-**Returns**
-
-Polars dataframe containing the schedule for the requested seasons.
-
-| col_name | type | description |
-|---|---|---|
-| `game_id` | character | Ten digit identifier for NFL game. |
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
-| `week` | integer | Season week. |
-| `gameday` | character | The date on which the game occurred. |
-| `weekday` | character | The day of the week on which the game occcured. |
-| `gametime` | character | The kickoff time of the game. This is represented in 24-hour time and the Eastern time zone, regardless of what time zone the game was being played in. |
-| `away_team` | character | String abbreviation for the away team. |
-| `away_score` | integer | The number of points the away team scored. Is NA for games which haven't yet been played. |
-| `home_team` | character | The home team. Note that this contains the designated home team for games which no team is playing at home such as Super Bowls or NFL International games. |
-| `home_score` | integer | The number of points the home team scored. Is NA for games which haven't yet been played. |
-| `location` | character | Either Home if the home team is playing in their home stadium, or Neutral if the game is being played at a neutral location. This still shows as Home for games between the Giants and Jets even though they share the same home stadium. |
-| `result` | integer | The number of points the home team scored minus the number of points the visiting team scored. Equals h_score - v_score. Is NA for games which haven't yet been played. Convenient for evaluating against the spread bets. |
-| `total` | integer | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
-| `overtime` | integer | Binary indicator of whether or not game went to overtime. |
-| `old_game_id` | character | Legacy NFL game ID. |
-| `gsis` | integer | The id of the game issued by the NFL Game Statistics & Information System. |
-| `nfl_detail_id` | character | The id of the game issued by NFL Detail. |
-| `pfr` | character | The id of the game issued by [Pro-Football-Reference](https://www.pro-football-reference.com/) |
-| `pff` | integer | The id of the game issued by [Pro Football Focus](https://www.pff.com/) |
-| `espn` | character | The id of the game issued by [ESPN](https://www.espn.com/) |
-| `ftn` | integer | FTN Data game identifier corresponding to this scheduled game. |
-| `away_rest` | integer | Days of rest that the away team is coming off of. |
-| `home_rest` | integer | Days of rest that the home team is coming off of. |
-| `away_moneyline` | integer | Odds for away team to win the game. |
-| `home_moneyline` | integer | Odds for home team to win the game. |
-| `spread_line` | double | The closing spread line for the game. A positive number means the home team was favored by that many points, a negative number means the away team was favored by that many points. (Source: Pro-Football-Reference) |
-| `away_spread_odds` | integer | Odds for away team to cover the spread. |
-| `home_spread_odds` | integer | Odds for home team to cover the spread. |
-| `total_line` | double | The closing total line for the game. (Source: Pro-Football-Reference) |
-| `under_odds` | integer | Odds that total score of game would be under the total_line. |
-| `over_odds` | integer | Odds that total score of game would be over the total_ine. |
-| `div_game` | integer | Binary indicator of whether or not game was played by 2 teams in the same division. |
-| `roof` | character | One of 'dome', 'outdoors', 'closed', 'open' indicating indicating the roof status of the stadium the game was played in. (Source: Pro-Football-Reference) |
-| `surface` | character | What type of ground the game was played on. (Source: Pro-Football-Reference) |
-| `temp` | integer | The temperature at the stadium only for 'roof' = 'outdoors' or 'open'.(Source: Pro-Football-Reference) |
-| `wind` | integer | The speed of the wind in miles/hour only for 'roof' = 'outdoors' or 'open'. (Source: Pro-Football-Reference) |
-| `away_qb_id` | character | GSIS Player ID for away team starting quarterback. |
-| `home_qb_id` | character | GSIS Player ID for home team starting quarterback. |
-| `away_qb_name` | character | Name of away team starting QB. |
-| `home_qb_name` | character | Name of home team starting QB. |
-| `away_coach` | character | First and last name of the away team coach. (Source: Pro-Football-Reference) |
-| `home_coach` | character | First and last name of the home team coach. (Source: Pro-Football-Reference) |
-| `referee` | character | Name of the game's referee (head official) |
-| `stadium_id` | character | ID of the stadium the game was played in. (Source: Pro-Football-Reference) |
-| `stadium` | character | Name of the stadium |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `season` is less than 1999. |
-
-**Example**
-
-```python
-from sportsdataverse.nfl import load_nfl_schedule
-schedule = load_nfl_schedule(seasons=[2024])
-schedule.shape
-
-# Multi-season range
-
-schedule = load_nfl_schedule(seasons=range(2020, 2025))
-
-# Filter to a single week
-
-import polars as pl
-week_one = load_nfl_schedule(seasons=[2024]).filter(pl.col("week") == 1)
-
-# Pandas round-trip
-
-schedule_pd = load_nfl_schedule(seasons=[2024], return_as_pandas=True)
-schedule_pd[["game_id", "home_team", "away_team", "week"]].head()
 ```

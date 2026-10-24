@@ -3,13 +3,15 @@
 The synthetic-input tests run against the bundled 2-pt model + FG grid + punt
 distribution and the download-on-demand fd / wp models; they are gated on model
 availability so the suite stays green offline (no cache + no network).  The
-oracle-parity test (gated by ``SDV_PY_LIVE_TESTS=1``) validates against nfl4th's
-shipped ``pre_computed_go_boost`` outputs on a 2022 slice.
+nfl4th oracle runs offline on the committed 2022 slice of nfl4th's shipped
+``pre_computed_go_boost`` outputs: in CI on a 606-play subsample with the two
+download-on-demand boosters replayed from recorded outputs, and locally on all
+4,239 plays with the real boosters.
 """
 
 from __future__ import annotations
 
-import os
+from pathlib import Path
 
 import numpy as np
 import polars as pl
@@ -24,7 +26,6 @@ from sportsdataverse.nfl.nfl_fourth_down import (
     get_go_wp,
     get_punt_wp,
 )
-from tests.conftest import skip_if_no_live
 
 # fd + wp models are download-on-demand; the go / fg / punt / combiner paths all
 # need them, so gate those tests on availability.
@@ -212,39 +213,111 @@ def test_empty_input_returns_empty_decision_cols() -> None:
     assert "fourth_down_recommendation" in out.columns
 
 
-@skip_if_no_live
-@requires_models
-def test_oracle_parity_2022() -> None:
-    """Validate against nfl4th's shipped pre_computed_go_boost on a 2022 slice.
+# --------------------------------------------------------------------------- #
+# nfl4th oracle (gap-C-125; ledger gate fourth-down-oracles-committed)
+# --------------------------------------------------------------------------- #
+# The committed slice is nfl4th's own published output for every 2022 fourth down
+# (`nfl4th_infrastructure/pre_computed_go_boost.rds`, 4,239 rows: nfl4th_go_wp /
+# nfl4th_fg_wp / nfl4th_punt_wp / nfl4th_go_boost) joined to the nflverse-data
+# `play_by_play_2022` inputs on (game_id, play_id); provenance in
+# tests/nfl/fixtures/README.md. Floors are measured values rounded to the safe side at
+# 1e-4, never lowered. Correlation alone survives an affine bias (`go_wp + 0.02`,
+# `go_wp * 0.98` keep r = 0.9986), so each component also carries a level floor: MAE
+# and max |diff|.
+#
+# Two tests share the oracle:
+# * test_nfl4th_oracle_replay_2022 runs EVERYWHERE, CI included: every 7th play (606)
+#   with the two download-on-demand boosters replayed from their recorded outputs
+#   (tests/nfl/_booster_replay.py; a feature row the recording never saw fails).
+# * test_nfl4th_oracle_full_slice_local_only scores all 4,239 plays with the real
+#   boosters; it needs them in the local model cache and is skipped elsewhere.
+NFL4TH_SLICE = Path(__file__).resolve().parent / "fixtures" / "nfl4th_2022_slice.parquet"
+NFL4TH_REPLAY_STRIDE = 7
+NFL4TH_REPLAY_FLOORS = {
+    # column: (min corr, max MAE, max |diff|, min comparable)   measured corr / MAE / max (n)
+    "go_wp": (0.995, 0.0126, 0.0879, 600),  # 0.998492 / 0.012505 / 0.087811 (606)
+    "fg_wp": (0.995, 0.0133, 0.0876, 600),  # 0.998240 / 0.013238 / 0.087517 (606)
+    "punt_wp": (0.995, 0.0123, 0.0874, 440),  # 0.998444 / 0.012272 / 0.087383 (443)
+    "go_boost": (0.9634, 0.6674, 5.7337, 600),  # 0.963449 / 0.667391 / 5.733650 (pct-pts)
+}
+NFL4TH_FULL_FLOORS = {
+    "go_wp": (0.995, 0.0122, 0.1097, 4200),  # 0.99862 / 0.012167 / 0.109654
+    "fg_wp": (0.995, 0.0130, 0.1078, 4200),  # 0.99829 / 0.012910 / 0.107780
+    "punt_wp": (0.995, 0.0125, 0.0945, 3000),  # 0.99849 / 0.012450 / 0.094482 (n=3,114 finite)
+    "go_boost": (0.9579, 0.6820, 6.0470, 4200),  # 0.95799 / 0.681019 / 6.046908 (pct-pts)
+}
+#: sha256 of the boosters the replay was recorded from (nfl_4th_down_models release, cached 2026-06-24)
+NFL4TH_BOOSTER_SHA256 = {
+    "fd_model.ubj": "74020522809537e67a01e058215631c00fd4379d0c4e7db51386ccc5eec05f9d",
+    "wp_model.ubj": "56444fc03114dccd9f01fae791408b8eac6636503614b5310359c1a3ae74da1f",
+}
+LOCAL_ONLY = pytest.mark.skipif(
+    not (FD_MODEL_AVAILABLE and WP_MODEL_AVAILABLE),
+    reason="LOCAL-ONLY: needs the nfl_4th_down_models fd/wp boosters (download-on-demand, not bundled, "
+    "not cached in CI); CI runs test_nfl4th_oracle_replay_2022 instead",
+)
 
-    Components (go_wp / fg_wp / punt_wp) must clear corr > 0.99; go_boost is a
-    first-difference SNR-limited metric (corr ~0.98 ceiling, like wpa) so it is
-    asserted at a looser bar.
-    """
-    import pandas as pd
 
-    from sportsdataverse.nfl import load_nfl_pbp
+def _check_oracle(scored, col: str, floors: dict) -> None:
+    min_corr, max_mae, max_abs, min_n = floors[col]
+    a = np.asarray(scored[col], dtype=float)
+    b = np.asarray(scored[f"nfl4th_{col}"], dtype=float)
+    k = np.isfinite(a) & np.isfinite(b)
+    assert k.sum() >= min_n, f"{col}: only {k.sum()} comparable rows"
+    d = np.abs(a[k] - b[k])
+    corr = np.corrcoef(a[k], b[k])[0, 1]
+    assert corr >= min_corr, f"{col} corr={corr:.5f} below {min_corr}"
+    assert d.mean() <= max_mae, f"{col} MAE={d.mean():.6f} above {max_mae}"
+    assert d.max() <= max_abs, f"{col} max|diff|={d.max():.6f} above {max_abs}"
+    print("NFL4TH_ORACLE_OK", col, round(corr, 5), round(d.mean(), 6), round(d.max(), 6))
 
-    oracle_path = os.path.join("dev", "nfl4th_artifacts", "pre_computed_go_boost.parquet")
-    if not os.path.exists(oracle_path):
-        pytest.skip("oracle parquet not present")
-    oracle = pd.read_parquet(oracle_path)
-    o22 = oracle[oracle["game_id"].str.startswith("2022_")]
-    pbp = load_nfl_pbp([2022]).to_pandas()
-    m = pbp.merge(o22[["game_id", "play_id"]], on=["game_id", "play_id"], how="inner")
-    m = m[(m["down"] == 4) & m["yardline_100"].notna() & m["spread_line"].notna()].reset_index(drop=True)
-    # keep the slice quick but representative
-    m = m.sample(n=min(800, len(m)), random_state=7).reset_index(drop=True)
-    res = get_4th_down_probs(m)
-    cmp = res[["game_id", "play_id", "go_wp", "fg_wp", "punt_wp", "go_boost"]].merge(
-        o22, on=["game_id", "play_id"], suffixes=("_mine", "_o")
-    )
-    for c, bar in (("go_wp", 0.99), ("fg_wp", 0.99), ("punt_wp", 0.99), ("go_boost", 0.95)):
-        a = cmp[c + "_mine"].to_numpy()
-        b = cmp[c + "_o"].to_numpy()
-        k = np.isfinite(a) & np.isfinite(b)
-        corr = np.corrcoef(a[k], b[k])[0, 1]
-        assert corr > bar, f"{c} corr={corr:.4f} below {bar}"
+
+@pytest.fixture(scope="module")
+def nfl4th_replay_scored():
+    import xgboost
+
+    import sportsdataverse.nfl.nfl_fourth_down as fd
+    from tests.nfl._booster_replay import MODELS, REPLAY, KeyedDMatrix, ReplayBooster
+
+    sub = pl.read_parquet(NFL4TH_SLICE).gather_every(NFL4TH_REPLAY_STRIDE)
+    assert sub.height == 606 and (sub["down"] == 4).all()
+    table = pl.read_parquet(REPLAY)
+    boosters = {name: ReplayBooster(name, table) for name in MODELS}
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(xgboost, "DMatrix", KeyedDMatrix)
+        mp.setattr(fd, "_try_load", lambda name: boosters.get(name))
+        return get_4th_down_probs(sub)
+
+
+@pytest.mark.parametrize("col", list(NFL4TH_REPLAY_FLOORS))
+def test_nfl4th_oracle_replay_2022(nfl4th_replay_scored, col) -> None:
+    """606 real 2022 fourth downs vs nfl4th's published values, boosters replayed: runs in CI."""
+    _check_oracle(nfl4th_replay_scored, col, NFL4TH_REPLAY_FLOORS)
+
+
+@pytest.fixture(scope="module")
+def nfl4th_full_scored():
+    s = pl.read_parquet(NFL4TH_SLICE)
+    assert s.height == 4239 and (s["down"] == 4).all()
+    return get_4th_down_probs(s)
+
+
+@LOCAL_ONLY
+@pytest.mark.parametrize("col", list(NFL4TH_FULL_FLOORS))
+def test_nfl4th_oracle_full_slice_local_only(nfl4th_full_scored, col) -> None:
+    """Every 2022 fourth down with the real boosters (local evidence; the replay above is the CI gate)."""
+    _check_oracle(nfl4th_full_scored, col, NFL4TH_FULL_FLOORS)
+
+
+@LOCAL_ONLY
+def test_nfl4th_replay_was_recorded_from_the_cached_boosters_local_only() -> None:
+    """A re-released booster must be re-recorded (tests/nfl/fixtures/record_nfl4th_replay.py)."""
+    import hashlib
+
+    from sportsdataverse.nfl.ep_wp import _model_cache_dir
+
+    for name, want in NFL4TH_BOOSTER_SHA256.items():
+        assert hashlib.sha256((_model_cache_dir() / name).read_bytes()).hexdigest() == want, name
 
 
 @pytest.mark.filterwarnings("error::pandas.errors.PerformanceWarning")
@@ -308,3 +381,13 @@ def test_pat_make_prob_scored_at_3_before_2015_and_15_after(monkeypatch) -> None
     # A 21-yard kick converts more often than a 33-yard one: the pre-2015 PAT is the surer point.
     conv = out.set_index("go_index").loc[np.arange(len(td)), "conv_1pt"].to_numpy()
     assert conv[season < 2015].min() > conv[season >= 2015].max()
+
+
+def test_prepare_era_one_hots_break_at_the_catalogued_cuts() -> None:
+    """``_prepare`` reads model_vars.ERA_SEASON_CUTS (plan task 3.11): each cut season closes its era."""
+    from sportsdataverse.nfl.nfl_fourth_down import _prepare
+
+    seasons = [2001, 2002, 2005, 2006, 2013, 2014, 2017, 2018]
+    d = _prepare(pl.DataFrame([_row(season=s) for s in seasons]).to_pandas())
+    era = d[["era0", "era1", "era2", "era3", "era4"]].to_numpy().argmax(axis=1).tolist()
+    assert era == [0, 1, 1, 2, 2, 3, 3, 4]

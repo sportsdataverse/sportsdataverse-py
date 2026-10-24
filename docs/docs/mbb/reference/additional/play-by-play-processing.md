@@ -347,6 +347,12 @@ The 35-column play-by-play frame (zero rows when the game is not found).
 | `is_garbage_time` | logical |  |
 | `sub_deviate` | integer |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `game_id` is not an integral contest id (`None`, NaN, `6470186.5`); a float such as `6470186.0` is accepted. |
+
 **Example**
 
 ```python

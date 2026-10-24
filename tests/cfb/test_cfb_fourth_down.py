@@ -8,6 +8,8 @@ or not the cfb4th GAM has been converted + bundled.
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 import polars as pl
 import pytest
@@ -27,7 +29,8 @@ from sportsdataverse.cfb.cfb_fourth_down import (
 try:
     _load_fd_model()
     FD_MODEL_AVAILABLE = True
-except Exception:  # pragma: no cover - environment dependent
+# Any load failure (offline, no cache, no xgboost) skips these tests.
+except Exception:  # pragma: no cover  # noqa: BLE001 -- any load failure skips
     FD_MODEL_AVAILABLE = False
 
 requires_fd = pytest.mark.skipif(
@@ -443,3 +446,114 @@ def test_go_wp_is_nan_for_a_play_with_no_yard_line(fourth_down_rows):
     for c in ("go_wp", "first_down_prob", "wp_succeed", "wp_fail"):
         assert np.isnan(out[c].iloc[-1]), c
         np.testing.assert_allclose(out[c].to_numpy()[:-1], alone[c].to_numpy(), err_msg=c)
+
+
+# --------------------------------------------------------------------------- #
+# cfb4th oracle (gap-C-124; ledger gate fourth-down-oracles-committed)
+# --------------------------------------------------------------------------- #
+# The committed slice is cfb4th 0.1.2 `add_4th_probs()` (R 4.6.1) on 500 seeded 2023
+# fourth downs of cfbfastR::load_cfb_pbp(2023) (cfb4th_* columns), joined on the
+# play-state key to the sdv-py `load_cfb_pbp([2023])` release inputs the Python
+# surface reads (302 rows; 293 with a finite oracle); provenance in
+# tests/cfb/fixtures/README.md. Floors are the values measured on the slice
+# (2026-10-11, `get_4th_down_probs(slice)` vs the cfb4th columns), rounded to the
+# safe side at 1e-4 and never lowered. The surface is spread-sign-critical (the
+# live run: cfbfastR's opposite-sign `spread` collapses go_wp corr to 0.39), which a
+# bounds-only test cannot see; the level floors also catch an affine bias that keeps
+# the correlation at 1.0.
+CFB4TH_SLICE = Path(__file__).resolve().parent / "fixtures" / "cfb4th_2023_slice.csv"
+CFB4TH_FLOORS = {
+    # column: (min corr, max MAE, max |diff|, min comparable rows)   measured corr / MAE / max
+    "go_wp": (0.995, 0.0171, 0.1298, 290),  # 0.99741 / 0.017057 / 0.129716 (n=293)
+    "fg_wp": (0.995, 0.0183, 0.1368, 290),  # 0.99679 / 0.018219 / 0.136711 (n=293)
+    "punt_wp": (0.995, 0.0211, 0.1517, 215),  # 0.99579 / 0.021047 / 0.151642 (n=218)
+    "go_boost": (0.773, 0.9097, 6.7208, 290),  # 0.77304 / 0.909645 / 6.720766 (first difference, pct-pts)
+}
+
+
+@pytest.fixture(scope="module")
+def cfb4th_scored():
+    s = pl.read_csv(CFB4TH_SLICE, schema_overrides={"game_id": pl.Utf8, "id": pl.Utf8})
+    assert s.height == 302 and (s["start.down"] == 4).all()
+    return get_4th_down_probs(s)
+
+
+@requires_fd
+@pytest.mark.parametrize("col", list(CFB4TH_FLOORS))
+def test_cfb4th_oracle_2023(cfb4th_scored, col):
+    """Real 2023 fourth downs vs cfb4th: correlation AND level floors per component."""
+    min_corr, max_mae, max_abs, min_n = CFB4TH_FLOORS[col]
+    a = np.asarray(cfb4th_scored[col], dtype=float)
+    b = np.asarray(cfb4th_scored[f"cfb4th_{col}"], dtype=float)
+    k = np.isfinite(a) & np.isfinite(b)
+    assert k.sum() >= min_n, f"{col}: only {k.sum()} comparable rows"
+    d = np.abs(a[k] - b[k])
+    corr = np.corrcoef(a[k], b[k])[0, 1]
+    assert corr >= min_corr, f"{col} corr={corr:.5f} below {min_corr}"
+    assert d.mean() <= max_mae, f"{col} MAE={d.mean():.6f} above {max_mae}"
+    assert d.max() <= max_abs, f"{col} max|diff|={d.max():.6f} above {max_abs}"
+    print("CFB4TH_ORACLE_OK", col, round(corr, 5), round(d.mean(), 6), round(d.max(), 6))
+
+
+# --------------------------------------------------------------------------- #
+# Kickoff touchback spot by season in the decision surfaces (plan task 3.11, R829-5)
+# --------------------------------------------------------------------------- #
+# Every post-score kickoff in the go / punt / fg / two-point states is a touchback at
+# TOUCHBACK_YARDLINE_BY_SEASON: 80 to go through 2011, 75 from 2012 (cfb4th uses 75
+# for every season). The spy records the yards_to_goal each state hands the EP model.
+
+
+def _spy_ep(monkeypatch, module):
+    seen = []
+    real = module._predict_ep
+
+    def spy(state):
+        seen.append(state["yards_to_goal"].to_numpy(dtype=float).copy())
+        return real(state)
+
+    monkeypatch.setattr(module, "_predict_ep", spy)
+    return seen
+
+
+@pytest.mark.parametrize(("season", "spot"), [(2011, 80), (2012, 75)])
+@pytest.mark.skipif(not FG_MODEL_AVAILABLE, reason="fg_model not bundled")
+def test_fg_make_state_kicks_off_to_the_seasons_touchback(monkeypatch, season, spot):
+    from sportsdataverse.cfb import cfb_fourth_down as m
+
+    seen = _spy_ep(monkeypatch, m)
+    get_fg_wp(pl.DataFrame([_row(4, 8, 25, season=season)]))
+    assert seen[0].tolist() == [spot]  # the first EP call scores the made-FG kickoff state
+
+
+@pytest.mark.parametrize(("season", "spot"), [(2011, 80), (2012, 75)])
+def test_punt_return_touchdown_kicks_off_to_the_seasons_touchback(monkeypatch, season, spot):
+    from sportsdataverse.cfb import cfb_fourth_down as m
+
+    monkeypatch.setattr(
+        m, "punt_distribution", pl.DataFrame({"yards_to_goal": [50], "yards_to_goal_end": [100], "pct": [1.0]})
+    )
+    seen = _spy_ep(monkeypatch, m)
+    get_punt_wp(pl.DataFrame([_row(4, 10, 50, season=season)]))
+    assert seen[0].tolist() == [spot]
+
+
+@requires_fd
+@pytest.mark.parametrize(("season", "spot"), [(2011, 80), (2012, 75)])
+def test_go_touchdown_kicks_off_to_the_seasons_touchback(monkeypatch, season, spot):
+    from sportsdataverse.cfb import cfb_fourth_down as m
+
+    seen = _spy_ep(monkeypatch, m)
+    get_go_wp(pl.DataFrame([_row(4, 1, 1, season=season)]))
+    # 4th and goal at the 1: a gain is a touchdown (-> kickoff touchback), anything else a
+    # turnover on downs at 89-100 to go, so every state under 85 is the touchback.
+    kickoffs = {y for y in seen[0].tolist() if y < 85}
+    assert kickoffs == {spot}
+
+
+@pytest.mark.parametrize(("season", "spot"), [(2011, 80), (2012, 75)])
+def test_two_point_states_kick_off_to_the_seasons_touchback(monkeypatch, season, spot):
+    from sportsdataverse.cfb import cfb_two_point as m
+
+    seen = _spy_ep(monkeypatch, m)
+    m.get_2pt_probs(pl.DataFrame([_row(sd=-2, tsr=120, adj=120, period=4, season=season)]))
+    assert seen and all(s.tolist() == [spot] for s in seen)

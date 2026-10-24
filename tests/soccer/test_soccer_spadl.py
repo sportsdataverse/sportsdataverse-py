@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import dataclasses
-import os
+import functools
+import gzip
+import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -210,8 +212,16 @@ def test_empty_dataset_returns_the_documented_schema() -> None:
     assert out.schema["action_id"] == pl.Int64
 
 
+def test_full_match_height() -> None:
+    """The committed full match converts to the oracle's action count within 2% (offline since supp-010)."""
+    oracle = pl.read_csv(ORACLE)
+    out = spadl.soccer_spadl(_dataset_full())
+    assert abs(out.height - oracle.height) <= 0.02 * oracle.height
+
+
 @skip_if_no_live
-def test_live_full_match_height() -> None:
+def test_live_open_dataset_height() -> None:
+    """The network path (`soccer_open_dataset`) still lands on the same height."""
     from sportsdataverse.soccer import soccer_open_dataset
 
     oracle = pl.read_csv(ORACLE)
@@ -413,25 +423,16 @@ _PARITY_OURS_ONLY: dict[str, str] = {
     "e14ae27f-6483-4182-9b30-74f22541aec3": "Injury Clearance pass kept as pass/fail by kloppy",
 }
 
-_FULL_URL = "https://raw.githubusercontent.com/statsbomb/open-data/master/data"
+FULL_EVENTS = FIXTURES / "kloppy" / "statsbomb_8658_events_full.json.gz"
 
 
+@functools.lru_cache(maxsize=1)
 def _dataset_full() -> Any:
-    """The full 8658 match from a gitignored cache, downloaded once (two requests) under SDV_PY_LIVE_TESTS=1."""
-    cache = FIXTURES / "socceraction" / "_8658_full"
-    ev, lu = cache / "events.json", cache / "lineups.json"
-    if not (ev.exists() and lu.exists()):
-        if os.environ.get("SDV_PY_LIVE_TESTS") != "1":
-            pytest.skip("full-match events not cached; run with SDV_PY_LIVE_TESTS=1 once to populate (gitignored)")
-        from sportsdataverse.dl_utils import download
+    """The full 8658 match (2,978 events) from the committed gzip (supp-010: the parity runs offline).
 
-        cache.mkdir(parents=True, exist_ok=True)
-        try:
-            for kind, path in (("lineups", lu), ("events", ev)):  # events.json is the completion sentinel
-                r = download(f"{_FULL_URL}/{kind}/8658.json", timeout=60)
-                r.raise_for_status()
-                path.write_bytes(r.content)
-        except Exception as exc:  # noqa: BLE001 - any fetch failure skips rather than erroring the module
-            ev.unlink(missing_ok=True)
-            pytest.skip(f"could not download the full 8658 match: {exc}")
-    return _with_game_id(statsbomb.load(event_data=str(ev), lineup_data=str(lu)))
+    kloppy reads a path, so the events are decompressed once into a per-process temp file; the
+    lineups are the committed whole file. Provenance: ``tests/fixtures/kloppy/README.md``.
+    """
+    tmp = Path(tempfile.mkdtemp(prefix="sb8658_")) / "events.json"
+    tmp.write_bytes(gzip.decompress(FULL_EVENTS.read_bytes()))
+    return _with_game_id(statsbomb.load(event_data=str(tmp), lineup_data=str(LINEUPS)))

@@ -6,6 +6,41 @@ description: "MLB — additional Python functions — ESPN — function referenc
 ---
 # MLB — additional Python functions — ESPN
 
+### espn_mlb_calendar {#espn_mlb_calendar}
+
+`espn_mlb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+
+espn_mlb_calendar - look up the MLB game-day calendar for a season.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `None` | Season year (e.g. 2024). |
+| `ondays` | `bool` | `None` | When True, returns the date-only list ESPN exposes; when False, returns a one-row-per-date frame with `eventDate` plus parsed year/month/day. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. |
+
+**Returns**
+
+Polars dataframe of valid game dates.
+
+| col_name | type | description |
+|---|---|---|
+| `event_date` | character | Event date-time in ISO 8601 (e.g. '2017-07-11T00:00:00Z'). |
+| `year` | integer | Season (4-digit year). |
+| `month` | integer | Month of the game day, as an integer (1-12). |
+| `day` | integer | Day of the month of the game day, as an integer. |
+| `season` | integer | Season year. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb import espn_mlb_calendar
+cal = espn_mlb_calendar(season=2024)
+print(cal.shape)
+cal.head()
+```
+
 ### espn_mlb_game_rosters {#espn_mlb_game_rosters}
 
 `espn_mlb_game_rosters(game_id: 'int', raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs)`
@@ -22,7 +57,7 @@ espn_mlb_game_rosters - pull the active game rosters for both teams.
 
 **Returns**
 
-One row per (game × team × athlete) with columns `game_id, team_id, home_away, athlete_id, athlete_full_name, athlete_jersey, athlete_position_id, athlete_position_abbreviation, athlete_starter`.
+One row per (game × team × athlete) with columns `game_id, team_id, home_away, athlete_id, athlete_full_name, athlete_jersey, athlete_position_id, athlete_position_abbreviation, athlete_position_name, athlete_starter`; zero rows with those columns when ESPN lists no competitor roster.
 
 **Example**
 
@@ -238,6 +273,7 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 |---|---|
 | `ValueError` | `season_type` is not `"regular"`/`"postseason"`. |
 | `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+| `sportsdataverse.errors.AssetFetchError` | The statistics, athlete or team fetch failed (403, 429, 5xx, a dead connection); only a 404 on the athlete or team node leaves those columns null. |
 
 **Example**
 
@@ -264,7 +300,7 @@ espn_mlb_schedule - look up the MLB schedule for a given date or season-year.
 
 **Returns**
 
-Polars dataframe containing the schedule. Returns `None` if no games.
+Polars dataframe containing the schedule. A day with no games returns a zero-row frame carrying the documented columns.
 
 | col_name | type | description |
 |---|---|---|
@@ -324,7 +360,7 @@ espn_mlb_teams - look up MLB teams from ESPN's Site v2 API.
 
 **Returns**
 
-Polars dataframe containing teams for MLB. This function caches by default, so if you want to refresh the data, use `sportsdataverse.mlb.espn_mlb_teams.cache_clear()`.
+Polars dataframe of the MLB teams, one row per team, with the columns in the returns table. A payload without teams returns a zero-row frame with those columns. The result is not cached: every call fetches (through the package's opt-in TTL response cache, `sportsdataverse.cache`, when it is on).
 
 | col_name | type | description |
 |---|---|---|
@@ -343,6 +379,13 @@ Polars dataframe containing teams for MLB. This function caches by default, so i
 | `team_slug` | character | URL-safe team identifier. |
 | `team_uid` | character | ESPN universal team identifier (UID). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | ESPN answered 404 for the teams resource. |
+| `AssetFetchError` | The fetch failed (403, 429, 5xx, a dropped connection); never returned as an empty frame. |
+
 **Example**
 
 ```python
@@ -356,9 +399,8 @@ teams.select(["team_id", "team_abbreviation", "team_display_name"]).head()
 import polars as pl
 teams.filter(pl.col("team_id") == "19").to_dicts()
 
-# Refresh the cache (the call is ``lru_cache``'d) and round-trip to pandas
+# Pandas round-trip
 
-espn_mlb_teams.cache_clear()
 teams_pd = espn_mlb_teams(return_as_pandas=True)
 teams_pd[["team_id", "team_abbreviation", "team_display_name"]].head()
 ```

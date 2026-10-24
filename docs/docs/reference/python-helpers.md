@@ -9,6 +9,12 @@ sidebar_position: 50
 Hand-written wrappers, loaders, and helpers in `sportsdataverse` that are not
 generated API-endpoint wrappers (those have their own reference pages).
 
+## ESPN
+
+| Function | Summary |
+|---|---|
+| [xfl_pbp](python-helpers/espn.md#xfl_pbp) | Enriched XFL play-by-play (EP/EPA/WP/WPA/CP/CPOE). |
+
 ## PFF Premium Stats (LEGACY)
 
 | Function | Summary |
@@ -246,9 +252,20 @@ generated API-endpoint wrappers (those have their own reference pages).
 | Function | Summary |
 |---|---|
 | [cache_stats](python-helpers/cache-and-configuration.md#cache_stats) | Return a snapshot of the cache for debugging / inspection. |
+| [clear_team_cache](python-helpers/cache-and-configuration.md#clear_team_cache) | Reset the in-process team-list cache. |
 | [get_cache_mode](python-helpers/cache-and-configuration.md#get_cache_mode) | Return the current cache mode. |
 | [set_cache_mode](python-helpers/cache-and-configuration.md#set_cache_mode) | Switch the global cache mode. |
 | [set_default_ttl](python-helpers/cache-and-configuration.md#set_default_ttl) | Override the default TTL for endpoints not matched by the tier rules. |
+
+## IDs and crosswalks
+
+| Function | Summary |
+|---|---|
+| [find_athlete](python-helpers/ids-and-crosswalks.md#find_athlete) | Resolve an athlete name to ESPN athlete metadata. |
+| [find_event](python-helpers/ids-and-crosswalks.md#find_event) | Resolve a game to its ESPN event ID via the scoreboard endpoint. |
+| [find_team](python-helpers/ids-and-crosswalks.md#find_team) | Resolve a team name to ESPN team metadata. |
+| [function_count](python-helpers/ids-and-crosswalks.md#function_count) | Count callable functions per league, or in one league. |
+| [list_functions](python-helpers/ids-and-crosswalks.md#list_functions) | Return an index of callable functions exposed by the package. |
 
 ## Validation
 

@@ -135,6 +135,7 @@ def _fetch(url: str, params: Optional[Dict[str, Any]] = None, headers: Optional[
 
 def _check_status(url: str, resp: Any) -> None:
     status = getattr(resp, "status_code", None)
+    _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a)
     if status == 200:
         return
     where = _rt._where(url)
@@ -200,6 +201,7 @@ def token_from_page(html: str, now: Optional[float] = None) -> Tuple[str, float]
     return tok, float(exp)
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-1)
 def _bearer(*, renew: bool = False) -> str:
     """The cached bearer token, fetched from the site root when absent, near expiry or ``renew``."""
     with _tok_lock:
@@ -314,6 +316,7 @@ def _schedule(path: str, params: Dict[str, Any]) -> Dict[str, Any]:
 
 
 # ------------------------------------------------------------------------------ the getter
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, Any]:
     """GET a FEB route, refuse every wrong answer, return the envelope or page record with the request stamped.
 

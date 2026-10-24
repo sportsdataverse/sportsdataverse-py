@@ -14,6 +14,7 @@ import logging
 import socket
 import time
 import traceback
+from collections.abc import Callable
 
 import pytest
 import requests
@@ -170,8 +171,11 @@ def test_a_caller_retry_adapter_logs_without_the_key(monkeypatch, caplog):
     session = requests.Session()
     session.mount("https://", HTTPAdapter(max_retries=Retry(total=2, backoff_factor=0)))
     monkeypatch.setattr(urllib3.util.connection, "create_connection", _refuse)
-    with pytest.raises(requests.exceptions.ConnectionError) as ei:
+    # B-L91: the dead connection surfaces as the vocabulary's failed fetch, chained to the redacted original
+    # (the traceback channel below formats the chain too).
+    with pytest.raises(AssetFetchError) as ei:
         toa.toa_sports(api_key=SECRET, return_parsed=False, num_retries=0, session=session)
+    assert isinstance(ei.value.__cause__, requests.exceptions.ConnectionError)
     assert [r for r in caplog.records if r.name == "urllib3.util.retry"]  # it did log the URL
     assert _leaks(ei.value, caplog) == []
 
@@ -239,26 +243,51 @@ def test_redact_secrets(text, expected):
     assert _redact_secrets(expected) == expected  # idempotent
 
 
-_ADVERSARIAL = {  # ~100 KB each
-    "names": "key" * 34_000,
-    "pairs": "apiKey=" * 15_000,
-    "long_value": "key=" + "a" * 100_000,
-    "spaces_no_separator": "apiKey'" + " " * 100_000 + "x",
-    "name_space": "key " * 25_000,
-    "escapes": "%26" * 34_000,
-    "escaped_almost_pairs": "%26key%3" * 12_500,
-    "plain": "a" * 100_000,
-    "unclosed_quote": 'key="' + "a" * 100_000,
-    "quoted_pairs": 'key="' * 20_000,
+def assert_redaction_linear(build: Callable[[int], str]) -> None:
+    """Fail when ``_redact_secrets`` scales worse than linearly on ``build(n)`` (about ``n`` chars).
+
+    Compares the input against one 4x its size instead of holding either to a wall-clock budget, so
+    a slow or coverage-traced runner cannot flake it: linear work takes ~4x as long, a quadratic scan
+    (an unbounded repeat retried from every start position) ~16x. The best of 5 interleaved repeats
+    drops scheduler noise, and a busy runner gets 3 attempts; a ratio over 12x (clearly quadratic)
+    fails at once. 10K/40K chars keeps a quadratic mutant to seconds per call while the linear scan
+    takes a few ms.
+    """
+    small, big = build(10_000), build(40_000)
+    for _ in range(3):
+        best_small = best_big = float("inf")
+        for _ in range(5):
+            start = time.perf_counter()
+            _redact_secrets(small)
+            best_small = min(best_small, time.perf_counter() - start)
+            start = time.perf_counter()
+            _redact_secrets(big)
+            best_big = min(best_big, time.perf_counter() - start)
+        ratio = best_big / best_small
+        if ratio < 8:
+            return
+        if ratio > 12:  # clearly quadratic: no retry would rescue it
+            break
+    pytest.fail(f"4x the input took {ratio:.1f}x as long ({best_small:.4f}s -> {best_big:.4f}s)")
+
+
+_ADVERSARIAL = {  # each builds a string of about n characters
+    "names": lambda n: "key" * (n // 3),
+    "pairs": lambda n: "apiKey=" * (n // 7),
+    "long_value": lambda n: "key=" + "a" * n,
+    "spaces_no_separator": lambda n: "apiKey'" + " " * n + "x",
+    "name_space": lambda n: "key " * (n // 4),
+    "escapes": lambda n: "%26" * (n // 3),
+    "escaped_almost_pairs": lambda n: "%26key%3" * (n // 8),
+    "plain": lambda n: "a" * n,
+    "unclosed_quote": lambda n: 'key="' + "a" * n,
+    "quoted_pairs": lambda n: 'key="' * (n // 5),
 }
 
 
 @pytest.mark.parametrize("shape", _ADVERSARIAL)
 def test_redact_secrets_is_linear(shape):
-    text = _ADVERSARIAL[shape]
-    start = time.perf_counter()
-    _redact_secrets(text)
-    assert time.perf_counter() - start < 0.05
+    assert_redaction_linear(_ADVERSARIAL[shape])
 
 
 def test_a_key_in_a_path_segment_is_redacted():

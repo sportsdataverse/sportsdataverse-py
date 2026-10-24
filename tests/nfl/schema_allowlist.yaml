@@ -1,0 +1,75 @@
+# Columns of NFLPlayProcess(...).plays_frame allowed to differ across the 31 committed captures
+# (read by tests/nfl/test_nfl_schema_allowlist.py; provenance: tests/nfl/fixtures/README.md).
+#
+#   kind: dtype     a different dtype in some captures
+#   kind: presence  absent from some captures
+#
+# Every row names the open finding that owns it. The list may only shrink: the test pins the
+# committed set and fails on a row that no capture needs any more, so the fix PR deletes its rows.
+# Measured on HEAD 36f7a02f1b (2026-10-11), with the download-on-demand nfl4th boosters off (the
+# hermetic run). prob_2pt's dtype mix (C-M7, fixed in task 2.17) needs them, so it has a test of
+# its own (test_prob_2pt_has_one_documented_dtype), not a row here.
+
+# C-L10's source row (adv-C-processing-003) names these 15 columns with teamParticipants (whose
+# struct field order task 2.17 pinned): ESPN passthrough fields (and one column derived from them)
+# that exist only when the feed carries them.
+- column: wallclock
+  kind: presence
+  finding: C-L10
+  note: absent before 2015 (16 captures)
+- column: extra_point_result
+  kind: presence
+  finding: C-L10
+  note: derived from pointAfterAttempt, so absent with it (24 captures)
+- column: pointAfterAttempt.abbreviation
+  kind: presence
+  finding: C-L10
+  note: absent in 24 captures
+- column: pointAfterAttempt.id
+  kind: presence
+  finding: C-L10
+  note: absent in 24 captures
+- column: pointAfterAttempt.text
+  kind: presence
+  finding: C-L10
+  note: absent in 24 captures
+- column: pointAfterAttempt.value
+  kind: presence
+  finding: C-L10
+  note: absent in 24 captures
+- column: penalty.status.slug
+  kind: presence
+  finding: C-L10
+  note: absent before 2025 (27 captures)
+- column: penalty.status.text
+  kind: presence
+  finding: C-L10
+  note: absent in 27 captures
+- column: penalty.type.slug
+  kind: presence
+  finding: C-L10
+  note: absent in 27 captures
+- column: penalty.type.text
+  kind: presence
+  finding: C-L10
+  note: absent in 27 captures
+- column: penalty.yards
+  kind: presence
+  finding: C-L10
+  note: absent in 27 captures
+- column: yardsAfterCatch
+  kind: presence
+  finding: C-L10
+  note: absent in 27 captures
+- column: review.type
+  kind: presence
+  finding: C-L10
+  note: only where the play was reviewed (absent in 28 captures)
+- column: review.upheld
+  kind: presence
+  finding: C-L10
+  note: absent in 28 captures
+- column: review.team.$ref
+  kind: presence
+  finding: C-L10
+  note: absent in 30 captures

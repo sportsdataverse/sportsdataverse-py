@@ -10,6 +10,8 @@ import os
 import re
 import time
 import unicodedata
+import warnings
+from collections.abc import Callable
 from functools import reduce
 from importlib.resources import files as _resource_files
 
@@ -53,6 +55,36 @@ def _touchdown_negated() -> pl.Expr:
         .then(head.str.contains(_PENALTY_NEGATED_TEXT))
         .otherwise(text.str.contains(_PENALTY_NEGATED_TEXT))
     )
+
+
+def _opening_kicker(plays: pl.DataFrame, home_id: int, away_id: int) -> int | None:
+    """The team that kicked the opening kickoff, i.e. the team that receives the second-half kickoff.
+
+    Read from the period-1 rows in order. ESPN's kickoff ``start.team.id`` names the kicking team,
+    except on a few opening kickoffs where it names the receiver (400559176), so the first scrimmage
+    snap settles it: with no turnover on the kick and no second kickoff before that snap (a return
+    touchdown), the receiver snaps first. A feed that files a scrimmage play before any kickoff gets
+    the first snap's defense (cfbfastR's and nflfastR's fallback). ``None`` when period 1 has no plays.
+    """
+    rows = plays.filter(pl.col("period.number") == 1).select("type.text", "text", "start.team.id", "start.down").rows()
+    labelled = None
+    for kind, text, team, down in rows:
+        kind = kind or ""
+        if team is None:
+            continue
+        if re.search(r"(?i)kickoff|onside", kind):
+            if labelled is not None:
+                return labelled
+            labelled = int(team)
+            if re.search(r"(?i)fumble|recover|muff|onside", text or ""):
+                return labelled
+            continue
+        if re.search(r"(?i)timeout|end of|end period|extra point|two.point|2pt|coin toss|penalty", kind) or not down:
+            continue
+        if labelled is None or int(team) == labelled:
+            return away_id if int(team) == home_id else home_id
+        return labelled
+    return labelled
 
 
 #: Infractions that WIPE OUT the play, measured by how often the down is
@@ -158,11 +190,6 @@ _STATED_YARDS_RE = r"(?i)(no gain)|(loss of )?(-)?(\d+)[\s-]*(?:yds?|yards?)\b(\
 #: A loss stated after the number -- ESPN's 2021+ vendor text, "rush middle for 3 yards loss", "caught
 #: at ARK23, for 1 yard loss", "for a 2 yard loss" -- which the "for N" readers take as a gain.
 _FOR_N_YARDS_LOSS_RE = r"(?i)for (?:a )?(\d+) y(?:ar)?ds? loss"
-#: First season of the NCAA's 2012 kickoff rules: a touchback comes out to the receiver's 25 (the
-#: 20 before) and a kickoff out of bounds to the 35 (the 40 before). Every 2012-13 fixture
-#: touchback's next snap starts at the 25.
-_KICKOFF_2012_RULES_FROM = 2012
-
 #: The returner clause with no "for": "Shaun Carney return -2 yards to the AFA10" (2005-2007) and
 #: the vendor template's "#16 M.Beltran, Jr. return 18 yards", whatever the name's shape.
 _RETURN_N_YARDS_RE = r"(?i)\breturn (-?\d+ yards?)\b"
@@ -288,9 +315,9 @@ _PLAYER_NAME_CLAUSE_LEAD = (
     r"|(?:to|by|at|for|in|the|up|lateral|complete|incomplete|direct|from|returned|recovered|fumbled|muffed)"
     r"(?:\s|$).*$)"
 )
-#: After the cut, a name holding a digit (a spot such as "WAS30"), ESPN's "N/A" placeholder, or a
-#: single character is not a name.
-_PLAYER_NAME_NOT_A_NAME = r"\d|^N/A(?:[\s,.]|$)|^.$"
+#: After the cut, a name holding a digit (a spot such as "WAS30"), ESPN's "N/A" placeholder, a
+#: single character, or ESPN's literal play text "null" (401628559's blocked punt, C-L6) is not a name.
+_PLAYER_NAME_NOT_A_NAME = r"\d|^N/A(?:[\s,.]|$)|^.$|^null$"
 
 #: Narrative tails that bleed into a captured name where the extraction regex
 #: has no stopword boundary: pass-direction phrases (``"Russell Wilson deep
@@ -329,7 +356,12 @@ from sportsdataverse.cfb.model_vars import (
     ep_final_names,
     ep_start_columns,
     ep_start_touchback_columns,
+    CFB_ESPN_TRY_ON_TD_ROW_FROM,
+    CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM,
+    CFB_MODEL_ERA_CUTS,
+    OT_SHOOTOUT_FROM_PERIOD,
     int_vec,
+    cfb_kickoff_out_of_bounds_spot_expr,
     kickoff_turnovers,
     kickoff_vec,
     normalplay,
@@ -338,6 +370,7 @@ from sportsdataverse.cfb.model_vars import (
     punt_vec,
     qbr_vars,
     scores_vec,
+    cfb_touchback_yardline_expr,
     turnover_vec,
     wp_end_columns,
     wp_final_names,
@@ -350,6 +383,8 @@ from sportsdataverse.cfb.model_vars import (
 )
 from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import DefaultOddsWarning as _DefaultOddsWarning  # private alias: cfb_pbp is star-imported
+from sportsdataverse.errors import PlayOrderWarning as _PlayOrderWarning  # private alias, as above
 
 ep_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/ep_model.ubj")
 wp_spread_file = _cfb_resource_filename("sportsdataverse", "cfb/models/wp_spread.ubj")
@@ -414,6 +449,118 @@ logger = logging.getLogger("sdv.cfb_pbp")
 logger.addHandler(logging.NullHandler())
 
 
+def _warn_default_odds(game_id, odds_source, spread, total) -> None:
+    """Warn that a game's EPA/WP inputs carry no market spread (W-M14): an unknown recorded as a number."""
+    warnings.warn(
+        f"CFB game {game_id}: no pregame spread is available (odds_source={odds_source!r}, "
+        f"gameSpreadAvailable=False); EPA/WP use spread {spread} / total {total}, which no market set. "
+        "Make it an error with warnings.simplefilter('error', DefaultOddsWarning).",
+        _DefaultOddsWarning,
+        stacklevel=3,
+    )
+
+
+#: The total every odds path falls back to when no provider has one (the pickcenter path used 55.0, R828-3).
+_DEFAULT_TOTAL = 55.5
+
+_FLAG_TEXT = {"true": True, "1": True, "false": False, "0": False}
+
+
+def _optional_flag(value: object, key: str) -> bool | None:
+    """A tri-state ``odds_override`` flag: a bool, ``"true"``/``"false"``/``"1"``/``"0"``, or None (unknown).
+
+    ``bool("False")`` is True, so a string flag is read by its text; anything else raises (R895-5). A
+    missing value from a pandas row (NaN, ``pd.NA``, ``NaT``) is unknown, as a missing key is (R895-7).
+    """
+    if value is None or isinstance(value, bool):
+        return value
+    if pd.api.types.is_scalar(value) and pd.isna(value):
+        return None
+    flag = _FLAG_TEXT.get(str(value).strip().lower())
+    if flag is None:
+        raise ValueError(f"odds_override[{key!r}] must be True/False, 'true'/'false'/'1'/'0' or None; got {value!r}")
+    return flag
+
+
+def _required_flag(value: object, key: str) -> bool:
+    """A required two-state ``odds_override`` flag: a bool, 1/0 or ``"true"``/``"false"``/``"1"``/``"0"``.
+
+    ``bool("False")`` is True, so a string flag is read by its text; anything else, None included, raises (WB-cfb-8).
+    """
+    flag = value if isinstance(value, bool) else _FLAG_TEXT.get(str(value).strip().lower())
+    if flag is None:
+        raise ValueError(f"odds_override[{key!r}] must be True/False, 1/0 or 'true'/'false'/'1'/'0'; got {value!r}")
+    return flag
+
+
+def _warn_default_total(game_id, odds_source, total) -> None:
+    """Warn that a game with a market spread has no market total (R828-3): the total is a default.
+
+    The ``overUnderAvailable`` play column records it per game (R837-2). The fourth-down surface keeps
+    its recommendation on the default total (owner ruling R837-3); the column lets a consumer drop it.
+    """
+    warnings.warn(
+        f"CFB game {game_id}: no pregame total is available (odds_source={odds_source!r}); the overUnder "
+        f"column (overUnderAvailable=False) and the fourth-down decision surface (team implied totals) use "
+        f"{total}, which no market set. "
+        "Make it an error with warnings.simplefilter('error', DefaultOddsWarning).",
+        _DefaultOddsWarning,
+        stacklevel=3,
+    )
+
+
+def _warn_period_steps_back(play_df: pl.DataFrame, game_id) -> None:
+    """Warn when ``period.number`` decreases along the final row order (C-M18): a wrong id or label."""
+    if "period.number" not in play_df.columns:
+        return
+    back = play_df.with_columns(_prev_id=pl.col("id").shift(1)).filter(
+        (pl.col("period.number").diff() < 0).fill_null(False)
+    )
+    if back.height:
+        warnings.warn(
+            f"CFB game {game_id}: the period steps back along the play order between play ids "
+            f"{back.select('_prev_id', 'id').rows()}; the row order or the period label is wrong there, "
+            "so the features read from a neighbouring row (scores, EPA lookbacks, WPA) read the wrong one.",
+            _PlayOrderWarning,
+            stacklevel=3,
+        )
+
+
+def _reconcile_play_scores(play_df: pl.DataFrame) -> pl.DataFrame:
+    """Repair ``homeScore`` / ``awayScore`` before the end markers are dropped and any margin is derived."""
+    # An "End of Game" / "End of OT" marker is dropped after this, but it is often the only row
+    # that carries the final score: ESPN drops the winning touchdown row from overtime feeds
+    # (2021 401301042 ends 23-30 on its last play and 29-30 on the marker; 2024 401628428
+    # 38-38 against a 43-41 marker). Carry a marker's higher score back onto the play before
+    # it, so the game still ends at its final; a lower score on a marker is a glitch and is
+    # ignored.
+    marker = pl.col("type.text").str.contains("(?i)end of|(?i)end period")
+    play_df = play_df.with_columns(
+        *[
+            pl.when(marker.shift(-1).fill_null(False) & (pl.col(c).shift(-1) > pl.col(c)))
+            .then(pl.col(c).shift(-1))
+            .otherwise(pl.col(c))
+            .alias(c)
+            for c in ("homeScore", "awayScore")
+        ]
+    )
+    # A few feeds keep homeScore/awayScore reversed for the whole game (2006 262590245,
+    # 2016 400876038 / 400876049, 2018 401135269): the away team's points sit under
+    # homeScore from its first score to the last row, so every margin in the game read
+    # for the wrong side. The header's final is the one statement of the score that does
+    # not come from a play row; when the last row is that final reversed, and the two
+    # sides differ, the columns are swapped back before any margin is derived.
+    _reversed = (
+        (pl.col("homeScore").last() == pl.col("awayFinalScore").first())
+        & (pl.col("awayScore").last() == pl.col("homeFinalScore").first())
+        & (pl.col("homeFinalScore").first() != pl.col("awayFinalScore").first())
+    ).fill_null(False)
+    return play_df.with_columns(
+        homeScore=pl.when(_reversed).then(pl.col("awayScore")).otherwise(pl.col("homeScore")),
+        awayScore=pl.when(_reversed).then(pl.col("homeScore")).otherwise(pl.col("awayScore")),
+    )
+
+
 def _ot_second(play_df, team_col: str):
     """Per row: is ``team_col`` second in its overtime period? Null where unknown."""
     if not {"period", "start.pos_team.id", team_col}.issubset(play_df.columns):
@@ -440,6 +587,19 @@ def _with_ot_second(play_df):
     return play_df if second is None else play_df.with_columns(pl.Series("ot_second_possession", second))
 
 
+def _as_trained_2h_flag(features: pl.DataFrame) -> pl.DataFrame:
+    """The booster input for ``pos_team_receives_2H_kickoff``: ``not is_home``, as the boosters were trained.
+
+    Shim for C-NF-2, until the WP boosters are retrained on the corrected flag. No retrain has shipped (task 3.8
+    changed no model bytes); whether to retrain is an open owner decision, not a done task. The bundled
+    ``wp_spread`` / ``wp_naive`` were trained on a frame where the flag was ``1 - is_home`` on every row, both halves, so they
+    learned it as a second home/away indicator. Feeding them the corrected published flag (true
+    only on the opening kicker's first-half possessions) degrades ``wp_before_naive``; feeding
+    the trained semantics keeps WP as it was while the published column stays correct.
+    """
+    return features.with_columns((pl.col("is_home") == False).alias("pos_team_receives_2H_kickoff"))
+
+
 def _wp_predict(play_df, model, names, tb_cols, start_cols, end_cols):
     """Project the WP feature columns, rename to the booster's feature names, and
     predict the start-touchback / start / end win-probabilities. Shared by the
@@ -457,6 +617,7 @@ def _wp_predict(play_df, model, names, tb_cols, start_cols, end_cols):
     start.columns = names
     end = play_df[end_cols]
     end.columns = names
+    tb, start, end = (_as_trained_2h_flag(x) for x in (tb, start, end))
     forced = _ot_forced(play_df)
     return (
         _adjust_wp(model.predict(DMatrix(tb)), tb, forced=forced).astype(np.float32),
@@ -675,11 +836,18 @@ _DEFENSIVE_TRY_RETURN = (
 
 
 def _ot_no_touchdown_before(columns) -> pl.Expr:
-    """Overtime rows whose last play (dead-ball rows skipped) was not a touchdown.
+    """Overtime rows where a try row is a two-point shootout attempt, not a touchdown's try.
 
-    A try row there is a two-point shootout attempt (2019-26), not a touchdown's try. A
-    touchdown ESPN typed as the play ("... fumbled, recovered by Navy Jake Zuzek in the end
-    zone for a TD", typed "Rush", 322802005 in overtime) counts by its text.
+    The season's rule set (:data:`~sportsdataverse.cfb.model_vars.OT_SHOOTOUT_FROM_PERIOD`)
+    decides: none before 2019; in 2019-20 every period from the fifth overtime (period 9) on,
+    from 2021 every period from the third (period 7) on. ESPN's period label is not reliable
+    in overtime, so a shootout-era row labelled earlier also counts when its last play
+    (dead-ball rows skipped) was not a touchdown: 401628439 (2024) files its attempts as
+    period 5. And a row labelled inside the shootout counts even after a touchdown, which
+    ESPN files out of order (401112489's winning try, period 10, follows the two
+    second-overtime touchdowns). A touchdown ESPN typed as the play ("... fumbled, recovered
+    by Navy Jake Zuzek in the end zone for a TD", typed "Rush", 322802005 in overtime)
+    counts by its text.
     """
     dead = pl.col("type.text").is_in(_CLOCK_STOPPAGES) | _penalty_before_try()
 
@@ -689,7 +857,12 @@ def _ot_no_touchdown_before(columns) -> pl.Expr:
     last_td = last("type.text").str.contains("(?i)touchdown").fill_null(False)
     if "td_play" in columns:
         last_td = last_td | (last("td_play") == True).fill_null(False)  # noqa: E712
-    return (pl.col("period.number") >= 5) & ~last_td
+    shootout_from = pl.lit(None, dtype=pl.Int64)
+    for first_season, first_period in OT_SHOOTOUT_FROM_PERIOD:
+        shootout_from = pl.when(pl.col("season") >= first_season).then(first_period).otherwise(shootout_from)
+    period = pl.col("period.number")
+    in_shootout = (period >= 5) & ((period >= shootout_from) | ~last_td)
+    return shootout_from.is_not_null() & in_shootout
 
 
 def _ot_shootout_state_wp(play_df, naive: bool):
@@ -721,15 +894,33 @@ def _ot_shootout_state_wp(play_df, naive: bool):
             second=pl.col("mask") & (pl.col("mask").cast(pl.Int32).cum_sum().over("period.number") >= 2),
             first_team=pl.col("team").filter(pl.col("mask")).first().over("period.number"),
         )
-        .with_columns(flip=(pl.col("second") & (pl.col("team") == pl.col("first_team"))).fill_null(False))
+        .with_columns(
+            flip=(pl.col("second") & (pl.col("team") == pl.col("first_team"))).fill_null(False),
+            # the period's first attempt does not start tied, so no score in that period is the game's
+            untied=(pl.col("mask") & (pl.col("second") == False) & (pl.col("m0") != 0))
+            .fill_null(False)
+            .any()
+            .over("period.number"),
+        )
     )
     flip, second = f["flip"].to_numpy(), f["second"].to_numpy()
     sign = np.where(flip, -1.0, 1.0)
     tie = _tie_value(None, n=f.height) if naive else _tie_value(f["spread"].to_numpy())
     tie = np.where(flip, 1.0 - tie, tie)
-    before = _ot_shootout_attempt_wp(sign * f["m0"].to_numpy(), tie, second)
-    after = _ot_shootout_wp(sign * f["m1"].to_numpy(), tie, second)
-    return f["mask"].to_numpy(), np.where(flip, 1.0 - before, before), np.where(flip, 1.0 - after, after)
+    m0, m1 = f["m0"].to_numpy(), f["m1"].to_numpy()
+    before = _ot_shootout_attempt_wp(sign * m0, tie, second)
+    after = _ot_shootout_wp(sign * m1, tie, second)
+    before, after = np.where(flip, 1.0 - before, before), np.where(flip, 1.0 - after, after)
+    # A shootout period opens tied, so when its first attempt does not, no score in that period
+    # is the game's: 401628439 carries 50-42 on all twelve attempts (the linescore has 40-40
+    # entering the shootout, 44-42 final), 401112489 37-34 on three (41-41), and 401677180's
+    # scores run Toledo 2 ahead from the third overtime (ESPN 42-44 where the linescore has
+    # 42-42), so its fifth opens on -2 and read 0.12. Over the 2019-26 shootout games this
+    # catches every attempt whose own margin is beyond 2 as well. The value is left null (NaN
+    # here, null in the column), not pinned to 0/1 from that score and not re-derived from the
+    # linescore.
+    impossible = f["untied"].to_numpy()
+    return f["mask"].to_numpy(), np.where(impossible, np.nan, before), np.where(impossible, np.nan, after)
 
 
 def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw, suffix="", wp_after_flip_raw=None):
@@ -783,6 +974,11 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     else:
         end_team_score_diff = pl.col("pos_score_diff_end")
 
+    # The game's last play: a game that ends on a Timeout row ends on the play before it (C-NF-12),
+    # which ends the game whatever WP the trailing Timeout row was scored at.
+    real_play = pl.col("type.text").fill_null("") != "Timeout"
+    last_play_number = pl.when(real_play).then(pl.col("game_play_number")).max()
+
     # Dead-ball rows between a touchdown and its try: the clock stoppages and a penalty
     # walked off before the try. The penalty inherits the touchdown's end state like a
     # timeout, instead of the model's placeholder (282710130: the touchdown ends at 0.081,
@@ -818,8 +1014,8 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     takes_over = (t.is_in(_TRY_TYPES) & (td_end == team)) | (
         before_try & ((td_end == team) | (td_end == _next(team, dead_ball)))
     )
-    # An overtime shootout attempt (2019-26, periods 5+: alternating "Two Point Pass|Rush"
-    # rows, no touchdown before them) is not a try after a touchdown. ESPN often leaves its
+    # An overtime shootout attempt (``_ot_no_touchdown_before``: the season's rule set,
+    # ``model_vars.OT_SHOOTOUT_FROM_PERIOD``) is not a try after a touchdown. ESPN often leaves its
     # team empty and the fill copies the previous attempt's (401282146: Finley's and Young's
     # attempts both 333), so each attempt took the other team's end state (17 of 31 pairs).
     if "period.number" in play_df.columns:
@@ -852,15 +1048,18 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
         & kick_team.is_not_null()
     )
     kick_board = pl.when(kick_team == team).then(kick_wb).otherwise(1 - kick_wb)
+    # the team of the row lead_wp_before is read from (EX-3.4-b: never a Timeout row)
+    lead_team = _next(team, t == "Timeout")
 
     return (
         play_df.with_columns(
-            pl.lit(wp_before_raw).alias(wb),
+            # NaN = a value deliberately left unknown (_ot_shootout_state_wp's impossible scores)
+            pl.lit(wp_before_raw).fill_nan(None).alias(wb),
             pl.lit(wp_touchback_raw).alias(wt),
-            pl.lit(wp_after_raw).alias(wa),
+            pl.lit(wp_after_raw).fill_nan(None).alias(wa),
             # kept aside: the model's own end-state WP, for the one row that has no
             # next play to borrow from (B14 below)
-            pl.lit(wp_after_raw).alias(f"_wa_raw{suffix}"),
+            pl.lit(wp_after_raw).fill_nan(None).alias(f"_wa_raw{suffix}"),
             pl.lit(wp_after_flip_raw if wp_after_flip_raw is not None else wp_after_raw).alias(f"_wa_flip{suffix}"),
         )
         .with_columns(
@@ -896,8 +1095,13 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             .alias(awb),
         )
         .with_columns(
-            pl.col(wb).shift(-1).alias(lwb),
-            pl.col(wb).shift(-2).alias(lwb2),
+            # EX-3.4-b: the board a play hands to is the next real row's; a Timeout row is
+            # filed under the team that called it with the stale start state of the play
+            # before (401856679: the interception read OU's pre-pick board, 0.52, not 0.37);
+            # lead_wp_before2 is the real row after that. Only Timeout rows are skipped, not
+            # _CLOCK_STOPPAGES: the End Period / End of Half branches below read that row's board.
+            _next(pl.col(wb), pl.col("type.text") == "Timeout").alias(lwb),
+            _next(_next(pl.col(wb), pl.col("type.text") == "Timeout"), pl.col("type.text") == "Timeout").alias(lwb2),
         )
         .with_columns(
             # a stoppage just before a try took the touchdown's wp_after above and does not move it
@@ -907,7 +1111,7 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
                 (pl.col("status_type_completed") == True)
                 .and_(
                     (pl.col("lead_play_type").is_null()).or_(
-                        pl.col("game_play_number") == pl.col("game_play_number").max(),
+                        pl.col("game_play_number") == last_play_number,
                     ),
                 )
                 .and_(end_team_score_diff > 0),
@@ -917,23 +1121,32 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
                 (pl.col("status_type_completed") == True)
                 .and_(
                     (pl.col("lead_play_type").is_null()).or_(
-                        pl.col("game_play_number") == pl.col("game_play_number").max(),
+                        pl.col("game_play_number") == last_play_number,
                     ),
                 )
                 .and_(end_team_score_diff < 0),
             )
             .then(0.0)
+            # left unknown on purpose: not borrowed from a later row past the null boards
+            .when(pl.lit(wp_after_raw).is_nan())
+            .then(None)
             .when(try_to_kickoff)
             .then(kick_board)
+            # the play that ends a half borrows the next real play's wp_before, past a Timeout
+            # row (C-NF-12): 401761665's timeout before overtime is filed to the other team.
+            # Keyed on that play's team either way, as cfbfastR does (create_wpa_naive.R
+            # wpa_base_nxt_ind / wpa_change_nxt_ind on lead_pos_team2), not on this play's own
+            # possession change (R832-6: 401858224's tying field goal kept its team and took
+            # the model's 0.476, not 1 - overtime's first wp_before, 0.498).
             .when(
                 (pl.col("end_of_half") == True)
-                .and_(pl.col("start.pos_team.id") == pl.col("lead_pos_team"))
+                .and_(pl.col("start.pos_team.id") == lead_team)
                 .and_(pl.col("type.text") != "Timeout"),
             )
             .then(pl.col(lwb))
             .when(
                 (pl.col("end_of_half") == True)
-                .and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
+                .and_(pl.col("start.pos_team.id") != lead_team)
                 .and_(pl.col("type.text") != "Timeout"),
             )
             .then(1 - pl.col(lwb))
@@ -987,7 +1200,7 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             # safeties) went from mean |WPA| 0.72, 16 above 0.5, to 0.05 and none.
             .when(
                 (pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(
-                    pl.col("lead_pos_team") == pl.col("start.pos_team.id"),
+                    lead_team == pl.col("start.pos_team.id"),
                 ),
             )
             .then(pl.col(lwb))
@@ -1020,7 +1233,8 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
                 .is_null()
                 .and_(pl.col(lwb).is_null())
                 .and_(pl.col("status_type_completed") != True)
-                .and_(pl.col(f"_wa_flip{suffix}").is_not_null()),
+                .and_(pl.col(f"_wa_flip{suffix}").is_not_null())
+                .and_(pl.lit(wp_after_raw).is_not_nan()),  # a shootout attempt left unknown stays unknown
             )
             .then(
                 pl.when(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
@@ -1302,6 +1516,12 @@ def _spot_from_text(txt, row):
 #: all three.
 #: Rows that are not snaps and may sit between a play and the one that follows it.
 _ADMIN_ROW_RE = r"(?i)^(?:timeout|end period|end of (?:half|game)|official)"
+#: rows that stop the clock without a snap; possession reads across them (EX-3.4-b)
+_STOPPAGE_TYPES = ["Timeout", "End Period", "End of Half"]
+#: EX-3.4-c: the play types whose degenerate end block takes the next snap's start
+_DEGENERATE_END_TYPES_RE = r"^(?:Rush|Pass|Pass Reception|Pass Incompletion|Pass Completion|Sack|Penalty)$"
+#: a row that follows a play without being a scrimmage snap of the team that ran it
+_NOT_A_SNAP_RE = r"(?i)kickoff|onside|extra point|two.point|2pt|coin toss"
 
 #: ESPN's down-and-distance text for a ``start.distance`` of 0 that is not labelled
 #: "Goal", and the "at <spot>" tail both texts share.
@@ -1717,7 +1937,7 @@ def _reorder_late_inserts(plays_df: pl.DataFrame) -> pl.DataFrame:
     )
     if not df["_late"].any():
         return plays_df
-    fixed = df.filter(~pl.col("_late")).select("_pos", "_seq", "_drv")
+    fixed = df.filter(pl.col("_late") == False).select("_pos", "_seq", "_drv")
     late = df.filter(pl.col("_late")).select("_pos", "_seq", "_drv")
     target = (
         late.join(fixed.rename({"_pos": "_tpos", "_seq": "_tseq", "_drv": "_tdrv"}), how="cross")
@@ -1744,7 +1964,7 @@ def _reorder_late_inserts(plays_df: pl.DataFrame) -> pl.DataFrame:
     # defensive twos meet this in 2014-2026 (7 rows, 2020-24).
     tries = df.filter(pl.col("_late") & pl.col("type.text").is_in(_TRY_TYPES)).join(target, on="_pos", how="anti")
     if tries.height:
-        tds = df.filter(~pl.col("_late") & pl.col("type.text").str.contains("(?i)touchdown")).select(
+        tds = df.filter((pl.col("_late") == False) & pl.col("type.text").str.contains("(?i)touchdown")).select(
             _tpos="_pos", _tseq="_seq", _tper="_per"
         )
         target = pl.concat(
@@ -1832,6 +2052,18 @@ def _drop_espn_play_copies(plays_df: pl.DataFrame) -> pl.DataFrame:
     * **Textless echo** -- a row with no text beside a texted row of the same type, period and
       start state, filed before the play at the previous play's clock (2009-13, 2021-22) or
       after it (2007-15). It goes; the texted twin stays.
+    * **Copy outside its drive** -- the same play (drive, period, clock, start state, type and
+      text) filed under a second id that the id sort puts outside its drive, where neither
+      neighbour is in that drive (401420836: an 11:58 rush among the 14:43 plays two drives
+      earlier, and a 10:44 punt after the next drive's first run). The stranded copy goes;
+      the copy inside its drive stays, so a down replayed in its own drive is never touched.
+      A clock that half its period's rows share (a clockless feed's 0:00, an old overtime's
+      15:00) tells no plays apart, and such a row is never called a copy. "Half" is a safe
+      margin, not a boundary the data sets: the one known wrong drop (401327913's kickoffs)
+      sat at 95%, and 0.6-0.9 would drop only more real copies (17 rows at 0.6). Over the
+      23,024 cfb-raw games this step drops 490 rows in 235 games (213 of them punts), each
+      with its twin kept (489 fewer rows after the whole pipeline); 438 sit next to that twin
+      in ESPN's feed.
 
     Timeouts and end-of-period rows are never dropped, and neither is a play without a start
     spot (``start.yardsToEndzone`` 0), which leaves the spotless 2004 feed to the adjacent rule.
@@ -1888,7 +2120,29 @@ def _drop_espn_play_copies(plays_df: pl.DataFrame) -> pl.DataFrame:
         .filter(pl.all_horizontal([pl.col(c) == pl.col(c).shift(-1) for c in copy]).fill_null(False))["_pos"]
         .to_list()
     )
-    return df.filter(~pl.col("_pos").is_in(stale + echo)).drop("_pos", "_stub")
+    df = df.filter(~pl.col("_pos").is_in(stale + echo)).drop("_pos", "_stub")
+    return _drop_stranded_copies(df, [*key, "text", "start.adj_TimeSecsRem"], marker)
+
+
+def _drop_stranded_copies(df: pl.DataFrame, same: list[str], marker: pl.Expr) -> pl.DataFrame:
+    """Drop the copy outside its drive (see :func:`_drop_espn_play_copies`).
+
+    A row goes when neither neighbour is in its drive and a row inside the drive matches it on
+    ``same``. A clock that half its period's rows share tells no plays apart (401327913 reads 0:00
+    on 95% of its rows, and its touchback kickoffs all sit in drive 1), so such a row is never
+    called a copy.
+    """
+    drive = pl.col("drive.id")
+    out_of_drive = (drive.shift(1) != drive).fill_null(True) & (drive.shift(-1) != drive).fill_null(True)
+    period_len = pl.len().over("period.number")
+    blank_clock = pl.len().over("period.number", "start.adj_TimeSecsRem") * 2 >= period_len
+    df = df.with_row_index("_pos").with_columns(_out=out_of_drive, _blank=blank_clock)
+    home = df.filter(pl.col("_out") == False).select(same).drop_nulls()
+    stranded = df.filter(
+        (pl.col("_out") == True) & (pl.col("_blank") == False) & ~marker & (pl.col("start.yardsToEndzone") != 0)
+    )
+    copy_of_home = stranded.drop_nulls(same).join(home.unique(), on=same, how="semi")["_pos"]
+    return df.filter(~pl.col("_pos").is_in(copy_of_home.implode())).drop("_pos", "_out", "_blank")
 
 
 _DD_SPOT_RE = re.compile(r"at (.+)$")
@@ -1971,6 +2225,46 @@ def _reunite_drive_rows(plays_df: pl.DataFrame) -> pl.DataFrame:
     return plays_df if order == list(range(plays_df.height)) else plays_df[order]
 
 
+def _place_out_of_scheme_plays(plays_df: pl.DataFrame) -> pl.DataFrame:
+    """Put a play whose id is outside the feed's numbering where its period and clock say (C-M18).
+
+    401425418 files a third-quarter kickoff (Q3 5:14; between the 5:20 and 5:14 plays in the
+    feed) under the id ``4014254180`` among 18-digit ids, so the id sort made it the game's first
+    row. A row moves only when its id's width differs from both neighbours' AND its period breaks
+    the order there: a feed whose ids change width as they count (the 2025+ vendor feed) already
+    runs in period order and is left alone, and a wrong period LABEL under a well-formed id
+    (401628439) is not a sort problem; :func:`_warn_period_steps_back` names it.
+    """
+    if "_feed" not in plays_df.columns:
+        raise ValueError("_place_out_of_scheme_plays needs the pre-sort row order in a `_feed` column")
+    if plays_df.height < 3 or not {"id", "period.number", "start.adj_TimeSecsRem"}.issubset(plays_df.columns):
+        return plays_df
+    period = pl.col("period.number").cast(pl.Int64, strict=False)
+    width = pl.col("id").cast(pl.String).str.len_chars()
+    stray = plays_df.select(
+        ((period.shift(1) > period) | (period.shift(-1) < period)).fill_null(False)
+        & (width != width.shift(1)).fill_null(True)
+        & (width != width.shift(-1)).fill_null(True)
+        & period.is_not_null()
+        & pl.col("start.adj_TimeSecsRem").is_not_null()
+    ).to_series()
+    if not stray.any():
+        return plays_df
+    rest = plays_df.filter(~stray)
+    for row in plays_df.filter(stray).iter_slices(1):
+        p, t, f = row["period.number"].item(), row["start.adj_TimeSecsRem"].item(), row["_feed"].item()
+        rest_p, rest_t = rest["period.number"].cast(pl.Int64, strict=False), rest["start.adj_TimeSecsRem"]
+        # just after the LAST play that comes before it (an earlier period, more time left, or the same
+        # clock and earlier in the incoming row order), not after a count of them: the id-sorted rest is not always
+        # in clock order (401420836 files this rush's 11:58 twin among its 14:43 plays), and on a clock
+        # tie the feed decides (400548110's personal foul follows the 9:41 touchdown it is filed after)
+        before = (rest_p < p) | ((rest_p == p) & ((rest_t > t) | ((rest_t == t) & (rest["_feed"] < f))))
+        hits = before.fill_null(False).arg_true()
+        at = int(hits[-1]) + 1 if hits.len() else 0
+        rest = pl.concat([rest.slice(0, at), row, rest.slice(at)])
+    return rest
+
+
 def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     """Chronological play sort with an overtime correction.
 
@@ -1984,7 +2278,11 @@ def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     """
     # maintain_order: a play repeated under drives.current sits after its
     # drives.previous copy, so the same-id dedupe keeps the fresher one
-    plays_df = plays_df.sort(["id", "start.adj_TimeSecsRem"], maintain_order=True)
+    # the incoming row order breaks a clock tie (R837-1): ESPN's feed on the first call
+    # (__helper_cfb_pbp_features), the first pass's output on the second (__add_downs_data)
+    plays_df = plays_df.with_row_index("_feed")
+    plays_df = _place_out_of_scheme_plays(plays_df.sort(["id", "start.adj_TimeSecsRem"], maintain_order=True))
+    plays_df = plays_df.drop("_feed")
     if "period.number" not in plays_df.columns or "sequenceNumber" not in plays_df.columns:
         return _reunite_drive_rows(plays_df)
     plays_df = _place_tries_filed_after_the_kickoff(_reunite_drive_rows(_reorder_late_inserts(plays_df)))
@@ -2030,7 +2328,7 @@ from sportsdataverse.football.attribution import (  # noqa: E402
     refine_play_types_post_attribution as _refine_play_types_post_attribution,
 )
 from sportsdataverse.football.box import air_yards_box as _air_yards_box  # noqa: E402
-from sportsdataverse.football.box import _ordered_rows  # noqa: E402
+from sportsdataverse.football.box import _home_first, _ordered_rows  # noqa: E402
 from sportsdataverse.football.box import _avg_start_ep  # noqa: E402
 from sportsdataverse.football.box import build_defensive_players_box as _build_defensive_players_box  # noqa: E402
 from sportsdataverse.football.box import build_specialists_box as _build_specialists_box  # noqa: E402
@@ -2071,6 +2369,54 @@ def _next_real_play(col: str) -> pl.Expr:
         )
         .otherwise(pl.col(col).shift(-1))
     )
+
+
+def _prev_real_play(col: str) -> pl.Expr:
+    """``col`` on the previous row that is not an administrative row (up to two skipped)."""
+    return (
+        pl.when(pl.col("type.text").shift(1).str.contains(_ADMIN_ROW_RE))
+        .then(
+            pl.when(pl.col("type.text").shift(2).str.contains(_ADMIN_ROW_RE))
+            .then(pl.col(col).shift(3))
+            .otherwise(pl.col(col).shift(2))
+        )
+        .otherwise(pl.col(col).shift(1))
+    )
+
+
+def _in_same_half(other: Callable[[str], pl.Expr]) -> pl.Expr:
+    """The row ``other`` reads is in this row's period, or both are in the same half of regulation (never null).
+
+    Needs ``period.number`` and ``half``. ``half`` is 2 for every period from the third on, so both rows must be in
+    regulation for the half to count: Q4 and an overtime period are not one half (R905-2), and an overtime period
+    hands the ball back to the team that just had it.
+    """
+    return (
+        (other("period.number") == pl.col("period.number"))
+        | ((pl.col("period.number") < 5) & (other("period.number") < 5) & (other("half") == pl.col("half")))
+    ).fill_null(False)
+
+
+def _mirror_next(col: str) -> pl.Expr:
+    """``col`` on the row B3 part (c)'s mirror test compares a play's end with (EX-3.4-a).
+
+    The next row, as before, unless administrative rows sit in between: then the next real play, when it is
+    in the same period or regulation half AND its start is where the play's own ``statYardage`` puts the
+    ball. A snap after a Timeout or a quarter break can carry a mirrored start of its own (252532199's
+    "rush for 47 yards to the LaLaf 28" is followed, across two timeouts, by a snap filed at 72), so the
+    play's stated yardage decides which of the two is the mirror.
+
+    Otherwise a Timeout row still answers with the team ESPN filed it under (its caller): R834-13 made a
+    defensive timeout the offense's, but its start is the caller's stale spot, which no end is a mirror of.
+    """
+    admin_next = pl.col("type.text").shift(-1).str.contains(_ADMIN_ROW_RE).fill_null(False)
+    agrees = (
+        _next_real_play("start.yardsToEndzone") == pl.col("start.yardsToEndzone") - pl.col("statYardage")
+    ).fill_null(False)
+    nxt = pl.col(col).shift(-1)
+    if col == "start.pos_team.id":
+        nxt = pl.when(pl.col("type.text").shift(-1) == "Timeout").then(pl.col("start.team.id").shift(-1)).otherwise(nxt)
+    return pl.when(admin_next & _in_same_half(_next_real_play) & agrees).then(_next_real_play(col)).otherwise(nxt)
 
 
 def _derive_special_teams_from_field_position(play_df: pl.DataFrame) -> pl.DataFrame:
@@ -2305,6 +2651,14 @@ class CFBPlayProcess(object):
                 gameSpreadAvailable} that short-circuits odds resolution (sets
                 odds_source="injected") so offline rebuilds never hit the live
                 core-odds endpoint or fall back to defaults. Validated + coerced here.
+                An optional ``overUnderAvailable`` key says whether ``overUnder`` is a
+                market total (True/False, ``"true"``/``"false"``/``"1"``/``"0"``, or
+                None; anything else raises ``ValueError``). A missing key means UNKNOWN:
+                the payload value and the play column are null, never a guess, because a
+                producer that filled 55.5 itself cannot say so without the key. EPA / WP
+                are unchanged by the flag. External overrides should carry it; a rebuild
+                of a game whose total was defaulted passes ``overUnderAvailable=False``
+                and warns.
             game_roster: optional pre-fetched game roster (the list of athlete
                 records from :func:`~sportsdataverse.cfb.cfb_game_rosters.espn_cfb_game_rosters`,
                 or the ``{"data": [...]}`` wrapper). Used by ``__attach_player_ids``
@@ -2326,6 +2680,9 @@ class CFBPlayProcess(object):
         Attributes:
             odds_source: provenance of the resolved spread —
                 "summary_pickcenter" | "core_odds_api" | "default" | "injected".
+            overUnderAvailable: False when ``overUnder`` is the 55.5 default rather than a
+                market total, None when an ``odds_override`` did not say (also a payload
+                key and a play column, R837-2, R895-1).
         """
         if odds_override is not None:
             if not isinstance(odds_override, dict):
@@ -2339,8 +2696,9 @@ class CFBPlayProcess(object):
             odds_override = {
                 "gameSpread": float(odds_override["gameSpread"]),
                 "overUnder": float(odds_override["overUnder"]),
-                "homeFavorite": bool(odds_override["homeFavorite"]),
-                "gameSpreadAvailable": bool(odds_override["gameSpreadAvailable"]),
+                "homeFavorite": _required_flag(odds_override["homeFavorite"], "homeFavorite"),
+                "gameSpreadAvailable": _required_flag(odds_override["gameSpreadAvailable"], "gameSpreadAvailable"),
+                "overUnderAvailable": _optional_flag(odds_override.get("overUnderAvailable"), "overUnderAvailable"),
             }
         self.gameId = int(gameId)
         # self.logger = logger
@@ -2438,7 +2796,7 @@ class CFBPlayProcess(object):
         #     "videos",
         # ]
         if self.raw == True:
-            logging.debug(f"{self.gameId}: raw cfb_pbp data requested, returning keys: {summary.keys()}")
+            logger.debug(f"{self.gameId}: raw cfb_pbp data requested, returning keys: {summary.keys()}")
             # reorder keys in raw format, appending empty keys which are defined later to the end
             pbp_json = {}
             for k in incoming_keys_expected:
@@ -2448,7 +2806,7 @@ class CFBPlayProcess(object):
                     pbp_json[k] = {} if k in dict_keys_expected else []
             return pbp_json
 
-        logging.debug(f"{self.gameId}: full cfb_pbp data requested, returning keys: {summary.keys()}")
+        logger.debug(f"{self.gameId}: full cfb_pbp data requested, returning keys: {summary.keys()}")
         for k in incoming_keys_expected:
             if k in summary.keys():
                 pbp_txt[k] = summary[k]
@@ -2484,6 +2842,12 @@ class CFBPlayProcess(object):
         Reads ``{path_to_json}/{gameId}.json`` where ``path_to_json`` was passed
         to the :class:`CFBPlayProcess` constructor.
 
+        Reading from disk does not make the pipeline offline (C-L3): with the defaults,
+        ``run_processing_pipeline()`` still requests ESPN participants for every play, and a summary
+        with fewer than two pickcenter providers still requests ESPN's odds endpoint. For a rebuild
+        that makes no request, pass ``join_participants=False`` and the persisted ``odds_override``
+        to the constructor, or hand the file to ``espn_cfb_pbp(summary=...)``, which sets both.
+
         Returns:
             dict: Parsed JSON contents, also stored on ``self.json``.
 
@@ -2494,6 +2858,14 @@ class CFBPlayProcess(object):
                 game = CFBPlayProcess(gameId=401628334, path_to_json="./cache")
                 pbp = game.cfb_pbp_disk()
                 print(list(pbp.keys()))
+
+            Offline rebuild (no network)::
+
+                odds = {"gameSpread": -4.0, "overUnder": 58.5, "homeFavorite": True, "gameSpreadAvailable": True}
+                game = CFBPlayProcess(gameId=401628334, path_to_json="./cache", join_participants=False,
+                                      odds_override=odds)
+                game.cfb_pbp_disk()
+                out = game.run_processing_pipeline()
         """
         with open(os.path.join(self.path_to_json, f"{self.gameId}.json")) as json_file:
             pbp_txt = json.load(json_file)
@@ -2537,7 +2909,7 @@ class CFBPlayProcess(object):
         # previous before current, whatever the feed's key order: a same-id repeat
         # keeps its LAST copy, which must be the fresher drives.current one
         for key in sorted(pbp_txt.get("drives").keys(), key=lambda k: k == "current"):
-            logging.debug(f"{self.gameId}: drives key - {key}")
+            logger.debug(f"{self.gameId}: drives key - {key}")
             prev_drives = pd.json_normalize(
                 data=pbp_txt.get("drives").get(f"{key}"),
                 record_path="plays",
@@ -2583,7 +2955,7 @@ class CFBPlayProcess(object):
             init["awayTeamId"]: {"1": [], "2": []},
         }
 
-        logging.debug(f"{self.gameId}: plays_df length - {len(pbp_txt['plays'])}")
+        logger.debug(f"{self.gameId}: plays_df length - {len(pbp_txt['plays'])}")
         if len(pbp_txt["plays"]) == 0:
             return pbp_txt
         # Repair the feed's pre-stripped entities once, at the boundary -- never in the 2025+
@@ -2597,12 +2969,12 @@ class CFBPlayProcess(object):
         if (len(pbp_txt["plays"]) < 50) and (
             pbp_txt.get("header").get("competitions")[0].get("status").get("type").get("completed") == True
         ):
-            logging.debug(f"{self.gameId}: appear to be too few plays ({len(pbp_txt['plays'])}) for a completed game")
+            logger.debug(f"{self.gameId}: appear to be too few plays ({len(pbp_txt['plays'])}) for a completed game")
             return pbp_txt
         if (len(pbp_txt["plays"]) > 500) and (
             pbp_txt.get("header").get("competitions")[0].get("status").get("type").get("completed") == True
         ):
-            logging.debug(f"{self.gameId}: appear to be too many plays ({len(pbp_txt['plays'])}) for a completed game")
+            logger.debug(f"{self.gameId}: appear to be too many plays ({len(pbp_txt['plays'])}) for a completed game")
             return pbp_txt
         # Sparse old games can omit nested per-play objects entirely: pd.json_normalize
         # only emits a `start.*`/`end.*`/`period.*`/`clock.*`/`type.*` column when at least
@@ -2614,6 +2986,8 @@ class CFBPlayProcess(object):
         # String-null because the chain runs `.str.*` ops on them (split/contains/to_lowercase),
         # which raise on an untyped Null column; the numeric/bool columns stay untyped Null so
         # their explicit downstream `.cast(...)` owns the final dtype.
+        # A play's whole ``end`` block or its scores can be absent from every play too (C-NF-10(a));
+        # the scores are created Int64-null, their published dtype.
         _required_play_cols = [
             "period.number",
             "clock.displayValue",
@@ -2622,6 +2996,8 @@ class CFBPlayProcess(object):
             "sequenceNumber",
             "text",
             "scoringPlay",
+            "homeScore",
+            "awayScore",
             "start.team.id",
             "start.down",
             "start.distance",
@@ -2629,13 +3005,25 @@ class CFBPlayProcess(object):
             "start.yardLine",
             "start.downDistanceText",
             "end.team.id",
+            "end.down",
+            "end.distance",
+            "end.yardsToEndzone",
             "end.yardLine",
         ]
         _string_play_cols = {"clock.displayValue", "type.text", "text", "start.downDistanceText"}
         _missing = [c for c in _required_play_cols if c not in pbp_txt["plays"].columns]
         if _missing:
             pbp_txt["plays"] = pbp_txt["plays"].with_columns(
-                [(pl.lit(None, dtype=pl.String) if c in _string_play_cols else pl.lit(None)).alias(c) for c in _missing]
+                [
+                    (
+                        pl.lit(None, dtype=pl.String)
+                        if c in _string_play_cols
+                        else pl.lit(None, dtype=pl.Int64)
+                        if c in ("homeScore", "awayScore")
+                        else pl.lit(None)
+                    ).alias(c)
+                    for c in _missing
+                ]
             )
         pbp_txt["plays"] = (
             pbp_txt["plays"]
@@ -2665,6 +3053,7 @@ class CFBPlayProcess(object):
                 homeFavorite=pl.lit(bool(np.asarray(init["homeFavorite"]).item())),
                 gameSpreadAvailable=pl.lit(init["gameSpreadAvailable"]),
                 overUnder=pl.lit(float(np.asarray(init["overUnder"]).item())),
+                overUnderAvailable=pl.lit(init["overUnderAvailable"], dtype=pl.Boolean),
             )
             .with_columns(
                 homeTeamSpread=pl.when(pl.col("homeFavorite") == True)
@@ -2842,6 +3231,12 @@ class CFBPlayProcess(object):
                         == False
                     )
                 ),
+                # EX-3.4-c: ESPN's degenerate end block, read before the repairs below rewrite
+                # end.yardsToEndzone (a declined penalty's start spot, part (b)'s backfill)
+                _end_degenerate=(pl.col("end.down") == 0)
+                .and_(pl.col("end.yardLine") == 0)
+                .and_(pl.col("end.yardsToEndzone") == 0)
+                .fill_null(False),
             )
             .with_columns(
                 pl.col("end.team.id")
@@ -2882,6 +3277,25 @@ class CFBPlayProcess(object):
                 .when(pl.col("type.text").is_in(kickoff_vec).and_(pl.col("start.team.id") == init["awayTeamId"]))
                 .then(pl.col("homeTeamId"))
                 .otherwise(pl.col("start.team.id"))
+                .alias("start.pos_team.id"),
+            )
+            .with_columns(
+                # R834-13 (owner ruling 2026-10-18; nflfastR's posteam on a timeout row): ESPN
+                # files a Timeout row under the team that CALLED it, so a defensive timeout
+                # read as the defense's possession while its EP (inherited from the play
+                # before, EX-3.4-b) is the offense's, and wp_before added the caller's score
+                # margin to the offense's EP (401864518 "Timeout UNLV" during NDSU's drive:
+                # 0.76 for UNLV where the plays around it give UNLV 0.75 to 0.81, but from
+                # NDSU's EP). When the real plays before and after it, in the same half,
+                # belong to one team, the timeout row is that team's possession.
+                pl.when(
+                    (pl.col("type.text") == "Timeout")
+                    & (_prev_real_play("start.pos_team.id") == _next_real_play("start.pos_team.id"))
+                    & _in_same_half(_prev_real_play)
+                    & _in_same_half(_next_real_play)
+                )
+                .then(_next_real_play("start.pos_team.id"))
+                .otherwise(pl.col("start.pos_team.id"))
                 .alias("start.pos_team.id"),
             )
             .with_columns(
@@ -2975,6 +3389,7 @@ class CFBPlayProcess(object):
         _period_over = (pl.col("half").shift(-1) != pl.col("half")).fill_null(False) | (
             pl.col("half").shift(-1).is_null() & (pl.col("status_type_completed") == True)  # noqa: E712
         ).fill_null(False)
+        opening_kicker = _opening_kicker(pbp_txt["plays"], init["homeTeamId"], init["awayTeamId"])
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
@@ -3027,15 +3442,9 @@ class CFBPlayProcess(object):
                 .then(pl.col("end.awayTeamTimeouts"))
                 .otherwise(pl.col("end.homeTeamTimeouts"))
                 .alias("end.defPosTeamTimeouts"),
-                pl.when(
-                    (pl.col("game_play_number") == 1).and_(
-                        pl.col("type.text").is_in(kickoff_vec),
-                        pl.col("start.pos_team.id") == pl.col("homeTeamId"),
-                    ),
-                )
-                .then(pl.col("homeTeamId"))
-                .otherwise(pl.col("awayTeamId"))
-                .alias("firstHalfKickoffTeamId"),
+                # one game-wide constant: the opening kicker (it was a per-row expression that
+                # named the receiver on row 1 and the away team on every later row)
+                pl.lit(opening_kicker, dtype=pl.Int32).alias("firstHalfKickoffTeamId"),
                 pl.col("period.number").alias("period"),
                 pl.when(pl.col("start.team.id") == pl.col("homeTeamId"))
                 .then(pl.lit(100) - pl.col("start.yardLine"))
@@ -3179,6 +3588,50 @@ class CFBPlayProcess(object):
             )
             .drop(["_b_zero", "_b_nxt_down", "_b_nxt_dist"])
             .with_columns(
+                # EX-3.4-c: the degenerate end block {down 0, yardLine 0, yardsToEndzone 0} on
+                # a scrimmage play that is not a fumble (supp-002's rule below owns those): a
+                # rush, a pass, a sack or a penalty, accepted or declined. ESPN kept the distance
+                # (or dropped the team), so B13 above does not see it; the down stayed 0 and the
+                # <= 0 clamp stored the own 99 (401754585 "pass incomplete" on 2nd & 5 at the
+                # 70: EPA -1.85, where the next snap, 3rd & 5 at the 70, gives -0.5). When the
+                # same team snaps next in the same period (or regulation half), that snap's
+                # start IS this play's end: an incompletion or a declined flag leaves the spot,
+                # a gain or an enforced flag moves it there. Not a score, a kick, a try or a
+                # fumble (supp-002's rule below); the next row must be a snap, not a kickoff or a
+                # try. An interception the same team snaps after was wiped out by a flag
+                # (401761639's "pass intercepted ... PENALTY", then 2nd & 1 at the 3): the rule
+                # applies (R905-3: 14 such rows in the 2,591-game sweep, 8 with EPA moved).
+                _ex34c=pl.col("_end_degenerate")
+                .and_(pl.col("scoringPlay") == False)
+                .and_(pl.col("type.text").str.contains(_DEGENERATE_END_TYPES_RE))
+                .and_(pl.col("text").str.contains(r"(?i)fumbl") == False)
+                # R905-1: not a 4th-down play short of the line to gain. downs_turnover reads it
+                # as a turnover from the start state and statYardage alone and flips the end
+                # margin, so an end taken from the same team's next snap would be scored from
+                # two sides (401760417's ghost "Br. Barnes run for 0 yds": -1.07 -> +0.82).
+                .and_(
+                    ((pl.col("type.text") != "Penalty") & (pl.col("start.down") == 4))
+                    .and_(pl.col("statYardage") < pl.col("start.distance"))
+                    .fill_null(False)
+                    == False
+                )
+                .and_(_next_real_play("start.pos_team.id") == pl.col("start.pos_team.id"))
+                .and_(_next_real_play("start.down").is_between(1, 4))
+                .and_(_next_real_play("type.text").str.contains(_NOT_A_SNAP_RE) == False)
+                .and_(_in_same_half(_next_real_play))
+                .fill_null(False),
+            )
+            .with_columns(
+                *[
+                    pl.when(pl.col("_ex34c"))
+                    .then(_next_real_play(f"start.{c}"))
+                    .otherwise(pl.col(f"end.{c}"))
+                    .alias(f"end.{c}")
+                    for c in ("down", "distance", "yardsToEndzone", "yardLine", "yard")
+                ],
+            )
+            .drop(["_ex34c", "_end_degenerate"])
+            .with_columns(
                 # B3 part (c): the same repair for end states that are PRESENT but
                 # mirrored. ESPN sometimes reports end.yardsToEndzone from the wrong
                 # side of the field while its own end.yardLine and the next play's
@@ -3204,10 +3657,18 @@ class CFBPlayProcess(object):
                 # its own, since both legitimately move the ball between snaps. A
                 # penalty on the NEXT play is fine -- it is enforced from that play's
                 # own result and cannot move its starting spot.
+                #
+                # EX-3.4-a: "next" is the next real play when only administrative rows (a
+                # Timeout, an End Period) sit in between, in the same period or regulation
+                # half, and that play starts where this one's statYardage ends it
+                # (``_mirror_next``). An End Period row repeats the previous play's START, so
+                # the mirror test read the wrong spot: 401856797's Q3-closing "rush for 4 yards
+                # gain to the CIN01" kept end.yardsToEndzone 99 (EPA -4.62) though Q4 opens
+                # 2nd & 1 at 1.
                 pl.when(
                     (pl.col("end.yardsToEndzone").is_null() == False)
-                    .and_(pl.col("start.yardsToEndzone").shift(-1).is_null() == False)
-                    .and_(pl.col("start.pos_team.id").shift(-1) == pl.col("end.pos_team.id"))
+                    .and_(_mirror_next("start.yardsToEndzone").is_null() == False)
+                    .and_(_mirror_next("start.pos_team.id") == pl.col("end.pos_team.id"))
                     .and_(pl.col("start.pos_team.id") == pl.col("end.pos_team.id"))
                     .and_(pl.col("type.text").is_in(kickoff_vec) == False)
                     .and_(
@@ -3235,12 +3696,12 @@ class CFBPlayProcess(object):
                     # counterfactual sign disagreements ("Personal Foul 11 yard from
                     # NEV21 to NEV1" stored as 90). Kicks stay excluded; their end
                     # states are parts (d) and (e).
-                    .and_(pl.col("end.yardsToEndzone") != pl.col("start.yardsToEndzone").shift(-1))
+                    .and_(pl.col("end.yardsToEndzone") != _mirror_next("start.yardsToEndzone"))
                     .and_(
-                        pl.col("end.yardsToEndzone") == (pl.lit(100) - pl.col("start.yardsToEndzone").shift(-1)),
+                        pl.col("end.yardsToEndzone") == (pl.lit(100) - _mirror_next("start.yardsToEndzone")),
                     ),
                 )
-                .then(pl.col("start.yardsToEndzone").shift(-1))
+                .then(_mirror_next("start.yardsToEndzone"))
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
             )
@@ -3346,7 +3807,7 @@ class CFBPlayProcess(object):
                     )
                     .and_(pl.col("_ko_pen_rekick_follows") == True),
                 )
-                .then(pl.when(pl.col("season") >= _KICKOFF_2012_RULES_FROM).then(pl.lit(75)).otherwise(pl.lit(80)))
+                .then(cfb_touchback_yardline_expr(pl.col("season")))
                 .when(
                     (pl.col("type.text").is_in(kickoff_vec).or_(pl.col("text").str.contains(r"(?i)kickoff")))
                     .and_(pl.col("text").str.contains(r"(?i)penalty"))
@@ -3485,14 +3946,7 @@ class CFBPlayProcess(object):
             )
             .drop(["_ret_spot", "_ret_y2ez", "_nxt_start", "_nxt_pos"])
         )
-        pbp_txt["firstHalfKickoffTeamId"] = np.where(
-            (pbp_txt["plays"]["game_play_number"] == 1)
-            & (pbp_txt["plays"]["type.text"].is_in(kickoff_vec))
-            & (pbp_txt["plays"]["start.team.id"] == init["homeTeamId"]),
-            init["homeTeamId"],
-            init["awayTeamId"],
-        )
-        pbp_txt["firstHalfKickoffTeamId"] = pbp_txt["firstHalfKickoffTeamId"][0]
+        pbp_txt["firstHalfKickoffTeamId"] = opening_kicker
 
         if "scoringType.displayName" in pbp_txt["plays"].columns:
             pbp_txt["plays"] = (
@@ -3566,7 +4020,8 @@ class CFBPlayProcess(object):
                 # as a scrimmage snap. Typed as the try, it moves back behind its touchdown
                 # (_place_tries_filed_after_the_kickoff) and realises nothing there, the
                 # touchdown having realised it. The only such row 2004-26; the untyped
-                # overtime copies of shootout attempts (401426542, 401112489) are left alone.
+                # overtime copies of shootout attempts (401426542's parenthesised rows) are
+                # left alone.
                 .when(
                     (pl.col("type.text") == "Unknown")
                     & (pl.col("period.number") <= 4)
@@ -3581,6 +4036,17 @@ class CFBPlayProcess(object):
                     .then(pl.lit("Two-Point Conversion Missed"))
                     .otherwise(pl.lit("Two-Point Conversion Good"))
                 )
+                # An untyped overtime row that IS a shootout attempt, not a copy of one:
+                # 401112489 (2019, six overtimes) records three of its four attempts only as
+                # "Sam Howell Two-Point Rush Attempt Failed" / "... Pass Attempt Failed".
+                # As "Unknown" they were scored as scrimmage snaps (wp_after 0.0). The only
+                # three such rows 2004-26.
+                .when(
+                    (pl.col("type.text") == "Unknown")
+                    & (pl.col("period.number") >= 5)
+                    & pl.col("text").str.contains(r"(?i)two-point (?:pass|rush) attempt failed").fill_null(False)
+                )
+                .then(pl.lit("Two-Point Conversion Missed"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
@@ -3741,11 +4207,11 @@ class CFBPlayProcess(object):
     def __helper__espn_cfb_odds_information__(self):
         """Fetch pre-game spread/total from ESPN's modern core odds endpoint.
 
-        Returns ``(gameSpread, overUnder, homeFavorite, gameSpreadAvailable)``.
+        Returns ``(gameSpread, overUnder, homeFavorite, gameSpreadAvailable, overUnderAvailable)``.
         ESPN emptied the legacy ``pickcenter`` array on the summary endpoint
         for 2024+ college games; this helper restores the data path for those
         games via the ``sports.core.api.espn.com`` v2 odds collection. Falls
-        back to defaults ``(2.5, 55.5, True, False)`` when the endpoint
+        back to defaults ``(2.5, 55.5, True, False, False)`` when the endpoint
         returns no items, errors out, or the JSON cannot be decoded —
         preserving the legacy caller-visible behavior on those failure
         paths.
@@ -3764,11 +4230,11 @@ class CFBPlayProcess(object):
                 self.gameId,
                 e,
             )
-            return (2.5, 55.5, True, False)
+            return (2.5, _DEFAULT_TOTAL, True, False, False)
 
         items = odds.get("items", []) if isinstance(odds, dict) else []
         if not items:
-            return (2.5, 55.5, True, False)
+            return (2.5, _DEFAULT_TOTAL, True, False, False)
 
         # Prefer ESPN BET (their canonical book) when present; the upstream
         # 0.36-live helper assumed items[0] was ESPN BET, but the items array
@@ -3791,9 +4257,11 @@ class CFBPlayProcess(object):
 
         gameSpreadAvailable = spread_raw is not None
         gameSpread = float(spread_raw) if spread_raw is not None else 2.5
-        overUnder = float(ou_raw) if ou_raw is not None else 55.5
+        overUnder = float(ou_raw) if ou_raw is not None else _DEFAULT_TOTAL
+        if gameSpreadAvailable and ou_raw is None:
+            _warn_default_total(self.gameId, "core_odds_api", overUnder)
         homeFavorite = bool(home_fav_raw) if home_fav_raw is not None else True
-        return (gameSpread, overUnder, homeFavorite, gameSpreadAvailable)
+        return (gameSpread, overUnder, homeFavorite, gameSpreadAvailable, ou_raw is not None)
 
     def __helper_cfb_pickcenter(self, pbp_txt):
         # Spread definition
@@ -3803,36 +4271,55 @@ class CFBPlayProcess(object):
             self.overUnder = o["overUnder"]
             self.homeFavorite = o["homeFavorite"]
             self.gameSpreadAvailable = o["gameSpreadAvailable"]
+            self.overUnderAvailable = o["overUnderAvailable"]
             self.odds_source = "injected"
+            if not self.gameSpreadAvailable:
+                # a rebuild of a default-odds game is still a default-odds game (R828-2)
+                _warn_default_odds(self.gameId, self.odds_source, self.gameSpread, self.overUnder)
+            elif self.overUnderAvailable is False:
+                # and a rebuild of a defaulted total is still a defaulted total (R837-2); None (an
+                # override that does not say) is unknown, not a default (R895-1)
+                _warn_default_total(self.gameId, self.odds_source, self.overUnder)
             return {
                 "gameSpread": self.gameSpread,
                 "overUnder": self.overUnder,
                 "homeFavorite": self.homeFavorite,
                 "gameSpreadAvailable": self.gameSpreadAvailable,
+                "overUnderAvailable": self.overUnderAvailable,
             }
         offline = getattr(self, "_offline", False)
         n_pick = len(pbp_txt.get("pickcenter", []))
         # offline (a supplied summary): the summary's own pickcenter is the only
         # odds source, so one provider is enough and an empty array means the
         # documented defaults, never a request
+        pickcenter = None
         if n_pick > 1 or (offline and n_pick >= 1):
             pickcenter = pd.json_normalize(data=pbp_txt, record_path="pickcenter")
             pickcenter = pickcenter.sort_values(by=["provider.id"])
-            homeFavorite = (
-                pickcenter[pickcenter["homeTeamOdds.favorite"].notnull()][["homeTeamOdds.favorite"]].values[0]
-                if "homeTeamOdds.favorite" in pickcenter.columns
-                else True
-            )
-            gameSpread = (
-                pickcenter[pickcenter["spread"].notnull()][["spread"]].values[0]
-                if "spread" in pickcenter.columns
-                else 2.5
-            )
-            overUnder = (
-                pickcenter[pickcenter["overUnder"].notnull()][["overUnder"]].values[0]
-                if "overUnder" in pickcenter.columns
-                else 55.0
-            )
+
+        def _first(column, default):
+            """The first provider's non-null ``column`` (``provider.id`` order), else ``default``.
+
+            An all-null column used to raise IndexError on the empty filter (C-NF-10(b), R828-3).
+            """
+            values = pickcenter[column].dropna() if column in pickcenter.columns else ()
+            return values.iloc[0] if len(values) else default
+
+        # a pickcenter whose providers carry no spread is no spread: it takes the path below, as an
+        # empty pickcenter does (C-NF-10(b))
+        if pickcenter is not None and _first("spread", None) is not None:
+            homeFavorite = _first("homeTeamOdds.favorite", True)
+            gameSpread = _first("spread", 2.5)
+            overUnder = _first("overUnder", None)
+            overUnderAvailable = overUnder is not None
+            if overUnder is None:
+                overUnder = _DEFAULT_TOTAL
+                _warn_default_total(self.gameId, "summary_pickcenter", overUnder)
+            # pandas hands back numpy values: unwrap to Python scalars so the payload's odds are a
+            # valid (JSON-safe) odds_override (C-M19); the values chosen are unchanged
+            homeFavorite = bool(np.asarray(homeFavorite).item())
+            gameSpread = float(np.asarray(gameSpread).item())
+            overUnder = float(np.asarray(overUnder).item())
             gameSpreadAvailable = True
             self.odds_source = "summary_pickcenter"
             # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
@@ -3841,23 +4328,28 @@ class CFBPlayProcess(object):
             # games on ESPN's summary endpoint). Try the modern core odds
             # endpoint before silently falling through to defaults — which
             # would otherwise corrupt every WPA/EP downstream calculation
-            # because every play would inherit `(2.5, 55.0, True)`.
+            # because every play would inherit `(2.5, 55.5, True)`.
             (
                 gameSpread,
                 overUnder,
                 homeFavorite,
                 gameSpreadAvailable,
-            ) = (2.5, 55.5, True, False) if offline else self.__helper__espn_cfb_odds_information__()
+                overUnderAvailable,
+            ) = (2.5, _DEFAULT_TOTAL, True, False, False) if offline else self.__helper__espn_cfb_odds_information__()
             self.odds_source = "core_odds_api" if gameSpreadAvailable else "default"
+            if not gameSpreadAvailable:
+                _warn_default_odds(self.gameId, self.odds_source, gameSpread, overUnder)
         self.gameSpread = gameSpread
         self.overUnder = overUnder
         self.homeFavorite = homeFavorite
         self.gameSpreadAvailable = gameSpreadAvailable
+        self.overUnderAvailable = overUnderAvailable
         return {
             "gameSpread": gameSpread,
             "overUnder": overUnder,
             "homeFavorite": homeFavorite,
             "gameSpreadAvailable": gameSpreadAvailable,
+            "overUnderAvailable": overUnderAvailable,
         }
 
     def __helper_cfb_game_data(self, pbp_txt, init):
@@ -3875,6 +4367,7 @@ class CFBPlayProcess(object):
             -1 * abs(init["gameSpread"]),
         )
         pbp_txt["overUnder"] = init["overUnder"]
+        pbp_txt["overUnderAvailable"] = init["overUnderAvailable"]
         pbp_txt["odds_source"] = self.odds_source
         # Home and Away identification variables
         # A missing or null name part is "", never str(None) == "None" (adapter-built headers).
@@ -3958,45 +4451,26 @@ class CFBPlayProcess(object):
             keep="last",
             maintain_order=True,
         )
-        # An "End of Game" / "End of OT" marker is dropped below, but it is often the only row
-        # that carries the final score: ESPN drops the winning touchdown row from overtime feeds
-        # (2021 401301042 ends 23-30 on its last play and 29-30 on the marker; 2024 401628428
-        # 38-38 against a 43-41 marker). Carry a marker's higher score back onto the play before
-        # it, so the game still ends at its final; a lower score on a marker is a glitch and is
-        # ignored.
-        marker = pl.col("type.text").str.contains("(?i)end of|(?i)end period")
-        play_df = play_df.with_columns(
-            *[
-                pl.when(marker.shift(-1).fill_null(False) & (pl.col(c).shift(-1) > pl.col(c)))
-                .then(pl.col(c).shift(-1))
-                .otherwise(pl.col(c))
-                .alias(c)
-                for c in ("homeScore", "awayScore")
-            ]
-        )
-        # A few feeds keep homeScore/awayScore reversed for the whole game (2006 262590245,
-        # 2016 400876038 / 400876049, 2018 401135269): the away team's points sit under
-        # homeScore from its first score to the last row, so every margin in the game read
-        # for the wrong side. The header's final is the one statement of the score that does
-        # not come from a play row; when the last row is that final reversed, and the two
-        # sides differ, the columns are swapped back before any margin is derived.
-        _reversed = (
-            (pl.col("homeScore").last() == pl.col("awayFinalScore").first())
-            & (pl.col("awayScore").last() == pl.col("homeFinalScore").first())
-            & (pl.col("homeFinalScore").first() != pl.col("awayFinalScore").first())
-        ).fill_null(False)
-        play_df = play_df.with_columns(
-            homeScore=pl.when(_reversed).then(pl.col("awayScore")).otherwise(pl.col("homeScore")),
-            awayScore=pl.when(_reversed).then(pl.col("homeScore")).otherwise(pl.col("awayScore")),
-        )
+        play_df = _reconcile_play_scores(play_df)
         play_df = play_df.filter(
             pl.col("type.text").str.contains("(?i)end of|(?i)coin toss|(?i)end period|(?i)wins toss") == False,
         )
+        _warn_period_steps_back(play_df, self.gameId)
+        # A half or game that ends on a Timeout row ends on the play before it (C-NF-12): end_of_half
+        # reads the next row that is not a Timeout, and a Timeout row never takes it.
+        half_play = pl.col("type.text").fill_null("") != "Timeout"
+        next_half = pl.when(half_play).then(pl.col("half")).shift(-1).backward_fill()
+        next_period = pl.when(half_play).then(pl.col("period")).shift(-1).backward_fill()
         play_df = (
             play_df.with_columns(
                 period=pl.col("period.number"),
                 half=pl.when(pl.col("period.number") <= 2).then(1).otherwise(2),
+                # C-L1: the order is final here (re-sorted, copies and markers dropped), so the
+                # row-index columns follow it. The numbers keep their gaps; only their order moves.
+                game_play_number=pl.col("game_play_number").sort(),
             )
+            # one chunk per column: polars 2.0 panics on a later struct whose fields disagree
+            .rechunk()
             .with_columns(
                 # A kickoff the receiving team returns ends at its first down. ESPN files
                 # that end at down -1 ("Kickoff Return (Offense)", 2014 on), and the EP and
@@ -4011,6 +4485,7 @@ class CFBPlayProcess(object):
                 .otherwise(pl.col("end.down"))
                 .alias("end.down"),
                 lead_half=pl.col("half").shift(-1),
+                lag_half=pl.col("half").shift(1),  # C-L1: the previous row of the final order
                 lag_scoringPlay=pl.col("scoringPlay").shift(1),
             )
             .with_columns(
@@ -4020,11 +4495,11 @@ class CFBPlayProcess(object):
                 # a fresh possession), and a finished game's last row (a live game's latest row
                 # has no next row YET). This compared against lead_half in the same
                 # with_columns as its fill, so it read the unfilled null on the game's last row.
-                end_of_half=(
-                    (pl.col("half").shift(-1) != pl.col("half"))
-                    | ((pl.col("period") == 4) & (pl.col("period").shift(-1) >= 5))
-                ).fill_null(False)
-                | (pl.col("half").shift(-1).is_null() & (pl.col("status_type_completed") == True)).fill_null(False),
+                end_of_half=half_play
+                & (
+                    ((next_half != pl.col("half")) | ((pl.col("period") == 4) & (next_period >= 5))).fill_null(False)
+                    | (next_half.is_null() & (pl.col("status_type_completed") == True)).fill_null(False)
+                ),
                 down_1=pl.col("start.down") == 1,
                 down_2=pl.col("start.down") == 2,
                 down_3=pl.col("start.down") == 3,
@@ -4089,7 +4564,7 @@ class CFBPlayProcess(object):
                 .when(
                     (pl.col("text").str.contains(r"(?i)fair catch|fair caught"))
                     .and_(pl.col("kickoff_play") == True)
-                    .and_(pl.col("season") >= 2018),
+                    .and_(pl.col("season") >= CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM),
                 )
                 .then(True)
                 .when((pl.col("text").str.contains("(?i)kickoff$")).and_(pl.col("kickoff_play") == True))
@@ -4229,51 +4704,56 @@ class CFBPlayProcess(object):
                             ],
                         )
                     )
-                    .or_((pl.col("type.text") == "Safety").and_(pl.col("text").str.contains("sacked")))
-                    .or_((pl.col("type.text") == "Safety").and_(pl.col("text").str.contains("pass complete")))
+                    # the text literals fold case, as cfbfastR's ignore_case does (C-L16)
+                    .or_((pl.col("type.text") == "Safety").and_(pl.col("text").str.contains("(?i)sacked")))
+                    .or_((pl.col("type.text") == "Safety").and_(pl.col("text").str.contains("(?i)pass complete")))
                     .or_(
                         (pl.col("type.text") == "Fumble Recovery (Own)").and_(
-                            pl.col("text").str.contains(r"pass complete|pass incomplete|pass intercepted"),
-                        ),
-                    )
-                    .or_((pl.col("type.text") == "Fumble Recovery (Own)").and_(pl.col("text").str.contains("sacked")))
-                    .or_(
-                        (pl.col("type.text") == "Fumble Recovery (Own) Touchdown").and_(
-                            pl.col("text").str.contains(r"pass complete|pass incomplete|pass intercepted"),
+                            pl.col("text").str.contains(r"(?i)pass complete|pass incomplete|pass intercepted"),
                         ),
                     )
                     .or_(
+                        (pl.col("type.text") == "Fumble Recovery (Own)").and_(pl.col("text").str.contains("(?i)sacked"))
+                    )
+                    .or_(
                         (pl.col("type.text") == "Fumble Recovery (Own) Touchdown").and_(
-                            pl.col("text").str.contains("sacked"),
+                            pl.col("text").str.contains(r"(?i)pass complete|pass incomplete|pass intercepted"),
+                        ),
+                    )
+                    .or_(
+                        (pl.col("type.text") == "Fumble Recovery (Own) Touchdown").and_(
+                            pl.col("text").str.contains("(?i)sacked"),
                         ),
                     )
                     .or_(
                         (pl.col("type.text") == "Fumble Recovery (Opponent)").and_(
-                            pl.col("text").str.contains(r"pass complete|pass incomplete|pass intercepted"),
+                            pl.col("text").str.contains(r"(?i)pass complete|pass incomplete|pass intercepted"),
                         ),
                     )
                     .or_(
                         (pl.col("type.text") == "Fumble Recovery (Opponent)").and_(
-                            pl.col("text").str.contains("sacked"),
+                            pl.col("text").str.contains("(?i)sacked"),
                         ),
                     )
                     .or_(
                         (pl.col("type.text") == "Fumble Recovery (Opponent) Touchdown").and_(
-                            pl.col("text").str.contains(r"pass complete|pass incomplete"),
+                            pl.col("text").str.contains(r"(?i)pass complete|pass incomplete"),
                         ),
                     )
                     .or_(
                         (pl.col("type.text") == "Fumble Return Touchdown").and_(
-                            pl.col("text").str.contains(r"pass complete|pass incomplete"),
+                            pl.col("text").str.contains(r"(?i)pass complete|pass incomplete"),
                         ),
                     )
                     .or_(
-                        (pl.col("type.text") == "Fumble Return Touchdown").and_(pl.col("text").str.contains("sacked")),
+                        (pl.col("type.text") == "Fumble Return Touchdown").and_(
+                            pl.col("text").str.contains("(?i)sacked")
+                        ),
                     )
                     # 2025+ ESPN type for a fumble with no recovery (out of bounds)
                     .or_(
                         (pl.col("type.text") == "Fumble").and_(
-                            pl.col("text").str.contains(r"pass complete|pass incomplete|pass intercepted"),
+                            pl.col("text").str.contains(r"(?i)pass complete|pass incomplete|pass intercepted"),
                         ),
                     )
                     # Interception plays are pass attempts. The branches above
@@ -4485,11 +4965,12 @@ class CFBPlayProcess(object):
                 .then(pl.col("pos_score_diff"))
                 .otherwise(pl.col("pos_score_diff_start"))
                 .alias("pos_score_diff_start"),
-                pl.when(pl.col("start.pos_team.id") == pl.col("firstHalfKickoffTeamId"))
+                # nflfastR's receive_2h_ko: only a first-half row can still be waiting for that kickoff
+                pl.when((pl.col("period") <= 2).and_(pl.col("start.pos_team.id") == pl.col("firstHalfKickoffTeamId")))
                 .then(True)
                 .otherwise(False)
                 .alias("start.pos_team_receives_2H_kickoff"),
-                pl.when(pl.col("end.pos_team.id") == pl.col("firstHalfKickoffTeamId"))
+                pl.when((pl.col("period") <= 2).and_(pl.col("end.pos_team.id") == pl.col("firstHalfKickoffTeamId")))
                 .then(True)
                 .otherwise(False)
                 .alias("end.pos_team_receives_2H_kickoff"),
@@ -4573,7 +5054,7 @@ class CFBPlayProcess(object):
             play_df.with_columns(
                 # 2025+ ESPN files a pick whose returner fumbles out of bounds as "Fumble";
                 # it is an interception, not a strip sack for the rule below to retype.
-                pl.when((pl.col("type.text") == "Fumble").and_(pl.col("text").str.contains("pass intercepted")))
+                pl.when((pl.col("type.text") == "Fumble").and_(pl.col("text").str.contains("(?i)pass intercepted")))
                 .then(pl.lit("Interception Return"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
@@ -5364,7 +5845,7 @@ class CFBPlayProcess(object):
                     .and_(pl.col("text").str.contains("(?i)sacked") == False),
                 )
                 .then(True)
-                .when((pl.col("type.text") == "Fumble").and_(pl.col("text").str.contains("pass complete")))
+                .when((pl.col("type.text") == "Fumble").and_(pl.col("text").str.contains("(?i)pass complete")))
                 .then(True)
                 .otherwise(False),
                 pass_attempt=pl.when(
@@ -5658,21 +6139,24 @@ class CFBPlayProcess(object):
                 .then(True)
                 .otherwise(False),
                 # --- Change of pos_team by lead('pos_team', 1)----
-                change_of_pos_team=pl.when(
-                    (pl.col("pos_team") == pl.col("lead_pos_team")).and_(
-                        ((pl.col("lead_play_type").is_in(["End Period", "End of Half"])) == False).or_(
-                            pl.col("lead_play_type").is_null(),
-                        ),
-                    ),
-                )
+                # EX-3.4-b: ESPN files a Timeout row under the team that CALLED it, so a
+                # defensive timeout is no change of possession. A Timeout row never carries
+                # one, and a play followed by stoppage rows (Timeout, End Period, End of Half,
+                # in any number) is compared with the next row that is none of them.
+                # (401864518: NDSU's sack-fumble, UNLV's timeout, NDSU's punt read as two
+                # turnovers; the old lead2 rule also misread Timeout + Timeout and
+                # Timeout + End Period.) A play followed by a real row keeps the old rule.
+                change_of_pos_team=pl.when(pl.col("type.text") == "Timeout")
                 .then(False)
-                .when(
-                    (pl.col("pos_team") == pl.col("lead_pos_team2")).and_(
-                        (pl.col("lead_play_type").is_in(["End Period", "End of Half"])).or_(
-                            pl.col("lead_play_type").is_null(),
-                        ),
-                    ),
+                .when(pl.col("lead_play_type").is_in(_STOPPAGE_TYPES))
+                .then(
+                    (
+                        pl.col("pos_team") != _next(pl.col("pos_team"), pl.col("type.text").is_in(_STOPPAGE_TYPES))
+                    ).fill_null(True)
                 )
+                .when(pl.col("pos_team") == pl.col("lead_pos_team"))
+                .then(False)
+                .when((pl.col("lead_play_type").is_null()).and_(pl.col("pos_team") == pl.col("lead_pos_team2")))
                 .then(False)
                 .otherwise(True),
             )
@@ -5840,22 +6324,28 @@ class CFBPlayProcess(object):
             .then(0)
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)for no gain")))
             .then(0)
-            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)run for a loss of")))
-            .then(-1 * _gain_text.str.extract(r"(?i)run for a loss of (\d+)").cast(pl.Int32))
-            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)rush for a loss of")))
-            .then(-1 * _gain_text.str.extract(r"(?i)rush for a loss of (\d+)").cast(pl.Int32))
+            # "a" is optional: 2005 writes "rush for loss of 1 yard to the Wyom32" (EX-1.2-a).
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)run for (?:a )?loss of")))
+            .then(-1 * _gain_text.str.extract(r"(?i)run for (?:a )?loss of (\d+)").cast(pl.Int32))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)rush for (?:a )?loss of")))
+            .then(-1 * _gain_text.str.extract(r"(?i)rush for (?:a )?loss of (\d+)").cast(pl.Int32))
             # ESPN "for N yds loss" (0.36-live port) -- ahead of "rush for", which reads it as a gain.
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(_FOR_N_YARDS_LOSS_RE)))
             .then(-1 * _rush_loss_yards)
-            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)run for")))
+            # The five guards below (run for / rush for / Yd Run / Yd Rush / Yard Rush) name the number
+            # their reader extracts, so a text the reader cannot parse falls through instead of stopping
+            # on a null (EX-1.2-a): "1 Yd Run (X Run for Two-Point Conversion)" is not a "run for N", and
+            # "Joseph Banyard rush ..." is not a "N Yard Rush". The "rushed" and kneel branches are not
+            # guarded that way, and the guards read cleaned_text while the readers stop at the turnover.
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)run for -?\d")))
             .then(_gain_text.str.extract(r"(?i)run for (-?\d+)").cast(pl.Int32))
-            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)rush for")))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)rush for -?\d")))
             .then(_gain_text.str.extract(r"(?i)rush for (-?\d+)").cast(pl.Int32))
-            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)Yd Run")))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)\d+ Yd Run")))
             .then(_gain_text.str.extract(r"(?i)(\d+) Yd Run").cast(pl.Int32))
-            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)Yd Rush")))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)\d+ Yd Rush")))
             .then(_gain_text.str.extract(r"(?i)(\d+) Yd Rush").cast(pl.Int32))
-            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)Yard Rush")))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)\d+ Yard Rush")))
             .then(_gain_text.str.extract(r"(?i)(\d+) Yard Rush").cast(pl.Int32))
             # ESPN "N yds gain" phrasing (0.36-live port)
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)\d+ y\w*ds gain")))
@@ -5865,7 +6355,8 @@ class CFBPlayProcess(object):
                 .and_(pl.col("cleaned_text").str.contains("(?i)rushed"))
                 .and_(pl.col("cleaned_text").str.contains("(?i)touchdown") == False),
             )
-            .then(_gain_text.str.extract(r"(?i)for (-?\d+) yards").cast(pl.Int32))
+            # "yards?": 2004-05 writes "rushed up the middle for 1 yard." (EX-1.2-a)
+            .then(_gain_text.str.extract(r"(?i)for (-?\d+) yards?\b").cast(pl.Int32))
             .when(
                 (pl.col("rush") == True)
                 .and_(pl.col("cleaned_text").str.contains("(?i)rushed"))
@@ -5895,6 +6386,20 @@ class CFBPlayProcess(object):
                 .and_(pl.col("penalty_detail").is_null())
             )
             .then(pl.col("statYardage").cast(pl.Int32))
+            # A fumbled or flagged rush whose verb and yardage are split by direction words ("rush
+            # over left tackle for 3 yards, ... SMU penalty 15 yard personal foul", "rush over right
+            # guard for 11 yards, fumbled, ... recovered by Cal"): the text states the carry, read
+            # up to the turnover. After the statYardage stand-in, so only these rows move.
+            .when(
+                (pl.col("rush") == True).and_(
+                    _gain_text.str.contains(r"(?i)\b(?:rush|run)\b[^,]*? for (?:a )?loss of \d")
+                )
+            )
+            .then(-1 * _gain_text.str.extract(r"(?i)\b(?:rush|run)\b[^,]*? for (?:a )?loss of (\d+)").cast(pl.Int32))
+            .when(
+                (pl.col("rush") == True).and_(_gain_text.str.contains(r"(?i)\b(?:rush|run)\b[^,]*? for -?\d+ yards?\b"))
+            )
+            .then(_gain_text.str.extract(r"(?i)\b(?:rush|run)\b[^,]*? for (-?\d+) yards?\b").cast(pl.Int32))
             .otherwise(None),
             # Receiving yardage reads cleaned_text so the "complete to" guard fires
             # on modern "complete short middle to ..." phrasing (raw `text` left it
@@ -5974,14 +6479,8 @@ class CFBPlayProcess(object):
             # form drops the "off", and every such row came out null
             .then(pl.col("text").str.extract(r"(?i)kick(?:off)? for (.+)").str.extract(r"(\d+)").cast(pl.Int32))
             .otherwise(None),
-            yds_kickoff_return=pl.when(
-                (pl.col("kickoff_play") == True)
-                .and_(pl.col("kickoff_tb") == True)
-                .and_(pl.col("season") >= _KICKOFF_2012_RULES_FROM),
-            )
-            .then(25)
-            .when((pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True))
-            .then(20)
+            yds_kickoff_return=pl.when((pl.col("kickoff_play") == True).and_(pl.col("kickoff_tb") == True))
+            .then(100 - cfb_touchback_yardline_expr(pl.col("season")))
             .when(
                 (pl.col("kickoff_play") == True)
                 .and_(pl.col("fumble_vec") == False)
@@ -5994,7 +6493,7 @@ class CFBPlayProcess(object):
                 .and_(pl.col("text").str.contains(r"(?i)out-of-bounds|out of bounds"))
                 .and_(pl.col("text").str.contains(_RETURNER_STEPPED_OUT_RE) == False),
             )
-            .then(pl.when(pl.col("season") >= _KICKOFF_2012_RULES_FROM).then(35).otherwise(40))
+            .then(cfb_kickoff_out_of_bounds_spot_expr(pl.col("season")))
             .when((pl.col("kickoff_downed") == True).or_(pl.col("kickoff_fair_catch") == True))
             .then(0)
             .when((pl.col("kickoff_play") == True).and_(pl.col("text").str.contains(r"(?i)returned by")))
@@ -6949,7 +7448,11 @@ class CFBPlayProcess(object):
             if "orig_play_type" in play_df.columns
             else pl.lit(False)
         )
-        gated = ((pl.col("season") >= 2014) | folded_kick_row) & is_td_row & pl.col("text").is_not_null()
+        gated = (
+            ((pl.col("season") >= CFB_ESPN_TRY_ON_TD_ROW_FROM) | folded_kick_row)
+            & is_td_row
+            & pl.col("text").is_not_null()
+        )
 
         made_name = pl.col("text").str.extract(xp_made_re, 1)
         miss_kw_name = pl.col("text").str.extract(xp_miss_kw_re, 1)
@@ -6982,7 +7485,7 @@ class CFBPlayProcess(object):
         # (2004-06), "Felipe Macias extra point GOOD." (2007-13). The row is the attempt; its
         # result is in the text, else in the type. 46.6k such rows had no flags.
         standalone = (
-            (pl.col("season") <= 2013)
+            (pl.col("season") < CFB_ESPN_TRY_ON_TD_ROW_FROM)
             & (
                 pl.col("type.text").is_in(["Extra Point Good", "Extra Point Missed"])
                 # a kicked try the defence returned, retyped above; 2014+ counts it on the TD row
@@ -7230,33 +7733,32 @@ class CFBPlayProcess(object):
                 highlight_run=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 8))
                 .then(True)
                 .otherwise(False),
-                adj_rush_yardage=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 8))
-                .then(8)
-                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") <= 8))
+                # The standard per-yard adjusted-line-yards band (losses 120%, yards 0-4 100%, yards
+                # 5-10 50%, beyond 10 0%; cap 7), the NFL processor's twin: the line takes half of
+                # yards 5-10, the carrier (second level) the other half, open field everything past
+                # 10, so the three parts sum to the carry. It was a 0-3 / 4-8 / cap 5.5 band (C-NF-3).
+                adj_rush_yardage=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
+                .then(10)
+                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") <= 10))
                 .then(pl.col("yds_rushed"))
                 .otherwise(None),
             )
             .with_columns(
                 line_yards=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") < 0))
                 .then(1.2 * pl.col("adj_rush_yardage"))
-                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 0).and_(pl.col("yds_rushed") <= 3))
+                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") <= 4))
                 .then(pl.col("adj_rush_yardage"))
-                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 4).and_(pl.col("yds_rushed") <= 8))
-                .then(3 + 0.5 * (pl.col("adj_rush_yardage") - 3))
-                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 8))
-                .then(5.5)
+                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") <= 10))
+                .then(4 + 0.5 * (pl.col("adj_rush_yardage") - 4))
+                .when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
+                .then(7.0)
                 .otherwise(None),
-                # The runner's half of the shared band starts where the line's full credit stops, and
-                # line_yards above gives the line 100% only through 3 yards. Subtracting 4 here instead
-                # of 3 lost exactly half a yard on every carry of 4+, so line + second level + open
-                # field came to yds_rushed - 0.5 rather than yds_rushed: 29 of the 55 rushes in
-                # ESPN 401864570 were short by 0.5 and the rest (runs under 4) were exact.
                 second_level_yards=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") >= 4))
-                .then(0.5 * (pl.col("adj_rush_yardage") - 3))
+                .then(0.5 * (pl.col("adj_rush_yardage") - 4))
                 .when(pl.col("rush") == True)
                 .then(0)
                 .otherwise(None),
-                open_field_yards=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 8))
+                open_field_yards=pl.when((pl.col("rush") == True).and_(pl.col("yds_rushed") > 10))
                 .then(pl.col("yds_rushed") - pl.col("adj_rush_yardage"))
                 .when(pl.col("rush") == True)
                 .then(0)
@@ -7471,10 +7973,8 @@ class CFBPlayProcess(object):
                 pl.lit(99).alias("start.yardsToEndzone.touchback"),
             )
             .with_columns(
-                pl.when((kick_mask).and_(pl.col("season") >= _KICKOFF_2012_RULES_FROM))
-                .then(75)
-                .when(kick_mask)
-                .then(80)
+                pl.when(kick_mask)
+                .then(cfb_touchback_yardline_expr(pl.col("season")))
                 .otherwise(pl.col("start.yardsToEndzone"))
                 .alias("start.yardsToEndzone.touchback"),
             )
@@ -7561,6 +8061,49 @@ class CFBPlayProcess(object):
                 .alias("end.yardsToEndzone"),
             )
             .with_columns(
+                # supp-002: ESPN ships some non-scoring fumble plays with an end block at yardLine 0
+                # and yardsToEndzone 0, which no play that kept the ball can end at; the <= 0 clamp
+                # below read it as the own 1 (401856682's Q4 Fumble Recovery (Own): EPA -5.91,
+                # where the next snap, 3rd & 1 at the 1, gives -0.41 and Yahoo/CBS -0.39). When the
+                # ball was kept (change_of_pos_team, right at the source since EX-3.4-b; owner ruling
+                # R834-7: possession, not the fumble attribution, which called 401856674165, the
+                # retained-fumble companion row of 401856674175, lost until EX-3.4-d) and the same team snaps next,
+                # that snap's start IS this play's end (yardLine and yard too). The same-team check is
+                # a defence if change_of_pos_team is wrong at source; no corpus row decides it today
+                # (registry: retired cfb-supp002-no-same-team-check). The next snap must be in the same
+                # period or the same half of regulation, both rows in regulation (_in_same_half, R905-2,
+                # WB-cfb-4: an overtime period hands the ball back to the team that just had it; it moves 0 rows
+                # over the 573 cfb-raw OT games with a Q3/Q4 fumble, the only games it can reach). Fumble plays only: the same end block on other play types is
+                # EX-3.4-c. Reach over all 20,719 cfb-raw games: 20 rows in 18 games.
+                _supp_002=(pl.col("end.yardLine") == 0)
+                .and_(pl.col("end.yardsToEndzone") == 0)
+                .and_(pl.col("fumble_vec") == True)
+                .and_(pl.col("scoring_play") == False)
+                .and_(pl.col("change_of_pos_team") == False)
+                .and_(_next_real_play("start.pos_team.id") == pl.col("start.pos_team.id"))
+                .and_(_in_same_half(_next_real_play))
+                .fill_null(False),
+            )
+            .with_columns(
+                *[
+                    pl.when(pl.col("_supp_002"))
+                    .then(_next_real_play(f"start.{c}"))
+                    .otherwise(pl.col(f"end.{c}"))
+                    .alias(f"end.{c}")
+                    for c in ("down", "distance", "yardsToEndzone", "yardLine", "yard")
+                ],
+            )
+            .with_columns(
+                *[
+                    pl.when(pl.col("_supp_002"))
+                    .then(pl.col("end.down") == d)
+                    .otherwise(pl.col(f"down_{d}_end"))
+                    .alias(f"down_{d}_end")
+                    for d in (1, 2, 3, 4)
+                ],
+            )
+            .drop("_supp_002")
+            .with_columns(
                 pl.when(pl.col("end.yardsToEndzone") >= 100)
                 .then(99)
                 .otherwise(pl.col("end.yardsToEndzone"))
@@ -7576,7 +8119,7 @@ class CFBPlayProcess(object):
                 # B5: the flagged penalty's END state is also a touchback (the ensuing
                 # kickoff), alongside the existing kickoff_tb handling.
                 pl.when((pl.col("kickoff_tb") == True).or_(pl.col("penalty_assessed_on_kickoff") == True))
-                .then(pl.when(pl.col("season") >= _KICKOFF_2012_RULES_FROM).then(75).otherwise(80))
+                .then(cfb_touchback_yardline_expr(pl.col("season")))
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
                 pl.when((pl.col("kickoff_tb") == True).or_(pl.col("penalty_assessed_on_kickoff") == True))
@@ -8009,7 +8552,14 @@ class CFBPlayProcess(object):
                 .otherwise(pl.col("EP_end"))
                 .forward_fill()
                 .shift(1),
-                lag_change_of_pos_team=pl.col("change_of_pos_team").shift(1),
+                # EX-3.4-b: like lag_EP_end, the possession change the next play reads is the
+                # last real play's, never a Timeout row's (punt, receiver's timeout, receiver's
+                # snap is still a change of possession).
+                lag_change_of_pos_team=pl.when(pl.col("type.text") == "Timeout")
+                .then(None)
+                .otherwise(pl.col("change_of_pos_team"))
+                .forward_fill()
+                .shift(1),
             )
             .with_columns(
                 lag_change_of_pos_team=pl.when(pl.col("lag_change_of_pos_team").is_null())
@@ -8032,7 +8582,16 @@ class CFBPlayProcess(object):
                 #
                 # lag_scoringPlay, not lag_scoring_play: the derived flag is not built
                 # until well after __process_epa, while ESPN's own is set at line 2387.
-                EP_between=pl.when(pl.col("lag_scoringPlay") == True)
+                # EX-3.4-b: read across a Timeout row, as lag_EP_end and the lagged possession
+                # do (score, timeout, kickoff: the kickoff's EP_between is 0, not a turnover).
+                EP_between=pl.when(
+                    pl.when(pl.col("type.text") == "Timeout")
+                    .then(None)
+                    .otherwise(pl.col("scoringPlay"))
+                    .forward_fill()
+                    .shift(1)
+                    == True
+                )
                 .then(0.0)
                 .when(pl.col("lag_change_of_pos_team") == True)
                 .then(pl.col("EP_start") + pl.col("lag_EP_end"))
@@ -8525,20 +9084,20 @@ class CFBPlayProcess(object):
                     (pl.col("scoringPlay") == True)
                     .and_(pl.col("td_play") == True)
                     .and_(pl.col("type.text").is_in(defense_score_vec))
-                    .and_(pl.col("season") <= 2013),
+                    .and_(pl.col("season") < CFB_ESPN_TRY_ON_TD_ROW_FROM),
                 )
                 .then(pl.col("pos_score_diff_end") - 0.92)
                 .when(
                     (pl.col("scoringPlay") == True)
                     .and_(pl.col("td_play") == True)
                     .and_(pl.col("type.text").is_in(offense_score_vec))
-                    .and_(pl.col("season") <= 2013),
+                    .and_(pl.col("season") < CFB_ESPN_TRY_ON_TD_ROW_FROM),
                 )
                 .then(pl.col("pos_score_diff_end") + 0.92)
                 .when(
                     (pl.col("type.text") == "Timeout")
                     .and_(pl.col("lag_scoringPlay") == True)
-                    .and_(pl.col("season") <= 2013),
+                    .and_(pl.col("season") < CFB_ESPN_TRY_ON_TD_ROW_FROM),
                 )
                 .then(pl.col("pos_score_diff_end") + 0.92)
                 .otherwise(pl.col("pos_score_diff_end"))
@@ -8601,7 +9160,10 @@ class CFBPlayProcess(object):
         _flip_df = play_df.with_columns((-pl.col("end.pos_score_diff")).alias("end.pos_score_diff")).with_columns(
             pl.when(_flipped_td)
             .then(
-                (pl.col("end.pos_score_diff") + pl.when(pl.col("season") <= 2013).then(0.92).otherwise(0.0))
+                (
+                    pl.col("end.pos_score_diff")
+                    + pl.when(pl.col("season") < CFB_ESPN_TRY_ON_TD_ROW_FROM).then(0.92).otherwise(0.0)
+                )
                 / (pl.col("end.adj_TimeSecsRem") + 1)
             )
             .otherwise(pl.col("end.ExpScoreDiff_Time_Ratio"))
@@ -8715,6 +9277,7 @@ class CFBPlayProcess(object):
             def _board_at(pos_pts: float, exp_pts: float, model=model, names=names, cols=cols):
                 ko = _view(pos_pts, exp_pts).select(cols)
                 ko.columns = names
+                ko = _as_trained_2h_flag(ko)
                 return _adjust_wp(model.predict(DMatrix(ko)), ko).astype(np.float32)
 
             w0, w1, w2 = _board_at(0.0, 0.0), _board_at(1.0, 1.0), _board_at(2.0, 2.0)
@@ -8794,6 +9357,18 @@ class CFBPlayProcess(object):
             play_df = play_df.with_columns((pl.Null).alias(column))
         return play_df
 
+    def __documented_dtypes(self, play_df):
+        """Widen the Float32 columns the XGBoost scorers leave (the WP family, ``first_down_prob``,
+        ``prob_2pt``, ``drive_start``) to their documented Float64, after every consumer has run.
+
+        Twin of ``NFLPlayProcess.__documented_dtypes`` (the CFB-vs-NFL shared-column dtype test binds
+        the two processors). float32 -> float64 is exact, so no value changes. The widened names are
+        kept so :meth:`create_box_score` narrows them back when re-run on ``plays_frame``.
+        """
+        widened = [c for c, dtype in play_df.schema.items() if dtype == pl.Float32]
+        self._widened_float32 = tuple(dict.fromkeys((*getattr(self, "_widened_float32", ()), *widened)))
+        return play_df.with_columns(pl.col(pl.Float32).cast(pl.Float64))
+
     def create_box_score(self, play_df):
         """Build a per-team and per-player advanced box score from a processed
         plays frame.
@@ -8833,6 +9408,13 @@ class CFBPlayProcess(object):
         # have to run the pipeline before pulling this in
         if self.ran_pipeline == False:
             self.run_processing_pipeline()
+        # The box aggregates and rounds (``pl.col(pl.Float32).round(2)``) at the precision the
+        # scorers emit, but plays_frame publishes those columns Float64 (__documented_dtypes).
+        # Narrowing them back here lets a caller re-run the box on plays_frame (Game on Paper's
+        # ?span= boxes) and get advBoxScore's values; they are widened float32, so this is exact.
+        play_df = play_df.with_columns(
+            pl.col(c).cast(pl.Float32) for c in getattr(self, "_widened_float32", ()) if c in play_df.columns
+        )
 
         box_score_columns = [
             "completion",
@@ -8959,14 +9541,15 @@ class CFBPlayProcess(object):
             .pipe(_fill_missing)
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
-        # One-hot rule-era dummies (era0..era3, cuts 2006/2013/2020). Era is constant
+        # One-hot rule-era dummies (era0..era3, cuts CFB_MODEL_ERA_CUTS). Era is constant
         # within a game, so they are added as literal columns from the game's season.
         _qbr_season = int(play_df["season"].drop_nulls().max())
+        _era_lo, _era_mid, _era_hi = CFB_MODEL_ERA_CUTS
         pass_qbr = pass_qbr.with_columns(
-            era0=pl.lit(1 if _qbr_season <= 2006 else 0, dtype=pl.Int32),
-            era1=pl.lit(1 if 2006 < _qbr_season <= 2013 else 0, dtype=pl.Int32),
-            era2=pl.lit(1 if 2013 < _qbr_season <= 2020 else 0, dtype=pl.Int32),
-            era3=pl.lit(1 if _qbr_season > 2020 else 0, dtype=pl.Int32),
+            era0=pl.lit(1 if _qbr_season <= _era_lo else 0, dtype=pl.Int32),
+            era1=pl.lit(1 if _era_lo < _qbr_season <= _era_mid else 0, dtype=pl.Int32),
+            era2=pl.lit(1 if _era_mid < _qbr_season <= _era_hi else 0, dtype=pl.Int32),
+            era3=pl.lit(1 if _qbr_season > _era_hi else 0, dtype=pl.Int32),
         )
         # # self.logger.info(pass_qbr)
 
@@ -9603,7 +10186,7 @@ class CFBPlayProcess(object):
             lambda left, right: left.join(right, on=["def_pos_team"], how="full", coalesce=True),
             def_data_frames,
         )
-        def_box_json = json.loads(def_box.write_json())
+        def_box_json = json.loads(_home_first(def_box, "def_pos_team", int(self.homeTeamId)).write_json())
 
         # Per-side turnover events. `is_pos_team_turnover` / `is_def_pos_team_turnover` are
         # set PER PLAY and a single play can set BOTH -- e.g. an interception returned and
@@ -9759,13 +10342,13 @@ class CFBPlayProcess(object):
             "pass": json.loads(_ordered_rows(passer_box, "pos_team", "passer_player_name", "Att").write_json()),
             "rush": json.loads(_ordered_rows(rusher_box, "pos_team", "rusher_player_name", "Car").write_json()),
             "receiver": json.loads(_ordered_rows(receiver_box, "pos_team", "receiver_player_name", "Tar").write_json()),
-            "team": json.loads(team_box.write_json()),
-            "situational": json.loads(situation_box.write_json()),
+            "team": json.loads(_home_first(team_box, "pos_team", team_ids[0]).write_json()),
+            "situational": json.loads(_home_first(situation_box, "pos_team", team_ids[0]).write_json()),
             "defensive": def_box_json,
             "defensive_players": defensive_players_json,
             "specialists": specialists_json,
             "turnover": turnover_box_json,
-            "drives": json.loads(drives_data.write_json()),
+            "drives": json.loads(_home_first(drives_data, "pos_team", team_ids[0]).write_json()),
             "espn_team": list(espn_team_box.values()),
             "espn_players": espn_players,
         }
@@ -9782,7 +10365,7 @@ class CFBPlayProcess(object):
                 )
             )
         except Exception as exc:  # noqa: BLE001
-            logging.debug(f"{self.gameId}: usage box failed -- {exc}")
+            logger.debug(f"{self.gameId}: usage box failed -- {exc}")
             box.update({k: [] for k in _USAGE_SECTIONS})
         return box
 
@@ -9898,14 +10481,14 @@ class CFBPlayProcess(object):
 
             # Graceful fallback conditions
             if parts is None or parts.height == 0 or "id" not in play_df.columns:
-                logging.debug(
+                logger.debug(
                     f"{self.gameId}: __join_participants skipped -- "
                     f"parts={None if parts is None else parts.height} rows, id_in_df={'id' in play_df.columns}",
                 )
                 return play_df
             return _coalesce_participants(play_df, parts)
         except Exception as exc:
-            logging.debug(f"{self.gameId}: __join_participants fallback -- {exc}")
+            logger.debug(f"{self.gameId}: __join_participants fallback -- {exc}")
             return original_play_df
 
     #: (name_col, id_col, team_col) for every extractable player type. ``team_col``
@@ -10068,7 +10651,7 @@ class CFBPlayProcess(object):
 
                 roster = espn_cfb_game_rosters(self.gameId)
             except Exception as exc:  # pragma: no cover - network dependent
-                logging.debug(f"{self.gameId}: __attach_player_ids roster fetch failed -- {exc}")
+                logger.debug(f"{self.gameId}: __attach_player_ids roster fetch failed -- {exc}")
                 roster = None
         # Roster first, box score second. Both feed the same set-valued lookups
         # below, so order only affects which source seeds a name -- and since the
@@ -10335,7 +10918,11 @@ class CFBPlayProcess(object):
 
         Returns:
             dict: The fully-processed game payload. If the constructor was
-            given ``return_keys``, only those keys are returned.
+            given ``return_keys``, only those keys are returned. Its ``plays`` are
+            the feed's plays without the administrative rows (coin toss, period and
+            game markers, drive banners) and ESPN's duplicate copies, so there are
+            fewer of them than the summary's drive plays. Key a play on ``id``:
+            before 2005 ``sequenceNumber`` restarts with every drive.
 
         Example:
             Quick start::
@@ -10376,7 +10963,9 @@ class CFBPlayProcess(object):
                 "timeouts": pbp_txt["timeouts"],
                 "homeTeamSpread": np.array(pbp_txt["homeTeamSpread"]).tolist(),
                 "gameSpread": pbp_txt["gameSpread"],
+                "homeFavorite": pbp_txt["homeFavorite"],
                 "gameSpreadAvailable": pbp_txt["gameSpreadAvailable"],
+                "overUnderAvailable": pbp_txt["overUnderAvailable"],
                 "overUnder": pbp_txt["overUnder"],
                 "odds_source": pbp_txt.get("odds_source"),
                 "pickcenter": np.array(pbp_txt["pickcenter"]).tolist(),
@@ -10429,6 +11018,7 @@ class CFBPlayProcess(object):
                     self.plays_json = self.__add_two_pt_probs(self.plays_json)
                 self.ran_pipeline = True
                 advBoxScore = self.plays_json.pipe(self.create_box_score)
+                self.plays_json = self.plays_json.pipe(self.__documented_dtypes)
                 # Keep the enriched polars frame: plays_json becomes a list of
                 # dicts below (and callers mutate it), so consumers that need
                 # to re-aggregate windows (Game on Paper's ?span= boxes filter
@@ -10452,7 +11042,9 @@ class CFBPlayProcess(object):
                     "timeouts": pbp_txt["timeouts"],
                     "homeTeamSpread": np.array(pbp_txt["homeTeamSpread"]).tolist(),
                     "gameSpread": pbp_txt["gameSpread"],
+                    "homeFavorite": pbp_txt["homeFavorite"],
                     "gameSpreadAvailable": pbp_txt["gameSpreadAvailable"],
+                    "overUnderAvailable": pbp_txt["overUnderAvailable"],
                     "overUnder": pbp_txt["overUnder"],
                     "odds_source": pbp_txt.get("odds_source"),
                     "pickcenter": np.array(pbp_txt["pickcenter"]).tolist(),
@@ -10553,7 +11145,9 @@ class CFBPlayProcess(object):
         keep = ["__fourth_row_idx"] + [c for c in decision_cols if c in scored.columns]
         scored_pl = pl.from_pandas(scored[keep]).with_columns(pl.col("__fourth_row_idx").cast(pl.UInt32))
 
-        plays = plays.join(scored_pl, on="__fourth_row_idx", how="left").drop("__fourth_row_idx")
+        plays = self.__documented_dtypes(
+            plays.join(scored_pl, on="__fourth_row_idx", how="left").drop("__fourth_row_idx")
+        )
         # keep the retained frame in sync -- consumers re-aggregating windows
         # (see run_processing_pipeline) must see the added columns too
         self.plays_frame = plays
@@ -10600,7 +11194,9 @@ class CFBPlayProcess(object):
             # plain run already carries the columns; recompute here for explicit calls.
             self.run_processing_pipeline()
 
-        plays = self.__add_two_pt_probs(pl.DataFrame(self.plays_json, infer_schema_length=None))
+        plays = self.__documented_dtypes(
+            self.__add_two_pt_probs(pl.DataFrame(self.plays_json, infer_schema_length=None))
+        )
         # keep the retained frame in sync -- consumers re-aggregating windows
         # (see run_processing_pipeline) must see the added columns too
         self.plays_frame = plays
@@ -10652,7 +11248,9 @@ class CFBPlayProcess(object):
                 "timeouts": pbp_txt["timeouts"],
                 "homeTeamSpread": np.array(pbp_txt["homeTeamSpread"]).tolist(),
                 "gameSpread": pbp_txt["gameSpread"],
+                "homeFavorite": pbp_txt["homeFavorite"],
                 "gameSpreadAvailable": pbp_txt["gameSpreadAvailable"],
+                "overUnderAvailable": pbp_txt["overUnderAvailable"],
                 "overUnder": pbp_txt["overUnder"],
                 "odds_source": pbp_txt.get("odds_source"),
                 "pickcenter": np.array(pbp_txt["pickcenter"]).tolist(),
@@ -10707,7 +11305,9 @@ class CFBPlayProcess(object):
                     "timeouts": pbp_txt["timeouts"],
                     "homeTeamSpread": np.array(pbp_txt["homeTeamSpread"]).tolist(),
                     "gameSpread": pbp_txt["gameSpread"],
+                    "homeFavorite": pbp_txt["homeFavorite"],
                     "gameSpreadAvailable": pbp_txt["gameSpreadAvailable"],
+                    "overUnderAvailable": pbp_txt["overUnderAvailable"],
                     "overUnder": pbp_txt["overUnder"],
                     "odds_source": pbp_txt.get("odds_source"),
                     "pickcenter": np.array(pbp_txt["pickcenter"]).tolist(),
@@ -10742,21 +11342,21 @@ class CFBPlayProcess(object):
                     game.run_processing_pipeline()
         """
         if len(self.json["plays"]) == 0:
-            logging.debug(
+            logger.debug(
                 f"{self.gameId}: appear to be too no plays available ({len(self.json['plays'])}). run_processing_pipeline did not run",
             )
             return True
         if (len(self.json["plays"]) < 50) and (
             self.json.get("header").get("competitions")[0].get("status").get("type").get("completed") == True
         ):
-            logging.debug(
+            logger.debug(
                 f"{self.gameId}: appear to be too few plays ({len(self.json['plays'])}) for a completed game. run_processing_pipeline did not run",
             )
             return True
         if (len(self.json["plays"]) > 500) and (
             self.json.get("header").get("competitions")[0].get("status").get("type").get("completed") == True
         ):
-            logging.debug(
+            logger.debug(
                 f"{self.gameId}: appear to be too many plays ({len(self.json['plays'])}) for a completed game. run_processing_pipeline did not run",
             )
             return True

@@ -45,13 +45,13 @@ def _existing_url(fn_name: str, league: str):
         box["url"] = url
         raise FileNotFoundError("404")  # short-circuit after first fetch
 
-    with patch.object(mod.pl, "read_parquet", side_effect=fake):
+    with patch.object(runtime, "_release_bytes", side_effect=fake):  # the release fetch, before the parse (R898-9)
         # `_read_release_parquet` classifies a failed read by asking the transport
         # what the server said, so keep that lookup offline too.
         with patch.object(runtime, "download", side_effect=NoDataError("404")):
             try:
                 getattr(mod, fn_name)(seasons=2024)
-            except Exception:  # noqa: BLE001
+            except Exception:  # noqa: BLE001 -- the URL is captured before the stubbed 404; what follows is irrelevant
                 pass
     return box.get("url")
 

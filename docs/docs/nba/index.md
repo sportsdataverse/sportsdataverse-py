@@ -10,14 +10,14 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
 | [Highlights](reference/additional#highlights) | curated "start here" functions | 8 | — |
-| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 122 | none |
+| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 123 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 53 | none |
 | [NBA Stats API](#nba-stats-api) | `stats.nba.com` | 130 | none (curl_cffi chrome TLS impersonation) |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 26 | none |
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 202 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 203 | — |
 
 ## ESPN {#espn}
 
@@ -28,7 +28,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [ESPN core API (v2)](reference/core) | 82 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
 | [ESPN CDN API (cdn.espn.com)](reference/cdn) | 4 |
-| [Hand-written wrappers](reference/additional/espn) | 6 |
+| [Hand-written wrappers](reference/additional/espn) | 7 |
 
 ## sportsdataverse-data releases {#sportsdataverse-data-releases}
 
@@ -239,7 +239,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`bref_team_roster`](reference/additional/basketball-reference#bref_team_roster) | [`bref_team_roster`](https://hoopR.sportsdataverse.org/reference/bref_team_roster.html) |
 | [`bref_teams_stats`](reference/additional/highlights#bref_teams_stats) | [`bref_teams_stats`](https://hoopR.sportsdataverse.org/reference/bref_teams_stats.html) |
 | [`espn_nba_award`](reference/core/other#espn_nba_award) | [`espn_nba_award`](https://hoopR.sportsdataverse.org/reference/espn_nba_award.html) |
-| [`espn_nba_calendar`](reference/site#espn_nba_calendar) | [`espn_nba_calendar`](https://hoopR.sportsdataverse.org/reference/espn_nba_calendar.html) |
+| [`espn_nba_calendar`](reference/additional/espn#espn_nba_calendar) | [`espn_nba_calendar`](https://hoopR.sportsdataverse.org/reference/espn_nba_calendar.html) |
 | [`espn_nba_coach`](reference/core/other#espn_nba_coach) | [`espn_nba_coach`](https://hoopR.sportsdataverse.org/reference/espn_nba_coach.html) |
 | [`espn_nba_coach_record`](reference/core/other#espn_nba_coach_record) | [`espn_nba_coach_record`](https://hoopR.sportsdataverse.org/reference/espn_nba_coach_record.html) |
 | [`espn_nba_coach_season`](reference/core/other#espn_nba_coach_season) | [`espn_nba_coach_season`](https://hoopR.sportsdataverse.org/reference/espn_nba_coach_season.html) |

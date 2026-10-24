@@ -1,7 +1,7 @@
 ---
 title: "Package — additional Python functions — Models and calculators"
 sidebar_label: "Models and calculators"
-sidebar_position: 10
+sidebar_position: 11
 description: "Package — additional Python functions — Models and calculators — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Package — additional Python functions — Models and calculators

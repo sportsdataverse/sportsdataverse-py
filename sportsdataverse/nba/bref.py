@@ -61,7 +61,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _text_body, _transport_errors
+from sportsdataverse._codegen_runtime import _text_body, _transport_errors, _zero_padded
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import NoDataError
 
@@ -259,6 +259,10 @@ def _bref_table(html: str, table_id: Optional[str] = None) -> pl.DataFrame:
     )
 
 
+#: Columns that look numeric but are labels: the jersey number (``data-stat="number"``).
+_TEXT_COLUMNS = frozenset({"number"})
+
+
 def _finish(df: pl.DataFrame) -> pl.DataFrame:
     """Drop spacer columns and blank rows, then numeric-cast what is fully numeric.
 
@@ -271,7 +275,9 @@ def _finish(df: pl.DataFrame) -> pl.DataFrame:
 
     Returns:
         The cleaned frame; columns whose non-blank values all parse as numbers
-        become ``Float64``, everything else stays ``Utf8``.
+        become ``Float64``, everything else stays ``Utf8``. The jersey column
+        (``number``) and any zero-padded column stay ``Utf8``: Robert Parish's
+        ``"00"`` is not ``"0"`` (B-M19).
     """
     if df.height == 0 or df.width == 0:
         return df
@@ -286,7 +292,7 @@ def _finish(df: pl.DataFrame) -> pl.DataFrame:
     for name in df.columns:
         col = df[name]
         nonblank = col.filter(col.is_not_null() & (col != ""))
-        if nonblank.len() == 0:
+        if nonblank.len() == 0 or name in _TEXT_COLUMNS or _zero_padded(nonblank):
             continue
         if nonblank.cast(pl.Float64, strict=False).null_count() == 0:
             df = df.with_columns(pl.col(name).cast(pl.Float64, strict=False))

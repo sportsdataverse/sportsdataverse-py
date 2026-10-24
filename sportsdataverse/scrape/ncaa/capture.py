@@ -20,6 +20,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Union
 
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
 from .bundle import is_captured, write_bundle
 
 logger = logging.getLogger(__name__)
@@ -125,8 +127,9 @@ def capture_contests(
         Counts: ``{"captured": int, "skipped": int, "failed": int}``.
 
     Raises:
-        SystemExit: A fetch raised ``RuntimeError`` (NcaaFetcher's
-            ban-suspect / exhausted-proxy sentinel), OR
+        SystemExit: A fetch raised ``AssetFetchError`` (NcaaFetcher's
+            ban-suspect / exhausted-pool / challenge / Terms failure; a 404's
+            ``NoDataError`` counts the contest as failed and moves on), OR
             *max_consecutive_failures* consecutive challenges failed to clear
             (soft-ban) -- either way the whole run stops immediately rather
             than continuing to the next contest. Both are resumable: re-run
@@ -154,7 +157,12 @@ def capture_contests(
 
             try:
                 pages = fetch_fn(fetcher, contest_id)
-            except RuntimeError as exc:
+            except NoDataError as exc:
+                # A real 404: the session got an answer, so this is neither a ban nor a soft-ban step.
+                logger.warning("contest_id=%s not on stats.ncaa.org -- bundle not written: %s", contest_id, exc)
+                counts["failed"] += 1
+                continue
+            except AssetFetchError as exc:
                 logger.error(
                     "BAN-SUSPECT: hard-stopping capture at contest_id=%s: %s",
                     contest_id,
@@ -225,15 +233,13 @@ def _vendor_fetcher(
     """
     import re as _re
     import time
-    import tomllib
 
-    from .canary import _vendor_ready, build_fetcher
+    from .canary import _toml_loads, _vendor_ready, build_fetcher
 
     cfg_path = Path(root) / "canary_vendors.toml"
     if not cfg_path.exists():
         raise SystemExit(f"--vendor requires {cfg_path} (copy from canary_vendors.toml.example)")
-    with open(cfg_path, "rb") as f:
-        doc = tomllib.load(f)
+    doc = _toml_loads(cfg_path.read_text(encoding="utf-8"))
     vendors = {v.get("name"): dict(v) for v in doc.get("vendor", [])}
     if vendor_name not in vendors:
         raise SystemExit(f"vendor {vendor_name!r} not in {cfg_path} (have: {sorted(vendors)})")

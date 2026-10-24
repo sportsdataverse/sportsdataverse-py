@@ -23,6 +23,7 @@ abbreviations** (ESPN ids were normalized via `espn_nfl_teams()` +
 | `fpi_2023.parquet` | `sports.core.api.espn.com` `/seasons/2023/powerindex?limit=50` (the `espn_nfl_season_powerindex` endpoint; fetched with `limit=50` because the wrapper's default page size is 25 of 32 teams) | 32 | `fpi` + `fpirank` from the `predictives` array; `team` holds the ESPN numeric id |
 | `espn_predictor_sample.parquet` | `espn_nfl_game_predictor(<espn id>)` per game | 272 | All completed 2023 REG games; `home_win_prob = gameProjection/100`, `predicted_margin = teamPredPtDiff` (home) |
 | `espn_propbets_sample.parquet` | `espn_nfl_game_propbets` | 0 | **Zero-row by construction**: ESPN purges propbets for past games (every probe 404s). Schema (`game_id, player_id, stat, line`) is the documented contract for the live-only line join |
+| `player_stats_2023_w1_9_4teams.parquet` | `load_nfl_player_stats([2023])` (nflverse-data `player_stats` release, read 2026-10-11) | 342 | supp-009 real slice for `player_usage_efficiency`: regular season, weeks 1-9, positions QB/RB/WR/TE, `recent_team` in KC/SF/DET/BUF (60 players); cols `season, week, season_type, player_id, player_display_name, position, recent_team` + the nine usage/yardage/TD columns the function reads |
 
 `espn_nfl_season_powerindex_leaders(season=2023)` returns `count: 0` for past
 seasons — that is why the per-team `powerindex` endpoint is the FPI source.

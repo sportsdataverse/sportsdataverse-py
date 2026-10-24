@@ -58,6 +58,7 @@ from sportsdataverse.errors import EraCoverageWarning
 from sportsdataverse.nfl.model_vars import (
     _EP_POINT_VALUES,
     ERA_MAX_KNOWN_SEASON,
+    ERA_SEASON_CUTS,
     OT_BOTH_POSSESS,
     OT_MODIFIED_SUDDEN_DEATH,
     OT_SUDDEN_DEATH,
@@ -71,6 +72,9 @@ from sportsdataverse.nfl.model_vars import (
     offense_score_vec,
     touchback_yardline_expr,
 )
+
+#: The nflfastR era one-hot cuts (rules/nfl.yaml#nfl-2002-nflfastr-era-bins), unpacked once for the era helpers.
+_ERA_CUT0, _ERA_CUT1, _ERA_CUT2, _ERA_CUT3 = ERA_SEASON_CUTS
 
 # ---------------------------------------------------------------------------
 # Feature lists — mirror nflfastR's ep_model_select / wp_*_model_select
@@ -263,6 +267,16 @@ _MODEL_URLS: dict[str, str] = {
         "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_4th_down_models/wp_model.ubj"
     ),
 }
+
+
+def _models_strict(strict: bool | None = None) -> bool:
+    """Whether a missing model raises instead of warning and nulling its columns.
+
+    An explicit ``strict`` wins; otherwise ``SDV_PY_MODELS_STRICT`` (``1`` / ``true`` / ``yes``).
+    """
+    if strict is not None:
+        return strict
+    return os.environ.get("SDV_PY_MODELS_STRICT", "").strip().lower() in ("1", "true", "yes")
 
 
 def _model_path(name: str) -> Path:
@@ -474,11 +488,11 @@ def _make_model_mutations(df: pl.DataFrame) -> pl.DataFrame:
     _warn_if_season_beyond_known_eras(df)
     df = df.with_columns(
         # Era flags
-        pl.when(pl.col("season") <= 2001).then(1).otherwise(0).alias("era0"),
-        pl.when((pl.col("season") > 2001) & (pl.col("season") <= 2005)).then(1).otherwise(0).alias("era1"),
-        pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("era2"),
-        pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("era3"),
-        pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("era4"),
+        pl.when(pl.col("season") <= _ERA_CUT0).then(1).otherwise(0).alias("era0"),
+        pl.when((pl.col("season") > _ERA_CUT0) & (pl.col("season") <= _ERA_CUT1)).then(1).otherwise(0).alias("era1"),
+        pl.when((pl.col("season") > _ERA_CUT1) & (pl.col("season") <= _ERA_CUT2)).then(1).otherwise(0).alias("era2"),
+        pl.when((pl.col("season") > _ERA_CUT2) & (pl.col("season") <= _ERA_CUT3)).then(1).otherwise(0).alias("era3"),
+        pl.when(pl.col("season") > _ERA_CUT3).then(1).otherwise(0).alias("era4"),
         # Down dummies
         pl.when(pl.col("down") == 1).then(1).otherwise(0).alias("down1"),
         pl.when(pl.col("down") == 2).then(1).otherwise(0).alias("down2"),
@@ -566,9 +580,9 @@ def _make_cp_mutations(df: pl.DataFrame) -> pl.DataFrame:
     df = df.with_columns(
         pl.when(pl.col("air_yards") == 0).then(1).otherwise(0).alias("air_is_zero"),
         (pl.col("air_yards") - pl.col("ydstogo")).alias("distance_to_sticks"),
-        pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("era2"),
-        pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("era3"),
-        pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("era4"),
+        pl.when((pl.col("season") > _ERA_CUT1) & (pl.col("season") <= _ERA_CUT2)).then(1).otherwise(0).alias("era2"),
+        pl.when((pl.col("season") > _ERA_CUT2) & (pl.col("season") <= _ERA_CUT3)).then(1).otherwise(0).alias("era3"),
+        pl.when(pl.col("season") > _ERA_CUT3).then(1).otherwise(0).alias("era4"),
     )
     if "home" not in df.columns:
         df = df.with_columns(
@@ -659,11 +673,11 @@ def _espn_ep_features(
     """
     _warn_if_season_beyond_known_eras(play_df)
     df = play_df.with_columns(
-        pl.when(pl.col("season") <= 2001).then(1).otherwise(0).alias("_era0"),
-        pl.when((pl.col("season") > 2001) & (pl.col("season") <= 2005)).then(1).otherwise(0).alias("_era1"),
-        pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("_era2"),
-        pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("_era3"),
-        pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("_era4"),
+        pl.when(pl.col("season") <= _ERA_CUT0).then(1).otherwise(0).alias("_era0"),
+        pl.when((pl.col("season") > _ERA_CUT0) & (pl.col("season") <= _ERA_CUT1)).then(1).otherwise(0).alias("_era1"),
+        pl.when((pl.col("season") > _ERA_CUT1) & (pl.col("season") <= _ERA_CUT2)).then(1).otherwise(0).alias("_era2"),
+        pl.when((pl.col("season") > _ERA_CUT2) & (pl.col("season") <= _ERA_CUT3)).then(1).otherwise(0).alias("_era3"),
+        pl.when(pl.col("season") > _ERA_CUT3).then(1).otherwise(0).alias("_era4"),
     )
     roof = _roof_one_hots(_roof_expr(play_df, roof_col))
     return (
@@ -816,9 +830,9 @@ def _espn_cp_features(
     df = play_df.with_columns(
         pl.when(pl.col(air_yards_col) == 0).then(1).otherwise(0).alias("_air_is_zero"),
         (pl.col(air_yards_col) - pl.col(ydstogo_col)).alias("_distance_to_sticks"),
-        pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("_era2"),
-        pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("_era3"),
-        pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("_era4"),
+        pl.when((pl.col("season") > _ERA_CUT1) & (pl.col("season") <= _ERA_CUT2)).then(1).otherwise(0).alias("_era2"),
+        pl.when((pl.col("season") > _ERA_CUT2) & (pl.col("season") <= _ERA_CUT3)).then(1).otherwise(0).alias("_era3"),
+        pl.when(pl.col("season") > _ERA_CUT3).then(1).otherwise(0).alias("_era4"),
     )
     pass_mid = (
         pl.col(pass_middle_col).cast(pl.Int8)
@@ -896,9 +910,9 @@ def _espn_xyac_features(
         pl.when(pl.col(air_yards_col) == 0).then(1).otherwise(0).alias("_air_is_zero"),
         (pl.col(yardline_col) - pl.col(air_yards_col)).alias("_distance_to_goal"),
         (pl.col(air_yards_col) - pl.col(ydstogo_col)).alias("_distance_to_sticks"),
-        pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("_era2"),
-        pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("_era3"),
-        pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("_era4"),
+        pl.when((pl.col("season") > _ERA_CUT1) & (pl.col("season") <= _ERA_CUT2)).then(1).otherwise(0).alias("_era2"),
+        pl.when((pl.col("season") > _ERA_CUT2) & (pl.col("season") <= _ERA_CUT3)).then(1).otherwise(0).alias("_era3"),
+        pl.when(pl.col("season") > _ERA_CUT3).then(1).otherwise(0).alias("_era4"),
     )
     pass_mid = (
         pl.col(pass_middle_col).cast(pl.Int8)
@@ -1994,11 +2008,14 @@ def calculate_xpass(
         # _make_model_mutations / _espn_ep_features.
         if "era0" not in feats.columns:
             feats = feats.with_columns(
-                pl.when(pl.col("season") <= 2001).then(1).otherwise(0).alias("era0"),
+                pl.when(pl.col("season") <= _ERA_CUT0).then(1).otherwise(0).alias("era0"),
             )
         if "era1" not in feats.columns:
             feats = feats.with_columns(
-                pl.when((pl.col("season") > 2001) & (pl.col("season") <= 2005)).then(1).otherwise(0).alias("era1"),
+                pl.when((pl.col("season") > _ERA_CUT0) & (pl.col("season") <= _ERA_CUT1))
+                .then(1)
+                .otherwise(0)
+                .alias("era1"),
             )
         X = feats.select(XPASS_FEATURES).to_numpy(allow_copy=True).astype(np.float32)
         preds = _load_model(_XPASS_MODEL_FILE, models_dir=models_dir).predict(DMatrix(X, feature_names=XPASS_FEATURES))
@@ -2203,6 +2220,36 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
         if "defensive_two_point_conv" in df.columns
         else pl.lit(False)
     )
+    # A kickoff the kicking team recovers (NFLPlayProcess's _kicker_recovers, R810-3).
+    kicker_recovers = (
+        (pl.col("_kicker_recovers") == True).fill_null(False) if "_kicker_recovers" in df.columns else pl.lit(False)
+    )
+    # The scoring overlays below key on ESPN's type.text. Two kinds of row are typed wrong for that:
+    # a kicking-team recovery returned for a touchdown is typed "Kickoff Return Touchdown" (an
+    # offense_score_vec type) but scores for the kicker, so it takes the defence-TD values (R831-6,
+    # 301107009/1557); and a touchdown-typed row whose touchdown did not stand (NFLPlayProcess's
+    # td_play false: the 2024 short/onside kickoffs ESPN types "Kickoff Return Touchdown", nullified
+    # and reversed scores) takes no scoring overlay at all, its EP_end coming from the end state
+    # (EX-2.20-a). A frame without td_play (the nflverse path) keeps keying on type.text alone.
+    kicker_td = pl.col("type.text").is_in(kickoff_vec) & pl.col("type.text").is_in(offense_score_vec) & kicker_recovers
+    td_stood = (
+        (pl.col("td_play") == True).fill_null(False) | ~pl.col("type.text").str.contains("Touchdown").fill_null(False)
+        if "td_play" in df.columns
+        else pl.lit(True)
+    )
+    def_score = (pl.col("type.text").is_in(defense_score_vec) | kicker_td) & td_stood
+    # NFLPlayProcess's safety flag also reads a scored "Safety" row whose text is blank (most before 2009) and a safety
+    # ESPN typed as something else (task 2.28); a frame without it keys on the text.
+    is_safety = (
+        (pl.col("safety") == True).fill_null(False)
+        if df.schema.get("safety") == pl.Boolean
+        else _lower.str.contains(r"safety")
+    )
+    # ... and NFLPlayProcess's _untyped_safety, a safety whatever ESPN typed it (a Sack, a Blocked Punt), dropped after
+    untyped_safety = (
+        (pl.col("_untyped_safety") == True).fill_null(False) if "_untyped_safety" in df.columns else pl.lit(False)
+    )
+    off_score = pl.col("type.text").is_in(offense_score_vec) & td_stood  # a kicker_td row met def_score first
     kick_good = _lower.str.contains(r"kick\)")
     kick_failed = _lower.str.contains(r"pat (?:failed|missed|no good)|extra point is (?:no good|blocked)")
     if "xp_attempt" in df.columns and "xp_made" in df.columns:
@@ -2234,51 +2281,47 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             .when(pl.col("type.text").is_in(["Defensive 2pt Conversion"]))
             .then(-2)
             # Safeties
-            .when(
-                (pl.col("type.text").is_in(defense_score_vec)).and_(
-                    pl.col("text").str.to_lowercase().str.contains(r"(?i)safety"),
-                ),
-            )
+            .when(def_score.and_(is_safety).or_(untyped_safety))
             .then(-2)
             # Defense TD + Successful Two-Point Conversion
-            .when((pl.col("type.text").is_in(defense_score_vec)).and_(two_pt_good))
+            .when(def_score.and_(two_pt_good))
             .then(-8)
             # Defense TD + Failed Two-Point Conversion
-            .when((pl.col("type.text").is_in(defense_score_vec)).and_(two_pt_failed))
+            .when(def_score.and_(two_pt_failed))
             .then(-6)
             # Defense TD + Kick/PAT Missed
-            .when((pl.col("type.text").is_in(defense_score_vec)).and_(kick_failed))
+            .when(def_score.and_(kick_failed))
             .then(-6)
             # Defense TD + Kick/PAT Good
-            .when((pl.col("type.text").is_in(defense_score_vec)).and_(kick_good))
+            .when(def_score.and_(kick_good))
             .then(-7)
             # Defense TD
-            .when(pl.col("type.text").is_in(defense_score_vec))
+            .when(def_score)
             .then(-6.92)
             # Offense TD + try returned by the defence for two
-            .when((pl.col("type.text").is_in(offense_score_vec)).and_(def_two))
+            .when(off_score.and_(def_two))
             .then(4)
             # Offense TD + Failed Two-Point Conversion
-            .when((pl.col("type.text").is_in(offense_score_vec)).and_(two_pt_failed))
+            .when(off_score.and_(two_pt_failed))
             .then(6)
             # Offense TD + Successful Two-Point Conversion
-            .when((pl.col("type.text").is_in(offense_score_vec)).and_(two_pt_good))
+            .when(off_score.and_(two_pt_good))
             .then(8)
             # Offense Made FG
             .when(
-                (pl.col("type.text").is_in(offense_score_vec))
-                .and_(pl.col("type.text").str.to_lowercase().str.contains(r"(?i)field goal"))
-                .and_(pl.col("type.text").str.to_lowercase().str.contains(r"(?i)good")),
+                off_score.and_(pl.col("type.text").str.to_lowercase().str.contains(r"(?i)field goal")).and_(
+                    pl.col("type.text").str.to_lowercase().str.contains(r"(?i)good")
+                ),
             )
             .then(3)
             # Offense TD + Kick/PAT Missed
-            .when((pl.col("type.text").is_in(offense_score_vec)).and_(kick_failed))
+            .when(off_score.and_(kick_failed))
             .then(6)
             # Offense TD + Kick/PAT Good
-            .when((pl.col("type.text").is_in(offense_score_vec)).and_(kick_good))
+            .when(off_score.and_(kick_good))
             .then(7)
             # Offense TD
-            .when(pl.col("type.text").is_in(offense_score_vec))
+            .when(off_score)
             .then(6.92)
             # Extra Point Good
             .when(pl.col("type.text").is_in(["Extra Point Good"]))
@@ -2321,6 +2364,10 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             .then(pl.col("EP_end") * -1)
             # Onside kicks
             .when((pl.col("kickoff_onside") == True).and_(pl.col("change_of_pos_team") == True))
+            .then(pl.col("EP_end") * -1)
+            # Any other kickoff the kicking team recovers (a muff; R810-3): EP_end is the kicker's.
+            # NFLPlayProcess flags it as _kicker_recovers; a frame without the flag has none.
+            .when(pl.col("type.text").is_in(kickoff_vec) & kicker_recovers)
             .then(pl.col("EP_end") * -1)
             .otherwise(pl.col("EP_end")),
         )
@@ -2392,6 +2439,12 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
         .with_columns(
             EPA=pl.when(pl.col("type.text").is_in(clock_stoppage_vec))
             .then(0)
+            # nflfastR (helper_add_ep_wp.R:710-724) keeps a scoring play's epa (sp == 1), and a good
+            # try is sp == 1 though scoring_play leaves the try types out: a try that ends a half
+            # realises its own points, whatever penalty its text carries (a missed one's 0 - 0.92 is
+            # -EP_start anyway; R832-3)
+            .when((pl.col("end_of_half") == True).and_(pl.col("type.text").is_in(_TRY_TYPES)))
+            .then(pl.col("EP_end") - pl.col("EP_start"))
             .when((pl.col("scoring_play") == False).and_(pl.col("end_of_half") == True))
             .then(-1 * pl.col("EP_start"))
             .when((pl.col("type.text").is_in(kickoff_vec)).and_(pl.col("penalty_in_text") == True))
@@ -2451,6 +2504,11 @@ _WPA_REQUIRED_COLUMNS: tuple[str, ...] = (
 )
 
 
+def _next_play(col: pl.Expr, skip: pl.Expr) -> pl.Expr:
+    # ``col`` on the first row after this one that is not ``skip``; also NFLPlayProcess's naive WP family
+    return pl.when(skip).then(None).otherwise(col).backward_fill().shift(-1).over("game_id")
+
+
 def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
     """Derive win probability added (WPA) from pre-scored WP point estimates.
 
@@ -2488,12 +2546,15 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
       to the defense ``def_wp_before``).
     * ``wp_after`` is rewritten by the end-of-half / end-of-game / OT two-path:
       timeouts hold ``wp_before``; a completed final play resolves to ``1.0`` /
-      ``0.0`` by the winner; end-of-half and ``End Period`` / ``End of Half``
-      lead plays take ``lead_wp_before`` (or ``1 - lead_wp_before`` on a
-      possession change); a possession change otherwise flips the lead;
+      ``0.0`` by the winner; the play that ends a half takes the next real
+      play's ``wp_before`` (past clock stoppages), flipped when that play is
+      the other team's; ``End Period`` / ``End of Half`` lead plays take
+      ``lead_wp_before`` (or ``1 - lead_wp_before`` on a possession change);
+      a possession change otherwise flips the lead;
       everything else keeps the model ``wp_after``.
     * ``def_wp_after = 1 - wp_after``; ``home_wp_after`` / ``away_wp_after``
-      use the **end** possession team for the perspective flip.
+      use the **start** possession team for the perspective flip (every
+      ``wp_after`` branch above is stated in that team's frame).
     * ``wpa = wp_after - wp_before``.
 
     **Every** ``shift`` / forward reference is grouped ``.over("game_id")`` so a
@@ -2628,10 +2689,6 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
     # the try's team. After a try the next row is the kickoff, whose wp_before is the
     # receiver's touchback view; a try that ends a half hands to the second-half kickoff.
     # The model's own end state scored ESPN's placeholder for the try's end.
-    def _next_play(col: pl.Expr, skip: pl.Expr) -> pl.Expr:
-        # ``col`` on the first row after this one that is not ``skip``
-        return pl.when(skip).then(None).otherwise(col).backward_fill().shift(-1).over("game_id")
-
     team = pl.col("start.pos_team.id")
     _stoppage = pl.col("type.text").is_in(clock_stoppage_vec)
     # A penalty walked off on the kickoff spot after the try is dead-ball the same way: the
@@ -2658,6 +2715,8 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
         & kick_team.is_not_null()
     )
     kick_board = pl.when(kick_team == team).then(kick_wb).otherwise(1 - kick_wb)
+    # the next real play after a half-ending play; wp_before is read after the overlay below
+    half_next_team, half_next_wb = _next_play(team, _stoppage), _next_play(pl.col("wp_before"), _stoppage)
 
     play_df = (
         df.with_columns(
@@ -2741,18 +2800,25 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             .then(0.0)
             .when(try_to_kickoff)
             .then(kick_board)
+            # The play that ends a half hands over to the next real play, past any clock-stoppage
+            # row (on the captures, only ever a Timeout: ESPN's end-of-period marker rows do not
+            # reach this frame): its wp_before, flipped when that play is the other team's. nflfastR
+            # has no branch here, home_wpa = lead(home_wp) - home_wp with the marker rows filled
+            # up from the next play (helper_add_ep_wp.R:1073-1181). Keyed on this play's own
+            # possession change, a half-ending play that kept the ball (a kneel, then the other
+            # team's second-half kickoff) fell through to the model's end state (2.26, R832-6).
             .when(
                 (pl.col("end_of_half") == True)
-                .and_(pl.col("start.pos_team.id") == pl.col("lead_pos_team"))
+                .and_(pl.col("start.pos_team.id") == half_next_team)
                 .and_(pl.col("type.text").is_in(clock_stoppage_vec) == False),
             )
-            .then(pl.col("lead_wp_before"))
+            .then(half_next_wb)
             .when(
                 (pl.col("end_of_half") == True)
-                .and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
+                .and_(pl.col("start.pos_team.id") != half_next_team)
                 .and_(pl.col("type.text").is_in(clock_stoppage_vec) == False),
             )
-            .then(1 - pl.col("lead_wp_before"))
+            .then(1 - half_next_wb)
             .when(
                 (pl.col("lead_play_type").is_in(["End Period", "End of Half"])).and_(
                     pl.col("change_of_pos_team") == False,
@@ -4165,6 +4231,7 @@ def _add_fourth_down_decisions(
     df: pl.DataFrame,
     *,
     return_as_pandas: bool = False,
+    strict: bool = False,
 ) -> pl.DataFrame:
     """Attach the nfl4th 4th-down decision columns to a full nflverse frame.
 
@@ -4177,7 +4244,8 @@ def _add_fourth_down_decisions(
 
     The 4th-down models (``fd_model`` / ``wp_model``) are download-on-demand; if
     they are unavailable offline the decision columns are emitted as all-null so
-    the frame keeps a stable column set.
+    the frame keeps a stable column set, with one ``RuntimeWarning`` per missing
+    model; ``strict=True`` raises the ``FileNotFoundError`` instead.
 
     Args:
         df: Full nflverse-shape play-by-play frame (every play, not just 4th
@@ -4189,11 +4257,19 @@ def _add_fourth_down_decisions(
             ``spread_line``, ``total_line``).
         return_as_pandas: unused here (the caller controls final conversion);
             retained for signature symmetry.
+        strict: Raise when a 4th-down model cannot be obtained.
 
     Returns:
         ``df`` with the 14 decision columns added (null on non-4th-down rows).
+
+    Raises:
+        FileNotFoundError: ``strict`` and ``fd_model.ubj`` / ``wp_model.ubj`` cannot be obtained.
     """
     import sportsdataverse.nfl.nfl_fourth_down as _fd
+
+    if strict:  # resolve both up front: get_4th_down_probs degrades a missing model to nulls
+        _load_model(_fd._FD_MODEL_FILE)
+        _load_model(_fd._WP_MODEL_FILE)
 
     decision_cols = [
         "go_wp",
@@ -4242,7 +4318,9 @@ def _add_fourth_down_decisions(
 
     try:
         probs_pd = _fd.get_4th_down_probs(fourth)
-    except Exception as exc:  # noqa: BLE001 — degrade gracefully on any scoring failure
+    except Exception as exc:  # degrade gracefully on any scoring failure
+        if strict:
+            raise
         # The 4th-down models (fd_model / wp_model) are download-on-demand and
         # may be unavailable (FileNotFoundError), or an incompatible cached
         # booster can raise an xgboost feature-count error (XGBoostError) — in
@@ -4284,6 +4362,7 @@ def enrich_nfl_pbp(
     touchback_yardline: Union[int, None] = None,
     ep_point_values: Union[np.ndarray, None] = None,
     return_as_pandas: bool = False,
+    strict: bool | None = None,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Enrich an nflverse-shape PBP frame with EP/EPA/WP/WPA/CP/CPOE/xYAC.
 
@@ -4343,6 +4422,11 @@ def enrich_nfl_pbp(
             re-scores keep the NFL vector; today every league's vector equals
             it, so nothing diverges.
         return_as_pandas: When ``True``, return a ``pandas.DataFrame``.
+        strict: When ``True``, a model that cannot be obtained (the
+            download-on-demand xYAC / nfl4th boosters offline with an empty
+            cache) raises instead of warning and nulling the columns it feeds.
+            ``None`` (default) reads ``SDV_PY_MODELS_STRICT`` (``1`` = strict);
+            a producer that must not publish null model columns turns it on.
 
     Returns:
         polars.DataFrame (or pandas.DataFrame when *return_as_pandas* is
@@ -4432,6 +4516,8 @@ def enrich_nfl_pbp(
     Raises:
         ValueError: when ``method`` is not ``"lead_diff"``, or required
             contract columns are absent from ``df``.
+        FileNotFoundError: in strict mode, when a model cannot be obtained
+            (the message names the artifact).
 
     Example:
         Quick start::
@@ -4469,6 +4555,7 @@ def enrich_nfl_pbp(
         )
 
     _validate_enrich_input(df)
+    strict = _models_strict(strict)
 
     # Resolve the scorers off the module so monkeypatched stubs in tests and any
     # future indirection are honoured.
@@ -4532,6 +4619,8 @@ def enrich_nfl_pbp(
     try:
         raw = _self.calculate_xpass(raw, models_dir=models_dir)
     except FileNotFoundError as exc:
+        if strict:
+            raise
         import warnings
 
         warnings.warn(
@@ -4550,6 +4639,8 @@ def enrich_nfl_pbp(
     try:
         raw = _self.calculate_xyac(raw, models_dir=models_dir)
     except (FileNotFoundError, pl.exceptions.ColumnNotFoundError) as exc:
+        if strict and isinstance(exc, FileNotFoundError):
+            raise
         import warnings
 
         # FileNotFoundError → xyac_model.ubj genuinely unavailable (offline,
@@ -4578,7 +4669,7 @@ def enrich_nfl_pbp(
     # 8. 4th-down decision surface — default-on, scored only on the qualifying
     #    4th-down rows and null elsewhere (nfl4th add_4th_probs + recommendation).
     if add_fourth_down:
-        raw = _add_fourth_down_decisions(raw)
+        raw = _add_fourth_down_decisions(raw, strict=strict)
 
     if return_as_pandas:
         return raw.to_pandas()

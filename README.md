@@ -138,7 +138,7 @@ With optional extras (defined in `[project.optional-dependencies]` in
 
 ```bash
 pip install "sportsdataverse[all]"      # everything below EXCEPT mcp
-pip install "sportsdataverse[models]"   # extra deps for the EPA / WP model code
+pip install "sportsdataverse[models]"   # no-op (kept so sportsdataverse[models] installs keep working)
 pip install "sportsdataverse[tests]"    # adds pytest, mypy, ruff, etc.
 pip install "sportsdataverse[nflpro]"   # NFL Pro (pro.nfl.com) Next Gen Stats
 pip install "sportsdataverse[pff]"      # PFF Developer + Premium clients
@@ -193,8 +193,8 @@ For deeper dev-environment detail (lint, mypy, dep-bumping workflow), see
 
 ### Notes
 
-- **Python target:** 3.9–3.14.
-- **DataFrame engine:** polars 1.x or 2.x. Most loaders accept `return_as_pandas=True`
+- **Python target:** 3.10–3.14.
+- **DataFrame engine:** polars 2.x (`polars>=2.0,<3`). Most loaders accept `return_as_pandas=True`
   if you prefer pandas.
 - **NFL caching:** loaders cache to memory by default. Set
   `SDV_PY_NFL_CACHE=filesystem` for cross-session reuse, or

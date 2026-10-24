@@ -12,6 +12,14 @@ Live integration tests live in ``test_espn_live.py`` (gated by
 
 from __future__ import annotations
 
+import functools
+import importlib
+import inspect
+import json
+import warnings
+from pathlib import Path
+from typing import Any, Dict, List
+
 import polars as pl
 import pytest
 
@@ -91,6 +99,7 @@ def test_parse_injuries_returns_one_row_per_team():
         ("events_core_nba", 1),  # 1-row capture, $ref-only items
     ],
 )
+@pytest.mark.filterwarnings("ignore:ESPN returned page:UserWarning")  # asserted by test_parse_items_short_page_*
 def test_parse_items_handles_items_key(fixture, expected_min_rows):
     from sportsdataverse._common_espn_parsers import parse_items
 
@@ -107,6 +116,137 @@ def test_parse_items_handles_entries_key_for_statisticslog():
 
     df = parse_items(_load("athlete_statslog_lbj"))
     assert df.height >= 1, "parse_items must fall back to the 'entries' key for athlete_statisticslog payloads"
+
+
+def test_parse_items_short_page_warns_naming_limit_and_page():
+    """A-H1: espn_nba_athletes_index() answers page 1 of 7 (count 610); the frame said nothing."""
+    from sportsdataverse._common_espn_parsers import parse_items
+
+    with pytest.warns(UserWarning, match=r"page 1 of 7 \(25 of 610 items\); pass the wrapper's limit= or page="):
+        assert parse_items(_load("athletes_index_nba")).height == 25
+
+
+def test_parse_items_short_page_warning_spares_a_one_page_answer():
+    from sportsdataverse._common_espn_parsers import parse_items
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        assert parse_items(_load("franchises_nba")).height > 0  # pageCount 1
+
+
+@pytest.mark.filterwarnings("ignore:ESPN returned page:UserWarning")  # asserted by test_parse_items_short_page_*
+@pytest.mark.parametrize("as_pandas", [False, True])
+def test_parse_items_page_envelope_rides_as_int64_columns(as_pandas):
+    """A-H1 / R-028: the frame carries ``count`` / ``page_count`` so a short page is visible without the warning."""
+    from sportsdataverse._common_espn_parsers import parse_items
+
+    df = parse_items(_load("athletes_index_nba"), return_as_pandas=as_pandas)  # page 1 of 7, 25 of 610
+    if as_pandas:
+        assert str(df["count"].dtype) == "Int64" and str(df["page_count"].dtype) == "Int64"
+        df = pl.from_pandas(df)
+    assert df.schema["count"] == pl.Int64 and df.schema["page_count"] == pl.Int64
+    assert df["count"].unique().to_list() == [610] and df["page_count"].unique().to_list() == [7]
+    assert df.columns[-2:] == ["count", "page_count"] and df.height == 25
+
+
+def test_parse_items_page_envelope_is_null_on_an_unpaginated_payload():
+    """athlete_statisticslog ships ``entries`` and no count/pageCount: the columns stay, typed, all null."""
+    from sportsdataverse._common_espn_parsers import parse_items
+
+    df = parse_items(_load("athlete_statisticslog_nba"))
+    assert df.height > 0 and df.schema["count"] == pl.Int64 and df.schema["page_count"] == pl.Int64
+    assert df["count"].null_count() == df.height and df["page_count"].null_count() == df.height
+
+
+# The three parsers below had never seen a real payload (their schemas said ``unverified``); each test
+# reads the 2026-10-18 capture its fix was made against.
+
+
+def test_athlete_stats_reads_the_web_v3_per_season_rows():
+    """Web v3 keeps the rows under ``categories[].statistics[]``: it parsed to 0 x 0."""
+    from sportsdataverse._common_espn_parsers import parse_athlete_stats
+
+    df = parse_athlete_stats(_load("athlete_stats_nba"))
+    assert df.height == 39  # 3 categories x (12 season rows + the Career row)
+    first = df.filter((pl.col("category") == "averages") & (pl.col("split_name") == "2010-11"))
+    assert first.select("season", "team_id", "position", "games_played", "avg_minutes").rows() == [
+        (2011, 20, "G", "78", "23.0")
+    ]
+
+
+@pytest.mark.parametrize("league", ["nba", "wnba", "mbb", "wbb", "nfl", "mlb"])
+def test_athlete_stats_keeps_each_category_career_line(league):
+    """R889-4: each Web v3 category's ``totals`` is the career line; it was dropped."""
+    from sportsdataverse._common_espn_parsers import parse_athlete_stats
+
+    payload = _load(f"athlete_stats_{league}")
+    df = parse_athlete_stats(payload)
+    career = df.filter(pl.col("split_name") == "Career")
+    assert career["category"].to_list() == [c["name"] for c in payload["categories"] if c.get("totals")]
+    assert career.select("season", "team_id", "position").null_count().row(0) == (career.height,) * 3
+
+
+def test_athlete_stats_ids_are_int64_on_both_branches():
+    """R889-2: the pandas branch kept team_id "20" a string, and a null season turned Float64."""
+    from sportsdataverse._common_espn_parsers import parse_athlete_stats
+
+    payload = _load("athlete_stats_nba")
+    assert {c: str(t) for c, t in parse_athlete_stats(payload).select("season", "team_id").schema.items()} == {
+        "season": "Int64",
+        "team_id": "Int64",
+    }
+    pdf = parse_athlete_stats(payload, return_as_pandas=True)
+    assert (str(pdf["season"].dtype), str(pdf["team_id"].dtype)) == ("Int64", "Int64")
+
+
+def test_athlete_stats_named_splits_carry_no_season_columns():
+    """R889-6: the labels + splits shape (athlete_overview's ``statistics`` block) has no season, team or position."""
+    from sportsdataverse._common_espn_parsers import parse_athlete_stats
+
+    df = parse_athlete_stats(_load("athlete_overview_nba")["statistics"])
+    assert df["split_name"].to_list() == ["Career"] and df["category"].to_list() == ["default"]
+    assert not {"season", "team_id", "position"} & set(df.columns)
+
+
+def test_athlete_stats_wrong_typed_containers_never_raise():
+    """R889-5: a non-dict ``season`` or a dict ``statistics`` raised AttributeError."""
+    from sportsdataverse._common_espn_parsers import parse_athlete_stats
+
+    payload = _load("athlete_stats_nba")
+    payload["categories"][0]["statistics"][0]["season"] = "2010-11"
+    payload["categories"][1]["statistics"] = {"season": {}}
+    payload["categories"][2]["statistics"].append(None)  # R889-8: a null row is skipped, not parsed
+    df = parse_athlete_stats(payload)
+    assert df.filter(pl.col("category") == "totals")["split_name"].to_list() == ["Career"]
+    assert df.filter(pl.col("category") == "averages").height == 13
+    assert df.filter(pl.col("category") == "miscellaneous").height == 13  # 12 seasons + Career
+
+
+def test_athlete_stats_empty_totals_add_no_career_row():
+    """R889-9: a category whose ``totals`` is empty has no career line to report."""
+    from sportsdataverse._common_espn_parsers import parse_athlete_stats
+
+    payload = _load("athlete_stats_nba")
+    payload["categories"][0]["totals"] = []
+    career = parse_athlete_stats(payload).filter(pl.col("split_name") == "Career")
+    assert career["category"].to_list() == ["totals", "miscellaneous"]
+
+
+def test_event_competitor_statistics_reads_the_one_split_object():
+    """Core v2 answers ``splits`` as one object: it raised AttributeError."""
+    from sportsdataverse._common_espn_parsers import parse_event_competitor_statistics
+
+    df = parse_event_competitor_statistics(_load("event_competitor_statistics_nba"))
+    assert df.height == 98 and set(df["category_name"]) == {"defensive", "general", "offensive"}
+    assert df.filter(pl.col("stat_name") == "blocks").select("split_name", "stat_value").rows() == [("All Splits", 7.0)]
+
+
+def test_season_draft_index_parses_to_its_own_row():
+    """The Core v2 season draft's ``rounds`` is a ``$ref``: it raised AttributeError."""
+    from sportsdataverse._common_espn_parsers import parse_draft
+
+    df = parse_draft(_load("season_draft_nba"))
+    assert df.select("year", "number_of_rounds", "short_display_name").rows() == [(2024, 2, "2024 NBA Draft")]
 
 
 # ===========================================================================
@@ -831,14 +971,24 @@ def _catalog_parser_names() -> set[str]:
     return {ep.parser for api in apis for ep in api.endpoints if ep.parser}
 
 
+def _ext_modules() -> list:
+    """Every generated ``*_espn_ext.py``, at any depth (the soccer leagues sit two levels down)."""
+    return sorted((Path(__file__).parents[1] / "sportsdataverse").rglob("*_espn_ext.py"))
+
+
+def _leagues() -> list:
+    from tools.codegen import generate, spec
+
+    return spec.load_leagues(generate.ENDPOINTS / "leagues.yaml").leagues
+
+
 def _generated_parser_imports() -> set[str]:
     """Every ``parse_*`` name imported from ``_common_espn_parsers`` by any
     generated ``*_espn_ext`` module."""
     import ast
-    from pathlib import Path
 
     out: set[str] = set()
-    for path in Path("sportsdataverse").glob("*/*_espn_ext.py"):
+    for path in _ext_modules():
         tree = ast.parse(path.read_text(encoding="utf-8"))
         for node in ast.walk(tree):
             if isinstance(node, ast.ImportFrom) and node.module == "sportsdataverse._common_espn_parsers":
@@ -870,47 +1020,31 @@ def test_generated_modules_import_only_defined_parsers():
     assert not undefined, f"generated modules import {len(undefined)} undefined parsers: {sorted(undefined)}"
 
 
-def test_return_parsed_shim_active_on_every_wrapper_across_all_leagues():
+def test_parser_import_scan_covers_all_modules():
+    """A-L15: the scan reads every league's ext module (thirty today), not the 11 a depth-1 glob saw."""
+    stems = {p.stem for p in _ext_modules()}
+    assert stems == {f"{lg.prefix}_espn_ext" for lg in _leagues()} and len(stems) >= 30
+
+
+def test_return_parsed_shim_active_on_every_wrapper_all_modules():
     """The return_parsed kwarg must appear in the signature of every
-    bound wrapper across all 7 league extension modules."""
+    bound wrapper of every league module in leagues.yaml (A-L15, A-L54)."""
+    import importlib
     import inspect
 
-    import sportsdataverse.cfb.cfb_espn_ext as cfb_mod
-    import sportsdataverse.mbb.mbb_espn_ext as mbb_mod
-    import sportsdataverse.mlb.mlb_espn_ext as mlb_mod
-    import sportsdataverse.nba.nba_espn_ext as nba_mod
-    import sportsdataverse.nfl.nfl_espn_ext as nfl_mod
-    import sportsdataverse.wbb.wbb_espn_ext as wbb_mod
-    import sportsdataverse.wnba.wnba_espn_ext as wnba_mod
-    from sportsdataverse.cfb.cfb_espn_ext import __all__ as cfb_all
-    from sportsdataverse.mbb.mbb_espn_ext import __all__ as mbb_all
-    from sportsdataverse.mlb.mlb_espn_ext import __all__ as mlb_all
-    from sportsdataverse.nba.nba_espn_ext import __all__ as nba_all
-    from sportsdataverse.nfl.nfl_espn_ext import __all__ as nfl_all
-    from sportsdataverse.wbb.wbb_espn_ext import __all__ as wbb_all
-    from sportsdataverse.wnba.wnba_espn_ext import __all__ as wnba_all
-
-    leagues = [
-        ("nba", nba_all, nba_mod),
-        ("wnba", wnba_all, wnba_mod),
-        ("mbb", mbb_all, mbb_mod),
-        ("wbb", wbb_all, wbb_mod),
-        ("cfb", cfb_all, cfb_mod),
-        ("nfl", nfl_all, nfl_mod),
-        ("mlb", mlb_all, mlb_mod),
-    ]
     missing = []
     total = 0
-    for league, names, mod in leagues:
-        for name in names:
+    for lg in _leagues():
+        parts = [lg.group, lg.prefix] if lg.group else [lg.prefix]
+        mod = importlib.import_module(".".join(["sportsdataverse", *parts, f"{lg.prefix}_espn_ext"]))
+        for name in mod.__all__:
             fn = getattr(mod, name, None)
             if fn is None or not callable(fn):
                 continue
             total += 1
-            sig = inspect.signature(fn)
-            if "return_parsed" not in sig.parameters:
-                missing.append(f"{league}.{name}")
-    assert total >= 750, f"sanity check: expected >=750 wrappers across 7 leagues, got {total}"
+            if "return_parsed" not in inspect.signature(fn).parameters:
+                missing.append(f"{lg.prefix}.{name}")
+    assert total >= 3000, f"sanity check: expected >=3000 wrappers across {len(_leagues())} leagues, got {total}"
     assert not missing, f"{len(missing)} wrappers missing the return_parsed shim: {missing[:10]}..."
 
 
@@ -933,6 +1067,13 @@ def test_summary_section_parsers_registry_consistent():
     # Every registered parser must be callable
     for name, fn in SUMMARY_SECTION_PARSERS.items():
         assert callable(fn), f"{name} -> {fn!r} not callable"
+
+
+def test_summary_docstring_counts_the_registered_sections():
+    """A-L41: the docstring said 17 sections while the registry held 21."""
+    from sportsdataverse._common_espn_parsers import SUMMARY_SECTION_PARSERS, parse_summary
+
+    assert f"({len(SUMMARY_SECTION_PARSERS)} sections currently)" in (parse_summary.__doc__ or "")
 
 
 def test_summary_dispatcher_returns_zero_row_dict_on_empty_payload():
@@ -1022,6 +1163,7 @@ def test_recruiting_years_fixture_parses_to_ref_frame():
     assert "$ref" in df.columns
 
 
+@pytest.mark.filterwarnings("ignore:ESPN returned page:UserWarning")  # asserted by test_parse_items_short_page_*
 def test_recruiting_athletes_fixture_flattens_inline_athletes():
     """Core v2 ``recruiting/{year}/athletes`` ships INLINE athlete objects
     (unlike most Core v2 lists, which are $ref-only) — the flattened frame
@@ -1034,6 +1176,7 @@ def test_recruiting_athletes_fixture_flattens_inline_athletes():
         assert col in df.columns, f"missing flattened column {col}"
 
 
+@pytest.mark.filterwarnings("ignore:ESPN returned page:UserWarning")  # asserted by test_parse_items_short_page_*
 def test_recruiting_wrappers_route_through_parse_items():
     """The generated basketball wrappers accept the shim kwargs and dispatch
     the fixture payload through parse_items. Patch the module-level ``_get``
@@ -1067,6 +1210,7 @@ def test_recruiting_rankings_fixture_parses_to_ref_frame():
     assert "$ref" in df.columns
 
 
+@pytest.mark.filterwarnings("ignore:ESPN returned page:UserWarning")  # asserted by test_parse_items_short_page_*
 def test_recruiting_athletes_pandas_opt_in():
     import pandas as pd
 
@@ -1230,3 +1374,505 @@ def test_rankings_wrapper_routes_through_parse_rankings(monkeypatch):
     monkeypatch.setattr(ext, "_get", lambda *args, **kwargs: fixture)
     assert ext.espn_cfb_rankings(return_parsed=False) is fixture
     assert ext.espn_cfb_rankings().height == _RANKINGS_ROWS["cfb"]
+
+
+# ===========================================================================
+# Hostile bodies and the dtype snapshot (A-M2, A-L16, A-L17, A-M13, A-M14, A-M15, EX-1.3-a)
+# ===========================================================================
+#
+# Every public ``parse_*`` defined in a ``sportsdataverse/**/*_parsers.py`` module (214 today, the 30
+# ESPN registry parsers among them) is DISCOVERED and fed five hostile bodies, so a new parser is
+# swept with no edit here. The parser contract: the error envelope may raise the vocabulary's
+# failed-fetch errors (NoDataError / AssetFetchError) or return zero rows; the other four shapes must
+# return zero rows. The envelope is ESPN's own (tests/fixtures/runtime_errors/espn_site_roster_400.json).
+# Every committed top-level ESPN capture is parsed by its endpoint's parser and its (column, dtype)
+# set compared with tests/espn_parser_dtype_snapshot.json; regenerate that file with
+# ``python -m tests.test_espn_universal_parsers`` only for a deliberate dtype change.
+
+_SNAPSHOT = Path(__file__).parent / "espn_parser_dtype_snapshot.json"
+# Four snapshot entries pin zero columns (injuries_mbb, injuries_wbb, team_schedule_cfb, team_schedule_nhl):
+# their captures are empty and parse to zero-width frames. Task 5.1 gives empty frames their documented schema.
+# scoreboard_cfb_2014_placeholder carries ESPN's real `{}` placeholder event, which has no ids: its row comes back
+# all-null, so its id columns keep the String dtype of every other scoreboard (A-M15, task 5.2), but the pandas hop
+# turns six Int64 columns Float64 (season_year, season_type, status_period, attendance, home_rank, away_rank;
+# A-M14's class, task 5.2). The snapshot pins that measured state.
+_ESPN_FIX = Path(__file__).parent / "fixtures" / "espn"
+_FIX_ROOT = Path(__file__).parent / "fixtures"
+# Captures no registered parser reads (kept for other tests): ``athlete_statistics_core_*`` feeds the
+# hand-written core-v2 stat pivot (tests/test_common_espn_player_stats.py) and ``error_404_body`` is
+# ESPN's real 404 body, not a payload (tests/scrape/test_scrape_espn_engine.py). ``mbb_season_days_2024``
+# bundles seven real scoreboard days keyed by date, not one payload (tests/mbb/test_mbb_schedule.py).
+# ``wbb_calendar_2001`` feeds the hand-written espn_wbb_calendar season floor (tests/test_wbb_calendar_floor.py,
+# main #860).
+_NO_PARSER = {
+    "athlete_statistics_core_nba_1966_2024",
+    "athlete_statslog_lbj",
+    "depthcharts_mlb",
+    "depthcharts_nba",
+    "depthcharts_nfl",
+    "depthcharts_nhl",
+    "error_404_body",
+    "mbb_season_days_2024",
+    "wbb_calendar_2001",
+}
+_PKG = Path(__file__).parents[1] / "sportsdataverse"
+
+
+def _registered() -> Dict[str, Any]:
+    """``{short: parser}``: the registry, plus the curated returns-schema parsers it lacks (``teams``)."""
+    from sportsdataverse._common_espn_parsers import ENDPOINT_PARSERS
+    from tools.codegen import generate
+
+    return {**{k: fn for k, (fn, _) in generate._return_schema_parsers().items()}, **ENDPOINT_PARSERS}
+
+
+def _parsers() -> Dict[str, Any]:
+    return {fn.__name__: fn for fn in _registered().values()}
+
+
+@functools.lru_cache(maxsize=1)
+def _public_parsers() -> Dict[str, Any]:
+    """``{"<module>.<parse_fn>": fn}`` for every public ``parse_*`` defined in a ``*_parsers.py`` module."""
+    out = {}
+    for path in sorted(_PKG.rglob("*_parsers.py")):
+        mod = ".".join(path.relative_to(_PKG.parent).with_suffix("").parts)
+        for name, fn in vars(importlib.import_module(mod)).items():
+            if name.startswith("parse_") and callable(fn) and getattr(fn, "__module__", "") == mod:
+                out[f"{mod.split('.', 1)[1]}.{name}"] = fn
+    return out
+
+
+def _captures() -> Dict[str, str]:
+    """``{fixture stem: short}`` for every top-level ESPN capture a registered parser reads."""
+    shorts = sorted(_registered(), key=len, reverse=True)
+    out = {}
+    for fx in sorted(_ESPN_FIX.glob("*.json")):
+        short = next((s for s in shorts if fx.stem.startswith(s + "_")), None)
+        if short is not None:
+            out[fx.stem] = short
+    return out
+
+
+def _frames(out: Any) -> Dict[str, pl.DataFrame]:
+    if isinstance(out, pl.DataFrame):
+        return {"": out}
+    assert isinstance(out, dict) and all(isinstance(v, pl.DataFrame) for v in out.values()), type(out)
+    return out
+
+
+def _dtype_snapshot() -> Dict[str, Dict[str, Dict[str, str]]]:
+    reg = _registered()
+    return {
+        stem: {sec: {c: str(t) for c, t in df.schema.items()} for sec, df in _frames(reg[short](_load(stem))).items()}
+        for stem, short in _captures().items()
+    }
+
+
+_ENVELOPE = json.loads((Path(__file__).parent / "fixtures/runtime_errors/espn_site_roster_400.json").read_text("utf-8"))
+_HOSTILE = {
+    "dict": {},
+    "list": [{}],
+    "none": None,
+    "empty_str": "",
+    "error_envelope": _ENVELOPE,
+    # WB-providers-2: pandas 2 reads a scalar record as an empty row (N x 0), pandas 3 raises. Zero rows on both,
+    # a SchemaDriftWarning allowed; the 3.10 CI job (#941) runs this sweep on pandas 2.
+    "scalar_list": ["a", "b", "c"],
+}
+# A scalar array is a real payload for these (committed captures: mlb_api/game_timestamps.json,
+# on3/filters_status.json, sports247/sports247_sports_year_fb.json): one row per scalar in this one column.
+_SCALAR_ARRAY_CAPTURED = {
+    "cfb.on3_parsers.parse_on3_rdb": "value",
+    "cfb.sports247_parsers.parse_sports247_result_set": "value",
+    "mlb.mlb_api_parsers.parse_mlb_api_timecodes": "timecode",
+}
+# Generic "any body" flatteners whose shape rule reads a scalar array as a ``value`` column by design
+# (soccer/_frames.rows_to_frame, cbs_napi_parsers._rows_to_frame); no capture of that shape is committed.
+_SCALAR_ARRAY_ANY_BODY = {
+    "cbs.cbs_napi_parsers.parse_cbs_napi": "value",
+    "euroleague.euroleague_parsers.parse_euroleague": "value",
+    "soccer.asa_parsers.parse_asa": "value",
+    "soccer.fifa_parsers.parse_fifa": "value",
+    "soccer.fotmob_parsers.parse_fotmob": "value",
+    "soccer.mls.mls_api_parsers.parse_mls_api": "value",
+    "soccer.nwsl.nwsl_api_parsers.parse_nwsl_sdp": "value",
+    "soccer.uefa_parsers.parse_uefa": "value",
+}
+_SCALAR_ARRAY = {**_SCALAR_ARRAY_CAPTURED, **_SCALAR_ARRAY_ANY_BODY}
+# Parsers that break the contract today, measured 2026-10-11 (polars 2.0): ``{parser: {shape: what the
+# case fails with}}``, AssertionError meaning it returned rows. The fixing task follows from the module.
+_HOSTILE_OPEN: Dict[str, Dict[str, type]] = {}  # task 4.1b closed the last of them (A-L17, A-L62, B-L6)
+# Main's families merged 10-17 (#826 European hockey, #859/#862 international basketball) return rows for a
+# hostile body, measured 2026-10-18 on the sync tree (109 cases, every one AssertionError = rows returned).
+_HOSTILE_SYNC_1018: Dict[str, Dict[str, type]] = {}  # task 4.1b closed them (EX-SYNC-g)
+# Plan v2.2: task 4.1 closed the ESPN parsers' zero-row contract (A-L17, A-M13), 4.9 the nhl/mlb/nba parsers'
+# (A-L60) and 4.1b every other provider parser (A-L17, EX-SYNC-g). None of these modules may be re-opened
+# above (test_hostile_closed_modules_stay_closed).
+_CLOSED = (
+    "_common_espn_parsers.",
+    "nhl.nhl_edge_parsers.",
+    "nhl.nhl_api_web_parsers.",
+    "nhl.nhl_records_parsers.",
+    "nhl.nhl_stats_rest_parsers.",
+    "mlb.mlb_api_parsers.",
+    "nba.nba_stats_parsers.",
+)
+
+
+def _open(qual: str, shape: str) -> str:
+    """The finding id and fixing task of an open ``(parser, shape)`` case."""
+    task = "4.1b"
+    return f"EX-1.3-a: a hostile {shape} body breaks the zero-row contract; task {task}"
+
+
+def _hostile_params() -> List[Any]:
+    params = []
+    for qual in sorted(_public_parsers()):
+        for shape in _HOSTILE:
+            exc = _HOSTILE_OPEN.get(qual, {}).get(shape)
+            marks = [pytest.mark.xfail(strict=True, raises=exc, reason=_open(qual, shape))] if exc else []
+            if _HOSTILE_SYNC_1018.get(qual, {}).get(shape):
+                marks = [
+                    pytest.mark.xfail(
+                        strict=True,
+                        raises=_HOSTILE_SYNC_1018[qual][shape],
+                        reason=f"EX-SYNC-g: a hostile {shape} body parses to rows; task providers 4.1b",
+                    )
+                ]
+            params.append(pytest.param(qual, shape, id=f"{qual}-{shape}", marks=marks))
+    return params
+
+
+@pytest.mark.parametrize(("qual", "shape"), _hostile_params())
+def test_hostile_body_is_zero_rows_or_a_vocabulary_raise(qual, shape):
+    from sportsdataverse.errors import AssetFetchError, NoDataError
+
+    parse = _public_parsers()[qual]
+    if shape == "error_envelope":  # a failed fetch: the one body the vocabulary lets a parser raise on
+        try:
+            out = parse(_HOSTILE[shape])
+        except (NoDataError, AssetFetchError):
+            return
+    elif shape == "scalar_list":
+        from sportsdataverse.errors import SchemaDriftWarning
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", SchemaDriftWarning)  # drift may say so; it must not read as rows
+            out = parse(_HOSTILE[shape])
+        if qual in _SCALAR_ARRAY:
+            assert {sec: df.columns for sec, df in _frames(out).items() if df.height} == {"": [_SCALAR_ARRAY[qual]]}
+            return
+    else:
+        out = parse(_HOSTILE[shape])
+    assert {sec: df.height for sec, df in _frames(out).items() if df.height} == {}
+
+
+def test_hostile_closed_modules_stay_closed():
+    """No case of a module whose contract tasks 4.1 / 4.9 closed may be re-opened as an xfail."""
+    reopened = sorted(q for q in {**_HOSTILE_OPEN, **_HOSTILE_SYNC_1018} if q.startswith(_CLOSED))
+    assert reopened == []
+
+
+def test_hostile_sweep_covers_every_public_parser():
+    parsers = _public_parsers()
+    # 831 on 2026-10-20: a decorator that dropped ``functools.wraps`` would lose its parsers from this sweep (R4.1b-2)
+    assert len(parsers) >= 831 and {f"_common_espn_parsers.{n}" for n in _parsers()} <= set(parsers)
+    needs_more = [
+        q
+        for q, fn in parsers.items()
+        if any(
+            p.default is p.empty and p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD, p.KEYWORD_ONLY)
+            for p in list(inspect.signature(fn).parameters.values())[1:]
+        )
+    ]
+    assert needs_more == [], "a parser needs more than its payload: give the sweep its arguments"
+    assert set(_HOSTILE_OPEN) <= set(parsers), sorted(set(_HOSTILE_OPEN) - set(parsers))
+    assert set(_HOSTILE_SYNC_1018) <= set(parsers), sorted(set(_HOSTILE_SYNC_1018) - set(parsers))
+    assert not set(_HOSTILE_SYNC_1018) & set(_HOSTILE_OPEN)
+    listed = set(_SCALAR_ARRAY)
+    assert listed <= set(parsers), sorted(listed - set(parsers))
+    unread = {fx.stem for fx in _ESPN_FIX.glob("*.json")} - set(_captures())
+    assert unread == _NO_PARSER, "a new capture needs a parser (or a reason in _NO_PARSER)"
+
+
+def _hostile_decorated() -> Dict[str, str]:
+    """``{"<module>.<parse_fn>": decorator}`` for every parser carrying ``errors._data_only`` / ``_dict_only``."""
+    import re
+
+    out = {}
+    for path in sorted(_PKG.rglob("*_parsers.py")):
+        mod = ".".join(path.relative_to(_PKG.parent).with_suffix("").parts)
+        for deco, name in re.findall(r"^@(_data_only|_dict_only)\ndef (parse_\w+)\(", path.read_text("utf-8"), re.M):
+            out[f"{mod.split('.', 1)[1]}.{name}"] = deco
+    return out
+
+
+def test_hostile_decorated_parsers_keep_their_identity_and_keyword_payload():
+    """R4.1b-1 / R4.1b-2: a decorated parser stays in the sweep (``functools.wraps``: name, module, ``__wrapped__``)
+    and takes its payload under its own first-parameter name as a keyword, as it did undecorated."""
+    decorated = _hostile_decorated()
+    assert len(decorated) >= 153
+    parsers = _public_parsers()
+    for qual in decorated:
+        fn = parsers[qual]  # KeyError: the decorator hid the parser from the sweep
+        assert fn.__name__ == qual.rsplit(".", 1)[1] and hasattr(fn, "__wrapped__"), qual
+        first = next(iter(inspect.signature(fn).parameters))
+        for body in ({}, [{}], _ENVELOPE):
+            assert {sec: df.height for sec, df in _frames(fn(**{first: body})).items() if df.height} == {}, qual
+
+
+def test_a_decorated_parser_reads_a_real_body_the_same_by_keyword():
+    from sportsdataverse.hockeytech._parsers import parse_game_summary
+    from sportsdataverse.odds.kalshi_parsers import parse_kalshi
+
+    events = json.loads((_FIX_ROOT / "kalshi" / "events.json").read_text("utf-8"))  # _data_only
+    assert parse_kalshi(raw=events).equals(parse_kalshi(events)) and parse_kalshi(raw=events).height > 0
+    summary = json.loads((_FIX_ROOT / "hockeytech" / "pwhl_game_summary_42.json").read_text("utf-8"))  # _dict_only
+    by_kw, by_pos = parse_game_summary(payload=summary, game_id=42), parse_game_summary(summary, 42)
+    assert {k: v.height for k, v in by_kw.items()} == {k: v.height for k, v in by_pos.items()}
+    assert by_kw["goals"].height > 0
+
+
+def test_game_summary_keeps_its_game_row_without_a_game_id():
+    """R4.1b-2 (M8): the stub-row guard drops the row only when there is neither a game_id nor data."""
+    from sportsdataverse.hockeytech._parsers import parse_game_summary
+
+    summary = json.loads((_FIX_ROOT / "hockeytech" / "pwhl_game_summary_42.json").read_text("utf-8"))
+    game = parse_game_summary(summary)["game"]
+    assert game.height == 1 and game["game_id"].to_list() == [None] and game["home_team"].to_list()[0]
+    assert parse_game_summary({}, game_id=7)["game"]["game_id"].to_list() == [7]  # the documented stub
+
+
+@pytest.mark.parametrize("site_kit", [["x"], "x", 1])
+def test_a_sitekit_that_is_not_an_object_is_zero_rows(site_kit):
+    """R4.1b-2 (M6): ``_sitekit`` reads only a dict ``SiteKit``."""
+    from sportsdataverse.hockeytech._parsers import parse_scorebar, parse_seasons, parse_teams
+
+    for parse in (parse_teams, parse_seasons, parse_scorebar):
+        assert parse({"SiteKit": site_kit}).height == 0, parse.__name__
+
+
+@pytest.mark.filterwarnings("ignore:ESPN returned page:UserWarning")  # asserted by test_parse_items_short_page_*
+def test_dtype_snapshot_matches_every_committed_capture():
+    """A-M2: column names AND dtypes per capture; a parser change that retypes a column fails here."""
+    want = json.loads(_SNAPSHOT.read_text(encoding="utf-8"))
+    got = _dtype_snapshot()
+    assert sorted(got) == sorted(want)
+    diffs = [
+        (stem, sec, col, want[stem].get(sec, {}).get(col), got[stem].get(sec, {}).get(col))
+        for stem in got
+        for sec in set(got[stem]) | set(want[stem])
+        for col in set(got[stem].get(sec, {})) | set(want[stem].get(sec, {}))
+        if want[stem].get(sec, {}).get(col) != got[stem].get(sec, {}).get(col)
+    ]
+    # Fix the parser, or regenerate only for a deliberate change: (capture, section, column, want, got).
+    assert not diffs, f"{len(diffs)} column dtypes changed, e.g. {sorted(diffs, key=str)[:8]}"
+
+
+def _id_cols(name: str) -> Dict[str, str]:
+    """``{capture/section/column: dtype}`` for every id column ``name`` emits on its captures."""
+    reg = _registered()
+    snap = json.loads(_SNAPSHOT.read_text(encoding="utf-8"))
+    return {
+        f"{stem}/{sec}/{col}": dtype
+        for stem, short in _captures().items()
+        if reg[short].__name__ == name
+        for sec, cols in snap[stem].items()
+        for col, dtype in cols.items()
+        if col == "id" or col.endswith("_id")
+    }
+
+
+# Parsers whose id columns are not Int64 on their captures today (String; parse_summary also
+# Float64). Task 5.2 makes every ESPN id Int64 at the parser boundary.
+_IDS_NOT_INT64 = {
+    "parse_athlete_gamelog",
+    "parse_athlete_overview",
+    "parse_event_plays",
+    "parse_fpi",
+    "parse_groups",
+    "parse_injuries",
+    "parse_items",
+    "parse_leaders",
+    "parse_news",
+    "parse_rankings",
+    "parse_scoreboard",
+    "parse_single_entity",
+    "parse_standings",
+    "parse_summary",
+    "parse_team_roster",
+    "parse_team_schedule",
+    "parse_teams",
+    "parse_transactions",
+}
+
+
+def _id_params(open_ids: set, reason: str) -> List[Any]:
+    return [
+        pytest.param(
+            name,
+            marks=[pytest.mark.xfail(strict=True, raises=AssertionError, reason=reason)] if name in open_ids else [],
+        )
+        for name in sorted(_parsers())
+    ]
+
+
+@pytest.mark.parametrize(
+    "name",
+    _id_params(_IDS_NOT_INT64, "A-M15: ESPN ids are String here but Int64 in parse_weekly_powerindex; task 5.2"),
+)
+def test_dtype_snapshot_ids_are_int64(name):
+    assert {k: v for k, v in _id_cols(name).items() if v != "Int64"} == {}
+
+
+@pytest.mark.parametrize(
+    "name",
+    _id_params({"parse_summary"}, "A-M14: the pandas hop turns point_after_attempt_id into Float64; task 5.2"),
+)
+def test_dtype_snapshot_ids_are_never_float(name):
+    """A float id stringifies as ``"123.0"`` and joins nothing."""
+    assert {k: v for k, v in _id_cols(name).items() if v.startswith("Float")} == {}
+
+
+if __name__ == "__main__":  # regenerate the snapshot after a deliberate dtype change
+    _SNAPSHOT.write_text(json.dumps(_dtype_snapshot(), indent=1) + "\n", encoding="utf-8", newline="\n")
+
+
+def _drift(raw: Any, path: tuple) -> Any:
+    """A deep copy of the real capture whose list at ``path`` holds strings instead of objects."""
+    import copy
+
+    out = copy.deepcopy(raw)
+    node = out
+    for step in path[:-1]:
+        node = node[step]
+    node[path[-1]] = [str(row) for row in node[path[-1]]]
+    return out
+
+
+# (parser, capture, path to the row list that drifts, where the warning names). Each capture parses to rows
+# first, with no warning (pytest.ini makes warnings errors), except where its parser reads no rows from it.
+_ESPN_DRIFT = [
+    ("parse_news", "news_nba", ("articles",), "parse_news: articles"),
+    ("parse_transactions", "transactions_nba", ("transactions",), "parse_transactions: records"),
+    ("parse_items", "season_coaches_nba", ("items",), "parse_items: items"),
+    ("parse_teams", "teams_mbb", ("sports", 0, "leagues", 0, "teams"), "parse_teams: teams"),
+    ("parse_groups", "teams_nba", ("sports",), "parse_groups: sports"),
+    ("parse_groups", "conferences_nba", ("groups",), "parse_groups: groups"),
+    ("parse_groups", "conferences_nba", ("groups", 0, "children"), "parse_groups: groups"),
+    ("parse_coaches", "season_coaches_nba", ("items",), "parse_coaches: items"),
+    ("parse_event_competitor_roster", "event_competitor_roster_nba", ("entries",), "parse_event_competitor_roster"),
+    ("parse_event_plays", "event_plays_nba", ("items",), "parse_event_plays: items"),
+    ("parse_team_schedule", "team_schedule_nba", ("events",), "parse_team_schedule: events"),
+    ("parse_team_roster", "team_roster_nba", ("athletes",), "parse_team_roster: athletes"),
+    ("parse_team_roster", "team_roster_nfl", ("athletes", 0, "items"), r"parse_team_roster: athletes\[\w+\]\.items"),
+    ("parse_injuries", "injuries_nba", ("injuries",), "parse_injuries: teams"),
+    ("parse_summary_plays", "summary_nba", ("plays",), "parse_summary_plays: plays"),
+    ("parse_summary_winprobability", "summary_nba", ("winprobability",), "parse_summary_winprobability: wp"),
+    ("parse_summary_officials", "summary_nba", ("gameInfo", "officials"), "parse_summary_officials: officials"),
+]
+
+
+def _nulled(raw: Any, path: tuple, keep: bool, nulls: bool = True) -> Any:
+    """A deep copy of the real capture whose list at ``path`` gains null rows (``keep``), holds only nulls, or
+    (``nulls=False``) is empty."""
+    import copy
+
+    out = copy.deepcopy(raw)
+    node = out
+    for step in path[:-1]:
+        node = node[step]
+    rows = node[path[-1]]
+    node[path[-1]] = [None, *rows, None] if keep else [None] * len(rows) if nulls else []
+    return out
+
+
+# Every _ESPN_DRIFT row whose list holds rows: each parser applies errors._object_rows to it, raising inside its
+# catch or warning through where=. teams_nba's ``sports`` walk reads no group rows, so it has none to null.
+_ESPN_ROW_RULE = [entry for entry in _ESPN_DRIFT if entry[1] != "teams_nba"] + [
+    # the grouped roster's position groups themselves (the players inside one are in _ESPN_DRIFT)
+    ("parse_team_roster", "team_roster_nfl", ("athletes",), "parse_team_roster: athletes"),
+]
+
+
+@pytest.mark.parametrize(("parser", "fixture", "path", "where"), _ESPN_ROW_RULE, ids=str)
+def test_espn_null_rows_are_dropped(parser, fixture, path, where):
+    """4.13: a null row is no data. It is dropped, wherever it sits: the frame is the capture's own, row for row
+    (R953-2: a leading null must not decide the shape; R953-3: order kept). A list of nulls is zero rows. Neither
+    warns (pytest.ini makes warnings errors). No committed capture holds a null row, so nulls are added."""
+    import sportsdataverse._common_espn_parsers as mod
+
+    parse, raw = getattr(mod, parser), _load(fixture)
+    expected = parse(raw)
+    assert expected.height > 1
+    assert parse(_nulled(raw, path, keep=True)).equals(expected)
+    # a list of nulls reads as an empty list (zero rows; for one group's players, the other groups' rows)
+    assert parse(_nulled(raw, path, keep=False)).height == parse(_nulled(raw, path, keep=False, nulls=False)).height
+    assert parse(_nulled(raw, path, keep=False)).height < expected.height
+
+
+@pytest.mark.parametrize(("parser", "fixture", "path", "where"), _ESPN_DRIFT, ids=lambda v: str(v))
+def test_espn_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, path, where, json_normalize_flavour):
+    """Task 4.9: a row list that stops holding objects is zero rows AND a SchemaDriftWarning naming the path."""
+    import sportsdataverse._common_espn_parsers as mod
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    parse, raw = getattr(mod, parser), _load(fixture)
+    if parser != "parse_groups":  # teams_nba carries no groups: only the walk to them is exercised
+        assert parse(raw).height > 0
+    with pytest.warns(SchemaDriftWarning, match=where):
+        assert parse(_drift(raw, path)).height == 0
+
+
+def test_espn_draft_picks_drift_warns(json_normalize_flavour):
+    """parse_draft's inline picks shape has no committed capture (its docstring says so): the real 2024 index
+    capture with its ``$ref`` rounds swapped for a picks list that holds strings reaches the same catch."""
+    from sportsdataverse._common_espn_parsers import parse_draft
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    raw = _load("season_draft_nba")
+    with pytest.warns(SchemaDriftWarning, match="parse_draft: all_picks"):
+        assert parse_draft({**raw, "rounds": [], "picks": [str(raw["athletes"])]}).height == 0
+
+
+@pytest.mark.parametrize(
+    "rounds",
+    [
+        [{"number": 1, "picks": ["bad"]}],  # dict("bad") -> ValueError
+        ["bad"],  # a round that is not an object
+    ],
+    ids=["str_pick", "str_round"],
+)
+def test_espn_draft_inline_rounds_drift_warns(rounds):
+    """R941-2: the inline ``rounds[].picks[]`` walk runs inside the catch, so a round or pick that is not an
+    object is zero rows + SchemaDriftWarning, not an exception. A good round before it does not leak rows.
+    The shape has no committed capture, so the good pick is the real 2024 capture's athletes ``$ref`` object."""
+    from sportsdataverse._common_espn_parsers import parse_draft
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    good = {"number": 1, "picks": [_load("season_draft_nba")["athletes"]]}
+    assert parse_draft({"rounds": [good]}).height == 1
+    with pytest.warns(SchemaDriftWarning, match="parse_draft: rounds"):
+        assert parse_draft({"rounds": [good, *rounds]}).height == 0
+
+
+def test_espn_draft_null_rounds_and_picks_are_dropped():
+    """4.13: the row rule reaches the inline rounds too. A null round or pick is dropped (it was drift, so the
+    whole draft was zero rows), and rounds of nothing but null picks are zero rows, with no warning."""
+    from sportsdataverse._common_espn_parsers import parse_draft
+
+    pick = _load("season_draft_nba")["athletes"]
+    assert parse_draft({"rounds": [None, {"number": 1, "picks": [None, pick, None]}]}).height == 1
+    assert parse_draft({"rounds": [{"number": 1, "picks": [None, None]}]}).height == 0
+    assert parse_draft({"rounds": [], "picks": [None, pick]}).height == 1
+
+
+def test_espn_grouped_roster_with_a_group_that_is_not_an_object_warns():
+    """A position-grouped roster (real NFL capture) whose later group stops being an object: zero rows + warning."""
+    from sportsdataverse._common_espn_parsers import parse_team_roster
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    raw = _load("team_roster_nfl")
+    drifted = {**raw, "athletes": [raw["athletes"][0], *(str(g) for g in raw["athletes"][1:])]}
+    with pytest.warns(SchemaDriftWarning, match="parse_team_roster: athletes: "):
+        assert parse_team_roster(drifted).height == 0

@@ -64,3 +64,22 @@ def test_adj_off_tracks_raw_team_epa(oracle_corpus):
     j = mine.join(raw, on="team_id", how="inner")
     assert j.height == 32
     assert spearman_corr(j["adj_off_epa"].to_numpy(), j["off_epa_per_play"].to_numpy()) >= 0.90
+
+
+def test_adj_net_level_tracks_raw_team_epa(oracle_corpus):
+    """Level gate beside the rank gates (C-L21): both gates above are Spearman, so
+    ``adj_net * 10 + 5`` passed them. The opponent adjustment only nudges a team's EPA
+    per play, so ``adj_net`` must sit on the raw ``off - def`` EPA-per-play scale.
+
+    Observed 2026-10-11 on this corpus: MAE 0.03138, max |diff| 0.08772, mean bias
+    +0.00405 (32 teams). Floors are those values rounded to the safe side; never lowered.
+    """
+    mine = ratings_from_fixture(oracle_corpus["pbp"])
+    raw = oracle_corpus["team_stats"]
+    j = mine.join(raw, on="team_id", how="inner")
+    assert j.height == 32
+    diff = (j["adj_net"] - (j["off_epa_per_play"] - j["def_epa_per_play"])).to_numpy()
+    assert abs(diff).mean() <= 0.0314, abs(diff).mean()
+    assert abs(diff).max() <= 0.0878, abs(diff).max()
+    assert abs(diff.mean()) <= 0.0041, diff.mean()
+    print("NFL_RATINGS_LEVEL_OK", round(abs(diff).mean(), 5))

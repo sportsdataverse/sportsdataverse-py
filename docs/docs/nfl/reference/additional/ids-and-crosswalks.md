@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — IDs and crosswalks"
 sidebar_label: "IDs and crosswalks"
-sidebar_position: 27
+sidebar_position: 28
 description: "NFL — additional Python functions — IDs and crosswalks — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — IDs and crosswalks
@@ -109,7 +109,7 @@ frames without carrying the full ~40-column master.
 
 **Returns**
 
-A one-row-per-`gsis_id` `DataFrame` of cross-system IDs (all `Utf8`) + `full_name` / `position`, with `yahoo_id` / `cbs_id` null where DynastyProcess has no unambiguous match (or its load fails). A failed / empty players load yields a zero-row frame carrying the same column set (never a raise).
+A one-row-per-`gsis_id` `DataFrame` of cross-system IDs (all `Utf8`) + `full_name` / `position`, with `yahoo_id` / `cbs_id` null where DynastyProcess has no unambiguous match (or its load fails, with a `UserWarning`). An absent (404) or empty players asset yields a zero-row frame carrying the same column set.
 
 | col_name | type | description |
 |---|---|---|
@@ -125,6 +125,12 @@ A one-row-per-`gsis_id` `DataFrame` of cross-system IDs (all `Utf8`) + `full_nam
 | `smart_id` | character | SMART ID for player (that's in raw pbp. It includes a hashed ESB_ID) |
 | `yahoo_id` | character | Yahoo ID - usual format is an integer with ~5 digits |
 | `cbs_id` | character | CBS ID - usual format is an integer with ~ 7 digits. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The players master could not be fetched (403, rate limit, 5xx): a zero-row crosswalk would null every id in a join. |
 
 **Example**
 

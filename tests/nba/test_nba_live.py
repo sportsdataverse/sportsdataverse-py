@@ -81,8 +81,9 @@ def test_pbp_every_foul_has_official_id():
 def test_pbp_time_actual_parses_as_datetime():
     df = parse_nba_live_pbp(PBP_PAYLOAD)
     sample = df["time_actual"][0]
-    # ISO-8601 with a trailing Z (e.g. "2025-10-21T23:43:24.7Z")
-    parsed = dt.datetime.fromisoformat(sample.replace("Z", "+00:00"))
+    # ISO-8601 with a trailing Z and a one-digit fraction (e.g. "2025-10-21T23:43:24.7Z").
+    # strptime, not fromisoformat: the latter only accepts a 1-digit fraction from 3.11.
+    parsed = dt.datetime.strptime(sample, "%Y-%m-%dT%H:%M:%S.%fZ")
     assert isinstance(parsed, dt.datetime)
 
 
@@ -442,13 +443,16 @@ def test_malformed_live_payloads_never_raise(payload):
     ids=["nba", "wnba"],
 )
 def test_boxscore_returns_table_documents_every_capture_column(fixture_path, schema_path):
-    """Per frame, the hand-authored Returns table lists the core columns first, then
-    every other column a real capture produces, at the captured dtype."""
+    """One Returns table per returned frame (B-M32: it was one flat table of ``key.column`` names);
+    each lists the core columns first, then every other column a real capture produces, at the
+    captured dtype."""
     box = parse_nba_live_boxscore(json.loads(fixture_path.read_text()))
-    columns = yaml.safe_load(schema_path.read_text(encoding="utf-8"))["columns"]
-    assert [c["name"].split(".", 1)[0] for c in columns] == [k for k, df in box.items() for _ in df.columns]
+    schema = yaml.safe_load(schema_path.read_text(encoding="utf-8"))
+    assert schema["kind"] == "frames" and "columns" not in schema
+    frames = {f["section"]: f["columns"] for f in schema["frames"]}
+    assert list(frames) == list(box)
     for key, df in box.items():
-        doc = {c["name"].split(".", 1)[1]: c["type"] for c in columns if c["name"].startswith(f"{key}.")}
+        doc = {c["name"]: c["type"] for c in frames[key]}
         assert list(doc)[: len(_BOX_CORE[key])] == _BOX_CORE[key].names(), key
         assert set(doc) == set(df.columns), key
         for name, dtype in df.schema.items():

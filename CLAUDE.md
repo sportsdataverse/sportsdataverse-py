@@ -13,7 +13,7 @@
   - [Parser Layer (0.0.51+)](#parser-layer-0051)
     - [`return_parsed` parameter](#return_parsed-parameter)
     - [Summary dispatcher (21 sub-frames)](#summary-dispatcher-21-sub-frames)
-    - [Test fixtures (3,365 fixture files across 142 directories)](#test-fixtures-3365-fixture-files-across-142-directories)
+    - [Test fixtures (3,400 fixture files across 147 directories)](#test-fixtures-3400-fixture-files-across-147-directories)
     - [Test infrastructure summary](#test-infrastructure-summary)
   - [Key Coding Conventions](#key-coding-conventions)
     - [Module pattern (NEW modules)](#module-pattern-new-modules)
@@ -65,9 +65,9 @@ When this guide differs from current repository docs, treat
 
 - **License:** MIT
 - **Branch:** `main` is the default branch and release branch.
-- **Python target:** 3.9, 3.10, 3.11, 3.12, 3.13, 3.14
+- **Python target:** 3.10, 3.11, 3.12, 3.13, 3.14
 - **Packaging:** uv (PEP 621 `[project]` + PEP 735 `[dependency-groups]`)
-- **DataFrame engine:** polars 1.x and 2.x (the `0.36-live` branch is a parallel
+- **DataFrame engine:** polars 2.x (`polars>=2.0,<3`; the `0.36-live` branch is a parallel
   pandas-based line of development; see "Branches" below)
 
 ## Commit Convention
@@ -96,8 +96,9 @@ is the sole attributable contributor.
 
 ## Branches
 
-- **`main`** — default; uses **polars** (1.x and 2.x) end-to-end. Migrated
-  from polars 0.18 → 1.x and converted to uv-based packaging (May 2026).
+- **`main`** — default; uses **polars** 2.x end-to-end. Migrated from polars
+  0.18 → 1.x and converted to uv-based packaging (May 2026), made 2.0-safe in
+  #719, and the floor raised to `polars>=2` (October 2026).
 - **`0.36-live`** — parallel pandas-based line of development. Carries CFB
   PBP bug fixes (kneel-down handling, half-edge cases, turnover detection,
   WP cases, punt/yardage parsing, etc.) that have not yet been ported into
@@ -367,10 +368,10 @@ Cross-league shape divergences captured by tests:
 - NCAA W basketball `officials` sometimes ships < 3 rows; CFB
   national championship shipped 0 officials.
 
-### Test fixtures (3,365 fixture files across 142 directories)
+### Test fixtures (3,400 fixture files across 147 directories)
 
 Captured fixtures live under `tests/fixtures/{espn,mlb_api,nhl_api_web,
-nhl_edge,nhl_stats_rest,nhl_records,kloppy,socceraction}/` (and more; 142 directories
+nhl_edge,nhl_stats_rest,nhl_records,kloppy,socceraction}/` (and more; 147 directories
 in all). Each directory has a
 `README.md` documenting provenance (URL + capture date). See
 each fixture directory's own `README.md` for provenance (URL + capture date).
@@ -634,8 +635,14 @@ pipeline relies on. Three additive pieces:
   resolution to those values (sets `odds_source="injected"`), so offline rebuilds never
   touch the network or inherit defaults. The override is **validated + type-coerced in
   `__init__`** (missing key / non-dict → `ValueError`). Default `None` = unchanged behavior.
+  An optional fifth key `overUnderAvailable` says whether the total is a market one; the payload
+  and the play frame carry it too. A missing key means UNKNOWN (null flag, EPA unchanged), never a
+  guess: external producers that fill 55.5 themselves must send it, so persist all five keys.
 
-Offline-rebuild pattern: `CFBPlayProcess(gameId, path_to_json=raw_dir, odds_override=<persisted>).cfb_pbp_disk()` then `.run_processing_pipeline()`.
+Offline-rebuild pattern: `CFBPlayProcess(gameId, path_to_json=raw_dir, join_participants=False, odds_override=<persisted>).cfb_pbp_disk()`
+then `.run_processing_pipeline()`. `cfb_pbp_disk()` alone does not make the run offline (C-L3): without
+`join_participants=False` the pipeline requests participants for every play, and without `odds_override` a summary
+with fewer than two pickcenter providers requests the odds endpoint. `espn_cfb_pbp(summary=...)` sets both.
 
 ### CFB — rule-era models + decision surfaces (0.0.68)
 
@@ -723,8 +730,9 @@ registry-driven league families**:
   `echl_game_shifts`, `echl_player_toi`, `echl_game_corsi`, `echl_season_id`,
   `most_recent_echl_season`. Adding a league is a `LEAGUES` entry + a 4-line
   `sportsdataverse/hockey/<lg>/__init__.py` (calls `build_family`) + 3 wiring
-  lines (`hockey/__init__.py` import, top-level `__init__.py` wildcard, and the
-  `_MOVED` back-compat entry). **No new parser code** — see below.
+  lines (the league in `tools/codegen/generate.py`'s `_HOCKEYTECH_MODULE_LEAGUES`,
+  which renders the generated `hockey/__init__.py`; the top-level `__init__.py`
+  wildcard; and the `_MOVED` back-compat entry). **No new parser code** — see below.
 - **20 leagues wired (all live-verified 2026-07-12):** `pwhl` (flagship, top-level
   `sportsdataverse.pwhl` with a richer surface), `ahl`, `ohl`, `whl`, `qmjhl`, and
   the 15 promoted 2026-07-12 — `echl`, `sphl`, `chl`, `ushl`, `bchl`, `ajhl`,
@@ -912,19 +920,21 @@ result directly. Read JSON through `_codegen_runtime._download_json(download, ur
 `_json_body` and `_transport_errors`; HTML/text sites use `_text_body` / `_check_response`.
 
 **Exception — remote columnar reads.** `_fetch_release_parquet()` in
-`_codegen_runtime.py` hands the release URL straight to Arrow rather than
-buffering it through `download()`. Two variants share that one implementation:
+`_codegen_runtime.py` never routes the asset's bytes through `download()`:
+`_release_bytes` reads the whole body with `urllib` (timeout `SDV_PY_HTTP_TIMEOUT`,
+default 30 s) into a `BytesIO`, and pyarrow parses that buffer. Two variants share that one implementation:
 `_fetch_release_parquet` **raises** `NoDataError` when an asset is absent (used by
 the hand-written `nfl_loaders.py` and `cfb_loaders_extra.py`, where a missing
 season is an error), and `_read_release_parquet` returns **`None`** instead (used
 by the 291 generated call sites, where a season gap is routine). Only "absent"
 differs — a failed fetch raises `AssetFetchError` from both, so the wrapper can
 never soften a rate limit into an empty frame. This is
-deliberate and measured, not an oversight: Arrow overlaps the fetch with decoding
-and range-reads column chunks, while any fetch-then-parse path serializes the two
-and holds an extra copy of the compressed asset. On the 59 MB
-`play_by_play_2025.parquet` the buffered variant cost **+7% peak RSS and +75% wall**
-(1010 MB / 6.0s → 1081 MB / 10.5s); temp-file and zero-copy `pa.py_buffer` variants
+deliberate and measured, not an oversight: it is the read polars' own URL path makes
+(`urlopen` + `BytesIO`), while a trip through `download()` holds an extra `requests`
+copy of the compressed asset. On the 59 MB
+`play_by_play_2025.parquet` the `download()` variant cost **+7% peak RSS and +75% wall**
+(1010 MB / 6.0s → 1081 MB / 10.5s; the extra copy explains the RSS, while the wall cost
+was measured, not traced to a cause); temp-file and zero-copy `pa.py_buffer` variants
 were no better. `download()` is still used there to **classify** a failed read — a
 404 becomes `NoDataError` (skip the season), any other non-200 becomes
 `AssetFetchError` (surface it), so a fetch that FAILED is never recorded as a
@@ -952,14 +962,24 @@ included). A test asserts they are the same object, so existing
 When a loader reads an optional upstream asset, decide deliberately which of the
 two a missing file is — and never let a 403 take the "absent" branch.
 
+Helpers follow the same split. A helper that consumes a fetch catches
+`NoDataError` only: `find_athlete` skips a 404 roster but raises on a 403, and
+`nfl_players_crosswalk` returns zero rows for an absent players asset but raises
+`AssetFetchError` on a failed fetch, because zero rows would null every id in a join.
+A fallback to stale or degraded data on a failed fetch (the bundled crosswalk
+when the release read fails, null provider ids when an enrichment source is down)
+is allowed only with a warning that names the failure. A missing model
+warns once per artifact and nulls its columns; `SDV_PY_MODELS_STRICT=1` (or
+`enrich_nfl_pbp(strict=True)`) raises instead, for producers that must not publish nulls.
+
 ### Polars version
 
-Constrained to `polars>=1.0,<3`. The lock resolves **2.0** on Python >= 3.10 and **1.36** on
-Python 3.9 (polars 2.0 needs 3.10), so every change must run on both. All seven `*_pbp.py`
-modules were migrated from the 0.18 surface to 1.x in May 2026 (about 165 call sites) and made
-2.0-safe in #719. A 0.18-style API in this codebase is a bug, not a style preference.
+Constrained to `polars>=2.0,<3`; the lock resolves **2.0** on every supported Python. polars 1.x
+is no longer supported, so code may use 2.x-only API. All seven `*_pbp.py` modules were migrated
+from the 0.18 surface to 1.x in May 2026 (about 165 call sites) and made 2.0-safe in #719. A
+0.18-style API in this codebase is a bug, not a style preference.
 
-Rules that keep code working on both 1.x and 2.0:
+polars 2.0 behaviour rules:
 
 - `list.to_struct(fields=[...])`, with `fields` as a keyword. `upper_bound` and `n_field_strategy` are gone in 2.0.
 - Pass `empty_as_null=` explicitly to every `explode()`. In 2.0 an empty list explodes to zero rows, not a null row.
@@ -971,11 +991,11 @@ Rules that keep code working on both 1.x and 2.0:
 - `pl.DataFrame()` has height 0 in 2.0, so `pl.DataFrame().with_columns(x=pl.lit(1))` is empty. Build the frame
   from its data instead.
 - Lazy `collect()` runs the streaming engine by default in 2.0.
-- `cut()`/`qcut()` are deprecated in 2.0, but their `bin_*` replacements don't exist in 1.x. Keep `cut`/`qcut`
-  until the floor moves to 2.0.
+- `cut()`/`qcut()` are deprecated in 2.0; their `bin_*` replacements are available now that the floor is 2.0.
+  Use them in new code. Existing `cut`/`qcut` call sites are a separate migration.
 - `hash()` / `hash_rows()` values change between polars versions. Never persist them.
-- `unpivot(variable_name=, value_name=)` raises in 2.0 when a melted column already has that name (1.x allowed
-  it; the upgrade guide does not mention it). Use names no input column can take, such as `value_name="__value"`.
+- `unpivot(variable_name=, value_name=)` raises in 2.0 when a melted column already has that name (the
+  upgrade guide does not mention it). Use names no input column can take, such as `value_name="__value"`.
 - Never hand a GitHub release URL to polars' own reader (`pl.read_parquet(url)`, `scan_parquet`,
   `read_parquet_schema`). In 2.0 it requests the footer with a suffix range, and the release CDN answers
   HTTP 501. Read with `use_pyarrow=True`, as `_fetch_release_parquet` does. For a footer-only schema, pass
@@ -1193,12 +1213,9 @@ code at the source; never blanket-ignore a category.
 - **`psutil` is optional in `decorators.py`.** It's imported lazily so
   the package still imports cleanly when `psutil` isn't installed.
   Don't promote it to a hard runtime dep without a deliberate decision.
-- **Polars literal-from-numpy no longer auto-broadcasts in 1.x.** Use
+- **Polars literal-from-numpy does not auto-broadcast (since 1.x).** Use
   `pl.lit(np_array).first()` to extract a scalar, or pass a Python value
   directly.
-- **`pyjanitor 0.32.18+` silently switched to pandas 3.x.** Keep the
-  defensive `pyjanitor<0.32.18` upper bound in `pyproject.toml` until
-  pandas 3 is the project floor.
 - **ESPN injuries come from the LEAGUE endpoint, never the game summary.**
   The per-game `summary` payload has an `injuries` key that is present and
   always `[]` — a producer stage built on it runs green forever and emits zero
@@ -1232,7 +1249,7 @@ code at the source; never blanket-ignore a category.
 - `CONTRIBUTING.md` is the canonical contributor onboarding file (covers
   uv, conda, lint/typecheck, dep-bumping flow).
 - `README.md` has Standard pip / Modern uv / Development install paths plus the
-  runtime notes (Python 3.9-3.14, polars 1.x/2.x, NFL cache). There is no Conda
+  runtime notes (Python 3.10-3.14, polars 2.x, NFL cache). There is no Conda
   section in the README; the recipe lives in `recipe/`.
 - `recipe/meta.yaml` + `recipe/README.md` ship the conda-build recipe and
   document the conda-forge feedstock submission flow. The local-source

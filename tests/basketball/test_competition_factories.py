@@ -614,7 +614,7 @@ def atrium_wire_answers(monkeypatch):
         calls.append(url.rsplit("/", 1)[1])
         return answers[url.rsplit("/", 1)[1]]
 
-    monkeypatch.setattr(atrium_wire._bb, "_get", fake)
+    monkeypatch.setattr(atrium_wire._bb, "_fetch_json", fake)  # the runtime reads the raising fetch (EX-SYNC-a)
     atrium_wire._seasons_cache.clear()
     yield answers, calls
     atrium_wire._seasons_cache.clear()

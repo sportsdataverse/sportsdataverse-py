@@ -1,5 +1,36 @@
-columns: []
-kind: dataframe
 schema: season_draft
-unverified: 'parser: parse_draft raises AttributeError: ''str'' object has no attribute ''get'' on the live payload (nba,
-  nfl, wnba, 2026-10-07), so no columns can be derived'
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''
+- name: display_name
+  type: character
+  description: ''
+- name: links
+  type: character
+  description: ''
+- name: number_of_rounds
+  type: integer
+  description: ''
+- name: positions
+  type: character
+  description: ''
+- name: short_display_name
+  type: character
+  description: ''
+- name: uid
+  type: character
+  description: ''
+- name: year
+  type: integer
+  description: ''
+- name: athletes_$ref
+  type: character
+  description: ''
+- name: rounds_$ref
+  type: character
+  description: ''
+- name: status_$ref
+  type: character
+  description: ''

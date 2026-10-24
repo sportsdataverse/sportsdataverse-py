@@ -32,8 +32,9 @@ from zoneinfo import ZoneInfo
 
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _json_body, _transport_errors, _where
 from sportsdataverse.dl_utils import download
-from sportsdataverse.errors import NoDataError
+from sportsdataverse.errors import AssetFetchError, NoDataError
 
 GAME_SCHEMA: dict[str, pl.DataType] = {
     "league": pl.Utf8,
@@ -236,6 +237,7 @@ def _odds_override_from_row(row: dict | None) -> dict | None:
         "overUnder": float(row["total_line"]),
         "homeFavorite": spread > 0,
         "gameSpreadAvailable": True,
+        "overUnderAvailable": True,  # None is returned above without a total_line
     }
 
 
@@ -250,14 +252,22 @@ def _fetch_idmap_row(
     """Read one id-map row from the Data API (``{base_url}/v1/{league}/idmap/{espn_id}``).
 
     Returns:
-        The row as a dict (the :data:`GAME_SCHEMA` columns), or None on a 404 (game not mapped).
-        Any other failure raises through ``download`` -- a failed fetch is never an empty row.
+        The row as a dict (the :data:`GAME_SCHEMA` columns), or None on a 404 or an empty
+        object (game not mapped).
+
+    Raises:
+        ValueError: The Data API answered 400 / 422.
+        AssetFetchError: Any other non-2xx (its error body is never a row), a connection
+            failure after retries, or a 2xx body that is not a JSON object (C-NF-7).
     """
     url = base_url.rstrip("/") + IDMAP_ROUTE.format(league=league, espn_id=espn_event_id)
     kwargs.setdefault("headers", _api_headers())
     try:
-        resp = transport(url=url, **kwargs)
+        with _transport_errors(url):
+            resp = transport(url=url, **kwargs)
+        body = _json_body(resp, url)
     except NoDataError:
         return None
-    body = resp.json()
-    return body if isinstance(body, dict) and body else None
+    if not isinstance(body, dict):
+        raise AssetFetchError(f"{_where(url)} answered a JSON array, not an id-map row")
+    return body or None

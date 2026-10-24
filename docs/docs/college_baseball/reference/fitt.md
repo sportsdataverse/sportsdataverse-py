@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # COLLEGE_BASEBALL — ESPN FPI API (fitt v3)
 
-`sportsdataverse.college_baseball` — 1 endpoint.
+`sportsdataverse.baseball.college_baseball` — 1 endpoint.
 
 ## espn_college_baseball_fpi
 

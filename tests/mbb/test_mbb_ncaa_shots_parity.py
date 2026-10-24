@@ -131,3 +131,11 @@ def test_multi_game_driver_offline(oracle_shots: pl.DataFrame) -> None:
     assert got.height == exp.height
     assert got["game_id"].unique().sort().to_list() == sorted(keep)
     assert "None" not in fetcher.calls
+
+
+def test_driver_float_contest_ids_are_integer_strings() -> None:
+    """A float id (what a pandas hop makes of an Int64 column with a null) fetches ``6470186`` (R853-2)."""
+    fetcher = _FixtureFetcher()
+    got = ncaa_mbb_shot_locations([6470186.0, math.nan, None], fetcher=fetcher)
+    assert fetcher.calls == ["6470186"]
+    assert got["game_id"].unique().to_list() == ["6470186"]

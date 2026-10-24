@@ -99,6 +99,7 @@ def _validate(method: str, game_id: int, body: Any, where: str) -> None:
         raise NoDataError(f"{where}: game {game_id} has no actions")
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, Any]:
     """GET one Segev method, refuse every wrong answer, return the JSON-RPC envelope with the request stamped.
 
@@ -132,6 +133,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, An
     where = _rt._where(URL)
     resp = _fetch({"method": method, "game_id": game_id})
     status = getattr(resp, "status_code", None)
+    _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a)
     if status == 404:
         raise NoDataError(f"{where} answered HTTP 404")
     if status in (400, 422):

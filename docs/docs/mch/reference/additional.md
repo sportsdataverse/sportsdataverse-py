@@ -6,7 +6,7 @@ sidebar_position: 50
 ---
 # MCH — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.mch` that are not
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.mch` that are not
 generated API-endpoint wrappers (those have their own reference pages).
 
 ## Models and calculators

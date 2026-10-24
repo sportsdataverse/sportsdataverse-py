@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Cache and configuration"
 sidebar_label: "Cache and configuration"
-sidebar_position: 25
+sidebar_position: 26
 description: "NFL — additional Python functions — Cache and configuration — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Cache and configuration
@@ -59,6 +59,12 @@ The cache key is the hash of `(qualified_name, args, kwargs)` with
 `return_as_pandas` excluded so memory / disk hits work regardless of
 which return shape the caller asked for. The cache always stores the
 polars frame internally and converts to pandas on read when requested.
+Every memory hit is a copy, so editing a returned frame in place never
+changes what the next call gets.
+
+The key does NOT include the URL or the function body: change a loader's
+URL or resource path without renaming it and callers keep the old frame
+until the TTL lapses or `clear_cache` runs.
 
 **Parameters**
 
@@ -104,9 +110,11 @@ update_config(cache_mode="off")         # bypass cache entirely
 Clear both memory and filesystem caches.
 
 Memory: empties the in-process dict.
-Filesystem: removes all entries under `config.cache_dir`. The
-directory itself is preserved so subsequent writes succeed without
-needing `mkdir`.
+Filesystem: removes the entries this cache wrote under `config.cache_dir`
+-- the `<sha256 key>.parquet` files, top level only -- and nothing else,
+so a `cache_dir` pointed at a directory that holds other files never
+loses them. The directory itself is preserved so subsequent
+writes succeed without needing `mkdir`.
 
 The `models/` subdirectory is **deliberately preserved** — it holds
 download-on-demand model artifacts (e.g. the ~34 MB `xyac_model.ubj`)
@@ -192,7 +200,7 @@ The (mutated) global config object, for chaining or inspection.
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If a passed key does not correspond to an `NflConfig` field. |
+| `ValueError` | If a passed key does not correspond to an `NflConfig` field, or `cache_mode` is not `"memory"`, `"filesystem"` or `"off"` (an unknown mode used to switch caching off silently). |
 
 **Example**
 

@@ -107,33 +107,24 @@ class TestDownload:
     #     response = download(url, proxy=proxy)
     #     assert response.status_code == 200
 
-    # Tests that the function can download a valid URL with a very short timeout
+    # Tests that a request that outlives its timeout surfaces instead of hanging or retrying.
     def test_download_valid_url_with_short_timeout(self):
-        # `num_retries=0` so the test deterministically asserts the
-        # exception propagates instead of waiting on the default
-        # 16-attempt retry loop where a warmed connection pool can let
-        # one of the retries succeed and the test fails with "DID NOT
-        # RAISE".
-        #
-        # A fresh `requests.Session()` (not `download()`'s default shared
-        # module-level session) is required here too: the two preceding
-        # tests in this class already hit this same host through the
-        # shared session, so a keep-alive connection is warm by the time
-        # this test runs. Reusing it lets the request complete inside the
-        # 1ms budget on a fast CI network (observed on windows-latest),
-        # so the deadline never actually gets exercised. A cold session
-        # forces a real DNS+TCP(+TLS) handshake within the deadline.
-        #
-        # Accept either Timeout or ConnectionError: at a 1ms deadline the
-        # kernel can surface ENETUNREACH / ECONNRESET before requests has
-        # a chance to raise its own Timeout, depending on which stage of
-        # the TCP handshake the deadline fires in. Both outcomes prove
-        # the bounded-deadline behavior we care about — the call did not
-        # block past the budget.
-        url = "https://jsonplaceholder.typicode.com/posts"
-        timeout = 0.001
-        with pytest.raises((requests.exceptions.Timeout, requests.exceptions.ConnectionError)):
-            download(url, timeout=timeout, num_retries=0, session=requests.Session())
+        # Deterministic, offline: the injected session raises the Timeout a 1 ms deadline produces.
+        # This used to be a real request against jsonplaceholder with timeout=0.001, which raced
+        # the network (a warm keep-alive could answer inside 1 ms) and flaked under machine load
+        # in the offline suite. What the test owns is download()'s side of the contract: the
+        # timeout reaches the session unchanged, and with num_retries=0 the Timeout propagates
+        # after exactly one attempt.
+        seen = []
+
+        class _Session:
+            def get(self, url, **kwargs):
+                seen.append(kwargs.get("timeout"))
+                raise requests.exceptions.Timeout(f"read timed out (timeout={kwargs.get('timeout')})")
+
+        with pytest.raises(requests.exceptions.Timeout):
+            download("https://jsonplaceholder.typicode.com/posts", timeout=0.001, num_retries=0, session=_Session())
+        assert seen == [0.001]
 
     # Tests that the function handles an invalid URL
     def test_download_invalid_url(self):
@@ -442,3 +433,90 @@ def test_none_num_retries_is_treated_as_omitted(monkeypatch):
     monkeypatch.setenv(d._ENV_RETRIES, "4")
     # would raise TypeError before this change
     assert d.download("https://example.invalid/x", session=session, num_retries=None) is not None
+
+
+# --------------------------------------------------------------------------------------
+# A-L19 / A-L30 / A-N11: what download() refuses to retry, and how long it may wait
+# --------------------------------------------------------------------------------------
+
+
+def _offline(monkeypatch, status: int, headers: dict | None = None):
+    """Answer every ``session.get`` with ``status``; record the calls and every sleep."""
+    import sportsdataverse.cache as _cache
+
+    calls, sleeps = [], []
+    monkeypatch.setattr(_cache, "get_cache_mode", lambda: "off")
+    monkeypatch.setattr("sportsdataverse.dl_utils.time.sleep", sleeps.append)
+
+    def fake_get(self, url, **kwargs):
+        calls.append(url)
+        return types.SimpleNamespace(status_code=status, url=url, reason="x", headers=headers or {}, json=lambda: {})
+
+    monkeypatch.setattr(requests.Session, "get", fake_get)
+    return calls, sleeps
+
+
+@pytest.mark.parametrize("host", ["api.nfl.com", "premium.pff.com", "comp.uefa.com", "kenpom.com", "herhoopstats.com"])
+def test_a_403_from_a_permanent_403_host_is_not_retried(monkeypatch, host):
+    calls, sleeps = _offline(monkeypatch, 403)
+    assert download(f"https://{host}/x", num_retries=15).status_code == 403
+    assert (len(calls), sleeps) == (1, [])  # was 5 calls and 4 backoffs
+
+
+@pytest.mark.parametrize("status", [429, 503])
+def test_a_permanent_403_host_still_retries_its_transient_statuses(monkeypatch, status):
+    # R880-2: only the 403 is permanent there; a rate limit or a 5xx from api.nfl.com is retried.
+    calls, sleeps = _offline(monkeypatch, status)
+    assert download("https://api.nfl.com/x", num_retries=15).status_code == status
+    assert len(calls) == 5 and len(sleeps) == 4
+
+
+def test_a_403_from_espn_is_still_retried(monkeypatch):
+    # ESPN Core v2 answers 403 under load: that one stays transient.
+    calls, _ = _offline(monkeypatch, 403)
+    download("https://sports.core.api.espn.com/v2/x", num_retries=15)
+    assert len(calls) == 5
+
+
+def test_a_malformed_url_raises_without_a_retry(monkeypatch):
+    sleeps = []
+    monkeypatch.setattr("sportsdataverse.dl_utils.time.sleep", sleeps.append)
+    with pytest.raises(requests.exceptions.MissingSchema):
+        download("not-a-url", num_retries=15)
+    assert sleeps == []  # was 15 backoffs, about 50 s
+
+
+def test_retry_after_waits_share_one_budget_and_long_waits_log(monkeypatch, caplog):
+    from sportsdataverse import dl_utils as d
+
+    calls, sleeps = _offline(monkeypatch, 429, {"Retry-After": "120"})
+    with caplog.at_level("WARNING", logger="sdv.dl_utils"):
+        assert download("https://site.api.espn.com/x", num_retries=15).status_code == 429
+    # four honoured 120 s waits (8 minutes) before; now the second would cross the budget
+    assert sleeps == [120.0] and sum(sleeps) <= d._MAX_TOTAL_RETRY_WAIT and len(calls) == 2
+    assert "waiting 120s before retrying" in caplog.text
+
+
+def test_a_connection_error_does_not_reuse_the_previous_retry_after(monkeypatch):
+    """After a 429 with Retry-After: 120, a connection error backs off normally (it re-read the stale
+    header, proposed 120 s again, crossed the wait budget and gave up with retries left)."""
+    import sportsdataverse.cache as _cache
+
+    monkeypatch.setattr(_cache, "get_cache_mode", lambda: "off")
+    sleeps = []
+    monkeypatch.setattr("sportsdataverse.dl_utils.time.sleep", sleeps.append)
+    answers = [
+        types.SimpleNamespace(status_code=429, url="u", reason="x", headers={"Retry-After": "120"}, json=lambda: {}),
+        requests.exceptions.ConnectionError("reset"),
+        types.SimpleNamespace(status_code=200, url="u", reason="OK", headers={}, json=lambda: {}),
+    ]
+
+    def fake_get(self, url, **kwargs):
+        out = answers.pop(0)
+        if isinstance(out, Exception):
+            raise out
+        return out
+
+    monkeypatch.setattr(requests.Session, "get", fake_get)
+    assert download("https://site.api.espn.com/x", num_retries=15).status_code == 200
+    assert sleeps[0] == 120.0 and len(sleeps) == 2 and sleeps[1] <= 4.0 and answers == []

@@ -115,6 +115,7 @@ def _check(url: str, body: Any) -> None:
         raise NoDataError(f"{where}: the game has no events")
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET a bucket key as JSON, throttled, and refuse a body without rows for the request.
 
@@ -131,6 +132,6 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         AssetFetchError: any other non-2xx (403 ``AccessDenied``), an error envelope, a body of
             the wrong shape, or a body for another season or game.
     """
-    body = _eh._get(url, params, **kwargs)
+    body = _eh._fetch_json(url, params, **kwargs)
     _check(url, body)
     return body

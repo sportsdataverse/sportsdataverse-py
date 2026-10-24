@@ -485,3 +485,17 @@ def test_no_engine_module_hardcodes_a_league_literal():
             if isinstance(node.value, str) and node.value in keys:
                 offenders.append(f"{module.name}:{node.lineno}: {node.value!r}")
     assert offenders == [], offenders
+
+
+_ESPN_404 = json.loads(
+    (Path(__file__).resolve().parents[1] / "fixtures" / "espn" / "error_404_body.json").read_text(encoding="utf-8")
+)
+
+
+def test_the_captured_espn_404_body_is_code_and_message():
+    # tests/fixtures/espn/error_404_body.json: site.api.espn.com .../summary?event=1, HTTP 404
+    assert _ESPN_404["code"] == 404 and set(_ESPN_404) == {"code", "message"}
+
+
+def test_espn_real_404_body_is_an_error_payload():
+    assert is_error_payload(_ESPN_404) is True

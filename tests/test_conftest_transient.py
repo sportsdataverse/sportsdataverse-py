@@ -14,7 +14,7 @@ from tests.conftest import _is_transient
 def _wrapped(cause: BaseException) -> AssetFetchError:
     try:
         raise cause
-    except BaseException as e:  # noqa: BLE001
+    except BaseException as e:  # noqa: BLE001 -- chains any cause under test, BaseException included
         try:
             raise AssetFetchError("fetch failed") from e
         except AssetFetchError as outer:

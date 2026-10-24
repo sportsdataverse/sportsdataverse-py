@@ -12,8 +12,9 @@ retries, a connection failure after retries, an empty 200 or a non-JSON 2xx ->
 
 from __future__ import annotations
 
+import time
 from pathlib import Path
-from typing import Any, Callable, List, Tuple, Union
+from typing import Any, Callable, Dict, List, Tuple, Union
 
 import pytest
 import requests
@@ -90,6 +91,44 @@ def test_empty_200_is_a_failed_fetch(monkeypatch):
     _serve(monkeypatch, 200, "  ")
     with pytest.raises(AssetFetchError, match="example.test/x answered HTTP 200 with an empty body"):
         _get("https://example.test/x")
+
+
+def test_a_json_array_where_a_yahoo_object_belongs_is_a_failed_fetch(monkeypatch):
+    # A-L18: it became {} ("nothing here").
+    from sportsdataverse.yahoo import yahoo_shangrila_runtime as rt
+
+    _serve(monkeypatch, 200, "[]")
+    with pytest.raises(AssetFetchError, match="JSON array where an object was expected"):
+        rt._get("https://graphite-secure.sports.yahoo.com/v1/query/shangrila/leagueNames")
+
+
+def test_statcast_html_leaderboards_still_return_their_page(monkeypatch):
+    # A-L63 refuses a page from a CSV endpoint; the two HTML leaderboards keep theirs.
+    from sportsdataverse.mlb import mlb_statcast_runtime as rt
+
+    page = (FIX.parent / "mlb_statcast" / "player_page.html").read_text(encoding="utf-8")
+    _serve(monkeypatch, 200, page, "text/html")
+    assert rt._get("https://baseballsavant.mlb.com/leaderboard/fielding-run-value") == page
+    with pytest.raises(AssetFetchError, match="a page, not data"):
+        rt._get("https://baseballsavant.mlb.com/leaderboard/expected_statistics")
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "https://baseballsavant.mlb.com/leaderboard/expected_statistics?next=/leaderboard/fielding-run-value",
+        "https://baseballsavant.mlb.com/leaderboard/fielding-run-value-extra",
+    ],
+)
+def test_statcast_html_allowance_is_the_path_not_a_substring(monkeypatch, url):
+    # A query or a longer path that merely names an HTML leaderboard is still a CSV endpoint.
+    from sportsdataverse.mlb import mlb_statcast_runtime as rt
+
+    _serve(
+        monkeypatch, 200, (FIX.parent / "mlb_statcast" / "player_page.html").read_text(encoding="utf-8"), "text/html"
+    )
+    with pytest.raises(AssetFetchError, match="a page, not data"):
+        rt._get(url)
 
 
 @pytest.mark.parametrize(
@@ -433,3 +472,311 @@ def test_247_refused_after_a_failed_remint_is_a_failed_fetch(monkeypatch):
 def test_the_two_errors_stay_distinct():
     assert not issubclass(NoDataError, AssetFetchError)
     assert not issubclass(AssetFetchError, NoDataError)
+
+
+# --------------------------------------------------------------------------------------
+# every ``*_runtime.py`` getter, DISCOVERED (A-M5): a new runtime is enrolled by construction
+# --------------------------------------------------------------------------------------
+
+_PKG = Path(__file__).resolve().parents[2] / "sportsdataverse"
+# ``*_runtime.py`` modules that define no ``_get``: main's per-competition factories and id crosswalks (#862).
+# test_non_getter_runtimes_have_no_getter fails the day one of them grows a ``_get``.
+_NOT_GETTERS = {
+    "atrium_competitions_runtime",
+    "fiba_competitions_runtime",
+    "genius_competitions_runtime",
+    "ha_crosswalk_runtime",
+    "khl_crosswalk_runtime",
+}
+_ALL_RUNTIMES = sorted(
+    p.relative_to(_PKG.parent).with_suffix("").as_posix().replace("/", ".") for p in _PKG.rglob("*_runtime.py")
+)
+_RUNTIMES = [m for m in _ALL_RUNTIMES if m.rsplit(".", 1)[1] not in _NOT_GETTERS]
+_JSON_CT = "application/json"
+_CASES = {  # case -> (status, body, content type, the vocabulary's answer)
+    "400": (400, '{"message": "bad request"}', _JSON_CT, ValueError),
+    "404": (404, "", "text/html", NoDataError),
+    "403": (403, "<html>Forbidden</html>", "text/html", AssetFetchError),
+    "429": (429, '{"error": "rate limited"}', _JSON_CT, AssetFetchError),
+    "503": (503, '{"message": "Service Unavailable"}', _JSON_CT, AssetFetchError),
+    "204": (204, "", _JSON_CT, "nothing"),
+    "empty_200": (200, "", _JSON_CT, AssetFetchError),
+    "html_200": (200, "<html>Just a moment...</html>", "text/html", AssetFetchError),
+    "scalar_200": (200, "42", _JSON_CT, AssetFetchError),
+}
+# Only the arguments a getter cannot run without; everything else is called as ``_get(url)``.
+_URL = {
+    "nba_stats_runtime": "https://stats.nba.com/stats/x",
+    "wnba_stats_runtime": "https://stats.wnba.com/stats/x",
+    # Route-checked getters (main 10-17/10-18 families): each refuses a path its family does not wrap with
+    # ValueError before any fetch, so it is called with one route (the endpoint YAML's path filled from its
+    # ``example_args``) that reaches the transport.
+    "aba_runtime": "https://www.aba-liga.com/match/6/2026/Overview",
+    "acb_runtime": "https://api2.acb.com/api/matchdata/MatchHeader/match-header",
+    "atrium_runtime": "https://embed-api.eui.connect.sportradar.com/v1/embed/14/fixtures",
+    "bleague_runtime": "https://b-league.s3.amazonaws.com/web_json/contexts/504734",
+    "bnxt_runtime": "https://bnxt.sportpress.info/api/v1/server-config",
+    "cba_runtime": "https://data-server.cbaleague.com/api/com-code-tables/getSeason",
+    "cebl_runtime": "https://api.data.cebl.ca/seasons/",
+    "easl_runtime": "https://easl.joshricha.com/api/v1/health",
+    "feb_runtime": "https://intrafeb.feb.es/LiveStats.API/api/v1/TeamStats/2535725",
+    "fiba_runtime": "https://www.fiba.basketball/en/games/100720",
+    "genius_runtime": "https://fibalivestats.dcd.shared.geniussports.com/data/2902690/data.json",
+    "ha_runtime": "https://hockeyallsvenskan.se/pages/matcher",
+    "ibba_runtime": "https://basket.co.il/ws/ws.asmx/Configuration",
+    "ibba_segev_runtime": "https://stats.segevstats.com/realtimestat_heb/api/",
+    "kbl_runtime": "https://api.kbl.or.kr/season/list",
+    "kzs_runtime": "https://api.kzs.si/api/v1/public/seasons/",
+    "lkl_runtime": "https://lkl.lt/api/livestream/boxscore/11446",
+    "nbl_rosetta_runtime": "https://prod.rosetta.nbl.com.au/get/nbl/seasons",
+    "pleague_preciser_runtime": "https://api.preciser.io/v1/chart-data/id/e6f98675-3e5b-11ed-949e-5d17350689cf",
+    "pleague_runtime": "https://pleagueofficial.com/schedule/2025",
+    "tbf_runtime": "https://miniappapi.tbf.org.tr/webapi-service/api/Season/get-seasons",
+    "tpbl_runtime": "https://api.tpbl.basketball/api/seasons",
+    "vhl_runtime": "https://www.vhlru.ru/en/calendar/2026/0/",
+    "vtb_infobasket_runtime": "https://org.infobasket.su/Comp/GetSeasonsForTag",
+    "vtb_league_runtime": "https://api.vtb-league.com/v2/leagues",
+    "wjbl_runtime": "https://api.wjbl.01core.app/api/leagues",
+}
+_KWARGS: Dict[str, Callable[[], Dict[str, Any]]] = {
+    "kenpom_runtime": lambda: {"session": requests.Session()},  # a session skips the subscription login
+    "nfl_api_runtime": lambda: {"headers": {}},  # no token mint
+    "nflpro_runtime": lambda: {"headers": {}},
+    "pff_runtime": lambda: {"cookies": {"_premium_key": "PK"}},
+    "pff_api_runtime": lambda: {"api_key": "k"},
+    "sports247_runtime": lambda: {"auth": False},  # no guest-JWT mint
+    # the route's required query parameters (each getter refuses the call without them before any fetch)
+    "acb_runtime": lambda: {"params": {"matchId": 105401}},
+    "fiba_runtime": lambda: {"params": {"comp": 208182}},
+    "ibba_runtime": lambda: {"params": {"cYear": 2026}},
+    "ibba_segev_runtime": lambda: {"params": {"method": "getGameInfo", "game_id": 1}},
+}
+_HTML_IS_DATA = {"kenpom_runtime"}  # its pages are the payload
+_KNOWN: Dict[Tuple[str, str], str] = {}  # task 4.1b closed nflpro (A-M4) and pff_api's 204 (A-L69)
+
+
+# Main's families merged 10-17 (#826 European hockey, #859/#862 international basketball) diverged from the
+# vocabulary here (EX-SYNC-a/b/d); task 4.1b closed them all. Kept, empty, for the next divergence:
+# ``{(runtime, case): (what the case fails with, why)}``, strict, so a row fails the day it is fixed.
+_SYNC_1018: Dict[Tuple[str, str], Tuple[Any, str]] = {}
+
+
+def _seed_feb(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setitem(mod._tok, "value", "seeded.bearer.token")
+    monkeypatch.setitem(mod._tok, "exp", time.time() + 3600)
+
+
+def _seed_khl(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setitem(mod._sessions, "https://example.test", [mod._new_http(), "seeded-sessid"])
+
+
+def _seed_scb(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setattr(mod, "_secrets", {"key": "seeded-key", "secret": "seeded-secret"})
+
+
+def _seed_lkl(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setitem(mod._GAMES, 11446, {"game_status": "seeded"})  # the finished-game check is cached
+
+
+def _seed_vhl(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setattr(mod, "vhl_tn", lambda season, stage="regular": 1374)  # the calendar-index lookup
+
+
+class _Pointer:
+    status_code, text, headers, url = 200, "1", {}, ""
+
+
+def _seed_bleague(mod: Any, monkeypatch: Any) -> None:
+    real = mod._fetch
+    monkeypatch.setattr(
+        mod, "_fetch", lambda url, params=None: _Pointer() if url.endswith("/latestid") else real(url, params)
+    )
+
+
+def _seed_fiba(mod: Any, monkeypatch: Any) -> None:  # the game page URL is built from two GDAP lookups
+    monkeypatch.setattr(
+        mod, "_page_url", lambda game_id, comp: f"{mod.SITE_URL}/en/history/x/{comp}/games/{game_id}-A-B"
+    )
+
+
+# R4.1b-d-1: a runtime whose first request is a bootstrap or lookup (a token, session or key page, a snapshot
+# pointer, a finished-game check, a calendar index) is seeded, so every case reaches its DATA request; on the 204
+# row the bootstrap URL must then never be served. A bootstrap's or lookup's own 204 is an unknown answer
+# (AssetFetchError), pinned in each family's tests.
+_SEED: Dict[str, Tuple[Callable[[Any, Any], None], str]] = {
+    "feb_runtime": (_seed_feb, "https://baloncestoenvivo.feb.es/"),
+    "khl_runtime": (_seed_khl, "https://example.test/"),
+    "scb_runtime": (_seed_scb, "https://www.easycredit-bbl.de/"),
+    "lkl_runtime": (_seed_lkl, "https://lkl.lt/rungtynes/11446"),
+    "vhl_runtime": (_seed_vhl, "https://www.vhlru.ru/en/calendar/"),
+    "fiba_runtime": (_seed_fiba, "https://digital-api.fiba.basketball/hapi/getGdapCompetitionById"),
+    "bleague_runtime": (_seed_bleague, "https://b-league.s3.amazonaws.com/web_json/v2_genius_contexts/504734/latestid"),
+}
+
+
+def _raises(stem: str, case: str) -> Any:
+    """What an open case fails with today: a getter that returns where it should raise fails
+    ``pytest.raises`` (DID NOT RAISE)."""
+    return pytest.fail.Exception
+
+
+def _matrix_params() -> List[Any]:
+    out = []
+    for mod in _RUNTIMES:
+        stem = mod.rsplit(".", 1)[1]
+        for case in _CASES:
+            marks = (
+                [pytest.mark.xfail(strict=True, raises=_raises(stem, case), reason=_KNOWN[stem, case])]
+                if (stem, case) in _KNOWN
+                else [
+                    pytest.mark.xfail(strict=True, raises=_SYNC_1018[stem, case][0], reason=_SYNC_1018[stem, case][1])
+                ]
+                if (stem, case) in _SYNC_1018
+                else []
+            )
+            out.append(pytest.param(mod, case, id=f"{stem}-{case}", marks=marks))
+    return out
+
+
+def _answer_every_transport(monkeypatch, status: int, body: str, ctype: str) -> Tuple[List[str], List[str]]:
+    """Serve one answer to requests AND curl_cffi; refuse and record every other way out.
+
+    Below the two patched entry points, DNS, Python sockets and libcurl's ``Curl.perform`` (curl_cffi
+    bypasses Python sockets) all raise and are recorded, so a getter that finds another path to the
+    network fails the case even when its ``OSError`` would have surfaced as the expected
+    ``AssetFetchError``. Returns ``(urls served, attempts blocked)``.
+    """
+    import socket
+
+    import sportsdataverse.cache as _cache
+
+    calls: List[str] = []
+
+    def request(self, method, url, *args, **kwargs):
+        calls.append(url)
+        resp = requests.Response()
+        resp.status_code = status
+        resp._content = body.encode("utf-8")
+        resp.encoding = "utf-8"
+        resp.headers["Content-Type"] = ctype
+        resp.url = url
+        return resp
+
+    blocked: List[str] = []
+
+    def no_network(*a, **k):
+        blocked.append(repr(a[:2])[:120])
+        raise OSError("network blocked in the vocabulary matrix")
+
+    monkeypatch.setattr(requests.Session, "request", request)
+    try:  # the stats.nba.com / 247Sports transports; absent, those getters raise ImportError loudly
+        from curl_cffi import requests as curl
+
+        from curl_cffi.curl import Curl
+
+        monkeypatch.setattr(curl.Session, "request", request)
+        monkeypatch.setattr(Curl, "perform", no_network)
+    except ImportError:
+        pass
+    for name in ("getaddrinfo", "gethostbyname", "create_connection"):
+        monkeypatch.setattr(socket, name, no_network)
+    monkeypatch.setattr(socket.socket, "connect", no_network)
+    monkeypatch.setattr(socket.socket, "connect_ex", no_network)
+    monkeypatch.setattr(_cache, "get_cache_mode", lambda: "off")
+    monkeypatch.setattr("time.sleep", lambda *a, **k: None)
+    monkeypatch.setenv("SDV_PY_NBA_STATS_RETRIES", "0")
+    return calls, blocked
+
+
+def test_every_getter_module_is_a_discovered_runtime():
+    """Every ``getter_module:`` an endpoint YAML names is enrolled in the matrix below."""
+    import yaml
+
+    named = set()
+    for y in (_PKG.parent / "tools/codegen/endpoints").glob("*.yaml"):
+        doc = yaml.safe_load(y.read_text(encoding="utf-8")) or {}
+        if isinstance(doc, dict) and doc.get("getter_module"):
+            named.add(doc["getter_module"])
+    assert named and named <= set(_RUNTIMES), sorted(named - set(_RUNTIMES))
+
+
+def test_non_getter_runtimes_have_no_getter():
+    import importlib
+
+    skipped = [m for m in _ALL_RUNTIMES if m.rsplit(".", 1)[1] in _NOT_GETTERS]
+    assert len(skipped) == len(_NOT_GETTERS)
+    assert [m for m in skipped if hasattr(importlib.import_module(m), "_get")] == []
+
+
+@pytest.mark.parametrize(("mod", "case"), _matrix_params())
+def test_discovered_runtime_speaks_the_vocabulary(monkeypatch, mod, case):
+    import importlib
+    import inspect
+    import warnings
+
+    from sportsdataverse.errors import EmptyResponseWarning
+
+    stem = mod.rsplit(".", 1)[1]
+    status, body, ctype, want = _CASES[case]
+    calls, blocked = _answer_every_transport(monkeypatch, status, body, ctype)
+    module = importlib.import_module(mod)
+    if stem in _SEED:
+        _SEED[stem][0](module, monkeypatch)
+    get = module._get
+    kwargs = _KWARGS.get(stem, dict)()
+    sig = inspect.signature(get).parameters
+    if "num_retries" in sig or any(p.kind is p.VAR_KEYWORD for p in sig.values()):
+        kwargs["num_retries"] = 0
+    url = _URL.get(stem, "https://example.test/x")
+
+    def call() -> Any:
+        try:
+            return get(url, **kwargs)
+        except TypeError as exc:
+            # ``num_retries`` only speeds the matrix up; the contract is the vocabulary. A getter whose
+            # ``**kwargs`` guard refuses every keyword (aba, acb, cba, ... vhl) raises TypeError naming it
+            # before any fetch, so it is called without it.
+            if "num_retries" not in kwargs or "num_retries" not in str(exc):
+                raise
+            return get(url, **{k: v for k, v in kwargs.items() if k != "num_retries"})
+
+    with warnings.catch_warnings():
+        # nba_stats warns on a 204; tests/nba/test_nba_stats_runtime.py asserts that warning.
+        warnings.filterwarnings("ignore", category=EmptyResponseWarning)
+        if stem in _HTML_IS_DATA and case in ("html_200", "scalar_200"):
+            assert call() == body
+        elif want == "nothing":
+            assert call() in ({}, [], "")
+        else:
+            with pytest.raises(want):
+                call()
+    assert calls, f"{mod}._get never reached the transport"
+    if stem in _SEED and case == "204":
+        assert _SEED[stem][1] not in calls, f"{mod}: the seeded bootstrap was fetched: {calls}"
+    assert blocked == [], f"{mod}._get tried the network below the patched transports: {blocked}"
+
+
+def test_a_runtime_with_a_green_vocabulary_matrix_documents_its_raises():
+    """A-L13: a getter whose every matrix row passes raises the vocabulary, so its generated
+    wrappers must say so (``generate._VOCAB_GETTERS`` adds the ``Raises:`` lines)."""
+    from tools.codegen import generate
+
+    known = {stem for stem, _case in (*_KNOWN, *_SYNC_1018)}
+    green = {mod for mod in _RUNTIMES if mod.rsplit(".", 1)[1] not in known}
+    assert sorted(green - generate._VOCAB_GETTERS) == []
+
+
+def test_the_stats_wrappers_name_the_missing_curl_cffi_import_error():
+    """R901-7: the stats.nba.com / stats.wnba.com runtime raises ImportError without curl_cffi; every
+    generated wrapper on it says so, once (drafthistory's YAML ``raises:`` already names it)."""
+    import inspect
+
+    from sportsdataverse.nba import nba_stats
+    from sportsdataverse.wnba import wnba_stats
+
+    for mod, prefix in ((nba_stats, "nba_stats_"), (wnba_stats, "wnba_stats_")):
+        fns = [f for n, f in inspect.getmembers(mod, inspect.isfunction) if n.startswith(prefix)]
+        assert fns
+        for fn in fns:
+            raises = (fn.__doc__ or "").split("Raises:")[1].split("Example:")[0]
+            assert raises.count("ImportError:") == 1, fn.__name__
