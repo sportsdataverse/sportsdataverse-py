@@ -7095,6 +7095,26 @@
   expected: kill
   note: NFL *_player_id String and pos_team Int32 again; the vs_nfl allowlist no longer lists them.
 
+- id: id-cast-empty-string-is-null
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            src = src.set(src == "", None)'
+  mutant: '            pass'
+  test: tests/codegen/test_id_casts.py -k "stripped"
+  expected: kill
+  note: A feed's "" id (HockeyTech FloCoreEventId on every scorebar row) is refused, so the column stays String (R981-5).
+
+- id: espn-id-refusal-warns
+  group: dtype-contract-5-2
+  finding: A-M15
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    if refused:'
+  mutant: '    if False:'
+  test: tests/test_espn_universal_parsers.py -k "not_an_integer_stays_as_it_came_and_warns"
+  expected: kill
+  note: An ESPN id column the cast refuses (text in the payload) stays String with no warning (R981-6).
+
 - id: ncaa-xwalk-tier-join-asserts-key-dtypes
   group: dtype-contract-5-2
   finding: B-GB-10

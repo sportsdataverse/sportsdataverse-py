@@ -1829,6 +1829,22 @@ def test_dtype_snapshot_ids_are_never_float(name):
     assert {k: v for k, v in _id_cols(name).items() if v.startswith("Float")} == {}
 
 
+def test_an_id_that_is_not_an_integer_stays_as_it_came_and_warns():
+    """R981-6: a real scoreboard whose first event id is text keeps ``game_id`` String (never nulled or forced) and
+    warns naming the column; every other id column of the frame is still Int64."""
+    import copy
+
+    from sportsdataverse._common_espn_parsers import parse_scoreboard
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    raw = copy.deepcopy(_load("scoreboard_nba"))
+    raw["events"][0]["id"] = "TBD-1"
+    with pytest.warns(SchemaDriftWarning, match=r"ESPN id columns.*'game_id'.*not integer ids"):
+        df = parse_scoreboard(raw)
+    assert df.schema["game_id"] == pl.String and df["game_id"][0] == "TBD-1"
+    assert df.schema["home_id"] == df.schema["away_id"] == pl.Int64
+
+
 def test_fpi_joins_weekly_powerindex_on_team_id():
     """A-M15: ``parse_fpi`` emitted ``team_id`` String and ``parse_weekly_powerindex`` Int64, so the join raised."""
     from sportsdataverse._common_espn_parsers import parse_fpi, parse_weekly_powerindex

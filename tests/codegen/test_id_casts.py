@@ -93,8 +93,8 @@ def test_ids_are_never_float_stringified():
 
 
 def test_string_ids_are_stripped_before_the_cast():
-    out = _cast_ids_int64(pl.DataFrame({"team_id": [" 103", "2649 ", None]}), ["team_id"])
-    assert out["team_id"].to_list() == [103, 2649, None]
+    out = _cast_ids_int64(pl.DataFrame({"team_id": [" 103", "2649 ", None, "", " "]}), ["team_id"])
+    assert out["team_id"].to_list() == [103, 2649, None, None, None]  # "" is no id (HockeyTech FloCoreEventId)
 
 
 def test_cast_leaves_other_columns_alone():
