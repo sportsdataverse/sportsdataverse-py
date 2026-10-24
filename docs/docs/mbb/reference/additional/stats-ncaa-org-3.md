@@ -1,10 +1,106 @@
 ---
-title: "MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–validate_lineup"
-sidebar_label: "stats.ncaa.org: ncaa_mbb–validate_lineup"
+title: "MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–td_at"
+sidebar_label: "stats.ncaa.org: ncaa_mbb–td_at"
 sidebar_position: 5
-description: "MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–td_at — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–validate_lineup
+# MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–td_at
+
+### ncaa_mbb_join_pbp_shots {#ncaa_mbb_join_pbp_shots}
+
+`ncaa_mbb_join_pbp_shots(pbp: 'pl.DataFrame', shots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"`
+
+Attach shot-chart coordinates to play-by-play rows (bigballR
+
+`join_pbp_shots`, `get_shot_locations.R:93-135`).
+
+FG attempts (`shot_value` 2/3) are matched to chart shots on
+`(game_id, game_seconds, event_result == shot_result, shot_no)` where
+`shot_no` is the within-second same-result sequence number on BOTH
+sides — free throws and non-shot rows are deliberately excluded from
+matching (the chart plots FGs only) and pass through NA-filled. Row
+count and per-game row order are preserved; the explicit `shot_dist`
+carry-through is fork-skew fix #11 (wbigballR's unexported copy drops
+it). Works identically for the WBB extension — feed it quarter-model
+pbp + shots frames.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | The 35-column snake_case pbp contract frame (see `~sportsdataverse.mbb.mbb_ncaa_game_pbp.PBP_SCHEMA`). |
+| `shots` | `DataFrame` |  | A `SHOTS_SCHEMA` frame (from `parse_ncaa_bb_shots` / `ncaa_mbb_shot_locations`) covering exactly the same game ids. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+The input pbp frame + `team`, `player`, `x`, `y`, `shot_dist` (null on non-FG rows and unmatched FG rows), sorted by (game_id, original per-game row order) exactly as R's `arrange(row, .by_group = TRUE)`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `clock` | character | Game clock value. |
+| `game_time` | character | Game start time. |
+| `game_seconds` | integer |  |
+| `home_score` | integer | Home team score at the time of the play. |
+| `away_score` | integer | Away team score at the time of the play. |
+| `event_team` | character |  |
+| `event_description` | character |  |
+| `player_1` | character |  |
+| `player_2` | character |  |
+| `event_type` | character | Event / play type code (V2 PBP). |
+| `event_result` | character |  |
+| `shot_value` | integer | Point value of the shot (2 or 3). |
+| `event_length` | integer |  |
+| `poss_num` | integer |  |
+| `poss_team` | character |  |
+| `poss_length` | integer |  |
+| `is_transition` | logical |  |
+| `home_1` | character |  |
+| `home_2` | character |  |
+| `home_3` | character |  |
+| `home_4` | character |  |
+| `home_5` | character |  |
+| `away_1` | character |  |
+| `away_2` | character |  |
+| `away_3` | character |  |
+| `away_4` | character |  |
+| `away_5` | character |  |
+| `status` | character | Status label. |
+| `is_garbage_time` | logical |  |
+| `sub_deviate` | integer |  |
+| `team` | character | Team-side label or team identifier. |
+| `player` | character | Player name. |
+| `x` | double | X. |
+| `y` | double | Y. |
+| `shot_dist` | double |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the pbp and shots game-id sets differ (R `stop("PBP and Shot Locations do not match.")`, `:97-99`), or if a join-key dtype disagrees between the two frames. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_game_pbp import ncaa_mbb_play_by_play
+from sportsdataverse.mbb.mbb_ncaa_shots import (
+    ncaa_mbb_join_pbp_shots,
+    ncaa_mbb_shot_locations,
+)
+pbp = ncaa_mbb_play_by_play(["6470186"])
+shots = ncaa_mbb_shot_locations(["6470186"])
+joined = ncaa_mbb_join_pbp_shots(pbp, shots)
+
+# Pipeline next step (one line)
+
+joined.filter(pl.col("x").is_not_null()).head()
+```
 
 ### ncaa_mbb_player_stats {#ncaa_mbb_player_stats}
 
@@ -465,6 +561,11 @@ Distinct `(team, player)` pairs across the ten on-floor slots.
 
 Unique `team`/`player` frame, the input `expand_xwalk_aliases` expects.
 
+| col_name | type | description |
+|---|---|---|
+| `team` | character | Team-side label or team identifier. |
+| `player` | character | Player name. |
+
 **Example**
 
 ```python
@@ -581,6 +682,19 @@ decile.
 **Returns**
 
 One row per bin, sorted: `decile` (0 = fewest possessions), `n`, `poss_min`, `poss_max`, `median_<se col>` ... and `coverage_<c>[_sampling]` ... (only for the columns present).
+
+| col_name | type | description |
+|---|---|---|
+| `decile` | integer | Possession-exposure bin, 0 = the players with the fewest possessions. |
+| `n` | integer | Number of players in the bin. |
+| `poss_min` | integer | Fewest possessions of any player in the bin. |
+| `poss_max` | integer | Most possessions of any player in the bin. |
+| `median_orapm_se` | double | Median orapm_se of the players in the bin. |
+| `median_drapm_se` | double | Median drapm_se of the players in the bin. |
+| `median_rapm_net_se` | double | Median rapm_net_se of the players in the bin. |
+| `median_orapm_se_sampling` | double | Median orapm_se_sampling of the players in the bin. |
+| `median_drapm_se_sampling` | double | Median drapm_se_sampling of the players in the bin. |
+| `median_rapm_net_se_sampling` | double | Median rapm_net_se_sampling of the players in the bin. |
 
 **Example**
 
@@ -735,6 +849,75 @@ Attach a `player_id` to each of the ten on-floor slots.
 
 `possessions` plus ten `{slot}_id` columns. `TEAM` slots and unresolved players carry a null id -- an explicit "not a rated player" that the design-matrix build must skip, never impute.
 
+| col_name | type | description |
+|---|---|---|
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `poss_num` | integer | Sequential possession number within the game. |
+| `poss_team` | character | Name of the team in possession. |
+| `home_1` | character | Name of the home team's on-floor player in lineup slot 1 for the possession, from the substitution walk-forward. |
+| `home_2` | character | Name of the home team's on-floor player in lineup slot 2 for the possession, from the substitution walk-forward. |
+| `home_3` | character | Name of the home team's on-floor player in lineup slot 3 for the possession, from the substitution walk-forward. |
+| `home_4` | character | Name of the home team's on-floor player in lineup slot 4 for the possession, from the substitution walk-forward. |
+| `home_5` | character | Name of the home team's on-floor player in lineup slot 5 for the possession, from the substitution walk-forward. |
+| `away_1` | character | Name of the away team's on-floor player in lineup slot 1 for the possession, from the substitution walk-forward. |
+| `away_2` | character | Name of the away team's on-floor player in lineup slot 2 for the possession, from the substitution walk-forward. |
+| `away_3` | character | Name of the away team's on-floor player in lineup slot 3 for the possession, from the substitution walk-forward. |
+| `away_4` | character | Name of the away team's on-floor player in lineup slot 4 for the possession, from the substitution walk-forward. |
+| `away_5` | character | Name of the away team's on-floor player in lineup slot 5 for the possession, from the substitution walk-forward. |
+| `home_score` | integer | Home team score at the time of the play. |
+| `away_score` | integer | Away team score at the time of the play. |
+| `pts` | integer | Points scored. |
+| `is_assisted` | integer | 1 when the possession's made field goal was assisted, else 0. |
+| `is_transition` | integer | 1 for transition possessions, else 0. |
+| `is_garbage_time` | integer | 1 for possessions in garbage time under the score-margin and clock rule, else 0. |
+| `start_event_type` | character | Event type that opened the possession (e.g., a defensive rebound or a made-basket inbound). |
+| `first_shot_time` | integer | Clock time in seconds at the possession's first shot attempt, from the possession segmentation engine. |
+| `first_shot_type` | character | Shot class of the possession's first attempt (rim, mid-range, or three). |
+| `last_event_time` | integer | Clock time in seconds at the possession's final event. |
+| `last_event_type` | character | Event type that ended the possession (e.g., a made shot, turnover, or defensive rebound). |
+| `contest_id` | character | stats.ncaa.org contest (game) identifier. |
+| `home_ncaa_team_id` | character | stats.ncaa.org team identifier for the home team. |
+| `home_espn_team_id` | character | ESPN home team id (NA for bart-only rows). |
+| `away_ncaa_team_id` | character | stats.ncaa.org team identifier for the away team. |
+| `away_espn_team_id` | character | ESPN away team id (NA for bart-only rows). |
+| `poss_team_ncaa_team_id` | character | stats.ncaa.org team identifier of the team in possession. |
+| `poss_team_espn_team_id` | character | ESPN team identifier of the team in possession, via the NCAA-to-ESPN crosswalk. |
+| `home_1_player_id` | character | stats.ncaa.org player identifier for the home slot-1 on-floor player. |
+| `home_1_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the home slot-1 on-floor player. |
+| `home_2_player_id` | character | stats.ncaa.org player identifier for the home slot-2 on-floor player. |
+| `home_2_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the home slot-2 on-floor player. |
+| `home_3_player_id` | character | stats.ncaa.org player identifier for the home slot-3 on-floor player. |
+| `home_3_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the home slot-3 on-floor player. |
+| `home_4_player_id` | character | stats.ncaa.org player identifier for the home slot-4 on-floor player. |
+| `home_4_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the home slot-4 on-floor player. |
+| `home_5_player_id` | character | stats.ncaa.org player identifier for the home slot-5 on-floor player. |
+| `home_5_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the home slot-5 on-floor player. |
+| `away_1_player_id` | character | stats.ncaa.org player identifier for the away slot-1 on-floor player. |
+| `away_1_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the away slot-1 on-floor player. |
+| `away_2_player_id` | character | stats.ncaa.org player identifier for the away slot-2 on-floor player. |
+| `away_2_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the away slot-2 on-floor player. |
+| `away_3_player_id` | character | stats.ncaa.org player identifier for the away slot-3 on-floor player. |
+| `away_3_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the away slot-3 on-floor player. |
+| `away_4_player_id` | character | stats.ncaa.org player identifier for the away slot-4 on-floor player. |
+| `away_4_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the away slot-4 on-floor player. |
+| `away_5_player_id` | character | stats.ncaa.org player identifier for the away slot-5 on-floor player. |
+| `away_5_clean_name` | character | Normalized (diacritics- and punctuation-cleaned) name of the away slot-5 on-floor player. |
+| `espn_game_id` | character | ESPN game id (NA for bart-only rows). |
+| `season` | integer | Season year. |
+| `home_1_id` | character | Resolved player_id of the home slot-1 player; null for a TEAM slot or an unresolved name. |
+| `home_2_id` | character | Resolved player_id of the home slot-2 player; null for a TEAM slot or an unresolved name. |
+| `home_3_id` | character | Resolved player_id of the home slot-3 player; null for a TEAM slot or an unresolved name. |
+| `home_4_id` | character | Resolved player_id of the home slot-4 player; null for a TEAM slot or an unresolved name. |
+| `home_5_id` | character | Resolved player_id of the home slot-5 player; null for a TEAM slot or an unresolved name. |
+| `away_1_id` | character | Resolved player_id of the away slot-1 player; null for a TEAM slot or an unresolved name. |
+| `away_2_id` | character | Resolved player_id of the away slot-2 player; null for a TEAM slot or an unresolved name. |
+| `away_3_id` | character | Resolved player_id of the away slot-3 player; null for a TEAM slot or an unresolved name. |
+| `away_4_id` | character | Resolved player_id of the away slot-4 player; null for a TEAM slot or an unresolved name. |
+| `away_5_id` | character | Resolved player_id of the away slot-5 player; null for a TEAM slot or an unresolved name. |
+
 **Raises**
 
 | Exception | Description |
@@ -882,6 +1065,21 @@ which are properties of the pooled fit -- is carried through untouched.
 **Returns**
 
 `players` restricted to the season's participants, with `off_poss` / `def_poss` recomputed from `stints`.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Unique player identifier. |
+| `orapm` | double | Offensive regularized adjusted plus-minus: points contributed per 100 possessions on offense, adjusted for the other 9 players on the floor. |
+| `drapm` | double | Defensive regularized adjusted plus-minus: points prevented per 100 possessions on defense (higher is better defense), adjusted for the other 9 players on the floor. |
+| `rapm_net` | double | Net RAPM (orapm plus drapm): overall point contribution per 100 possessions. Verified against live data: rapm_net == orapm + drapm exactly. |
+| `off_poss` | integer | Offensive possessions the player was on court for; the regression weight behind orapm. |
+| `def_poss` | integer | Defensive possessions the player was on court for; the regression weight behind drapm. |
+| `orapm_se` | double | Posterior standard error of orapm (per 100 possessions) from the ridge fit. |
+| `drapm_se` | double | Posterior standard error of drapm (per 100 possessions) from the ridge fit. |
+| `rapm_net_se` | double | Posterior standard error of rapm_net (per 100 possessions) from the ridge fit. |
+| `orapm_se_sampling` | double | Sampling standard error of orapm, without the ridge prior's shrinkage. |
+| `drapm_se_sampling` | double | Sampling standard error of drapm, without the ridge prior's shrinkage. |
+| `rapm_net_se_sampling` | double | Sampling standard error of rapm_net, without the ridge prior's shrinkage. |
 
 **Example**
 
@@ -1212,6 +1410,18 @@ from what was known at the end of season `t`.
 
 One vertically concatenated stint frame carrying the extra `fit_weight` / `y_offset` columns `solve_rapm_league` reads.
 
+| col_name | type | description |
+|---|---|---|
+| `off_ids` | character | Sorted player ids of the five offensive players in the stint (a list), from the resolved slot ids. |
+| `def_ids` | character | Sorted player ids of the five defensive players in the stint (a list). |
+| `off_team` | character | Team on offense during the stint. |
+| `def_team` | character | Team on defense during the stint. |
+| `is_home_offense` | logical | True when the home team is on offense, the home-court term of the RAPM design matrix. |
+| `n_poss` | integer | Possessions the five-on-five unit played together in this offensive direction. |
+| `pts` | integer | Points scored. |
+| `fit_weight` | double | Season weight in the pooled fit: decay ** (target - season). |
+| `y_offset` | double | The row's season per-100 scoring level minus the target season's, so the pool does not credit era pace. |
+
 **Raises**
 
 | Exception | Description |
@@ -1276,6 +1486,12 @@ use this so the count means the same thing everywhere.
 **Returns**
 
 One row per player: `player_id`, `off_poss`, `def_poss` (Int64).
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Unique player identifier. |
+| `off_poss` | integer | Offensive possessions the player was on court for; the regression weight behind orapm. |
+| `def_poss` | integer | Defensive possessions the player was on court for; the regression weight behind drapm. |
 
 **Example**
 
@@ -1373,144 +1589,4 @@ soup = parse_html("<tr><td>A</td><td>B</td></tr>")
 row = soup.find("tr")
 td_at(row, 1).get_text()  # "B"
 td_at(row, 5)  # None
-```
-
-### team_aggregate {#team_aggregate}
-
-`team_aggregate(stints: 'pl.DataFrame', players: 'pl.DataFrame') -> 'pl.DataFrame'`
-
-Model-implied team ratings from player coefficients.
-
-For each team: `team_orapm` is the possession-weighted mean over its
-offensive stints of the on-floor five's `orapm` sum; `team_drapm`
-likewise with `drapm` over its defensive stints; `team_net` is their
-sum. This is exactly what the fitted model predicts for the team's
-average possession (excluding opponent terms and home-court), so it is
-the faithful aggregate to hold against an external team rating (Torvik
-AdjEM) in the oracle gate.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `stints` | `DataFrame` |  | Output of `aggregate_stints`. |
-| `players` | `DataFrame` |  | Players frame from `solve_rapm_league` (needs `player_id`, `orapm`, `drapm`). A player absent from it contributes 0 -- the model's own convention for an unrated column. |
-
-**Returns**
-
-One row per team: `team`, `team_orapm`, `team_drapm`, `team_net`, `off_poss`, `def_poss`.
-
-**Example**
-
-```python
-teams = team_aggregate(stints, players)
-joined = teams.join(torvik, on="team", how="inner")
-```
-
-### transform_shot_location {#transform_shot_location}
-
-`transform_shot_location(x: 'float', y: 'float', second_half_switch: 'bool', team_shooting_left_in_first_period: 'bool', is_offensive: 'bool') -> 'tuple[float, float, float, float]'`
-
-Transforms a raw SVG pixel location into feet from the basket, always
-
-oriented as if shooting towards the left goal (`ShotEventParser
-.transform_shot_location`, `:588-620`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `x` | `float` |  | Raw SVG `cx` pixel coordinate. |
-| `y` | `float` |  | Raw SVG `cy` pixel coordinate. |
-| `second_half_switch` | `bool` |  | Whether this shot is in the "other" half of the game from `team_shooting_left_in_first_period` (each `False` factor below flips which side is treated as "left"). |
-| `team_shooting_left_in_first_period` | `bool` |  | Whether the team under analysis shot towards the left goal in the first period (see `is_team_shooting_left_to_start`). |
-| `is_offensive` | `bool` |  | Whether the team under analysis is shooting (an opponent shot flips the expected side again). |
-
-**Returns**
-
-`(x, y, alt_x, alt_y)` in feet -- the believed-correct location, then the alternative (mirror-image) location, both relative to the goal the shot is (believed to be) attacking.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_shot_parser import transform_shot_location
-transform_shot_location(310.2, 235, False, False, True)
-```
-
-### update_config {#update_config}
-
-`update_config(**kwargs: 'object') -> 'NcaaFetchConfig'`
-
-Update the active config in place.
-
-**Returns**
-
-The (mutated) global config object.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If a passed key does not correspond to a field. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_fetch import update_config
-update_config(proxy_url="http://user:pass@1.2.3.4:8080")
-```
-
-### validate_box_score {#validate_box_score}
-
-`validate_box_score(team: 'TeamId', lineup: 'list[str]') -> 'Union[list[PlayerCodeId], ParseError]'`
-
-Checks there are no duplicates in the lineup (``BoxscoreParser
-
-.validate_box_score`, `:388-404``).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `team` | `TeamId` |  | The team the lineup belongs to (feeds `~sportsdataverse.mbb.mbb_ncaa_stints.build_player_code`'s team-scoped misspelling corrections). |
-| `lineup` | `list[str]` |  | The raw player-name strings, in whatever order they were assembled by `inject_validated_players`. |
-
-**Returns**
-
-`lineup`, mapped to `~sportsdataverse.mbb.mbb_ncaa_models.PlayerCodeId` (same order, no sort -- see the module docstring's "not sorted" note). When two teammates collide on the `{first-two-letters}{Surname}` scheme -- siblings, in practice -- **only the colliding players** are re-coded to `{First}{Last}` by `_disambiguate_sibling_codes`; every other player keeps the Scala-faithful code. This is a DELIBERATE divergence from `ExtractorUtils.scala`, which rejects the game: since a team's roster is the same all season, one sibling pair cost the team its ENTIRE season of lineups. A `~sportsdataverse.mbb.mbb_ncaa_data_quality.ParseError` is returned only when widening cannot separate them, i.e. two players with the SAME full name -- genuinely ambiguous, so still an error. Callers must not re-derive a code from a name after this point: `build_player_code` would undo the widening and silently drop one twin. Use `~sportsdataverse.mbb.mbb_ncaa_names.code_from_box`, which resolves against this roster.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_boxscore_parser import validate_box_score
-from sportsdataverse.mbb.mbb_ncaa_models import TeamId
-validate_box_score(TeamId("Team"), ["Player One", "Player Two"])
-```
-
-### validate_lineup {#validate_lineup}
-
-`validate_lineup(lineup_event: 'LineupEvent', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'list[ValidationError]'`
-
-Flags a lineup stint as internally inconsistent, via 3 independent
-
-checks (`LineupErrorAnalysisUtils.validate_lineup`, `:181-218`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `lineup_event` | `LineupEvent` |  | The lineup stint to validate. |
-| `box_lineup` | `LineupEvent` |  | The team's box-score lineup event (`players` is the full roster) -- used both to build the name-resolution context (see `~sportsdataverse.mbb.mbb_ncaa_names.build_tidy_player_context`) and, indirectly, as the source of `players_out` for jersey-number resolution inside `~sportsdataverse.mbb .mbb_ncaa_names.tidy_player`. |
-| `valid_player_codes` | `set[str]` |  | Every player code that's actually on the box score / roster for this team-season. |
-
-**Returns**
-
-The failing `ValidationError`\ s, in declaration order (see the module docstring's "Return shape" note) -- empty if `lineup_event` is clean. * `ValidationError.WRONG_NUMBER_OF_PLAYERS` -- `lineup_event` doesn't have exactly 5 players on the floor. * `ValidationError.UNKNOWN_PLAYERS` -- some player on the floor isn't in `valid_player_codes`. * `ValidationError.INACTIVE_PLAYERS` -- some player mentioned in `lineup_event`'s own (team-side) raw game events resolves to a code not in `valid_player_codes` (i.e. isn't on the floor, per the lineup being validated).
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_stint_validation import validate_lineup
-errors = validate_lineup(lineup_event, box_lineup, {"MiMitchell", "BbBob"})
-assert not errors  # a clean lineup returns []
 ```

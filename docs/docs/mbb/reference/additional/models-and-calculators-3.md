@@ -1,7 +1,7 @@
 ---
 title: "MBB — additional Python functions — Models and calculators: roc_auc–win_prob"
 sidebar_label: "Models and calculators: roc_auc–win_prob"
-sidebar_position: 11
+sidebar_position: 12
 description: "MBB — additional Python functions — Models and calculators: roc_auc–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # MBB — additional Python functions — Models and calculators: roc_auc–win_prob

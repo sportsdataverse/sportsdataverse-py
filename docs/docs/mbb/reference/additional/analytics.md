@@ -1,7 +1,7 @@
 ---
 title: "MBB — additional Python functions — Analytics: ConcurrentClump–ncaa_mbb"
 sidebar_label: "Analytics: ConcurrentClump–ncaa_mbb"
-sidebar_position: 12
+sidebar_position: 13
 description: "MBB — additional Python functions — Analytics: ConcurrentClump–ncaa_mbb — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # MBB — additional Python functions — Analytics: ConcurrentClump–ncaa_mbb

@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — stats.ncaa.org: BadLineupClump–duration_from"
-sidebar_label: "stats.ncaa.org: BadLineupClump–duration_from"
+title: "MBB — additional Python functions — stats.ncaa.org: BadLineupClump–create_shot"
+sidebar_label: "stats.ncaa.org: BadLineupClump–create_shot"
 sidebar_position: 3
-description: "MBB — additional Python functions — stats.ncaa.org: BadLineupClump–duration_from — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — stats.ncaa.org: BadLineupClump–create_shot — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — stats.ncaa.org: BadLineupClump–duration_from
+# MBB — additional Python functions — stats.ncaa.org: BadLineupClump–create_shot
 
 ### BadLineupClump {#BadLineupClump}
 
@@ -906,6 +906,16 @@ Collapse id-resolved possessions into matchup stints.
 
 One row per unique `(offense five, defense five, home/away offense)` with `n_poss` and total `pts` (schema `STINT_SCHEMA`). Possessions with ANY null slot id are dropped (unresolved player or `TEAM` pseudo-slot -- never imputed), as are possessions whose `poss_team` matches neither side.
 
+| col_name | type | description |
+|---|---|---|
+| `off_ids` | character | Sorted player ids of the five offensive players in the stint (a list), from the resolved slot ids. |
+| `def_ids` | character | Sorted player ids of the five defensive players in the stint (a list). |
+| `off_team` | character | Team on offense during the stint. |
+| `def_team` | character | Team on defense during the stint. |
+| `is_home_offense` | logical | True when the home team is on offense, the home-court term of the RAPM design matrix. |
+| `n_poss` | integer | Possessions the five-on-five unit played together in this offensive direction. |
+| `pts` | integer | Points scored. |
+
 **Raises**
 
 | Exception | Description |
@@ -1271,6 +1281,27 @@ Synthesize a cross-season `person_id` for roster rows.
 
 The input columns plus `player_key` and a `Utf8` `person_id` that is stable across seasons and teams. `player_id` is preserved -- the synthetic key ADDS to the provider's id, never replaces it.
 
+| col_name | type | description |
+|---|---|---|
+| `season` | character | Season year. |
+| `team_id` | character | Unique team identifier. |
+| `team` | character | Team-side label or team identifier. |
+| `player_id` | character | Unique player identifier. |
+| `player` | character | Player name. |
+| `clean_name` | character | Normalized (diacritics- and punctuation-cleaned) player name used to join across the NCAA datasets. |
+| `name` | character | Display name. |
+| `jersey` | character | Jersey number worn by the player. |
+| `class` | character | College class / draft eligibility note. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `height` | character | Player height (string e.g. '6-2' or inches). |
+| `ht_inches` | integer | Player height converted to total inches from the stats.ncaa.org roster listing. |
+| `hometown` | character | Player hometown. |
+| `high_school` | character | High school the player attended, from the stats.ncaa.org roster listing. |
+| `gp` | character | Games played. |
+| `gs` | character | Games started. |
+| `player_key` | character | Normalized name-code (diacritics folded, upper-cased, trailing dots dropped) that joins possessions to rosters. |
+| `person_id` | character | Unique player identifier (V3 endpoints). |
+
 **Example**
 
 ```python
@@ -1341,6 +1372,12 @@ Build the `(team, player_key) -> player_id` bridge from `team_rosters`.
 **Returns**
 
 Frame of `team`, `player_key`, `player_id` (all `Utf8`), unique on `(team, player_key)`.
+
+| col_name | type | description |
+|---|---|---|
+| `team` | character | Team-side label or team identifier. |
+| `player_key` | character | Normalized name-code (diacritics folded, upper-cased, trailing dots dropped) that joins possessions to rosters. |
+| `player_id` | character | Unique player identifier. |
 
 **Example**
 
@@ -1827,70 +1864,4 @@ from sportsdataverse.mbb.mbb_ncaa_shot_parser import create_shot_event_data
 box_html = Path("tests/fixtures/ncaa/test_lineup.html").read_text(encoding="utf-8")
 box_lineup = get_box_lineup("test_p1.html", box_html, TeamId("TeamA"), format_version=1)
 shots = create_shot_event_data("test_p1.html", box_html, box_lineup)
-```
-
-### current_ncaa_team_alts {#current_ncaa_team_alts}
-
-`current_ncaa_team_alts(doc: 'Tag') -> 'list[str]'`
-
-The two team names from a *current* (2026) stats.ncaa.org game page.
-
-Both team logos render as `a.skipMask > img[alt]` on the modern
-play-by-play / box-score / individual-stats pages -- the `alt` is the
-short team name (e.g. `"Illinois"`), in `[home_or_first, second]`
-document order, deduped (the individual-stats page repeats each team).
-
-This is the current-markup counterpart to the cbb-explorer `:2018+`
-`team_finder` selectors (`div.card-header img[alt]` for the box,
-`table[align=center] > tbody a > img[alt]` for the pbp), which no
-longer match: NCAA's markup drifted since cbb-explorer's ~2020 capture.
-The v1 `team_finder`\ s try their ported selector first, then fall
-back here, so both the vendored-era and current pages resolve.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `doc` | `Tag` |  | A parsed stats.ncaa.org game page (`parse_html`). |
-
-**Returns**
-
-The distinct team-logo `alt` texts in document order: `[]` when the page carries no team logos, one name when only one team has a logo.
-
-**Example**
-
-```python
-from sportsdataverse.mbb import current_ncaa_team_alts, parse_html
-
-html = '<a class="skipMask"><img alt="Illinois"></a><a class="skipMask"><img alt="Purdue"></a>'
-current_ncaa_team_alts(parse_html(html))
-# ['Illinois', 'Purdue']
-```
-
-### duration_from_period {#duration_from_period}
-
-`duration_from_period(period: 'int', is_women_game: 'bool') -> 'float'`
-
-The game duration (minutes elapsed) once `period` has completed
-
-(`ExtractorUtils.scala:286-287`: `start_time_from_period(period + 1,
-...)`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `period` | `int` |  | The 1-indexed period number. |
-| `is_women_game` | `bool` |  | Whether to use the women's or men's period schedule. |
-
-**Returns**
-
-The game-clock minute at the end of `period`.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_stints import duration_from_period
-duration_from_period(2, is_women_game=False)  # 40.0 (end of men's regulation)
-duration_from_period(4, is_women_game=True)  # 40.0 (end of women's regulation)
 ```

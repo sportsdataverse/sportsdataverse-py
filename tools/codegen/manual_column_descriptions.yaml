@@ -70724,3 +70724,119 @@ tournaments:
 venues:
   count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
   page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+build_player_xwalk:
+  player_key: Normalized name-code (diacritics folded, upper-cased, trailing dots dropped) that joins possessions to rosters.
+build_person_keys:
+  clean_name: Normalized (diacritics- and punctuation-cleaned) player name used to join across the NCAA datasets.
+  high_school: High school the player attended, from the stats.ncaa.org roster listing.
+  ht_inches: Player height converted to total inches from the stats.ncaa.org roster listing.
+  player_key: Normalized name-code (diacritics folded, upper-cased, trailing dots dropped) that joins possessions to rosters.
+expand_xwalk_aliases:
+  player_key: Normalized name-code (diacritics folded, upper-cased, trailing dots dropped) that joins possessions to rosters.
+resolve_possessions:
+  away_1: Name of the away team's on-floor player in lineup slot 1 for the possession, from the substitution walk-forward.
+  away_1_clean_name: Normalized (diacritics- and punctuation-cleaned) name of the away slot-1 on-floor player.
+  away_1_id: Resolved player_id of the away slot-1 player; null for a TEAM slot or an unresolved name.
+  away_1_player_id: stats.ncaa.org player identifier for the away slot-1 on-floor player.
+  away_2: Name of the away team's on-floor player in lineup slot 2 for the possession, from the substitution walk-forward.
+  away_2_clean_name: Normalized (diacritics- and punctuation-cleaned) name of the away slot-2 on-floor player.
+  away_2_id: Resolved player_id of the away slot-2 player; null for a TEAM slot or an unresolved name.
+  away_2_player_id: stats.ncaa.org player identifier for the away slot-2 on-floor player.
+  away_3: Name of the away team's on-floor player in lineup slot 3 for the possession, from the substitution walk-forward.
+  away_3_clean_name: Normalized (diacritics- and punctuation-cleaned) name of the away slot-3 on-floor player.
+  away_3_id: Resolved player_id of the away slot-3 player; null for a TEAM slot or an unresolved name.
+  away_3_player_id: stats.ncaa.org player identifier for the away slot-3 on-floor player.
+  away_4: Name of the away team's on-floor player in lineup slot 4 for the possession, from the substitution walk-forward.
+  away_4_clean_name: Normalized (diacritics- and punctuation-cleaned) name of the away slot-4 on-floor player.
+  away_4_id: Resolved player_id of the away slot-4 player; null for a TEAM slot or an unresolved name.
+  away_4_player_id: stats.ncaa.org player identifier for the away slot-4 on-floor player.
+  away_5: Name of the away team's on-floor player in lineup slot 5 for the possession, from the substitution walk-forward.
+  away_5_clean_name: Normalized (diacritics- and punctuation-cleaned) name of the away slot-5 on-floor player.
+  away_5_id: Resolved player_id of the away slot-5 player; null for a TEAM slot or an unresolved name.
+  away_5_player_id: stats.ncaa.org player identifier for the away slot-5 on-floor player.
+  away_ncaa_team_id: stats.ncaa.org team identifier for the away team.
+  contest_id: stats.ncaa.org contest (game) identifier.
+  first_shot_time: Clock time in seconds at the possession's first shot attempt, from the possession segmentation engine.
+  first_shot_type: Shot class of the possession's first attempt (rim, mid-range, or three).
+  home_1: Name of the home team's on-floor player in lineup slot 1 for the possession, from the substitution walk-forward.
+  home_1_clean_name: Normalized (diacritics- and punctuation-cleaned) name of the home slot-1 on-floor player.
+  home_1_id: Resolved player_id of the home slot-1 player; null for a TEAM slot or an unresolved name.
+  home_1_player_id: stats.ncaa.org player identifier for the home slot-1 on-floor player.
+  home_2: Name of the home team's on-floor player in lineup slot 2 for the possession, from the substitution walk-forward.
+  home_2_clean_name: Normalized (diacritics- and punctuation-cleaned) name of the home slot-2 on-floor player.
+  home_2_id: Resolved player_id of the home slot-2 player; null for a TEAM slot or an unresolved name.
+  home_2_player_id: stats.ncaa.org player identifier for the home slot-2 on-floor player.
+  home_3: Name of the home team's on-floor player in lineup slot 3 for the possession, from the substitution walk-forward.
+  home_3_clean_name: Normalized (diacritics- and punctuation-cleaned) name of the home slot-3 on-floor player.
+  home_3_id: Resolved player_id of the home slot-3 player; null for a TEAM slot or an unresolved name.
+  home_3_player_id: stats.ncaa.org player identifier for the home slot-3 on-floor player.
+  home_4: Name of the home team's on-floor player in lineup slot 4 for the possession, from the substitution walk-forward.
+  home_4_clean_name: Normalized (diacritics- and punctuation-cleaned) name of the home slot-4 on-floor player.
+  home_4_id: Resolved player_id of the home slot-4 player; null for a TEAM slot or an unresolved name.
+  home_4_player_id: stats.ncaa.org player identifier for the home slot-4 on-floor player.
+  home_5: Name of the home team's on-floor player in lineup slot 5 for the possession, from the substitution walk-forward.
+  home_5_clean_name: Normalized (diacritics- and punctuation-cleaned) name of the home slot-5 on-floor player.
+  home_5_id: Resolved player_id of the home slot-5 player; null for a TEAM slot or an unresolved name.
+  home_5_player_id: stats.ncaa.org player identifier for the home slot-5 on-floor player.
+  home_ncaa_team_id: stats.ncaa.org team identifier for the home team.
+  is_assisted: 1 when the possession's made field goal was assisted, else 0.
+  is_garbage_time: 1 for possessions in garbage time under the score-margin and clock rule, else 0.
+  is_transition: 1 for transition possessions, else 0.
+  last_event_time: Clock time in seconds at the possession's final event.
+  last_event_type: Event type that ended the possession (e.g., a made shot, turnover, or defensive rebound).
+  poss_num: Sequential possession number within the game.
+  poss_team: Name of the team in possession.
+  poss_team_espn_team_id: ESPN team identifier of the team in possession, via the NCAA-to-ESPN crosswalk.
+  poss_team_ncaa_team_id: stats.ncaa.org team identifier of the team in possession.
+  start_event_type: Event type that opened the possession (e.g., a defensive rebound or a made-basket inbound).
+aggregate_stints:
+  def_ids: Sorted player ids of the five defensive players in the stint (a list).
+  def_team: Team on defense during the stint.
+  is_home_offense: True when the home team is on offense, the home-court term of the RAPM design matrix.
+  n_poss: Possessions the five-on-five unit played together in this offensive direction.
+  off_ids: Sorted player ids of the five offensive players in the stint (a list), from the resolved slot ids.
+  off_team: Team on offense during the stint.
+stint_exposure:
+  def_poss: Defensive possessions the player was on court for; the regression weight behind drapm.
+  off_poss: Offensive possessions the player was on court for; the regression weight behind orapm.
+team_aggregate:
+  def_poss: Defensive possessions the player was on court for; the regression weight behind drapm.
+  off_poss: Offensive possessions the player was on court for; the regression weight behind orapm.
+  team_drapm: Possession-weighted mean, over the team's defensive stints, of the on-floor five's summed drapm (per 100).
+  team_net: 'team_orapm plus team_drapm: the team''s net rating implied by its players'' RAPM.'
+  team_orapm: Possession-weighted mean, over the team's offensive stints, of the on-floor five's summed orapm (per 100).
+season_slice:
+  def_poss: Defensive possessions the player was on court for; the regression weight behind drapm.
+  drapm: 'Defensive regularized adjusted plus-minus: points prevented per 100 possessions on defense (higher is better defense),
+    adjusted for the other 9 players on the floor.'
+  drapm_se: Posterior standard error of drapm (per 100 possessions) from the ridge fit.
+  drapm_se_sampling: Sampling standard error of drapm, without the ridge prior's shrinkage.
+  off_poss: Offensive possessions the player was on court for; the regression weight behind orapm.
+  orapm: 'Offensive regularized adjusted plus-minus: points contributed per 100 possessions on offense, adjusted for the other
+    9 players on the floor.'
+  orapm_se: Posterior standard error of orapm (per 100 possessions) from the ridge fit.
+  orapm_se_sampling: Sampling standard error of orapm, without the ridge prior's shrinkage.
+  rapm_net: 'Net RAPM (orapm plus drapm): overall point contribution per 100 possessions. Verified against live data: rapm_net
+    == orapm + drapm exactly.'
+  rapm_net_se: Posterior standard error of rapm_net (per 100 possessions) from the ridge fit.
+  rapm_net_se_sampling: Sampling standard error of rapm_net, without the ridge prior's shrinkage.
+possession_deciles:
+  decile: Possession-exposure bin, 0 = the players with the fewest possessions.
+  median_drapm_se: Median drapm_se of the players in the bin.
+  median_drapm_se_sampling: Median drapm_se_sampling of the players in the bin.
+  median_orapm_se: Median orapm_se of the players in the bin.
+  median_orapm_se_sampling: Median orapm_se_sampling of the players in the bin.
+  median_rapm_net_se: Median rapm_net_se of the players in the bin.
+  median_rapm_net_se_sampling: Median rapm_net_se_sampling of the players in the bin.
+  n: Number of players in the bin.
+  poss_max: Most possessions of any player in the bin.
+  poss_min: Fewest possessions of any player in the bin.
+stack_seasons:
+  def_ids: Sorted player ids of the five defensive players in the stint (a list).
+  def_team: Team on defense during the stint.
+  fit_weight: 'Season weight in the pooled fit: decay ** (target - season).'
+  is_home_offense: True when the home team is on offense, the home-court term of the RAPM design matrix.
+  n_poss: Possessions the five-on-five unit played together in this offensive direction.
+  off_ids: Sorted player ids of the five offensive players in the stint (a list), from the resolved slot ids.
+  off_team: Team on offense during the stint.
+  y_offset: The row's season per-100 scoring level minus the target season's, so the pool does not credit era pace.

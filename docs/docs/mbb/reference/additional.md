@@ -83,8 +83,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [create_lineup_data](additional/stats-ncaa-org.md#create_lineup_data) | Combines the different methods to build a set of lineup events |
 | [create_player_events](additional/stats-ncaa-org.md#create_player_events) | Split a lineup event into one :class:`~sportsdataverse.mbb |
 | [create_shot_event_data](additional/stats-ncaa-org.md#create_shot_event_data) | Parses a game page's SVG shot map into a list of :class:`~sportsdataverse |
-| [current_ncaa_team_alts](additional/stats-ncaa-org.md#current_ncaa_team_alts) | The two team names from a *current* (2026) stats.ncaa.org game page. |
-| [duration_from_period](additional/stats-ncaa-org.md#duration_from_period) | The game duration (minutes elapsed) once `period` has completed |
+| [current_ncaa_team_alts](additional/stats-ncaa-org-2.md#current_ncaa_team_alts) | The two team names from a *current* (2026) stats.ncaa.org game page. |
+| [duration_from_period](additional/stats-ncaa-org-2.md#duration_from_period) | The game duration (minutes elapsed) once `period` has completed |
 | [enrich_and_reverse_game_events](additional/stats-ncaa-org-2.md#enrich_and_reverse_game_events) | Inserts game-break events and turns descending per-row times into |
 | [enrich_lineup](additional/stats-ncaa-org-2.md#enrich_lineup) | Populate `pts`/`plus_minus` from the score delta, then run the |
 | [enrich_shot_events_with_pbp](additional/stats-ncaa-org-2.md#enrich_shot_events_with_pbp) | Enrich each shot with its play-by-play event + on-floor lineup |
@@ -130,7 +130,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [name_in_v0_box_format](additional/stats-ncaa-org-2.md#name_in_v0_box_format) | Switch a v1-box-format name (`"first_name names"`) to v0-box format |
 | [ncaa_mbb_box_scores](additional/stats-ncaa-org-2.md#ncaa_mbb_box_scores) | Box scores for one or more NCAA games (bigballR `get_box_scores` port). |
 | [ncaa_mbb_date_games](additional/stats-ncaa-org-2.md#ncaa_mbb_date_games) | Discover every NCAA MBB game played on a date (bigballR `get_date_games`). |
-| [ncaa_mbb_join_pbp_shots](additional/stats-ncaa-org-2.md#ncaa_mbb_join_pbp_shots) | Attach shot-chart coordinates to play-by-play rows (bigballR |
+| [ncaa_mbb_join_pbp_shots](additional/stats-ncaa-org-3.md#ncaa_mbb_join_pbp_shots) | Attach shot-chart coordinates to play-by-play rows (bigballR |
 | [ncaa_mbb_player_stats](additional/stats-ncaa-org-3.md#ncaa_mbb_player_stats) | Aggregate bigballR-contract play-by-play into per-player box stats. |
 | [ncaa_mbb_possessions](additional/stats-ncaa-org-3.md#ncaa_mbb_possessions) | Aggregate bigballR-contract play-by-play into one row per possession. |
 | [ncaa_mbb_shot_locations](additional/stats-ncaa-org-3.md#ncaa_mbb_shot_locations) | Scrape MBB shot locations for one or more games (bigballR |
@@ -163,11 +163,11 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [sum_event_stats](additional/stats-ncaa-org-3.md#sum_event_stats) | Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models |
 | [sum_shot_infos](additional/stats-ncaa-org-3.md#sum_shot_infos) | Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models |
 | [td_at](additional/stats-ncaa-org-3.md#td_at) | JSoup `row >?> element("td:eq(n)")`: the `n`-th `<td>` child. |
-| [team_aggregate](additional/stats-ncaa-org-3.md#team_aggregate) | Model-implied team ratings from player coefficients. |
-| [transform_shot_location](additional/stats-ncaa-org-3.md#transform_shot_location) | Transforms a raw SVG pixel location into feet from the basket, always |
-| [update_config](additional/stats-ncaa-org-3.md#update_config) | Update the active config in place. |
-| [validate_box_score](additional/stats-ncaa-org-3.md#validate_box_score) | Checks there are no duplicates in the lineup (``BoxscoreParser |
-| [validate_lineup](additional/stats-ncaa-org-3.md#validate_lineup) | Flags a lineup stint as internally inconsistent, via 3 independent |
+| [team_aggregate](additional/stats-ncaa-org-4.md#team_aggregate) | Model-implied team ratings from player coefficients. |
+| [transform_shot_location](additional/stats-ncaa-org-4.md#transform_shot_location) | Transforms a raw SVG pixel location into feet from the basket, always |
+| [update_config](additional/stats-ncaa-org-4.md#update_config) | Update the active config in place. |
+| [validate_box_score](additional/stats-ncaa-org-4.md#validate_box_score) | Checks there are no duplicates in the lineup (``BoxscoreParser |
+| [validate_lineup](additional/stats-ncaa-org-4.md#validate_lineup) | Flags a lineup stint as internally inconsistent, via 3 independent |
 
 ## KenPom
 
