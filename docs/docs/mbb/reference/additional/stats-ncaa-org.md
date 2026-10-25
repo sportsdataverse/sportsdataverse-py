@@ -908,8 +908,8 @@ One row per unique `(offense five, defense five, home/away offense)` with `n_pos
 
 | col_name | type | description |
 |---|---|---|
-| `off_ids` | character | Sorted player ids of the five offensive players in the stint (a list), from the resolved slot ids. |
-| `def_ids` | character | Sorted player ids of the five defensive players in the stint (a list). |
+| `off_ids` | list | Sorted player ids of the five offensive players in the stint (a list), from the resolved slot ids. |
+| `def_ids` | list | Sorted player ids of the five defensive players in the stint (a list). |
 | `off_team` | character | Team on offense during the stint. |
 | `def_team` | character | Team on defense during the stint. |
 | `is_home_offense` | logical | True when the home team is on offense, the home-court term of the RAPM design matrix. |

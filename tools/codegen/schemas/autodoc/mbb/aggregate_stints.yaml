@@ -2,10 +2,10 @@ schema: aggregate_stints
 kind: dataframe
 columns:
 - name: off_ids
-  type: character
+  type: list
   description: ''
 - name: def_ids
-  type: character
+  type: list
   description: ''
 - name: off_team
   type: character

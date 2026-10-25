@@ -37,8 +37,8 @@ One row per team: `team`, `team_orapm`, `team_drapm`, `team_net`, `off_poss`, `d
 | `team_orapm` | double | Possession-weighted mean, over the team's offensive stints, of the on-floor five's summed orapm (per 100). |
 | `team_drapm` | double | Possession-weighted mean, over the team's defensive stints, of the on-floor five's summed drapm (per 100). |
 | `team_net` | double | team_orapm plus team_drapm: the team's net rating implied by its players' RAPM. |
-| `off_poss` | integer | Offensive possessions the player was on court for; the regression weight behind orapm. |
-| `def_poss` | integer | Defensive possessions the player was on court for; the regression weight behind drapm. |
+| `off_poss` | integer | Team's total offensive possessions (n_poss summed over the stints it had the ball); the weight behind team_orapm. |
+| `def_poss` | integer | Team's total defensive possessions (n_poss summed over the stints it defended); the weight behind team_drapm. |
 
 **Example**
 
