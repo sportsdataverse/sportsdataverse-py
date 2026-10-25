@@ -23,3 +23,8 @@
   as `int64[pyarrow]` instead: `parse_fpi`, `parse_weekly_powerindex` and the generated `load_*_crosswalk` loaders.
   The injuries / depth-chart snapshots read an id that is
   not an integer (text, `"007"`) as null with a `SchemaDriftWarning` naming the field. (#981)
+- **HockeyTech (PWHL + 19 leagues: parsers, `<lg>_pbp`, schedules, rosters, leaders, summaries):** every `id` /
+  `*_id` is `Int64` (`player_id` was Float64 in pbp, `team_id` / `game_id` String or the caller's dtype); the
+  game-summary `home_team_id` / `away_team_id` / `game_season_id` are null, not `""`, when it is unavailable. The
+  pandas output (`return_as_pandas=True`) carries the ids as pandas' nullable `Int64` (was `float64` such as `1.0`,
+  or `str`). An id that is not an integer keeps its column String and warns `SchemaDriftWarning`. (#988)
