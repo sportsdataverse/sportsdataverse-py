@@ -1109,6 +1109,9 @@ across those.
 The release loaders (`load_pwhl_*`, `load_<lg>_rosters`, ...) keep the dtypes their files were published with
 (String or Int32 for some ids), so cast with `.cast(pl.Int64)` (or cast the release side to match) before
 joining a release frame to live parser output.
+Producers that store or republish parser frames follow the migration notes and deploy order in
+`changelog.d/ids-int64.breaking.md` (cast stored history once, `_rds.write_rds` for nullable ids, producers
+first).
 
 ### Lint and format
 

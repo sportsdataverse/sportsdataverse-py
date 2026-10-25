@@ -44,3 +44,20 @@
   `release.with_columns(pl.col("game_id").cast(pl.Int64))`. Code that relied on String ids from the live
   parsers can cast back with `pl.col("team_id").cast(pl.String)` (pandas: `.astype("string")`); an `Int64`
   id stringifies as `"123"`, never `"123.0"`.
+- **Producers that store or republish these frames: migrate before upgrading.**
+  - *Deploy order:* update (or pin to a pre-release commit) every producer that writes these frames first,
+    then upgrade to this release.
+  - *Stored history:* a season written before this release holds String / Int32 ids, a new one Int64. Before
+    the first post-upgrade run, cast the stored ids once (`pl.col(c).cast(pl.Int64)`) or rebuild every season;
+    otherwise `pd.concat` / `to_parquet` of the master fails on a mixed column, and `pl.concat(how=
+    "diagonal_relaxed")` silently turns the ids back into String. This covers the snapshot histories, the
+    ESPN schedule season masters, and the PWHL schedule master and per-game final JSON, whose seasons mix text
+    (`"1"`) and integer (`1`) ids until the JSON is reprocessed.
+  - *RDS:* `pyreadr.write_rds` cannot write pandas' nullable `Int64` with a missing value (`TypeError: must be
+    real number, not NAType`). Write the polars frame with `sportsdataverse._rds.write_rds`, or cast the id
+    columns (`.astype("float64")`) before `pyreadr`.
+  - *R packages:* releases rebuilt from these parsers (the ESPN schedule seasons of the hoopR / wehoop raw
+    repos, the PWHL schedule and play-by-play releases) carry integer ids for the seasons built after this
+    release, where hoopR, wehoop and fastRhockey document some of them as character. Republish every season
+    in one pass and update the R documentation, or cast those ids back to String in the producer until the R
+    package moves.
