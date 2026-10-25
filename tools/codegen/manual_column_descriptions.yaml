@@ -3903,6 +3903,18 @@ espn_mbb_schedule:
   home_current_rank: Current national poll ranking of the home team at the time of the game, or null if unranked.
   home_linescores: Period-by-period scoring breakdown for the home team, serialized as a packed integer sequence.
   home_records: Win-loss record string(s) for the home team across applicable record categories (e.g., overall, conference).
+espn_mlb_game_rosters:
+  game_id: ESPN game (event) id the roster belongs to.
+  team_id: ESPN team id of the competitor whose roster the row comes from.
+  home_away: Whether the row's team is the home or the away side of the game ("home" / "away").
+  athlete_id: ESPN athlete id, from the roster entry's playerId (else the id in its athlete $ref).
+  athlete_full_name: The athlete's full name, from his ESPN athlete record (the roster entry carries only a short name).
+  athlete_jersey: The athlete's jersey number as text, from his ESPN athlete record.
+  athlete_position_id: ESPN position id of the athlete's listed position on his athlete record, i.e. his season position, not necessarily where he played in this game (see game_position_id).
+  athlete_position_abbreviation: Abbreviation of the athlete's listed (season) position on his athlete record, e.g. RF or SS.
+  athlete_position_name: Name of the athlete's listed (season) position on his athlete record, e.g. Right Field.
+  game_position_id: ESPN position id the player was entered at in this game, from the roster entry's own position $ref (e.g. 8 for a center fielder); differs from athlete_position_id when he played out of position.
+  athlete_starter: Whether the athlete started this game, from the roster entry.
 espn_mlb_player_stats:
   batting_bipa: Batting average on balls in the air (fly balls and line drives), measuring in-play success on airborne contact.
   batting_mlb_rating: ESPN's composite MLB rating for the batter reflecting overall offensive performance.

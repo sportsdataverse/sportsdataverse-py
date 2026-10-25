@@ -1,0 +1,36 @@
+schema: espn_mlb_game_rosters
+kind: dataframe
+columns:
+- name: game_id
+  type: integer
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: home_away
+  type: character
+  description: ''
+- name: athlete_id
+  type: integer
+  description: ''
+- name: athlete_full_name
+  type: character
+  description: ''
+- name: athlete_jersey
+  type: character
+  description: ''
+- name: athlete_position_id
+  type: integer
+  description: ''
+- name: athlete_position_abbreviation
+  type: character
+  description: ''
+- name: athlete_position_name
+  type: character
+  description: ''
+- name: game_position_id
+  type: integer
+  description: ''
+- name: athlete_starter
+  type: logical
+  description: ''

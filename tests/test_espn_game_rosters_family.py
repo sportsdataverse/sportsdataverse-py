@@ -317,17 +317,68 @@ def test_snake_collision_keeps_the_top_level_key_in_either_column_order():
         assert _snake_flattened(frame).to_dicts() == [{"debut_year": 2018}], cols
 
 
-def test_mlb_game_rosters_with_every_athlete_ref_404_is_empty_not_an_error(monkeypatch):
-    """WB-consolidation-1: when every athlete ``$ref`` 404s each is warned about and left out, and the game returns the
-    documented zero-row frame instead of raising ``NoDataError`` for the whole game."""
+def test_mlb_game_rosters_with_every_athlete_ref_404_raises_like_the_siblings(monkeypatch):
+    """PRE-1008 D-3: when every athlete ``$ref`` 404s each is warned about and left out, and the game raises
+    ``NoDataError`` as the six sibling Core v2 chains do (it used to return an empty frame, so a loop that skips on
+    ``NoDataError`` wrote an empty MLB file)."""
+    from sportsdataverse.errors import NoDataError
+
     _, rosters = _serve_mlb_rosters(monkeypatch)
     every = tuple(e["playerId"] for payload in rosters.values() for e in payload["entries"])
     game_id, _ = _serve_mlb_rosters(monkeypatch, missing=every)
-    mod = _mod("mlb")
     with pytest.warns(UserWarning, match=r"no athlete resource at .*left out") as rec:
-        df = mod.espn_mlb_game_rosters(game_id=game_id)
+        with pytest.raises(NoDataError, match="no athlete resource found for any rostered MLB player"):
+            _mod("mlb").espn_mlb_game_rosters(game_id=game_id)
     assert len(rec) == len(every)
-    assert df.height == 0 and df.columns == list(mod._COLUMNS)
+
+
+def test_mlb_game_rosters_game_position_is_the_entrys_not_the_athletes(monkeypatch):
+    """PRE-1008 M-1: ``athlete_position_*`` is the athlete record's (season) position; the position the player was
+    entered at in this game is ``game_position_id``, from the entry's own position ``$ref``. On 401701038 Judge's
+    record says RF while his entry lists position 8 (CF)."""
+    game_id, rosters = _serve_mlb_rosters(monkeypatch)
+    df = _mod("mlb").espn_mlb_game_rosters(game_id=game_id)
+    entries = [e for payload in rosters.values() for e in payload["entries"]]
+    assert df.schema["game_position_id"] == pl.Int64
+    want = [int(re.search(r"/positions/(\d+)", e["position"]["$ref"]).group(1)) for e in entries]
+    assert df["game_position_id"].to_list() == want
+    judge = df.filter(pl.col("athlete_full_name") == "Aaron Judge").row(0, named=True)
+    assert (judge["game_position_id"], judge["athlete_position_abbreviation"]) == (8, "RF")
+    assert (df["game_position_id"] != df["athlete_position_id"]).sum() > 0  # the two are different things
+
+
+def test_mlb_game_rosters_take_the_id_from_the_athlete_ref_when_playerid_is_missing(monkeypatch):
+    """PRE-1008 M-2: an entry with an athlete ``$ref`` but no ``playerId`` had a null join key, so every athlete was
+    fetched and every row silently dropped. The id is read from the ``$ref`` path; the real rosters without any
+    ``playerId`` keep every row."""
+    game_id, rosters = _serve_mlb_rosters(monkeypatch)
+    entries = [e for payload in rosters.values() for e in payload["entries"]]
+    ids = [e.pop("playerId") for e in entries]
+    df = _mod("mlb").espn_mlb_game_rosters(game_id=game_id)
+    assert df["athlete_id"].to_list() == ids
+
+
+def test_mlb_game_rosters_warn_on_an_entry_that_matches_no_athlete_read(monkeypatch):
+    """PRE-1008 M-2: an entry whose athlete record was read but whose ``playerId`` differs from it no longer drops in
+    silence; it is left out with a warning, the other entries keep their rows."""
+    game_id, rosters = _serve_mlb_rosters(monkeypatch)
+    entries = [e for payload in rosters.values() for e in payload["entries"]]
+    entries[0]["playerId"] = 1
+    with pytest.warns(UserWarning, match=r"1 ESPN MLB roster entries match no athlete record read"):
+        df = _mod("mlb").espn_mlb_game_rosters(game_id=game_id)
+    assert df.height == len(entries) - 1
+
+
+def test_mlb_game_rosters_repeated_athlete_gives_one_row_per_entry(monkeypatch):
+    """PRE-1008 minor / bodies B1: two entries naming one athlete give one row each; his record is deduplicated on
+    athlete_id before the join, so the join cannot multiply rows."""
+    game_id, rosters = _serve_mlb_rosters(monkeypatch)
+    payload = next(iter(rosters.values()))
+    payload["entries"].append(dict(payload["entries"][0]))
+    entries = [e for p in rosters.values() for e in p["entries"]]
+    df = _mod("mlb").espn_mlb_game_rosters(game_id=game_id)
+    assert df.height == len(entries)
+    assert df["athlete_id"].to_list() == [e["playerId"] for e in entries]
 
 
 def test_mlb_game_rosters_drop_an_entry_with_no_athlete(monkeypatch):
