@@ -97,7 +97,9 @@ NFL_FF_OPPORTUNITY_URL = FFOPPORTUNITYGITHUB + "{model_version}-data/ep_{stat_ty
 
 
 # C-L45: release URLs nothing reads any more (the generated ``*_loaders`` build theirs from
-# ``tools/codegen/endpoints/releases.yaml``). Deprecated, not deleted: they are public names.
+# ``tools/codegen/endpoints/releases.yaml``). Deprecated, not deleted: they are public names. The warning fires on the
+# module spellings (``from sportsdataverse.config import X``); the package attribute ``sportsdataverse.config`` is
+# ``sportsdataverse.nfl.config`` (the nfl star import rebinds it, as on main), which never reaches this __getattr__.
 _DEPRECATED: dict[str, str] = {
     "CFB_ROSTER_URL": SGITHUB + "cfbfastR-data/main/rosters/parquet/cfb_rosters_{season}.parquet",
     "CFB_TEAM_SCHEDULE_URL": SDVRELEASES + "cfb_schedules/cfb_schedules_{season}.parquet",
