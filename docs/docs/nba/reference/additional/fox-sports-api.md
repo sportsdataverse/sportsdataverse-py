@@ -532,7 +532,7 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `v1` | character | Team nickname as Fox displays it (e.g. 'Celtics'); the column is named v1 because its table header cell is blank. |
 | `w_l` | character | Win-loss record as a 'W-L' string (e.g. '42-40'). |
 | `pct` | character | Winning percentage as Fox prints it, a string such as '.524' or '1.000'. |
-| `gb` | character | Games behind the table leader as a one-decimal string (e.g. '11.0'); null on rows from tables without a GB column (the preseason table). |
+| `gb` | character | Games behind the table leader as a one-decimal string (e.g. '11.0'), '-' for the table leader; null on rows from tables without a GB column (the preseason table). |
 | `pf` | character | Points scored per game as a one-decimal string. |
 | `pa` | character | Points allowed per game as a one-decimal string. |
 | `home` | character | Home record as a 'W-L' string; null on rows from tables without a HOME column (the preseason table). |

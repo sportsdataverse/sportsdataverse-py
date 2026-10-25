@@ -57,6 +57,9 @@ TEAM_POP_COLS = (
 )
 
 # Athlete keys dropped before flattening. ``position`` is NOT here: only its ``$ref`` goes.
+# json_normalize separator for the athlete record: no ESPN key contains it.
+_NEST = "\x1f"
+
 ATHLETE_POP_COLS = (
     "links",
     "injuries",
@@ -111,6 +114,23 @@ def team_items(items: pl.DataFrame, **kwargs: Any) -> pl.DataFrame:
     return teams_df.with_columns(team_id=pl.col("team_id").cast(pl.Int32))
 
 
+def _snake_flattened(frame: pl.DataFrame) -> pl.DataFrame:
+    """Snake-case a record flattened with ``_NEST``; when two keys land on one name, keep the shallowest.
+
+    MLB ships ``debutYear`` beside ``debut.year``: both snake-case to ``debut_year``. The top-level key wins by rule,
+    whatever order the record (or pandas) put the columns in (R1002-6); ties keep the first.
+    """
+    names = [underscore(c.replace(_NEST, "_").replace("$ref", "href")) for c in frame.columns]
+    best: dict[str, int] = {}
+    for i, (col, name) in enumerate(zip(frame.columns, names)):
+        if name not in best or col.count(_NEST) < frame.columns[best[name]].count(_NEST):
+            best[name] = i
+    keep = sorted(best.values())
+    out = frame.select([frame.columns[i] for i in keep])
+    out.columns = [names[i] for i in keep]
+    return out
+
+
 def athlete_items(teams_rosters: pl.DataFrame, **kwargs: Any) -> pl.DataFrame:
     """Fetch each rostered athlete's Core v2 resource and flatten it to one row per athlete.
 
@@ -131,13 +151,8 @@ def athlete_items(teams_rosters: pl.DataFrame, **kwargs: Any) -> pl.DataFrame:
             position = {k: v for k, v in position.items() if k != "$ref"}
         if position:
             athlete["position"] = position
-        frame = pl.from_pandas(pd.json_normalize(athlete, sep="_"))
-        names = [underscore(c.replace("$ref", "href")) for c in frame.columns]
-        # MLB ships ``debutYear`` beside ``debut.year``: both snake-case to ``debut_year``, so the first (the
-        # top-level key) is kept rather than the frame failing on a duplicate column
-        keep = [i for i, n in enumerate(names) if n not in names[:i]]
-        frame = frame.select([frame.columns[i] for i in keep])
-        frame.columns = [names[i] for i in keep]
+        # flatten with a separator no ESPN key holds, so each column's nesting depth is known
+        frame = _snake_flattened(pl.from_pandas(pd.json_normalize(athlete, sep=_NEST)))
         game_athletes = pl.concat([game_athletes, frame], how="diagonal")
     if game_athletes.is_empty():
         raise NoDataError("NoDataError: no athlete resource found for any rostered player")

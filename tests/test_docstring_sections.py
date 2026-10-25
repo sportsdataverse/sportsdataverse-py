@@ -22,6 +22,26 @@ def test_audited_modules_have_every_section(capsys):
     assert main([str(ROOT / p) for p in AUDITED]) == 0, capsys.readouterr().out
 
 
+def test_every_audited_path_holds_python():
+    """R1000-4: a renamed or emptied directory would make the check above pass on nothing."""
+    for p in AUDITED:
+        path = ROOT / p
+        assert path.exists(), p
+        assert path.is_file() or any(path.rglob("*.py")), f"{p} holds no .py file"
+
+
+def test_checker_wants_a_literal_block_in_example(tmp_path):
+    """R1000-1: an ``Example:`` with prose only (no ``::`` literal block) is a gap."""
+    f = tmp_path / "m.py"
+    f.write_text(
+        'def f():\n    """Do it.\n\n    Returns:\n        int.\n\n    Example:\n        Call f() and print it.\n\n'
+        '    See Also:\n        * g\n    """\n    return 1\n',
+        encoding="utf-8",
+    )
+    lines, missing, prompts = check_file(f)
+    assert (missing, prompts) == (1, 0) and "'::' literal block" in lines[0]
+
+
 def test_checker_reports_a_missing_example(tmp_path):
     f = tmp_path / "m.py"
     f.write_text(

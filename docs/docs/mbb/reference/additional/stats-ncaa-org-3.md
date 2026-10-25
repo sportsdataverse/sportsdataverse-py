@@ -294,11 +294,11 @@ given lineup always occupies the same columns.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
+| `game_id` | character | stats.ncaa.org game id of the play-by-play page the possession comes from. |
 | `game_date` | character | Game date (YYYY-MM-DD). |
-| `home` | character | Home. |
-| `away` | character | Away record. |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `home` | character | Home team's name as the stats.ncaa.org play-by-play page lists it. |
+| `away` | character | Away team's name as the stats.ncaa.org play-by-play page lists it. |
+| `period` | integer | Period number from the stats.ncaa.org page: 1-2 for halves (3+ = overtime), or 1-4 for quarters (5+ = overtime) on a quarters page (women's games from 2015-16). |
 | `poss_num` | integer | Possession number within the game, stamped upstream by the play-by-play chain (parse_ncaa_bb_game_pbp). |
 | `poss_team` | character | Name of the team in possession. |
 | `home_1` | character | Home on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always occupies the same columns; simple=True keeps on-court order. |
@@ -311,9 +311,9 @@ given lineup always occupies the same columns.
 | `away_3` | character | Away on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True). |
 | `away_4` | character | Away on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True). |
 | `away_5` | character | Away on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True). |
-| `home_score` | integer | Home team score at the time of the play. |
-| `away_score` | integer | Away team score at the time of the play. |
-| `pts` | integer | Points scored. |
+| `home_score` | integer | Home team's score on the possession's first event row (the page's running score after that event). |
+| `away_score` | integer | Away team's score on the possession's first event row (the page's running score after that event). |
+| `pts` | integer | Points scored on the possession, summing shot_value (3, 2, or 1 for a free throw) over its made shots. |
 | `is_assisted` | integer | Count of the possession's events that carry a second player (player_2), usually 0 or 1 -- a count, not a flag, kept from bigballR's get_possessions for parity. |
 | `is_transition` | integer | 1 when the possession is a transition possession, else 0: its first event (a steal or a shot type, or a foul in the possessing team's favour) came within 10 seconds of the possession start and the previous possession ended on a terminal event. Null when any event of the possession has no flag. |
 | `is_garbage_time` | integer | 1 when any event of the possession falls in garbage time, else 0. Garbage time starts at the first event with a margin of 25+ inside the last 10 minutes of regulation (or later), 20+ inside the last 5 or 15+ inside the last 2, while at most 3 of the two teams' 10 starters are on the floor, and lasts to the end of the game. Null when any event has no flag. |

@@ -55,7 +55,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
-from gen_soccer_common import refs_root, write_yaml
+from gen_soccer_common import refs_root, snake_path, write_yaml
 from openapi_params import _query_params
 
 from sportsdataverse.dl_utils import underscore
@@ -259,7 +259,7 @@ def _editorial_entries(spec: dict) -> List[Dict[str, Any]]:
             "short": short,
             "summary": op.get("summary") or f"GET {path}",
             "host": EDITORIAL_HOST,
-            "path": "/" + _TOKEN.sub(lambda m: "{" + underscore(m.group(1)) + "}", tail),
+            "path": "/" + snake_path(tail),
             "parser": "parse_yahoo_editorial",
             "returns_schema": f"native/yahoo_shangrila/{short}",
             "docstring": {

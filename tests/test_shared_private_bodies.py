@@ -177,7 +177,7 @@ def _untyped_body_hash(fn: object) -> str:
 _PARSERS = "sportsdataverse._parser_common"
 _MLB_API = "sportsdataverse.mlb.mlb_api_parsers"
 _NHL_WEB = "sportsdataverse.nhl.nhl_api_web_parsers"
-_NHL_PARSERS = (
+_MLB_NHL_PARSERS = (
     _MLB_API,
     _NHL_WEB,
     "sportsdataverse.nhl.nhl_edge_parsers",
@@ -188,8 +188,8 @@ _ESPN_PARSERS = "sportsdataverse._common_espn_parsers"
 
 # (shared name, former-copy modules, untyped hash of the deleted copies at the merge commit)
 PARSER_SHARED = [
-    ("_snake_columns", _NHL_PARSERS, "13d5edd96daffeaa"),
-    ("_empty_frame", (*_NHL_PARSERS, _ESPN_PARSERS), "286e4f5349dcd93d"),
+    ("_snake_columns", _MLB_NHL_PARSERS, "13d5edd96daffeaa"),
+    ("_empty_frame", (*_MLB_NHL_PARSERS, _ESPN_PARSERS), "286e4f5349dcd93d"),
     ("_as_dict", (_MLB_API, _NHL_WEB), "cb2a840410514d0f"),
 ]
 
@@ -205,7 +205,7 @@ def test_parser_helpers_are_one_body(name: str, copies: tuple, pin: str) -> None
 def test_from_pandas_errors_is_one_tuple() -> None:
     shared = importlib.import_module(_PARSERS)._FROM_PANDAS_ERRORS
     assert shared == (TypeError, ValueError, NotImplementedError, pl.exceptions.PolarsError)
-    for module in (*_NHL_PARSERS, _ESPN_PARSERS):
+    for module in (*_MLB_NHL_PARSERS, _ESPN_PARSERS):
         assert importlib.import_module(module)._FROM_PANDAS_ERRORS is shared, module
 
 
@@ -236,8 +236,39 @@ def test_one_browser_user_agent() -> None:
     ):
         assert sent is ua
     package = Path(_codegen_runtime.__file__).parent
-    copies = [p for p in package.rglob("*.py") if "Chrome/124.0 Safari" in p.read_text(encoding="utf-8")]
+    copies = [p for p in package.rglob("*.py") if any(_OLD_UA in s for s in _string_literals(p))]
     assert copies == [Path(_codegen_runtime.__file__)], "a runtime spells out the User-Agent again"
+
+
+def _string_literals(path: Path) -> list:
+    """Every string a module spells out, as Python reads it (R61d-3).
+
+    ``ast`` folds implicitly concatenated literals (``"...Chrome/" "124.0 ..."``) into one constant, and a ``+`` chain
+    of literals is joined here, so a User-Agent split across literals is still found; a plain text search is not.
+    """
+
+    def joined(node: ast.AST) -> "str | None":
+        if isinstance(node, ast.Constant) and isinstance(node.value, str):
+            return node.value
+        if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
+            left, right = joined(node.left), joined(node.right)
+            return None if left is None or right is None else left + right
+        return None
+
+    nodes = ast.walk(ast.parse(path.read_text(encoding="utf-8")))
+    return [s for s in (joined(n) for n in nodes if isinstance(n, (ast.Constant, ast.BinOp))) if s is not None]
+
+
+def test_the_user_agent_guard_sees_a_split_literal(tmp_path) -> None:
+    """R61d-3: a re-copied User-Agent split across literals (implicit or ``+``) is still a copy."""
+    head, tail = _OLD_UA[:60], _OLD_UA[60:]
+    split = tmp_path / "runtime.py"
+    split.write_text(f'UA = "{head}" "{tail}"\n', encoding="utf-8")
+    added = tmp_path / "other.py"
+    added.write_text(f'UA = "{head}" + "{tail}"\n', encoding="utf-8")
+    assert _OLD_UA not in split.read_text(encoding="utf-8")  # a text search misses both
+    assert any(_OLD_UA in s for s in _string_literals(split))
+    assert any(_OLD_UA in s for s in _string_literals(added))
 
 
 @pytest.mark.parametrize(

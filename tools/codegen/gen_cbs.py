@@ -30,7 +30,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 import polars as pl
-from gen_soccer_common import load_spec, refs_dir, rewrite_schema_dir, write_yaml
+from gen_soccer_common import load_spec, refs_dir, rewrite_schema_dir, snake_path, write_yaml
 from openapi_params import _query_params
 
 from sportsdataverse.cbs.cbs_napi_parsers import (
@@ -152,7 +152,7 @@ def _path_params(op: dict, path: str) -> List[Dict[str, Any]]:
 
 def _emit_path(path: str) -> str:
     rest = path[len(PATH_PREFIX) :] if path.startswith(PATH_PREFIX) else path
-    return PATH_PREFIX + _TOKEN.sub(lambda m: "{" + underscore(m.group(1)) + "}", rest)
+    return PATH_PREFIX + snake_path(rest)
 
 
 def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
