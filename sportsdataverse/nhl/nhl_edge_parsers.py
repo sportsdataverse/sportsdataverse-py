@@ -90,14 +90,14 @@ def _snake_columns(df: pd.DataFrame) -> pd.DataFrame:
 def _to_output(df: pd.DataFrame, return_as_pandas: bool):
     """Return ``df`` as pandas (when ``return_as_pandas``) or polars."""
     try:
-        out = _cast_id_columns(pl.from_pandas(df))
+        out = _cast_id_columns(pl.from_pandas(df), "NHL EDGE parser")
     except _FROM_PANDAS_ERRORS:
         # Polars rejects mixed-typed object columns sometimes; coerce to str
         # for any leftover object dtype.
         df2 = df.copy()
         for col in [c for c in df2.columns if df2[c].dtype == "object"]:
             df2[col] = df2[col].astype(str)
-        out = _cast_id_columns(pl.from_pandas(df2))
+        out = _cast_id_columns(pl.from_pandas(df2), "NHL EDGE parser")
     # R986-1: the pandas frame carries the same ids, as pandas' nullable Int64 (never float64 / object)
     return _pandas_ids(out, df) if return_as_pandas else out
 

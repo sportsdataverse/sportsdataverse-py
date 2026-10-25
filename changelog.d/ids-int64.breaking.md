@@ -13,7 +13,8 @@
 - **NHL API parsers (`parse_nhl_web_*`, `parse_nhl_records`, `parse_nhl_stats_rest`, `parse_nhl_edge_*`) and
   `nhl_edge_skating_value`:** every `id` / `*_id` is `Int64` (was Float64 / String by payload, `player_id` a
   Utf8 pin); stats-rest `formatted_season_id` and the country `id` are text and stay String. The pandas output
-  (`return_as_pandas=True`) carries them as pandas' nullable `Int64` (was `float64` / `object`). (#986)
+  (`return_as_pandas=True`) carries them as pandas' nullable `Int64` (was `float64` / `object`). Any other id that
+  is not an integer keeps its column String and warns `SchemaDriftWarning` naming it, as the ESPN parsers do. (#986)
 - **ESPN, pandas output (`return_as_pandas=True`):** the same id columns are pandas' nullable `Int64` (was `object`,
   or `float64` such as `150.0` where a value was missing). The frames whose pandas output is Arrow-backed carry them
   as `int64[pyarrow]` instead: `parse_fpi`, `parse_weekly_powerindex` and the generated `load_*_crosswalk` loaders.

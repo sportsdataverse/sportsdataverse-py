@@ -243,3 +243,20 @@ def test_nhl_pandas_ids_are_nullable_int64(api, module, parser, fname):
     for sec, df in frames.items():
         ids = [c for c, t in df.schema.items() if t == pl.Int64 and (c == "id" or c.endswith("_id"))]
         assert {c: str(pdfs[sec][c].dtype) for c in ids} == dict.fromkeys(ids, "Int64"), sec
+
+
+def test_an_nhl_id_that_is_not_an_integer_stays_as_it_came_and_warns():
+    """R986-2: one text id in a real payload keeps that column String (never nulled or forced) and warns naming it, as
+    the ESPN parsers do; the known text ids (``formatted_season_id``, the country ``id``) stay silent (warnings are
+    errors in this suite, so every other capture proves that)."""
+    from sportsdataverse.errors import SchemaDriftWarning
+    from sportsdataverse.nhl.nhl_api_web_parsers import parse_nhl_web_pbp
+
+    raw = load_fixture("nhl_api_web", "pbp_2024_scf_g7")
+    play = next(p for p in raw["plays"] if "eventOwnerTeamId" in (p.get("details") or {}))
+    play["details"]["eventOwnerTeamId"] = "TBD"
+    with pytest.warns(SchemaDriftWarning, match=r"NHL api-web parser: id columns \['details_event_owner_team_id'\]"):
+        df = parse_nhl_web_pbp(raw)
+    assert df.schema["details_event_owner_team_id"] == pl.String
+    assert "TBD" in df["details_event_owner_team_id"].to_list()
+    assert df.schema["details_player_id"] == pl.Int64
