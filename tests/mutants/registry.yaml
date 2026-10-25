@@ -7180,8 +7180,8 @@
   group: dtype-contract-5-2
   finding: B-H5
   file: sportsdataverse/nhl/nhl_api_web_parsers.py
-  snippet: '        return _cast_id_columns(pl.from_pandas(df))'
-  mutant: '        return pl.from_pandas(df)'
+  snippet: '        out = _cast_id_columns(pl.from_pandas(df))'
+  mutant: '        out = pl.from_pandas(df)'
   test: tests/test_nhl_aux_parsers.py -k "ids_int64 and pbp_2024_scf_g7"
   expected: kill
   note: parse_nhl_web_pbp emits details_player_id and the other event ids as Float64 again.
@@ -7190,8 +7190,8 @@
   group: dtype-contract-5-2
   finding: B-H5
   file: sportsdataverse/nhl/nhl_records_parsers.py
-  snippet: '        return _cast_id_columns(pl.from_pandas(df))'
-  mutant: '        return pl.from_pandas(df)'
+  snippet: '        out = _cast_id_columns(pl.from_pandas(df))'
+  mutant: '        out = pl.from_pandas(df)'
   test: tests/test_nhl_aux_parsers.py -k "ids_int64 and nhl_records"
   expected: kill
   note: records player_id / franchise_id are Int64, Float64 ('8445802.0') or String by payload again.
