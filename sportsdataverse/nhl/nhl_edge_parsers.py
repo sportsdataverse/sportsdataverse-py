@@ -67,7 +67,7 @@ from typing import Dict, Optional
 import pandas as pd
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _cast_id_columns, _pandas_ids
+from sportsdataverse._codegen_runtime import _cast_id_columns, _pandas_ids, _str_or_null
 from sportsdataverse._parser_common import _FROM_PANDAS_ERRORS, _empty_frame, _snake_columns
 from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _first_row, _object_rows, _warn_schema_drift
 
@@ -85,7 +85,7 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool):
         # for any leftover object dtype.
         df2 = df.copy()
         for col in [c for c in df2.columns if df2[c].dtype == "object"]:
-            df2[col] = df2[col].astype(str)
+            df2[col] = df2[col].map(_str_or_null)  # a missing cell stays null, never "nan"
         out = _cast_id_columns(pl.from_pandas(df2), "NHL EDGE parser")
     # R986-1: the pandas frame carries the same ids, as pandas' nullable Int64 (never float64 / object)
     return _pandas_ids(out, df) if return_as_pandas else out

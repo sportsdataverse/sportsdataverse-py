@@ -329,3 +329,17 @@ def test_nflverse_source_requires_seasons() -> None:
     """source='nflverse' with neither game_ids nor seasons raises ValueError."""
     with pytest.raises(ValueError, match="requires seasons"):
         build_nfl_season(source="nflverse")
+
+
+def test_a_pipeline_v1_cache_entry_is_not_served(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Task 5.2 made the NFL ids Int64, so PIPELINE_VERSION is 2: a frame cached by a v1 build (String
+    ``*_player_id``) must be rebuilt, not mixed into a v2 season, whose concat would re-String the ids."""
+    assert PIPELINE_VERSION >= 2
+    built = pl.DataFrame({"game_id": [1], "play_id": [101], "passer_player_id": [4241479]})
+    monkeypatch.setattr(nfl_build_mod, "_build_game_espn", lambda game_id: built)
+    update_config(cache_mode="memory", cache_duration=3600)
+    stale = pl.DataFrame({"game_id": [1], "play_id": [101], "passer_player_id": ["4241479"]})
+    nfl_build_mod._game_cache_write(nfl_build_mod._game_cache_key(1, 1), stale)
+
+    out = build_nfl_season([1])
+    assert out.schema["passer_player_id"] == pl.Int64

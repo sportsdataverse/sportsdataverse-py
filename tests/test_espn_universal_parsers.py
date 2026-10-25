@@ -1867,6 +1867,20 @@ def test_an_id_that_is_not_an_integer_stays_as_it_came_and_warns():
     assert df.schema["home_id"] == df.schema["away_id"] == pl.Int64
 
 
+@pytest.mark.parametrize("league", ["cfb", "mbb", "mlb", "nba", "nfl", "nhl", "wbb", "wnba"])
+def test_leaders_uid_composite_is_text_not_a_refused_id(league):
+    """S5 (#1003 review): ESPN ``uId`` underscores to ``athlete_team_u_id`` (``"s:40~l:46~t:20"``); it is text by
+    design, so the leaders parse neither casts nor warns about it, and the real ids are still Int64."""
+    from sportsdataverse._common_espn_parsers import parse_items
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        df = parse_items(_load(f"leaders_{league}"))
+    assert df.schema["athlete_team_u_id"] == pl.String
+    ids = [c for c in df.columns if (c == "id" or c.endswith("_id")) and not c.endswith("u_id")]
+    assert ids and all(df.schema[c] == pl.Int64 for c in ids), {c: df.schema[c] for c in ids}
+
+
 def test_fpi_joins_weekly_powerindex_on_team_id():
     """A-M15: ``parse_fpi`` emitted ``team_id`` String and ``parse_weekly_powerindex`` Int64, so the join raised."""
     from sportsdataverse._common_espn_parsers import parse_fpi, parse_weekly_powerindex
