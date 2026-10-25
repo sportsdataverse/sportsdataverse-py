@@ -786,7 +786,7 @@ frames:
     type: character
   - description: ''
     name: sequence_id
-    type: integer
+    type: character
   - description: ''
     name: external_id
     type: character
