@@ -24,6 +24,8 @@ from typing import TYPE_CHECKING, Any, Union
 import polars as pl
 from bs4 import BeautifulSoup
 
+from sportsdataverse.scrape.ncaa._box_html import _cells, _cid, _finish, _int, _rows  # B-L28: one body each
+
 if TYPE_CHECKING:
     import pandas as pd
 
@@ -39,27 +41,6 @@ __all__ = [
 # a period sub-row inside team_stats -- basketball labels these "Nth Period"
 # (WBB quarters, MBB halves); accept Quarter/Half/Inning too for cross-sport reuse.
 _PERIOD_RE = re.compile(r"^(?:\d+(?:st|nd|rd|th)\s+(?:Period|Quarter|Half|Inning)|OT\s*\d*|Extra\s+Innings)$", re.I)
-
-
-def _cells(tr: "Any") -> "list[str]":
-    return [c.get_text(" ", strip=True) for c in tr.find_all(["th", "td"])]
-
-
-def _rows(table: "Any") -> "list[list[str]]":
-    return [_cells(tr) for tr in table.find_all("tr")]
-
-
-def _cid(contest_id: "str | int | None") -> "str | None":
-    return str(contest_id) if contest_id is not None else None
-
-
-def _int(v: str) -> "int | None":
-    return int(v) if v and v.lstrip("-").isdigit() else None
-
-
-def _finish(rows: "list[dict]", schema: dict, return_as_pandas: bool) -> "Union[pl.DataFrame, pd.DataFrame]":
-    df = pl.DataFrame(rows, schema=schema) if rows else pl.DataFrame(schema=schema)
-    return df.to_pandas() if return_as_pandas else df
 
 
 # --- officials ------------------------------------------------------------

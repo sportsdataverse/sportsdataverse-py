@@ -67,7 +67,7 @@ def test_wbb_shot_locations_season_pins_the_period_model(monkeypatch) -> None:
     capture to parse: the check records the model handed to the (real-fixture-fed)
     parser rather than counting rows (rules/wbb.yaml#wbb-2016-four-quarters).
     """
-    from sportsdataverse.wbb import wbb_ncaa_shots as mod
+    from sportsdataverse.mbb import mbb_ncaa_shots as mod  # the shared driver's parse call (B-L26)
 
     seen: list = []
 
@@ -101,7 +101,7 @@ def test_wbb_shot_locations_float_contest_ids_are_integer_strings() -> None:
 
 def test_wbb_shot_locations_float_season_pins_halves(monkeypatch) -> None:
     """``season=2015.0`` resolves the halves model, not "2015.0" -> quarters (R853-5)."""
-    from sportsdataverse.wbb import wbb_ncaa_shots as mod
+    from sportsdataverse.mbb import mbb_ncaa_shots as mod  # the shared driver's parse call (B-L26)
 
     seen: list = []
 

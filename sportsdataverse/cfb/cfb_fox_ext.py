@@ -23,9 +23,10 @@ import polars as pl
 if TYPE_CHECKING:
     import pandas as pd
 
-from sportsdataverse._codegen_runtime import _get
-from sportsdataverse._fox_layout import DATA_KEY as FOX_DATA_KEY
-from sportsdataverse._fox_layout import parse_drive_pbp
+from sportsdataverse._fox_layout import API
+from sportsdataverse._fox_layout import _cells, _clean, _table_rows, _uri_id, parse_drive_pbp
+from sportsdataverse._fox_layout import _full_team_name as _fox_team_fullname
+from sportsdataverse._fox_layout import fox_get as _fox_get
 from sportsdataverse._fox_layout import register_league_endpoints  # single source of truth for the public Fox key
 from sportsdataverse.errors import NoDataError
 
@@ -44,52 +45,9 @@ __all__ = [
     "fox_cfb_odds",
 ]
 
-FOX_BASE = "https://api.foxsports.com/bifrost/v1"
-# FOX_DATA_KEY (the public foxsports.com data-tier key, env-overridable via
-# SDV_PY_FOX_DATA_KEY) is imported from sportsdataverse._fox_layout above so the
-# bundled default and its env override live in exactly one place.
-
-_HEADERS = {"Origin": "https://www.foxsports.com", "Referer": "https://www.foxsports.com/"}
-
-
-def _fox_get(path: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, Any]:
-    merged = {"apikey": FOX_DATA_KEY, "api-version": "1.1"}
-    if params:
-        merged.update(params)
-    return _get(f"{FOX_BASE}/{path}", params=merged, headers=_HEADERS, **kwargs)
-
-
-def _clean(name: Any) -> str:
-    return re.sub(r"\W+", "_", str(name)).strip("_").lower() or "v"
-
-
-def _table_rows(tbl: Optional[dict], extra: Optional[dict] = None) -> List[Dict]:
-    """A Bifrost table {headers, rows} -> list of wide dict rows."""
-    extra = extra or {}
-    if not tbl:
-        return []
-    headers = _cells((tbl.get("headers") or [{}])[0].get("columns"))
-    names = [_clean(h) if h not in (None, "") else f"v{i}" for i, h in enumerate(headers)]
-    out: List[Dict] = []
-    for r in tbl.get("rows", []) or []:
-        cells = _cells(r.get("columns"))
-        row = dict(extra)
-        for name, val in zip(names, cells):
-            row[name] = val
-        row["entity_id"] = _uri_id((r.get("entityLink") or {}).get("contentUri"))
-        out.append(row)
-    return out
-
-
-def _cells(columns: Any) -> List[Optional[str]]:
-    return [c.get("text") if isinstance(c, dict) else c for c in (columns or [])]
-
-
-def _uri_id(uri: Optional[str]) -> Optional[str]:
-    if not uri:
-        return None
-    m = re.search(r"(\d+)$", uri)
-    return m.group(1) if m else None
+# B-L52: the Bifrost getter and the five table helpers are _fox_layout's, which serves every
+# Fox league; this module keeps only what is CFB-specific.
+FOX_BASE = API
 
 
 # Stable column sets -- what each parser always emits, so an empty response still
@@ -276,14 +234,6 @@ def fox_cfb_teams(
             }
         )
     return _frame(rows, return_as_pandas, _TEAMS_COLUMNS)
-
-
-def _fox_team_fullname(team: Optional[dict]) -> Optional[str]:
-    """A Fox scoreboard team block -> ``"Location Nickname"`` full name."""
-    if not team:
-        return None
-    stacked = f"{team.get('stackedNameTop') or ''} {team.get('stackedNameBottom') or ''}".strip()
-    return stacked or team.get("longName") or team.get("name")
 
 
 def _parse_fox_segment(raw: Dict[str, Any], segment_id: str) -> List[Dict[str, Any]]:

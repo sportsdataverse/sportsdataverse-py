@@ -106,11 +106,10 @@ at length in ``mbb_ncaa_roster_parser.py`` (Task 5e.1) for
 ``String`` elements directly (Java's own polynomial ``String.hashCode()``),
 not a case-class ``productHash``. :func:`_scala_string_set_order` reuses the
 already-JVM-validated ``improve``/radix-key trie-order math from that task
-(:func:`_hashmap_improve` / :func:`_hashmap_radix_key`, duplicated here --
-NOT imported from ``mbb_ncaa_roster_parser.py``, whose private helpers this
-task's brief marks read-only/do-not-refactor), fed a plain
-:func:`_java_string_hash` this time instead of the roster parser's
-case-class ``productHash``. **This path is UNTESTED by any current oracle**:
+(:func:`_hashmap_improve` / :func:`_hashmap_radix_key`, imported from
+``mbb_ncaa_roster_parser.py`` together with :func:`_java_string_hash`: one
+body each, B-L27), fed a plain :func:`_java_string_hash` this time instead of
+the roster parser's case-class ``productHash``. **This path is UNTESTED by any current oracle**:
 every ``BoxscoreParserTests.scala`` call uses ``external_roster=(Nil, Nil)``
 and a team/year absent from ``players_missing_from_boxscore``, so
 ``just_players``/``other_players``/``manual_extra_players`` are always empty
@@ -217,6 +216,7 @@ from sportsdataverse.mbb.mbb_ncaa_models import (
     Year,
 )
 from sportsdataverse.mbb.mbb_ncaa_names import build_tidy_player_context, tidy_player
+from sportsdataverse.mbb.mbb_ncaa_roster_parser import _hashmap_improve, _hashmap_radix_key, _java_string_hash
 from sportsdataverse.mbb.mbb_ncaa_stints import (
     build_player_code,
     name_in_v0_box_format,
@@ -634,46 +634,11 @@ def _disambiguate_sibling_codes(codes: "list[PlayerCodeId]") -> "list[PlayerCode
 
 
 # ---------------------------------------------------------------------------
-# Scala immutable.HashSet iteration-order emulation for a plain Set[String]
-# -- re-application (NOT a fresh derivation) of the Task 5e.1
-# improve/radix-key math from mbb_ncaa_roster_parser.py, duplicated here per
-# this task's "do not refactor prior work" scope (that module's helpers are
-# private). See the module docstring's "Extra-players Set ordering" note.
+# Scala immutable.HashSet iteration-order emulation for a plain Set[String]:
+# the improve/radix-key math is mbb_ncaa_roster_parser's (one body, B-L27);
+# HashSet and HashMap share the hash-trie. See the module docstring's
+# "Extra-players Set ordering" note.
 # ---------------------------------------------------------------------------
-
-
-def _java_string_hash(s: str) -> int:
-    """Java/Scala ``String.hashCode()``, 32-bit wraparound -- what a plain
-    ``Set[String]`` hashes directly (no case-class ``productHash`` mixing,
-    unlike ``mbb_ncaa_roster_parser.py``'s ``Map[PlayerCodeId, _]``)."""
-    h = 0
-    for ch in s:
-        h = (h * 31 + ord(ch)) & 0xFFFFFFFF
-    return h
-
-
-def _hashmap_improve(hcode: int) -> int:
-    """``scala.collection.immutable.HashMap``/``HashSet``'s internal
-    hash-smear (``improve``) -- identical math to
-    ``mbb_ncaa_roster_parser._hashmap_improve`` (both collection types share
-    the same underlying hash-trie implementation)."""
-    h = hcode & 0xFFFFFFFF
-    h = (h + (~(h << 9) & 0xFFFFFFFF)) & 0xFFFFFFFF
-    h ^= h >> 14
-    h = (h + ((h << 4) & 0xFFFFFFFF)) & 0xFFFFFFFF
-    h ^= h >> 10
-    return h & 0xFFFFFFFF
-
-
-def _hashmap_radix_key(hcode: int) -> int:
-    """Turns an improved hash into an ascending sort key reproducing the
-    hash-trie's depth-first iteration order -- identical math to
-    ``mbb_ncaa_roster_parser._hashmap_radix_key``."""
-    h = hcode & 0xFFFFFFFF
-    key = 0
-    for i in range(7):  # 7 groups of 5 bits covers all 32 bits (ceil(32/5))
-        key = (key << 5) | ((h >> (5 * i)) & 0x1F)
-    return key
 
 
 def _scala_string_set_order(items: list[str]) -> list[str]:
