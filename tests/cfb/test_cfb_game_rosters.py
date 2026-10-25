@@ -20,7 +20,7 @@ from __future__ import annotations
 import polars as pl
 import pytest
 
-from sportsdataverse.cfb import cfb_game_rosters
+from sportsdataverse import _espn_game_rosters
 from sportsdataverse.cfb.cfb_game_rosters import helper_cfb_game_items, helper_cfb_roster_items
 from sportsdataverse.errors import NoESPNDataError
 
@@ -89,7 +89,7 @@ def test_roster_items_one_team_404_recovers_other(monkeypatch):
             raise NoESPNDataError("NoESPNDataError: No data found for " + url)
         return _FakeResp({"entries": [_roster_entry(101), _roster_entry(102)]})
 
-    monkeypatch.setattr(cfb_game_rosters, "download", fake_download)
+    monkeypatch.setattr(_espn_game_rosters, "download", fake_download)  # the shared roster_items body (task 6.1)
     out = helper_cfb_roster_items(items=items, summary_url="http://core/competitors")
     assert isinstance(out, pl.DataFrame)
     assert out.height == 2  # only team 52's two entries
@@ -104,7 +104,7 @@ def test_roster_items_all_teams_404_raises(monkeypatch):
     def fake_download(url, **kwargs):
         raise NoESPNDataError("NoESPNDataError: No data found for " + url)
 
-    monkeypatch.setattr(cfb_game_rosters, "download", fake_download)
+    monkeypatch.setattr(_espn_game_rosters, "download", fake_download)  # the shared roster_items body (task 6.1)
     with pytest.raises(NoESPNDataError):
         helper_cfb_roster_items(items=items, summary_url="http://core/competitors")
 
@@ -134,7 +134,7 @@ def test_roster_items_differing_team_columns_concat(monkeypatch):
             return _FakeResp({"entries": [_entry(101, jersey="7"), _entry(102, jersey="9")]})
         return _FakeResp({"entries": [_entry(201, didNotPlay=True), _entry(202, didNotPlay=False)]})
 
-    monkeypatch.setattr(cfb_game_rosters, "download", fake_download)
+    monkeypatch.setattr(_espn_game_rosters, "download", fake_download)  # the shared roster_items body (task 6.1)
     out = helper_cfb_roster_items(items=items, summary_url="http://core/competitors")
     assert out.height == 4
     assert set(out["team_id"].unique().to_list()) == {52, 2641}
