@@ -20,7 +20,7 @@ columns:
   type: logical
   description: ''
 - name: id
-  type: character
+  type: integer
   description: ''
 - name: name
   type: character

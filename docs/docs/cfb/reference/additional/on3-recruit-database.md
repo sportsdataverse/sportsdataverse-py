@@ -369,7 +369,7 @@ One row per ranked recruit (On3 ratings). Zero-row frame on empty payload.
 | `whisper` | double |  |
 | `whisper_change` | double |  |
 | `valuation_change` | integer |  |
-| `jersey_number` | double | Jersey number worn by the recruit, when listed. |
+| `jersey_number` | integer | Jersey number worn by the recruit, when listed. |
 | `high_school_rating` | character | High-school rating annotation as shipped by On3 (mixed-type; stringified). |
 | `ratings` | character | JSON-encoded list of the player's rating rows across editions (year, type, rating, stars, ranks). |
 | `person_default_sport_key` | integer | On3 numeric key of the person's primary sport. |
@@ -444,7 +444,7 @@ One row per ranked recruit (On3 ratings). Zero-row frame on empty payload.
 | `person_high_school_mascot` | character | Mascot of the person's high school. |
 | `person_high_school_abbreviation` | character | High-school abbreviation. |
 | `person_high_school_asset_url` | character | Convenience CDN URL of the high-school logo (top-level school field). |
-| `person_high_school_default_asset_key` | double | On3 asset key of the recruit's high-school logo asset. |
+| `person_high_school_default_asset_key` | integer | On3 asset key of the recruit's high-school logo asset. |
 | `person_high_school_default_asset_domain_override` | double | CDN domain override for the recruit's high-school logo asset (usually null). |
 | `person_high_school_default_asset_domain` | character | CDN domain serving the recruit's high-school logo asset. |
 | `person_high_school_default_asset_source_override` | double | Source-path override for the recruit's high-school logo asset (usually null). |
@@ -454,14 +454,14 @@ One row per ranked recruit (On3 ratings). Zero-row frame on empty payload.
 | `person_high_school_default_asset_caption` | double | Editorial caption attached to the recruit's high-school logo asset (usually null). |
 | `person_high_school_default_asset_category` | double | Editorial category label of the recruit's high-school logo asset (usually null). |
 | `person_high_school_default_asset_alt_text` | double | Accessibility alt text of the recruit's high-school logo asset (usually null). |
-| `person_high_school_default_asset_height` | double | Pixel height of the recruit's high-school logo asset. |
-| `person_high_school_default_asset_width` | double | Pixel width of the recruit's high-school logo asset. |
+| `person_high_school_default_asset_height` | integer | Pixel height of the recruit's high-school logo asset. |
+| `person_high_school_default_asset_width` | integer | Pixel width of the recruit's high-school logo asset. |
 | `person_high_school_default_asset_asset_type` | character | On3 asset-type discriminator of the recruit's high-school logo asset (e.g. Image). |
 | `person_high_school_default_asset_file_system` | character | Storage file-system flag of the recruit's high-school logo asset. |
 | `person_high_school_default_asset_path` | character | Storage path of the recruit's high-school logo asset. |
 | `person_high_school_default_asset_type` | character | Media type field of the recruit's high-school logo asset. |
 | `person_high_school_default_asset_thumbnail` | double | Thumbnail variant of the recruit's high-school logo asset (video assets; usually null). |
-| `person_high_school_default_asset_duration` | double | Duration of the recruit's high-school logo asset when it is a video (usually null). |
+| `person_high_school_default_asset_duration` | integer | Duration of the recruit's high-school logo asset when it is a video (usually null). |
 | `person_high_school_default_asset_mime_type` | character | MIME type of the recruit's high-school logo asset. |
 | `person_high_school_default_asset_credit_line` | double |  |
 | `person_high_school_default_asset_provenance` | double |  |
@@ -588,7 +588,7 @@ One row per team class (On3 ratings). Zero-row frame on empty payload.
 | `applied_average_consensus_rating` | double | Average commit rating counted by the formula (consensus ratings). |
 | `commits` | integer | Total number of commits in the class. |
 | `applied_commits` | integer | Number of commits counted toward the ranking formula. |
-| `deductions` | double | Points deducted by the formula (e.g. over-signing adjustments). |
+| `deductions` | integer | Points deducted by the formula (e.g. over-signing adjustments). |
 | `deductions_description` | character | Explanation of the deduction, when present. |
 | `five_stars` | integer | Count of On3 five-star commits. |
 | `consensus_five_stars` | integer | Count of industry-consensus five-star commits. |
@@ -596,13 +596,13 @@ One row per team class (On3 ratings). Zero-row frame on empty payload.
 | `consensus_four_stars` | integer | Count of industry-consensus four-star commits. |
 | `three_stars` | integer | Count of On3 three-star commits. |
 | `consensus_three_stars` | integer | Count of industry-consensus three-star commits. |
-| `overall_rank` | double | On3 national team-class rank. |
-| `overall_consensus_rank` | double | Industry-consensus national team-class rank. |
+| `overall_rank` | integer | On3 national team-class rank. |
+| `overall_consensus_rank` | integer | Industry-consensus national team-class rank. |
 | `dispay_consensus_score` | double | Display string of the consensus class score (field name misspelling is On3's). |
 | `dispay_on3_score` | double | Display string of the On3 class score (field name misspelling is On3's). |
 | `average_nil_value` | double | Average On3 NIL valuation across the class, in US dollars. |
-| `conference_rank` | double | On3 class rank within the program's conference. |
-| `conference_consensus_rank` | double | Consensus class rank within the program's conference. |
+| `conference_rank` | integer | On3 class rank within the program's conference. |
+| `conference_consensus_rank` | integer | Consensus class rank within the program's conference. |
 | `organization_key` | integer | On3 numeric key of the program. |
 | `organization_full_name` | character | Full name of the program. |
 | `organization_name` | character | Short name of the program. |

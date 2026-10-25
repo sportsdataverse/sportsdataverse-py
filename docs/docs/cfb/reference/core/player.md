@@ -77,7 +77,7 @@ ESPN endpoint.
 | `full_name` | character | Venue full name (e.g. `Tenney Stadium`). |
 | `guid` | character | ESPN athlete GUID. |
 | `height` | double | Listed height (inches). |
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `jersey` | character | Jersey number. |
 | `last_name` | character | Athlete last name. |
 | `linked` | logical |  |
@@ -108,14 +108,14 @@ ESPN endpoint.
 | `position_$ref` | character |  |
 | `position_abbreviation` | character | Position abbreviation (e.g. `QB`). |
 | `position_display_name` | character | Human-readable position name. |
-| `position_id` | character | ESPN position id. |
+| `position_id` | integer | ESPN position id. |
 | `position_leaf` | logical | `TRUE` for a most-specific (leaf) position. |
 | `position_name` | character | Position name (e.g. `Quarterback`). |
 | `seasons_$ref` | character |  |
 | `statistics_$ref` | character |  |
 | `statisticslog_$ref` | character |  |
 | `status_abbreviation` | character |  |
-| `status_id` | character | ESPN commitment status id. |
+| `status_id` | integer | ESPN commitment status id. |
 | `status_name` | character | Status-type key (e.g. `STATUS_FINAL`). |
 | `status_type` | character | Status type. |
 | `team_$ref` | character |  |
@@ -406,7 +406,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ESPN numeric identifier for the athlete. |
+| `id` | integer | ESPN numeric identifier for the athlete. |
 | `display_name` | character | Athlete's full display name as shown on ESPN. |
 | `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
 

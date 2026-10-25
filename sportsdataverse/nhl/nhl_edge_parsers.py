@@ -67,6 +67,7 @@ from typing import Dict, Optional
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _cast_id_columns, _pandas_ids
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _first_row, _object_rows, _warn_schema_drift
 
@@ -88,17 +89,17 @@ def _snake_columns(df: pd.DataFrame) -> pd.DataFrame:
 
 def _to_output(df: pd.DataFrame, return_as_pandas: bool):
     """Return ``df`` as pandas (when ``return_as_pandas``) or polars."""
-    if return_as_pandas:
-        return df
     try:
-        return pl.from_pandas(df)
+        out = _cast_id_columns(pl.from_pandas(df), "NHL EDGE parser")
     except _FROM_PANDAS_ERRORS:
         # Polars rejects mixed-typed object columns sometimes; coerce to str
         # for any leftover object dtype.
         df2 = df.copy()
         for col in [c for c in df2.columns if df2[c].dtype == "object"]:
             df2[col] = df2[col].astype(str)
-        return pl.from_pandas(df2)
+        out = _cast_id_columns(pl.from_pandas(df2), "NHL EDGE parser")
+    # R986-1: the pandas frame carries the same ids, as pandas' nullable Int64 (never float64 / object)
+    return _pandas_ids(out, df) if return_as_pandas else out
 
 
 def _empty_frame(return_as_pandas: bool = False):

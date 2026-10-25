@@ -98,12 +98,12 @@ def test_eb_shrinkage_and_matchup(monkeypatch):
     monkeypatch.setattr(_props_mod, "nhl_team_ratings", _mini_ratings)
     out = nhl_player_props(2024, stats=("shots",))
     assert out.height > 0
-    assert out.schema["player_id"] == pl.Utf8
+    assert out.schema["player_id"] == out.schema["game_id"] == pl.Int64
     assert out.schema["team"] == pl.Utf8
 
     # Rookie D's game-2 projection (as-of only game 1's single shot) should be
     # shrunk much closer to the position prior than the raw 1-game rate (2.0).
-    rookie_g2 = out.filter((pl.col("player_id") == "200") & (pl.col("game_id") == "2") & (pl.col("stat") == "shots"))
+    rookie_g2 = out.filter((pl.col("player_id") == 200) & (pl.col("game_id") == 2) & (pl.col("stat") == "shots"))
     assert rookie_g2.height == 1
     assert rookie_g2["proj_mean"][0] != 1.0  # not the naive single-game rate
 
@@ -112,7 +112,7 @@ def test_first_game_has_no_prior_history_but_still_projects(monkeypatch):
     monkeypatch.setattr(_props_mod, "load_nhl_skater_boxscores", lambda seasons: _mini_boxscores())
     monkeypatch.setattr(_props_mod, "nhl_team_ratings", _mini_ratings)
     out = nhl_player_props(2024, stats=("shots",))
-    star_g1 = out.filter((pl.col("player_id") == "100") & (pl.col("game_id") == "1") & (pl.col("stat") == "shots"))
+    star_g1 = out.filter((pl.col("player_id") == 100) & (pl.col("game_id") == 1) & (pl.col("stat") == "shots"))
     assert star_g1.height == 1
     assert star_g1["proj_mean"][0] > 0
 
@@ -133,3 +133,34 @@ def test_empty_seasons_returns_documented_schema(monkeypatch):
         "p_over",
         "line",
     ]
+
+
+def test_props_join_the_nhl_parser_frames_on_player_id(monkeypatch):
+    """R986-3: props ``player_id`` was a Utf8 pin, so it could not join a ``parse_nhl_web_*`` frame (Int64). Built from
+    the real 2024 SCF game-7 boxscore capture; the join key dtypes agree and every skater matches."""
+    from sportsdataverse.nhl.nhl_api_web_parsers import parse_nhl_web_boxscore
+    from tests.conftest import load_fixture
+
+    raw = load_fixture("nhl_api_web", "boxscore_2024_scf_g7")
+    box = parse_nhl_web_boxscore(raw).filter(pl.col("position") != "G")
+    abbrev = {"home": raw["homeTeam"]["abbrev"], "away": raw["awayTeam"]["abbrev"]}
+    skaters = box.select(
+        pl.lit(int(str(raw["season"])[4:])).alias("season"),
+        pl.lit(raw["id"]).alias("game_id"),
+        pl.lit(raw["gameDate"]).alias("game_date"),
+        "player_id",
+        pl.col("home_away").replace_strict(abbrev).alias("team_abbrev"),
+        "position",
+        pl.col("sog").alias("shots_on_goal"),
+        "points",
+    )
+    ratings = pl.DataFrame(
+        {"season": [2024] * 2, "team": list(abbrev.values()), "adj_xgf": [2.6, 2.5], "adj_xga": [2.4, 2.5]}
+    )
+    monkeypatch.setattr(_props_mod, "load_nhl_skater_boxscores", lambda seasons: skaters)
+    monkeypatch.setattr(_props_mod, "nhl_team_ratings", lambda seasons, **kw: ratings)
+    props = nhl_player_props(2024, stats=("shots",))
+    assert props.schema["player_id"] == box.schema["player_id"] == pl.Int64
+    assert props.schema["game_id"] == pl.Int64
+    joined = props.join(box.select("player_id", "sog"), on="player_id", how="inner")
+    assert joined.height == props.height == box.height

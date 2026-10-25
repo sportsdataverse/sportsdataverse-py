@@ -32,7 +32,7 @@ columns:
   type: logical
   description: ''
 - name: team_id
-  type: character
+  type: integer
   description: ''
 - name: rank
   type: integer

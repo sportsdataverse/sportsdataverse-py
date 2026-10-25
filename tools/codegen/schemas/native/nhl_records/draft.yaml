@@ -29,7 +29,7 @@ columns:
   type: character
   description: ''
 - name: cs_player_id
-  type: character
+  type: integer
   description: ''
 - name: draft_date
   type: character
@@ -41,7 +41,7 @@ columns:
   type: integer
   description: ''
 - name: drafted_by_team_id
-  type: character
+  type: integer
   description: ''
 - name: first_name
   type: character
@@ -62,7 +62,7 @@ columns:
   type: integer
   description: ''
 - name: player_id
-  type: character
+  type: integer
   description: ''
 - name: player_name
   type: character

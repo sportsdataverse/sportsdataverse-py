@@ -17,7 +17,7 @@ columns:
   type: character
   description: ''
 - name: franchise_id
-  type: double
+  type: integer
   description: ''
 - name: last_name
   type: character

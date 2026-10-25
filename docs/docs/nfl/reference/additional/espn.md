@@ -118,7 +118,7 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `contract_season_href` | character | ESPN API hyperlink reference URL for the specific season-level contract detail resource. |
 | `contract_team_href` | character | ESPN API hyperlink reference URL for the team associated with the player's contract. |
 | `contract_active` | logical |  |
-| `status_id` | character |  |
+| `status_id` | integer |  |
 | `status_name` | character |  |
 | `status_type` | character |  |
 | `status_abbreviation` | character |  |
@@ -602,7 +602,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ID of the player in the 'name' column. |
+| `id` | integer | ID of the player in the 'name' column. |
 | `uid` | character |  |
 | `date` | character |  |
 | `attendance` | integer |  |
@@ -618,9 +618,9 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `notes_headline` | character |  |
 | `broadcast_market` | character |  |
 | `broadcast_name` | character |  |
-| `type_id` | character |  |
+| `type_id` | integer |  |
 | `type_abbreviation` | character |  |
-| `venue_id` | character |  |
+| `venue_id` | integer |  |
 | `venue_full_name` | character |  |
 | `venue_address_city` | character |  |
 | `venue_address_state` | character |  |
@@ -629,7 +629,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `status_clock` | double |  |
 | `status_display_clock` | character |  |
 | `status_period` | integer |  |
-| `status_type_id` | character |  |
+| `status_type_id` | integer |  |
 | `status_type_name` | character |  |
 | `status_type_state` | character |  |
 | `status_type_completed` | logical |  |
@@ -638,7 +638,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `status_type_short_detail` | character |  |
 | `status_is_tbd_flex` | logical | Boolean flag indicating whether the game's broadcast slot is designated as a flex/TBD window. |
 | `format_regulation_periods` | integer |  |
-| `home_id` | character |  |
+| `home_id` | integer |  |
 | `home_uid` | character |  |
 | `home_location` | character |  |
 | `home_name` | character |  |
@@ -648,13 +648,13 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `home_color` | character |  |
 | `home_alternate_color` | character |  |
 | `home_is_active` | logical |  |
-| `home_venue_id` | character |  |
+| `home_venue_id` | integer |  |
 | `home_logo` | character |  |
 | `home_score` | character | The number of points the home team scored. Is NA for games which haven't yet been played. |
 | `home_current_rank` | integer | Always null. The NFL has no poll, so ESPN ships no curatedRank; kept so the column set matches the college schedules. |
 | `home_linescores` | list | Comma-separated or serialized quarter-by-quarter score totals for the home team. |
 | `home_records` | character | Serialized win-loss-tie record(s) for the home team (e.g., overall, home, away, conference). |
-| `away_id` | character |  |
+| `away_id` | integer |  |
 | `away_uid` | character |  |
 | `away_location` | character |  |
 | `away_name` | character |  |
@@ -664,7 +664,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `away_color` | character |  |
 | `away_alternate_color` | character |  |
 | `away_is_active` | logical |  |
-| `away_venue_id` | character |  |
+| `away_venue_id` | integer |  |
 | `away_logo` | character |  |
 | `away_score` | character | The number of points the away team scored. Is NA for games which haven't yet been played. |
 | `away_current_rank` | integer | Always null. The NFL has no poll, so ESPN ships no curatedRank; kept so the column set matches the college schedules. |
@@ -717,7 +717,7 @@ Polars dataframe of the NFL teams, one row per team, with the columns in the ret
 | `team_alternate_color` | character |  |
 | `team_color` | character |  |
 | `team_display_name` | character |  |
-| `team_id` | character |  |
+| `team_id` | integer |  |
 | `team_is_active` | logical |  |
 | `team_is_all_star` | logical |  |
 | `team_location` | character |  |

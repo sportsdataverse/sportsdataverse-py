@@ -3,7 +3,7 @@ kind: dataframe
 description: One row per rostered athlete (site v2 /teams/{id}/roster).
 columns:
 - name: id
-  type: character
+  type: integer
   description: Id.
 - name: uid
   type: character
@@ -75,7 +75,7 @@ columns:
   type: character
   description: Birth place country.
 - name: college_id
-  type: character
+  type: integer
   description: College id.
 - name: college_guid
   type: character
@@ -102,7 +102,7 @@ columns:
   type: character
   description: Headshot alt.
 - name: position_id
-  type: character
+  type: integer
   description: Position id.
 - name: position_name
   type: character
@@ -180,7 +180,7 @@ columns:
   type: logical
   description: Contract active.
 - name: status_id
-  type: character
+  type: integer
   description: Status id.
 - name: status_name
   type: character

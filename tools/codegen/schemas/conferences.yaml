@@ -2,7 +2,7 @@ schema: conferences
 kind: dataframe
 columns:
 - name: group_id
-  type: character
+  type: integer
   description: ''
 - name: name
   type: character
@@ -17,7 +17,7 @@ columns:
   type: logical
   description: ''
 - name: parent_group_id
-  type: character
+  type: integer
   description: ''
 - name: depth
   type: integer

@@ -119,7 +119,7 @@ columns:
   type: logical
   description: ''
 - name: status_id
-  type: character
+  type: integer
   description: ''
 - name: status_name
   type: character

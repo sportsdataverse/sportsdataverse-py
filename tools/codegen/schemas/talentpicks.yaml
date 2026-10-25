@@ -23,7 +23,7 @@ columns:
   type: character
   description: ''
 - name: pick_person_id
-  type: character
+  type: integer
   description: ''
 - name: pick_person_last_name
   type: character

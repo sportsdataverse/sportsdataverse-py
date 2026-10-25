@@ -14,7 +14,7 @@ columns:
   type: character
   description: ''
 - name: split_stats_id
-  type: character
+  type: integer
   description: ''
 - name: split_stats_name
   type: character

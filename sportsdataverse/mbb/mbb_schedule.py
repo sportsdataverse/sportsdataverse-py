@@ -52,7 +52,7 @@ def espn_mbb_schedule(
 
             import polars as pl
             duke = season.filter(
-                (pl.col("home_id") == "150") | (pl.col("away_id") == "150")
+                (pl.col("home_id") == 150) | (pl.col("away_id") == 150)
             )
 
         Pandas round-trip::

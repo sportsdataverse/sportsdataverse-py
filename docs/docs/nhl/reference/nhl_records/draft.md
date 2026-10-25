@@ -34,18 +34,18 @@ Retrieve NHL Entry Draft picks.
 | `birth_date` | character | Player birth date. |
 | `birth_place` | character | Player birth place. |
 | `country_code` | character | Player country code. |
-| `cs_player_id` | character | Central Scouting player identifier. |
+| `cs_player_id` | integer | Central Scouting player identifier. |
 | `draft_date` | character | Date the player was drafted. |
 | `draft_master_id` | integer | Draft master record identifier. |
 | `draft_year` | integer | Draft year the lottery applies to. |
-| `drafted_by_team_id` | character | Identifier of the drafting team. |
+| `drafted_by_team_id` | integer | Identifier of the drafting team. |
 | `first_name` | character | Player first name. |
 | `height` | character | Player height in inches. |
 | `last_name` | character | Player last name. |
 | `notes` | character | Notes flag for the pick. |
 | `overall_pick_number` | integer | Overall pick number in the draft. |
 | `pick_in_round` | integer | Pick number within the round. |
-| `player_id` | character | Unique player identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `player_name` | character | Player name. |
 | `position` | character | Player position. |
 | `removed_outright` | character | Removed-outright indicator. |
@@ -100,7 +100,7 @@ All draft picks made by a single team.
 | `birth_date` | character | Player birth date. |
 | `birth_place` | character | Player birth place. |
 | `country_code` | character | Player country code. |
-| `cs_player_id` | character | Central Scouting player identifier. |
+| `cs_player_id` | integer | Central Scouting player identifier. |
 | `draft_date` | character | Date the player was drafted. |
 | `draft_master_id` | integer | Draft master record identifier. |
 | `draft_year` | integer | Draft year the lottery applies to. |
@@ -111,7 +111,7 @@ All draft picks made by a single team.
 | `notes` | character | Notes flag for the pick. |
 | `overall_pick_number` | integer | Overall pick number in the draft. |
 | `pick_in_round` | integer | Pick number within the round. |
-| `player_id` | character | Unique player identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `player_name` | character | Player name. |
 | `position` | character | Player position. |
 | `removed_outright` | character | Removed-outright indicator. |

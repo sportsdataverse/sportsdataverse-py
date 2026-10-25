@@ -4,12 +4,13 @@
 
 from __future__ import annotations
 
-import polars as pl
+import polars as pl  # noqa: F401  (used only by a loader with no returns table)
 
 from sportsdataverse._codegen_runtime import (
     SeasonNotFoundError,  # noqa: F401
     _as_season_list,
     _cast_ids_int64,  # noqa: F401  (used only by loaders declaring id_int64)
+    _empty_from_schema,  # noqa: F401
     _read_release_parquet,
     cli_warn,
 )
@@ -155,7 +156,8 @@ def load_mbb_pbp(seasons, return_as_pandas: bool = False):
         cli_warn("load_mbb_pbp: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else _empty_from_schema("loader_schemas:load_mbb_pbp")
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -253,7 +255,12 @@ def load_mbb_player_boxscore(seasons, return_as_pandas: bool = False):
         cli_warn("load_mbb_player_boxscore: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_mbb_player_boxscore")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -383,7 +390,10 @@ def load_mbb_schedule(seasons, return_as_pandas: bool = False):
         cli_warn("load_mbb_schedule: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed") if frames else _empty_from_schema("loader_schemas:load_mbb_schedule")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -485,7 +495,12 @@ def load_mbb_team_boxscore(seasons, return_as_pandas: bool = False):
         cli_warn("load_mbb_team_boxscore: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_mbb_team_boxscore")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -539,7 +554,8 @@ def load_mbb_ratings(seasons, return_as_pandas: bool = False):
         cli_warn("load_mbb_ratings: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else _empty_from_schema("loader_schemas:load_mbb_ratings")
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -591,7 +607,12 @@ def load_mbb_player_value(seasons, return_as_pandas: bool = False):
         cli_warn("load_mbb_player_value: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_mbb_player_value")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -654,7 +675,8 @@ def load_mbb_shots(seasons, return_as_pandas: bool = False):
         cli_warn("load_mbb_shots: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else _empty_from_schema("loader_schemas:load_mbb_shots")
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -721,7 +743,10 @@ def load_mbb_standings(seasons, return_as_pandas: bool = False):
         cli_warn("load_mbb_standings: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed") if frames else _empty_from_schema("loader_schemas:load_mbb_standings")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -779,7 +804,12 @@ def load_mbb_player_season_stats(seasons, return_as_pandas: bool = False):
         cli_warn("load_mbb_player_season_stats: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_mbb_player_season_stats")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -858,7 +888,8 @@ def load_mbb_rosters(seasons, return_as_pandas: bool = False):
         cli_warn("load_mbb_rosters: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else _empty_from_schema("loader_schemas:load_mbb_rosters")
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -908,7 +939,10 @@ def load_mbb_officials(seasons, return_as_pandas: bool = False):
         cli_warn("load_mbb_officials: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed") if frames else _empty_from_schema("loader_schemas:load_mbb_officials")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -973,7 +1007,12 @@ def load_mbb_game_rosters(seasons, return_as_pandas: bool = False):
         cli_warn("load_mbb_game_rosters: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_mbb_game_rosters")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1032,7 +1071,12 @@ def load_mbb_team_season_stats(seasons, return_as_pandas: bool = False):
         cli_warn("load_mbb_team_season_stats: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_mbb_team_season_stats")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1052,10 +1096,10 @@ def load_mbb_player_crosswalk(seasons, return_as_pandas: bool = False):
         |col_name           |type    |
         |:------------------|:-------|
         |season             |Int32   |
-        |espn_team_id       |Int32   |
+        |espn_team_id       |Int64   |
         |team_abbreviation  |String  |
         |player_name        |String  |
-        |espn_athlete_id    |String  |
+        |espn_athlete_id    |Int64   |
         |espn_full_name     |String  |
         |espn_jersey        |String  |
         |espn_position      |String  |
@@ -1093,7 +1137,15 @@ def load_mbb_player_crosswalk(seasons, return_as_pandas: bool = False):
         cli_warn("load_mbb_player_crosswalk: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_mbb_player_crosswalk")
+    )
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["espn_team_id", "espn_athlete_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1114,9 +1166,9 @@ def load_mbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         |:-----------------|:-------|
         |season            |Int32   |
         |game_date         |Date    |
-        |home_espn_team_id |Int32   |
-        |away_espn_team_id |Int32   |
-        |espn_game_id      |String  |
+        |home_espn_team_id |Int64   |
+        |away_espn_team_id |Int64   |
+        |espn_game_id      |Int64   |
         |bart_muid         |String  |
         |bart_team1        |String  |
         |bart_team2        |String  |
@@ -1150,7 +1202,15 @@ def load_mbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         cli_warn("load_mbb_schedule_crosswalk: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_mbb_schedule_crosswalk")
+    )
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1170,7 +1230,7 @@ def load_mbb_team_crosswalk(seasons, return_as_pandas: bool = False):
         |col_name              |type    |
         |:---------------------|:-------|
         |season                |Int32   |
-        |espn_team_id          |Int32   |
+        |espn_team_id          |Int64   |
         |espn_abbreviation     |String  |
         |espn_display_name     |String  |
         |espn_short_name       |String  |
@@ -1214,7 +1274,15 @@ def load_mbb_team_crosswalk(seasons, return_as_pandas: bool = False):
         cli_warn("load_mbb_team_crosswalk: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_mbb_team_crosswalk")
+    )
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1293,7 +1361,12 @@ def load_mbb_player_core(seasons, return_as_pandas: bool = False):
         cli_warn("load_mbb_player_core: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_mbb_player_core")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1423,7 +1496,10 @@ def load_ncaa_mbb_pbp(seasons, return_as_pandas: bool = False):
         cli_warn("load_ncaa_mbb_pbp: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed") if frames else _empty_from_schema("loader_schemas:load_ncaa_mbb_pbp")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1473,7 +1549,12 @@ def load_ncaa_mbb_schedule(seasons, return_as_pandas: bool = False):
         cli_warn("load_ncaa_mbb_schedule: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_ncaa_mbb_schedule")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1641,7 +1722,12 @@ def load_ncaa_mbb_player_box(seasons, return_as_pandas: bool = False):
         cli_warn("load_ncaa_mbb_player_box: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_ncaa_mbb_player_box")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1765,7 +1851,12 @@ def load_ncaa_mbb_team_box(seasons, return_as_pandas: bool = False):
         cli_warn("load_ncaa_mbb_team_box: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_ncaa_mbb_team_box")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1812,7 +1903,12 @@ def load_ncaa_mbb_rosters(seasons, return_as_pandas: bool = False):
         cli_warn("load_ncaa_mbb_rosters: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_ncaa_mbb_rosters")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1871,7 +1967,12 @@ def load_ncaa_mbb_team_rosters(seasons, return_as_pandas: bool = False):
         cli_warn("load_ncaa_mbb_team_rosters: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_ncaa_mbb_team_rosters")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1918,7 +2019,12 @@ def load_ncaa_mbb_team_ids(seasons, return_as_pandas: bool = False):
         cli_warn("load_ncaa_mbb_team_ids: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_ncaa_mbb_team_ids")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2017,7 +2123,12 @@ def load_ncaa_mbb_possessions(seasons, return_as_pandas: bool = False):
         cli_warn("load_ncaa_mbb_possessions: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_ncaa_mbb_possessions")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2137,7 +2248,12 @@ def load_ncaa_mbb_lineups(seasons, return_as_pandas: bool = False):
         cli_warn("load_ncaa_mbb_lineups: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_ncaa_mbb_lineups")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2213,7 +2329,12 @@ def load_ncaa_mbb_matchup_stints(seasons, return_as_pandas: bool = False):
         cli_warn("load_ncaa_mbb_matchup_stints: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_ncaa_mbb_matchup_stints")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2275,7 +2396,12 @@ def load_ncaa_mbb_shots(seasons, return_as_pandas: bool = False):
         cli_warn("load_ncaa_mbb_shots: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_ncaa_mbb_shots")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2329,7 +2455,12 @@ def load_ncaa_mbb_rapm_within_team(seasons, return_as_pandas: bool = False):
         cli_warn("load_ncaa_mbb_rapm_within_team: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_ncaa_mbb_rapm_within_team")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2383,7 +2514,10 @@ def load_ncaa_mbb_rapm(seasons, return_as_pandas: bool = False):
         cli_warn("load_ncaa_mbb_rapm: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed") if frames else _empty_from_schema("loader_schemas:load_ncaa_mbb_rapm")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2424,7 +2558,7 @@ def load_mbb_groups(return_as_pandas: bool = False):
     )
     if df is None:
         cli_warn("load_mbb_groups: no published asset (returning an empty frame)")
-    out = df if df is not None else pl.DataFrame()
+    out = df if df is not None else _empty_from_schema("loader_schemas:load_mbb_groups")
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2468,7 +2602,7 @@ def load_mbb_group_seasons(return_as_pandas: bool = False):
     )
     if df is None:
         cli_warn("load_mbb_group_seasons: no published asset (returning an empty frame)")
-    out = df if df is not None else pl.DataFrame()
+    out = df if df is not None else _empty_from_schema("loader_schemas:load_mbb_group_seasons")
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2511,7 +2645,7 @@ def load_mbb_group_aliases(return_as_pandas: bool = False):
     )
     if df is None:
         cli_warn("load_mbb_group_aliases: no published asset (returning an empty frame)")
-    out = df if df is not None else pl.DataFrame()
+    out = df if df is not None else _empty_from_schema("loader_schemas:load_mbb_group_aliases")
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2568,5 +2702,10 @@ def load_mbb_team_group_seasons(seasons, return_as_pandas: bool = False):
         cli_warn("load_mbb_team_group_seasons: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
-    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_mbb_team_group_seasons")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out

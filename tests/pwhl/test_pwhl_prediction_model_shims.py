@@ -97,7 +97,7 @@ def test_pwhl_player_props_routing_reads_pwhl_loaders_only(loader_calls):
 
     assert set(loader_calls) == set(_PWHL_SLICES)
     box = pl.read_parquet(FIX / "skater_box_2025_slice.parquet")
-    skaters = set(box.filter(pl.col("position") != "G")["player_id"].to_list())
+    skaters = set(box.filter(pl.col("position") != "G")["player_id"].cast(pl.Int64).to_list())
     assert out.height > 0
     assert set(out["player_id"].to_list()) <= skaters
     # every opponent resolved, so the PWHL ratings fed the matchup multiplier
