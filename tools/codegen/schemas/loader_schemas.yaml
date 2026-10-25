@@ -7290,7 +7290,7 @@ load_cfb_team_summaries:
 - name: total_available_yards_off
   type: Float64
 - name: total_gained_yards_off
-  type: Int64
+  type: Float64
 - name: pts_per_opp_off_n
   type: Int64
 - name: pts_per_drive_off_n
@@ -7320,7 +7320,7 @@ load_cfb_team_summaries:
 - name: total_available_yards_def
   type: Float64
 - name: total_gained_yards_def
-  type: Int64
+  type: Float64
 - name: pts_per_opp_def_n
   type: Int64
 - name: pts_per_drive_def_n
@@ -7350,7 +7350,7 @@ load_cfb_team_summaries:
 - name: total_available_yards_margin
   type: Float64
 - name: total_gained_yards_margin
-  type: Int64
+  type: Float64
 - name: available_yards_pct_margin
   type: Float64
 - name: pts_per_opp_margin
@@ -8491,6 +8491,20 @@ load_cfb_team_summaries:
   type: Float64
 - name: def_strength_faced_conf_pct
   type: Float64
+- name: deserved_wins
+  type: Float64
+- name: luck_wins
+  type: Float64
+- name: luck_z
+  type: Float64
+- name: luck_wins_rank
+  type: Float64
+- name: luck_z_rank
+  type: Float64
+- name: paper_index_games_n
+  type: Int64
+- name: paper_index_span
+  type: String
 load_cfb_team_summaries_weekly:
 - name: team_id
   type: Int64
@@ -8853,7 +8867,7 @@ load_cfb_team_summaries_weekly:
 - name: total_available_yards_off
   type: Float64
 - name: total_gained_yards_off
-  type: Int64
+  type: Float64
 - name: pts_per_opp_off_n
   type: Int64
 - name: pts_per_drive_off_n
@@ -8883,7 +8897,7 @@ load_cfb_team_summaries_weekly:
 - name: total_available_yards_def
   type: Float64
 - name: total_gained_yards_def
-  type: Int64
+  type: Float64
 - name: pts_per_opp_def_n
   type: Int64
 - name: pts_per_drive_def_n
@@ -8913,7 +8927,7 @@ load_cfb_team_summaries_weekly:
 - name: total_available_yards_margin
   type: Float64
 - name: total_gained_yards_margin
-  type: Int64
+  type: Float64
 - name: available_yards_pct_margin
   type: Float64
 - name: pts_per_opp_margin
@@ -10054,6 +10068,20 @@ load_cfb_team_summaries_weekly:
   type: Float64
 - name: def_strength_faced_conf_pct
   type: Float64
+- name: deserved_wins
+  type: Float64
+- name: luck_wins
+  type: Float64
+- name: luck_z
+  type: Float64
+- name: luck_wins_rank
+  type: Float64
+- name: luck_z_rank
+  type: Float64
+- name: paper_index_games_n
+  type: Int64
+- name: paper_index_span
+  type: String
 - name: through_week
   type: Int32
 load_cfb_team_talent:

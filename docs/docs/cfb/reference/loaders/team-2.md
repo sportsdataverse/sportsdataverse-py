@@ -194,7 +194,7 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `turnover_margin_rank` | Float64 | National rank of turnover_margin, 1 = largest margin. Null when the metric is null or the column holds fewer than two distinct values: unranked, not last. |
 | `havoc_margin_rank` | Float64 | National rank of havoc_margin, 1 = largest margin. Null when the metric is null or the column holds fewer than two distinct values: unranked, not last. |
 | `total_available_yards_off` | Float64 | Available yards are the yards a drive could theoretically gain, summed from each drive's starting distance to the opponent goal line. Total available yards on the team's own drives (ESPN's drive team). A drive's start is its header oriented to agree with its first snap, or that snap when the header is a 0 or missing placeholder. |
-| `total_gained_yards_off` | Int64 | Total yards the team gained across its own drives, each drive's gain capped at its available yards. |
+| `total_gained_yards_off` | Float64 | Total yards the team gained across its own drives, each drive's gain capped at its available yards. |
 | `pts_per_opp_off_n` | Int64 | Sample size behind pts_per_opp_off: the number of scoring opportunities on the team's own drives. 0 when there were none, and pts_per_opp_off is then null. |
 | `pts_per_drive_off_n` | Int64 | Sample size behind pts_per_drive_off: the number of the team's own drives it is computed over. 0 when there were none, and pts_per_drive_off is then null. Can sit slightly below drives_off, which also counts drive ids holding only a stray snap. |
 | `start_position_off` | Float64 | Average drive start position, measured in yards from the opponent goal line, with the team on offense. |
@@ -209,7 +209,7 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `start_position_off_rank` | Float64 | National rank of the team's average drive start position, measured in yards from the opponent goal line with the team on offense, where 1 is best. Null when the metric is null or the column holds fewer than two distinct values: unranked, not last. |
 | `drive_start_ep_off_rank` | Float64 | National rank of the team's average expected points (EP) at the first snap of a drive, over the drives the side owned with the team on offense, where 1 is best. Null when the metric is null or the column holds fewer than two distinct values: unranked, not last. |
 | `total_available_yards_def` | Float64 | Available yards are the yards a drive could theoretically gain, summed from each drive's starting distance to the opponent goal line. Total available yards on opponents' drives against the team's defense (ESPN's drive team). A drive's start is its header oriented to agree with its first snap, or that snap when the header is a 0 or missing placeholder. |
-| `total_gained_yards_def` | Int64 | Total yards the team allowed across opponents' drives against its defense, each drive's gain capped at its available yards. |
+| `total_gained_yards_def` | Float64 | Total yards the team allowed across opponents' drives against its defense, each drive's gain capped at its available yards. |
 | `pts_per_opp_def_n` | Int64 | Sample size behind pts_per_opp_def: the number of scoring opportunities on opponents' drives against the team's defense. 0 when there were none, and pts_per_opp_def is then null. |
 | `pts_per_drive_def_n` | Int64 | Sample size behind pts_per_drive_def: the number of opponents' drives against the team's defense it is computed over. 0 when there were none, and pts_per_drive_def is then null. Can sit slightly below drives_def, which also counts drive ids holding only a stray snap. |
 | `start_position_def` | Float64 | Average drive start position, measured in yards from the opponent goal line, with the team on defense (i.e. allowed to opponents). |
@@ -224,7 +224,7 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `start_position_def_rank` | Float64 | National rank of the team's average drive start position, measured in yards from the opponent goal line with the team on defense (i.e. allowed to opponents), where 1 is best. Null when the metric is null or the column holds fewer than two distinct values: unranked, not last. |
 | `drive_start_ep_def_rank` | Float64 | National rank of the team's average expected points (EP) at the first snap of a drive, over the drives the side owned with the team on defense (i.e. allowed to opponents), where 1 is best. Null when the metric is null or the column holds fewer than two distinct values: unranked, not last. |
 | `total_available_yards_margin` | Float64 | Available yards on the team's own drives minus available yards on drives it defended. |
-| `total_gained_yards_margin` | Int64 | Yards the team gained minus yards it allowed. |
+| `total_gained_yards_margin` | Float64 | Yards the team gained minus yards it allowed. |
 | `available_yards_pct_margin` | Float64 | Available-yards share gained by the offense minus the share allowed by the defense. Higher is better. |
 | `pts_per_opp_margin` | Float64 | pts_per_opp_off minus pts_per_opp_def. Null when either side is null. Higher is better. |
 | `pts_per_drive_margin` | Float64 | pts_per_drive_off minus pts_per_drive_def: attributed drive-result points per owned drive minus those per opponents' owned drive. Null when either side is null. Higher is better. |
@@ -795,6 +795,13 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 | `net_adj_epa_conf_pct` | Float64 | Percentile (0-100) of net_adj_epa among teams in the same conference, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric is null, for an FBS Independent (not a conference), or when fewer than 5 teams in the conference have the metric. Rows with a null metric are excluded from the denominator. |
 | `off_strength_faced_conf_pct` | Float64 | Percentile (0-100) of off_strength_faced among teams in the same conference, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric is null, for an FBS Independent (not a conference), or when fewer than 5 teams in the conference have the metric. Rows with a null metric are excluded from the denominator. |
 | `def_strength_faced_conf_pct` | Float64 | Percentile (0-100) of def_strength_faced among teams in the same conference, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric is null, for an FBS Independent (not a conference), or when fewer than 5 teams in the conference have the metric. Rows with a null metric are excluded from the denominator. |
+| `deserved_wins` | Float64 | Sum of the team's paper_share over the season: the wins the Paper Index says its play earned (sportsdataverse.paper_index.deserved_wins). |
+| `luck_wins` | Float64 | wins minus deserved_wins; positive means the team won more games than its play deserved. |
+| `luck_z` | Float64 | luck_wins / sqrt(sum(p * (1 - p))) over the team's game shares p: luck in standard deviations of a sum of independent Bernoulli(p) wins; null when that variance is 0. |
+| `luck_wins_rank` | Float64 | National rank of luck_wins among the season's teams, 1 = the most wins above what its play deserved. |
+| `luck_z_rank` | Float64 | National rank of luck_z among the season's teams, 1 = the luckiest in standard deviations. |
+| `paper_index_games_n` | Int64 | Games the Paper Index scored for the team (completed, not tied, both sides at least 20 scrimmage snaps); deserved_wins and luck are sums over these games. |
+| `paper_index_span` | String | Where the season sits relative to the Paper Index fit (sportsdataverse.paper_index TRAIN_SEASONS / HOLDOUT_SEASONS): train (in-sample, its games were part of the fit), holdout (scored out of sample) or out_of_span (scored, never seen by the fit). |
 
 ```python
 load_cfb_team_summaries(seasons=2024)
