@@ -503,3 +503,18 @@ def test_shift_still_on_the_ice_keeps_end_s_int64():
     shift["end_time"] = None
     df = parse_shifts(raw, game_id=42)
     assert df.schema["end_s"] == pl.Int64 and df["end_s"].null_count() == 1
+
+
+def test_a_hockeytech_id_that_is_not_an_integer_stays_as_it_came_and_warns():
+    """R988-3: one parser serves 20 leagues, so a league whose feed ships one text id would get that column String while
+    the other 19 get Int64, silently. On the real PWHL roster with one ``person_id`` text the column stays as it came
+    and the parser warns naming it; every other id is still Int64."""
+    from sportsdataverse.errors import SchemaDriftWarning
+    from sportsdataverse.hockeytech import _parsers as P
+
+    raw = _load("pwhl_roster_1_5")
+    raw["SiteKit"]["Roster"][0]["person_id"] = "TBD"
+    with pytest.warns(SchemaDriftWarning, match=r"HockeyTech parser: id columns \['person_id'\]"):
+        df = P.parse_roster(raw)
+    assert df.schema["person_id"] == pl.String and "TBD" in df["person_id"].to_list()
+    assert {c: t for c, t in df.schema.items() if c.endswith("_id") and c != "person_id" and t != pl.Int64} == {}

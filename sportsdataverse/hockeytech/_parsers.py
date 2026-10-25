@@ -48,7 +48,7 @@ def _to_frame(records: List[Dict[str, Any]], return_as_pandas: bool) -> Any:
         return pdf if return_as_pandas else pl.DataFrame()
     # every id Int64 from the raw integer (task 5.2: B-H5, B-L72); a text id is refused and keeps its dtype.
     # The pandas frame carries the same ids as pandas' nullable Int64, never float64 (R988-2).
-    out = _cast_id_columns(pl.from_pandas(pdf))
+    out = _cast_id_columns(pl.from_pandas(pdf), "HockeyTech parser")
     return _pandas_ids(out, pdf) if return_as_pandas else out
 
 
@@ -176,7 +176,9 @@ def parse_schedule(payload: Any, return_as_pandas: bool = False, season_id: Opti
     if season_id is not None:
         rows = [r for r in rows if str(r["season_id"]) == str(season_id)]
     if not rows:
-        empty = _cast_id_columns(pl.DataFrame(schema=dict.fromkeys(_SCHEDULE_RENAME.values(), pl.String)))
+        empty = _cast_id_columns(
+            pl.DataFrame(schema=dict.fromkeys(_SCHEDULE_RENAME.values(), pl.String)), "HockeyTech parse_schedule"
+        )
         return _pandas_ids(empty) if return_as_pandas else empty
     return _to_frame(rows, return_as_pandas)
 

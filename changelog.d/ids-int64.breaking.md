@@ -27,4 +27,4 @@
   `*_id` is `Int64` (`player_id` was Float64 in pbp, `team_id` / `game_id` String or the caller's dtype); the
   game-summary `home_team_id` / `away_team_id` / `game_season_id` are null, not `""`, when it is unavailable. The
   pandas output (`return_as_pandas=True`) carries the ids as pandas' nullable `Int64` (was `float64` such as `1.0`,
-  or `str`). (#988)
+  or `str`). An id that is not an integer keeps its column String and warns `SchemaDriftWarning`. (#988)
