@@ -160,9 +160,9 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [stack_seasons](additional/stats-ncaa-org-3.md#stack_seasons) | Pool several seasons' stints into ONE decayed-weight design for `target`. |
 | [start_time_from_period](additional/stats-ncaa-org-3.md#start_time_from_period) | The game-clock time (minutes elapsed) a period starts at |
 | [stint_exposure](additional/stats-ncaa-org-3.md#stint_exposure) | PLAYED, never a count of possessions the fit chose to believe. Callers that |
-| [sum_event_stats](additional/stats-ncaa-org-3.md#sum_event_stats) | Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models |
-| [sum_shot_infos](additional/stats-ncaa-org-3.md#sum_shot_infos) | Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models |
-| [td_at](additional/stats-ncaa-org-3.md#td_at) | JSoup `row >?> element("td:eq(n)")`: the `n`-th `<td>` child. |
+| [sum_event_stats](additional/stats-ncaa-org-4.md#sum_event_stats) | Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models |
+| [sum_shot_infos](additional/stats-ncaa-org-4.md#sum_shot_infos) | Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models |
+| [td_at](additional/stats-ncaa-org-4.md#td_at) | JSoup `row >?> element("td:eq(n)")`: the `n`-th `<td>` child. |
 | [team_aggregate](additional/stats-ncaa-org-4.md#team_aggregate) | Model-implied team ratings from player coefficients. |
 | [transform_shot_location](additional/stats-ncaa-org-4.md#transform_shot_location) | Transforms a raw SVG pixel location into feet from the basket, always |
 | [update_config](additional/stats-ncaa-org-4.md#update_config) | Update the active config in place. |

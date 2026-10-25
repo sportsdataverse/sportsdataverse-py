@@ -1,12 +1,8 @@
 from __future__ import annotations
 
-import logging
 from typing import Any
 
 from sportsdataverse._deprecation import warn_deprecated
-
-logger = logging.getLogger("sdv.dl_utils")
-logger.addHandler(logging.NullHandler())
 
 
 SGITHUB = "https://raw.githubusercontent.com/sportsdataverse/"

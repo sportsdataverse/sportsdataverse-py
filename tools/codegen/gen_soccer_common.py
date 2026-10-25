@@ -1,14 +1,14 @@
 """Shared helpers for the spec- and capture-driven flat-API generators.
 
-The name is historical: the module began as the common code of the three soccer
-generators (``gen_asa.py``, ``gen_mls.py``, ``gen_nwsl.py``) and is now imported by
-about fifty ``gen_*.py`` scripts across soccer, hockey, basketball, prediction markets
-and the other intake families. Each reads a frozen OpenAPI spec (or captures) plus the
-committed sample payloads from the ``sdv-internal-refs`` checkout and emits an endpoint
-YAML + per-endpoint returns-schemas. A new generator takes ``refs_dir``, ``load_spec``,
-``spec_descriptions``, ``describe``, ``parse_capture``, ``columns_from_frame``,
-``write_yaml`` and ``rewrite_schema_dir`` from here rather than re-implementing them;
-only its provider-specific route curation belongs in the script.
+Despite the name, this is the shared helper module of every flat-API generator (about 40 import it):
+the reference-repo path (:func:`refs_root`, :func:`refs_dir`), spec and capture loading, and the
+deterministic YAML writers. A generator imports these rather than keeping its own copy (A-L22/A-L24).
+
+``gen_asa.py``, ``gen_mls.py`` and ``gen_nwsl.py`` all read a frozen OpenAPI spec
+plus the committed sample payloads from the same ``sdv-internal-refs`` checkout
+and emit an endpoint YAML + per-endpoint returns-schemas. Everything they do
+identically lives here so the three scripts carry only their provider-specific
+route curation.
 
 Returns-schema columns are derived by **running the real parser over the
 committed capture** rather than by reading the spec's declared 200-response
@@ -275,6 +275,19 @@ _TABLE_ROW = re.compile(r"^\s*\|(.+)\|\s*$")
 _SEPARATOR_ROW = re.compile(r"^[\s|:-]+$")
 
 
+def refs_root() -> Path:
+    """The ``sdv-internal-refs`` checkout: ``$SDV_INTERNAL_REFS_REPO``, else a sibling checkout, else the default.
+
+    A generator that reads the repo through fixed sub-paths (rather than one marker file, which is
+    :func:`refs_dir`'s job) starts here.
+    """
+    env = os.environ.get("SDV_INTERNAL_REFS_REPO")
+    if env:
+        return Path(env)
+    sibling = ROOT.parent / "sdv-internal-refs"
+    return sibling if sibling.exists() else _WINDOWS_REFS
+
+
 def refs_dir(source: str, marker: str) -> Path:
     """Resolve ``sdv-internal-refs/<source>`` (env -> sibling checkout -> default).
 
@@ -498,6 +511,24 @@ def parse_capture(
     if isinstance(parsed, dict):
         return parsed.get(primary or next(iter(parsed), ""), pl.DataFrame())
     return parsed
+
+
+_PATH_TOKEN = re.compile(r"\{([^}]+)\}")
+
+
+def snake_path(path: str) -> str:
+    """Snake-case every ``{token}`` of a route: ``/players/{playerId}`` -> ``/players/{player_id}``."""
+    return _PATH_TOKEN.sub(lambda m: "{" + underscore(m.group(1)) + "}", path)
+
+
+def capture_for(refs: Path, path: str) -> Path | None:
+    """``capture.py``'s slug for a route's committed capture, or None when there is none.
+
+    ``/markets/{ticker}/orderbook`` -> ``<refs>/captures/markets__ticker__orderbook.json``.
+    """
+    slug = path.strip("/").replace("/", "__").replace("{", "").replace("}", "")
+    candidate = refs / "captures" / f"{slug}.json"
+    return candidate if candidate.exists() else None
 
 
 def write_yaml(path: Path, obj: Any) -> None:

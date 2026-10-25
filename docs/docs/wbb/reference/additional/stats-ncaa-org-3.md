@@ -6,6 +6,57 @@ description: "WBB — additional Python functions — stats.ncaa.org: ncaa_wbb�
 ---
 # WBB — additional Python functions — stats.ncaa.org: ncaa_wbb–validate_lineup
 
+### ncaa_wbb_team_schedule {#ncaa_wbb_team_schedule}
+
+`ncaa_wbb_team_schedule(team_id: 'Optional[int]' = None, *, team: 'Optional[str]' = None, season: 'Optional[str]' = None, fetcher: "Optional['NcaaFetcher']" = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+
+Scrape a women's team's season schedule from stats.ncaa.org.
+
+Port of wbigballR `get_team_schedule` with name resolution fixed to the
+WBB crosswalk (see the module docstring). Algorithm detail:
+`sportsdataverse.mbb.mbb_ncaa_schedule.ncaa_mbb_team_schedule`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Optional[int]` | `None` | stats.ncaa.org team id (changes every season). |
+| `team` | `Optional[str]` | `None` | School name, e.g. `"South Carolina"`. |
+| `season` | `Optional[str]` | `None` | Season string, e.g. `"2024-25"`; required with `team`. |
+| `fetcher` | `Optional['NcaaFetcher']` | `None` | Injectable `~sportsdataverse.mbb.mbb_ncaa_fetch. NcaaFetcher`; defaults to a fresh browser-transport fetcher. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per scheduled game — see `~sportsdataverse.mbb.mbb_ncaa_schedule.parse_ncaa_bb_team_schedule` for the column contract.
+
+| col_name | type | description |
+|---|---|---|
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `home` | character | Home. |
+| `home_score` | integer | Home team score at the time of the play. |
+| `away` | character | Away record. |
+| `away_score` | integer | Away team score at the time of the play. |
+| `box_id` | character |  |
+| `game_id` | character | Unique game identifier. |
+| `is_neutral` | logical |  |
+| `detail` | character | Detail. |
+| `attendance` | integer | Reported attendance. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Neither `team_id` nor a resolvable `team`/`season` pair was given. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb.wbb_ncaa_schedule import ncaa_wbb_team_schedule
+df = ncaa_wbb_team_schedule(team="South Carolina", season="2024-25")
+print(df.shape)
+```
+
 ### ncaa_wbb_team_stats {#ncaa_wbb_team_stats}
 
 `ncaa_wbb_team_stats(pbp: 'pl.DataFrame', *, include_transition: 'bool' = False, fix_tip_in: 'bool' = True, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`

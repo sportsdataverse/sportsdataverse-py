@@ -350,10 +350,12 @@ def _shot_locations(
     period_model: "tuple[int, int, int]",
     fetcher: Optional[_SupportsFetchGameBox],
     return_as_pandas: bool,
+    log: logging.Logger = logger,
 ) -> "Union[pl.DataFrame, Any]":
     """The shots driver behind ``ncaa_mbb_shot_locations`` and ``ncaa_wbb_shot_locations`` (B-L26).
 
     The leagues differ only in ``period_model``: MBB halves, WBB the model for the season's era.
+    ``log`` is the calling league's module logger, so each league's per-game lines keep its name.
     """
     # R :5 drops NAs; NaN and non-integral floats map to None, 6470186.0 -> "6470186"
     ids = [g for g in map(_utf8_id, game_ids) if g is not None]
@@ -363,7 +365,7 @@ def _shot_locations(
         for gid in ids:
             df = parse_ncaa_bb_shots(f.fetch_game_box(gid), gid, period_model=period_model)
             found = sorted({t for t in df["team"].to_list() if t is not None})
-            logger.info(
+            log.info(
                 "Game_ID: %s || %s v. %s || %d shots found",
                 gid,
                 found[0] if found else None,

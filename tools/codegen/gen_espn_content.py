@@ -18,11 +18,11 @@ Run: ``python tools/codegen/gen_espn_content.py``
 from __future__ import annotations
 
 import re
-from pathlib import Path
 from typing import Any, Dict, List
 
 from gen_soccer_common import (
     ROOT,
+    capture_for,
     columns_from_frame,
     get_ops,
     load_spec,
@@ -55,13 +55,6 @@ _SHORTS: Dict[str, str] = {
 # substitutes them and blanks the segment (spec.py:304 excludes them from token
 # validation). Emitted as plain params instead, the gen_asa.py LEAGUE_PARAM lesson.
 _SLUG_RENAMES = {"sport": "sport_slug", "league": "league_slug"}
-
-
-def _capture_for(refs: Path, path: str) -> Path | None:
-    """``capture.py``'s slug: ``/sports/{sport}/{league}/news`` -> ``sports__sport__league__news``."""
-    slug = path.strip("/").replace("/", "__").replace("{", "").replace("}", "")
-    candidate = refs / "captures" / f"{slug}.json"
-    return candidate if candidate.exists() else None
 
 
 def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
@@ -153,7 +146,7 @@ def main() -> None:
     unverified = 0
     for path, _op in ops:
         short = _SHORTS[path]
-        capture = _capture_for(refs, path)
+        capture = capture_for(refs, path)
         schema: Dict[str, Any] = {"schema": short, "kind": "dataframe"}
         if capture is None:
             unverified += 1

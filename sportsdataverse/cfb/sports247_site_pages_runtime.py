@@ -24,7 +24,7 @@ from __future__ import annotations
 
 from typing import Any, Callable, Dict, List, Optional, Union
 
-from sportsdataverse._codegen_runtime import _json_text, _transport_errors
+from sportsdataverse._codegen_runtime import _CHROME_UA, _json_text, _transport_errors
 from sportsdataverse.dl_utils import _ENV_TIMEOUT, _env_int
 
 __all__ = ["_get", "site_headers"]
@@ -46,10 +46,7 @@ def site_headers() -> Dict[str, str]:
             print(h["Accept"])  # "application/json, text/plain, */*"
     """
     return {
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
-        ),
+        "User-Agent": _CHROME_UA,
         "Accept": "application/json, text/plain, */*",
         "Accept-Language": "en-US,en;q=0.9",
         "Referer": "https://247sports.com/",

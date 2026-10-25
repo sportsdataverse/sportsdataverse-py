@@ -135,7 +135,7 @@ def nba_pbp_disk(game_id, path_to_json):
             pbp = nba_pbp_disk(game_id=401585183, path_to_json="./cache")
             print(list(pbp.keys()))
     """
-    with open(os.path.join(path_to_json, f"{game_id}.json")) as json_file:
+    with open(os.path.join(path_to_json, f"{game_id}.json"), encoding="utf-8") as json_file:
         pbp_txt = json.load(json_file)
     return pbp_txt
 

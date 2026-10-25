@@ -209,7 +209,9 @@ def test_full_body_numeric_columns_parse_every_cell(path):
 
 
 def test_mm_ss_times_stay_strings_and_the_placeholder_is_null():
-    df = parse_sihf_table(json.loads((FIXTURES / "full" / "table__playerTimeOnIce__2026__1.json").read_text()))
+    df = parse_sihf_table(
+        json.loads((FIXTURES / "full" / "table__playerTimeOnIce__2026__1.json").read_text(encoding="utf-8"))
+    )
     assert df.schema["time_on_ice"] == df.schema["time_on_ice_per_shift"] == pl.String
     assert df.schema["shifts_per_game"] == pl.Float64
     assert df["time_on_ice_per_shift"].null_count() == 4  # "-" for the four skaters without a shift
@@ -222,7 +224,7 @@ def test_mm_ss_times_stay_strings_and_the_placeholder_is_null():
     ["teamGoal", "teamGoalPosNation", "teamShotDetail", "teamPp", "teamFaceoffZone", "teamShootout"],
 )
 def test_team_table_league_average_row(alias):
-    df = parse_sihf_table(json.loads((FIXTURES / "full" / f"table__{alias}__2026__1.json").read_text()))
+    df = parse_sihf_table(json.loads((FIXTURES / "full" / f"table__{alias}__2026__1.json").read_text(encoding="utf-8")))
     assert df.height == 15
     avg = df.filter(pl.col("row_type") == "average")
     assert avg.select("rank", "team_id", "team_name", "team_acronym").rows() == [(None, None, "Durchschnitt", None)]
@@ -231,14 +233,16 @@ def test_team_table_league_average_row(alias):
 
 
 def test_goal_tables_balance_league_wide():
-    teams = parse_sihf_table(json.loads((FIXTURES / "full" / "table__teamGoal__2026__1.json").read_text())).filter(
-        pl.col("row_type") == "data"
-    )
+    teams = parse_sihf_table(
+        json.loads((FIXTURES / "full" / "table__teamGoal__2026__1.json").read_text(encoding="utf-8"))
+    ).filter(pl.col("row_type") == "data")
     assert teams["goals_for"].sum() == teams["goals_against"].sum()
 
 
 def test_attendance_drops_the_thousands_separator_and_tags_the_total_row():
-    df = parse_sihf_table(json.loads((FIXTURES / "full" / "table__teamSpectator__2026__1.json").read_text()))
+    df = parse_sihf_table(
+        json.loads((FIXTURES / "full" / "table__teamSpectator__2026__1.json").read_text(encoding="utf-8"))
+    )
     total = df.filter(pl.col("row_type") == "total")
     assert total.select("team_id", "team_name", "spectators", "home_games").rows() == [(None, "Total", 3458381, 460)]
     teams = df.filter(pl.col("row_type") == "data")
@@ -264,14 +268,16 @@ def test_every_quotient_alias_is_a_float_rate():
     ],
 )
 def test_an_unhashable_filter_alias_or_highlight_style_is_ignored_not_a_crash(bad):
-    raw = json.loads((FIXTURES / "full" / "table__teamSpectator__2026__1.json").read_text())
+    raw = json.loads((FIXTURES / "full" / "table__teamSpectator__2026__1.json").read_text(encoding="utf-8"))
     raw.update(bad)
     df = parse_sihf_table(raw)
     assert df.height == len(raw["data"])
 
 
 def test_goalies_below_the_line_have_no_rank_but_are_not_summary_rows():
-    df = parse_sihf_table(json.loads((FIXTURES / "full" / "table__goalkeeperWin__2026__1.json").read_text()))
+    df = parse_sihf_table(
+        json.loads((FIXTURES / "full" / "table__goalkeeperWin__2026__1.json").read_text(encoding="utf-8"))
+    )
     avg = df.filter(pl.col("row_type") == "average")
     assert avg.select("player", "team_id", "team_name").rows() == [("Durchschnitt", None, "Durchschnitt")]
     unranked = df.filter(pl.col("rank").is_null() & (pl.col("row_type") == "data"))
@@ -287,7 +293,7 @@ def test_goalies_below_the_line_have_no_rank_but_are_not_summary_rows():
     ],
 )
 def test_the_average_row_is_found_without_highlighted_positions(cell):
-    body = json.loads((FIXTURES / "full" / "table__teamGoal__2026__1.json").read_text())
+    body = json.loads((FIXTURES / "full" / "table__teamGoal__2026__1.json").read_text(encoding="utf-8"))
     body["highlightedPositions"] = []
     avg_index = next(i for i, r in enumerate(body["data"]) if r[1].get("name") == "Durchschnitt")
     body["data"][avg_index][1] = cell

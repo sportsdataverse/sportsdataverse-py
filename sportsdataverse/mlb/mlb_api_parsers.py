@@ -51,21 +51,12 @@ from typing import Dict
 import pandas as pd
 import polars as pl
 
-from sportsdataverse.dl_utils import underscore
-from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _first_row, _object_rows, _warn_schema_drift
-
-# What ``pl.from_pandas`` raises on a mixed-type object column: pyarrow's ArrowInvalid (ValueError),
-# ArrowTypeError (TypeError), ArrowNotImplementedError (NotImplementedError), or a polars error.
-_FROM_PANDAS_ERRORS = (TypeError, ValueError, NotImplementedError, pl.exceptions.PolarsError)
+from sportsdataverse._parser_common import _FROM_PANDAS_ERRORS, _as_dict, _empty_frame, _snake_columns
+from sportsdataverse.errors import _SHAPE_ERRORS, _first_row, _object_rows, _warn_schema_drift
 
 # ---------------------------------------------------------------------------
 # Internal helpers (mirror _common_espn_parsers conventions)
 # ---------------------------------------------------------------------------
-
-
-def _snake_columns(df: pd.DataFrame) -> pd.DataFrame:
-    df.columns = [underscore(c).replace(".", "_") for c in df.columns]
-    return df
 
 
 def _to_output(df: pd.DataFrame, return_as_pandas: bool):
@@ -80,16 +71,6 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool):
         for col in [c for c in df2.columns if df2[c].dtype == "object"]:
             df2[col] = df2[col].astype(str)
         return pl.from_pandas(df2)
-
-
-def _empty_frame(return_as_pandas: bool = False):
-    df = pd.DataFrame()
-    return df if return_as_pandas else pl.DataFrame()
-
-
-def _as_dict(payload) -> dict:
-    """``payload`` when it is a data object; ``{}`` for a non-dict body or an error envelope."""
-    return payload if isinstance(payload, dict) and _error_envelope_code(payload) is None else {}
 
 
 def _flatten_rows(items, return_as_pandas: bool, where: str):
