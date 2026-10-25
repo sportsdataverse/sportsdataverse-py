@@ -243,13 +243,13 @@ class NoDataError(SportsDataverseError):
         Catch missing-data responses around an ESPN call::
 
             from sportsdataverse.errors import NoDataError
-            from sportsdataverse.cfb import espn_cfb_pbp
+            from sportsdataverse.cfb import espn_cfb_game_rosters
 
             try:
-                pbp = espn_cfb_pbp(game_id=1)  # not a real ESPN game id
+                rosters = espn_cfb_game_rosters(game_id=1)  # not a real ESPN game id
             except NoDataError as exc:
                 print(f"no data: {exc}")
-                pbp = None
+                rosters = None
     """
 
     pass

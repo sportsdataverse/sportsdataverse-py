@@ -371,25 +371,22 @@ def download(
     Example:
         Quick start::
 
+            from sportsdataverse._codegen_runtime import _download_json
             from sportsdataverse.dl_utils import download
 
             url = "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams"
-            resp = download(url)
-            data = resp.json()
+            resp = download(url)  # the Response; check resp.status_code before using it
+            data = _download_json(download, url)  # JSON under the error vocabulary
 
         Custom retries and timeout::
 
             resp = download(url, num_retries=5, timeout=30)
 
-        Add headers (e.g. for a stats.wnba.com endpoint that needs an Origin)::
+        Add headers::
 
             resp = download(
-                "https://stats.wnba.com/stats/leaguedashteamstats",
-                headers={
-                    "Origin": "https://stats.wnba.com",
-                    "Referer": "https://www.wnba.com/",
-                    "User-Agent": "sportsdataverse-py",
-                },
+                "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams",
+                headers={"User-Agent": "sportsdataverse-py"},
             )
 
         Pass query-string parameters with ``params=``::

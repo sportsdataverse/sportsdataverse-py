@@ -31,7 +31,6 @@ from sportsdataverse.errors import (
 )
 from sportsdataverse.errors import SeasonNotFoundError  # noqa: F401  (re-export for generated loaders)
 
-
 logger = logging.getLogger(__name__)
 
 # Release / raw-data hosts for the generated dataset loaders.

@@ -36,6 +36,7 @@ from gen_soccer_common import (
     parse_capture,
     refs_dir,
     rewrite_schema_dir,
+    snake_path,
     spec_descriptions,
     write_yaml,
 )
@@ -148,7 +149,7 @@ _EXAMPLE: Dict[str, Any] = {
 
 def _emit_path(path: str) -> str:
     tail = path[len(BASE_PATH) :]
-    return _TOKEN.sub(lambda m: "{" + underscore(m.group(1)) + "}", tail)
+    return snake_path(tail)
 
 
 def _path_params(path: str) -> List[Dict[str, Any]]:

@@ -45,6 +45,7 @@ from gen_soccer_common import (
     parse_capture,
     refs_dir,
     rewrite_schema_dir,
+    snake_path,
     spec_descriptions,
     write_yaml,
 )
@@ -303,7 +304,7 @@ def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
     entry: Dict[str, Any] = {
         "short": short,
         "summary": _SUMMARIES[short],
-        "path": _TOKEN.sub(lambda m: "{" + underscore(m.group(1)) + "}", path),
+        "path": snake_path(path),
         "parser": "parse_fifa",
         "returns_schema": f"native/{STEM}/{short}",
         "example_args": example_args,
