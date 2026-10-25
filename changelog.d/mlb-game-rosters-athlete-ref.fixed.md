@@ -5,4 +5,4 @@
   with neither, or whose athlete `$ref` 404s, is left out with a warning; when no athlete can be read the result
   is the documented zero-row frame, never `NoDataError` for the whole game. A side whose roster 404s is still
   skipped, and a failed fetch still raises `AssetFetchError`. `raw=True` keeps its documented per-entry keys,
-  read from the entry alone; `athlete_id` there is now the entry's `playerId` (it was null). (#1002)
+  read from the entry alone; `athlete_id` there is now the entry's `playerId` (it was null). (#1002, #1010)
