@@ -1092,6 +1092,16 @@ across the whole pipeline:
   case rather than require an exact match. For polars/Rust regex use the inline
   case toggle `(?i)...` (lookaround is unsupported — see "Polars version" above).
 
+**The rule that shipped (task 5.2).** The ESPN, NHL and HockeyTech parsers emit every `id` / `*_id`
+column as `Int64` at the parser boundary: `_codegen_runtime._cast_id_columns` (over
+`_cast_ids_int64`) casts them, and `_codegen_runtime._pandas_ids` keeps them nullable `Int64` (or
+`int64[pyarrow]` for the Arrow-backed frames) when `return_as_pandas=True`. `*_ids` list columns are
+not ids. Ids that are text by design stay String through `text_ids` (ESPN `now_id`, NHL stats-rest
+`formatted_season_id` and the country `id`). A column holding a value that is not an integer is
+refused: it keeps its dtype and warns `SchemaDriftWarning` naming it. Not yet covered: the soccer and
+cricket ESPN wrappers routed to `soccer_espn_parsers` / `cricket_espn_parsers`, and the hand-written
+helpers that still pin Utf8 ids, so cast before joining across those.
+
 ### Lint and format
 
 ruff is both linter and formatter. `line-length = 120` and `line-ending = "lf"` in
