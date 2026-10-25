@@ -18,7 +18,7 @@ from typing import Any, Optional
 
 from sportsdataverse.hockeytech import hockeytech_api, resolve_season_id
 from sportsdataverse.hockeytech import _parsers as P
-from sportsdataverse.hockeytech._leagues import most_recent_season_yr
+from sportsdataverse.hockeytech._leagues import _season_id_from_payload, most_recent_season_yr
 from sportsdataverse.hockeytech._analytics import (
     corsi_fenwick_on_ice,
     enrich_pbp,
@@ -109,9 +109,13 @@ def build_family(league: str) -> dict[str, Any]:
         "    AssetFetchError: The seasons feed failed."
     )
 
-    def _season_or_latest(season: Optional[int], season_id: Optional[int]) -> Optional[int]:
-        """The caller's season; the newest only when neither season nor season_id is given."""
-        return season if season is not None or season_id is not None else _most_recent_season()
+    def _sid(season: Optional[int], season_id: Optional[int]) -> int:
+        """The caller's season id; the newest regular season's when neither is given, read from one
+        ``modulekit/seasons`` fetch (not one to pick the year and a second to resolve it)."""
+        if season is not None or season_id is not None:
+            return resolve_season_id(lg, season=season, season_id=season_id)
+        payload = hockeytech_api(lg, "modulekit", "seasons", {})
+        return _season_id_from_payload(lg, payload, most_recent_season_yr(P.parse_seasons(payload), lg))
 
     # ------------------------------------------------------------------
     # Schedule
@@ -123,7 +127,7 @@ def build_family(league: str) -> dict[str, Any]:
         return_as_pandas: bool = False,
     ) -> Any:
         """Schedule — one row per game."""
-        sid = resolve_season_id(lg, season=_season_or_latest(season, season_id), season_id=season_id)
+        sid = _sid(season, season_id)
         payload = hockeytech_api(lg, "modulekit", "schedule", {"season_id": sid})
         return P.parse_schedule(payload, return_as_pandas, season_id=sid)
 
@@ -189,11 +193,7 @@ def build_family(league: str) -> dict[str, Any]:
         return_as_pandas: bool = False,
     ) -> Any:
         """Standings — one row per team."""
-        sid = resolve_season_id(
-            lg,
-            season=_season_or_latest(season, season_id),
-            season_id=season_id,
-        )
+        sid = _sid(season, season_id)
         payload = hockeytech_api(
             lg,
             "statviewfeed",
@@ -229,11 +229,7 @@ def build_family(league: str) -> dict[str, Any]:
         return_as_pandas: bool = False,
     ) -> Any:
         """Teams for a given season."""
-        sid = resolve_season_id(
-            lg,
-            season=_season_or_latest(season, season_id),
-            season_id=season_id,
-        )
+        sid = _sid(season, season_id)
         return P.parse_teams(
             hockeytech_api(lg, "modulekit", "teamsbyseason", {"season": sid}),
             return_as_pandas,
@@ -258,11 +254,7 @@ def build_family(league: str) -> dict[str, Any]:
         return_as_pandas: bool = False,
     ) -> Any:
         """Team roster for a given team + season."""
-        sid = resolve_season_id(
-            lg,
-            season=_season_or_latest(season, season_id),
-            season_id=season_id,
-        )
+        sid = _sid(season, season_id)
         return P.parse_roster(
             hockeytech_api(lg, "modulekit", "roster", {"team_id": team_id, "season_id": sid}),
             return_as_pandas,
@@ -323,11 +315,7 @@ def build_family(league: str) -> dict[str, Any]:
         return_as_pandas: bool = False,
     ) -> Any:
         """Statistical leaders for a given season."""
-        sid = resolve_season_id(
-            lg,
-            season=_season_or_latest(season, season_id),
-            season_id=season_id,
-        )
+        sid = _sid(season, season_id)
         payload = hockeytech_api(
             lg,
             "statviewfeed",
