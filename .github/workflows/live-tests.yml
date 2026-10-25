@@ -16,10 +16,13 @@ on:
         required: false
         default: "true"
 
-# A newer main push supersedes a running live suite (about 2 h).
+# Main runs never cancel each other (as in quality.yml): with a 1-1.5 h suite, cancelling on
+# every merge meant 17 of 40 main runs never finished. GitHub keeps one running and one pending
+# run per group, so main still runs at most one live suite at a time. Other refs (a dispatch
+# from a branch) cancel their predecessor.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 permissions:
   contents: read
 
@@ -28,6 +31,8 @@ jobs:
     name: pytest (live APIs)
     # Ubuntu: nothing here is platform-specific, and the macOS runners were the flaky part.
     runs-on: ubuntu-latest
+    # Completed runs take 64-93 min. Without a bound a stall held the runner for the 6 h default.
+    timeout-minutes: 150
     steps:
       - uses: actions/checkout@v5
       - name: Install uv
@@ -52,4 +57,6 @@ jobs:
         # -W default: warnings report here rather than fail; the PR jobs enforce pytest.ini's `error`.
         # A command-line -W outranks pytest.ini's filterwarnings, so the two known kloppy notices
         # (its unclosed spool buffer, see pytest.ini, and its StatsBomb licence notice) are re-ignored after it.
-        run: uv run --frozen pytest -n auto --dist loadgroup --maxfail=10 -W default -W "ignore:Unclosed file <kloppy.infra.io.buffered_stream.BufferedStream:ResourceWarning" -W "ignore::UserWarning:kloppy._providers.statsbomb" --cov=sportsdataverse --cov-report=term-missing:skip-covered
+        # --durations=50 names the slow tests (the 59%-69% stretch takes half the run); -n auto stays, since
+        # more workers risks the memory pressure suspected in two runner shutdowns.
+        run: uv run --frozen pytest -n auto --dist loadgroup --maxfail=10 --durations=50 -W default -W "ignore:Unclosed file <kloppy.infra.io.buffered_stream.BufferedStream:ResourceWarning" -W "ignore::UserWarning:kloppy._providers.statsbomb" --cov=sportsdataverse --cov-report=term-missing:skip-covered
