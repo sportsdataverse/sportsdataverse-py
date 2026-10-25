@@ -66,7 +66,7 @@ def test_teams_copy_on_return(league, monkeypatch):
     second = _fn(league)(return_as_pandas=True)
     assert second is not first
     assert "added_by_caller" not in second.columns
-    assert second["team_id"].tolist() == [t["team"]["id"] for t in body["sports"][0]["leagues"][0]["teams"]]
+    assert second["team_id"].tolist() == [int(t["team"]["id"]) for t in body["sports"][0]["leagues"][0]["teams"]]
     assert len(calls) == 2  # never served from a process-lifetime cache
 
 

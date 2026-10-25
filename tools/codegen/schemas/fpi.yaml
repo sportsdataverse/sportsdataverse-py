@@ -2,7 +2,7 @@ schema: fpi
 kind: dataframe
 columns:
 - name: team_id
-  type: character
+  type: integer
   description: ''
 - name: team_uid
   type: character

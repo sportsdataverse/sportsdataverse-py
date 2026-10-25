@@ -1,7 +1,7 @@
 columns:
 - description: ''
   name: id
-  type: character
+  type: integer
 - description: ''
   name: now_id
   type: character

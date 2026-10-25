@@ -30,7 +30,7 @@ ESPN endpoint.
 | `display_name` | character | Human-readable metric name. |
 | `gender` | character |  |
 | `guid` | character | ESPN athlete GUID. |
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `is_tournament` | logical |  |
 | `links` | character |  |
 | `logos` | character | Team logos. |
@@ -67,7 +67,7 @@ ESPN endpoint.
 | `season_type_has_groups` | logical |  |
 | `season_type_has_legs` | logical |  |
 | `season_type_has_standings` | logical |  |
-| `season_type_id` | character |  |
+| `season_type_id` | integer |  |
 | `season_type_name` | character |  |
 | `season_type_slug` | character |  |
 | `season_type_start_date` | character |  |
@@ -340,7 +340,7 @@ ESPN endpoint.
 | `$ref` | character |  |
 | `competitions` | character |  |
 | `date` | character | Date of the poll release. |
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `links` | character |  |
 | `name` | character | Position name (e.g. `Quarterback`). |
 | `short_name` | character | Ranking source short name (e.g. `AP Poll`). |
@@ -392,7 +392,7 @@ ESPN endpoint.
 | `team_alternate_color` | character | Secondary team color as a hex string (no leading '#'). |
 | `team_color` | character | Primary team color as a hex string (no leading '#'). |
 | `team_display_name` | character | Full team display name (location + nickname). |
-| `team_id` | character | ESPN team id (stable join key across ESPN endpoints). |
+| `team_id` | integer | ESPN team id (stable join key across ESPN endpoints). |
 | `team_is_active` | logical | Whether the team is currently active. |
 | `team_is_all_star` | logical | Whether the entry is an all-star squad rather than a franchise. |
 | `team_location` | character | Team location / city (e.g. "Boston"). |
@@ -445,7 +445,7 @@ ESPN endpoint.
 | `color` | character | Primary team color (hex, no `#`). |
 | `display_name` | character | Human-readable metric name. |
 | `guid` | character | ESPN athlete GUID. |
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `is_active` | logical | Whether the team is currently active. |
 | `is_all_star` | logical | Whether the team is an all-star team. |
 | `links` | character |  |
@@ -475,7 +475,7 @@ ESPN endpoint.
 | `venue_full_name` | character |  |
 | `venue_grass` | logical | Whether the home venue has a grass surface. |
 | `venue_guid` | character |  |
-| `venue_id` | character | Referencing venue id. |
+| `venue_id` | integer | Referencing venue id. |
 | `venue_images` | character |  |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
 | `venue_short_name` | character |  |
@@ -560,7 +560,7 @@ ESPN endpoint.
 | `full_name` | character | Venue full name (e.g. `Tenney Stadium`). |
 | `grass` | logical | TRUE/FALSE response on whether the field is grass or not. |
 | `guid` | character | ESPN athlete GUID. |
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `images` | character |  |
 | `indoor` | logical | `TRUE` if the venue is indoors. |
 
@@ -644,7 +644,7 @@ ESPN endpoint.
 | `abbreviation` | character | Metric abbreviation. |
 | `color` | character | Primary team color (hex, no `#`). |
 | `display_name` | character | Human-readable metric name. |
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `is_active` | logical | Whether the team is currently active. |
 | `location` | character | Team location / school name. |
 | `name` | character | Position name (e.g. `Quarterback`). |
@@ -658,7 +658,7 @@ ESPN endpoint.
 | `venue_full_name` | character |  |
 | `venue_grass` | logical | Whether the home venue has a grass surface. |
 | `venue_guid` | character |  |
-| `venue_id` | character | Referencing venue id. |
+| `venue_id` | integer | Referencing venue id. |
 | `venue_images` | character |  |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
 | `venue_short_name` | character |  |
@@ -704,7 +704,7 @@ ESPN endpoint.
 | `coach_seasons` | character |  |
 | `experience` | integer | Years of experience ESPN credits the coach. |
 | `first_name` | character | Athlete first name. |
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `last_name` | character | Athlete last name. |
 | `uid` | character | ESPN global unique identifier. |
 | `birth_place_city` | character |  |
@@ -749,7 +749,7 @@ ESPN endpoint.
 |---|---|---|
 | `$ref` | character |  |
 | `display_value` | character | Display-formatted metric value as shown on ESPN. |
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `name` | character | Position name (e.g. `Quarterback`). |
 | `stats` | character |  |
 | `summary` | character | Win-loss summary string (e.g. `2-0`). |
@@ -872,7 +872,7 @@ ESPN endpoint.
 | `$ref` | character |  |
 | `abbreviation` | character | Metric abbreviation. |
 | `display_name` | character | Human-readable metric name. |
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `leaf` | logical | `TRUE` for a most-specific (leaf) position. |
 | `name` | character | Position name (e.g. `Quarterback`). |
 | `parent_$ref` | character |  |
@@ -1036,7 +1036,7 @@ ESPN endpoint.
 |---|---|---|
 | `group_name` | character | Group name. |
 | `group_abbreviation` | character | Group abbreviation. |
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_name` | character | Team name. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |
@@ -1173,7 +1173,7 @@ ESPN endpoint.
 | `pick_person_first_name` | character |  |
 | `pick_person_headshot_alt` | character |  |
 | `pick_person_headshot_href` | character |  |
-| `pick_person_id` | character |  |
+| `pick_person_id` | integer |  |
 | `pick_person_last_name` | character |  |
 | `week_record_display_value` | character |  |
 | `week_record_season_$ref` | character |  |
@@ -1308,7 +1308,7 @@ ESPN endpoint.
 | `grade_display_value` | character | Display-formatted grade (`NR` when not rated). |
 | `recruiting_class` | integer | Recruiting class / signing year. |
 | `schools` | character |  |
-| `athlete_alternate_id` | character |  |
+| `athlete_alternate_id` | integer |  |
 | `athlete_display_name` | character | Player display name. |
 | `athlete_first_name` | character | Player first name. |
 | `athlete_full_name` | character |  |
@@ -1318,17 +1318,17 @@ ESPN endpoint.
 | `athlete_high_school_address_state` | character |  |
 | `athlete_high_school_address_state_abbreviation` | character |  |
 | `athlete_high_school_address_zip_code` | character |  |
-| `athlete_high_school_id` | character |  |
+| `athlete_high_school_id` | integer |  |
 | `athlete_high_school_name` | character |  |
 | `athlete_high_school_proper_name` | character |  |
 | `athlete_hometown_city` | character |  |
 | `athlete_hometown_state` | character |  |
 | `athlete_hometown_state_abbreviation` | character |  |
-| `athlete_id` | character | ESPN athlete id. |
+| `athlete_id` | integer | ESPN athlete id. |
 | `athlete_last_name` | character | Player last name. |
 | `athlete_links` | character |  |
 | `athlete_position_abbreviation` | character | Player position abbreviation. |
-| `athlete_position_id` | character |  |
+| `athlete_position_id` | integer |  |
 | `athlete_short_name` | character |  |
 | `athlete_weight` | double |  |
 | `status_description` | character |  |

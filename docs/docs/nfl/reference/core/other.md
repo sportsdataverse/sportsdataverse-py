@@ -30,7 +30,7 @@ ESPN endpoint.
 | `display_name` | character | Full name of player |
 | `gender` | character |  |
 | `guid` | character |  |
-| `id` | character | ID of the player in the 'name' column. |
+| `id` | integer | ID of the player in the 'name' column. |
 | `is_tournament` | logical |  |
 | `links` | character |  |
 | `logos` | character |  |
@@ -67,7 +67,7 @@ ESPN endpoint.
 | `season_type_has_groups` | logical |  |
 | `season_type_has_legs` | logical |  |
 | `season_type_has_standings` | logical |  |
-| `season_type_id` | character |  |
+| `season_type_id` | integer |  |
 | `season_type_name` | character |  |
 | `season_type_slug` | character |  |
 | `season_type_start_date` | character |  |
@@ -205,7 +205,7 @@ ESPN endpoint.
 | `$ref` | character |  |
 | `competitions` | character |  |
 | `date` | character |  |
-| `id` | character | ID of the player in the 'name' column. |
+| `id` | integer | ID of the player in the 'name' column. |
 | `links` | character |  |
 | `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
 | `short_name` | character | Player short name (i.e. "F.Last") |
@@ -257,7 +257,7 @@ ESPN endpoint.
 | `team_alternate_color` | character | Secondary team color as a hex string (no leading '#'). |
 | `team_color` | character | Primary team color as a hex string (no leading '#'). |
 | `team_display_name` | character | Full team display name (location + nickname). |
-| `team_id` | character | ESPN team id (stable join key across ESPN endpoints). |
+| `team_id` | integer | ESPN team id (stable join key across ESPN endpoints). |
 | `team_is_active` | logical | Whether the team is currently active. |
 | `team_is_all_star` | logical | Whether the entry is an all-star squad rather than a franchise. |
 | `team_location` | character | Team location / city (e.g. "Boston"). |
@@ -310,7 +310,7 @@ ESPN endpoint.
 | `color` | character |  |
 | `display_name` | character | Full name of player |
 | `guid` | character |  |
-| `id` | character | ID of the player in the 'name' column. |
+| `id` | integer | ID of the player in the 'name' column. |
 | `is_active` | logical | Active contract |
 | `is_all_star` | logical |  |
 | `links` | character |  |
@@ -340,7 +340,7 @@ ESPN endpoint.
 | `venue_full_name` | character |  |
 | `venue_grass` | logical |  |
 | `venue_guid` | character |  |
-| `venue_id` | character |  |
+| `venue_id` | integer |  |
 | `venue_images` | character |  |
 | `venue_indoor` | logical |  |
 | `venue_short_name` | character |  |
@@ -425,7 +425,7 @@ ESPN endpoint.
 | `full_name` | character | Full name as per NFL.com |
 | `grass` | logical |  |
 | `guid` | character |  |
-| `id` | character | ID of the player in the 'name' column. |
+| `id` | integer | ID of the player in the 'name' column. |
 | `images` | character |  |
 | `indoor` | logical |  |
 
@@ -509,7 +509,7 @@ ESPN endpoint.
 | `abbreviation` | character |  |
 | `color` | character |  |
 | `display_name` | character | Full name of player |
-| `id` | character | ID of the player in the 'name' column. |
+| `id` | integer | ID of the player in the 'name' column. |
 | `is_active` | logical | Active contract |
 | `location` | character | Either Home if the home team is playing in their home stadium, or Neutral if the game is being played at a neutral location. This still shows as Home for games between the Giants and Jets even though they share the same home stadium. |
 | `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
@@ -523,7 +523,7 @@ ESPN endpoint.
 | `venue_full_name` | character |  |
 | `venue_grass` | logical |  |
 | `venue_guid` | character |  |
-| `venue_id` | character |  |
+| `venue_id` | integer |  |
 | `venue_images` | character |  |
 | `venue_indoor` | logical |  |
 | `venue_short_name` | character |  |
@@ -569,7 +569,7 @@ ESPN endpoint.
 | `coach_seasons` | character |  |
 | `experience` | integer |  |
 | `first_name` | character | First name of player |
-| `id` | character | ID of the player in the 'name' column. |
+| `id` | integer | ID of the player in the 'name' column. |
 | `last_name` | character | Last name of player |
 | `uid` | character |  |
 | `birth_place_city` | character |  |
@@ -614,7 +614,7 @@ ESPN endpoint.
 |---|---|---|
 | `$ref` | character |  |
 | `display_value` | character |  |
-| `id` | character | ID of the player in the 'name' column. |
+| `id` | integer | ID of the player in the 'name' column. |
 | `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
 | `stats` | character |  |
 | `summary` | character |  |
@@ -737,7 +737,7 @@ ESPN endpoint.
 | `$ref` | character |  |
 | `abbreviation` | character |  |
 | `display_name` | character | Full name of player |
-| `id` | character | ID of the player in the 'name' column. |
+| `id` | integer | ID of the player in the 'name' column. |
 | `leaf` | logical |  |
 | `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
 | `parent_$ref` | character |  |
@@ -901,7 +901,7 @@ ESPN endpoint.
 |---|---|---|
 | `group_name` | character | Group name. |
 | `group_abbreviation` | character | Group abbreviation. |
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_name` | character | Team name. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |
@@ -1041,7 +1041,7 @@ ESPN endpoint.
 | `pick_person_first_name` | character |  |
 | `pick_person_headshot_alt` | character |  |
 | `pick_person_headshot_href` | character |  |
-| `pick_person_id` | character |  |
+| `pick_person_id` | integer |  |
 | `pick_person_last_name` | character |  |
 | `week_record_display_value` | character |  |
 | `week_record_season_$ref` | character |  |

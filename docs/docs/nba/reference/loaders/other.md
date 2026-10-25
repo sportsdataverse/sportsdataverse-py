@@ -402,9 +402,9 @@ Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `season` | Int32 | Season year. |
 | `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
-| `home_espn_team_id` | Int32 | ESPN home team id (NA for bart-only rows). |
-| `away_espn_team_id` | Int32 | ESPN away team id (NA for bart-only rows). |
-| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `home_espn_team_id` | Int64 | ESPN home team id (NA for bart-only rows). |
+| `away_espn_team_id` | Int64 | ESPN away team id (NA for bart-only rows). |
+| `espn_game_id` | Int64 | ESPN game id (NA for bart-only rows). |
 | `nba_game_id` | String | NBA Stats 10-character game id matched to the ESPN game in the crosswalk. |
 | `nba_game_code` | String | NBA game code (date and matchup string) from the NBA Stats API. |
 | `nba_home_team_id` | String | NBA Stats team id of the home team. |

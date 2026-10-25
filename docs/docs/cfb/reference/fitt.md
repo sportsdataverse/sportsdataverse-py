@@ -29,7 +29,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | ESPN team id. |
+| `team_id` | integer | ESPN team id. |
 | `team_uid` | character |  |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Full team display name. |

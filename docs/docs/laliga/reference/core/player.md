@@ -79,7 +79,7 @@ ESPN endpoint.
 | `full_name` | character |  |
 | `guid` | character |  |
 | `height` | double |  |
-| `id` | character |  |
+| `id` | integer |  |
 | `jersey` | character |  |
 | `last_name` | character |  |
 | `linked` | logical |  |
@@ -110,14 +110,14 @@ ESPN endpoint.
 | `position_$ref` | character |  |
 | `position_abbreviation` | character |  |
 | `position_display_name` | character |  |
-| `position_id` | character |  |
+| `position_id` | integer |  |
 | `position_leaf` | logical |  |
 | `position_name` | character |  |
 | `seasons_$ref` | character |  |
 | `statistics_$ref` | character |  |
 | `statisticslog_$ref` | character |  |
 | `status_abbreviation` | character |  |
-| `status_id` | character |  |
+| `status_id` | integer |  |
 | `status_name` | character |  |
 | `status_type` | character |  |
 | `team_$ref` | character |  |
@@ -424,7 +424,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ESPN numeric identifier for the athlete. |
+| `id` | integer | ESPN numeric identifier for the athlete. |
 | `display_name` | character | Athlete's full display name as shown on ESPN. |
 | `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
 

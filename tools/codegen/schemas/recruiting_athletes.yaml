@@ -26,7 +26,7 @@ columns:
   type: character
   description: ''
 - name: athlete_alternate_id
-  type: character
+  type: integer
   description: ''
 - name: athlete_display_name
   type: character
@@ -56,7 +56,7 @@ columns:
   type: character
   description: ''
 - name: athlete_high_school_id
-  type: character
+  type: integer
   description: ''
 - name: athlete_high_school_name
   type: character
@@ -74,7 +74,7 @@ columns:
   type: character
   description: ''
 - name: athlete_id
-  type: character
+  type: integer
   description: ''
 - name: athlete_last_name
   type: character
@@ -86,7 +86,7 @@ columns:
   type: character
   description: ''
 - name: athlete_position_id
-  type: character
+  type: integer
   description: ''
 - name: athlete_short_name
   type: character

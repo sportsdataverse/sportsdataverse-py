@@ -284,7 +284,7 @@ def test_mlb_game_rosters_skips_one_sides_404_roster(monkeypatch):
 
     _route(monkeypatch, answer)
     out = espn_mlb_game_rosters(9)
-    assert out["team_id"].to_list() == ["2"]
+    assert out["team_id"].to_list() == [2]
 
 
 def test_tally_labels_carry_no_query_string(monkeypatch, caplog):

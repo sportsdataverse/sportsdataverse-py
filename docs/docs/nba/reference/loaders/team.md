@@ -114,7 +114,7 @@ Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | col_name | type | description |
 |---|---|---|
 | `season` | Int32 | Season year. |
-| `espn_team_id` | Int32 | ESPN team id (canonical key). |
+| `espn_team_id` | Int64 | ESPN team id (canonical key). |
 | `espn_abbreviation` | String | ESPN abbreviation. |
 | `espn_display_name` | String | ESPN display name (school + mascot). |
 | `espn_short_name` | String | ESPN short name. |

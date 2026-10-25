@@ -5,7 +5,7 @@ columns:
   type: character
   description: ''
 - name: id
-  type: character
+  type: integer
   description: Id.
 - name: uid
   type: character
@@ -89,7 +89,7 @@ columns:
   type: character
   description: ''
 - name: college_id
-  type: character
+  type: integer
   description: College id.
 - name: college_guid
   type: character
@@ -116,7 +116,7 @@ columns:
   type: character
   description: Headshot alt.
 - name: position_id
-  type: character
+  type: integer
   description: Position id.
 - name: position_name
   type: character
@@ -131,7 +131,7 @@ columns:
   type: logical
   description: Position leaf.
 - name: position_parent_id
-  type: character
+  type: integer
   description: ''
 - name: position_parent_name
   type: character
@@ -149,7 +149,7 @@ columns:
   type: integer
   description: Experience years.
 - name: status_id
-  type: character
+  type: integer
   description: Status id.
 - name: status_name
   type: character

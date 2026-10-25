@@ -90,7 +90,7 @@ import re
 import pandas as pd
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _documented_empty
+from sportsdataverse._codegen_runtime import _cast_ids_int64, _documented_empty, _pandas_ids
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _first_row, _object_rows, _warn_schema_drift
 
@@ -126,25 +126,51 @@ def _snake_columns(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+#: ESPN id columns that are not integers: kept String at the parser boundary (task 5.2). ``now_id`` is ESPN's
+#: content id, ``"1-44686270"`` on every news / summary capture.
+_TEXT_IDS = frozenset({"now_id"})
+
+
+def _ids_int64(df: pl.DataFrame) -> pl.DataFrame:
+    """Every ESPN ``id`` / ``*_id`` column as ``Int64`` (task 5.2: A-M14, A-M15).
+
+    ESPN ships ids as numeric strings in one payload and integers in the next, and the pandas hop turns an
+    integer id with a missing value into ``123.0``, so the dtype is fixed here, from the raw integer
+    (``_cast_ids_int64``). An id column the cast refuses (a value that is not an integer) stays as it came
+    and warns: that is new payload shape, not an id to force.
+    """
+    cols = [c for c in df.columns if (c == "id" or c.endswith("_id")) and c not in _TEXT_IDS]
+    out = _cast_ids_int64(df, cols)
+    refused = [c for c in cols if out.schema[c] != pl.Int64]
+    if refused:
+        _warn_schema_drift("ESPN id columns", ValueError(f"{refused} hold values that are not integer ids"))
+    return out
+
+
 def _to_output(df: pd.DataFrame, return_as_pandas: bool) -> pl.DataFrame:
     """Convert pandas DataFrame to polars (or return pandas if requested).
 
     Handles the ``object`` dtype that polars cannot infer to a scalar type
-    by casting those columns to ``str``.
+    by casting those columns to ``str``. Id columns leave as ``Int64`` (:func:`_ids_int64`); the pandas
+    frame keeps its other columns as they are and carries the same ids as pandas' nullable ``Int64``
+    (R981-2), read from the polars cast so both outputs agree.
     """
+    pdf = df
     if return_as_pandas:
-        return df
+        df = df.copy()  # the stringifying below must not reach the pandas frame returned
     # Replace any remaining pure-Python objects (dicts/lists) with their
     # string representations so polars can ingest them without errors.
     for col in [c for c in df.columns if df[c].dtype == "object"]:
         df[col] = df[col].apply(lambda v: str(v) if isinstance(v, (dict, list)) else v)
     try:
-        return pl.from_pandas(df)
+        out = pl.from_pandas(df)
     except _FROM_PANDAS_ERRORS:
         # Last-resort: stringify everything that is still object-typed
         for col in [c for c in df.columns if df[c].dtype == "object"]:
             df[col] = df[col].astype(str)
-        return pl.from_pandas(df)
+        out = pl.from_pandas(df)
+    out = _ids_int64(out)
+    return _pandas_ids(out, pdf) if return_as_pandas else out
 
 
 def _empty_frame(return_as_pandas: bool = False):
@@ -576,7 +602,7 @@ def parse_fpi(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
         rows.append(row)
 
     df = pd.json_normalize(rows)
-    out = pl.from_pandas(df)
+    out = _ids_int64(pl.from_pandas(df))
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -625,7 +651,7 @@ def parse_weekly_powerindex(payload: Dict, return_as_pandas: bool = False) -> pl
                 row[key] = f.get("value")
         rows.append(row)
 
-    out = pl.from_pandas(pd.json_normalize(rows))
+    out = _ids_int64(pl.from_pandas(pd.json_normalize(rows)))
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2519,16 +2545,15 @@ def parse_cdn_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.Data
     # pandas frame would turn rank / previous_rank / first_place_votes into floats.
     df = pl.DataFrame(rows, infer_schema_length=None)
     df = df.rename({c: underscore(c) for c in df.columns})
-    # String, like every other ESPN team_id this parser layer emits (scoreboard
-    # home_id / away_id, summary team_id). The Utf8 cast keeps an all-null
-    # team_url (polars dtype Null) from breaking .str.
+    # Read from the team URL as text (the Utf8 cast keeps an all-null team_url, polars dtype Null, from
+    # breaking .str), then Int64 like every ESPN id this parser layer emits (task 5.2).
     if "team_url" in df.columns:
         team_id = pl.col("team_url").cast(pl.Utf8).str.extract(_TEAM_ID_FROM_URL, 1)
     else:
         team_id = pl.lit(None, dtype=pl.Utf8)
     lead = ["poll_id", "poll_name", "poll_short_name", "ranked", "team_id"]
-    df = df.with_columns(team_id.alias("team_id")).select(*lead, pl.exclude(lead))
-    return df.to_pandas() if return_as_pandas else df
+    df = _ids_int64(df.with_columns(team_id.alias("team_id")).select(*lead, pl.exclude(lead)))
+    return _pandas_ids(df) if return_as_pandas else df
 
 
 def _dict(value: Any) -> Dict:
@@ -2536,7 +2561,7 @@ def _dict(value: Any) -> Dict:
 
 
 # parse_rankings' columns in order (documented in tools/codegen/schemas/rankings.yaml).
-# poll_id is an integer like parse_cdn_rankings'; team_id is a string, as across the ESPN parsers.
+# poll_id and team_id are integers, like parse_cdn_rankings' and every ESPN id (task 5.2).
 _RANKINGS_SCHEMA = {
     "poll_id": pl.Int64,
     "poll_name": pl.Utf8,
@@ -2548,7 +2573,7 @@ _RANKINGS_SCHEMA = {
     "week_display": pl.Utf8,
     "poll_date": pl.Utf8,
     "ranked": pl.Boolean,
-    "team_id": pl.Utf8,
+    "team_id": pl.Int64,
     "rank": pl.Int64,
     "previous_rank": pl.Int64,
     "points": pl.Float64,
@@ -2656,7 +2681,7 @@ def parse_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFram
         )
     else:
         df = pl.DataFrame(schema=_RANKINGS_SCHEMA)
-    return df.to_pandas() if return_as_pandas else df
+    return _pandas_ids(df) if return_as_pandas else df
 
 
 # ===========================================================================
