@@ -107,8 +107,11 @@ shields.io endpoint JSON. Neither number is measured anywhere else.
   drift gate is what covers the generated wrappers. It is published for transparency and
   is not gated.
 
-A badge goes stale (it keeps the last published value) when a `main` run fails before the
-artifact is written; it never shows a number no run measured.
+The badges follow every finished `main` run, including one whose coverage gate or a test
+failed: that run still measured coverage, so the badge shows the drop rather than an older,
+higher number. A badge keeps its last published value only when a run produced no coverage
+report at all (it was cancelled, or failed before the suite ran); it never shows a number
+no run measured.
 
 ## Python version support
 
@@ -161,7 +164,7 @@ standalone import-sorting hook is inactive — plus
 - **Tests for new live-API modules** go under `tests/wbb/` or
   `tests/wnba/` (mirroring the source layout) and use the
   `skip_if_no_live` decorator from `tests/conftest.py`. Live tests are
-  gated by the `SDV_PY_LIVE_TESTS=1` environment variable, which `tests.yml`'s live job
+  gated by the `SDV_PY_LIVE_TESTS=1` environment variable, which `live-tests.yml`
 sets on pushes to main and manual runs (not on PRs; opt out with a `workflow_dispatch`
 `live_tests=false`) and `live-tests-cron.yml` always sets; `nba_stats` / `wnba_stats` live tests use
 the separate `SDV_PY_NBA_STATS_LIVE=1` gate that no workflow sets. Historically so CI and

@@ -162,10 +162,11 @@ jobs:
           if [ -f /tmp/baseline/upstream-coverage.json ]; then extra=(--baseline /tmp/baseline/upstream-coverage.json); fi
           uv run --frozen python tools/quality_scoreboard.py --check --baseline /tmp/baseline/coverage-devel.json --coverage-json coverage.json "${extra[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
       - name: snapshot the CI numbers (re-seed baseline/ from this artifact)
-        if: ${{ !cancelled() && hashFiles('coverage.json') != '' }}
+        # always(): a failed test or a failed gate still publishes what it measured (the badge shows the drop).
+        if: ${{ always() && hashFiles('coverage.json') != '' }}
         run: uv run --frozen python tools/quality_scoreboard.py --write scoreboard-ci.json --coverage-json coverage.json > /dev/null
       - uses: actions/upload-artifact@v7
-        if: ${{ !cancelled() && hashFiles('coverage.json') != '' }}
+        if: ${{ always() && hashFiles('coverage.json') != '' }}
         with:
           name: coverage-scoreboard
           path: |
@@ -181,7 +182,10 @@ jobs:
     #   coverage-all.json = the plain pytest-cov total, generated wrappers included
     name: publish coverage badge (main only)
     needs: coverage
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # Runs after a failed coverage job too (a failed test or gate still measured something),
+    # so the badge shows a drop instead of keeping the older, higher number. When no artifact
+    # was uploaded, download-artifact fails and nothing is published.
+    if: ${{ !cancelled() && needs.coverage.result != 'skipped' && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
