@@ -58,7 +58,8 @@ from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Union
 
 import polars as pl
 
-from sportsdataverse.errors import AssetFetchError, NoDataError
+from sportsdataverse._codegen_runtime import _pandas_ids
+from sportsdataverse.errors import AssetFetchError, NoDataError, SchemaDriftWarning
 
 __all__ = [
     "DEPTHCHART_SNAPSHOT_SCHEMA",
@@ -137,26 +138,34 @@ _ATHLETE_ID_RE = re.compile(r"/id/(\d+)")
 _HEADSHOT_ID_RE = re.compile(r"/(\d+)\.png")
 
 
-_INTEGER_ID = re.compile(r"-?\d+")
+#: An integer id as ESPN writes one: no leading zero ("007" is not the id 7), optional minus.
+_INTEGER_ID = re.compile(r"-?(?:0|[1-9]\d*)")
 
 
-def _as_id(value: Any) -> Optional[int]:
-    """Read an ESPN id as an ``int``, never via ``float``.
+def _as_id(value: Any, field: str) -> Optional[int]:
+    """Read the ESPN id ``field`` as an ``int``, never via ``float``.
 
     A numeric string (ESPN's injury ids are negative: ``"-1975351"``) and an int are read as
     they are; a float id is kept only when it is integral, so ``123.0`` is ``123`` and never
-    ``"123.0"``; anything else (text, ``12.5``) is ``None`` rather than a wrong id. ``bool`` is
-    rejected because it is an ``int`` subclass.
+    ``"123.0"``. A missing or blank id is ``None``. Anything else -- text, ``12.5``, a
+    zero-padded ``"007"`` (reading it as 7 would change the id), a ``bool`` -- is ``None`` with a
+    :class:`~sportsdataverse.errors.SchemaDriftWarning` naming ``field`` and the value (R981-4):
+    the column is ``Int64``, so the value cannot be kept, and an append-only snapshot must not
+    lose it silently.
     """
-    if value is None or isinstance(value, bool):
+    if value is None or (isinstance(value, str) and not value.strip()):
         return None
-    if isinstance(value, str):
-        text = value.strip()
-        return int(text) if _INTEGER_ID.fullmatch(text) else None
-    if isinstance(value, int):
+    if isinstance(value, str) and _INTEGER_ID.fullmatch(value.strip()):
+        return int(value.strip())
+    if isinstance(value, int) and not isinstance(value, bool):
         return value
-    if isinstance(value, float):
-        return int(value) if value.is_integer() else None
+    if isinstance(value, float) and value.is_integer():
+        return int(value)
+    warnings.warn(
+        f"ESPN snapshot id {field}: {value!r} is not an integer id; read as null",
+        SchemaDriftWarning,
+        stacklevel=3,
+    )
     return None
 
 
@@ -190,7 +199,7 @@ def _athlete_id(athlete: Mapping[str, Any]) -> Optional[int]:
     stay joinable-looking. The headshot URL carries the same id and is the
     fallback for that day.
     """
-    direct = _as_id(athlete.get("id"))
+    direct = _as_id(athlete.get("id"), "athlete.id")
     if direct is not None:
         return direct
     for link in _list(athlete.get("links")):
@@ -244,7 +253,7 @@ def parse_injuries_snapshot(
     for team in teams:
         if not isinstance(team, Mapping):
             continue
-        team_id = _as_id(team.get("id"))
+        team_id = _as_id(team.get("id"), "team.id")
         team_name = _text(team, "displayName")
         for record in _list(team.get("injuries")):
             if not isinstance(record, Mapping):
@@ -261,7 +270,7 @@ def parse_injuries_snapshot(
                     "league": league,
                     "team_id": team_id,
                     "team_display_name": team_name,
-                    "injury_id": _as_id(record.get("id")),
+                    "injury_id": _as_id(record.get("id"), "injury.id"),
                     "athlete_id": _athlete_id(athlete),
                     "athlete_display_name": _text(athlete, "displayName"),
                     "athlete_short_name": _text(athlete, "shortName"),
@@ -269,7 +278,7 @@ def parse_injuries_snapshot(
                     "athlete_position_name": _text(position, "displayName"),
                     "status": _text(record, "status"),
                     "injury_date": _text(record, "date"),
-                    "type_id": _as_id(type_.get("id")),
+                    "type_id": _as_id(type_.get("id"), "injury.type.id"),
                     "type_name": _text(type_, "name"),
                     "type_abbreviation": _text(type_, "abbreviation"),
                     "type_description": _text(type_, "description"),
@@ -281,12 +290,12 @@ def parse_injuries_snapshot(
                     "detail_fantasy_status": _text(fantasy, "description"),
                     "short_comment": _text(record, "shortComment"),
                     "long_comment": _text(record, "longComment"),
-                    "source_id": _as_id(source.get("id")),
+                    "source_id": _as_id(source.get("id"), "injury.source.id"),
                     "source_description": _text(source, "description"),
                 }
             )
     df = pl.DataFrame(rows, schema=INJURY_SNAPSHOT_SCHEMA)
-    return df.to_pandas() if return_as_pandas else df
+    return _pandas_ids(df) if return_as_pandas else df
 
 
 def _gather(
@@ -376,7 +385,7 @@ def espn_injuries_snapshot(
 
     frames = _gather(slugs, _one, request_delay=request_delay, label="espn_injuries_snapshot")
     df = pl.concat(frames, how="vertical") if frames else pl.DataFrame(schema=INJURY_SNAPSHOT_SCHEMA)
-    return df.to_pandas() if return_as_pandas else df
+    return _pandas_ids(df) if return_as_pandas else df
 
 
 #: Leagues whose ESPN ``teams/{team_id}/depthcharts`` payload carries a
@@ -494,13 +503,13 @@ def parse_depthchart_snapshot(
                         "league": league,
                         "season": _as_int(season.get("year")),
                         "season_type": _as_int(season.get("type")),
-                        "team_id": _as_id(team.get("id")),
+                        "team_id": _as_id(team.get("id"), "team.id"),
                         "team_display_name": _text(team, "displayName"),
                         "team_abbreviation": _text(team, "abbreviation"),
-                        "group_id": _as_id(group_map.get("id")),
+                        "group_id": _as_id(group_map.get("id"), "depthchart.id"),
                         "group_name": _text(group_map, "name"),
                         "position_slot": str(slot_key),
-                        "position_id": _as_id(position.get("id")),
+                        "position_id": _as_id(position.get("id"), "position.id"),
                         "position_abbreviation": _text(position, "abbreviation"),
                         "position_name": _text(position, "displayName"),
                         "depth_rank": rank,
@@ -511,7 +520,7 @@ def parse_depthchart_snapshot(
                     }
                 )
     df = pl.DataFrame(rows, schema=DEPTHCHART_SNAPSHOT_SCHEMA)
-    return df.to_pandas() if return_as_pandas else df
+    return _pandas_ids(df) if return_as_pandas else df
 
 
 def espn_depthcharts_snapshot(
@@ -600,4 +609,4 @@ def espn_depthcharts_snapshot(
         label=f"espn_depthcharts_snapshot({league})",
     )
     df = pl.concat(frames, how="vertical") if frames else pl.DataFrame(schema=DEPTHCHART_SNAPSHOT_SCHEMA)
-    return df.to_pandas() if return_as_pandas else df
+    return _pandas_ids(df) if return_as_pandas else df

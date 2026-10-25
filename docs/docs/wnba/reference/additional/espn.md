@@ -912,7 +912,7 @@ teams.select(["team_id", "team_abbreviation", "team_display_name"]).head()
 
 # Find Las Vegas Aces (team_id 17)
 
-teams.filter(__import__("polars").col("team_id") == "17").to_dicts()
+teams.filter(__import__("polars").col("team_id") == 17).to_dicts()
 
 # Pandas round-trip
 

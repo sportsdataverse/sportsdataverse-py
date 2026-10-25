@@ -1829,6 +1829,44 @@ def test_dtype_snapshot_ids_are_never_float(name):
     assert {k: v for k, v in _id_cols(name).items() if v.startswith("Float")} == {}
 
 
+def test_pandas_ids_are_nullable_int64_never_float():
+    """R981-2: ``return_as_pandas=True`` carries the same ids as pandas' nullable ``Int64``. On the real cfb summary
+    ``point_after_attempt_id`` is null on most drive plays; a plain pandas hop reads it ``float64`` (``1.0``)."""
+    import pandas as pd
+
+    from sportsdataverse._common_espn_parsers import parse_summary, parse_summary_drive_plays
+
+    raw = _load("summary_cfb")
+    pl_frame = parse_summary_drive_plays(raw)
+    pdf = parse_summary_drive_plays(raw, return_as_pandas=True)
+    assert pl_frame["point_after_attempt_id"].null_count() > 0
+    ids = [c for c, t in pl_frame.schema.items() if t == pl.Int64 and (c == "id" or c.endswith("_id"))]
+    assert ids and {c: str(pdf[c].dtype) for c in ids} == dict.fromkeys(ids, "Int64")
+    got = [None if v is pd.NA else int(v) for v in pdf["point_after_attempt_id"]]
+    assert got == pl_frame["point_after_attempt_id"].to_list()
+    for sec, frame in parse_summary(raw, return_as_pandas=True).items():
+        floats = [
+            c for c in frame.columns if (c == "id" or c.endswith("_id")) and str(frame[c].dtype).startswith("float")
+        ]
+        assert floats == [], sec
+
+
+def test_an_id_that_is_not_an_integer_stays_as_it_came_and_warns():
+    """R981-6: a real scoreboard whose first event id is text keeps ``game_id`` String (never nulled or forced) and
+    warns naming the column; every other id column of the frame is still Int64."""
+    import copy
+
+    from sportsdataverse._common_espn_parsers import parse_scoreboard
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    raw = copy.deepcopy(_load("scoreboard_nba"))
+    raw["events"][0]["id"] = "TBD-1"
+    with pytest.warns(SchemaDriftWarning, match=r"ESPN id columns.*'game_id'.*not integer ids"):
+        df = parse_scoreboard(raw)
+    assert df.schema["game_id"] == pl.String and df["game_id"][0] == "TBD-1"
+    assert df.schema["home_id"] == df.schema["away_id"] == pl.Int64
+
+
 def test_fpi_joins_weekly_powerindex_on_team_id():
     """A-M15: ``parse_fpi`` emitted ``team_id`` String and ``parse_weekly_powerindex`` Int64, so the join raised."""
     from sportsdataverse._common_espn_parsers import parse_fpi, parse_weekly_powerindex

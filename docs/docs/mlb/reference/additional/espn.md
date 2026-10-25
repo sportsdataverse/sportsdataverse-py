@@ -397,7 +397,7 @@ teams.select(["team_id", "team_abbreviation", "team_display_name"]).head()
 # Find Los Angeles Dodgers (team_id 19)
 
 import polars as pl
-teams.filter(pl.col("team_id") == "19").to_dicts()
+teams.filter(pl.col("team_id") == 19).to_dicts()
 
 # Pandas round-trip
 

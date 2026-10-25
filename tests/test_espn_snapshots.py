@@ -146,16 +146,38 @@ def test_ids_are_int64_and_never_float_stringified():
         ("123", 123),
         (" 123 ", 123),
         ("-1975351", -1975351),  # ESPN's injury ids are negative
+        ("0", 0),
         (123.0, 123),  # never "123.0"
-        (12.5, None),
-        ("abc", None),
-        (True, None),  # bool is an int subclass; not an id
         (None, None),
         ("", None),
+        ("  ", None),
     ],
 )
 def test_as_id_coerces_without_going_through_float(raw, expected):
-    assert _as_id(raw) == expected
+    assert _as_id(raw, "team.id") == expected
+
+
+@pytest.mark.parametrize("raw", [12.5, "abc", "007", True])
+def test_as_id_warns_on_a_value_that_is_not_an_integer_id(raw):
+    """R981-4: the column is Int64, so a non-integer id cannot be kept; it is null WITH a warning naming the field
+    (never silently), and a zero-padded "007" is not read as 7."""
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    with pytest.warns(SchemaDriftWarning, match=r"ESPN snapshot id injury\.id: .* is not an integer id"):
+        assert _as_id(raw, "injury.id") is None
+
+
+def test_a_padded_injury_id_on_the_real_capture_is_null_with_a_warning_and_spares_the_rest():
+    """R981-4 on the real nfl capture: one record's id zero-padded is null (not unpadded) and warns; every other row
+    keeps its id."""
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    raw = load_fixture("espn", "injuries_nfl")
+    rec = raw["injuries"][0]["injuries"][0]
+    rec["id"] = "00" + str(rec["id"]).lstrip("-")
+    with pytest.warns(SchemaDriftWarning, match=r"injury\.id: '00\d+' is not an integer id"):
+        df = parse_injuries_snapshot(raw, league="nfl", as_of_date=STAMP)
+    assert df["injury_id"][0] is None and df["injury_id"].null_count() == 1
 
 
 # ---------------------------------------------------------------------------

@@ -4,7 +4,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse import _espn_game_rosters
-from sportsdataverse._codegen_runtime import _download_json
+from sportsdataverse._codegen_runtime import _download_json, _pandas_ids
 from sportsdataverse.dl_utils import (  # noqa: F401 -- normalize_team_roster_columns leaks via `import *` (coverage_allowlist.yaml)
     download,
     normalize_team_roster_columns,
@@ -93,7 +93,7 @@ def espn_cfb_game_rosters(
     rosters = rosters.with_columns(game_id=pl.lit(game_id).cast(pl.Int64))
     rosters.columns = [underscore(c) for c in rosters.columns]
     rosters = _espn_game_rosters.roster_ids(rosters)
-    return rosters.to_pandas() if return_as_pandas else rosters
+    return _pandas_ids(rosters) if return_as_pandas else rosters
 
 
 def helper_cfb_game_items(summary):
