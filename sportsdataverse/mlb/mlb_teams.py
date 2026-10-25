@@ -35,7 +35,7 @@ def espn_mlb_teams(return_as_pandas=False, **kwargs) -> pl.DataFrame:
         Find Los Angeles Dodgers (team_id 19)::
 
             import polars as pl
-            teams.filter(pl.col("team_id") == "19").to_dicts()
+            teams.filter(pl.col("team_id") == 19).to_dicts()
 
         Pandas round-trip::
 

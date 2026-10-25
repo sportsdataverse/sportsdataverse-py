@@ -5090,9 +5090,9 @@
   file: sportsdataverse/_espn_schedule.py
   snippet: 'elif dtype == pl.Int64 and df.schema[name].is_float():'
   mutant: 'elif False:'
-  test: tests/wbb/test_wbb_schedule_teams_offline.py -k id_dtypes
+  test: tests/wbb/test_wbb_schedule_teams_offline.py -k integer_with_a_missing_value
   expected: kill
-  note: 'tournament_id arrives Float64 when one event lacks it (the pandas hop); documented integer'
+  note: 'attendance arrives Float64 when one event lacks it (the pandas hop); documented integer. Re-pointed in task 5.2 (R981-1): ids are cast before this branch, so tournament_id no longer reaches it'
 
 - id: nfl-schedule-rank-default-99
   group: espn-schedule
@@ -7094,6 +7094,56 @@
   test: tests/cfb/test_cfb_whole_game_oracle.py -k "shared_column_dtypes_match_nfl"
   expected: kill
   note: NFL *_player_id String and pos_team Int32 again; the vs_nfl allowlist no longer lists them.
+
+- id: id-cast-empty-string-is-null
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            src = src.set(src == "", None)'
+  mutant: '            pass'
+  test: tests/codegen/test_id_casts.py -k "stripped"
+  expected: kill
+  note: A feed's "" id (HockeyTech FloCoreEventId on every scorebar row) is refused, so the column stays String (R981-5).
+
+- id: espn-id-refusal-warns
+  group: dtype-contract-5-2
+  finding: A-M15
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    if refused:'
+  mutant: '    if False:'
+  test: tests/test_espn_universal_parsers.py -k "not_an_integer_stays_as_it_came_and_warns"
+  expected: kill
+  note: An ESPN id column the cast refuses (text in the payload) stays String with no warning (R981-6).
+
+- id: espn-pandas-ids-nullable-int64
+  group: dtype-contract-5-2
+  finding: A-M14
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            out[col] = pd.array(df[col].to_list(), dtype="Int64")'
+  mutant: '            pass'
+  test: tests/test_espn_universal_parsers.py -k "pandas_ids_are_nullable_int64_never_float"
+  expected: kill
+  note: The pandas output of a parser reads a null-bearing id as float64 again (R981-2).
+
+- id: espn-snapshot-id-refusal-warns
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/espn_snapshots.py
+  snippet: '        f"ESPN snapshot id {field}: {value!r} is not an integer id; read as null",'
+  mutant: '        f"ESPN snapshot id {field}: {value!r} read as null",'
+  test: tests/test_espn_snapshots.py -k "as_id_warns_on_a_value_that_is_not_an_integer_id"
+  expected: kill
+  note: A snapshot id that is not an integer is nulled without saying why (R981-4).
+
+- id: espn-snapshot-padded-id-not-unpadded
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/espn_snapshots.py
+  snippet: '_INTEGER_ID = re.compile(r"-?(?:0|[1-9]\d*)")'
+  mutant: '_INTEGER_ID = re.compile(r"-?\d+")'
+  test: tests/test_espn_snapshots.py -k "padded_injury_id_on_the_real_capture"
+  expected: kill
+  note: A zero-padded snapshot id ("007") is silently read as 7 (R981-4).
 
 - id: ncaa-xwalk-tier-join-asserts-key-dtypes
   group: dtype-contract-5-2

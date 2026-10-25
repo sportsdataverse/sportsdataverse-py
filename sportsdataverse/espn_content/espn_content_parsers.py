@@ -30,7 +30,7 @@ from typing import Any, Dict, List, Union
 import pandas as pd
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _cast_ids_int64
+from sportsdataverse._codegen_runtime import _cast_ids_int64, _pandas_ids
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import _data_only
 
@@ -126,4 +126,4 @@ def parse_espn_content(
     .. _ESPN content.core endpoints: https://content.core.api.espn.com/v1/sports/news
     """
     df = _to_frame(_as_rows(raw))
-    return df.to_pandas() if return_as_pandas else df
+    return _pandas_ids(df) if return_as_pandas else df

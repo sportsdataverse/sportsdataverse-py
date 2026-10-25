@@ -4,7 +4,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse import _espn_game_rosters
-from sportsdataverse._codegen_runtime import _download_json
+from sportsdataverse._codegen_runtime import _download_json, _pandas_ids
 from sportsdataverse.dl_utils import download, underscore
 
 _COLUMNS = (
@@ -97,8 +97,8 @@ def espn_mlb_game_rosters(game_id: int, raw: bool = False, return_as_pandas: boo
     if not rows:  # B-L25: no competitors (or no roster) -> the documented columns, zero rows; was None
         schema = {c: pl.Boolean if c == "athlete_starter" else pl.String for c in _COLUMNS}
         empty = _espn_game_rosters.roster_ids(pl.DataFrame(schema=schema))
-        return empty.to_pandas() if return_as_pandas else empty
+        return _pandas_ids(empty) if return_as_pandas else empty
     df = pd.DataFrame(rows)
     df.columns = [underscore(c) for c in df.columns.tolist()]
     out = _espn_game_rosters.roster_ids(pl.from_pandas(df))
-    return out.to_pandas() if return_as_pandas else out
+    return _pandas_ids(out) if return_as_pandas else out

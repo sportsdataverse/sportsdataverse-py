@@ -569,7 +569,7 @@ print(season.shape)
 
 import polars as pl
 uconn = season.filter(
-    (pl.col("home_id") == "2509") | (pl.col("away_id") == "2509")
+    (pl.col("home_id") == 2509) | (pl.col("away_id") == 2509)
 )
 
 # Pandas round-trip

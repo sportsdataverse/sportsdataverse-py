@@ -90,7 +90,7 @@ import re
 import pandas as pd
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _cast_ids_int64, _documented_empty
+from sportsdataverse._codegen_runtime import _cast_ids_int64, _documented_empty, _pandas_ids
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _first_row, _object_rows, _warn_schema_drift
 
@@ -151,10 +151,13 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool) -> pl.DataFrame:
     """Convert pandas DataFrame to polars (or return pandas if requested).
 
     Handles the ``object`` dtype that polars cannot infer to a scalar type
-    by casting those columns to ``str``. Id columns leave as ``Int64`` (:func:`_ids_int64`).
+    by casting those columns to ``str``. Id columns leave as ``Int64`` (:func:`_ids_int64`); the pandas
+    frame keeps its other columns as they are and carries the same ids as pandas' nullable ``Int64``
+    (R981-2), read from the polars cast so both outputs agree.
     """
+    pdf = df
     if return_as_pandas:
-        return df
+        df = df.copy()  # the stringifying below must not reach the pandas frame returned
     # Replace any remaining pure-Python objects (dicts/lists) with their
     # string representations so polars can ingest them without errors.
     for col in [c for c in df.columns if df[c].dtype == "object"]:
@@ -166,7 +169,8 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool) -> pl.DataFrame:
         for col in [c for c in df.columns if df[c].dtype == "object"]:
             df[col] = df[col].astype(str)
         out = pl.from_pandas(df)
-    return _ids_int64(out)
+    out = _ids_int64(out)
+    return _pandas_ids(out, pdf) if return_as_pandas else out
 
 
 def _empty_frame(return_as_pandas: bool = False):
@@ -2549,7 +2553,7 @@ def parse_cdn_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.Data
         team_id = pl.lit(None, dtype=pl.Utf8)
     lead = ["poll_id", "poll_name", "poll_short_name", "ranked", "team_id"]
     df = _ids_int64(df.with_columns(team_id.alias("team_id")).select(*lead, pl.exclude(lead)))
-    return df.to_pandas() if return_as_pandas else df
+    return _pandas_ids(df) if return_as_pandas else df
 
 
 def _dict(value: Any) -> Dict:
@@ -2677,7 +2681,7 @@ def parse_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFram
         )
     else:
         df = pl.DataFrame(schema=_RANKINGS_SCHEMA)
-    return df.to_pandas() if return_as_pandas else df
+    return _pandas_ids(df) if return_as_pandas else df
 
 
 # ===========================================================================

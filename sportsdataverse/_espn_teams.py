@@ -23,7 +23,7 @@ from typing import Any, Callable, TypeVar
 import pandas as pd
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _cast_ids_int64, _download_json
+from sportsdataverse._codegen_runtime import _cast_ids_int64, _download_json, _pandas_ids
 from sportsdataverse._deprecation import warn_deprecated
 from sportsdataverse.dl_utils import download, underscore
 
@@ -77,11 +77,11 @@ def teams_frame(
     ]
     if not teams:
         empty = pl.DataFrame(schema=TEAMS_SCHEMA)
-        return empty.to_pandas() if return_as_pandas else empty
+        return _pandas_ids(empty) if return_as_pandas else empty
     frame = pd.json_normalize(teams, sep="_")
     frame.columns = [underscore(c) for c in frame.columns.tolist()]
     out = _cast_ids_int64(pl.from_pandas(frame), ["team_id"])
-    return out.to_pandas() if return_as_pandas else out
+    return _pandas_ids(out) if return_as_pandas else out
 
 
 def cache_clear_shim(fn: _F) -> _F:
