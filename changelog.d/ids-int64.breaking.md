@@ -32,3 +32,15 @@
   game-summary `home_team_id` / `away_team_id` / `game_season_id` are null, not `""`, when it is unavailable. The
   pandas output (`return_as_pandas=True`) carries the ids as pandas' nullable `Int64` (was `float64` such as `1.0`,
   or `str`). An id that is not an integer keeps its column String and warns `SchemaDriftWarning`. (#988)
+- **`build_nfl_season` cache:** `PIPELINE_VERSION` is 2, so per-game frames cached by an earlier version (String
+  `*_player_id`, Int32 `pos_team`) are rebuilt instead of being concatenated into a season with the new Int64
+  ones, where `diagonal_relaxed` would turn those columns back into String.
+- **Release loaders keep their published dtypes.** The `load_pwhl_*` releases (`load_pwhl_schedules` `game_id` /
+  `home_team_id` / `away_team_id`; `load_pwhl_pbp` `team_id` / `player_team_id` / `home_team_id` /
+  `away_team_id` / `game_season_id`; the box scores' `player_id`) and the ESPN `load_<lg>_rosters` releases
+  (`status_id`, and `position_id` outside CFB) still read those ids as String or Int32, as the files were published, while the
+  live parsers above now emit Int64. Joining a release frame to live parser output therefore raises
+  `SchemaError` where it used to work. Cast one side before the join, e.g.
+  `release.with_columns(pl.col("game_id").cast(pl.Int64))`. Code that relied on String ids from the live
+  parsers can cast back with `pl.col("team_id").cast(pl.String)` (pandas: `.astype("string")`); an `Int64`
+  id stringifies as `"123"`, never `"123.0"`.
