@@ -278,8 +278,9 @@ def build_family(league: str) -> dict[str, Any]:
         "    polars.DataFrame: One row per rostered player: ``player_id``, ``person_id``, names\n"
         "        (``first_name``, ``last_name``, ``display_name``), ``position``, ``tp_jersey_number``,\n"
         "        ``shoots`` / ``catches``, ``height`` / ``weight``, ``birthdate``, home and birth places,\n"
-        "        ``rookie``, ``veteran_status``, ``draft_status`` and ``player_image`` (String, as the feed\n"
-        f"        ships them). {_PANDAS}" + _RAISES
+        "        ``rookie``, ``veteran_status``, ``draft_status`` and ``player_image``. The ``id`` / ``*_id``\n"
+        "        columns are Int64; the rest are String, as the feed ships them.\n"
+        f"        {_PANDAS}" + _RAISES
     )
 
     # ------------------------------------------------------------------
@@ -310,8 +311,9 @@ def build_family(league: str) -> dict[str, Any]:
         "        ``season_name``, ``playoff``, ``team_id`` / ``team_name`` / ``team_code``,\n"
         "        ``games_played``, ``goals``, ``assists``, ``points``, ``plus_minus``,\n"
         "        ``penalty_minutes``, power-play / short-handed / shootout splits, ``shots``,\n"
-        "        ``faceoff_wins`` / ``faceoff_attempts``, ``ice_time`` and ``stat_type`` (String, as the\n"
-        f"        feed ships them). {_PANDAS}" + _RAISES
+        "        ``faceoff_wins`` / ``faceoff_attempts``, ``ice_time`` and ``stat_type``. ``season_id`` and\n"
+        "        ``team_id`` are Int64; the rest are String, as the feed ships them.\n"
+        f"        {_PANDAS}" + _RAISES
     )
 
     # ------------------------------------------------------------------
