@@ -145,7 +145,7 @@ def find_team(
 
         Every candidate::
 
-            find_team("los angeles", league="nba", multi=True)  # Lakers and Clippers
+            find_team("new", league="nba", multi=True)  # New Orleans Pelicans and New York Knicks
 
         See Also:
             * :func:`find_athlete` / :func:`find_event` -- the athlete and game resolvers; :func:`clear_team_cache`
@@ -178,6 +178,25 @@ def find_team(
 # ---------------------------------------------------------------------------
 
 
+def _roster_athletes(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """The athlete dicts of a raw roster payload, whichever shape it ships.
+
+    NBA / WNBA / MBB / WBB list the athletes flat; MLB / NFL / NHL / CFB group them by position
+    (``{"position": ..., "items": [...]}``), and each grouped athlete gains that ``position_group``.
+    """
+    flat_athletes: List[Dict[str, Any]] = []
+    for entry in payload.get("athletes") or []:
+        if not isinstance(entry, dict):
+            continue
+        if "items" in entry and isinstance(entry["items"], list):
+            flat_athletes.extend(
+                {**p, "position_group": entry.get("position")} for p in entry["items"] if isinstance(p, dict)
+            )
+        else:
+            flat_athletes.append(entry)
+    return flat_athletes
+
+
 def find_athlete(
     name: str,
     league: str,
@@ -206,7 +225,9 @@ def find_athlete(
 
     Raises:
         ValueError: ``league`` is not one of the supported slugs.
-        AssetFetchError: a roster fetch failed (403, rate limit, 5xx, dead
+        NoDataError: the league's teams endpoint answered 404 (it is read to resolve
+            ``team=`` or, without it, to list the teams to search).
+        AssetFetchError: a teams or roster fetch failed (403, rate limit, 5xx, dead
             connection), so whether the athlete exists is unknown. A roster that
             answers 404 is skipped.
 
@@ -249,22 +270,7 @@ def find_athlete(
             payload = roster_fn(team_id=team_id, return_parsed=False)
         except NoDataError:
             continue  # a 404 roster has no athletes; a failed fetch (AssetFetchError) propagates
-        # Roster shape varies — handle both flat and position-grouped
-        raw_athletes = payload.get("athletes") or []
-        flat_athletes: List[Dict[str, Any]] = []
-        for entry in raw_athletes:
-            if not isinstance(entry, dict):
-                continue
-            if "items" in entry and isinstance(entry["items"], list):
-                # Position-grouped shape (MLB/NFL/NHL/CFB)
-                for p in entry["items"]:
-                    if isinstance(p, dict):
-                        p = {**p, "position_group": entry.get("position")}
-                        flat_athletes.append(p)
-            else:
-                # Flat shape (NBA/WNBA/MBB/WBB)
-                flat_athletes.append(entry)
-        for ath in flat_athletes:
+        for ath in _roster_athletes(payload):
             if _matches(
                 name,
                 ath.get("fullName"),

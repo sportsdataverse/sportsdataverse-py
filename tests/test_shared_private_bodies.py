@@ -4,14 +4,16 @@ Each row names the shared body and every module that used to carry its own copy.
 
 * identity -- each former copy's name is now bound to the one shared function, so a fix reaches
   every caller;
-* equality at the merge commit -- the shared body's AST (docstring and name stripped) hashes to the
-  value the deleted copies hashed to. A deliberate change to a shared body updates its pin here.
+* equality at the merge commit -- the shared body's canonical key (``tests/_body_key.py``: sha256 of the
+  module's own field-by-field serialisation of the AST, neither ``ast.dump`` nor ``ast.unparse``, after
+  stripping name, decorators, docstring, annotations and parameter names, so it is the same on Python
+  3.10-3.14) equals the deleted copies'. Re-pinned under that key in PRE-1008 M-3. A deliberate change to a
+  shared body updates its pin; the rows marked "current body" pin a body changed on purpose after the merge.
 """
 
 from __future__ import annotations
 
 import ast
-import hashlib
 import importlib
 import inspect
 import textwrap
@@ -20,18 +22,9 @@ from pathlib import Path
 import polars as pl
 import pytest
 
+from tests._body_key import body_key
+
 FIXTURES = Path(__file__).parent / "fixtures"
-
-
-def _body_hash(fn: object) -> str:
-    """sha256[:16] of a function's signature + body AST, docstring and name excluded."""
-    node = ast.parse(textwrap.dedent(inspect.getsource(fn))).body[0]
-    assert isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
-    body = node.body
-    if body and isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant):
-        body = body[1:]
-    sig = ast.dump(node.args) + (ast.dump(node.returns) if node.returns else "")
-    return hashlib.sha256((sig + "".join(ast.dump(b) for b in body)).encode()).hexdigest()[:16]
 
 
 _BOX = "sportsdataverse.scrape.ncaa._box_html"
@@ -50,40 +43,40 @@ _FOX_EXT = "sportsdataverse.cfb.cfb_fox_ext"
 
 # (shared module, shared name, [(former-copy module, name there)], hash of the deleted copies)
 SHARED = [
-    (_BOX, "_cells", [(m, "_cells") for m in _BOX_COPIES], "f715d1baca8170d0"),
-    (_BOX, "_rows", [(m, "_rows") for m in _BOX_COPIES], "12d05e090f3fb7d2"),
-    (_BOX, "_cid", [(m, "_cid") for m in _BOX_COPIES], "5d3c6c7c83c81af1"),
-    (_BOX, "_int", [(m, "_int") for m in _BOX_COPIES], "9bc0ee738dfa364f"),
-    (_BOX, "_finish", [(m, "_finish") for m in _BOX_COPIES], "9bbf594d900f05ff"),
+    (_BOX, "_cells", [(m, "_cells") for m in _BOX_COPIES], "51257b82e4565011"),
+    (_BOX, "_rows", [(m, "_rows") for m in _BOX_COPIES], "a6d594b191798793"),
+    (_BOX, "_cid", [(m, "_cid") for m in _BOX_COPIES], "de399ce1c6eba3a5"),
+    (_BOX, "_int", [(m, "_int") for m in _BOX_COPIES], "247ec235f22cc09e"),
+    (_BOX, "_finish", [(m, "_finish") for m in _BOX_COPIES], "7d63b13f69c09b5b"),
     (
         _ROSTER,
         "_java_string_hash",
         [("sportsdataverse.mbb.mbb_ncaa_boxscore_parser", "_java_string_hash")],
-        "81c2c4d7e26b28a0",
+        "d597612ef4e5fe12",
     ),
     (
         _ROSTER,
         "_hashmap_improve",
         [("sportsdataverse.mbb.mbb_ncaa_boxscore_parser", "_hashmap_improve")],
-        "f346f43cf43e684d",
+        "72257cbb55fb2cf4",
     ),
     (
         _ROSTER,
         "_hashmap_radix_key",
         [("sportsdataverse.mbb.mbb_ncaa_boxscore_parser", "_hashmap_radix_key")],
-        "518a1da8e4a8c911",
+        "e9492859c6e1842d",
     ),
     (
         "sportsdataverse.scrape.ncaa.capture",
         "_parse_shard",
         [("sportsdataverse.scrape.ncaa.parse", "_parse_shard")],
-        "5125db40c5d192dd",
+        "659422bc930c3ee6",
     ),
-    (_FOX, "_clean", [(_FOX_EXT, "_clean")], "696d5113317fffa5"),
-    (_FOX, "_table_rows", [(_FOX_EXT, "_table_rows")], "809c702af8147d4c"),
-    (_FOX, "_cells", [(_FOX_EXT, "_cells")], "e4433f1643bd6b1a"),
-    (_FOX, "_uri_id", [(_FOX_EXT, "_uri_id")], "6c9ee881f9c919b2"),
-    (_FOX, "_full_team_name", [(_FOX_EXT, "_fox_team_fullname")], "0c2148ef5a4ca870"),
+    (_FOX, "_clean", [(_FOX_EXT, "_clean")], "ed647fea3916cb44"),
+    (_FOX, "_table_rows", [(_FOX_EXT, "_table_rows")], "d17227cc5e564746"),
+    (_FOX, "_cells", [(_FOX_EXT, "_cells")], "07a86db343005ad4"),
+    (_FOX, "_uri_id", [(_FOX_EXT, "_uri_id")], "4afe6342d438de45"),
+    (_FOX, "_full_team_name", [(_FOX_EXT, "_fox_team_fullname")], "4c321547055feb1d"),
 ]
 
 
@@ -92,7 +85,7 @@ def test_every_former_copy_is_the_shared_body(owner: str, name: str, copies: lis
     shared = getattr(importlib.import_module(owner), name)
     for module, copy_name in copies:
         assert getattr(importlib.import_module(module), copy_name) is shared, f"{module}.{copy_name} is a copy again"
-    assert _body_hash(shared) == pin, f"{owner}.{name} no longer equals the copies it replaced; update the pin"
+    assert body_key(shared) == pin, f"{owner}.{name} no longer equals the copies it replaced; update the pin"
 
 
 def test_cfb_fox_ext_gets_through_the_layout_getter() -> None:
@@ -160,24 +153,13 @@ def test_a_failed_crosswalk_read_is_a_miss_and_is_not_cached(monkeypatch) -> Non
     assert idmap._CFB_CROSSWALK_CACHE == {}
 
 
-def _body_only_hash(fn: object, rename: dict) -> str:
-    """sha256[:16] of a function's body AST (no signature, no docstring), names in ``rename`` mapped first."""
-    node = ast.parse(textwrap.dedent(inspect.getsource(fn))).body[0]
-    body = node.body
-    if body and isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant):
-        body = body[1:]
-    dump = "".join(ast.dump(b) for b in body)
-    for old, new in rename.items():
-        dump = dump.replace(f"'{old}'", f"'{new}'")
-    return hashlib.sha256(dump.encode()).hexdigest()[:16]
-
-
 def test_scoreboard_event_parsing_is_one_body_with_the_league_home_away_step(monkeypatch) -> None:
     """B-M29: the seven ``scoreboard_event_parsing`` bodies were AST-identical; each now calls the one
     ``_scoreboard_event`` with its own league's ``__extract_home_away`` (the step's defaults differ by sport, so it
-    is a parameter). The shared body, with the parameter read as the old global, hashes to the deleted copies."""
+    is a parameter). The pin is the current body, deliberately changed in #1001: the deleted copies called the
+    module global ``__extract_home_away`` (key b7c64f4afbde572e), the shared body takes it as a parameter."""
     sched = importlib.import_module(_SCHEDULE)
-    assert _body_only_hash(sched._scoreboard_event, {"extract_home_away": "__extract_home_away"}) == "355447b0de5b4f8e"
+    assert body_key(sched._scoreboard_event) == "ce665ba26eff3b3d"
     for lg in _SEVEN:
         mod = importlib.import_module(f"{_LG}.{lg}.{lg}_schedule")
         calls: list = []
@@ -187,45 +169,48 @@ def test_scoreboard_event_parsing_is_one_body_with_the_league_home_away_step(mon
         assert calls == [(event, getattr(mod, "__extract_home_away"))], lg
 
 
-# Task 6.1 (a), B-M29 / B-M30: the shared bodies gained type annotations the deleted copies lacked, so these
-# pins are of the body alone (no signature, no docstring), computed on the copies at a78e6c17d2. nhl keeps its
-# own roster_items (it does not drop period / for_player_id / active).
+# Task 6.1 (a), B-M29 / B-M30: the shared bodies gained type annotations the deleted copies lacked; the canonical
+# key ignores annotations. nhl keeps its own roster_items (it does not drop period / for_player_id / active).
 SHARED_BODY_ONLY = [
     (
         _ROSTERS,
         "game_items",
         [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_game_items") for lg in _SEVEN],
-        "bb613e4495138b68",
+        "945fc471dc919246",
     ),
     (
         _ROSTERS,
         "team_items",
         [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_team_items") for lg in _SEVEN],
-        "c5af81a5ed87ffd3",
+        # current body, not the deleted copies': those were one-line wrappers around it (shared since #878, key
+        # 8f78866dd5a3dcbd); #1001 bound the names to it directly
+        "dbec5a384652bebd",
     ),
     (
         _ROSTERS,
         "athlete_items",
         [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_athlete_items") for lg in _SEVEN],
-        "6f6234d8f5bf8b66",  # #1002 + #1006: the duplicate snake-case key guard, shallowest key wins (MLB debutYear vs debut.year)
+        # current body, deliberately changed in #1002 and #1006 (the duplicate snake-case key guard, shallowest key
+        # wins: MLB debutYear vs debut.year); the deleted one-line wrappers keyed e01649b3176f5591
+        "1ff15e20a9a0bed8",
     ),
     (
         _ROSTERS,
         "roster_items",
         [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_roster_items") for lg in _SEVEN if lg != "nhl"],
-        "ca17f1e34f4a9a00",
+        "db9e425267f9d4d5",
     ),
     (
         _SCHEDULE,
         "_extract_home_away_nba",
         [(f"{_LG}.{lg}.{lg}_schedule", "__extract_home_away") for lg in ("nba", "wnba")],
-        "a2483927b31d693f",
+        "1c6c7383a3e24838",
     ),
     (
         _SCHEDULE,
         "_extract_home_away_college",
         [(f"{_LG}.{lg}.{lg}_schedule", "__extract_home_away") for lg in ("cfb", "wbb")],
-        "c0b728de9c672f97",
+        "a6802be4d276c070",
     ),
 ]
 
@@ -237,7 +222,7 @@ def test_every_former_espn_copy_is_the_shared_body(owner: str, name: str, copies
     shared = getattr(importlib.import_module(owner), name)
     for module, copy_name in copies:
         assert getattr(importlib.import_module(module), copy_name) is shared, f"{module}.{copy_name} is a copy again"
-    assert _body_only_hash(shared, {}) == pin, f"{owner}.{name} no longer equals the copies it replaced; update the pin"
+    assert body_key(shared) == pin, f"{owner}.{name} no longer equals the copies it replaced; update the pin"
 
 
 # R61a-2: the deliberate outliers stay their own bodies. nhl's roster_items keeps period / for_player_id / active;
@@ -301,21 +286,6 @@ def test_outlier_home_away_steps_keep_their_league_defaults(
 # --- 6.1d: parser helpers, the browser User-Agent, the mls/nwsl getter (A-N15, A-L59, A-L8) ---------------
 
 
-def _untyped_body_hash(fn: object) -> str:
-    """sha256[:16] of a function's parameters + body AST with annotations, docstring and name excluded.
-
-    The shared copies are typed for the mypy ratchet; most of the deleted copies were not.
-    """
-    node = ast.parse(textwrap.dedent(inspect.getsource(fn))).body[0]
-    assert isinstance(node, ast.FunctionDef)
-    for arg in node.args.posonlyargs + node.args.args + node.args.kwonlyargs:
-        arg.annotation = None
-    body = node.body
-    if body and isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant):
-        body = body[1:]
-    return hashlib.sha256((ast.dump(node.args) + "".join(ast.dump(b) for b in body)).encode()).hexdigest()[:16]
-
-
 _PARSERS = "sportsdataverse._parser_common"
 _MLB_API = "sportsdataverse.mlb.mlb_api_parsers"
 _NHL_WEB = "sportsdataverse.nhl.nhl_api_web_parsers"
@@ -328,11 +298,11 @@ _MLB_NHL_PARSERS = (
 )
 _ESPN_PARSERS = "sportsdataverse._common_espn_parsers"
 
-# (shared name, former-copy modules, untyped hash of the deleted copies at the merge commit)
+# (shared name, former-copy modules, canonical key of the deleted copies at the merge commit)
 PARSER_SHARED = [
-    ("_snake_columns", _MLB_NHL_PARSERS, "13d5edd96daffeaa"),
-    ("_empty_frame", (*_MLB_NHL_PARSERS, _ESPN_PARSERS), "286e4f5349dcd93d"),
-    ("_as_dict", (_MLB_API, _NHL_WEB), "cb2a840410514d0f"),
+    ("_snake_columns", _MLB_NHL_PARSERS, "fa95bf879b4c3477"),
+    ("_empty_frame", (*_MLB_NHL_PARSERS, _ESPN_PARSERS), "21a85e7199b77600"),
+    ("_as_dict", (_MLB_API, _NHL_WEB), "0ed57da7de510562"),
 ]
 
 
@@ -341,7 +311,7 @@ def test_parser_helpers_are_one_body(name: str, copies: tuple, pin: str) -> None
     shared = getattr(importlib.import_module(_PARSERS), name)
     for module in copies:
         assert getattr(importlib.import_module(module), name) is shared, f"{module}.{name} is a copy again"
-    assert _untyped_body_hash(shared) == pin, f"{_PARSERS}.{name} no longer equals the copies it replaced"
+    assert body_key(shared) == pin, f"{_PARSERS}.{name} no longer equals the copies it replaced"
 
 
 def test_from_pandas_errors_is_one_tuple() -> None:

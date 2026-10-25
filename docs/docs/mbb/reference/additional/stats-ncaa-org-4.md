@@ -1,10 +1,43 @@
 ---
-title: "MBB — additional Python functions — stats.ncaa.org: sum_event–validate_lineup"
-sidebar_label: "stats.ncaa.org: sum_event–validate_lineup"
+title: "MBB — additional Python functions — stats.ncaa.org: stint_exposure–validate_lineup"
+sidebar_label: "stats.ncaa.org: stint_exposure–validate_lineup"
 sidebar_position: 6
-description: "MBB — additional Python functions — stats.ncaa.org: sum_event–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — stats.ncaa.org: stint_exposure–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — stats.ncaa.org: sum_event–validate_lineup
+# MBB — additional Python functions — stats.ncaa.org: stint_exposure–validate_lineup
+
+### stint_exposure {#stint_exposure}
+
+`stint_exposure(stints: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+`player_id` -> `off_poss` / `def_poss` from a stint frame's REAL possessions.
+
+`fit_weight` is deliberately ignored: exposure is a count of possessions
+PLAYED, never a count of possessions the fit chose to believe. Callers that
+need a possession total (an SPM prior's exposure shrink, a possession bin)
+use this so the count means the same thing everywhere.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `stints` | `DataFrame` |  | `aggregate_stints` output (one season, or a pooled design). |
+
+**Returns**
+
+One row per player: `player_id`, `off_poss`, `def_poss` (Int64).
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Unique player identifier. |
+| `off_poss` | integer | Offensive possessions the player was on court for; the regression weight behind orapm. |
+| `def_poss` | integer | Defensive possessions the player was on court for; the regression weight behind drapm. |
+
+**Example**
+
+```python
+stint_exposure(stints).sort("off_poss", descending=True).head()
+```
 
 ### sum_event_stats {#sum_event_stats}
 

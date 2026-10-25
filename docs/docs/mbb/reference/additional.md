@@ -159,7 +159,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [split_half_se_check](additional/stats-ncaa-org-3.md#split_half_se_check) | Odd-vs-even-game refit: are the standard errors on the right scale? |
 | [stack_seasons](additional/stats-ncaa-org-3.md#stack_seasons) | Pool several seasons' stints into ONE decayed-weight design for `target`. |
 | [start_time_from_period](additional/stats-ncaa-org-3.md#start_time_from_period) | The game-clock time (minutes elapsed) a period starts at |
-| [stint_exposure](additional/stats-ncaa-org-3.md#stint_exposure) | PLAYED, never a count of possessions the fit chose to believe. Callers that |
+| [stint_exposure](additional/stats-ncaa-org-4.md#stint_exposure) | PLAYED, never a count of possessions the fit chose to believe. Callers that |
 | [sum_event_stats](additional/stats-ncaa-org-4.md#sum_event_stats) | Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models |
 | [sum_shot_infos](additional/stats-ncaa-org-4.md#sum_shot_infos) | Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models |
 | [td_at](additional/stats-ncaa-org-4.md#td_at) | JSoup `row >?> element("td:eq(n)")`: the `n`-th `<td>` child. |

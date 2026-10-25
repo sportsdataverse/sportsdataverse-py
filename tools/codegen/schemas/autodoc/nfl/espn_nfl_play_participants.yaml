@@ -179,116 +179,116 @@ columns:
   type: character
   description: ''
 - name: kicker_player_names
-  type: character
+  type: list
   description: ''
 - name: returner_player_names
-  type: character
+  type: list
   description: ''
 - name: assisted_by_player_names
-  type: character
+  type: list
   description: ''
 - name: other_player_names
-  type: character
+  type: list
   description: ''
 - name: passer_player_names
-  type: character
+  type: list
   description: ''
 - name: receiver_player_names
-  type: character
+  type: list
   description: ''
 - name: rusher_player_names
-  type: character
+  type: list
   description: ''
 - name: tackler_player_names
-  type: character
+  type: list
   description: ''
 - name: pass_defender_player_names
-  type: character
+  type: list
   description: ''
 - name: scorer_player_names
-  type: character
+  type: list
   description: ''
 - name: pat_scorer_player_names
-  type: character
+  type: list
   description: ''
 - name: penalized_player_names
-  type: character
+  type: list
   description: ''
 - name: punter_player_names
-  type: character
+  type: list
   description: ''
 - name: fumbler_player_names
-  type: character
+  type: list
   description: ''
 - name: forced_by_player_names
-  type: character
+  type: list
   description: ''
 - name: recoverer_player_names
-  type: character
+  type: list
   description: ''
 - name: sacked_by_player_names
-  type: character
+  type: list
   description: ''
 - name: snapper_player_names
-  type: character
+  type: list
   description: ''
 - name: holder_player_names
-  type: character
+  type: list
   description: ''
 - name: kicker_player_ids
-  type: character
+  type: list
   description: ''
 - name: returner_player_ids
-  type: character
+  type: list
   description: ''
 - name: assisted_by_player_ids
-  type: character
+  type: list
   description: ''
 - name: other_player_ids
-  type: character
+  type: list
   description: ''
 - name: passer_player_ids
-  type: character
+  type: list
   description: ''
 - name: receiver_player_ids
-  type: character
+  type: list
   description: ''
 - name: rusher_player_ids
-  type: character
+  type: list
   description: ''
 - name: tackler_player_ids
-  type: character
+  type: list
   description: ''
 - name: pass_defender_player_ids
-  type: character
+  type: list
   description: ''
 - name: scorer_player_ids
-  type: character
+  type: list
   description: ''
 - name: pat_scorer_player_ids
-  type: character
+  type: list
   description: ''
 - name: penalized_player_ids
-  type: character
+  type: list
   description: ''
 - name: punter_player_ids
-  type: character
+  type: list
   description: ''
 - name: fumbler_player_ids
-  type: character
+  type: list
   description: ''
 - name: forced_by_player_ids
-  type: character
+  type: list
   description: ''
 - name: recoverer_player_ids
-  type: character
+  type: list
   description: ''
 - name: sacked_by_player_ids
-  type: character
+  type: list
   description: ''
 - name: snapper_player_ids
-  type: character
+  type: list
   description: ''
 - name: holder_player_ids
-  type: character
+  type: list
   description: ''

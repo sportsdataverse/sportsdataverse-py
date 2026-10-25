@@ -216,7 +216,7 @@ names and ids.
 
 **Returns**
 
-Polars (or pandas) DataFrame, one row per play; the raw play dicts when `raw=True`.
+Polars (or pandas) DataFrame, one row per play with at least one participant (a play whose `participants[]` is empty has no row); the raw play dicts when `raw=True`.
 
 | col_name | type | description |
 |---|---|---|
@@ -279,44 +279,44 @@ Polars (or pandas) DataFrame, one row per play; the raw play dicts when `raw=Tru
 | `sacked_by_position_id` | character |  |
 | `snapper_position_id` | character |  |
 | `holder_position_id` | character |  |
-| `kicker_player_names` | character |  |
-| `returner_player_names` | character |  |
-| `assisted_by_player_names` | character |  |
-| `other_player_names` | character |  |
-| `passer_player_names` | character |  |
-| `receiver_player_names` | character |  |
-| `rusher_player_names` | character |  |
-| `tackler_player_names` | character |  |
-| `pass_defender_player_names` | character |  |
-| `scorer_player_names` | character |  |
-| `pat_scorer_player_names` | character |  |
-| `penalized_player_names` | character |  |
-| `punter_player_names` | character |  |
-| `fumbler_player_names` | character |  |
-| `forced_by_player_names` | character |  |
-| `recoverer_player_names` | character |  |
-| `sacked_by_player_names` | character |  |
-| `snapper_player_names` | character |  |
-| `holder_player_names` | character |  |
-| `kicker_player_ids` | character |  |
-| `returner_player_ids` | character |  |
-| `assisted_by_player_ids` | character |  |
-| `other_player_ids` | character |  |
-| `passer_player_ids` | character |  |
-| `receiver_player_ids` | character |  |
-| `rusher_player_ids` | character |  |
-| `tackler_player_ids` | character |  |
-| `pass_defender_player_ids` | character |  |
-| `scorer_player_ids` | character |  |
-| `pat_scorer_player_ids` | character |  |
-| `penalized_player_ids` | character |  |
-| `punter_player_ids` | character |  |
-| `fumbler_player_ids` | character |  |
-| `forced_by_player_ids` | character |  |
-| `recoverer_player_ids` | character |  |
-| `sacked_by_player_ids` | character |  |
-| `snapper_player_ids` | character |  |
-| `holder_player_ids` | character |  |
+| `kicker_player_names` | list |  |
+| `returner_player_names` | list |  |
+| `assisted_by_player_names` | list |  |
+| `other_player_names` | list |  |
+| `passer_player_names` | list |  |
+| `receiver_player_names` | list |  |
+| `rusher_player_names` | list |  |
+| `tackler_player_names` | list |  |
+| `pass_defender_player_names` | list |  |
+| `scorer_player_names` | list |  |
+| `pat_scorer_player_names` | list |  |
+| `penalized_player_names` | list |  |
+| `punter_player_names` | list |  |
+| `fumbler_player_names` | list |  |
+| `forced_by_player_names` | list |  |
+| `recoverer_player_names` | list |  |
+| `sacked_by_player_names` | list |  |
+| `snapper_player_names` | list |  |
+| `holder_player_names` | list |  |
+| `kicker_player_ids` | list |  |
+| `returner_player_ids` | list |  |
+| `assisted_by_player_ids` | list |  |
+| `other_player_ids` | list |  |
+| `passer_player_ids` | list |  |
+| `receiver_player_ids` | list |  |
+| `rusher_player_ids` | list |  |
+| `tackler_player_ids` | list |  |
+| `pass_defender_player_ids` | list |  |
+| `scorer_player_ids` | list |  |
+| `pat_scorer_player_ids` | list |  |
+| `penalized_player_ids` | list |  |
+| `punter_player_ids` | list |  |
+| `fumbler_player_ids` | list |  |
+| `forced_by_player_ids` | list |  |
+| `recoverer_player_ids` | list |  |
+| `sacked_by_player_ids` | list |  |
+| `snapper_player_ids` | list |  |
+| `holder_player_ids` | list |  |
 
 **Example**
 

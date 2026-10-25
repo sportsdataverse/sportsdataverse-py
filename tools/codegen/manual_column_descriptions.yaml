@@ -3903,6 +3903,21 @@ espn_mbb_schedule:
   home_current_rank: Current national poll ranking of the home team at the time of the game, or null if unranked.
   home_linescores: Period-by-period scoring breakdown for the home team, serialized as a packed integer sequence.
   home_records: Win-loss record string(s) for the home team across applicable record categories (e.g., overall, conference).
+espn_mlb_game_rosters:
+  game_id: ESPN game (event) id the roster belongs to.
+  team_id: ESPN team id of the competitor whose roster the row comes from.
+  home_away: Whether the row's team is the home or the away side of the game ("home" / "away").
+  athlete_id: ESPN athlete id, from the roster entry's playerId (else the id in its athlete $ref).
+  athlete_full_name: The athlete's full name, from his ESPN athlete record (the roster entry carries only a short name).
+  athlete_jersey: The athlete's jersey number as text, from his ESPN athlete record.
+  athlete_position_id: ESPN position id of the athlete's listed position on his athlete record, i.e. his season
+    position, not necessarily where he played in this game (see game_position_id).
+  athlete_position_abbreviation: Abbreviation of the athlete's listed (season) position on his athlete record, e.g. RF or SS.
+  athlete_position_name: Name of the athlete's listed (season) position on his athlete record, e.g. Right Field.
+  game_position_id: ESPN position id the player entered this game at, from the roster entry's own position $ref (e.g.
+    8 for a center fielder; 11 is a pinch hitter and 12 a pinch runner). It is the entry position only, not any later
+    move in the game; differs from athlete_position_id when he played out of his listed position.
+  athlete_starter: Whether the athlete started this game, from the roster entry.
 espn_mlb_player_stats:
   batting_bipa: Batting average on balls in the air (fly balls and line drives), measuring in-play success on airborne contact.
   batting_mlb_rating: ESPN's composite MLB rating for the batter reflecting overall offensive performance.
@@ -39894,7 +39909,8 @@ load_ncaa_mbb_possessions:
   poss_team: Name of the team in possession.
   poss_team_espn_team_id: ESPN team identifier of the team in possession, via the NCAA-to-ESPN crosswalk.
   poss_team_ncaa_team_id: stats.ncaa.org team identifier of the team in possession.
-  start_event_type: Event type that opened the possession (e.g., a defensive rebound or a made-basket inbound).
+  start_event_type: Event type of the play immediately before the possession's first event (what started it,
+    e.g. a defensive rebound or a made basket), not the possession's own first event.
 load_ncaa_mbb_rapm:
   def_poss: Defensive possessions the player was on court for; the regression weight behind drapm.
   drapm: 'Defensive regularized adjusted plus-minus: points prevented per 100 possessions on defense (higher is better defense),
@@ -40408,7 +40424,8 @@ load_ncaa_wbb_possessions:
   poss_team_espn_team_id: ESPN team identifier of the team in possession, via the NCAA-to-ESPN crosswalk.
   poss_team_ncaa_team_id: stats.ncaa.org team identifier of the team in possession.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
-  start_event_type: Event type that opened the possession (e.g., a defensive rebound or a made-basket inbound).
+  start_event_type: Event type of the play immediately before the possession's first event (what started it,
+    e.g. a defensive rebound or a made basket), not the possession's own first event.
 load_ncaa_wbb_rapm:
   def_poss: Defensive possessions the player was on court for; the regression weight behind drapm.
   drapm: 'Defensive regularized adjusted plus-minus: points prevented per 100 possessions on defense (higher is better defense),
@@ -71037,7 +71054,8 @@ resolve_possessions:
   poss_team: Name of the team in possession.
   poss_team_espn_team_id: ESPN team identifier of the team in possession, via the NCAA-to-ESPN crosswalk.
   poss_team_ncaa_team_id: stats.ncaa.org team identifier of the team in possession.
-  start_event_type: Event type that opened the possession (e.g., a defensive rebound or a made-basket inbound).
+  start_event_type: Event type of the play immediately before the possession's first event (what started it,
+    e.g. a defensive rebound or a made basket), not the possession's own first event.
 aggregate_stints:
   def_ids: Sorted player ids of the five defensive players in the stint (a list).
   def_team: Team on defense during the stint.
@@ -71083,6 +71101,18 @@ possession_deciles:
   n: Number of players in the bin.
   poss_max: Most possessions of any player in the bin.
   poss_min: Fewest possessions of any player in the bin.
+  coverage_orapm: Share of the bin's players whose split-half orapm difference falls within 2 posterior SEs (|z| <= 2);
+    present only on split_half_se_check per_player input, should sit near 0.95.
+  coverage_orapm_sampling: Share of the bin's players whose split-half orapm difference falls within 2 sampling SEs (|z|
+    <= 2); present only on split_half_se_check per_player input, should sit near 0.95.
+  coverage_drapm: Share of the bin's players whose split-half drapm difference falls within 2 posterior SEs (|z| <= 2);
+    present only on split_half_se_check per_player input, should sit near 0.95.
+  coverage_drapm_sampling: Share of the bin's players whose split-half drapm difference falls within 2 sampling SEs (|z|
+    <= 2); present only on split_half_se_check per_player input, should sit near 0.95.
+  coverage_rapm_net: Share of the bin's players whose split-half rapm_net difference falls within 2 posterior SEs (|z|
+    <= 2); present only on split_half_se_check per_player input, should sit near 0.95.
+  coverage_rapm_net_sampling: Share of the bin's players whose split-half rapm_net difference falls within 2 sampling
+    SEs (|z| <= 2); present only on split_half_se_check per_player input, should sit near 0.95.
 stack_seasons:
   def_ids: Sorted player ids of the five defensive players in the stint (a list).
   def_team: Team on defense during the stint.

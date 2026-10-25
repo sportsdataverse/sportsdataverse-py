@@ -295,9 +295,12 @@ def download(
     Canonical HTTP gateway used by every wrapper in the package. Wraps
     :mod:`requests` with an exponential-style retry loop, raises
     :class:`~sportsdataverse.errors.NoDataError` on any 404 -- an ESPN
-    200-with-``code:404`` body included, and release assets on GitHub too --
-    and surfaces transient failures through the supplied ``logger`` rather
-    than raising.
+    200-with-``code:404`` body included, and release assets on GitHub too.
+    Retryable statuses (403/408/429/5xx) and connection failures are retried
+    and logged through ``logger``; once the status budget is spent the last
+    response is RETURNED, not raised, so read its body through
+    ``_codegen_runtime._download_json``. A connection failure that outlives
+    the budget is re-raised (see Raises).
 
     Args:
         url: Target URL.

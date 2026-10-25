@@ -125,7 +125,16 @@ class OracleLike(Protocol):
         Any object with these members qualifies (a runtime-checkable Protocol)::
 
             from sportsdataverse.validation.findings import OracleLike
-            isinstance(my_oracle, OracleLike)
+
+            class MyOracle:
+                domain = "nfl"
+                column_map = {"epa": "epa"}
+                thresholds = {"epa": 0.99}
+
+                def reference_frame(self, dataset, keys):
+                    return None
+
+            isinstance(MyOracle(), OracleLike)  # True
 
     See Also:
         * :func:`~sportsdataverse.validation.pbp_invariants.run` -- the shipped check that records findings

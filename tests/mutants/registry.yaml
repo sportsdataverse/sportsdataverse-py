@@ -5248,12 +5248,58 @@
   expected: kill
   note: 'the logo except wrote "" silently'
 
+- id: mlb-game-rosters-game-position-from-the-entry
+  group: espn-rosters
+  finding: B-L25
+  file: sportsdataverse/mlb/mlb_game_rosters.py
+  snippet: '        "game_position_id": _ref_id(entry_position.get("$ref"), _POSITION_ID_RE),'
+  mutant: '        "game_position_id": None,'
+  test: tests/test_espn_game_rosters_family.py -k "game_position_is_the_entrys"
+  expected: kill
+  note: The game position from the entry's position $ref is lost again (PRE-1008 M-1).
+- id: mlb-game-rosters-id-from-the-athlete-ref
+  group: espn-rosters
+  finding: B-L25
+  file: sportsdataverse/mlb/mlb_game_rosters.py
+  snippet: '    player_id = e.get("playerId") if e.get("playerId") is not None else _ref_id(href, _ATHLETE_ID_RE)'
+  mutant: '    player_id = e.get("playerId")'
+  test: tests/test_espn_game_rosters_family.py -k "take_the_id_from_the_athlete_ref"
+  expected: kill
+  note: An entry with an athlete $ref but no playerId has a null join key and drops (PRE-1008 M-2, bodies B2).
+- id: mlb-game-rosters-unmatched-entry-warns
+  group: espn-rosters
+  finding: B-L25
+  file: sportsdataverse/mlb/mlb_game_rosters.py
+  snippet: '        if unmatched:'
+  mutant: '        if False:'
+  test: tests/test_espn_game_rosters_family.py -k "warn_on_an_entry_that_matches_no_athlete_read"
+  expected: kill
+  note: An entry that matches no athlete record read drops in silence (PRE-1008 M-2).
+- id: mlb-game-rosters-no-readable-athlete-raises
+  group: espn-rosters
+  finding: B-L25
+  file: sportsdataverse/mlb/mlb_game_rosters.py
+  snippet: '        if rows:  # entries exist but no athlete is readable: the siblings'' NoDataError (PRE-1008 D-3)'
+  mutant: '        if False:'
+  test: tests/test_espn_game_rosters_family.py -k "every_athlete_ref_404_raises_like_the_siblings"
+  expected: kill
+  note: Every athlete $ref 404 returns an empty frame where the six sibling chains raise NoDataError (PRE-1008 D-3).
+- id: mlb-game-rosters-athletes-deduplicated
+  group: espn-rosters
+  finding: B-L25
+  file: sportsdataverse/mlb/mlb_game_rosters.py
+  snippet: '            .unique("athlete_id", keep="first", maintain_order=True)  # one record per athlete: no row multiplies'
+  mutant: '            .with_columns(pl.col("athlete_id"))'
+  test: tests/test_espn_game_rosters_family.py -k "repeated_athlete_gives_one_row_per_entry"
+  expected: kill
+  note: A repeated playerId multiplies the joined rows (PRE-1008 minor, bodies B1).
+
 - id: mlb-game-rosters-empty-frame
   group: espn-rosters
   finding: B-L25
   file: sportsdataverse/mlb/mlb_game_rosters.py
-  snippet: 'if not parts:  # B-L25: no competitors, no roster or no readable athlete -> the documented columns, zero rows'
-  mutant: 'if False:'
+  snippet: '        return _espn_game_rosters.roster_ids(pl.DataFrame(schema=schema))'
+  mutant: '        return None'
   test: tests/test_espn_game_rosters_family.py -k mlb_game_rosters_empty
   expected: kill
   note: 'empty competitors returned None (removed) / a zero-column frame'
@@ -8283,3 +8329,32 @@
   note: >-
     Reading the very next row, a timeout filed between a safety and its free kick hides the kick: on nfl-raw
     250918010/3832 and 300912002/4199 lose their safety; the test copies a timeout in after 271021019/2661.
+
+# --- PRE-1008 D-1: the saved-payload readers decode UTF-8 on every platform ----
+- id: nba-pbp-disk-reads-utf8
+  group: utf8-reads
+  finding: D-1
+  file: sportsdataverse/nba/nba_pbp.py
+  snippet: '    with open(os.path.join(path_to_json, f"{game_id}.json"), encoding="utf-8") as json_file:'
+  mutant: '    with open(os.path.join(path_to_json, f"{game_id}.json")) as json_file:'
+  test: tests/test_pbp_disk_utf8.py -k "nba"
+  expected: kill
+  note: The nba disk reader leaves the encoding to the platform again (cp1252 on Windows); PRE-1008 D-1.
+- id: nfl-pbp-disk-reads-utf8
+  group: utf8-reads
+  finding: D-1
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        with open(os.path.join(self.path_to_json, f"{self.gameId}.json"), encoding="utf-8") as json_file:'
+  mutant: '        with open(os.path.join(self.path_to_json, f"{self.gameId}.json")) as json_file:'
+  test: tests/test_pbp_disk_utf8.py -k "nfl"
+  expected: kill
+  note: The nfl disk reader leaves the encoding to the platform again (cp1252 on Windows); PRE-1008 D-1.
+- id: cfb-pbp-disk-reads-utf8
+  group: utf8-reads
+  finding: D-1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '        with open(os.path.join(self.path_to_json, f"{self.gameId}.json"), encoding="utf-8") as json_file:'
+  mutant: '        with open(os.path.join(self.path_to_json, f"{self.gameId}.json")) as json_file:'
+  test: tests/test_pbp_disk_utf8.py -k "cfb"
+  expected: kill
+  note: The cfb disk reader leaves the encoding to the platform again (cp1252 on Windows); PRE-1008 D-1.
