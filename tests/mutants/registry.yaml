@@ -7125,6 +7125,16 @@
   expected: kill
   note: The pandas output of a parser reads a null-bearing id as float64 again (R981-2).
 
+- id: nhl-pandas-ids-nullable-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  snippet: '    return _pandas_ids(out, df) if return_as_pandas else out'
+  mutant: '    return df if return_as_pandas else out'
+  test: tests/test_nhl_aux_parsers.py -k "nhl_pandas_ids_are_nullable_int64 and pbp_2024_scf_g7"
+  expected: kill
+  note: The NHL api-web pandas output skips the id cast and keeps float64 player ids (R986-1).
+
 - id: espn-snapshot-id-refusal-warns
   group: dtype-contract-5-2
   finding: B-M15

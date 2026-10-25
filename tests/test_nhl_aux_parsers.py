@@ -227,3 +227,19 @@ def test_nhl_ids_int64(api, module, parser, fname):
         text = {c for c in ids if c in _NHL_TEXT_ID_COLUMNS or (fname, c) in _NHL_TEXT_IDS}
         assert {c: t for c, t in ids.items() if c not in text and t != pl.Int64} == {}, sec
         assert all(ids[c] == pl.String for c in text), sec
+
+
+@pytest.mark.parametrize(("api", "module", "parser", "fname"), list(_nhl_native_cases()))
+def test_nhl_pandas_ids_are_nullable_int64(api, module, parser, fname):
+    """R986-1: ``return_as_pandas=True`` carries the same ids as pandas' nullable ``Int64``. Before, the pandas frame
+    skipped the cast: ``details_*_player_id`` on the scf g7 pbp were ``float64`` and records ids mixed float / object."""
+    import importlib
+
+    fn = getattr(importlib.import_module(f"sportsdataverse.{module}"), parser)
+    raw = load_fixture(api, fname.removesuffix(".json"))
+    out, pdf_out = fn(raw), fn(raw, return_as_pandas=True)
+    frames = out if isinstance(out, dict) else {"": out}
+    pdfs = pdf_out if isinstance(pdf_out, dict) else {"": pdf_out}
+    for sec, df in frames.items():
+        ids = [c for c, t in df.schema.items() if t == pl.Int64 and (c == "id" or c.endswith("_id"))]
+        assert {c: str(pdfs[sec][c].dtype) for c in ids} == dict.fromkeys(ids, "Int64"), sec
