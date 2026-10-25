@@ -141,11 +141,11 @@ def test_corsi_fenwick_on_ice_player_level():
     out = corsi_fenwick_on_ice(pbp)
     # player 10 (home): on ice for 2 home attempts (shot+blocked) => CF 2
     # the goal was by away team (team_id=1, home_team_id=3, so team != home) while 10 on ice => CA 1
-    p10 = out.filter(pl.col("player_id") == "10")
+    p10 = out.filter(pl.col("player_id") == 10)
     assert p10["corsi_for"][0] == 2 and p10["corsi_against"][0] == 1
     # player 20 (away): home had shot+blocked while 20 on ice => CA 2
     # away goal while 20 on => CF 1
-    p20 = out.filter(pl.col("player_id") == "20")
+    p20 = out.filter(pl.col("player_id") == 20)
     assert p20["corsi_for"][0] == 1 and p20["corsi_against"][0] == 2
     assert not out["corsi_includes_missed"].any()
 

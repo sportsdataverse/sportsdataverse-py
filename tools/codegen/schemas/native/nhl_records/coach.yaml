@@ -74,7 +74,7 @@ columns:
   type: integer
   description: ''
 - name: team_id
-  type: character
+  type: integer
   description: ''
 - name: top100_player_link
   type: character

@@ -7125,6 +7125,156 @@
   expected: kill
   note: The pandas output of a parser reads a null-bearing id as float64 again (R981-2).
 
+- id: nhl-id-cast-refusal-warns
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    if refused:'
+  mutant: '    if False:'
+  test: tests/test_nhl_aux_parsers.py -k "nhl_id_that_is_not_an_integer"
+  expected: kill
+  note: An NHL id column the cast refuses (text in the payload) stays String with no warning (R986-2).
+
+- id: nhl-stats-rest-country-id-is-text-by-design
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/nhl/nhl_stats_rest_parsers.py
+  snippet: '    return {"formatted_season_id"} | ({"id"} if "country3_code" in columns else set())'
+  mutant: '    return {"formatted_season_id"}'
+  test: tests/test_nhl_aux_parsers.py -k "nhl_ids_int64 and stats_rest_country"
+  expected: kill
+  note: The country endpoint's ISO-code id warns as payload drift on every call (R986-2).
+
+- id: nhl-player-props-ids-join-the-parser-frames
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/nhl/nhl_player_props.py
+  snippet: '    "player_id": pl.Int64,'
+  mutant: '    "player_id": pl.Utf8,'
+  test: tests/nhl/test_nhl_player_props.py -k "props_join_the_nhl_parser_frames"
+  expected: kill
+  note: nhl_player_props pins player_id to Utf8 again, so it cannot join a parse_nhl_web_* frame (R986-3).
+
+- id: nhl-edge-parser-ids-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/nhl/nhl_edge_parsers.py
+  snippet: '        out = _cast_id_columns(pl.from_pandas(df), "NHL EDGE parser")'
+  mutant: '        out = pl.from_pandas(df)'
+  test: tests/test_nhl_aux_parsers.py -k "edge_id_with_a_missing_value"
+  expected: kill
+  note: An EDGE id with a missing value is Float64 again (R986-4).
+
+- id: parser-id-cast-covers-the-bare-id
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    cols = [c for c in df.columns if c == "id" or c.endswith("_id")]'
+  mutant: '    cols = [c for c in df.columns if c.endswith("_id")]'
+  test: tests/test_nhl_aux_parsers.py -k "bare_id_with_a_missing_value"
+  expected: kill
+  note: A bare id column (records id) with a missing value is Float64 again (R986-4).
+
+- id: nhl-pandas-ids-nullable-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  snippet: '    return _pandas_ids(out, df) if return_as_pandas else out'
+  mutant: '    return df if return_as_pandas else out'
+  test: tests/test_nhl_aux_parsers.py -k "nhl_pandas_ids_are_nullable_int64 and pbp_2024_scf_g7"
+  expected: kill
+  note: The NHL api-web pandas output skips the id cast and keeps float64 player ids (R986-1).
+
+- id: hockeytech-enriched-pbp-pandas-ids-nullable-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '        return _pandas_ids(df)'
+  mutant: '        return df.to_pandas()'
+  test: tests/hockeytech/test_pbp_enrich.py -k "enriched_pbp_pandas_ids_are_nullable_int64"
+  expected: kill
+  note: The enriched pbp's pandas output turns a null-bearing team_id into float64 (1.0) again (R988-2).
+
+- id: hockeytech-id-cast-refusal-warns
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    if refused:'
+  mutant: '    if False:'
+  test: tests/hockeytech/test_parsers.py -k "hockeytech_id_that_is_not_an_integer"
+  expected: kill
+  note: A HockeyTech league whose feed ships one text id gets that column String with no warning (R988-3).
+
+- id: hockeytech-game-corsi-joins-toi-on-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '    toi_sel = toi.select("player_id", "toi_seconds")'
+  mutant: '    toi_sel = toi.select(pl.col("player_id").cast(pl.Utf8), "toi_seconds")'
+  test: tests/hockeytech/test_league_families.py -k "game_corsi_joins_toi and ohl"
+  expected: kill
+  note: Every <lg>_game_corsi fails on a Utf8 TOI key again (R988-1).
+
+- id: hockeytech-corsi-toi-join-asserts-key-dtypes
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '    if corsi.schema["player_id"] != toi_sel.schema["player_id"]:'
+  mutant: '    if False:'
+  test: tests/hockeytech/test_league_families.py -k "refuses_a_key_dtype_mismatch"
+  expected: kill
+  note: The Corsi / TOI join stops asserting player_id dtype agreement (R988-1).
+
+- id: hockeytech-family-shifts-pandas-ids
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_family.py
+  snippet: '            return _pandas_ids(shifts)'
+  mutant: '            return shifts.to_pandas()'
+  test: tests/hockeytech/test_league_families.py -k "shifts_and_toi_pandas_ids and ohl and game_shifts"
+  expected: kill
+  note: <lg>_game_shifts pandas ids are numpy int64 / float64 again (R988-2).
+
+- id: hockeytech-family-toi-pandas-ids
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_family.py
+  snippet: '            return _pandas_ids(toi)'
+  mutant: '            return toi.to_pandas()'
+  test: tests/hockeytech/test_league_families.py -k "shifts_and_toi_pandas_ids and ohl and player_toi"
+  expected: kill
+  note: <lg>_player_toi pandas ids are numpy int64 / float64 again (R988-2).
+
+- id: pwhl-shifts-pandas-ids
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/pwhl/pwhl_analytics.py
+  snippet: '        return _pandas_ids(shifts)'
+  mutant: '        return shifts.to_pandas()'
+  test: tests/hockeytech/test_league_families.py -k "shifts_and_toi_pandas_ids and pwhl and game_shifts"
+  expected: kill
+  note: pwhl_game_shifts pandas ids are numpy int64 / float64 again (R988-2).
+
+- id: pwhl-toi-pandas-ids
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/pwhl/pwhl_analytics.py
+  snippet: '        return _pandas_ids(toi)'
+  mutant: '        return toi.to_pandas()'
+  test: tests/hockeytech/test_league_families.py -k "shifts_and_toi_pandas_ids and pwhl and player_toi"
+  expected: kill
+  note: pwhl_player_toi pandas ids are numpy int64 / float64 again (R988-2).
+
+- id: hockeytech-parser-pandas-ids-nullable-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '    return _pandas_ids(out, pdf) if return_as_pandas else out'
+  mutant: '    return pdf if return_as_pandas else out'
+  test: tests/hockeytech/test_parsers.py -k "hockeytech_pandas_ids_are_nullable_int64 and parse_pbp-pwhl_pbp_42"
+  expected: kill
+  note: The HockeyTech parsers' pandas output skips the id cast (pbp player_id float64) (R988-2).
+
 - id: espn-snapshot-id-refusal-warns
   group: dtype-contract-5-2
   finding: B-M15
@@ -7185,6 +7335,47 @@
   expected: kill
   note: An Int32 key joins an Int64 one silently by supertype (a String one would match nothing).
 
+# --- task 5.2 part (b): NHL ids are Int64 at the parser boundary (B-H5, B-GB-10)
+- id: nhl-web-parser-ids-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  snippet: '        out = _cast_id_columns(pl.from_pandas(df), "NHL api-web parser")'
+  mutant: '        out = pl.from_pandas(df)'
+  test: tests/test_nhl_aux_parsers.py -k "ids_int64 and pbp_2024_scf_g7"
+  expected: kill
+  note: parse_nhl_web_pbp emits details_player_id and the other event ids as Float64 again.
+
+- id: nhl-records-parser-ids-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/nhl/nhl_records_parsers.py
+  snippet: '        out = _cast_id_columns(pl.from_pandas(df), "NHL Records parser")'
+  mutant: '        out = pl.from_pandas(df)'
+  test: tests/test_nhl_aux_parsers.py -k "ids_int64 and nhl_records"
+  expected: kill
+  note: records player_id / franchise_id are Int64, Float64 ('8445802.0') or String by payload again.
+
+- id: nhl-edge-value-player-id-int64
+  group: dtype-contract-5-2
+  finding: B-GB-10
+  file: sportsdataverse/nhl/nhl_edge_value.py
+  snippet: '    "player_id": pl.Int64,'
+  mutant: '    "player_id": pl.Utf8,'
+  test: tests/nhl/test_nhl_edge_value.py -k "player_id_is_int64"
+  expected: kill
+  note: The PWHL / empty skating-value frame pins player_id Utf8 again (the retired pin).
+
+- id: nhl-edge-value-casts-detail-ids
+  group: dtype-contract-5-2
+  finding: B-GB-10
+  file: sportsdataverse/nhl/nhl_edge_value.py
+  snippet: '    out = _cast_ids_int64(scored, ["player_id"]).with_columns(pl.col("season").cast(pl.Int64)).select(select_cols)'
+  mutant: '    out = scored.with_columns(pl.col("season").cast(pl.Int64)).select(select_cols)'
+  test: tests/nhl/test_nhl_edge_value.py -k "player_id_is_int64"
+  expected: kill
+  note: The skating value keeps the EDGE capture's text player ids, so it joins no NHL frame.
+
 - id: cfb-drive-columns-every-documented-drive-key
   group: dtype-contract-5-1
   finding: C-L5
@@ -7194,3 +7385,34 @@
   test: tests/cfb/test_cfb_pbp_processor_fixes.py -k "no_drive_carries and 400547808"
   expected: kill
   note: R980-1, one entry (here the four drive.team.* columns) dropped from the typed list leaves 400547808's team columns Null.
+
+# --- task 5.2 part (c): HockeyTech ids are Int64 at the parser boundary (B-H5, B-L72)
+- id: hockeytech-parser-ids-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '    out = _cast_id_columns(pl.from_pandas(pdf), "HockeyTech parser")'
+  mutant: '    out = pl.from_pandas(pdf)'
+  test: tests/hockeytech/test_parsers.py -k "hockeytech_ids_int64"
+  expected: kill
+  note: player_id is Float64 in pbp and String in roster / leaders / summary again; game_id copies the caller (B-L72).
+
+- id: hockeytech-meta-team-id-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '        home_team_id=pl.lit(home_team_id, dtype=pl.Int64),'
+  mutant: '        home_team_id=pl.lit(str(home_team_id or "")),'
+  test: tests/hockeytech/test_pbp_enrich.py -k "enriched_pbp_ids_int64"
+  expected: kill
+  note: enrich_pbp writes the game-summary home team as text ("" when absent) again.
+
+- id: hockeytech-corsi-player-id-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '    return _cast_ids_int64(out, ["player_id"])'
+  mutant: '    return out'
+  test: tests/hockeytech/test_public_surface.py -k "corsi_fenwick_on_ice_player_level"
+  expected: kill
+  note: The on-ice Corsi frame keys players by the text ids of the on-ice strings again.

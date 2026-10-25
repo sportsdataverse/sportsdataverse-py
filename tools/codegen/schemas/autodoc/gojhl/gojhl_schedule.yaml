@@ -2,7 +2,7 @@ schema: gojhl_schedule
 kind: dataframe
 columns:
 - name: game_id
-  type: character
+  type: integer
   description: ''
 - name: game_date
   type: character
@@ -14,7 +14,7 @@ columns:
   type: character
   description: ''
 - name: home_team_id
-  type: character
+  type: integer
   description: ''
 - name: home_score
   type: character
@@ -23,7 +23,7 @@ columns:
   type: character
   description: ''
 - name: away_team_id
-  type: character
+  type: integer
   description: ''
 - name: away_score
   type: character
@@ -32,7 +32,7 @@ columns:
   type: character
   description: ''
 - name: season_id
-  type: character
+  type: integer
   description: ''
 - name: game_type
   type: character

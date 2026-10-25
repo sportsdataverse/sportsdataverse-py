@@ -23,6 +23,7 @@ from typing import Dict
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _cast_id_columns, _pandas_ids
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import _SHAPE_ERRORS, _object_rows, _warn_schema_drift
 
@@ -36,17 +37,23 @@ def _snake_columns(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def _text_ids(columns) -> set:
+    """Id columns that are text by design: the season label ``"1971-72"`` and the country endpoint's ISO code
+    ``"DEU"`` (its ``id`` repeats ``country3_code``). Any other id that is not an integer warns (R986-2)."""
+    return {"formatted_season_id"} | ({"id"} if "country3_code" in columns else set())
+
+
 def _to_output(df: pd.DataFrame, return_as_pandas: bool):
-    if return_as_pandas:
-        return df
     try:
-        return pl.from_pandas(df)
+        out = _cast_id_columns(pl.from_pandas(df), "NHL Stats REST parser", _text_ids(df.columns))
     except _FROM_PANDAS_ERRORS:
         # A mixed-type object column fails the Arrow conversion: stringify rather than lose the frame.
         df2 = df.copy()
         for col in [c for c in df2.columns if df2[c].dtype == "object"]:
             df2[col] = df2[col].astype(str)
-        return pl.from_pandas(df2)
+        out = _cast_id_columns(pl.from_pandas(df2), "NHL Stats REST parser", _text_ids(df.columns))
+    # R986-1: the pandas frame carries the same ids, as pandas' nullable Int64 (never float64 / object)
+    return _pandas_ids(out, df) if return_as_pandas else out
 
 
 def _empty_frame(return_as_pandas: bool = False):
