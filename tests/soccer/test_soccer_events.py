@@ -21,6 +21,7 @@ statsbomb = pytest.importorskip("kloppy.statsbomb")
 import sportsdataverse
 from sportsdataverse import soccer
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import AssetFetchError
 from sportsdataverse.soccer import soccer_events_to_frame, soccer_open_dataset, soccer_open_events
 from tests.conftest import skip_if_no_live
 
@@ -134,6 +135,41 @@ def test_open_events_dispatches_to_kloppy_and_forwards_kwargs(monkeypatch: pytes
     # kloppy synthesizes rows (a BALL_OUT after the pass that went out, ...); count what it loaded
     assert df.height == len(_dataset(coordinates="statsbomb").events)
     assert df["coordinates_x"].max() > 1.0  # provider units survived the kwarg
+
+
+def test_truncated_body_is_retried_once_without_kloppys_cache(monkeypatch: pytest.MonkeyPatch) -> None:
+    from kloppy.config import get_config
+
+    caches: list = []
+
+    def flaky_load_open_data(**kwargs: Any) -> Any:
+        caches.append(get_config("cache"))
+        if len(caches) == 1:  # the first read is a cut-off body, as raw.githubusercontent.com served it
+            raise json.JSONDecodeError("Unterminated string starting at", "{...", 1505556)
+        return _dataset(coordinates=kwargs["coordinates"])
+
+    monkeypatch.setattr(statsbomb, "load_open_data", flaky_load_open_data)
+    df = soccer_open_events("statsbomb", 8658)
+    assert df.height > 0
+    assert len(caches) == 2
+    assert caches[1] != caches[0]  # the retry read through a throwaway cache, not the poisoned one
+    assert get_config("cache") == caches[0]  # and the user's cache setting is restored
+
+
+def test_a_second_truncated_body_is_an_asset_fetch_error(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls: list = []
+
+    def corrupt_load_open_data(**kwargs: Any) -> Any:
+        calls.append(kwargs)
+        raise json.JSONDecodeError("Invalid control character at", "{...", 353723)
+
+    monkeypatch.setattr(statsbomb, "load_open_data", corrupt_load_open_data)
+    with pytest.raises(
+        AssetFetchError,
+        match=r"match 8658 \(https://github\.com/statsbomb/open-data/raw/master/data/events/8658\.json\)",
+    ):
+        soccer_open_dataset("statsbomb", 8658)
+    assert len(calls) == 2  # one retry, no more
 
 
 @skip_if_no_live

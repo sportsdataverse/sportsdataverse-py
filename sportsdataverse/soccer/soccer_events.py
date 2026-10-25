@@ -13,9 +13,12 @@ from __future__ import annotations
 
 import dataclasses
 import importlib
+import json
+import tempfile
 from typing import TYPE_CHECKING, Any, Dict, Union
 
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import AssetFetchError
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
     import pandas as pd
@@ -51,6 +54,34 @@ def _stamp_game_id(dataset: Any, game_id: Union[int, str]) -> Any:
 # provider -> the kloppy module attribute whose ``load_open_data(match_id=...)`` serves it.
 # ponytail: statsbomb only; Metrica / SkillCorner open samples follow the same shape when asked for.
 _OPEN_DATA_PROVIDERS: Dict[str, str] = {"statsbomb": "statsbomb"}
+# The events file each provider's loader reads, named in the error a corrupt body raises.
+_OPEN_DATA_EVENT_URLS: Dict[str, str] = {
+    "statsbomb": "https://github.com/statsbomb/open-data/raw/master/data/events/{match_id}.json",
+}
+
+
+def _load_open_data(module: Any, key: str, match_id: Union[int, str], kwargs: Dict[str, Any]) -> Any:
+    """``module.load_open_data``, retried once against a fresh cache when the body is cut off.
+
+    kloppy reads open data through an fsspec ``simplecache``, which keeps a truncated download,
+    so a plain retry would re-read the same partial file. The retry runs against a throwaway
+    cache directory; a second corrupt body is a failed fetch (``AssetFetchError``), never a
+    raw ``JSONDecodeError``.
+    """
+    try:
+        return module.load_open_data(match_id=match_id, **kwargs)
+    except json.JSONDecodeError:
+        kloppy_config = importlib.import_module("kloppy.config")
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
+            with kloppy_config.config_context("cache", tmp):
+                try:
+                    return module.load_open_data(match_id=match_id, **kwargs)
+                except json.JSONDecodeError as exc:
+                    url = _OPEN_DATA_EVENT_URLS[key].format(match_id=match_id)
+                    raise AssetFetchError(
+                        f"{key} open data: truncated or corrupt body for match {match_id} ({url}), "
+                        "also after one retry without kloppy's cache"
+                    ) from exc
 
 
 def soccer_events_to_frame(dataset: Any, *, return_as_pandas: bool = False) -> Union[pl.DataFrame, pd.DataFrame]:
@@ -131,6 +162,8 @@ def soccer_open_dataset(provider: str, match_id: Union[int, str], **kwargs: Any)
     Raises:
         ImportError: kloppy is not installed -- ``pip install "sportsdataverse[soccer]"``.
         ValueError: ``provider`` is not a supported open-data key.
+        AssetFetchError: the events file arrived truncated or corrupt twice (the retry bypasses
+            kloppy's cache).
 
     Example:
         Quick start::
@@ -153,7 +186,7 @@ def soccer_open_dataset(provider: str, match_id: Union[int, str], **kwargs: Any)
         raise ValueError(f"unknown open-data provider {provider!r}; supported: {sorted(_OPEN_DATA_PROVIDERS)}")
     module = _provider_module(key)
     kwargs.setdefault("coordinates", key)  # provider units (StatsBomb 120 x 80), what pitch_coords() expects
-    dataset = module.load_open_data(match_id=match_id, **kwargs)
+    dataset = _load_open_data(module, key, match_id, kwargs)
     return _stamp_game_id(dataset, match_id)
 
 
@@ -189,6 +222,8 @@ def soccer_open_events(
     Raises:
         ImportError: kloppy is not installed -- ``pip install "sportsdataverse[soccer]"``.
         ValueError: ``provider`` is not a supported open-data key.
+        AssetFetchError: the events file arrived truncated or corrupt twice (the retry bypasses
+            kloppy's cache).
 
     Example:
         Quick start::
