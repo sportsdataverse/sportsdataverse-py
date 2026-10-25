@@ -6,6 +6,61 @@ description: "WBB — additional Python functions — stats.ncaa.org: ncaa_wbb�
 ---
 # WBB — additional Python functions — stats.ncaa.org: ncaa_wbb–validate_lineup
 
+### ncaa_wbb_team_roster {#ncaa_wbb_team_roster}
+
+`ncaa_wbb_team_roster(team_id: 'Optional[int]' = None, *, team: 'Optional[str]' = None, season: 'Optional[str]' = None, fetcher: "Optional['NcaaFetcher']" = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+
+Scrape a women's team roster from stats.ncaa.org.
+
+Port of wbigballR `get_team_roster` with name resolution fixed to the
+WBB crosswalk (see the module docstring). The roster parser itself is
+league-agnostic; algorithm detail:
+`sportsdataverse.mbb.mbb_ncaa_schedule.ncaa_mbb_team_roster`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Optional[int]` | `None` | stats.ncaa.org team id (changes every season). |
+| `team` | `Optional[str]` | `None` | School name, e.g. `"South Carolina"`. |
+| `season` | `Optional[str]` | `None` | Season string, e.g. `"2024-25"`; required with `team`. |
+| `fetcher` | `Optional['NcaaFetcher']` | `None` | Injectable `~sportsdataverse.mbb.mbb_ncaa_fetch. NcaaFetcher`; defaults to a fresh browser-transport fetcher. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per player — see `~sportsdataverse.mbb.mbb_ncaa_schedule.parse_ncaa_bb_team_roster` for the column contract.
+
+| col_name | type | description |
+|---|---|---|
+| `gp` | character | Games played. |
+| `gs` | character | Games started. |
+| `jersey` | character | Jersey number worn by the player. |
+| `name` | character | Display name. |
+| `class` | character | College class / draft eligibility note. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `height` | character | Player height (string e.g. '6-2' or inches). |
+| `hometown` | character | Player hometown. |
+| `high_school` | character |  |
+| `player` | character | Player name. |
+| `clean_name` | character |  |
+| `ht_inches` | integer |  |
+| `player_id` | character | Unique player identifier. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Neither `team_id` nor a resolvable `team`/`season` pair was given. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb.wbb_ncaa_schedule import ncaa_wbb_team_roster
+df = ncaa_wbb_team_roster(team="South Carolina", season="2024-25")
+print(df.select("jersey", "player", "ht_inches").head())
+```
+
 ### ncaa_wbb_team_schedule {#ncaa_wbb_team_schedule}
 
 `ncaa_wbb_team_schedule(team_id: 'Optional[int]' = None, *, team: 'Optional[str]' = None, season: 'Optional[str]' = None, fetcher: "Optional['NcaaFetcher']" = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`

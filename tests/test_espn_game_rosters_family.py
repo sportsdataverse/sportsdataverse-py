@@ -289,3 +289,29 @@ def test_mlb_game_rosters_pandas_ids_are_nullable_int64(monkeypatch):
     assert df.height and df["athlete_id"].null_count() == 0
     ids = [c for c in df.columns if c == "id" or c.endswith("_id")]
     assert {c: str(pdf[c].dtype) for c in ids} == dict.fromkeys(ids, "Int64")
+
+
+def test_athlete_step_keeps_the_top_level_key_whatever_the_json_order(monkeypatch):
+    """R1002-6: an MLB athlete record ships ``debutYear`` beside ``debut.year`` (both snake-case to ``debut_year``).
+    The top-level key wins by rule, not because ESPN happened to serialise it first: on the real record with the
+    nested ``debut`` moved ahead of ``debutYear`` (and its year changed so the two differ) ``debut_year`` is still
+    the top-level value."""
+    from sportsdataverse import _espn_game_rosters
+
+    record = _mlb_athlete(33804)
+    reordered = {"debut": {**record["debut"], "year": record["debutYear"] + 1}}
+    reordered.update({k: v for k, v in record.items() if k != "debut"})
+    href = "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/33804"
+    _serve(monkeypatch, {_key(href): reordered})
+    df = _espn_game_rosters.athlete_items(pl.DataFrame({"athlete_href": [href]}))
+    assert df.columns.count("debut_year") == 1
+    assert df["debut_year"].to_list() == [record["debutYear"]]
+
+
+def test_snake_collision_keeps_the_top_level_key_in_either_column_order():
+    """R1002-6: pandas puts top-level keys first today, so pin the rule on the order it does not produce too."""
+    from sportsdataverse._espn_game_rosters import _NEST, _snake_flattened
+
+    for cols in (("debutYear", f"debut{_NEST}year"), (f"debut{_NEST}year", "debutYear")):
+        frame = pl.DataFrame({c: [2018 if c == "debutYear" else 2019] for c in cols})
+        assert _snake_flattened(frame).to_dicts() == [{"debut_year": 2018}], cols

@@ -4,8 +4,8 @@ One copy of the bodies that were byte-identical across ``mlb/mlb_api_parsers.py`
 ``nhl/nhl_*_parsers.py`` modules and ``_common_espn_parsers.py``. Each module still binds the old
 private name, so ``module._empty_frame`` and friends keep working.
 
-``_to_output`` is not here: since the dtype contract each module's copy differs (the id cast and its
-warning label, ``text_ids``). ``_flatten_rows`` is not here either: it is AST-identical in the MLB and
+``_to_output`` is not here: since the dtype contract (task 5.2) each module's copy differs, in the id cast,
+its warning label and its ``text_ids``. ``_flatten_rows`` is not here either: it is AST-identical in the MLB and
 NHL api-web modules but late-binds that module's own ``_to_output``.
 """
 

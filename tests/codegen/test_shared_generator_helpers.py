@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import ast
 import hashlib
+import re
 from pathlib import Path
 
 import pytest
@@ -56,6 +57,7 @@ PINS = {
     "write_yaml": "cde26123dbd25114",
     "rewrite_schema_dir": "4811f2004dfacda7",
     "capture_for": "4802852069df1789",
+    "refs_root": "8091b40d284bc12d",
 }
 
 
@@ -113,3 +115,30 @@ def test_no_generator_carries_a_copy_of_a_shared_helper() -> None:
 @pytest.mark.parametrize(("name", "pin"), sorted(PINS.items()))
 def test_the_shared_body_equals_the_copies_it_replaced(name: str, pin: str) -> None:
     assert _body_key(_functions(_tree(COMMON))[name]) == pin, f"gen_soccer_common.{name} changed; update the pin"
+
+
+def test_no_generator_inlines_snake_path() -> None:
+    """R61c-2: an inline re-copy of ``snake_path`` (``"{" + underscore(m.group(1)) + "}"`` in a token
+    ``sub``) is not AST-identical to the shared body, so the body-hash check above misses it."""
+    copies = [
+        f"{path.name}:{i}"
+        for path in sorted(CODEGEN.glob("*.py"))
+        if path.name != COMMON
+        for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1)
+        if re.search(r'"\{"\s*\+\s*underscore\(', line)
+    ]
+    assert copies == [], f"use gen_soccer_common.snake_path: {copies}"
+
+
+def test_no_generator_reads_the_refs_env_itself() -> None:
+    """R61c-2: an inline re-copy of ``refs_root`` (a generator reading ``$SDV_INTERNAL_REFS_REPO`` itself, in any
+    function or at module level) differs from the shared body's AST, so the body-hash check above misses it."""
+    copies = [
+        f"{path.name}:{node.lineno}"
+        for path in sorted(CODEGEN.glob("*.py"))
+        if path.name != COMMON
+        for node in ast.walk(ast.parse(path.read_text(encoding="utf-8")))
+        if isinstance(node, ast.Call)
+        and any(isinstance(a, ast.Constant) and a.value == "SDV_INTERNAL_REFS_REPO" for a in node.args)
+    ]
+    assert copies == [], f"use gen_soccer_common.refs_root / refs_dir: {copies}"

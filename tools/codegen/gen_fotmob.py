@@ -38,6 +38,7 @@ from gen_soccer_common import (
     parse_capture,
     refs_dir,
     rewrite_schema_dir,
+    snake_path,
     spec_descriptions,
     write_yaml,
 )
@@ -108,7 +109,7 @@ def _endpoint_entry(spec: dict, path: str, op: dict) -> Dict[str, Any]:
         "short": short,
         "summary": _SUMMARIES.get(short) or op.get("summary") or f"GET {path}",
         # the renderer substitutes a token by the python argument of the same name
-        "path": _TOKEN.sub(lambda m: "{" + underscore(m.group(1)) + "}", path),
+        "path": snake_path(path),
         "parser": PARSER,
         "returns_schema": f"native/{STEM}/{short}",
     }

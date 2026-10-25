@@ -37448,22 +37448,27 @@ wjbl_teams:
     the site''s /team/roster/?team_id=. Not season_team_id.'
   team_name: Franchise name, Japanese or English ('富士通レッドウェーブ' = Fujitsu Red Wave; 'TEAM シリウス' = all-star side Team Sirius).
 ncaa_mbb_possessions:
+  away: Away team's name as the stats.ncaa.org play-by-play page lists it.
   away_1: Away on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always
     occupies the same columns; simple=True keeps on-court order.
   away_2: Away on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True).
   away_3: Away on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True).
   away_4: Away on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True).
   away_5: Away on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  away_score: Away team's score on the possession's first event row (the page's running score after that event).
   first_shot_time: Seconds into the possession (poss_length) at its first field-goal attempt; null when the possession had
     no shot.
   first_shot_type: Event type of the possession's first field-goal attempt ("Layup", "Three Point Jumper", "Two Point Jumper",
     "Hook", "Dunk", "Tip In"); null when the possession had no shot.
+  game_id: stats.ncaa.org game id of the play-by-play page the possession comes from.
+  home: Home team's name as the stats.ncaa.org play-by-play page lists it.
   home_1: Home on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always
     occupies the same columns; simple=True keeps on-court order.
   home_2: Home on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True).
   home_3: Home on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True).
   home_4: Home on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True).
   home_5: Home on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  home_score: Home team's score on the possession's first event row (the page's running score after that event).
   is_assisted: Count of the possession's events that carry a second player (player_2), usually 0 or 1 -- a count, not a flag,
     kept from bigballR's get_possessions for parity.
   is_garbage_time: 1 when any event of the possession falls in garbage time, else 0. Garbage time starts at the first event
@@ -37475,27 +37480,35 @@ ncaa_mbb_possessions:
     on a terminal event. Null when any event of the possession has no flag.'
   last_event_time: Seconds into the possession (poss_length) at its final event.
   last_event_type: Event type of the possession's final event (e.g. a made shot, a turnover or a defensive rebound).
+  period: 'Period number from the stats.ncaa.org page: 1-2 for halves (3+ = overtime), or 1-4 for quarters (5+ = overtime)
+    on a quarters page (women''s games from 2015-16).'
   poss_num: Possession number within the game, stamped upstream by the play-by-play chain (parse_ncaa_bb_game_pbp).
   poss_team: Name of the team in possession.
+  pts: Points scored on the possession, summing shot_value (3, 2, or 1 for a free throw) over its made shots.
   start_event_type: Event type of the play immediately before the possession's first event (what started it, e.g. a defensive
     rebound or a made basket). Null for a game's first possession (fix_cross_game_leak=True, the default).
 ncaa_wbb_possessions:
+  away: Away team's name as the stats.ncaa.org play-by-play page lists it.
   away_1: Away on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always
     occupies the same columns; simple=True keeps on-court order.
   away_2: Away on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True).
   away_3: Away on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True).
   away_4: Away on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True).
   away_5: Away on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  away_score: Away team's score on the possession's first event row (the page's running score after that event).
   first_shot_time: Seconds into the possession (poss_length) at its first field-goal attempt; null when the possession had
     no shot.
   first_shot_type: Event type of the possession's first field-goal attempt ("Layup", "Three Point Jumper", "Two Point Jumper",
     "Hook", "Dunk", "Tip In"); null when the possession had no shot.
+  game_id: stats.ncaa.org game id of the play-by-play page the possession comes from.
+  home: Home team's name as the stats.ncaa.org play-by-play page lists it.
   home_1: Home on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always
     occupies the same columns; simple=True keeps on-court order.
   home_2: Home on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True).
   home_3: Home on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True).
   home_4: Home on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True).
   home_5: Home on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  home_score: Home team's score on the possession's first event row (the page's running score after that event).
   is_assisted: Count of the possession's events that carry a second player (player_2), usually 0 or 1 -- a count, not a flag,
     kept from bigballR's get_possessions for parity.
   is_garbage_time: 1 when any event of the possession falls in garbage time, else 0. Garbage time starts at the first event
@@ -37507,8 +37520,11 @@ ncaa_wbb_possessions:
     on a terminal event. Null when any event of the possession has no flag.'
   last_event_time: Seconds into the possession (poss_length) at its final event.
   last_event_type: Event type of the possession's final event (e.g. a made shot, a turnover or a defensive rebound).
+  period: 'Period number from the stats.ncaa.org page: 1-2 for halves (3+ = overtime), or 1-4 for quarters (5+ = overtime)
+    on a quarters page (women''s games from 2015-16).'
   poss_num: Possession number within the game, stamped upstream by the play-by-play chain (parse_ncaa_bb_game_pbp).
   poss_team: Name of the team in possession.
+  pts: Points scored on the possession, summing shot_value (3, 2, or 1 for a free throw) over its made shots.
   start_event_type: Event type of the play immediately before the possession's first event (what started it, e.g. a defensive
     rebound or a made basket). Null for a game's first possession (fix_cross_game_leak=True, the default).
 espn_cfb_play_participants:
@@ -37651,8 +37667,8 @@ fox_nba_standings:
   eastern_conference: Team's position in the Eastern Conference table, from the first column whose header is the table name;
     null on rows from other tables.
   entity_id: 'Fox id of the row''s linked team as a string: the trailing number of the row''s entityLink contentUri.'
-  gb: Games behind the table leader as a one-decimal string (e.g. '11.0'); null on rows from tables without a GB column (the
-    preseason table).
+  gb: Games behind the table leader as a one-decimal string (e.g. '11.0'), '-' for the table leader; null on rows from tables
+    without a GB column (the preseason table).
   home: Home record as a 'W-L' string; null on rows from tables without a HOME column (the preseason table).
   l10: Record over the last 10 games as a 'W-L' string; null on rows from tables without an L10 column.
   northwest: Team's position in the Northwest division table, from the first column whose header is the table name; null on

@@ -209,7 +209,7 @@ participant type ESPN ships).
 
 **Returns**
 
-Polars (or pandas) DataFrame, one row per play; the raw play dicts when `raw=True`. The `{type}_*` columns depend on the payload: a game carries only the participant types ESPN shipped for it. The returns table lists the union of the 17 types measured over 11,430 games (2014-2026), each with its five columns.
+Polars (or pandas) DataFrame, one row per play; the raw play dicts when `raw=True`. The `{type}_*` columns depend on the payload: a game carries only the participant types ESPN shipped for it. The returns table lists the union of the 17 types measured over 11,430 games of the cfbfastR-cfb-raw captures (2014-2026, measured in #999), each with its five columns.
 
 | col_name | type | description |
 |---|---|---|
