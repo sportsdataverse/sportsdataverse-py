@@ -229,7 +229,7 @@ Coach Stanley Cup Final win streak and consecutive-cup records.
 | `active_coach` | logical | Boolean flag indicating whether the coach is currently active as an NHL head coach. |
 | `coach_id` | integer | ESPN coach id parsed from the `$ref` URL. |
 | `coach_name` | character | Full name of the head coach in this Stanley Cup championship record. |
-| `franchise_id` | double | Unique franchise identifier. |
+| `franchise_id` | integer | Unique franchise identifier. |
 | `franchise_name` | character | Franchise name. |
 | `longest_streak` | integer | Maximum number of consecutive seasons in which the coach won the Stanley Cup. |
 | `longest_streak_description` | character | Human-readable description of the coach's longest consecutive Stanley Cup winning streak. |

@@ -14,7 +14,7 @@ columns:
   type: character
   description: ''
 - name: alternate_id
-  type: character
+  type: integer
   description: ''
 - name: first_name
   type: character
@@ -116,7 +116,7 @@ columns:
   type: character
   description: ''
 - name: status_id
-  type: character
+  type: integer
   description: ''
 - name: status_name
   type: character

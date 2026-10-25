@@ -1215,6 +1215,28 @@ def _schema_doc(schema_name: str | None, league: str | None = None) -> dict:
     return yaml.safe_load(p.read_text(encoding="utf-8")) or {}
 
 
+def _documented_table(ep: spec.Endpoint, league_key: str) -> str:
+    """The returns table an empty parse of ``ep`` carries in ``league_key``'s wrapper (task 5.1, R978-1).
+
+    The table the league's reference page shows (``_schema_doc``: ``<schema>/<league>`` first, then
+    ``<schema>``), passed as ``documented_table=`` to a parser that takes one (``_documented_empty``, or a
+    summary dispatcher). Empty when the parser takes none or the table has no columns."""
+    import importlib
+    import inspect
+
+    modules = ["sportsdataverse._common_espn_parsers", *_SPORT_PARSER_MODULE.values()]
+    found = (getattr(importlib.import_module(m), ep.parser or "", None) for m in modules)
+    fn = next((f for f in found if f is not None), None)
+    takes = fn is not None and (
+        getattr(fn, "__documented_empty__", None) or "documented_table" in inspect.signature(fn).parameters
+    )
+    doc = _schema_doc(ep.returns_schema, league_key)
+    if not (takes and (doc.get("columns") or any(f.get("columns") for f in doc.get("frames") or []))):
+        return ""
+    per_league = ROOT / "tools" / "codegen" / "schemas" / str(ep.returns_schema) / f"{league_key}.yaml"
+    return f"{ep.returns_schema}/{league_key}" if per_league.exists() else str(ep.returns_schema)
+
+
 @functools.lru_cache(maxsize=None)
 def _return_table(schema_name: str | None, league: str | None = None) -> str:
     """Markdown ``@return`` table(s) for a ``returns_schema`` (resolved by ``_schema_doc``).
@@ -1408,6 +1430,7 @@ class _EndpointView:
         self.return_table = _return_table(ep.returns_schema, schema_key)
         schema_doc = _schema_doc(ep.returns_schema, schema_key)
         self.return_frames = schema_doc.get("kind") == "frames"
+        self.documented_table = "" if flat else _documented_table(ep, schema_key)
         self.returns_dict = _returns_dict(schema_doc)
         # The parsed return the signature names follows the docstring: a dict of frames when the
         # docstring says one (a ``parsed_doc`` or a dict-of-frames schema), else one frame (R858-4).
@@ -2090,6 +2113,8 @@ class _LoaderView:
         self.docstring = _build_loader_docstring(ld)
         self.id_int64 = ld.id_int64
         self.single = _loader_is_single(ld)
+        has_table = ld.fn in _loader_schemas()
+        self.empty = f'_empty_from_schema("loader_schemas:{ld.fn}")' if has_table else "pl.DataFrame()"
 
 
 def render_loader_module(league: str, loaders, bases: dict) -> str:
@@ -2117,6 +2142,139 @@ def _render_loaders_all() -> dict[str, str]:
     return out
 
 
+# Documented type label -> the polars dtype an empty frame carries (task 5.1). The R-style labels are what
+# ``_friendly_type`` writes for a parser's Int64 / Float64 / String / Boolean columns.
+_EMPTY_DTYPES = {
+    "character": "String",
+    "String": "String",
+    "Utf8": "String",
+    "integer": "Int64",
+    "Int64": "Int64",
+    "Int32": "Int32",
+    "UInt32": "UInt32",
+    "double": "Float64",
+    "numeric": "Float64",
+    "Float64": "Float64",
+    "Float32": "Float32",
+    "logical": "Boolean",
+    "Boolean": "Boolean",
+    "date": "Date",
+    "Date": "Date",
+    "datetime": "Datetime",
+    "Null": "Null",
+}
+_EMPTY_SCHEMA_CALL = re.compile(r"""_(?:empty_from_schema|documented_empty|pin_documented)\(\s*["']([\w./:-]+)["']""")
+
+
+def _empty_polars_dtype(label: str):
+    """The polars dtype one documented type label stands for; raise on a label no empty frame can carry."""
+    import polars as pl
+
+    m = re.fullmatch(r"Datetime\(time_unit='(\w+)', time_zone='([\w/]+)'\)", label)
+    if m:
+        return pl.Datetime(m.group(1), m.group(2))
+    m = re.fullmatch(r"List\((\w+)\)", label)
+    if m:
+        return pl.List(_empty_polars_dtype(m.group(1)))
+    if label not in _EMPTY_DTYPES:
+        raise SystemExit(f"returns schema type {label!r} has no empty-frame dtype (add it to _EMPTY_DTYPES)")
+    return pl.Datetime("us") if label == "datetime" else getattr(pl, _EMPTY_DTYPES[label])
+
+
+def _empty_dtype(label: str) -> str:
+    """The polars constructor source for one documented type label."""
+    import polars as pl
+
+    def source(dt) -> str:
+        if isinstance(dt, pl.Datetime):
+            return f"pl.Datetime({dt.time_unit!r}" + (f", {dt.time_zone!r})" if dt.time_zone else ")")
+        if isinstance(dt, pl.List):
+            return f"pl.List({source(dt.inner)})"
+        return f"pl.{dt}"
+
+    return source(_empty_polars_dtype(label))
+
+
+def _schema_yaml(path: str) -> dict:
+    return yaml.safe_load((ENDPOINTS.parent / "schemas" / f"{path}.yaml").read_text(encoding="utf-8")) or {}
+
+
+def _schema_kind(path: str) -> str:
+    return str(_schema_yaml(path).get("kind") or "")
+
+
+def _schema_frames(path: str) -> list[dict]:
+    return list(_schema_yaml(path).get("frames") or [])
+
+
+def _documented_columns(name: str) -> list[dict]:
+    """The columns of a returns table named ``<path under schemas/>[:<frames section or loader>]``."""
+    path, _, key = name.partition(":")
+    if path == "loader_schemas":
+        return _loader_schemas()[key]
+    doc = yaml.safe_load((ENDPOINTS.parent / "schemas" / f"{path}.yaml").read_text(encoding="utf-8"))
+    if key:
+        return next(f for f in doc["frames"] if f["section"] == key).get("columns") or []
+    return doc.get("columns") or []
+
+
+def _league_documented_tables() -> set[str]:
+    """Every ``documented_table`` a league wrapper can pass (R978-1): the scope rules of
+    :func:`_espn_league_views` without building the views (a superset is harmless; a table is only data)."""
+    params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
+    apis = [spec.load_espn_api(ENDPOINTS / f"{a}.yaml", params) for a in ESPN_APIS]
+    out: set[str] = set()
+    for lg in spec.load_leagues(ENDPOINTS / "leagues.yaml").leagues:
+        overrides = _SPORT_PARSER_OVERRIDES.get(lg.sport, {})
+        for api in apis:
+            for ep in api.endpoints:
+                if ep.scope not in lg.scopes or lg.league in ep.exclude_leagues:
+                    continue
+                if ep.include_prefixes and lg.prefix not in ep.include_prefixes:
+                    continue
+                if ep.short in overrides:  # the sport parser documents the sport's table, as in the views
+                    out.add(_documented_table(dataclasses.replace(ep, parser=overrides[ep.short]), lg.sport))
+                else:
+                    out.add(_documented_table(ep, lg.prefix))
+    out.discard("")
+    return out
+
+
+def render_returns_schemas() -> str:
+    """``sportsdataverse/_returns_schemas.py``: every returns table an empty result is built from (task 5.1).
+
+    Holds each generated loader's ``loader_schemas.yaml`` entry plus every name a hand-written module passes
+    to ``_empty_from_schema`` / ``_documented_empty`` / ``_pin_documented`` (found by scanning the package) and
+    every league wrapper's ``documented_table`` (each section of a ``frames`` table), so the wheel carries the
+    tables ``tools/`` keeps out of it."""
+    names = {f"loader_schemas:{ld.fn}" for ld in _releases_cfg().loaders if ld.league in _GENERATED_LOADER_LEAGUES}
+    names &= {f"loader_schemas:{fn}" for fn in _loader_schemas()}
+    for py in sorted(LIVE.rglob("*.py")):
+        if py.name != "_returns_schemas.py" and not py.name.endswith("_espn_ext.py"):
+            names.update(_EMPTY_SCHEMA_CALL.findall(py.read_text(encoding="utf-8")))
+    names.update(_league_documented_tables())
+    for name in [n for n in names if ":" not in n and _schema_kind(n) == "frames"]:
+        # a frames table is read one section at a time (``summary/mbb:plays``)
+        names.remove(name)
+        names.update(f"{name}:{f['section']}" for f in _schema_frames(name))
+    lines = [
+        "# GENERATED by tools/codegen/generate.py -- DO NOT EDIT.",
+        "# Source: tools/codegen/schemas/** (the returns tables)",
+        '"""The documented returns tables an empty result carries (read by ``_codegen_runtime._empty_from_schema``)."""',
+        "",
+        "from __future__ import annotations",
+        "",
+        "import polars as pl",
+        "",
+        "SCHEMAS: dict[str, dict[str, pl.DataType]] = {",
+    ]
+    for name in sorted(names):
+        cols = ", ".join(f"{c['name']!r}: {_empty_dtype(str(c['type']))}" for c in _documented_columns(name))
+        lines.append(f"    {name!r}: {{{cols}}},")
+    lines.append("}")
+    return "\n".join(lines) + "\n"
+
+
 def build_loaders_live() -> list[Path]:
     """Write generated {league}_loaders.py modules + wire each league __init__."""
     written = []
@@ -2137,8 +2295,10 @@ def build_loaders_live() -> list[Path]:
         elif line not in init.read_text(encoding="utf-8"):
             init.write_text(init.read_text(encoding="utf-8").rstrip() + "\n" + line, encoding="utf-8", newline="\n")
         written.append(dest)
-    if written:
-        _ruff_format(*written)
+    dest = LIVE / "_returns_schemas.py"
+    dest.write_text(render_returns_schemas(), encoding="utf-8", newline="\n")
+    written.append(dest)
+    _ruff_format(*written)
     return sorted(written)
 
 
@@ -2159,11 +2319,13 @@ def _loaders_stale() -> list[str]:
         rendered = _render_loaders_all()
         for lg, src in rendered.items():
             (tmp / f"{lg}_loaders.py").write_text(src, encoding="utf-8", newline="\n")
+        (tmp / "_returns_schemas.py").write_text(render_returns_schemas(), encoding="utf-8", newline="\n")
         _ruff_format_dir(tmp)
         stale = []
-        for lg in rendered:
-            live_file = LIVE / lg / f"{lg}_loaders.py"
-            if not live_file.exists() or live_file.read_text(encoding="utf-8") != (tmp / f"{lg}_loaders.py").read_text(
+        live_files = {f"{lg}_loaders.py": LIVE / lg / f"{lg}_loaders.py" for lg in rendered}
+        live_files["_returns_schemas.py"] = LIVE / "_returns_schemas.py"
+        for name, live_file in live_files.items():
+            if not live_file.exists() or live_file.read_text(encoding="utf-8") != (tmp / name).read_text(
                 encoding="utf-8",
             ):
                 stale.append(str(live_file.relative_to(ROOT)))

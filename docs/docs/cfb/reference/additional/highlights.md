@@ -771,7 +771,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `uid` | character | ESPN global unique identifier. |
 | `date` | character | Date of the poll release. |
 | `attendance` | integer | Reported attendance at the game. |
@@ -788,9 +788,9 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `notes_headline` | character |  |
 | `broadcast_market` | character |  |
 | `broadcast_name` | character |  |
-| `type_id` | character | Play-type id. |
+| `type_id` | integer | Play-type id. |
 | `type_abbreviation` | character | Play-type abbreviation (e.g. `RUSH`, `TD`). |
-| `venue_id` | character | Referencing venue id. |
+| `venue_id` | integer | Referencing venue id. |
 | `venue_full_name` | character |  |
 | `venue_address_city` | character |  |
 | `venue_address_state` | character |  |
@@ -799,19 +799,19 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `status_clock` | double |  |
 | `status_display_clock` | character |  |
 | `status_period` | integer |  |
-| `status_type_id` | character |  |
+| `status_type_id` | integer |  |
 | `status_type_name` | character |  |
 | `status_type_state` | character |  |
 | `status_type_completed` | logical |  |
 | `status_type_description` | character |  |
 | `status_type_detail` | character |  |
 | `status_type_short_detail` | character |  |
-| `groups_id` | character |  |
+| `groups_id` | integer |  |
 | `groups_name` | character |  |
 | `groups_short_name` | character |  |
 | `groups_is_conference` | logical |  |
 | `format_regulation_periods` | integer |  |
-| `home_id` | character | Home team referencing id. |
+| `home_id` | integer | Home team referencing id. |
 | `home_uid` | character |  |
 | `home_location` | character |  |
 | `home_name` | character |  |
@@ -821,14 +821,14 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `home_color` | character |  |
 | `home_alternate_color` | character |  |
 | `home_is_active` | logical |  |
-| `home_venue_id` | character |  |
+| `home_venue_id` | integer |  |
 | `home_logo` | character |  |
-| `home_conference_id` | character |  |
+| `home_conference_id` | integer |  |
 | `home_score` | character | Home-team score after the play. |
 | `home_current_rank` | integer | AP or Coaches Poll ranking of the home team at the time of the game (null if unranked). |
 | `home_linescores` | list | Per-period point totals for the home team, stored as an array of quarter/overtime scores. |
 | `home_records` | character | Win-loss record of the home team at the time of the game, as reported by ESPN (e.g., overall or conference record). |
-| `away_id` | character | Away team referencing id. |
+| `away_id` | integer | Away team referencing id. |
 | `away_uid` | character |  |
 | `away_location` | character |  |
 | `away_name` | character |  |
@@ -838,9 +838,9 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `away_color` | character |  |
 | `away_alternate_color` | character |  |
 | `away_is_active` | logical |  |
-| `away_venue_id` | character |  |
+| `away_venue_id` | integer |  |
 | `away_logo` | character |  |
-| `away_conference_id` | character |  |
+| `away_conference_id` | integer |  |
 | `away_score` | character | Away-team score after the play. |
 | `away_current_rank` | integer | AP or Coaches Poll ranking of the away team at the time of the game (null if unranked). |
 | `away_linescores` | list | Per-period point totals for the away team, stored as an array of quarter/overtime scores. |

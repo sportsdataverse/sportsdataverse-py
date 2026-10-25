@@ -144,3 +144,28 @@ def test_nhl_release_loaders_start_at_first_published_season(fn, asset):
         with pytest.raises(SeasonNotFoundError):
             loader(seasons=2009)
     reader.assert_not_called()
+
+
+def _generated_loaders():
+    """``(module, fn)`` for every generated season-loop / single-asset loader with a returns table."""
+    schemas = generate._loader_schemas()
+    for ld in spec.load_releases(REL).loaders:
+        if ld.league in generate._GENERATED_LOADER_LEAGUES and not (ld.stub or ld.deprecated_for) and ld.fn in schemas:
+            yield ld.league, ld.fn, ld.min_season
+
+
+@pytest.mark.filterwarnings("ignore:load_.*no (data|published asset):UserWarning")  # asserted in test_on_missing.py
+def test_empty_schema_no_published_season_returns_the_documented_columns(monkeypatch):
+    """A-M7: when no season resolves, a generated loader returns its documented columns with zero rows."""
+    from tests.conftest import documented_schema
+
+    monkeypatch.setattr(runtime, "_read_release_parquet", lambda url, *a, **k: None)
+    checked = 0
+    for league, fn, min_season in _generated_loaders():
+        mod = importlib.import_module(f"sportsdataverse.{league}.{league}_loaders")
+        monkeypatch.setattr(mod, "_read_release_parquet", lambda url, *a, **k: None)
+        loader = getattr(mod, fn)
+        out = loader() if "seasons" not in loader.__code__.co_varnames else loader(max(min_season or 0, 2024))
+        assert out.height == 0 and dict(out.schema) == documented_schema(f"loader_schemas:{fn}"), fn
+        checked += 1
+    assert checked >= 294

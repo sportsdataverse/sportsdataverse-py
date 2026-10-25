@@ -339,7 +339,11 @@ def decompose_college_baseball_plays(
         row.update(_decompose(desc))
         out.append(row)
     df = pl.DataFrame(out, schema=PBP_SCHEMA) if out else pl.DataFrame(schema=PBP_SCHEMA)
-    return df.to_pandas() if return_as_pandas else df
+    if return_as_pandas:
+        # B-L36: an integer column with a missing value (the count on a play with no pitch count) stays a
+        # nullable integer; plain to_pandas() would widen it to float64.
+        return df.to_pandas().astype({c: "Int64" for c, t in PBP_SCHEMA.items() if t == pl.Int64})
+    return df
 
 
 def parse_college_baseball_ncaa_pbp(

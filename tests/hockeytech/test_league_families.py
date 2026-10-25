@@ -79,7 +79,7 @@ def test_league_schedule(patched_api, lg):
     df = getattr(mod, f"{lg}_schedule")(season_id=8)
     assert isinstance(df, pl.DataFrame)
     assert df.height == 120
-    assert set(df["season_id"]) == {"8"}
+    assert set(df["season_id"]) == {8}
 
 
 @pytest.mark.parametrize(
@@ -160,3 +160,67 @@ def test_all_four_leagues_share_one_surface():
     assert len(ref) >= 10
     for lg in LEAGUES[1:]:
         assert surfaces[lg] == ref, f"{lg} surface diverges from ahl"
+
+
+_GAME_42 = {
+    "gameCenterPlayByPlay": "pwhl_pbp_42",
+    "gamesummary": "pwhl_game_summary_42",
+    "gameshifts": "pwhl_gameshifts_42",
+}
+
+
+@pytest.fixture()
+def game_42_api(monkeypatch):
+    """Serve the committed PWHL game-42 pbp / game summary / shifts captures to every family and to the PWHL module."""
+    from sportsdataverse.hockeytech import _family
+    from sportsdataverse.pwhl import pwhl_analytics, pwhl_api
+
+    def fake_api(league, feed, view, params=None, **kwargs):
+        stem = _GAME_42.get(view)
+        return load_fixture("hockeytech", stem) if stem else {}
+
+    for mod in (_family, pwhl_api, pwhl_analytics):
+        monkeypatch.setattr(mod, "hockeytech_api", fake_api)
+
+
+def _corsi_fn(lg):
+    if lg == "pwhl":
+        return importlib.import_module("sportsdataverse.pwhl").pwhl_game_corsi
+    return getattr(importlib.import_module(f"sportsdataverse.hockey.{lg}"), f"{lg}_game_corsi")
+
+
+@pytest.mark.parametrize("lg", [*LEAGUES, "pwhl"])
+def test_game_corsi_joins_toi_on_int64_player_ids(game_42_api, lg):
+    """R988-1: every ``<lg>_game_corsi`` and ``pwhl_game_corsi`` raised ``SchemaError`` (the TOI side cast player_id to
+    Utf8 against the Int64 Corsi frame). On the real game-42 captures every on-ice player joins its TOI."""
+    df = _corsi_fn(lg)(42)
+    assert df.height > 0 and df.schema["player_id"] == pl.Int64
+    assert df["toi_seconds"].null_count() == 0  # every on-ice player is in the shift data
+    assert df["corsi_for_per60"].null_count() == 0
+    pdf = _corsi_fn(lg)(42, return_as_pandas=True)
+    assert isinstance(pdf, pd.DataFrame) and str(pdf["player_id"].dtype) == "Int64"
+
+
+@pytest.mark.parametrize("lg", [*LEAGUES, "pwhl"])
+@pytest.mark.parametrize("fn", ["game_shifts", "player_toi"])
+def test_shifts_and_toi_pandas_ids_are_nullable_int64(game_42_api, lg, fn):
+    """R988-2: the shifts / TOI pandas exits carry ``player_id`` as pandas' nullable ``Int64`` (a plain ``to_pandas()``
+    gives numpy int64, or float64 once a value is missing), with the polars frame's values."""
+    mod = importlib.import_module("sportsdataverse.pwhl" if lg == "pwhl" else f"sportsdataverse.hockey.{lg}")
+    f = getattr(mod, f"{lg}_{fn}")
+    df, pdf = f(42), f(42, return_as_pandas=True)
+    ids = [c for c, t in df.schema.items() if t == pl.Int64 and (c == "id" or c.endswith("_id"))]
+    assert "player_id" in ids
+    assert {c: str(pdf[c].dtype) for c in ids} == dict.fromkeys(ids, "Int64")
+    assert pdf["player_id"].tolist() == df["player_id"].to_list()
+
+
+def test_corsi_toi_join_refuses_a_key_dtype_mismatch(game_42_api):
+    """R988-1: the join asserts ``player_id`` dtype agreement instead of matching nothing (or raising deep in polars)."""
+    from sportsdataverse.hockeytech._analytics import _corsi_with_toi, corsi_fenwick_on_ice, player_toi
+    from sportsdataverse.hockeytech._parsers import parse_pbp, parse_shifts
+
+    corsi = corsi_fenwick_on_ice(parse_pbp(load_fixture("hockeytech", "pwhl_pbp_42"), game_id=42))
+    toi = player_toi(parse_shifts(load_fixture("hockeytech", "pwhl_gameshifts_42"), game_id=42))
+    with pytest.raises(TypeError, match=r"player_id dtypes differ: corsi Int64 vs toi String"):
+        _corsi_with_toi(corsi, toi.with_columns(pl.col("player_id").cast(pl.String)))

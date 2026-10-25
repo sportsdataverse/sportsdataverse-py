@@ -307,8 +307,8 @@ def test_player_ids_resolve_from_the_boxscore(processed):
         assert named[id_col].is_not_null().mean() >= 0.95, (name_col, named[id_col].null_count())
     # the same athlete resolves to one id whichever column he appears in
     watson = f.filter(pl.col("passer_player_name") == "D.Watson")["passer_player_id"].unique().to_list()
-    assert watson == ["3122840"]
-    assert f.filter(pl.col("rusher_player_name") == "D.Watson")["rusher_player_id"].unique().to_list() == ["3122840"]
+    assert watson == [3122840]
+    assert f.filter(pl.col("rusher_player_name") == "D.Watson")["rusher_player_id"].unique().to_list() == [3122840]
 
 
 def test_penalty_side_direct_epa_and_naive_wp(processed):

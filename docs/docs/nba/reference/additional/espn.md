@@ -132,7 +132,7 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `draft_selection` | integer | Draft selection. |
 | `draft_team_href` | character |  |
 | `draft_pick_href` | character |  |
-| `status_id` | character | Status identifier. |
+| `status_id` | integer | Status identifier. |
 | `status_name` | character | Status label. |
 | `status_type` | character | Status type. |
 | `status_abbreviation` | character | Status abbreviation. |

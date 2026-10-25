@@ -20,7 +20,7 @@ columns:
   type: character
   description: ''
 - name: id
-  type: character
+  type: integer
   description: ''
 - name: is_tournament
   type: logical
@@ -131,7 +131,7 @@ columns:
   type: logical
   description: ''
 - name: season_type_id
-  type: character
+  type: integer
   description: ''
 - name: season_type_name
   type: character

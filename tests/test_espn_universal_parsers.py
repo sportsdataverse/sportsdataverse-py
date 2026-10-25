@@ -1244,7 +1244,7 @@ _RANKINGS_SCHEMA = {
     "week_display": pl.Utf8,
     "poll_date": pl.Utf8,
     "ranked": pl.Boolean,
-    "team_id": pl.Utf8,
+    "team_id": pl.Int64,
     "rank": pl.Int64,
     "previous_rank": pl.Int64,
     "points": pl.Float64,
@@ -1281,7 +1281,7 @@ def test_rankings_one_row_per_ranked_or_vote_receiving_team(league):
         rows = df.filter(pl.col("poll_id") == int(poll["id"]))
         ranked = rows.filter(pl.col("ranked") == True)
         assert ranked["rank"].to_list() == [e["current"] for e in poll["ranks"]]
-        assert ranked["team_id"].to_list() == [e["team"]["id"] for e in poll["ranks"]]
+        assert ranked["team_id"].to_list() == [int(e["team"]["id"]) for e in poll["ranks"]]
         others = rows.filter(pl.col("ranked") == False)
         assert others.height == len(poll["others"])
         # ESPN ships current=0 for a vote-receiving team; 0 is not a rank.
@@ -1294,7 +1294,7 @@ def test_rankings_first_row_is_the_ap_number_one():
     row = parse_rankings(_load("rankings_cfb")).row(0, named=True)
     assert row["poll_name"] == "AP Top 25"
     assert (row["season"], row["season_type"], row["week"]) == (2026, 2, 6)
-    assert (row["rank"], row["team_id"], row["team_abbreviation"]) == (1, "251", "TEX")
+    assert (row["rank"], row["team_id"], row["team_abbreviation"]) == (1, 251, "TEX")
     assert row["first_place_votes"] == 61
 
 
@@ -1336,7 +1336,7 @@ def test_rankings_team_color_null_sentinel_is_null():
 
     payload = _load("rankings_mch")
     sentinel = {
-        e["team"]["id"]
+        int(e["team"]["id"])
         for p in payload["rankings"]
         for k in ("ranks", "others")
         for e in p[k]
@@ -1390,12 +1390,13 @@ def test_rankings_wrapper_routes_through_parse_rankings(monkeypatch):
 # ``python -m tests.test_espn_universal_parsers`` only for a deliberate dtype change.
 
 _SNAPSHOT = Path(__file__).parent / "espn_parser_dtype_snapshot.json"
-# Four snapshot entries pin zero columns (injuries_mbb, injuries_wbb, team_schedule_cfb, team_schedule_nhl):
-# their captures are empty and parse to zero-width frames. Task 5.1 gives empty frames their documented schema.
+# The captures that parse to zero rows (injuries_mbb, injuries_wbb, team_schedule_cfb, team_schedule_nhl and the
+# empty summary sections) pin zero columns: those tables differ by league, so a parser called directly cannot pick
+# one. The league wrappers pass theirs (task 5.1, test_empty_schema_every_league_wrapper_passes_its_own_table).
 # scoreboard_cfb_2014_placeholder carries ESPN's real `{}` placeholder event, which has no ids: its row comes back
-# all-null, so its id columns keep the String dtype of every other scoreboard (A-M15, task 5.2), but the pandas hop
-# turns six Int64 columns Float64 (season_year, season_type, status_period, attendance, home_rank, away_rank;
-# A-M14's class, task 5.2). The snapshot pins that measured state.
+# all-null, and its id columns are Int64 like every other scoreboard's (task 5.2). The pandas hop still turns six
+# non-id Int64 columns Float64 there (season_year, season_type, status_period, attendance, home_rank, away_rank);
+# they are not ids, so task 5.2 leaves them. The snapshot pins that measured state.
 _ESPN_FIX = Path(__file__).parent / "fixtures" / "espn"
 _FIX_ROOT = Path(__file__).parent / "fixtures"
 # Captures no registered parser reads (kept for other tests): ``athlete_statistics_core_*`` feeds the
@@ -1406,6 +1407,7 @@ _FIX_ROOT = Path(__file__).parent / "fixtures"
 # main #860).
 _NO_PARSER = {
     "athlete_statistics_core_nba_1966_2024",
+    "athlete_statistics_core_nhl_3895074_2024",
     "athlete_statslog_lbj",
     "depthcharts_mlb",
     "depthcharts_nba",
@@ -1567,6 +1569,133 @@ def test_hostile_body_is_zero_rows_or_a_vocabulary_raise(qual, shape):
     assert {sec: df.height for sec, df in _frames(out).items() if df.height} == {}
 
 
+# Task 5.1 (A-M12, B-L73, R978-1): a documented parser carries its returns table on every empty result. 45 ESPN
+# parsers (the dedicated ones and every summary section), the soccer and cricket scoreboards and 3 HockeyTech
+# ones on 2026-10-22. The table is the league's own (``scoreboard/mbb``), which the generated wrapper passes as
+# ``documented_table=``; called without one, a parser whose table has per-league variants keeps its zero-width
+# result. The generic flatteners (parse_items, parse_single_entity), the ESPN cdn rankings and HockeyTech
+# leaders / standings / roster / player stats (columns follow the payload or the league) are not documented.
+_DOCUMENTED_EMPTY_FLOOR = 50
+
+
+def _documented_parsers() -> Dict[str, Any]:
+    return {q: fn for q, fn in _public_parsers().items() if getattr(fn, "__documented_empty__", None)}
+
+
+def _league_tables(name: str) -> List[str]:
+    """The per-league tables of ``name`` (``summary:plays`` -> ``summary/mbb:plays``, ...)."""
+    from sportsdataverse._returns_schemas import SCHEMAS
+
+    base, _, section = name.partition(":")
+    return sorted(k for k in SCHEMAS if k.startswith(base + "/") and k.partition(":")[2] == section)
+
+
+@pytest.mark.parametrize(("qual", "shape"), [(q, s) for q in sorted(_documented_parsers()) for s in _HOSTILE])
+def test_empty_schema_hostile_body_carries_the_documented_columns(qual, shape):
+    import pandas as pd
+
+    from sportsdataverse.errors import AssetFetchError, NoDataError, SchemaDriftWarning
+    from tests.conftest import documented_schema
+
+    parse = _documented_parsers()[qual]
+    name = parse.__documented_empty__
+    leagues = _league_tables(name)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", SchemaDriftWarning)  # the scalar_list body may say so (the sweep above)
+        try:
+            direct = parse(_HOSTILE[shape])
+            calls = [(t, parse(_HOSTILE[shape], documented_table=t)) for t in leagues or [name]]
+            pdf = parse(_HOSTILE[shape], return_as_pandas=True, documented_table=(leagues or [name])[0])
+        except (NoDataError, AssetFetchError):
+            assert shape == "error_envelope"
+            return
+    # without a table a per-league parser cannot know which applies; a single-table parser uses its own
+    assert direct.height == 0 and (direct.width == 0 if leagues else dict(direct.schema) == documented_schema(name))
+    for table, out in calls:
+        assert out.height == 0 and dict(out.schema) == documented_schema(table), table
+    assert isinstance(pdf, pd.DataFrame) and len(pdf) == 0
+    assert list(pdf.columns) == list(documented_schema((leagues or [name])[0]))
+
+
+def test_empty_schema_sweep_covers_every_documented_parser():
+    assert len(_documented_parsers()) >= _DOCUMENTED_EMPTY_FLOOR
+
+
+def test_empty_schema_decorated_names_are_the_endpoints_returns_schema():
+    """R978-1 (mutants M7/M8): a parser's table name is the returns_schema of every ESPN endpoint it parses."""
+    from tools.codegen import generate, spec
+
+    params = spec.load_parameters(generate.ENDPOINTS / "parameters.yaml")
+    by_parser: Dict[str, set] = {}
+    for api in generate.ESPN_APIS:
+        for ep in spec.load_espn_api(generate.ENDPOINTS / f"{api}.yaml", params).endpoints:
+            by_parser.setdefault(ep.parser or ep.short, set()).add(ep.returns_schema)
+    for sport, overrides in generate._SPORT_PARSER_OVERRIDES.items():
+        for short, parser in overrides.items():
+            by_parser.setdefault(parser, set()).add(short)
+    for qual, fn in _documented_parsers().items():
+        if qual.startswith("hockeytech."):
+            continue
+        base = fn.__documented_empty__.partition(":")[0]
+        assert by_parser.get(fn.__name__, {base}) == {base}, qual
+
+
+def test_empty_schema_every_league_wrapper_passes_its_own_table(monkeypatch):
+    """R978-1: each generated wrapper's empty parse equals the table its league's reference page documents."""
+    import re
+
+    from tests.conftest import documented_schema
+    from tools.codegen import generate
+
+    call = re.compile(
+        r"""return (parse_\w+)\(\s*raw,\s*return_as_pandas=return_as_pandas,\s*documented_table=["']([^"']+)["']"""
+    )
+    seen = 0
+    for path in sorted(_PKG.rglob("*_espn_ext.py")):
+        mod = importlib.import_module(".".join(path.relative_to(_PKG.parent).with_suffix("").parts))
+        for parser, table in set(call.findall(path.read_text(encoding="utf-8"))):
+            base, _, league = table.partition("/")
+            assert generate._schema_doc(base, league or None) == generate._schema_yaml(table), table
+            out = getattr(mod, parser)({}, documented_table=table)
+            for sec, df in _frames(out).items():
+                want = documented_schema(f"{table}:{sec}" if sec else table)
+                assert df.height == 0 and dict(df.schema) == want, (path.name, parser, table, sec)
+            seen += 1
+    assert seen >= 400  # every league module's documented wrappers
+
+
+def test_empty_schema_quiet_scoreboard_day_keeps_each_leagues_dtypes(monkeypatch):
+    """R978-1: a quiet mbb day stacks onto a real one without retyping ``home_rank``; soccer / cricket carry theirs."""
+    from sportsdataverse.cricket import cricket_espn_ext
+    from sportsdataverse.mbb import mbb_espn_ext
+    from sportsdataverse.soccer import soccer_espn_ext
+    from tests.conftest import documented_schema
+
+    from sportsdataverse._common_espn_parsers import parse_scoreboard
+
+    real = parse_scoreboard(_load("scoreboard_mbb"))
+    monkeypatch.setattr(mbb_espn_ext, "_get", lambda *a, **k: {"events": []})
+    quiet = mbb_espn_ext.espn_mbb_scoreboard(dates="20240715")
+    assert quiet.height == 0 and dict(quiet.schema) == documented_schema("scoreboard/mbb")
+    season = pl.concat([real, quiet], how="diagonal_relaxed")
+    assert season.schema["home_rank"] == real.schema["home_rank"] == pl.Int64
+    assert quiet.filter(pl.col("home_rank") <= 25).height == 0
+    monkeypatch.setattr(soccer_espn_ext, "_get", lambda *a, **k: {"events": []})
+    monkeypatch.setattr(cricket_espn_ext, "_get", lambda *a, **k: {"events": []})
+    soccer = soccer_espn_ext.espn_soccer_scoreboard(league="eng.1")
+    cricket = cricket_espn_ext.espn_cricket_scoreboard(league="8048")
+    assert dict(soccer.schema) == documented_schema("scoreboard/soccer") and 14 <= soccer.width <= 15
+    assert dict(cricket.schema) == documented_schema("scoreboard/cricket") and 14 <= cricket.width <= 15
+
+
+def test_empty_schema_zero_rows_with_columns_are_left_alone():
+    """R978-6: only a zero-WIDTH result is replaced; a zero-row frame that already has columns is the parser's."""
+    from sportsdataverse._codegen_runtime import _documented_empty
+
+    own = pl.DataFrame(schema={"x": pl.Int64})
+    assert _documented_empty("fpi")(lambda payload, return_as_pandas=False: own)({}) is own
+
+
 def test_hostile_closed_modules_stay_closed():
     """No case of a module whose contract tasks 4.1 / 4.9 closed may be re-opened as an xfail."""
     reopened = sorted(q for q in {**_HOSTILE_OPEN, **_HOSTILE_SYNC_1018} if q.startswith(_CLOSED))
@@ -1683,55 +1812,71 @@ def _id_cols(name: str) -> Dict[str, str]:
     }
 
 
-# Parsers whose id columns are not Int64 on their captures today (String; parse_summary also
-# Float64). Task 5.2 makes every ESPN id Int64 at the parser boundary.
-_IDS_NOT_INT64 = {
-    "parse_athlete_gamelog",
-    "parse_athlete_overview",
-    "parse_event_plays",
-    "parse_fpi",
-    "parse_groups",
-    "parse_injuries",
-    "parse_items",
-    "parse_leaders",
-    "parse_news",
-    "parse_rankings",
-    "parse_scoreboard",
-    "parse_single_entity",
-    "parse_standings",
-    "parse_summary",
-    "parse_team_roster",
-    "parse_team_schedule",
-    "parse_teams",
-    "parse_transactions",
-}
+# Task 5.2: every ESPN ``id`` / ``*_id`` column is Int64 at the parser boundary (``_ids_int64``), except the
+# content id ``now_id`` ("1-44686270"), which is not an integer and stays String.
+_TEXT_IDS = {"now_id"}
 
 
-def _id_params(open_ids: set, reason: str) -> List[Any]:
-    return [
-        pytest.param(
-            name,
-            marks=[pytest.mark.xfail(strict=True, raises=AssertionError, reason=reason)] if name in open_ids else [],
-        )
-        for name in sorted(_parsers())
-    ]
-
-
-@pytest.mark.parametrize(
-    "name",
-    _id_params(_IDS_NOT_INT64, "A-M15: ESPN ids are String here but Int64 in parse_weekly_powerindex; task 5.2"),
-)
+@pytest.mark.parametrize("name", sorted(_parsers()))
 def test_dtype_snapshot_ids_are_int64(name):
-    assert {k: v for k, v in _id_cols(name).items() if v != "Int64"} == {}
+    """A-M15: one id dtype across the ESPN parsers, so ``parse_fpi`` joins ``parse_weekly_powerindex``."""
+    assert {k: v for k, v in _id_cols(name).items() if v != "Int64" and k.rsplit("/", 1)[1] not in _TEXT_IDS} == {}
 
 
-@pytest.mark.parametrize(
-    "name",
-    _id_params({"parse_summary"}, "A-M14: the pandas hop turns point_after_attempt_id into Float64; task 5.2"),
-)
+@pytest.mark.parametrize("name", sorted(_parsers()))
 def test_dtype_snapshot_ids_are_never_float(name):
     """A float id stringifies as ``"123.0"`` and joins nothing."""
     assert {k: v for k, v in _id_cols(name).items() if v.startswith("Float")} == {}
+
+
+def test_pandas_ids_are_nullable_int64_never_float():
+    """R981-2: ``return_as_pandas=True`` carries the same ids as pandas' nullable ``Int64``. On the real cfb summary
+    ``point_after_attempt_id`` is null on most drive plays; a plain pandas hop reads it ``float64`` (``1.0``)."""
+    import pandas as pd
+
+    from sportsdataverse._common_espn_parsers import parse_summary, parse_summary_drive_plays
+
+    raw = _load("summary_cfb")
+    pl_frame = parse_summary_drive_plays(raw)
+    pdf = parse_summary_drive_plays(raw, return_as_pandas=True)
+    assert pl_frame["point_after_attempt_id"].null_count() > 0
+    ids = [c for c, t in pl_frame.schema.items() if t == pl.Int64 and (c == "id" or c.endswith("_id"))]
+    assert ids and {c: str(pdf[c].dtype) for c in ids} == dict.fromkeys(ids, "Int64")
+    got = [None if v is pd.NA else int(v) for v in pdf["point_after_attempt_id"]]
+    assert got == pl_frame["point_after_attempt_id"].to_list()
+    for sec, frame in parse_summary(raw, return_as_pandas=True).items():
+        floats = [
+            c for c in frame.columns if (c == "id" or c.endswith("_id")) and str(frame[c].dtype).startswith("float")
+        ]
+        assert floats == [], sec
+
+
+def test_an_id_that_is_not_an_integer_stays_as_it_came_and_warns():
+    """R981-6: a real scoreboard whose first event id is text keeps ``game_id`` String (never nulled or forced) and
+    warns naming the column; every other id column of the frame is still Int64."""
+    import copy
+
+    from sportsdataverse._common_espn_parsers import parse_scoreboard
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    raw = copy.deepcopy(_load("scoreboard_nba"))
+    raw["events"][0]["id"] = "TBD-1"
+    with pytest.warns(SchemaDriftWarning, match=r"ESPN id columns.*'game_id'.*not integer ids"):
+        df = parse_scoreboard(raw)
+    assert df.schema["game_id"] == pl.String and df["game_id"][0] == "TBD-1"
+    assert df.schema["home_id"] == df.schema["away_id"] == pl.Int64
+
+
+def test_fpi_joins_weekly_powerindex_on_team_id():
+    """A-M15: ``parse_fpi`` emitted ``team_id`` String and ``parse_weekly_powerindex`` Int64, so the join raised."""
+    from sportsdataverse._common_espn_parsers import parse_fpi, parse_weekly_powerindex
+
+    fpi = parse_fpi(_load("fpi_nba"))
+    weekly = parse_weekly_powerindex(_load("season_week_powerindex_nfl"))
+    assert fpi.schema["team_id"] == weekly.schema["team_id"] == pl.Int64
+    joined = fpi.select("team_id").join(weekly.select("team_id", "season"), on="team_id", how="inner")
+    # the two captures are different leagues, so only the overlapping numbers match; the dtype is the point
+    assert joined.height == len(set(fpi["team_id"]) & set(weekly["team_id"])) > 0
 
 
 if __name__ == "__main__":  # regenerate the snapshot after a deliberate dtype change

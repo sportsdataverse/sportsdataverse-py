@@ -17,8 +17,8 @@ columns:
   type: integer
   description: ''
 - name: official_id
-  type: character
+  type: integer
   description: ''
 - name: player_id
-  type: character
+  type: integer
   description: ''

@@ -35,13 +35,13 @@ columns:
   type: integer
   description: ''
 - name: details_event_owner_team_id
-  type: double
+  type: integer
   description: ''
 - name: details_losing_player_id
-  type: double
+  type: integer
   description: ''
 - name: details_winning_player_id
-  type: double
+  type: integer
   description: ''
 - name: details_x_coord
   type: double
@@ -56,10 +56,10 @@ columns:
   type: character
   description: ''
 - name: details_shooting_player_id
-  type: double
+  type: integer
   description: ''
 - name: details_goalie_in_net_id
-  type: double
+  type: integer
   description: ''
 - name: details_away_sog
   type: double
@@ -71,16 +71,16 @@ columns:
   type: character
   description: ''
 - name: details_blocking_player_id
-  type: double
+  type: integer
   description: ''
 - name: details_hitting_player_id
-  type: double
+  type: integer
   description: ''
 - name: details_hittee_player_id
-  type: double
+  type: integer
   description: ''
 - name: details_player_id
-  type: double
+  type: integer
   description: ''
 - name: details_type_code
   type: character
@@ -92,28 +92,28 @@ columns:
   type: double
   description: ''
 - name: details_committed_by_player_id
-  type: double
+  type: integer
   description: ''
 - name: details_drawn_by_player_id
-  type: double
+  type: integer
   description: ''
 - name: ppt_replay_url
   type: character
   description: ''
 - name: details_scoring_player_id
-  type: double
+  type: integer
   description: ''
 - name: details_scoring_player_total
   type: double
   description: ''
 - name: details_assist1_player_id
-  type: double
+  type: integer
   description: ''
 - name: details_assist1_player_total
   type: double
   description: ''
 - name: details_assist2_player_id
-  type: double
+  type: integer
   description: ''
 - name: details_assist2_player_total
   type: double

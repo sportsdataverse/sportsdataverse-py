@@ -383,9 +383,9 @@ Release: [mbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 |---|---|---|
 | `season` | Int32 | Season year. |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
-| `home_espn_team_id` | Int32 | ESPN home team id (NA for bart-only rows). |
-| `away_espn_team_id` | Int32 | ESPN away team id (NA for bart-only rows). |
-| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `home_espn_team_id` | Int64 | ESPN home team id (NA for bart-only rows). |
+| `away_espn_team_id` | Int64 | ESPN away team id (NA for bart-only rows). |
+| `espn_game_id` | Int64 | ESPN game id (NA for bart-only rows). |
 | `bart_muid` | String | Torvik muid (NA for espn-only rows). |
 | `bart_team1` | String | Torvik team1 name (NA for espn-only rows). |
 | `bart_team2` | String | Torvik team2 name (NA for espn-only rows). |

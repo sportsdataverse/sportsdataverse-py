@@ -3,7 +3,7 @@ kind: dataframe
 description: One row per event on the scoreboard for the requested date(s).
 columns:
 - name: game_id
-  type: character
+  type: integer
   description: ESPN event id.
 - name: uid
   type: character
@@ -27,7 +27,7 @@ columns:
   type: character
   description: ''
 - name: status_type_id
-  type: character
+  type: integer
   description: ''
 - name: status_type_name
   type: character
@@ -66,7 +66,7 @@ columns:
   type: integer
   description: ''
 - name: venue_id
-  type: character
+  type: integer
   description: ''
 - name: venue_full_name
   type: character
@@ -87,7 +87,7 @@ columns:
   type: character
   description: ''
 - name: home_id
-  type: character
+  type: integer
   description: ''
 - name: home_name
   type: character
@@ -120,7 +120,7 @@ columns:
   type: character
   description: ''
 - name: away_id
-  type: character
+  type: integer
   description: ''
 - name: away_name
   type: character

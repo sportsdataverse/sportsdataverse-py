@@ -136,7 +136,7 @@ columns:
   type: integer
 - description: ''
   name: clinched_division_clinched
-  type: character
+  type: logical
 - description: ''
   name: team_code_id
   type: integer
@@ -151,13 +151,13 @@ columns:
   type: integer
 - description: ''
   name: clinched_playoff_spot_clinched
-  type: character
+  type: logical
 - description: ''
   name: games_back_number
   type: character
 - description: ''
   name: division_rank_tied
-  type: character
+  type: logical
 - description: ''
   name: division_rank_rank
   type: integer
@@ -172,7 +172,7 @@ columns:
   type: integer
 - description: ''
   name: wild_card_rank_tied
-  type: character
+  type: logical
 - description: ''
   name: wild_card_rank_rank
   type: integer
@@ -181,13 +181,13 @@ columns:
   type: integer
 - description: ''
   name: today_games_included_through
-  type: character
+  type: logical
 - description: ''
   name: today_games_included_through_id
   type: integer
 - description: ''
   name: eliminated_from_playoffs_eliminated
-  type: character
+  type: logical
 - description: ''
   name: wc_games_back_number
   type: character
@@ -211,7 +211,7 @@ columns:
   type: integer
 - description: ''
   name: league_rank_tied
-  type: character
+  type: logical
 - description: ''
   name: league_rank_rank
   type: integer
@@ -319,7 +319,7 @@ columns:
   type: logical
 - description: ''
   name: clinched_first_round_bye_clinched
-  type: character
+  type: logical
 - description: ''
   name: content
   type: character

@@ -27,7 +27,7 @@ from typing import TYPE_CHECKING, Dict, Optional, Union
 import polars as pl
 import pyarrow as pa
 
-from sportsdataverse._codegen_runtime import _read_release_parquet, cli_warn
+from sportsdataverse._codegen_runtime import _pandas_ids, _read_release_parquet, cli_warn
 from sportsdataverse.config import SDVRELEASES
 from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.mbb.mbb_ncaa_team_ids import _LEAGUE_PKG, _league_data_bytes
@@ -37,21 +37,22 @@ if TYPE_CHECKING:  # pragma: no cover
 
 _CROSSWALK_CACHE: Dict[str, pl.DataFrame] = {}
 
-#: ESPN ids stay Utf8 (the convention everywhere else in sdv-py); NCAA ids stay
-#: Int64 to match ``ncaa_{mbb,wbb}_team_ids().id``.
+#: ESPN ids are Int64, like every ESPN id sdv-py emits (task 5.2, B-M15); NCAA ids are
+#: Int64 to match ``ncaa_{mbb,wbb}_team_ids().id``. ``conference_id`` is the SDV group id
+#: (``"mbb:big-ten"``), text.
 _SCHEMA: Dict[str, pl.DataType] = {
     "season": pl.Utf8,
     "ncaa_team_id": pl.Int64,
     "ncaa_team": pl.Utf8,
     "ncaa_conference": pl.Utf8,
     "conference_id": pl.Utf8,
-    "espn_team_id": pl.Utf8,
+    "espn_team_id": pl.Int64,
     "espn_display_name": pl.Utf8,
     "espn_location": pl.Utf8,
     "espn_mascot": pl.Utf8,
     "espn_abbreviation": pl.Utf8,
     "espn_conference_name": pl.Utf8,
-    "espn_conference_id": pl.Utf8,
+    "espn_conference_id": pl.Int64,
     "match_method": pl.Utf8,
 }
 
@@ -102,10 +103,10 @@ def ncaa_espn_team_crosswalk(
         ``ncaa_team_id`` (Int64 -- the season-specific stats.ncaa.org id),
         ``ncaa_team`` / ``ncaa_conference`` (str), ``conference_id`` (str,
         nullable -- the SDV group id, e.g. ``"mbb:big-ten"``), ``espn_team_id``
-        (str, nullable -- ESPN ids are strings throughout sdv-py),
+        (Int64, nullable -- ESPN ids are Int64 throughout sdv-py),
         ``espn_display_name`` / ``espn_location`` / ``espn_mascot`` /
-        ``espn_abbreviation`` / ``espn_conference_name`` /
-        ``espn_conference_id`` (str, nullable), and ``match_method`` (str --
+        ``espn_abbreviation`` / ``espn_conference_name`` (str, nullable),
+        ``espn_conference_id`` (Int64, nullable), and ``match_method`` (str --
         ``"exact"``, ``"dict"``, ``"alias"``, ``"org"`` (the school's ESPN id
         from its other seasons) or ``"unmatched"``). The three
         conference columns and ``ncaa_conference`` are per season: Maryland is
@@ -147,7 +148,7 @@ def ncaa_espn_team_crosswalk(
             # Not cached: a later call retries the release (a transient failure must not pin the
             # bundled copy for the life of the process).
             df = _packaged_crosswalk(league)
-    return df.to_pandas() if return_as_pandas else df
+    return _pandas_ids(df) if return_as_pandas else df
 
 
 __all__ = ["ncaa_espn_team_crosswalk"]

@@ -515,7 +515,7 @@ columns:
   type: character
   description: ''
 - name: provider_id
-  type: character
+  type: integer
   description: ''
 - name: provider_name
   type: character
