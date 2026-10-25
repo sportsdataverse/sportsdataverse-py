@@ -165,3 +165,20 @@ def test_wbb_period_tuples_have_one_owner() -> None:
         if "(4, 600, 300)" in line and "wbb_period_model" not in line
     ]
     assert not offenders, "WBB period tuple re-defined outside scrape/ncaa/_rules.py:\n" + "\n".join(offenders)
+
+
+def test_xwalk_tier_join_asserts_its_key_dtypes() -> None:
+    """Task 5.2: an Int32 team id joined to an Int64 one would match by supertype today and silently miss on a
+    String side; the tier join refuses any key whose dtypes differ."""
+    import polars as pl
+    import pytest
+
+    pending = pl.DataFrame(
+        {"contest_id": ["1"], "game_date": ["2025-01-01"], "espn_team_id": pl.Series([52], dtype=pl.Int32)}
+    )
+    lookup = pl.DataFrame({"game_date": ["2025-01-01"], "espn_team_id": [52], "espn_game_id": ["401"]})
+    keys = ["game_date", "espn_team_id"]
+    with pytest.raises(AssertionError, match="espn_team_id"):
+        espn_game_xwalk._apply_tier(pending, lookup, keys, "single_team")
+    matched, _ = espn_game_xwalk._apply_tier(pending.cast({"espn_team_id": pl.Int64}), lookup, keys, "single_team")
+    assert matched["espn_game_id"].to_list() == ["401"]

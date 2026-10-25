@@ -26,7 +26,7 @@ columns:
   type: integer
   description: ''
 - name: deductions
-  type: double
+  type: integer
   description: ''
 - name: deductions_description
   type: character
@@ -50,10 +50,10 @@ columns:
   type: integer
   description: ''
 - name: overall_rank
-  type: double
+  type: integer
   description: ''
 - name: overall_consensus_rank
-  type: double
+  type: integer
   description: ''
 - name: dispay_consensus_score
   type: double
@@ -65,10 +65,10 @@ columns:
   type: double
   description: ''
 - name: conference_rank
-  type: double
+  type: integer
   description: ''
 - name: conference_consensus_rank
-  type: double
+  type: integer
   description: ''
 - name: organization_key
   type: integer

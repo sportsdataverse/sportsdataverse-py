@@ -493,3 +493,12 @@ def test_warnings_404_body_raises_no_data(monkeypatch, return_parsed):
     _serve(monkeypatch, 200, _WARNINGS_404)
     with pytest.raises(NoDataError, match="404 warning: No scoring plays data for that game"):
         cbs_game_scoring_plays(1, return_parsed=return_parsed)
+
+
+@pytest.mark.parametrize("stem", ["team_standings_nfl", "team_standings_nhl"])
+def test_boolean_flags_stay_boolean_and_never_read_nan(stem):
+    """B-M17: a flag key some teams lack is null, not "nan"; the clinch / elimination flags are Boolean."""
+    df = parse_cbs_napi_standings(_load(stem))
+    flags = [c for c in df.columns if c.endswith(("_clinched", "_eliminated"))]
+    assert flags and {df.schema[c] for c in flags} <= {pl.Boolean, pl.Null}
+    assert [c for c, t in df.schema.items() if t == pl.String and "nan" in df[c].to_list()] == []

@@ -105,7 +105,7 @@ A long-form `polars`/`pandas` `DataFrame` (one row per bookmaker x market x outc
 | `outcome_name` | character |  |
 | `outcome_description` | character |  |
 | `outcome_price` | integer |  |
-| `outcome_point` | character |  |
+| `outcome_point` | double |  |
 | `outcome_link` | character |  |
 | `outcome_sid` | character |  |
 
@@ -166,7 +166,7 @@ A long-form `polars`/`pandas` `DataFrame` (one row per bookmaker x market x outc
 | `outcome_name` | character |  |
 | `outcome_description` | character |  |
 | `outcome_price` | integer |  |
-| `outcome_point` | character |  |
+| `outcome_point` | double |  |
 | `outcome_link` | character |  |
 | `outcome_sid` | character |  |
 
@@ -346,7 +346,7 @@ A long-form `polars`/`pandas` `DataFrame` (one row per event x bookmaker x marke
 | `outcome_name` | character | Outcome the price applies to; on the sampled h2h rows, a team's full name (e.g. 'Buffalo Bills'). |
 | `outcome_description` | character | Copied from the outcome's description field; all null in the sampled data, which held only h2h outcomes. |
 | `outcome_price` | integer | Price of the outcome as an integer in American odds under the default odds_format='american' (e.g. -238, 195). |
-| `outcome_point` | character | Copied from the outcome's point field, stored as text; all null in the sampled data, which held only h2h (moneyline) outcomes. |
+| `outcome_point` | double | Copied from the outcome's point field, stored as text; all null in the sampled data, which held only h2h (moneyline) outcomes. |
 | `outcome_link` | character | Outcome deep link, only sent when include_links=True; all null in the sampled data, which did not request links. |
 | `outcome_sid` | character | Bookmaker-specific source id for the outcome, only sent when include_sids=True; all null in the sampled data, which did not request sids. |
 
@@ -404,7 +404,7 @@ A long-form `polars`/`pandas` `DataFrame` (one row per outcome, stamped with the
 | `outcome_name` | character | Outcome the price applies to; on the sampled h2h rows, a team's full name (e.g. 'Buffalo Bills'). |
 | `outcome_description` | character | Copied from the outcome's description field; all null in the sampled data, which held only h2h outcomes. |
 | `outcome_price` | integer | Price of the outcome as an integer in American odds under the default odds_format='american' (e.g. -238, 195). |
-| `outcome_point` | character | Copied from the outcome's point field, stored as text; all null in the sampled data, which held only h2h (moneyline) outcomes. |
+| `outcome_point` | double | Copied from the outcome's point field, stored as text; all null in the sampled data, which held only h2h (moneyline) outcomes. |
 | `outcome_link` | character | Outcome deep link, only sent when include_links=True; all null in the sampled data, which did not request links. |
 | `outcome_sid` | character | Bookmaker-specific source id for the outcome, only sent when include_sids=True; all null in the sampled data, which did not request sids. |
 

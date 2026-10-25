@@ -16,8 +16,9 @@ import polars as pl
 if TYPE_CHECKING:
     import pandas as pd
 
+from sportsdataverse._codegen_runtime import _pandas_ids
 from sportsdataverse.hockeytech import hockeytech_api
-from sportsdataverse.hockeytech._analytics import corsi_fenwick_on_ice, per60, player_toi
+from sportsdataverse.hockeytech._analytics import _corsi_with_toi, corsi_fenwick_on_ice, player_toi
 from sportsdataverse.hockeytech._parsers import parse_shifts
 
 __all__ = ["pwhl_game_shifts", "pwhl_player_toi", "pwhl_game_corsi"]
@@ -49,7 +50,7 @@ def pwhl_game_shifts(game_id: int, return_as_pandas: bool = False) -> "Union[pl.
     payload = hockeytech_api(_LG, "modulekit", "gameshifts", {"game_id": game_id})
     shifts = parse_shifts(payload, game_id=game_id)
     if return_as_pandas:
-        return shifts.to_pandas()
+        return _pandas_ids(shifts)
     return shifts
 
 
@@ -77,7 +78,7 @@ def pwhl_player_toi(game_id: int, return_as_pandas: bool = False) -> "Union[pl.D
     shifts = pwhl_game_shifts(game_id)
     toi = player_toi(shifts)
     if return_as_pandas:
-        return toi.to_pandas()
+        return _pandas_ids(toi)
     return toi
 
 
@@ -105,7 +106,7 @@ def pwhl_game_corsi(game_id: int, return_as_pandas: bool = False) -> "Union[pl.D
     polars.DataFrame or pandas.DataFrame
         One row per on-ice player with columns:
 
-        - ``player_id`` (Utf8)
+        - ``player_id`` (Int64)
         - ``corsi_for``, ``corsi_against`` (Int64)
         - ``corsi_for_pct`` (Float64)
         - ``fenwick_for``, ``fenwick_against`` (Int64)
@@ -122,22 +123,10 @@ def pwhl_game_corsi(game_id: int, return_as_pandas: bool = False) -> "Union[pl.D
     # Fetch TOI (reuses hockeytech_api via pwhl_game_shifts under the hood)
     toi = pwhl_player_toi(game_id)
 
-    # LEFT-JOIN toi_seconds onto corsi so every on-ice player is present
-    # even if they have no shift data (null toi_seconds).
-    toi_sel = toi.select(
-        pl.col("player_id").cast(pl.Utf8),
-        pl.col("toi_seconds"),
-    )
-    out = corsi.join(toi_sel, on="player_id", how="left")
-
-    # Add corsi_for_per60 (null when toi_seconds is null or zero)
-    out = out.with_columns(
-        pl.when(pl.col("toi_seconds").is_not_null() & (pl.col("toi_seconds") > 0))
-        .then(per60("corsi_for"))
-        .otherwise(pl.lit(None, dtype=pl.Float64))
-        .alias("corsi_for_per60")
-    )
+    # LEFT-JOIN toi_seconds onto corsi so every on-ice player is present even if they have no shift data
+    # (null toi_seconds); corsi_for_per60 is null when toi_seconds is null or zero.
+    out = _corsi_with_toi(corsi, toi)
 
     if return_as_pandas:
-        return out.to_pandas()
+        return _pandas_ids(out)
     return out

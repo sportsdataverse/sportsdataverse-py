@@ -61,9 +61,9 @@ columns:
   type: character
 - description: ''
   name: is_active
-  type: character
+  type: logical
 - description: ''
   name: resource_cache_no_cache
-  type: character
+  type: logical
 kind: dataframe
 schema: endpoint_registry

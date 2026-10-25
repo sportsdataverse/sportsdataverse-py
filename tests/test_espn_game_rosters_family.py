@@ -72,6 +72,23 @@ def test_game_rosters_keep_position(league, monkeypatch):
 
 
 @pytest.mark.parametrize("league", LEAGUES)
+def test_game_rosters_ids_int64(league, monkeypatch):
+    """B-M15: the finished frame's ids are Int64 (the chain reads team_id / position_id Int32, status_id String)."""
+    from sportsdataverse._espn_game_rosters import roster_ids
+
+    athlete = _payload("athlete_core", league)
+    _serve(monkeypatch, {_key(athlete["$ref"]): athlete})
+    df = getattr(_mod(league), f"helper_{league}_athlete_items")(
+        teams_rosters=pl.DataFrame({"athlete_href": [athlete["$ref"]]})
+    )
+    df = roster_ids(df.with_columns(team_id=pl.lit(1, dtype=pl.Int32), game_id=pl.lit(401, dtype=pl.Int64)))
+    ids = {c: df.schema[c] for c in df.columns if c == "id" or c.endswith("_id")}
+    assert {"athlete_id", "position_id", "team_id", "game_id"} <= set(ids)
+    assert set(ids.values()) == {pl.Int64}, ids
+    assert df["position_id"].to_list() == [int(athlete["position"]["id"])]
+
+
+@pytest.mark.parametrize("league", LEAGUES)
 def test_game_rosters_athlete_404_drops_only_that_athlete(league, monkeypatch):
     athlete = _payload("athlete_core", league)
     missing = re.sub(r"/athletes/\d+", "/athletes/1", athlete["$ref"])
@@ -110,7 +127,10 @@ def test_mlb_game_rosters_empty_competitors_is_a_schemad_frame(monkeypatch):
     assert isinstance(df, pl.DataFrame) and df.height == 0
     assert df.columns == list(mod._COLUMNS)
     assert df.schema["athlete_starter"] == pl.Boolean
-    assert mod.espn_mlb_game_rosters(game_id=game_id, return_as_pandas=True).columns.tolist() == list(mod._COLUMNS)
+    pdf = mod.espn_mlb_game_rosters(game_id=game_id, return_as_pandas=True)
+    assert pdf.columns.tolist() == list(mod._COLUMNS)
+    ids = [c for c in mod._COLUMNS if c.endswith("_id")]
+    assert {c: str(pdf[c].dtype) for c in ids} == dict.fromkeys(ids, "Int64")  # R981-8: as the full frame's
 
 
 # --------------------------------------------------------------------------------------
@@ -169,3 +189,51 @@ def test_game_rosters_athlete_failed_fetch_raises(league, failure, monkeypatch):
         warnings.simplefilter("always")
         helper(teams_rosters=pl.DataFrame({"athlete_href": [athlete["$ref"]]}))
     assert not [w for w in seen if "no athlete resource" in str(w.message)]
+
+
+@pytest.mark.parametrize("league", LEAGUES)
+def test_game_rosters_pandas_ids_are_nullable_int64(league, monkeypatch):
+    """R981-8: the finished frame's pandas exit, per chain. The real competitors capture feeds the chain; the roster /
+    team / athlete fetches are stubbed so one athlete is off the roster, which leaves its ``team_id`` null -- a plain
+    ``to_pandas()`` floated it (``52.0``)."""
+    body = _payload("event_competitors", league)
+    game_id = int(re.search(r"/events/(\d+)/", body["items"][0]["$ref"]).group(1))
+    url = re.sub(r"/competitors/.*", "/competitors", body["items"][0]["$ref"])
+    _serve(monkeypatch, {_key(url): body})
+    mod = _mod(league)
+    on_roster = []
+
+    def rosters(items, summary_url, **kw):
+        out = pl.DataFrame({"team_id": items["team_id"]}).with_columns(player_id=pl.int_range(1, pl.len() + 1))
+        on_roster.extend(out["player_id"].to_list())
+        return out
+
+    monkeypatch.setattr(mod, f"helper_{league}_roster_items", rosters)
+    monkeypatch.setattr(mod, f"helper_{league}_team_items", lambda items, **kw: items.select("team_id"))
+    monkeypatch.setattr(
+        mod,
+        f"helper_{league}_athlete_items",
+        lambda teams_rosters, **kw: pl.DataFrame({"athlete_id": [on_roster[0], 999999]}),
+    )
+    df = getattr(mod, f"espn_{league}_game_rosters")(game_id=game_id)
+    pdf = getattr(mod, f"espn_{league}_game_rosters")(game_id=game_id, return_as_pandas=True)
+    assert df["team_id"].null_count() == 1
+    ids = [c for c, t in df.schema.items() if t == pl.Int64 and (c == "id" or c.endswith("_id"))]
+    assert {"team_id", "athlete_id", "game_id"} <= set(ids)
+    assert {c: str(pdf[c].dtype) for c in ids} == dict.fromkeys(ids, "Int64")
+
+
+def test_mlb_game_rosters_pandas_ids_are_nullable_int64(monkeypatch):
+    """R981-8, mlb's own chain: the real competitors capture, each side's roster served the real Core v2 roster
+    capture (its entries carry the athlete as a ``$ref`` only, so ``athlete_id`` is null); pandas ids are Int64."""
+    body = _payload("event_competitors", "mlb")
+    roster = json.loads((FIX / "espn" / "event_competitor_roster_nba.json").read_text(encoding="utf-8"))
+    game_id = int(re.search(r"/events/(\d+)/", body["items"][0]["$ref"]).group(1))
+    url = re.sub(r"/competitors/.*", "/competitors", body["items"][0]["$ref"])
+    _serve(monkeypatch, {_key(url): body, **{_key(c["roster"]["$ref"]): roster for c in body["items"]}})
+    mod = _mod("mlb")
+    df = mod.espn_mlb_game_rosters(game_id=game_id)
+    pdf = mod.espn_mlb_game_rosters(game_id=game_id, return_as_pandas=True)
+    assert df.height and df["athlete_id"].null_count() > 0
+    ids = [c for c in df.columns if c == "id" or c.endswith("_id")]
+    assert {c: str(pdf[c].dtype) for c in ids} == dict.fromkeys(ids, "Int64")

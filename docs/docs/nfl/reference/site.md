@@ -31,7 +31,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | ESPN event id. |
+| `game_id` | integer | ESPN event id. |
 | `uid` | character |  |
 | `date` | character | Match start timestamp (ISO 8601, UTC). |
 | `name` | character | Full event name (e.g. 'Team A at Team B'). |
@@ -39,7 +39,7 @@ ESPN endpoint.
 | `season_year` | integer | Integer season year ESPN assigns the event (e.g. 2025 for the 2025-26 season). |
 | `season_type` | integer | ESPN season-type id of the event's season: 1 preseason, 2 regular season, 3 postseason, 4 offseason for the US leagues; soccer competitions carry their own competition-specific ids (e.g. 13481). |
 | `season_slug` | character | ESPN slug of the event's season type (e.g. 'regular-season', 'post-season'; soccer competitions use their own, such as 'final' or 'torneo-apertura'). |
-| `status_type_id` | character |  |
+| `status_type_id` | integer |  |
 | `status_type_name` | character |  |
 | `status_type_state` | character |  |
 | `status_type_completed` | logical |  |
@@ -52,14 +52,14 @@ ESPN endpoint.
 | `neutral_site` | logical | Whether the match is played at a neutral venue. |
 | `conference_competition` | logical |  |
 | `attendance` | integer |  |
-| `venue_id` | character |  |
+| `venue_id` | integer |  |
 | `venue_full_name` | character |  |
 | `venue_city` | character |  |
 | `venue_state` | character |  |
 | `venue_indoor` | logical |  |
 | `broadcast` | character | Every network name of the competition in feed order, deduped and ", "-joined (an entry with no names gives its market); "" when the game lists no broadcast. |
 | `note` | character | Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none. |
-| `home_id` | character |  |
+| `home_id` | integer |  |
 | `home_name` | character |  |
 | `home_abbreviation` | character |  |
 | `home_display_name` | character |  |
@@ -70,7 +70,7 @@ ESPN endpoint.
 | `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
 | `home_winner` | logical |  |
 | `home_rank` | character |  |
-| `away_id` | character |  |
+| `away_id` | integer |  |
 | `away_name` | character |  |
 | `away_abbreviation` | character |  |
 | `away_display_name` | character |  |
@@ -118,11 +118,11 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |
 | `team_location` | character | Team location. |
-| `athlete_id` | character | Athlete id. |
+| `athlete_id` | integer | Athlete id. |
 | `athlete_display_name` | character | Athlete display name. |
 | `athlete_short_name` | character | Athlete short name. |
 | `athlete_jersey` | character | Athlete jersey. |
@@ -189,7 +189,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |
 | `home_away` | character | Home away. |
@@ -205,17 +205,17 @@ ESPN endpoint.
 |---|---|---|
 | `home_win_percentage` | double | Home win percentage. |
 | `tie_percentage` | double | Tie percentage. |
-| `play_id` | character | Play id. |
+| `play_id` | integer | Play id. |
 
 **leaders**
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `category_name` | character | Category name. |
 | `category_display_name` | character | Category display name. |
-| `athlete_id` | character | Athlete id. |
+| `athlete_id` | integer | Athlete id. |
 | `athlete_display_name` | character | Athlete display name. |
 | `athlete_position` | character | Athlete position. |
 | `value` | double | Value. |
@@ -228,7 +228,7 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `attendance` | integer | Attendance. |
-| `venue_id` | character | Venue id. |
+| `venue_id` | integer | Venue id. |
 | `venue_guid` | character | Venue guid. |
 | `venue_full_name` | character | Venue full name. |
 | `venue_address_city` | character | Venue address city. |
@@ -246,13 +246,13 @@ ESPN endpoint.
 | `order` | integer | Order. |
 | `position_name` | character | Position name. |
 | `position_display_name` | character | Position display name. |
-| `position_id` | character | Position id. |
+| `position_id` | integer | Position id. |
 
 **header**
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Id. |
+| `id` | integer | Id. |
 | `uid` | character | Uid. |
 | `time_valid` | logical | Time valid. |
 | `competitions` | character | Competitions. |
@@ -262,7 +262,7 @@ ESPN endpoint.
 | `season_year` | integer | Season year. |
 | `season_current` | logical | Season current. |
 | `season_type` | integer | Season type. |
-| `league_id` | character | League id. |
+| `league_id` | integer | League id. |
 | `league_uid` | character | League uid. |
 | `league_name` | character | League name. |
 | `league_abbreviation` | character | League abbreviation. |
@@ -278,7 +278,7 @@ ESPN endpoint.
 | `group_header` | character | Group header. |
 | `conference_header` | character | Conference header. |
 | `division_header` | character | Division header. |
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_uid` | character | Team uid. |
 | `team_location` | character | Team location. |
 | `losses` | character | Losses. |
@@ -313,7 +313,7 @@ ESPN endpoint.
 | `data_source_identifier` | character | Data source identifier. |
 | `publishedkey` | character | Publishedkey. |
 | `type` | character | Type. |
-| `game_id` | character | Game id. |
+| `game_id` | integer | Game id. |
 | `headline` | character | Headline. |
 | `description` | character | Description. |
 | `link_text` | character | Link text. |
@@ -343,7 +343,7 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `injuries` | character | Injuries. |
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_uid` | character | Team uid. |
 | `team_display_name` | character | Team display name. |
 | `team_abbreviation` | character | Team abbreviation. |
@@ -377,7 +377,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Id. |
+| `id` | integer | Id. |
 | `description` | character | Description. |
 | `yards` | integer | The number of receiving yards |
 | `is_score` | logical |  |
@@ -386,7 +386,7 @@ ESPN endpoint.
 | `short_display_result` | character |  |
 | `display_result` | character |  |
 | `plays` | character |  |
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_name` | character | Full display name of the team. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |
@@ -408,9 +408,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `drive_id` | character |  |
+| `drive_id` | integer |  |
 | `drive_sequence` | integer | Sequential position of the drive within the game's broadcast or play-by-play listing. |
-| `id` | character | Id. |
+| `id` | integer | Id. |
 | `sequence_number` | character | Sequence number. |
 | `text` | character | Text. |
 | `away_score` | integer | Away score. |
@@ -423,7 +423,7 @@ ESPN endpoint.
 | `is_penalty` | logical |  |
 | `stat_yardage` | integer |  |
 | `is_turnover` | logical |  |
-| `type_id` | character | Type id. |
+| `type_id` | integer | Type id. |
 | `type_text` | character | Type text. |
 | `type_abbreviation` | character |  |
 | `period_number` | integer | Period number. |
@@ -432,7 +432,7 @@ ESPN endpoint.
 | `start_distance` | integer |  |
 | `start_yard_line` | integer |  |
 | `start_yards_to_endzone` | integer |  |
-| `start_team_id` | character |  |
+| `start_team_id` | integer |  |
 | `end_down` | integer |  |
 | `end_distance` | integer |  |
 | `end_yard_line` | integer | String indicating the yardline at the end of the given play consisting of team half and yard line number. |
@@ -440,14 +440,14 @@ ESPN endpoint.
 | `end_down_distance_text` | character |  |
 | `end_short_down_distance_text` | character |  |
 | `end_possession_text` | character |  |
-| `end_team_id` | character |  |
+| `end_team_id` | integer |  |
 | `start_down_distance_text` | character |  |
 | `start_short_down_distance_text` | character |  |
 | `start_possession_text` | character |  |
 | `scoring_type_name` | character |  |
 | `scoring_type_display_name` | character |  |
 | `scoring_type_abbreviation` | character |  |
-| `point_after_attempt_id` | double |  |
+| `point_after_attempt_id` | integer |  |
 | `point_after_attempt_text` | character |  |
 | `point_after_attempt_abbreviation` | character |  |
 | `point_after_attempt_value` | double |  |
@@ -456,17 +456,17 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Id. |
+| `id` | integer | Id. |
 | `text` | character | Text. |
 | `away_score` | integer | Away score. |
 | `home_score` | integer | Home score. |
-| `type_id` | character | Type id. |
+| `type_id` | integer | Type id. |
 | `type_text` | character | Type text. |
 | `type_abbreviation` | character |  |
 | `period_number` | integer | Period number. |
 | `clock_value` | double |  |
 | `clock_display_value` | character | Clock display value. |
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_uid` | character | Team uid. |
 | `team_display_name` | character | Team display name. |
 | `team_abbreviation` | character | Team abbreviation. |
@@ -595,7 +595,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ESPN numeric identifier for the athlete. |
+| `id` | integer | ESPN numeric identifier for the athlete. |
 | `display_name` | character | Athlete's full display name as shown on ESPN. |
 | `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
 
@@ -639,7 +639,7 @@ ESPN endpoint.
 | `team_alternate_color` | character |  |
 | `team_color` | character |  |
 | `team_display_name` | character |  |
-| `team_id` | character |  |
+| `team_id` | integer |  |
 | `team_links` | character |  |
 | `team_location` | character |  |
 | `team_logos` | character |  |
@@ -678,12 +678,12 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `group_id` | character |  |
+| `group_id` | integer |  |
 | `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
 | `abbreviation` | character |  |
 | `short_name` | character | Player short name (i.e. "F.Last") |
 | `is_conference` | logical |  |
-| `parent_group_id` | character |  |
+| `parent_group_id` | integer |  |
 | `depth` | integer |  |
 | `children_count` | integer |  |
 
@@ -791,7 +791,7 @@ ESPN endpoint.
 | `team_alternate_color` | character | Secondary team color as a hex string (no leading '#'). |
 | `team_color` | character | Primary team color as a hex string (no leading '#'). |
 | `team_display_name` | character | Full team display name (location + nickname). |
-| `team_id` | character | ESPN team id (stable join key across ESPN endpoints). |
+| `team_id` | integer | ESPN team id (stable join key across ESPN endpoints). |
 | `team_is_active` | logical | Whether the team is currently active. |
 | `team_is_all_star` | logical | Whether the entry is an all-star squad rather than a franchise. |
 | `team_location` | character | Team location / city (e.g. "Boston"). |
@@ -844,7 +844,7 @@ ESPN endpoint.
 | `team_franchise_abbreviation` | character |  |
 | `team_franchise_color` | character |  |
 | `team_franchise_display_name` | character |  |
-| `team_franchise_id` | character |  |
+| `team_franchise_id` | integer |  |
 | `team_franchise_is_active` | logical |  |
 | `team_franchise_location` | character |  |
 | `team_franchise_name` | character |  |
@@ -858,14 +858,14 @@ ESPN endpoint.
 | `team_franchise_venue_full_name` | character |  |
 | `team_franchise_venue_grass` | logical |  |
 | `team_franchise_venue_guid` | character |  |
-| `team_franchise_venue_id` | character |  |
+| `team_franchise_venue_id` | integer |  |
 | `team_franchise_venue_images` | character |  |
 | `team_franchise_venue_indoor` | logical |  |
 | `team_franchise_venue_short_name` | character |  |
-| `team_groups_id` | character |  |
+| `team_groups_id` | integer |  |
 | `team_groups_is_conference` | logical |  |
-| `team_groups_parent_id` | character |  |
-| `team_id` | character |  |
+| `team_groups_parent_id` | integer |  |
+| `team_id` | integer |  |
 | `team_is_active` | logical |  |
 | `team_links` | character |  |
 | `team_location` | character |  |
@@ -914,7 +914,7 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `position_group` | character | Postion group of player as listed by NFL |
-| `id` | character | Id. |
+| `id` | integer | Id. |
 | `uid` | character | Uid. |
 | `guid` | character | Guid. |
 | `first_name` | character | First name. |
@@ -935,7 +935,7 @@ ESPN endpoint.
 | `birth_place_city` | character | Birth place city. |
 | `birth_place_state` | character | Birth place state. |
 | `birth_place_country` | character | Birth place country. |
-| `college_id` | character | College id. |
+| `college_id` | integer | College id. |
 | `college_guid` | character | College guid. |
 | `college_mascot` | character | College mascot. |
 | `college_name` | character | College name. |
@@ -944,18 +944,18 @@ ESPN endpoint.
 | `college_logos` | character | College logos. |
 | `headshot_href` | character | Headshot href. |
 | `headshot_alt` | character | Headshot alt. |
-| `position_id` | character | Position id. |
+| `position_id` | integer | Position id. |
 | `position_name` | character | Position name. |
 | `position_display_name` | character | Position display name. |
 | `position_abbreviation` | character | Position abbreviation. |
 | `position_leaf` | logical | Position leaf. |
-| `position_parent_id` | character |  |
+| `position_parent_id` | integer |  |
 | `position_parent_name` | character |  |
 | `position_parent_display_name` | character |  |
 | `position_parent_abbreviation` | character |  |
 | `position_parent_leaf` | logical |  |
 | `experience_years` | integer | Experience years. |
-| `status_id` | character | Status id. |
+| `status_id` | integer | Status id. |
 | `status_name` | character | Status name. |
 | `status_type` | character | Status type. |
 | `status_abbreviation` | character | Status abbreviation. |
@@ -1001,7 +1001,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ESPN numeric event identifier. |
+| `id` | integer | ESPN numeric event identifier. |
 | `date` | character | Event timestamp (ISO 8601, UTC). |
 | `name` | character | Full event name (e.g. 'Team A at Team B'). |
 | `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
@@ -1010,7 +1010,7 @@ ESPN endpoint.
 | `links` | character | Related links (list, stringified). |
 | `season_year` | integer | Four-digit season year. |
 | `season_display_name` | character | Human-readable season label (e.g. '2024-25'). |
-| `season_type_id` | character | ESPN numeric identifier for the season type. |
+| `season_type_id` | integer | ESPN numeric identifier for the season type. |
 | `season_type_type` | integer | Season type numeric code. |
 | `season_type_name` | character | Season type name (e.g. Regular Season). |
 | `season_type_abbreviation` | character | Season type abbreviation. |
@@ -1119,7 +1119,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ESPN numeric identifier for the athlete. |
+| `id` | integer | ESPN numeric identifier for the athlete. |
 | `display_name` | character | Athlete's full display name as shown on ESPN. |
 | `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
 
@@ -1436,7 +1436,7 @@ ESPN endpoint.
 |---|---|---|
 | `group_name` | character | Group name. |
 | `group_abbreviation` | character | Group abbreviation. |
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_name` | character | Team name. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |

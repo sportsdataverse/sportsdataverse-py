@@ -26,7 +26,7 @@ columns:
   type: character
   description: ''
 - name: team_franchise_id
-  type: character
+  type: integer
   description: ''
 - name: team_franchise_is_active
   type: logical
@@ -68,7 +68,7 @@ columns:
   type: character
   description: ''
 - name: team_franchise_venue_id
-  type: character
+  type: integer
   description: ''
 - name: team_franchise_venue_images
   type: character
@@ -80,16 +80,16 @@ columns:
   type: character
   description: ''
 - name: team_groups_id
-  type: character
+  type: integer
   description: ''
 - name: team_groups_is_conference
   type: logical
   description: ''
 - name: team_groups_parent_id
-  type: character
+  type: integer
   description: ''
 - name: team_id
-  type: character
+  type: integer
   description: ''
 - name: team_is_active
   type: logical

@@ -152,7 +152,7 @@ columns:
   type: character
   description: ''
 - name: winning_goal_scorer_player_id
-  type: double
+  type: integer
   description: ''
 - name: winning_goal_scorer_first_initial_default
   type: character
@@ -176,7 +176,7 @@ columns:
   type: character
   description: ''
 - name: special_event_parent_id
-  type: double
+  type: integer
   description: ''
 - name: special_event_name_default
   type: character

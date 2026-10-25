@@ -30,7 +30,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | ESPN event id. |
+| `game_id` | integer | ESPN event id. |
 | `uid` | character | Competitor uid string. |
 | `date` | character | Match start timestamp (ISO 8601, UTC). |
 | `name` | character | Full event name (e.g. 'Team A at Team B'). |
@@ -38,7 +38,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 | `season_year` | integer | Integer season year ESPN assigns the event (e.g. 2025 for the 2025-26 season). |
 | `season_type` | integer | ESPN season-type id of the event's season: 1 preseason, 2 regular season, 3 postseason, 4 offseason for the US leagues; soccer competitions carry their own competition-specific ids (e.g. 13481). |
 | `season_slug` | character | ESPN slug of the event's season type (e.g. 'regular-season', 'post-season'; soccer competitions use their own, such as 'final' or 'torneo-apertura'). |
-| `status_type_id` | character | Status type identifier. |
+| `status_type_id` | integer | Status type identifier. |
 | `status_type_name` | character | Status type name. |
 | `status_type_state` | character | Status state (pre/in/post). |
 | `status_type_completed` | logical | Whether the game is complete. |
@@ -51,14 +51,14 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 | `neutral_site` | logical | Whether the match is played at a neutral venue. |
 | `conference_competition` | logical | Whether it is a conference competition. |
 | `attendance` | integer | Game attendance. |
-| `venue_id` | character | Venue identifier. |
+| `venue_id` | integer | Venue identifier. |
 | `venue_full_name` | character | Venue full name. |
 | `venue_city` | character | Venue city. |
 | `venue_state` | character | Venue state. |
 | `venue_indoor` | logical | Whether the venue is indoors. |
 | `broadcast` | character | Every network name of the competition in feed order, deduped and ", "-joined (an entry with no names gives its market); "" when the game lists no broadcast. |
 | `note` | character | Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none. |
-| `home_id` | character | Home team ESPN identifier. |
+| `home_id` | integer | Home team ESPN identifier. |
 | `home_name` | character | Home team display name. |
 | `home_abbreviation` | character | Home team abbreviation. |
 | `home_display_name` | character | Home team display name. |
@@ -69,7 +69,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 | `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
 | `home_winner` | logical | Whether the home team won. |
 | `home_rank` | character | Home team rank (if ranked). |
-| `away_id` | character | Away team ESPN identifier. |
+| `away_id` | integer | Away team ESPN identifier. |
 | `away_name` | character | Away team display name. |
 | `away_abbreviation` | character | Away team abbreviation. |
 | `away_display_name` | character | Away team display name. |

@@ -2,7 +2,7 @@ schema: qmjhl_player_stats
 kind: dataframe
 columns:
 - name: season_id
-  type: character
+  type: integer
   description: ''
 - name: season_name
   type: character
@@ -119,7 +119,7 @@ columns:
   type: character
   description: ''
 - name: team_id
-  type: character
+  type: integer
   description: ''
 - name: active
   type: character

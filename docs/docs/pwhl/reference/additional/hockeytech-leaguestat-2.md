@@ -27,8 +27,8 @@ One row per rostered player: `player_id`, `person_id`, names (`first_name`, `las
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Unique player identifier. |
-| `person_id` | character | Unique person identifier. |
+| `id` | integer | Unique player identifier. |
+| `person_id` | integer | Unique person identifier. |
 | `active` | character | Whether athlete is currently active. |
 | `first_name` | character | Player first name. |
 | `last_name` | character | Player last name. |
@@ -48,20 +48,20 @@ One row per rostered player: `player_id`, `person_id`, names (`first_name`, `las
 | `height_hyphenated` | character | Player's height formatted as feet-inches with a hyphen separator (e.g., '5-9'), as supplied by the PWHL HockeyTech API. |
 | `hidden` | character | Flag indicating whether the player's roster entry is suppressed from public-facing displays in the PWHL HockeyTech system. |
 | `current_team` | character | Name or identifier of the PWHL team to which the player is currently rostered. |
-| `player_id` | character | Unique player identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `status` | character | Status string (e.g. captain markers). |
 | `birthdate` | character | Date of birth. |
 | `birthdate_year` | character | Player birth year. |
 | `rawbirthdate` | character | Player's birth date as a raw string in the format returned by the PWHL HockeyTech API, typically YYYY-MM-DD. |
-| `latest_team_id` | character | Most recent team identifier. |
+| `latest_team_id` | integer | Most recent team identifier. |
 | `veteran_status` | character | Player veteran status. |
 | `veteran_description` | character | Text label or descriptor indicating the player's veteran status or experience classification in the PWHL. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Team name. |
 | `division` | character | Division identifier. |
 | `tp_jersey_number` | character | Jersey number assigned to the player on the current PWHL team roster, as provided by the HockeyTech feed. |
 | `rookie` | character | Whether the player is a rookie. |
-| `position_id` | character | Official position identifier. |
+| `position_id` | integer | Official position identifier. |
 | `position` | character | Player position. |
 | `nhlteam` | character | Name or identifier of the NHL organization that holds the player's NHL rights, if applicable. |
 | `player_id_1` | character | Alternate or secondary HockeyTech player identifier, distinct from the primary person_id and player_id fields. |
@@ -113,7 +113,7 @@ One row per team: `team_id`, `team_name`, `team_code`, `team_nickname`, `team_la
 | col_name | type | description |
 |---|---|---|
 | `team_name` | character | Team name. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `team_code` | character | Team abbreviation. |
 | `team_nickname` | character | Team nickname. |
 | `team_label` | character | Short city label. |
