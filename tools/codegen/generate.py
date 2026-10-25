@@ -18,11 +18,12 @@ from urllib.parse import urlencode
 import yaml
 
 # Make ``tools`` importable when run as a script (`python tools/codegen/generate.py`),
-# where sys.path[0] is this file's dir rather than the repo root.
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+# where sys.path[0] is this file's dir rather than the repo root. Imported as
+# ``tools.codegen.generate`` the root is already importable, so sys.path is left alone.
+if not __package__:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from tools.codegen import render, render_notebooks, spec  # noqa: E402
-from tools.hooks import sync_docs_changelog  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 ENDPOINTS = ROOT / "tools" / "codegen" / "endpoints"
@@ -1405,7 +1406,7 @@ class _EndpointView:
         self.raises_rows = _raises_rows(
             _raises_lines(doc_extras or {}, route_module in _VOCAB_GETTERS, _GETTER_RAISES.get(route_module, ()))
         )
-        self.return_table = _return_table(ep.returns_schema, schema_key)
+        self._returns_schema = ep.returns_schema  # read by the lazy ``return_table``
         schema_doc = _schema_doc(ep.returns_schema, schema_key)
         self.return_frames = schema_doc.get("kind") == "frames"
         self.returns_dict = _returns_dict(schema_doc)
@@ -1421,6 +1422,12 @@ class _EndpointView:
         self.unverified = str(schema_doc.get("unverified") or "")
         self.returns_prose = _normalize_rst(ep.summary or "")
         self.api_name = ""  # set by _espn_league_views for per-API docs filtering
+
+    @functools.cached_property
+    def return_table(self) -> str:
+        """The markdown returns table(s). Docs-only, so built on first read: a code-only render never
+        pays for it (it was ~29 of the ~86 s of ``_render_all``)."""
+        return _return_table(self._returns_schema, self.schema_league)
 
     @staticmethod
     def _build_path_expr(ep: spec.Endpoint, ep_host: str, league: spec.League, quote_path: bool = False) -> str:
@@ -2717,13 +2724,16 @@ def build_parsed_live() -> list[Path]:
     return sorted(written)
 
 
+@functools.cache
+def _league_group() -> dict[str, str]:
+    """League prefix -> sport-group container, for leagues that nest (soccer, football). Read from
+    leagues.yaml (on first use, not at import) so it cannot drift from the ESPN side's layout."""
+    return {lg.prefix: lg.group for lg in spec.load_leagues(ENDPOINTS / "leagues.yaml").leagues if lg.group}
+
+
 # Flat (non-sport/league) API families: (yaml_stem, league_prefix). Only those
 # whose YAML exists under tools/codegen/endpoints/ are generated, so the NHL/MLB
 # native cutover can land family-by-family.
-#: League prefix -> sport-group container, for leagues that nest (soccer, football).
-#: Read from leagues.yaml so it cannot drift from the ESPN side's layout.
-_LEAGUE_GROUP = {lg.prefix: lg.group for lg in spec.load_leagues(ENDPOINTS / "leagues.yaml").leagues if lg.group}
-
 FLAT_APIS = [
     ("nhl_api_web", "nhl"),
     ("nhl_edge", "nhl"),
@@ -2845,7 +2855,7 @@ def _flat_dest(prefix: str, module: str) -> Path:
     """
     if prefix in _NESTED_HOMES:
         return LIVE.joinpath(*_NESTED_HOMES[prefix].split("."), f"{module}.py")
-    group = _LEAGUE_GROUP.get(prefix, "")
+    group = _league_group().get(prefix, "")
     base = LIVE / group / prefix if group else LIVE / prefix
     return base / f"{module}.py"
 
@@ -5760,6 +5770,8 @@ def _render_docs_all() -> dict[str, str]:
     out.update(render_notebooks.relinked_pages(anchor_map))
     out[_LEAGUES_JSON_REL] = render_leagues_json()
     try:
+        from tools.hooks import sync_docs_changelog
+
         pages = sync_docs_changelog.render((ROOT / "CHANGELOG.md").read_text(encoding="utf-8"))
     except ValueError as e:  # an unrecognised CHANGELOG.md heading: name it, no traceback
         raise SystemExit(f"codegen: cannot render the docs changelog pages: {e}") from None
