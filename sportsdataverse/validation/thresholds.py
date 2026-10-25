@@ -70,8 +70,8 @@ def parse(text: str) -> dict[str, dict[str, float]]:
     Example:
         Read a tolerance file the packaged reader's way::
 
-            from sportsdataverse.validation.thresholds import parse
-            parse(open("thresholds.yaml", encoding="utf-8").read())
+            from sportsdataverse.validation.thresholds import PATH, parse
+            parse(PATH.read_text(encoding="utf-8"))
 
     See Also:
         * :func:`for_league` -- the packaged file's values for one league

@@ -34,7 +34,8 @@ Single athlete dict or list. Each entry contains the athlete's ESPN ID plus the 
 | Exception | Description |
 |---|---|
 | `ValueError` | `league` is not one of the supported slugs. |
-| `AssetFetchError` | A roster fetch failed (403, rate limit, 5xx, dead connection), so whether the athlete exists is unknown. A roster that answers 404 is skipped. |
+| `NoDataError` | The league's teams endpoint answered 404 (it is read to resolve `team=` or, without it, to list the teams to search). |
+| `AssetFetchError` | A teams or roster fetch failed (403, rate limit, 5xx, dead connection), so whether the athlete exists is unknown. A roster that answers 404 is skipped. |
 
 **Example**
 
@@ -128,7 +129,7 @@ print(team["id"], team["displayName"])  # the raw ESPN team dict (camelCase keys
 
 # Every candidate
 
-find_team("los angeles", league="nba", multi=True)  # Lakers and Clippers
+find_team("new", league="nba", multi=True)  # New Orleans Pelicans and New York Knicks
 ```
 
 ### function_count {#function_count}
