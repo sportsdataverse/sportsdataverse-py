@@ -40,7 +40,7 @@ __all__ = ["pwhl_player_props", "pwhl_game_total"]
 
 _PROPS_BOX_SCHEMA: dict[str, pl.DataType] = {
     "game_id": pl.Int64(),
-    "player_id": pl.Utf8(),
+    "player_id": pl.Int64(),
     "game_date": pl.Utf8(),
     "season": pl.Int64(),
     "position": pl.Utf8(),
@@ -93,7 +93,7 @@ def _pwhl_props_box(seasons: Any) -> pl.DataFrame:
             .join(dates, on="game_id", how="left")
             .select(
                 "game_id",
-                pl.col("player_id").cast(pl.Utf8),
+                pl.col("player_id").cast(pl.Int64),
                 "game_date",
                 pl.lit(season, dtype=pl.Int64).alias("season"),
                 pl.when(pl.col("position").is_in(["LD", "RD", "D"]))

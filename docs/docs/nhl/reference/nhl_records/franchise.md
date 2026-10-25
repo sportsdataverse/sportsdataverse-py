@@ -27,7 +27,7 @@ List all NHL franchises (historical and active).
 | `id` | integer | Unique player identifier. |
 | `first_season_id` | integer | Season identifier of the first season. |
 | `full_name` | character | Player full name. |
-| `last_season_id` | double | Season ID of the franchise's last season. |
+| `last_season_id` | integer | Season ID of the franchise's last season. |
 | `most_recent_team_id` | integer | Most recent team identifier. |
 | `team_abbrev` | character | Team abbreviation. |
 | `team_common_name` | character | Team common (nickname) name. |
@@ -132,7 +132,7 @@ All-time team totals per franchise (regular season).
 | `home_overtime_losses` | double | Overtime losses at home. |
 | `home_ties` | double | Ties at home. |
 | `home_wins` | double | Wins at home. |
-| `last_season_id` | double | Season ID of the franchise's last season. |
+| `last_season_id` | integer | Season ID of the franchise's last season. |
 | `losses` | double | Losses. |
 | `overtime_losses` | double | Total overtime losses. |
 | `penalty_minutes` | double | Penalty minutes. |
@@ -323,7 +323,7 @@ League-wide franchise totals (all-time aggregate per franchise).
 | `home_overtime_losses` | double | Overtime losses at home. |
 | `home_ties` | double | Ties at home. |
 | `home_wins` | integer | Wins at home. |
-| `last_season_id` | double | Season ID of the franchise's last season. |
+| `last_season_id` | integer | Season ID of the franchise's last season. |
 | `losses` | integer | Losses. |
 | `overtime_losses` | double | Total overtime losses. |
 | `penalty_minutes` | integer | Penalty minutes. |

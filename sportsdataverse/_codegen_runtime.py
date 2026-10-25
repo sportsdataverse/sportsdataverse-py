@@ -13,6 +13,7 @@ import json
 import logging
 import numbers
 import time
+import warnings
 from contextlib import contextmanager
 from typing import Any, Callable, Iterator, List, Optional, TypeVar, cast
 from urllib.parse import quote, urlsplit
@@ -23,6 +24,7 @@ from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import (
     AssetFetchError,
     NoDataError,
+    SchemaDriftWarning,
     _error_envelope_code,
     _redact_secrets,
     _string_route,
@@ -82,6 +84,27 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
             continue
         df = df.with_columns(cast.alias(col))
     return df
+
+
+def _cast_id_columns(df: pl.DataFrame, where: str, text_ids: Any = ()) -> pl.DataFrame:
+    """Every ``id`` / ``*_id`` column of a parser's frame through :func:`_cast_ids_int64` (task 5.2).
+
+    A column holding an id that is not an integer is refused there and keeps its dtype. ``text_ids`` names the
+    columns that are text by design (NHL stats-rest ``formatted_season_id`` ``"1971-72"``, the country ``id``
+    ``"DEU"``); any other refused column warns :class:`~sportsdataverse.errors.SchemaDriftWarning` naming
+    ``where`` and the columns (R986-2), as the ESPN parsers do: one text id in a payload otherwise flips that
+    column back to String for that call only, silently.
+    """
+    cols = [c for c in df.columns if c == "id" or c.endswith("_id")]
+    out = _cast_ids_int64(df, cols)
+    refused = [c for c in cols if out.schema[c] != pl.Int64 and c not in text_ids and out[c].null_count() < out.height]
+    if refused:
+        warnings.warn(
+            f"{where}: id columns {refused} hold values that are not integer ids; kept as they came",
+            SchemaDriftWarning,
+            stacklevel=3,
+        )
+    return out
 
 
 def _pandas_ids(df: pl.DataFrame, out: Any = None) -> Any:

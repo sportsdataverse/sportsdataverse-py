@@ -442,7 +442,7 @@ Retrieve league leaders for a goalie statistical attribute.
 |---|---|---|
 | `save_pctg` | double | Save percentage. |
 | `player_id` | integer | Unique player identifier. |
-| `player_current_team_id` | double | Player's current team identifier. |
+| `player_current_team_id` | integer | Player's current team identifier. |
 | `player_first_name` | character | Player first name. |
 | `player_full_name` | character | Player full name. |
 | `player_last_name` | character | Player last name. |
@@ -495,7 +495,7 @@ Retrieve league leaders for a skater statistical attribute.
 |---|---|---|
 | `goals` | integer | Goals scored. |
 | `player_id` | integer | Unique player identifier. |
-| `player_current_team_id` | character | Player's current team identifier. |
+| `player_current_team_id` | integer | Player's current team identifier. |
 | `player_first_name` | character | Player first name. |
 | `player_full_name` | character | Player full name. |
 | `player_last_name` | character | Player last name. |
