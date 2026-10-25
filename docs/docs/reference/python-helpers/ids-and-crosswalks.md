@@ -36,6 +36,18 @@ Single athlete dict or list. Each entry contains the athlete's ESPN ID plus the 
 | `ValueError` | `league` is not one of the supported slugs. |
 | `AssetFetchError` | A roster fetch failed (403, rate limit, 5xx, dead connection), so whether the athlete exists is unknown. A roster that answers 404 is skipped. |
 
+**Example**
+
+```python
+from sportsdataverse.find import find_athlete
+athlete = find_athlete("lebron", league="nba", team="lakers")
+print(athlete["id"], athlete["team_id"])
+
+# Every match across the league (one roster call per team)
+
+find_athlete("smith", league="wnba", multi=True)
+```
+
 ### find_event {#find_event}
 
 `find_event(date: 'str', league: 'str', *, home: 'Optional[str]' = None, away: 'Optional[str]' = None, multi: 'bool' = False) -> 'Union[Optional[Dict[str, Any]], List[Dict[str, Any]]]'`
@@ -63,6 +75,18 @@ Single event dict (with the `id` you'd pass to `espn_{league}_summary(event_id=.
 | `ValueError` | `league` is not one of the supported slugs, or `date` is not `YYYYMMDD` / `YYYY-MM-DD`. |
 | `NoDataError` | The scoreboard endpoint answered 404. |
 | `AssetFetchError` | The scoreboard fetch failed (403, rate limit, 5xx, dead connection), so the answer is unknown. |
+
+**Example**
+
+```python
+from sportsdataverse.find import find_event
+event = find_event("2024-06-17", league="nba", home="Boston")
+print(event["id"], event["name"])
+
+# Every game on a date (double-headers)
+
+find_event("20240601", league="mlb", multi=True)
+```
 
 ### find_team {#find_team}
 
@@ -94,6 +118,18 @@ Single team dict (`{id, displayName, abbreviation, location, ...}`) or `None` wh
 | `ValueError` | `league` is not one of the supported slugs. |
 | `NoDataError` | The teams endpoint answered 404. |
 | `AssetFetchError` | The teams fetch failed (403, rate limit, 5xx, dead connection), so the answer is unknown. |
+
+**Example**
+
+```python
+from sportsdataverse.find import find_team
+team = find_team("lakers", league="nba")
+print(team["id"], team["displayName"])  # the raw ESPN team dict (camelCase keys)
+
+# Every candidate
+
+find_team("los angeles", league="nba", multi=True)  # Lakers and Clippers
+```
 
 ### function_count {#function_count}
 

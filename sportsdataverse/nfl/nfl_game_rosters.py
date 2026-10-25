@@ -65,6 +65,12 @@ def espn_nfl_game_rosters(
             rosters_pd = espn_nfl_game_rosters(game_id=401220403, return_as_pandas=True)
             home = rosters_pd[rosters_pd["home_away"] == "home"]
             away = rosters_pd[rosters_pd["home_away"] == "away"]
+
+        See Also:
+            * `nflfastR`_ -- ``fast_scraper_roster()``, the nflverse roster source
+            * :func:`sportsdataverse.nfl.load_nfl_rosters` -- season rosters from the nflverse release
+
+        .. _nflfastR: https://www.nflfastr.com
     """
     # summary endpoint for pickcenter array
     summary_url = "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{x}/competitions/{x}/competitors".format(

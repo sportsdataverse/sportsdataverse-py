@@ -592,7 +592,7 @@ qbs = (
 
 ### load_ff_rankings {#load_ff_rankings}
 
-`load_ff_rankings(type: 'str' = 'draft', kind: 'str' = None, return_as_pandas=False) -> 'pl.DataFrame'`
+`load_ff_rankings(type: 'str' = 'draft', kind: 'str | None' = None, return_as_pandas=False) -> 'pl.DataFrame'`
 
 Load fantasy football rankings and projections
 

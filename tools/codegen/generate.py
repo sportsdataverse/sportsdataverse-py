@@ -2299,6 +2299,15 @@ def build_loaders_live() -> list[Path]:
     return sorted(written)
 
 
+def _differs(live: Path, expected: str) -> bool:
+    """True when ``live`` is missing or its BYTES differ from ``expected`` encoded as UTF-8.
+
+    Bytes, not text: ``read_text`` folds CRLF into LF, so a generated file committed with CRLF
+    line endings compared equal and passed ``--check`` while differing from what codegen writes
+    (every writer here writes LF)."""
+    return not live.exists() or live.read_bytes() != expected.encode("utf-8")
+
+
 def _yaml_file(path: Path) -> Any:
     """``path`` parsed as YAML; an empty file reads as ``{}``."""
     return yaml.safe_load(path.read_text(encoding="utf-8")) or {}
@@ -2333,7 +2342,7 @@ def _stale_vs_render(prefix: str, rendered: dict[str, str], live: dict[str, Path
         return [
             str(path.relative_to(ROOT))
             for name, path in live.items()
-            if not path.exists() or path.read_text(encoding="utf-8") != (tmp / name).read_text(encoding="utf-8")
+            if _differs(path, (tmp / name).read_text(encoding="utf-8"))
         ]
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
@@ -3218,7 +3227,7 @@ def _live_stale() -> list[str]:
         has_ext = (container / f"{group}_espn_ext.py").exists()
         expected = _container_init_body(group, members, has_ext)
         live_init = container / "__init__.py"
-        if not live_init.exists() or live_init.read_text(encoding="utf-8") != expected:
+        if _differs(live_init, expected):
             stale.append(str(live_init.relative_to(ROOT)))
     return stale
 
@@ -5940,7 +5949,7 @@ def _docs_stale(rendered: dict[str, str] | None = None) -> list[str]:
     stale = []
     for rel, content in rendered.items():
         f = DOCS / rel
-        if not f.exists() or f.read_text(encoding="utf-8") != content:
+        if _differs(f, content):
             stale.append(rel)
     for root in _generated_docs_roots():
         d = DOCS / root

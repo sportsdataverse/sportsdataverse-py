@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–td_at"
-sidebar_label: "stats.ncaa.org: ncaa_mbb–td_at"
+title: "MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–stint_exposure"
+sidebar_label: "stats.ncaa.org: ncaa_mbb–stint_exposure"
 sidebar_position: 5
-description: "MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–td_at — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–stint_exposure — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–td_at
+# MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–stint_exposure
 
 ### ncaa_mbb_join_pbp_shots {#ncaa_mbb_join_pbp_shots}
 
@@ -299,29 +299,29 @@ given lineup always occupies the same columns.
 | `home` | character | Home. |
 | `away` | character | Away record. |
 | `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `poss_num` | integer |  |
-| `poss_team` | character |  |
-| `home_1` | character |  |
-| `home_2` | character |  |
-| `home_3` | character |  |
-| `home_4` | character |  |
-| `home_5` | character |  |
-| `away_1` | character |  |
-| `away_2` | character |  |
-| `away_3` | character |  |
-| `away_4` | character |  |
-| `away_5` | character |  |
+| `poss_num` | integer | Possession number within the game, stamped upstream by the play-by-play chain (parse_ncaa_bb_game_pbp). |
+| `poss_team` | character | Name of the team in possession. |
+| `home_1` | character | Home on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always occupies the same columns; simple=True keeps on-court order. |
+| `home_2` | character | Home on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `home_3` | character | Home on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `home_4` | character | Home on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `home_5` | character | Home on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `away_1` | character | Away on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always occupies the same columns; simple=True keeps on-court order. |
+| `away_2` | character | Away on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `away_3` | character | Away on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `away_4` | character | Away on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `away_5` | character | Away on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True). |
 | `home_score` | integer | Home team score at the time of the play. |
 | `away_score` | integer | Away team score at the time of the play. |
 | `pts` | integer | Points scored. |
-| `is_assisted` | integer |  |
-| `is_transition` | integer |  |
-| `is_garbage_time` | integer |  |
-| `start_event_type` | character |  |
-| `first_shot_time` | integer |  |
-| `first_shot_type` | character |  |
-| `last_event_time` | integer |  |
-| `last_event_type` | character |  |
+| `is_assisted` | integer | Count of the possession's events that carry a second player (player_2), usually 0 or 1 -- a count, not a flag, kept from bigballR's get_possessions for parity. |
+| `is_transition` | integer | 1 when the possession is a transition possession, else 0: its first event (a steal or a shot type, or a foul in the possessing team's favour) came within 10 seconds of the possession start and the previous possession ended on a terminal event. Null when any event of the possession has no flag. |
+| `is_garbage_time` | integer | 1 when any event of the possession falls in garbage time, else 0. Garbage time starts at the first event with a margin of 25+ inside the last 10 minutes of regulation (or later), 20+ inside the last 5 or 15+ inside the last 2, while at most 3 of the two teams' 10 starters are on the floor, and lasts to the end of the game. Null when any event has no flag. |
+| `start_event_type` | character | Event type of the play immediately before the possession's first event (what started it, e.g. a defensive rebound or a made basket). Null for a game's first possession (fix_cross_game_leak=True, the default). |
+| `first_shot_time` | integer | Seconds into the possession (poss_length) at its first field-goal attempt; null when the possession had no shot. |
+| `first_shot_type` | character | Event type of the possession's first field-goal attempt ("Layup", "Three Point Jumper", "Two Point Jumper", "Hook", "Dunk", "Tip In"); null when the possession had no shot. |
+| `last_event_time` | integer | Seconds into the possession (poss_length) at its final event. |
+| `last_event_type` | character | Event type of the possession's final event (e.g. a made shot, a turnover or a defensive rebound). |
 
 **Example**
 
@@ -1497,96 +1497,4 @@ One row per player: `player_id`, `off_poss`, `def_poss` (Int64).
 
 ```python
 stint_exposure(stints).sort("off_poss", descending=True).head()
-```
-
-### sum_event_stats {#sum_event_stats}
-
-`sum_event_stats(lhs: 'LineupEventStats', rhs: 'LineupEventStats') -> 'LineupEventStats'`
-
-Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models
-
-.LineupEventStats` (`protected def sum_event_stats`, `LineupUtils.scala
-:1534-1622`, debug-only -- the Scala's own docstring says "just used for
-debug"). The Scala builds this via `shapeless.Generic` field-zipping;
-this port is an explicit field-by-field call since Python has no
-equivalent generic-programming machinery.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `lhs` | `LineupEventStats` |  | The left-hand stat tree. |
-| `rhs` | `LineupEventStats` |  | The right-hand stat tree. |
-
-**Returns**
-
-A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEventStats` with every field summed (see the module's private `_sum_*` helpers for the `Optional`/nested-field summing rules).
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import sum_event_stats
-from sportsdataverse.mbb.mbb_ncaa_models import LineupEventStats
-
-sum_event_stats(LineupEventStats.empty(), LineupEventStats.empty()).num_events
-```
-
-### sum_shot_infos {#sum_shot_infos}
-
-`sum_shot_infos(shot_infos: 'list[PlayerShotInfo]') -> 'Optional[PlayerShotInfo]'`
-
-Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models
-
-.PlayerShotInfo`\ s (`sum_shot_infos`, `LineupUtils.scala:1625-1655`,
-debug-only).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `shot_infos` | `list[PlayerShotInfo]` |  | The list to combine, in order. |
-
-**Returns**
-
-`None` if `shot_infos` is empty; the single element if there's exactly one; otherwise a left-fold of pairwise field-wise sums (`reduceOption`).
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import sum_shot_infos
-from sportsdataverse.mbb.mbb_ncaa_models import PlayerShotInfo
-
-sum_shot_infos([PlayerShotInfo(ast_3pm=(1, 0, 0, 0, 0)), PlayerShotInfo(ast_3pm=(0, 1, 0, 0, 0))])
-```
-
-### td_at {#td_at}
-
-`td_at(row: 'Tag', n: 'int') -> 'Optional[Tag]'`
-
-JSoup `row >?> element("td:eq(n)")`: the `n`-th `<td>` child.
-
-Soupsieve has no `:eq()` positional pseudo-class (unlike JSoup), so
-this is a plain 0-indexed lookup into `row.find_all("td")`, guarded
-against an out-of-range index (JSoup's `>?>` returns `None` rather
-than raising when the selector matches nothing).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `row` | `Tag` |  | The row (or other container) element to search. |
-| `n` | `int` |  | The 0-indexed `<td>` position. |
-
-**Returns**
-
-The `n`-th `<td>` descendant, or `None` if `row` has fewer than `n + 1` of them.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_html import parse_html, td_at
-soup = parse_html("<tr><td>A</td><td>B</td></tr>")
-row = soup.find("tr")
-td_at(row, 1).get_text()  # "B"
-td_at(row, 5)  # None
 ```

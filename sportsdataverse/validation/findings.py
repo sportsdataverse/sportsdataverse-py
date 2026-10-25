@@ -9,6 +9,19 @@ if TYPE_CHECKING:
 
 
 class Severity(str, Enum):
+    """How serious a fired rule is: ``error`` fails a gate, ``warn`` needs judgment, ``info`` is coverage.
+
+    Example:
+        Compare by member, serialise by value::
+
+            from sportsdataverse.validation.findings import Severity
+            Severity("warn") is Severity.WARN, Severity.ERROR.value
+
+    See Also:
+        * :func:`~sportsdataverse.validation.pbp_invariants.run` -- the shipped check that records findings
+        * :func:`~sportsdataverse.validation.validate_game` -- the per-game gate (its own ``Finding`` type)
+    """
+
     ERROR = "error"
     WARN = "warn"
     INFO = "info"
@@ -16,6 +29,33 @@ class Severity(str, Enum):
 
 @dataclass(frozen=True)
 class Finding:
+    """One result of an offline harness check (``tools/validation``) on one dataset.
+
+    Attributes:
+        check: the check that produced it (``"pbp_invariants"``, ``"boundary_leakage"``, ...).
+        severity: its :class:`Severity`.
+        domain: the league / domain (``"nfl"``, ``"cfb"``, ...).
+        dataset: the dataset identifier.
+        message: what broke, in one line.
+        locator: where (rule, game, column, ...), as the check defines it.
+        expected: the reference value, when the check has one.
+        actual: the observed value, when the check has one.
+        metric: the measured quantity (a violation count, a rate, a correlation).
+        needs_judgment: True when a reviewer must decide whether it is real.
+        sample: up to a handful of offending rows.
+
+    Example:
+        Record one and serialise it::
+
+            from sportsdataverse.validation.findings import Finding, Severity
+            f = Finding("pbp_invariants", Severity.ERROR, "nfl", "pbp_2024", "score.delta: 1/180 violate")
+            f.to_dict()["severity"]  # "error"
+
+    See Also:
+        * :func:`~sportsdataverse.validation.pbp_invariants.run` -- the shipped check that records findings
+        * :func:`~sportsdataverse.validation.validate_game` -- the per-game gate (its own ``Finding`` type)
+    """
+
     check: str
     severity: Severity
     domain: str
@@ -46,6 +86,26 @@ class Finding:
 
 @dataclass(frozen=True)
 class Verdict:
+    """A reviewer's ruling on one :class:`Finding` (the harness triage output).
+
+    Attributes:
+        finding_ref: which finding it rules on.
+        status: ``"confirmed"``, ``"dismissed"`` or ``"uncertain"``.
+        confidence: 0-1.
+        rationale: why.
+        suggested_fix: a fix, when there is one.
+
+    Example:
+        Dismiss a benign drift::
+
+            from sportsdataverse.validation.findings import Verdict
+            Verdict("pbp_2024/score.delta", "dismissed", 0.9, "a scoring-change replay, not a parser bug")
+
+    See Also:
+        * :func:`~sportsdataverse.validation.pbp_invariants.run` -- the shipped check that records findings
+        * :func:`~sportsdataverse.validation.validate_game` -- the per-game gate (its own ``Finding`` type)
+    """
+
     finding_ref: str
     status: str  # "confirmed" | "dismissed" | "uncertain"
     confidence: float
@@ -55,6 +115,23 @@ class Verdict:
 
 @runtime_checkable
 class OracleLike(Protocol):
+    """What a parity check needs from a reference implementation (an R or nflverse oracle).
+
+    ``reference_frame(dataset, keys)`` returns the oracle's rows for those join keys (``None`` when it
+    has none); ``column_map`` maps our column names to the oracle's and ``thresholds`` holds the
+    per-column parity floors.
+
+    Example:
+        Any object with these members qualifies (a runtime-checkable Protocol)::
+
+            from sportsdataverse.validation.findings import OracleLike
+            isinstance(my_oracle, OracleLike)
+
+    See Also:
+        * :func:`~sportsdataverse.validation.pbp_invariants.run` -- the shipped check that records findings
+        * :func:`~sportsdataverse.validation.validate_game` -- the per-game gate (its own ``Finding`` type)
+    """
+
     domain: str
     column_map: dict[str, str]
     thresholds: dict[str, float]
@@ -64,6 +141,26 @@ class OracleLike(Protocol):
 
 @dataclass(frozen=True)
 class CheckContext:
+    """Everything a harness check may read about the dataset it runs on, beyond the frame itself.
+
+    ``domain`` / ``dataset`` name it; ``schema`` and ``required_columns`` are its contract;
+    ``join_keys``, ``prob_groups`` (columns that must sum to 1), ``range_constraints``,
+    ``lag_columns`` / ``cumulative_columns`` (leakage checks, grouped by ``group_key``) and
+    ``expected_constant_columns`` drive the individual checks; ``oracle``, ``prior_frame`` (the
+    previous release) and ``thresholds`` feed the parity and drift checks. A check reads only the
+    fields it needs.
+
+    Example:
+        The context :func:`~sportsdataverse.validation.pbp_invariants.run` needs (its league)::
+
+            from sportsdataverse.validation.findings import CheckContext
+            ctx = CheckContext(domain="nfl", dataset="pbp_2024", schema={})
+
+    See Also:
+        * :func:`~sportsdataverse.validation.pbp_invariants.run` -- the shipped check that records findings
+        * :func:`~sportsdataverse.validation.validate_game` -- the per-game gate (its own ``Finding`` type)
+    """
+
     domain: str
     dataset: str
     schema: dict[str, str]

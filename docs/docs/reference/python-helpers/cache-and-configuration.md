@@ -30,6 +30,18 @@ Reset the in-process team-list cache.
 |---|---|---|---|
 | `league` | `Optional[str]` | `None` | If given, only clear that league's cache. With no arg, clear every league. |
 
+**Returns**
+
+None.
+
+**Example**
+
+```python
+from sportsdataverse.find import clear_team_cache, find_team
+clear_team_cache("nba")
+find_team("lakers", league="nba")  # re-reads the teams list
+```
+
 ### get_cache_mode {#get_cache_mode}
 
 `get_cache_mode() -> 'str'`

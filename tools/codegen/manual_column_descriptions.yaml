@@ -37447,6 +37447,233 @@ wjbl_teams:
     12 = Denso Iris, 8 = ENEOS Sunflowers; all-star sides have their own ids, e.g. 591). The team_id of /team/roster and of
     the site''s /team/roster/?team_id=. Not season_team_id.'
   team_name: Franchise name, Japanese or English ('富士通レッドウェーブ' = Fujitsu Red Wave; 'TEAM シリウス' = all-star side Team Sirius).
+ncaa_mbb_possessions:
+  away_1: Away on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always
+    occupies the same columns; simple=True keeps on-court order.
+  away_2: Away on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  away_3: Away on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  away_4: Away on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  away_5: Away on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  first_shot_time: Seconds into the possession (poss_length) at its first field-goal attempt; null when the possession had
+    no shot.
+  first_shot_type: Event type of the possession's first field-goal attempt ("Layup", "Three Point Jumper", "Two Point Jumper",
+    "Hook", "Dunk", "Tip In"); null when the possession had no shot.
+  home_1: Home on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always
+    occupies the same columns; simple=True keeps on-court order.
+  home_2: Home on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  home_3: Home on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  home_4: Home on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  home_5: Home on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  is_assisted: Count of the possession's events that carry a second player (player_2), usually 0 or 1 -- a count, not a flag,
+    kept from bigballR's get_possessions for parity.
+  is_garbage_time: 1 when any event of the possession falls in garbage time, else 0. Garbage time starts at the first event
+    with a margin of 25+ inside the last 10 minutes of regulation (or later), 20+ inside the last 5 or 15+ inside the last
+    2, while at most 3 of the two teams' 10 starters are on the floor, and lasts to the end of the game. Null when any event
+    has no flag.
+  is_transition: '1 when the possession is a transition possession, else 0: its first event (a steal or a shot type, or a
+    foul in the possessing team''s favour) came within 10 seconds of the possession start and the previous possession ended
+    on a terminal event. Null when any event of the possession has no flag.'
+  last_event_time: Seconds into the possession (poss_length) at its final event.
+  last_event_type: Event type of the possession's final event (e.g. a made shot, a turnover or a defensive rebound).
+  poss_num: Possession number within the game, stamped upstream by the play-by-play chain (parse_ncaa_bb_game_pbp).
+  poss_team: Name of the team in possession.
+  start_event_type: Event type of the play immediately before the possession's first event (what started it, e.g. a defensive
+    rebound or a made basket). Null for a game's first possession (fix_cross_game_leak=True, the default).
+ncaa_wbb_possessions:
+  away_1: Away on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always
+    occupies the same columns; simple=True keeps on-court order.
+  away_2: Away on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  away_3: Away on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  away_4: Away on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  away_5: Away on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  first_shot_time: Seconds into the possession (poss_length) at its first field-goal attempt; null when the possession had
+    no shot.
+  first_shot_type: Event type of the possession's first field-goal attempt ("Layup", "Three Point Jumper", "Two Point Jumper",
+    "Hook", "Dunk", "Tip In"); null when the possession had no shot.
+  home_1: Home on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always
+    occupies the same columns; simple=True keeps on-court order.
+  home_2: Home on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  home_3: Home on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  home_4: Home on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  home_5: Home on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True).
+  is_assisted: Count of the possession's events that carry a second player (player_2), usually 0 or 1 -- a count, not a flag,
+    kept from bigballR's get_possessions for parity.
+  is_garbage_time: 1 when any event of the possession falls in garbage time, else 0. Garbage time starts at the first event
+    with a margin of 25+ inside the last 10 minutes of regulation (or later), 20+ inside the last 5 or 15+ inside the last
+    2, while at most 3 of the two teams' 10 starters are on the floor, and lasts to the end of the game. Null when any event
+    has no flag.
+  is_transition: '1 when the possession is a transition possession, else 0: its first event (a steal or a shot type, or a
+    foul in the possessing team''s favour) came within 10 seconds of the possession start and the previous possession ended
+    on a terminal event. Null when any event of the possession has no flag.'
+  last_event_time: Seconds into the possession (poss_length) at its final event.
+  last_event_type: Event type of the possession's final event (e.g. a made shot, a turnover or a defensive rebound).
+  poss_num: Possession number within the game, stamped upstream by the play-by-play chain (parse_ncaa_bb_game_pbp).
+  poss_team: Name of the team in possession.
+  start_event_type: Event type of the play immediately before the possession's first event (what started it, e.g. a defensive
+    rebound or a made basket). Null for a game's first possession (fix_cross_game_leak=True, the default).
+espn_cfb_play_participants:
+  assisted_by_player_id: ESPN athlete id of the play's first participant ESPN types ``assistedBy``; null when the play has
+    none.
+  assisted_by_player_ids: ESPN athlete ids of every participant ESPN types ``assistedBy`` on the play, in ESPN's order; []
+    when none.
+  assisted_by_player_name: Display name of the play's first participant ESPN types ``assistedBy``; null when the play has
+    none.
+  assisted_by_player_names: Display names of every participant ESPN types ``assistedBy`` on the play, in ESPN's order; []
+    when none.
+  assisted_by_position_id: ESPN position id of the play's first participant ESPN types ``assistedBy`` (see sportsdataverse.football.positions);
+    null when none.
+  forced_by_player_id: ESPN athlete id of the play's first participant ESPN types ``forcedBy``; null when the play has none.
+  forced_by_player_ids: ESPN athlete ids of every participant ESPN types ``forcedBy`` on the play, in ESPN's order; [] when
+    none.
+  forced_by_player_name: Display name of the play's first participant ESPN types ``forcedBy``; null when the play has none.
+  forced_by_player_names: Display names of every participant ESPN types ``forcedBy`` on the play, in ESPN's order; [] when
+    none.
+  forced_by_position_id: ESPN position id of the play's first participant ESPN types ``forcedBy`` (see sportsdataverse.football.positions);
+    null when none.
+  fumbler_player_id: ESPN athlete id of the play's first participant ESPN types ``fumbler``; null when the play has none.
+  fumbler_player_ids: ESPN athlete ids of every participant ESPN types ``fumbler`` on the play, in ESPN's order; [] when none.
+  fumbler_player_name: Display name of the play's first participant ESPN types ``fumbler``; null when the play has none.
+  fumbler_player_names: Display names of every participant ESPN types ``fumbler`` on the play, in ESPN's order; [] when none.
+  fumbler_position_id: ESPN position id of the play's first participant ESPN types ``fumbler`` (see sportsdataverse.football.positions);
+    null when none.
+  game_id: ESPN game (event) id.
+  kicker_player_id: ESPN athlete id of the play's first participant ESPN types ``kicker``; null when the play has none.
+  kicker_player_ids: ESPN athlete ids of every participant ESPN types ``kicker`` on the play, in ESPN's order; [] when none.
+  kicker_player_name: Display name of the play's first participant ESPN types ``kicker``; null when the play has none.
+  kicker_player_names: Display names of every participant ESPN types ``kicker`` on the play, in ESPN's order; [] when none.
+  kicker_position_id: ESPN position id of the play's first participant ESPN types ``kicker`` (see sportsdataverse.football.positions);
+    null when none.
+  pass_defender_player_id: ESPN athlete id of the play's first participant ESPN types ``passDefender``; null when the play
+    has none.
+  pass_defender_player_ids: ESPN athlete ids of every participant ESPN types ``passDefender`` on the play, in ESPN's order;
+    [] when none.
+  pass_defender_player_name: Display name of the play's first participant ESPN types ``passDefender``; null when the play
+    has none.
+  pass_defender_player_names: Display names of every participant ESPN types ``passDefender`` on the play, in ESPN's order;
+    [] when none.
+  pass_defender_position_id: ESPN position id of the play's first participant ESPN types ``passDefender`` (see sportsdataverse.football.positions);
+    null when none.
+  passer_player_id: ESPN athlete id of the play's first participant ESPN types ``passer``; null when the play has none.
+  passer_player_ids: ESPN athlete ids of every participant ESPN types ``passer`` on the play, in ESPN's order; [] when none.
+  passer_player_name: Display name of the play's first participant ESPN types ``passer``; null when the play has none.
+  passer_player_names: Display names of every participant ESPN types ``passer`` on the play, in ESPN's order; [] when none.
+  passer_position_id: ESPN position id of the play's first participant ESPN types ``passer`` (see sportsdataverse.football.positions);
+    null when none.
+  pat_passer_player_id: ESPN athlete id of the play's first participant ESPN types ``patPasser``; null when the play has none.
+  pat_passer_player_ids: ESPN athlete ids of every participant ESPN types ``patPasser`` on the play, in ESPN's order; [] when
+    none.
+  pat_passer_player_name: Display name of the play's first participant ESPN types ``patPasser``; null when the play has none.
+  pat_passer_player_names: Display names of every participant ESPN types ``patPasser`` on the play, in ESPN's order; [] when
+    none.
+  pat_passer_position_id: ESPN position id of the play's first participant ESPN types ``patPasser`` (see sportsdataverse.football.positions);
+    null when none.
+  pat_scorer_player_id: ESPN athlete id of the play's first participant ESPN types ``patScorer``; null when the play has none.
+  pat_scorer_player_ids: ESPN athlete ids of every participant ESPN types ``patScorer`` on the play, in ESPN's order; [] when
+    none.
+  pat_scorer_player_name: Display name of the play's first participant ESPN types ``patScorer``; null when the play has none.
+  pat_scorer_player_names: Display names of every participant ESPN types ``patScorer`` on the play, in ESPN's order; [] when
+    none.
+  pat_scorer_position_id: ESPN position id of the play's first participant ESPN types ``patScorer`` (see sportsdataverse.football.positions);
+    null when none.
+  penalized_player_id: ESPN athlete id of the play's first participant ESPN types ``penalized``; null when the play has none.
+  penalized_player_ids: ESPN athlete ids of every participant ESPN types ``penalized`` on the play, in ESPN's order; [] when
+    none.
+  penalized_player_name: Display name of the play's first participant ESPN types ``penalized``; null when the play has none.
+  penalized_player_names: Display names of every participant ESPN types ``penalized`` on the play, in ESPN's order; [] when
+    none.
+  penalized_position_id: ESPN position id of the play's first participant ESPN types ``penalized`` (see sportsdataverse.football.positions);
+    null when none.
+  play_id: ESPN play id, the join key to the play-by-play frame.
+  punter_player_id: ESPN athlete id of the play's first participant ESPN types ``punter``; null when the play has none.
+  punter_player_ids: ESPN athlete ids of every participant ESPN types ``punter`` on the play, in ESPN's order; [] when none.
+  punter_player_name: Display name of the play's first participant ESPN types ``punter``; null when the play has none.
+  punter_player_names: Display names of every participant ESPN types ``punter`` on the play, in ESPN's order; [] when none.
+  punter_position_id: ESPN position id of the play's first participant ESPN types ``punter`` (see sportsdataverse.football.positions);
+    null when none.
+  receiver_player_id: ESPN athlete id of the play's first participant ESPN types ``receiver``; null when the play has none.
+  receiver_player_ids: ESPN athlete ids of every participant ESPN types ``receiver`` on the play, in ESPN's order; [] when
+    none.
+  receiver_player_name: Display name of the play's first participant ESPN types ``receiver``; null when the play has none.
+  receiver_player_names: Display names of every participant ESPN types ``receiver`` on the play, in ESPN's order; [] when
+    none.
+  receiver_position_id: ESPN position id of the play's first participant ESPN types ``receiver`` (see sportsdataverse.football.positions);
+    null when none.
+  recoverer_player_id: ESPN athlete id of the play's first participant ESPN types ``recoverer``; null when the play has none.
+  recoverer_player_ids: ESPN athlete ids of every participant ESPN types ``recoverer`` on the play, in ESPN's order; [] when
+    none.
+  recoverer_player_name: Display name of the play's first participant ESPN types ``recoverer``; null when the play has none.
+  recoverer_player_names: Display names of every participant ESPN types ``recoverer`` on the play, in ESPN's order; [] when
+    none.
+  recoverer_position_id: ESPN position id of the play's first participant ESPN types ``recoverer`` (see sportsdataverse.football.positions);
+    null when none.
+  returner_player_id: ESPN athlete id of the play's first participant ESPN types ``returner``; null when the play has none.
+  returner_player_ids: ESPN athlete ids of every participant ESPN types ``returner`` on the play, in ESPN's order; [] when
+    none.
+  returner_player_name: Display name of the play's first participant ESPN types ``returner``; null when the play has none.
+  returner_player_names: Display names of every participant ESPN types ``returner`` on the play, in ESPN's order; [] when
+    none.
+  returner_position_id: ESPN position id of the play's first participant ESPN types ``returner`` (see sportsdataverse.football.positions);
+    null when none.
+  rusher_player_id: ESPN athlete id of the play's first participant ESPN types ``rusher``; null when the play has none.
+  rusher_player_ids: ESPN athlete ids of every participant ESPN types ``rusher`` on the play, in ESPN's order; [] when none.
+  rusher_player_name: Display name of the play's first participant ESPN types ``rusher``; null when the play has none.
+  rusher_player_names: Display names of every participant ESPN types ``rusher`` on the play, in ESPN's order; [] when none.
+  rusher_position_id: ESPN position id of the play's first participant ESPN types ``rusher`` (see sportsdataverse.football.positions);
+    null when none.
+  sacked_by_player_id: ESPN athlete id of the play's first participant ESPN types ``sackedBy``; null when the play has none.
+  sacked_by_player_ids: ESPN athlete ids of every participant ESPN types ``sackedBy`` on the play, in ESPN's order; [] when
+    none.
+  sacked_by_player_name: Display name of the play's first participant ESPN types ``sackedBy``; null when the play has none.
+  sacked_by_player_names: Display names of every participant ESPN types ``sackedBy`` on the play, in ESPN's order; [] when
+    none.
+  sacked_by_position_id: ESPN position id of the play's first participant ESPN types ``sackedBy`` (see sportsdataverse.football.positions);
+    null when none.
+  scorer_player_id: ESPN athlete id of the play's first participant ESPN types ``scorer``; null when the play has none.
+  scorer_player_ids: ESPN athlete ids of every participant ESPN types ``scorer`` on the play, in ESPN's order; [] when none.
+  scorer_player_name: Display name of the play's first participant ESPN types ``scorer``; null when the play has none.
+  scorer_player_names: Display names of every participant ESPN types ``scorer`` on the play, in ESPN's order; [] when none.
+  scorer_position_id: ESPN position id of the play's first participant ESPN types ``scorer`` (see sportsdataverse.football.positions);
+    null when none.
+  tackler_player_id: ESPN athlete id of the play's first participant ESPN types ``tackler``; null when the play has none.
+  tackler_player_ids: ESPN athlete ids of every participant ESPN types ``tackler`` on the play, in ESPN's order; [] when none.
+  tackler_player_name: Display name of the play's first participant ESPN types ``tackler``; null when the play has none.
+  tackler_player_names: Display names of every participant ESPN types ``tackler`` on the play, in ESPN's order; [] when none.
+  tackler_position_id: ESPN position id of the play's first participant ESPN types ``tackler`` (see sportsdataverse.football.positions);
+    null when none.
+fox_nba_standings:
+  atlantic: Team's position in the Atlantic division table, from the first column whose header is the table name; null on
+    rows from other tables.
+  away: Away record as a 'W-L' string; null on rows from tables without an AWAY column (the preseason table).
+  central: Team's position in the Central division table, from the first column whose header is the table name; null on rows
+    from other tables.
+  conf: Record against conference opponents as a 'W-L' string; null on rows from tables without a CONF column.
+  div: Record against division opponents as a 'W-L' string; null on rows from tables without a DIV column.
+  eastern_conference: Team's position in the Eastern Conference table, from the first column whose header is the table name;
+    null on rows from other tables.
+  entity_id: 'Fox id of the row''s linked team as a string: the trailing number of the row''s entityLink contentUri.'
+  gb: Games behind the table leader as a one-decimal string (e.g. '11.0'); null on rows from tables without a GB column (the
+    preseason table).
+  home: Home record as a 'W-L' string; null on rows from tables without a HOME column (the preseason table).
+  l10: Record over the last 10 games as a 'W-L' string; null on rows from tables without an L10 column.
+  northwest: Team's position in the Northwest division table, from the first column whose header is the table name; null on
+    rows from other tables.
+  pa: Points allowed per game as a one-decimal string.
+  pacific: Team's position in the Pacific division table, from the first column whose header is the table name; null on rows
+    from other tables.
+  pct: Winning percentage as Fox prints it, a string such as '.524' or '1.000'.
+  pf: Points scored per game as a one-decimal string.
+  section: Title of the Fox standings section the row came from ('CONFERENCE', 'DIVISION' or 'PRESEASON'); each team appears
+    once per section.
+  southeast: Team's position in the Southeast division table, from the first column whose header is the table name; null on
+    rows from other tables.
+  southwest: Team's position in the Southwest division table, from the first column whose header is the table name; null on
+    rows from other tables.
+  strk: Current streak, W or L plus its length (e.g. 'W3', 'L10').
+  team_id: The Fox team id the standings were requested for (the path's team id), as a string; the same on every row.
+  v1: Team nickname as Fox displays it (e.g. 'Celtics'); the column is named v1 because its table header cell is blank.
+  w_l: Win-loss record as a 'W-L' string (e.g. '42-40').
+  western_conference: Team's position in the Western Conference table, from the first column whose header is the table name;
+    null on rows from other tables.
 load_contracts:
   cols: Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context.
   contract_history: List of structs, one per contract in the player's OverTheCap contract history (team, contract_type, status,

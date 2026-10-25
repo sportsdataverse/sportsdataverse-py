@@ -1547,7 +1547,9 @@ def build_nfl_team_stats(
     # String lists default to empty string.
     team_df = team_df.with_columns([pl.col(c).fill_null("") for c in _TEAM_STR_COLUMNS if c in team_df.columns])
 
-    # FG / PAT percentages (avoid 0/0). The reference's per-dtype NaN->null
+    # FG / PAT percentages (avoid 0/0). Documented divergence: fg_pct is rounded to 3 dp here and
+    # in _kick_field_goals (which also rounds pat_pct); nflfastR calculate_stats.R does not round
+    # either (fg_pct line 496, pat_pct line 520). The reference's per-dtype NaN->null
     # cleanup is intentionally skipped here for these float columns: the
     # when-guard only divides when the attempt count is > 0, so NaN (0/0) is
     # unreachable.

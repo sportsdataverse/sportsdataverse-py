@@ -215,7 +215,7 @@ def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
     # flips applied a 0-200 x 0-85 mirror to these centre-origin feet: home events landed
     # 100-300 ft out.) ``home_team_id`` arrives with the game-summary meta-join; without it,
     # or for an event with no team, the side is unknown and the right frame is null.
-    # enrich_pbp writes home_team_id null when the game summary is unavailable (MJHL's gc feed
+    # enrich_pbp writes home_team_id null when the game summary is unavailable (MJHL's gc/gamesummary
     # is access-denied; it wrote "" before task 5.2), so an empty id is as unknown as a null one.
     if {"team_id", "home_team_id"} <= set(pbp.columns):
         tid, hid = pl.col("team_id").cast(pl.Utf8), pl.col("home_team_id").cast(pl.Utf8)

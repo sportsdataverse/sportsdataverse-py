@@ -761,7 +761,29 @@ def _team_ids(box: dict[str, Any] | None, teams: set[int]) -> Any:
 
 
 def game_teams(plays: pl.DataFrame) -> set[int]:
-    """The two team ids the frame was played by (``pos_team`` and ``def_pos_team``)."""
+    """The two team ids the frame was played by (``pos_team`` and ``def_pos_team``).
+
+    Args:
+        plays: one game's processed plays frame.
+
+    Returns:
+        set[int]: every distinct non-null ``pos_team`` / ``def_pos_team`` value that reads as an
+        integer team id; empty when the frame has neither column.
+
+    Example:
+        The two sides of a processed game::
+
+            from sportsdataverse.nfl import NFLPlayProcess
+
+            proc = NFLPlayProcess(gameId=401671801)
+            proc.espn_nfl_pbp()
+            game = proc.run_processing_pipeline()
+            from sportsdataverse.validation.box_reconcile import game_teams
+            game_teams(proc.plays_frame)
+
+    See Also:
+        * :func:`evaluate_box` -- its ``box.team_ids_in_game`` rule checks box rows against this set
+    """
     teams: set[int] = set()
     for column in ("pos_team", "def_pos_team"):
         if column in plays.columns:
@@ -785,6 +807,21 @@ def evaluate_box(plays: pl.DataFrame, box: dict[str, Any] | None, league: str = 
     Returns:
         One ``RuleResult`` per ``box.*`` reconciliation rule that could run,
         including rules that did not fire.
+
+    Example:
+        Reconcile a processed game's box score::
+
+            from sportsdataverse.nfl import NFLPlayProcess
+
+            proc = NFLPlayProcess(gameId=401671801)
+            proc.espn_nfl_pbp()
+            game = proc.run_processing_pipeline()
+            from sportsdataverse.validation.box_reconcile import evaluate_box
+            [r.rule for r in evaluate_box(proc.plays_frame, game.get("advBoxScore")) if r.n_violations]
+
+    See Also:
+        * :func:`~sportsdataverse.validation.pbp_invariants.evaluate` -- runs these rules with the rest
+        * :func:`~sportsdataverse.validation.validate_game` -- the per-game gate built on both
     """
     del league  # every checked column is league-identical; see the module docstring
     if not isinstance(plays, pl.DataFrame) or plays.height == 0 or not box:

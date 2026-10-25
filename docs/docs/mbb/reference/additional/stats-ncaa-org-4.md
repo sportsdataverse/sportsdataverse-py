@@ -1,10 +1,102 @@
 ---
-title: "MBB — additional Python functions — stats.ncaa.org: team_aggregate–validate_lineup"
-sidebar_label: "stats.ncaa.org: team_aggregate–validate_lineup"
+title: "MBB — additional Python functions — stats.ncaa.org: sum_event–validate_lineup"
+sidebar_label: "stats.ncaa.org: sum_event–validate_lineup"
 sidebar_position: 6
-description: "MBB — additional Python functions — stats.ncaa.org: team_aggregate–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — stats.ncaa.org: sum_event–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — stats.ncaa.org: team_aggregate–validate_lineup
+# MBB — additional Python functions — stats.ncaa.org: sum_event–validate_lineup
+
+### sum_event_stats {#sum_event_stats}
+
+`sum_event_stats(lhs: 'LineupEventStats', rhs: 'LineupEventStats') -> 'LineupEventStats'`
+
+Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models
+
+.LineupEventStats` (`protected def sum_event_stats`, `LineupUtils.scala
+:1534-1622`, debug-only -- the Scala's own docstring says "just used for
+debug"). The Scala builds this via `shapeless.Generic` field-zipping;
+this port is an explicit field-by-field call since Python has no
+equivalent generic-programming machinery.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lhs` | `LineupEventStats` |  | The left-hand stat tree. |
+| `rhs` | `LineupEventStats` |  | The right-hand stat tree. |
+
+**Returns**
+
+A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEventStats` with every field summed (see the module's private `_sum_*` helpers for the `Optional`/nested-field summing rules).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import sum_event_stats
+from sportsdataverse.mbb.mbb_ncaa_models import LineupEventStats
+
+sum_event_stats(LineupEventStats.empty(), LineupEventStats.empty()).num_events
+```
+
+### sum_shot_infos {#sum_shot_infos}
+
+`sum_shot_infos(shot_infos: 'list[PlayerShotInfo]') -> 'Optional[PlayerShotInfo]'`
+
+Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models
+
+.PlayerShotInfo`\ s (`sum_shot_infos`, `LineupUtils.scala:1625-1655`,
+debug-only).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `shot_infos` | `list[PlayerShotInfo]` |  | The list to combine, in order. |
+
+**Returns**
+
+`None` if `shot_infos` is empty; the single element if there's exactly one; otherwise a left-fold of pairwise field-wise sums (`reduceOption`).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import sum_shot_infos
+from sportsdataverse.mbb.mbb_ncaa_models import PlayerShotInfo
+
+sum_shot_infos([PlayerShotInfo(ast_3pm=(1, 0, 0, 0, 0)), PlayerShotInfo(ast_3pm=(0, 1, 0, 0, 0))])
+```
+
+### td_at {#td_at}
+
+`td_at(row: 'Tag', n: 'int') -> 'Optional[Tag]'`
+
+JSoup `row >?> element("td:eq(n)")`: the `n`-th `<td>` child.
+
+Soupsieve has no `:eq()` positional pseudo-class (unlike JSoup), so
+this is a plain 0-indexed lookup into `row.find_all("td")`, guarded
+against an out-of-range index (JSoup's `>?>` returns `None` rather
+than raising when the selector matches nothing).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `row` | `Tag` |  | The row (or other container) element to search. |
+| `n` | `int` |  | The 0-indexed `<td>` position. |
+
+**Returns**
+
+The `n`-th `<td>` descendant, or `None` if `row` has fewer than `n + 1` of them.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_html import parse_html, td_at
+soup = parse_html("<tr><td>A</td><td>B</td></tr>")
+row = soup.find("tr")
+td_at(row, 1).get_text()  # "B"
+td_at(row, 5)  # None
+```
 
 ### team_aggregate {#team_aggregate}
 

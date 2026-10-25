@@ -278,8 +278,8 @@ def test_pbp_agrees_with_rotation(game_id: str) -> None:
     agree = sum(1 for k in shared if a[k] == b[k])
     rate = agree / len(shared) if shared else 0.0
     print(f"\ngame {game_id}: pbp/rotation agreement {rate:.4f} ({agree}/{len(shared)} actions)")
-    # Report + assert the parity floor. If a fixture legitimately drops below,
-    # print `rate` and set the floor to the measured value with a comment.
+    # Report + assert the parity floor. A fixture that drops below it is a regression to
+    # investigate; the floor is never lowered to the measured value.
     assert rate >= 0.95, f"game {game_id}: pbp/rotation agreement {rate:.3f} < 0.95"
 
 

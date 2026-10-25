@@ -89,8 +89,9 @@ LEAGUES: Dict[str, LeagueConfig] = {
     "nojhl": LeagueConfig("NOJHL", "nojhl", "c1375ff55168bd71", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
     "vijhl": LeagueConfig("VIJHL", "vijhl", "4f1a61df18906b61", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
     "kijhl": LeagueConfig("KIJHL", "kijhl", "2589e0f644b1bb71", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
-    # mjhl: seasons/scorebar/standings work; its public key has NO gamecenter access,
-    # so <lg>_pbp / <lg>_game_summary come back empty for MJHL (graceful, not an error).
+    # mjhl (probed 2026-10-05): gameCenterPlayByPlay ships goals/penalties/goalie changes only (no
+    # coordinates) and shifts answer normally; only gc/gamesummary is denied ("Feed type access
+    # denied.", read as {}), so mjhl_game_summary has empty event frames and mjhl_pbp no game metadata.
     "mjhl": LeagueConfig("MJHL", "mjhl", "f894c324fe5fd8f0", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
 }
 
