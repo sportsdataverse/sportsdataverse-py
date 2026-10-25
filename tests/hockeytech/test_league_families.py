@@ -224,3 +224,40 @@ def test_corsi_toi_join_refuses_a_key_dtype_mismatch(game_42_api):
     toi = player_toi(parse_shifts(load_fixture("hockeytech", "pwhl_gameshifts_42"), game_id=42))
     with pytest.raises(TypeError, match=r"player_id dtypes differ: corsi Int64 vs toi String"):
         _corsi_with_toi(corsi, toi.with_columns(pl.col("player_id").cast(pl.String)))
+
+
+@pytest.mark.parametrize("lg", [*LEAGUES, "pwhl"])
+def test_game_corsi_without_a_game_summary_is_empty(monkeypatch, lg):
+    """R988-6: with no game summary (MJHL's ``gc/gamesummary`` is denied) the home side is unknown. Before 5.2 every
+    shot was credited to the away skaters (39/39 ``corsi_for`` wrong on game 42); now the result is zero rows."""
+    from sportsdataverse.hockeytech import _family
+    from sportsdataverse.pwhl import pwhl_analytics, pwhl_api
+
+    served = {k: v for k, v in _GAME_42.items() if k != "gamesummary"}
+
+    def fake_api(league, feed, view, params=None, **kwargs):
+        stem = served.get(view)
+        return load_fixture("hockeytech", stem) if stem else {}
+
+    for mod in (_family, pwhl_api, pwhl_analytics):
+        monkeypatch.setattr(mod, "hockeytech_api", fake_api)
+    df = _corsi_fn(lg)(42)
+    assert df.height == 0 and df.schema["player_id"] == pl.Int64
+
+
+def test_corsi_skips_a_blank_home_team_id():
+    """R988-6: a String pbp frame whose ``home_team_id`` is ``""`` (no summary) credits nothing rather than every shot
+    to the away skaters; the real game-42 events otherwise give 39 rows."""
+    from sportsdataverse.hockeytech._analytics import corsi_fenwick_on_ice, enrich_pbp
+    from sportsdataverse.hockeytech._parsers import parse_pbp
+
+    pbp = enrich_pbp(
+        parse_pbp(load_fixture("hockeytech", "pwhl_pbp_42"), game_id=42),
+        "pwhl",
+        42,
+        meta_payload=load_fixture("hockeytech", "pwhl_game_summary_42"),
+        shifts_payload=load_fixture("hockeytech", "pwhl_gameshifts_42"),
+    )
+    assert corsi_fenwick_on_ice(pbp).height > 0
+    blank = pbp.with_columns(pl.col("team_id").cast(pl.String), pl.lit("").alias("home_team_id"))
+    assert corsi_fenwick_on_ice(blank).height == 0

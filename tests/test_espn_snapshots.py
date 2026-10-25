@@ -690,3 +690,28 @@ def test_a_bad_athlete_id_the_link_recovers_says_so():
     ):
         df = parse_injuries_snapshot(raw, league="nfl", as_of_date=STAMP)
     assert clean is not None and df["athlete_id"][0] == clean
+
+
+def test_an_athlete_id_wins_over_a_link_that_disagrees():
+    """R981-12: ``athlete.id`` is read first; the player link is only the fallback. On the real nfl capture with an
+    integer ``athlete.id`` that differs from the link's, the direct id is the one kept (no warning: it is an id)."""
+    raw = load_fixture("espn", "injuries_nfl")
+    athlete = raw["injuries"][0]["injuries"][0]["athlete"]
+    linked = parse_injuries_snapshot(raw, league="nfl", as_of_date=STAMP)["athlete_id"][0]
+    athlete["id"] = str(linked + 1)
+    assert parse_injuries_snapshot(raw, league="nfl", as_of_date=STAMP)["athlete_id"][0] == linked + 1
+
+
+def test_a_bad_athlete_id_the_headshot_recovers_names_the_headshot():
+    """R981-12: when only the headshot carries the id, the warning names the headshot, not the player link."""
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    raw = load_fixture("espn", "injuries_nfl")
+    athlete = raw["injuries"][0]["injuries"][0]["athlete"]
+    clean = parse_injuries_snapshot(raw, league="nfl", as_of_date=STAMP)["athlete_id"][0]
+    athlete["id"], athlete["links"] = "abc", []
+    with pytest.warns(
+        SchemaDriftWarning, match=rf"athlete\.id: 'abc' is not an integer id; the headshot gives {clean}$"
+    ):
+        df = parse_injuries_snapshot(raw, league="nfl", as_of_date=STAMP)
+    assert df["athlete_id"][0] == clean
