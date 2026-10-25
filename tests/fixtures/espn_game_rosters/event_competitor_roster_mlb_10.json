@@ -1,0 +1,676 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster?lang=en&region=us",
+ "entries": [
+  {
+   "playerId": 33804,
+   "period": 9,
+   "active": false,
+   "starter": true,
+   "forPlayerId": 0,
+   "valid": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/33804?lang=en&region=us"
+   },
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/4?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster/33804/statistics/0?lang=en&region=us"
+   },
+   "displayName": "Torres",
+   "batOrder": 1,
+   "recordNumber": 1,
+   "subbedIn": {
+    "didSub": false
+   },
+   "subbedOut": {
+    "didSub": true,
+    "replacementAthlete": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/42401?lang=en&region=us"
+    }
+   },
+   "atBats": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010380001990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010380401990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010380804990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381201990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381603990057?lang=en&region=us"
+    }
+   ]
+  },
+  {
+   "playerId": 42401,
+   "period": 9,
+   "active": false,
+   "starter": false,
+   "forPlayerId": 0,
+   "valid": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/42401?lang=en&region=us"
+   },
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/12?lang=en&region=us"
+   },
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/12?lang=en&region=us"
+    }
+   ],
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster/42401/statistics/0?lang=en&region=us"
+   },
+   "displayName": "Dom\u00ednguez",
+   "batOrder": 1,
+   "recordNumber": 1652,
+   "subbedIn": {
+    "didSub": false
+   },
+   "subbedOut": {
+    "didSub": true,
+    "replacementAthlete": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/40835?lang=en&region=us"
+    }
+   },
+   "atBats": []
+  },
+  {
+   "playerId": 40835,
+   "period": 9,
+   "active": true,
+   "starter": false,
+   "forPlayerId": 0,
+   "valid": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/40835?lang=en&region=us"
+   },
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/4?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster/40835/statistics/0?lang=en&region=us"
+   },
+   "displayName": "Cabrera",
+   "batOrder": 1,
+   "recordNumber": 1712,
+   "subbedIn": {
+    "didSub": false
+   },
+   "subbedOut": {
+    "didSub": false
+   },
+   "atBats": []
+  },
+  {
+   "playerId": 36969,
+   "period": 0,
+   "active": true,
+   "starter": true,
+   "forPlayerId": 0,
+   "valid": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/36969?lang=en&region=us"
+   },
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/9?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster/36969/statistics/0?lang=en&region=us"
+   },
+   "displayName": "Soto",
+   "batOrder": 2,
+   "recordNumber": 2,
+   "subbedIn": {
+    "didSub": false
+   },
+   "subbedOut": {
+    "didSub": false
+   },
+   "atBats": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010380002990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010380402990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381001990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381202990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381604990057?lang=en&region=us"
+    }
+   ]
+  },
+  {
+   "playerId": 33192,
+   "period": 0,
+   "active": true,
+   "starter": true,
+   "forPlayerId": 0,
+   "valid": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/33192?lang=en&region=us"
+   },
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/8?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster/33192/statistics/0?lang=en&region=us"
+   },
+   "displayName": "Judge",
+   "batOrder": 3,
+   "recordNumber": 3,
+   "subbedIn": {
+    "didSub": false
+   },
+   "subbedOut": {
+    "didSub": false
+   },
+   "atBats": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010380003990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010380403990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381002990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381203990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381605990057?lang=en&region=us"
+    }
+   ]
+  },
+  {
+   "playerId": 30583,
+   "period": 0,
+   "active": true,
+   "starter": true,
+   "forPlayerId": 0,
+   "valid": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/30583?lang=en&region=us"
+   },
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/10?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster/30583/statistics/0?lang=en&region=us"
+   },
+   "displayName": "Stanton",
+   "batOrder": 4,
+   "recordNumber": 4,
+   "subbedIn": {
+    "didSub": false
+   },
+   "subbedOut": {
+    "didSub": false
+   },
+   "atBats": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010380004990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010380601990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381003990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381204990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381801990057?lang=en&region=us"
+    }
+   ]
+  },
+  {
+   "playerId": 41433,
+   "period": 0,
+   "active": true,
+   "starter": true,
+   "forPlayerId": 0,
+   "valid": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/41433?lang=en&region=us"
+   },
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/5?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster/41433/statistics/0?lang=en&region=us"
+   },
+   "displayName": "Chisholm Jr.",
+   "batOrder": 5,
+   "recordNumber": 5,
+   "subbedIn": {
+    "didSub": false
+   },
+   "subbedOut": {
+    "didSub": false
+   },
+   "atBats": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010380005990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010380602990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381004990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381401990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381802990057?lang=en&region=us"
+    }
+   ]
+  },
+  {
+   "playerId": 30782,
+   "period": 0,
+   "active": true,
+   "starter": true,
+   "forPlayerId": 0,
+   "valid": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/30782?lang=en&region=us"
+   },
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/3?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster/30782/statistics/0?lang=en&region=us"
+   },
+   "displayName": "Rizzo",
+   "batOrder": 6,
+   "recordNumber": 6,
+   "subbedIn": {
+    "didSub": false
+   },
+   "subbedOut": {
+    "didSub": false
+   },
+   "atBats": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010380201990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010380603990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381005990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381402990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381803990057?lang=en&region=us"
+    }
+   ]
+  },
+  {
+   "playerId": 42547,
+   "period": 0,
+   "active": true,
+   "starter": true,
+   "forPlayerId": 0,
+   "valid": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/42547?lang=en&region=us"
+   },
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/6?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster/42547/statistics/0?lang=en&region=us"
+   },
+   "displayName": "Volpe",
+   "batOrder": 7,
+   "recordNumber": 7,
+   "subbedIn": {
+    "didSub": false
+   },
+   "subbedOut": {
+    "didSub": false
+   },
+   "atBats": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010380202990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010380801990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381006990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381403990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381804990057?lang=en&region=us"
+    }
+   ]
+  },
+  {
+   "playerId": 4683349,
+   "period": 0,
+   "active": true,
+   "starter": true,
+   "forPlayerId": 0,
+   "valid": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/4683349?lang=en&region=us"
+   },
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/2?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster/4683349/statistics/0?lang=en&region=us"
+   },
+   "displayName": "Wells",
+   "batOrder": 8,
+   "recordNumber": 8,
+   "subbedIn": {
+    "didSub": false
+   },
+   "subbedOut": {
+    "didSub": false
+   },
+   "atBats": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010380203990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010380802990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381007990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381601990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381805990057?lang=en&region=us"
+    }
+   ]
+  },
+  {
+   "playerId": 33786,
+   "period": 0,
+   "active": true,
+   "starter": true,
+   "forPlayerId": 0,
+   "valid": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/33786?lang=en&region=us"
+   },
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/7?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster/33786/statistics/0?lang=en&region=us"
+   },
+   "displayName": "A. Verdugo",
+   "batOrder": 9,
+   "recordNumber": 9,
+   "subbedIn": {
+    "didSub": false
+   },
+   "subbedOut": {
+    "didSub": false
+   },
+   "atBats": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010380204990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010380803990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381008990057?lang=en&region=us"
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/plays/4017010381602990057?lang=en&region=us"
+    }
+   ]
+  }
+ ],
+ "pitchers": [
+  {
+   "playerId": 32081,
+   "period": 7,
+   "active": false,
+   "starter": true,
+   "forPlayerId": 0,
+   "valid": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/32081?lang=en&region=us"
+   },
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/1?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster/32081/statistics/0?lang=en&region=us"
+   },
+   "displayName": "Cole",
+   "batOrder": 0,
+   "recordNumber": 10,
+   "subbedIn": {
+    "didSub": false
+   },
+   "subbedOut": {
+    "didSub": true,
+    "replacementAthlete": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/32827?lang=en&region=us"
+    }
+   },
+   "atBats": []
+  },
+  {
+   "playerId": 32827,
+   "period": 7,
+   "active": false,
+   "starter": false,
+   "forPlayerId": 0,
+   "valid": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/32827?lang=en&region=us"
+   },
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/1?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster/32827/statistics/0?lang=en&region=us"
+   },
+   "notes": [
+    {
+     "type": "pitchingDecision",
+     "text": "H, 4"
+    }
+   ],
+   "displayName": "Holmes",
+   "batOrder": 0,
+   "recordNumber": 1331,
+   "subbedIn": {
+    "didSub": false
+   },
+   "subbedOut": {
+    "didSub": true,
+    "replacementAthlete": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/31867?lang=en&region=us"
+    }
+   },
+   "atBats": []
+  },
+  {
+   "playerId": 31867,
+   "period": 8,
+   "active": false,
+   "starter": false,
+   "forPlayerId": 32827,
+   "valid": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/31867?lang=en&region=us"
+   },
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/1?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster/31867/statistics/0?lang=en&region=us"
+   },
+   "notes": [
+    {
+     "type": "pitchingDecision",
+     "text": "H, 3"
+    }
+   ],
+   "displayName": "Kahnle",
+   "batOrder": 0,
+   "recordNumber": 1361,
+   "subbedIn": {
+    "didSub": true,
+    "replacementAthlete": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/32827?lang=en&region=us"
+    }
+   },
+   "subbedOut": {
+    "didSub": true,
+    "replacementAthlete": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/33770?lang=en&region=us"
+    }
+   },
+   "atBats": []
+  },
+  {
+   "playerId": 33770,
+   "period": 10,
+   "active": false,
+   "starter": false,
+   "forPlayerId": 31867,
+   "valid": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/33770?lang=en&region=us"
+   },
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/1?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster/33770/statistics/0?lang=en&region=us"
+   },
+   "notes": [
+    {
+     "type": "pitchingDecision",
+     "text": "B, 2"
+    }
+   ],
+   "displayName": "Weaver",
+   "batOrder": 0,
+   "recordNumber": 1541,
+   "subbedIn": {
+    "didSub": true,
+    "replacementAthlete": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/31867?lang=en&region=us"
+    }
+   },
+   "subbedOut": {
+    "didSub": true,
+    "replacementAthlete": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/42964?lang=en&region=us"
+    }
+   },
+   "atBats": []
+  },
+  {
+   "playerId": 42964,
+   "period": 10,
+   "active": false,
+   "starter": false,
+   "forPlayerId": 0,
+   "valid": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/42964?lang=en&region=us"
+   },
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/1?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster/42964/statistics/0?lang=en&region=us"
+   },
+   "notes": [
+    {
+     "type": "pitchingDecision",
+     "text": "L, 0-1, H, 1"
+    }
+   ],
+   "displayName": "Cousins",
+   "batOrder": 0,
+   "recordNumber": 1921,
+   "subbedIn": {
+    "didSub": false
+   },
+   "subbedOut": {
+    "didSub": true,
+    "replacementAthlete": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/36480?lang=en&region=us"
+    }
+   },
+   "atBats": []
+  },
+  {
+   "playerId": 36480,
+   "period": 10,
+   "active": true,
+   "starter": false,
+   "forPlayerId": 0,
+   "valid": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/36480?lang=en&region=us"
+   },
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/1?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster/36480/statistics/0?lang=en&region=us"
+   },
+   "notes": [
+    {
+     "type": "pitchingDecision",
+     "text": "B, 1"
+    }
+   ],
+   "displayName": "Cortes",
+   "batOrder": 0,
+   "recordNumber": 1951,
+   "subbedIn": {
+    "didSub": false
+   },
+   "subbedOut": {
+    "didSub": false
+   },
+   "atBats": []
+  }
+ ],
+ "competition": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038?lang=en&region=us"
+ },
+ "team": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/teams/10?lang=en&region=us"
+ },
+ "lastBatterOrder": "9"
+}

@@ -132,7 +132,12 @@ def athlete_items(teams_rosters: pl.DataFrame, **kwargs: Any) -> pl.DataFrame:
         if position:
             athlete["position"] = position
         frame = pl.from_pandas(pd.json_normalize(athlete, sep="_"))
-        frame.columns = [underscore(c.replace("$ref", "href")) for c in frame.columns]
+        names = [underscore(c.replace("$ref", "href")) for c in frame.columns]
+        # MLB ships ``debutYear`` beside ``debut.year``: both snake-case to ``debut_year``, so the first (the
+        # top-level key) is kept rather than the frame failing on a duplicate column
+        keep = [i for i, n in enumerate(names) if n not in names[:i]]
+        frame = frame.select([frame.columns[i] for i in keep])
+        frame.columns = [names[i] for i in keep]
         game_athletes = pl.concat([game_athletes, frame], how="diagonal")
     if game_athletes.is_empty():
         raise NoDataError("NoDataError: no athlete resource found for any rostered player")
