@@ -207,7 +207,6 @@ def resolve_season_id(league: str, season=None, game_type: str = "regular", seas
         raise ValueError("Provide either season (end-year) or season_id")
 
     from sportsdataverse.errors import SportsDataverseError
-    from sportsdataverse.hockeytech._parsers import TWO_YEAR_NAME_RE, parse_seasons
 
     try:
         payload = _fetch_seasons_raw(league)
@@ -215,6 +214,15 @@ def resolve_season_id(league: str, season=None, game_type: str = "regular", seas
         if league != "pwhl":
             raise
         payload = None
+    return _season_id_from_payload(league, payload, season, game_type)
+
+
+def _season_id_from_payload(league: str, payload, season, game_type: str = "regular") -> int:
+    """``resolve_season_id`` on an already-fetched ``modulekit/seasons`` payload (``None`` = the
+    fetch failed). A caller that read the feed to pick the default season passes it here instead
+    of fetching it a second time."""
+    from sportsdataverse.hockeytech._parsers import TWO_YEAR_NAME_RE, parse_seasons
+
     df = parse_seasons(payload)
     if df.height:
         hit = df.filter((df["season_yr"] == int(season)) & (df["game_type_label"] == game_type))
