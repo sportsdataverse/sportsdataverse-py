@@ -6842,6 +6842,80 @@
     The pre-3.10 citation: a gitignored script that exists only on the maintainer's disk, so the refit
     instruction for DEFAULT_RIDGE_LAMBDA was not reproducible from a clone.
 
+# --- task 6.1 (a): one private body behind the ESPN schedule and game-roster families (B-M29, B-M30) ----
+- id: shared-game-items-copy-again
+  group: share-private-bodies
+  finding: B-M30
+  file: sportsdataverse/nba/nba_game_rosters.py
+  snippet: "helper_nba_game_items = _espn_game_rosters.game_items\n"
+  mutant: "def helper_nba_game_items(summary):\n    return _espn_game_rosters.game_items(summary)\n"
+  test: tests/test_shared_private_bodies.py -k game_items
+  expected: kill
+  note: The pre-6.1 state, nba's own game_items body instead of the shared one.
+- id: shared-roster-items-copy-again
+  group: share-private-bodies
+  finding: B-M30
+  file: sportsdataverse/wbb/wbb_game_rosters.py
+  snippet: "helper_wbb_roster_items = _espn_game_rosters.roster_items\n"
+  mutant: "def helper_wbb_roster_items(items, summary_url, **kwargs):\n    return _espn_game_rosters.roster_items(items, summary_url, **kwargs)\n"
+  test: tests/test_shared_private_bodies.py -k roster_items
+  expected: kill
+  note: The pre-6.1 state, wbb's own roster_items body instead of the shared one.
+- id: shared-home-away-step-wrong-group
+  group: share-private-bodies
+  finding: B-M29
+  file: sportsdataverse/wnba/wnba_schedule.py
+  snippet: "__extract_home_away = _extract_home_away_nba\n"
+  mutant: "from sportsdataverse._espn_schedule import _extract_home_away_college\n\n__extract_home_away = _extract_home_away_college\n"
+  test: tests/test_shared_private_bodies.py -k extract_home_away_nba
+  expected: kill
+  note: wnba's home/away step bound to the college one (poll rank, vs-conf record) instead of its nba twin.
+- id: shared-scoreboard-event-skipped
+  group: share-private-bodies
+  finding: B-M29
+  file: sportsdataverse/mbb/mbb_schedule.py
+  snippet: "    return _scoreboard_event(event, __extract_home_away)\n"
+  mutant: "    return event\n"
+  test: tests/test_shared_private_bodies.py -k scoreboard_event_parsing_is_one_body
+  expected: kill
+  note: mbb's scoreboard_event_parsing no longer runs the shared body with its home/away step.
+- id: shared-nhl-roster-items-outlier-merged
+  group: share-private-bodies
+  finding: R61a-2
+  file: sportsdataverse/nhl/nhl_game_rosters.py
+  snippet: "def helper_nhl_roster_items(items, summary_url, **kwargs):\n"
+  mutant: "helper_nhl_roster_items = _espn_game_rosters.roster_items\n\n\ndef _own_nhl_roster_items(items, summary_url, **kwargs):\n"
+  test: tests/test_shared_private_bodies.py -k nhl_keeps_its_own_roster_items
+  expected: kill
+  note: nhl's roster_items bound to the shared body, which drops period / for_player_id / active.
+- id: shared-mbb-home-away-outlier-merged
+  group: share-private-bodies
+  finding: R61a-2
+  file: sportsdataverse/mbb/mbb_schedule.py
+  snippet: "def __extract_home_away(event, arg1, arg2):\n"
+  mutant: "from sportsdataverse._espn_schedule import _extract_home_away_college as __extract_home_away\n\n\ndef _own_extract_home_away(event, arg1, arg2):\n"
+  test: tests/test_shared_private_bodies.py -k "outlier_home_away_steps and mbb"
+  expected: kill
+  note: mbb's home/away step bound to the college one (four periods, not two halves).
+- id: shared-nfl-home-away-outlier-merged
+  group: share-private-bodies
+  finding: R61a-2
+  file: sportsdataverse/nfl/nfl_schedule.py
+  snippet: "def __extract_home_away(event, arg1, arg2):\n"
+  mutant: "from sportsdataverse._espn_schedule import _extract_home_away_college as __extract_home_away\n\n\ndef _own_extract_home_away(event, arg1, arg2):\n"
+  test: tests/test_shared_private_bodies.py -k "outlier_home_away_steps and nfl"
+  expected: kill
+  note: nfl's home/away step bound to the college one (unranked = 99 and a vs-conf record; NFL has no poll).
+- id: shared-nhl-home-away-outlier-merged
+  group: share-private-bodies
+  finding: R61a-2
+  file: sportsdataverse/nhl/nhl_schedule.py
+  snippet: "def __extract_home_away(event, arg1, arg2):\n"
+  mutant: "from sportsdataverse._espn_schedule import _extract_home_away_nba as __extract_home_away\n\n\ndef _own_extract_home_away(event, arg1, arg2):\n"
+  test: tests/test_shared_private_bodies.py -k "outlier_home_away_steps and nhl"
+  expected: kill
+  note: nhl's home/away step bound to the nba one (four periods and overall records, not three and YTD).
+
 # --- task 6.1 (c): one copy of the generator helpers in gen_soccer_common (A-L7, A-L22, A-L23, A-L24, A-N18) ----
 - id: shared-generator-write-yaml-copy-again
   group: share-generator-helpers

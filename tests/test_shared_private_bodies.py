@@ -1,4 +1,4 @@
-"""One private body behind every former copy (task 6.1: B-L26, B-L27, B-L28, B-L46, B-L52, B-GB-11).
+"""One private body behind every former copy (task 6.1: B-L26, B-L27, B-L28, B-L46, B-L52, B-GB-11, B-M29, B-M30).
 
 Each row names the shared body and every module that used to carry its own copy. Two checks:
 
@@ -42,6 +42,10 @@ _BOX_COPIES = (
 )
 _ROSTER = "sportsdataverse.mbb.mbb_ncaa_roster_parser"
 _FOX = "sportsdataverse._fox_layout"
+_LG = "sportsdataverse"
+_SEVEN = ("cfb", "mbb", "nba", "nfl", "nhl", "wbb", "wnba")
+_ROSTERS = "sportsdataverse._espn_game_rosters"
+_SCHEDULE = "sportsdataverse._espn_schedule"
 _FOX_EXT = "sportsdataverse.cfb.cfb_fox_ext"
 
 # (shared module, shared name, [(former-copy module, name there)], hash of the deleted copies)
@@ -154,6 +158,144 @@ def test_a_failed_crosswalk_read_is_a_miss_and_is_not_cached(monkeypatch) -> Non
     monkeypatch.setattr(cfb, "load_cfb_schedule_crosswalk", _boom)
     assert _crosswalk_fox_id(401756846, (2025,)) is None
     assert idmap._CFB_CROSSWALK_CACHE == {}
+
+
+def _body_only_hash(fn: object, rename: dict) -> str:
+    """sha256[:16] of a function's body AST (no signature, no docstring), names in ``rename`` mapped first."""
+    node = ast.parse(textwrap.dedent(inspect.getsource(fn))).body[0]
+    body = node.body
+    if body and isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant):
+        body = body[1:]
+    dump = "".join(ast.dump(b) for b in body)
+    for old, new in rename.items():
+        dump = dump.replace(f"'{old}'", f"'{new}'")
+    return hashlib.sha256(dump.encode()).hexdigest()[:16]
+
+
+def test_scoreboard_event_parsing_is_one_body_with_the_league_home_away_step(monkeypatch) -> None:
+    """B-M29: the seven ``scoreboard_event_parsing`` bodies were AST-identical; each now calls the one
+    ``_scoreboard_event`` with its own league's ``__extract_home_away`` (the step's defaults differ by sport, so it
+    is a parameter). The shared body, with the parameter read as the old global, hashes to the deleted copies."""
+    sched = importlib.import_module(_SCHEDULE)
+    assert _body_only_hash(sched._scoreboard_event, {"extract_home_away": "__extract_home_away"}) == "355447b0de5b4f8e"
+    for lg in _SEVEN:
+        mod = importlib.import_module(f"{_LG}.{lg}.{lg}_schedule")
+        calls: list = []
+        monkeypatch.setattr(mod, "_scoreboard_event", lambda event, step, c=calls: c.append((event, step)) or event)
+        event = {"id": "1"}
+        assert mod.scoreboard_event_parsing(event) is event
+        assert calls == [(event, getattr(mod, "__extract_home_away"))], lg
+
+
+# Task 6.1 (a), B-M29 / B-M30: the shared bodies gained type annotations the deleted copies lacked, so these
+# pins are of the body alone (no signature, no docstring), computed on the copies at a78e6c17d2. nhl keeps its
+# own roster_items (it does not drop period / for_player_id / active).
+SHARED_BODY_ONLY = [
+    (
+        _ROSTERS,
+        "game_items",
+        [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_game_items") for lg in _SEVEN],
+        "bb613e4495138b68",
+    ),
+    (
+        _ROSTERS,
+        "team_items",
+        [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_team_items") for lg in _SEVEN],
+        "c5af81a5ed87ffd3",
+    ),
+    (
+        _ROSTERS,
+        "athlete_items",
+        [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_athlete_items") for lg in _SEVEN],
+        "6f6234d8f5bf8b66",  # #1002 + #1006: the duplicate snake-case key guard, shallowest key wins (MLB debutYear vs debut.year)
+    ),
+    (
+        _ROSTERS,
+        "roster_items",
+        [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_roster_items") for lg in _SEVEN if lg != "nhl"],
+        "ca17f1e34f4a9a00",
+    ),
+    (
+        _SCHEDULE,
+        "_extract_home_away_nba",
+        [(f"{_LG}.{lg}.{lg}_schedule", "__extract_home_away") for lg in ("nba", "wnba")],
+        "a2483927b31d693f",
+    ),
+    (
+        _SCHEDULE,
+        "_extract_home_away_college",
+        [(f"{_LG}.{lg}.{lg}_schedule", "__extract_home_away") for lg in ("cfb", "wbb")],
+        "c0b728de9c672f97",
+    ),
+]
+
+
+@pytest.mark.parametrize(
+    ("owner", "name", "copies", "pin"), SHARED_BODY_ONLY, ids=[f"{r[0]}.{r[1]}" for r in SHARED_BODY_ONLY]
+)
+def test_every_former_espn_copy_is_the_shared_body(owner: str, name: str, copies: list, pin: str) -> None:
+    shared = getattr(importlib.import_module(owner), name)
+    for module, copy_name in copies:
+        assert getattr(importlib.import_module(module), copy_name) is shared, f"{module}.{copy_name} is a copy again"
+    assert _body_only_hash(shared, {}) == pin, f"{owner}.{name} no longer equals the copies it replaced; update the pin"
+
+
+# R61a-2: the deliberate outliers stay their own bodies. nhl's roster_items keeps period / for_player_id / active;
+# mbb (two halves), nfl (no poll: null rank) and nhl (three periods, YTD record, no rank) keep their own home/away
+# step. Binding any of them to a shared body would change its frame, so each asserts identity and its defaults.
+
+
+def test_nhl_keeps_its_own_roster_items(monkeypatch) -> None:
+    from sportsdataverse.nhl import nhl_game_rosters
+
+    rosters = importlib.import_module(_ROSTERS)
+    fn = nhl_game_rosters.helper_nhl_roster_items
+    assert fn is not rosters.roster_items, "nhl's roster_items is bound to the shared body"
+    entry = {"playerId": 7, "period": 0, "active": True, "forPlayerId": 0, "athlete": {"$ref": "http://core/a/7"}}
+
+    class _Resp:
+        def json(self) -> dict:
+            return {"entries": [entry]}
+
+    monkeypatch.setattr(nhl_game_rosters, "download", lambda url, **kwargs: _Resp())
+    out = fn(pl.DataFrame({"team_id": [1]}), "http://core/competitors")
+    assert {"period", "for_player_id", "active"} <= set(out.columns)
+
+
+def _bare_event() -> dict:
+    """A scoreboard event whose competitors ship no rank, linescores or records, so every default shows."""
+    return {
+        "competitions": [
+            {
+                "competitors": [
+                    {"team": {"id": str(i)}, "score": "1", "homeAway": s} for i, s in ((1, "home"), (2, "away"))
+                ]
+            }
+        ]
+    }
+
+
+@pytest.mark.parametrize(
+    ("lg", "rank", "periods", "record_types"),
+    [
+        ("mbb", 99, 2, ["total", "home", "road", "vsconf"]),
+        ("nfl", None, 4, ["total", "home", "road"]),
+        ("nhl", "absent", 3, ["ytd", "home", "road"]),
+    ],
+)
+def test_outlier_home_away_steps_keep_their_league_defaults(
+    lg: str, rank: object, periods: int, record_types: list
+) -> None:
+    sched = importlib.import_module(_SCHEDULE)
+    step = getattr(importlib.import_module(f"{_LG}.{lg}.{lg}_schedule"), "__extract_home_away")
+    assert step not in (sched._extract_home_away_nba, sched._extract_home_away_college), f"{lg} uses a shared step"
+    home = step(_bare_event(), 0, "home")["competitions"][0]["home"]
+    assert len(home["linescores"]) == periods
+    assert [r["type"] for r in home["records"]] == record_types
+    if rank == "absent":
+        assert "currentRank" not in home
+    else:
+        assert home["currentRank"] == rank
 
 
 # --- 6.1d: parser helpers, the browser User-Agent, the mls/nwsl getter (A-N15, A-L59, A-L8) ---------------

@@ -5,7 +5,7 @@ import datetime
 import polars as pl
 
 from sportsdataverse._codegen_runtime import _download_json
-from sportsdataverse._espn_schedule import _schedule_frame
+from sportsdataverse._espn_schedule import _extract_home_away_nba, _schedule_frame, _scoreboard_event
 from sportsdataverse.dl_utils import download
 
 
@@ -69,73 +69,10 @@ def scoreboard_event_parsing(event):
             from sportsdataverse.nba import espn_nba_schedule
             sched = espn_nba_schedule(dates=20230102)
     """
-    event.get("competitions")[0].get("competitors")[0].get("team").pop("links", None)
-    event.get("competitions")[0].get("competitors")[1].get("team").pop("links", None)
-    if event.get("competitions")[0].get("competitors")[0].get("homeAway") == "home":
-        event = __extract_home_away(event, 0, "home")
-        event = __extract_home_away(event, 1, "away")
-    else:
-        event = __extract_home_away(event, 0, "away")
-        event = __extract_home_away(event, 1, "home")
-    del_keys = ["geoBroadcasts", "headlines", "series", "situation", "tickets", "odds", "leaders"]
-    for k in del_keys:
-        event.get("competitions")[0].pop(k, None)
-    event.get("competitions")[0]["notes_type"] = (
-        event.get("competitions")[0]["notes"][0].get("type") if len(event.get("competitions")[0]["notes"]) > 0 else ""
-    )
-    event.get("competitions")[0]["notes_headline"] = (
-        event.get("competitions")[0]["notes"][0].get("headline").replace('"', "")
-        if len(event.get("competitions")[0]["notes"]) > 0
-        else ""
-    )
-    event.get("competitions")[0]["broadcast_market"] = (
-        event.get("competitions")[0].get("broadcasts", [])[0].get("market", "")
-        if len(event.get("competitions")[0].get("broadcasts")) > 0
-        else ""
-    )
-    event.get("competitions")[0]["broadcast_name"] = (
-        event.get("competitions")[0].get("broadcasts", [])[0].get("names", [])[0]
-        if len(event.get("competitions")[0].get("broadcasts")) > 0
-        else ""
-    )
-    event.get("competitions")[0].pop("broadcasts", None)
-    event.get("competitions")[0].pop("notes", None)
-    event.get("competitions")[0].pop("competitors", None)
-    return event
+    return _scoreboard_event(event, __extract_home_away)
 
 
-def __extract_home_away(event, arg1, arg2):
-    event["competitions"][0][arg2] = event.get("competitions")[0].get("competitors")[arg1].get("team")
-    event["competitions"][0][arg2]["score"] = event.get("competitions")[0].get("competitors")[arg1].get("score")
-    event["competitions"][0][arg2]["winner"] = event.get("competitions")[0].get("competitors")[arg1].get("winner")
-    # add winner back to main competitors if does not exist
-    event["competitions"][0]["competitors"][arg1]["winner"] = (
-        event.get("competitions")[0].get("competitors")[arg1].get("winner", False)
-    )
-    event["competitions"][0][arg2]["linescores"] = (
-        event.get("competitions")[0]
-        .get("competitors")[arg1]
-        .get("linescores", [{"value": 0}, {"value": 0}, {"value": 0}, {"value": 0}])
-    )
-    # add linescores back to main competitors if does not exist
-    event["competitions"][0]["competitors"][arg1]["linescores"] = (
-        event.get("competitions")[0]
-        .get("competitors")[arg1]
-        .get("linescores", [{"value": 0}, {"value": 0}, {"value": 0}, {"value": 0}])
-    )
-    event["competitions"][0][arg2]["records"] = (
-        event.get("competitions")[0]
-        .get("competitors")[arg1]
-        .get(
-            "records",
-            [
-                {"abbreviation": "Game", "name": "overall", "summary": "0-0", "type": "total"},
-                {"abbreviation": "null", "name": "Home", "summary": "0-0", "type": "home"},
-                {"abbreviation": "null", "name": "Road", "summary": "0-0", "type": "road"},
-            ],
-        )
-    )
-    return event
+__extract_home_away = _extract_home_away_nba
 
 
 def espn_nba_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs) -> pl.DataFrame:
