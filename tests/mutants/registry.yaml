@@ -8329,3 +8329,32 @@
   note: >-
     Reading the very next row, a timeout filed between a safety and its free kick hides the kick: on nfl-raw
     250918010/3832 and 300912002/4199 lose their safety; the test copies a timeout in after 271021019/2661.
+
+# --- PRE-1008 D-1: the saved-payload readers decode UTF-8 on every platform ----
+- id: nba-pbp-disk-reads-utf8
+  group: utf8-reads
+  finding: D-1
+  file: sportsdataverse/nba/nba_pbp.py
+  snippet: '    with open(os.path.join(path_to_json, f"{game_id}.json"), encoding="utf-8") as json_file:'
+  mutant: '    with open(os.path.join(path_to_json, f"{game_id}.json")) as json_file:'
+  test: tests/test_pbp_disk_utf8.py -k "nba"
+  expected: kill
+  note: The nba disk reader leaves the encoding to the platform again (cp1252 on Windows); PRE-1008 D-1.
+- id: nfl-pbp-disk-reads-utf8
+  group: utf8-reads
+  finding: D-1
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        with open(os.path.join(self.path_to_json, f"{self.gameId}.json"), encoding="utf-8") as json_file:'
+  mutant: '        with open(os.path.join(self.path_to_json, f"{self.gameId}.json")) as json_file:'
+  test: tests/test_pbp_disk_utf8.py -k "nfl"
+  expected: kill
+  note: The nfl disk reader leaves the encoding to the platform again (cp1252 on Windows); PRE-1008 D-1.
+- id: cfb-pbp-disk-reads-utf8
+  group: utf8-reads
+  finding: D-1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '        with open(os.path.join(self.path_to_json, f"{self.gameId}.json"), encoding="utf-8") as json_file:'
+  mutant: '        with open(os.path.join(self.path_to_json, f"{self.gameId}.json")) as json_file:'
+  test: tests/test_pbp_disk_utf8.py -k "cfb"
+  expected: kill
+  note: The cfb disk reader leaves the encoding to the platform again (cp1252 on Windows); PRE-1008 D-1.
