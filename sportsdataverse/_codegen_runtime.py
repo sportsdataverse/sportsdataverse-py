@@ -86,23 +86,25 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
     return df
 
 
-def _cast_id_columns(df: pl.DataFrame, where: str, text_ids: Any = ()) -> pl.DataFrame:
+def _cast_id_columns(df: pl.DataFrame, where: str, text_ids: Any = (), stacklevel: int = 3) -> pl.DataFrame:
     """Every ``id`` / ``*_id`` column of a parser's frame through :func:`_cast_ids_int64` (task 5.2).
 
     A column holding an id that is not an integer is refused there and keeps its dtype. ``text_ids`` names the
     columns that are text by design (NHL stats-rest ``formatted_season_id`` ``"1971-72"``, the country ``id``
-    ``"DEU"``); any other refused column warns :class:`~sportsdataverse.errors.SchemaDriftWarning` naming
-    ``where`` and the columns (R986-2), as the ESPN parsers do: one text id in a payload otherwise flips that
-    column back to String for that call only, silently.
+    ``"DEU"``): they are never cast, so an all-null or all-digit payload of them keeps its dtype (R986-5). Any
+    other refused column warns :class:`~sportsdataverse.errors.SchemaDriftWarning` naming ``where`` and the
+    columns (R986-2), as the ESPN parsers do: one text id in a payload otherwise flips that column back to String
+    for that call only, silently. ``stacklevel`` is the ``warnings.warn`` one, so a parser can point the warning
+    at its own caller (R988-7).
     """
-    cols = [c for c in df.columns if c == "id" or c.endswith("_id")]
+    cols = [c for c in df.columns if (c == "id" or c.endswith("_id")) and c not in text_ids]
     out = _cast_ids_int64(df, cols)
-    refused = [c for c in cols if out.schema[c] != pl.Int64 and c not in text_ids and out[c].null_count() < out.height]
+    refused = [c for c in cols if out.schema[c] != pl.Int64 and out[c].null_count() < out.height]
     if refused:
         warnings.warn(
             f"{where}: id columns {refused} hold values that are not integer ids; kept as they came",
             SchemaDriftWarning,
-            stacklevel=3,
+            stacklevel=stacklevel,
         )
     return out
 

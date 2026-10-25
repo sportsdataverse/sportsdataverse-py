@@ -284,3 +284,19 @@ def test_a_bare_id_with_a_missing_value_is_int64_not_float():
     df = parse_nhl_records(raw)
     assert df.schema["id"] == pl.Int64 and df["id"].null_count() == 1
     assert df["id"].drop_nulls().to_list() == [r["id"] for r in raw["data"][1:]]
+
+
+@pytest.mark.parametrize("label", [None, "19711972"], ids=["all_null", "all_digits"])
+def test_a_text_by_design_id_is_never_cast_even_when_all_null(label):
+    """R986-5 / R989-2: ``text_ids`` silenced the warning but still cast, so a payload whose ``formattedSeasonId`` is
+    null on every row, or digits only on every row, flipped ``formatted_season_id`` to Int64 for that call. On the
+    real season capture with every label replaced the column stays String; ``id`` (the integer season) is Int64."""
+    from sportsdataverse.nhl.nhl_stats_rest_parsers import parse_nhl_stats_rest
+
+    raw = load_fixture("nhl_stats_rest", "stats_rest_season")
+    for row in raw["data"]:
+        row["formattedSeasonId"] = label
+    df = parse_nhl_stats_rest(raw)
+    assert df.schema["formatted_season_id"] == pl.String
+    assert df["formatted_season_id"].to_list() == [label] * df.height
+    assert df.schema["id"] == pl.Int64
