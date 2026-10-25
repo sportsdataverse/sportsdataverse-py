@@ -4146,7 +4146,7 @@
 - id: nhl-web-envelope-is-zero-rows
   group: codegen-runtime
   finding: EX-1.3-a
-  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  file: sportsdataverse/_parser_common.py
   snippet: '    return payload if isinstance(payload, dict) and _error_envelope_code(payload) is None else {}'
   mutant: '    return payload if isinstance(payload, dict) else {}'
   test: tests/test_espn_universal_parsers.py -k "hostile and parse_nhl_web_landing"
@@ -6917,6 +6917,33 @@
   test: tests/test_shared_private_bodies.py -k share_one_crosswalk_read
   expected: kill
   note: Without the one cache a worker reads the cfb_crosswalk asset on every adapter call (the pre-6.1 two caches read it twice).
+- id: shared-parser-empty-frame-copy-again
+  group: share-private-bodies
+  finding: A-N15
+  file: sportsdataverse/nhl/nhl_records_parsers.py
+  snippet: "from sportsdataverse._parser_common import _FROM_PANDAS_ERRORS, _empty_frame, _snake_columns\n"
+  mutant: "from sportsdataverse._parser_common import _FROM_PANDAS_ERRORS, _snake_columns\n\n\ndef _empty_frame(return_as_pandas=False):\n    df = pd.DataFrame()\n    return df if return_as_pandas else pl.DataFrame()\n"
+  test: tests/test_shared_private_bodies.py -k _empty_frame
+  expected: kill
+  note: The pre-6.1d state, the NHL Records parsers' own copy of the empty-frame helper.
+- id: shared-browser-user-agent-copy-again
+  group: share-private-bodies
+  finding: A-L59
+  file: sportsdataverse/yahoo/yahoo_shangrila_runtime.py
+  snippet: '    "User-Agent": _CHROME_UA,'
+  mutant: '    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",'
+  test: tests/test_shared_private_bodies.py -k one_browser_user_agent
+  expected: kill
+  note: The pre-6.1d state, the Yahoo runtime spelling out its own copy of the User-Agent.
+- id: shared-referer-getter-caller-headers-lose
+  group: share-private-bodies
+  finding: A-L8
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    headers = {"Referer": referer, "User-Agent": _CHROME_UA, **(kwargs.pop("headers", None) or {})}'
+  mutant: '    headers = {**(kwargs.pop("headers", None) or {}), "Referer": referer, "User-Agent": _CHROME_UA}'
+  test: tests/test_shared_private_bodies.py -k mls_nwsl_getters
+  expected: kill
+  note: A caller's headers= no longer win key-by-key over the mls / nwsl site defaults.
 
 # --- task 5.1 (devel-dtype-contract): empty results carry their returns table (A-M12, A-M7, MD-3, B-L73, B-GB-09)
 - id: documented-empty-replaces-a-zero-width-frame

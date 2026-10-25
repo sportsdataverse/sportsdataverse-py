@@ -17,11 +17,10 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional, Union
 
-from sportsdataverse._codegen_runtime import _json_body, _transport_errors
+from sportsdataverse._codegen_runtime import _referer_get
 from sportsdataverse.dl_utils import download
 
 REFERER = "https://www.mlssoccer.com/"
-_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
 
 __all__ = ["REFERER", "_get", "bool_str"]
 
@@ -84,8 +83,4 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Union[Dict, 
             body = _get("https://stats-api.mlssoccer.com/competitions")
             print(sorted(body))
     """
-    headers = {"Referer": REFERER, "User-Agent": _UA, **(kwargs.pop("headers", None) or {})}
-    clean = {k: v for k, v in (params or {}).items() if v is not None}
-    with _transport_errors(url):
-        resp = download(url=url, params=clean, headers=headers, **kwargs)
-    return _json_body(resp, url)
+    return _referer_get(download, REFERER, url, params, kwargs)

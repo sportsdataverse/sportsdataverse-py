@@ -14,15 +14,13 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional, Union
 
-from sportsdataverse._codegen_runtime import _json_body, _transport_errors
+from sportsdataverse._codegen_runtime import _CHROME_UA, _json_body, _transport_errors
 from sportsdataverse.dl_utils import download
 
 __all__ = ["UEFA_HEADERS", "_get"]
 
 UEFA_HEADERS: Dict[str, str] = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
-    ),
+    "User-Agent": _CHROME_UA,
     "Accept": "application/json",
     "Origin": "https://www.uefa.com",
 }
