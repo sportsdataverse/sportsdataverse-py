@@ -100,7 +100,7 @@ def roster_ids(rosters: pl.DataFrame) -> pl.DataFrame:
     return _cast_ids_int64(rosters, [c for c in rosters.columns if c == "id" or c.endswith("_id")])
 
 
-def game_items(summary):
+def game_items(summary: dict[str, Any]) -> pl.DataFrame:
     """Flatten a game's Core v2 ``competitors`` payload to one row per team (``team_id`` Int32, links as ``*_href``)."""
     items = pl.from_pandas(pd.json_normalize(summary, record_path="items", sep="_"))
     items.columns = [col.replace("$ref", "href") for col in items.columns]
@@ -117,7 +117,7 @@ def game_items(summary):
     return items
 
 
-def roster_items(items, summary_url, **kwargs):
+def roster_items(items: pl.DataFrame, summary_url: str, **kwargs: Any) -> pl.DataFrame:
     """Fetch each team's game roster and stack the entries, one row per rostered player.
 
     A team whose roster 404s is skipped so the other side is still read (task 6.1 shared this body; nhl keeps its

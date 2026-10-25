@@ -84,45 +84,6 @@ SHARED = [
     (_FOX, "_cells", [(_FOX_EXT, "_cells")], "e4433f1643bd6b1a"),
     (_FOX, "_uri_id", [(_FOX_EXT, "_uri_id")], "6c9ee881f9c919b2"),
     (_FOX, "_full_team_name", [(_FOX_EXT, "_fox_team_fullname")], "0c2148ef5a4ca870"),
-    # B-M30: the Core v2 game-roster steps; nhl keeps its own roster_items (it does not drop period /
-    # for_player_id / active), the other helpers are one body in all seven chains
-    (
-        _ROSTERS,
-        "game_items",
-        [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_game_items") for lg in _SEVEN],
-        "b9f04361e64c9bee",
-    ),
-    (
-        _ROSTERS,
-        "team_items",
-        [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_team_items") for lg in _SEVEN],
-        "73c5a2312c8534d9",
-    ),
-    (
-        _ROSTERS,
-        "athlete_items",
-        [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_athlete_items") for lg in _SEVEN],
-        "ac9df877d2c7b018",
-    ),
-    (
-        _ROSTERS,
-        "roster_items",
-        [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_roster_items") for lg in _SEVEN if lg != "nhl"],
-        "56b2bc088f858c79",
-    ),
-    # B-M29: the scoreboard home/away step where two leagues' copies were identical
-    (
-        _SCHEDULE,
-        "_extract_home_away_nba",
-        [(f"{_LG}.{lg}.{lg}_schedule", "__extract_home_away") for lg in ("nba", "wnba")],
-        "695f7ef62325b032",
-    ),
-    (
-        _SCHEDULE,
-        "_extract_home_away_college",
-        [(f"{_LG}.{lg}.{lg}_schedule", "__extract_home_away") for lg in ("cfb", "wbb")],
-        "85d4c94fbaeb810b",
-    ),
 ]
 
 
@@ -223,3 +184,56 @@ def test_scoreboard_event_parsing_is_one_body_with_the_league_home_away_step(mon
         event = {"id": "1"}
         assert mod.scoreboard_event_parsing(event) is event
         assert calls == [(event, getattr(mod, "__extract_home_away"))], lg
+
+
+# Task 6.1 (a), B-M29 / B-M30: the shared bodies gained type annotations the deleted copies lacked, so these
+# pins are of the body alone (no signature, no docstring), computed on the copies at a78e6c17d2. nhl keeps its
+# own roster_items (it does not drop period / for_player_id / active).
+SHARED_BODY_ONLY = [
+    (
+        _ROSTERS,
+        "game_items",
+        [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_game_items") for lg in _SEVEN],
+        "bb613e4495138b68",
+    ),
+    (
+        _ROSTERS,
+        "team_items",
+        [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_team_items") for lg in _SEVEN],
+        "c5af81a5ed87ffd3",
+    ),
+    (
+        _ROSTERS,
+        "athlete_items",
+        [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_athlete_items") for lg in _SEVEN],
+        "b71d8d4d8b082812",
+    ),
+    (
+        _ROSTERS,
+        "roster_items",
+        [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_roster_items") for lg in _SEVEN if lg != "nhl"],
+        "ca17f1e34f4a9a00",
+    ),
+    (
+        _SCHEDULE,
+        "_extract_home_away_nba",
+        [(f"{_LG}.{lg}.{lg}_schedule", "__extract_home_away") for lg in ("nba", "wnba")],
+        "a2483927b31d693f",
+    ),
+    (
+        _SCHEDULE,
+        "_extract_home_away_college",
+        [(f"{_LG}.{lg}.{lg}_schedule", "__extract_home_away") for lg in ("cfb", "wbb")],
+        "c0b728de9c672f97",
+    ),
+]
+
+
+@pytest.mark.parametrize(
+    ("owner", "name", "copies", "pin"), SHARED_BODY_ONLY, ids=[f"{r[0]}.{r[1]}" for r in SHARED_BODY_ONLY]
+)
+def test_every_former_espn_copy_is_the_shared_body(owner: str, name: str, copies: list, pin: str) -> None:
+    shared = getattr(importlib.import_module(owner), name)
+    for module, copy_name in copies:
+        assert getattr(importlib.import_module(module), copy_name) is shared, f"{module}.{copy_name} is a copy again"
+    assert _body_only_hash(shared, {}) == pin, f"{owner}.{name} no longer equals the copies it replaced; update the pin"

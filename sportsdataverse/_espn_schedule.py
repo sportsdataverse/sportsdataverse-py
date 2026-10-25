@@ -294,7 +294,7 @@ def _schedule_frame(
     return _pandas_ids(df) if return_as_pandas else df
 
 
-def _scoreboard_event(event, extract_home_away):
+def _scoreboard_event(event: Any, extract_home_away: Callable[[Any, int, str], Any]) -> Any:
     """Flatten one ESPN scoreboard event for the schedule frame, in place (task 6.1: one body for seven leagues).
 
     ``extract_home_away`` is the league's ``(event, index, "home" | "away")`` step that copies one competitor onto
@@ -335,7 +335,7 @@ def _scoreboard_event(event, extract_home_away):
     return event
 
 
-def _extract_home_away_nba(event, arg1, arg2):
+def _extract_home_away_nba(event: Any, arg1: int, arg2: str) -> Any:
     """Copy competitor ``arg1`` onto ``competitions[0][arg2]``: four-period linescore default, no poll (nba, wnba)."""
     event["competitions"][0][arg2] = event.get("competitions")[0].get("competitors")[arg1].get("team")
     event["competitions"][0][arg2]["score"] = event.get("competitions")[0].get("competitors")[arg1].get("score")
@@ -370,7 +370,7 @@ def _extract_home_away_nba(event, arg1, arg2):
     return event
 
 
-def _extract_home_away_college(event, arg1, arg2):
+def _extract_home_away_college(event: Any, arg1: int, arg2: str) -> Any:
     """Copy competitor ``arg1`` onto ``competitions[0][arg2]``: poll rank (99 unranked), four periods (cfb, wbb)."""
     event["competitions"][0][arg2] = event.get("competitions")[0].get("competitors")[arg1].get("team")
     event["competitions"][0][arg2]["score"] = event.get("competitions")[0].get("competitors")[arg1].get("score")
