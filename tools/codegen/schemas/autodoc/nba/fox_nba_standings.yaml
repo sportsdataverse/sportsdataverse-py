@@ -19,10 +19,28 @@ columns:
 - name: pct
   type: character
   description: ''
+- name: gb
+  type: character
+  description: ''
 - name: pf
   type: character
   description: ''
 - name: pa
+  type: character
+  description: ''
+- name: home
+  type: character
+  description: ''
+- name: away
+  type: character
+  description: ''
+- name: conf
+  type: character
+  description: ''
+- name: div
+  type: character
+  description: ''
+- name: l10
   type: character
   description: ''
 - name: strk
@@ -32,5 +50,23 @@ columns:
   type: character
   description: ''
 - name: western_conference
+  type: character
+  description: ''
+- name: atlantic
+  type: character
+  description: ''
+- name: central
+  type: character
+  description: ''
+- name: southeast
+  type: character
+  description: ''
+- name: northwest
+  type: character
+  description: ''
+- name: pacific
+  type: character
+  description: ''
+- name: southwest
   type: character
   description: ''

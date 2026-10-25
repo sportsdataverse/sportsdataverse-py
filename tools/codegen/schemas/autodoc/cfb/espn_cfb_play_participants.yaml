@@ -40,6 +40,24 @@ columns:
 - name: punter_player_name
   type: character
   description: ''
+- name: tackler_player_name
+  type: character
+  description: ''
+- name: assisted_by_player_name
+  type: character
+  description: ''
+- name: forced_by_player_name
+  type: character
+  description: ''
+- name: recoverer_player_name
+  type: character
+  description: ''
+- name: pat_passer_player_name
+  type: character
+  description: ''
+- name: fumbler_player_name
+  type: character
+  description: ''
 - name: kicker_player_id
   type: character
   description: ''
@@ -71,6 +89,24 @@ columns:
   type: character
   description: ''
 - name: punter_player_id
+  type: character
+  description: ''
+- name: tackler_player_id
+  type: character
+  description: ''
+- name: assisted_by_player_id
+  type: character
+  description: ''
+- name: forced_by_player_id
+  type: character
+  description: ''
+- name: recoverer_player_id
+  type: character
+  description: ''
+- name: pat_passer_player_id
+  type: character
+  description: ''
+- name: fumbler_player_id
   type: character
   description: ''
 - name: kicker_position_id
@@ -106,6 +142,24 @@ columns:
 - name: punter_position_id
   type: character
   description: ''
+- name: tackler_position_id
+  type: character
+  description: ''
+- name: assisted_by_position_id
+  type: character
+  description: ''
+- name: forced_by_position_id
+  type: character
+  description: ''
+- name: recoverer_position_id
+  type: character
+  description: ''
+- name: pat_passer_position_id
+  type: character
+  description: ''
+- name: fumbler_position_id
+  type: character
+  description: ''
 - name: kicker_player_names
   type: character
   description: ''
@@ -139,6 +193,24 @@ columns:
 - name: punter_player_names
   type: character
   description: ''
+- name: tackler_player_names
+  type: character
+  description: ''
+- name: assisted_by_player_names
+  type: character
+  description: ''
+- name: forced_by_player_names
+  type: character
+  description: ''
+- name: recoverer_player_names
+  type: character
+  description: ''
+- name: pat_passer_player_names
+  type: character
+  description: ''
+- name: fumbler_player_names
+  type: character
+  description: ''
 - name: kicker_player_ids
   type: character
   description: ''
@@ -170,5 +242,23 @@ columns:
   type: character
   description: ''
 - name: punter_player_ids
+  type: character
+  description: ''
+- name: tackler_player_ids
+  type: character
+  description: ''
+- name: assisted_by_player_ids
+  type: character
+  description: ''
+- name: forced_by_player_ids
+  type: character
+  description: ''
+- name: recoverer_player_ids
+  type: character
+  description: ''
+- name: pat_passer_player_ids
+  type: character
+  description: ''
+- name: fumbler_player_ids
   type: character
   description: ''
