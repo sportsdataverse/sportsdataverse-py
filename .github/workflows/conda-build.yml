@@ -50,7 +50,7 @@ jobs:
           # that — conda-build creates its own ephemeral build env per
           # recipe anyway, so we don't gain anything from a sub-env here.
           activate-environment: base
-          auto-activate-base: true
+          auto-activate: true
           auto-update-conda: false
           channels: conda-forge
           channel-priority: strict

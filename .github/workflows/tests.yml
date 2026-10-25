@@ -178,4 +178,6 @@ jobs:
           SDV_PY_HTTP_RETRIES: "3"
           SDV_PY_HTTP_TIMEOUT: "15"
         # -W default: warnings report here rather than fail; the PR jobs enforce pytest.ini's `error`.
-        run: uv run --frozen pytest -n auto --dist loadgroup --maxfail=10 -W default --cov=sportsdataverse --cov-report=term-missing:skip-covered
+        # A command-line -W outranks pytest.ini's filterwarnings, so the two known kloppy notices
+        # (its unclosed spool buffer, see pytest.ini, and its StatsBomb licence notice) are re-ignored after it.
+        run: uv run --frozen pytest -n auto --dist loadgroup --maxfail=10 -W default -W "ignore:Unclosed file <kloppy.infra.io.buffered_stream.BufferedStream:ResourceWarning" -W "ignore::UserWarning:kloppy._providers.statsbomb" --cov=sportsdataverse --cov-report=term-missing:skip-covered
