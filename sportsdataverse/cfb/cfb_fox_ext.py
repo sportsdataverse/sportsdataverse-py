@@ -23,7 +23,7 @@ import polars as pl
 if TYPE_CHECKING:
     import pandas as pd
 
-from sportsdataverse._fox_layout import API
+from sportsdataverse._fox_layout import API, DATA_KEY
 from sportsdataverse._fox_layout import _cells, _clean, _table_rows, _uri_id, parse_drive_pbp
 from sportsdataverse._fox_layout import _full_team_name as _fox_team_fullname
 from sportsdataverse._fox_layout import fox_get as _fox_get
@@ -48,6 +48,7 @@ __all__ = [
 # B-L52: the Bifrost getter and the five table helpers are _fox_layout's, which serves every
 # Fox league; this module keeps only what is CFB-specific.
 FOX_BASE = API
+FOX_DATA_KEY = DATA_KEY  # the public data-tier key, env-overridable via SDV_PY_FOX_DATA_KEY (R61b-2)
 
 
 # Stable column sets -- what each parser always emits, so an empty response still

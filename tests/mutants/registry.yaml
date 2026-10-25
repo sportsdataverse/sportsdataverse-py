@@ -7642,3 +7642,14 @@
   test: tests/hockeytech/test_public_surface.py -k "corsi_fenwick_on_ice_player_level"
   expected: kill
   note: The on-ice Corsi frame keys players by the text ids of the on-ice strings again.
+
+# --- pre-main sweep: R61b-1 (6.1b review) the WBB shots line logs under the WBB logger ----
+- id: wbb-shots-log-under-mbb-logger
+  group: premain-sweep
+  finding: R61b-1
+  file: sportsdataverse/wbb/wbb_ncaa_shots.py
+  snippet: "    return _shot_locations(game_ids, period_model, fetcher, return_as_pandas, log=logger)\n"
+  mutant: "    return _shot_locations(game_ids, period_model, fetcher, return_as_pandas)\n"
+  test: tests/wbb/test_wbb_ncaa_shots_shim.py -k log_under_the_wbb_logger
+  expected: kill
+  note: The 6.1b state, where the shared driver logged a WBB call under sportsdataverse.mbb and the WBB logger was dead.

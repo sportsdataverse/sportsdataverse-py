@@ -97,6 +97,7 @@ def test_cfb_fox_ext_gets_through_the_layout_getter() -> None:
     fox = importlib.import_module(_FOX)
     assert ext._fox_get is fox.fox_get
     assert ext.FOX_BASE == fox.API == "https://api.foxsports.com/bifrost/v1"
+    assert ext.FOX_DATA_KEY is fox.DATA_KEY  # public module attribute kept (R61b-2)
 
 
 def test_wbb_shot_locations_runs_the_mbb_driver_with_the_wbb_period_model(monkeypatch) -> None:
@@ -106,7 +107,7 @@ def test_wbb_shot_locations_runs_the_mbb_driver_with_the_wbb_period_model(monkey
 
     assert wbb_ncaa_shots._shot_locations is mbb_ncaa_shots._shot_locations
     calls: list = []
-    monkeypatch.setattr(wbb_ncaa_shots, "_shot_locations", lambda *a: calls.append(a) or pl.DataFrame())
+    monkeypatch.setattr(wbb_ncaa_shots, "_shot_locations", lambda *a, **k: calls.append(a) or pl.DataFrame())
     ncaa_wbb_shot_locations(["5728709"], season=2015, fetcher=object())
     ncaa_wbb_shot_locations(["5728709"], fetcher=object())
     assert [c[1] for c in calls] == [(2, 1200, 300), (4, 600, 300)]

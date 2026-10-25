@@ -73,7 +73,7 @@ def ncaa_wbb_shot_locations(
     """
     # _utf8_id, never str(): season=2015.0 must read "2015" (halves), not "2015.0" (quarters)
     period_model = wbb_period_model(_utf8_id(season))
-    return _shot_locations(game_ids, period_model, fetcher, return_as_pandas)
+    return _shot_locations(game_ids, period_model, fetcher, return_as_pandas, log=logger)
 
 
 def ncaa_wbb_join_pbp_shots(
