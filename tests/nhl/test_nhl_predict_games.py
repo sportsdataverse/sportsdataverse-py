@@ -74,3 +74,12 @@ def test_nhl_predict_games_empty_input_returns_documented_schema():
         "exp_total",
         "market_edge",
     ]
+
+
+def test_nhl_predict_games_empty_slate_game_id_is_int64():
+    """S6 (#1003 review): the empty slate pins game_id Int64, the dtype a full slate built from the NHL / ESPN
+    schedule parsers carries, so an empty day stacks with a full one."""
+    empty = nhl_predict_games(pl.DataFrame(), pl.DataFrame())
+    assert empty.schema["game_id"] == pl.Int64
+    full = empty.with_columns(pl.lit(2025020001, dtype=pl.Int64).alias("game_id")).clear(1)
+    assert pl.concat([empty, full], how="vertical").schema == empty.schema

@@ -363,7 +363,7 @@ Vectorized pregame margin/win-prob/total (+ market edge) over a schedule.
 
 **Returns**
 
-A polars (or pandas) DataFrame, one row per game. |col_name |type | |:-------------|:------| |game_id |String | |home_team |String | |away_team |String | |neutral_site |Boolean| |exp_margin |Float64| |home_win_prob |Float64| |exp_total |Float64| |market_edge |Float64|
+A polars (or pandas) DataFrame, one row per game. |col_name |type | |:-------------|:------| |game_id |Int64 | |home_team |String | |away_team |String | |neutral_site |Boolean| |exp_margin |Float64| |home_win_prob |Float64| |exp_total |Float64| |market_edge |Float64|
 
 No returns table is published for this function: no capture: it needs games with home_team / away_team / neutral_site columns that no loader returns.
 
