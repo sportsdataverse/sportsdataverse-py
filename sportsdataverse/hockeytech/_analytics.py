@@ -674,7 +674,9 @@ def corsi_fenwick_on_ice(pbp: pl.DataFrame) -> pl.DataFrame:
         on_ice_home_raw = row.get("on_ice_home")
         on_ice_away_raw = row.get("on_ice_away")
 
-        if team_id is None or home_team_id is None:
+        # no game summary (MJHL: gc/gamesummary is denied) leaves home_team_id null, or "" in a String frame: the
+        # side of the event is unknown, so the row is skipped rather than every shot credited to the away skaters
+        if team_id is None or home_team_id is None or str(home_team_id).strip() == "":
             continue
         if on_ice_home_raw is None or on_ice_away_raw is None:
             continue
