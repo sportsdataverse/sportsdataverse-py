@@ -190,10 +190,11 @@ def main() -> int:
         if block:
             out[fn] = block
 
-    dest = pathlib.Path("tools/codegen/_fpi_descriptions.yaml")
+    dest = pathlib.Path(__file__).resolve().parent / "_fpi_descriptions.yaml"  # whatever the CWD
     dest.write_text(
         yaml.safe_dump(out, sort_keys=True, allow_unicode=True, width=100),
         encoding="utf-8",
+        newline="\n",
     )
     total = sum(len(v) for v in out.values())
     print(f"wrote {dest}: {total} descriptions across {len(out)} loaders")

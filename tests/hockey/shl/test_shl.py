@@ -136,7 +136,10 @@ def test_schema_types_come_from_the_full_bodies():
         ("boxscore", "gameday__boxscore__bdhvuc5tex.json", P.parse_shl_player_box),
         ("pbp", "gameday__play-by-play__bdhvuc5tex.json", P.parse_shl_pbp),
     ]:
-        schema = {c["name"]: c["type"] for c in yaml.safe_load((SCHEMAS / f"{short}.yaml").read_text())["columns"]}
+        schema = {
+            c["name"]: c["type"]
+            for c in yaml.safe_load((SCHEMAS / f"{short}.yaml").read_text(encoding="utf-8"))["columns"]
+        }
         df = parser(_load(FULL / body))
         for col, dtype in df.schema.items():
             want = "numeric" if dtype == pl.Float64 else "integer" if dtype.is_integer() else None
@@ -223,7 +226,9 @@ def test_season_routes_take_the_end_year_and_stats_info_always_sends_count_1000(
 
 def test_schemas_match_the_parsers_on_the_captures():
     for ep in _endpoints():
-        cols = [c["name"] for c in yaml.safe_load((SCHEMAS / f"{ep['short']}.yaml").read_text())["columns"]]
+        cols = [
+            c["name"] for c in yaml.safe_load((SCHEMAS / f"{ep['short']}.yaml").read_text(encoding="utf-8"))["columns"]
+        ]
         for f in _capture_for(ep):
             parsed = getattr(P, ep["parser"])(_load(f)).columns
             assert set(parsed) <= set(cols), (ep["short"], f.name, sorted(set(parsed) - set(cols)))
@@ -233,7 +238,7 @@ def test_schemas_match_the_parsers_on_the_captures():
 
 
 def _documented(short: str) -> list:
-    return [c["name"] for c in yaml.safe_load((SCHEMAS / f"{short}.yaml").read_text())["columns"]]
+    return [c["name"] for c in yaml.safe_load((SCHEMAS / f"{short}.yaml").read_text(encoding="utf-8"))["columns"]]
 
 
 @pytest.mark.parametrize(("short", "parser", "fixture"), _CASES, ids=[f"{s}:{f.stem[-30:]}" for s, _, f in _CASES])
@@ -270,7 +275,7 @@ def test_schema_module_lists_the_returns_schema_columns():
     assert set(DTYPES) == {e["short"] for e in _endpoints()}
     r_type = {"str": "character", "int": "integer", "float": "numeric", "bool": "logical", "list[int]": "character"}
     for short, types in DTYPES.items():
-        doc = yaml.safe_load((SCHEMAS / f"{short}.yaml").read_text())["columns"]
+        doc = yaml.safe_load((SCHEMAS / f"{short}.yaml").read_text(encoding="utf-8"))["columns"]
         assert [c["name"] for c in doc] == list(types), short
         assert [c["type"] for c in doc] == [r_type[t] for t in types.values()], short
         assert all(c["description"] == "" for c in doc), short  # text lives in the descriptions snippet
