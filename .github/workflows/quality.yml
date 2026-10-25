@@ -190,16 +190,18 @@ jobs:
     # the runner count; at ~22 s/row that holds to roughly 600 rows.
     # 10-21: the main -> providers sync brought the registry to 574 rows, so the matrix went to 10
     # shards, keeping the 30-min timeout.
+    # 10-22: the main -> nfl sync (#982) brought it to 661 rows and shard 1/10 hit the 30-min limit
+    # (every row it reached was killed), so the matrix went to 12 shards (~55 rows each).
     # 10-25: at 714 rows (~71/shard) shard 1 finished at 30m05s on run 40176467860 ("70 killed,
-    # 0 survived") and was cancelled by the limit; shard 10 had done the same. Timeout -> 45 at
-    # 10 shards, keeping the runner count; at ~22 s/row that holds to roughly 1,000 rows.
+    # 0 survived") and was cancelled by the limit at 10 shards. Timeout -> 45; with the 12 shards above
+    # (~22 s/row) that holds to roughly 1,400 rows.
     name: mutation registry (${{ matrix.shard }}/${{ strategy.job-total }})
     runs-on: ubuntu-latest
     timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     steps:
       - uses: actions/checkout@v5
         with:
