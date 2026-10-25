@@ -78,10 +78,9 @@ def scoreboard_event_parsing(event):
     Example:
         Wire it into a custom schedule pull::
 
-            from sportsdataverse.dl_utils import download
+            from sportsdataverse.nfl import espn_nfl_scoreboard
             from sportsdataverse.nfl.nfl_schedule import scoreboard_event_parsing
-            url = "http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
-            payload = download(url=url).json()
+            payload = espn_nfl_scoreboard(dates=20240115, return_parsed=False)
             for ev in payload.get("events", []):
                 scoreboard_event_parsing(ev)
                 ev["competitions"][0]["home"]["abbreviation"]

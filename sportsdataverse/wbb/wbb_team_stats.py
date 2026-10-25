@@ -178,7 +178,9 @@ def espn_wbb_team_stats(
             frames_pd["Averages"].head()
 
         See Also:
-            * `wehoop`_ - R sister package
+            * `wehoop`_ - R sister package. Its ``espn_wbb_team_stats()`` is not this function's port: it
+              reads the Core v2 ``seasons/{year}/types/{type}/teams/{id}/statistics`` endpoint with
+              ``year`` / ``season_type`` / ``total`` arguments
             * `cfbfastR`_ - companion R package for college football
             * `ESPN`_ - data origin
 
