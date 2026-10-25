@@ -90,7 +90,7 @@ import re
 import pandas as pd
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _cast_ids_int64, _documented_empty, _pandas_ids
+from sportsdataverse._codegen_runtime import _cast_ids_int64, _documented_empty, _pandas_ids, _str_or_null
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _first_row, _object_rows, _warn_schema_drift
 
@@ -167,7 +167,7 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool) -> pl.DataFrame:
     except _FROM_PANDAS_ERRORS:
         # Last-resort: stringify everything that is still object-typed
         for col in [c for c in df.columns if df[c].dtype == "object"]:
-            df[col] = df[col].astype(str)
+            df[col] = df[col].map(_str_or_null)  # a missing cell stays null, never "nan"
         out = pl.from_pandas(df)
     out = _ids_int64(out)
     return _pandas_ids(out, pdf) if return_as_pandas else out
