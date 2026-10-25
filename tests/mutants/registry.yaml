@@ -7966,3 +7966,68 @@
     every other boundary keeps the pre-fix own-possession-change key. It survived the full tests/cfb (only
     401858224's regulation end, which has a Timeout, pinned the branch) while it reverts 63 of the 64 moved
     capture rows, mostly the first half's last snap handing to the other team's 2H kickoff.
+
+# --- #1011 T1/T2: a missing cell stays null, never "nan", where a parser stringifies a mixed object column ---
+# Killers: an object column of int, str and NaN, which stays `object` on pandas 3 (3.13, CI) and 2.3 (3.10 floor).
+# The HockeyTech `kinds` filter (`and not _is_missing(v)`) has no row: with the map below in place it changes
+# no output on the default venv (a str + NaN column is `str` dtype on pandas 3), so it is an equivalent mutant.
+
+- id: hockeytech-stringify-keeps-missing-null
+  group: str-or-null
+  finding: R1011-T1
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: 'lambda v: None if _is_missing(v) else str(v) if isinstance(v, (int, float, bool)) else v'
+  mutant: 'lambda v: str(v) if isinstance(v, (int, float, bool)) else v'
+  test: tests/hockeytech/test_nan_ids.py::test_a_nan_team_id_beside_a_text_one_still_casts_to_int64
+  expected: kill
+  note: The pre-fix map; str(NaN) = "nan" makes the id cast refuse player_team_id (String + SchemaDriftWarning).
+
+- id: espn-to-output-fallback-keeps-missing-null
+  group: str-or-null
+  finding: R1011-T2
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: 'df[col] = df[col].map(_str_or_null)  # a missing cell stays null, never "nan"'
+  mutant: 'df[col] = df[col].astype(str)'
+  test: tests/test_parser_stringify_fallbacks.py -k "_common_espn_parsers"
+  expected: kill
+  note: The pre-fix last-resort stringify of _common_espn_parsers._to_output.
+
+- id: nhl-api-web-to-output-fallback-keeps-missing-null
+  group: str-or-null
+  finding: R1011-T2
+  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  snippet: 'df2[col] = df2[col].map(_str_or_null)  # a missing cell stays null, never "nan"'
+  mutant: 'df2[col] = df2[col].astype(str)'
+  test: tests/test_parser_stringify_fallbacks.py -k "nhl_api_web_parsers"
+  expected: kill
+  note: On 3.10 the pre-fix fallback writes "nan" into 15 columns of right_rail_2024_scf_g7.json's leaders frame.
+
+- id: nhl-edge-to-output-fallback-keeps-missing-null
+  group: str-or-null
+  finding: R1011-T2
+  file: sportsdataverse/nhl/nhl_edge_parsers.py
+  snippet: 'df2[col] = df2[col].map(_str_or_null)  # a missing cell stays null, never "nan"'
+  mutant: 'df2[col] = df2[col].astype(str)'
+  test: tests/test_parser_stringify_fallbacks.py -k "nhl_edge_parsers"
+  expected: kill
+  note: The pre-fix last-resort stringify of nhl_edge_parsers._to_output.
+
+- id: nhl-records-to-output-fallback-keeps-missing-null
+  group: str-or-null
+  finding: R1011-T2
+  file: sportsdataverse/nhl/nhl_records_parsers.py
+  snippet: 'df2[col] = df2[col].map(_str_or_null)  # a missing cell stays null, never "nan"'
+  mutant: 'df2[col] = df2[col].astype(str)'
+  test: tests/test_parser_stringify_fallbacks.py -k "nhl_records_parsers"
+  expected: kill
+  note: The pre-fix last-resort stringify of nhl_records_parsers._to_output.
+
+- id: nhl-stats-rest-to-output-fallback-keeps-missing-null
+  group: str-or-null
+  finding: R1011-T2
+  file: sportsdataverse/nhl/nhl_stats_rest_parsers.py
+  snippet: 'df2[col] = df2[col].map(_str_or_null)  # a missing cell stays null, never "nan"'
+  mutant: 'df2[col] = df2[col].astype(str)'
+  test: tests/test_parser_stringify_fallbacks.py -k "nhl_stats_rest_parsers"
+  expected: kill
+  note: The pre-fix last-resort stringify of nhl_stats_rest_parsers._to_output.

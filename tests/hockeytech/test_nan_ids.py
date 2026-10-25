@@ -18,14 +18,21 @@ from sportsdataverse.hockeytech._parsers import _to_frame
 
 
 def test_a_nan_team_id_beside_a_text_one_still_casts_to_int64():
-    records = [{"player_team_id": "12", "team_id": 1}, {"player_team_id": float("nan"), "team_id": "3"}]
+    # int, str and a missing value: the mix the feed ships (0 in one row, "1" in the next), which stays an
+    # object column on pandas 3 as well as on 2.3, so the bug shows on CI's Python and on the floor alike.
+    records = [
+        {"player_team_id": 12, "team_id": 1},
+        {"player_team_id": "3", "team_id": "3"},
+        {"player_team_id": float("nan"), "team_id": 5},
+    ]
+    assert pd.DataFrame(records)["player_team_id"].dtype == object  # the input reaches the stringify
     with warnings.catch_warnings():
         warnings.simplefilter("error")  # a refused id column warns SchemaDriftWarning
         out = _to_frame(records, False, parser="test")
     assert out.schema["player_team_id"] == pl.Int64
-    assert out["player_team_id"].to_list() == [12, None]
+    assert out["player_team_id"].to_list() == [12, 3, None]
     assert out.schema["team_id"] == pl.Int64
-    assert out["team_id"].to_list() == [1, 3]
+    assert out["team_id"].to_list() == [1, 3, 5]
 
 
 def test_str_or_null_keeps_missing_values_null():
