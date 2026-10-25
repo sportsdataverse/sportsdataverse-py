@@ -186,7 +186,6 @@ rosters.shape
 
 rosters_pd = espn_nfl_game_rosters(game_id=401220403, return_as_pandas=True)
 home = rosters_pd[rosters_pd["home_away"] == "home"]
-away = rosters_pd[rosters_pd["home_away"] == "away"]
 ```
 
 ### espn_nfl_play_participants {#espn_nfl_play_participants}
@@ -777,10 +776,9 @@ The mutated event dict with normalized `home` / `away` / broadcast keys.
 **Example**
 
 ```python
-from sportsdataverse.dl_utils import download
+from sportsdataverse.nfl import espn_nfl_scoreboard
 from sportsdataverse.nfl.nfl_schedule import scoreboard_event_parsing
-url = "http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
-payload = download(url=url).json()
+payload = espn_nfl_scoreboard(dates=20240115, return_parsed=False)
 for ev in payload.get("events", []):
     scoreboard_event_parsing(ev)
     ev["competitions"][0]["home"]["abbreviation"]

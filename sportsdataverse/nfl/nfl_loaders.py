@@ -1663,7 +1663,7 @@ _FF_RANKINGS_ID_DTYPES = {
 @cached_loader
 def load_nfl_ff_rankings(
     type: str = "draft",
-    kind: str = None,
+    kind: str | None = None,
     return_as_pandas=False,
 ) -> pl.DataFrame:
     """Load fantasy football rankings and projections

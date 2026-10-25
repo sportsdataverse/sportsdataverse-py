@@ -159,7 +159,10 @@ def nfl_predict_games(
         era: Constants era key.
         odds: Optional market frame (``game_id``, ``close_spread_home`` --
             the market's expected home margin, positive = home favored).
-            Games absent from ``odds`` get a null ``market_edge``.
+            A sportsbook quotes the home favourite as ``-7``: negate the quoted
+            line (``close_spread_home = 7``) before passing it. Nothing in the
+            package builds this column. Games absent from ``odds`` get a null
+            ``market_edge``.
         return_as_pandas: If True, returns a pandas DataFrame.
 
     Returns:

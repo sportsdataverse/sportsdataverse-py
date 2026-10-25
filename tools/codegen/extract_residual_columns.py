@@ -1,6 +1,12 @@
 """Walk the committed return-table schema YAMLs and emit the work-list of
 columns that render BLANK in the docs (no captured description, no manual-dict
-entry, no R-dict match). Input for description authoring + the coverage test."""
+entry, no R-dict match). Input for description authoring + the coverage test.
+
+Run from the repo root, either way::
+
+    uv run python tools/codegen/extract_residual_columns.py            # JSON work-list
+    uv run python tools/codegen/extract_residual_columns.py --report   # per-bucket count / cap
+"""
 
 from __future__ import annotations
 
@@ -8,6 +14,12 @@ import functools
 import glob
 import json
 import os
+import sys
+
+# Script mode (`python tools/codegen/extract_residual_columns.py`) puts this file's directory on
+# sys.path, not the repo root, so the absolute ``tools.codegen`` import below would fail.
+if not __package__:
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from tools.codegen.generate import ENDPOINTS, FLAT_APIS, _manual_col_desc, _r_col_desc, _r_dict_applies
 
@@ -69,37 +81,26 @@ def _bucket_of(path: str) -> str:
     return rel[0]
 
 
-# Buckets whose blank columns are a TRACKED follow-up, not a coverage failure.
+# Buckets whose blank columns are a TRACKED follow-up, not a coverage failure: residual_columns()
+# skips them and deferred_columns() reports them. Every other bucket is held at zero blank cells by
+# test_manual_descriptions, and so is a bucket registered here at 0 (the intake families below).
 #
-# nba_stats / wnba_stats / sports247_site_pages / on3 / pff / loader_schemas were
-# once here for the same reason: each family's column surface was captured faster
-# than descriptions could be authored, so the backlog was exempted from the hard
-# residual ratchet and reported separately via deferred_columns(). All six have
-# since been fully backfilled (0 genuinely-uncovered columns as of 2026-09-03) and
-# were promoted OUT of this set -- their coverage is now enforced by the same hard
-# gate as everything else, so a future regression (e.g. capturing a new nba_stats
-# endpoint before its columns are described) is caught immediately instead of
-# quietly reappearing as "deferred." If a bucket like this grows a large new
-# backlog again, re-add it here deliberately rather than letting the gate go red.
+# Each cap is the count measured when the bucket was (re-)based, so a NEW blank column in it still
+# fails test_deferred_buckets_do_not_grow. Lower a cap as columns are authored; remove the bucket
+# once it reaches 0. ``extract_residual_columns.py --report`` prints each bucket's count beside its cap.
 #
-# native/nflpro is deferred for a different, durable reason (not "not yet authored"
-# but "not authorable"): the Next Gen Stats field names have no reachable authoritative
-# label source. gen_nflpro_descriptions.py (2026-10-07) authored the 1,006 columns that
-# a nflverse value crosswalk, an arithmetic identity on the capture or the envelope
-# confirms; the 30 it cannot confirm (avgTTP, bhPct, twfPct, ...) stay blank and capped.
-# See sdv-internal-refs/nfl/nflpro/catalogs/nfl_pro_secured_returns.md.
-#
-# native/nba_stats and native/wnba_stats are deferred AGAIN (2026-10-05; native/on3 was
-# fully authored 2026-10-07 by gen_on3_descriptions.py and promoted out)
-# because their tables were regenerated from what the parsers emit on real captures
-# instead of from the canonical catalog / OpenAPI spec. That renamed columns
-# (fg3m -> fg3_m, leagueid -> league_id; descriptions re-keyed where the rename was
-# unambiguous), documented every result set of a multi-set stats endpoint instead of
-# one representative set, and replaced On3's single object columns with the
-# json_normalize-flattened ones the parser actually returns. The newly surfaced
-# columns had no description to carry over. Each is CAPPED at the count measured
-# that day, so a newly blank column still fails the gate (test_manual_descriptions);
-# lower a cap as columns are authored, and promote the bucket out at 0.
+# Why the large buckets are here:
+# - native/nflpro: not authorable. gen_nflpro_descriptions.py authored every Next Gen Stats column a
+#   nflverse crosswalk, an identity on the capture or the envelope confirms; the 30 left (avgTTP,
+#   bhPct, twfPct, ...) have no reachable label source (sdv-internal-refs/nfl/nflpro/catalogs/
+#   nfl_pro_secured_returns.md).
+# - native/nba_stats, native/wnba_stats: their tables were rebuilt from what the parser emits on real
+#   captures (2026-10-05), which renamed columns and surfaced every result set; the new columns had
+#   no description to carry over. (native/on3, rebuilt the same way, was fully authored 2026-10-07 and
+#   removed from this table.)
+# - the ESPN generic tables, Fox, KenPom and the intake families: captured from live payloads whose
+#   providers publish no field dictionary; the per-group comments below give the dates and sources.
+# - the autodoc buckets: re-based 2026-10-08 when every hand-written DataFrame function got a table.
 #
 # {bucket: max uncovered cells, or None for no cap}
 _DEFERRED_BUCKETS: dict[str, int | None] = {
@@ -436,7 +437,25 @@ def residual_by_bucket() -> dict:
     return dict(sorted(counts.items(), key=lambda kv: -kv[1]))
 
 
+def report() -> str:
+    """Each deferred bucket's uncovered count beside its cap, then the totals (``--report``)."""
+    counts: dict[str, int] = {}
+    for r in deferred_columns():
+        counts[r["bucket"]] = counts.get(r["bucket"], 0) + 1
+    lines = [f"{b}: {counts.get(b, 0)} / {cap}" for b, cap in sorted(_DEFERRED_BUCKETS.items())]
+    below = sum(1 for b, cap in _DEFERRED_BUCKETS.items() if cap is not None and counts.get(b, 0) < cap)
+    lines += [
+        f"residual (outside the deferred buckets): {len(residual_columns())}",
+        f"deferred cells: {sum(counts.values())}; buckets below their cap (lower it): {below}",
+        f"deferred buckets: {len(_DEFERRED_BUCKETS)}",
+    ]
+    return "\n".join(lines)
+
+
 def main() -> None:
+    if "--report" in sys.argv[1:]:
+        print(report())
+        return
     residual = residual_columns()
     deferred = deferred_columns()
     print(

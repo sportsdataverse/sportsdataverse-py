@@ -588,6 +588,25 @@ def download(
 
 
 def init_request_settings(params, session, logger):
+    """Fill in the defaults :func:`download` uses for anything the caller left as ``None``.
+
+    Args:
+        params: Query parameters; ``None`` becomes ``{}``.
+        session: A ``requests.Session``; ``None`` becomes the package's shared pooled session.
+        logger: A ``logging.Logger``; ``None`` becomes the ``sdv.dl_utils`` module logger.
+
+    Returns:
+        tuple: ``(session, params, logger)`` with every ``None`` replaced.
+
+    Example:
+        The defaults ``download()`` would use::
+
+            from sportsdataverse.dl_utils import init_request_settings
+            session, params, logger = init_request_settings(None, None, None)
+
+    See Also:
+        * :func:`download` -- the only caller
+    """
     if params is None:
         params = {}
 
@@ -625,6 +644,9 @@ def flatten_json_iterative(dictionary, sep=".", ind_start=0):
             # {'game.id': '401628334',
             #  'game.competitors.0.team': 'Ohio State',
             #  'game.competitors.1.team': 'Marshall'}
+
+        See Also:
+            * :func:`key_check` -- a safe single-key read from the same kind of payload
     """
 
     def unpack_one(parent_key, parent_value):
@@ -701,6 +723,9 @@ def normalize_team_roster_columns(teams_df: pl.DataFrame) -> pl.DataFrame:
 
             from sportsdataverse.dl_utils import normalize_team_roster_columns
             teams_df = normalize_team_roster_columns(teams_df)
+
+        See Also:
+            * :func:`sportsdataverse.nfl.espn_nfl_game_rosters` -- one of the ``*_game_rosters`` callers
     """
     # Canonicalize raw keys: $ref -> href, camelCase -> snake_case. Matches the
     # convention the sibling roster/athlete helpers already use.
@@ -768,12 +793,32 @@ def key_check(obj, key, replacement=np.array([])):
 
             key_check(payload, "missing", replacement=None)
             # None
+
+        See Also:
+            * :func:`flatten_json_iterative` -- flatten a whole payload instead
     """
     return obj[key] if key in obj.keys() else replacement
 
 
 @pl.api.register_dataframe_namespace("janitor")
 class ColumnJanitor:
+    """The ``DataFrame.janitor`` namespace: column-name clean-up on any polars frame.
+
+    Importing ``sportsdataverse`` registers it. ``clean_names()`` snake-cases every column with
+    :func:`underscore`; ``to_pascal_case`` / ``to_camel_case`` / ``to_kebab_case`` are deprecated
+    (0.1.6; removed in 0.2.0) in favour of ``df.rename`` with :func:`camelize` / :func:`kebabize`.
+
+    Example:
+        Snake-case a frame's columns::
+
+            import polars as pl
+            import sportsdataverse  # noqa: F401  (registers the namespace)
+            pl.DataFrame({"homeTeamScore": [1]}).janitor.clean_names().columns  # ["home_team_score"]
+
+        See Also:
+            * :func:`underscore` / :func:`kebabize` / :func:`camelize` -- the three case converters
+    """
+
     def __init__(self, df: pl.DataFrame):
         self._df = df
 
@@ -836,6 +881,9 @@ def underscore(word):
 
             camelize(underscore("IOError"))
             # 'IoError'
+
+        See Also:
+            * :func:`underscore` / :func:`kebabize` / :func:`camelize` -- the three case converters
     """
 
     word = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1_\2", word)
@@ -854,6 +902,13 @@ def kebabize(word):
     emits dashes instead of underscores. Useful for URL slugs and
     hyphen-friendly schema labels.
 
+    Args:
+        word: The CamelCase, PascalCase or snake_case string to convert.
+
+    Returns:
+        str: The kebab-case form: words split at each case change, underscores turned into
+            dashes, everything lower-cased.
+
     Example:
         Basic input -> output::
 
@@ -864,6 +919,9 @@ def kebabize(word):
 
             kebabize("home_team_score")
             # 'home-team-score'
+
+        See Also:
+            * :func:`underscore` / :func:`kebabize` / :func:`camelize` -- the three case converters
     """
 
     word = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1_\2", word)
@@ -883,6 +941,9 @@ def camelize(string, uppercase_first_letter=True):
             separated form).
         uppercase_first_letter: When ``True`` (default) emit
             ``UpperCamelCase``; when ``False`` emit ``lowerCamelCase``.
+
+    Returns:
+        str: The CamelCase form.
 
     Example:
         Default UpperCamelCase::
@@ -904,6 +965,9 @@ def camelize(string, uppercase_first_letter=True):
 
             camelize(underscore("IOError"))
             # 'IoError'
+
+        See Also:
+            * :func:`underscore` / :func:`kebabize` / :func:`camelize` -- the three case converters
     """
     if uppercase_first_letter:
         return re.sub(r"(?:^|_)(.)", lambda m: m.group(1).upper(), string)

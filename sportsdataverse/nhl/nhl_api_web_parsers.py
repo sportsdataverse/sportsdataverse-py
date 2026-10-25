@@ -163,7 +163,7 @@ def parse_nhl_web_landing(payload: Dict, return_as_pandas: bool = False) -> pl.D
 
 def parse_nhl_web_right_rail(
     payload: Dict,
-    section: str = None,
+    section: str | None = None,
     return_as_pandas: bool = False,
 ):
     """Parse ``nhl_web_right_rail()`` — dispatcher with 6 sub-frames.
@@ -323,7 +323,7 @@ def parse_nhl_web_standings_season(payload: Dict, return_as_pandas: bool = False
 
 def parse_nhl_web_club_stats(
     payload: Dict,
-    section: str = None,
+    section: str | None = None,
     return_as_pandas: bool = False,
 ):
     """Parse ``nhl_web_club_stats()`` — dispatcher with skaters + goalies.

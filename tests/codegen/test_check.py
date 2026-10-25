@@ -642,3 +642,13 @@ def test_parsed_and_docs_flag_runs_only_those_two_stages(monkeypatch):
         monkeypatch.setattr(generate, name, lambda _n=name: pytest.fail(f"{_n} ran"))
     assert generate.main(["--parsed-and-docs"]) == 0
     assert calls == ["build_parsed_live", "build_docs"]
+
+
+def test_check_compares_bytes_so_a_crlf_file_is_stale(tmp_path):
+    """A-L52: ``read_text`` folds CRLF into LF, so a CRLF-committed generated file used to pass ``--check``."""
+    f = tmp_path / "gen.py"
+    f.write_bytes(b"x = 1\r\ny = 2\r\n")
+    assert generate._differs(f, "x = 1\ny = 2\n")
+    f.write_bytes(b"x = 1\ny = 2\n")
+    assert not generate._differs(f, "x = 1\ny = 2\n")
+    assert generate._differs(tmp_path / "missing.py", "")

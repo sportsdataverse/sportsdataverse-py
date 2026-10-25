@@ -1,4 +1,4 @@
-"""Shared helpers for the three soccer flat-API generators (ASA / MLS / NWSL).
+"""Shared helpers for the spec- and capture-driven flat-API generators.
 
 Despite the name, this is the shared helper module of every flat-API generator (about 40 import it):
 the reference-repo path (:func:`refs_root`, :func:`refs_dir`), spec and capture loading, and the
