@@ -558,6 +558,7 @@ files = [
     "sportsdataverse/nfl/utils_date.py",
     "sportsdataverse/mlb/mlb_statcast_runtime.py",
     "sportsdataverse/_fox_layout.py",
+    "sportsdataverse/_parser_common.py",
     "sportsdataverse/mbb/torvik_runtime.py",
     "sportsdataverse/_html_tables.py",
     "sportsdataverse/_temporal.py",
