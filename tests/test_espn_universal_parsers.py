@@ -2021,3 +2021,14 @@ def test_espn_grouped_roster_with_a_group_that_is_not_an_object_warns():
     drifted = {**raw, "athletes": [raw["athletes"][0], *(str(g) for g in raw["athletes"][1:])]}
     with pytest.warns(SchemaDriftWarning, match="parse_team_roster: athletes: "):
         assert parse_team_roster(drifted).height == 0
+
+
+def test_rankings_pandas_ids_are_nullable_int64():
+    """R981-11: ``parse_rankings(..., return_as_pandas=True)`` carries the ids as pandas' nullable ``Int64``."""
+    from sportsdataverse._common_espn_parsers import parse_rankings
+
+    payload = _load("rankings_cfb")
+    df, pdf = parse_rankings(payload), parse_rankings(payload, return_as_pandas=True)
+    ids = [c for c, t in df.schema.items() if t == pl.Int64 and (c == "id" or c.endswith("_id"))]
+    assert "team_id" in ids and {c: str(pdf[c].dtype) for c in ids} == dict.fromkeys(ids, "Int64")
+    assert pdf["team_id"].tolist() == df["team_id"].to_list()
