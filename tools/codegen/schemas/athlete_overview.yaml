@@ -2,7 +2,7 @@ schema: athlete_overview
 kind: dataframe
 columns:
 - name: athlete_id
-  type: character
+  type: integer
   description: ''
 - name: athlete_display_name
   type: character
@@ -17,7 +17,7 @@ columns:
   type: character
   description: ''
 - name: athlete_team_id
-  type: character
+  type: integer
   description: ''
 - name: athlete_team_abbreviation
   type: character

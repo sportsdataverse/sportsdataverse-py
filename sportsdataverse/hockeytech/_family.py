@@ -16,17 +16,16 @@ from __future__ import annotations
 
 from typing import Any, Optional
 
+from sportsdataverse._codegen_runtime import _pandas_ids
 from sportsdataverse.hockeytech import hockeytech_api, resolve_season_id
 from sportsdataverse.hockeytech import _parsers as P
 from sportsdataverse.hockeytech._leagues import _season_id_from_payload, most_recent_season_yr
 from sportsdataverse.hockeytech._analytics import (
+    _corsi_with_toi,
     corsi_fenwick_on_ice,
     enrich_pbp,
-    per60,
     player_toi,
 )
-
-import polars as pl
 
 # Shared docstring tails for the minted callables (every one goes through hockeytech_api).
 _RAISES = (
@@ -376,7 +375,7 @@ def build_family(league: str) -> dict[str, Any]:
             game_id=game_id,
         )
         if return_as_pandas:
-            return shifts.to_pandas()
+            return _pandas_ids(shifts)
         return shifts
 
     _game_shifts.__name__ = f"{lg}_game_shifts"
@@ -399,7 +398,7 @@ def build_family(league: str) -> dict[str, Any]:
         shifts = _game_shifts(game_id)
         toi = player_toi(shifts)
         if return_as_pandas:
-            return toi.to_pandas()
+            return _pandas_ids(toi)
         return toi
 
     _player_toi.__name__ = f"{lg}_player_toi"
@@ -420,27 +419,16 @@ def build_family(league: str) -> dict[str, Any]:
         pbp = _pbp(game_id)
         corsi = corsi_fenwick_on_ice(pbp)
 
-        toi = _player_toi(game_id)
-        toi_sel = toi.select(
-            pl.col("player_id").cast(pl.Utf8),
-            pl.col("toi_seconds"),
-        )
-        out = corsi.join(toi_sel, on="player_id", how="left")
-        out = out.with_columns(
-            pl.when(pl.col("toi_seconds").is_not_null() & (pl.col("toi_seconds") > 0))
-            .then(per60("corsi_for"))
-            .otherwise(pl.lit(None, dtype=pl.Float64))
-            .alias("corsi_for_per60")
-        )
+        out = _corsi_with_toi(corsi, _player_toi(game_id))
         if return_as_pandas:
-            return out.to_pandas()
+            return _pandas_ids(out)
         return out
 
     _game_corsi.__name__ = f"{lg}_game_corsi"
     _game_corsi.__qualname__ = f"{lg}_game_corsi"
     _game_corsi.__doc__ = (
         f"Player-level on-ice Corsi and Fenwick for a single {cfg.name} game.\n\n" + _GAME_ARGS + "Returns:\n"
-        "    polars.DataFrame: One row per player on ice for a shot attempt: ``player_id`` (String),\n"
+        "    polars.DataFrame: One row per player on ice for a shot attempt: ``player_id`` (Int64),\n"
         "        ``corsi_for`` / ``corsi_against`` / ``corsi_for_pct``, ``fenwick_for`` /\n"
         "        ``fenwick_against`` / ``fenwick_for_pct``, ``corsi_includes_missed`` (Boolean),\n"
         "        ``toi_seconds`` (Int64) and ``corsi_for_per60`` (Float64, null without time on ice).\n"

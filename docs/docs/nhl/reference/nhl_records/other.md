@@ -26,14 +26,14 @@ List all NHL award / trophy records.
 |---|---|---|
 | `id` | integer | Unique player identifier. |
 | `awarded_posthumously` | logical | Whether the award was given posthumously. |
-| `coach_id` | double | ESPN coach id parsed from the `$ref` URL. |
+| `coach_id` | integer | ESPN coach id parsed from the `$ref` URL. |
 | `created_on` | character | Date the trophy record was created. |
 | `detail_summary` | character | Detail summary flag. |
 | `full_name` | character | Player full name. |
-| `general_manager_id` | double | General manager identifier, if applicable. |
+| `general_manager_id` | integer | General manager identifier, if applicable. |
 | `image_url` | character | Player headshot URL. |
 | `is_rookie` | logical | Whether the player is a rookie. |
-| `player_id` | double | Unique player identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `player_image_caption` | character | Player image caption flag. |
 | `player_image_url` | character | URL to the player image. |
 | `season_id` | integer | Season identifier. |
@@ -120,7 +120,7 @@ Retrieve the trophy winner for a specific season.
 | `general_manager_id` | integer | General manager identifier, if applicable. |
 | `image_url` | character | Player headshot URL. |
 | `is_rookie` | logical | Whether the player is a rookie. |
-| `player_id` | character | Unique player identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `player_image_caption` | character | Player image caption flag. |
 | `player_image_url` | character | URL to the player image. |
 | `season_id` | integer | Season identifier. |
@@ -187,9 +187,9 @@ List NHL head coaches.
 | `is_active` | logical | Whether the team is active. |
 | `last_name` | character | Player last name. |
 | `nationality_code` | character | Nationality code of the official. |
-| `player_id` | double | Unique player identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `stanley_cup` | double | Number of Stanley Cup championships won by the coach as a head coach or assistant coach. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `top100_player_link` | character | URL to the coach's NHL Top 100 players recognition page, if applicable. |
 | `twitter` | character | Twitter/X handle or profile URL for the coach's official social media presence. |
 
@@ -251,7 +251,7 @@ Retrieve one coach by their numeric ID.
 | `nationality_code` | character | Nationality code of the official. |
 | `player_id` | integer | Unique player identifier. |
 | `stanley_cup` | integer | Number of Stanley Cup championships won by the coach as a head coach. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `top100_player_link` | character | URL to the coach's entry on the NHL's Top 100 Players list, if applicable. |
 | `twitter` | character | Twitter (X) handle or URL associated with the coach. |
 
@@ -430,7 +430,7 @@ Skaters with the most consecutive 100-point seasons.
 | `active_streak` | logical | Indicator of whether the streak is active. |
 | `consecutive100_point_seasons` | integer | Number of consecutive NHL regular seasons in which the player reached 100 or more points. |
 | `first_name` | character | Player first name. |
-| `franchise_id` | double | Unique franchise identifier. |
+| `franchise_id` | integer | Unique franchise identifier. |
 | `last_name` | character | Player last name. |
 | `player_id` | integer | Unique player identifier. |
 | `position_code` | character | Player position code. |
@@ -556,7 +556,7 @@ Hockey Hall of Fame player inductees.
 | `induction_cat_id` | integer | Induction category identifier. |
 | `misc_full_name` | character | Full name of the inductee. |
 | `office_id` | integer | Office/category identifier. |
-| `official_id` | character | ESPN official id (echoed from arg). |
+| `official_id` | integer | ESPN official id (echoed from arg). |
 | `player_id` | integer | Unique player identifier. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -598,8 +598,8 @@ Hall of Fame players for a specific induction office/category.
 | `induction_cat_id` | integer | Induction category identifier. |
 | `misc_full_name` | character | Full name of the inductee. |
 | `office_id` | integer | Office/category identifier. |
-| `official_id` | character | ESPN official id (echoed from arg). |
-| `player_id` | character | Unique player identifier. |
+| `official_id` | integer | ESPN official id (echoed from arg). |
+| `player_id` | integer | Unique player identifier. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

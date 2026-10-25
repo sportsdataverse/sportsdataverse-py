@@ -39,7 +39,7 @@ ESPN endpoint.
 | `gamecast_available` | logical |  |
 | `guid` | character | ESPN athlete GUID. |
 | `highlights_available` | logical |  |
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `lineup_available` | logical |  |
 | `links` | character |  |
 | `live_available` | logical |  |
@@ -62,7 +62,7 @@ ESPN endpoint.
 | `uid` | character | ESPN global unique identifier. |
 | `wallclock_available` | logical |  |
 | `boxscore_source_description` | character |  |
-| `boxscore_source_id` | character |  |
+| `boxscore_source_id` | integer |  |
 | `boxscore_source_state` | character |  |
 | `broadcasts_$ref` | character |  |
 | `details_$ref` | character |  |
@@ -74,15 +74,15 @@ ESPN endpoint.
 | `format_regulation_periods` | integer |  |
 | `format_regulation_slug` | character |  |
 | `game_source_description` | character |  |
-| `game_source_id` | character |  |
+| `game_source_id` | integer |  |
 | `game_source_state` | character |  |
 | `linescore_source_description` | character |  |
-| `linescore_source_id` | character |  |
+| `linescore_source_id` | integer |  |
 | `linescore_source_state` | character |  |
 | `odds_$ref` | character |  |
 | `officials_$ref` | character |  |
 | `play_by_play_source_description` | character |  |
-| `play_by_play_source_id` | character |  |
+| `play_by_play_source_id` | integer |  |
 | `play_by_play_source_state` | character |  |
 | `power_indexes_$ref` | character |  |
 | `predictor_$ref` | character |  |
@@ -90,11 +90,11 @@ ESPN endpoint.
 | `relevancy_$ref` | character |  |
 | `situation_$ref` | character |  |
 | `stats_source_description` | character |  |
-| `stats_source_id` | character |  |
+| `stats_source_id` | integer |  |
 | `stats_source_state` | character |  |
 | `status_$ref` | character |  |
 | `type_abbreviation` | character | Play-type abbreviation (e.g. `RUSH`, `TD`). |
-| `type_id` | character | Play-type id. |
+| `type_id` | integer | Play-type id. |
 | `type_slug` | character | Broadcast-type slug (e.g. `streaming`, `tv`). |
 | `type_text` | character | Play-type text (e.g. `Pass Reception`). |
 | `type_type` | character |  |
@@ -104,7 +104,7 @@ ESPN endpoint.
 | `venue_full_name` | character |  |
 | `venue_grass` | logical | Whether the home venue has a grass surface. |
 | `venue_guid` | character |  |
-| `venue_id` | character | Referencing venue id. |
+| `venue_id` | integer | Referencing venue id. |
 | `venue_images` | character |  |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
 
@@ -145,7 +145,7 @@ ESPN endpoint.
 |---|---|---|
 | `$ref` | character |  |
 | `home_away` | character | `home` or `away`. |
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `order` | integer | Team order within the competition (0 = first). |
 | `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
 | `uid` | character | ESPN global unique identifier. |
@@ -198,7 +198,7 @@ ESPN endpoint.
 |---|---|---|
 | `$ref` | character |  |
 | `home_away` | character | `home` or `away`. |
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `order` | integer | Team order within the competition (0 = first). |
 | `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
 | `uid` | character | ESPN global unique identifier. |
@@ -611,7 +611,7 @@ ESPN endpoint.
 | `open_under_fraction` | character |  |
 | `open_under_value` | double |  |
 | `provider_$ref` | character |  |
-| `provider_id` | character | ESPN odds-provider (sportsbook) id. |
+| `provider_id` | integer | ESPN odds-provider (sportsbook) id. |
 | `provider_name` | character | Sportsbook / provider name (e.g. `ESPN BET`). |
 | `provider_priority` | integer | ESPN display priority of the odds provider. |
 | `prop_bets_$ref` | character |  |
@@ -668,7 +668,7 @@ ESPN endpoint.
 | `home_team_$ref` | character |  |
 | `play_$ref` | character |  |
 | `source_description` | character | ESPN data-source description (e.g. `Basic/Manual`). |
-| `source_id` | character | ESPN data-source id for the probability row. |
+| `source_id` | integer | ESPN data-source id for the probability row. |
 | `source_state` | character | ESPN data-source state (e.g. `full`). |
 | `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
 | `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
@@ -717,7 +717,7 @@ ESPN endpoint.
 | `coordinate_x` | integer |  |
 | `coordinate_y` | integer |  |
 | `home_score` | integer | Home-team score after the play. |
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `modified` | character | ISO timestamp the play record was last modified. |
 | `period_display_value` | character |  |
 | `period_number` | integer |  |
@@ -730,7 +730,7 @@ ESPN endpoint.
 | `shooting_play` | logical |  |
 | `team_$ref` | character |  |
 | `text` | character | Full play description. |
-| `type_id` | character | Play-type id. |
+| `type_id` | integer | Play-type id. |
 | `type_text` | character | Play-type text (e.g. `Pass Reception`). |
 | `valid` | logical | `TRUE` if the roster entry is flagged valid by ESPN. |
 | `wallclock` | character | Real-world ISO timestamp of the play. |
@@ -777,7 +777,7 @@ ESPN endpoint.
 | `alternative_text` | character | Alternative play description. |
 | `away_score` | integer | Away-team score after the play. |
 | `home_score` | integer | Home-team score after the play. |
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `modified` | character | ISO timestamp the play record was last modified. |
 | `participants` | character |  |
 | `points_attempted` | integer |  |
@@ -797,7 +797,7 @@ ESPN endpoint.
 | `period_number` | integer |  |
 | `probability_$ref` | character |  |
 | `team_$ref` | character |  |
-| `type_id` | character | Play-type id. |
+| `type_id` | integer | Play-type id. |
 | `type_text` | character | Play-type text (e.g. `Pass Reception`). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -928,7 +928,7 @@ ESPN endpoint.
 | `type_completed` | logical |  |
 | `type_description` | character |  |
 | `type_detail` | character |  |
-| `type_id` | character | Play-type id. |
+| `type_id` | integer | Play-type id. |
 | `type_name` | character | Broadcast-type name (e.g. `TV`, `Streaming`, `Radio`). |
 | `type_short_detail` | character |  |
 | `type_state` | character |  |
@@ -972,11 +972,11 @@ ESPN endpoint.
 | `display_name` | character | Human-readable metric name. |
 | `first_name` | character | Athlete first name. |
 | `full_name` | character | Venue full name (e.g. `Tenney Stadium`). |
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `last_name` | character | Athlete last name. |
 | `order` | integer | Team order within the competition (0 = first). |
 | `position_display_name` | character | Human-readable position name. |
-| `position_id` | character | ESPN position id. |
+| `position_id` | integer | ESPN position id. |
 | `position_name` | character | Position name (e.g. `Quarterback`). |
 | `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
 | `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
@@ -1024,16 +1024,16 @@ ESPN endpoint.
 | `slug` | character | URL slug for the team. |
 | `station` | character | Broadcast station / network name (e.g. `ESPN+`). |
 | `competition_$ref` | character |  |
-| `market_id` | character | ESPN futures-market identifier. |
+| `market_id` | integer | ESPN futures-market identifier. |
 | `market_type` | character | Geographic market type (e.g. `National`). |
 | `media_$ref` | character |  |
 | `media_call_letters` | character | Broadcast call letters for the outlet. |
-| `media_id` | character | ESPN media id for the outlet. |
+| `media_id` | integer | ESPN media id for the outlet. |
 | `media_logos` | character |  |
 | `media_name` | character | ESPN media name for the outlet. |
 | `media_short_name` | character | Short ESPN media name for the outlet. |
 | `media_slug` | character | ESPN media slug for the outlet. |
-| `type_id` | character | Play-type id. |
+| `type_id` | integer | Play-type id. |
 | `type_long_name` | character |  |
 | `type_short_name` | character |  |
 | `type_slug` | character | Broadcast-type slug (e.g. `streaming`, `tv`). |
@@ -1269,11 +1269,11 @@ ESPN endpoint.
 | `display_name` | character | Human-readable metric name. |
 | `first_name` | character | Athlete first name. |
 | `full_name` | character | Venue full name (e.g. `Tenney Stadium`). |
-| `id` | character | 247Sports referencing id for the recruit. |
+| `id` | integer | 247Sports referencing id for the recruit. |
 | `last_name` | character | Athlete last name. |
 | `order` | integer | Team order within the competition (0 = first). |
 | `position_display_name` | character | Human-readable position name. |
-| `position_id` | character | ESPN position id. |
+| `position_id` | integer | ESPN position id. |
 | `position_name` | character | Position name (e.g. `Quarterback`). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

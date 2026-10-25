@@ -1142,13 +1142,16 @@
   finding: A-L55
   file: sportsdataverse/_codegen_runtime.py
   snippet: |2-
+        for col in cols:
+            if col not in df.columns or df.schema[col] == pl.Int64:
+  mutant: |2-
         if df.height == 0:
             return df
         for col in cols:
-  mutant: '    for col in cols:'
-  test: tests/codegen/test_id_casts.py -k empty_frame_keeps
+            if col not in df.columns or df.schema[col] == pl.Int64:
+  test: tests/codegen/test_id_casts.py -k empty_frame_cast
   expected: kill
-  note: casting the empty frame too is task 5.2's fix; the strict xfail turns XPASS (red), which is the kill
+  note: task 5.2 casts the empty frame too; the original skip leaves String ids on an empty result
 
 # --- task 1.4: hand-written provider gates (group provider-gates) -------------------------------
 - id: cfb-schedule-drop-null-competitor-guard
@@ -1178,11 +1181,12 @@
   group: provider-gates
   finding: B-M33
   file: sportsdataverse/_common_espn_player_stats.py
-  snippet: 'out[col] = num if num is not None else stat.get("displayValue")'
-  mutant: 'out[col] = stat.get("displayValue") if stat.get("displayValue") is not None else num'
+  snippet: 'num = _coerce_float(stat.get("value"))'
+  mutant: 'num = _coerce_float(stat.get("displayValue"))'
   test: tests/test_common_espn_player_stats.py
   expected: kill
-  note: the pinned capture values (ledger gate player-stats-offline)
+  note: the pinned capture values (ledger gate player-stats-offline); re-keyed in task 5.1 (B-L20), where the
+    displayValue fallback went
 
 - id: ncaa-parse-quarters-for-every-season
   group: provider-gates
@@ -5139,9 +5143,9 @@
   file: sportsdataverse/_espn_schedule.py
   snippet: 'elif dtype == pl.Int64 and df.schema[name].is_float():'
   mutant: 'elif False:'
-  test: tests/wbb/test_wbb_schedule_teams_offline.py -k id_dtypes
+  test: tests/wbb/test_wbb_schedule_teams_offline.py -k integer_with_a_missing_value
   expected: kill
-  note: 'tournament_id arrives Float64 when one event lacks it (the pandas hop); documented integer'
+  note: 'attendance arrives Float64 when one event lacks it (the pandas hop); documented integer. Re-pointed in task 5.2 (R981-1): ids are cast before this branch, so tournament_id no longer reaches it'
 
 - id: nfl-schedule-rank-default-99
   group: espn-schedule
@@ -6837,3 +6841,687 @@
   note: >-
     The pre-3.10 citation: a gitignored script that exists only on the maintainer's disk, so the refit
     instruction for DEFAULT_RIDGE_LAMBDA was not reproducible from a clone.
+
+# --- task 5.1 (devel-dtype-contract): empty results carry their returns table (A-M12, A-M7, MD-3, B-L73, B-GB-09)
+- id: documented-empty-replaces-a-zero-width-frame
+  group: dtype-contract-5-1
+  finding: A-M12
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            return _empty_from_schema(table, return_as_pandas=not isinstance(out, pl.DataFrame), arrow=arrow)'
+  mutant: '            return out'
+  test: tests/test_espn_universal_parsers.py -k "empty_schema_quiet_scoreboard_day_keeps_each"
+  expected: kill
+  note: >-
+    Without the swap a quiet scoreboard day is a (0, 0) frame again and `pl.col("home_id")` raises
+    ColumnNotFoundError.
+
+- id: generated-loader-no-season-is-the-documented-table
+  group: dtype-contract-5-1
+  finding: A-M7
+  file: sportsdataverse/pwhl/pwhl_loaders.py
+  snippet: '    out = pl.concat(frames, how="diagonal_relaxed") if frames else _empty_from_schema("loader_schemas:load_phf_pbp")'
+  mutant: '    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()'
+  test: tests/codegen/test_loaders_parity.py -k "empty_schema"
+  expected: kill
+  note: >-
+    The template's pre-5.1 empty frame in one generated loader: load_phf_pbp with no published season
+    returns (0, 0) instead of its 79 documented columns.
+
+- id: nba-multifile-loader-no-season-is-the-documented-table
+  group: dtype-contract-5-1
+  finding: MD-3
+  file: sportsdataverse/nba/nba_loaders_extra.py
+  snippet: '@_documented_empty("autodoc/nba/load_nba_stats_synergy", arrow=True)'
+  mutant: '# @_documented_empty("autodoc/nba/load_nba_stats_synergy", arrow=True)'
+  test: tests/nba/test_nba_stats_multifile_loaders.py -k "empty_schema and synergy"
+  expected: kill
+  note: load_nba_stats_synergy with no published season returns (0, 0) again.
+
+- id: hockeytech-parser-carries-its-documented-table
+  group: dtype-contract-5-1
+  finding: B-L73
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '@_documented_empty("autodoc/pwhl/pwhl_teams")'
+  mutant: '# @_documented_empty("autodoc/pwhl/pwhl_teams")'
+  test: tests/test_espn_universal_parsers.py -k "empty_schema_sweep_covers"
+  expected: kill
+  note: parse_teams drops out of the empty-result sweep (41 documented parsers < the floor of 42).
+
+- id: enrich-pbp-no-plays-is-the-documented-table
+  group: dtype-contract-5-1
+  finding: B-GB-09
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '        return _empty_from_schema("autodoc/pwhl/pwhl_pbp", return_as_pandas)'
+  mutant: '        pass'
+  test: tests/hockeytech/test_pbp_enrich.py -k "empty_schema"
+  expected: kill
+  note: >-
+    A game with no plays falls through to literals added to the (0, 0) frame: 28 columns on polars 2.0,
+    one all-null phantom row on polars 1.x.
+
+# --- task 5.1 part (b): provider columns take their documented types (B-M17, B-L90, B-GB-15, B-L83, B-L36, B-L55, B-L20)
+- id: cbs-flag-column-stays-boolean
+  group: dtype-contract-5-1
+  finding: B-M17
+  file: sportsdataverse/cbs/cbs_napi_parsers.py
+  snippet: '            frame[col] = cells if flags else cells.map(_stringify)'
+  mutant: '            frame[col] = cells.map(_stringify)'
+  test: tests/cbs/test_cbs_napi.py -k "boolean_flags"
+  expected: kill
+  note: The clinch / elimination flags on the NFL and NHL standings captures become "True" / "False" strings again.
+
+- id: yahoo-flag-column-stays-boolean
+  group: dtype-contract-5-1
+  finding: B-M17
+  file: sportsdataverse/yahoo/yahoo_shangrila_parsers.py
+  snippet: '            if {type(v) for v in cells if v is not None} <= {bool}:'
+  mutant: '            if False:'
+  test: tests/yahoo/test_yahoo_shangrila.py -k "boolean_flags"
+  expected: kill
+  note: The stream's `official` flag becomes the strings "True" plus a null, not Boolean.
+
+- id: odds-outcome-point-float64
+  group: dtype-contract-5-1
+  finding: B-L90
+  file: sportsdataverse/odds/the_odds_api_parsers.py
+  snippet: '        df["outcome_point"] = df["outcome_point"].astype("float64")'
+  mutant: '        pass'
+  test: tests/odds/test_the_odds_api.py -k "outcome_point_dtype"
+  expected: kill
+  note: An h2h-only frame's line is untyped again and a whole-number spread is Int64.
+
+- id: euroleague-header-round-int64
+  group: dtype-contract-5-1
+  finding: B-GB-15
+  file: sportsdataverse/euroleague/euroleague_parsers.py
+  snippet: '    df = df.with_columns(pl.col("round").cast(pl.Int64, strict=False)) if "round" in df.columns else df'
+  mutant: '    df = df'
+  test: tests/euroleague/test_euroleague.py -k "round_int64"
+  expected: kill
+  note: The v1 header's round is String again and does not concat with the v2 games' Int64 round.
+
+- id: statcast-chunk-pins-its-returns-table
+  group: dtype-contract-5-1
+  finding: B-L83
+  file: sportsdataverse/mlb/mlb_statcast_extra.py
+  snippet: '    return _pin_search_chunk(frame, base_url)'
+  mutant: '    return frame'
+  test: tests/mlb/test_mlb_statcast_extra.py -k "documented_dtypes"
+  expected: kill
+  note: A chunk with one missing `zone` reads Float64 while a full one reads Int64.
+
+- id: college-baseball-pandas-counts-stay-integer
+  group: dtype-contract-5-1
+  finding: B-L36
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: '        return df.to_pandas().astype({c: "Int64" for c, t in PBP_SCHEMA.items() if t == pl.Int64})'
+  mutant: '        return df.to_pandas()'
+  test: tests/baseball/test_college_baseball_ncaa_pbp.py -k "count_columns"
+  expected: kill
+  note: count_balls / count_strikes come back float64 under pandas on game 6356679.
+
+- id: fox-frame-warns-on-mixed-columns
+  group: dtype-contract-5-1
+  finding: B-L55
+  file: sportsdataverse/_fox_layout.py
+  snippet: '    if mixed:'
+  mutant: '    if False:'
+  test: tests/test_fox_layout.py -k "mixes_text_and_numbers"
+  expected: kill
+  note: A roster column holding one number among text is retyped String with no warning.
+
+- id: espn-player-stat-without-a-number-is-null
+  group: dtype-contract-5-1
+  finding: B-L20
+  file: sportsdataverse/_common_espn_player_stats.py
+  snippet: '            out[col] = num'
+  mutant: '            out[col] = num if num is not None else display'
+  test: tests/test_common_espn_player_stats.py -k "null_float_not_its_display_value"
+  expected: kill
+  note: A stat with no value carries its "--" display string into a Float64 column again.
+
+- id: league-wrapper-passes-its-own-table
+  group: dtype-contract-5-1
+  finding: A-M12
+  file: sportsdataverse/mbb/mbb_espn_ext.py
+  snippet: '        return parse_scoreboard(raw, return_as_pandas=return_as_pandas, documented_table="scoreboard/mbb")'
+  mutant: '        return parse_scoreboard(raw, return_as_pandas=return_as_pandas)'
+  test: tests/test_espn_universal_parsers.py -k "empty_schema_quiet_scoreboard_day_keeps_each"
+  expected: kill
+  note: >-
+    R978-1: without its league's table a quiet mbb day is (0, 0) again (and with the generic table it would turn
+    a season's home_rank String through diagonal_relaxed).
+
+- id: per-league-parser-without-a-table-keeps-zero-width
+  group: dtype-contract-5-1
+  finding: A-M12
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            table = documented_table or (None if _league_tables(name) else name)'
+  mutant: '            table = documented_table or name'
+  test: tests/test_espn_universal_parsers.py -k "empty_schema_hostile and parse_scoreboard-dict"
+  expected: kill
+  note: R978-1, a direct parse_scoreboard({}) would take the generic (NBA) table, whose rank columns are String.
+
+- id: documented-empty-swaps-zero-width-only
+  group: dtype-contract-5-1
+  finding: A-M12
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            if table is None or not hasattr(out, "columns") or len(out.columns):'
+  mutant: '            if table is None or not hasattr(out, "columns") or len(out):'
+  test: tests/test_espn_universal_parsers.py -k "empty_schema_zero_rows_with_columns"
+  expected: kill
+  note: R978-6, a zero-row result that already has its own columns would be replaced.
+
+- id: empty-pandas-is-arrow-backed-where-the-full-one-is
+  group: dtype-contract-5-1
+  finding: MD-3
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    return df.to_pandas(use_pyarrow_extension_array=True) if arrow else _pandas_ids(df)'
+  mutant: '    return _pandas_ids(df)'
+  test: tests/nba/test_nba_stats_multifile_loaders.py -k "empty_schema and synergy"
+  expected: kill
+  note: R978-3, an empty multi-file load would have numpy dtypes while a full one has Arrow dtypes.
+
+- id: enrich-pbp-zero-rows-with-columns-is-documented
+  group: dtype-contract-5-1
+  finding: B-GB-09
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '    df = df.select([c for c in order if c in df.columns] + [c for c in df.columns if c not in order])'
+  mutant: '    df = df'
+  test: tests/hockeytech/test_pbp_enrich.py -k "real_games_stack"
+  expected: kill
+  note: R978-4, the two payload dialects build their columns in different orders, so the leagues do not stack.
+
+- id: hockeytech-shift-end-stays-int64
+  group: dtype-contract-5-1
+  finding: B-L73
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '    df = df.with_columns(pl.col(c).cast(pl.Int64) for c in ("start_s", "end_s") if c in df.columns)'
+  mutant: '    df = df'
+  test: tests/hockeytech/test_parsers.py -k "on_the_ice"
+  expected: kill
+  note: R978-4, a shift still on the ice makes end_s Float64.
+
+- id: pin-documented-float-back-to-int64
+  group: dtype-contract-5-1
+  finding: B-L83
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            if moved.null_count() == 0 and moved.cast(have, strict=False).equals(values):'
+  mutant: '            if moved.null_count() == 0 and moved.cast(have, strict=False).equals(values) and not want.is_integer():'
+  test: tests/mlb/test_mlb_statcast_extra.py -k "pinned_back"
+  expected: kill
+  note: R979-2, the headline direction (a whole-number column pandas read as float64) is never pinned back to Int64.
+
+- id: pin-documented-never-truncates
+  group: dtype-contract-5-1
+  finding: B-L83
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            if moved.null_count() == 0 and moved.cast(have, strict=False).equals(values):'
+  mutant: '            if moved.null_count() == 0:'
+  test: tests/mlb/test_mlb_statcast_extra.py -k "pinned_back"
+  expected: kill
+  note: R979-2/-4, a 1.5 in a documented-integer column would be truncated to 1.
+
+- id: pin-documented-all-null-columns
+  group: dtype-contract-5-1
+  finding: B-L83
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '        if values.len() == 0:'
+  mutant: '        if False:'
+  test: tests/mlb/test_mlb_statcast_extra.py -k "minors_and_wbc"
+  expected: kill
+  note: The WBC capture's all-null fielding alignment stays Float64 instead of the documented String.
+
+- id: statcast-minors-chunk-pinned
+  group: dtype-contract-5-1
+  finding: B-L83
+  file: sportsdataverse/mlb/mlb_statcast_extra.py
+  snippet: '        return _pin_documented("autodoc/mlb/mlb_statcast_search_minors", frame)'
+  mutant: '        return frame'
+  test: tests/mlb/test_mlb_statcast_extra.py -k "minors_and_wbc"
+  expected: kill
+  note: R979-2, a minors chunk with one missing zone reads Float64.
+
+- id: statcast-wbc-chunk-pinned
+  group: dtype-contract-5-1
+  finding: B-L83
+  file: sportsdataverse/mlb/mlb_statcast_extra.py
+  snippet: '        return _pin_documented("autodoc/mlb/mlb_statcast_search_wbc", frame)'
+  mutant: '        return frame'
+  test: tests/mlb/test_mlb_statcast_extra.py -k "minors_and_wbc"
+  expected: kill
+  note: R979-2, the WBC chunk's fielding alignment stays Float64 and a missing zone reads Float64.
+
+- id: espn-player-stat-plain-number-display
+  group: dtype-contract-5-1
+  finding: B-L20
+  file: sportsdataverse/_common_espn_player_stats.py
+  snippet: '                num = float(display)'
+  mutant: '                num = None'
+  test: tests/test_common_espn_player_stats.py -k "nhl_stat_with_a_numeric_display"
+  expected: kill
+  note: R979-5, McDavid's NHL stats with display "0" and no value become null instead of 0.0.
+
+# --- task 5.1 part (c): CFB drive columns of a feed with no drive end keep their dtype (C-L5)
+- id: cfb-drive-columns-without-an-end-keep-their-dtype
+  group: dtype-contract-5-1
+  finding: C-L5
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '        pl.col(c).cast(t) for c, t in documented.items() if c.startswith("drive.") and plays.schema.get(c) == pl.Null'
+  mutant: '        pl.col(c) for c, t in documented.items() if c.startswith("drive.") and plays.schema.get(c) == pl.Null'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "schema_is_identical and 252532751"
+  expected: kill
+  note: The eight drive.* columns of 252532751 (2005, drives without an end) are dtype Null again.
+
+# --- task 5.2 part (a): ESPN ids are Int64 at the parser boundary (A-M14, A-M15, B-M15, B-GB-10, C-M8)
+- id: espn-parser-ids-int64-at-the-boundary
+  group: dtype-contract-5-2
+  finding: A-M15
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    out = _ids_int64(out)'
+  mutant: '    pass'
+  test: tests/test_espn_universal_parsers.py -k "dtype_snapshot_matches_every_committed_capture"
+  expected: kill
+  note: The pandas-hop parsers hand back their ids as String (or Float64 with a missing value) again.
+
+- id: espn-fpi-team-id-joins-weekly-powerindex
+  group: dtype-contract-5-2
+  finding: A-M15
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    out = _ids_int64(pl.from_pandas(df))'
+  mutant: '    out = pl.from_pandas(df)'
+  test: tests/test_espn_universal_parsers.py -k "fpi_joins_weekly_powerindex"
+  expected: kill
+  note: parse_fpi emits team_id String again, so its join with parse_weekly_powerindex raises SchemaError.
+
+- id: id-cast-strips-string-ids
+  group: dtype-contract-5-2
+  finding: A-L55
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            src = src.str.strip_chars()'
+  mutant: '            pass'
+  test: tests/codegen/test_id_casts.py -k "stripped"
+  expected: kill
+  note: A String id with surrounding whitespace is refused and stays String.
+
+- id: espn-schedule-ids-int64
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/_espn_schedule.py
+  snippet: '    df = _schedule_ids(df).with_columns('
+  mutant: '    df = df.with_columns('
+  test: tests/nba/test_nba_schedule_teams_offline.py -k "schedule_offline and id_dtypes"
+  expected: kill
+  note: The seven scoreboard schedules emit home_id / venue_id / ... as String again.
+
+- id: espn-mlb-schedule-ids-int64
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/mlb/mlb_schedule.py
+  snippet: '    df = _schedule_ids(pl.from_pandas(pd.DataFrame(rows)))'
+  mutant: '    df = pl.from_pandas(pd.DataFrame(rows))'
+  test: tests/mlb/test_mlb_schedule_teams_offline.py -k "schedule_offline and id_dtypes"
+  expected: kill
+  note: espn_mlb_schedule emits game_id / venue_id / home_id / away_id as String again.
+
+- id: espn-teams-team-id-int64
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/_espn_teams.py
+  snippet: '    out = _cast_ids_int64(pl.from_pandas(frame), ["team_id"])'
+  mutant: '    out = pl.from_pandas(frame)'
+  test: tests/nba/test_nba_schedule_teams_offline.py -k "teams_offline and id_dtypes"
+  expected: kill
+  note: espn_<lg>_teams emits team_id String again.
+
+- id: espn-game-rosters-ids-int64
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/_espn_game_rosters.py
+  snippet: '    return _cast_ids_int64(rosters, [c for c in rosters.columns if c == "id" or c.endswith("_id")])'
+  mutant: '    return rosters'
+  test: tests/test_espn_game_rosters_family.py -k "ids_int64"
+  expected: kill
+  note: A game-rosters frame mixes Int32 team_id / position_id, Int64 athlete_id and String status_id again.
+
+- id: espn-snapshot-ids-int64
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/espn_snapshots.py
+  snippet: '        return int(value.strip())'
+  mutant: '        return value.strip()'
+  test: tests/test_espn_snapshots.py -k "as_id_coerces"
+  expected: kill
+  note: The injuries snapshot reads its ids as text again (the inverted Utf8 pin).
+
+- id: espn-content-ids-int64
+  group: dtype-contract-5-2
+  finding: B-GB-10
+  file: sportsdataverse/espn_content/espn_content_parsers.py
+  snippet: '_TEXT_ID = re.compile(r"^now_id$|(^|_)code$")'
+  mutant: '_TEXT_ID = _ID'
+  test: tests/espn_content/test_espn_content.py -k "id_columns_are_int64"
+  expected: kill
+  note: Every id-like column is pinned to text again, the Utf8 pin task 5.2 retired.
+
+- id: ncaa-espn-team-crosswalk-espn-id-int64
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/mbb/mbb_ncaa_espn_crosswalk.py
+  snippet: '    "espn_team_id": pl.Int64,'
+  mutant: '    "espn_team_id": pl.Utf8,'
+  test: tests/mbb/test_ncaa_espn_team_crosswalk.py -k "id_dtypes"
+  expected: kill
+  note: The NCAA -> ESPN crosswalk's espn_team_id is Utf8 again and joins no ESPN frame.
+
+- id: nfl-processor-ids-match-cfb
+  group: dtype-contract-5-2
+  finding: C-M8
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        play_df = _cast_ids_int64(play_df, ids)'
+  mutant: '        pass'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "shared_column_dtypes_match_nfl"
+  expected: kill
+  note: NFL *_player_id String and pos_team Int32 again; the vs_nfl allowlist no longer lists them.
+
+- id: id-cast-empty-string-is-null
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            src = src.set(src == "", None)'
+  mutant: '            pass'
+  test: tests/codegen/test_id_casts.py -k "stripped"
+  expected: kill
+  note: A feed's "" id (HockeyTech FloCoreEventId on every scorebar row) is refused, so the column stays String (R981-5).
+
+- id: espn-id-refusal-warns
+  group: dtype-contract-5-2
+  finding: A-M15
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    if refused:'
+  mutant: '    if False:'
+  test: tests/test_espn_universal_parsers.py -k "not_an_integer_stays_as_it_came_and_warns"
+  expected: kill
+  note: An ESPN id column the cast refuses (text in the payload) stays String with no warning (R981-6).
+
+- id: espn-pandas-ids-nullable-int64
+  group: dtype-contract-5-2
+  finding: A-M14
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            out[col] = pd.array(df[col].to_list(), dtype="Int64")'
+  mutant: '            pass'
+  test: tests/test_espn_universal_parsers.py -k "pandas_ids_are_nullable_int64_never_float"
+  expected: kill
+  note: The pandas output of a parser reads a null-bearing id as float64 again (R981-2).
+
+- id: nhl-id-cast-refusal-warns
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    if refused:'
+  mutant: '    if False:'
+  test: tests/test_nhl_aux_parsers.py -k "nhl_id_that_is_not_an_integer"
+  expected: kill
+  note: An NHL id column the cast refuses (text in the payload) stays String with no warning (R986-2).
+
+- id: nhl-stats-rest-country-id-is-text-by-design
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/nhl/nhl_stats_rest_parsers.py
+  snippet: '    return {"formatted_season_id"} | ({"id"} if "country3_code" in columns else set())'
+  mutant: '    return {"formatted_season_id"}'
+  test: tests/test_nhl_aux_parsers.py -k "nhl_ids_int64 and stats_rest_country"
+  expected: kill
+  note: The country endpoint's ISO-code id warns as payload drift on every call (R986-2).
+
+- id: nhl-player-props-ids-join-the-parser-frames
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/nhl/nhl_player_props.py
+  snippet: '    "player_id": pl.Int64,'
+  mutant: '    "player_id": pl.Utf8,'
+  test: tests/nhl/test_nhl_player_props.py -k "props_join_the_nhl_parser_frames"
+  expected: kill
+  note: nhl_player_props pins player_id to Utf8 again, so it cannot join a parse_nhl_web_* frame (R986-3).
+
+- id: nhl-edge-parser-ids-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/nhl/nhl_edge_parsers.py
+  snippet: '        out = _cast_id_columns(pl.from_pandas(df), "NHL EDGE parser")'
+  mutant: '        out = pl.from_pandas(df)'
+  test: tests/test_nhl_aux_parsers.py -k "edge_id_with_a_missing_value"
+  expected: kill
+  note: An EDGE id with a missing value is Float64 again (R986-4).
+
+- id: parser-id-cast-covers-the-bare-id
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    cols = [c for c in df.columns if c == "id" or c.endswith("_id")]'
+  mutant: '    cols = [c for c in df.columns if c.endswith("_id")]'
+  test: tests/test_nhl_aux_parsers.py -k "bare_id_with_a_missing_value"
+  expected: kill
+  note: A bare id column (records id) with a missing value is Float64 again (R986-4).
+
+- id: nhl-pandas-ids-nullable-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  snippet: '    return _pandas_ids(out, df) if return_as_pandas else out'
+  mutant: '    return df if return_as_pandas else out'
+  test: tests/test_nhl_aux_parsers.py -k "nhl_pandas_ids_are_nullable_int64 and pbp_2024_scf_g7"
+  expected: kill
+  note: The NHL api-web pandas output skips the id cast and keeps float64 player ids (R986-1).
+
+- id: hockeytech-enriched-pbp-pandas-ids-nullable-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '        return _pandas_ids(df)'
+  mutant: '        return df.to_pandas()'
+  test: tests/hockeytech/test_pbp_enrich.py -k "enriched_pbp_pandas_ids_are_nullable_int64"
+  expected: kill
+  note: The enriched pbp's pandas output turns a null-bearing team_id into float64 (1.0) again (R988-2).
+
+- id: hockeytech-id-cast-refusal-warns
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    if refused:'
+  mutant: '    if False:'
+  test: tests/hockeytech/test_parsers.py -k "hockeytech_id_that_is_not_an_integer"
+  expected: kill
+  note: A HockeyTech league whose feed ships one text id gets that column String with no warning (R988-3).
+
+- id: hockeytech-game-corsi-joins-toi-on-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '    toi_sel = toi.select("player_id", "toi_seconds")'
+  mutant: '    toi_sel = toi.select(pl.col("player_id").cast(pl.Utf8), "toi_seconds")'
+  test: tests/hockeytech/test_league_families.py -k "game_corsi_joins_toi and ohl"
+  expected: kill
+  note: Every <lg>_game_corsi fails on a Utf8 TOI key again (R988-1).
+
+- id: hockeytech-corsi-toi-join-asserts-key-dtypes
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '    if corsi.schema["player_id"] != toi_sel.schema["player_id"]:'
+  mutant: '    if False:'
+  test: tests/hockeytech/test_league_families.py -k "refuses_a_key_dtype_mismatch"
+  expected: kill
+  note: The Corsi / TOI join stops asserting player_id dtype agreement (R988-1).
+
+- id: hockeytech-family-shifts-pandas-ids
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_family.py
+  snippet: '            return _pandas_ids(shifts)'
+  mutant: '            return shifts.to_pandas()'
+  test: tests/hockeytech/test_league_families.py -k "shifts_and_toi_pandas_ids and ohl and game_shifts"
+  expected: kill
+  note: <lg>_game_shifts pandas ids are numpy int64 / float64 again (R988-2).
+
+- id: hockeytech-family-toi-pandas-ids
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_family.py
+  snippet: '            return _pandas_ids(toi)'
+  mutant: '            return toi.to_pandas()'
+  test: tests/hockeytech/test_league_families.py -k "shifts_and_toi_pandas_ids and ohl and player_toi"
+  expected: kill
+  note: <lg>_player_toi pandas ids are numpy int64 / float64 again (R988-2).
+
+- id: pwhl-shifts-pandas-ids
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/pwhl/pwhl_analytics.py
+  snippet: '        return _pandas_ids(shifts)'
+  mutant: '        return shifts.to_pandas()'
+  test: tests/hockeytech/test_league_families.py -k "shifts_and_toi_pandas_ids and pwhl and game_shifts"
+  expected: kill
+  note: pwhl_game_shifts pandas ids are numpy int64 / float64 again (R988-2).
+
+- id: pwhl-toi-pandas-ids
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/pwhl/pwhl_analytics.py
+  snippet: '        return _pandas_ids(toi)'
+  mutant: '        return toi.to_pandas()'
+  test: tests/hockeytech/test_league_families.py -k "shifts_and_toi_pandas_ids and pwhl and player_toi"
+  expected: kill
+  note: pwhl_player_toi pandas ids are numpy int64 / float64 again (R988-2).
+
+- id: hockeytech-parser-pandas-ids-nullable-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '    return _pandas_ids(out, pdf) if return_as_pandas else out'
+  mutant: '    return pdf if return_as_pandas else out'
+  test: tests/hockeytech/test_parsers.py -k "hockeytech_pandas_ids_are_nullable_int64 and parse_pbp-pwhl_pbp_42"
+  expected: kill
+  note: The HockeyTech parsers' pandas output skips the id cast (pbp player_id float64) (R988-2).
+
+- id: espn-snapshot-id-refusal-warns
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/espn_snapshots.py
+  snippet: '        f"ESPN snapshot id {field}: {value!r} is not an integer id; {outcome}",'
+  mutant: '        f"ESPN snapshot id {field}: {value!r} {outcome}",'
+  test: tests/test_espn_snapshots.py -k "as_id_warns_on_a_value_that_is_not_an_integer_id"
+  expected: kill
+  note: A snapshot id that is not an integer is nulled without saying why (R981-4).
+
+- id: espn-snapshot-athlete-id-warning-names-the-recovery
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/espn_snapshots.py
+  snippet: '    outcome = "read as null" if recovered is None else f"the player link gives {recovered}"'
+  mutant: '    outcome = "read as null"'
+  test: tests/test_espn_snapshots.py -k "bad_athlete_id_the_link_recovers"
+  expected: kill
+  note: A bad athlete.id the player link still recovers is reported as read as null (R981-10).
+
+- id: espn-snapshot-padded-id-not-unpadded
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/espn_snapshots.py
+  snippet: '_INTEGER_ID = re.compile(r"-?(?:0|[1-9]\d*)")'
+  mutant: '_INTEGER_ID = re.compile(r"-?\d+")'
+  test: tests/test_espn_snapshots.py -k "padded_injury_id_on_the_real_capture"
+  expected: kill
+  note: A zero-padded snapshot id ("007") is silently read as 7 (R981-4).
+
+- id: ncaa-xwalk-tier-join-asserts-key-dtypes
+  group: dtype-contract-5-2
+  finding: B-GB-10
+  file: sportsdataverse/scrape/ncaa/espn_game_xwalk.py
+  snippet: '        assert pending.schema[k] == lookup.schema[k], f"{k}: {pending.schema[k]} vs {lookup.schema[k]}"'
+  mutant: '        pass'
+  test: tests/scrape/test_scrape_ncaa_league.py -k "xwalk_tier_join_asserts"
+  expected: kill
+  note: An Int32 key joins an Int64 one silently by supertype (a String one would match nothing).
+
+# --- task 5.2 part (b): NHL ids are Int64 at the parser boundary (B-H5, B-GB-10)
+- id: nhl-web-parser-ids-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  snippet: '        out = _cast_id_columns(pl.from_pandas(df), "NHL api-web parser")'
+  mutant: '        out = pl.from_pandas(df)'
+  test: tests/test_nhl_aux_parsers.py -k "ids_int64 and pbp_2024_scf_g7"
+  expected: kill
+  note: parse_nhl_web_pbp emits details_player_id and the other event ids as Float64 again.
+
+- id: nhl-records-parser-ids-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/nhl/nhl_records_parsers.py
+  snippet: '        out = _cast_id_columns(pl.from_pandas(df), "NHL Records parser")'
+  mutant: '        out = pl.from_pandas(df)'
+  test: tests/test_nhl_aux_parsers.py -k "ids_int64 and nhl_records"
+  expected: kill
+  note: records player_id / franchise_id are Int64, Float64 ('8445802.0') or String by payload again.
+
+- id: nhl-edge-value-player-id-int64
+  group: dtype-contract-5-2
+  finding: B-GB-10
+  file: sportsdataverse/nhl/nhl_edge_value.py
+  snippet: '    "player_id": pl.Int64,'
+  mutant: '    "player_id": pl.Utf8,'
+  test: tests/nhl/test_nhl_edge_value.py -k "player_id_is_int64"
+  expected: kill
+  note: The PWHL / empty skating-value frame pins player_id Utf8 again (the retired pin).
+
+- id: nhl-edge-value-casts-detail-ids
+  group: dtype-contract-5-2
+  finding: B-GB-10
+  file: sportsdataverse/nhl/nhl_edge_value.py
+  snippet: '    out = _cast_ids_int64(scored, ["player_id"]).with_columns(pl.col("season").cast(pl.Int64)).select(select_cols)'
+  mutant: '    out = scored.with_columns(pl.col("season").cast(pl.Int64)).select(select_cols)'
+  test: tests/nhl/test_nhl_edge_value.py -k "player_id_is_int64"
+  expected: kill
+  note: The skating value keeps the EDGE capture's text player ids, so it joins no NHL frame.
+
+- id: cfb-drive-columns-every-documented-drive-key
+  group: dtype-contract-5-1
+  finding: C-L5
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '        pl.col(c).cast(t) for c, t in documented.items() if c.startswith("drive.") and plays.schema.get(c) == pl.Null'
+  mutant: '        pl.col(c).cast(t) for c, t in documented.items() if c.startswith("drive.") and not c.startswith("drive.team.") and plays.schema.get(c) == pl.Null'
+  test: tests/cfb/test_cfb_pbp_processor_fixes.py -k "no_drive_carries and 400547808"
+  expected: kill
+  note: R980-1, one entry (here the four drive.team.* columns) dropped from the typed list leaves 400547808's team columns Null.
+
+# --- task 5.2 part (c): HockeyTech ids are Int64 at the parser boundary (B-H5, B-L72)
+- id: hockeytech-parser-ids-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '    out = _cast_id_columns(pl.from_pandas(pdf), "HockeyTech parser")'
+  mutant: '    out = pl.from_pandas(pdf)'
+  test: tests/hockeytech/test_parsers.py -k "hockeytech_ids_int64"
+  expected: kill
+  note: player_id is Float64 in pbp and String in roster / leaders / summary again; game_id copies the caller (B-L72).
+
+- id: hockeytech-meta-team-id-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '        home_team_id=pl.lit(home_team_id, dtype=pl.Int64),'
+  mutant: '        home_team_id=pl.lit(str(home_team_id or "")),'
+  test: tests/hockeytech/test_pbp_enrich.py -k "enriched_pbp_ids_int64"
+  expected: kill
+  note: enrich_pbp writes the game-summary home team as text ("" when absent) again.
+
+- id: hockeytech-corsi-player-id-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '    return _cast_ids_int64(out, ["player_id"])'
+  mutant: '    return out'
+  test: tests/hockeytech/test_public_surface.py -k "corsi_fenwick_on_ice_player_level"
+  expected: kill
+  note: The on-ice Corsi frame keys players by the text ids of the on-ice strings again.

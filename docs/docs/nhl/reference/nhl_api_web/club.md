@@ -76,7 +76,7 @@ Pull a team's full-season schedule.
 | `winning_goalie_last_name_default` | character | Winning goalie last name (default language). |
 | `away_team_airline_link` | character | Link to away team airline info. |
 | `away_team_airline_desc` | character | Away team airline description. |
-| `winning_goal_scorer_player_id` | double | Winning goal scorer player identifier. |
+| `winning_goal_scorer_player_id` | integer | Winning goal scorer player identifier. |
 | `winning_goal_scorer_first_initial_default` | character | Winning goal scorer first initial (default). |
 | `winning_goal_scorer_last_name_default` | character | Winning goal scorer last name (default language). |
 | `three_min_recap` | character | Link to the three-minute recap. |
@@ -84,7 +84,7 @@ Pull a team's full-season schedule.
 | `condensed_game` | character | Link to the condensed game video. |
 | `venue_es` | character | Venue name (Spanish). |
 | `venue_fr` | character | Venue name (French). |
-| `special_event_parent_id` | double | NHL api-web identifier for the parent special-event record grouping multiple games under the same marquee event umbrella. |
+| `special_event_parent_id` | integer | NHL api-web identifier for the parent special-event record grouping multiple games under the same marquee event umbrella. |
 | `special_event_name_default` | character | English display name for a special promotional or marquee event designation attached to the game (e.g., 'Winter Classic', 'Heritage Classic'). |
 | `special_event_name_fr` | character | French display name for a special promotional or marquee event designation attached to the game, used in bilingual NHL communications. |
 | `away_team_hotel_link` | character | Link to away team hotel info. |

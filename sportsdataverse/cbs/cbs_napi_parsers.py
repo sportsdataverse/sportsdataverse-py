@@ -143,7 +143,11 @@ def _rows_to_frame(rows: List[Any]) -> pl.DataFrame:
     frame.columns = _dedupe(frame.columns)
     for col in frame.columns:
         if frame[col].dtype == object:
-            frame[col] = frame[col].map(_stringify)
+            # B-M17: a key absent from some rows is pandas' NaN: null, never the string "nan"; and a column
+            # of flags stays Boolean instead of becoming "True" / "False" strings.
+            cells = frame[col].map(lambda v: None if isinstance(v, float) and v != v else v)
+            flags = {type(v) for v in cells if v is not None} <= {bool}
+            frame[col] = cells if flags else cells.map(_stringify)
     return _canonicalize_dtypes(pl.from_pandas(frame))
 
 

@@ -29,11 +29,11 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |
 | `team_location` | character | Team location. |
-| `athlete_id` | character | Athlete id. |
+| `athlete_id` | integer | Athlete id. |
 | `athlete_display_name` | character | Athlete display name. |
 | `athlete_short_name` | character | Athlete short name. |
 | `athlete_jersey` | character | Athlete jersey. |
@@ -61,7 +61,7 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |
 | `home_away` | character | Home away. |
@@ -75,7 +75,7 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Id. |
+| `id` | integer | Id. |
 | `sequence_number` | character | Sequence number. |
 | `text` | character | Text. |
 | `away_score` | integer | Away score. |
@@ -86,12 +86,12 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 | `shooting_play` | logical | Shooting play. |
 | `points_attempted` | integer | Points attempted. |
 | `short_description` | character | Short description. |
-| `type_id` | character | Type id. |
+| `type_id` | integer | Type id. |
 | `type_text` | character | Type text. |
 | `period_number` | integer | Period number. |
 | `period_display_value` | character | Period display value. |
 | `clock_display_value` | character | Clock display value. |
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `coordinate_x` | integer | Coordinate x. |
 | `coordinate_y` | integer | Coordinate y. |
 | `participants` | character | Participants. |
@@ -102,17 +102,17 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 |---|---|---|
 | `home_win_percentage` | double | Home win percentage. |
 | `tie_percentage` | double | Tie percentage. |
-| `play_id` | character | Play id. |
+| `play_id` | integer | Play id. |
 
 **leaders**
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `category_name` | character | Category name. |
 | `category_display_name` | character | Category display name. |
-| `athlete_id` | character | Athlete id. |
+| `athlete_id` | integer | Athlete id. |
 | `athlete_display_name` | character | Athlete display name. |
 | `athlete_position` | character | Athlete position. |
 | `value` | double | Value. |
@@ -125,7 +125,7 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 | col_name | type | description |
 |---|---|---|
 | `attendance` | integer | Attendance. |
-| `venue_id` | character | Venue id. |
+| `venue_id` | integer | Venue id. |
 | `venue_guid` | character | Venue guid. |
 | `venue_full_name` | character | Venue full name. |
 | `venue_address_city` | character | Venue address city. |
@@ -142,13 +142,13 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 | `order` | integer | Order. |
 | `position_name` | character | Position name. |
 | `position_display_name` | character | Position display name. |
-| `position_id` | character | Position id. |
+| `position_id` | integer | Position id. |
 
 **header**
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Id. |
+| `id` | integer | Id. |
 | `uid` | character | Uid. |
 | `time_valid` | logical | Time valid. |
 | `competitions` | character | Competitions. |
@@ -158,7 +158,7 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 | `season_year` | integer | Season year. |
 | `season_current` | logical | Season current. |
 | `season_type` | integer | Season type. |
-| `league_id` | character | League id. |
+| `league_id` | integer | League id. |
 | `league_uid` | character | League uid. |
 | `league_name` | character | League name. |
 | `league_abbreviation` | character | League abbreviation. |
@@ -175,7 +175,7 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 | `group_header` | character | Group header. |
 | `conference_header` | character | Conference header. |
 | `division_header` | character | Division header. |
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_uid` | character | Team uid. |
 | `team_location` | character | Team location. |
 | `overall` | character | Overall. |
@@ -190,11 +190,11 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 | `lang` | character | Lang. |
 | `region` | character | Region label. |
 | `is_national` | logical | Boolean flag indicating whether the broadcast is a nationally distributed feed. |
-| `type_id` | character | Type id. |
+| `type_id` | integer | Type id. |
 | `type_short_name` | character | Type short name. |
 | `type_long_name` | character | Type long name. |
 | `type_slug` | character |  |
-| `market_id` | character | Unique identifier for market. |
+| `market_id` | integer | Unique identifier for market. |
 | `market_type` | character | Market type. |
 | `media_call_letters` | character |  |
 | `media_name` | character |  |
@@ -274,11 +274,11 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |
 | `team_location` | character | Team location. |
-| `athlete_id` | character | Athlete id. |
+| `athlete_id` | integer | Athlete id. |
 | `athlete_display_name` | character | Athlete display name. |
 | `athlete_short_name` | character | Athlete short name. |
 | `athlete_jersey` | character | Athlete jersey. |
@@ -306,7 +306,7 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |
 | `home_away` | character | Home away. |
@@ -320,7 +320,7 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Id. |
+| `id` | integer | Id. |
 | `sequence_number` | character | Sequence number. |
 | `text` | character | Text. |
 | `away_score` | integer | Away score. |
@@ -331,12 +331,12 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 | `shooting_play` | logical | Shooting play. |
 | `points_attempted` | integer | Points attempted. |
 | `short_description` | character | Short description. |
-| `type_id` | character | Type id. |
+| `type_id` | integer | Type id. |
 | `type_text` | character | Type text. |
 | `period_number` | integer | Period number. |
 | `period_display_value` | character | Period display value. |
 | `clock_display_value` | character | Clock display value. |
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `coordinate_x` | integer | Coordinate x. |
 | `coordinate_y` | integer | Coordinate y. |
 | `participants` | character | Participants. |
@@ -347,17 +347,17 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 |---|---|---|
 | `home_win_percentage` | double | Home win percentage. |
 | `tie_percentage` | double | Tie percentage. |
-| `play_id` | character | Play id. |
+| `play_id` | integer | Play id. |
 
 **leaders**
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `category_name` | character | Category name. |
 | `category_display_name` | character | Category display name. |
-| `athlete_id` | character | Athlete id. |
+| `athlete_id` | integer | Athlete id. |
 | `athlete_display_name` | character | Athlete display name. |
 | `athlete_position` | character | Athlete position. |
 | `value` | double | Value. |
@@ -370,7 +370,7 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 | col_name | type | description |
 |---|---|---|
 | `attendance` | integer | Attendance. |
-| `venue_id` | character | Venue id. |
+| `venue_id` | integer | Venue id. |
 | `venue_guid` | character | Venue guid. |
 | `venue_full_name` | character | Venue full name. |
 | `venue_address_city` | character | Venue address city. |
@@ -387,13 +387,13 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 | `order` | integer | Order. |
 | `position_name` | character | Position name. |
 | `position_display_name` | character | Position display name. |
-| `position_id` | character | Position id. |
+| `position_id` | integer | Position id. |
 
 **header**
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Id. |
+| `id` | integer | Id. |
 | `uid` | character | Uid. |
 | `time_valid` | logical | Time valid. |
 | `competitions` | character | Competitions. |
@@ -403,7 +403,7 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 | `season_year` | integer | Season year. |
 | `season_current` | logical | Season current. |
 | `season_type` | integer | Season type. |
-| `league_id` | character | League id. |
+| `league_id` | integer | League id. |
 | `league_uid` | character | League uid. |
 | `league_name` | character | League name. |
 | `league_abbreviation` | character | League abbreviation. |
@@ -420,7 +420,7 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 | `group_header` | character | Group header. |
 | `conference_header` | character | Conference header. |
 | `division_header` | character | Division header. |
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_uid` | character | Team uid. |
 | `team_location` | character | Team location. |
 | `overall` | character | Overall. |
@@ -435,11 +435,11 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 | `lang` | character | Lang. |
 | `region` | character | Region label. |
 | `is_national` | logical | Boolean flag indicating whether the broadcast is a nationally distributed feed. |
-| `type_id` | character | Type id. |
+| `type_id` | integer | Type id. |
 | `type_short_name` | character | Type short name. |
 | `type_long_name` | character | Type long name. |
 | `type_slug` | character |  |
-| `market_id` | character | Unique identifier for market. |
+| `market_id` | integer | Unique identifier for market. |
 | `market_type` | character | Market type. |
 | `media_call_letters` | character |  |
 | `media_name` | character |  |
@@ -520,7 +520,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | ESPN event id. |
+| `game_id` | integer | ESPN event id. |
 | `uid` | character | ESPN UID string. |
 | `date` | character | Match start timestamp (ISO 8601, UTC). |
 | `name` | character | Full event name (e.g. 'Team A at Team B'). |
@@ -528,7 +528,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 | `season_year` | integer | Integer season year ESPN assigns the event (e.g. 2025 for the 2025-26 season). |
 | `season_type` | integer | ESPN season-type id of the event's season: 1 preseason, 2 regular season, 3 postseason, 4 offseason for the US leagues; soccer competitions carry their own competition-specific ids (e.g. 13481). |
 | `season_slug` | character | ESPN slug of the event's season type (e.g. 'regular-season', 'post-season'; soccer competitions use their own, such as 'final' or 'torneo-apertura'). |
-| `status_type_id` | character | Unique identifier for status type. |
+| `status_type_id` | integer | Unique identifier for status type. |
 | `status_type_name` | character | Status type name. |
 | `status_type_state` | character | Status type state. |
 | `status_type_completed` | logical | Status type completed. |
@@ -541,14 +541,14 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 | `neutral_site` | logical | Whether the match is played at a neutral venue. |
 | `conference_competition` | logical | Conference competition. |
 | `attendance` | integer | Reported attendance. |
-| `venue_id` | character | Unique venue identifier. |
+| `venue_id` | integer | Unique venue identifier. |
 | `venue_full_name` | character | Venue full name. |
 | `venue_city` | character | Venue city. |
 | `venue_state` | character | Venue state / region. |
 | `venue_indoor` | logical | TRUE if the venue is indoors. |
 | `broadcast` | character | Every network name of the competition in feed order, deduped and ", "-joined (an entry with no names gives its market); "" when the game lists no broadcast. |
 | `note` | character | Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none. |
-| `home_id` | character | Unique identifier for home. |
+| `home_id` | integer | Unique identifier for home. |
 | `home_name` | character | Home name. |
 | `home_abbreviation` | character | Home team's abbreviation. |
 | `home_display_name` | character | Home display name. |
@@ -559,7 +559,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 | `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
 | `home_winner` | logical | Home team's winner. |
 | `home_rank` | character |  |
-| `away_id` | character | Unique identifier for away. |
+| `away_id` | integer | Unique identifier for away. |
 | `away_name` | character | Away name. |
 | `away_abbreviation` | character | Away team's abbreviation. |
 | `away_display_name` | character | Away display name. |
@@ -608,7 +608,7 @@ espn.com scoreboard page data for one day (one week for football), one row per g
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | ESPN event id. |
+| `game_id` | integer | ESPN event id. |
 | `uid` | character | ESPN UID string. |
 | `date` | character | Match start timestamp (ISO 8601, UTC). |
 | `name` | character | Full event name (e.g. 'Team A at Team B'). |
@@ -616,7 +616,7 @@ espn.com scoreboard page data for one day (one week for football), one row per g
 | `season_year` | integer | Integer season year ESPN assigns the event (e.g. 2025 for the 2025-26 season). |
 | `season_type` | integer | ESPN season-type id of the event's season: 1 preseason, 2 regular season, 3 postseason, 4 offseason for the US leagues; soccer competitions carry their own competition-specific ids (e.g. 13481). |
 | `season_slug` | character | ESPN slug of the event's season type (e.g. 'regular-season', 'post-season'; soccer competitions use their own, such as 'final' or 'torneo-apertura'). |
-| `status_type_id` | character | Unique identifier for status type. |
+| `status_type_id` | integer | Unique identifier for status type. |
 | `status_type_name` | character | Status type name. |
 | `status_type_state` | character | Status type state. |
 | `status_type_completed` | logical | Status type completed. |
@@ -629,14 +629,14 @@ espn.com scoreboard page data for one day (one week for football), one row per g
 | `neutral_site` | logical | Whether the match is played at a neutral venue. |
 | `conference_competition` | logical | Conference competition. |
 | `attendance` | integer | Reported attendance. |
-| `venue_id` | character | Unique venue identifier. |
+| `venue_id` | integer | Unique venue identifier. |
 | `venue_full_name` | character | Venue full name. |
 | `venue_city` | character | Venue city. |
 | `venue_state` | character | Venue state / region. |
 | `venue_indoor` | logical | TRUE if the venue is indoors. |
 | `broadcast` | character | Every network name of the competition in feed order, deduped and ", "-joined (an entry with no names gives its market); "" when the game lists no broadcast. |
 | `note` | character | Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none. |
-| `home_id` | character | Unique identifier for home. |
+| `home_id` | integer | Unique identifier for home. |
 | `home_name` | character | Home name. |
 | `home_abbreviation` | character | Home team's abbreviation. |
 | `home_display_name` | character | Home display name. |
@@ -647,7 +647,7 @@ espn.com scoreboard page data for one day (one week for football), one row per g
 | `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
 | `home_winner` | logical | Home team's winner. |
 | `home_rank` | character |  |
-| `away_id` | character | Unique identifier for away. |
+| `away_id` | integer | Unique identifier for away. |
 | `away_name` | character | Away name. |
 | `away_abbreviation` | character | Away team's abbreviation. |
 | `away_display_name` | character | Away display name. |

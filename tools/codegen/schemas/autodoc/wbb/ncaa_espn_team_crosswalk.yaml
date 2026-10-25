@@ -14,7 +14,7 @@ columns:
   type: character
   description: ''
 - name: espn_team_id
-  type: character
+  type: integer
   description: ''
 - name: espn_display_name
   type: character
@@ -32,7 +32,7 @@ columns:
   type: character
   description: ''
 - name: espn_conference_id
-  type: character
+  type: integer
   description: ''
 - name: match_method
   type: character

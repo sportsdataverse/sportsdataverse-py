@@ -574,3 +574,16 @@ def test_live_points_e2025_game_1() -> None:
     assert df.height >= 150
     assert set(df["team"].to_list()) == {"IST", "TEL"}
     assert df.schema["coord_x"] == pl.Int64
+
+
+def test_round_int64_across_generations():
+    """B-GB-15: the v1 header's round joins the v2 rounds / games routes' round without a cast."""
+    from sportsdataverse.euroleague.euroleague_parsers import parse_euroleague, parse_euroleague_header
+
+    header = parse_euroleague_header(_load("api__Header"))
+    games = parse_euroleague(_load("competitions__E__seasons__E2025__games"))
+    rounds = parse_euroleague(_load("competitions__E__seasons__E2025__rounds"))
+    assert header.schema["round"] == games.schema["round"] == rounds.schema["round"] == pl.Int64
+    assert header["round"].to_list() == [1]
+    assert parse_euroleague_header({}).schema["round"] == pl.Int64
+    assert pl.concat([header.select("round"), games.select("round")])["round"].to_list() == [1, 47, 46, 46]

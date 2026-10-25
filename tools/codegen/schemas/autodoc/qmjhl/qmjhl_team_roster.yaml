@@ -2,10 +2,10 @@ schema: qmjhl_team_roster
 kind: dataframe
 columns:
 - name: id
-  type: character
+  type: integer
   description: ''
 - name: person_id
-  type: character
+  type: integer
   description: ''
 - name: active
   type: character
@@ -65,7 +65,7 @@ columns:
   type: character
   description: ''
 - name: player_id
-  type: character
+  type: integer
   description: ''
 - name: status
   type: character
@@ -80,7 +80,7 @@ columns:
   type: character
   description: ''
 - name: latest_team_id
-  type: character
+  type: integer
   description: ''
 - name: veteran_status
   type: character
@@ -89,7 +89,7 @@ columns:
   type: character
   description: ''
 - name: team_id
-  type: character
+  type: integer
   description: ''
 - name: team_name
   type: character
@@ -104,7 +104,7 @@ columns:
   type: character
   description: ''
 - name: position_id
-  type: character
+  type: integer
   description: ''
 - name: position
   type: character

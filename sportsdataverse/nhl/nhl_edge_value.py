@@ -62,13 +62,16 @@ from typing import Literal, overload
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _cast_ids_int64
 from sportsdataverse.nhl.nhl_microstat_constants import get_constants
 
 _COMPONENTS = ("top_speed", "distance_km", "speed_bursts_20", "oz_time_pct")
 _ZONE_BALANCE_COMPONENT = "oz_dz_time_balance"
 
+#: ``player_id`` is Int64, the dtype the EDGE parsers and every NHL id carry (task 5.2, B-GB-10); it was a
+#: Utf8 pin, so the value frame could not join the frames it was built from.
 VALUE_SCHEMA = {
-    "player_id": pl.Utf8,
+    "player_id": pl.Int64,
     "season": pl.Int64,
     "top_speed": pl.Float64,
     "distance_km": pl.Float64,
@@ -229,8 +232,5 @@ def nhl_edge_skating_value(
     ]
     if _ZONE_BALANCE_COMPONENT in scored.columns:
         select_cols.append(pl.col(_ZONE_BALANCE_COMPONENT).cast(pl.Float64))
-    out = scored.with_columns(
-        pl.col("player_id").cast(pl.Utf8),
-        pl.col("season").cast(pl.Int64),
-    ).select(select_cols)
+    out = _cast_ids_int64(scored, ["player_id"]).with_columns(pl.col("season").cast(pl.Int64)).select(select_cols)
     return out.to_pandas() if return_as_pandas else out
