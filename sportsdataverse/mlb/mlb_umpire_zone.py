@@ -34,6 +34,7 @@ import numpy as np
 import pandas as pd
 import polars as pl
 from scipy.optimize import minimize
+from scipy.special import expit
 
 from sportsdataverse.mlb._savant_eras import abs_era_expr, drop_abs_era_rows
 
@@ -132,8 +133,8 @@ def fit_zone_model(pitches: pl.DataFrame) -> Dict[str, Any]:
     def _neg_log_loss(theta: "np.ndarray") -> float:
         w, b = theta[:-1], theta[-1]
         z = X @ w + b
-        p = 1.0 / (1.0 + np.exp(-z))
-        p = np.clip(p, 1e-12, 1 - 1e-12)
+        # expit, not 1/(1+exp(-z)): exp overflows (RuntimeWarning) once the optimizer probes a large |z|.
+        p = np.clip(expit(z), 1e-12, 1 - 1e-12)
         loss = -np.mean(y * np.log(p) + (1 - y) * np.log(1 - p))
         return loss + _L2_PENALTY * float(np.sum(w**2))
 
@@ -146,7 +147,7 @@ def _score(pitches: pl.DataFrame, model: Dict[str, Any]) -> "np.ndarray":
     X = _zone_features(pitches)
     coef = np.asarray(model["coef"], dtype=float)
     z = X @ coef + model["intercept"]
-    return 1.0 / (1.0 + np.exp(-z))
+    return expit(z)
 
 
 def mlb_umpire_called_strike_prob(
