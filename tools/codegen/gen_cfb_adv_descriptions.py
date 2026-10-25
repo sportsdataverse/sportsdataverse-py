@@ -22,7 +22,8 @@ from __future__ import annotations
 import pathlib
 import sys
 
-sys.path.insert(0, ".")
+_ROOT = pathlib.Path(__file__).resolve().parents[2]  # the repo root, whatever the CWD
+sys.path.insert(0, str(_ROOT))
 
 _ESPN = "ESPN's advanced box score"
 _THRESH = "ESPN applies its own qualifying threshold"
@@ -149,10 +150,10 @@ def main() -> None:
     # descriptions apply across the family, not just the team block.
     targets = tuple(
         f
-        for f in yaml.safe_load(pathlib.Path("tools/codegen/schemas/loader_schemas.yaml").read_text(encoding="utf-8"))
+        for f in yaml.safe_load((_ROOT / "tools/codegen/schemas/loader_schemas.yaml").read_text(encoding="utf-8"))
         if f.startswith("load_cfb_adv")
     )
-    schemas = yaml.safe_load(pathlib.Path("tools/codegen/schemas/loader_schemas.yaml").read_text(encoding="utf-8"))
+    schemas = yaml.safe_load((_ROOT / "tools/codegen/schemas/loader_schemas.yaml").read_text(encoding="utf-8"))
     out: dict[str, dict[str, str]] = {}
     missing: set[str] = set()
     for t in targets:
