@@ -6847,8 +6847,8 @@
   group: share-generator-helpers
   finding: A-L22
   file: tools/codegen/gen_cbs.py
-  snippet: "from gen_soccer_common import load_spec, refs_dir, rewrite_schema_dir, write_yaml\n"
-  mutant: "from gen_soccer_common import load_spec, refs_dir, rewrite_schema_dir\n\n\ndef write_yaml(path, obj):\n    path.write_text(yaml.safe_dump(obj), encoding=\"utf-8\")\n"
+  snippet: "from gen_soccer_common import load_spec, refs_dir, rewrite_schema_dir, snake_path, write_yaml\n"
+  mutant: "from gen_soccer_common import load_spec, refs_dir, rewrite_schema_dir, snake_path\n\n\ndef write_yaml(path, obj):\n    path.write_text(yaml.safe_dump(obj), encoding=\"utf-8\")\n"
   test: tests/codegen/test_shared_generator_helpers.py -k gen_cbs
   expected: kill
   note: The pre-6.1 state, gen_cbs writing YAML through its own copy rather than gen_soccer_common's.
@@ -7709,3 +7709,14 @@
   test: tests/wbb/test_wbb_ncaa_shots_shim.py -k log_under_the_wbb_logger
   expected: kill
   note: The 6.1b state, where the shared driver logged a WBB call under sportsdataverse.mbb and the WBB logger was dead.
+
+# --- final nits: R1000-1 (#1000 review) an Example: without a literal block is a docstring gap ----
+- id: docstring-check-wants-a-literal-block
+  group: final-nits
+  finding: R1000-1
+  file: tools/check_docstrings.py
+  snippet: '        if "Example:" in doc and "::" not in doc.split("Example:", 1)[1]:'
+  mutant: '        if False:'
+  test: tests/test_docstring_sections.py -k literal_block_in_example
+  expected: kill
+  note: A docstring whose Example section holds prose only (no literal block) passes the check again.

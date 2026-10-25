@@ -3,7 +3,11 @@
 Every public function defined in the given modules (files or package directories) must
 carry ``Args:`` (when it takes parameters), ``Returns:``, ``Raises:`` (when its body has a
 ``raise``), ``Example:`` and ``See Also:``; every public class ``Example:`` and ``See Also:``.
-No docstring may hold a ``>>>`` doctest prompt.
+An ``Example:`` section must hold a napoleon literal block (a ``::``). No docstring may hold a
+``>>>`` doctest prompt.
+
+Only module-level functions and classes are walked: the methods of a public class are not
+checked (the audited modules' dataclass helpers such as ``to_dict`` carry one-line docstrings).
 
     uv run python tools/check_docstrings.py sportsdataverse/find.py sportsdataverse/validation
 
@@ -59,6 +63,8 @@ def check_file(path: Path) -> tuple[list[str], int, int]:
             continue
         doc = ast.get_docstring(node) or ""
         gaps = [s for s in _required(node) if s not in doc]
+        if "Example:" in doc and "::" not in doc.split("Example:", 1)[1]:
+            gaps.append("a '::' literal block in Example:")
         if gaps:
             missing += len(gaps)
             lines.append(f"{path}:{node.lineno} {node.name}: missing {', '.join(gaps)}")
