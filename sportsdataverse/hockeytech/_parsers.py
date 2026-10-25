@@ -36,11 +36,15 @@ def _snake_columns(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def _to_frame(records: List[Dict[str, Any]], return_as_pandas: bool, parser: Optional[str] = None) -> Any:
+def _to_frame(
+    records: List[Dict[str, Any]], return_as_pandas: bool, *, parser: Optional[str] = None, stacklevel: int = 4
+) -> Any:
     """Flatten ``records`` to a frame with every id Int64 (task 5.2).
 
     ``parser`` names the public parser in an id-refusal warning; it defaults to the calling function's name, and
-    the warning points at that parser's caller (R988-7).
+    the warning points at that parser's caller (R988-7). ``stacklevel`` counts from the cast: 4 reaches the
+    caller of an undecorated parser, 5 the caller of one wrapped by a decorator (``_documented_empty``,
+    ``_data_only``, ``_dict_only``) (R989).
     """
     parser = parser or sys._getframe(1).f_code.co_name
     pdf = pd.json_normalize(records or [], sep="_")
@@ -55,7 +59,7 @@ def _to_frame(records: List[Dict[str, Any]], return_as_pandas: bool, parser: Opt
         return pdf if return_as_pandas else pl.DataFrame()
     # every id Int64 from the raw integer (task 5.2: B-H5, B-L72); a text id is refused and keeps its dtype.
     # The pandas frame carries the same ids as pandas' nullable Int64, never float64 (R988-2).
-    out = _cast_id_columns(pl.from_pandas(pdf), f"HockeyTech {parser}", stacklevel=4)
+    out = _cast_id_columns(pl.from_pandas(pdf), f"HockeyTech {parser}", stacklevel=stacklevel)
     return _pandas_ids(out, pdf) if return_as_pandas else out
 
 
@@ -254,7 +258,7 @@ def parse_teams(payload: Any, return_as_pandas: bool = False) -> Any:
                 "team_logo": t.get("team_logo_url") or t.get("logo"),
             }
         )
-    return _to_frame(rows, return_as_pandas)
+    return _to_frame(rows, return_as_pandas, stacklevel=5)
 
 
 def parse_roster(payload: Any, return_as_pandas: bool = False) -> Any:
@@ -532,7 +536,7 @@ def parse_pbp(
         rows = _parse_pbp_b(events, game_id=game_id)
     else:
         rows = _parse_pbp_a(events, game_id=game_id)
-    return _to_frame(rows, return_as_pandas)
+    return _to_frame(rows, return_as_pandas, stacklevel=5)
 
 
 def mmss_to_seconds(value: Any) -> Optional[int]:
@@ -605,7 +609,7 @@ def parse_shifts(payload: Any, game_id: Any = None, return_as_pandas: bool = Fal
                     }
                 )
     # A shift still on the ice has no end time: pandas then reads end_s as float. Both are whole seconds.
-    df = _to_frame(rows, False)
+    df = _to_frame(rows, False, stacklevel=5)
     df = df.with_columns(pl.col(c).cast(pl.Int64) for c in ("start_s", "end_s") if c in df.columns)
     return _pandas_ids(df) if return_as_pandas else df
 
@@ -794,11 +798,11 @@ def parse_game_summary(payload: Any, game_id: Any = None) -> Dict[str, Any]:
 
     return {
         # the stub row carries only the caller's game_id: without one (or any data) it is no row
-        "game": _to_frame([game_row] if game_id is not None or summary else [], False),
-        "goals": _to_frame(goals_raw, False),
-        "penalties": _to_frame(penalties_raw, False),
-        "shots_by_period": _to_frame(sbp_raw, False),
-        "three_stars": _to_frame(stars_raw, False),
+        "game": _to_frame([game_row] if game_id is not None or summary else [], False, stacklevel=5),
+        "goals": _to_frame(goals_raw, False, stacklevel=5),
+        "penalties": _to_frame(penalties_raw, False, stacklevel=5),
+        "shots_by_period": _to_frame(sbp_raw, False, stacklevel=5),
+        "three_stars": _to_frame(stars_raw, False, stacklevel=5),
     }
 
 
@@ -807,7 +811,7 @@ def parse_game_summary(payload: Any, game_id: Any = None) -> Dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 
-def _flat_sitekit_parser(key: str, rename: Optional[Dict[str, str]] = None, records: Optional[str] = None):
+def _flat_sitekit_parser(key: str, name: str, rename: Optional[Dict[str, str]] = None, records: Optional[str] = None):
     """Factory that creates a flat SiteKit extractor for the given ``key``.
 
     The returned parser reads ``SiteKit.<key>`` -- a list of dicts, or, for views that wrap
@@ -823,7 +827,7 @@ def _flat_sitekit_parser(key: str, rename: Optional[Dict[str, str]] = None, reco
             raw = (raw.get(records) or []) if records else [raw]
         if rename and isinstance(raw, list):
             raw = [{rename.get(k, k): v for k, v in r.items()} for r in raw if isinstance(r, dict)]
-        return _to_frame(list(raw), return_as_pandas, parser=f"parse_{key.lower()}")
+        return _to_frame(list(raw), return_as_pandas, parser=name)  # the exported name, not parse_<key>
 
     _parser.__name__ = f"parse_{key.lower()}"
     _parser.__doc__ = (
@@ -834,16 +838,16 @@ def _flat_sitekit_parser(key: str, rename: Optional[Dict[str, str]] = None, reco
     return _parser
 
 
-parse_player_game_log = _flat_sitekit_parser("Player", records="games")
+parse_player_game_log = _flat_sitekit_parser("Player", "parse_player_game_log", records="games")
 """Parse ``SiteKit.Player.games`` (the gamebygame view) as one row per game."""
 
-parse_player_search = _flat_sitekit_parser("Searchplayers")
+parse_player_search = _flat_sitekit_parser("Searchplayers", "parse_player_search")
 """Parse ``SiteKit.Searchplayers`` into a flat frame (player search results)."""
 
-parse_streaks = _flat_sitekit_parser("Streaks")
+parse_streaks = _flat_sitekit_parser("Streaks", "parse_streaks")
 """Parse ``SiteKit.Streaks`` into a flat frame (player/team streaks)."""
 
-parse_transactions = _flat_sitekit_parser("Transactions", records="transactions")
+parse_transactions = _flat_sitekit_parser("Transactions", "parse_transactions", records="transactions")
 """Parse ``SiteKit.Transactions`` into a flat frame (roster transactions)."""
 
 
@@ -866,14 +870,14 @@ def parse_playoff_bracket(payload: Any, return_as_pandas: bool = False) -> Any:
     return _to_frame(rows, return_as_pandas)
 
 
-parse_scorebar = _flat_sitekit_parser("Scorebar")
+parse_scorebar = _flat_sitekit_parser("Scorebar", "parse_scorebar")
 """Parse ``SiteKit.Scorebar`` into a flat frame (live scorebar).
 
 NOTE: :func:`parse_schedule` maps the same rows onto the canonical schedule columns
 (``_SCOREBAR_RENAME``).
 """
 
-parse_stats = _flat_sitekit_parser("Statviewtype")
+parse_stats = _flat_sitekit_parser("Statviewtype", "parse_stats")
 """Parse ``SiteKit.Statviewtype`` into a flat frame (stat view / leaders).
 
 NOTE: for the leaders-specific column contract see :func:`parse_leaders`.
@@ -1217,7 +1221,7 @@ def parse_seasons(payload: Any, return_as_pandas: bool = False) -> Any:
                 "game_type_label": label,
             }
         )
-    df = _to_frame(rows, return_as_pandas)
+    df = _to_frame(rows, return_as_pandas, stacklevel=5)
     if not len(df):
         return df
     # pandas turns an int column holding a None into float64: cast back at the boundary

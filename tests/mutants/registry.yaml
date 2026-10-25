@@ -7279,7 +7279,7 @@
   group: dtype-contract-5-2
   finding: B-H5
   file: sportsdataverse/hockeytech/_parsers.py
-  snippet: '    out = _cast_id_columns(pl.from_pandas(pdf), f"HockeyTech {parser}", stacklevel=4)'
+  snippet: '    out = _cast_id_columns(pl.from_pandas(pdf), f"HockeyTech {parser}", stacklevel=stacklevel)'
   mutant: '    out = _cast_id_columns(pl.from_pandas(pdf), "HockeyTech parser")'
   test: tests/hockeytech/test_parsers.py -k "hockeytech_id_that_is_not_an_integer"
   expected: kill
@@ -7294,6 +7294,26 @@
   test: tests/hockeytech/test_league_families.py -k "blank_home_team_id"
   expected: kill
   note: A pbp frame with a blank home_team_id credits every shot to the away skaters (R988-6).
+
+- id: hockeytech-decorated-parser-warning-points-at-the-caller
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '    df = _to_frame(rows, False, stacklevel=5)'
+  mutant: '    df = _to_frame(rows, False)'
+  test: tests/hockeytech/test_parsers.py -k "names_the_parser_and_points and parse_shifts"
+  expected: kill
+  note: A decorated parser's id warning points at the decorator wrapper, not the caller (R989, CodeRabbit).
+
+- id: hockeytech-sitekit-parser-warning-names-the-export
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '        return _to_frame(list(raw), return_as_pandas, parser=name)  # the exported name, not parse_<key>'
+  mutant: '        return _to_frame(list(raw), return_as_pandas, parser=f"parse_{key.lower()}")'
+  test: tests/hockeytech/test_parsers.py -k "names_the_parser_and_points and parse_player_game_log"
+  expected: kill
+  note: parse_player_game_log's id warning names it parse_player (R989, CodeRabbit).
 
 - id: hockeytech-parser-pandas-ids-nullable-int64
   group: dtype-contract-5-2
@@ -7421,7 +7441,7 @@
   group: dtype-contract-5-2
   finding: B-H5
   file: sportsdataverse/hockeytech/_parsers.py
-  snippet: '    out = _cast_id_columns(pl.from_pandas(pdf), f"HockeyTech {parser}", stacklevel=4)'
+  snippet: '    out = _cast_id_columns(pl.from_pandas(pdf), f"HockeyTech {parser}", stacklevel=stacklevel)'
   mutant: '    out = pl.from_pandas(pdf)'
   test: tests/hockeytech/test_parsers.py -k "hockeytech_ids_int64"
   expected: kill
