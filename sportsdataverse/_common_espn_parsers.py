@@ -959,8 +959,8 @@ def parse_leaders(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame
 
     Input: raw payload from ``_espn_statistics_byathlete()``.
     Output: one row per athlete in ``categories[].leaders[]`` with
-    athlete_id + per-stat values. Stat column names are drawn from
-    ``glossary[].abbreviation`` or ``categories[].labels``.
+    athlete_id + per-stat values. Stat column names are each category's
+    ``names[]`` (``labels[]`` when a category has no ``names``), snake-cased.
 
     Args:
         payload: Raw JSON dict from the statistics/byathlete endpoint.
@@ -971,12 +971,6 @@ def parse_leaders(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame
     """
     if not payload:
         return _empty_frame(return_as_pandas)
-
-    # Build a glossary mapping abbreviation → description from payload.glossary
-    glossary = {
-        g.get("abbreviation"): g.get("displayName") or g.get("description") or g.get("abbreviation")
-        for g in (payload.get("glossary") or [])
-    }
 
     categories = payload.get("categories") or []
     rows: List[dict] = []
@@ -2315,7 +2309,7 @@ def parse_summary_drive_plays(payload: Dict, return_as_pandas: bool = False) -> 
 
 @_zero_rows_unless_dict
 def parse_summary(
-    payload: Dict, section: str = None, return_as_pandas: bool = False, documented_table: str | None = None
+    payload: Dict, section: str | None = None, return_as_pandas: bool = False, documented_table: str | None = None
 ):
     """Dispatcher: parse one section of a Site v2 summary payload.
 
@@ -2400,7 +2394,7 @@ def _cdn_content(payload: Any) -> dict:
 
 
 def parse_cdn_game(
-    payload: Dict, section: str = None, return_as_pandas: bool = False, documented_table: str | None = None
+    payload: Dict, section: str | None = None, return_as_pandas: bool = False, documented_table: str | None = None
 ):
     """Parse a CDN ``playbyplay`` / ``boxscore`` page through :func:`parse_summary`.
 
