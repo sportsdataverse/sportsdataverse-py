@@ -6885,11 +6885,21 @@
   group: dtype-contract-5-2
   finding: B-M15
   file: sportsdataverse/_espn_game_rosters.py
-  snippet: '        keep = [i for i, n in enumerate(names) if n not in names[:i]]'
-  mutant: '        keep = list(range(len(names)))'
+  snippet: '    keep = sorted(best.values())'
+  mutant: '    keep = list(range(len(names)))'
   test: tests/test_espn_game_rosters_family.py -k "read_each_athlete_from_its_ref"
   expected: kill
   note: An MLB athlete record (debutYear beside debut.year) fails the shared athlete step on a duplicate column.
+
+- id: game-rosters-athlete-key-collision-prefers-top-level
+  group: final-nits
+  finding: R1002-6
+  file: sportsdataverse/_espn_game_rosters.py
+  snippet: '        if name not in best or col.count(_NEST) < frame.columns[best[name]].count(_NEST):'
+  mutant: '        if name not in best:'
+  test: tests/test_espn_game_rosters_family.py -k "keeps_the_top_level_key_in_either_column_order"
+  expected: kill
+  note: A snake-case collision keeps whichever key ESPN serialised first, not the top-level one (R1002-6).
 
 # --- task 6.1 (b): one private body behind every former copy (B-L26, B-L27, B-L28, B-L46, B-L52, B-GB-11) ----
 - id: shared-box-readers-copy-again
