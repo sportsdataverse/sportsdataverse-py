@@ -6,6 +6,7 @@ These are PURE frame->frame functions (no network) ported from fastRhockey's
 
 from __future__ import annotations
 
+import pandas as pd
 import polars as pl
 import pytest
 
@@ -405,3 +406,78 @@ def test_add_coord_transforms_shots_populated_on_real_data():
     # All shots should have x_coord_original populated
     assert shots["x_coord_original"].drop_nulls().len() == shots.height
     assert shots["y_coord_original"].drop_nulls().len() == shots.height
+
+
+@pytest.mark.parametrize("payload", [{}, None, {"GC": {"Pxpverbose": []}}])
+def test_empty_schema_enrich_pbp_on_a_game_with_no_plays(payload):
+    """B-GB-09: a game with no plays is the documented pbp table with zero rows (no phantom row on polars 1.x)."""
+    from sportsdataverse.hockeytech import _parsers as P
+    from sportsdataverse.hockeytech._analytics import enrich_pbp
+    from tests.conftest import documented_schema
+
+    df = P.parse_pbp(payload, game_id=42)
+    meta, shifts = load_fixture("hockeytech", "pwhl_game_summary_42"), load_fixture("hockeytech", "pwhl_gameshifts_42")
+    out = enrich_pbp(df, "pwhl", 42, meta_payload=meta, shifts_payload=shifts)
+    assert out.height == 0 and dict(out.schema) == documented_schema("autodoc/pwhl/pwhl_pbp")
+    pdf = enrich_pbp(df, "pwhl", 42, meta_payload=meta, shifts_payload=shifts, return_as_pandas=True)
+    assert isinstance(pdf, pd.DataFrame) and len(pdf) == 0
+    assert list(pdf.columns) == list(documented_schema("autodoc/pwhl/pwhl_pbp"))
+
+
+def test_empty_schema_enrich_pbp_zero_rows_with_columns_and_real_games_stack():
+    """R978-4/-6: a game whose plays all filter out (zero rows, parser columns) is the documented table too, and
+    a no-play game, a PWHL game and an OHL game (the other payload dialect) stack vertically."""
+    from sportsdataverse.hockeytech import _parsers as P
+    from sportsdataverse.hockeytech._analytics import enrich_pbp
+    from tests.conftest import documented_schema
+
+    meta, shifts = load_fixture("hockeytech", "pwhl_game_summary_42"), load_fixture("hockeytech", "pwhl_gameshifts_42")
+    played = enrich_pbp(_pbp(), "pwhl", 42, meta_payload=meta, shifts_payload=shifts)
+    none = enrich_pbp(_pbp().head(0), "pwhl", 42, meta_payload=meta, shifts_payload=shifts)
+    ohl = P.parse_pbp(load_fixture("hockeytech", "ohl_pbp_27225"), pbp_style="hockeytech_b", game_id=27225)
+    other = enrich_pbp(ohl, "ohl", 27225, meta_payload={}, shifts_payload={})
+    want = documented_schema("autodoc/pwhl/pwhl_pbp")
+    assert none.height == 0 and dict(none.schema) == want
+    assert dict(played.schema) == want
+    assert played.columns == other.columns
+    assert pl.concat([played, none, other], how="vertical_relaxed").height == played.height + other.height
+
+
+def test_enriched_pbp_ids_int64():
+    """B-H5 (task 5.2): the enriched pbp (``<lg>_pbp``) carries every id Int64, the parser's and the game-summary
+    meta's alike; an OHL game with no summary has null meta ids, not ``""``."""
+    from sportsdataverse.hockeytech import _parsers as P
+    from sportsdataverse.hockeytech._analytics import enrich_pbp
+
+    meta, shifts = load_fixture("hockeytech", "pwhl_game_summary_42"), load_fixture("hockeytech", "pwhl_gameshifts_42")
+    played = enrich_pbp(_pbp(), "pwhl", 42, meta_payload=meta, shifts_payload=shifts)
+    ohl = P.parse_pbp(load_fixture("hockeytech", "ohl_pbp_27225"), pbp_style="hockeytech_b", game_id=27225)
+    other = enrich_pbp(ohl, "ohl", 27225, meta_payload={}, shifts_payload={})
+    for df in (played, other):
+        ids = {c: df.schema[c] for c in df.columns if c == "id" or c.endswith("_id")}
+        assert {"game_id", "team_id", "player_id", "home_team_id", "away_team_id", "game_season_id"} <= set(ids)
+        assert {c: t for c, t in ids.items() if t != pl.Int64} == {}
+    assert played["home_team_id"].null_count() == 0 and other["home_team_id"].null_count() == other.height
+
+
+def test_enriched_pbp_pandas_ids_are_nullable_int64():
+    """R988-2: ``<lg>_pbp(..., return_as_pandas=True)`` turned the null-bearing ``team_id`` / ``player_team_id`` into
+    float64 (``1.0``) and an OHL game with no summary got an all-NaN ``home_team_id``; the ids are pandas' nullable
+    ``Int64``, the same values as the polars frame."""
+    import pandas as pd
+
+    from sportsdataverse.hockeytech import _parsers as P
+    from sportsdataverse.hockeytech._analytics import enrich_pbp
+
+    meta, shifts = load_fixture("hockeytech", "pwhl_game_summary_42"), load_fixture("hockeytech", "pwhl_gameshifts_42")
+    ohl = P.parse_pbp(load_fixture("hockeytech", "ohl_pbp_27225"), pbp_style="hockeytech_b", game_id=27225)
+    for args, kw in (
+        ((_pbp(), "pwhl", 42), {"meta_payload": meta, "shifts_payload": shifts}),
+        ((ohl, "ohl", 27225), {"meta_payload": {}, "shifts_payload": {}}),
+    ):
+        df = enrich_pbp(*args, **kw)
+        pdf = enrich_pbp(*args, return_as_pandas=True, **kw)
+        ids = [c for c, t in df.schema.items() if t == pl.Int64 and (c == "id" or c.endswith("_id"))]
+        assert {"team_id", "home_team_id"} <= set(ids)
+        assert {c: str(pdf[c].dtype) for c in ids} == dict.fromkeys(ids, "Int64")
+        assert [None if v is pd.NA else int(v) for v in pdf["team_id"]] == df["team_id"].to_list()

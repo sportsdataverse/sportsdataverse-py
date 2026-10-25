@@ -2,7 +2,7 @@ schema: pwhl_game_corsi
 kind: dataframe
 columns:
 - name: player_id
-  type: character
+  type: integer
   description: ''
 - name: corsi_for
   type: integer

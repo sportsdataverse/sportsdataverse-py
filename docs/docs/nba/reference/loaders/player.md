@@ -111,10 +111,10 @@ Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | col_name | type | description |
 |---|---|---|
 | `season` | Int32 | Season year. |
-| `espn_team_id` | Int32 | ESPN team id (canonical key). |
+| `espn_team_id` | Int64 | ESPN team id (canonical key). |
 | `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
 | `player_name` | String | Player name. |
-| `espn_athlete_id` | String | ESPN athlete id. |
+| `espn_athlete_id` | Int64 | ESPN athlete id. |
 | `espn_full_name` | String | ESPN full name. |
 | `espn_jersey` | String | ESPN jersey number. |
 | `espn_position` | String | ESPN position abbreviation. |

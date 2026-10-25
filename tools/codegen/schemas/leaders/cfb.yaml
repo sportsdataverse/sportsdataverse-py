@@ -32,7 +32,7 @@ columns:
   type: character
   description: Pagination last.
 - name: league_id
-  type: character
+  type: integer
   description: League id.
 - name: league_uid
   type: character
@@ -65,7 +65,7 @@ columns:
   type: character
   description: Current season end date.
 - name: current_season_type_id
-  type: character
+  type: integer
   description: Current season type id.
 - name: current_season_type_type
   type: integer
@@ -104,7 +104,7 @@ columns:
   type: character
   description: Requested season end date.
 - name: requested_season_type_id
-  type: character
+  type: integer
   description: Requested season type id.
 - name: requested_season_type_type
   type: integer

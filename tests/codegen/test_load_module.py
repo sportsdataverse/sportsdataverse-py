@@ -125,7 +125,10 @@ def test_generated_single_asset_loader_has_no_seasons_and_is_404_safe(tmp_path):
     with warnings.catch_warnings(record=True) as w:
         warnings.simplefilter("always")
         out = fn()
-    assert out.shape == (0, 0) and any("no published asset" in str(x.message) for x in w)
+    # A-M7 (task 5.1): the documented columns with zero rows, not a (0, 0) frame
+    want = list(generate._loader_schemas()["load_cfb_coach_careers"])
+    assert out.height == 0 and out.columns == [c["name"] for c in want]
+    assert any("no published asset" in str(x.message) for x in w)
 
 
 def test_seasonal_loader_docstring_still_documents_seasons(tmp_path):

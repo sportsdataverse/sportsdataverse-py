@@ -2,7 +2,7 @@ schema: team_roster
 kind: dataframe
 columns:
 - name: id
-  type: character
+  type: integer
   description: Id.
 - name: uid
   type: character
@@ -62,7 +62,7 @@ columns:
   type: character
   description: ''
 - name: birth_country_alternate_id
-  type: character
+  type: integer
   description: ''
 - name: birth_country_abbreviation
   type: character
@@ -92,7 +92,7 @@ columns:
   type: character
   description: ''
 - name: position_id
-  type: character
+  type: integer
   description: Position id.
 - name: position_name
   type: character
@@ -116,7 +116,7 @@ columns:
   type: character
   description: ''
 - name: status_id
-  type: character
+  type: integer
   description: Status id.
 - name: status_name
   type: character

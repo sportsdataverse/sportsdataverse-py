@@ -206,8 +206,8 @@ Get the resource endpoint registry
 | `routes` | character | JSON-encoded list of colon-style route patterns for the endpoints reachable at more than one route; only the conference, division and team resources carry it, each adding a /resource/vendor/{vendorId}/... variant. |
 | `paths` | character | JSON-encoded list of brace-style request paths matching routes, present only on the endpoints that expose several routes. |
 | `expiration_message` | character | Cache-expiration descriptor as CBS returns it for the four entries where the block is null rather than an object; the object form is flattened into expiration_message_object_key_name instead. |
-| `is_active` | character |  |
-| `resource_cache_no_cache` | character | Marker carried only by the endpoints CBS never caches (the bulk controller and the registry itself), whose resourceCache block holds noCache in place of a namespace. |
+| `is_active` | logical |  |
+| `resource_cache_no_cache` | logical | Marker carried only by the endpoints CBS never caches (the bulk controller and the registry itself), whose resourceCache block holds noCache in place of a namespace. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

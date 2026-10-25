@@ -1251,6 +1251,7 @@ loaders:
   base: sdv_releases
   url: mbb_crosswalk/mbb_player_crosswalk_{season}.parquet
   tag: mbb_crosswalk
+  id_int64: [espn_team_id, espn_athlete_id]
   min_season: 2025
   example_args:
     seasons: 2026
@@ -1259,6 +1260,7 @@ loaders:
   base: sdv_releases
   url: mbb_crosswalk/mbb_schedule_crosswalk_{season}.parquet
   tag: mbb_crosswalk
+  id_int64: [espn_game_id, home_espn_team_id, away_espn_team_id]
   min_season: 2025
   example_args:
     seasons: 2026
@@ -1267,6 +1269,7 @@ loaders:
   base: sdv_releases
   url: mbb_crosswalk/mbb_team_crosswalk_{season}.parquet
   tag: mbb_crosswalk
+  id_int64: [espn_team_id]
   min_season: 2002
   example_args:
     seasons: 2026
@@ -1275,6 +1278,7 @@ loaders:
   base: sdv_releases
   url: wbb_crosswalk/wbb_player_crosswalk_{season}.parquet
   tag: wbb_crosswalk
+  id_int64: [espn_team_id, espn_athlete_id]
   min_season: 2014
   example_args:
     seasons: 2026
@@ -1283,6 +1287,7 @@ loaders:
   base: sdv_releases
   url: wbb_crosswalk/wbb_schedule_crosswalk_{season}.parquet
   tag: wbb_crosswalk
+  id_int64: [espn_game_id, home_espn_team_id, away_espn_team_id]
   min_season: 2026
   example_args:
     seasons: 2026
@@ -1291,6 +1296,7 @@ loaders:
   base: sdv_releases
   url: wbb_crosswalk/wbb_team_crosswalk_{season}.parquet
   tag: wbb_crosswalk
+  id_int64: [espn_team_id]
   min_season: 2014
   example_args:
     seasons: 2026
@@ -1299,6 +1305,7 @@ loaders:
   base: sdv_releases
   url: nba_crosswalk/nba_player_crosswalk_{season}.parquet
   tag: nba_crosswalk
+  id_int64: [espn_team_id, espn_athlete_id]
   min_season: 2002
   example_args:
     seasons: 2026
@@ -1307,6 +1314,7 @@ loaders:
   base: sdv_releases
   url: nba_crosswalk/nba_schedule_crosswalk_{season}.parquet
   tag: nba_crosswalk
+  id_int64: [espn_game_id, home_espn_team_id, away_espn_team_id]
   min_season: 2026
   example_args:
     seasons: 2026
@@ -1315,6 +1323,7 @@ loaders:
   base: sdv_releases
   url: nba_crosswalk/nba_team_crosswalk_{season}.parquet
   tag: nba_crosswalk
+  id_int64: [espn_team_id]
   min_season: 2026
   example_args:
     seasons: 2026
@@ -1323,6 +1332,7 @@ loaders:
   base: sdv_releases
   url: wnba_crosswalk/wnba_player_crosswalk_{season}.parquet
   tag: wnba_crosswalk
+  id_int64: [espn_team_id, espn_athlete_id]
   min_season: 2002
   example_args:
     seasons: 2026
@@ -1331,6 +1341,7 @@ loaders:
   base: sdv_releases
   url: wnba_crosswalk/wnba_schedule_crosswalk_{season}.parquet
   tag: wnba_crosswalk
+  id_int64: [espn_game_id, home_espn_team_id, away_espn_team_id]
   min_season: 2026
   example_args:
     seasons: 2026
@@ -1339,6 +1350,7 @@ loaders:
   base: sdv_releases
   url: wnba_crosswalk/wnba_team_crosswalk_{season}.parquet
   tag: wnba_crosswalk
+  id_int64: [espn_team_id]
   min_season: 2026
   example_args:
     seasons: 2026

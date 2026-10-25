@@ -60,8 +60,8 @@ from sportsdataverse.nhl.nhl_team_ratings import nhl_team_ratings
 
 _PROPS_SCHEMA: dict[str, pl.PolarsDataType] = {
     "season": pl.Int64,
-    "game_id": pl.Utf8,
-    "player_id": pl.Utf8,
+    "game_id": pl.Int64,
+    "player_id": pl.Int64,
     "team": pl.Utf8,
     "opp_team": pl.Utf8,
     "stat": pl.Utf8,
@@ -197,8 +197,8 @@ def nhl_player_props(
         |col_name  |type   |
         |:---------|:------|
         |season    |Int64  |
-        |game_id   |String |
-        |player_id |String |
+        |game_id   |Int64  |
+        |player_id |Int64  |
         |team      |String |
         |opp_team  |String |
         |stat      |String |
@@ -217,7 +217,7 @@ def nhl_player_props(
 
         Pipeline next step (one line)::
 
-            props.filter(pl.col("player_id") == "8478402")
+            props.filter(pl.col("player_id") == 8478402)
     """
     box = (load_skater_boxscores or load_nhl_skater_boxscores)(seasons)
     if box.is_empty():
@@ -225,8 +225,9 @@ def nhl_player_props(
 
     const = get_constants(league)
     box = box.with_columns(
-        pl.col("game_id").cast(pl.Int64).cast(pl.Utf8),
-        pl.col("player_id").cast(pl.Int64).cast(pl.Utf8),
+        # Int64 like every NHL parser id (task 5.2, R986-3), so props join parse_nhl_web_* / EDGE frames
+        pl.col("game_id").cast(pl.Int64),
+        pl.col("player_id").cast(pl.Int64),
         pl.col("game_date").str.strptime(pl.Date, "%Y-%m-%d", strict=False).alias("date"),
     ).filter(pl.col("position") != "G")
 

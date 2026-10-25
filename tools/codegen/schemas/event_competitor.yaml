@@ -8,7 +8,7 @@ columns:
   type: character
   description: ''
 - name: id
-  type: character
+  type: integer
   description: ''
 - name: order
   type: integer

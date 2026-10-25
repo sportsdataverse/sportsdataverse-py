@@ -165,3 +165,13 @@ def test_decompose_empty_is_zero_row_with_schema() -> None:
 
     df = decompose_college_baseball_plays([])
     assert df.height == 0 and df.columns == list(PBP_SCHEMA.keys())
+
+
+def test_count_columns_stay_integer_under_pandas() -> None:
+    """B-L36: the documented integer count columns are nullable Int64 under pandas, not float64."""
+    p = GAMES[0]
+    pdf = parse_college_baseball_ncaa_pbp(
+        p.read_text(encoding="utf-8"), contest_id=p.stem.split("_")[-1], return_as_pandas=True
+    )
+    assert pdf["count_balls"].isna().any() and pdf["count_balls"].notna().any()  # the capture has both
+    assert {str(pdf[c].dtype) for c in ("count_balls", "count_strikes", "rbi", "inning")} == {"Int64"}

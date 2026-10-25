@@ -73,6 +73,9 @@ def _to_frame(records: List, return_as_pandas: bool) -> DataFrameT:
         if df[col].apply(lambda v: isinstance(v, list)).any():
             df[col] = df[col].apply(lambda v: str(v) if isinstance(v, list) else v)
     df.columns = [underscore(c).replace(".", "_") for c in df.columns]
+    if "outcome_point" in df.columns:
+        # B-L90: the handicap / total line is a number on every market (null on h2h), never String or Int64
+        df["outcome_point"] = df["outcome_point"].astype("float64")
     if return_as_pandas:
         return df
     try:

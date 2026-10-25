@@ -44,7 +44,7 @@ columns:
   type: double
   description: ''
 - name: zone
-  type: double
+  type: integer
   description: ''
 - name: des
   type: character
@@ -167,7 +167,7 @@ columns:
   type: double
   description: ''
 - name: release_spin_rate
-  type: double
+  type: integer
   description: ''
 - name: release_extension
   type: double
@@ -263,7 +263,7 @@ columns:
   type: character
   description: ''
 - name: spin_axis
-  type: double
+  type: integer
   description: ''
 - name: delta_home_win_exp
   type: double
@@ -320,16 +320,16 @@ columns:
   type: integer
   description: ''
 - name: pitcher_days_since_prev_game
-  type: double
+  type: integer
   description: ''
 - name: batter_days_since_prev_game
-  type: double
+  type: integer
   description: ''
 - name: pitcher_days_until_next_game
-  type: double
+  type: integer
   description: ''
 - name: batter_days_until_next_game
-  type: double
+  type: integer
   description: ''
 - name: api_break_z_with_gravity
   type: double

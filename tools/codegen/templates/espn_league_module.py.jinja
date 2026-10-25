@@ -86,7 +86,11 @@ def {{ ep.fn_name }}(
     )
 {% if ep.parser %}
     if return_parsed:
+{% if ep.documented_table %}
+        return {{ ep.parser }}(raw, return_as_pandas=return_as_pandas, documented_table={{ ep.documented_table|py_repr }})
+{% else %}
         return {{ ep.parser }}(raw, return_as_pandas=return_as_pandas)
+{% endif %}
 {% endif %}
     return raw
 {% endfor %}

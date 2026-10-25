@@ -43,7 +43,7 @@ ESPN endpoint.
 | `type_has_groups` | logical |  |
 | `type_has_legs` | logical |  |
 | `type_has_standings` | logical |  |
-| `type_id` | character | Type identifier (numeric). |
+| `type_id` | integer | Type identifier (numeric). |
 | `type_name` | character | Type name. |
 | `type_slug` | character |  |
 | `type_start_date` | character |  |
@@ -110,7 +110,7 @@ ESPN endpoint.
 | `type_has_groups` | logical |  |
 | `type_has_legs` | logical |  |
 | `type_has_standings` | logical |  |
-| `type_id` | character | Type identifier (numeric). |
+| `type_id` | integer | Type identifier (numeric). |
 | `type_leaders_$ref` | character |  |
 | `type_name` | character | Type name. |
 | `type_slug` | character |  |
@@ -204,7 +204,7 @@ ESPN endpoint.
 | `has_groups` | logical | Whether groups exist for this type. |
 | `has_legs` | logical | Whether playoff legs exist. |
 | `has_standings` | logical | Whether standings exist. |
-| `id` | character | Id. |
+| `id` | integer | Id. |
 | `name` | character | Display name. |
 | `slug` | character | URL-safe identifier. |
 | `start_date` | character | Start date (YYYY-MM-DD). |
@@ -252,7 +252,7 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
-| `id` | character | Id. |
+| `id` | integer | Id. |
 | `is_conference` | logical | Whether this group is a conference. |
 | `links` | character |  |
 | `midsize_name` | character | Mid-size display name. |
@@ -461,7 +461,7 @@ ESPN endpoint.
 | `competition_$ref` | character |  |
 | `split_stats_abbreviation` | character |  |
 | `split_stats_categories` | character |  |
-| `split_stats_id` | character |  |
+| `split_stats_id` | integer |  |
 | `split_stats_name` | character |  |
 | `team_$ref` | character |  |
 | `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
@@ -746,7 +746,7 @@ ESPN endpoint.
 | `color` | character | Primary color (hex without leading '#'). |
 | `display_name` | character | Display name. |
 | `guid` | character | Stable cross-league team GUID. |
-| `id` | character | Id. |
+| `id` | integer | Id. |
 | `is_active` | logical | Is active. |
 | `is_all_star` | logical | Is all star. |
 | `links` | character |  |
@@ -776,7 +776,7 @@ ESPN endpoint.
 | `venue_full_name` | character | Venue full name. |
 | `venue_grass` | logical |  |
 | `venue_guid` | character |  |
-| `venue_id` | character | Unique venue identifier. |
+| `venue_id` | integer | Unique venue identifier. |
 | `venue_images` | character |  |
 | `venue_indoor` | logical | TRUE if the venue is indoors. |
 | `venue_short_name` | character |  |

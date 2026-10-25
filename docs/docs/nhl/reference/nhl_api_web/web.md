@@ -36,33 +36,33 @@ Pull the play-by-play feed for one NHL game.
 | `period_descriptor_number` | integer | Period number. |
 | `period_descriptor_period_type` | character | Period type (e.g., REG, OT). |
 | `period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods. |
-| `details_event_owner_team_id` | double | NHL api-web team identifier for the team credited with or responsible for the play event in the play-by-play feed. |
-| `details_losing_player_id` | double | NHL api-web player identifier for the skater who lost the faceoff on a faceoff event in the play-by-play feed. |
-| `details_winning_player_id` | double | NHL api-web player identifier for the skater who won the faceoff on a faceoff event in the play-by-play feed. |
+| `details_event_owner_team_id` | integer | NHL api-web team identifier for the team credited with or responsible for the play event in the play-by-play feed. |
+| `details_losing_player_id` | integer | NHL api-web player identifier for the skater who lost the faceoff on a faceoff event in the play-by-play feed. |
+| `details_winning_player_id` | integer | NHL api-web player identifier for the skater who won the faceoff on a faceoff event in the play-by-play feed. |
 | `details_x_coord` | double | Horizontal rink coordinate (feet from centre ice, positive toward right side) of the play event location in the NHL api-web play-by-play feed. |
 | `details_y_coord` | double | Vertical rink coordinate (feet from centre ice, positive toward one end) of the play event location in the NHL api-web play-by-play feed. |
 | `details_zone_code` | character | Ice zone where the play event occurred, coded as 'O' (offensive), 'D' (defensive), or 'N' (neutral) relative to the event owner team in the play-by-play feed. |
 | `details_shot_type` | character | Classification of the shot attempt (e.g., wrist shot, slap shot, backhand, deflection) as provided in the NHL api-web play-by-play details. |
-| `details_shooting_player_id` | double | NHL api-web player identifier for the skater who took the shot on a shot-on-goal, missed-shot, or blocked-shot event in the play-by-play feed. |
-| `details_goalie_in_net_id` | double | NHL api-web player identifier for the goaltender who was in the net at the time of the shot, goal, or missed-shot event in the play-by-play feed. |
+| `details_shooting_player_id` | integer | NHL api-web player identifier for the skater who took the shot on a shot-on-goal, missed-shot, or blocked-shot event in the play-by-play feed. |
+| `details_goalie_in_net_id` | integer | NHL api-web player identifier for the goaltender who was in the net at the time of the shot, goal, or missed-shot event in the play-by-play feed. |
 | `details_away_sog` | double | Cumulative shots on goal by the away team at the moment of the play event in the NHL api-web play-by-play feed. |
 | `details_home_sog` | double | Cumulative shots on goal by the home team at the moment of the play event in the NHL api-web play-by-play feed. |
 | `details_reason` | character | Primary reason or description for the play event (e.g., specific penalty infraction name) as provided in the NHL api-web play-by-play details. |
-| `details_blocking_player_id` | double | NHL api-web player identifier for the skater who blocked a shot on the blocked-shot event in the play-by-play feed. |
-| `details_hitting_player_id` | double | NHL api-web player identifier for the skater who delivered the body check on a hit event in the play-by-play feed. |
-| `details_hittee_player_id` | double | NHL api-web player identifier for the skater who received the body check on a hit event in the play-by-play feed. |
-| `details_player_id` | double | NHL api-web player identifier for the primary player involved in the play event (used on giveaway, takeaway, and similar single-player events). |
+| `details_blocking_player_id` | integer | NHL api-web player identifier for the skater who blocked a shot on the blocked-shot event in the play-by-play feed. |
+| `details_hitting_player_id` | integer | NHL api-web player identifier for the skater who delivered the body check on a hit event in the play-by-play feed. |
+| `details_hittee_player_id` | integer | NHL api-web player identifier for the skater who received the body check on a hit event in the play-by-play feed. |
+| `details_player_id` | integer | NHL api-web player identifier for the primary player involved in the play event (used on giveaway, takeaway, and similar single-player events). |
 | `details_type_code` | character | Structured sub-type code providing additional classification within the play event category in the NHL api-web play-by-play feed. |
 | `details_desc_key` | character | Short descriptor key providing additional classification of the play event (e.g., penalty type or shot outcome) in the NHL api-web play-by-play feed. |
 | `details_duration` | double | Duration of the penalty in minutes as specified in the play event details of the NHL api-web play-by-play feed. |
-| `details_committed_by_player_id` | double | NHL api-web player identifier for the player who committed the infraction on a penalty event in the play-by-play feed. |
-| `details_drawn_by_player_id` | double | NHL api-web player identifier for the player who drew (was the victim of) the penalty on a penalty event in the play-by-play feed. |
+| `details_committed_by_player_id` | integer | NHL api-web player identifier for the player who committed the infraction on a penalty event in the play-by-play feed. |
+| `details_drawn_by_player_id` | integer | NHL api-web player identifier for the player who drew (was the victim of) the penalty on a penalty event in the play-by-play feed. |
 | `ppt_replay_url` | character | URL to the power-play tracking replay video associated with this play event in the NHL api-web play-by-play feed. |
-| `details_scoring_player_id` | double | NHL api-web player identifier for the skater who scored the goal on a goal event in the play-by-play feed. |
+| `details_scoring_player_id` | integer | NHL api-web player identifier for the skater who scored the goal on a goal event in the play-by-play feed. |
 | `details_scoring_player_total` | double | Running season goal total for the scoring player at the time of the goal event in the NHL api-web play-by-play feed. |
-| `details_assist1_player_id` | double | NHL api-web player identifier for the primary (first) assist credited on a goal event in the play-by-play feed. |
+| `details_assist1_player_id` | integer | NHL api-web player identifier for the primary (first) assist credited on a goal event in the play-by-play feed. |
 | `details_assist1_player_total` | double | Running season assist total for the primary assist player at the time of the goal event in the play-by-play feed. |
-| `details_assist2_player_id` | double | NHL api-web player identifier for the secondary (second) assist credited on a goal event in the play-by-play feed. |
+| `details_assist2_player_id` | integer | NHL api-web player identifier for the secondary (second) assist credited on a goal event in the play-by-play feed. |
 | `details_assist2_player_total` | double | Running season assist total for the secondary assist player at the time of the goal event in the play-by-play feed. |
 | `details_away_score` | double | Cumulative away-team score at the moment of the play event in the NHL api-web play-by-play feed. |
 | `details_home_score` | double | Cumulative home-team score at the moment of the play event in the NHL api-web play-by-play feed. |

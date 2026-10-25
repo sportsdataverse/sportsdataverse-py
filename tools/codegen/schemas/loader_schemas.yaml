@@ -12435,13 +12435,13 @@ load_mbb_player_crosswalk:
 - name: season
   type: Int32
 - name: espn_team_id
-  type: Int32
+  type: Int64
 - name: team_abbreviation
   type: String
 - name: player_name
   type: String
 - name: espn_athlete_id
-  type: String
+  type: Int64
 - name: espn_full_name
   type: String
 - name: espn_jersey
@@ -12795,11 +12795,11 @@ load_mbb_schedule_crosswalk:
 - name: game_date
   type: Date
 - name: home_espn_team_id
-  type: Int32
+  type: Int64
 - name: away_espn_team_id
-  type: Int32
+  type: Int64
 - name: espn_game_id
-  type: String
+  type: Int64
 - name: bart_muid
   type: String
 - name: bart_team1
@@ -13031,7 +13031,7 @@ load_mbb_team_crosswalk:
 - name: season
   type: Int32
 - name: espn_team_id
-  type: Int32
+  type: Int64
 - name: espn_abbreviation
   type: String
 - name: espn_display_name
@@ -14282,13 +14282,13 @@ load_nba_player_crosswalk:
 - name: season
   type: Int32
 - name: espn_team_id
-  type: Int32
+  type: Int64
 - name: team_abbreviation
   type: String
 - name: player_name
   type: String
 - name: espn_athlete_id
-  type: String
+  type: Int64
 - name: espn_full_name
   type: String
 - name: espn_jersey
@@ -14645,11 +14645,11 @@ load_nba_schedule_crosswalk:
 - name: game_date
   type: Date
 - name: home_espn_team_id
-  type: Int32
+  type: Int64
 - name: away_espn_team_id
-  type: Int32
+  type: Int64
 - name: espn_game_id
-  type: String
+  type: Int64
 - name: nba_game_id
   type: String
 - name: nba_game_code
@@ -17108,7 +17108,7 @@ load_nba_team_crosswalk:
 - name: season
   type: Int32
 - name: espn_team_id
-  type: Int32
+  type: Int64
 - name: espn_abbreviation
   type: String
 - name: espn_display_name
@@ -29717,13 +29717,13 @@ load_wbb_player_crosswalk:
 - name: season
   type: Int32
 - name: espn_team_id
-  type: Int32
+  type: Int64
 - name: team_abbreviation
   type: String
 - name: player_name
   type: String
 - name: espn_athlete_id
-  type: String
+  type: Int64
 - name: espn_full_name
   type: String
 - name: espn_jersey
@@ -30093,11 +30093,11 @@ load_wbb_schedule_crosswalk:
 - name: game_date
   type: Date
 - name: home_espn_team_id
-  type: Int32
+  type: Int64
 - name: away_espn_team_id
-  type: Int32
+  type: Int64
 - name: espn_game_id
-  type: String
+  type: Int64
 - name: bart_muid
   type: String
 - name: bart_team1
@@ -30325,7 +30325,7 @@ load_wbb_team_crosswalk:
 - name: season
   type: Int32
 - name: espn_team_id
-  type: Int32
+  type: Int64
 - name: espn_abbreviation
   type: String
 - name: espn_display_name
@@ -30931,13 +30931,13 @@ load_wnba_player_crosswalk:
 - name: season
   type: Int32
 - name: espn_team_id
-  type: Int32
+  type: Int64
 - name: team_abbreviation
   type: String
 - name: player_name
   type: String
 - name: espn_athlete_id
-  type: String
+  type: Int64
 - name: espn_full_name
   type: String
 - name: espn_jersey
@@ -31296,11 +31296,11 @@ load_wnba_schedule_crosswalk:
 - name: game_date
   type: Date
 - name: home_espn_team_id
-  type: Int32
+  type: Int64
 - name: away_espn_team_id
-  type: Int32
+  type: Int64
 - name: espn_game_id
-  type: String
+  type: Int64
 - name: wnba_game_id
   type: String
 - name: wnba_game_code
@@ -32093,7 +32093,7 @@ load_wnba_team_crosswalk:
 - name: season
   type: Int32
 - name: espn_team_id
-  type: Int32
+  type: Int64
 - name: espn_abbreviation
   type: String
 - name: espn_display_name

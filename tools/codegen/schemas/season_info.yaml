@@ -59,7 +59,7 @@ columns:
   type: logical
   description: ''
 - name: type_id
-  type: character
+  type: integer
   description: ''
 - name: type_leaders_$ref
   type: character
