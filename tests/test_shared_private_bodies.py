@@ -207,7 +207,7 @@ SHARED_BODY_ONLY = [
         _ROSTERS,
         "athlete_items",
         [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_athlete_items") for lg in _SEVEN],
-        "0220579403cae26f",  # #1002: the duplicate snake-case key guard (MLB debutYear vs debut.year)
+        "6f6234d8f5bf8b66",  # #1002 + #1006: the duplicate snake-case key guard, shallowest key wins (MLB debutYear vs debut.year)
     ),
     (
         _ROSTERS,
