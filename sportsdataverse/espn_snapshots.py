@@ -142,7 +142,7 @@ _HEADSHOT_ID_RE = re.compile(r"/(\d+)\.png")
 _INTEGER_ID = re.compile(r"-?(?:0|[1-9]\d*)")
 
 
-def _as_id(value: Any, field: str) -> Optional[int]:
+def _as_id(value: Any, field: str, outcome: str = "read as null") -> Optional[int]:
     """Read the ESPN id ``field`` as an ``int``, never via ``float``.
 
     A numeric string (ESPN's injury ids are negative: ``"-1975351"``) and an int are read as
@@ -151,7 +151,7 @@ def _as_id(value: Any, field: str) -> Optional[int]:
     zero-padded ``"007"`` (reading it as 7 would change the id), a ``bool`` -- is ``None`` with a
     :class:`~sportsdataverse.errors.SchemaDriftWarning` naming ``field`` and the value (R981-4):
     the column is ``Int64``, so the value cannot be kept, and an append-only snapshot must not
-    lose it silently.
+    lose it silently. ``outcome`` is what the warning says happens next (R981-10).
     """
     if value is None or (isinstance(value, str) and not value.strip()):
         return None
@@ -162,7 +162,7 @@ def _as_id(value: Any, field: str) -> Optional[int]:
     if isinstance(value, float) and value.is_integer():
         return int(value)
     warnings.warn(
-        f"ESPN snapshot id {field}: {value!r} is not an integer id; read as null",
+        f"ESPN snapshot id {field}: {value!r} is not an integer id; {outcome}",
         SchemaDriftWarning,
         stacklevel=3,
     )
@@ -199,15 +199,19 @@ def _athlete_id(athlete: Mapping[str, Any]) -> Optional[int]:
     stay joinable-looking. The headshot URL carries the same id and is the
     fallback for that day.
     """
-    direct = _as_id(athlete.get("id"), "athlete.id")
-    if direct is not None:
-        return direct
+    recovered = None
     for link in _list(athlete.get("links")):
         match = _ATHLETE_ID_RE.search(str(_mapping(link).get("href") or ""))
         if match:
-            return int(match.group(1))
-    headshot = _HEADSHOT_ID_RE.search(str(_mapping(athlete.get("headshot")).get("href") or ""))
-    return int(headshot.group(1)) if headshot else None
+            recovered = int(match.group(1))
+            break
+    if recovered is None:
+        headshot = _HEADSHOT_ID_RE.search(str(_mapping(athlete.get("headshot")).get("href") or ""))
+        recovered = int(headshot.group(1)) if headshot else None
+    # R981-10: a bad athlete.id the link / headshot still recovers is not "read as null"
+    outcome = "read as null" if recovered is None else f"the player link gives {recovered}"
+    direct = _as_id(athlete.get("id"), "athlete.id", outcome)
+    return direct if direct is not None else recovered
 
 
 def _text(container: Any, key: str) -> Optional[str]:

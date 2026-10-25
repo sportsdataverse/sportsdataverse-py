@@ -11,5 +11,7 @@
   `lead_pos_team`, `lead_pos_team2`, `start.pos_team.id` (Int32) are `Int64`, as in the CFB processor.
   A source whose ids are not integers (NFL.com gsis `"00-0034796"`) keeps them String. (#981)
 - **ESPN, pandas output (`return_as_pandas=True`):** the same id columns are pandas' nullable `Int64` (was `object`,
-  or `float64` such as `150.0` where a value was missing). The injuries / depth-chart snapshots read an id that is
+  or `float64` such as `150.0` where a value was missing). The frames whose pandas output is Arrow-backed carry them
+  as `int64[pyarrow]` instead: `parse_fpi`, `parse_weekly_powerindex` and the generated `load_*_crosswalk` loaders.
+  The injuries / depth-chart snapshots read an id that is
   not an integer (text, `"007"`) as null with a `SchemaDriftWarning` naming the field. (#981)
