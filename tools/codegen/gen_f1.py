@@ -43,6 +43,7 @@ from gen_soccer_common import (
     parse_capture,
     refs_dir,
     rewrite_schema_dir,
+    snake_path,
     write_yaml,
 )
 from openapi_params import _query_params
@@ -103,10 +104,6 @@ def _short(path: str) -> str:
         raise SystemExit(f"{STEM}: no wrapper short for spec path {path}; add it to _SHORTS") from None
 
 
-def _snake_path(path: str) -> str:
-    return _TOKEN.sub(lambda m: "{" + underscore(m.group(1)) + "}", path)
-
-
 def _capture_for(refs: Path, path: str) -> List[Path]:
     """The committed capture(s) for ``path``: ``capture.py``'s slug rule over the pinned values."""
     values = dict(_CAPTURE_VALUES)
@@ -165,7 +162,7 @@ def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
     entry: Dict[str, Any] = {
         "short": short,
         "summary": (op.get("summary") or f"Fetch {path}").rstrip(".") + ".",
-        "path": _snake_path(path),
+        "path": snake_path(path),
         "parser": "parse_f1_mrdata",
         "returns_schema": f"native/{STEM}/{short}",
         "example_args": example,

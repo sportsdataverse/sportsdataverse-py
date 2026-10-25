@@ -38,7 +38,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from gen_soccer_common import load_spec, refs_dir, rewrite_schema_dir, write_yaml  # noqa: E402
+from gen_soccer_common import load_spec, refs_dir, rewrite_schema_dir, snake_path, write_yaml  # noqa: E402
 
 from sportsdataverse.basketball.kbl import kbl_codes as codes  # noqa: E402
 from sportsdataverse.basketball.kbl import kbl_parsers as P  # noqa: E402
@@ -622,10 +622,6 @@ def _check_frames(short: str, entry: Entry) -> None:
         raise SystemExit(f"kbl: {short}: no fixture parses to a row")
 
 
-def _snake_path(path: str) -> str:
-    return re.sub(r"\{([^}]+)\}", lambda m: "{" + underscore(m.group(1)) + "}", path)
-
-
 def _endpoint(short: str, entry: Entry) -> Dict[str, Any]:
     spec_path, parser, _fixtures, summary, fields = entry
     fields = copy.deepcopy(fields)
@@ -634,7 +630,7 @@ def _endpoint(short: str, entry: Entry) -> Dict[str, Any]:
     return {
         "short": short,
         "summary": summary,
-        "path": _snake_path(spec_path),
+        "path": snake_path(spec_path),
         "parser": parser.__name__,
         "returns_schema": f"native/kbl/{short}",
         **fields,

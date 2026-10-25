@@ -999,10 +999,10 @@
   group: codegen-gates
   finding: A-M1
   file: tools/codegen/generate.py
-  snippet: '    tmp = _check_tmp("_check_live_")'
+  snippet: '    stale = _stale_vs_render("_check_live_", rendered, live)'
   mutant: |2-
         return []
-        tmp = _check_tmp("_check_live_")
+        stale = _stale_vs_render("_check_live_", rendered, live)
   test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and live"
   expected: kill
   note: the ledger gate's own mutation (making _live_stale return [] unconditionally)
@@ -1011,10 +1011,10 @@
   group: codegen-gates
   finding: A-M1
   file: tools/codegen/generate.py
-  snippet: '    tmp = _check_tmp("_check_flat_")'
+  snippet: '    return _stale_vs_render("_check_flat_", rendered, live)'
   mutant: |2-
         return []
-        tmp = _check_tmp("_check_flat_")
+        return _stale_vs_render("_check_flat_", rendered, live)
   test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and flat"
   expected: kill
 
@@ -1022,10 +1022,10 @@
   group: codegen-gates
   finding: A-M1
   file: tools/codegen/generate.py
-  snippet: '    tmp = _check_tmp("_check_parsed_")'
+  snippet: '    return _stale_vs_render("_check_parsed_", rendered, {name: LIVE / "parsed" / name for name in rendered})'
   mutant: |2-
         return []
-        tmp = _check_tmp("_check_parsed_")
+        return _stale_vs_render("_check_parsed_", rendered, {name: LIVE / "parsed" / name for name in rendered})
   test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and parsed"
   expected: kill
 
@@ -1033,10 +1033,10 @@
   group: codegen-gates
   finding: A-M1
   file: tools/codegen/generate.py
-  snippet: '    tmp = _check_tmp("_check_loaders_")'
+  snippet: '    return _stale_vs_render("_check_loaders_", rendered, live)'
   mutant: |2-
         return []
-        tmp = _check_tmp("_check_loaders_")
+        return _stale_vs_render("_check_loaders_", rendered, live)
   test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and loaders"
   expected: kill
 
@@ -6841,6 +6841,35 @@
   note: >-
     The pre-3.10 citation: a gitignored script that exists only on the maintainer's disk, so the refit
     instruction for DEFAULT_RIDGE_LAMBDA was not reproducible from a clone.
+
+# --- task 6.1 (c): one copy of the generator helpers in gen_soccer_common (A-L7, A-L22, A-L23, A-L24, A-N18) ----
+- id: shared-generator-write-yaml-copy-again
+  group: share-generator-helpers
+  finding: A-L22
+  file: tools/codegen/gen_cbs.py
+  snippet: "from gen_soccer_common import load_spec, refs_dir, rewrite_schema_dir, write_yaml\n"
+  mutant: "from gen_soccer_common import load_spec, refs_dir, rewrite_schema_dir\n\n\ndef write_yaml(path, obj):\n    path.write_text(yaml.safe_dump(obj), encoding=\"utf-8\")\n"
+  test: tests/codegen/test_shared_generator_helpers.py -k gen_cbs
+  expected: kill
+  note: The pre-6.1 state, gen_cbs writing YAML through its own copy rather than gen_soccer_common's.
+- id: shared-generator-capture-for-copy-again
+  group: share-generator-helpers
+  finding: A-L7
+  file: tools/codegen/gen_kalshi.py
+  snippet: "    capture_for,\n"
+  mutant: "    capture_for as _shared_capture_for,\n"
+  test: tests/codegen/test_shared_generator_helpers.py -k gen_kalshi
+  expected: kill
+  note: A generator that stops importing the shared capture slug (the pre-6.1 four private copies).
+- id: shared-generator-copy-anywhere
+  group: share-generator-helpers
+  finding: A-L23
+  file: tools/codegen/gen_pff.py
+  snippet: "def main() -> None:\n"
+  mutant: "def _clean_generated_schema_dir(path: Path) -> None:\n    path.mkdir(parents=True, exist_ok=True)\n    for schema_path in path.glob(\"*.yaml\"):\n        schema_path.unlink()\n\n\ndef main() -> None:\n"
+  test: tests/codegen/test_shared_generator_helpers.py -k no_generator_carries_a_copy
+  expected: kill
+  note: A byte-identical copy of rewrite_schema_dir reappearing in any generator (the pre-6.1 four copies).
 
 # --- task 6.1 (b): one private body behind every former copy (B-L26, B-L27, B-L28, B-L46, B-L52, B-GB-11) ----
 - id: shared-box-readers-copy-again

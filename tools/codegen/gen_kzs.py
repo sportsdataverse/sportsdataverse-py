@@ -32,7 +32,7 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import polars as pl
-from gen_soccer_common import ROOT, load_spec, refs_dir, rewrite_schema_dir, write_yaml
+from gen_soccer_common import ROOT, load_spec, refs_dir, rewrite_schema_dir, snake_path, write_yaml
 
 from sportsdataverse.basketball.kzs import kzs_parsers as P
 from sportsdataverse.dl_utils import underscore
@@ -668,11 +668,6 @@ def _write_dtypes(codes: Dict[str, Dict[str, str]]) -> None:
     DTYPES_MODULE.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
 
 
-def _snake_path(path: str) -> str:
-    """``/matches/{competitionId}/playingDays`` -> ``/matches/{competition_id}/playingDays`` (wrapper path tokens)."""
-    return re.sub(r"\{([^}]+)\}", lambda m: "{" + underscore(m.group(1)) + "}", path)
-
-
 def _endpoint(short: str, entry: Entry) -> Dict[str, Any]:
     spec_path, parser, _fixtures, summary, fields = entry
     fields = copy.deepcopy(fields)
@@ -688,7 +683,7 @@ def _endpoint(short: str, entry: Entry) -> Dict[str, Any]:
     return {
         "short": short,
         "summary": summary,
-        "path": _snake_path(spec_path),
+        "path": snake_path(spec_path),
         "parser": parser.__name__,
         "returns_schema": f"native/kzs/{short}",
         **fields,

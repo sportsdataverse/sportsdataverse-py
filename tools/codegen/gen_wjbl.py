@@ -512,10 +512,6 @@ def _fixture_body(rel: str) -> Any:
     return json.loads((FIXTURES / rel).read_text(encoding="utf-8"))
 
 
-def _snake_path(path: str) -> str:
-    return re.sub(r"\{([^}]+)\}", lambda m: "{" + underscore(m.group(1)) + "}", path)
-
-
 def _endpoint(short: str, entry: Entry) -> Dict[str, Any]:
     route, parser, _fixtures, summary, fields = entry
     return {

@@ -45,6 +45,7 @@ from gen_soccer_common import (
     parse_capture,
     refs_dir,
     rewrite_schema_dir,
+    snake_path,
     spec_descriptions,
     write_yaml,
 )
@@ -88,11 +89,6 @@ _OPID_PREFIX = re.compile(r"^[a-z]+_v\d+_")
 _EXAMPLE_PATH_ARGS: Dict[str, str] = {"match_id": "2047742"}
 
 _UNVERIFIED = "no committed capture in sdv-internal-refs/uefa/captures (ENDPOINTS.md marks the route not captured)"
-
-
-def _snake_path(path: str) -> str:
-    """``/v1/team-statistics/{matchId}`` -> ``/v1/team-statistics/{match_id}``."""
-    return _TOKEN.sub(lambda m: "{" + underscore(m.group(1)) + "}", path)
 
 
 def _short(path: str, op: dict) -> str:
@@ -155,7 +151,7 @@ def _endpoint_entry(spec: dict, path: str, op: dict) -> Dict[str, Any]:
     entry: Dict[str, Any] = {
         "short": short,
         "summary": _SUMMARIES[short].rstrip(".") + ".",
-        "path": _snake_path(path),
+        "path": snake_path(path),
         "parser": PARSER,
         "returns_schema": f"native/{STEM}/{short}",
     }
