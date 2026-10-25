@@ -199,17 +199,19 @@ def _athlete_id(athlete: Mapping[str, Any]) -> Optional[int]:
     stay joinable-looking. The headshot URL carries the same id and is the
     fallback for that day.
     """
-    recovered = None
+    recovered, source = None, None
     for link in _list(athlete.get("links")):
         match = _ATHLETE_ID_RE.search(str(_mapping(link).get("href") or ""))
         if match:
-            recovered = int(match.group(1))
+            recovered, source = int(match.group(1)), "player link"
             break
     if recovered is None:
         headshot = _HEADSHOT_ID_RE.search(str(_mapping(athlete.get("headshot")).get("href") or ""))
-        recovered = int(headshot.group(1)) if headshot else None
-    # R981-10: a bad athlete.id the link / headshot still recovers is not "read as null"
-    outcome = "read as null" if recovered is None else f"the player link gives {recovered}"
+        if headshot:
+            recovered, source = int(headshot.group(1)), "headshot"
+    # R981-10 / R981-12: a bad athlete.id the link or headshot still recovers is not "read as null"; the warning
+    # names the source that gave the id
+    outcome = "read as null" if recovered is None else f"the {source} gives {recovered}"
     direct = _as_id(athlete.get("id"), "athlete.id", outcome)
     return direct if direct is not None else recovered
 
