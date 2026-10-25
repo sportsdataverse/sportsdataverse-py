@@ -233,8 +233,6 @@ GET /stats/alltimeleadersgrids
 wnba_stats_alltimeleadersgrids(league_id='10')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_assistleaders
 
 GET /stats/assistleaders
@@ -283,8 +281,6 @@ GET /stats/assistleaders
 ```python
 wnba_stats_assistleaders(league_id='10', season='2024')
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_assisttracker
 
@@ -349,8 +345,6 @@ GET /stats/assisttracker
 ```python
 wnba_stats_assisttracker(league_id='10', season_nullable='2024')
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_draftcombinestats
 
@@ -436,8 +430,6 @@ GET /stats/draftcombinestats
 wnba_stats_draftcombinestats(league_id='10', season_all_time='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_drafthistory
 
 GET /stats/drafthistory
@@ -494,8 +486,6 @@ GET /stats/drafthistory
 ```python
 wnba_stats_drafthistory(league_id='10', season_year_nullable='2024')
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_fantasywidget
 
@@ -571,8 +561,6 @@ GET /stats/fantasywidget
 wnba_stats_fantasywidget(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_gamerotation
 
 GET /stats/gamerotation
@@ -640,8 +628,6 @@ GET /stats/gamerotation
 ```python
 wnba_stats_gamerotation(league_id='10')
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_homepageleaders
 
@@ -721,8 +707,6 @@ GET /stats/homepageleaders
 ```python
 wnba_stats_homepageleaders(league_id='10', season='2024')
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_homepagev2
 
@@ -843,8 +827,6 @@ GET /stats/homepagev2
 wnba_stats_homepagev2(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_hustlestatsboxscore
 
 GET /stats/hustlestatsboxscore
@@ -942,8 +924,6 @@ GET /stats/hustlestatsboxscore
 wnba_stats_hustlestatsboxscore()
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_infographicfanduelplayer
 
 GET /stats/infographicfanduelplayer
@@ -1012,8 +992,6 @@ GET /stats/infographicfanduelplayer
 ```python
 wnba_stats_infographicfanduelplayer()
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_leaderstiles
 
@@ -1102,8 +1080,6 @@ GET /stats/leaderstiles
 wnba_stats_leaderstiles(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_playbyplayv2
 
 GET /stats/playbyplayv2
@@ -1183,5 +1159,3 @@ GET /stats/playbyplayv2
 ```python
 wnba_stats_playbyplayv2()
 ```
-
-_Last validated n/a._

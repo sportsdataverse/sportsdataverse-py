@@ -58,8 +58,6 @@ One team.
 sportality_team(team_uuid='rfo82vr830')
 ```
 
-_Last validated n/a._
-
 ## sportality_team_played_games
 
 A team's recent games (current season view).
@@ -136,8 +134,6 @@ A team's recent games (current season view).
 sportality_team_played_games(team_uuid='rfo82vr830')
 ```
 
-_Last validated n/a._
-
 ## sportality_team_stats
 
 Team totals per period (2023/24 on).
@@ -191,8 +187,6 @@ Team totals per period (2023/24 on).
 ```python
 sportality_team_stats(game_uuid='c4hh5nig6t')
 ```
-
-_Last validated n/a._
 
 ## sportality_team_upcoming_games
 
@@ -269,5 +263,3 @@ A team's next games (current season view).
 ```python
 sportality_team_upcoming_games(team_uuid='rfo82vr830')
 ```
-
-_Last validated n/a._

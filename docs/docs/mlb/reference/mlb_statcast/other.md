@@ -110,8 +110,6 @@ GET /gf — Savant per-game JSON feed (pitch-by-pitch tracking).
 mlb_statcast_gamefeed()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_schedule
 
 GET /schedule — Savant schedule feed (one row per game).
@@ -357,5 +355,3 @@ GET /schedule — Savant schedule feed (one row per game).
 ```python
 mlb_statcast_schedule()
 ```
-
-_Last validated n/a._

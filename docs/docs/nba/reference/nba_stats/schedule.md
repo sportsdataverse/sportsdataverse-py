@@ -96,8 +96,6 @@ GET /stats/scheduleleaguev2
 nba_stats_scheduleleaguev2(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_scheduleleaguev2int
 
 GET /stats/scheduleleaguev2int
@@ -186,5 +184,3 @@ GET /stats/scheduleleaguev2int
 ```python
 nba_stats_scheduleleaguev2int(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._

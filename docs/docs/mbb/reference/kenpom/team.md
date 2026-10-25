@@ -69,8 +69,6 @@ GET /teamstats.php - team shooting and style splits; side='o' for offense, 'd' f
 kenpom_team_stats(year=2025, side='o')
 ```
 
-_Last validated n/a._
-
 ## kenpom_team
 
 GET /team.php - a team's full season page. Returns EVERY table on it, so one call covers hoopR's kp_team_schedule(), kp_team_players() and kp_team_lineups(), which each fetch this same page separately -- plus kp_team_depth_chart(), recovered under a "depth_chart" key from an embedded script tag rather than a table (KenPom dropped the static depth-chart table; see kp_team_depth_chart()'s R source).
@@ -181,8 +179,6 @@ GET /team.php - a team's full season page. Returns EVERY table on it, so one cal
 ```python
 kenpom_team(team='Duke', year=2025)
 ```
-
-_Last validated n/a._
 
 ## kenpom_team_players_expanded
 
@@ -303,8 +299,6 @@ GET /player-expanded.php - a team's expanded per-player table plus the minutes m
 kenpom_team_players_expanded(team='Duke', year=2025)
 ```
 
-_Last validated n/a._
-
 ## kenpom_team_history
 
 GET /history.php?t= - a program's season-by-season history. Port of hoopR kp_team_history().
@@ -371,5 +365,3 @@ GET /history.php?t= - a program's season-by-season history. Port of hoopR kp_tea
 ```python
 kenpom_team_history(team='Duke')
 ```
-
-_Last validated n/a._

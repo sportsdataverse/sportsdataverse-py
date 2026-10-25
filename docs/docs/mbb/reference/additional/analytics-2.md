@@ -1,7 +1,7 @@
 ---
 title: "MBB — additional Python functions — Analytics: order_lineup–weighted_avg"
 sidebar_label: "Analytics: order_lineup–weighted_avg"
-sidebar_position: 13
+sidebar_position: 14
 description: "MBB — additional Python functions — Analytics: order_lineup–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # MBB — additional Python functions — Analytics: order_lineup–weighted_avg

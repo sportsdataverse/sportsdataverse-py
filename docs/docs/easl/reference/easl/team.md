@@ -147,8 +147,6 @@ Team totals of a finished game, one row per team, with the opponent's totals as 
 easl_team_box(fixture_id='10af8fd4-106e-11f1-960b-5798087c7aa3')
 ```
 
-_Last validated n/a._
-
 ## easl_team_box_by_period
 
 Team totals of a finished game by period, one row per team and period (overtimes after the fourth).
@@ -291,8 +289,6 @@ Team totals of a finished game by period, one row per team and period (overtimes
 easl_team_box_by_period(fixture_id='10af8fd4-106e-11f1-960b-5798087c7aa3')
 ```
 
-_Last validated n/a._
-
 ## easl_teams
 
 The 12 ACTIVE EASL teams (historical teams resolve only through easl_team).
@@ -348,8 +344,6 @@ The 12 ACTIVE EASL teams (historical teams resolve only through easl_team).
 ```python
 easl_teams()
 ```
-
-_Last validated n/a._
 
 ## easl_team
 
@@ -407,8 +401,6 @@ One team's directory entry; resolves the historical teams easl_teams does not li
 ```python
 easl_team(team_id='865489e8-b0f5-11ed-8b3f-c199a9dea184')
 ```
-
-_Last validated n/a._
 
 ## easl_team_schedule
 
@@ -489,5 +481,3 @@ A team's fixtures in one season, shaped like easl_schedule.
 ```python
 easl_team_schedule(season=2026, team_id='865489e8-b0f5-11ed-8b3f-c199a9dea184')
 ```
-
-_Last validated n/a._

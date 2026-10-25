@@ -59,8 +59,6 @@ The leagues served by the API: vtb, vtbyouth, wbc.
 vtb_league_leagues()
 ```
 
-_Last validated n/a._
-
 ## vtb_league_seasons
 
 The seasons the API serves for one league (new seasons only, from 2024-25).
@@ -100,8 +98,6 @@ The seasons the API serves for one league (new seasons only, from 2024-25).
 ```python
 vtb_league_seasons(league_slug='vtb')
 ```
-
-_Last validated n/a._
 
 ## vtb_league_matches
 
@@ -195,5 +191,3 @@ Every match of one league-season (schedule, scores, quarter points, venue), in o
 ```python
 vtb_league_matches(league_slug='vtb', season=2026)
 ```
-
-_Last validated n/a._

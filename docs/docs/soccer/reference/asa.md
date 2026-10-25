@@ -61,8 +61,6 @@ Games/fixtures with final scores, venue/official/manager FKs.
 asa_games(league_slug='mls')
 ```
 
-_Last validated n/a._
-
 ## asa_games_xgoals
 
 Per-game expected-goals + expected points for both sides.
@@ -123,8 +121,6 @@ Per-game expected-goals + expected points for both sides.
 asa_games_xgoals(league_slug='mls')
 ```
 
-_Last validated n/a._
-
 ## asa_goalkeepers_goals_added
 
 Per-goalkeeper Goals Added with a per-action-type data[] breakdown.
@@ -171,8 +167,6 @@ Per-goalkeeper Goals Added with a per-action-type data[] breakdown.
 ```python
 asa_goalkeepers_goals_added(league_slug='mls')
 ```
-
-_Last validated n/a._
 
 ## asa_goalkeepers_xgoals
 
@@ -228,8 +222,6 @@ Per-goalkeeper shot-stopping vs post-shot expected goals.
 asa_goalkeepers_xgoals(league_slug='mls')
 ```
 
-_Last validated n/a._
-
 ## asa_managers
 
 Managers/head coaches.
@@ -267,8 +259,6 @@ Managers/head coaches.
 ```python
 asa_managers(league_slug='mls')
 ```
-
-_Last validated n/a._
 
 ## asa_players
 
@@ -315,8 +305,6 @@ Players in the league (identity + biometrics + positions).
 ```python
 asa_players(league_slug='mls')
 ```
-
-_Last validated n/a._
 
 ## asa_players_goals_added
 
@@ -365,8 +353,6 @@ Per-player Goals Added (g+) with a per-action-type data[] breakdown.
 ```python
 asa_players_goals_added(league_slug='mls')
 ```
-
-_Last validated n/a._
 
 ## asa_players_salaries
 
@@ -418,8 +404,6 @@ Player salaries (MLS only; server caps the response at 10000 rows).
 ```python
 asa_players_salaries(league_slug='mls')
 ```
-
-_Last validated n/a._
 
 ## asa_players_xgoals
 
@@ -483,8 +467,6 @@ Per-player expected-goals + attacking production.
 asa_players_xgoals(league_slug='mls')
 ```
 
-_Last validated n/a._
-
 ## asa_players_xpass
 
 Per-player expected-passing (completion over expected, distance, share of team touches).
@@ -542,8 +524,6 @@ Per-player expected-passing (completion over expected, distance, share of team t
 asa_players_xpass(league_slug='mls')
 ```
 
-_Last validated n/a._
-
 ## asa_referees
 
 Match referees.
@@ -582,8 +562,6 @@ Match referees.
 ```python
 asa_referees(league_slug='mls')
 ```
-
-_Last validated n/a._
 
 ## asa_stadia
 
@@ -635,8 +613,6 @@ Stadia (venue metadata incl. coordinates + pitch dimensions).
 asa_stadia(league_slug='mls')
 ```
 
-_Last validated n/a._
-
 ## asa_teams
 
 Teams in the league (full table, no filter params).
@@ -675,8 +651,6 @@ Teams in the league (full table, no filter params).
 ```python
 asa_teams(league_slug='mls')
 ```
-
-_Last validated n/a._
 
 ## asa_teams_goals_added
 
@@ -723,8 +697,6 @@ Per-team Goals Added for/against with a per-action-type data[] breakdown.
 ```python
 asa_teams_goals_added(league_slug='mls')
 ```
-
-_Last validated n/a._
 
 ## asa_teams_xgoals
 
@@ -782,8 +754,6 @@ Per-team expected-goals for/against + expected points.
 ```python
 asa_teams_xgoals(league_slug='mls')
 ```
-
-_Last validated n/a._
 
 ## asa_teams_xpass
 
@@ -844,5 +814,3 @@ Per-team expected-passing (completion over expected, vertical distance).
 ```python
 asa_teams_xpass(league_slug='mls')
 ```
-
-_Last validated n/a._

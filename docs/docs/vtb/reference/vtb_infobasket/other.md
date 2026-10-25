@@ -48,8 +48,6 @@ Season END year -> season-level CompID for a competition tag (the table every se
 vtb_infobasket_seasons()
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_calendar
 
 Every game of a season (finished, live and planned): teams, scores, date, venue, attendance.
@@ -131,8 +129,6 @@ Every game of a season (finished, live and planned): teams, scores, date, venue,
 ```python
 vtb_infobasket_calendar(season=2026)
 ```
-
-_Last validated n/a._
 
 ## vtb_infobasket_game
 
@@ -225,8 +221,6 @@ Header of a finished game: stage, venue, rules, the two teams and their scores.
 vtb_infobasket_game(game_id=921391)
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_box_score
 
 Player box score of a finished game (one row per player of each team, DNPs included).
@@ -309,8 +303,6 @@ Player box score of a finished game (one row per player of each team, DNPs inclu
 vtb_infobasket_box_score(game_id=921391)
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_pbp
 
 Play-by-play of a finished game with shot x/y (2022-23 onwards; earlier games have no plays).
@@ -364,8 +356,6 @@ Play-by-play of a finished game with shot x/y (2022-23 onwards; earlier games ha
 vtb_infobasket_pbp(game_id=921391)
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_game_staff
 
 The coaches and officials of a finished game (names and roles only).
@@ -411,8 +401,6 @@ The coaches and officials of a finished game (names and roles only).
 ```python
 vtb_infobasket_game_staff(game_id=921391)
 ```
-
-_Last validated n/a._
 
 ## vtb_infobasket_game_page
 
@@ -477,8 +465,6 @@ Thin header of a finished game (use vtb_infobasket_game for teams, box score and
 vtb_infobasket_game_page(game_id=921391)
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_comp_issue
 
 Stage tree of a season (regular season, playoff, series): the stage ids the standings wrappers take.
@@ -531,8 +517,6 @@ Stage tree of a season (regular season, playoff, series): the stage ids the stan
 ```python
 vtb_infobasket_comp_issue(season=2026)
 ```
-
-_Last validated n/a._
 
 ## vtb_infobasket_standings
 
@@ -597,8 +581,6 @@ Standings of one stage (a round-robin stage such as the regular season), one row
 vtb_infobasket_standings(comp_id=50720)
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_cross_table
 
 Head-to-head results grid of a round-robin stage (every game twice, once from each side).
@@ -647,8 +629,6 @@ Head-to-head results grid of a round-robin stage (every game twice, once from ea
 ```python
 vtb_infobasket_cross_table(comp_id=50720)
 ```
-
-_Last validated n/a._
 
 ## vtb_infobasket_playoff
 
@@ -710,8 +690,6 @@ Playoff bracket of a playoff stage, one row per series.
 vtb_infobasket_playoff(comp_id=54281)
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_playoff_games
 
 The games of every series of a playoff stage.
@@ -764,8 +742,6 @@ The games of every series of a playoff stage.
 vtb_infobasket_playoff_games(comp_id=54281)
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_coach
 
 Coach profile: names, height, weight (no birth data).
@@ -809,8 +785,6 @@ Coach profile: names, height, weight (no birth data).
 ```python
 vtb_infobasket_coach(person_id=131047)
 ```
-
-_Last validated n/a._
 
 ## vtb_infobasket_roster
 
@@ -875,8 +849,6 @@ A club's player roster in one season.
 vtb_infobasket_roster(season=2026, team_id=2650)
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_roster_coaches
 
 A club's coaches in one season (no birth data).
@@ -933,5 +905,3 @@ A club's coaches in one season (no birth data).
 ```python
 vtb_infobasket_roster_coaches(season=2026, team_id=2650)
 ```
-
-_Last validated n/a._

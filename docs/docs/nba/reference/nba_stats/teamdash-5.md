@@ -187,8 +187,6 @@ GET /stats/teamdashlineups
 nba_stats_teamdashlineups(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_teamdashptpass
 
 GET /stats/teamdashptpass
@@ -281,8 +279,6 @@ GET /stats/teamdashptpass
 ```python
 nba_stats_teamdashptpass(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_teamdashptreb
 
@@ -441,8 +437,6 @@ GET /stats/teamdashptreb
 ```python
 nba_stats_teamdashptreb(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_teamdashptshots
 
@@ -630,5 +624,3 @@ GET /stats/teamdashptshots
 ```python
 nba_stats_teamdashptshots(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._

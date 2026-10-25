@@ -122,8 +122,6 @@ Pull a team's full-season schedule.
 nhl_club_schedule_season(team='TOR')
 ```
 
-_Last validated n/a._
-
 ## nhl_club_schedule_month
 
 Pull a team's schedule for one month.
@@ -156,8 +154,6 @@ Pull a team's schedule for one month.
 nhl_club_schedule_month(team='TOR')
 ```
 
-_Last validated n/a._
-
 ## nhl_club_schedule_week
 
 Pull a team's schedule for one week.
@@ -189,8 +185,6 @@ Pull a team's schedule for one week.
 ```python
 nhl_club_schedule_week(team='TOR')
 ```
-
-_Last validated n/a._
 
 ## nhl_club_stats
 
@@ -276,8 +270,6 @@ Pull a team's season stat block.
 nhl_club_stats(team='TOR')
 ```
 
-_Last validated n/a._
-
 ## nhl_club_stats_season
 
 Pull the seasons a team has stats for.
@@ -308,5 +300,3 @@ Pull the seasons a team has stats for.
 ```python
 nhl_club_stats_season(team='TOR')
 ```
-
-_Last validated n/a._

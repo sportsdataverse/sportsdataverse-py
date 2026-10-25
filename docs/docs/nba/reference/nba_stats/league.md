@@ -158,8 +158,6 @@ GET /stats/leaguegamefinder
 nba_stats_leaguegamefinder(league_id='00', season_nullable='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_leaguegamelog
 
 GET /stats/leaguegamelog
@@ -232,8 +230,6 @@ GET /stats/leaguegamelog
 ```python
 nba_stats_leaguegamelog(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_leaguehustlestatsplayer
 
@@ -323,8 +319,6 @@ GET /stats/leaguehustlestatsplayer
 nba_stats_leaguehustlestatsplayer(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_leaguehustlestatsteam
 
 GET /stats/leaguehustlestatsteam
@@ -405,8 +399,6 @@ GET /stats/leaguehustlestatsteam
 nba_stats_leaguehustlestatsteam(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_leagueleaders
 
 GET /stats/leagueleaders
@@ -473,8 +465,6 @@ GET /stats/leagueleaders
 ```python
 nba_stats_leagueleaders(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_leaguelineupviz
 
@@ -562,8 +552,6 @@ GET /stats/leaguelineupviz
 ```python
 nba_stats_leaguelineupviz(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_leagueplayerondetails
 
@@ -680,8 +668,6 @@ GET /stats/leagueplayerondetails
 nba_stats_leagueplayerondetails(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_leagueseasonmatchups
 
 GET /stats/leagueseasonmatchups
@@ -750,5 +736,3 @@ GET /stats/leagueseasonmatchups
 ```python
 nba_stats_leagueseasonmatchups(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._

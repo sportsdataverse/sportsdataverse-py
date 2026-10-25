@@ -79,8 +79,6 @@ Final-choice PlayerSport/commit for a recruitment.
 sports247_site_pages_recruitment_final_choice(key=114978)
 ```
 
-_Last validated n/a._
-
 ## sports247_site_pages_recruitment_institution
 
 Committed institution for a recruitment.
@@ -137,8 +135,6 @@ Committed institution for a recruitment.
 ```python
 sports247_site_pages_recruitment_institution(key=114978)
 ```
-
-_Last validated n/a._
 
 ## sports247_site_pages_recruitment_interests
 
@@ -197,8 +193,6 @@ All institutions the recruit has interest links with.
 sports247_site_pages_recruitment_interests(key=114978)
 ```
 
-_Last validated n/a._
-
 ## sports247_site_pages_recruitment_offers
 
 Institutions that have offered the recruit.
@@ -255,8 +249,6 @@ Institutions that have offered the recruit.
 ```python
 sports247_site_pages_recruitment_offers(key=114978)
 ```
-
-_Last validated n/a._
 
 ## sports247_site_pages_recruitment_player_sport
 
@@ -329,5 +321,3 @@ PlayerSport underlying a recruitment.
 ```python
 sports247_site_pages_recruitment_player_sport(key=114978)
 ```
-
-_Last validated n/a._

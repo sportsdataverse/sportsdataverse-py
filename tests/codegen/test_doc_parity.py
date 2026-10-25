@@ -1,4 +1,4 @@
-"""Doc-parity: every generated reference page carries the full 8-section contract.
+"""Doc-parity: every generated reference page carries the required sections.
 
 Iterates every league x API the generator knows about and asserts each rendered
 reference page has the required headings. Catches a template regression (or a new
@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from tools.codegen import generate
 
-_REQUIRED = ("Endpoint URL", "| API Parameter |", "### Returns", "### Example", "Last validated")
+_REQUIRED = ("Endpoint URL", "| API Parameter |", "### Returns", "### Example")
 
 
 def test_every_reference_page_has_required_sections():
@@ -18,6 +18,7 @@ def test_every_reference_page_has_required_sections():
             md = generate.render_reference_page(prefix, api["name"])
             for needed in _REQUIRED:
                 assert needed in md, f"{prefix}/{api['name']} reference page missing {needed!r}"
+            assert "Last validated" not in md  # A-L4: the never-set field and its line are gone
 
 
 def test_every_documented_league_has_an_index():

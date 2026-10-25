@@ -1115,7 +1115,6 @@ def _plays(df: pl.DataFrame, summary: dict[str, Any] | None) -> list[RuleResult 
     processed = set(ids.drop_nulls().to_list())
     raw_ids: list[int] = []
     unexplained: list[dict[str, Any]] = []
-    documented = 0
     seen_text: dict[str, int] = {}
     for p in raw:
         try:
@@ -1130,10 +1129,8 @@ def _plays(df: pl.DataFrame, summary: dict[str, Any] | None) -> list[RuleResult 
         if pid in processed:
             continue
         if pl.Series([typ]).str.contains(DOCUMENTED_DROP_RE).item():
-            documented += 1
             continue
         if text and prior is not None:  # the processor's own text-dupe filter
-            documented += 1
             continue
         unexplained.append({"id": pid, "type.text": typ, "text": text[:_TEXT_CHARS]})
     extra = processed - set(raw_ids)

@@ -55,8 +55,6 @@ Game report header: both teams, score, tip-off time and colours.
 cba_game_info(schedule_id=100105799)
 ```
 
-_Last validated n/a._
-
 ## cba_game_team_shots
 
 Shot-zone profile of the two teams of a game. NOT game data: the teams' current season table.
@@ -142,8 +140,6 @@ Shot-zone profile of the two teams of a game. NOT game data: the teams' current 
 cba_game_team_shots(schedule_id=100105799)
 ```
 
-_Last validated n/a._
-
 ## cba_game_team_four
 
 Four-factors table of the two teams of a game. NOT game data: the teams' previous season table.
@@ -221,5 +217,3 @@ Four-factors table of the two teams of a game. NOT game data: the teams' previou
 ```python
 cba_game_team_four(schedule_id=100105799)
 ```
-
-_Last validated n/a._

@@ -73,8 +73,6 @@ Retrieve NHL Entry Draft picks.
 nhl_records_draft()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_draft_by_team
 
 All draft picks made by a single team.
@@ -141,8 +139,6 @@ All draft picks made by a single team.
 nhl_records_draft_by_team(team_id=10)
 ```
 
-_Last validated n/a._
-
 ## nhl_records_draft_prospect
 
 Draft prospect records.
@@ -206,8 +202,6 @@ Draft prospect records.
 nhl_records_draft_prospect()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_draft_lottery_odds
 
 Draft lottery odds (current year or filtered by season).
@@ -246,5 +240,3 @@ Draft lottery odds (current year or filtered by season).
 ```python
 nhl_records_draft_lottery_odds()
 ```
-
-_Last validated n/a._

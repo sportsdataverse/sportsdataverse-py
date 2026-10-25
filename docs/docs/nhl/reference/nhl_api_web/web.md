@@ -90,8 +90,6 @@ Pull the play-by-play feed for one NHL game.
 nhl_web_pbp(game_id=2024020001)
 ```
 
-_Last validated n/a._
-
 ## nhl_web_schedule
 
 Pull the week-of NHL schedule rooted at `date`.
@@ -186,5 +184,3 @@ Pull the week-of NHL schedule rooted at `date`.
 ```python
 nhl_web_schedule()
 ```
-
-_Last validated n/a._

@@ -1,0 +1,12 @@
+schema: stint_exposure
+kind: dataframe
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: off_poss
+  type: integer
+  description: ''
+- name: def_poss
+  type: integer
+  description: ''

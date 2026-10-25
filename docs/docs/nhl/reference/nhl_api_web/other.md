@@ -78,8 +78,6 @@ Pull the boxscore for one NHL game.
 nhl_boxscore(game_id=2024020001)
 ```
 
-_Last validated n/a._
-
 ## nhl_landing
 
 Pull the gamecenter landing payload for one NHL game.
@@ -163,8 +161,6 @@ Pull the gamecenter landing payload for one NHL game.
 ```python
 nhl_landing(game_id=2024020001)
 ```
-
-_Last validated n/a._
 
 ## nhl_right_rail
 
@@ -272,8 +268,6 @@ Pull the gamecenter right-rail payload (in-game widgets).
 nhl_right_rail(game_id=2024020001)
 ```
 
-_Last validated n/a._
-
 ## nhl_score
 
 Pull the single-day scoreboard for `date`.
@@ -357,8 +351,6 @@ Pull the single-day scoreboard for `date`.
 nhl_score()
 ```
 
-_Last validated n/a._
-
 ## nhl_schedule_calendar
 
 Pull the calendar of game-days for the season.
@@ -389,8 +381,6 @@ Pull the calendar of game-days for the season.
 ```python
 nhl_schedule_calendar()
 ```
-
-_Last validated n/a._
 
 ## nhl_playoff_series
 
@@ -471,8 +461,6 @@ Pull a single playoff series payload.
 ```python
 nhl_playoff_series(season=2025, series_letter='a')
 ```
-
-_Last validated n/a._
 
 ## nhl_standings
 
@@ -593,8 +581,6 @@ Pull the NHL standings.
 nhl_standings()
 ```
 
-_Last validated n/a._
-
 ## nhl_standings_season
 
 Pull the per-season standings cutover dates.
@@ -638,8 +624,6 @@ Pull the per-season standings cutover dates.
 ```python
 nhl_standings_season()
 ```
-
-_Last validated n/a._
 
 ## nhl_roster
 
@@ -698,8 +682,6 @@ Pull a team's roster.
 nhl_roster(team='TOR')
 ```
 
-_Last validated n/a._
-
 ## nhl_roster_season
 
 Pull every season a team has had on file.
@@ -730,8 +712,6 @@ Pull every season a team has had on file.
 ```python
 nhl_roster_season(team='TOR')
 ```
-
-_Last validated n/a._
 
 ## nhl_skater_leaders
 
@@ -789,8 +769,6 @@ Pull skater stat leaders.
 nhl_skater_leaders()
 ```
 
-_Last validated n/a._
-
 ## nhl_goalie_leaders
 
 Pull goalie stat leaders.
@@ -842,5 +820,3 @@ Pull goalie stat leaders.
 ```python
 nhl_goalie_leaders()
 ```
-
-_Last validated n/a._

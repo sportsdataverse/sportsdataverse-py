@@ -1,7 +1,7 @@
 ---
 title: "CFB — On3 Recruit Database (api.on3.com) — People"
 sidebar_label: "People"
-sidebar_position: 7
+sidebar_position: 6
 description: "CFB — On3 Recruit Database (api.on3.com) — People — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -40,8 +40,6 @@ No returns table is published for this endpoint: its committed capture has 0 row
 ```python
 on3_people_combine_measurements(person_key=89617)
 ```
-
-_Last validated n/a._
 
 ## on3_people_latest_valuation
 
@@ -92,8 +90,6 @@ GET /rdb/v1/people/{personKey}/latest-valuation
 on3_people_latest_valuation(person_key=89617)
 ```
 
-_Last validated n/a._
-
 ## on3_people_measurements
 
 GET /rdb/v1/people/{personKey}/measurements
@@ -129,8 +125,6 @@ GET /rdb/v1/people/{personKey}/measurements
 ```python
 on3_people_measurements(person_key=89617)
 ```
-
-_Last validated n/a._
 
 ## on3_people_measurements_averages
 
@@ -179,8 +173,6 @@ GET /rdb/v1/people/{personKey}/measurements/averages
 on3_people_measurements_averages(person_key=89617)
 ```
 
-_Last validated n/a._
-
 ## on3_people_person_connections
 
 GET /rdb/v1/people/{personKey}/person-connections
@@ -216,8 +208,6 @@ No returns table is published for this endpoint: its committed capture has 0 row
 ```python
 on3_people_person_connections(person_key=89617)
 ```
-
-_Last validated n/a._
 
 ## on3_people_social
 
@@ -257,8 +247,6 @@ GET /rdb/v1/people/{personKey}/social
 on3_people_social(person_key=89617)
 ```
 
-_Last validated n/a._
-
 ## on3_people_social_post_summary
 
 GET /rdb/v1/people/{personKey}/social-post-summary
@@ -297,8 +285,6 @@ GET /rdb/v1/people/{personKey}/social-post-summary
 on3_people_social_post_summary(person_key=89617)
 ```
 
-_Last validated n/a._
-
 ## on3_people_track_and_field_measurements
 
 GET /rdb/v1/people/{personKey}/track-and-field-measurements
@@ -332,8 +318,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 ```python
 on3_people_track_and_field_measurements(person_key=89617)
 ```
-
-_Last validated n/a._
 
 ## on3_people_valuation_growth
 
@@ -374,5 +358,3 @@ GET /rdb/v1/people/{personKey}/valuation-growth
 ```python
 on3_people_valuation_growth(person_key=89617)
 ```
-
-_Last validated n/a._

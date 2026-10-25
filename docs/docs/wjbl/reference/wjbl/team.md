@@ -67,8 +67,6 @@ Team line and totals of each side of a final game's box score, with the shooting
 wjbl_team_box_score(play_schedule_id=7987)
 ```
 
-_Last validated n/a._
-
 ## wjbl_team_period_stats
 
 Team stat summary per period, half and game (2018-19 on): percentages, rebounds, assists, turnovers, lead changes.
@@ -131,8 +129,6 @@ Team stat summary per period, half and game (2018-19 on): percentages, rebounds,
 wjbl_team_period_stats(play_schedule_id=7987)
 ```
 
-_Last validated n/a._
-
 ## wjbl_team_standings
 
 League table of one or more season phases: rank and record of every team.
@@ -182,8 +178,6 @@ League table of one or more season phases: rank and record of every team.
 ```python
 wjbl_team_standings(season_ids='169')
 ```
-
-_Last validated n/a._
 
 ## wjbl_team_ranking
 
@@ -253,8 +247,6 @@ League table with per-game team averages (points, shooting, rebounds, assists) o
 wjbl_team_ranking(season_ids='169,170')
 ```
 
-_Last validated n/a._
-
 ## wjbl_teams
 
 Every franchise (team_id) the site knows, all-star sides included.
@@ -290,5 +282,3 @@ Every franchise (team_id) the site knows, all-star sides included.
 ```python
 wjbl_teams()
 ```
-
-_Last validated n/a._

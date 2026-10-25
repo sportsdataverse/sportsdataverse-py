@@ -56,8 +56,6 @@ Yahoo shangrila persisted query `gamePropBets` -> one row per `games` entry
 yahoo_game_prop_bets()
 ```
 
-_Last validated n/a._
-
 ## yahoo_game_stats_leaders
 
 Yahoo shangrila persisted query `gameStatsLeaders` -> one row per `games` entry
@@ -318,5 +316,3 @@ Yahoo shangrila persisted query `gameStatsLeaders` -> one row per `games` entry
 ```python
 yahoo_game_stats_leaders()
 ```
-
-_Last validated n/a._

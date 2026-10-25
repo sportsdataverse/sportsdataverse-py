@@ -75,8 +75,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_facet_run_defense_summary()
 ```
 
-_Last validated n/a._
-
 ## pff_facet_field_goal_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /field_goal/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
@@ -150,8 +148,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_facet_field_goal_summary()
 ```
-
-_Last validated n/a._
 
 ## pff_facet_coverage_summary
 
@@ -237,8 +233,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_facet_coverage_summary()
 ```
 
-_Last validated n/a._
-
 ## pff_facet_kicking_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /kickoff/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
@@ -305,8 +299,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_facet_kicking_summary()
 ```
-
-_Last validated n/a._
 
 ## pff_facet_blocking_summary
 
@@ -382,8 +374,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_facet_blocking_summary()
 ```
-
-_Last validated n/a._
 
 ## pff_facet_defense_summary
 
@@ -484,8 +474,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_facet_defense_summary()
 ```
 
-_Last validated n/a._
-
 ## pff_facet_offense_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
@@ -553,8 +541,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_facet_offense_summary()
 ```
-
-_Last validated n/a._
 
 ## pff_facet_passing_allowed_pressure
 
@@ -631,8 +617,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_facet_passing_allowed_pressure()
 ```
-
-_Last validated n/a._
 
 ## pff_facet_pass_rush_summary
 
@@ -711,5 +695,3 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_facet_pass_rush_summary()
 ```
-
-_Last validated n/a._

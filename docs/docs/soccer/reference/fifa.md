@@ -146,8 +146,6 @@ Match calendar of a competition season (first page; results and fixtures).
 fifa_calendar_matches(count='3', id_competition='17', id_season='285023', language='en')
 ```
 
-_Last validated n/a._
-
 ## fifa_competition
 
 One competition by id.
@@ -197,8 +195,6 @@ One competition by id.
 fifa_competition(id_competition='17', language='en')
 ```
 
-_Last validated n/a._
-
 ## fifa_competitions
 
 All FIFA competitions (first page).
@@ -247,8 +243,6 @@ All FIFA competitions (first page).
 ```python
 fifa_competitions(count='3', language='en')
 ```
-
-_Last validated n/a._
 
 ## fifa_live_football
 
@@ -389,8 +383,6 @@ Matches live right now across FIFA competitions.
 fifa_live_football(language='en')
 ```
 
-_Last validated n/a._
-
 ## fifa_players_search
 
 Players matching a name (first page).
@@ -450,8 +442,6 @@ Players matching a name (first page).
 fifa_players_search(language='en', name='Messi')
 ```
 
-_Last validated n/a._
-
 ## fifa_seasons
 
 Seasons of a competition (first page).
@@ -505,8 +495,6 @@ Seasons of a competition (first page).
 ```python
 fifa_seasons(count='3', id_competition='17', language='en')
 ```
-
-_Last validated n/a._
 
 ## fifa_stadiums
 
@@ -566,8 +554,6 @@ Stadiums (first page).
 ```python
 fifa_stadiums(count='3', language='en')
 ```
-
-_Last validated n/a._
 
 ## fifa_team
 
@@ -635,8 +621,6 @@ One team by id.
 fifa_team(id_team='43922', language='en')
 ```
 
-_Last validated n/a._
-
 ## fifa_teams_search
 
 Teams matching a name (first page).
@@ -702,5 +686,3 @@ Teams matching a name (first page).
 ```python
 fifa_teams_search(language='en', name='Argentina')
 ```
-
-_Last validated n/a._

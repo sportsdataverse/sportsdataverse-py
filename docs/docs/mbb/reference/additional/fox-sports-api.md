@@ -1,7 +1,7 @@
 ---
 title: "MBB — additional Python functions — Fox Sports API"
 sidebar_label: "Fox Sports API"
-sidebar_position: 7
+sidebar_position: 8
 description: "MBB — additional Python functions — Fox Sports API — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # MBB — additional Python functions — Fox Sports API

@@ -101,8 +101,6 @@ ESPN endpoint.
 espn_nbagl_league_root()
 ```
 
-_Last validated n/a._
-
 ## espn_nbagl_seasons
 
 ESPN endpoint.
@@ -140,8 +138,6 @@ ESPN endpoint.
 ```python
 espn_nbagl_seasons()
 ```
-
-_Last validated n/a._
 
 ## espn_nbagl_games
 
@@ -181,8 +177,6 @@ ESPN endpoint.
 ```python
 espn_nbagl_games()
 ```
-
-_Last validated n/a._
 
 ## espn_nbagl_game
 
@@ -231,8 +225,6 @@ ESPN endpoint.
 ```python
 espn_nbagl_game(event_id='401584793')
 ```
-
-_Last validated n/a._
 
 ## espn_nbagl_teams_core
 
@@ -283,8 +275,6 @@ ESPN endpoint.
 ```python
 espn_nbagl_teams_core()
 ```
-
-_Last validated n/a._
 
 ## espn_nbagl_team_core
 
@@ -361,8 +351,6 @@ ESPN endpoint.
 espn_nbagl_team_core(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_nbagl_venues
 
 ESPN endpoint.
@@ -400,8 +388,6 @@ ESPN endpoint.
 ```python
 espn_nbagl_venues()
 ```
-
-_Last validated n/a._
 
 ## espn_nbagl_venue
 
@@ -445,8 +431,6 @@ ESPN endpoint.
 espn_nbagl_venue(venue_id='3663')
 ```
 
-_Last validated n/a._
-
 ## espn_nbagl_franchises
 
 ESPN endpoint.
@@ -484,8 +468,6 @@ ESPN endpoint.
 ```python
 espn_nbagl_franchises()
 ```
-
-_Last validated n/a._
 
 ## espn_nbagl_franchise
 
@@ -544,8 +526,6 @@ ESPN endpoint.
 espn_nbagl_franchise(franchise_id='2')
 ```
 
-_Last validated n/a._
-
 ## espn_nbagl_coach
 
 ESPN endpoint.
@@ -591,8 +571,6 @@ ESPN endpoint.
 espn_nbagl_coach(coach_id='1')
 ```
 
-_Last validated n/a._
-
 ## espn_nbagl_coach_record
 
 ESPN endpoint.
@@ -637,8 +615,6 @@ ESPN endpoint.
 espn_nbagl_coach_record(coach_id='1')
 ```
 
-_Last validated n/a._
-
 ## espn_nbagl_coach_season
 
 ESPN endpoint.
@@ -673,8 +649,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_nbagl_coach_season(coach_id='1', season=2024)
 ```
-
-_Last validated n/a._
 
 ## espn_nbagl_positions
 
@@ -713,8 +687,6 @@ ESPN endpoint.
 ```python
 espn_nbagl_positions()
 ```
-
-_Last validated n/a._
 
 ## espn_nbagl_position
 
@@ -758,8 +730,6 @@ ESPN endpoint.
 espn_nbagl_position(position_id='1')
 ```
 
-_Last validated n/a._
-
 ## espn_nbagl_tournaments
 
 ESPN endpoint.
@@ -798,8 +768,6 @@ ESPN endpoint.
 espn_nbagl_tournaments()
 ```
 
-_Last validated n/a._
-
 ## espn_nbagl_awards
 
 ESPN endpoint.
@@ -837,8 +805,6 @@ ESPN endpoint.
 ```python
 espn_nbagl_awards()
 ```
-
-_Last validated n/a._
 
 ## espn_nbagl_award
 
@@ -879,8 +845,6 @@ ESPN endpoint.
 ```python
 espn_nbagl_award(award_id='1')
 ```
-
-_Last validated n/a._
 
 ## espn_nbagl_standings_core
 
@@ -947,8 +911,6 @@ ESPN endpoint.
 espn_nbagl_standings_core()
 ```
 
-_Last validated n/a._
-
 ## espn_nbagl_leaders_core
 
 ESPN endpoint.
@@ -982,8 +944,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 espn_nbagl_leaders_core()
 ```
 
-_Last validated n/a._
-
 ## espn_nbagl_league_notes
 
 ESPN endpoint.
@@ -1016,8 +976,6 @@ No returns table is published for this endpoint: no capture: the page holds zero
 ```python
 espn_nbagl_league_notes()
 ```
-
-_Last validated n/a._
 
 ## espn_nbagl_talentpicks
 
@@ -1066,5 +1024,3 @@ ESPN endpoint.
 ```python
 espn_nbagl_talentpicks()
 ```
-
-_Last validated n/a._

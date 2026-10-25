@@ -64,8 +64,6 @@ Yahoo shangrila persisted query `playerBasic` -> tables: players, leagues
 yahoo_player_basic()
 ```
 
-_Last validated n/a._
-
 ## yahoo_player_career_stats
 
 Yahoo shangrila persisted query `playerCareerStats` -> one row per `players` entry
@@ -110,8 +108,6 @@ Yahoo shangrila persisted query `playerCareerStats` -> one row per `players` ent
 ```python
 yahoo_player_career_stats()
 ```
-
-_Last validated n/a._
 
 ## yahoo_player_game_log
 
@@ -162,8 +158,6 @@ Yahoo shangrila persisted query `playerGameLog` -> one row per `players` entry
 yahoo_player_game_log()
 ```
 
-_Last validated n/a._
-
 ## yahoo_player_props
 
 Yahoo shangrila persisted query `playerProps` -> one row per `players` entry
@@ -201,8 +195,6 @@ Yahoo shangrila persisted query `playerProps` -> one row per `players` entry
 ```python
 yahoo_player_props()
 ```
-
-_Last validated n/a._
 
 ## yahoo_player_search
 
@@ -252,8 +244,6 @@ Yahoo shangrila persisted query `playerSearch` -> one row per `leagues.players` 
 ```python
 yahoo_player_search()
 ```
-
-_Last validated n/a._
 
 ## yahoo_player_season_stats
 
@@ -306,5 +296,3 @@ Yahoo shangrila persisted query `playerSeasonStats` -> one row per `players` ent
 ```python
 yahoo_player_season_stats()
 ```
-
-_Last validated n/a._

@@ -123,8 +123,6 @@ GET /stats/teamdetails
 nba_stats_teamdetails()
 ```
 
-_Last validated n/a._
-
 ## nba_stats_teamestimatedmetrics
 
 GET /stats/teamestimatedmetrics
@@ -193,8 +191,6 @@ GET /stats/teamestimatedmetrics
 nba_stats_teamestimatedmetrics(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_teamgamelog
 
 GET /stats/teamgamelog
@@ -262,8 +258,6 @@ GET /stats/teamgamelog
 ```python
 nba_stats_teamgamelog(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_teamgamelogs
 
@@ -378,8 +372,6 @@ GET /stats/teamgamelogs
 nba_stats_teamgamelogs(league_id='00', season_nullable='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_teaminfocommon
 
 GET /stats/teaminfocommon
@@ -458,8 +450,6 @@ GET /stats/teaminfocommon
 ```python
 nba_stats_teaminfocommon(league_id='00', season_nullable='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_teamvsplayer
 
@@ -800,8 +790,6 @@ GET /stats/teamvsplayer
 nba_stats_teamvsplayer(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_teamyearbyyearstats
 
 GET /stats/teamyearbyyearstats
@@ -874,5 +862,3 @@ GET /stats/teamyearbyyearstats
 ```python
 nba_stats_teamyearbyyearstats(league_id='00')
 ```
-
-_Last validated n/a._

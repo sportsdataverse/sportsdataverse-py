@@ -12,11 +12,11 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 | [Highlights](reference/additional#highlights) | curated "start here" functions | 9 | — |
 | [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 129 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 34 | none |
-| [stats.ncaa.org](#stats-ncaa-org) | `stats.ncaa.org` | 120 | none (Terms gate + rate rotation) |
+| [stats.ncaa.org](#stats-ncaa-org) | `stats.ncaa.org` | 136 | none (Terms gate + rate rotation) |
 | [KenPom](#kenpom) | `kenpom.com` | 32 | subscription (KENPOM_EMAIL / KENPOM_PASSWORD) |
 | [Bart Torvik T-Rank](#bart-torvik-t-rank) | `barttorvik.com` | 5 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 325 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 341 | — |
 
 ## ESPN {#espn}
 
@@ -39,7 +39,7 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 
 | Reference | Functions |
 |---|---:|
-| [Hand-written wrappers](reference/additional/stats-ncaa-org) | 120 |
+| [Hand-written wrappers](reference/additional/stats-ncaa-org) | 136 |
 
 ## KenPom {#kenpom}
 

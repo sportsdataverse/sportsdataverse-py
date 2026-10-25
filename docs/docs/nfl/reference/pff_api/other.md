@@ -52,8 +52,6 @@ List the leagues you can read, with their seasons and weeks
 pff_api_ref_leagues()
 ```
 
-_Last validated n/a._
-
 ## pff_api_ref_games
 
 List game results for a league, season and week
@@ -107,8 +105,6 @@ List game results for a league, season and week
 pff_api_ref_games(league='nfl', season=2022, week=1)
 ```
 
-_Last validated n/a._
-
 ## pff_api_ref_players
 
 Search the player directory by name or id
@@ -161,8 +157,6 @@ Search the player directory by name or id
 pff_api_ref_players(league='nfl', name='burrow')
 ```
 
-_Last validated n/a._
-
 ## pff_api_whoami
 
 Show what this API believes about the current credential
@@ -192,5 +186,3 @@ Show what this API believes about the current credential
 ```python
 pff_api_whoami()
 ```
-
-_Last validated n/a._

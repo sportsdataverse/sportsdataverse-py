@@ -42,8 +42,6 @@ GET /api/v1.1/game/{gamePk}/feed/live — live firehose (v1.1).
 mlb_pbp(game_pk=716390)
 ```
 
-_Last validated n/a._
-
 ## mlb_boxscore
 
 GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
@@ -312,8 +310,6 @@ GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
 mlb_boxscore(game_pk=716390)
 ```
 
-_Last validated n/a._
-
 ## mlb_linescore
 
 GET /api/v1/game/{gamePk}/linescore — inning-by-inning + current game state.
@@ -360,8 +356,6 @@ GET /api/v1/game/{gamePk}/linescore — inning-by-inning + current game state.
 ```python
 mlb_linescore(game_pk=716390)
 ```
-
-_Last validated n/a._
 
 ## mlb_win_probability
 
@@ -463,8 +457,6 @@ GET /api/v1/game/{gamePk}/winProbability — per-play WP timeline.
 mlb_win_probability(game_pk=716390)
 ```
 
-_Last validated n/a._
-
 ## mlb_people
 
 GET /api/v1/people?personIds=... — bulk person lookup by MLBAM id.
@@ -545,8 +537,6 @@ GET /api/v1/people?personIds=... — bulk person lookup by MLBAM id.
 mlb_people()
 ```
 
-_Last validated n/a._
-
 ## mlb_person
 
 GET /api/v1/people/{personId} — single person detail.
@@ -625,8 +615,6 @@ GET /api/v1/people/{personId} — single person detail.
 mlb_person(person_id=660271)
 ```
 
-_Last validated n/a._
-
 ## mlb_person_game_stats
 
 GET /api/v1/people/{personId}/stats/game/{gamePk} — one player, one game.
@@ -668,8 +656,6 @@ GET /api/v1/people/{personId}/stats/game/{gamePk} — one player, one game.
 ```python
 mlb_person_game_stats(person_id=660271, game_pk=716390)
 ```
-
-_Last validated n/a._
 
 ## mlb_sport_players
 
@@ -759,8 +745,6 @@ GET /api/v1/sports/{sportId}/players — every player in a sport for a season.
 mlb_sport_players()
 ```
 
-_Last validated n/a._
-
 ## mlb_sports
 
 GET /api/v1/sports — list known sports (MLB, MiLB, KBO, NPB, …).
@@ -802,8 +786,6 @@ GET /api/v1/sports — list known sports (MLB, MiLB, KBO, NPB, …).
 ```python
 mlb_sports()
 ```
-
-_Last validated n/a._
 
 ## mlb_leagues
 
@@ -882,8 +864,6 @@ GET /api/v1/leagues — list leagues.
 mlb_leagues()
 ```
 
-_Last validated n/a._
-
 ## mlb_season
 
 GET /api/v1/seasons/{seasonId} — single season detail.
@@ -941,8 +921,6 @@ GET /api/v1/seasons/{seasonId} — single season detail.
 mlb_season(season_id='X')
 ```
 
-_Last validated n/a._
-
 ## mlb_venues
 
 GET /api/v1/venues — list venues.
@@ -984,5 +962,3 @@ GET /api/v1/venues — list venues.
 ```python
 mlb_venues()
 ```
-
-_Last validated n/a._

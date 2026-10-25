@@ -179,8 +179,6 @@ Whole-game box score lines of every player on either team sheet, keyed by GoHoop
 tpbl_box_players(game_id=6)
 ```
 
-_Last validated n/a._
-
 ## tpbl_box_player_periods
 
 Per-quarter box score lines of the players who were on court, overtimes included.
@@ -353,8 +351,6 @@ Per-quarter box score lines of the players who were on court, overtimes included
 tpbl_box_player_periods(game_id=6)
 ```
 
-_Last validated n/a._
-
 ## tpbl_box_teams
 
 Whole-game team totals of both teams: shooting, rebounds, fouls, assists, turnovers and paint points.
@@ -429,8 +425,6 @@ Whole-game team totals of both teams: shooting, rebounds, fouls, assists, turnov
 ```python
 tpbl_box_teams(game_id=6)
 ```
-
-_Last validated n/a._
 
 ## tpbl_box_team_periods
 
@@ -507,5 +501,3 @@ Per-quarter team lines of both teams: points scored and conceded in the quarter,
 ```python
 tpbl_box_team_periods(game_id=6)
 ```
-
-_Last validated n/a._

@@ -54,8 +54,6 @@ GET /referee.php - one referee's game log and splits for a season. Port of hoopR
 kenpom_referee(referee=714294, year=2025)
 ```
 
-_Last validated n/a._
-
 ## kenpom_game_attributes
 
 GET /game_attrs.php - season game leaderboards by attribute (thrill score, comebacks, upsets, ...). Port of hoopR kp_game_attrs().
@@ -101,5 +99,3 @@ GET /game_attrs.php - season game leaderboards by attribute (thrill score, comeb
 ```python
 kenpom_game_attributes(year=2025, attribute='ThrillScore')
 ```
-
-_Last validated n/a._

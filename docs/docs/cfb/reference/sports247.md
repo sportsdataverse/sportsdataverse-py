@@ -53,8 +53,6 @@ toc_max_heading_level: 2
 sports247_teams()
 ```
 
-_Last validated n/a._
-
 ## sports247_institution_rankings
 
 247Sports team recruiting-class rankings (247 rank/rating + industry composite) for a sport and class year.
@@ -128,8 +126,6 @@ _Last validated n/a._
 sports247_institution_rankings(year=2026, sport_key=1)
 ```
 
-_Last validated n/a._
-
 ## sports247_recruits
 
 247Sports individual recruit rankings for a sport and class year (247 + industry-composite ratings, stars, commit status; paginated).
@@ -202,8 +198,6 @@ _Last validated n/a._
 ```python
 sports247_recruits(year=2026, sport_key=1)
 ```
-
-_Last validated n/a._
 
 ## sports247_transfers
 
@@ -282,8 +276,6 @@ _Last validated n/a._
 sports247_transfers(year=2026, sport_key=1)
 ```
 
-_Last validated n/a._
-
 ## sports247_coaches
 
 247Sports coach recruiting rankings for a sport and year (paginated).
@@ -340,8 +332,6 @@ _Last validated n/a._
 sports247_coaches(year=2026, sport_key=1)
 ```
 
-_Last validated n/a._
-
 ## sports247_transfer_portal_player_feed
 
 247Sports transfer-portal player ranking feed for a sport and class year.
@@ -397,8 +387,6 @@ _Last validated n/a._
 ```python
 sports247_transfer_portal_player_feed(year=2026, sport_key=1)
 ```
-
-_Last validated n/a._
 
 ## sports247_composite_team_ranking_feed
 
@@ -461,8 +449,6 @@ _Last validated n/a._
 sports247_composite_team_ranking_feed(year=2026, sport_key=1)
 ```
 
-_Last validated n/a._
-
 ## sports247_transfer_portal_team_feed
 
 247Sports transfer-portal team ranking feed for a sport and class year.
@@ -506,8 +492,6 @@ _Last validated n/a._
 ```python
 sports247_transfer_portal_team_feed(year=2026, sport_key=1)
 ```
-
-_Last validated n/a._
 
 ## sports247_target_predictions
 
@@ -574,8 +558,6 @@ _Last validated n/a._
 sports247_target_predictions(site_key=1, year=2026, sport_key=1)
 ```
 
-_Last validated n/a._
-
 ## sports247_sport_years
 
 Class years for which the 247Sports RDB has data for a given sport.
@@ -611,8 +593,6 @@ Class years for which the 247Sports RDB has data for a given sport.
 ```python
 sports247_sport_years(sport_key=1)
 ```
-
-_Last validated n/a._
 
 ## sports247_tags_autocomplete
 
@@ -653,8 +633,6 @@ _Last validated n/a._
 ```python
 sports247_tags_autocomplete(default_name='smith')
 ```
-
-_Last validated n/a._
 
 ## sports247_positions
 
@@ -697,5 +675,3 @@ _Last validated n/a._
 ```python
 sports247_positions(sport_key=1)
 ```
-
-_Last validated n/a._

@@ -178,8 +178,6 @@ GET /stats/boxscoresummaryv2
 wnba_stats_boxscoresummaryv2()
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_boxscoresummaryv3
 
 GET /stats/boxscoresummaryv3
@@ -316,8 +314,6 @@ GET /stats/boxscoresummaryv3
 wnba_stats_boxscoresummaryv3()
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_boxscoretraditionalv2
 
 GET /stats/boxscoretraditionalv2
@@ -450,8 +446,6 @@ GET /stats/boxscoretraditionalv2
 wnba_stats_boxscoretraditionalv2()
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_boxscoretraditionalv3
 
 GET /stats/boxscoretraditionalv3
@@ -564,8 +558,6 @@ GET /stats/boxscoretraditionalv3
 wnba_stats_boxscoretraditionalv3()
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_boxscoreusagev2
 
 GET /stats/boxscoreusagev2
@@ -665,8 +657,6 @@ GET /stats/boxscoreusagev2
 ```python
 wnba_stats_boxscoreusagev2()
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_boxscoreusagev3
 
@@ -777,5 +767,3 @@ GET /stats/boxscoreusagev3
 ```python
 wnba_stats_boxscoreusagev3()
 ```
-
-_Last validated n/a._

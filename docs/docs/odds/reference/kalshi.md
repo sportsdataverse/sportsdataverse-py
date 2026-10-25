@@ -59,8 +59,6 @@ One event, optionally with its markets nested.
 kalshi_event(event_ticker='KXNFLGAME-26OCT08TBDAL', with_nested_markets='true')
 ```
 
-_Last validated n/a._
-
 ## kalshi_events
 
 Events, filterable by series and status; cursor-paged.
@@ -112,8 +110,6 @@ Events, filterable by series and status; cursor-paged.
 kalshi_events(limit='3', series_ticker='KXNFLGAME', status='open')
 ```
 
-_Last validated n/a._
-
 ## kalshi_exchange_status
 
 Exchange and trading status.
@@ -151,8 +147,6 @@ Exchange and trading status.
 ```python
 kalshi_exchange_status()
 ```
-
-_Last validated n/a._
 
 ## kalshi_market
 
@@ -230,8 +224,6 @@ One market.
 ```python
 kalshi_market(ticker='KXNFLGAME-26OCT08TBDAL-DAL')
 ```
-
-_Last validated n/a._
 
 ## kalshi_markets
 
@@ -312,8 +304,6 @@ Markets, filterable by event/series/status; cursor-paged.
 kalshi_markets(event_ticker='KXNFLGAME-26OCT08TBDAL', limit='3')
 ```
 
-_Last validated n/a._
-
 ## kalshi_orderbook
 
 Order book of a market (fixed-point dollar levels).
@@ -352,8 +342,6 @@ Order book of a market (fixed-point dollar levels).
 ```python
 kalshi_orderbook(depth='3', ticker='KXNFLGAME-26OCT08TBDAL-DAL')
 ```
-
-_Last validated n/a._
 
 ## kalshi_series
 
@@ -405,8 +393,6 @@ One series.
 kalshi_series(series_ticker='KXNFLGAME')
 ```
 
-_Last validated n/a._
-
 ## kalshi_series_list
 
 Series (market families) in a category; the whole category in one body.
@@ -456,8 +442,6 @@ Series (market families) in a category; the whole category in one body.
 kalshi_series_list(category='Sports')
 ```
 
-_Last validated n/a._
-
 ## kalshi_trades
 
 Public trades, filterable by market; cursor-paged.
@@ -504,5 +488,3 @@ Public trades, filterable by market; cursor-paged.
 ```python
 kalshi_trades(limit='3', ticker='KXNFLGAME-26OCT08TBDAL-DAL')
 ```
-
-_Last validated n/a._

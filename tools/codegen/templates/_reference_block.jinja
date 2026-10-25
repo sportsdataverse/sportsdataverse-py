@@ -15,10 +15,6 @@
 
 **Example request:** `{{ ep.curl_example }}`
 {% endif %}
-{% if ep.r_equivalent %}
-
-**R equivalent:** {% for pkg, fn in ep.r_equivalent.items() %}`{{ pkg }}::{{ fn }}()`{% if not loop.last %}, {% endif %}{% endfor %}
-{% endif %}
 
 {% if ep.body_kind != "query" %}
 | API Parameter | Python | In | Pattern | Required | Nullable | Description |
@@ -62,9 +58,4 @@ No returns table is published for this endpoint: {{ ep.unverified }}.
 ```python
 {{ ep.example_call }}
 ```
-{% if ep.notebook %}
-> See the [{{ ep.notebook }} notebook](../../../examples/notebooks/{{ ep.notebook }}.ipynb) for a runnable walkthrough.
-{% endif %}
-
-_Last validated {{ ep.last_validated or "n/a" }}._
 {%- endmacro %}

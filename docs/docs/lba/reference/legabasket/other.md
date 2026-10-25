@@ -56,8 +56,6 @@ Championships of a season, one per phase (Regular Season, Play Off); every seaso
 lba_championships(season=2027)
 ```
 
-_Last validated n/a._
-
 ## lba_calendar
 
 Games of one round of a championship: teams, score, venue, referees and broadcasters.
@@ -131,8 +129,6 @@ Games of one round of a championship: teams, score, venue, referees and broadcas
 ```python
 lba_calendar(championship_id=602, round=1)
 ```
-
-_Last validated n/a._
 
 ## lba_game
 
@@ -231,8 +227,6 @@ Game header: teams, venue, quarter scores, coaches, referees and broadcasters.
 lba_game(game_id=25602)
 ```
 
-_Last validated n/a._
-
 ## lba_box_score
 
 Box score of a final game: one row per player of both teams (Italian-named stat columns).
@@ -307,8 +301,6 @@ Box score of a final game: one row per player of both teams (Italian-named stat 
 lba_box_score(game_id=25602)
 ```
 
-_Last validated n/a._
-
 ## lba_pbp
 
 Play-by-play of a final game (2017-18 on), one row per action with x/y; coordinate frame by era.
@@ -380,8 +372,6 @@ Play-by-play of a final game (2017-18 on), one row per action with x/y; coordina
 lba_pbp(game_id=25602)
 ```
 
-_Last validated n/a._
-
 ## lba_pbp_legend
 
 The play-by-play qualifier code table (59 codes) with its Italian labels.
@@ -418,8 +408,6 @@ The play-by-play qualifier code table (59 codes) with its Italian labels.
 ```python
 lba_pbp_legend(game_id=25602)
 ```
-
-_Last validated n/a._
 
 ## lba_shots
 
@@ -466,8 +454,6 @@ Shooting by court zone per team for a final game (made / attempted aggregates; z
 ```python
 lba_shots(game_id=25602)
 ```
-
-_Last validated n/a._
 
 ## lba_standings
 
@@ -562,8 +548,6 @@ Standings of a championship after a round, one row per team.
 lba_standings(championship_id=602, round=3)
 ```
 
-_Last validated n/a._
-
 ## lba_roster
 
 Players of one team-season with bio, number and role.
@@ -622,8 +606,6 @@ Players of one team-season with bio, number and role.
 lba_roster(team_id=1764)
 ```
 
-_Last validated n/a._
-
 ## lba_roster_coach
 
 Head coach of one team-season.
@@ -673,8 +655,6 @@ Head coach of one team-season.
 ```python
 lba_roster_coach(team_id=1764)
 ```
-
-_Last validated n/a._
 
 ## lba_game_log
 
@@ -780,5 +760,3 @@ A player's game log for one season, one row per game.
 ```python
 lba_game_log(player_id=969, season=2027)
 ```
-
-_Last validated n/a._

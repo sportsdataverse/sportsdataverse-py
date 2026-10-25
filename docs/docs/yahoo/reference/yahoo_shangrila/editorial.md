@@ -467,5 +467,3 @@ Full game box score + play-by-play (normalized stat dictionaries)
 ```python
 yahoo_editorial_boxscore(game_id='ncaaf.g.202509200023')
 ```
-
-_Last validated n/a._

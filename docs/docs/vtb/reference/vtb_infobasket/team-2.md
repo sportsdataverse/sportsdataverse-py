@@ -105,8 +105,6 @@ Season totals of every player of a club in one season.
 vtb_infobasket_team_player_stats(season=2026, team_id=2650)
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_team_coach_stats
 
 Technical fouls and games of every coach of a club in one season.
@@ -163,5 +161,3 @@ Technical fouls and games of every coach of a club in one season.
 ```python
 vtb_infobasket_team_coach_stats(season=2026, team_id=2650)
 ```
-
-_Last validated n/a._

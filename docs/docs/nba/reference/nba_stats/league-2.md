@@ -127,8 +127,6 @@ GET /stats/leaguestandings
 nba_stats_leaguestandings(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_leaguestandingsv3
 
 GET /stats/leaguestandingsv3
@@ -259,5 +257,3 @@ GET /stats/leaguestandingsv3
 ```python
 nba_stats_leaguestandingsv3(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._

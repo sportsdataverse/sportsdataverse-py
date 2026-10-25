@@ -401,5 +401,3 @@ GET /stats/playerdashboardbygamesplits
 ```python
 nba_stats_playerdashboardbygamesplits(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._

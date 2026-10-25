@@ -139,8 +139,6 @@ GET /stats/boxscoretraditionalv2
 nba_stats_boxscoretraditionalv2()
 ```
 
-_Last validated n/a._
-
 ## nba_stats_boxscoretraditionalv3
 
 GET /stats/boxscoretraditionalv3
@@ -253,8 +251,6 @@ GET /stats/boxscoretraditionalv3
 nba_stats_boxscoretraditionalv3()
 ```
 
-_Last validated n/a._
-
 ## nba_stats_boxscoreusagev3
 
 GET /stats/boxscoreusagev3
@@ -364,5 +360,3 @@ GET /stats/boxscoreusagev3
 ```python
 nba_stats_boxscoreusagev3()
 ```
-
-_Last validated n/a._

@@ -66,8 +66,6 @@ Season schedule and results of a tournament, one row per game (All-Star games dr
 khl_schedule(season=2026)
 ```
 
-_Last validated n/a._
-
 ## khl_roster
 
 Club roster (current season only): one row per player.
@@ -113,8 +111,6 @@ Club roster (current season only): one row per player.
 khl_roster(club_id=7)
 ```
 
-_Last validated n/a._
-
 ## khl_stat_filters
 
 Stats filter options: seasons, tournaments, position groups and clubs (one row per option).
@@ -157,8 +153,6 @@ Stats filter options: seasons, tournaments, position groups and clubs (one row p
 ```python
 khl_stat_filters(season=2026)
 ```
-
-_Last validated n/a._
 
 ## khl_game_header
 
@@ -245,8 +239,6 @@ Game header: status, teams, score, arena (one row).
 khl_game_header(game_id=898236, season=2026)
 ```
 
-_Last validated n/a._
-
 ## khl_game_protocol
 
 Game protocol: one row per goal with scorer, assistants, strength and the jerseys on the ice.
@@ -305,8 +297,6 @@ Game protocol: one row per goal with scorer, assistants, strength and the jersey
 ```python
 khl_game_protocol(game_id=898236, season=2026)
 ```
-
-_Last validated n/a._
 
 ## khl_game_info
 
@@ -417,8 +407,6 @@ Game info: teams, score, arena, officials, starting goalies (one row).
 khl_game_info(game_id=898236, season=2026)
 ```
 
-_Last validated n/a._
-
 ## khl_player_box
 
 Skater box score by period: one row per period, side and jersey, with the player id.
@@ -487,8 +475,6 @@ Skater box score by period: one row per period, side and jersey, with the player
 khl_player_box(game_id=898236, season=2026)
 ```
 
-_Last validated n/a._
-
 ## khl_pbp
 
 Play-by-play: shots, faceoffs, hits, blocks, giveaways, takeaways, penalties and goals (2008-09 on).
@@ -553,8 +539,6 @@ Play-by-play: shots, faceoffs, hits, blocks, giveaways, takeaways, penalties and
 khl_pbp(game_id=898236, season=2026)
 ```
 
-_Last validated n/a._
-
 ## khl_shots
 
 Shot map: one row per shot with its x / y on the 1000 x 500 rink grid (2024-25 on).
@@ -607,8 +591,6 @@ Shot map: one row per shot with its x / y on the 1000 x 500 rink grid (2024-25 o
 ```python
 khl_shots(game_id=898236, season=2026)
 ```
-
-_Last validated n/a._
 
 ## khl_player_profile
 
@@ -675,8 +657,6 @@ Player profile: bio, contract, club (one row).
 ```python
 khl_player_profile(player_id=41928)
 ```
-
-_Last validated n/a._
 
 ## khl_player_career
 
@@ -753,8 +733,6 @@ Player career: one row per season tournament.
 khl_player_career(player_id=41928)
 ```
 
-_Last validated n/a._
-
 ## khl_playoff_bracket
 
 Playoff bracket: one row per team per series.
@@ -799,8 +777,6 @@ Playoff bracket: one row per team per series.
 ```python
 khl_playoff_bracket(season=2026)
 ```
-
-_Last validated n/a._
 
 ## khl_standings
 
@@ -854,8 +830,6 @@ Regular-season standings: one row per team per table (league, conferences, divis
 ```python
 khl_standings(season=2026)
 ```
-
-_Last validated n/a._
 
 ## khl_player_stats
 
@@ -942,5 +916,3 @@ League player stats of a tournament, one page (goalies: every page) (one row per
 ```python
 khl_player_stats(position='forwards', season=2026)
 ```
-
-_Last validated n/a._

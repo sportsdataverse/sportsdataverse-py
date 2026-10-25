@@ -1,0 +1,24 @@
+schema: aggregate_stints
+kind: dataframe
+columns:
+- name: off_ids
+  type: list
+  description: ''
+- name: def_ids
+  type: list
+  description: ''
+- name: off_team
+  type: character
+  description: ''
+- name: def_team
+  type: character
+  description: ''
+- name: is_home_offense
+  type: logical
+  description: ''
+- name: n_poss
+  type: integer
+  description: ''
+- name: pts
+  type: integer
+  description: ''

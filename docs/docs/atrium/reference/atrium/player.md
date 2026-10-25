@@ -62,8 +62,6 @@ The players of a season, with position, nationality, birth date, age and height.
 atrium_players(website_id=12)
 ```
 
-_Last validated n/a._
-
 ## atrium_player
 
 A player page: bio and the season averages the card shows.
@@ -116,8 +114,6 @@ A player page: bio and the season averages the card shows.
 ```python
 atrium_player(person_id='4458f165-f865-11f0-8ebf-539c931c1654', website_id=12)
 ```
-
-_Last validated n/a._
 
 ## atrium_player_seasons
 
@@ -177,8 +173,6 @@ A player's per-game averages, one row per competition-season.
 ```python
 atrium_player_seasons(person_id='4458f165-f865-11f0-8ebf-539c931c1654', website_id=12)
 ```
-
-_Last validated n/a._
 
 ## atrium_player_game_log
 
@@ -259,8 +253,6 @@ A player's game log: one row per game with the opponent, result and the statisti
 atrium_player_game_log(person_id='4458f165-f865-11f0-8ebf-539c931c1654', website_id=12)
 ```
 
-_Last validated n/a._
-
 ## atrium_player_stats
 
 Player season statistics in long form (one row per player, table and statistic); ids decoded from the widget links.
@@ -312,5 +304,3 @@ Player season statistics in long form (one row per player, table and statistic);
 ```python
 atrium_player_stats(website_id=12)
 ```
-
-_Last validated n/a._

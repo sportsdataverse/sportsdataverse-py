@@ -52,8 +52,6 @@ Officials nominated to one game (referees, table officials, commissioner).
 fiba_gdap_game_officials(game_id=100720)
 ```
 
-_Last validated n/a._
-
 ## fiba_gdap_game_periods
 
 Period scores of one game.
@@ -95,8 +93,6 @@ Period scores of one game.
 ```python
 fiba_gdap_game_periods(game_id=100720)
 ```
-
-_Last validated n/a._
 
 ## fiba_gdap_games_between
 
@@ -217,5 +213,3 @@ Games of EVERY FIBA competition in a local-time window (how competitions and gam
 ```python
 fiba_gdap_games_between(date_from='2023-09-08', date_to='2023-09-11')
 ```
-
-_Last validated n/a._

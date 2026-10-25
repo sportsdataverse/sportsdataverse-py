@@ -120,8 +120,6 @@ A team's games with each team's leaders.
 fiba_gdap_team_games(team_id=279569)
 ```
 
-_Last validated n/a._
-
 ## fiba_gdap_team_player_stats
 
 Per-game averages of every player of a team at a competition.
@@ -223,8 +221,6 @@ Per-game averages of every player of a team at a competition.
 fiba_gdap_team_player_stats(team_id=279569)
 ```
 
-_Last validated n/a._
-
 ## fiba_gdap_team_staff
 
 Coaches of every team of a competition.
@@ -276,8 +272,6 @@ Coaches of every team of a competition.
 ```python
 fiba_gdap_team_staff(comp=208182)
 ```
-
-_Last validated n/a._
 
 ## fiba_gdap_team_stats
 
@@ -389,8 +383,6 @@ A team's per-game averages and totals at a competition, with the bench totals.
 fiba_gdap_team_stats(team_id=279569)
 ```
 
-_Last validated n/a._
-
 ## fiba_gdap_teams
 
 Teams of a competition with their profile (final ranking, per-game averages).
@@ -454,5 +446,3 @@ Teams of a competition with their profile (final ranking, per-game averages).
 ```python
 fiba_gdap_teams(comp=208182)
 ```
-
-_Last validated n/a._

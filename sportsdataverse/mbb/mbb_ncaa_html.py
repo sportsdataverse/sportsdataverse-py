@@ -111,6 +111,7 @@ __all__ = [
     "attr_regex_filter",
     "select_contains",
     "filter_matching_own",
+    "current_ncaa_team_alts",
 ]
 
 
@@ -376,6 +377,22 @@ def current_ncaa_team_alts(doc: Tag) -> list[str]:
     longer match: NCAA's markup drifted since cbb-explorer's ~2020 capture.
     The v1 ``team_finder``\\ s try their ported selector first, then fall
     back here, so both the vendored-era and current pages resolve.
+
+    Args:
+        doc: A parsed stats.ncaa.org game page (:func:`parse_html`).
+
+    Returns:
+        The distinct team-logo ``alt`` texts in document order: ``[]`` when the
+        page carries no team logos, one name when only one team has a logo.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb import current_ncaa_team_alts, parse_html
+
+            html = '<a class="skipMask"><img alt="Illinois"></a><a class="skipMask"><img alt="Purdue"></a>'
+            current_ncaa_team_alts(parse_html(html))
+            # ['Illinois', 'Purdue']
     """
     out: list[str] = []
     for el in doc.select("a.skipMask img[alt]"):

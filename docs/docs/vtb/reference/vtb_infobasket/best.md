@@ -72,8 +72,6 @@ Player leaders of a season for the first `count` leader categories.
 vtb_infobasket_best_players(season=2026)
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_best_teams
 
 Team leaders of a season for the first `count` leader categories.
@@ -131,8 +129,6 @@ Team leaders of a season for the first `count` leader categories.
 vtb_infobasket_best_teams(season=2026)
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_best_player_parameters
 
 Player leader categories (a code table).
@@ -170,8 +166,6 @@ Player leader categories (a code table).
 vtb_infobasket_best_player_parameters()
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_best_team_parameters
 
 Team leader categories (a code table).
@@ -208,5 +202,3 @@ Team leader categories (a code table).
 ```python
 vtb_infobasket_best_team_parameters()
 ```
-
-_Last validated n/a._

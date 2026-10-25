@@ -100,8 +100,6 @@ Season totals of every team of a season (all stages).
 vtb_infobasket_team_stats(season=2026)
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_team_stats_players
 
 Season totals of every player of every team of a season.
@@ -198,8 +196,6 @@ Season totals of every player of every team of a season.
 vtb_infobasket_team_stats_players(season=2026)
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_team_stats_coaches
 
 Technical fouls and games of every coach of every team of a season.
@@ -254,8 +250,6 @@ Technical fouls and games of every coach of every team of a season.
 ```python
 vtb_infobasket_team_stats_coaches(season=2026)
 ```
-
-_Last validated n/a._
 
 ## vtb_infobasket_team_preview
 
@@ -351,8 +345,6 @@ Season totals of a game's two teams (the pre-game preview).
 vtb_infobasket_team_preview(game_id=921391, season=2026)
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_team_box_score
 
 Team box score of a finished game, with the head coach's technical fouls.
@@ -433,8 +425,6 @@ Team box score of a finished game, with the head coach's technical fouls.
 vtb_infobasket_team_box_score(game_id=921391)
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_team
 
 Club profile: names, region, country, status.
@@ -488,8 +478,6 @@ Club profile: names, region, country, status.
 vtb_infobasket_team(team_id=2650)
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_team_seasons
 
 The seasons a club has data for (END year and the club's competition id).
@@ -530,8 +518,6 @@ The seasons a club has data for (END year and the club's competition id).
 ```python
 vtb_infobasket_team_seasons(team_id=2650)
 ```
-
-_Last validated n/a._
 
 ## vtb_infobasket_team_comps
 
@@ -579,8 +565,6 @@ The competitions a club played in one season.
 ```python
 vtb_infobasket_team_comps(season=2026, team_id=2650)
 ```
-
-_Last validated n/a._
 
 ## vtb_infobasket_team_games
 
@@ -665,8 +649,6 @@ A club's games in one season (the calendar's row shape).
 ```python
 vtb_infobasket_team_games(season=2026, team_id=2650)
 ```
-
-_Last validated n/a._
 
 ## vtb_infobasket_team_season_stats
 
@@ -762,5 +744,3 @@ A club's season totals in one season.
 ```python
 vtb_infobasket_team_season_stats(season=2026, team_id=2650)
 ```
-
-_Last validated n/a._

@@ -88,6 +88,15 @@ def normalize_player_key(expr: pl.Expr) -> pl.Expr:
 
     Returns:
         The normalized key expression.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.mbb import normalize_player_key
+
+            pl.DataFrame({"code": ["anaëlle.dutat."]}).select(normalize_player_key(pl.col("code")))
+            # ANAELLE.DUTAT
     """
     return expr.str.normalize("NFKD").str.replace_all(r"\p{M}", "").str.to_uppercase().str.strip_chars_end(".")
 

@@ -180,8 +180,6 @@ GET /stats/teamdashboardbyyearoveryear
 wnba_stats_teamdashboardbyyearoveryear(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_teamdashlineups
 
 GET /stats/teamdashlineups
@@ -361,5 +359,3 @@ GET /stats/teamdashlineups
 ```python
 wnba_stats_teamdashlineups(league_id='10', season='2024')
 ```
-
-_Last validated n/a._

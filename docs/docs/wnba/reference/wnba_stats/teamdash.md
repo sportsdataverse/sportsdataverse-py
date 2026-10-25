@@ -710,5 +710,3 @@ GET /stats/teamdashboardbyclutch
 ```python
 wnba_stats_teamdashboardbyclutch(league_id='10', season='2024')
 ```
-
-_Last validated n/a._

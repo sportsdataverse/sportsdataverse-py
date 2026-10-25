@@ -52,8 +52,6 @@ GET /bifrost/v1/{sport}/team/{team_id}/gamelog -- Fox Sports API team gamelog.
 fox_api_team_gamelog(sport='nfl', team_id='25')
 ```
 
-_Last validated n/a._
-
 ## fox_api_team_header
 
 GET /bifrost/v1/{sport}/team/{team_id}/header -- Fox Sports API team header.
@@ -102,8 +100,6 @@ GET /bifrost/v1/{sport}/team/{team_id}/header -- Fox Sports API team header.
 fox_api_team_header(sport='nfl', team_id='25')
 ```
 
-_Last validated n/a._
-
 ## fox_api_team_roster
 
 GET /bifrost/v1/{sport}/team/{team_id}/roster -- Fox Sports API team roster.
@@ -149,8 +145,6 @@ GET /bifrost/v1/{sport}/team/{team_id}/roster -- Fox Sports API team roster.
 ```python
 fox_api_team_roster(sport='nfl', team_id='25')
 ```
-
-_Last validated n/a._
 
 ## fox_api_team_standings
 
@@ -212,8 +206,6 @@ GET /bifrost/v1/{sport}/team/{team_id}/standings -- Fox Sports API team standing
 fox_api_team_standings(sport='nfl', team_id='25')
 ```
 
-_Last validated n/a._
-
 ## fox_api_team_stats
 
 GET /bifrost/v1/{sport}/team/{team_id}/stats -- Fox Sports API team stats.
@@ -263,5 +255,3 @@ GET /bifrost/v1/{sport}/team/{team_id}/stats -- Fox Sports API team stats.
 ```python
 fox_api_team_stats(sport='nfl', team_id='25')
 ```
-
-_Last validated n/a._

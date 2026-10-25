@@ -51,8 +51,6 @@ Players of a season, 50 per page (walk the pages with page).
 lba_players(season=2027)
 ```
 
-_Last validated n/a._
-
 ## lba_player
 
 Player bio with current-season totals, highs and averages (one row).
@@ -197,8 +195,6 @@ Player bio with current-season totals, highs and averages (one row).
 lba_player(player_id=969)
 ```
 
-_Last validated n/a._
-
 ## lba_player_stats
 
 A player's career by championship: per-game averages, single-game highs and totals.
@@ -267,8 +263,6 @@ A player's career by championship: per-game averages, single-game highs and tota
 lba_player_stats(player_id=969)
 ```
 
-_Last validated n/a._
-
 ## lba_players_leaderboard
 
 Season player leaderboard for one category (per-game average).
@@ -320,5 +314,3 @@ Season player leaderboard for one category (per-game average).
 ```python
 lba_players_leaderboard(category='points', season=2027)
 ```
-
-_Last validated n/a._

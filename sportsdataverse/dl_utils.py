@@ -17,6 +17,7 @@ import polars as pl
 import requests
 from requests.adapters import HTTPAdapter
 
+from sportsdataverse._deprecation import warn_deprecated
 from sportsdataverse.errors import NoDataError, _is_data_body, _may_be_json, _redact_secrets, no_espn_data
 
 logger = logging.getLogger("sdv.dl_utils")
@@ -783,13 +784,32 @@ class ColumnJanitor:
     def clean_names(self) -> pl.DataFrame:
         return self._df.rename({c: underscore(c) for c in self._df.columns})
 
+    # C-L59: no caller anywhere; deprecated, not deleted (public on every DataFrame's ``janitor``).
     def to_pascal_case(self) -> pl.DataFrame:
+        warn_deprecated(
+            "DataFrame.janitor.to_pascal_case",
+            replacement="df.rename(sportsdataverse.dl_utils.camelize)",
+            since="0.1.6",
+            removed_in="0.2.0",
+        )
         return self._df.rename({c: camelize(c, True) for c in self._df.columns})
 
     def to_camel_case(self) -> pl.DataFrame:
+        warn_deprecated(
+            "DataFrame.janitor.to_camel_case",
+            replacement="df.rename(lambda c: sportsdataverse.dl_utils.camelize(c, False))",
+            since="0.1.6",
+            removed_in="0.2.0",
+        )
         return self._df.rename({c: camelize(c, False) for c in self._df.columns})
 
     def to_kebab_case(self) -> pl.DataFrame:
+        warn_deprecated(
+            "DataFrame.janitor.to_kebab_case",
+            replacement="df.rename(sportsdataverse.dl_utils.kebabize)",
+            since="0.1.6",
+            removed_in="0.2.0",
+        )
         return self._df.rename({c: kebabize(c) for c in self._df.columns})
 
 
@@ -895,7 +915,7 @@ def camelize(string, uppercase_first_letter=True):
         return string[0].lower() + camelize(string)[1:]
 
 
-class ESPNResponse:
+class _ESPNResponse:
     def __init__(self, response, status_code, url):
         self._response = response
 
@@ -925,8 +945,8 @@ class ESPNResponse:
         return self._url
 
 
-class ESPNHTTP:
-    espn_response = ESPNResponse
+class _ESPNHTTP:
+    espn_response = _ESPNResponse
 
     base_url = None
 
@@ -986,3 +1006,20 @@ class ESPNHTTP:
             raise Exception("InvalidResponse: Response is not in a valid JSON format.")
 
         return data
+
+
+# A-L32 / C-L59: ``ESPNHTTP`` / ``ESPNResponse`` (an nba_api-derived client) have no caller in the
+# package or the workspace; every request goes through :func:`download`. Deprecated, not deleted.
+_DEPRECATED = {"ESPNHTTP": _ESPNHTTP, "ESPNResponse": _ESPNResponse}
+
+
+def __getattr__(name: str) -> Any:  # PEP 562: warn on access, not on import
+    if name in _DEPRECATED:
+        warn_deprecated(
+            f"sportsdataverse.dl_utils.{name}",
+            replacement="sportsdataverse.dl_utils.download()",
+            since="0.1.6",
+            removed_in="0.2.0",
+        )
+        return _DEPRECATED[name]
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

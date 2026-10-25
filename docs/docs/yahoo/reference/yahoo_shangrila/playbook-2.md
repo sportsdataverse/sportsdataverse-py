@@ -48,8 +48,6 @@ Yahoo shangrila persisted query `playbookTeamSocialShare` -> one row per `teams`
 yahoo_playbook_team_social_share()
 ```
 
-_Last validated n/a._
-
 ## yahoo_playbook_tennis_match
 
 Yahoo shangrila persisted query `playbookTennisMatch` -> one row per `events` entry
@@ -80,5 +78,3 @@ Yahoo shangrila persisted query `playbookTennisMatch` -> one row per `events` en
 ```python
 yahoo_playbook_tennis_match()
 ```
-
-_Last validated n/a._

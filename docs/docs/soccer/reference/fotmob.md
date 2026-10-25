@@ -46,8 +46,6 @@ Every league FotMob covers, grouped as popular / international / by country.
 fotmob_all_leagues()
 ```
 
-_Last validated n/a._
-
 ## fotmob_audio_matches
 
 Matches with audio commentary available, with their languages.
@@ -83,8 +81,6 @@ Matches with audio commentary available, with their languages.
 ```python
 fotmob_audio_matches()
 ```
-
-_Last validated n/a._
 
 ## fotmob_leagues
 
@@ -166,8 +162,6 @@ League page: details, tabs, current table, fixtures, stats, transfers (one wide 
 fotmob_leagues(id='47', tab='overview', time_zone='UTC', type='league')
 ```
 
-_Last validated n/a._
-
 ## fotmob_match_details
 
 Match page: general info, header, lineups, events, stats (one wide row).
@@ -245,8 +239,6 @@ Match page: general info, header, lineups, events, stats (one wide row).
 fotmob_match_details(match_id='4813647')
 ```
 
-_Last validated n/a._
-
 ## fotmob_matches
 
 All matches on a date, one row per league with that league's matches nested.
@@ -290,8 +282,6 @@ All matches on a date, one row per league with that league's matches nested.
 ```python
 fotmob_matches(date='20260301', timezone='UTC')
 ```
-
-_Last validated n/a._
 
 ## fotmob_player_data
 
@@ -398,8 +388,6 @@ Player page: bio, primary team, career history, recent matches, stats (one wide 
 fotmob_player_data(id='1077894')
 ```
 
-_Last validated n/a._
-
 ## fotmob_search_suggest
 
 Search suggestions for a term, one row per result group (players, teams, leagues).
@@ -438,8 +426,6 @@ Search suggestions for a term, one row per result group (players, teams, leagues
 ```python
 fotmob_search_suggest(lang='en', term='haaland')
 ```
-
-_Last validated n/a._
 
 ## fotmob_table
 
@@ -487,8 +473,6 @@ A data.fotmob.com league table file: legend, filters and the all/home/away/xg ta
 ```python
 fotmob_table(url='http://data.fotmob.com/tables.ext.47.fot.gz')
 ```
-
-_Last validated n/a._
 
 ## fotmob_teams
 
@@ -594,8 +578,6 @@ Team page: details, squad, table, fixtures, stats, transfers, history (one wide 
 fotmob_teams(id='8650', tab='overview', time_zone='UTC', type='team')
 ```
 
-_Last validated n/a._
-
 ## fotmob_tlnews
 
 News timeline for a league or team, one row per story.
@@ -640,8 +622,6 @@ News timeline for a league or team, one row per story.
 ```python
 fotmob_tlnews(id='47', start_index='0', type='league')
 ```
-
-_Last validated n/a._
 
 ## fotmob_top_transfers
 
@@ -704,8 +684,6 @@ Top transfers across FotMob, one row per transfer.
 fotmob_top_transfers()
 ```
 
-_Last validated n/a._
-
 ## fotmob_totw_rounds
 
 Team-of-the-week rounds for a league season, one row per round.
@@ -745,8 +723,6 @@ Team-of-the-week rounds for a league season, one row per round.
 ```python
 fotmob_totw_rounds(league_id='47', season='2025/2026')
 ```
-
-_Last validated n/a._
 
 ## fotmob_trending_news
 
@@ -789,8 +765,6 @@ Trending news stories (host-root route), one row per story.
 ```python
 fotmob_trending_news(lang='en')
 ```
-
-_Last validated n/a._
 
 ## fotmob_tvlistings
 
@@ -847,5 +821,3 @@ TV listings for a country, one row per broadcast with the match id in `id`.
 ```python
 fotmob_tvlistings(country_code='GB')
 ```
-
-_Last validated n/a._

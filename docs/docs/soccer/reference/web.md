@@ -65,8 +65,6 @@ ESPN endpoint.
 espn_soccer_player_overview(league='eng.1', athlete_id='4239')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_player_stats
 
 ESPN endpoint.
@@ -109,8 +107,6 @@ ESPN endpoint.
 ```python
 espn_soccer_player_stats(league='eng.1', athlete_id='4239')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_player_gamelog
 
@@ -174,8 +170,6 @@ ESPN endpoint.
 espn_soccer_player_gamelog(league='eng.1', athlete_id='4239')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_player_splits
 
 ESPN endpoint.
@@ -218,8 +212,6 @@ ESPN endpoint.
 ```python
 espn_soccer_player_splits(league='eng.1', athlete_id='4239')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_leaders
 
@@ -294,5 +286,3 @@ ESPN endpoint.
 ```python
 espn_soccer_leaders(league='eng.1')
 ```
-
-_Last validated n/a._

@@ -130,8 +130,6 @@ GET /stats/cumestatsplayer
 nba_stats_cumestatsplayer(league_id='00')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_cumestatsplayergames
 
 GET /stats/cumestatsplayergames
@@ -177,8 +175,6 @@ GET /stats/cumestatsplayergames
 ```python
 nba_stats_cumestatsplayergames(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_cumestatsteam
 
@@ -312,8 +308,6 @@ GET /stats/cumestatsteam
 nba_stats_cumestatsteam(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_cumestatsteamgames
 
 GET /stats/cumestatsteamgames
@@ -360,5 +354,3 @@ GET /stats/cumestatsteamgames
 ```python
 nba_stats_cumestatsteamgames(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._

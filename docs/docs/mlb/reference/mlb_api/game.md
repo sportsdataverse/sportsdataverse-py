@@ -39,8 +39,6 @@ GET /api/v1/game/{gamePk}/contextMetrics — WP, leverage index, in-game context
 mlb_game_context_metrics(game_pk=716390)
 ```
 
-_Last validated n/a._
-
 ## mlb_game_content
 
 GET /api/v1/game/{gamePk}/content — articles, highlights, editorial content.
@@ -71,8 +69,6 @@ GET /api/v1/game/{gamePk}/content — articles, highlights, editorial content.
 ```python
 mlb_game_content(game_pk=716390)
 ```
-
-_Last validated n/a._
 
 ## mlb_game_timestamps
 
@@ -109,8 +105,6 @@ Retrieve all of the play timecodes for a game in GUMBO feed.
 ```python
 mlb_game_timestamps(game_pk=716390)
 ```
-
-_Last validated n/a._
 
 ## mlb_game_changes
 
@@ -213,8 +207,6 @@ View corrected non Statcast information for games
 mlb_game_changes(sport_id=1, updated_since='2023-09-01T00:00:00Z')
 ```
 
-_Last validated n/a._
-
 ## mlb_game_guids
 
 View Statcast data for a specific game.
@@ -257,8 +249,6 @@ No returns table is published for this endpoint: no capture: statsapi.mlb.com an
 mlb_game_guids(game_pk=716390)
 ```
 
-_Last validated n/a._
-
 ## mlb_game_color
 
 View game color commentary info.
@@ -294,8 +284,6 @@ No returns table is published for this endpoint: no capture: statsapi.mlb.com an
 ```python
 mlb_game_color(game_pk=716390)
 ```
-
-_Last validated n/a._
 
 ## mlb_game_color_diff
 
@@ -333,8 +321,6 @@ No returns table is published for this endpoint: no capture: statsapi.mlb.com an
 mlb_game_color_diff(game_pk=716390)
 ```
 
-_Last validated n/a._
-
 ## mlb_game_color_timestamps
 
 View all of the color timecodes for a game.
@@ -368,8 +354,6 @@ No returns table is published for this endpoint: no capture: statsapi.mlb.com an
 ```python
 mlb_game_color_timestamps(game_pk=716390)
 ```
-
-_Last validated n/a._
 
 ## mlb_game_pace
 
@@ -465,5 +449,3 @@ View time of game info.
 ```python
 mlb_game_pace(season='2023')
 ```
-
-_Last validated n/a._

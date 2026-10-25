@@ -74,8 +74,6 @@ Schedule and results of one season and stage (pre-season, regular season, playof
 pleague_schedule(season=2025)
 ```
 
-_Last validated n/a._
-
 ## pleague_game
 
 Header of one finished game: date, venue, both clubs with their score and the Preciser game uuid.
@@ -128,8 +126,6 @@ Header of one finished game: date, venue, both clubs with their score and the Pr
 pleague_game(gid=197)
 ```
 
-_Last validated n/a._
-
 ## pleague_periods
 
 Points each team scored in each quarter and overtime of one finished game.
@@ -170,8 +166,6 @@ Points each team scored in each quarter and overtime of one finished game.
 pleague_periods(gid=197)
 ```
 
-_Last validated n/a._
-
 ## pleague_officials
 
 The referee and the two umpires printed under the header of one finished game (names only).
@@ -211,8 +205,6 @@ The referee and the two umpires printed under the header of one finished game (n
 ```python
 pleague_officials(gid=197)
 ```
-
-_Last validated n/a._
 
 ## pleague_box_players
 
@@ -296,8 +288,6 @@ Player box score of one finished game: minutes, points, shooting splits, rebound
 pleague_box_players(gid=197)
 ```
 
-_Last validated n/a._
-
 ## pleague_box_teams
 
 Team totals of one finished game: the box score's total row, home then away.
@@ -355,8 +345,6 @@ Team totals of one finished game: the box score's total row, home then away.
 ```python
 pleague_box_teams(gid=197)
 ```
-
-_Last validated n/a._
 
 ## pleague_pbp
 
@@ -419,8 +407,6 @@ Play-by-play of one finished game (2022-23 on) in game order, with shot x / y an
 pleague_pbp(gid=197)
 ```
 
-_Last validated n/a._
-
 ## pleague_standings
 
 Regular-season standings of one season: record, scoring averages, home / away and recent form.
@@ -475,8 +461,6 @@ Regular-season standings of one season: record, scoring averages, home / away an
 ```python
 pleague_standings(season=2025)
 ```
-
-_Last validated n/a._
 
 ## pleague_stat_player
 
@@ -558,8 +542,6 @@ Player season averages and totals of one season and stage: shooting, rebounds, a
 pleague_stat_player(season=2025, stage_sn=2)
 ```
 
-_Last validated n/a._
-
 ## pleague_player
 
 One player's profile: names, club, jersey, position, height, weight and birthplace.
@@ -609,8 +591,6 @@ One player's profile: names, club, jersey, position, height, weight and birthpla
 ```python
 pleague_player(player_page_id='1JbPozLB')
 ```
-
-_Last validated n/a._
 
 ## pleague_player_seasons
 
@@ -669,5 +649,3 @@ One player's season totals and per-game averages, league and East Asia Super Lea
 ```python
 pleague_player_seasons(player_page_id='1JbPozLB')
 ```
-
-_Last validated n/a._

@@ -140,8 +140,6 @@ GET /rdb/v1/collective-groups
 on3_collective_groups()
 ```
 
-_Last validated n/a._
-
 ## on3_collective_groups_deals
 
 GET /rdb/v1/collective-groups/{key}/deals
@@ -178,8 +176,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 on3_collective_groups_deals(key=1)
 ```
 
-_Last validated n/a._
-
 ## on3_collective_groups_key
 
 GET /rdb/v1/collective-groups/{key}
@@ -213,5 +209,3 @@ No returns table is published for this endpoint: no committed capture with rows,
 ```python
 on3_collective_groups_key(key=1)
 ```
-
-_Last validated n/a._

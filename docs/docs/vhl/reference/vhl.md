@@ -67,8 +67,6 @@ Schedule and results of one season stage: every game with its club ids, score an
 vhl_schedule(season=2026)
 ```
 
-_Last validated n/a._
-
 ## vhl_game_info
 
 Game header of a report: date, attendance, score by period, teams, coaches and officials.
@@ -138,8 +136,6 @@ Game header of a report: date, attendance, score by period, teams, coaches and o
 vhl_game_info(game_id=899223, season=2026)
 ```
 
-_Last validated n/a._
-
 ## vhl_goals
 
 Goals of a game with scorer, assists, strength and the jerseys on ice for both teams.
@@ -202,8 +198,6 @@ Goals of a game with scorer, assists, strength and the jerseys on ice for both t
 vhl_goals(game_id=899223, season=2026)
 ```
 
-_Last validated n/a._
-
 ## vhl_penalties
 
 Penalties of a game: team, time, player, minutes and infraction.
@@ -253,8 +247,6 @@ Penalties of a game: team, time, player, minutes and infraction.
 ```python
 vhl_penalties(game_id=899223, season=2026)
 ```
-
-_Last validated n/a._
 
 ## vhl_player_box
 
@@ -326,8 +318,6 @@ Skater box score of a game: scoring, shots, faceoffs, time on ice, hits and bloc
 vhl_player_box(game_id=899223, season=2026)
 ```
 
-_Last validated n/a._
-
 ## vhl_goalie_box
 
 Goalie box score of a game: shots against, saves, save percentage and time on ice.
@@ -389,8 +379,6 @@ Goalie box score of a game: shots against, saves, save percentage and time on ic
 vhl_goalie_box(game_id=899223, season=2026)
 ```
 
-_Last validated n/a._
-
 ## vhl_pbp
 
 Text broadcast of a game (online.vhlru.ru, Russian text): goals, penalties, shootout attempts, goalie changes and comments. No shot coordinates.
@@ -444,8 +432,6 @@ Text broadcast of a game (online.vhlru.ru, Russian text): goals, penalties, shoo
 vhl_pbp(game_id=899223, season=2026)
 ```
 
-_Last validated n/a._
-
 ## vhl_standings
 
 League standings of one regular season (/standings/league/; /standings/regular/ ignores the season).
@@ -496,8 +482,6 @@ League standings of one regular season (/standings/league/; /standings/regular/ 
 ```python
 vhl_standings(season=2026)
 ```
-
-_Last validated n/a._
 
 ## vhl_skater_stats
 
@@ -567,8 +551,6 @@ Season stats of every defenseman and forward of one season stage.
 vhl_skater_stats(season=2026)
 ```
 
-_Last validated n/a._
-
 ## vhl_goalie_stats
 
 Season stats of every goalie of one season stage.
@@ -626,8 +608,6 @@ Season stats of every goalie of one season stage.
 vhl_goalie_stats(season=2026)
 ```
 
-_Last validated n/a._
-
 ## vhl_player
 
 Player card: position, height, weight, birth date, age, country and photo.
@@ -672,8 +652,6 @@ Player card: position, height, weight, birth date, age, country and photo.
 ```python
 vhl_player(player_id=34526)
 ```
-
-_Last validated n/a._
 
 ## vhl_player_career
 
@@ -749,8 +727,6 @@ Player career by season stage and team (skater and goalie columns in one frame).
 vhl_player_career(player_id=34526)
 ```
 
-_Last validated n/a._
-
 ## vhl_roster
 
 CURRENT roster of a team page (player names in Cyrillic even on /en/).
@@ -796,5 +772,3 @@ CURRENT roster of a team page (player names in Cyrillic even on /en/).
 ```python
 vhl_roster(team_page_id=390)
 ```
-
-_Last validated n/a._

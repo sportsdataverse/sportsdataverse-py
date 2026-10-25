@@ -96,8 +96,6 @@ Pull categorized (cat) EDGE detail stats for a single skater.
 nhl_edge_cat_skater_detail(player_id=8480801)
 ```
 
-_Last validated n/a._
-
 ## nhl_edge_cat_goalie_detail
 
 Pull categorized (cat) EDGE detail stats for a single goalie.
@@ -172,5 +170,3 @@ Pull categorized (cat) EDGE detail stats for a single goalie.
 ```python
 nhl_edge_cat_goalie_detail(player_id=8480801)
 ```
-
-_Last validated n/a._

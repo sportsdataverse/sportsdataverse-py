@@ -204,8 +204,6 @@ GET /stats/playerdashboardbyyearoveryear
 wnba_stats_playerdashboardbyyearoveryear(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_playerdashptshotdefend
 
 GET /stats/playerdashptshotdefend
@@ -268,5 +266,3 @@ GET /stats/playerdashptshotdefend
 ```python
 wnba_stats_playerdashptshotdefend(league_id='10', season='2024')
 ```
-
-_Last validated n/a._

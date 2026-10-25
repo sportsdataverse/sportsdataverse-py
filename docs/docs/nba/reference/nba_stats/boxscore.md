@@ -126,8 +126,6 @@ GET /stats/boxscoreadvancedv3
 nba_stats_boxscoreadvancedv3()
 ```
 
-_Last validated n/a._
-
 ## nba_stats_boxscoredefensivev2
 
 GET /stats/boxscoredefensivev2
@@ -210,8 +208,6 @@ GET /stats/boxscoredefensivev2
 ```python
 nba_stats_boxscoredefensivev2()
 ```
-
-_Last validated n/a._
 
 ## nba_stats_boxscorefourfactorsv3
 
@@ -302,8 +298,6 @@ GET /stats/boxscorefourfactorsv3
 ```python
 nba_stats_boxscorefourfactorsv3()
 ```
-
-_Last validated n/a._
 
 ## nba_stats_boxscorehustlev2
 
@@ -406,8 +400,6 @@ GET /stats/boxscorehustlev2
 nba_stats_boxscorehustlev2()
 ```
 
-_Last validated n/a._
-
 ## nba_stats_boxscorematchupsv3
 
 GET /stats/boxscorematchupsv3
@@ -475,8 +467,6 @@ GET /stats/boxscorematchupsv3
 ```python
 nba_stats_boxscorematchupsv3()
 ```
-
-_Last validated n/a._
 
 ## nba_stats_boxscoremiscv3
 
@@ -575,8 +565,6 @@ GET /stats/boxscoremiscv3
 ```python
 nba_stats_boxscoremiscv3()
 ```
-
-_Last validated n/a._
 
 ## nba_stats_boxscoreplayertrackv3
 
@@ -686,8 +674,6 @@ GET /stats/boxscoreplayertrackv3
 nba_stats_boxscoreplayertrackv3()
 ```
 
-_Last validated n/a._
-
 ## nba_stats_boxscorescoringv3
 
 GET /stats/boxscorescoringv3
@@ -791,8 +777,6 @@ GET /stats/boxscorescoringv3
 ```python
 nba_stats_boxscorescoringv3()
 ```
-
-_Last validated n/a._
 
 ## nba_stats_boxscoresummaryv2
 
@@ -965,8 +949,6 @@ GET /stats/boxscoresummaryv2
 nba_stats_boxscoresummaryv2()
 ```
 
-_Last validated n/a._
-
 ## nba_stats_boxscoresummaryv3
 
 GET /stats/boxscoresummaryv3
@@ -1102,5 +1084,3 @@ GET /stats/boxscoresummaryv3
 ```python
 nba_stats_boxscoresummaryv3()
 ```
-
-_Last validated n/a._

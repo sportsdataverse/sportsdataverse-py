@@ -42,8 +42,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_player_passing_summary()
 ```
 
-_Last validated n/a._
-
 ## pff_player_rushing_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /rushing/summary (per-week + totals for one player)
@@ -78,8 +76,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_player_rushing_summary()
 ```
-
-_Last validated n/a._
 
 ## pff_player_receiving_summary
 
@@ -116,8 +112,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_player_receiving_summary()
 ```
 
-_Last validated n/a._
-
 ## pff_player_defense_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /defense/summary (per-week + totals for one player)
@@ -152,8 +146,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_player_defense_summary()
 ```
-
-_Last validated n/a._
 
 ## pff_player_offense_summary
 
@@ -190,8 +182,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_player_offense_summary()
 ```
 
-_Last validated n/a._
-
 ## pff_player_snaps_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /snaps/summary (per-week + totals for one player)
@@ -227,8 +217,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_player_snaps_summary()
 ```
 
-_Last validated n/a._
-
 ## pff_player_offense_blocking
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/blocking (per-week + totals for one player)
@@ -263,8 +251,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_player_offense_blocking()
 ```
-
-_Last validated n/a._
 
 ## pff_players
 
@@ -317,8 +303,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_players()
 ```
 
-_Last validated n/a._
-
 ## pff_player_seasons
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Seasons a player has data for
@@ -350,8 +334,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_player_seasons()
 ```
-
-_Last validated n/a._
 
 ## pff_player_position_pivot
 
@@ -386,5 +368,3 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_player_position_pivot()
 ```
-
-_Last validated n/a._

@@ -53,8 +53,6 @@ GET /bifrost/v1/{sport}/league/conferences -- Fox Sports API league conferences.
 fox_api_league_conferences(sport='cfb')
 ```
 
-_Last validated n/a._
-
 ## fox_api_league_header
 
 GET /bifrost/v1/{sport}/league/header -- Fox Sports API league header.
@@ -101,8 +99,6 @@ GET /bifrost/v1/{sport}/league/header -- Fox Sports API league header.
 ```python
 fox_api_league_header(sport='nfl')
 ```
-
-_Last validated n/a._
 
 ## fox_api_league_odds
 
@@ -179,8 +175,6 @@ GET /bifrost/v1/{sport}/league/odds -- Fox Sports API league odds.
 fox_api_league_odds(sport='nfl')
 ```
 
-_Last validated n/a._
-
 ## fox_api_league_playernews
 
 GET /bifrost/v1/{sport}/league/playernews -- Fox Sports API league playernews.
@@ -245,8 +239,6 @@ GET /bifrost/v1/{sport}/league/playernews -- Fox Sports API league playernews.
 fox_api_league_playernews(sport='nfl')
 ```
 
-_Last validated n/a._
-
 ## fox_api_league_polls
 
 GET /bifrost/v1/{sport}/league/polls -- Fox Sports API league polls.
@@ -292,8 +284,6 @@ GET /bifrost/v1/{sport}/league/polls -- Fox Sports API league polls.
 fox_api_league_polls(sport='cfb')
 ```
 
-_Last validated n/a._
-
 ## fox_api_league_schedule
 
 GET /bifrost/v1/{sport}/league/schedule -- Fox Sports API league schedule.
@@ -338,8 +328,6 @@ GET /bifrost/v1/{sport}/league/schedule -- Fox Sports API league schedule.
 fox_api_league_schedule(sport='nfl')
 ```
 
-_Last validated n/a._
-
 ## fox_api_league_scores
 
 GET /bifrost/v1/{sport}/league/scores -- Fox Sports API league scores.
@@ -383,8 +371,6 @@ GET /bifrost/v1/{sport}/league/scores -- Fox Sports API league scores.
 ```python
 fox_api_league_scores(sport='nfl')
 ```
-
-_Last validated n/a._
 
 ## fox_api_league_scores_segment
 
@@ -446,8 +432,6 @@ GET /bifrost/v1/{sport}/league/scores-segment/{segment_id} -- Fox Sports API lea
 fox_api_league_scores_segment(sport='nfl', segment_id='2026-3-1')
 ```
 
-_Last validated n/a._
-
 ## fox_api_league_standings
 
 GET /bifrost/v1/{sport}/league/standings -- Fox Sports API league standings.
@@ -507,8 +491,6 @@ GET /bifrost/v1/{sport}/league/standings -- Fox Sports API league standings.
 fox_api_league_standings(sport='nfl')
 ```
 
-_Last validated n/a._
-
 ## fox_api_league_stats
 
 GET /bifrost/v1/{sport}/league/stats -- Fox Sports API league stats.
@@ -558,8 +540,6 @@ GET /bifrost/v1/{sport}/league/stats -- Fox Sports API league stats.
 ```python
 fox_api_league_stats(sport='nfl')
 ```
-
-_Last validated n/a._
 
 ## fox_api_league_stats_con
 
@@ -621,8 +601,6 @@ GET /bifrost/v1/{sport}/league/stats-con/{who}/{category}/{page} -- Fox Sports A
 fox_api_league_stats_con(sport='nfl', who='player', category='passing', page='1')
 ```
 
-_Last validated n/a._
-
 ## fox_api_league_teamnav
 
 GET /bifrost/v1/{sport}/league/teamnav -- Fox Sports API league teamnav.
@@ -668,5 +646,3 @@ GET /bifrost/v1/{sport}/league/teamnav -- Fox Sports API league teamnav.
 ```python
 fox_api_league_teamnav(sport='nfl')
 ```
-
-_Last validated n/a._

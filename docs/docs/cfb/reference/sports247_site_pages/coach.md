@@ -64,8 +64,6 @@ Coach alma-mater Institution.
 sports247_site_pages_coach_alma_mater(key=1504)
 ```
 
-_Last validated n/a._
-
 ## sports247_site_pages_coach_hometown
 
 Coach hometown Location.
@@ -111,8 +109,6 @@ Coach hometown Location.
 ```python
 sports247_site_pages_coach_hometown(key=1504)
 ```
-
-_Last validated n/a._
 
 ## sports247_site_pages_coach_ranking
 
@@ -185,8 +181,6 @@ Single CoachRanking row.
 ```python
 sports247_site_pages_coach_ranking()
 ```
-
-_Last validated n/a._
 
 ## sports247_site_pages_coach_rankings
 
@@ -261,5 +255,3 @@ Coach's recruiting-ranking history (one row per Ranking snapshot).
 ```python
 sports247_site_pages_coach_rankings(key=1531)
 ```
-
-_Last validated n/a._

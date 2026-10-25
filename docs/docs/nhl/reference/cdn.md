@@ -96,5 +96,3 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 ```python
 espn_nhl_cdn_schedule(date='20250115')
 ```
-
-_Last validated n/a._

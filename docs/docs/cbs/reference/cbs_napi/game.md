@@ -36,8 +36,6 @@ Get a BettingSplits resource for a particular game.
 cbs_game_betting_splits()
 ```
 
-_Last validated n/a._
-
 ## cbs_game_boxscore
 
 Get boxscore resource
@@ -66,8 +64,6 @@ Get boxscore resource
 ```python
 cbs_game_boxscore()
 ```
-
-_Last validated n/a._
 
 ## cbs_game_content_preview
 
@@ -98,8 +94,6 @@ Get content for game preview
 cbs_game_content_preview()
 ```
 
-_Last validated n/a._
-
 ## cbs_game_content_recap
 
 Get content for game recap
@@ -128,8 +122,6 @@ Get content for game recap
 ```python
 cbs_game_content_recap()
 ```
-
-_Last validated n/a._
 
 ## cbs_game_content_story
 
@@ -161,8 +153,6 @@ Get content for game story
 cbs_game_content_story()
 ```
 
-_Last validated n/a._
-
 ## cbs_game_featured
 
 Get a FeaturedGame resource.
@@ -191,8 +181,6 @@ Get a FeaturedGame resource.
 ```python
 cbs_game_featured()
 ```
-
-_Last validated n/a._
 
 ## cbs_game_lineup
 
@@ -223,8 +211,6 @@ Get a lineup resource for a particular game.
 ```python
 cbs_game_lineup()
 ```
-
-_Last validated n/a._
 
 ## cbs_game_odds
 
@@ -260,8 +246,6 @@ Get an odds resource for a particular game.
 cbs_game_odds()
 ```
 
-_Last validated n/a._
-
 ## cbs_game_odds_hq
 
 Get an HQ odds resource for a particular game.
@@ -291,8 +275,6 @@ Get an HQ odds resource for a particular game.
 cbs_game_odds_hq()
 ```
 
-_Last validated n/a._
-
 ## cbs_game_outcomes
 
 Get an odds outcome for a particular game.
@@ -321,8 +303,6 @@ Get an odds outcome for a particular game.
 ```python
 cbs_game_outcomes()
 ```
-
-_Last validated n/a._
 
 ## cbs_game_probable_players
 
@@ -354,8 +334,6 @@ Get a list of players who are probably playing in a particular game.
 ```python
 cbs_game_probable_players()
 ```
-
-_Last validated n/a._
 
 ## cbs_game_props
 
@@ -391,8 +369,6 @@ Get game props for a game.
 cbs_game_props()
 ```
 
-_Last validated n/a._
-
 ## cbs_game_rtwp
 
 Get a rtwp resource for a particular game.
@@ -421,8 +397,6 @@ Get a rtwp resource for a particular game.
 ```python
 cbs_game_rtwp()
 ```
-
-_Last validated n/a._
 
 ## cbs_game_ruwt_highlights
 
@@ -453,8 +427,6 @@ Get the RUWT highlights resource for a particular game.
 cbs_game_ruwt_highlights()
 ```
 
-_Last validated n/a._
-
 ## cbs_game_scoring_boxscores
 
 Get an scoring box scores resource for a particular game.
@@ -483,8 +455,6 @@ Get an scoring box scores resource for a particular game.
 ```python
 cbs_game_scoring_boxscores()
 ```
-
-_Last validated n/a._
 
 ## cbs_game_scoring_drives
 
@@ -537,8 +507,6 @@ Get a drives resource for a particular game.
 cbs_game_scoring_drives()
 ```
 
-_Last validated n/a._
-
 ## cbs_game_scoring_leaders
 
 Get an scoring leaders resource for a particular game.
@@ -568,8 +536,6 @@ Get an scoring leaders resource for a particular game.
 cbs_game_scoring_leaders()
 ```
 
-_Last validated n/a._
-
 ## cbs_game_scoring_player_stats
 
 Get an scoring player stats resource for a particular game.
@@ -598,8 +564,6 @@ Get an scoring player stats resource for a particular game.
 ```python
 cbs_game_scoring_player_stats()
 ```
-
-_Last validated n/a._
 
 ## cbs_game_scoring_plays
 
@@ -655,8 +619,6 @@ Get an scoring plays resource for a particular game.
 cbs_game_scoring_plays()
 ```
 
-_Last validated n/a._
-
 ## cbs_game_scoring_rosters
 
 Get an scoring rosters resource for a particular game.
@@ -685,8 +647,6 @@ Get an scoring rosters resource for a particular game.
 ```python
 cbs_game_scoring_rosters()
 ```
-
-_Last validated n/a._
 
 ## cbs_game_scoring_scoreboard
 
@@ -717,8 +677,6 @@ Get an scoring scoreboard resource for a particular game.
 cbs_game_scoring_scoreboard()
 ```
 
-_Last validated n/a._
-
 ## cbs_game_scoring_scores
 
 Get an scoring scores resource for a particular game.
@@ -747,8 +705,6 @@ Get an scoring scores resource for a particular game.
 ```python
 cbs_game_scoring_scores()
 ```
-
-_Last validated n/a._
 
 ## cbs_game_scoring_team_stats
 
@@ -779,8 +735,6 @@ Get an scoring team stats resource for a particular game.
 cbs_game_scoring_team_stats()
 ```
 
-_Last validated n/a._
-
 ## cbs_game_scoring_winprob
 
 Get an scoring winprob resource for a particular game.
@@ -809,8 +763,6 @@ Get an scoring winprob resource for a particular game.
 ```python
 cbs_game_scoring_winprob()
 ```
-
-_Last validated n/a._
 
 ## cbs_game_scoring_ytd_player_stats
 
@@ -841,8 +793,6 @@ Get an scoring YTD player stats resource for a particular game.
 cbs_game_scoring_ytd_player_stats()
 ```
 
-_Last validated n/a._
-
 ## cbs_game_scoring_ytd_team_stats
 
 Get an scoring YTD team stats resource for a particular game.
@@ -871,8 +821,6 @@ Get an scoring YTD team stats resource for a particular game.
 ```python
 cbs_game_scoring_ytd_team_stats()
 ```
-
-_Last validated n/a._
 
 ## cbs_game_ticket
 
@@ -903,8 +851,6 @@ Get a ticket resource for a particular game.
 cbs_game_ticket()
 ```
 
-_Last validated n/a._
-
 ## cbs_game_weather
 
 Get a Weather resource for a particular game.
@@ -933,5 +879,3 @@ Get a Weather resource for a particular game.
 ```python
 cbs_game_weather()
 ```
-
-_Last validated n/a._

@@ -72,8 +72,6 @@ One team's games for one season.
 nl_team_schedule(season=2026, team_id=101144)
 ```
 
-_Last validated n/a._
-
 ## nl_team_stats
 
 One game's team totals: shots by period, faceoffs by zone, power play and penalty kill.
@@ -148,8 +146,6 @@ One game's team totals: shots by period, faceoffs by zone, power play and penalt
 ```python
 nl_team_stats(game_id=20261105000325)
 ```
-
-_Last validated n/a._
 
 ## nl_team_player_stats
 
@@ -333,8 +329,6 @@ Season stats for one team's players.
 nl_team_player_stats(phase=4940, season=2026, team_id=101144)
 ```
 
-_Last validated n/a._
-
 ## nl_team_info
 
 Club CMS record: names, logo, website, ticket links.
@@ -396,5 +390,3 @@ Club CMS record: names, logo, website, ticket links.
 ```python
 nl_team_info(team_id=101144)
 ```
-
-_Last validated n/a._

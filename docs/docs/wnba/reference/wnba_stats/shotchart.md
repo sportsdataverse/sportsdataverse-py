@@ -111,8 +111,6 @@ GET /stats/shotchartdetail
 wnba_stats_shotchartdetail(league_id='10', season_nullable='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_shotchartleaguewide
 
 GET /stats/shotchartleaguewide
@@ -156,8 +154,6 @@ GET /stats/shotchartleaguewide
 ```python
 wnba_stats_shotchartleaguewide(league_id='10', season='2024')
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_shotchartlineupdetail
 
@@ -253,5 +249,3 @@ GET /stats/shotchartlineupdetail
 ```python
 wnba_stats_shotchartlineupdetail(league_id='10', season='2024')
 ```
-
-_Last validated n/a._

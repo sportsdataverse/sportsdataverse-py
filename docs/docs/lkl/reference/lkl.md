@@ -72,8 +72,6 @@ Game header from the game page: status, tip-off, venue, attendance, officials an
 lkl_game_info(game_id=11446)
 ```
 
-_Last validated n/a._
-
 ## lkl_game_players
 
 Game roster from the game page: every player on either team sheet with the lkl.lt player id and slug.
@@ -115,8 +113,6 @@ Game roster from the game page: every player on either team sheet with the lkl.l
 ```python
 lkl_game_players(game_id=11446)
 ```
-
-_Last validated n/a._
 
 ## lkl_player_box
 
@@ -188,8 +184,6 @@ Per-player box score of a finished game: minutes, points, shooting splits, rebou
 ```python
 lkl_player_box(game_id=11446)
 ```
-
-_Last validated n/a._
 
 ## lkl_team_box
 
@@ -264,8 +258,6 @@ Team game totals of both teams: shooting, rebounds, assists, turnovers, fouls, p
 lkl_team_box(game_id=11446)
 ```
 
-_Last validated n/a._
-
 ## lkl_period_scores
 
 Points each team scored in each period of a game, overtime included.
@@ -306,8 +298,6 @@ Points each team scored in each period of a game, overtime included.
 ```python
 lkl_period_scores(game_id=11446)
 ```
-
-_Last validated n/a._
 
 ## lkl_summary
 
@@ -356,8 +346,6 @@ Summary tab: the head-to-head comparison of both teams (shooting, rebounds, assi
 lkl_summary(game_id=11446)
 ```
 
-_Last validated n/a._
-
 ## lkl_game_score
 
 Score line of a game: both scores and the clock text.
@@ -396,8 +384,6 @@ Score line of a game: both scores and the clock text.
 ```python
 lkl_game_score(game_id=11446)
 ```
-
-_Last validated n/a._
 
 ## lkl_game_stats
 
@@ -446,8 +432,6 @@ Statistics tab: the head-to-head comparison of both teams, one row per statistic
 lkl_game_stats(game_id=11446)
 ```
 
-_Last validated n/a._
-
 ## lkl_lead_chart
 
 Lead chart of a game: the score margin at each chart point of each period.
@@ -489,8 +473,6 @@ Lead chart of a game: the score margin at each chart point of each period.
 ```python
 lkl_lead_chart(game_id=11446)
 ```
-
-_Last validated n/a._
 
 ## lkl_leaders
 
@@ -536,8 +518,6 @@ Leaders tab: each team's top players in points, rebounds, assists, efficiency, s
 ```python
 lkl_leaders(game_id=11446)
 ```
-
-_Last validated n/a._
 
 ## lkl_pbp
 
@@ -592,8 +572,6 @@ Play-by-play of a finished game (2024-25 onward), oldest first, with the running
 lkl_pbp(game_id=11446)
 ```
 
-_Last validated n/a._
-
 ## lkl_shots
 
 Every field-goal attempt of a finished game (2024-25 onward) with its court position (Genius LiveStats data).
@@ -642,8 +620,6 @@ Every field-goal attempt of a finished game (2024-25 onward) with its court posi
 ```python
 lkl_shots(game_id=11446)
 ```
-
-_Last validated n/a._
 
 ## lkl_results
 
@@ -697,8 +673,6 @@ Every played game of one LKL season (all pages of the site's results list, merge
 lkl_results(season=2026)
 ```
 
-_Last validated n/a._
-
 ## lkl_standings
 
 League table of one LKL season: overall, home and away records, and the final ranking once it is set.
@@ -747,5 +721,3 @@ League table of one LKL season: overall, home and away records, and the final ra
 ```python
 lkl_standings(season=2026)
 ```
-
-_Last validated n/a._
