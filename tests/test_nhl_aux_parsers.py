@@ -260,3 +260,27 @@ def test_an_nhl_id_that_is_not_an_integer_stays_as_it_came_and_warns():
     assert df.schema["details_event_owner_team_id"] == pl.String
     assert "TBD" in df["details_event_owner_team_id"].to_list()
     assert df.schema["details_player_id"] == pl.Int64
+
+
+def test_an_edge_id_with_a_missing_value_is_int64_not_float():
+    """R986-4: the EDGE captures' ids already arrive Int64, so nothing guarded the EDGE cast. The real team speed top-10
+    with one team's ``id`` missing: the pandas hop floats ``team_id`` and the cast brings it back to Int64."""
+    from sportsdataverse.nhl.nhl_edge_parsers import parse_edge_top10
+
+    raw = load_fixture("nhl_edge", "team_skating_speed_top_10")
+    raw[0]["team"].pop("id")
+    df = parse_edge_top10(raw)
+    assert df.schema["team_id"] == pl.Int64 and df["team_id"].null_count() == 1
+    assert df["team_id"].drop_nulls().to_list() == [r["team"]["id"] for r in raw[1:]]
+
+
+def test_a_bare_id_with_a_missing_value_is_int64_not_float():
+    """R986-4: no committed NHL capture has a bare ``id`` that needs the cast (the ``c == "id"`` half was unguarded).
+    The real records vs-franchise capture with one row's ``id`` missing: ``id`` is Int64 with one null, not Float64."""
+    from sportsdataverse.nhl.nhl_records_parsers import parse_nhl_records
+
+    raw = load_fixture("nhl_records", "records_all_time_record_vs_franchise")
+    raw["data"][0].pop("id")
+    df = parse_nhl_records(raw)
+    assert df.schema["id"] == pl.Int64 and df["id"].null_count() == 1
+    assert df["id"].drop_nulls().to_list() == [r["id"] for r in raw["data"][1:]]

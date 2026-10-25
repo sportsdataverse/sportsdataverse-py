@@ -7155,6 +7155,26 @@
   expected: kill
   note: nhl_player_props pins player_id to Utf8 again, so it cannot join a parse_nhl_web_* frame (R986-3).
 
+- id: nhl-edge-parser-ids-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/nhl/nhl_edge_parsers.py
+  snippet: '        out = _cast_id_columns(pl.from_pandas(df), "NHL EDGE parser")'
+  mutant: '        out = pl.from_pandas(df)'
+  test: tests/test_nhl_aux_parsers.py -k "edge_id_with_a_missing_value"
+  expected: kill
+  note: An EDGE id with a missing value is Float64 again (R986-4).
+
+- id: parser-id-cast-covers-the-bare-id
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    cols = [c for c in df.columns if c == "id" or c.endswith("_id")]'
+  mutant: '    cols = [c for c in df.columns if c.endswith("_id")]'
+  test: tests/test_nhl_aux_parsers.py -k "bare_id_with_a_missing_value"
+  expected: kill
+  note: A bare id column (records id) with a missing value is Float64 again (R986-4).
+
 - id: nhl-pandas-ids-nullable-int64
   group: dtype-contract-5-2
   finding: B-H5
