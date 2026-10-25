@@ -241,6 +241,41 @@ def _odds_override_from_row(row: dict | None) -> dict | None:
     }
 
 
+#: ``cfb_crosswalk`` frames already read, keyed by the season tuple, shared by the Fox and Yahoo CFB
+#: adapters so a worker reads the asset once (B-GB-11). Successful reads only: caching a miss would
+#: make one transient release-asset failure permanent for the life of a Game on Paper worker, and
+#: this runs on its request path.
+_CFB_CROSSWALK_CACHE: dict[tuple[int, ...], pl.DataFrame] = {}
+
+
+def _cfb_crosswalk_id(espn_id: Any, seasons: tuple[int, ...], column: str) -> str | None:
+    """``column`` (``fox_game_id`` / ``yahoo_game_id``) for an ESPN event id from ``cfb_crosswalk``, or None.
+
+    Never raises: an unreachable release asset is a miss, and the game falls through to the next source.
+    """
+    frame = _CFB_CROSSWALK_CACHE.get(seasons)
+    if frame is None:
+        try:
+            from sportsdataverse.cfb import load_cfb_schedule_crosswalk
+
+            frame = load_cfb_schedule_crosswalk(list(seasons))
+        except Exception:  # noqa: BLE001 -- an unreachable asset is a miss, never a raise
+            return None
+        if (
+            not isinstance(frame, pl.DataFrame)
+            or frame.is_empty()
+            or not {"espn_game_id", column} <= set(frame.columns)
+        ):
+            return None
+        _CFB_CROSSWALK_CACHE[seasons] = frame
+    if column not in frame.columns:
+        return None
+    hit = frame.filter(pl.col("espn_game_id").cast(pl.Utf8) == str(espn_id))
+    if hit.is_empty():
+        return None
+    return hit.row(0, named=True).get(column) or None
+
+
 def _fetch_idmap_row(
     league: str,
     espn_event_id: str | int,
