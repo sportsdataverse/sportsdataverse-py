@@ -5,10 +5,10 @@ columns:
   type: integer
   description: ''
 - name: game_id
-  type: character
+  type: integer
   description: ''
 - name: player_id
-  type: character
+  type: integer
   description: ''
 - name: team
   type: character
