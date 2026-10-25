@@ -1,0 +1,311 @@
+{
+  "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/30583?lang=en&region=us",
+  "id": "30583",
+  "uid": "s:1~l:10~a:30583",
+  "guid": "85fd807f-1324-d722-3965-eece0c5ad858",
+  "type": "baseball",
+  "alternateIds": {
+    "sdr": "2334304"
+  },
+  "firstName": "Giancarlo",
+  "lastName": "Stanton",
+  "fullName": "Giancarlo Stanton",
+  "displayName": "Giancarlo Stanton",
+  "nickname": "",
+  "shortName": "G. Stanton",
+  "weight": 245.0,
+  "displayWeight": "245 lbs",
+  "height": 77.0,
+  "displayHeight": "6' 5\"",
+  "age": 36,
+  "dateOfBirth": "1989-11-08T08:00Z",
+  "debutYear": 2010,
+  "links": [
+    {
+      "language": "en-US",
+      "rel": [
+        "playercard",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/_/id/30583",
+      "text": "Player Card",
+      "shortText": "Player Card",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "stats",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/stats/_/id/30583/giancarlo-stanton",
+      "text": "Stats",
+      "shortText": "Stats",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "stats",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:30583&section=stats",
+      "text": "Stats",
+      "shortText": "Stats",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "splits",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/splits/_/id/30583/giancarlo-stanton",
+      "text": "Splits",
+      "shortText": "Splits",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "gamelog",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/gamelog/_/id/30583/giancarlo-stanton",
+      "text": "Game Log",
+      "shortText": "Game Log",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "gamelog",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:30583&section=gamelog",
+      "text": "Game Log",
+      "shortText": "Game Log",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "news",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/news/_/id/30583/giancarlo-stanton",
+      "text": "News",
+      "shortText": "News",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "news",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:30583&section=news",
+      "text": "News",
+      "shortText": "News",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "bio",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/bio/_/id/30583/giancarlo-stanton",
+      "text": "Bio",
+      "shortText": "Bio",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "bio",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:30583&section=bio",
+      "text": "Bio",
+      "shortText": "Bio",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "overview",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/_/id/30583/giancarlo-stanton",
+      "text": "Overview",
+      "shortText": "Overview",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "overview",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:30583",
+      "text": "Overview",
+      "shortText": "Overview",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "batvspitch",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/batvspitch/_/id/30583/giancarlo-stanton",
+      "text": "Bat vs Pitch",
+      "shortText": "Bat vs Pitch",
+      "isExternal": false,
+      "isPremium": false
+    }
+  ],
+  "birthPlace": {
+    "city": "Panorama City",
+    "state": "CA",
+    "country": "United States"
+  },
+  "slug": "giancarlo-stanton",
+  "headshot": {
+    "href": "https://a.espncdn.com/i/headshots/mlb/players/full/30583.png",
+    "alt": "Giancarlo Stanton"
+  },
+  "jersey": "27",
+  "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/10?lang=en&region=us",
+    "id": "10",
+    "name": "Designated Hitter",
+    "displayName": "Designated Hitter",
+    "abbreviation": "DH",
+    "leaf": true,
+    "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/18?lang=en&region=us"
+    }
+  },
+  "positions": [
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/10?lang=en&region=us",
+      "id": "10",
+      "name": "Designated Hitter",
+      "displayName": "Designated Hitter",
+      "abbreviation": "DH",
+      "leaf": true,
+      "parent": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/18?lang=en&region=us"
+      },
+      "statistics": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/types/2/athletes/30583/statistics/86?lang=en&region=us"
+      }
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/11?lang=en&region=us",
+      "id": "11",
+      "name": "Pinch Hitter",
+      "displayName": "Pinch Hitter",
+      "abbreviation": "PH",
+      "leaf": true,
+      "parent": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/18?lang=en&region=us"
+      },
+      "statistics": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/types/2/athletes/30583/statistics/87?lang=en&region=us"
+      }
+    }
+  ],
+  "injuries": [],
+  "linked": true,
+  "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/teams/10?lang=en&region=us"
+  },
+  "teams": [
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/teams/10?lang=en&region=us"
+    }
+  ],
+  "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/types/2/athletes/30583/statistics?lang=en&region=us"
+  },
+  "notes": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/30583/notes?lang=en&region=us"
+  },
+  "contracts": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/athletes/30583/contracts?lang=en&region=us"
+  },
+  "experience": {
+    "years": 17
+  },
+  "debut": {
+    "year": 2010,
+    "event": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/300608122?lang=en&region=us"
+    },
+    "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/300608122/competitions/300608122/competitors/28/roster/30583/statistics/0?lang=en&region=us"
+    }
+  },
+  "active": true,
+  "eventLog": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/30583/eventlog?lang=en&region=us"
+  },
+  "draft": {
+    "displayText": "Year: 2007 Round: 2 Pick: 76",
+    "round": 2,
+    "year": 2007,
+    "selection": 76,
+    "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2007/teams/28?lang=en&region=us"
+    }
+  },
+  "status": {
+    "id": "1",
+    "name": "Active",
+    "type": "active",
+    "abbreviation": "Active"
+  },
+  "bats": {
+    "type": "RIGHT",
+    "abbreviation": "R",
+    "displayValue": "Right"
+  },
+  "throws": {
+    "type": "RIGHT",
+    "abbreviation": "R",
+    "displayValue": "Right"
+  }
+}

@@ -1,0 +1,328 @@
+{
+  "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/36969?lang=en&region=us",
+  "id": "36969",
+  "uid": "s:1~l:10~a:36969",
+  "guid": "c0225b71-161d-fe89-5c62-d27fa64259fd",
+  "type": "baseball",
+  "alternateIds": {
+    "sdr": "4143646"
+  },
+  "firstName": "Juan",
+  "lastName": "Soto",
+  "fullName": "Juan Soto",
+  "displayName": "Juan Soto",
+  "shortName": "J. Soto",
+  "weight": 224.0,
+  "displayWeight": "224 lbs",
+  "height": 73.0,
+  "displayHeight": "6' 1\"",
+  "age": 28,
+  "dateOfBirth": "1998-10-25T07:00Z",
+  "debutYear": 2018,
+  "links": [
+    {
+      "language": "en-US",
+      "rel": [
+        "playercard",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/_/id/36969",
+      "text": "Player Card",
+      "shortText": "Player Card",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "stats",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/stats/_/id/36969/juan-soto",
+      "text": "Stats",
+      "shortText": "Stats",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "stats",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:36969&section=stats",
+      "text": "Stats",
+      "shortText": "Stats",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "splits",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/splits/_/id/36969/juan-soto",
+      "text": "Splits",
+      "shortText": "Splits",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "gamelog",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/gamelog/_/id/36969/juan-soto",
+      "text": "Game Log",
+      "shortText": "Game Log",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "gamelog",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:36969&section=gamelog",
+      "text": "Game Log",
+      "shortText": "Game Log",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "news",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/news/_/id/36969/juan-soto",
+      "text": "News",
+      "shortText": "News",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "news",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:36969&section=news",
+      "text": "News",
+      "shortText": "News",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "bio",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/bio/_/id/36969/juan-soto",
+      "text": "Bio",
+      "shortText": "Bio",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "bio",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:36969&section=bio",
+      "text": "Bio",
+      "shortText": "Bio",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "overview",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/_/id/36969/juan-soto",
+      "text": "Overview",
+      "shortText": "Overview",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "overview",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:36969",
+      "text": "Overview",
+      "shortText": "Overview",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "batvspitch",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/batvspitch/_/id/36969/juan-soto",
+      "text": "Bat vs Pitch",
+      "shortText": "Bat vs Pitch",
+      "isExternal": false,
+      "isPremium": false
+    }
+  ],
+  "birthPlace": {
+    "city": "Santo Domingo",
+    "country": "Dominican Republic"
+  },
+  "slug": "juan-soto",
+  "headshot": {
+    "href": "https://a.espncdn.com/i/headshots/mlb/players/full/36969.png",
+    "alt": "Juan Soto"
+  },
+  "jersey": "22",
+  "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/7?lang=en&region=us",
+    "id": "7",
+    "name": "Left Field",
+    "displayName": "Left Fielder",
+    "abbreviation": "LF",
+    "leaf": true,
+    "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/14?lang=en&region=us"
+    }
+  },
+  "positions": [
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/7?lang=en&region=us",
+      "id": "7",
+      "name": "Left Field",
+      "displayName": "Left Fielder",
+      "abbreviation": "LF",
+      "leaf": true,
+      "parent": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/14?lang=en&region=us"
+      },
+      "statistics": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/types/2/athletes/36969/statistics/83?lang=en&region=us"
+      }
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/9?lang=en&region=us",
+      "id": "9",
+      "name": "Right Field",
+      "displayName": "Right Fielder",
+      "abbreviation": "RF",
+      "leaf": true,
+      "parent": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/14?lang=en&region=us"
+      },
+      "statistics": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/types/2/athletes/36969/statistics/85?lang=en&region=us"
+      }
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/10?lang=en&region=us",
+      "id": "10",
+      "name": "Designated Hitter",
+      "displayName": "Designated Hitter",
+      "abbreviation": "DH",
+      "leaf": true,
+      "parent": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/18?lang=en&region=us"
+      },
+      "statistics": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/types/2/athletes/36969/statistics/86?lang=en&region=us"
+      }
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/11?lang=en&region=us",
+      "id": "11",
+      "name": "Pinch Hitter",
+      "displayName": "Pinch Hitter",
+      "abbreviation": "PH",
+      "leaf": true,
+      "parent": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/18?lang=en&region=us"
+      },
+      "statistics": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/types/2/athletes/36969/statistics/87?lang=en&region=us"
+      }
+    }
+  ],
+  "injuries": [],
+  "linked": true,
+  "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/teams/10?lang=en&region=us"
+  },
+  "teams": [
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/teams/10?lang=en&region=us"
+    }
+  ],
+  "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/types/2/athletes/36969/statistics?lang=en&region=us"
+  },
+  "notes": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/36969/notes?lang=en&region=us"
+  },
+  "contracts": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/athletes/36969/contracts?lang=en&region=us"
+  },
+  "experience": {
+    "years": 9
+  },
+  "debut": {
+    "year": 2018,
+    "event": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/400983513?lang=en&region=us"
+    },
+    "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/400983513/competitions/400983513/competitors/20/roster/36969/statistics/0?lang=en&region=us"
+    }
+  },
+  "active": true,
+  "eventLog": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/36969/eventlog?lang=en&region=us"
+  },
+  "status": {
+    "id": "1",
+    "name": "Active",
+    "type": "active",
+    "abbreviation": "Active"
+  },
+  "bats": {
+    "type": "LEFT",
+    "abbreviation": "L",
+    "displayValue": "Left"
+  },
+  "throws": {
+    "type": "LEFT",
+    "abbreviation": "L",
+    "displayValue": "Left"
+  }
+}

@@ -1,0 +1,287 @@
+{
+  "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/42547?lang=en&region=us",
+  "id": "42547",
+  "uid": "s:1~l:10~a:42547",
+  "guid": "9a98f8e9-c371-32a1-ac9d-040b12582b8d",
+  "type": "baseball",
+  "alternateIds": {
+    "sdr": "4613130"
+  },
+  "firstName": "Anthony",
+  "lastName": "Volpe",
+  "fullName": "Anthony Volpe",
+  "displayName": "Anthony Volpe",
+  "shortName": "A. Volpe",
+  "weight": 197.0,
+  "displayWeight": "197 lbs",
+  "height": 70.0,
+  "displayHeight": "5' 10\"",
+  "age": 25,
+  "dateOfBirth": "2001-04-28T07:00Z",
+  "debutYear": 2023,
+  "links": [
+    {
+      "language": "en-US",
+      "rel": [
+        "playercard",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/_/id/42547",
+      "text": "Player Card",
+      "shortText": "Player Card",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "stats",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/stats/_/id/42547/anthony-volpe",
+      "text": "Stats",
+      "shortText": "Stats",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "stats",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:42547&section=stats",
+      "text": "Stats",
+      "shortText": "Stats",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "splits",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/splits/_/id/42547/anthony-volpe",
+      "text": "Splits",
+      "shortText": "Splits",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "gamelog",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/gamelog/_/id/42547/anthony-volpe",
+      "text": "Game Log",
+      "shortText": "Game Log",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "gamelog",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:42547&section=gamelog",
+      "text": "Game Log",
+      "shortText": "Game Log",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "news",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/news/_/id/42547/anthony-volpe",
+      "text": "News",
+      "shortText": "News",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "news",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:42547&section=news",
+      "text": "News",
+      "shortText": "News",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "bio",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/bio/_/id/42547/anthony-volpe",
+      "text": "Bio",
+      "shortText": "Bio",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "bio",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:42547&section=bio",
+      "text": "Bio",
+      "shortText": "Bio",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "overview",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/_/id/42547/anthony-volpe",
+      "text": "Overview",
+      "shortText": "Overview",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "overview",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:42547",
+      "text": "Overview",
+      "shortText": "Overview",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "batvspitch",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/batvspitch/_/id/42547/anthony-volpe",
+      "text": "Bat vs Pitch",
+      "shortText": "Bat vs Pitch",
+      "isExternal": false,
+      "isPremium": false
+    }
+  ],
+  "birthPlace": {
+    "city": "New York",
+    "state": "NY",
+    "country": "United States"
+  },
+  "slug": "anthony-volpe",
+  "headshot": {
+    "href": "https://a.espncdn.com/i/headshots/mlb/players/full/42547.png",
+    "alt": "Anthony Volpe"
+  },
+  "jersey": "11",
+  "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/6?lang=en&region=us",
+    "id": "6",
+    "name": "Shortstop",
+    "displayName": "Shortstop",
+    "abbreviation": "SS",
+    "leaf": true,
+    "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/13?lang=en&region=us"
+    }
+  },
+  "positions": [
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/6?lang=en&region=us",
+      "id": "6",
+      "name": "Shortstop",
+      "displayName": "Shortstop",
+      "abbreviation": "SS",
+      "leaf": true,
+      "parent": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/13?lang=en&region=us"
+      },
+      "statistics": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/types/2/athletes/42547/statistics/82?lang=en&region=us"
+      }
+    }
+  ],
+  "injuries": [],
+  "linked": true,
+  "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/teams/10?lang=en&region=us"
+  },
+  "teams": [
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/teams/10?lang=en&region=us"
+    }
+  ],
+  "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/types/2/athletes/42547/statistics?lang=en&region=us"
+  },
+  "notes": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/42547/notes?lang=en&region=us"
+  },
+  "contracts": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/athletes/42547/contracts?lang=en&region=us"
+  },
+  "experience": {
+    "years": 4
+  },
+  "debut": {
+    "year": 2023,
+    "event": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401471030?lang=en&region=us"
+    },
+    "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401471030/competitions/401471030/competitors/10/roster/42547/statistics/0?lang=en&region=us"
+    }
+  },
+  "active": true,
+  "eventLog": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/42547/eventlog?lang=en&region=us"
+  },
+  "status": {
+    "id": "1",
+    "name": "Active",
+    "type": "active",
+    "abbreviation": "Active"
+  },
+  "bats": {
+    "type": "RIGHT",
+    "abbreviation": "R",
+    "displayValue": "Right"
+  },
+  "throws": {
+    "type": "RIGHT",
+    "abbreviation": "R",
+    "displayValue": "Right"
+  }
+}
