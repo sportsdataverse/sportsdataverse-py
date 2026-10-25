@@ -192,6 +192,25 @@ def test_resolve_season_id_pwhl_falls_back_on_failed_fetch(monkeypatch):
         resolve_season_id("pwhl", season=2031)
 
 
+@pytest.mark.parametrize("lg", ["pwhl", "ahl"])
+def test_default_season_reads_the_seasons_feed_once(monkeypatch, lg):
+    """A call with no season picks the newest regular season and resolves its id from ONE
+    ``modulekit/seasons`` fetch; it used to fetch the feed a second time to resolve the year it had
+    just read (B-L77). The June PWHL capture's newest regular season is 2025-26 (id 8)."""
+    payload = load_fixture("hockeytech", f"{lg}_seasons")
+    views: list = []
+
+    def fake(league, feed, view, *a, **k):
+        views.append(view)
+        return payload if view == "seasons" else {}
+
+    _patch_all(monkeypatch, fake)
+    mod = importlib.import_module("sportsdataverse.pwhl.pwhl_api" if lg == "pwhl" else f"sportsdataverse.hockey.{lg}")
+    getattr(mod, f"{lg}_schedule")()
+    assert views.count("seasons") == 1
+    assert views == ["seasons", "schedule"]
+
+
 @pytest.mark.parametrize(
     "season, game_type, expected",
     [(2026, "regular", 90), (2026, "playoffs", 92), (2027, "regular", 94), (2025, "regular", 86)],

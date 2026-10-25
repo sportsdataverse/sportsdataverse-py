@@ -20,10 +20,12 @@ Anything that does not parse is reported and left BLANK -- never invented.
 
 from __future__ import annotations
 
+import pathlib
 import re
 import sys
 
-sys.path.insert(0, ".")
+_ROOT = pathlib.Path(__file__).resolve().parents[2]  # the repo root, whatever the CWD
+sys.path.insert(0, str(_ROOT))
 
 from tools.codegen.gen_cfb_player_percentile_descriptions import pct_desc  # noqa: E402
 
@@ -441,12 +443,10 @@ def main() -> None:
     generator non-idempotent -- a second run sees zero work and a re-merge would
     wipe the block it just wrote. The declared schema is the stable source.
     """
-    import pathlib
-
     import yaml
 
     targets = ("load_cfb_team_summaries", "load_cfb_team_summaries_weekly")
-    schemas = yaml.safe_load(pathlib.Path("tools/codegen/schemas/loader_schemas.yaml").read_text(encoding="utf-8"))
+    schemas = yaml.safe_load((_ROOT / "tools/codegen/schemas/loader_schemas.yaml").read_text(encoding="utf-8"))
     out: dict[str, dict[str, str]] = {t: {} for t in targets}
     unparsed: list[str] = []
     for t in targets:

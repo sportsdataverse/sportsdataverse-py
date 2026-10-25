@@ -85,5 +85,10 @@ from sportsdataverse.mlb.mlb_win_expectancy import (
 # Re-export MLB Stats API wrappers that share a name with a submodule
 # (mlb_schedule, mlb_teams). The submodule imports above set the package
 # attribute to the module object; re-importing the functions here restores
-# them as callable names in the sportsdataverse.mlb namespace.
+# them as callable names in the sportsdataverse.mlb namespace, whatever order
+# the submodules happen to load in. Both names are public, so the attribute is
+# the function: `import sportsdataverse.mlb.mlb_schedule as m` binds the
+# function too. Reach the ESPN modules with `from sportsdataverse.mlb.mlb_schedule
+# import ...` or importlib.import_module("sportsdataverse.mlb.mlb_schedule"),
+# which read sys.modules (tests/mlb/test_mlb_namespace_binding.py pins this).
 from sportsdataverse.mlb.mlb_api_extra import mlb_schedule, mlb_teams  # noqa: E402

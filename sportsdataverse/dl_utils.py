@@ -617,8 +617,7 @@ def init_request_settings(params, session, logger):
         session = _SHARED_SESSION
 
     if logger is None:
-        logger = logging.getLogger("sdv.dl_utils")
-        logger.addHandler(logging.NullHandler())
+        logger = logging.getLogger("sdv.dl_utils")  # its NullHandler is added once, at import
     return session, params, logger
 
 

@@ -70,3 +70,7 @@ tests/fixtures/socceraction/_8658_full/
 
 # gen_<stem>.py description output; merged into tools/codegen/manual_column_descriptions.yaml by hand
 tools/codegen/*_column_descriptions.snippet.yaml
+# gen_*_descriptions.py intermediates: the CWD-written `_<name>_descs.yaml` files and gen_fpi's
+# tools/codegen/_fpi_descriptions.yaml; each is folded in by merge_column_descriptions.py, never committed
+/_*_descs.yaml
+tools/codegen/_fpi_descriptions.yaml
