@@ -132,7 +132,8 @@ def build_family(league: str) -> dict[str, Any]:
         f"{cfg.name} schedule — one row per game of one season.\n\n" + _SEASON_ARGS + "Returns:\n"
         "    polars.DataFrame: One row per game: ``game_id``, ``game_date``, ``game_status``,\n"
         "        ``home_team`` / ``home_team_id`` / ``home_score``, ``away_team`` / ``away_team_id`` /\n"
-        "        ``away_score``, ``venue``, ``season_id`` and ``game_type`` (all String). Only the\n"
+        "        ``away_score``, ``venue``, ``season_id`` and ``game_type``; the ``*_id`` columns are Int64,\n"
+        "        the rest String. Only the\n"
         "        requested season's games: a regular season, its playoffs and its preseason are\n"
         f"        separate season ids, so pass ``season_id`` (from ``{lg}_season_id()``) for the\n"
         f"        playoffs. {_PANDAS}" + _RAISES + "\n"
@@ -243,7 +244,8 @@ def build_family(league: str) -> dict[str, Any]:
     _teams.__doc__ = (
         f"{cfg.name} teams for a given season.\n\n" + _SEASON_ARGS + "Returns:\n"
         "    polars.DataFrame: One row per team: ``team_id``, ``team_name``, ``team_code``,\n"
-        f"        ``team_nickname``, ``team_label``, ``division`` and ``team_logo`` (String). {_PANDAS}" + _RAISES
+        f"        ``team_nickname``, ``team_label``, ``division`` and ``team_logo``; ``team_id`` is Int64, the rest\n"
+        f"        String. {_PANDAS}" + _RAISES
     )
 
     # ------------------------------------------------------------------
@@ -347,7 +349,8 @@ def build_family(league: str) -> dict[str, Any]:
         f"{cfg.name} statistical leaders for a given season.\n\n" + _SEASON_ARGS + "Returns:\n"
         "    polars.DataFrame: One row per ranked skater (points and goals leaders): ``rank`` (Int64),\n"
         "        ``player_id``, ``name``, ``jersey_number``, ``position``, ``team_id`` / ``team_name`` /\n"
-        "        ``team_code``, ``stat_formatted`` and ``type_formatted`` (String), plus photo and logo\n"
+        "        ``team_code``, ``stat_formatted`` and ``type_formatted`` (``player_id`` / ``team_id`` Int64,\n"
+        "        the rest String), plus photo and logo\n"
         f"        URLs. {_PANDAS}" + _RAISES
     )
 

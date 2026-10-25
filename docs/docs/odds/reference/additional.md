@@ -346,7 +346,7 @@ A long-form `polars`/`pandas` `DataFrame` (one row per event x bookmaker x marke
 | `outcome_name` | character | Outcome the price applies to; on the sampled h2h rows, a team's full name (e.g. 'Buffalo Bills'). |
 | `outcome_description` | character | Copied from the outcome's description field; all null in the sampled data, which held only h2h outcomes. |
 | `outcome_price` | integer | Price of the outcome as an integer in American odds under the default odds_format='american' (e.g. -238, 195). |
-| `outcome_point` | double | Copied from the outcome's point field, stored as text; all null in the sampled data, which held only h2h (moneyline) outcomes. |
+| `outcome_point` | double | The outcome's point field (the spread or total line, e.g. -3.5) as a float; null for outcomes without one, such as h2h (moneyline), the only market in the sampled data. |
 | `outcome_link` | character | Outcome deep link, only sent when include_links=True; all null in the sampled data, which did not request links. |
 | `outcome_sid` | character | Bookmaker-specific source id for the outcome, only sent when include_sids=True; all null in the sampled data, which did not request sids. |
 
@@ -404,7 +404,7 @@ A long-form `polars`/`pandas` `DataFrame` (one row per outcome, stamped with the
 | `outcome_name` | character | Outcome the price applies to; on the sampled h2h rows, a team's full name (e.g. 'Buffalo Bills'). |
 | `outcome_description` | character | Copied from the outcome's description field; all null in the sampled data, which held only h2h outcomes. |
 | `outcome_price` | integer | Price of the outcome as an integer in American odds under the default odds_format='american' (e.g. -238, 195). |
-| `outcome_point` | double | Copied from the outcome's point field, stored as text; all null in the sampled data, which held only h2h (moneyline) outcomes. |
+| `outcome_point` | double | The outcome's point field (the spread or total line, e.g. -3.5) as a float; null for outcomes without one, such as h2h (moneyline), the only market in the sampled data. |
 | `outcome_link` | character | Outcome deep link, only sent when include_links=True; all null in the sampled data, which did not request links. |
 | `outcome_sid` | character | Bookmaker-specific source id for the outcome, only sent when include_sids=True; all null in the sampled data, which did not request sids. |
 

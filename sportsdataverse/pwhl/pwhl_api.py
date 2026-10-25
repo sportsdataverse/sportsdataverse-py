@@ -132,7 +132,8 @@ def pwhl_schedule(
     Returns:
         polars.DataFrame: One row per game: ``game_id``, ``game_date``, ``game_status``, ``home_team`` /
             ``home_team_id`` / ``home_score``, ``away_team`` / ``away_team_id`` / ``away_score``,
-            ``venue``, ``season_id`` and ``game_type`` (all String). Only the requested season's
+            ``venue``, ``season_id`` and ``game_type``; the ``*_id`` columns are Int64, the rest
+            String. Only the requested season's
             games: a regular season, its playoffs and its preseason are separate season ids, so
             pass ``season_id`` (from ``pwhl_season_id()``) for the playoffs. A pandas DataFrame
             when ``return_as_pandas`` is True.
@@ -312,7 +313,8 @@ def pwhl_teams(
 
     Returns:
         polars.DataFrame: One row per team: ``team_id``, ``team_name``, ``team_code``,
-            ``team_nickname``, ``team_label``, ``division`` and ``team_logo`` (String). A pandas DataFrame when ``return_as_pandas`` is True.
+            ``team_nickname``, ``team_label``, ``division`` and ``team_logo``; ``team_id`` is Int64, the
+            rest String. A pandas DataFrame when ``return_as_pandas`` is True.
 
     Raises:
         NoDataError: The feed answered 404.
@@ -448,7 +450,8 @@ def pwhl_leaders(
     Returns:
         polars.DataFrame: One row per ranked skater (points and goals leaders): ``rank`` (Int64),
             ``player_id``, ``name``, ``jersey_number``, ``position``, ``team_id`` / ``team_name`` /
-            ``team_code``, ``stat_formatted`` and ``type_formatted`` (String), plus photo and logo
+            ``team_code``, ``stat_formatted`` and ``type_formatted`` (``player_id`` / ``team_id`` Int64,
+            the rest String), plus photo and logo
             URLs. A pandas DataFrame when ``return_as_pandas`` is True.
 
     Raises:
@@ -530,7 +533,8 @@ def pwhl_scorebar(return_as_pandas: bool = False) -> Any:
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
-        polars.DataFrame: One row per game in the window, as the feed ships it (String): ``id``,
+        polars.DataFrame: One row per game in the window, as the feed ships it (``id`` and the
+            ``*_id`` columns Int64, the rest String): ``id``,
             ``season_id``, ``game_date`` / ``game_date_iso8601``, ``scheduled_time``, ``home_id`` /
             ``home_code`` / ``home_long_name`` / ``home_goals``, the same ``visitor_*`` columns,
             ``period``, ``game_clock``, ``game_status`` / ``game_status_string``, ``venue_name``, both
@@ -753,7 +757,8 @@ def pwhl_player_search(name: str, return_as_pandas: bool = False) -> Any:
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
-        polars.DataFrame: One row per matching player (String): ``person_id``, ``player_id``,
+        polars.DataFrame: One row per matching player (the ``*_id`` columns Int64, the rest String):
+            ``person_id``, ``player_id``,
             ``first_name`` / ``last_name``, ``position``, ``shoots`` / ``catches``, ``height`` /
             ``weight``, ``birthdate`` and birthplace, ``last_team_name`` / ``last_team_code``,
             ``role_name``, ``active``, ``last_active_date`` and the match ``score``. A pandas DataFrame when ``return_as_pandas`` is True.
@@ -801,7 +806,8 @@ def pwhl_stats(
 
     Returns:
         polars.DataFrame: One row per player for that season and position, as the feed ships it
-            (String, ~90 columns): ``player_id``, ``name``, ``team_id`` / ``team_name`` /
+            (~90 columns; the ``*_id`` columns Int64, the others typed as the returns table lists):
+            ``player_id``, ``name``, ``team_id`` / ``team_name`` /
             ``team_code``, ``position``, ``games_played``, and the counting, per-game and ice-time
             stats of that position (skaters: ``goals``, ``assists``, ``points``, ``plus_minus``,
             ``shots``, ``hits``, ``penalty_minutes`` ...). A pandas DataFrame when ``return_as_pandas`` is True.
@@ -898,7 +904,8 @@ def pwhl_transactions(return_as_pandas: bool = False) -> Any:
         polars.DataFrame: One row per transaction on the feed's current page (the newest 20):
             ``transaction_date`` / ``transaction_time``, ``transaction_type`` / ``ttype_text``,
             ``title``, ``detail``, ``player_id`` / ``player_name`` / ``position``, and
-            ``team_id`` / ``team_name`` / ``team_code`` / ``team_city`` (String). A pandas
+            ``team_id`` / ``team_name`` / ``team_code`` / ``team_city`` (``player_id`` / ``team_id``
+            Int64, the rest String). A pandas
             DataFrame when ``return_as_pandas`` is True.
 
     Raises:

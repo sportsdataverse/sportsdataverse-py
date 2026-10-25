@@ -177,7 +177,8 @@ def parse_schedule(payload: Any, return_as_pandas: bool = False, season_id: Opti
         polars.DataFrame: One row per game: ``game_id``, ``game_date``, ``game_status``,
             ``home_team`` / ``home_team_id`` / ``home_score``, ``away_team`` / ``away_team_id`` /
             ``away_score``, ``venue``, ``season_id`` and ``game_type``. An empty or None payload,
-            or a filter that keeps nothing, gives zero rows with these columns (String); it
+            or a filter that keeps nothing, gives zero rows with these columns (the ``*_id`` columns
+            Int64, the rest String); it
             never raises. A pandas DataFrame when ``return_as_pandas`` is True.
     """
     games, rename = _sitekit(payload, "Schedule"), _SCHEDULE_RENAME
@@ -317,7 +318,7 @@ def _parse_pbp_a(events: List[Any], game_id: Any = None) -> List[Dict[str, Any]]
         else:
             period = period_raw
 
-        # Normalize team_id to string to avoid mixed int/str column dtype
+        # Normalize team_id to string to avoid mixed int/str column dtype; the frame exit casts it to Int64
         raw_team = d.get("team_id") or d.get("shooterTeamId") or d.get("teamId")
         base: Dict[str, Any] = {
             "game_id": game_id,
