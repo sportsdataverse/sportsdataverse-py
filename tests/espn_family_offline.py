@@ -281,6 +281,11 @@ def check_teams(league: str, case: str, monkeypatch) -> None:
     elif case == "pandas_ids":
         pdf, _ = _call(league, "teams", monkeypatch, body, return_as_pandas=True)
         assert str(pdf["team_id"].dtype) == "Int64" and pdf["team_id"].tolist() == [int(t["id"]) for t in teams]
+        # R981-11: an empty directory's pandas frame carries the same dtype, not numpy int64
+        empty, _ = _call(
+            league, "teams", monkeypatch, {"sports": [{"leagues": [{"teams": []}]}]}, return_as_pandas=True
+        )
+        assert len(empty) == 0 and str(empty["team_id"].dtype) == "Int64"
     elif case == "query_key":
         query = calls[0].split("?", 1)[1]
         group: Optional[str] = {"mbb": "50", "wbb": "50", "cfb": "80"}.get(league)

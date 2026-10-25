@@ -142,3 +142,15 @@ def test_declared_schema_agrees_with_the_cast():
         for col in cols:
             if col in declared:
                 assert declared[col] == "Int64", f"{fn}.{col} cast to Int64 but declared {declared[col]}"
+
+
+def test_empty_from_schema_pandas_ids_are_nullable_int64():
+    """R981-11: the non-arrow pandas branch of ``_empty_from_schema`` gives the documented Int64 ids as pandas'
+    nullable ``Int64``, the dtype a non-empty pandas result has (a plain ``to_pandas()`` gives numpy ``int64``)."""
+    from sportsdataverse._codegen_runtime import _empty_from_schema
+
+    pdf = _empty_from_schema("scoreboard", return_as_pandas=True)
+    ids = [c for c in pdf.columns if c == "id" or c.endswith("_id")]
+    assert len(pdf) == 0 and ids and {c: str(pdf[c].dtype) for c in ids} == dict.fromkeys(ids, "Int64")
+    arrow = _empty_from_schema("scoreboard", return_as_pandas=True, arrow=True)
+    assert {c: str(arrow[c].dtype) for c in ids} == dict.fromkeys(ids, "int64[pyarrow]")
