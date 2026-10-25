@@ -1083,6 +1083,27 @@ def per60(value_col: str, toi_seconds_col: str = "toi_seconds") -> pl.Expr:
     return (pl.col(value_col) / pl.col(toi_seconds_col) * 3600).alias(f"{value_col}_per60")
 
 
+def _corsi_with_toi(corsi: pl.DataFrame, toi: pl.DataFrame) -> pl.DataFrame:
+    """Left-join each on-ice player's ``toi_seconds`` onto the Corsi frame and add ``corsi_for_per60``.
+
+    Both sides key players by ``player_id`` Int64 (task 5.2); the TOI side used to be cast to Utf8 here, which
+    raised ``SchemaError`` on every ``<lg>_game_corsi`` once the Corsi frame went Int64 (R988-1). A key dtype
+    mismatch raises naming both dtypes instead of joining nothing.
+    """
+    toi_sel = toi.select("player_id", "toi_seconds")
+    if corsi.schema["player_id"] != toi_sel.schema["player_id"]:
+        raise TypeError(
+            f"player_id dtypes differ: corsi {corsi.schema['player_id']} vs toi {toi_sel.schema['player_id']}"
+        )
+    out = corsi.join(toi_sel, on="player_id", how="left")
+    return out.with_columns(
+        pl.when(pl.col("toi_seconds").is_not_null() & (pl.col("toi_seconds") > 0))
+        .then(per60("corsi_for"))
+        .otherwise(pl.lit(None, dtype=pl.Float64))
+        .alias("corsi_for_per60")
+    )
+
+
 def player_toi(shifts: pl.DataFrame) -> pl.DataFrame:
     """Compute per-player TOI from a parsed shifts frame.
 

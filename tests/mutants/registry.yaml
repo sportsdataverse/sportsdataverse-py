@@ -7205,6 +7205,66 @@
   expected: kill
   note: A HockeyTech league whose feed ships one text id gets that column String with no warning (R988-3).
 
+- id: hockeytech-game-corsi-joins-toi-on-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '    toi_sel = toi.select("player_id", "toi_seconds")'
+  mutant: '    toi_sel = toi.select(pl.col("player_id").cast(pl.Utf8), "toi_seconds")'
+  test: tests/hockeytech/test_league_families.py -k "game_corsi_joins_toi and ohl"
+  expected: kill
+  note: Every <lg>_game_corsi fails on a Utf8 TOI key again (R988-1).
+
+- id: hockeytech-corsi-toi-join-asserts-key-dtypes
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '    if corsi.schema["player_id"] != toi_sel.schema["player_id"]:'
+  mutant: '    if False:'
+  test: tests/hockeytech/test_league_families.py -k "refuses_a_key_dtype_mismatch"
+  expected: kill
+  note: The Corsi / TOI join stops asserting player_id dtype agreement (R988-1).
+
+- id: hockeytech-family-shifts-pandas-ids
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_family.py
+  snippet: '            return _pandas_ids(shifts)'
+  mutant: '            return shifts.to_pandas()'
+  test: tests/hockeytech/test_league_families.py -k "shifts_and_toi_pandas_ids and ohl and game_shifts"
+  expected: kill
+  note: <lg>_game_shifts pandas ids are numpy int64 / float64 again (R988-2).
+
+- id: hockeytech-family-toi-pandas-ids
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_family.py
+  snippet: '            return _pandas_ids(toi)'
+  mutant: '            return toi.to_pandas()'
+  test: tests/hockeytech/test_league_families.py -k "shifts_and_toi_pandas_ids and ohl and player_toi"
+  expected: kill
+  note: <lg>_player_toi pandas ids are numpy int64 / float64 again (R988-2).
+
+- id: pwhl-shifts-pandas-ids
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/pwhl/pwhl_analytics.py
+  snippet: '        return _pandas_ids(shifts)'
+  mutant: '        return shifts.to_pandas()'
+  test: tests/hockeytech/test_league_families.py -k "shifts_and_toi_pandas_ids and pwhl and game_shifts"
+  expected: kill
+  note: pwhl_game_shifts pandas ids are numpy int64 / float64 again (R988-2).
+
+- id: pwhl-toi-pandas-ids
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/pwhl/pwhl_analytics.py
+  snippet: '        return _pandas_ids(toi)'
+  mutant: '        return toi.to_pandas()'
+  test: tests/hockeytech/test_league_families.py -k "shifts_and_toi_pandas_ids and pwhl and player_toi"
+  expected: kill
+  note: pwhl_player_toi pandas ids are numpy int64 / float64 again (R988-2).
+
 - id: hockeytech-parser-pandas-ids-nullable-int64
   group: dtype-contract-5-2
   finding: B-H5

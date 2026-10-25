@@ -29,7 +29,7 @@ Every output row carries `corsi_includes_missed = False`.
 
 **Returns**
 
-One row per on-ice player with columns: - `player_id` (Utf8) - `corsi_for`, `corsi_against` (Int64) - `corsi_for_pct` (Float64) - `fenwick_for`, `fenwick_against` (Int64) - `fenwick_for_pct` (Float64) - `toi_seconds` (Int64, from shifts; null if player not in shift data) - `corsi_for_per60` (Float64) - `corsi_includes_missed` (Boolean, always False)
+One row per on-ice player with columns: - `player_id` (Int64) - `corsi_for`, `corsi_against` (Int64) - `corsi_for_pct` (Float64) - `fenwick_for`, `fenwick_against` (Int64) - `fenwick_for_pct` (Float64) - `toi_seconds` (Int64, from shifts; null if player not in shift data) - `corsi_for_per60` (Float64) - `corsi_includes_missed` (Boolean, always False)
 
 | col_name | type | description |
 |---|---|---|
