@@ -24,11 +24,33 @@ from tools.hooks import sync_docs_changelog as sync  # noqa: E402
 ROOT = Path(__file__).resolve().parents[1]
 
 
+_SEMVER = re.compile(r"(\d+)\.(\d+)\.(\d+)")
+
+
+def _require_minor_bump(version: str, text: str) -> None:
+    """Refuse to release ``*.breaking.md`` fragments as a patch: the minor (or major) must rise.
+
+    Compared with the newest ``## x.y.z Release`` heading in the changelog. A version that is not x.y.z is left
+    to the renderer's own check.
+    """
+    new = _SEMVER.fullmatch(version)
+    last = re.search(r"^## (\d+\.\d+\.\d+) Release\b", text, re.M)
+    if not new or not last:
+        return
+    major, minor = (int(x) for x in last.group(1).split(".")[:2])
+    if (int(new[1]), int(new[2])) <= (major, minor):
+        raise ValueError(
+            f"changelog.d/ holds breaking-change fragments, so {version} cannot follow {last.group(1)} as a patch: "
+            f"release {major}.{minor + 1}.0 (or a new major) instead"
+        )
+
+
 def release(version: str, date: dt.date, changelog: Path = sync.SOURCE, fragments: Path = sync.FRAGMENTS) -> list[Path]:
     """Write ``version``'s section into ``changelog`` from ``fragments`` and delete them; returns the deleted paths.
 
-    Raises ValueError, leaving both untouched, when there are no fragments, ``version`` is already released, or the
-    result is a changelog the docs renderer cannot read (a version such as ``v0.1.6``). If a delete fails after the
+    Raises ValueError, leaving both untouched, when there are no fragments, ``version`` is already released, a
+    ``*.breaking.md`` fragment would ship in a patch release, or the result is a changelog the docs renderer cannot
+    read (a version such as ``v0.1.6``). If a delete fails after the
     write (a locked file on Windows), `git checkout CHANGELOG.md changelog.d` restores both.
     """
     text = changelog.read_text(encoding="utf-8")
@@ -37,6 +59,8 @@ def release(version: str, date: dt.date, changelog: Path = sync.SOURCE, fragment
     groups = sync.read_fragments(fragments)
     if not groups:
         raise ValueError(f"no changelog.d/ fragments to release in {fragments}")
+    if groups.get("breaking"):
+        _require_minor_bump(version, text)
     section = sync.assemble(groups, f"{version} Release: {date:%B} {date.day}, {date.year}")
     first = re.search(r"^## ", text, re.M)
     at = first.start() if first else len(text)
