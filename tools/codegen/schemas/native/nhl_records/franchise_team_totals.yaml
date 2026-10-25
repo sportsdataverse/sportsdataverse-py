@@ -47,7 +47,7 @@ columns:
   type: double
   description: ''
 - name: last_season_id
-  type: double
+  type: integer
   description: ''
 - name: losses
   type: double

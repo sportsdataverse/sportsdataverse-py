@@ -67,15 +67,34 @@ def test_cast_is_a_noop_for_missing_columns_and_empty_frames():
     assert _cast_ids_int64(empty, ["team_id"]).height == 0
 
 
-@pytest.mark.xfail(
-    strict=True,
-    raises=AssertionError,
-    reason="A-L55: _cast_ids_int64 returns an empty frame untouched (String ids); task 5.2",
-)
-def test_cast_on_an_empty_frame_keeps_the_int64_contract():
-    """An all-empty result must carry the same id dtype as a populated one, or a join on it fails."""
-    empty = pl.DataFrame({"team_id": []}, schema={"team_id": pl.Utf8})
-    assert _cast_ids_int64(empty, ["team_id"]).schema["team_id"] == pl.Int64
+def test_empty_frame_cast_keeps_the_int64_contract():
+    """A-L55: an all-empty result carries the same id dtype as a populated one, or a join on it fails."""
+    empty = pl.DataFrame(schema={"team_id": pl.Utf8, "athlete_id": pl.Float64, "game_id": pl.Null})
+    out = _cast_ids_int64(empty, ["team_id", "athlete_id", "game_id"])
+    assert dict(out.schema) == {"team_id": pl.Int64, "athlete_id": pl.Int64, "game_id": pl.Int64}
+
+
+def test_ids_are_never_float_stringified():
+    """B-H5 / A-M14: a float-origin id is cast from its integer value, so it never reads ``"123.0"``; and no id
+    column of a committed ESPN capture is a float (the parser dtype snapshot)."""
+    import json
+
+    out = _cast_ids_int64(pl.DataFrame({"player_id": [8445802.0, None]}), ["player_id"])
+    assert out["player_id"].cast(pl.Utf8).to_list() == ["8445802", None]
+    snap = json.loads((ROOT / "tests" / "espn_parser_dtype_snapshot.json").read_text(encoding="utf-8"))
+    floats = {
+        f"{stem}/{sec}/{col}": dt
+        for stem, secs in snap.items()
+        for sec, cols in secs.items()
+        for col, dt in cols.items()
+        if (col == "id" or col.endswith("_id")) and dt.startswith("Float")
+    }
+    assert floats == {}
+
+
+def test_string_ids_are_stripped_before_the_cast():
+    out = _cast_ids_int64(pl.DataFrame({"team_id": [" 103", "2649 ", None, "", " "]}), ["team_id"])
+    assert out["team_id"].to_list() == [103, 2649, None, None, None]  # "" is no id (HockeyTech FloCoreEventId)
 
 
 def test_cast_leaves_other_columns_alone():
@@ -123,3 +142,15 @@ def test_declared_schema_agrees_with_the_cast():
         for col in cols:
             if col in declared:
                 assert declared[col] == "Int64", f"{fn}.{col} cast to Int64 but declared {declared[col]}"
+
+
+def test_empty_from_schema_pandas_ids_are_nullable_int64():
+    """R981-11: the non-arrow pandas branch of ``_empty_from_schema`` gives the documented Int64 ids as pandas'
+    nullable ``Int64``, the dtype a non-empty pandas result has (a plain ``to_pandas()`` gives numpy ``int64``)."""
+    from sportsdataverse._codegen_runtime import _empty_from_schema
+
+    pdf = _empty_from_schema("scoreboard", return_as_pandas=True)
+    ids = [c for c in pdf.columns if c == "id" or c.endswith("_id")]
+    assert len(pdf) == 0 and ids and {c: str(pdf[c].dtype) for c in ids} == dict.fromkeys(ids, "Int64")
+    arrow = _empty_from_schema("scoreboard", return_as_pandas=True, arrow=True)
+    assert {c: str(arrow[c].dtype) for c in ids} == dict.fromkeys(ids, "int64[pyarrow]")

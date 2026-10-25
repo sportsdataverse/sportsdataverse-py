@@ -271,7 +271,10 @@ def parse_euroleague_header(
 
     .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
     """
-    return as_output(_live_frame("game_header", _as_rows(raw)), return_as_pandas=return_as_pandas)
+    df = _live_frame("game_header", _as_rows(raw))
+    # B-GB-15: the header ships the round number as text ("1"); the v2 rounds / games routes carry it Int64
+    df = df.with_columns(pl.col("round").cast(pl.Int64, strict=False)) if "round" in df.columns else df
+    return as_output(df, return_as_pandas=return_as_pandas)
 
 
 def parse_euroleague_pbp(

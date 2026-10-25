@@ -8,7 +8,7 @@ columns:
   type: logical
   description: ''
 - name: coach_id
-  type: double
+  type: integer
   description: ''
 - name: created_on
   type: character
@@ -20,7 +20,7 @@ columns:
   type: character
   description: ''
 - name: general_manager_id
-  type: double
+  type: integer
   description: ''
 - name: image_url
   type: character
@@ -29,7 +29,7 @@ columns:
   type: logical
   description: ''
 - name: player_id
-  type: double
+  type: integer
   description: ''
 - name: player_image_caption
   type: character

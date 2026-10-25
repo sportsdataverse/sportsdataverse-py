@@ -35,7 +35,7 @@ columns:
   type: integer
   description: ''
 - name: end_s
-  type: double
+  type: integer
   description: ''
 - name: goal_on_shift
   type: integer

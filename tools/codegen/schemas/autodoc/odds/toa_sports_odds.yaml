@@ -44,7 +44,7 @@ columns:
   type: integer
   description: ''
 - name: outcome_point
-  type: character
+  type: double
   description: ''
 - name: outcome_link
   type: character

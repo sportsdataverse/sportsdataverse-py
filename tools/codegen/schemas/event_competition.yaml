@@ -41,7 +41,7 @@ columns:
   type: logical
   description: ''
 - name: id
-  type: character
+  type: integer
   description: ''
 - name: lineup_available
   type: logical
@@ -110,7 +110,7 @@ columns:
   type: character
   description: ''
 - name: boxscore_source_id
-  type: character
+  type: integer
   description: ''
 - name: boxscore_source_state
   type: character
@@ -146,7 +146,7 @@ columns:
   type: character
   description: ''
 - name: game_source_id
-  type: character
+  type: integer
   description: ''
 - name: game_source_state
   type: character
@@ -155,7 +155,7 @@ columns:
   type: character
   description: ''
 - name: linescore_source_id
-  type: character
+  type: integer
   description: ''
 - name: linescore_source_state
   type: character
@@ -170,7 +170,7 @@ columns:
   type: character
   description: ''
 - name: play_by_play_source_id
-  type: character
+  type: integer
   description: ''
 - name: play_by_play_source_state
   type: character
@@ -194,7 +194,7 @@ columns:
   type: character
   description: ''
 - name: stats_source_id
-  type: character
+  type: integer
   description: ''
 - name: stats_source_state
   type: character
@@ -206,7 +206,7 @@ columns:
   type: character
   description: ''
 - name: type_id
-  type: character
+  type: integer
   description: ''
 - name: type_slug
   type: character
@@ -236,7 +236,7 @@ columns:
   type: character
   description: ''
 - name: venue_id
-  type: character
+  type: integer
   description: ''
 - name: venue_images
   type: character

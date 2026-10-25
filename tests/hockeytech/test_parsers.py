@@ -3,6 +3,7 @@ from __future__ import annotations
 
 
 import polars as pl
+import pytest
 
 from tests.conftest import load_fixture
 
@@ -69,10 +70,10 @@ def test_parse_schedule_season_scoped_view_one_row_per_game():
     df = parse_schedule(_load("pwhl_schedule_8"))
     assert df.columns == _SCHEDULE_COLS
     assert df.height == 120 and df["game_id"].n_unique() == 120
-    assert set(df["season_id"]) == {"8"}
+    assert set(df["season_id"]) == {8}
     assert set(df["game_status"]) == {"Final", "Final OT", "Final SO"}
     first = df.row(0, named=True)
-    assert first["home_team"] and first["home_team_id"].isdigit() and first["away_score"].isdigit()
+    assert first["home_team"] and first["home_team_id"] > 0 and first["away_score"].isdigit()
 
 
 def test_parse_schedule_scorebar_maps_to_the_same_columns():
@@ -95,7 +96,9 @@ def test_parse_schedule_empty_keeps_the_documented_columns():
     ]:
         df = parse_schedule(payload, **kw)
         assert df.height == 0 and df.columns == _SCHEDULE_COLS
-        assert set(df.dtypes) == {pl.String}
+        ids = {c for c in df.columns if c.endswith("_id")}
+        assert {df.schema[c] for c in ids} == {pl.Int64}  # task 5.2: ids are Int64 empty or not
+        assert {df.schema[c] for c in df.columns if c not in ids} == {pl.String}
         pdf = parse_schedule(payload, return_as_pandas=True, **kw)
         assert pdf.shape == (0, len(_SCHEDULE_COLS)) and list(pdf.columns) == _SCHEDULE_COLS
 
@@ -107,7 +110,7 @@ def test_parse_schedule_unplayed_games_carry_their_start_time():
     df = parse_schedule(_load("ahl_schedule_94"), season_id=94)
     assert df.height == 5 and df.columns == _SCHEDULE_COLS
     unplayed = df.filter(pl.col("game_status").str.contains(r"^\d{1,2}:\d{2} [ap]m [A-Z]{3}$"))
-    assert unplayed["game_id"].to_list() == ["1029104", "1029105", "1029107"]
+    assert unplayed["game_id"].to_list() == [1029104, 1029105, 1029107]
     assert unplayed["game_status"].to_list() == ["7:00 pm EDT", "7:00 pm EDT", "7:05 pm EDT"]
     assert df.filter(~pl.col("game_id").is_in(unplayed["game_id"]))["game_status"].to_list() == ["Final", "Final"]
 
@@ -120,7 +123,7 @@ def test_parse_schedule_season_id_drops_other_seasons():
     assert len({g["SeasonID"] for g in raw["SiteKit"]["Scorebar"]}) == 6
     df = parse_schedule(raw, season_id=5)
     assert df.height == 90
-    assert set(df["season_id"]) == {"5"}
+    assert set(df["season_id"]) == {5}
     assert parse_schedule(raw, return_as_pandas=True, season_id=5).shape == (90, len(_SCHEDULE_COLS))
 
 
@@ -165,7 +168,7 @@ def test_parse_teams_and_roster():
     roster = parse_roster(raw)
     players = [r for r in raw["SiteKit"]["Roster"] if isinstance(r, dict)]  # the payload ends with a list stub
     assert roster.height == len(players) == 28
-    assert roster["player_id"].to_list() == [r["player_id"] for r in players]
+    assert roster["player_id"].to_list() == [int(r["player_id"]) for r in players]
     assert roster["last_name"].to_list() == [r["last_name"] for r in players]
 
 
@@ -270,7 +273,8 @@ def test_parse_leaders_has_player_and_team():
     boards = [row for board in ("Points", "Goals") for row in raw["skaters"][board]["results"]]
     assert df.height == len(boards) == 10
     for col in ("player_id", "team_id", "name", "type_formatted"):
-        assert df[col].to_list() == [row[col] for row in boards], col
+        want = [int(row[col]) if col.endswith("_id") else row[col] for row in boards]
+        assert df[col].to_list() == want, col
 
 
 def test_parse_game_summary_returns_named_subframes():
@@ -408,3 +412,164 @@ def test_parse_pbp_flags_goal_shot_twins_real_fixture():
 
     # non-shot rows are never flagged
     assert df.filter((pl.col("event") != "shot") & (pl.col("is_goal_twin") == True)).height == 0  # noqa: E712
+
+
+_ID_CASES = [
+    ("parse_schedule", "pwhl_schedule_8", {}),
+    ("parse_schedule", "pwhl_schedule_2025", {}),
+    ("parse_schedule", "ahl_schedule_94", {}),
+    ("parse_standings", "pwhl_standings_5", {}),
+    ("parse_teams", "pwhl_teams_5", {}),
+    ("parse_roster", "pwhl_roster_1_5", {}),
+    ("parse_pbp", "pwhl_pbp_42", {"game_id": "42"}),
+    ("parse_pbp", "ohl_pbp_27225", {"game_id": 27225}),
+    ("parse_shifts", "pwhl_gameshifts_42", {"game_id": "42"}),
+    ("parse_player_stats", "pwhl_player_stats_27", {}),
+    ("parse_leaders", "pwhl_leaders_5", {}),
+    ("parse_game_summary", "pwhl_game_summary_42", {"game_id": "42"}),
+    ("parse_playoff_bracket", "pwhl_brackets_9", {}),
+    ("parse_game_info", "pwhl_svf_gamesummary_164", {}),
+    ("parse_player_box", "pwhl_svf_gamesummary_164", {}),
+    ("parse_player_info", "pwhl_svf_player_12", {}),
+    ("parse_seasons", "pwhl_seasons", {}),
+    ("parse_scorebar", "pwhl_schedule_2025", {}),
+]
+
+
+@pytest.mark.parametrize(("parser", "stem", "kw"), _ID_CASES, ids=[f"{p}-{s}" for p, s, _ in _ID_CASES])
+def test_hockeytech_ids_int64(parser, stem, kw):
+    """B-H5 / B-L72 (task 5.2): player_id was Float64 in pbp, String in roster / leaders / summary; game_id copied the
+    caller's dtype (String from the schedule, Int64 from an int). Every id is Int64 from the raw integer now."""
+    from sportsdataverse.hockeytech import _parsers as P
+
+    out = getattr(P, parser)(_load(stem), **kw)
+    frames = out if isinstance(out, dict) else {"": out}
+    assert any(df.height for df in frames.values()), stem
+    for sec, df in frames.items():
+        ids = {c: df.schema[c] for c in df.columns if c == "id" or c.endswith("_id")}
+        assert {c: t for c, t in ids.items() if t != pl.Int64} == {}, sec
+
+
+@pytest.mark.parametrize(("parser", "stem", "kw"), _ID_CASES, ids=[f"{p}-{s}" for p, s, _ in _ID_CASES])
+def test_hockeytech_pandas_ids_are_nullable_int64(parser, stem, kw):
+    """R988-2: ``return_as_pandas=True`` carries the same ids as pandas' nullable ``Int64``. Before, the pandas frame
+    skipped the cast (pbp ``player_id`` float64, roster / leaders ids str)."""
+    from sportsdataverse.hockeytech import _parsers as P
+
+    import inspect
+
+    fn = getattr(P, parser)
+    if "return_as_pandas" not in inspect.signature(fn).parameters:
+        pytest.skip(f"{parser} has no pandas output")
+    out, pdf_out = fn(_load(stem), **kw), fn(_load(stem), return_as_pandas=True, **kw)
+    frames = out if isinstance(out, dict) else {"": out}
+    pdfs = pdf_out if isinstance(pdf_out, dict) else {"": pdf_out}
+    for sec, df in frames.items():
+        ids = [c for c, t in df.schema.items() if t == pl.Int64 and (c == "id" or c.endswith("_id"))]
+        if df.height:
+            assert {c: str(pdfs[sec][c].dtype) for c in ids} == dict.fromkeys(ids, "Int64"), sec
+
+
+@pytest.mark.parametrize(
+    ("parser", "stem", "kwargs", "table"),
+    [
+        ("parse_teams", "pwhl_teams_5", {}, "pwhl_teams"),
+        ("parse_shifts", "pwhl_gameshifts_42", {"game_id": 42}, "pwhl_game_shifts"),
+        ("parse_seasons", "pwhl_seasons", {}, "pwhl_season_id"),
+    ],
+)
+def test_empty_schema_documented_table_is_the_real_output(parser, stem, kwargs, table):
+    """R978-4 (mutant M8): the table an empty result carries is the one a real reply parses to."""
+    import pandas as pd
+
+    from sportsdataverse.hockeytech import _parsers as P
+    from tests.conftest import documented_schema
+
+    fn = getattr(P, parser)
+    want = documented_schema(f"autodoc/pwhl/{table}")
+    assert fn.__documented_empty__ == f"autodoc/pwhl/{table}"
+    assert dict(fn(_load(stem), **kwargs).schema) == want
+    assert dict(fn({}, **kwargs).schema) == want and fn({}, **kwargs).height == 0
+    pdf = fn({}, return_as_pandas=True, **kwargs)
+    assert isinstance(pdf, pd.DataFrame) and list(pdf.columns) == list(want)
+
+
+def test_shift_still_on_the_ice_keeps_end_s_int64():
+    """R978-4: the real shift feed with one shift's end time not yet set: end_s stays Int64 (null), never Float64."""
+    from sportsdataverse.hockeytech._parsers import parse_shifts
+
+    raw = _load("pwhl_gameshifts_42")
+    shift = next(sh for player in raw["SiteKit"]["Gameshifts"]["home"] for sh in player.get("shifts") or [])
+    shift["end_time"] = None
+    df = parse_shifts(raw, game_id=42)
+    assert df.schema["end_s"] == pl.Int64 and df["end_s"].null_count() == 1
+
+
+def test_a_hockeytech_id_that_is_not_an_integer_stays_as_it_came_and_warns():
+    """R988-3: one parser serves 20 leagues, so a league whose feed ships one text id would get that column String while
+    the other 19 get Int64, silently. On the real PWHL roster with one ``person_id`` text the column stays as it came
+    and the parser warns naming it; every other id is still Int64."""
+    from sportsdataverse.errors import SchemaDriftWarning
+    from sportsdataverse.hockeytech import _parsers as P
+
+    raw = _load("pwhl_roster_1_5")
+    raw["SiteKit"]["Roster"][0]["person_id"] = "TBD"
+    with pytest.warns(SchemaDriftWarning, match=r"HockeyTech parse_roster: id columns \['person_id'\]") as rec:
+        df = P.parse_roster(raw)
+    # R988-7: the warning names the parser and points at its caller, not inside _parsers.py
+    assert [w.filename for w in rec] == [__file__]
+    assert df.schema["person_id"] == pl.String and "TBD" in df["person_id"].to_list()
+    assert {c: t for c, t in df.schema.items() if c.endswith("_id") and c != "person_id" and t != pl.Int64} == {}
+
+
+#: Release loaders read a parquet the producer wrote, not a parser frame; their ids keep the release's dtype.
+_RELEASE_TABLES = {"load_pwhl_games", "as_of_ratings_split"}
+
+
+def test_every_hockeytech_returns_table_documents_its_ids_as_integer():
+    """R988-4: ``pwhl_player_search`` / ``pwhl_stats`` still said ``character`` for ids their parser (``_to_frame``)
+    emits Int64; no capture exists for either, so no parser test noticed. Every HockeyTech parser-backed returns table
+    documents its ids as ``integer``."""
+    import yaml
+
+    from sportsdataverse.hockeytech._leagues import LEAGUES
+    from tests.conftest import _REPO_ROOT as ROOT
+
+    wrong = {}
+    for lg in {*LEAGUES, "pwhl"}:
+        for path in sorted((ROOT / "tools" / "codegen" / "schemas" / "autodoc" / lg).glob("*.yaml")):
+            if path.stem in _RELEASE_TABLES:
+                continue
+            cols = yaml.safe_load(path.read_text(encoding="utf-8")).get("columns") or []
+            bad = [
+                c["name"] for c in cols if (c["name"] == "id" or c["name"].endswith("_id")) and c["type"] != "integer"
+            ]
+            if bad:
+                wrong[f"{lg}/{path.stem}"] = bad
+    assert wrong == {}
+
+
+@pytest.mark.parametrize(
+    ("parser", "stem", "kw"),
+    [
+        ("parse_roster", "pwhl_roster_1_5", {}),  # undecorated
+        ("parse_teams", "pwhl_teams_5", {}),  # @_documented_empty
+        ("parse_shifts", "pwhl_gameshifts_42", {"game_id": 42}),  # @_documented_empty
+        ("parse_seasons", "pwhl_seasons", {}),  # @_documented_empty
+        ("parse_pbp", "pwhl_pbp_42", {"game_id": 42}),  # @_data_only
+        ("parse_game_summary", "pwhl_game_summary_42", {"game_id": 42}),  # @_dict_only
+        ("parse_player_game_log", "pwhl_player_gamebygame_27_5", {}),  # SiteKit factory
+    ],
+)
+def test_id_warning_names_the_parser_and_points_at_its_caller(monkeypatch, parser, stem, kw):
+    """R989 (CodeRabbit): a decorated parser pointed the refused-id warning at its decorator's wrapper, and the SiteKit
+    factory named ``parse_player_game_log`` ``parse_player``. A text ``bogus_id`` column added to every frame: each
+    warning names the exported parser and its ``filename`` is this test file."""
+    from sportsdataverse.errors import SchemaDriftWarning
+    from sportsdataverse.hockeytech import _parsers as P
+
+    snake = P._snake_columns
+    monkeypatch.setattr(P, "_snake_columns", lambda df: snake(df).assign(bogus_id="x") if len(df) else snake(df))
+    with pytest.warns(SchemaDriftWarning, match=rf"HockeyTech {parser}: id columns \['bogus_id'\]") as rec:
+        getattr(P, parser)(_load(stem), **kw)
+    assert {w.filename for w in rec} == {__file__}

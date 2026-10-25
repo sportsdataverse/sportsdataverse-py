@@ -46,7 +46,7 @@ def _team_mascot(team: dict) -> str:
     return display or location
 
 
-from sportsdataverse._codegen_runtime import _download_json
+from sportsdataverse._codegen_runtime import _cast_ids_int64, _download_json
 from sportsdataverse.dl_utils import download
 from sportsdataverse.football.attribution import (
     _abbr_compat,
@@ -7954,6 +7954,9 @@ class NFLPlayProcess(object):
         ("timeout", pl.Boolean),
     )
 
+    # The possession-team ids the processor builds as Int32 (CFB: Int64); every other team id keeps its dtype.
+    _INT64_TEAM_IDS = ("pos_team", "lag_pos_team", "lead_pos_team", "lead_pos_team2", "start.pos_team.id")
+
     def __documented_dtypes(self, play_df):
         """Cast the processed plays to their documented dtypes, after every consumer has run.
 
@@ -7963,11 +7966,15 @@ class NFLPlayProcess(object):
         type are Float64 (C-M7). Widening here, not at the scorers, keeps the WP cascade and the
         box score computing at the precision they always did; float32 -> float64 is exact, so no
         value changes. The widened names are kept so :meth:`create_box_score` narrows them back when
-        re-run on ``plays_frame``. ``teamParticipants`` gets one struct field order (C-L10).
+        re-run on ``plays_frame``. ``teamParticipants`` gets one struct field order (C-L10). The
+        player ids (String, from the text-name match) and the possession-team ids (Int32) leave as
+        ``Int64``, the dtype the CFB processor emits for the same columns (task 5.2, C-M8).
         """
         widened = [c for c, dtype in play_df.schema.items() if dtype == pl.Float32]
         self._widened_float32 = tuple(dict.fromkeys((*getattr(self, "_widened_float32", ()), *widened)))
         play_df = play_df.with_columns(pl.col(pl.Float32).cast(pl.Float64))
+        ids = [c for c in play_df.columns if c in self._INT64_TEAM_IDS or re.search(r"_player_id\d*$", c)]
+        play_df = _cast_ids_int64(play_df, ids)
         if "teamParticipants" not in play_df.columns:
             return play_df
         fields = dict(self._TEAM_PARTICIPANT_FIELDS)

@@ -4,7 +4,7 @@ frames:
 - section: boxscore_player
   columns:
   - name: team_id
-    type: character
+    type: integer
     description: Team id.
   - name: team_abbreviation
     type: character
@@ -16,7 +16,7 @@ frames:
     type: character
     description: Team location.
   - name: athlete_id
-    type: character
+    type: integer
     description: Athlete id.
   - name: athlete_display_name
     type: character
@@ -204,7 +204,7 @@ frames:
 - section: boxscore_team
   columns:
   - name: team_id
-    type: character
+    type: integer
     description: Team id.
   - name: team_abbreviation
     type: character
@@ -241,12 +241,12 @@ frames:
     type: double
     description: Tie percentage.
   - name: play_id
-    type: character
+    type: integer
     description: Play id.
 - section: leaders
   columns:
   - name: team_id
-    type: character
+    type: integer
     description: Team id.
   - name: team_abbreviation
     type: character
@@ -258,7 +258,7 @@ frames:
     type: character
     description: Category display name.
   - name: athlete_id
-    type: character
+    type: integer
     description: Athlete id.
   - name: athlete_display_name
     type: character
@@ -284,7 +284,7 @@ frames:
     type: integer
     description: Attendance.
   - name: venue_id
-    type: character
+    type: integer
     description: Venue id.
   - name: venue_guid
     type: character
@@ -325,12 +325,12 @@ frames:
     type: character
     description: Position display name.
   - name: position_id
-    type: character
+    type: integer
     description: Position id.
 - section: header
   columns:
   - name: id
-    type: character
+    type: integer
     description: Id.
   - name: uid
     type: character
@@ -360,7 +360,7 @@ frames:
     type: integer
     description: Season type.
   - name: league_id
-    type: character
+    type: integer
     description: League id.
   - name: league_uid
     type: character
@@ -399,7 +399,7 @@ frames:
     type: character
     description: Division header.
   - name: team_id
-    type: character
+    type: integer
     description: Team id.
   - name: team_uid
     type: character
@@ -484,7 +484,7 @@ frames:
     type: character
     description: Type.
   - name: game_id
-    type: character
+    type: integer
     description: Game id.
   - name: headline
     type: character
@@ -561,7 +561,7 @@ frames:
     type: character
     description: Injuries.
   - name: team_id
-    type: character
+    type: integer
     description: Team id.
   - name: team_uid
     type: character
@@ -637,7 +637,7 @@ frames:
 - section: drives
   columns:
   - name: id
-    type: character
+    type: integer
     description: Id.
   - name: description
     type: character
@@ -664,7 +664,7 @@ frames:
     type: character
     description: ''
   - name: team_id
-    type: character
+    type: integer
     description: Team id.
   - name: team_name
     type: character
@@ -717,13 +717,13 @@ frames:
 - section: drive_plays
   columns:
   - name: drive_id
-    type: character
+    type: integer
     description: ''
   - name: drive_sequence
     type: integer
     description: ''
   - name: id
-    type: character
+    type: integer
     description: Id.
   - name: sequence_number
     type: character
@@ -762,7 +762,7 @@ frames:
     type: logical
     description: ''
   - name: type_id
-    type: character
+    type: integer
     description: Type id.
   - name: type_text
     type: character
@@ -789,7 +789,7 @@ frames:
     type: integer
     description: ''
   - name: start_team_id
-    type: character
+    type: integer
     description: ''
   - name: end_down
     type: integer
@@ -813,7 +813,7 @@ frames:
     type: character
     description: ''
   - name: end_team_id
-    type: character
+    type: integer
     description: ''
   - name: start_down_distance_text
     type: character
@@ -834,7 +834,7 @@ frames:
     type: character
     description: ''
   - name: point_after_attempt_id
-    type: double
+    type: integer
     description: ''
   - name: point_after_attempt_text
     type: character
@@ -848,7 +848,7 @@ frames:
 - section: scoring_plays
   columns:
   - name: id
-    type: character
+    type: integer
     description: Id.
   - name: text
     type: character
@@ -860,7 +860,7 @@ frames:
     type: integer
     description: Home score.
   - name: type_id
-    type: character
+    type: integer
     description: Type id.
   - name: type_text
     type: character
@@ -878,7 +878,7 @@ frames:
     type: character
     description: Clock display value.
   - name: team_id
-    type: character
+    type: integer
     description: Team id.
   - name: team_uid
     type: character

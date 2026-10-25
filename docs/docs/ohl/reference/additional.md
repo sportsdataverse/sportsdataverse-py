@@ -26,11 +26,11 @@ Player-level on-ice Corsi and Fenwick for a single OHL game.
 
 **Returns**
 
-One row per player on ice for a shot attempt: `player_id` (String), `corsi_for` / `corsi_against` / `corsi_for_pct`, `fenwick_for` / `fenwick_against` / `fenwick_for_pct`, `corsi_includes_missed` (Boolean), `toi_seconds` (Int64) and `corsi_for_per60` (Float64, null without time on ice). A pandas DataFrame when `return_as_pandas` is True.
+One row per player on ice for a shot attempt: `player_id` (Int64), `corsi_for` / `corsi_against` / `corsi_for_pct`, `fenwick_for` / `fenwick_against` / `fenwick_for_pct`, `corsi_includes_missed` (Boolean), `toi_seconds` (Int64) and `corsi_for_per60` (Float64, null without time on ice). A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `corsi_for` | integer | Total shot attempts (goals, saves, missed shots, and blocked shots) directed toward the opposing team while the player was on the ice in the OHL game. |
 | `corsi_against` | integer | Total shot attempts (goals, saves, missed shots, and blocked shots) directed against the player's team while that player was on the ice in the OHL game. |
 | `corsi_for_pct` | double | Share of all shot attempts while the player was on the ice that were directed toward the opponent, expressed as a percentage (Corsi For / (Corsi For + Corsi Against)). |
@@ -111,15 +111,15 @@ OHL statistical leaders for a given season.
 
 **Returns**
 
-One row per ranked skater (points and goals leaders): `rank` (Int64), `player_id`, `name`, `jersey_number`, `position`, `team_id` / `team_name` / `team_code`, `stat_formatted` and `type_formatted` (String), plus photo and logo URLs. A pandas DataFrame when `return_as_pandas` is True.
+One row per ranked skater (points and goals leaders): `rank` (Int64), `player_id`, `name`, `jersey_number`, `position`, `team_id` / `team_name` / `team_code`, `stat_formatted` and `type_formatted` (`player_id` / `team_id` Int64, the rest String), plus photo and logo URLs. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | Rank of the streak. |
-| `player_id` | character | Unique player identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `jersey_number` | character | Jersey number. |
 | `name` | character | Team mascot name. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Team name. |
 | `team_code` | character | Team abbreviation. |
 | `team_logo` | character | URL to the team logo image. |
@@ -159,25 +159,25 @@ One row per event (shot, goal, penalty, faceoff, hit, goalie change ...): `game_
 |---|---|---|
 | `game_id` | integer | Unique game identifier. |
 | `event` | character | Event description label. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `period_of_game` | character | Period in which the event occurred. |
 | `time_of_period` | character | Elapsed time within the period (MM:SS). |
 | `x_coord` | double | Transformed x-coordinate of the event (feet scale). |
 | `y_coord` | double | Transformed y-coordinate of the event (feet scale). |
-| `player_id` | double | Unique player identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `player_name_first` | character | Primary player first name. |
 | `player_name_last` | character | Primary player last name. |
 | `player_position` | character | Primary player position. |
 | `goal` | logical | Flag for whether the event was a goal. |
 | `is_goal_twin` | logical | Boolean flag marking a shot row that duplicates a goal event on the same play — the HockeyTech feed emits both a shot row and a goal row for every goal. Shot rows (twins included) match the official boxscore shots-on-goal totals; drop rows with this flag set to get a deduplicated event stream. |
-| `goalie_id` | double | Goalie identifier on the play. |
+| `goalie_id` | integer | Goalie identifier on the play. |
 | `goalie_first` | character | Goalie first name. |
 | `goalie_last` | character | Goalie last name. |
 | `home_win` | character | Whether the home player won the faceoff. |
-| `player_team_id` | character | Unique team identifier of the primary player. |
+| `player_team_id` | integer | Unique team identifier of the primary player. |
 | `event_type` | character | Standardized event type code. |
 | `shot_quality` | character | Shot quality descriptor. |
-| `player_two_id` | double | Second player's unique identifier. |
+| `player_two_id` | integer | Second player's unique identifier. |
 | `player_two_name_first` | character | Second player first name. |
 | `player_two_name_last` | character | Second player last name. |
 | `player_two_position` | character | Second player position. |
@@ -188,57 +188,57 @@ One row per event (shot, goal, penalty, faceoff, hit, goalie change ...): `game_
 | `penalty_shot` | character | Whether the goal came on a penalty shot. |
 | `insurance` | character | Whether the goal was an insurance goal. |
 | `short_handed` | character | Whether the event occurred while short-handed. |
-| `player_three_id` | double | Third player's unique identifier. |
+| `player_three_id` | integer | Third player's unique identifier. |
 | `player_three_name_first` | character | Third player first name. |
 | `player_three_name_last` | character | Third player last name. |
 | `player_three_position` | character | Third player position. |
-| `plus_player_one_id` | double | On-ice plus player one unique identifier. |
+| `plus_player_one_id` | integer | On-ice plus player one unique identifier. |
 | `plus_player_one_first` | character | On-ice plus player one first name. |
 | `plus_player_one_last` | character | On-ice plus player one last name. |
 | `plus_player_one_position` | character | On-ice plus player one position. |
-| `plus_player_two_id` | double | On-ice plus player two unique identifier. |
+| `plus_player_two_id` | integer | On-ice plus player two unique identifier. |
 | `plus_player_two_first` | character | On-ice plus player two first name. |
 | `plus_player_two_last` | character | On-ice plus player two last name. |
 | `plus_player_two_position` | character | On-ice plus player two position. |
-| `plus_player_three_id` | double | On-ice plus player three unique identifier. |
+| `plus_player_three_id` | integer | On-ice plus player three unique identifier. |
 | `plus_player_three_first` | character | On-ice plus player three first name. |
 | `plus_player_three_last` | character | On-ice plus player three last name. |
 | `plus_player_three_position` | character | On-ice plus player three position. |
-| `plus_player_four_id` | double | On-ice plus player four unique identifier. |
+| `plus_player_four_id` | integer | On-ice plus player four unique identifier. |
 | `plus_player_four_first` | character | On-ice plus player four first name. |
 | `plus_player_four_last` | character | On-ice plus player four last name. |
 | `plus_player_four_position` | character | On-ice plus player four position. |
-| `plus_player_five_id` | double | On-ice plus player five unique identifier. |
+| `plus_player_five_id` | integer | On-ice plus player five unique identifier. |
 | `plus_player_five_first` | character | On-ice plus player five first name. |
 | `plus_player_five_last` | character | On-ice plus player five last name. |
 | `plus_player_five_position` | character | On-ice plus player five position. |
-| `minus_player_one_id` | double | On-ice minus player one unique identifier. |
+| `minus_player_one_id` | integer | On-ice minus player one unique identifier. |
 | `minus_player_one_first` | character | On-ice minus player one first name. |
 | `minus_player_one_last` | character | On-ice minus player one last name. |
 | `minus_player_one_position` | character | On-ice minus player one position. |
-| `minus_player_two_id` | double | On-ice minus player two unique identifier. |
+| `minus_player_two_id` | integer | On-ice minus player two unique identifier. |
 | `minus_player_two_first` | character | On-ice minus player two first name. |
 | `minus_player_two_last` | character | On-ice minus player two last name. |
 | `minus_player_two_position` | character | On-ice minus player two position. |
-| `minus_player_three_id` | double | On-ice minus player three unique identifier. |
+| `minus_player_three_id` | integer | On-ice minus player three unique identifier. |
 | `minus_player_three_first` | character | On-ice minus player three first name. |
 | `minus_player_three_last` | character | On-ice minus player three last name. |
 | `minus_player_three_position` | character | On-ice minus player three position. |
-| `minus_player_four_id` | double | On-ice minus player four unique identifier. |
+| `minus_player_four_id` | integer | On-ice minus player four unique identifier. |
 | `minus_player_four_first` | character | On-ice minus player four first name. |
 | `minus_player_four_last` | character | On-ice minus player four last name. |
 | `minus_player_four_position` | character | On-ice minus player four position. |
-| `minus_player_five_id` | double | On-ice minus player five unique identifier. |
+| `minus_player_five_id` | integer | On-ice minus player five unique identifier. |
 | `minus_player_five_first` | character | On-ice minus player five first name. |
 | `minus_player_five_last` | character | On-ice minus player five last name. |
 | `minus_player_five_position` | character | On-ice minus player five position. |
 | `game_date` | character | Game date. |
 | `game_season` | integer | Season (concluding year, YYYY). |
-| `game_season_id` | character | HockeyTech season identifier. |
+| `game_season_id` | integer | HockeyTech season identifier. |
 | `home_team` | character | Home team name. |
-| `home_team_id` | character | Home team identifier. |
+| `home_team_id` | integer | Home team identifier. |
 | `away_team` | character | Away team name. |
-| `away_team_id` | character | Away team identifier. |
+| `away_team_id` | integer | Away team identifier. |
 | `x_coord_original` | double | Original raw x-coordinate from the feed. |
 | `y_coord_original` | double | Original raw y-coordinate from the feed. |
 | `x_coord_neutral` | double | Neutral-zone-centered x-coordinate. |
@@ -281,11 +281,11 @@ OHL player season stats across all seasons.
 
 **Returns**
 
-One row per season (and team) the player played: `season_id`, `season_name`, `playoff`, `team_id` / `team_name` / `team_code`, `games_played`, `goals`, `assists`, `points`, `plus_minus`, `penalty_minutes`, power-play / short-handed / shootout splits, `shots`, `faceoff_wins` / `faceoff_attempts`, `ice_time` and `stat_type` (String, as the feed ships them). A pandas DataFrame when `return_as_pandas` is True.
+One row per season (and team) the player played: `season_id`, `season_name`, `playoff`, `team_id` / `team_name` / `team_code`, `games_played`, `goals`, `assists`, `points`, `plus_minus`, `penalty_minutes`, power-play / short-handed / shootout splits, `shots`, `faceoff_wins` / `faceoff_attempts`, `ice_time` and `stat_type`. `season_id` and `team_id` are Int64; the rest are String, as the feed ships them. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | character | Season identifier. |
+| `season_id` | integer | Season identifier. |
 | `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
 | `shortname` | character | Player short name. |
 | `playoff` | character | Whether the row is playoff statistics. |
@@ -324,7 +324,7 @@ One row per season (and team) the player played: `season_id`, `season_name`, `pl
 | `team_code` | character | Team abbreviation. |
 | `team_city` | character | Team city. |
 | `team_nickname` | character | Team nickname. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `active` | character | Whether athlete is currently active. |
 | `first_goals` | character | First goals of a game. |
 | `insurance_goals` | character | Insurance goals. |
@@ -394,21 +394,21 @@ OHL schedule — one row per game of one season.
 
 **Returns**
 
-One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_team_id` / `home_score`, `away_team` / `away_team_id` / `away_score`, `venue`, `season_id` and `game_type` (all String). Only the requested season's games: a regular season, its playoffs and its preseason are separate season ids, so pass `season_id` (from `ohl_season_id()`) for the playoffs. A pandas DataFrame when `return_as_pandas` is True.
+One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_team_id` / `home_score`, `away_team` / `away_team_id` / `away_score`, `venue`, `season_id` and `game_type`; the `*_id` columns are Int64, the rest String. Only the requested season's games: a regular season, its playoffs and its preseason are separate season ids, so pass `season_id` (from `ohl_season_id()`) for the playoffs. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
+| `game_id` | integer | Unique game identifier. |
 | `game_date` | character | Game date. |
 | `game_status` | character | Game status text. |
 | `home_team` | character | Home team name. |
-| `home_team_id` | character | Home team identifier. |
+| `home_team_id` | integer | Home team identifier. |
 | `home_score` | character | Home team final score. |
 | `away_team` | character | Away team name. |
-| `away_team_id` | character | Away team identifier. |
+| `away_team_id` | integer | Away team identifier. |
 | `away_score` | character | Away team final score. |
 | `venue` | character | Venue where the game was played. |
-| `season_id` | character | Season identifier. |
+| `season_id` | integer | Season identifier. |
 | `game_type` | character | Game type the row belongs to. |
 
 **Raises**
@@ -485,7 +485,7 @@ OHL team roster for a given team + season.
 
 **Returns**
 
-One row per rostered player: `player_id`, `person_id`, names (`first_name`, `last_name`, `display_name`), `position`, `tp_jersey_number`, `shoots` / `catches`, `height` / `weight`, `birthdate`, home and birth places, `rookie`, `veteran_status`, `draft_status` and `player_image` (String, as the feed ships them). A pandas DataFrame when `return_as_pandas` is True.
+One row per rostered player: `player_id`, `person_id`, names (`first_name`, `last_name`, `display_name`), `position`, `tp_jersey_number`, `shoots` / `catches`, `height` / `weight`, `birthdate`, home and birth places, `rookie`, `veteran_status`, `draft_status` and `player_image`. The `id` / `*_id` columns are Int64; the rest are String, as the feed ships them. A pandas DataFrame when `return_as_pandas` is True.
 
 **Raises**
 
@@ -510,12 +510,12 @@ OHL teams for a given season.
 
 **Returns**
 
-One row per team: `team_id`, `team_name`, `team_code`, `team_nickname`, `team_label`, `division` and `team_logo` (String). A pandas DataFrame when `return_as_pandas` is True.
+One row per team: `team_id`, `team_name`, `team_code`, `team_nickname`, `team_label`, `division` and `team_logo`; `team_id` is Int64, the rest String. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
 | `team_name` | character | Team name. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `team_code` | character | Team abbreviation. |
 | `team_nickname` | character | Team nickname. |
 | `team_label` | character | Short city label. |

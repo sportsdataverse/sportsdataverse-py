@@ -47,6 +47,7 @@ from typing import Dict, List
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _cast_id_columns, _pandas_ids, _str_or_null
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _object_rows, _warn_schema_drift
 
@@ -65,17 +66,17 @@ def _snake_columns(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _to_output(df: pd.DataFrame, return_as_pandas: bool):
-    if return_as_pandas:
-        return df
     try:
-        return pl.from_pandas(df)
+        out = _cast_id_columns(pl.from_pandas(df), "NHL api-web parser")
     except _FROM_PANDAS_ERRORS:
         # A mixed-type object column (e.g. ints and strings) fails the Arrow conversion:
         # stringify the object columns rather than lose the frame.
         df2 = df.copy()
         for col in [c for c in df2.columns if df2[c].dtype == "object"]:
-            df2[col] = df2[col].astype(str)
-        return pl.from_pandas(df2)
+            df2[col] = df2[col].map(_str_or_null)  # a missing cell stays null, never "nan"
+        out = _cast_id_columns(pl.from_pandas(df2), "NHL api-web parser")
+    # R986-1: the pandas frame carries the same ids, as pandas' nullable Int64 (never float64 / object)
+    return _pandas_ids(out, df) if return_as_pandas else out
 
 
 def _empty_frame(return_as_pandas: bool = False):

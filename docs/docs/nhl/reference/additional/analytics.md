@@ -99,7 +99,7 @@ Per-skater frame: `player_id`, `season`, `top_speed`, `distance_km`, `speed_burs
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `season` | integer | Season year (echoed from arg). |
 | `top_speed` | double |  |
 | `distance_km` | double |  |
@@ -317,13 +317,13 @@ per-projected-game ratings.
 
 **Returns**
 
-A polars (or pandas) DataFrame, one row per (player, game, stat). Empty/malformed input returns a zero-row frame with the documented schema. |col_name |type | |:---------|:------| |season |Int64 | |game_id |String | |player_id |String | |team |String | |opp_team |String | |stat |String | |proj_mean |Float64| |proj_sd |Float64| |p_over |Float64| |line |Float64|
+A polars (or pandas) DataFrame, one row per (player, game, stat). Empty/malformed input returns a zero-row frame with the documented schema. |col_name |type | |:---------|:------| |season |Int64 | |game_id |Int64 | |player_id |Int64 | |team |String | |opp_team |String | |stat |String | |proj_mean |Float64| |proj_sd |Float64| |p_over |Float64| |line |Float64|
 
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Season year (echoed from arg). |
-| `game_id` | character | Unique game identifier. |
-| `player_id` | character | Unique player identifier. |
+| `game_id` | integer | Unique game identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `team` | character | Team name. |
 | `opp_team` | character |  |
 | `stat` | character |  |
@@ -342,7 +342,7 @@ print(props.sort("proj_mean", descending=True).head())
 
 # Pipeline next step (one line)
 
-props.filter(pl.col("player_id") == "8478402")
+props.filter(pl.col("player_id") == 8478402)
 ```
 
 ### nhl_predict_games {#nhl_predict_games}
@@ -363,7 +363,7 @@ Vectorized pregame margin/win-prob/total (+ market edge) over a schedule.
 
 **Returns**
 
-A polars (or pandas) DataFrame, one row per game. |col_name |type | |:-------------|:------| |game_id |String | |home_team |String | |away_team |String | |neutral_site |Boolean| |exp_margin |Float64| |home_win_prob |Float64| |exp_total |Float64| |market_edge |Float64|
+A polars (or pandas) DataFrame, one row per game. |col_name |type | |:-------------|:------| |game_id |Int64 | |home_team |String | |away_team |String | |neutral_site |Boolean| |exp_margin |Float64| |home_win_prob |Float64| |exp_total |Float64| |market_edge |Float64|
 
 No returns table is published for this function: no capture: it needs games with home_team / away_team / neutral_site columns that no loader returns.
 

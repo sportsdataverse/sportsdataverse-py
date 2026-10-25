@@ -422,7 +422,7 @@ _PER_SHORT: Dict[str, Dict[str, str]] = {
     },
     "game_points": {"points": "Points the shot is worth (1, 2 or 3)."},
     "game_header": {
-        "round": "Round label (e.g. Round 1).",
+        "round": "Round number (Int64, as the v2 rounds and games routes carry it).",
         "capacity": "Capacity as reported by the API (equals the box score's attendance on the captured game; semantics unverified).",
         "quarter": "Current period of the game.",
         "date": "Game date (venue local, dd/mm/yyyy).",

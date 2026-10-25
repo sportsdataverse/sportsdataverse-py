@@ -27,12 +27,12 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `athlete_id` | character |  |
+| `athlete_id` | integer |  |
 | `athlete_display_name` | character |  |
 | `athlete_short_name` | character |  |
 | `athlete_position` | character |  |
 | `athlete_jersey` | character |  |
-| `athlete_team_id` | character |  |
+| `athlete_team_id` | integer |  |
 | `athlete_team_abbreviation` | character |  |
 | `split_name` | character |  |
 | `split_category` | character |  |
@@ -131,14 +131,14 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `season_type_id` | character |  |
+| `season_type_id` | integer |  |
 | `season_type_name` | character |  |
 | `category` | character |  |
-| `event_id` | character |  |
+| `event_id` | integer |  |
 | `event_date` | character |  |
 | `home_away` | character |  |
 | `score` | character |  |
-| `opponent_id` | character |  |
+| `opponent_id` | integer |  |
 | `opponent_abbreviation` | character |  |
 | `opponent_display_name` | character |  |
 | `game_result` | character |  |
@@ -254,7 +254,7 @@ ESPN endpoint.
 | `pagination_first` | character | Pagination first. |
 | `pagination_next` | character | Pagination next. |
 | `pagination_last` | character | Pagination last. |
-| `league_id` | character | League id. |
+| `league_id` | integer | League id. |
 | `league_uid` | character | League uid. |
 | `league_name` | character | League name. |
 | `league_abbreviation` | character | League abbreviation. |
@@ -264,7 +264,7 @@ ESPN endpoint.
 | `current_season_display_name` | character | Current season display name. |
 | `current_season_start_date` | character | Current season start date. |
 | `current_season_end_date` | character | Current season end date. |
-| `current_season_type_id` | character | Current season type id. |
+| `current_season_type_id` | integer | Current season type id. |
 | `current_season_type_type` | integer | Current season type type. |
 | `current_season_type_name` | character | Current season type name. |
 | `current_season_type_start_date` | character | Current season type start date. |
@@ -273,7 +273,7 @@ ESPN endpoint.
 | `requested_season_display_name` | character | Requested season display name. |
 | `requested_season_start_date` | character | Requested season start date. |
 | `requested_season_end_date` | character | Requested season end date. |
-| `requested_season_type_id` | character | Requested season type id. |
+| `requested_season_type_id` | integer | Requested season type id. |
 | `requested_season_type_type` | integer | Requested season type type. |
 | `requested_season_type_name` | character | Requested season type name. |
 | `requested_season_type_start_date` | character | Requested season type start date. |

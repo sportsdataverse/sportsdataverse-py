@@ -21,6 +21,7 @@ import json
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
+import pandas as pd
 import polars as pl
 import yaml
 
@@ -43,23 +44,23 @@ CAPTURE_DATES = {
     "mlb": 20241025,
 }
 
-#: Explicit id-column allowlist per family: column -> the dtype its returns table documents
-#: (``character`` -> String, ``integer`` -> Int32/Int64). An id column the parser emits that is
-#: not listed here fails the check, so a new id column needs a decision, not a silent dtype.
+#: Explicit id-column list per family: column -> the dtype its returns table documents. Every ESPN id is
+#: ``Int64`` (task 5.2, B-M15); an id column the parser emits that is not listed here fails the check, so a
+#: new id column needs a decision, not a silent dtype.
 _STR = (pl.String,)
-_INT = (pl.Int32, pl.Int64)
+_INT = (pl.Int64,)
 _SCHEDULE_IDS_COMMON = {
-    "id": _STR,
+    "id": _INT,
     "game_id": _INT,
-    "type_id": _STR,
-    "venue_id": _STR,
-    "status_type_id": _STR,
-    "home_id": _STR,
-    "home_venue_id": _STR,
-    "away_id": _STR,
-    "away_venue_id": _STR,
+    "type_id": _INT,
+    "venue_id": _INT,
+    "status_type_id": _INT,
+    "home_id": _INT,
+    "home_venue_id": _INT,
+    "away_id": _INT,
+    "away_venue_id": _INT,
 }
-_COLLEGE_IDS = {"home_conference_id": _STR, "away_conference_id": _STR, "tournament_id": _INT}
+_COLLEGE_IDS = {"home_conference_id": _INT, "away_conference_id": _INT, "tournament_id": _INT}
 SCHEDULE_IDS: Dict[str, Dict[str, tuple]] = {
     "mbb": {**_SCHEDULE_IDS_COMMON, **_COLLEGE_IDS},
     "wbb": {**_SCHEDULE_IDS_COMMON, **_COLLEGE_IDS},
@@ -67,10 +68,10 @@ SCHEDULE_IDS: Dict[str, Dict[str, tuple]] = {
     "wnba": dict(_SCHEDULE_IDS_COMMON),
     "nfl": dict(_SCHEDULE_IDS_COMMON),
     "nhl": dict(_SCHEDULE_IDS_COMMON),
-    "cfb": {**_SCHEDULE_IDS_COMMON, **_COLLEGE_IDS, "groups_id": _STR},
-    "mlb": {"game_id": _STR, "venue_id": _STR, "home_id": _STR, "away_id": _STR},
+    "cfb": {**_SCHEDULE_IDS_COMMON, **_COLLEGE_IDS, "groups_id": _INT},
+    "mlb": {"game_id": _INT, "venue_id": _INT, "home_id": _INT, "away_id": _INT},
 }
-TEAMS_IDS = {"team_id": _STR, "team_uid": _STR}
+TEAMS_IDS = {"team_id": _INT, "team_uid": _STR}  # a uid ("s:40~l:46~t:1") is not an integer id
 
 
 def _documented(league: str, family: str) -> List[str]:
@@ -91,7 +92,8 @@ def _call(league: str, family: str, monkeypatch, body: Dict[str, Any], **kwargs:
     calls = _route(monkeypatch, lambda url: (200, json.dumps(body), "application/json"))
     fn = getattr(importlib.import_module(f"sportsdataverse.{league}.{league}_{family}"), f"espn_{league}_{family}")
     out = fn(**kwargs)  # the teams functions no longer cache (task 2.11), so nothing to clear
-    assert isinstance(out, pl.DataFrame), f"espn_{league}_{family} returned {type(out).__name__}, not a DataFrame"
+    want = pd.DataFrame if kwargs.get("return_as_pandas") else pl.DataFrame
+    assert isinstance(out, want), f"espn_{league}_{family} returned {type(out).__name__}, not a {want.__module__} frame"
     return out, calls
 
 
@@ -127,10 +129,10 @@ EVENT_MUTATIONS: Dict[str, Callable[[Dict[str, Any]], None]] = {
 
 def schedule_cases(league: str) -> List[Any]:
     """The schedule case ids for one league (task 2.9 fixed every known defect these pinned)."""
-    cases: List[Any] = ["snapshot", "id_dtypes", "query_key", "returns_table_columns", "empty_slate"]
+    cases: List[Any] = ["snapshot", "id_dtypes", "pandas_ids", "query_key", "returns_table_columns", "empty_slate"]
     cases += list(EVENT_MUTATIONS)
-    if league != "mlb":  # mlb emits no linescores
-        cases += ["canceled_masked", "parse_twice"]
+    if league != "mlb":  # mlb emits no linescores (nor attendance)
+        cases += ["canceled_masked", "parse_twice", "integer_with_a_missing_value"]
     if league == "nfl":
         cases.append("rank_not_default")
     if league == "cfb":
@@ -159,7 +161,7 @@ def check_schedule(league: str, case: str, monkeypatch) -> None:
         assert df[_season_col(df)].cast(pl.Int64).to_list() == [e["season"]["year"] for e in events]
         assert df["season_type"].cast(pl.Int64).to_list() == [e["season"]["type"] for e in events]
         home = [next(c for c in e["competitions"][0]["competitors"] if c["homeAway"] == "home") for e in events]
-        assert df["home_id"].to_list() == [c["team"]["id"] for c in home]
+        assert df["home_id"].to_list() == [int(c["team"]["id"]) for c in home]
         assert [str(s) for s in df["home_score"].to_list()] == [str(c["score"]) for c in home]
     elif case == "id_dtypes":
         df, _ = _call(league, "schedule", monkeypatch, body, **kwargs)
@@ -169,6 +171,14 @@ def check_schedule(league: str, case: str, monkeypatch) -> None:
         assert not unlisted, f"id columns without an allowlist entry: {unlisted}"
         wrong = {c: str(df.schema[c]) for c in id_cols if df.schema[c] not in allow[c]}
         assert not wrong, f"id columns off their documented dtype: {wrong}"
+    elif case == "pandas_ids":
+        # R981-2: the pandas frame carries the ids as pandas' nullable Int64, never float64 ("150.0") where one
+        # event lacks one (the real cfb capture has null groups_id / conference ids)
+        pdf, _ = _call(league, "schedule", monkeypatch, body, return_as_pandas=True, **kwargs)
+        pdf_empty, _ = _call(league, "schedule", monkeypatch, {**body, "events": []}, return_as_pandas=True, **kwargs)
+        for frame in (pdf, pdf_empty):
+            ids = {c: str(frame[c].dtype) for c in frame.columns if c in SCHEDULE_IDS[league]}
+            assert ids and set(ids.values()) == {"Int64"}, ids
     elif case == "query_key":
         _, calls = _call(league, "schedule", monkeypatch, body, season_type=2, **kwargs)
         assert "seasontype=2" in calls[0], calls[0]
@@ -214,6 +224,18 @@ def check_schedule(league: str, case: str, monkeypatch) -> None:
         second = getattr(module, f"espn_{league}_schedule")(**kwargs)
         assert first.height == len(events) and first.equals(second)
         assert body == _payload(f"scoreboard_{league}.json")
+    elif case == "integer_with_a_missing_value":
+        # B-M16 / R981-1: one event without ``attendance`` turns the column Float64 on the pandas hop; the frame
+        # restores the documented integer (ids no longer reach that branch: they are cast first, task 5.2)
+        bad = copy.deepcopy(body)
+        if len(_events(bad)) < 2:  # a one-event capture borrows a sibling's real event
+            sibling = "wbb" if league == "mbb" else "nba"
+            bad["events"].append(copy.deepcopy(_payload(f"scoreboard_{sibling}.json")["events"][0]))
+        bad["events"][0]["competitions"][0].pop("attendance", None)
+        want = [c.get("attendance") for e in _events(bad) for c in e["competitions"][:1]]
+        df, _ = _call(league, "schedule", monkeypatch, bad, **kwargs)
+        assert df.schema["attendance"] == pl.Int64, df.schema["attendance"]
+        assert df["attendance"].to_list() == want
     elif case == "rank_not_default":
         df, _ = _call(league, "schedule", monkeypatch, body, **kwargs)
         # NFL competitors carry no curatedRank (0 of 15 in the capture): the columns are all null, and
@@ -235,7 +257,7 @@ def check_schedule(league: str, case: str, monkeypatch) -> None:
 # teams
 # --------------------------------------------------------------------------------------
 
-TEAMS_CASES = ["snapshot", "id_dtypes", "query_key"]
+TEAMS_CASES = ["snapshot", "id_dtypes", "pandas_ids", "query_key"]
 
 
 def teams_cases(league: str) -> List[str]:
@@ -248,7 +270,7 @@ def check_teams(league: str, case: str, monkeypatch) -> None:
     df, calls = _call(league, "teams", monkeypatch, body)
     if case == "snapshot":
         assert df.height == len(teams) > 0
-        assert df["team_id"].to_list() == [t["id"] for t in teams]
+        assert df["team_id"].to_list() == [int(t["id"]) for t in teams]
         assert df["team_abbreviation"].to_list() == [t["abbreviation"] for t in teams]
         assert df["team_display_name"].to_list() == [t["displayName"] for t in teams]
         assert list(df.columns) == _documented(league, "teams")
@@ -256,6 +278,14 @@ def check_teams(league: str, case: str, monkeypatch) -> None:
         id_cols = [c for c in df.columns if c.endswith("_id") or c.endswith("_uid")]
         assert sorted(id_cols) == sorted(TEAMS_IDS)
         assert {c: df.schema[c] for c in id_cols} == {c: TEAMS_IDS[c][0] for c in id_cols}
+    elif case == "pandas_ids":
+        pdf, _ = _call(league, "teams", monkeypatch, body, return_as_pandas=True)
+        assert str(pdf["team_id"].dtype) == "Int64" and pdf["team_id"].tolist() == [int(t["id"]) for t in teams]
+        # R981-11: an empty directory's pandas frame carries the same dtype, not numpy int64
+        empty, _ = _call(
+            league, "teams", monkeypatch, {"sports": [{"leagues": [{"teams": []}]}]}, return_as_pandas=True
+        )
+        assert len(empty) == 0 and str(empty["team_id"].dtype) == "Int64"
     elif case == "query_key":
         query = calls[0].split("?", 1)[1]
         group: Optional[str] = {"mbb": "50", "wbb": "50", "cfb": "80"}.get(league)

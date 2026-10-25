@@ -438,7 +438,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ESPN numeric identifier for the athlete. |
+| `id` | integer | ESPN numeric identifier for the athlete. |
 | `display_name` | character | Athlete's full display name as shown on ESPN. |
 | `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
 
@@ -484,7 +484,7 @@ ESPN endpoint.
 | `team_alternate_color` | character |  |
 | `team_color` | character |  |
 | `team_display_name` | character |  |
-| `team_id` | character |  |
+| `team_id` | integer |  |
 | `team_links` | character |  |
 | `team_location` | character |  |
 | `team_logos` | character |  |
@@ -525,12 +525,12 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `group_id` | character |  |
+| `group_id` | integer |  |
 | `name` | character |  |
 | `abbreviation` | character |  |
 | `short_name` | character |  |
 | `is_conference` | logical |  |
-| `parent_group_id` | character |  |
+| `parent_group_id` | integer |  |
 | `depth` | integer |  |
 | `children_count` | integer |  |
 
@@ -698,7 +698,7 @@ ESPN endpoint.
 | `team_franchise_abbreviation` | character |  |
 | `team_franchise_color` | character |  |
 | `team_franchise_display_name` | character |  |
-| `team_franchise_id` | character |  |
+| `team_franchise_id` | integer |  |
 | `team_franchise_is_active` | logical |  |
 | `team_franchise_location` | character |  |
 | `team_franchise_name` | character |  |
@@ -712,14 +712,14 @@ ESPN endpoint.
 | `team_franchise_venue_full_name` | character |  |
 | `team_franchise_venue_grass` | logical |  |
 | `team_franchise_venue_guid` | character |  |
-| `team_franchise_venue_id` | character |  |
+| `team_franchise_venue_id` | integer |  |
 | `team_franchise_venue_images` | character |  |
 | `team_franchise_venue_indoor` | logical |  |
 | `team_franchise_venue_short_name` | character |  |
-| `team_groups_id` | character |  |
+| `team_groups_id` | integer |  |
 | `team_groups_is_conference` | logical |  |
-| `team_groups_parent_id` | character |  |
-| `team_id` | character |  |
+| `team_groups_parent_id` | integer |  |
+| `team_id` | integer |  |
 | `team_is_active` | logical |  |
 | `team_links` | character |  |
 | `team_location` | character |  |
@@ -828,7 +828,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ESPN numeric event identifier. |
+| `id` | integer | ESPN numeric event identifier. |
 | `date` | character | Event timestamp (ISO 8601, UTC). |
 | `name` | character | Full event name (e.g. 'Team A at Team B'). |
 | `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
@@ -837,7 +837,7 @@ ESPN endpoint.
 | `links` | character | Related links (list, stringified). |
 | `season_year` | integer | Four-digit season year. |
 | `season_display_name` | character | Human-readable season label (e.g. '2024-25'). |
-| `season_type_id` | character | ESPN numeric identifier for the season type. |
+| `season_type_id` | integer | ESPN numeric identifier for the season type. |
 | `season_type_type` | integer | Season type numeric code. |
 | `season_type_name` | character | Season type name (e.g. Regular Season). |
 | `season_type_abbreviation` | character | Season type abbreviation. |
@@ -950,7 +950,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ESPN numeric identifier for the athlete. |
+| `id` | integer | ESPN numeric identifier for the athlete. |
 | `display_name` | character | Athlete's full display name as shown on ESPN. |
 | `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
 

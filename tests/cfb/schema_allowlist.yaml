@@ -5,224 +5,105 @@
 #   divergence both fail until this file changes.
 # scope vs_nfl: a column CFB 401628455 shares with NFL 401872922 at a different dtype (tier C T4
 #   counted 69; teamParticipants follows the feed). The set must equal the measured differences.
-# Every row names its finding. Both halves only shrink; SCHEMA_ALLOWLIST_MAX_ROWS caps the row count.
+# Every row names its finding. accepted_by records the owner accepting the row at approval (2026-10-25: all 17). Both halves only shrink; SCHEMA_ALLOWLIST_MAX_ROWS caps the row count.
 # Phase-2 dtype fixes (plan 2.17) delete rows or games.
-- column: 'drive.description'
-  scope: across_captures
-  finding: C-L5
-  reason: 'dtype Null on 252532751 (2005), whose drives carry no end; String/Int64 elsewhere'
-  games: [252532751]
-- column: 'drive.displayResult'
-  scope: across_captures
-  finding: C-L5
-  reason: 'dtype Null on 252532751 (2005), whose drives carry no end; String/Int64 elsewhere'
-  games: [252532751]
-- column: 'drive.end.clock.displayValue'
-  scope: across_captures
-  finding: C-L5
-  reason: 'dtype Null on 252532751 (2005), whose drives carry no end; String/Int64 elsewhere'
-  games: [252532751]
-- column: 'drive.end.period.number'
-  scope: across_captures
-  finding: C-L5
-  reason: 'dtype Null on 252532751 (2005), whose drives carry no end; String/Int64 elsewhere'
-  games: [252532751]
-- column: 'drive.end.period.type'
-  scope: across_captures
-  finding: C-L5
-  reason: 'dtype Null on 252532751 (2005), whose drives carry no end; String/Int64 elsewhere'
-  games: [252532751]
-- column: 'drive.end.yardLine'
-  scope: across_captures
-  finding: C-L5
-  reason: 'dtype Null on 252532751 (2005), whose drives carry no end; String/Int64 elsewhere'
-  games: [252532751]
-- column: 'drive.shortDisplayResult'
-  scope: across_captures
-  finding: C-L5
-  reason: 'dtype Null on 252532751 (2005), whose drives carry no end; String/Int64 elsewhere'
-  games: [252532751]
-- column: 'drive.timeElapsed.displayValue'
-  scope: across_captures
-  finding: C-L5
-  reason: 'dtype Null on 252532751 (2005), whose drives carry no end; String/Int64 elsewhere'
-  games: [252532751]
 - column: 'end.downDistanceText'
   scope: across_captures
   finding: C-M8
+  accepted_by: saiemgilani  # owner, 2026-10-25
   reason: 'absent on 252532751 (2005): its feed has no end blocks / no scoringType; present elsewhere'
   games: [252532751]
 - column: 'end.possessionText'
   scope: across_captures
   finding: C-M8
+  accepted_by: saiemgilani  # owner, 2026-10-25
   reason: 'absent on 252532751 (2005): its feed has no end blocks / no scoringType; present elsewhere'
   games: [252532751]
 - column: 'end.shortDownDistanceText'
   scope: across_captures
   finding: C-M8
+  accepted_by: saiemgilani  # owner, 2026-10-25
   reason: 'absent on 252532751 (2005): its feed has no end blocks / no scoringType; present elsewhere'
   games: [252532751]
 - column: 'extra_point_result'
   scope: across_captures
   finding: C-M8
+  accepted_by: saiemgilani  # owner, 2026-10-25
   reason: 'absent on the 63 captures with no try row (the column is created only when the feed carries pointAfterAttempt)'
   games: [242972641, 243040130, 243040265, 243042579, 243110264, 243392572, 252460252, 252532751, 252600087, 252740026, 262522509, 262660245, 262940151, 272650152, 272650194, 272870068, 282410024, 282430151, 282432641, 282570328, 282640084, 282710130, 292542649, 292810142, 293182305, 293250145, 302450154, 302540025, 303102638, 313090025, 322430041, 322590228, 322802005, 332570254, 332852449, 332990030, 333130023, 400547673, 400547699, 400547865, 400547866, 400547980, 400548023, 400548110, 400548134, 400548250, 400548425, 400559176, 400756970, 400763571, 400787459, 400869270, 400869817, 400876049, 400953391, 401012682, 401032062, 401110775, 401112081, 401234597, 401236002, 401309611, 401309854]
 - column: 'mediaId'
   scope: across_captures
   finding: C-M8
+  accepted_by: saiemgilani  # owner, 2026-10-25
   reason: 'present (String) only on the 19 captures whose feed carries it; absent on the reference'
   games: [332852449, 332990030, 400547673, 400547699, 400547865, 400548023, 400548110, 400548134, 400548250, 400548425, 400756970, 400787459, 400869817, 400876049, 400953391, 401012682, 401032062, 401110775, 401628374]
 - column: 'pointAfterAttempt.abbreviation'
   scope: across_captures
   finding: C-M8
+  accepted_by: saiemgilani  # owner, 2026-10-25
   reason: 'absent on the 63 captures with no try row (the column is created only when the feed carries pointAfterAttempt)'
   games: [242972641, 243040130, 243040265, 243042579, 243110264, 243392572, 252460252, 252532751, 252600087, 252740026, 262522509, 262660245, 262940151, 272650152, 272650194, 272870068, 282410024, 282430151, 282432641, 282570328, 282640084, 282710130, 292542649, 292810142, 293182305, 293250145, 302450154, 302540025, 303102638, 313090025, 322430041, 322590228, 322802005, 332570254, 332852449, 332990030, 333130023, 400547673, 400547699, 400547865, 400547866, 400547980, 400548023, 400548110, 400548134, 400548250, 400548425, 400559176, 400756970, 400763571, 400787459, 400869270, 400869817, 400876049, 400953391, 401012682, 401032062, 401110775, 401112081, 401234597, 401236002, 401309611, 401309854]
 - column: 'pointAfterAttempt.id'
   scope: across_captures
   finding: C-M8
+  accepted_by: saiemgilani  # owner, 2026-10-25
   reason: 'absent on the 63 captures with no try row (the column is created only when the feed carries pointAfterAttempt)'
   games: [242972641, 243040130, 243040265, 243042579, 243110264, 243392572, 252460252, 252532751, 252600087, 252740026, 262522509, 262660245, 262940151, 272650152, 272650194, 272870068, 282410024, 282430151, 282432641, 282570328, 282640084, 282710130, 292542649, 292810142, 293182305, 293250145, 302450154, 302540025, 303102638, 313090025, 322430041, 322590228, 322802005, 332570254, 332852449, 332990030, 333130023, 400547673, 400547699, 400547865, 400547866, 400547980, 400548023, 400548110, 400548134, 400548250, 400548425, 400559176, 400756970, 400763571, 400787459, 400869270, 400869817, 400876049, 400953391, 401012682, 401032062, 401110775, 401112081, 401234597, 401236002, 401309611, 401309854]
 - column: 'pointAfterAttempt.text'
   scope: across_captures
   finding: C-M8
+  accepted_by: saiemgilani  # owner, 2026-10-25
   reason: 'absent on the 63 captures with no try row (the column is created only when the feed carries pointAfterAttempt)'
   games: [242972641, 243040130, 243040265, 243042579, 243110264, 243392572, 252460252, 252532751, 252600087, 252740026, 262522509, 262660245, 262940151, 272650152, 272650194, 272870068, 282410024, 282430151, 282432641, 282570328, 282640084, 282710130, 292542649, 292810142, 293182305, 293250145, 302450154, 302540025, 303102638, 313090025, 322430041, 322590228, 322802005, 332570254, 332852449, 332990030, 333130023, 400547673, 400547699, 400547865, 400547866, 400547980, 400548023, 400548110, 400548134, 400548250, 400548425, 400559176, 400756970, 400763571, 400787459, 400869270, 400869817, 400876049, 400953391, 401012682, 401032062, 401110775, 401112081, 401234597, 401236002, 401309611, 401309854]
 - column: 'pointAfterAttempt.value'
   scope: across_captures
   finding: C-M8
+  accepted_by: saiemgilani  # owner, 2026-10-25
   reason: 'absent on the 63 captures with no try row (the column is created only when the feed carries pointAfterAttempt)'
   games: [242972641, 243040130, 243040265, 243042579, 243110264, 243392572, 252460252, 252532751, 252600087, 252740026, 262522509, 262660245, 262940151, 272650152, 272650194, 272870068, 282410024, 282430151, 282432641, 282570328, 282640084, 282710130, 292542649, 292810142, 293182305, 293250145, 302450154, 302540025, 303102638, 313090025, 322430041, 322590228, 322802005, 332570254, 332852449, 332990030, 333130023, 400547673, 400547699, 400547865, 400547866, 400547980, 400548023, 400548110, 400548134, 400548250, 400548425, 400559176, 400756970, 400763571, 400787459, 400869270, 400869817, 400876049, 400953391, 401012682, 401032062, 401110775, 401112081, 401234597, 401236002, 401309611, 401309854]
 - column: 'scoringType.abbreviation'
   scope: across_captures
   finding: C-M8
+  accepted_by: saiemgilani  # owner, 2026-10-25
   reason: 'absent on 252532751 (2005): its feed has no end blocks / no scoringType; present elsewhere'
   games: [252532751]
 - column: 'scoringType.displayName'
   scope: across_captures
   finding: C-M8
+  accepted_by: saiemgilani  # owner, 2026-10-25
   reason: 'absent on 252532751 (2005): its feed has no end blocks / no scoringType; present elsewhere'
   games: [252532751]
 - column: 'scoringType.name'
   scope: across_captures
   finding: C-M8
+  accepted_by: saiemgilani  # owner, 2026-10-25
   reason: 'absent on 252532751 (2005): its feed has no end blocks / no scoringType; present elsewhere'
   games: [252532751]
 - column: 'teamParticipants'
   scope: across_captures
   finding: C-L10
+  accepted_by: saiemgilani  # owner, 2026-10-25
   reason: 'List(Struct) field set and order follow the feed: no `type` on 252532751, an extra `timeout` field on 41 captures'
   games: [252532751, 401752671, 401752684, 401752744, 401752746, 401752753, 401752817, 401752844, 401752854, 401752914, 401752946, 401754543, 401754554, 401754571, 401754579, 401754585, 401754598, 401754623, 401756930, 401756960, 401760419, 401761622, 401761656, 401761657, 401761665, 401762461, 401762835, 401762856, 401762858, 401777353, 401778334, 401831583, 401856682, 401856766, 401858213, 401858221, 401858224, 401858228, 401858426, 401858435, 401858439, 401866418]
 - column: 'two_point_conv_result'
   scope: across_captures
   finding: C-M8
+  accepted_by: saiemgilani  # owner, 2026-10-25
   reason: 'absent on the 63 captures with no try row (the column is created only when the feed carries pointAfterAttempt)'
   games: [242972641, 243040130, 243040265, 243042579, 243110264, 243392572, 252460252, 252532751, 252600087, 252740026, 262522509, 262660245, 262940151, 272650152, 272650194, 272870068, 282410024, 282430151, 282432641, 282570328, 282640084, 282710130, 292542649, 292810142, 293182305, 293250145, 302450154, 302540025, 303102638, 313090025, 322430041, 322590228, 322802005, 332570254, 332852449, 332990030, 333130023, 400547673, 400547699, 400547865, 400547866, 400547980, 400548023, 400548110, 400548134, 400548250, 400548425, 400559176, 400756970, 400763571, 400787459, 400869270, 400869817, 400876049, 400953391, 401012682, 401032062, 401110775, 401112081, 401234597, 401236002, 401309611, 401309854]
 - column: 'wallclock'
   scope: across_captures
   finding: C-M8
+  accepted_by: saiemgilani  # owner, 2026-10-25
   reason: 'absent on the 37 captures whose feed has no wallclock'
   games: [242972641, 243040130, 243040265, 243042579, 243110264, 243392572, 252460252, 252532751, 252600087, 252740026, 262522509, 262660245, 262940151, 272650152, 272650194, 272870068, 282410024, 282430151, 282432641, 282570328, 282640084, 282710130, 292542649, 292810142, 293182305, 293250145, 302450154, 302540025, 303102638, 313090025, 322430041, 322590228, 322802005, 332570254, 332852449, 332990030, 333130023]
-- column: 'fg_block_player_id'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'fg_kicker_player_id'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'fg_return_player_id'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'fumble_forced_player_id'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'fumble_player_id'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'fumble_recovered_player_id'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'interception_player_id'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'kickoff_player_id'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'kickoff_return_player_id'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'lag_pos_team'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL Int32; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'lead_pos_team'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL Int32; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'lead_pos_team2'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL Int32; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'pass_breakup_player_id'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'passer_player_id'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'pos_team'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL Int32; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'punt_block_player_id'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'punt_block_return_player_id'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'punt_return_player_id'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'punter_player_id'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'receiver_player_id'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'rusher_player_id'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'sack_player_id'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'sack_player_id2'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL String; owner decision 2026-10-09: ESPN ids Int64'
-- column: 'start.pos_team.id'
-  scope: vs_nfl
-  finding: C-M8
-  reason: 'CFB Int64 vs NFL Int32; owner decision 2026-10-09: ESPN ids Int64'
 - column: 'teamParticipants'
   scope: vs_nfl
   finding: C-L10
+  accepted_by: saiemgilani  # owner, 2026-10-25
   reason: 'CFB List(Struct({''team'': Struct({''$ref'': String}), ''id'': String, ''order'': Int64, ''type'': String})) vs NFL List(Struct({''team'': Struct({''$ref'': String}), ''id'': String, ''statistics'': Struct({''$ref'': String}), ''playStatistics'': Struct({''$ref'': String}), ''order'': Int64, ''type'': String, ''timeout'': Boolean})) (struct field set differs)'
 - column: 'yds_kickoff_return'
   scope: vs_nfl
   finding: C-M8
+  accepted_by: saiemgilani  # owner, 2026-10-25
   reason: 'CFB Int32 vs NFL Int64; tier C T4: probabilities and EP/WP values Float64, the documented double'

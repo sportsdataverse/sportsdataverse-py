@@ -2,7 +2,7 @@ schema: pwhl_stats
 kind: dataframe
 columns:
 - name: player_id
-  type: character
+  type: integer
   description: ''
 - name: shortname
   type: character
@@ -65,7 +65,7 @@ columns:
   type: character
   description: ''
 - name: team_id
-  type: character
+  type: integer
   description: ''
 - name: division
   type: character
@@ -236,7 +236,7 @@ columns:
   type: character
   description: ''
 - name: latest_team_id
-  type: character
+  type: integer
   description: ''
 - name: num_teams
   type: character

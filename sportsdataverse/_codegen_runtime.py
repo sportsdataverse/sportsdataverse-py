@@ -13,6 +13,7 @@ import json
 import logging
 import numbers
 import time
+import warnings
 from contextlib import contextmanager
 from typing import Any, Callable, Iterator, List, Optional, TypeVar, cast
 from urllib.parse import quote, urlsplit
@@ -23,6 +24,7 @@ from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import (
     AssetFetchError,
     NoDataError,
+    SchemaDriftWarning,
     _error_envelope_code,
     _redact_secrets,
     _string_route,
@@ -34,6 +36,20 @@ logger = logging.getLogger(__name__)
 # Release / raw-data hosts for the generated dataset loaders.
 _SDV_RELEASES = "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/"
 _RAW_DATA = "https://raw.githubusercontent.com/sportsdataverse/"
+
+
+def _is_missing(v: Any) -> bool:
+    """Whether a pandas cell is a missing value: ``None``, a float NaN, ``pd.NA`` or ``pd.NaT``."""
+    return v is None or (isinstance(v, float) and v != v) or type(v).__name__ in ("NAType", "NaTType")
+
+
+def _str_or_null(v: Any) -> Any:
+    """``str(v)`` for an object cell a parser stringifies, but a missing value stays null.
+
+    ``str(NaN)`` is ``"nan"``: pandas fills a missing JSON key with NaN in an object column (pandas 2.3, the
+    Python 3.10 floor), and a stringified ``"nan"`` makes :func:`_cast_ids_int64` refuse the whole id column.
+    """
+    return None if _is_missing(v) else str(v)
 
 
 def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
@@ -49,7 +65,9 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
     value survives the cast. A String column holding a genuinely non-numeric id, or
     one with leading zeros that would change meaning, is left exactly as-is rather
     than corrupted or nulled. Float-origin ids go straight to Int64 rather than
-    through a string (which would yield ``"123.0"``).
+    through a string (which would yield ``"123.0"``), and only when every value is
+    integral. Surrounding whitespace in a String id is stripped first and an empty one is null. An empty frame
+    is cast too (A-L55), so a result with no rows joins like one with rows.
 
     Args:
         df: frame to normalize (may be empty).
@@ -58,12 +76,14 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
     Returns:
         The frame with each named column cast to ``Int64`` where safe.
     """
-    if df.height == 0:
-        return df
     for col in cols:
         if col not in df.columns or df.schema[col] == pl.Int64:
             continue
         src = df[col]
+        if src.dtype == pl.String:
+            # "" is a feed's "no id" (HockeyTech's FloCoreEventId on every scorebar row): null, not a refusal
+            src = src.str.strip_chars()
+            src = src.set(src == "", None)
         cast = src.cast(pl.Int64, strict=False)
         # Refuse if the cast would invent nulls -- a value did not survive, so the
         # column is not really an integer id.
@@ -78,6 +98,122 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
             continue
         df = df.with_columns(cast.alias(col))
     return df
+
+
+def _cast_id_columns(df: pl.DataFrame, where: str, text_ids: Any = (), stacklevel: int = 3) -> pl.DataFrame:
+    """Every ``id`` / ``*_id`` column of a parser's frame through :func:`_cast_ids_int64` (task 5.2).
+
+    A column holding an id that is not an integer is refused there and keeps its dtype. ``text_ids`` names the
+    columns that are text by design (NHL stats-rest ``formatted_season_id`` ``"1971-72"``, the country ``id``
+    ``"DEU"``): they are never cast, so an all-null or all-digit payload of them keeps its dtype (R986-5). Any
+    other refused column warns :class:`~sportsdataverse.errors.SchemaDriftWarning` naming ``where`` and the
+    columns (R986-2), as the ESPN parsers do: one text id in a payload otherwise flips that column back to String
+    for that call only, silently. ``stacklevel`` is the ``warnings.warn`` one, so a parser can point the warning
+    at its own caller (R988-7).
+    """
+    cols = [c for c in df.columns if (c == "id" or c.endswith("_id")) and c not in text_ids]
+    out = _cast_ids_int64(df, cols)
+    refused = [c for c in cols if out.schema[c] != pl.Int64 and out[c].null_count() < out.height]
+    if refused:
+        warnings.warn(
+            f"{where}: id columns {refused} hold values that are not integer ids; kept as they came",
+            SchemaDriftWarning,
+            stacklevel=stacklevel,
+        )
+    return out
+
+
+def _pandas_ids(df: pl.DataFrame, out: Any = None) -> Any:
+    """``df`` as pandas with every ``Int64`` ``id`` / ``*_id`` column as pandas' nullable ``Int64`` (R981-2).
+
+    A plain ``to_pandas()`` turns an ``Int64`` column holding a null into ``float64`` (``5.0``), the float id
+    the polars side was cast to stop. The values cross as Python ints, so an 18-digit play id stays exact
+    (a float64 hop would round it). ``out`` is a pandas frame of the same rows to write the ids into
+    instead of ``df.to_pandas()``.
+    """
+    import pandas as pd
+
+    if out is None:
+        out = df.to_pandas()
+    for col, dtype in df.schema.items():
+        if dtype == pl.Int64 and (col == "id" or col.endswith("_id")):
+            out[col] = pd.array(df[col].to_list(), dtype="Int64")
+    return out
+
+
+def _empty_from_schema(name: str, return_as_pandas: bool = False, arrow: bool = False) -> Any:
+    """A zero-row frame with the columns and dtypes of the returns table ``name`` (task 5.1).
+
+    ``name`` is the table's path under ``tools/codegen/schemas/`` without ``.yaml`` (``scoreboard``, or a
+    league's own ``scoreboard/mbb``), plus ``:<section>`` for one frame of a ``frames`` table or
+    ``:<loader>`` for a ``loader_schemas.yaml`` entry. Codegen copies every table a call names into
+    ``sportsdataverse/_returns_schemas.py``. ``arrow`` gives the pandas frame Arrow-backed dtypes, for the
+    callers whose non-empty pandas result has them.
+    """
+    from sportsdataverse._returns_schemas import SCHEMAS
+
+    df = pl.DataFrame(schema=SCHEMAS[name])
+    if not return_as_pandas:
+        return df
+    return df.to_pandas(use_pyarrow_extension_array=True) if arrow else _pandas_ids(df)
+
+
+def _pin_documented(name: str, df: pl.DataFrame) -> pl.DataFrame:
+    """Cast ``df``'s columns to the dtypes of the returns table ``name`` wherever no value can change (B-L83).
+
+    A column moves when it is all null (its dtype only reflects what a reader guessed) or when both
+    dtypes are numeric and every value survives the round trip (an integer column the pandas hop or a
+    missing value turned Float64, or the reverse). It never raises: a value the cast would change or
+    reject (a fraction, NaN or inf into an integer, an integer outside the target's range, an Int64
+    above 2**53 into Float64) leaves the whole column as it is, as does any non-numeric mismatch, which
+    is a parser question, not a cast (R979-4).
+    """
+    from sportsdataverse._returns_schemas import SCHEMAS
+
+    casts = []
+    for col, want in SCHEMAS[name].items():
+        if col not in df.columns or df.schema[col] == want:
+            continue
+        have, values = df.schema[col], df[col].drop_nulls()
+        if values.len() == 0:
+            casts.append(pl.col(col).cast(want))
+        elif have.is_numeric() and want.is_numeric():
+            moved = values.cast(want, strict=False)
+            if moved.null_count() == 0 and moved.cast(have, strict=False).equals(values):
+                casts.append(pl.col(col).cast(want))
+    return df.with_columns(casts) if casts else df
+
+
+def _league_tables(name: str) -> bool:
+    """Whether the returns table ``name`` has per-league variants (``scoreboard/mbb``, ``summary/nfl:plays``)."""
+    from sportsdataverse._returns_schemas import SCHEMAS
+
+    base = name.split(":", 1)[0]
+    return any(k.startswith(base + "/") for k in SCHEMAS)
+
+
+def _documented_empty(name: str, arrow: bool = False) -> Callable[[_Fn], _Fn]:
+    """Decorate a parser or loader so a result with no columns is the documented empty frame (task 5.1).
+
+    The table is ``name``, or the ``documented_table=`` the caller passes: the generated league wrappers pass
+    their league's own table (``scoreboard/mbb``), as the league's reference page documents it. Called
+    without one, a parser whose table has per-league variants cannot know which applies and keeps its
+    zero-width result (R978-1); a zero-row result that has columns is always left as it is.
+    """
+
+    def wrap(parse: _Fn) -> _Fn:
+        @functools.wraps(parse)
+        def wrapper(*args: Any, documented_table: Optional[str] = None, **kwargs: Any) -> Any:
+            out = parse(*args, **kwargs)
+            table = documented_table or (None if _league_tables(name) else name)
+            if table is None or not hasattr(out, "columns") or len(out.columns):
+                return out
+            return _empty_from_schema(table, return_as_pandas=not isinstance(out, pl.DataFrame), arrow=arrow)
+
+        wrapper.__documented_empty__ = name  # type: ignore[attr-defined]  # the empty-result sweep reads it
+        return cast(_Fn, wrapper)
+
+    return wrap
 
 
 #: A leading zero before a digit: the text a numeric cast would change ("07", "00", "000000").

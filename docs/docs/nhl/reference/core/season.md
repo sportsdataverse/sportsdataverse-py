@@ -43,7 +43,7 @@ ESPN endpoint.
 | `type_has_groups` | logical |  |
 | `type_has_legs` | logical |  |
 | `type_has_standings` | logical |  |
-| `type_id` | character | Play type id. |
+| `type_id` | integer | Play type id. |
 | `type_name` | character | Status type name (e.g. "STATUS_FINAL"). |
 | `type_slug` | character | Broadcast type slug. |
 | `type_start_date` | character |  |
@@ -112,7 +112,7 @@ ESPN endpoint.
 | `type_has_groups` | logical |  |
 | `type_has_legs` | logical |  |
 | `type_has_standings` | logical |  |
-| `type_id` | character | Play type id. |
+| `type_id` | integer | Play type id. |
 | `type_leaders_$ref` | character |  |
 | `type_name` | character | Status type name (e.g. "STATUS_FINAL"). |
 | `type_slug` | character | Broadcast type slug. |
@@ -210,7 +210,7 @@ ESPN endpoint.
 | `has_groups` | logical | Whether this season type has groups. |
 | `has_legs` | logical | Whether this season type has legs. |
 | `has_standings` | logical | Whether this season type has standings. |
-| `id` | character | Unique player identifier. |
+| `id` | integer | Unique player identifier. |
 | `name` | character | Team mascot name. |
 | `slug` | character | URL slug. |
 | `start_date` | character | Season start date. |
@@ -260,7 +260,7 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
-| `id` | character | Unique player identifier. |
+| `id` | integer | Unique player identifier. |
 | `is_conference` | logical | Whether this group is a conference (vs. division). |
 | `links` | character |  |
 | `midsize_name` | character |  |
@@ -479,7 +479,7 @@ ESPN endpoint.
 | `competition_$ref` | character |  |
 | `split_stats_abbreviation` | character |  |
 | `split_stats_categories` | character |  |
-| `split_stats_id` | character |  |
+| `split_stats_id` | integer |  |
 | `split_stats_name` | character |  |
 | `team_$ref` | character |  |
 | `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
@@ -776,7 +776,7 @@ ESPN endpoint.
 | `color` | character | Primary color hex. |
 | `display_name` | character | Player display name. |
 | `guid` | character | Athlete global unique identifier. |
-| `id` | character | Unique player identifier. |
+| `id` | integer | Unique player identifier. |
 | `is_active` | logical | Whether the team is active. |
 | `is_all_star` | logical | Whether the team is an all-star team. |
 | `links` | character |  |
@@ -806,7 +806,7 @@ ESPN endpoint.
 | `venue_full_name` | character | Venue full name. |
 | `venue_grass` | logical |  |
 | `venue_guid` | character |  |
-| `venue_id` | character | Venue identifier. |
+| `venue_id` | integer | Venue identifier. |
 | `venue_images` | character |  |
 | `venue_indoor` | logical | Whether the venue is indoors. |
 | `venue_short_name` | character |  |

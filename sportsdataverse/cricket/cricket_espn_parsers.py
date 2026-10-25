@@ -20,6 +20,7 @@ from typing import Any, Dict, Optional, Union
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _documented_empty
 from sportsdataverse.dl_utils import underscore
 
 
@@ -43,6 +44,7 @@ def _competitor(comp: dict, home_away: str) -> dict:
 # ---------------------------------------------------------------------------
 
 
+@_documented_empty("scoreboard")
 def parse_cricket_scoreboard(payload: Any, *, return_as_pandas: bool = False):
     """Parse an ESPN cricket scoreboard payload into a tidy flat DataFrame.
 

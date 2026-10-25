@@ -45,13 +45,16 @@ def test_pandas_round_trip():
     assert isinstance(parse_espn_content(load("news"), return_as_pandas=True), pd.DataFrame)
 
 
-def test_id_columns_are_utf8():
+def test_id_columns_are_int64():
+    """B-GB-10 (task 5.2): story ids join the Int64 contract; ESPN's text content id ``now_id`` stays String."""
     from sportsdataverse.espn_content.espn_content_parsers import parse_espn_content
 
-    df = parse_espn_content(load("news"))
+    raw = load("news")
+    df = parse_espn_content(raw)
     for name, dtype in df.schema.items():
         if name == "id" or name.endswith("_id"):
-            assert dtype == pl.String, name
+            assert dtype == (pl.String if name == "now_id" else pl.Int64), name
+    assert df["id"].to_list() == [int(h["id"]) for h in raw["headlines"]]
 
 
 def test_no_path_token_named_league_or_sport():
@@ -75,3 +78,13 @@ def test_paging_params_are_caller_supplied():
     doc = yaml.safe_load(YAML_PATH.read_text(encoding="utf-8"))
     ep = next(e for e in doc["endpoints"] if e["short"] == "news")
     assert {p["name"] for p in ep["extra_params"]} == {"limit", "offset"}
+
+
+def test_pandas_ids_are_nullable_int64():
+    """R981-8: the pandas frame carries the story ids as pandas' nullable ``Int64``, as the polars one does."""
+    from sportsdataverse.espn_content.espn_content_parsers import parse_espn_content
+
+    raw = load("news")
+    pdf = parse_espn_content(raw, return_as_pandas=True)
+    assert str(pdf["id"].dtype) == "Int64"
+    assert pdf["id"].tolist() == [int(h["id"]) for h in raw["headlines"]]

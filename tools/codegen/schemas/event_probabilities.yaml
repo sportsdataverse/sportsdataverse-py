@@ -44,7 +44,7 @@ columns:
   type: character
   description: ''
 - name: source_id
-  type: character
+  type: integer
   description: ''
 - name: source_state
   type: character

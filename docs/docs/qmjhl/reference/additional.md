@@ -26,7 +26,7 @@ Player-level on-ice Corsi and Fenwick for a single QMJHL game.
 
 **Returns**
 
-One row per player on ice for a shot attempt: `player_id` (String), `corsi_for` / `corsi_against` / `corsi_for_pct`, `fenwick_for` / `fenwick_against` / `fenwick_for_pct`, `corsi_includes_missed` (Boolean), `toi_seconds` (Int64) and `corsi_for_per60` (Float64, null without time on ice). A pandas DataFrame when `return_as_pandas` is True.
+One row per player on ice for a shot attempt: `player_id` (Int64), `corsi_for` / `corsi_against` / `corsi_for_pct`, `fenwick_for` / `fenwick_against` / `fenwick_for_pct`, `corsi_includes_missed` (Boolean), `toi_seconds` (Int64) and `corsi_for_per60` (Float64, null without time on ice). A pandas DataFrame when `return_as_pandas` is True.
 
 **Raises**
 
@@ -98,15 +98,15 @@ QMJHL statistical leaders for a given season.
 
 **Returns**
 
-One row per ranked skater (points and goals leaders): `rank` (Int64), `player_id`, `name`, `jersey_number`, `position`, `team_id` / `team_name` / `team_code`, `stat_formatted` and `type_formatted` (String), plus photo and logo URLs. A pandas DataFrame when `return_as_pandas` is True.
+One row per ranked skater (points and goals leaders): `rank` (Int64), `player_id`, `name`, `jersey_number`, `position`, `team_id` / `team_name` / `team_code`, `stat_formatted` and `type_formatted` (`player_id` / `team_id` Int64, the rest String), plus photo and logo URLs. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | Rank of the streak. |
-| `player_id` | character | Unique player identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `jersey_number` | character | Jersey number. |
 | `name` | character | Team mascot name. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Team name. |
 | `team_code` | character | Team abbreviation. |
 | `team_logo` | character | URL to the team logo image. |
@@ -164,11 +164,11 @@ QMJHL player season stats across all seasons.
 
 **Returns**
 
-One row per season (and team) the player played: `season_id`, `season_name`, `playoff`, `team_id` / `team_name` / `team_code`, `games_played`, `goals`, `assists`, `points`, `plus_minus`, `penalty_minutes`, power-play / short-handed / shootout splits, `shots`, `faceoff_wins` / `faceoff_attempts`, `ice_time` and `stat_type` (String, as the feed ships them). A pandas DataFrame when `return_as_pandas` is True.
+One row per season (and team) the player played: `season_id`, `season_name`, `playoff`, `team_id` / `team_name` / `team_code`, `games_played`, `goals`, `assists`, `points`, `plus_minus`, `penalty_minutes`, power-play / short-handed / shootout splits, `shots`, `faceoff_wins` / `faceoff_attempts`, `ice_time` and `stat_type`. `season_id` and `team_id` are Int64; the rest are String, as the feed ships them. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | character | Season identifier. |
+| `season_id` | integer | Season identifier. |
 | `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
 | `shortname` | character | Player short name. |
 | `playoff` | character | Whether the row is playoff statistics. |
@@ -207,7 +207,7 @@ One row per season (and team) the player played: `season_id`, `season_name`, `pl
 | `team_code` | character | Team abbreviation. |
 | `team_city` | character | Team city. |
 | `team_nickname` | character | Team nickname. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `active` | character | Whether athlete is currently active. |
 | `first_goals` | character | First goals of a game. |
 | `insurance_goals` | character | Insurance goals. |
@@ -268,21 +268,21 @@ QMJHL schedule — one row per game of one season.
 
 **Returns**
 
-One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_team_id` / `home_score`, `away_team` / `away_team_id` / `away_score`, `venue`, `season_id` and `game_type` (all String). Only the requested season's games: a regular season, its playoffs and its preseason are separate season ids, so pass `season_id` (from `qmjhl_season_id()`) for the playoffs. A pandas DataFrame when `return_as_pandas` is True.
+One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_team_id` / `home_score`, `away_team` / `away_team_id` / `away_score`, `venue`, `season_id` and `game_type`; the `*_id` columns are Int64, the rest String. Only the requested season's games: a regular season, its playoffs and its preseason are separate season ids, so pass `season_id` (from `qmjhl_season_id()`) for the playoffs. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
+| `game_id` | integer | Unique game identifier. |
 | `game_date` | character | Game date. |
 | `game_status` | character | Game status text. |
 | `home_team` | character | Home team name. |
-| `home_team_id` | character | Home team identifier. |
+| `home_team_id` | integer | Home team identifier. |
 | `home_score` | character | Home team final score. |
 | `away_team` | character | Away team name. |
-| `away_team_id` | character | Away team identifier. |
+| `away_team_id` | integer | Away team identifier. |
 | `away_score` | character | Away team final score. |
 | `venue` | character | Venue where the game was played. |
-| `season_id` | character | Season identifier. |
+| `season_id` | integer | Season identifier. |
 | `game_type` | character | Game type the row belongs to. |
 
 **Raises**
@@ -358,12 +358,12 @@ QMJHL team roster for a given team + season.
 
 **Returns**
 
-One row per rostered player: `player_id`, `person_id`, names (`first_name`, `last_name`, `display_name`), `position`, `tp_jersey_number`, `shoots` / `catches`, `height` / `weight`, `birthdate`, home and birth places, `rookie`, `veteran_status`, `draft_status` and `player_image` (String, as the feed ships them). A pandas DataFrame when `return_as_pandas` is True.
+One row per rostered player: `player_id`, `person_id`, names (`first_name`, `last_name`, `display_name`), `position`, `tp_jersey_number`, `shoots` / `catches`, `height` / `weight`, `birthdate`, home and birth places, `rookie`, `veteran_status`, `draft_status` and `player_image`. The `id` / `*_id` columns are Int64; the rest are String, as the feed ships them. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Unique player identifier. |
-| `person_id` | character | Unique person identifier. |
+| `id` | integer | Unique player identifier. |
+| `person_id` | integer | Unique person identifier. |
 | `active` | character | Whether athlete is currently active. |
 | `first_name` | character | Player first name. |
 | `last_name` | character | Player last name. |
@@ -383,20 +383,20 @@ One row per rostered player: `player_id`, `person_id`, names (`first_name`, `las
 | `height_hyphenated` | character | Player height formatted as a hyphenated feet-inches string (e.g., "6-1") as returned by the HockeyTech feed. |
 | `hidden` | character | Flag indicating whether this roster entry is suppressed from public-facing displays in the HockeyTech system. |
 | `current_team` | character | Name or identifier of the team to which the player is currently assigned within the HockeyTech system. |
-| `player_id` | character | Unique player identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `status` | character | Status string (e.g. captain markers). |
 | `birthdate` | character | Date of birth. |
 | `birthdate_year` | character | Player birth year. |
 | `rawbirthdate` | character | Player's date of birth as a raw string in the format returned by the HockeyTech feed (e.g., "YYYY-MM-DD"). |
-| `latest_team_id` | character | Most recent team identifier. |
+| `latest_team_id` | integer | Most recent team identifier. |
 | `veteran_status` | character | Player veteran status. |
 | `veteran_description` | character | Text label describing the player's veteran status or classification under QMJHL roster rules. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Team name. |
 | `division` | character | Division identifier. |
 | `tp_jersey_number` | character | Jersey number assigned to the player on the QMJHL team's official roster (may differ from current game-night number). |
 | `rookie` | character | Whether the player is a rookie. |
-| `position_id` | character | Official position identifier. |
+| `position_id` | integer | Official position identifier. |
 | `position` | character | Player position. |
 | `nhlteam` | character | Name or abbreviation of the NHL team that holds the player's NHL rights, if applicable. |
 | `player_id_1` | character | Primary alternate player identifier used by the HockeyTech system to cross-reference player records. |
@@ -431,12 +431,12 @@ QMJHL teams for a given season.
 
 **Returns**
 
-One row per team: `team_id`, `team_name`, `team_code`, `team_nickname`, `team_label`, `division` and `team_logo` (String). A pandas DataFrame when `return_as_pandas` is True.
+One row per team: `team_id`, `team_name`, `team_code`, `team_nickname`, `team_label`, `division` and `team_logo`; `team_id` is Int64, the rest String. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
 | `team_name` | character | Team name. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `team_code` | character | Team abbreviation. |
 | `team_nickname` | character | Team nickname. |
 | `team_label` | character | Short city label. |

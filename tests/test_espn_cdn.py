@@ -35,7 +35,7 @@ def _load(name: str) -> dict:
 def test_game_page_parses_like_a_summary():
     frames = parse_cdn_game(_load("playbyplay_nba.json"))
     assert set(frames) == set(SUMMARY_SECTION_PARSERS)
-    assert frames["header"]["id"].to_list() == ["401705127"]
+    assert frames["header"]["id"].to_list() == [401705127]
     assert frames["plays"].height == 441
     assert frames["boxscore_player"].height > 0
 
@@ -61,16 +61,16 @@ def test_schedule_flattens_every_day():
     # 2025-01-15 .. 2025-01-21 local, 51 games, each once
     assert df.height == 51
     assert df["game_id"].n_unique() == 51
-    assert "401705127" in df["game_id"].to_list()
+    assert 401705127 in df["game_id"].to_list()
 
 
 def test_scoreboard_unwraps_sbdata_nba_and_soccer():
     nba = parse_cdn_scoreboard(_load("scoreboard_nba.json"))
     assert nba.height == 11
-    assert "401705127" in nba["game_id"].to_list()
+    assert 401705127 in nba["game_id"].to_list()
     epl = parse_cdn_scoreboard(_load("scoreboard_epl.json"))
     assert epl.height == 6
-    assert "704518" in epl["game_id"].to_list()
+    assert 704518 in epl["game_id"].to_list()
 
 
 def test_rankings_one_row_per_poll_entry():
@@ -79,9 +79,9 @@ def test_rankings_one_row_per_poll_entry():
     ranked = df.filter(pl.col("ranked") == True)
     assert ranked.group_by("poll_name").len()["len"].to_list() == [25] * 5
     assert df.schema["rank"] == pl.Int64
-    assert df.schema["team_id"] == pl.Utf8
+    assert df.schema["team_id"] == pl.Int64
     ap1 = ranked.filter((pl.col("poll_id") == 1) & (pl.col("rank") == 1))
-    assert ap1.select("team_display_name", "team_id").row(0) == ("Texas", "251")
+    assert ap1.select("team_display_name", "team_id").row(0) == ("Texas", 251)
     votes = df.filter(pl.col("ranked") == False)
     assert votes.height > 0
     assert votes["rank"].null_count() == votes.height
@@ -104,7 +104,7 @@ def test_rankings_all_null_team_url_does_not_raise():
             entry["team_url"] = None
     df = parse_cdn_rankings(raw)
     assert df.height == 217
-    assert df.schema["team_id"] == pl.Utf8
+    assert df.schema["team_id"] == pl.Int64
     assert df["team_id"].null_count() == df.height
     # and a page with no team_url key at all keeps the same column set
     for poll in raw["content"]["data"]["rankings"]:
@@ -234,3 +234,14 @@ def test_live_nba_cdn_playbyplay():
 
     frames = espn_nba_cdn_playbyplay(game_id=401705127)
     assert frames["plays"].height > 400
+
+
+def test_cdn_rankings_pandas_ids_are_nullable_int64():
+    """R981-11: on the real cfb capture most rows carry no team (151 of 217 ``team_id`` null), so a plain
+    ``to_pandas()`` floated the column (``251.0``); the pandas frame carries pandas' nullable ``Int64``."""
+    df = parse_cdn_rankings(_load("rankings_cfb.json"))
+    pdf = parse_cdn_rankings(_load("rankings_cfb.json"), return_as_pandas=True)
+    assert df["team_id"].null_count() > df.height // 2
+    ids = [c for c, t in df.schema.items() if t == pl.Int64 and (c == "id" or c.endswith("_id"))]
+    assert {c: str(pdf[c].dtype) for c in ids} == dict.fromkeys(ids, "Int64")
+    assert int(pdf["team_id"].isna().sum()) == df["team_id"].null_count()

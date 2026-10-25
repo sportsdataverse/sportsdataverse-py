@@ -16,7 +16,9 @@ route and fills only while a story is breaking, so a body carrying
 
 Follows the package-wide parser contract: polars by default, pandas via
 ``return_as_pandas=True``, a zero-row frame (never an exception) on an empty or
-malformed payload, snake_cased columns, ids pinned to ``Utf8``.
+malformed payload, snake_cased columns, ids ``Int64`` like every ESPN id (task 5.2, B-GB-10): a story's
+``id`` is the article id ``parse_news`` emits, so the two join. ``now_id`` (``"1-49778940"``) and ``*_code``
+are not integers and stay ``Utf8``.
 """
 
 from __future__ import annotations
@@ -28,12 +30,15 @@ from typing import Any, Dict, List, Union
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _cast_ids_int64, _pandas_ids
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import _data_only
 
 __all__ = ["parse_espn_content"]
 
 _ID = re.compile(r"(^|_)(id|code)$")
+#: Id-like columns whose values are text: ESPN's content id ``"1-49778940"`` and the ``*_code`` columns.
+_TEXT_ID = re.compile(r"^now_id$|(^|_)code$")
 
 
 def _as_rows(raw: Any) -> List[Dict[str, Any]]:
@@ -72,15 +77,16 @@ def _to_frame(rows: List[Dict[str, Any]]) -> pl.DataFrame:
                 col = col.map(lambda v: v if v is None or (isinstance(v, float) and v != v) else str(v))
             pdf[name] = col
     df = pl.from_pandas(pdf)
-    ids = []
+    text = []
     for name, dtype in df.schema.items():
-        if not _ID.search(name) or dtype == pl.String:
+        if not _TEXT_ID.search(name) or dtype == pl.String:
             continue
         expr = pl.col(name)
         if dtype.is_float():
             expr = expr.cast(pl.Int64, strict=False)
-        ids.append(expr.cast(pl.String).alias(name))
-    return df.with_columns(ids) if ids else df
+        text.append(expr.cast(pl.String).alias(name))
+    df = df.with_columns(text) if text else df
+    return _cast_ids_int64(df, [c for c in df.columns if _ID.search(c) and not _TEXT_ID.search(c)])
 
 
 @_data_only
@@ -97,9 +103,9 @@ def parse_espn_content(
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
-        One row per headline, snake_cased, with ``id`` / ``*_id`` columns pinned
-        to ``Utf8`` and nested ``categories`` / ``images`` / ``keywords``
-        JSON-encoded. A zero-row frame when the payload is ``None``, empty or
+        One row per headline, snake_cased, with ``id`` / ``*_id`` columns
+        ``Int64`` (``now_id`` and ``*_code`` stay ``Utf8``) and nested
+        ``categories`` / ``images`` / ``keywords`` JSON-encoded. A zero-row frame when the payload is ``None``, empty or
         malformed.
 
     Example:
@@ -120,4 +126,4 @@ def parse_espn_content(
     .. _ESPN content.core endpoints: https://content.core.api.espn.com/v1/sports/news
     """
     df = _to_frame(_as_rows(raw))
-    return df.to_pandas() if return_as_pandas else df
+    return _pandas_ids(df) if return_as_pandas else df
