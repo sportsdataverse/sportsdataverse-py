@@ -6871,6 +6871,16 @@
   expected: kill
   note: A byte-identical copy of rewrite_schema_dir reappearing in any generator (the pre-6.1 four copies).
 
+- id: mlb-game-rosters-ids-from-the-ref
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/mlb/mlb_game_rosters.py
+  snippet: '    match = _re.search(rf"/{kind}/(\d+)", str(obj.get("$ref") or ""))'
+  mutant: '    match = None'
+  test: tests/test_espn_game_rosters_family.py -k "read_the_athlete_and_position_ids"
+  expected: kill
+  note: The MLB roster ids are read from an inline id the Core v2 entry never carries, so they are null again.
+
 # --- task 6.1 (b): one private body behind every former copy (B-L26, B-L27, B-L28, B-L46, B-L52, B-GB-11) ----
 - id: shared-box-readers-copy-again
   group: share-private-bodies

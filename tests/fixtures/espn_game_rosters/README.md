@@ -33,3 +33,5 @@ the first entry of the first competitor's `roster`; the team is that competitor'
 | `event_competitors_cfb.json` | `GET https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401636892/competitions/401636892/competitors` |
 | `athlete_core_cfb.json` | `GET http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/athletes/4426773?lang=en&region=us` (leaf position with a `parent` link) |
 | `event_competitors_mlb.json` | `GET https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors` |
+| `event_competitor_roster_mlb_19.json` | `GET http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/19/roster?lang=en&region=us` (captured 2026-10-25; the roster `$ref` of `event_competitors_mlb.json`; entries carry `athlete` / `position` as a bare `$ref`) |
+| `event_competitor_roster_mlb_10.json` | `GET http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster?lang=en&region=us` (captured 2026-10-25, same shape) |

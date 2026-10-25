@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re as _re
+
 import pandas as pd
 import polars as pl
 
@@ -19,6 +21,18 @@ _COLUMNS = (
     "athlete_position_name",
     "athlete_starter",
 )
+
+
+def _ref_id(obj: dict, kind: str) -> str | None:
+    """``obj["id"]``, else the id at the end of ``obj["$ref"]`` (``.../athletes/39832?lang=en``).
+
+    The real Core v2 roster entry carries the athlete and the position as a bare ``{"$ref": ...}`` with no
+    inline id, so reading ``id`` alone left ``athlete_id`` / ``athlete_position_id`` null on every game.
+    """
+    if obj.get("id") is not None:
+        return str(obj["id"])
+    match = _re.search(rf"/{kind}/(\d+)", str(obj.get("$ref") or ""))
+    return match.group(1) if match else None
 
 
 def espn_mlb_game_rosters(game_id: int, raw: bool = False, return_as_pandas: bool = False, **kwargs):
@@ -82,10 +96,11 @@ def espn_mlb_game_rosters(game_id: int, raw: bool = False, return_as_pandas: boo
                     "game_id": str(game_id),
                     "team_id": str(team_id) if team_id else None,
                     "home_away": home_away,
-                    "athlete_id": athlete.get("id"),
-                    "athlete_full_name": athlete.get("fullName") or athlete.get("displayName"),
+                    # the entry carries the athlete as a $ref only; its playerId is the same id
+                    "athlete_id": _ref_id(athlete, "athletes") or (str(e["playerId"]) if e.get("playerId") else None),
+                    "athlete_full_name": athlete.get("fullName") or athlete.get("displayName") or e.get("displayName"),
                     "athlete_jersey": athlete.get("jersey"),
-                    "athlete_position_id": position.get("id"),
+                    "athlete_position_id": _ref_id(position, "positions"),
                     "athlete_position_abbreviation": position.get("abbreviation"),
                     "athlete_position_name": position.get("name"),
                     "athlete_starter": e.get("starter"),
