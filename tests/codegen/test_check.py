@@ -540,6 +540,7 @@ _KEPT_CACHES = {
     "_docs_corpus",
     "_docstring_param_descs",
     "_highlights_map",
+    "_league_group",
     "_league_module",
     "_loader_schemas",
     "_manual_col_descs",

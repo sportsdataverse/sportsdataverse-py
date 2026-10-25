@@ -520,3 +520,18 @@ def test_a_connection_error_does_not_reuse_the_previous_retry_after(monkeypatch)
     monkeypatch.setattr(requests.Session, "get", fake_get)
     assert download("https://site.api.espn.com/x", num_retries=15).status_code == 200
     assert sleeps[0] == 120.0 and len(sleeps) == 2 and sleeps[1] <= 4.0 and answers == []
+
+
+def test_download_without_a_logger_adds_no_handler():
+    """The module logger gets its NullHandler once, at import; a ``download()`` made without a
+    logger used to add another on every call (C-NF-9)."""
+    import logging
+
+    from sportsdataverse.dl_utils import init_request_settings
+
+    log = logging.getLogger("sdv.dl_utils")
+    before = len(log.handlers)
+    for _ in range(3):
+        _, _, got = init_request_settings(None, None, None)
+    assert got is log
+    assert len(log.handlers) == before
