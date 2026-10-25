@@ -634,3 +634,59 @@ def test_one_failed_league_warns_and_keeps_the_other_leagues(monkeypatch):
     with pytest.warns(UserWarning, match=r"1 of 2 fetches failed \(cfb\)"):
         df = espn_injuries_snapshot(["nfl", "cfb"], as_of_date=STAMP, request_delay=0)
     assert df["league"].unique().to_list() == ["nfl"] and df.height > 0
+
+
+def _pandas_ids_are_int64(pdf, df):
+    ids = [c for c, t in df.schema.items() if t == pl.Int64 and (c == "id" or c.endswith("_id"))]
+    assert ids and {c: str(pdf[c].dtype) for c in ids} == dict.fromkeys(ids, "Int64")
+
+
+def test_injuries_snapshot_pandas_ids_are_nullable_int64(monkeypatch):
+    """R981-8: on the real nfl capture with one record's ``source.id`` missing, a plain ``to_pandas()`` floated
+    ``source_id`` (``1.0``); the parser and the fetcher both hand pandas' nullable ``Int64``."""
+    import sportsdataverse.espn_snapshots as mod
+
+    raw = load_fixture("espn", "injuries_nfl")
+    raw["injuries"][0]["injuries"][0]["source"].pop("id")
+    df = parse_injuries_snapshot(raw, league="nfl", as_of_date=STAMP)
+    assert df["source_id"].null_count() == 1
+    _pandas_ids_are_int64(parse_injuries_snapshot(raw, league="nfl", as_of_date=STAMP, return_as_pandas=True), df)
+    monkeypatch.setattr(
+        mod.importlib,
+        "import_module",
+        lambda name: type("M", (), {"espn_nfl_injuries": staticmethod(lambda return_parsed=True: raw)}),
+    )
+    pdf = espn_injuries_snapshot("nfl", as_of_date=STAMP, request_delay=0, return_as_pandas=True)
+    _pandas_ids_are_int64(pdf, df)
+    assert int(pdf["source_id"].isna().sum()) == 1
+
+
+def test_depthchart_snapshot_pandas_ids_are_nullable_int64(monkeypatch):
+    """R981-8: the depth-chart parser and fetcher hand their ids as pandas' nullable ``Int64`` (real nba capture, one
+    group id missing)."""
+    import sportsdataverse.espn_snapshots as mod
+
+    raw = load_fixture("espn", "depthcharts_nba")
+    group = raw["depthchart"][0]
+    group["id"] = None
+    df = parse_depthchart_snapshot(raw, league="nba", as_of_date=STAMP)
+    assert 0 < df["group_id"].null_count()
+    _pandas_ids_are_int64(parse_depthchart_snapshot(raw, league="nba", as_of_date=STAMP, return_as_pandas=True), df)
+    monkeypatch.setattr(mod.time, "sleep", lambda s: None)
+    monkeypatch.setattr("sportsdataverse.nba.espn_nba_team_depthcharts", lambda team_id, return_parsed=False: raw)
+    _pandas_ids_are_int64(espn_depthcharts_snapshot("nba", team_ids=[1], as_of_date=STAMP, return_as_pandas=True), df)
+
+
+def test_a_bad_athlete_id_the_link_recovers_says_so():
+    """R981-10: a text ``athlete.id`` whose player-card link still carries the id keeps the recovered id, and the
+    warning says the link gave it rather than claiming the id was read as null."""
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    raw = load_fixture("espn", "injuries_nfl")
+    clean = parse_injuries_snapshot(raw, league="nfl", as_of_date=STAMP)["athlete_id"][0]
+    raw["injuries"][0]["injuries"][0]["athlete"]["id"] = "abc"
+    with pytest.warns(
+        SchemaDriftWarning, match=rf"athlete\.id: 'abc' is not an integer id; the player link gives {clean}$"
+    ):
+        df = parse_injuries_snapshot(raw, league="nfl", as_of_date=STAMP)
+    assert clean is not None and df["athlete_id"][0] == clean

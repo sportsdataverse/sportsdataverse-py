@@ -247,3 +247,26 @@ def test_failed_release_read_is_not_cached(monkeypatch):
     second = mod.ncaa_espn_team_crosswalk(league="mbb")
     assert second.equals(release)
     assert mod._CROSSWALK_CACHE["mbb"].equals(release)
+
+
+@pytest.mark.parametrize("league", LEAGUES)
+def test_pandas_espn_ids_are_nullable_int64_not_float(league, offline, monkeypatch):
+    """R981-8: an unmatched team's null ``espn_team_id`` made a plain ``to_pandas()`` float the column (``150.0``);
+    the ESPN ids are pandas' nullable ``Int64``."""
+    bundled = xw._packaged_crosswalk(league)
+    espn = [c for c in bundled.columns if c.startswith("espn_")]
+    # the real bundle with its first row unmatched, as the matcher writes one: espn columns null
+    unmatched = bundled.with_columns(
+        *[pl.when(pl.int_range(pl.len()) == 0).then(None).otherwise(pl.col(c)).alias(c) for c in espn],
+        pl.when(pl.int_range(pl.len()) == 0)
+        .then(pl.lit("unmatched"))
+        .otherwise(pl.col("match_method"))
+        .alias("match_method"),
+    )
+    monkeypatch.setattr(xw, "_packaged_crosswalk", lambda lg: unmatched)
+    df = ncaa_espn_team_crosswalk(league=league)
+    pdf = ncaa_espn_team_crosswalk(league=league, return_as_pandas=True)
+    assert df["espn_team_id"].null_count() > 0
+    for col in ("espn_team_id", "espn_conference_id", "ncaa_team_id"):
+        assert str(pdf[col].dtype) == "Int64", col
+    assert int(pdf["espn_team_id"].isna().sum()) == df["espn_team_id"].null_count()
