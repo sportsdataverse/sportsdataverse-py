@@ -22,7 +22,8 @@ import pathlib
 import re
 import sys
 
-sys.path.insert(0, ".")
+_ROOT = pathlib.Path(__file__).resolve().parents[2]  # the repo root, whatever the CWD
+sys.path.insert(0, str(_ROOT))
 
 ROLE = {
     "passer": "the passer",
@@ -234,7 +235,7 @@ def main() -> None:
     from tools.codegen import extract_residual_columns as x
 
     rows = [r for r in x.deferred_columns() if r["league"] == "cfb"]
-    schemas = yaml.safe_load(pathlib.Path("tools/codegen/schemas/loader_schemas.yaml").read_text(encoding="utf-8"))
+    schemas = yaml.safe_load((_ROOT / "tools/codegen/schemas/loader_schemas.yaml").read_text(encoding="utf-8"))
     targets = sorted({r["schema"] for r in rows})
     out, unparsed = {}, []
     for t in targets:
