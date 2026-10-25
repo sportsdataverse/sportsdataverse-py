@@ -104,7 +104,8 @@ def espn_cfb_play_participants(
         **kwargs: Forwarded to ``sportsdataverse.dl_utils.download``.
 
     Returns:
-        Polars (or pandas) DataFrame, one row per play; the raw play dicts when
+        Polars (or pandas) DataFrame, one row per play with at least one participant (a play
+        whose ``participants[]`` is empty has no row); the raw play dicts when
         ``raw=True``. The ``{type}_*`` columns depend on the payload: a game carries
         only the participant types ESPN shipped for it. The returns table lists the
         union of the 17 types measured over 11,430 games of the cfbfastR-cfb-raw captures

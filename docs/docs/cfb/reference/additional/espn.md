@@ -209,7 +209,7 @@ participant type ESPN ships).
 
 **Returns**
 
-Polars (or pandas) DataFrame, one row per play; the raw play dicts when `raw=True`. The `{type}_*` columns depend on the payload: a game carries only the participant types ESPN shipped for it. The returns table lists the union of the 17 types measured over 11,430 games of the cfbfastR-cfb-raw captures (2014-2026, measured in #999), each with its five columns.
+Polars (or pandas) DataFrame, one row per play with at least one participant (a play whose `participants[]` is empty has no row); the raw play dicts when `raw=True`. The `{type}_*` columns depend on the payload: a game carries only the participant types ESPN shipped for it. The returns table lists the union of the 17 types measured over 11,430 games of the cfbfastR-cfb-raw captures (2014-2026, measured in #999), each with its five columns.
 
 | col_name | type | description |
 |---|---|---|
@@ -266,40 +266,40 @@ Polars (or pandas) DataFrame, one row per play; the raw play dicts when `raw=Tru
 | `recoverer_position_id` | character | ESPN position id of the play's first participant ESPN types `recoverer` (see sportsdataverse.football.positions); null when none. |
 | `pat_passer_position_id` | character | ESPN position id of the play's first participant ESPN types `patPasser` (see sportsdataverse.football.positions); null when none. |
 | `fumbler_position_id` | character | ESPN position id of the play's first participant ESPN types `fumbler` (see sportsdataverse.football.positions); null when none. |
-| `kicker_player_names` | character | Display names of every participant ESPN types `kicker` on the play, in ESPN's order; [] when none. |
-| `passer_player_names` | character | Display names of every participant ESPN types `passer` on the play, in ESPN's order; [] when none. |
-| `receiver_player_names` | character | Display names of every participant ESPN types `receiver` on the play, in ESPN's order; [] when none. |
-| `rusher_player_names` | character | Display names of every participant ESPN types `rusher` on the play, in ESPN's order; [] when none. |
-| `scorer_player_names` | character | Display names of every participant ESPN types `scorer` on the play, in ESPN's order; [] when none. |
-| `returner_player_names` | character | Display names of every participant ESPN types `returner` on the play, in ESPN's order; [] when none. |
-| `pass_defender_player_names` | character | Display names of every participant ESPN types `passDefender` on the play, in ESPN's order; [] when none. |
-| `penalized_player_names` | character | Display names of every participant ESPN types `penalized` on the play, in ESPN's order; [] when none. |
-| `sacked_by_player_names` | character | Display names of every participant ESPN types `sackedBy` on the play, in ESPN's order; [] when none. |
-| `pat_scorer_player_names` | character | Display names of every participant ESPN types `patScorer` on the play, in ESPN's order; [] when none. |
-| `punter_player_names` | character | Display names of every participant ESPN types `punter` on the play, in ESPN's order; [] when none. |
-| `tackler_player_names` | character | Display names of every participant ESPN types `tackler` on the play, in ESPN's order; [] when none. |
-| `assisted_by_player_names` | character | Display names of every participant ESPN types `assistedBy` on the play, in ESPN's order; [] when none. |
-| `forced_by_player_names` | character | Display names of every participant ESPN types `forcedBy` on the play, in ESPN's order; [] when none. |
-| `recoverer_player_names` | character | Display names of every participant ESPN types `recoverer` on the play, in ESPN's order; [] when none. |
-| `pat_passer_player_names` | character | Display names of every participant ESPN types `patPasser` on the play, in ESPN's order; [] when none. |
-| `fumbler_player_names` | character | Display names of every participant ESPN types `fumbler` on the play, in ESPN's order; [] when none. |
-| `kicker_player_ids` | character | ESPN athlete ids of every participant ESPN types `kicker` on the play, in ESPN's order; [] when none. |
-| `passer_player_ids` | character | ESPN athlete ids of every participant ESPN types `passer` on the play, in ESPN's order; [] when none. |
-| `receiver_player_ids` | character | ESPN athlete ids of every participant ESPN types `receiver` on the play, in ESPN's order; [] when none. |
-| `rusher_player_ids` | character | ESPN athlete ids of every participant ESPN types `rusher` on the play, in ESPN's order; [] when none. |
-| `scorer_player_ids` | character | ESPN athlete ids of every participant ESPN types `scorer` on the play, in ESPN's order; [] when none. |
-| `returner_player_ids` | character | ESPN athlete ids of every participant ESPN types `returner` on the play, in ESPN's order; [] when none. |
-| `pass_defender_player_ids` | character | ESPN athlete ids of every participant ESPN types `passDefender` on the play, in ESPN's order; [] when none. |
-| `penalized_player_ids` | character | ESPN athlete ids of every participant ESPN types `penalized` on the play, in ESPN's order; [] when none. |
-| `sacked_by_player_ids` | character | ESPN athlete ids of every participant ESPN types `sackedBy` on the play, in ESPN's order; [] when none. |
-| `pat_scorer_player_ids` | character | ESPN athlete ids of every participant ESPN types `patScorer` on the play, in ESPN's order; [] when none. |
-| `punter_player_ids` | character | ESPN athlete ids of every participant ESPN types `punter` on the play, in ESPN's order; [] when none. |
-| `tackler_player_ids` | character | ESPN athlete ids of every participant ESPN types `tackler` on the play, in ESPN's order; [] when none. |
-| `assisted_by_player_ids` | character | ESPN athlete ids of every participant ESPN types `assistedBy` on the play, in ESPN's order; [] when none. |
-| `forced_by_player_ids` | character | ESPN athlete ids of every participant ESPN types `forcedBy` on the play, in ESPN's order; [] when none. |
-| `recoverer_player_ids` | character | ESPN athlete ids of every participant ESPN types `recoverer` on the play, in ESPN's order; [] when none. |
-| `pat_passer_player_ids` | character | ESPN athlete ids of every participant ESPN types `patPasser` on the play, in ESPN's order; [] when none. |
-| `fumbler_player_ids` | character | ESPN athlete ids of every participant ESPN types `fumbler` on the play, in ESPN's order; [] when none. |
+| `kicker_player_names` | list | Display names of every participant ESPN types `kicker` on the play, in ESPN's order; [] when none. |
+| `passer_player_names` | list | Display names of every participant ESPN types `passer` on the play, in ESPN's order; [] when none. |
+| `receiver_player_names` | list | Display names of every participant ESPN types `receiver` on the play, in ESPN's order; [] when none. |
+| `rusher_player_names` | list | Display names of every participant ESPN types `rusher` on the play, in ESPN's order; [] when none. |
+| `scorer_player_names` | list | Display names of every participant ESPN types `scorer` on the play, in ESPN's order; [] when none. |
+| `returner_player_names` | list | Display names of every participant ESPN types `returner` on the play, in ESPN's order; [] when none. |
+| `pass_defender_player_names` | list | Display names of every participant ESPN types `passDefender` on the play, in ESPN's order; [] when none. |
+| `penalized_player_names` | list | Display names of every participant ESPN types `penalized` on the play, in ESPN's order; [] when none. |
+| `sacked_by_player_names` | list | Display names of every participant ESPN types `sackedBy` on the play, in ESPN's order; [] when none. |
+| `pat_scorer_player_names` | list | Display names of every participant ESPN types `patScorer` on the play, in ESPN's order; [] when none. |
+| `punter_player_names` | list | Display names of every participant ESPN types `punter` on the play, in ESPN's order; [] when none. |
+| `tackler_player_names` | list | Display names of every participant ESPN types `tackler` on the play, in ESPN's order; [] when none. |
+| `assisted_by_player_names` | list | Display names of every participant ESPN types `assistedBy` on the play, in ESPN's order; [] when none. |
+| `forced_by_player_names` | list | Display names of every participant ESPN types `forcedBy` on the play, in ESPN's order; [] when none. |
+| `recoverer_player_names` | list | Display names of every participant ESPN types `recoverer` on the play, in ESPN's order; [] when none. |
+| `pat_passer_player_names` | list | Display names of every participant ESPN types `patPasser` on the play, in ESPN's order; [] when none. |
+| `fumbler_player_names` | list | Display names of every participant ESPN types `fumbler` on the play, in ESPN's order; [] when none. |
+| `kicker_player_ids` | list | ESPN athlete ids of every participant ESPN types `kicker` on the play, in ESPN's order; [] when none. |
+| `passer_player_ids` | list | ESPN athlete ids of every participant ESPN types `passer` on the play, in ESPN's order; [] when none. |
+| `receiver_player_ids` | list | ESPN athlete ids of every participant ESPN types `receiver` on the play, in ESPN's order; [] when none. |
+| `rusher_player_ids` | list | ESPN athlete ids of every participant ESPN types `rusher` on the play, in ESPN's order; [] when none. |
+| `scorer_player_ids` | list | ESPN athlete ids of every participant ESPN types `scorer` on the play, in ESPN's order; [] when none. |
+| `returner_player_ids` | list | ESPN athlete ids of every participant ESPN types `returner` on the play, in ESPN's order; [] when none. |
+| `pass_defender_player_ids` | list | ESPN athlete ids of every participant ESPN types `passDefender` on the play, in ESPN's order; [] when none. |
+| `penalized_player_ids` | list | ESPN athlete ids of every participant ESPN types `penalized` on the play, in ESPN's order; [] when none. |
+| `sacked_by_player_ids` | list | ESPN athlete ids of every participant ESPN types `sackedBy` on the play, in ESPN's order; [] when none. |
+| `pat_scorer_player_ids` | list | ESPN athlete ids of every participant ESPN types `patScorer` on the play, in ESPN's order; [] when none. |
+| `punter_player_ids` | list | ESPN athlete ids of every participant ESPN types `punter` on the play, in ESPN's order; [] when none. |
+| `tackler_player_ids` | list | ESPN athlete ids of every participant ESPN types `tackler` on the play, in ESPN's order; [] when none. |
+| `assisted_by_player_ids` | list | ESPN athlete ids of every participant ESPN types `assistedBy` on the play, in ESPN's order; [] when none. |
+| `forced_by_player_ids` | list | ESPN athlete ids of every participant ESPN types `forcedBy` on the play, in ESPN's order; [] when none. |
+| `recoverer_player_ids` | list | ESPN athlete ids of every participant ESPN types `recoverer` on the play, in ESPN's order; [] when none. |
+| `pat_passer_player_ids` | list | ESPN athlete ids of every participant ESPN types `patPasser` on the play, in ESPN's order; [] when none. |
+| `fumbler_player_ids` | list | ESPN athlete ids of every participant ESPN types `fumbler` on the play, in ESPN's order; [] when none. |
 
 **Example**
 

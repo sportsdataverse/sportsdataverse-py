@@ -467,7 +467,7 @@ Release: [ncaa_wbb_possessions](https://github.com/sportsdataverse/sportsdataver
 | `is_assisted` | Int64 | Count of the possession's events that carry an assisting second player (0, 1, rarely 2) -- a count, not a flag, kept from the R source for parity. |
 | `is_transition` | Int64 | 1 for transition possessions, else 0. |
 | `is_garbage_time` | Int64 | 1 for possessions in garbage time under the score-margin and clock rule, else 0. |
-| `start_event_type` | String | Event type that opened the possession (e.g., a defensive rebound or a made-basket inbound). |
+| `start_event_type` | String | Event type of the play immediately before the possession's first event (what started it, e.g. a defensive rebound or a made basket), not the possession's own first event. |
 | `first_shot_time` | Int64 | Seconds into the possession (poss_length) at its first field-goal attempt; null when the possession had no shot. |
 | `first_shot_type` | String | stats.ncaa.org event name of the possession's first field-goal attempt ("Layup", "Three Point Jumper", "Two Point Jumper", "Hook", "Dunk", "Tip In"); null when the possession had no shot. |
 | `last_event_time` | Int64 | Seconds into the possession (poss_length) at its final event. |

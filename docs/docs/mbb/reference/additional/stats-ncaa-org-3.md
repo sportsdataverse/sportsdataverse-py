@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–stint_exposure"
-sidebar_label: "stats.ncaa.org: ncaa_mbb–stint_exposure"
+title: "MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–start_time"
+sidebar_label: "stats.ncaa.org: ncaa_mbb–start_time"
 sidebar_position: 5
-description: "MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–stint_exposure — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–start_time — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–stint_exposure
+# MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–start_time
 
 ### ncaa_mbb_join_pbp_shots {#ncaa_mbb_join_pbp_shots}
 
@@ -695,6 +695,12 @@ One row per bin, sorted: `decile` (0 = fewest possessions), `n`, `poss_min`, `po
 | `median_orapm_se_sampling` | double | Median orapm_se_sampling of the players in the bin. |
 | `median_drapm_se_sampling` | double | Median drapm_se_sampling of the players in the bin. |
 | `median_rapm_net_se_sampling` | double | Median rapm_net_se_sampling of the players in the bin. |
+| `coverage_orapm` | double | Share of the bin's players whose split-half orapm difference falls within 2 posterior SEs (\|z\| <= 2); present only on split_half_se_check per_player input, should sit near 0.95. |
+| `coverage_orapm_sampling` | double | Share of the bin's players whose split-half orapm difference falls within 2 sampling SEs (\|z\| <= 2); present only on split_half_se_check per_player input, should sit near 0.95. |
+| `coverage_drapm` | double | Share of the bin's players whose split-half drapm difference falls within 2 posterior SEs (\|z\| <= 2); present only on split_half_se_check per_player input, should sit near 0.95. |
+| `coverage_drapm_sampling` | double | Share of the bin's players whose split-half drapm difference falls within 2 sampling SEs (\|z\| <= 2); present only on split_half_se_check per_player input, should sit near 0.95. |
+| `coverage_rapm_net` | double | Share of the bin's players whose split-half rapm_net difference falls within 2 posterior SEs (\|z\| <= 2); present only on split_half_se_check per_player input, should sit near 0.95. |
+| `coverage_rapm_net_sampling` | double | Share of the bin's players whose split-half rapm_net difference falls within 2 sampling SEs (\|z\| <= 2); present only on split_half_se_check per_player input, should sit near 0.95. |
 
 **Example**
 
@@ -873,7 +879,7 @@ Attach a `player_id` to each of the ten on-floor slots.
 | `is_assisted` | integer | Count of the possession's events that carry an assisting second player (0, 1, rarely 2) -- a count, not a flag, kept from the R source for parity. |
 | `is_transition` | integer | 1 for transition possessions, else 0. |
 | `is_garbage_time` | integer | 1 for possessions in garbage time under the score-margin and clock rule, else 0. |
-| `start_event_type` | character | Event type that opened the possession (e.g., a defensive rebound or a made-basket inbound). |
+| `start_event_type` | character | Event type of the play immediately before the possession's first event (what started it, e.g. a defensive rebound or a made basket), not the possession's own first event. |
 | `first_shot_time` | integer | Seconds into the possession (poss_length) at its first field-goal attempt; null when the possession had no shot. |
 | `first_shot_type` | character | stats.ncaa.org event name of the possession's first field-goal attempt ("Layup", "Three Point Jumper", "Two Point Jumper", "Hook", "Dunk", "Tip In"); null when the possession had no shot. |
 | `last_event_time` | integer | Seconds into the possession (poss_length) at its final event. |
@@ -1464,37 +1470,4 @@ from sportsdataverse.mbb.mbb_ncaa_stints import start_time_from_period
 start_time_from_period(2, is_women_game=False)  # 20.0 (men's 2nd half)
 start_time_from_period(1, is_women_game=True)  # 0.0 (women's 1st quarter)
 start_time_from_period(6, is_women_game=False)  # 45.0 (men's 2nd OT)
-```
-
-### stint_exposure {#stint_exposure}
-
-`stint_exposure(stints: 'pl.DataFrame') -> 'pl.DataFrame'`
-
-`player_id` -> `off_poss` / `def_poss` from a stint frame's REAL possessions.
-
-`fit_weight` is deliberately ignored: exposure is a count of possessions
-PLAYED, never a count of possessions the fit chose to believe. Callers that
-need a possession total (an SPM prior's exposure shrink, a possession bin)
-use this so the count means the same thing everywhere.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `stints` | `DataFrame` |  | `aggregate_stints` output (one season, or a pooled design). |
-
-**Returns**
-
-One row per player: `player_id`, `off_poss`, `def_poss` (Int64).
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `off_poss` | integer | Offensive possessions the player was on court for; the regression weight behind orapm. |
-| `def_poss` | integer | Defensive possessions the player was on court for; the regression weight behind drapm. |
-
-**Example**
-
-```python
-stint_exposure(stints).sort("off_poss", descending=True).head()
 ```

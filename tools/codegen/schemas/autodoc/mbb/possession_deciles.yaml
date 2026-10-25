@@ -31,3 +31,21 @@ columns:
 - name: median_rapm_net_se_sampling
   type: double
   description: ''
+- name: coverage_orapm
+  type: double
+  description: ''
+- name: coverage_orapm_sampling
+  type: double
+  description: ''
+- name: coverage_drapm
+  type: double
+  description: ''
+- name: coverage_drapm_sampling
+  type: double
+  description: ''
+- name: coverage_rapm_net
+  type: double
+  description: ''
+- name: coverage_rapm_net_sampling
+  type: double
+  description: ''
