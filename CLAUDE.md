@@ -1050,7 +1050,7 @@ un-typed and stay out of the gate's `files` scope until cleaned.
 ### Test gating
 
 Live-API tests use `@skip_if_no_live` from `tests/conftest.py` and run only
-when `SDV_PY_LIVE_TESTS=1` is set. `tests.yml`'s live job sets it on pushes to
+when `SDV_PY_LIVE_TESTS=1` is set. `live-tests.yml` sets it on pushes to
 main and manual runs, not on PRs (a `workflow_dispatch` with `live_tests=false` opts
 out), and the weekly `live-tests-cron.yml` always sets it. A live test that hits a
 timeout, dropped connection or 429/5xx skips instead of failing (`tests/conftest.py`
