@@ -2525,12 +2525,12 @@
 - id: ncaa-wbb-shots-driver-float-contest-ids
   group: ncaa-era
   finding: B-L38
-  file: sportsdataverse/wbb/wbb_ncaa_shots.py
+  file: sportsdataverse/mbb/mbb_ncaa_shots.py
   snippet: "    ids = [g for g in map(_utf8_id, game_ids) if g is not None]\n"
   mutant: "    ids = [g for g in game_ids if g is not None and g == g]\n"
   test: tests/wbb/test_wbb_ncaa_shots_shim.py -k float_contest_ids
   expected: kill
-  note: The WBB shots driver fetches contests/5728709.0/ for a float id (R853-2).
+  note: The WBB shots driver fetches contests/5728709.0/ for a float id (R853-2); since 6.1 (B-L26) the WBB driver is the MBB body.
 - id: ncaa-box-driver-float-contest-ids
   group: ncaa-era
   finding: B-L38
@@ -6837,3 +6837,50 @@
   note: >-
     The pre-3.10 citation: a gitignored script that exists only on the maintainer's disk, so the refit
     instruction for DEFAULT_RIDGE_LAMBDA was not reproducible from a clone.
+
+# --- task 6.1 (b): one private body behind every former copy (B-L26, B-L27, B-L28, B-L46, B-L52, B-GB-11) ----
+- id: shared-box-readers-copy-again
+  group: share-private-bodies
+  finding: B-L28
+  file: sportsdataverse/cfb/cfb_ncaa_box.py
+  snippet: "from sportsdataverse.scrape.ncaa._box_html import _cells, _cid, _finish, _int, _rows  # B-L28: one body each\n"
+  mutant: "from sportsdataverse.scrape.ncaa._box_html import _cells, _cid, _finish, _int, _rows  # B-L28: one body each\n\n\ndef _int(v: str) -> \"int | None\":\n    return int(v) if v and v.lstrip(\"-\").isdigit() else None\n"
+  test: tests/test_shared_private_bodies.py -k _box_html
+  expected: kill
+  note: The pre-6.1 state, a third copy of the box readers in the football module.
+- id: shared-jvm-hash-copy-again
+  group: share-private-bodies
+  finding: B-L27
+  file: sportsdataverse/mbb/mbb_ncaa_boxscore_parser.py
+  snippet: "from sportsdataverse.mbb.mbb_ncaa_roster_parser import _hashmap_improve, _hashmap_radix_key, _java_string_hash\n"
+  mutant: "from sportsdataverse.mbb.mbb_ncaa_roster_parser import _hashmap_improve, _hashmap_radix_key\n\n\ndef _java_string_hash(s: str) -> int:\n    h = 0\n    for ch in s:\n        h = (h * 31 + ord(ch)) & 0xFFFFFFFF\n    return h\n"
+  test: tests/test_shared_private_bodies.py -k _java_string_hash
+  expected: kill
+  note: The pre-6.1 state, the box-score parser's own copy of the JVM string hash.
+- id: shared-parse-shard-copy-again
+  group: share-private-bodies
+  finding: B-L46
+  file: sportsdataverse/scrape/ncaa/parse.py
+  snippet: "from .capture import _parse_shard  # B-L46: one body, the capture CLI's\n"
+  mutant: "def _parse_shard(spec: str) -> \"tuple[int, int]\":\n    i_str, _, n_str = spec.partition(\"/\")\n    return int(i_str), int(n_str or \"1\")\n\n\n"
+  test: tests/test_shared_private_bodies.py -k _parse_shard
+  expected: kill
+  note: The pre-6.1 state, a second shard parser in the parse CLI.
+- id: shared-fox-helpers-copy-again
+  group: share-private-bodies
+  finding: B-L52
+  file: sportsdataverse/cfb/cfb_fox_ext.py
+  snippet: "FOX_BASE = API\n"
+  mutant: "FOX_BASE = API\n\n\ndef _uri_id(uri):\n    return uri.rsplit(\"/\", 1)[-1] if uri else None\n"
+  test: tests/test_shared_private_bodies.py -k _uri_id
+  expected: kill
+  note: The pre-6.1 state, the CFB Fox module's own copy of the layout helpers.
+- id: shared-cfb-crosswalk-cache-not-shared
+  group: share-private-bodies
+  finding: B-GB-11
+  file: sportsdataverse/football/sources/idmap.py
+  snippet: "        _CFB_CROSSWALK_CACHE[seasons] = frame\n"
+  mutant: "        pass\n"
+  test: tests/test_shared_private_bodies.py -k share_one_crosswalk_read
+  expected: kill
+  note: Without the one cache a worker reads the cfb_crosswalk asset on every adapter call (the pre-6.1 two caches read it twice).
