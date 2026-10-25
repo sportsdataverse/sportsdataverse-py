@@ -153,3 +153,123 @@ def test_a_failed_crosswalk_read_is_a_miss_and_is_not_cached(monkeypatch) -> Non
     monkeypatch.setattr(cfb, "load_cfb_schedule_crosswalk", _boom)
     assert _crosswalk_fox_id(401756846, (2025,)) is None
     assert idmap._CFB_CROSSWALK_CACHE == {}
+
+
+# --- 6.1d: parser helpers, the browser User-Agent, the mls/nwsl getter (A-N15, A-L59, A-L8) ---------------
+
+
+def _untyped_body_hash(fn: object) -> str:
+    """sha256[:16] of a function's parameters + body AST with annotations, docstring and name excluded.
+
+    The shared copies are typed for the mypy ratchet; most of the deleted copies were not.
+    """
+    node = ast.parse(textwrap.dedent(inspect.getsource(fn))).body[0]
+    assert isinstance(node, ast.FunctionDef)
+    for arg in node.args.posonlyargs + node.args.args + node.args.kwonlyargs:
+        arg.annotation = None
+    body = node.body
+    if body and isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant):
+        body = body[1:]
+    return hashlib.sha256((ast.dump(node.args) + "".join(ast.dump(b) for b in body)).encode()).hexdigest()[:16]
+
+
+_PARSERS = "sportsdataverse._parser_common"
+_MLB_API = "sportsdataverse.mlb.mlb_api_parsers"
+_NHL_WEB = "sportsdataverse.nhl.nhl_api_web_parsers"
+_NHL_PARSERS = (
+    _MLB_API,
+    _NHL_WEB,
+    "sportsdataverse.nhl.nhl_edge_parsers",
+    "sportsdataverse.nhl.nhl_records_parsers",
+    "sportsdataverse.nhl.nhl_stats_rest_parsers",
+)
+_ESPN_PARSERS = "sportsdataverse._common_espn_parsers"
+
+# (shared name, former-copy modules, untyped hash of the deleted copies at the merge commit)
+PARSER_SHARED = [
+    ("_snake_columns", _NHL_PARSERS, "13d5edd96daffeaa"),
+    ("_empty_frame", (*_NHL_PARSERS, _ESPN_PARSERS), "286e4f5349dcd93d"),
+    ("_as_dict", (_MLB_API, _NHL_WEB), "cb2a840410514d0f"),
+]
+
+
+@pytest.mark.parametrize(("name", "copies", "pin"), PARSER_SHARED, ids=[f"{_PARSERS}.{r[0]}" for r in PARSER_SHARED])
+def test_parser_helpers_are_one_body(name: str, copies: tuple, pin: str) -> None:
+    shared = getattr(importlib.import_module(_PARSERS), name)
+    for module in copies:
+        assert getattr(importlib.import_module(module), name) is shared, f"{module}.{name} is a copy again"
+    assert _untyped_body_hash(shared) == pin, f"{_PARSERS}.{name} no longer equals the copies it replaced"
+
+
+def test_from_pandas_errors_is_one_tuple() -> None:
+    shared = importlib.import_module(_PARSERS)._FROM_PANDAS_ERRORS
+    assert shared == (TypeError, ValueError, NotImplementedError, pl.exceptions.PolarsError)
+    for module in (*_NHL_PARSERS, _ESPN_PARSERS):
+        assert importlib.import_module(module)._FROM_PANDAS_ERRORS is shared, module
+
+
+# The 12 copies of this string that the runtimes carried before 6.1d (A-L59).
+_OLD_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+
+
+def test_one_browser_user_agent() -> None:
+    from sportsdataverse import _codegen_runtime, _subscription_http
+    from sportsdataverse.cfb import on3_runtime, sports247_runtime, sports247_site_pages_runtime
+    from sportsdataverse.nfl import nfl_games, nfl_ngs, nflpro_runtime, pff_runtime
+    from sportsdataverse.soccer import uefa_runtime
+    from sportsdataverse.yahoo import yahoo_shangrila_runtime
+
+    ua = _codegen_runtime._CHROME_UA
+    assert ua == _OLD_UA
+    for sent in (
+        _subscription_http.USER_AGENT,
+        on3_runtime._UA,
+        nflpro_runtime._UA,
+        nfl_ngs._UA,
+        nfl_games._DEFAULT_UA,
+        sports247_runtime.rdb_headers()["User-Agent"],
+        sports247_site_pages_runtime.site_headers()["User-Agent"],
+        pff_runtime._pff_headers()["User-Agent"],
+        uefa_runtime.UEFA_HEADERS["User-Agent"],
+        yahoo_shangrila_runtime._HEADERS["User-Agent"],
+    ):
+        assert sent is ua
+    package = Path(_codegen_runtime.__file__).parent
+    copies = [p for p in package.rglob("*.py") if "Chrome/124.0 Safari" in p.read_text(encoding="utf-8")]
+    assert copies == [Path(_codegen_runtime.__file__)], "a runtime spells out the User-Agent again"
+
+
+@pytest.mark.parametrize(
+    ("runtime", "referer"),
+    [
+        ("sportsdataverse.soccer.mls.mls_api_runtime", "https://www.mlssoccer.com/"),
+        ("sportsdataverse.soccer.nwsl.nwsl_api_runtime", "https://www.nwslsoccer.com/"),
+    ],
+)
+def test_mls_nwsl_getters_share_one_body_and_keep_their_download_seam(runtime: str, referer: str, monkeypatch) -> None:
+    from sportsdataverse._codegen_runtime import _CHROME_UA
+
+    module = importlib.import_module(runtime)
+    calls: list = []
+
+    class _Resp:
+        status_code = 200
+        text = '{"ok": 1}'
+
+        def json(self) -> dict:
+            return {"ok": 1}
+
+    monkeypatch.setattr(module, "download", lambda **kw: calls.append(kw) or _Resp())
+    assert module._get("https://h/a", params={"a": None, "b": 1}) == {"ok": 1}
+    assert module._get("https://h/b", headers={"Referer": "z", "X": "1"}, num_retries=0) == {"ok": 1}
+    assert calls == [
+        {"url": "https://h/a", "params": {"b": 1}, "headers": {"Referer": referer, "User-Agent": _CHROME_UA}},
+        {
+            "url": "https://h/b",
+            "params": {},
+            "headers": {"Referer": "z", "User-Agent": _CHROME_UA, "X": "1"},
+            "num_retries": 0,
+        },
+    ]
+    body = ast.parse(textwrap.dedent(inspect.getsource(module._get))).body[0].body[-1]
+    assert ast.unparse(body) == "return _referer_get(download, REFERER, url, params, kwargs)"
