@@ -52,12 +52,19 @@ espn_mlb_game_rosters - pull the active game rosters for both teams.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `int` |  | ESPN game id. |
-| `raw` | `bool` | `False` | When True, returns the merged competitor + roster payload dict. |
+| `raw` | `bool` | `False` | When True, returns `{"competitors": [...], "rows": [...]}`: the competitor items and one dict per roster entry with the documented columns, read from the entry only (no athlete fetch; `athlete_id` is the entry's `playerId` when the athlete is a bare `$ref`). |
 | `return_as_pandas` | `bool` | `False` | When True, returns a pandas dataframe; otherwise polars. |
 
 **Returns**
 
-One row per (game × team × athlete) with columns `game_id, team_id, home_away, athlete_id, athlete_full_name, athlete_jersey, athlete_position_id, athlete_position_abbreviation, athlete_position_name, athlete_starter`; zero rows with those columns when ESPN lists no competitor roster.
+One row per (game × team × athlete) with columns `game_id, team_id, home_away, athlete_id, athlete_full_name, athlete_jersey, athlete_position_id, athlete_position_abbreviation, athlete_position_name, athlete_starter`; zero rows with those columns when ESPN lists no competitor roster, or when no entry's athlete can be read.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | A competitors, roster or athlete fetch failed (not a 404). |
+| `NoDataError` | The competitors resource answered 404. |
 
 **Example**
 

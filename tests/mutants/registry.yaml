@@ -5252,7 +5252,7 @@
   group: espn-rosters
   finding: B-L25
   file: sportsdataverse/mlb/mlb_game_rosters.py
-  snippet: 'if not rows:  # B-L25: no competitors (or no roster) -> the documented columns, zero rows; was None'
+  snippet: 'if not parts:  # B-L25: no competitors, no roster or no readable athlete -> the documented columns, zero rows'
   mutant: 'if False:'
   test: tests/test_espn_game_rosters_family.py -k mlb_game_rosters_empty
   expected: kill
@@ -6841,6 +6841,17 @@
   note: >-
     The pre-3.10 citation: a gitignored script that exists only on the maintainer's disk, so the refit
     instruction for DEFAULT_RIDGE_LAMBDA was not reproducible from a clone.
+
+# --- WB-consolidation-1: an MLB roster with no readable athlete is an empty frame, not NoDataError ----
+- id: mlb-rosters-all-athletes-404-drop-not-raise
+  group: share-private-bodies
+  finding: B-L25
+  file: sportsdataverse/mlb/mlb_game_rosters.py
+  snippet: "        except NoDataError:  # every $ref 404'd: each was already warned about and left out\n"
+  mutant: "        except KeyError:  # every $ref 404'd: each was already warned about and left out\n"
+  test: tests/test_espn_game_rosters_family.py -k every_athlete_ref_404
+  expected: kill
+  note: A game whose every athlete $ref 404s raises NoDataError for the whole game again (WB-consolidation-1).
 
 # --- task 6.1 (a): one private body behind the ESPN schedule and game-roster families (B-M29, B-M30) ----
 - id: shared-game-items-copy-again
