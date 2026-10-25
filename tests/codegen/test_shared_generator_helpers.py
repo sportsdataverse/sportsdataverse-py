@@ -55,11 +55,13 @@ FORMER_COPIES = {
     "gen_euroleague.py": ({"snake_path"}, {"_snake_path"}),
 }
 
-# shared helper -> hash of the copies it replaced
+# shared helper -> canonical key of the copies it replaced, except where marked "current body"
 PINS = {
     "write_yaml": "d2c0fd81daca3498",
     "rewrite_schema_dir": "186076d5a47055b1",
     "capture_for": "63b9a789159e1082",
+    # current body, deliberately changed in #994 when the variants were unified (env, then a sibling checkout,
+    # then the default); the deleted gen_yahoo copy keyed f631060855bea9a5. #1000 touched only the module docstring
     "refs_root": "cc3e9ecd474dc205",
 }
 

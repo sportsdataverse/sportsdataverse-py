@@ -4,9 +4,11 @@ Each row names the shared body and every module that used to carry its own copy.
 
 * identity -- each former copy's name is now bound to the one shared function, so a fix reaches
   every caller;
-* equality at the merge commit -- the shared body's canonical key (``tests/_body_key.py``: ``ast.unparse``
-  with name, docstring, annotations and parameter names stripped, the same on Python 3.10-3.14) equals the
-  deleted copies'. Re-pinned under that key in PRE-1008 M-3. A deliberate change to a shared body updates its pin.
+* equality at the merge commit -- the shared body's canonical key (``tests/_body_key.py``: sha256 of the
+  module's own field-by-field serialisation of the AST, neither ``ast.dump`` nor ``ast.unparse``, after
+  stripping name, decorators, docstring, annotations and parameter names, so it is the same on Python
+  3.10-3.14) equals the deleted copies'. Re-pinned under that key in PRE-1008 M-3. A deliberate change to a
+  shared body updates its pin; the rows marked "current body" pin a body changed on purpose after the merge.
 """
 
 from __future__ import annotations
@@ -154,7 +156,8 @@ def test_a_failed_crosswalk_read_is_a_miss_and_is_not_cached(monkeypatch) -> Non
 def test_scoreboard_event_parsing_is_one_body_with_the_league_home_away_step(monkeypatch) -> None:
     """B-M29: the seven ``scoreboard_event_parsing`` bodies were AST-identical; each now calls the one
     ``_scoreboard_event`` with its own league's ``__extract_home_away`` (the step's defaults differ by sport, so it
-    is a parameter). The shared body's canonical key (its parameter names are canonical) is pinned."""
+    is a parameter). The pin is the current body, deliberately changed in #1001: the deleted copies called the
+    module global ``__extract_home_away`` (key b7c64f4afbde572e), the shared body takes it as a parameter."""
     sched = importlib.import_module(_SCHEDULE)
     assert body_key(sched._scoreboard_event) == "ce665ba26eff3b3d"
     for lg in _SEVEN:
@@ -179,13 +182,17 @@ SHARED_BODY_ONLY = [
         _ROSTERS,
         "team_items",
         [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_team_items") for lg in _SEVEN],
+        # current body, not the deleted copies': those were one-line wrappers around it (shared since #878, key
+        # 8f78866dd5a3dcbd); #1001 bound the names to it directly
         "dbec5a384652bebd",
     ),
     (
         _ROSTERS,
         "athlete_items",
         [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_athlete_items") for lg in _SEVEN],
-        "1ff15e20a9a0bed8",  # #1002 + #1006: the duplicate snake-case key guard, shallowest key wins (MLB debutYear vs debut.year)
+        # current body, deliberately changed in #1002 and #1006 (the duplicate snake-case key guard, shallowest key
+        # wins: MLB debutYear vs debut.year); the deleted one-line wrappers keyed e01649b3176f5591
+        "1ff15e20a9a0bed8",
     ),
     (
         _ROSTERS,
