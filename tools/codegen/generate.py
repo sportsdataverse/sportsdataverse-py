@@ -2142,6 +2142,15 @@ def build_loaders_live() -> list[Path]:
     return sorted(written)
 
 
+def _differs(live: Path, expected: str) -> bool:
+    """True when ``live`` is missing or its BYTES differ from ``expected`` encoded as UTF-8.
+
+    Bytes, not text: ``read_text`` folds CRLF into LF, so a generated file committed with CRLF
+    line endings compared equal and passed ``--check`` while differing from what codegen writes
+    (every writer here writes LF)."""
+    return not live.exists() or live.read_bytes() != expected.encode("utf-8")
+
+
 def _check_tmp(prefix: str) -> Path:
     """A fresh temp dir inside ``OUT`` for one ``--check`` gate run.
 
@@ -2163,9 +2172,7 @@ def _loaders_stale() -> list[str]:
         stale = []
         for lg in rendered:
             live_file = LIVE / lg / f"{lg}_loaders.py"
-            if not live_file.exists() or live_file.read_text(encoding="utf-8") != (tmp / f"{lg}_loaders.py").read_text(
-                encoding="utf-8",
-            ):
+            if _differs(live_file, (tmp / f"{lg}_loaders.py").read_text(encoding="utf-8")):
                 stale.append(str(live_file.relative_to(ROOT)))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
@@ -2875,9 +2882,7 @@ def _flat_stale() -> list[str]:
         stale = []
         for module, prefix in prefixes.items():
             live_file = _flat_dest(prefix, module)
-            if not live_file.exists() or live_file.read_text(encoding="utf-8") != (tmp / f"{module}.py").read_text(
-                encoding="utf-8",
-            ):
+            if _differs(live_file, (tmp / f"{module}.py").read_text(encoding="utf-8")):
                 stale.append(str(live_file.relative_to(ROOT)))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
@@ -2895,9 +2900,7 @@ def _parsed_stale() -> list[str]:
         stale = []
         for name in rendered:
             live_file = LIVE / "parsed" / name
-            if not live_file.exists() or live_file.read_text(encoding="utf-8") != (tmp / name).read_text(
-                encoding="utf-8",
-            ):
+            if _differs(live_file, (tmp / name).read_text(encoding="utf-8")):
                 stale.append(str(live_file.relative_to(ROOT)))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
@@ -3083,9 +3086,7 @@ def _live_stale() -> list[str]:
                 live_file = LIVE / group / prefix / f"{prefix}_espn_ext.py"
             else:
                 live_file = LIVE / prefix / f"{prefix}_espn_ext.py"
-            if not live_file.exists() or live_file.read_text(encoding="utf-8") != (tmp / name).read_text(
-                encoding="utf-8",
-            ):
+            if _differs(live_file, (tmp / name).read_text(encoding="utf-8")):
                 stale.append(str(live_file.relative_to(ROOT)))
         # Also check each container __init__.py against its expected body.
         for group, members in _container_groups(groups).items():
@@ -3093,7 +3094,7 @@ def _live_stale() -> list[str]:
             has_ext = (container / f"{group}_espn_ext.py").exists()
             expected = _container_init_body(group, members, has_ext)
             live_init = container / "__init__.py"
-            if not live_init.exists() or live_init.read_text(encoding="utf-8") != expected:
+            if _differs(live_init, expected):
                 stale.append(str(live_init.relative_to(ROOT)))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
@@ -5822,7 +5823,7 @@ def _docs_stale(rendered: dict[str, str] | None = None) -> list[str]:
     stale = []
     for rel, content in rendered.items():
         f = DOCS / rel
-        if not f.exists() or f.read_text(encoding="utf-8") != content:
+        if _differs(f, content):
             stale.append(rel)
     for root in _generated_docs_roots():
         d = DOCS / root
