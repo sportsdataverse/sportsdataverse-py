@@ -1,4 +1,4 @@
-"""One private body behind every former copy (task 6.1: B-L26, B-L27, B-L28, B-L46, B-L52, B-GB-11).
+"""One private body behind every former copy (task 6.1: B-L26, B-L27, B-L28, B-L46, B-L52, B-GB-11, B-M29, B-M30).
 
 Each row names the shared body and every module that used to carry its own copy. Two checks:
 
@@ -42,6 +42,10 @@ _BOX_COPIES = (
 )
 _ROSTER = "sportsdataverse.mbb.mbb_ncaa_roster_parser"
 _FOX = "sportsdataverse._fox_layout"
+_LG = "sportsdataverse"
+_SEVEN = ("cfb", "mbb", "nba", "nfl", "nhl", "wbb", "wnba")
+_ROSTERS = "sportsdataverse._espn_game_rosters"
+_SCHEDULE = "sportsdataverse._espn_schedule"
 _FOX_EXT = "sportsdataverse.cfb.cfb_fox_ext"
 
 # (shared module, shared name, [(former-copy module, name there)], hash of the deleted copies)
@@ -80,6 +84,45 @@ SHARED = [
     (_FOX, "_cells", [(_FOX_EXT, "_cells")], "e4433f1643bd6b1a"),
     (_FOX, "_uri_id", [(_FOX_EXT, "_uri_id")], "6c9ee881f9c919b2"),
     (_FOX, "_full_team_name", [(_FOX_EXT, "_fox_team_fullname")], "0c2148ef5a4ca870"),
+    # B-M30: the Core v2 game-roster steps; nhl keeps its own roster_items (it does not drop period /
+    # for_player_id / active), the other helpers are one body in all seven chains
+    (
+        _ROSTERS,
+        "game_items",
+        [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_game_items") for lg in _SEVEN],
+        "b9f04361e64c9bee",
+    ),
+    (
+        _ROSTERS,
+        "team_items",
+        [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_team_items") for lg in _SEVEN],
+        "73c5a2312c8534d9",
+    ),
+    (
+        _ROSTERS,
+        "athlete_items",
+        [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_athlete_items") for lg in _SEVEN],
+        "ac9df877d2c7b018",
+    ),
+    (
+        _ROSTERS,
+        "roster_items",
+        [(f"{_LG}.{lg}.{lg}_game_rosters", f"helper_{lg}_roster_items") for lg in _SEVEN if lg != "nhl"],
+        "56b2bc088f858c79",
+    ),
+    # B-M29: the scoreboard home/away step where two leagues' copies were identical
+    (
+        _SCHEDULE,
+        "_extract_home_away_nba",
+        [(f"{_LG}.{lg}.{lg}_schedule", "__extract_home_away") for lg in ("nba", "wnba")],
+        "695f7ef62325b032",
+    ),
+    (
+        _SCHEDULE,
+        "_extract_home_away_college",
+        [(f"{_LG}.{lg}.{lg}_schedule", "__extract_home_away") for lg in ("cfb", "wbb")],
+        "85d4c94fbaeb810b",
+    ),
 ]
 
 
@@ -153,3 +196,30 @@ def test_a_failed_crosswalk_read_is_a_miss_and_is_not_cached(monkeypatch) -> Non
     monkeypatch.setattr(cfb, "load_cfb_schedule_crosswalk", _boom)
     assert _crosswalk_fox_id(401756846, (2025,)) is None
     assert idmap._CFB_CROSSWALK_CACHE == {}
+
+
+def _body_only_hash(fn: object, rename: dict) -> str:
+    """sha256[:16] of a function's body AST (no signature, no docstring), names in ``rename`` mapped first."""
+    node = ast.parse(textwrap.dedent(inspect.getsource(fn))).body[0]
+    body = node.body
+    if body and isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant):
+        body = body[1:]
+    dump = "".join(ast.dump(b) for b in body)
+    for old, new in rename.items():
+        dump = dump.replace(f"'{old}'", f"'{new}'")
+    return hashlib.sha256(dump.encode()).hexdigest()[:16]
+
+
+def test_scoreboard_event_parsing_is_one_body_with_the_league_home_away_step(monkeypatch) -> None:
+    """B-M29: the seven ``scoreboard_event_parsing`` bodies were AST-identical; each now calls the one
+    ``_scoreboard_event`` with its own league's ``__extract_home_away`` (the step's defaults differ by sport, so it
+    is a parameter). The shared body, with the parameter read as the old global, hashes to the deleted copies."""
+    sched = importlib.import_module(_SCHEDULE)
+    assert _body_only_hash(sched._scoreboard_event, {"extract_home_away": "__extract_home_away"}) == "355447b0de5b4f8e"
+    for lg in _SEVEN:
+        mod = importlib.import_module(f"{_LG}.{lg}.{lg}_schedule")
+        calls: list = []
+        monkeypatch.setattr(mod, "_scoreboard_event", lambda event, step, c=calls: c.append((event, step)) or event)
+        event = {"id": "1"}
+        assert mod.scoreboard_event_parsing(event) is event
+        assert calls == [(event, getattr(mod, "__extract_home_away"))], lg

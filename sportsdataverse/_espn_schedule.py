@@ -1,7 +1,8 @@
 """Frame assembly shared by the hand-written ``espn_<lg>_schedule`` functions (task 2.9).
 
-Each league module keeps its own request and its own ``scoreboard_event_parsing``; this module
-owns what happens to the events afterwards, so the contract is stated once:
+Each league module keeps its own request; its ``scoreboard_event_parsing`` calls the one ``_scoreboard_event``
+body here with the league's home/away step (task 6.1). This module owns what happens to the events afterwards,
+so the contract is stated once:
 
 * an empty slate returns a zero-row frame carrying the documented columns (B-H2, B-M12);
 * one malformed event is dropped and the rest of the day kept (B-M24);
@@ -291,3 +292,118 @@ def _schedule_frame(
             fixed.append(pl.col(name))
     df = df.select(*fixed, *[c for c in df.columns if c not in schema])
     return _pandas_ids(df) if return_as_pandas else df
+
+
+def _scoreboard_event(event, extract_home_away):
+    """Flatten one ESPN scoreboard event for the schedule frame, in place (task 6.1: one body for seven leagues).
+
+    ``extract_home_away`` is the league's ``(event, index, "home" | "away")`` step that copies one competitor onto
+    ``competitions[0]`` -- its defaults (linescore count, record names, a poll rank) differ by sport.
+    """
+    event.get("competitions")[0].get("competitors")[0].get("team").pop("links", None)
+    event.get("competitions")[0].get("competitors")[1].get("team").pop("links", None)
+    if event.get("competitions")[0].get("competitors")[0].get("homeAway") == "home":
+        event = extract_home_away(event, 0, "home")
+        event = extract_home_away(event, 1, "away")
+    else:
+        event = extract_home_away(event, 0, "away")
+        event = extract_home_away(event, 1, "home")
+    del_keys = ["geoBroadcasts", "headlines", "series", "situation", "tickets", "odds", "leaders"]
+    for k in del_keys:
+        event.get("competitions")[0].pop(k, None)
+    event.get("competitions")[0]["notes_type"] = (
+        event.get("competitions")[0]["notes"][0].get("type") if len(event.get("competitions")[0]["notes"]) > 0 else ""
+    )
+    event.get("competitions")[0]["notes_headline"] = (
+        event.get("competitions")[0]["notes"][0].get("headline").replace('"', "")
+        if len(event.get("competitions")[0]["notes"]) > 0
+        else ""
+    )
+    event.get("competitions")[0]["broadcast_market"] = (
+        event.get("competitions")[0].get("broadcasts", [])[0].get("market", "")
+        if len(event.get("competitions")[0].get("broadcasts")) > 0
+        else ""
+    )
+    event.get("competitions")[0]["broadcast_name"] = (
+        event.get("competitions")[0].get("broadcasts", [])[0].get("names", [])[0]
+        if len(event.get("competitions")[0].get("broadcasts")) > 0
+        else ""
+    )
+    event.get("competitions")[0].pop("broadcasts", None)
+    event.get("competitions")[0].pop("notes", None)
+    event.get("competitions")[0].pop("competitors", None)
+    return event
+
+
+def _extract_home_away_nba(event, arg1, arg2):
+    """Copy competitor ``arg1`` onto ``competitions[0][arg2]``: four-period linescore default, no poll (nba, wnba)."""
+    event["competitions"][0][arg2] = event.get("competitions")[0].get("competitors")[arg1].get("team")
+    event["competitions"][0][arg2]["score"] = event.get("competitions")[0].get("competitors")[arg1].get("score")
+    event["competitions"][0][arg2]["winner"] = event.get("competitions")[0].get("competitors")[arg1].get("winner")
+    # add winner back to main competitors if does not exist
+    event["competitions"][0]["competitors"][arg1]["winner"] = (
+        event.get("competitions")[0].get("competitors")[arg1].get("winner", False)
+    )
+    event["competitions"][0][arg2]["linescores"] = (
+        event.get("competitions")[0]
+        .get("competitors")[arg1]
+        .get("linescores", [{"value": 0}, {"value": 0}, {"value": 0}, {"value": 0}])
+    )
+    # add linescores back to main competitors if does not exist
+    event["competitions"][0]["competitors"][arg1]["linescores"] = (
+        event.get("competitions")[0]
+        .get("competitors")[arg1]
+        .get("linescores", [{"value": 0}, {"value": 0}, {"value": 0}, {"value": 0}])
+    )
+    event["competitions"][0][arg2]["records"] = (
+        event.get("competitions")[0]
+        .get("competitors")[arg1]
+        .get(
+            "records",
+            [
+                {"abbreviation": "Game", "name": "overall", "summary": "0-0", "type": "total"},
+                {"abbreviation": "null", "name": "Home", "summary": "0-0", "type": "home"},
+                {"abbreviation": "null", "name": "Road", "summary": "0-0", "type": "road"},
+            ],
+        )
+    )
+    return event
+
+
+def _extract_home_away_college(event, arg1, arg2):
+    """Copy competitor ``arg1`` onto ``competitions[0][arg2]``: poll rank (99 unranked), four periods (cfb, wbb)."""
+    event["competitions"][0][arg2] = event.get("competitions")[0].get("competitors")[arg1].get("team")
+    event["competitions"][0][arg2]["score"] = event.get("competitions")[0].get("competitors")[arg1].get("score")
+    event["competitions"][0][arg2]["winner"] = event.get("competitions")[0].get("competitors")[arg1].get("winner")
+    # add winner back to main competitors if does not exist
+    event["competitions"][0]["competitors"][arg1]["winner"] = (
+        event.get("competitions")[0].get("competitors")[arg1].get("winner", False)
+    )
+    event["competitions"][0][arg2]["currentRank"] = (
+        event.get("competitions")[0].get("competitors")[arg1].get("curatedRank", {}).get("current", 99)
+    )
+    event["competitions"][0][arg2]["linescores"] = (
+        event.get("competitions")[0]
+        .get("competitors")[arg1]
+        .get("linescores", [{"value": 0}, {"value": 0}, {"value": 0}, {"value": 0}])
+    )
+    # add linescores back to main competitors if does not exist
+    event["competitions"][0]["competitors"][arg1]["linescores"] = (
+        event.get("competitions")[0]
+        .get("competitors")[arg1]
+        .get("linescores", [{"value": 0}, {"value": 0}, {"value": 0}, {"value": 0}])
+    )
+    event["competitions"][0][arg2]["records"] = (
+        event.get("competitions")[0]
+        .get("competitors")[arg1]
+        .get(
+            "records",
+            [
+                {"abbreviation": "Game", "name": "overall", "summary": "0-0", "type": "total"},
+                {"abbreviation": "null", "name": "Home", "summary": "0-0", "type": "home"},
+                {"abbreviation": "null", "name": "Road", "summary": "0-0", "type": "road"},
+                {"abbreviation": "null", "name": "vs. Conf.", "summary": "0-0", "type": "vsconf"},
+            ],
+        )
+    )
+    return event

@@ -6842,6 +6842,44 @@
     The pre-3.10 citation: a gitignored script that exists only on the maintainer's disk, so the refit
     instruction for DEFAULT_RIDGE_LAMBDA was not reproducible from a clone.
 
+# --- task 6.1 (a): one private body behind the ESPN schedule and game-roster families (B-M29, B-M30) ----
+- id: shared-game-items-copy-again
+  group: share-private-bodies
+  finding: B-M30
+  file: sportsdataverse/nba/nba_game_rosters.py
+  snippet: "helper_nba_game_items = _espn_game_rosters.game_items\n"
+  mutant: "def helper_nba_game_items(summary):\n    return _espn_game_rosters.game_items(summary)\n"
+  test: tests/test_shared_private_bodies.py -k game_items
+  expected: kill
+  note: The pre-6.1 state, nba's own game_items body instead of the shared one.
+- id: shared-roster-items-copy-again
+  group: share-private-bodies
+  finding: B-M30
+  file: sportsdataverse/wbb/wbb_game_rosters.py
+  snippet: "helper_wbb_roster_items = _espn_game_rosters.roster_items\n"
+  mutant: "def helper_wbb_roster_items(items, summary_url, **kwargs):\n    return _espn_game_rosters.roster_items(items, summary_url, **kwargs)\n"
+  test: tests/test_shared_private_bodies.py -k roster_items
+  expected: kill
+  note: The pre-6.1 state, wbb's own roster_items body instead of the shared one.
+- id: shared-home-away-step-wrong-group
+  group: share-private-bodies
+  finding: B-M29
+  file: sportsdataverse/wnba/wnba_schedule.py
+  snippet: "__extract_home_away = _extract_home_away_nba\n"
+  mutant: "from sportsdataverse._espn_schedule import _extract_home_away_college\n\n__extract_home_away = _extract_home_away_college\n"
+  test: tests/test_shared_private_bodies.py -k extract_home_away_nba
+  expected: kill
+  note: wnba's home/away step bound to the college one (poll rank, vs-conf record) instead of its nba twin.
+- id: shared-scoreboard-event-skipped
+  group: share-private-bodies
+  finding: B-M29
+  file: sportsdataverse/mbb/mbb_schedule.py
+  snippet: "    return _scoreboard_event(event, __extract_home_away)\n"
+  mutant: "    return event\n"
+  test: tests/test_shared_private_bodies.py -k scoreboard_event_parsing_is_one_body
+  expected: kill
+  note: mbb's scoreboard_event_parsing no longer runs the shared body with its home/away step.
+
 # --- task 6.1 (b): one private body behind every former copy (B-L26, B-L27, B-L28, B-L46, B-L52, B-GB-11) ----
 - id: shared-box-readers-copy-again
   group: share-private-bodies

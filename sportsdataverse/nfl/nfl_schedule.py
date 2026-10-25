@@ -4,7 +4,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse._codegen_runtime import _download_json
-from sportsdataverse._espn_schedule import _schedule_frame
+from sportsdataverse._espn_schedule import _schedule_frame, _scoreboard_event
 from sportsdataverse.dl_utils import download
 
 # One season/week rule (nflreadr's), owned by utils_date; re-exported here under the old names.
@@ -86,39 +86,7 @@ def scoreboard_event_parsing(event):
                 scoreboard_event_parsing(ev)
                 ev["competitions"][0]["home"]["abbreviation"]
     """
-    event.get("competitions")[0].get("competitors")[0].get("team").pop("links", None)
-    event.get("competitions")[0].get("competitors")[1].get("team").pop("links", None)
-    if event.get("competitions")[0].get("competitors")[0].get("homeAway") == "home":
-        event = __extract_home_away(event, 0, "home")
-        event = __extract_home_away(event, 1, "away")
-    else:
-        event = __extract_home_away(event, 0, "away")
-        event = __extract_home_away(event, 1, "home")
-    del_keys = ["geoBroadcasts", "headlines", "series", "situation", "tickets", "odds", "leaders"]
-    for k in del_keys:
-        event.get("competitions")[0].pop(k, None)
-    event.get("competitions")[0]["notes_type"] = (
-        event.get("competitions")[0]["notes"][0].get("type") if len(event.get("competitions")[0]["notes"]) > 0 else ""
-    )
-    event.get("competitions")[0]["notes_headline"] = (
-        event.get("competitions")[0]["notes"][0].get("headline").replace('"', "")
-        if len(event.get("competitions")[0]["notes"]) > 0
-        else ""
-    )
-    event.get("competitions")[0]["broadcast_market"] = (
-        event.get("competitions")[0].get("broadcasts", [])[0].get("market", "")
-        if len(event.get("competitions")[0].get("broadcasts")) > 0
-        else ""
-    )
-    event.get("competitions")[0]["broadcast_name"] = (
-        event.get("competitions")[0].get("broadcasts", [])[0].get("names", [])[0]
-        if len(event.get("competitions")[0].get("broadcasts")) > 0
-        else ""
-    )
-    event.get("competitions")[0].pop("broadcasts", None)
-    event.get("competitions")[0].pop("notes", None)
-    event.get("competitions")[0].pop("competitors", None)
-    return event
+    return _scoreboard_event(event, __extract_home_away)
 
 
 def __extract_home_away(event, arg1, arg2):
