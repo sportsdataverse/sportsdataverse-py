@@ -78,3 +78,13 @@ def test_paging_params_are_caller_supplied():
     doc = yaml.safe_load(YAML_PATH.read_text(encoding="utf-8"))
     ep = next(e for e in doc["endpoints"] if e["short"] == "news")
     assert {p["name"] for p in ep["extra_params"]} == {"limit", "offset"}
+
+
+def test_pandas_ids_are_nullable_int64():
+    """R981-8: the pandas frame carries the story ids as pandas' nullable ``Int64``, as the polars one does."""
+    from sportsdataverse.espn_content.espn_content_parsers import parse_espn_content
+
+    raw = load("news")
+    pdf = parse_espn_content(raw, return_as_pandas=True)
+    assert str(pdf["id"].dtype) == "Int64"
+    assert pdf["id"].tolist() == [int(h["id"]) for h in raw["headlines"]]
