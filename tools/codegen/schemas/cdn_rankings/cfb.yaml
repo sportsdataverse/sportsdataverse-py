@@ -14,7 +14,7 @@ columns:
   type: logical
   description: ''
 - name: team_id
-  type: character
+  type: integer
   description: ''
 - name: team_display_name
   type: character

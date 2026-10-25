@@ -354,7 +354,7 @@ DataFrame with columns `season` (str, `"YYYY-YY"`), `ncaa_team_id` (Int64 -- the
 | `espn_mascot` | character | ESPN team mascot/nickname. |
 | `espn_abbreviation` | character | ESPN abbreviation. |
 | `espn_conference_name` | character | Conference name for that season as the {mbb,wbb}_group_seasons table records it (e.g. 'Colonial Athletic Association' through 2022-23, 'Coastal Athletic Association' after). Null on the same rows as conference_id. |
-| `espn_conference_id` | integer | ESPN conference (group) id for that season as a string (e.g. '23' for the Southeastern Conference). ESPN group ids are sport-scoped (Summit League is 49 in men's, 47 in women's) and can change (men's Summit League was 15 before 2008). Null on the same rows as conference_id. |
+| `espn_conference_id` | integer | ESPN conference (group) id for that season, Int64 (e.g. 23 for the Southeastern Conference). ESPN group ids are sport-scoped (Summit League is 49 in men's, 47 in women's) and can change (men's Summit League was 15 before 2008). Null on the same rows as conference_id. |
 | `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `conference_id` | character | SportsDataverse conference (group) id for that season, prefixed by the league (e.g. 'mbb:big-ten'), from the {mbb,wbb}_team_group_seasons release table joined on espn_team_id and the season's ending year. Stable across renames and shared with the {mbb,wbb}_groups tables; null only when that table has no row for the team that season. |
 

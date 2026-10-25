@@ -99,7 +99,7 @@ Per-skater frame: `player_id`, `season`, `top_speed`, `distance_km`, `speed_burs
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `season` | integer | Season year (echoed from arg). |
 | `top_speed` | double |  |
 | `distance_km` | double |  |

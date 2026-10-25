@@ -1462,7 +1462,7 @@ ESPN endpoint.
 | `week_display` | character | Poll week as ESPN labels it, e.g. 'Week 6'. |
 | `poll_date` | character | Date the poll was released (ISO 8601, UTC). |
 | `ranked` | logical | TRUE for the poll's ranked teams; FALSE for teams that only received votes. |
-| `team_id` | integer | ESPN team id as a string (the dtype of scoreboard home_id / away_id). |
+| `team_id` | integer | ESPN team id (Int64, like scoreboard home_id / away_id). |
 | `rank` | integer | Position in the poll (1 = top). Null on vote-receiving rows. |
 | `previous_rank` | integer | Position in the previous poll; 0 when the team was unranked then. |
 | `points` | double | Poll points received (0 for polls ESPN ships without points, such as USCHO). |

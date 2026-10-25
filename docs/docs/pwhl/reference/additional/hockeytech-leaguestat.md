@@ -198,7 +198,7 @@ by season, not `season` (name string). The resolved integer is passed as the
 
 **Returns**
 
-One row per ranked skater (points and goals leaders): `rank` (Int64), `player_id`, `name`, `jersey_number`, `position`, `team_id` / `team_name` / `team_code`, `stat_formatted` and `type_formatted` (String), plus photo and logo URLs. A pandas DataFrame when `return_as_pandas` is True.
+One row per ranked skater (points and goals leaders): `rank` (Int64), `player_id`, `name`, `jersey_number`, `position`, `team_id` / `team_name` / `team_code`, `stat_formatted` and `type_formatted` (`player_id` / `team_id` Int64, the rest String), plus photo and logo URLs. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -548,7 +548,7 @@ Search for PWHL players by name.
 
 **Returns**
 
-One row per matching player (String): `person_id`, `player_id`, `first_name` / `last_name`, `position`, `shoots` / `catches`, `height` / `weight`, `birthdate` and birthplace, `last_team_name` / `last_team_code`, `role_name`, `active`, `last_active_date` and the match `score`. A pandas DataFrame when `return_as_pandas` is True.
+One row per matching player (the `*_id` columns Int64, the rest String): `person_id`, `player_id`, `first_name` / `last_name`, `position`, `shoots` / `catches`, `height` / `weight`, `birthdate` and birthplace, `last_team_name` / `last_team_code`, `role_name`, `active`, `last_active_date` and the match `score`. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -614,7 +614,7 @@ PWHL player season stats across all seasons.
 
 **Returns**
 
-One row per season (and team) the player played: `season_id`, `season_name`, `playoff`, `team_id` / `team_name` / `team_code`, `games_played`, `goals`, `assists`, `points`, `plus_minus`, `penalty_minutes`, power-play / short-handed / shootout splits, `shots`, `faceoff_wins` / `faceoff_attempts`, `ice_time` and `stat_type` (String, as the feed ships them). A pandas DataFrame when `return_as_pandas` is True.
+One row per season (and team) the player played: `season_id`, `season_name`, `playoff`, `team_id` / `team_name` / `team_code`, `games_played`, `goals`, `assists`, `points`, `plus_minus`, `penalty_minutes`, power-play / short-handed / shootout splits, `shots`, `faceoff_wins` / `faceoff_attempts`, `ice_time` and `stat_type`. `season_id` and `team_id` are Int64; the rest are String, as the feed ships them. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -771,7 +771,7 @@ PWHL schedule — one row per game of one season (matches fastRhockey `pwhl_sche
 
 **Returns**
 
-One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_team_id` / `home_score`, `away_team` / `away_team_id` / `away_score`, `venue`, `season_id` and `game_type` (all String). Only the requested season's games: a regular season, its playoffs and its preseason are separate season ids, so pass `season_id` (from `pwhl_season_id()`) for the playoffs. A pandas DataFrame when `return_as_pandas` is True.
+One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_team_id` / `home_score`, `away_team` / `away_team_id` / `away_score`, `venue`, `season_id` and `game_type`; the `*_id` columns are Int64, the rest String. Only the requested season's games: a regular season, its playoffs and its preseason are separate season ids, so pass `season_id` (from `pwhl_season_id()`) for the playoffs. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -822,7 +822,7 @@ PWHL live scorebar (today ± 3 days).
 
 **Returns**
 
-One row per game in the window, as the feed ships it (String): `id`, `season_id`, `game_date` / `game_date_iso8601`, `scheduled_time`, `home_id` / `home_code` / `home_long_name` / `home_goals`, the same `visitor_*` columns, `period`, `game_clock`, `game_status` / `game_status_string`, `venue_name`, both teams' records, and broadcast URLs. A pandas DataFrame when `return_as_pandas` is True.
+One row per game in the window, as the feed ships it (`id` and the `*_id` columns Int64, the rest String): `id`, `season_id`, `game_date` / `game_date_iso8601`, `scheduled_time`, `home_id` / `home_code` / `home_long_name` / `home_goals`, the same `visitor_*` columns, `period`, `game_clock`, `game_status` / `game_status_string`, `venue_name`, both teams' records, and broadcast URLs. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -1095,7 +1095,7 @@ PWHL aggregate stats by season and position.
 
 **Returns**
 
-One row per player for that season and position, as the feed ships it (String, ~90 columns): `player_id`, `name`, `team_id` / `team_name` / `team_code`, `position`, `games_played`, and the counting, per-game and ice-time stats of that position (skaters: `goals`, `assists`, `points`, `plus_minus`, `shots`, `hits`, `penalty_minutes` ...). A pandas DataFrame when `return_as_pandas` is True.
+One row per player for that season and position, as the feed ships it (~90 columns; the `*_id` columns Int64, the others typed as the returns table lists): `player_id`, `name`, `team_id` / `team_name` / `team_code`, `position`, `games_played`, and the counting, per-game and ice-time stats of that position (skaters: `goals`, `assists`, `points`, `plus_minus`, `shots`, `hits`, `penalty_minutes` ...). A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
