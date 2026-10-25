@@ -55,6 +55,7 @@ from typing import Any, Optional, Union
 
 import polars as pl
 
+from .capture import _parse_shard  # B-L46: one body, the capture CLI's
 from .identity import enrich_parsed
 from sportsdataverse.mbb.mbb_ncaa_boxscore_parser import get_box_lineup
 from sportsdataverse.mbb.mbb_ncaa_data_quality import ParseError
@@ -480,15 +481,6 @@ def parse_and_write(bundle: "dict[str, Any]", root: "Union[str, Path]", *, leagu
     """Convenience: :func:`parse_bundle` then :func:`write_parsed`."""
     parsed = parse_bundle(bundle, league=league, root=root)
     return write_parsed(root, league, parsed["contest_id"], parsed)
-
-
-def _parse_shard(spec: str) -> "tuple[int, int]":
-    """``"i/N"`` -> ``(i, N)``. Defaults to ``0/1`` (no sharding)."""
-    i_str, _, n_str = spec.partition("/")
-    i, n = int(i_str), int(n_str or "1")
-    if n < 1 or not (0 <= i < n):
-        raise ValueError(f"invalid --shard {spec!r}; expected 'i/N' with 0<=i<N")
-    return i, n
 
 
 def _main(default_league: str, default_root: str) -> None:

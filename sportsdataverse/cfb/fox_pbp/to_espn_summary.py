@@ -24,7 +24,6 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
-import polars as pl
 
 from sportsdataverse._codegen_runtime import _id_text
 from sportsdataverse.cfb.yahoo_pbp.to_espn_summary import ESPN_PLAY_TYPES as _YAHOO_CFB_PLAY_TYPES
@@ -52,11 +51,6 @@ ESPN_PLAY_TYPES: Dict[str, Tuple[str, Optional[str]]] = {
     "79": ("End of Regulation", "ER"),
 }
 
-#: ``cfb_crosswalk`` frames already read, keyed by the season tuple. Successful reads only:
-#: caching a miss would make one transient release-asset failure permanent for the life of a
-#: Game on Paper worker, and this runs on its request path.
-_CROSSWALK_CACHE: Dict[Tuple[int, ...], pl.DataFrame] = {}
-
 
 def _crosswalk_fox_id(espn_id: Any, seasons: Tuple[int, ...]) -> Optional[str]:
     """``fox_game_id`` for an ESPN event id from the published ``cfb_crosswalk`` asset, or None.
@@ -69,24 +63,9 @@ def _crosswalk_fox_id(espn_id: Any, seasons: Tuple[int, ...]) -> Optional[str]:
     outage it exists for; the durable leg is the id map's own ``fox_event_id`` column, which
     the nightly job fills from this same crosswalk before kickoff.
     """
-    if seasons not in _CROSSWALK_CACHE:
-        try:
-            from sportsdataverse.cfb import load_cfb_schedule_crosswalk
+    from sportsdataverse.football.sources.idmap import _cfb_crosswalk_id
 
-            frame = load_cfb_schedule_crosswalk(list(seasons))
-        except Exception:  # noqa: BLE001 -- an unreachable asset is a miss, never a raise
-            return None
-        if (
-            not isinstance(frame, pl.DataFrame)
-            or frame.is_empty()
-            or not {"espn_game_id", "fox_game_id"} <= set(frame.columns)
-        ):
-            return None
-        _CROSSWALK_CACHE[seasons] = frame
-    hit = _CROSSWALK_CACHE[seasons].filter(pl.col("espn_game_id").cast(pl.Utf8) == str(espn_id))
-    if hit.is_empty():
-        return None
-    return hit.row(0, named=True).get("fox_game_id") or None
+    return _cfb_crosswalk_id(espn_id, seasons, "fox_game_id")
 
 
 def _current_cfb_seasons() -> Tuple[int, ...]:
