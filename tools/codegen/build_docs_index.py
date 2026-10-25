@@ -8,6 +8,12 @@ generate.py), the committed generated docs tree (for doc URLs), and two public n
 inputs that --offline skips: the sdv-swagger OpenAPI specs and the R packages' pkgdown
 llms.txt function indexes. Writes sdv_docs.schema.ASSET, its gzip RELEASE_ASSET (the file
 the release serves) and MANIFEST into --out.
+
+generate.py has no public model interface, so this module reads 12 of its private names:
+_R_PARITY_PACKAGE, _autodoc_return_columns, _autodoc_return_frames, _doc_view,
+_documented_espn_views, _flat_views, _loader_schemas, _r_exports, _r_parity_aliases,
+_release_page_url, _schema_doc and _table_cell_desc. Renaming or reshaping one of them is a
+change to this builder too; tests/codegen/test_docs_index.py exercises the build offline.
 """
 
 from __future__ import annotations
