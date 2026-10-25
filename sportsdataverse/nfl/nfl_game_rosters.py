@@ -64,6 +64,12 @@ def espn_nfl_game_rosters(
 
             rosters_pd = espn_nfl_game_rosters(game_id=401220403, return_as_pandas=True)
             home = rosters_pd[rosters_pd["home_away"] == "home"]
+
+        See Also:
+            * `nflfastR`_ -- ``fast_scraper_roster()``, the nflverse roster source
+            * :func:`sportsdataverse.nfl.load_nfl_rosters` -- season rosters from the nflverse release
+
+        .. _nflfastR: https://www.nflfastr.com
             away = rosters_pd[rosters_pd["home_away"] == "away"]
     """
     # summary endpoint for pickcenter array
@@ -93,17 +99,24 @@ def helper_nfl_game_items(summary):
     Used by :func:`espn_nfl_game_rosters`. Exposed for advanced callers
     who already have the JSON payload and want to skip the network call.
 
+    Args:
+        summary: The Core v2 ``/competitors`` payload (``espn_nfl_game_rosters(..., raw=True)``).
+
+    Returns:
+        pl.DataFrame: One row per competitor (team): the ``items[]`` flattened, ``$ref`` keys as
+        ``*_href``, snake-cased, with ``team_id`` (Int32), ``team_uid``, ``order``, ``home_away``
+        and ``winner``.
+
     Example:
         Reuse against a cached payload::
 
-            from sportsdataverse.dl_utils import download
-            from sportsdataverse.nfl.nfl_game_rosters import helper_nfl_game_items
-            url = (
-                "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/"
-                "events/401220403/competitions/401220403/competitors"
-            )
-            items = helper_nfl_game_items(download(url).json())
+            from sportsdataverse.nfl.nfl_game_rosters import espn_nfl_game_rosters, helper_nfl_game_items
+            summary = espn_nfl_game_rosters(401220403, raw=True)  # the /competitors payload
+            items = helper_nfl_game_items(summary)
             items.columns
+
+    See Also:
+        * :func:`espn_nfl_game_rosters` -- the public entry point that chains these helpers
     """
     items = pl.from_pandas(pd.json_normalize(summary, record_path="items", sep="_"))
     items.columns = [col.replace("$ref", "href") for col in items.columns]
@@ -127,6 +140,13 @@ def helper_nfl_team_items(items, **kwargs):
 
     Used by :func:`espn_nfl_game_rosters`.
 
+    Args:
+        items: The frame :func:`helper_nfl_game_items` returns (needs ``team_href``).
+        **kwargs: Passed to the download of each team resource.
+
+    Returns:
+        pl.DataFrame: One ``team_*`` row per team, keyed by ``team_id`` (Int32), with the logo columns.
+
     Example:
         Pair with :func:`helper_nfl_game_items` for an offline-style flow::
 
@@ -135,6 +155,9 @@ def helper_nfl_team_items(items, **kwargs):
             )
             # items = helper_nfl_game_items(...)
             # teams = helper_nfl_team_items(items)
+
+    See Also:
+        * :func:`espn_nfl_game_rosters` -- the public entry point that chains these helpers
     """
     return _espn_game_rosters.team_items(items, **kwargs)
 
@@ -145,11 +168,27 @@ def helper_nfl_roster_items(items, summary_url, **kwargs):
 
     Used by :func:`espn_nfl_game_rosters`.
 
+    Args:
+        items: The frame :func:`helper_nfl_game_items` returns (needs ``team_id``).
+        summary_url: The ``/competitors`` URL; each team's roster is ``<summary_url>/<team_id>/roster``.
+        **kwargs: Passed to each roster download.
+
+    Returns:
+        pl.DataFrame: One row per roster entry of both teams, ``player_id`` (Int64) and ``team_id``
+        (Int32); a team whose roster answers 404 is skipped.
+
+    Raises:
+        NoDataError: No team in the game has a roster resource.
+        AssetFetchError: A roster fetch failed (403, 429, 5xx, a dropped connection).
+
     Example:
         Wired into the public flow (preferred entry point)::
 
             from sportsdataverse.nfl import espn_nfl_game_rosters
             rosters = espn_nfl_game_rosters(game_id=401220403)
+
+    See Also:
+        * :func:`espn_nfl_game_rosters` -- the public entry point that chains these helpers
     """
     from sportsdataverse.errors import NoDataError
 
@@ -188,10 +227,21 @@ def helper_nfl_athlete_items(teams_rosters, **kwargs):
 
     Used by :func:`espn_nfl_game_rosters`.
 
+    Args:
+        teams_rosters: The roster frame (needs ``athlete_href``).
+        **kwargs: Passed to each athlete download.
+
+    Returns:
+        pl.DataFrame: One row per athlete whose resource answered; a 404 athlete is left out with a
+        ``UserWarning``.
+
     Example:
         Wired into the public flow (preferred entry point)::
 
             from sportsdataverse.nfl import espn_nfl_game_rosters
             rosters = espn_nfl_game_rosters(game_id=401220403)
+
+    See Also:
+        * :func:`espn_nfl_game_rosters` -- the public entry point that chains these helpers
     """
     return _espn_game_rosters.athlete_items(teams_rosters, **kwargs)

@@ -1,0 +1,34 @@
+"""The modules the audit found short of napoleon sections stay complete (C-L50, C-L55, C-L60, B-L24)."""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+from tools.check_docstrings import check_file, main
+
+ROOT = Path(__file__).resolve().parents[1]
+AUDITED = [
+    "sportsdataverse/find.py",
+    "sportsdataverse/validation",
+    "sportsdataverse/_rds.py",
+    "sportsdataverse/dl_utils.py",
+    "sportsdataverse/errors.py",
+    "sportsdataverse/pwhl/pwhl_api.py",
+    "sportsdataverse/nfl/nfl_game_rosters.py",
+]
+
+
+def test_audited_modules_have_every_section(capsys):
+    assert main([str(ROOT / p) for p in AUDITED]) == 0, capsys.readouterr().out
+
+
+def test_checker_reports_a_missing_example(tmp_path):
+    f = tmp_path / "m.py"
+    f.write_text(
+        'def f(x):\n    """Do it.\n\n    Args:\n        x: x.\n\n    Returns:\n        int.\n\n'
+        '    See Also:\n        * g\n    """\n    if x:\n        raise ValueError\n    return 1\n',
+        encoding="utf-8",
+    )
+    lines, missing, prompts = check_file(f)
+    assert (missing, prompts) == (2, 0)  # Raises: (the body raises) and Example:
+    assert "Raises:" in lines[0] and "Example:" in lines[0]

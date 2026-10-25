@@ -1,9 +1,9 @@
 """Runtime for the generated Football-Data.co.uk wrappers.
 
 football-data.co.uk is a static **CSV** archive, not a JSON API. The shared
-no-auth runtime (:mod:`sportsdataverse._codegen_runtime`) always does
-``response.json()`` and answers ``{}`` on a non-JSON body, which would silently
-drop every payload. This is the ``torvik_runtime`` pattern: return the parsed
+no-auth runtime (:mod:`sportsdataverse._codegen_runtime`) decodes JSON only and
+raises ``AssetFetchError`` on a non-JSON 2xx body, so no CSV would ever reach the
+parser. This is the ``torvik_runtime`` pattern: return the parsed
 JSON ``dict`` for a JSON body and the **raw text** for everything else, so
 ``parse_football_data`` receives the CSV it expects.
 

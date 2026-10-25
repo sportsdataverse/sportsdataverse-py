@@ -6,9 +6,9 @@ return **CSV** when called with ``csv=true`` (``text/csv``), the per-game feed
 leaderboards (``fielding-run-value``, ``statcast-park-factors``) return **HTML**
 with the data embedded in a ``<script>`` blob even with ``csv=true``.
 
-The shared no-auth runtime (:mod:`sportsdataverse._codegen_runtime`) always does
-``response.json()`` and returns ``{}`` on any non-JSON body — which silently
-drops every CSV/HTML payload. This module supplies a drop-in ``_get`` that
+The shared no-auth runtime (:mod:`sportsdataverse._codegen_runtime`) decodes JSON
+only and raises ``AssetFetchError`` on a non-JSON 2xx body, so no CSV/HTML payload
+would ever reach its parser. This module supplies a drop-in ``_get`` that
 returns the **parsed JSON dict for JSON bodies and the raw text for CSV/HTML
 bodies**, so each endpoint's registered parser receives the shape it expects
 (``parse_mlb_statcast_leaderboard`` consumes CSV text, ``parse_mlb_statcast_gamefeed``

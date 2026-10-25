@@ -88,6 +88,20 @@ class RuleResult:
         n_violations: How many of those broke it.
         samples: Up to ``_SAMPLE_N`` offending rows with the columns that matter.
         severity: Severity when the rule fires.
+
+    Example:
+        The rules that fired on a processed game::
+
+            from sportsdataverse.nfl import NFLPlayProcess
+
+            proc = NFLPlayProcess(gameId=401671801)
+            proc.espn_nfl_pbp()
+            game = proc.run_processing_pipeline()
+            from sportsdataverse.validation.pbp_invariants import evaluate
+            [(r.rule, r.n_violations, r.n_checked) for r in evaluate(proc.plays_frame) if r.n_violations]
+
+    See Also:
+        * :func:`evaluate` -- returns one per applicable rule
     """
 
     rule: str
@@ -441,7 +455,27 @@ _SCORE = ("start.homeScore", "start.awayScore", "end.homeScore", "end.awayScore"
 
 
 def header_final_score(summary: dict[str, Any] | None) -> tuple[int | None, int | None]:
-    """``(home, away)`` final score from an ESPN summary header, ``(None, None)`` when absent."""
+    """``(home, away)`` final score from an ESPN summary header, ``(None, None)`` when absent.
+
+    Args:
+        summary: a raw ESPN summary payload (``header.competitions[0].competitors[]``).
+
+    Returns:
+        tuple[int | None, int | None]: each side's ``score`` as an integer; a side whose score is
+        missing or not numeric stays ``None``.
+
+    Example:
+        A final score from the raw summary::
+
+            from sportsdataverse.nfl import espn_nfl_summary
+
+            summary = espn_nfl_summary(event_id=401671801, return_parsed=False)
+            from sportsdataverse.validation.pbp_invariants import header_final_score
+            header_final_score(summary)
+
+    See Also:
+        * :func:`evaluate` -- the rule table this input feeds
+    """
     home = away = None
     try:
         comps = summary["header"]["competitions"][0]["competitors"]  # type: ignore[index]
@@ -713,7 +747,26 @@ def _down_distance(df: pl.DataFrame) -> list[RuleResult | None]:
 
 
 def home_result(summary: dict[str, Any] | None) -> float | None:
-    """1.0 home win, 0.0 home loss, 0.5 tie; None when the header has no final score."""
+    """1.0 home win, 0.0 home loss, 0.5 tie; None when the header has no final score.
+
+    Args:
+        summary: a raw ESPN summary payload.
+
+    Returns:
+        float | None: the home side's result, from :func:`header_final_score`.
+
+    Example:
+        The result the final-WP rules compare against::
+
+            from sportsdataverse.nfl import espn_nfl_summary
+
+            summary = espn_nfl_summary(event_id=401671801, return_parsed=False)
+            from sportsdataverse.validation.pbp_invariants import home_result
+            home_result(summary)
+
+    See Also:
+        * :func:`evaluate` -- the rule table this input feeds
+    """
     home, away = header_final_score(summary)
     if home is None or away is None:
         return None
@@ -1082,7 +1135,27 @@ def _flags(df: pl.DataFrame) -> list[RuleResult | None]:
 
 
 def raw_plays(summary: dict[str, Any] | None) -> list[dict[str, Any]]:
-    """Every play in the summary's drive groups, as the processors read them (all ``drives`` keys)."""
+    """Every play in the summary's drive groups, as the processors read them (all ``drives`` keys).
+
+    Args:
+        summary: a raw ESPN summary payload.
+
+    Returns:
+        list[dict]: the ``plays[]`` of every drive under every ``drives`` key (``previous``,
+        ``current``), in payload order; empty when the summary has no drives.
+
+    Example:
+        Count the plays the processor was given::
+
+            from sportsdataverse.nfl import espn_nfl_summary
+
+            summary = espn_nfl_summary(event_id=401671801, return_parsed=False)
+            from sportsdataverse.validation.pbp_invariants import raw_plays
+            len(raw_plays(summary))
+
+    See Also:
+        * :func:`evaluate` -- the rule table this input feeds
+    """
     drives = (summary or {}).get("drives") or {}
     groups: list[Any] = []
     for value in drives.values() if isinstance(drives, dict) else [drives]:
@@ -1168,7 +1241,29 @@ def _espn_int(value: Any) -> int | None:
 
 
 def espn_team_stats(summary: dict[str, Any] | None) -> dict[int, dict[str, int | None]]:
-    """``{team_id: {pass_yds_net, sack_yds, rush_yds, rush_att, comp, att, sacks}}`` from ESPN's summary box."""
+    """``{team_id: {pass_yds_net, sack_yds, rush_yds, rush_att, comp, att, sacks}}`` from ESPN's summary box.
+
+    Args:
+        summary: a raw ESPN summary payload (``boxscore.teams[].statistics[]``).
+
+    Returns:
+        dict[int, dict[str, int | None]]: per team id, the integers read from ESPN's
+        ``netPassingYards``, ``rushingYards``, ``rushingAttempts``, ``completionAttempts`` (``comp`` /
+        ``att``) and ``sacksYardsLost`` (``sacks`` / ``sack_yds``); a value ESPN leaves blank or
+        malformed is ``None``.
+
+    Example:
+        ESPN's own team box, keyed by team id::
+
+            from sportsdataverse.nfl import espn_nfl_summary
+
+            summary = espn_nfl_summary(event_id=401671801, return_parsed=False)
+            from sportsdataverse.validation.pbp_invariants import espn_team_stats
+            espn_team_stats(summary)
+
+    See Also:
+        * :func:`evaluate` -- the rule table this input feeds
+    """
     out: dict[int, dict[str, int | None]] = {}
     for team in ((summary or {}).get("boxscore") or {}).get("teams") or []:
         try:
@@ -1659,6 +1754,22 @@ def evaluate(
     Returns:
         One RuleResult per rule whose columns (and optional inputs) are present,
         including rules that did not fire (``n_violations == 0``).
+
+    Example:
+        Every rule that fired on a processed game::
+
+            from sportsdataverse.nfl import NFLPlayProcess
+
+            proc = NFLPlayProcess(gameId=401671801)
+            proc.espn_nfl_pbp()
+            game = proc.run_processing_pipeline()
+            from sportsdataverse.validation.pbp_invariants import evaluate
+            results = evaluate(proc.plays_frame, summary=proc.json, box=game.get("advBoxScore"))
+            [r for r in results if r.n_violations]
+
+    See Also:
+        * :func:`~sportsdataverse.validation.validate_game` -- the per-game gate over these results
+        * :func:`run` -- the same results as offline-harness findings
     """
     groups: list[RuleResult | None] = []
     groups += _timeouts(plays)
@@ -1699,6 +1810,21 @@ def run(
     Returns:
         Findings whose ``metric`` is the violation count and whose locator
         carries the rule, invariant group and denominator.
+
+    Example:
+        Harness findings for a processed game::
+
+            from sportsdataverse.nfl import NFLPlayProcess
+
+            proc = NFLPlayProcess(gameId=401671801)
+            proc.espn_nfl_pbp()
+            game = proc.run_processing_pipeline()
+            from sportsdataverse.validation.findings import CheckContext
+            from sportsdataverse.validation.pbp_invariants import run
+            run("pbp", proc.plays_frame, CheckContext(domain="nfl", dataset="pbp", schema={}))
+
+    See Also:
+        * :func:`evaluate` -- the rule results these findings are built from
     """
     findings = []
     for r in evaluate(frame, summary=summary, box=box, league=ctx.domain):

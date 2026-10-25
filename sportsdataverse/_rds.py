@@ -386,6 +386,9 @@ def write_rds(
             so a released rds without it prints differently for every user.
         compress: Gzip the stream like ``saveRDS(compress = TRUE)``.
 
+    Returns:
+        None. The file at ``path`` is written (replaced if it exists).
+
     Raises:
         ValueError: On column dtypes with no R atomic-vector equivalent, or a
             ``cls`` that does not end in ``"data.frame"``.
@@ -409,6 +412,12 @@ def write_rds(
                     "hoopR_timestamp": datetime.now(timezone.utc),
                 },
             )
+
+        See Also:
+            * :mod:`sportsdataverse.release` -- the release helpers that publish these files
+            * `hoopR`_ -- the R producers whose ``saveRDS`` output this matches byte for byte
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
     """
     if cls is not None:
         cls = list(cls)
