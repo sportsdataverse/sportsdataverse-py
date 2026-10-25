@@ -34,7 +34,8 @@ import pathlib
 import re
 import sys
 
-sys.path.insert(0, ".")
+_ROOT = pathlib.Path(__file__).resolve().parents[2]  # the repo root, whatever the CWD
+sys.path.insert(0, str(_ROOT))
 
 STATIC: dict[str, str] = {
     # --- expected points ---------------------------------------------------
@@ -271,7 +272,7 @@ def main() -> None:
     import yaml
 
     target = "load_cfb_pbp"
-    schemas = yaml.safe_load(pathlib.Path("tools/codegen/schemas/loader_schemas.yaml").read_text(encoding="utf-8"))
+    schemas = yaml.safe_load((_ROOT / "tools/codegen/schemas/loader_schemas.yaml").read_text(encoding="utf-8"))
     got, unparsed = {}, []
     for c in schemas[target]:
         d = describe(c["name"])
