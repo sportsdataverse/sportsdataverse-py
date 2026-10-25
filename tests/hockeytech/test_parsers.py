@@ -514,8 +514,10 @@ def test_a_hockeytech_id_that_is_not_an_integer_stays_as_it_came_and_warns():
 
     raw = _load("pwhl_roster_1_5")
     raw["SiteKit"]["Roster"][0]["person_id"] = "TBD"
-    with pytest.warns(SchemaDriftWarning, match=r"HockeyTech parser: id columns \['person_id'\]"):
+    with pytest.warns(SchemaDriftWarning, match=r"HockeyTech parse_roster: id columns \['person_id'\]") as rec:
         df = P.parse_roster(raw)
+    # R988-7: the warning names the parser and points at its caller, not inside _parsers.py
+    assert [w.filename for w in rec] == [__file__]
     assert df.schema["person_id"] == pl.String and "TBD" in df["person_id"].to_list()
     assert {c: t for c, t in df.schema.items() if c.endswith("_id") and c != "person_id" and t != pl.Int64} == {}
 
@@ -545,3 +547,29 @@ def test_every_hockeytech_returns_table_documents_its_ids_as_integer():
             if bad:
                 wrong[f"{lg}/{path.stem}"] = bad
     assert wrong == {}
+
+
+@pytest.mark.parametrize(
+    ("parser", "stem", "kw"),
+    [
+        ("parse_roster", "pwhl_roster_1_5", {}),  # undecorated
+        ("parse_teams", "pwhl_teams_5", {}),  # @_documented_empty
+        ("parse_shifts", "pwhl_gameshifts_42", {"game_id": 42}),  # @_documented_empty
+        ("parse_seasons", "pwhl_seasons", {}),  # @_documented_empty
+        ("parse_pbp", "pwhl_pbp_42", {"game_id": 42}),  # @_data_only
+        ("parse_game_summary", "pwhl_game_summary_42", {"game_id": 42}),  # @_dict_only
+        ("parse_player_game_log", "pwhl_player_gamebygame_27_5", {}),  # SiteKit factory
+    ],
+)
+def test_id_warning_names_the_parser_and_points_at_its_caller(monkeypatch, parser, stem, kw):
+    """R989 (CodeRabbit): a decorated parser pointed the refused-id warning at its decorator's wrapper, and the SiteKit
+    factory named ``parse_player_game_log`` ``parse_player``. A text ``bogus_id`` column added to every frame: each
+    warning names the exported parser and its ``filename`` is this test file."""
+    from sportsdataverse.errors import SchemaDriftWarning
+    from sportsdataverse.hockeytech import _parsers as P
+
+    snake = P._snake_columns
+    monkeypatch.setattr(P, "_snake_columns", lambda df: snake(df).assign(bogus_id="x") if len(df) else snake(df))
+    with pytest.warns(SchemaDriftWarning, match=rf"HockeyTech {parser}: id columns \['bogus_id'\]") as rec:
+        getattr(P, parser)(_load(stem), **kw)
+    assert {w.filename for w in rec} == {__file__}
