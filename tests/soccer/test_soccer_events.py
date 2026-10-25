@@ -137,23 +137,36 @@ def test_open_events_dispatches_to_kloppy_and_forwards_kwargs(monkeypatch: pytes
     assert df["coordinates_x"].max() > 1.0  # provider units survived the kwarg
 
 
-def test_truncated_body_is_retried_once_without_kloppys_cache(monkeypatch: pytest.MonkeyPatch) -> None:
-    from kloppy.config import get_config
+def test_truncated_body_is_retried_once_after_evicting_the_cached_copy(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    import fsspec
+    from kloppy.config import config_context, get_config
 
-    caches: list = []
+    from sportsdataverse.soccer.soccer_events import _open_data_urls
+
+    events_url = _open_data_urls("statsbomb", 8658)[0]
+    cache = tmp_path / "kloppy_cache"
+    seen: list = []
 
     def flaky_load_open_data(**kwargs: Any) -> Any:
-        caches.append(get_config("cache"))
-        if len(caches) == 1:  # the first read is a cut-off body, as raw.githubusercontent.com served it
+        fs = fsspec.filesystem("simplecache", target_protocol="http", cache_storage=str(cache))
+        seen.append((get_config("cache"), fs._check_file(fs._strip_protocol(events_url))))
+        if len(seen) == 1:  # the first read is a cut-off body, as raw.githubusercontent.com served it
             raise json.JSONDecodeError("Unterminated string starting at", "{...", 1505556)
         return _dataset(coordinates=kwargs["coordinates"])
 
     monkeypatch.setattr(statsbomb, "load_open_data", flaky_load_open_data)
-    df = soccer_open_events("statsbomb", 8658)
+    with config_context("cache", str(cache)):
+        fs = fsspec.filesystem("simplecache", target_protocol="http", cache_storage=str(cache))
+        poisoned = Path(cache) / fs._mapper(fs._strip_protocol(events_url))
+        poisoned.parent.mkdir(parents=True, exist_ok=True)
+        poisoned.write_text('{"cut off', encoding="utf-8")  # the partial download kloppy kept
+        df = soccer_open_events("statsbomb", 8658)
     assert df.height > 0
-    assert len(caches) == 2
-    assert caches[1] != caches[0]  # the retry read through a throwaway cache, not the poisoned one
-    assert get_config("cache") == caches[0]  # and the user's cache setting is restored
+    assert len(seen) == 2
+    assert seen[0][1] and not seen[1][1]  # the poisoned cache file was evicted before the retry
+    assert seen[0][0] == seen[1][0] == str(cache)  # the process-wide cache setting was never touched
 
 
 def test_a_second_truncated_body_is_an_asset_fetch_error(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -166,7 +179,7 @@ def test_a_second_truncated_body_is_an_asset_fetch_error(monkeypatch: pytest.Mon
     monkeypatch.setattr(statsbomb, "load_open_data", corrupt_load_open_data)
     with pytest.raises(
         AssetFetchError,
-        match=r"match 8658 \(https://github\.com/statsbomb/open-data/raw/master/data/events/8658\.json\)",
+        match=r"match 8658 \(https://raw\.githubusercontent\.com/.+/data/events/8658\.json\)",
     ):
         soccer_open_dataset("statsbomb", 8658)
     assert len(calls) == 2  # one retry, no more

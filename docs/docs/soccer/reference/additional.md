@@ -265,7 +265,7 @@ A kloppy `EventDataset`.
 |---|---|
 | `ImportError` | Kloppy is not installed -- `pip install "sportsdataverse[soccer]"`. |
 | `ValueError` | `provider` is not a supported open-data key. |
-| `AssetFetchError` | The events file arrived truncated or corrupt twice (the retry bypasses kloppy's cache). |
+| `AssetFetchError` | The events file arrived truncated or corrupt twice (the retry evicts kloppy's cached copy first). |
 
 **Example**
 
@@ -336,7 +336,7 @@ A polars DataFrame (pandas with `return_as_pandas=True`), one row per event; see
 |---|---|
 | `ImportError` | Kloppy is not installed -- `pip install "sportsdataverse[soccer]"`. |
 | `ValueError` | `provider` is not a supported open-data key. |
-| `AssetFetchError` | The events file arrived truncated or corrupt twice (the retry bypasses kloppy's cache). |
+| `AssetFetchError` | The events file arrived truncated or corrupt twice (the retry evicts kloppy's cached copy first). |
 
 **Example**
 
