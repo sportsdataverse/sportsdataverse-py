@@ -50,8 +50,8 @@ no live API). Click any name for the full reference.
 | [`fox_mbb_league_leaders`](../mbb/reference/additional/fox-sports-api.md#fox_mbb_league_leaders) | Stat leaders (scoring, rebounds, …) | 🦊 Fox ⭐ |
 | [`fox_mbb_standings`](../mbb/reference/additional/fox-sports-api.md#fox_mbb_standings) | Fox conference standings for a team | 🦊 Fox ⭐ |
 | [`fox_mbb_team_roster`](../mbb/reference/additional/fox-sports-api.md#fox_mbb_team_roster) | Fox roster for a team | 🦊 Fox |
-| [`espn_mbb_team_schedule`](../mbb/reference/additional.md#espn_mbb_team_schedule) | One team's full season schedule | 🟥 ESPN ⭐ |
-| [`espn_mbb_conferences`](../mbb/reference/additional.md#espn_mbb_conferences) | Conference / group catalog | 🟥 ESPN ⭐ |
+| [`espn_mbb_team_schedule`](../mbb/reference/site.md#espn_mbb_team_schedule) | One team's full season schedule | 🟥 ESPN ⭐ |
+| [`espn_mbb_conferences`](../mbb/reference/site.md#espn_mbb_conferences) | Conference / group catalog | 🟥 ESPN ⭐ |
 | [`load_mbb_schedule`](../mbb/reference/loaders/other.md#load_mbb_schedule) | Whole-season schedule parquet | 📦 loader |
 | [`load_mbb_player_boxscore`](../mbb/reference/loaders/player.md#load_mbb_player_boxscore) | Season player box scores | 📦 loader |
 | [`load_mbb_team_boxscore`](../mbb/reference/loaders/other.md#load_mbb_team_boxscore) | Season team box scores | 📦 loader |
@@ -333,7 +333,7 @@ pbox = sdv.mbb.load_mbb_player_boxscore(seasons=[2024])
 
 ### Recipe 8 — One conference's power board 🏟️ (ESPN, join)
 
-[`espn_mbb_conferences`](../mbb/reference/additional.md#espn_mbb_conferences) is the group catalog; [`espn_mbb_standings`](../mbb/reference/site.md#espn_mbb_standings) carries a `group_name` per team. Filter standings to a single league — here the Big 12 — to get a clean intra-conference pecking order.
+[`espn_mbb_conferences`](../mbb/reference/site.md#espn_mbb_conferences) is the group catalog; [`espn_mbb_standings`](../mbb/reference/site.md#espn_mbb_standings) carries a `group_name` per team. Filter standings to a single league — here the Big 12 — to get a clean intra-conference pecking order.
 
 
 ```python
@@ -358,7 +358,7 @@ out
 
 ### Recipe 9 — A team's full season schedule 🗓️ (ESPN)
 
-[`espn_mbb_team_schedule`](../mbb/reference/additional.md#espn_mbb_team_schedule) returns every game on one team's slate for a season — matchup name, week and season type — perfect for building an opponent list. We use UConn's 2024 championship run.
+[`espn_mbb_team_schedule`](../mbb/reference/site.md#espn_mbb_team_schedule) returns every game on one team's slate for a season — matchup name, week and season type — perfect for building an opponent list. We use UConn's 2024 championship run.
 
 
 ```python

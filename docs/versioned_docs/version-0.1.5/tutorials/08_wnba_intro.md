@@ -24,7 +24,7 @@ Every accessor returns a tidy **polars** `DataFrame` by default — pass `return
 | [`espn_wnba_teams`](../wnba/reference/additional/espn.md#espn_wnba_teams) | One row per franchise (grab `team_id`s) | ⭐ ESPN |
 | [`espn_wnba_team_roster`](../wnba/reference/site.md#espn_wnba_team_roster) | A team's active roster for a season | ⭐ ESPN |
 | [`espn_wnba_schedule`](../wnba/reference/additional/espn.md#espn_wnba_schedule) | Games + results for a date or date range | ⭐ ESPN |
-| [`espn_wnba_pbp`](../wnba/reference/additional.md#play-by-play-schedule--rosters) | Event-level play-by-play for one game | ⭐ ESPN |
+| [`espn_wnba_pbp`](../wnba/reference/additional/espn.md#espn_wnba_pbp) | Event-level play-by-play for one game | ⭐ ESPN |
 | [`espn_wnba_player_stats`](../wnba/reference/additional/espn.md#espn_wnba_player_stats) | A player's season stat line (wide) | ⭐ ESPN |
 | [`espn_wnba_team_stats`](../wnba/reference/additional/espn.md#espn_wnba_team_stats) | A team's season stats (Averages/Totals/Misc) | ⭐ ESPN |
 | [`espn_wnba_standings`](../wnba/reference/site.md#espn_wnba_standings) | League standings, one row per team | ⭐ ESPN |
@@ -129,7 +129,7 @@ out
 
 ## 🎬 Play-by-play — 2024 Finals Game 5
 
-[`espn_wnba_pbp`](../wnba/reference/additional.md#play-by-play-schedule--rosters) returns a **dict** of component pieces (`plays`, `boxscore`, `header`, `winprobability`, …). The `plays` entry is a list of raw ESPN dicts; build a frame with `pl.DataFrame(..., infer_schema_length=None)`. Its columns use raw **dot-notation** (`period.number`, `clock.displayValue`, `scoringPlay`, `type.text`).
+[`espn_wnba_pbp`](../wnba/reference/additional/espn.md#espn_wnba_pbp) returns a **dict** of component pieces (`plays`, `boxscore`, `header`, `winprobability`, …). The `plays` entry is a list of raw ESPN dicts; build a frame with `pl.DataFrame(..., infer_schema_length=None)`. Its columns use raw **dot-notation** (`period.number`, `clock.displayValue`, `scoringPlay`, `type.text`).
 
 
 ```python

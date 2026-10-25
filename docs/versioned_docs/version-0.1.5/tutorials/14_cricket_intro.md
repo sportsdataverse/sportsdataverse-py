@@ -605,7 +605,7 @@ for name, df in empty_frames.items():
 ## 🎉 Where to next
 
 - 📡 **Full endpoint reference** — every `espn_cricket_*` wrapper is documented
-  on the [Cricket reference](../cricket/reference/) pages, grouped by Site v2,
+  on the [Cricket reference](../cricket/index.md) pages, grouped by Site v2,
   Web v3, and Core v2 families.
 - 🔑 **`event_id` lookup** — the scoreboard frame's `event_id` column is the
   key that unlocks the full summary. Build a pipeline:
