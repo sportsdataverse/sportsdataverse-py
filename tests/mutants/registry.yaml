@@ -6875,11 +6875,21 @@
   group: dtype-contract-5-2
   finding: B-M15
   file: sportsdataverse/mlb/mlb_game_rosters.py
-  snippet: '    match = _re.search(rf"/{kind}/(\d+)", str(obj.get("$ref") or ""))'
-  mutant: '    match = None'
-  test: tests/test_espn_game_rosters_family.py -k "read_the_athlete_and_position_ids"
+  snippet: '    "full_name": "athlete_full_name",'
+  mutant: '    "short_name": "athlete_full_name",'
+  test: tests/test_espn_game_rosters_family.py -k "read_each_athlete_from_its_ref"
   expected: kill
-  note: The MLB roster ids are read from an inline id the Core v2 entry never carries, so they are null again.
+  note: The MLB roster full name is ESPN's short name again ("T. Hernandez"), not the athlete record's (R1002-1).
+
+- id: game-rosters-athlete-key-collision-keeps-the-first
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/_espn_game_rosters.py
+  snippet: '        keep = [i for i, n in enumerate(names) if n not in names[:i]]'
+  mutant: '        keep = list(range(len(names)))'
+  test: tests/test_espn_game_rosters_family.py -k "read_each_athlete_from_its_ref"
+  expected: kill
+  note: An MLB athlete record (debutYear beside debut.year) fails the shared athlete step on a duplicate column.
 
 # --- task 6.1 (b): one private body behind every former copy (B-L26, B-L27, B-L28, B-L46, B-L52, B-GB-11) ----
 - id: shared-box-readers-copy-again

@@ -223,35 +223,61 @@ def test_game_rosters_pandas_ids_are_nullable_int64(league, monkeypatch):
     assert {c: str(pdf[c].dtype) for c in ids} == dict.fromkeys(ids, "Int64")
 
 
-def _serve_mlb_rosters(monkeypatch) -> tuple[int, dict]:
-    """Serve the real MLB competitors capture and each side's real Core v2 roster capture; return (game_id, rosters)."""
+def _mlb_athlete(player_id: int) -> Dict[str, Any]:
+    return json.loads((FIX / "espn_game_rosters" / "mlb_athletes" / f"athlete_{player_id}.json").read_text("utf-8"))
+
+
+def _serve_mlb_rosters(monkeypatch, missing: tuple = ()) -> tuple[int, dict]:
+    """Serve the real MLB competitors capture, each side's real Core v2 roster capture and each rostered athlete's real
+    Core v2 record (an athlete id in ``missing`` answers ESPN's real 404); return (game_id, rosters)."""
     body = _payload("event_competitors", "mlb")
-    rosters = {}
+    rosters, athletes = {}, {}
     for c in body["items"]:
         team = re.search(r"/competitors/(\d+)/roster", c["roster"]["$ref"]).group(1)
-        rosters[_key(c["roster"]["$ref"])] = json.loads(
+        roster = json.loads(
             (FIX / "espn_game_rosters" / f"event_competitor_roster_mlb_{team}.json").read_text(encoding="utf-8")
         )
+        rosters[_key(c["roster"]["$ref"])] = roster
+        for e in roster["entries"]:
+            if e["playerId"] not in missing:
+                athletes[_key(e["athlete"]["$ref"])] = _mlb_athlete(e["playerId"])
     game_id = int(re.search(r"/events/(\d+)/", body["items"][0]["$ref"]).group(1))
     url = re.sub(r"/competitors/.*", "/competitors", body["items"][0]["$ref"])
-    _serve(monkeypatch, {_key(url): body, **rosters})
+    _serve(monkeypatch, {_key(url): body, **rosters, **athletes})
     return game_id, rosters
 
 
-def test_mlb_game_rosters_read_the_athlete_and_position_ids_from_their_refs(monkeypatch):
-    """The real Core v2 roster entry carries the athlete and the position as a bare ``$ref`` with no inline id, so
-    ``athlete_id`` / ``athlete_position_id`` (and the name) were null on every real MLB game. They are read from the
-    ``$ref`` (the name from the entry's ``displayName``), Int64, one row per entry."""
+def test_mlb_game_rosters_read_each_athlete_from_its_ref(monkeypatch):
+    """R1002-1/2: the real Core v2 roster entry carries the athlete and the position as a bare ``$ref``, and its
+    ``displayName`` is ESPN's SHORT name ("T. Hernández", "E. Hernández" on one roster). Each athlete is read from its
+    ``$ref`` (the step the other Core v2 chains use), so the id, full name, jersey and position are the athlete
+    record's, one row per entry, ids Int64."""
     game_id, rosters = _serve_mlb_rosters(monkeypatch)
     df = _mod("mlb").espn_mlb_game_rosters(game_id=game_id)
     entries = [e for payload in rosters.values() for e in payload["entries"]]
+    records = [_mlb_athlete(e["playerId"]) for e in entries]
     assert df.height == len(entries)
     assert df.schema["athlete_id"] == df.schema["athlete_position_id"] == pl.Int64
-    want_ids = [int(re.search(r"/athletes/(\d+)", e["athlete"]["$ref"]).group(1)) for e in entries]
-    assert df["athlete_id"].to_list() == want_ids == [e["playerId"] for e in entries]
-    want_pos = [int(re.search(r"/positions/(\d+)", e["position"]["$ref"]).group(1)) for e in entries]
-    assert df["athlete_position_id"].to_list() == want_pos
-    assert df["athlete_full_name"].to_list() == [e["displayName"] for e in entries]
+    assert df["athlete_id"].to_list() == [int(r["id"]) for r in records] == [e["playerId"] for e in entries]
+    assert df["athlete_full_name"].to_list() == [r["fullName"] for r in records]
+    assert df["athlete_jersey"].to_list() == [r.get("jersey") for r in records]
+    assert df["athlete_position_id"].to_list() == [int(r["position"]["id"]) for r in records]
+    assert df["athlete_position_abbreviation"].to_list() == [r["position"]["abbreviation"] for r in records]
+    assert df["athlete_position_name"].to_list() == [r["position"]["name"] for r in records]
+    assert df["athlete_starter"].to_list() == [e["starter"] for e in entries]
+    hernandez = df.filter(pl.col("athlete_full_name").str.contains("Hernandez"))["athlete_full_name"].to_list()
+    assert len(set(hernandez)) == len(hernandez) == 2  # the entries' short names were ambiguous
+
+
+def test_mlb_game_rosters_leave_out_an_athlete_whose_ref_404s(monkeypatch):
+    """R1002-1: the siblings' rule -- an athlete ``$ref`` that 404s drops that athlete with a warning, not the game."""
+    _, rosters = _serve_mlb_rosters(monkeypatch)
+    gone = next(iter(rosters.values()))["entries"][0]["playerId"]
+    game_id, rosters = _serve_mlb_rosters(monkeypatch, missing=(gone,))
+    with pytest.warns(UserWarning, match=rf"no athlete resource at .*/athletes/{gone}\?.*left out"):
+        df = _mod("mlb").espn_mlb_game_rosters(game_id=game_id)
+    entries = [e for payload in rosters.values() for e in payload["entries"]]
+    assert df.height == len(entries) - 1 and gone not in df["athlete_id"].to_list()
 
 
 def test_mlb_game_rosters_pandas_ids_are_nullable_int64(monkeypatch):

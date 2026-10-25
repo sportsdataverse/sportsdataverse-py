@@ -1,0 +1,296 @@
+{
+  "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/30782?lang=en&region=us",
+  "id": "30782",
+  "uid": "s:1~l:10~a:30782",
+  "guid": "26cdda29-3dc0-d40e-0010-2dcf6b973b90",
+  "type": "baseball",
+  "alternateIds": {
+    "sdr": "2335110"
+  },
+  "firstName": "Anthony",
+  "lastName": "Rizzo",
+  "fullName": "Anthony Rizzo",
+  "displayName": "Anthony Rizzo",
+  "shortName": "A. Rizzo",
+  "weight": 240.0,
+  "displayWeight": "240 lbs",
+  "height": 75.0,
+  "displayHeight": "6' 3\"",
+  "age": 37,
+  "dateOfBirth": "1989-08-08T07:00Z",
+  "debutYear": 2011,
+  "links": [
+    {
+      "language": "en-US",
+      "rel": [
+        "playercard",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/_/id/30782",
+      "text": "Player Card",
+      "shortText": "Player Card",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "stats",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/stats/_/id/30782/anthony-rizzo",
+      "text": "Stats",
+      "shortText": "Stats",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "stats",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:30782&section=stats",
+      "text": "Stats",
+      "shortText": "Stats",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "splits",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/splits/_/id/30782/anthony-rizzo",
+      "text": "Splits",
+      "shortText": "Splits",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "gamelog",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/gamelog/_/id/30782/anthony-rizzo",
+      "text": "Game Log",
+      "shortText": "Game Log",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "gamelog",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:30782&section=gamelog",
+      "text": "Game Log",
+      "shortText": "Game Log",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "news",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/news/_/id/30782/anthony-rizzo",
+      "text": "News",
+      "shortText": "News",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "news",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:30782&section=news",
+      "text": "News",
+      "shortText": "News",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "bio",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/bio/_/id/30782/anthony-rizzo",
+      "text": "Bio",
+      "shortText": "Bio",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "bio",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:30782&section=bio",
+      "text": "Bio",
+      "shortText": "Bio",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "overview",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/_/id/30782/anthony-rizzo",
+      "text": "Overview",
+      "shortText": "Overview",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "overview",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:30782",
+      "text": "Overview",
+      "shortText": "Overview",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "batvspitch",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/batvspitch/_/id/30782/anthony-rizzo",
+      "text": "Bat vs Pitch",
+      "shortText": "Bat vs Pitch",
+      "isExternal": false,
+      "isPremium": false
+    }
+  ],
+  "birthPlace": {
+    "city": "Parkland",
+    "state": "FL",
+    "country": "United States"
+  },
+  "slug": "anthony-rizzo",
+  "headshot": {
+    "href": "https://a.espncdn.com/i/headshots/mlb/players/full/30782.png",
+    "alt": "Anthony Rizzo"
+  },
+  "jersey": "48",
+  "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/3?lang=en&region=us",
+    "id": "3",
+    "name": "First Base",
+    "displayName": "First Baseman",
+    "abbreviation": "1B",
+    "leaf": true,
+    "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/13?lang=en&region=us"
+    }
+  },
+  "positions": [
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/3?lang=en&region=us",
+      "id": "3",
+      "name": "First Base",
+      "displayName": "First Baseman",
+      "abbreviation": "1B",
+      "leaf": true,
+      "parent": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/13?lang=en&region=us"
+      },
+      "statistics": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/types/2/athletes/30782/statistics/79?lang=en&region=us"
+      }
+    }
+  ],
+  "injuries": [],
+  "linked": true,
+  "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/teams/10?lang=en&region=us"
+  },
+  "teams": [
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/teams/10?lang=en&region=us"
+    }
+  ],
+  "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/types/2/athletes/30782/statistics?lang=en&region=us"
+  },
+  "notes": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/30782/notes?lang=en&region=us"
+  },
+  "contracts": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/athletes/30782/contracts?lang=en&region=us"
+  },
+  "experience": {
+    "years": 14
+  },
+  "debut": {
+    "year": 2011,
+    "event": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/310609125?lang=en&region=us"
+    },
+    "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/310609125/competitions/310609125/competitors/25/roster/30782/statistics/0?lang=en&region=us"
+    }
+  },
+  "active": false,
+  "eventLog": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/30782/eventlog?lang=en&region=us"
+  },
+  "draft": {
+    "displayText": "Year: 2007 Round: 6 Pick: 204",
+    "round": 6,
+    "year": 2007,
+    "selection": 204,
+    "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2007/teams/2?lang=en&region=us"
+    }
+  },
+  "status": {
+    "id": "9",
+    "name": "Free Agent",
+    "type": "free-agent",
+    "abbreviation": "FA"
+  },
+  "bats": {
+    "type": "LEFT",
+    "abbreviation": "L",
+    "displayValue": "Left"
+  },
+  "throws": {
+    "type": "LEFT",
+    "abbreviation": "L",
+    "displayValue": "Left"
+  }
+}

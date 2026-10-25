@@ -1,0 +1,300 @@
+{
+  "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/33377?lang=en&region=us",
+  "id": "33377",
+  "uid": "s:1~l:10~a:33377",
+  "guid": "b36b2389-f8ea-858f-b985-6a7fa715c3c3",
+  "type": "baseball",
+  "alternateIds": {
+    "sdr": "3094081"
+  },
+  "firstName": "Teoscar",
+  "lastName": "Hernandez",
+  "fullName": "Teoscar Hernandez",
+  "displayName": "Teoscar Hernandez",
+  "shortName": "T. Hernandez",
+  "weight": 215.0,
+  "displayWeight": "215 lbs",
+  "height": 72.0,
+  "displayHeight": "6' 0\"",
+  "age": 34,
+  "dateOfBirth": "1992-10-15T07:00Z",
+  "debutYear": 2016,
+  "links": [
+    {
+      "language": "en-US",
+      "rel": [
+        "playercard",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/_/id/33377",
+      "text": "Player Card",
+      "shortText": "Player Card",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "stats",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/stats/_/id/33377/teoscar-hernandez",
+      "text": "Stats",
+      "shortText": "Stats",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "stats",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:33377&section=stats",
+      "text": "Stats",
+      "shortText": "Stats",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "splits",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/splits/_/id/33377/teoscar-hernandez",
+      "text": "Splits",
+      "shortText": "Splits",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "gamelog",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/gamelog/_/id/33377/teoscar-hernandez",
+      "text": "Game Log",
+      "shortText": "Game Log",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "gamelog",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:33377&section=gamelog",
+      "text": "Game Log",
+      "shortText": "Game Log",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "news",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/news/_/id/33377/teoscar-hernandez",
+      "text": "News",
+      "shortText": "News",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "news",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:33377&section=news",
+      "text": "News",
+      "shortText": "News",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "bio",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/bio/_/id/33377/teoscar-hernandez",
+      "text": "Bio",
+      "shortText": "Bio",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "bio",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:33377&section=bio",
+      "text": "Bio",
+      "shortText": "Bio",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "overview",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/_/id/33377/teoscar-hernandez",
+      "text": "Overview",
+      "shortText": "Overview",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "overview",
+        "sportscenter",
+        "app",
+        "athlete"
+      ],
+      "href": "sportscenter://x-callback-url/showClubhouse?uid=s:1~l:10~a:33377",
+      "text": "Overview",
+      "shortText": "Overview",
+      "isExternal": false,
+      "isPremium": false
+    },
+    {
+      "language": "en-US",
+      "rel": [
+        "batvspitch",
+        "desktop",
+        "athlete"
+      ],
+      "href": "https://www.espn.com/mlb/player/batvspitch/_/id/33377/teoscar-hernandez",
+      "text": "Bat vs Pitch",
+      "shortText": "Bat vs Pitch",
+      "isExternal": false,
+      "isPremium": false
+    }
+  ],
+  "birthPlace": {
+    "city": "Cotui",
+    "country": "Dominican Republic"
+  },
+  "slug": "teoscar-hernandez",
+  "headshot": {
+    "href": "https://a.espncdn.com/i/headshots/mlb/players/full/33377.png",
+    "alt": "Teoscar Hernandez"
+  },
+  "jersey": "37",
+  "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/7?lang=en&region=us",
+    "id": "7",
+    "name": "Left Field",
+    "displayName": "Left Fielder",
+    "abbreviation": "LF",
+    "leaf": true,
+    "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/14?lang=en&region=us"
+    }
+  },
+  "positions": [
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/7?lang=en&region=us",
+      "id": "7",
+      "name": "Left Field",
+      "displayName": "Left Fielder",
+      "abbreviation": "LF",
+      "leaf": true,
+      "parent": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/14?lang=en&region=us"
+      },
+      "statistics": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/types/2/athletes/33377/statistics/83?lang=en&region=us"
+      }
+    },
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/9?lang=en&region=us",
+      "id": "9",
+      "name": "Right Field",
+      "displayName": "Right Fielder",
+      "abbreviation": "RF",
+      "leaf": true,
+      "parent": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/positions/14?lang=en&region=us"
+      },
+      "statistics": {
+        "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/types/2/athletes/33377/statistics/85?lang=en&region=us"
+      }
+    }
+  ],
+  "injuries": [],
+  "linked": true,
+  "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/teams/19?lang=en&region=us"
+  },
+  "teams": [
+    {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/teams/19?lang=en&region=us"
+    }
+  ],
+  "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/types/2/athletes/33377/statistics?lang=en&region=us"
+  },
+  "notes": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/33377/notes?lang=en&region=us"
+  },
+  "contracts": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/athletes/33377/contracts?lang=en&region=us"
+  },
+  "experience": {
+    "years": 11
+  },
+  "debut": {
+    "year": 2016,
+    "event": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/360812114?lang=en&region=us"
+    },
+    "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/360812114/competitions/360812114/competitors/18/roster/33377/statistics/0?lang=en&region=us"
+    }
+  },
+  "active": true,
+  "eventLog": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/33377/eventlog?lang=en&region=us"
+  },
+  "status": {
+    "id": "1",
+    "name": "Active",
+    "type": "active",
+    "abbreviation": "Active"
+  },
+  "bats": {
+    "type": "RIGHT",
+    "abbreviation": "R",
+    "displayValue": "Right"
+  },
+  "throws": {
+    "type": "RIGHT",
+    "abbreviation": "R",
+    "displayValue": "Right"
+  }
+}
