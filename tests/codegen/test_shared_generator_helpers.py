@@ -4,18 +4,21 @@ The flat-API generators share ``tools/codegen/gen_soccer_common.py``. Static che
 generators need the private sdv-internal-refs checkout to run):
 
 * every generator that carried its own copy now imports the shared helper and defines no copy;
-* no module under ``tools/codegen`` holds a body equal to a shared helper's, so a new copy fails here;
-* each shared body hashes to the deleted copies' (docstring and name excluded) at the merge commit.
+* no module under ``tools/codegen`` holds a body equal to a shared helper's, so a new copy fails here, with or
+  without type hints and whatever its parameters are called (PRE-1008 B3);
+* each shared body's canonical key (``tests/_body_key.py``, the same on Python 3.10-3.14) equals the deleted
+  copies' at the merge commit (re-pinned under that key in PRE-1008 M-3).
 """
 
 from __future__ import annotations
 
 import ast
-import hashlib
 import re
 from pathlib import Path
 
 import pytest
+
+from tests._body_key import body_key
 
 CODEGEN = Path(__file__).resolve().parents[2] / "tools" / "codegen"
 COMMON = "gen_soccer_common.py"
@@ -54,23 +57,15 @@ FORMER_COPIES = {
 
 # shared helper -> hash of the copies it replaced
 PINS = {
-    "write_yaml": "cde26123dbd25114",
-    "rewrite_schema_dir": "4811f2004dfacda7",
-    "capture_for": "4802852069df1789",
-    "refs_root": "8091b40d284bc12d",
+    "write_yaml": "d2c0fd81daca3498",
+    "rewrite_schema_dir": "186076d5a47055b1",
+    "capture_for": "63b9a789159e1082",
+    "refs_root": "cc3e9ecd474dc205",
 }
 
 
 def _tree(name: str) -> ast.Module:
     return ast.parse((CODEGEN / name).read_text(encoding="utf-8"))
-
-
-def _body_key(node: ast.FunctionDef) -> str:
-    body = node.body
-    if body and isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant):
-        body = body[1:]
-    sig = ast.dump(node.args) + (ast.dump(node.returns) if node.returns else "")
-    return hashlib.sha256((sig + "".join(ast.dump(b) for b in body)).encode()).hexdigest()[:16]
 
 
 def _functions(tree: ast.Module) -> dict[str, ast.FunctionDef]:
@@ -96,25 +91,71 @@ def test_a_former_copy_imports_the_shared_helper(gen: str) -> None:
     )
 
 
-def test_no_generator_carries_a_copy_of_a_shared_helper() -> None:
+def _copies_in(paths) -> list[str]:
+    """Every function in ``paths`` whose canonical body key equals a shared helper's."""
     shared = {
-        _body_key(fn): name
+        body_key(fn): name
         for name, fn in _functions(_tree(COMMON)).items()
         if name in PINS or name in {"refs_root", "refs_dir", "load_spec", "snake_path"}
     }
-    copies = [
-        f"{path.name}:{fn.name} == gen_soccer_common.{shared[_body_key(fn)]}"
-        for path in sorted(CODEGEN.glob("*.py"))
+    return [
+        f"{path.name}:{fn.name} == gen_soccer_common.{shared[body_key(fn)]}"
+        for path in sorted(paths)
         if path.name != COMMON
         for fn in _functions(ast.parse(path.read_text(encoding="utf-8"))).values()
-        if _body_key(fn) in shared
+        if body_key(fn) in shared
     ]
-    assert copies == []
+
+
+def test_no_generator_carries_a_copy_of_a_shared_helper() -> None:
+    assert _copies_in(CODEGEN.glob("*.py")) == []
+
+
+def _pasted_copy(name: str, *, strip_hints: bool, rename: bool) -> str:
+    """The shared helper ``name`` as someone might paste it into a generator: private name, hints dropped, and/or
+    every parameter renamed."""
+    fn = _functions(_tree(COMMON))[name]
+    params = [a for a in fn.args.posonlyargs + fn.args.args + fn.args.kwonlyargs]
+    names = {a.arg: f"{a.arg}_x" for a in params} if rename else {}
+    for a in params:
+        a.arg = names.get(a.arg, a.arg)
+        if strip_hints:
+            a.annotation = None
+    if strip_hints:
+        fn.returns = None
+    for node in ast.walk(fn):
+        if isinstance(node, ast.Name) and node.id in names:
+            node.id = names[node.id]
+    fn.name = f"_{name}"
+    return ast.unparse(fn)
+
+
+@pytest.mark.parametrize(
+    ("strip_hints", "rename"), [(True, False), (False, True), (True, True)], ids=["no_hints", "renamed", "both"]
+)
+def test_a_pasted_copy_without_hints_or_with_renamed_parameters_is_caught(tmp_path, strip_hints, rename) -> None:
+    """PRE-1008 B3: the detector compared exact copies only, so a pasted helper with its type hints dropped or its
+    parameters renamed passed. The canonical key ignores both."""
+    gen = tmp_path / "gen_pasted.py"
+    gen.write_text(
+        "import yaml\n\n\n" + _pasted_copy("write_yaml", strip_hints=strip_hints, rename=rename) + "\n",
+        encoding="utf-8",
+    )
+    assert _copies_in([gen]) == ["gen_pasted.py:_write_yaml == gen_soccer_common.write_yaml"]
+
+
+def test_a_real_body_change_turns_the_key_red() -> None:
+    """PRE-1008 M-3: the canonical key ignores names, hints and docstrings, not behaviour: one changed argument in
+    the shared body gives a different key, so its pin fails."""
+    fn = _functions(_tree(COMMON))["write_yaml"]
+    pinned = body_key(fn)
+    changed = ast.parse(ast.unparse(fn).replace("sort_keys=True", "sort_keys=False")).body[0]
+    assert body_key(changed) != pinned == PINS["write_yaml"]
 
 
 @pytest.mark.parametrize(("name", "pin"), sorted(PINS.items()))
 def test_the_shared_body_equals_the_copies_it_replaced(name: str, pin: str) -> None:
-    assert _body_key(_functions(_tree(COMMON))[name]) == pin, f"gen_soccer_common.{name} changed; update the pin"
+    assert body_key(_functions(_tree(COMMON))[name]) == pin, f"gen_soccer_common.{name} changed; update the pin"
 
 
 def test_no_generator_inlines_snake_path() -> None:
