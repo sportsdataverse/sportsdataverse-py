@@ -48,6 +48,7 @@ FORMER_COPIES = {
     "gen_wjbl.py": (set(), {"_snake_path"}),
     "gen_f1.py": ({"snake_path"}, {"_snake_path"}),
     "gen_uefa.py": ({"snake_path"}, {"_snake_path"}),
+    "gen_euroleague.py": ({"snake_path"}, {"_snake_path"}),
 }
 
 # shared helper -> hash of the copies it replaced

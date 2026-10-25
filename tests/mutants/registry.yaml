@@ -999,10 +999,10 @@
   group: codegen-gates
   finding: A-M1
   file: tools/codegen/generate.py
-  snippet: '    tmp = _check_tmp("_check_live_")'
+  snippet: '    stale = _stale_vs_render("_check_live_", rendered, live)'
   mutant: |2-
         return []
-        tmp = _check_tmp("_check_live_")
+        stale = _stale_vs_render("_check_live_", rendered, live)
   test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and live"
   expected: kill
   note: the ledger gate's own mutation (making _live_stale return [] unconditionally)
@@ -1011,10 +1011,10 @@
   group: codegen-gates
   finding: A-M1
   file: tools/codegen/generate.py
-  snippet: '    tmp = _check_tmp("_check_flat_")'
+  snippet: '    return _stale_vs_render("_check_flat_", rendered, live)'
   mutant: |2-
         return []
-        tmp = _check_tmp("_check_flat_")
+        return _stale_vs_render("_check_flat_", rendered, live)
   test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and flat"
   expected: kill
 
@@ -1022,10 +1022,10 @@
   group: codegen-gates
   finding: A-M1
   file: tools/codegen/generate.py
-  snippet: '    tmp = _check_tmp("_check_parsed_")'
+  snippet: '    return _stale_vs_render("_check_parsed_", rendered, {name: LIVE / "parsed" / name for name in rendered})'
   mutant: |2-
         return []
-        tmp = _check_tmp("_check_parsed_")
+        return _stale_vs_render("_check_parsed_", rendered, {name: LIVE / "parsed" / name for name in rendered})
   test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and parsed"
   expected: kill
 
@@ -1033,10 +1033,10 @@
   group: codegen-gates
   finding: A-M1
   file: tools/codegen/generate.py
-  snippet: '    tmp = _check_tmp("_check_loaders_")'
+  snippet: '    return _stale_vs_render("_check_loaders_", rendered, live)'
   mutant: |2-
         return []
-        tmp = _check_tmp("_check_loaders_")
+        return _stale_vs_render("_check_loaders_", rendered, live)
   test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and loaders"
   expected: kill
 
