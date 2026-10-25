@@ -21,6 +21,7 @@ import json
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
+import pandas as pd
 import polars as pl
 import yaml
 
@@ -91,7 +92,8 @@ def _call(league: str, family: str, monkeypatch, body: Dict[str, Any], **kwargs:
     calls = _route(monkeypatch, lambda url: (200, json.dumps(body), "application/json"))
     fn = getattr(importlib.import_module(f"sportsdataverse.{league}.{league}_{family}"), f"espn_{league}_{family}")
     out = fn(**kwargs)  # the teams functions no longer cache (task 2.11), so nothing to clear
-    assert isinstance(out, pl.DataFrame), f"espn_{league}_{family} returned {type(out).__name__}, not a DataFrame"
+    want = pd.DataFrame if kwargs.get("return_as_pandas") else pl.DataFrame
+    assert isinstance(out, want), f"espn_{league}_{family} returned {type(out).__name__}, not a {want.__module__} frame"
     return out, calls
 
 
@@ -127,7 +129,7 @@ EVENT_MUTATIONS: Dict[str, Callable[[Dict[str, Any]], None]] = {
 
 def schedule_cases(league: str) -> List[Any]:
     """The schedule case ids for one league (task 2.9 fixed every known defect these pinned)."""
-    cases: List[Any] = ["snapshot", "id_dtypes", "query_key", "returns_table_columns", "empty_slate"]
+    cases: List[Any] = ["snapshot", "id_dtypes", "pandas_ids", "query_key", "returns_table_columns", "empty_slate"]
     cases += list(EVENT_MUTATIONS)
     if league != "mlb":  # mlb emits no linescores (nor attendance)
         cases += ["canceled_masked", "parse_twice", "integer_with_a_missing_value"]
@@ -169,6 +171,14 @@ def check_schedule(league: str, case: str, monkeypatch) -> None:
         assert not unlisted, f"id columns without an allowlist entry: {unlisted}"
         wrong = {c: str(df.schema[c]) for c in id_cols if df.schema[c] not in allow[c]}
         assert not wrong, f"id columns off their documented dtype: {wrong}"
+    elif case == "pandas_ids":
+        # R981-2: the pandas frame carries the ids as pandas' nullable Int64, never float64 ("150.0") where one
+        # event lacks one (the real cfb capture has null groups_id / conference ids)
+        pdf, _ = _call(league, "schedule", monkeypatch, body, return_as_pandas=True, **kwargs)
+        pdf_empty, _ = _call(league, "schedule", monkeypatch, {**body, "events": []}, return_as_pandas=True, **kwargs)
+        for frame in (pdf, pdf_empty):
+            ids = {c: str(frame[c].dtype) for c in frame.columns if c in SCHEDULE_IDS[league]}
+            assert ids and set(ids.values()) == {"Int64"}, ids
     elif case == "query_key":
         _, calls = _call(league, "schedule", monkeypatch, body, season_type=2, **kwargs)
         assert "seasontype=2" in calls[0], calls[0]
@@ -247,7 +257,7 @@ def check_schedule(league: str, case: str, monkeypatch) -> None:
 # teams
 # --------------------------------------------------------------------------------------
 
-TEAMS_CASES = ["snapshot", "id_dtypes", "query_key"]
+TEAMS_CASES = ["snapshot", "id_dtypes", "pandas_ids", "query_key"]
 
 
 def teams_cases(league: str) -> List[str]:
@@ -268,6 +278,9 @@ def check_teams(league: str, case: str, monkeypatch) -> None:
         id_cols = [c for c in df.columns if c.endswith("_id") or c.endswith("_uid")]
         assert sorted(id_cols) == sorted(TEAMS_IDS)
         assert {c: df.schema[c] for c in id_cols} == {c: TEAMS_IDS[c][0] for c in id_cols}
+    elif case == "pandas_ids":
+        pdf, _ = _call(league, "teams", monkeypatch, body, return_as_pandas=True)
+        assert str(pdf["team_id"].dtype) == "Int64" and pdf["team_id"].tolist() == [int(t["id"]) for t in teams]
     elif case == "query_key":
         query = calls[0].split("?", 1)[1]
         group: Optional[str] = {"mbb": "50", "wbb": "50", "cfb": "80"}.get(league)

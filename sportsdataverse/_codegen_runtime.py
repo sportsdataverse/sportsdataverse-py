@@ -84,6 +84,24 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
     return df
 
 
+def _pandas_ids(df: pl.DataFrame, out: Any = None) -> Any:
+    """``df`` as pandas with every ``Int64`` ``id`` / ``*_id`` column as pandas' nullable ``Int64`` (R981-2).
+
+    A plain ``to_pandas()`` turns an ``Int64`` column holding a null into ``float64`` (``5.0``), the float id
+    the polars side was cast to stop. The values cross as Python ints, so an 18-digit play id stays exact
+    (a float64 hop would round it). ``out`` is a pandas frame of the same rows to write the ids into
+    instead of ``df.to_pandas()``.
+    """
+    import pandas as pd
+
+    if out is None:
+        out = df.to_pandas()
+    for col, dtype in df.schema.items():
+        if dtype == pl.Int64 and (col == "id" or col.endswith("_id")):
+            out[col] = pd.array(df[col].to_list(), dtype="Int64")
+    return out
+
+
 def _empty_from_schema(name: str, return_as_pandas: bool = False, arrow: bool = False) -> Any:
     """A zero-row frame with the columns and dtypes of the returns table ``name`` (task 5.1).
 
@@ -98,7 +116,7 @@ def _empty_from_schema(name: str, return_as_pandas: bool = False, arrow: bool = 
     df = pl.DataFrame(schema=SCHEMAS[name])
     if not return_as_pandas:
         return df
-    return df.to_pandas(use_pyarrow_extension_array=True) if arrow else df.to_pandas()
+    return df.to_pandas(use_pyarrow_extension_array=True) if arrow else _pandas_ids(df)
 
 
 def _pin_documented(name: str, df: pl.DataFrame) -> pl.DataFrame:

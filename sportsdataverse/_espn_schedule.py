@@ -25,7 +25,7 @@ from typing import Any
 import pandas as pd
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _cast_ids_int64
+from sportsdataverse._codegen_runtime import _cast_ids_int64, _pandas_ids
 from sportsdataverse.dl_utils import underscore
 
 _LINESCORES = pl.List(pl.Struct({"value": pl.Float64, "displayValue": pl.String, "period": pl.Int64}))
@@ -201,7 +201,7 @@ def _schedule_schema(league: str) -> dict[str, pl.DataType]:
 def _empty_schedule(league: str, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
     """A zero-row schedule frame carrying the documented columns."""
     df = pl.DataFrame(schema=_schedule_schema(league))
-    return df.to_pandas() if return_as_pandas else df
+    return _pandas_ids(df) if return_as_pandas else df
 
 
 def _schedule_ids(df: pl.DataFrame) -> pl.DataFrame:
@@ -290,4 +290,4 @@ def _schedule_frame(
         else:
             fixed.append(pl.col(name))
     df = df.select(*fixed, *[c for c in df.columns if c not in schema])
-    return df.to_pandas() if return_as_pandas else df
+    return _pandas_ids(df) if return_as_pandas else df

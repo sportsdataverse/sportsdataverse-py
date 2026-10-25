@@ -7115,6 +7115,36 @@
   expected: kill
   note: An ESPN id column the cast refuses (text in the payload) stays String with no warning (R981-6).
 
+- id: espn-pandas-ids-nullable-int64
+  group: dtype-contract-5-2
+  finding: A-M14
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '            out[col] = pd.array(df[col].to_list(), dtype="Int64")'
+  mutant: '            pass'
+  test: tests/test_espn_universal_parsers.py -k "pandas_ids_are_nullable_int64_never_float"
+  expected: kill
+  note: The pandas output of a parser reads a null-bearing id as float64 again (R981-2).
+
+- id: espn-snapshot-id-refusal-warns
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/espn_snapshots.py
+  snippet: '        f"ESPN snapshot id {field}: {value!r} is not an integer id; read as null",'
+  mutant: '        f"ESPN snapshot id {field}: {value!r} read as null",'
+  test: tests/test_espn_snapshots.py -k "as_id_warns_on_a_value_that_is_not_an_integer_id"
+  expected: kill
+  note: A snapshot id that is not an integer is nulled without saying why (R981-4).
+
+- id: espn-snapshot-padded-id-not-unpadded
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/espn_snapshots.py
+  snippet: '_INTEGER_ID = re.compile(r"-?(?:0|[1-9]\d*)")'
+  mutant: '_INTEGER_ID = re.compile(r"-?\d+")'
+  test: tests/test_espn_snapshots.py -k "padded_injury_id_on_the_real_capture"
+  expected: kill
+  note: A zero-padded snapshot id ("007") is silently read as 7 (R981-4).
+
 - id: ncaa-xwalk-tier-join-asserts-key-dtypes
   group: dtype-contract-5-2
   finding: B-GB-10

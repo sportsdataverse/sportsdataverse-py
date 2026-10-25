@@ -27,7 +27,7 @@ from typing import TYPE_CHECKING, Dict, Optional, Union
 import polars as pl
 import pyarrow as pa
 
-from sportsdataverse._codegen_runtime import _read_release_parquet, cli_warn
+from sportsdataverse._codegen_runtime import _pandas_ids, _read_release_parquet, cli_warn
 from sportsdataverse.config import SDVRELEASES
 from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.mbb.mbb_ncaa_team_ids import _LEAGUE_PKG, _league_data_bytes
@@ -148,7 +148,7 @@ def ncaa_espn_team_crosswalk(
             # Not cached: a later call retries the release (a transient failure must not pin the
             # bundled copy for the life of the process).
             df = _packaged_crosswalk(league)
-    return df.to_pandas() if return_as_pandas else df
+    return _pandas_ids(df) if return_as_pandas else df
 
 
 __all__ = ["ncaa_espn_team_crosswalk"]

@@ -5,7 +5,7 @@ import datetime
 import pandas as pd
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _download_json
+from sportsdataverse._codegen_runtime import _download_json, _pandas_ids
 from sportsdataverse._espn_schedule import _empty_schedule, _schedule_ids
 from sportsdataverse.dl_utils import download
 
@@ -56,7 +56,7 @@ def espn_mlb_schedule(dates=None, season_type=None, limit=500, return_as_pandas=
 
     rows = [_scoreboard_event_parsing(ev) for ev in events]
     df = _schedule_ids(pl.from_pandas(pd.DataFrame(rows)))
-    return df.to_pandas() if return_as_pandas else df
+    return _pandas_ids(df) if return_as_pandas else df
 
 
 def _scoreboard_event_parsing(event: dict) -> dict:
