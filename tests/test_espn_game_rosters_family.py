@@ -403,3 +403,16 @@ def test_mlb_game_rosters_raw_rows_keep_the_documented_keys(monkeypatch):
     entries = [e for payload in rosters.values() for e in payload["entries"]]
     assert [list(r) for r in out["rows"]] == [list(mod._COLUMNS)] * len(entries)
     assert [r["athlete_id"] for r in out["rows"]] == [e["playerId"] for e in entries]
+
+
+def test_mlb_game_rosters_raw_ids_are_ints_whichever_field_they_came_from(monkeypatch):
+    """PRE-1008 critic minor 4: in ``raw=True`` rows ``athlete_id`` was an int from ``playerId`` but a str from the
+    athlete ``$ref`` fallback, and ``game_position_id`` always a str. Both are ints, on the real captures with one
+    entry's ``playerId`` removed."""
+    game_id, rosters = _serve_mlb_rosters(monkeypatch)
+    first = next(iter(rosters.values()))["entries"][0]
+    want = first.pop("playerId")
+    out = _mod("mlb").espn_mlb_game_rosters(game_id=game_id, raw=True)
+    assert out["rows"][0]["athlete_id"] == want and type(out["rows"][0]["athlete_id"]) is int
+    assert {type(r["athlete_id"]) for r in out["rows"]} == {int}
+    assert {type(r["game_position_id"]) for r in out["rows"]} == {int}

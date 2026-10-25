@@ -52,7 +52,7 @@ espn_mlb_game_rosters - pull the active game rosters for both teams.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `int` |  | ESPN game id. |
-| `raw` | `bool` | `False` | When True, returns `{"competitors": [...], "rows": [...]}`: the competitor items and one dict per roster entry with the documented columns, read from the entry only (no athlete fetch; `athlete_id` is the entry's `playerId`, else the id in its athlete `$ref`). |
+| `raw` | `bool` | `False` | When True, returns `{"competitors": [...], "rows": [...]}`: the competitor items and one dict per roster entry with the documented columns, read from the entry only (no athlete fetch; `athlete_id` is the entry's `playerId`, else the id in its athlete `$ref`; it and `game_position_id` are ints). |
 | `return_as_pandas` | `bool` | `False` | When True, returns a pandas dataframe; otherwise polars. |
 
 **Returns**
@@ -70,7 +70,7 @@ One row per (game × team × athlete) with columns `game_id, team_id, home_away,
 | `athlete_position_id` | integer | ESPN position id of the athlete's listed position on his athlete record, i.e. his season position, not necessarily where he played in this game (see game_position_id). |
 | `athlete_position_abbreviation` | character | Abbreviation of the athlete's listed (season) position on his athlete record, e.g. RF or SS. |
 | `athlete_position_name` | character | Name of the athlete's listed (season) position on his athlete record, e.g. Right Field. |
-| `game_position_id` | integer | ESPN position id the player was entered at in this game, from the roster entry's own position $ref (e.g. 8 for a center fielder); differs from athlete_position_id when he played out of position. |
+| `game_position_id` | integer | ESPN position id the player entered this game at, from the roster entry's own position $ref (e.g. 8 for a center fielder; 11 is a pinch hitter and 12 a pinch runner). It is the entry position only, not any later move in the game; differs from athlete_position_id when he played out of his listed position. |
 | `athlete_starter` | logical | Whether the athlete started this game, from the roster entry. |
 
 **Raises**

@@ -3914,8 +3914,9 @@ espn_mlb_game_rosters:
     position, not necessarily where he played in this game (see game_position_id).
   athlete_position_abbreviation: Abbreviation of the athlete's listed (season) position on his athlete record, e.g. RF or SS.
   athlete_position_name: Name of the athlete's listed (season) position on his athlete record, e.g. Right Field.
-  game_position_id: ESPN position id the player was entered at in this game, from the roster entry's own position $ref
-    (e.g. 8 for a center fielder); differs from athlete_position_id when he played out of position.
+  game_position_id: ESPN position id the player entered this game at, from the roster entry's own position $ref (e.g.
+    8 for a center fielder; 11 is a pinch hitter and 12 a pinch runner). It is the entry position only, not any later
+    move in the game; differs from athlete_position_id when he played out of his listed position.
   athlete_starter: Whether the athlete started this game, from the roster entry.
 espn_mlb_player_stats:
   batting_bipa: Batting average on balls in the air (fly balls and line drives), measuring in-play success on airborne contact.

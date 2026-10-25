@@ -61,7 +61,8 @@ def espn_mlb_game_rosters(game_id: int, raw: bool = False, return_as_pandas: boo
         game_id (int): ESPN game id.
         raw (bool): When True, returns ``{"competitors": [...], "rows": [...]}``: the competitor items and
             one dict per roster entry with the documented columns, read from the entry only (no athlete
-            fetch; ``athlete_id`` is the entry's ``playerId``, else the id in its athlete ``$ref``).
+            fetch; ``athlete_id`` is the entry's ``playerId``, else the id in its athlete ``$ref``; it and
+            ``game_position_id`` are ints).
         return_as_pandas (bool): When True, returns a pandas dataframe; otherwise polars.
         **kwargs: Passed to every download (competitors, rosters, athletes).
 
@@ -116,9 +117,17 @@ def espn_mlb_game_rosters(game_id: int, raw: bool = False, return_as_pandas: boo
 
 
 def _ref_id(ref: Any, pattern: _re.Pattern) -> Any:
-    """The id a Core v2 ``$ref`` carries in its path (``pattern``'s group), or ``None``."""
+    """The id a Core v2 ``$ref`` carries in its path (``pattern``'s group) as an ``int``, or ``None``."""
     match = pattern.search(ref) if isinstance(ref, str) else None
-    return match.group(1) if match else None
+    return int(match.group(1)) if match else None
+
+
+def _int_id(value: Any) -> Any:
+    """An id as an ``int`` when it is one (ESPN ships ``playerId`` as a number, an inline ``id`` as a string), so a
+    raw row's ``athlete_id`` has one type whichever field it came from; anything else is returned unchanged."""
+    if isinstance(value, str) and value.strip().isdigit():
+        return int(value)
+    return value
 
 
 def _entry_row(e: dict, game_id: Any, team_id: Any, home_away: Any) -> dict:
@@ -141,7 +150,7 @@ def _entry_row(e: dict, game_id: Any, team_id: Any, home_away: Any) -> dict:
         "game_id": str(game_id),
         "team_id": str(team_id) if team_id else None,
         "home_away": home_away,
-        "athlete_id": inline.get("id") if inline.get("id") is not None else player_id,
+        "athlete_id": _int_id(inline.get("id") if inline.get("id") is not None else player_id),
         "athlete_full_name": inline.get("fullName") or inline.get("displayName"),
         "athlete_jersey": inline.get("jersey"),
         "athlete_position_id": position.get("id"),
@@ -204,7 +213,9 @@ def _resolve_athletes(rows: list, **kwargs: Any) -> pl.DataFrame:
                 f"athlete_id {athletes.schema['athlete_id']}"
             )
         keep = ("game_id", "team_id", "home_away", "game_position_id", "athlete_starter")
-        fields = pl.DataFrame([{k: r[k] for k in keep} for _, r in refs], schema={k: schema[k] for k in keep})
+        fields = pl.DataFrame(
+            [{k: r[k] for k in keep} for _, r in refs], schema={k: schema[k] for k in keep}, strict=False
+        )
         joined = pl.concat([fields, entries.select("player_id", "_order")], how="horizontal").join(
             athletes, left_on="player_id", right_on="athlete_id", how="inner", maintain_order="left"
         )
@@ -217,7 +228,7 @@ def _resolve_athletes(rows: list, **kwargs: Any) -> pl.DataFrame:
             if i in joined_orders:
                 continue
             href_id = _ref_id(r["_href"], _ATHLETE_ID_RE)
-            if r["athlete_id"] is None or href_id is None or int(href_id) in read:
+            if r["athlete_id"] is None or href_id is None or href_id in read:
                 unmatched += 1
         if unmatched:
             warnings.warn(
