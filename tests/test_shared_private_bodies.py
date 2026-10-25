@@ -240,6 +240,64 @@ def test_every_former_espn_copy_is_the_shared_body(owner: str, name: str, copies
     assert _body_only_hash(shared, {}) == pin, f"{owner}.{name} no longer equals the copies it replaced; update the pin"
 
 
+# R61a-2: the deliberate outliers stay their own bodies. nhl's roster_items keeps period / for_player_id / active;
+# mbb (two halves), nfl (no poll: null rank) and nhl (three periods, YTD record, no rank) keep their own home/away
+# step. Binding any of them to a shared body would change its frame, so each asserts identity and its defaults.
+
+
+def test_nhl_keeps_its_own_roster_items(monkeypatch) -> None:
+    from sportsdataverse.nhl import nhl_game_rosters
+
+    rosters = importlib.import_module(_ROSTERS)
+    fn = nhl_game_rosters.helper_nhl_roster_items
+    assert fn is not rosters.roster_items, "nhl's roster_items is bound to the shared body"
+    entry = {"playerId": 7, "period": 0, "active": True, "forPlayerId": 0, "athlete": {"$ref": "http://core/a/7"}}
+
+    class _Resp:
+        def json(self) -> dict:
+            return {"entries": [entry]}
+
+    monkeypatch.setattr(nhl_game_rosters, "download", lambda url, **kwargs: _Resp())
+    out = fn(pl.DataFrame({"team_id": [1]}), "http://core/competitors")
+    assert {"period", "for_player_id", "active"} <= set(out.columns)
+
+
+def _bare_event() -> dict:
+    """A scoreboard event whose competitors ship no rank, linescores or records, so every default shows."""
+    return {
+        "competitions": [
+            {
+                "competitors": [
+                    {"team": {"id": str(i)}, "score": "1", "homeAway": s} for i, s in ((1, "home"), (2, "away"))
+                ]
+            }
+        ]
+    }
+
+
+@pytest.mark.parametrize(
+    ("lg", "rank", "periods", "record_types"),
+    [
+        ("mbb", 99, 2, ["total", "home", "road", "vsconf"]),
+        ("nfl", None, 4, ["total", "home", "road"]),
+        ("nhl", "absent", 3, ["ytd", "home", "road"]),
+    ],
+)
+def test_outlier_home_away_steps_keep_their_league_defaults(
+    lg: str, rank: object, periods: int, record_types: list
+) -> None:
+    sched = importlib.import_module(_SCHEDULE)
+    step = getattr(importlib.import_module(f"{_LG}.{lg}.{lg}_schedule"), "__extract_home_away")
+    assert step not in (sched._extract_home_away_nba, sched._extract_home_away_college), f"{lg} uses a shared step"
+    home = step(_bare_event(), 0, "home")["competitions"][0]["home"]
+    assert len(home["linescores"]) == periods
+    assert [r["type"] for r in home["records"]] == record_types
+    if rank == "absent":
+        assert "currentRank" not in home
+    else:
+        assert home["currentRank"] == rank
+
+
 # --- 6.1d: parser helpers, the browser User-Agent, the mls/nwsl getter (A-N15, A-L59, A-L8) ---------------
 
 
