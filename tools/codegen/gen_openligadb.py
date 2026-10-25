@@ -17,11 +17,11 @@ Run: ``python tools/codegen/gen_openligadb.py``
 
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Any, Dict, List
 
 from gen_soccer_common import (
     ROOT,
+    capture_for,
     columns_from_frame,
     get_ops,
     load_spec,
@@ -60,13 +60,6 @@ _SHORTS: Dict[str, str] = {
 # (spec.py:304 treats {sport}/{league} as ESPN slugs and blanks the segment).
 # {league_id} is a distinct name and is left alone. The gen_asa.py lesson.
 _SLUG_RENAMES = {"league": "league_slug"}
-
-
-def _capture_for(refs: Path, path: str) -> Path | None:
-    """``capture.py``'s slug: ``/getmatchdata/{league}/{season}`` -> ``getmatchdata__league__season``."""
-    slug = path.strip("/").replace("/", "__").replace("{", "").replace("}", "")
-    candidate = refs / "captures" / f"{slug}.json"
-    return candidate if candidate.exists() else None
 
 
 def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
@@ -159,7 +152,7 @@ def main() -> None:
     unverified = 0
     for path, _op in ops:
         short = _SHORTS[path]
-        capture = _capture_for(refs, path)
+        capture = capture_for(refs, path)
         schema: Dict[str, Any] = {"schema": short, "kind": "dataframe"}
         if capture is None:
             unverified += 1

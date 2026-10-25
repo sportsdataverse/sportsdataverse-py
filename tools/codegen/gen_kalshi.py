@@ -22,11 +22,11 @@ Run: ``python tools/codegen/gen_kalshi.py``
 
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Any, Dict, List
 
 from gen_soccer_common import (
     ROOT,
+    capture_for,
     columns_from_frame,
     get_ops,
     load_spec,
@@ -58,13 +58,6 @@ _SHORTS: Dict[str, str] = {
     "/markets/{ticker}/orderbook": "orderbook",
     "/markets/trades": "trades",
 }
-
-
-def _capture_for(refs: Path, path: str) -> Path | None:
-    """``capture.py``'s slug: ``/markets/{ticker}/orderbook`` -> ``markets__ticker__orderbook``."""
-    slug = path.strip("/").replace("/", "__").replace("{", "").replace("}", "")
-    candidate = refs / "captures" / f"{slug}.json"
-    return candidate if candidate.exists() else None
 
 
 def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
@@ -159,7 +152,7 @@ def main() -> None:
     unverified = 0
     for path, _op in ops:
         short = _SHORTS[path]
-        capture = _capture_for(refs, path)
+        capture = capture_for(refs, path)
         schema: Dict[str, Any] = {"schema": short, "kind": "dataframe"}
         if capture is None:
             unverified += 1

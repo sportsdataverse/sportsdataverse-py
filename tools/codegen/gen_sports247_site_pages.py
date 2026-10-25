@@ -12,7 +12,6 @@ Run: python tools/codegen/gen_sports247_site_pages.py
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
@@ -20,9 +19,13 @@ import yaml
 
 from sportsdataverse.dl_utils import underscore
 
+try:  # imported as tools.codegen.<gen> (the tests)
+    from tools.codegen.gen_soccer_common import refs_root, rewrite_schema_dir, write_yaml
+except ModuleNotFoundError:  # run as a script: this file's directory is sys.path[0]
+    from gen_soccer_common import refs_root, rewrite_schema_dir, write_yaml
+
 ROOT = Path(__file__).resolve().parents[2]
-_DEFAULT_REFS = Path(r"C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs")
-SPEC = Path(os.environ.get("SDV_INTERNAL_REFS_REPO", str(_DEFAULT_REFS))) / "247sports/site-pages.openapi.yaml"
+SPEC = refs_root() / "247sports/site-pages.openapi.yaml"
 
 # raw OpenAPI path -> generator-derived short name (stable; see plan route table)
 _SHORT: Dict[str, str] = {
@@ -157,18 +160,6 @@ _SCHEMA_PREFIX = "sports247_site_pages_"
 
 def _schema_name(ref: str | None, short: str) -> str:
     return _SCHEMA_PREFIX + (underscore(ref) if ref else short)
-
-
-def _write_yaml(path: Path, obj: Any) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8", newline="\n") as fh:
-        yaml.safe_dump(obj, fh, sort_keys=True, default_flow_style=False, allow_unicode=True)
-
-
-def _clean_generated_schema_dir(path: Path) -> None:
-    path.mkdir(parents=True, exist_ok=True)
-    for schema_path in path.glob("*.yaml"):
-        schema_path.unlink()
 
 
 def _ref_name(schema_node: Dict[str, Any]) -> str | None:
@@ -312,10 +303,10 @@ def main() -> None:
         "runtime_imports": ["_get"],
         "endpoints": endpoints,
     }
-    _write_yaml(ROOT / "tools/codegen/endpoints/sports247_site_pages.yaml", doc)
+    write_yaml(ROOT / "tools/codegen/endpoints/sports247_site_pages.yaml", doc)
 
     schema_dir = ROOT / "tools/codegen/schemas/native/sports247_site_pages"
-    _clean_generated_schema_dir(schema_dir)
+    rewrite_schema_dir(schema_dir)
     for schema_name, comp_name in sorted(used_schemas.items()):
         cols = _flatten_columns(comps[comp_name].get("properties", {}), comps)
         # Parser output wins over the spec's types; columns the parser emits but the
@@ -327,7 +318,7 @@ def main() -> None:
         known = {c["name"] for c in columns}
         columns += [{"name": n, "type": t, "description": ""} for n, t in obs.items() if n not in known]
         schema = {"schema": schema_name, "kind": "dataframe", "columns": columns}
-        _write_yaml(schema_dir / f"{schema_name}.yaml", schema)
+        write_yaml(schema_dir / f"{schema_name}.yaml", schema)
 
     print(f"sports247_site_pages: {len(endpoints)} endpoints, {len(used_schemas)} schemas")
 

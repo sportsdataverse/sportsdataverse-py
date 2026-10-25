@@ -50,12 +50,12 @@ Run: ``python tools/codegen/gen_yahoo.py``
 from __future__ import annotations
 
 import json
-import os
 import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
+from gen_soccer_common import refs_root, write_yaml
 from openapi_params import _query_params
 
 from sportsdataverse.dl_utils import underscore
@@ -87,26 +87,8 @@ _PYTYPE = {"integer": "int", "string": "str", "boolean": "bool", "number": "floa
 _TOKEN = re.compile(r"\{([^}]+)\}")
 
 
-def _refs_root() -> Path:
-    """Locate the ``sdv-internal-refs`` checkout.
-
-    ``$SDV_INTERNAL_REFS_REPO`` wins; otherwise the Windows workspace default is
-    tried, then a sibling checkout next to this repo (the Linux droplet layout).
-    """
-    env = os.environ.get("SDV_INTERNAL_REFS_REPO")
-    if env:
-        return Path(env)
-    for cand in (
-        Path("C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs"),
-        ROOT.parent / "sdv-internal-refs",
-    ):
-        if cand.exists():
-            return cand
-    return ROOT.parent / "sdv-internal-refs"
-
-
 def _load(name: str) -> dict:
-    return yaml.safe_load((_refs_root() / "yahoo" / name).read_text(encoding="utf-8"))
+    return yaml.safe_load((refs_root() / "yahoo" / name).read_text(encoding="utf-8"))
 
 
 def _short(tail: str) -> str:
@@ -325,7 +307,7 @@ def _editorial_schema_docs() -> Dict[str, Dict[str, Any]]:
     """
     from sportsdataverse.yahoo.yahoo_shangrila_parsers import parse_yahoo_editorial
 
-    resp_dir = _refs_root() / "yahoo" / "discovery" / "responses"
+    resp_dir = refs_root() / "yahoo" / "discovery" / "responses"
     docs: Dict[str, Dict[str, Any]] = {}
     for short, fname in _CAPTURES.items():
         src = resp_dir / fname
@@ -347,12 +329,6 @@ def _editorial_schema_docs() -> Dict[str, Dict[str, Any]]:
 
 
 # ---------------------------------------------------------------------------
-
-
-def _write_yaml(path: Path, obj: Any) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8", newline="\n") as fh:
-        yaml.safe_dump(obj, fh, sort_keys=True, default_flow_style=False, allow_unicode=True)
 
 
 def main() -> None:
@@ -393,7 +369,7 @@ def main() -> None:
         },
         "endpoints": entries,
     }
-    _write_yaml(ROOT / "tools/codegen/endpoints/yahoo_shangrila.yaml", doc)
+    write_yaml(ROOT / "tools/codegen/endpoints/yahoo_shangrila.yaml", doc)
 
     schema_dir = ROOT / "tools/codegen/schemas/native/yahoo_shangrila"
     schema_dir.mkdir(parents=True, exist_ok=True)
@@ -402,10 +378,10 @@ def main() -> None:
     for path in sorted(shangrila["paths"]):
         short = _short(path[len(_SHANGRILA_PREFIX) :])
         props = _data_props(shangrila["paths"][path]["get"], shangrila)
-        _write_yaml(schema_dir / f"{short}.yaml", _schema_doc(short, props))
+        write_yaml(schema_dir / f"{short}.yaml", _schema_doc(short, props))
     editorial_docs = _editorial_schema_docs()
     for short in _CAPTURES:
-        _write_yaml(
+        write_yaml(
             schema_dir / f"{short}.yaml",
             editorial_docs.get(short) or {"schema": short, "kind": "dataframe", "columns": []},
         )

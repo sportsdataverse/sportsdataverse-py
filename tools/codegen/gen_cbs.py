@@ -25,13 +25,12 @@ Run: ``python tools/codegen/gen_cbs.py``
 from __future__ import annotations
 
 import json
-import os
 import re
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 import polars as pl
-import yaml
+from gen_soccer_common import load_spec, refs_dir, rewrite_schema_dir, write_yaml
 from openapi_params import _query_params
 
 from sportsdataverse.cbs.cbs_napi_parsers import (
@@ -107,24 +106,6 @@ _ROW_PARSERS = {
 _REGEXP_VALUE = re.compile(r"^new RegExp\(")
 
 _TOKEN = re.compile(r"\{([^}]+)\}")
-
-
-def _refs_dir() -> Path:
-    """Resolve the ``sdv-internal-refs/cbs`` directory (env -> sibling -> default)."""
-    env = os.environ.get("SDV_INTERNAL_REFS_REPO")
-    candidates = [Path(env)] if env else []
-    candidates += [
-        ROOT.parent / "sdv-internal-refs",
-        Path("C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs"),
-    ]
-    for base in candidates:
-        if (base / "cbs" / "cbssports-napi.openapi.yaml").exists():
-            return base / "cbs"
-    raise SystemExit("cbs: spec not found -- set SDV_INTERNAL_REFS_REPO to the sdv-internal-refs checkout")
-
-
-def _load_spec(refs: Path) -> dict:
-    return yaml.safe_load((refs / "cbssports-napi.openapi.yaml").read_text(encoding="utf-8"))
 
 
 def _short_from_path(path: str) -> str:
@@ -229,21 +210,9 @@ def _capture_columns(refs: Path, pattern: str, parser: Any) -> List[Dict[str, st
     ]
 
 
-def _write_yaml(path: Path, obj: Any) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8", newline="\n") as fh:
-        yaml.safe_dump(obj, fh, sort_keys=True, default_flow_style=False, allow_unicode=True)
-
-
-def _clean_generated_schema_dir(path: Path) -> None:
-    path.mkdir(parents=True, exist_ok=True)
-    for schema_path in path.glob("*.yaml"):
-        schema_path.unlink()
-
-
 def main() -> None:
-    refs = _refs_dir()
-    spec = _load_spec(refs)
+    refs = refs_dir("cbs", "cbssports-napi.openapi.yaml")
+    spec = load_spec(refs, "cbssports-napi.openapi.yaml")
     ops = sorted(
         ((path, item["get"]) for path, item in spec["paths"].items() if "get" in item),
         key=lambda pv: _short_from_path(pv[0]),
@@ -285,9 +254,9 @@ def main() -> None:
         },
         "endpoints": [_endpoint_entry(p, op) for p, op in ops],
     }
-    _write_yaml(ROOT / "tools/codegen/endpoints/cbs_napi.yaml", doc)
+    write_yaml(ROOT / "tools/codegen/endpoints/cbs_napi.yaml", doc)
     schema_dir = ROOT / "tools/codegen/schemas/native/cbs_napi"
-    _clean_generated_schema_dir(schema_dir)
+    rewrite_schema_dir(schema_dir)
     documented = 0
     for short in shorts:
         cols: List[Dict[str, str]] = []
@@ -295,7 +264,7 @@ def main() -> None:
             pattern, parser = _CAPTURES[short]
             cols = _capture_columns(refs, pattern, parser)
             documented += bool(cols)
-        _write_yaml(schema_dir / f"{short}.yaml", {"schema": short, "kind": "dataframe", "columns": cols})
+        write_yaml(schema_dir / f"{short}.yaml", {"schema": short, "kind": "dataframe", "columns": cols})
     print(f"cbs_napi: {len(ops)} endpoints, {documented} capture-backed returns-schemas")
 
 

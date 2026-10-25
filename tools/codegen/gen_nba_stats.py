@@ -16,9 +16,13 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 import polars as pl
-import yaml
 
 from sportsdataverse.nba.nba_stats_parsers import _result_sets, _to_frame
+
+try:  # imported as tools.codegen.<gen> (the tests)
+    from tools.codegen.gen_soccer_common import rewrite_schema_dir, write_yaml
+except ModuleNotFoundError:  # run as a script: this file's directory is sys.path[0]
+    from gen_soccer_common import rewrite_schema_dir, write_yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 CAT = json.loads((ROOT / "tools/codegen/inputs/nba_canonical_catalog.json").read_text(encoding="utf-8"))
@@ -387,18 +391,6 @@ def _endpoint_entry(
     return entry
 
 
-def _write_yaml(path: Path, obj: Any) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8", newline="\n") as fh:
-        yaml.safe_dump(obj, fh, sort_keys=True, default_flow_style=False, allow_unicode=True)
-
-
-def _clean_generated_schema_dir(path: Path) -> None:
-    path.mkdir(parents=True, exist_ok=True)
-    for schema_path in path.glob("*.yaml"):
-        schema_path.unlink()
-
-
 def main() -> None:
     eps = {stem: _stats_eps(cfg["league_id"]) for stem, cfg in STEMS.items()}
     sets = {stem: {e["slug"]: parsed_sets(stem, e["slug"]) for e in eps[stem]} for stem in STEMS}
@@ -415,12 +407,12 @@ def main() -> None:
                 _endpoint_entry(e, stem, cfg["default_league"], parser_name, sets[stem][e["slug"]]) for e in eps[stem]
             ],
         }
-        _write_yaml(ROOT / f"tools/codegen/endpoints/{stem}.yaml", doc)
+        write_yaml(ROOT / f"tools/codegen/endpoints/{stem}.yaml", doc)
         schema_dir = ROOT / f"tools/codegen/schemas/native/{stem}"
-        _clean_generated_schema_dir(schema_dir)
+        rewrite_schema_dir(schema_dir)
         sibling = sets[_SIBLING[stem][0]]
         for slug, ep_sets in sets[stem].items():
-            _write_yaml(schema_dir / f"{slug}.yaml", _schema(stem, slug, ep_sets, sibling.get(slug, {})))
+            write_yaml(schema_dir / f"{slug}.yaml", _schema(stem, slug, ep_sets, sibling.get(slug, {})))
         print(f"{stem}: {len(eps[stem])} endpoints")
 
 

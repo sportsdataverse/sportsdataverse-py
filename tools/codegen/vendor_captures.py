@@ -17,7 +17,6 @@ from __future__ import annotations
 
 import csv
 import json
-import os
 import re
 import sys
 from pathlib import Path
@@ -134,9 +133,9 @@ def vendor_on3(refs: Path) -> None:
 
 
 def main() -> None:
-    refs = Path(
-        os.environ.get("SDV_INTERNAL_REFS_REPO", "C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs")
-    )
+    from gen_soccer_common import refs_root  # script-only: main() never runs on import
+
+    refs = refs_root()
     vendor_nba(refs)
     vendor_on3(refs)
 
