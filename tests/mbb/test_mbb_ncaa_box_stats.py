@@ -2,7 +2,9 @@
 
 Fixtures are the committed bigballR stats.ncaa.org captures (``tests/fixtures/ncaa/bigballr/html``).
 ``box_<id>.html`` is the real box-score LANDING page: served where the per-player
-``individual_stats`` tab is expected, the parser raises -- a real unreadable page.
+``individual_stats`` tab is expected, the parser warns and returns zero rows -- a real
+unreadable page. The tests assert that warning with ``pytest.warns``, so they take the same
+path under pytest.ini's ``error`` filter and under the live job's ``-W default``.
 """
 
 from __future__ import annotations
@@ -18,6 +20,7 @@ from tests.mbb._bigballr_oracle import GAMES, HTML_DIR
 GOOD = GAMES["mbb"][0]
 WRONG_TAB = GAMES["mbb"][1]
 BANNED, MISSING, REJECTED = "9000001", "9000002", "9000005"
+NOT_INDIVIDUAL_STATS = rf"game id {WRONG_TAB} is not an individual_stats page"
 
 
 class _Fetcher:
@@ -41,19 +44,21 @@ def test_fetch_failure_raises_by_default() -> None:
 
 
 def test_fetch_failure_default_still_skips_a_missing_or_unreadable_game() -> None:
-    df = ncaa_mbb_box_scores([GOOD, MISSING, WRONG_TAB], fetcher=_Fetcher())
+    with pytest.warns(UserWarning, match=NOT_INDIVIDUAL_STATS):
+        df = ncaa_mbb_box_scores([GOOD, MISSING, WRONG_TAB], fetcher=_Fetcher())
     assert df["game_id"].unique().to_list() == [GOOD]
     assert "scrape_status" not in df.columns
 
 
 def test_fetch_failure_skip_records_a_status_row_per_skipped_game() -> None:
-    df = ncaa_mbb_box_scores([GOOD, BANNED, MISSING, WRONG_TAB, REJECTED], fetcher=_Fetcher(), errors="skip")
+    with pytest.warns(UserWarning, match=NOT_INDIVIDUAL_STATS):
+        df = ncaa_mbb_box_scores([GOOD, BANNED, MISSING, WRONG_TAB, REJECTED], fetcher=_Fetcher(), errors="skip")
     played = df.filter(pl.col("game_id") == GOOD)
     assert played.height > 10 and played["scrape_status"].unique().to_list() == ["ok"]
     stubs = dict(df.filter(pl.col("game_id") != GOOD).select("game_id", "scrape_status").iter_rows())
     assert stubs[BANNED].startswith("fetch_failed: NCAA fetch failed")
     assert stubs[MISSING].startswith("no_data: ")
-    assert stubs[WRONG_TAB].startswith("parse_failed: ")
+    assert stubs[WRONG_TAB] == "parse_failed: zero player rows (not an individual_stats page)"
     assert stubs[REJECTED].startswith("request_error: stats.ncaa.org rejected")  # a 422 is not a parser problem
     assert len(stubs) == 4
 
