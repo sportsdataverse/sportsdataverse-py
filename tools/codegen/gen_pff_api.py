@@ -35,7 +35,6 @@ Run: ``python tools/codegen/gen_pff_api.py``
 from __future__ import annotations
 
 import json
-import os
 import re
 from pathlib import Path
 from typing import Any, Dict, List
@@ -45,12 +44,13 @@ import yaml
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.nfl import pff_parsers
 
+try:  # imported as tools.codegen.<gen> (the tests)
+    from tools.codegen.gen_soccer_common import refs_root, write_yaml
+except ModuleNotFoundError:  # run as a script: this file's directory is sys.path[0]
+    from gen_soccer_common import refs_root, write_yaml
+
 ROOT = Path(__file__).resolve().parents[2]
-_REAL_REFS = Path("C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs")
-_REFS = Path(
-    os.environ.get("SDV_INTERNAL_REFS_REPO")
-    or next((str(c) for c in (ROOT.parent / "sdv-internal-refs", _REAL_REFS) if c.exists()), str(_REAL_REFS))
-)
+_REFS = refs_root()
 DEV = _REFS / "pff" / "developer"
 SPEC_PATH = DEV / "pff-developer.openapi.json"
 CAPTURES = DEV / "captures"
@@ -394,21 +394,15 @@ def build() -> tuple[dict, Dict[str, dict]]:
     return doc, schemas
 
 
-def _write_yaml(path: Path, obj: Any) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8", newline="\n") as fh:
-        yaml.safe_dump(obj, fh, sort_keys=True, default_flow_style=False, allow_unicode=True)
-
-
 def main() -> None:
     doc, schemas = build()
-    _write_yaml(ROOT / "tools/codegen/endpoints/pff_api.yaml", doc)
+    write_yaml(ROOT / "tools/codegen/endpoints/pff_api.yaml", doc)
     schema_dir = ROOT / "tools/codegen/schemas/native/pff_api"
     schema_dir.mkdir(parents=True, exist_ok=True)
     for old in schema_dir.glob("*.yaml"):
         old.unlink()
     for slug, schema in schemas.items():
-        _write_yaml(schema_dir / f"{slug}.yaml", schema)
+        write_yaml(schema_dir / f"{slug}.yaml", schema)
     print(f"pff_api: {len(doc['endpoints'])} endpoints, {len(schemas)} new schemas")
 
 

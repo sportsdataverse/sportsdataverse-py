@@ -22,12 +22,12 @@ Run: ``python tools/codegen/gen_on3.py``
 from __future__ import annotations
 
 import json
-import os
 import re
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 import yaml
+from gen_soccer_common import refs_root, write_yaml
 from openapi_params import _query_params
 
 from sportsdataverse.cfb.on3_parsers import parse_on3_rdb
@@ -85,8 +85,7 @@ _TOKEN = re.compile(r"\{([^}]+)\}")
 
 
 def _spec_path() -> Path:
-    base = os.environ.get("SDV_INTERNAL_REFS_REPO", "C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs")
-    return Path(base) / "on3" / "on3-recruit-database.openapi.yaml"
+    return refs_root() / "on3" / "on3-recruit-database.openapi.yaml"
 
 
 def _load_spec() -> dict:
@@ -294,12 +293,6 @@ def _usable_ops(spec: dict) -> List[Tuple[str, dict]]:
     )
 
 
-def _write_yaml(path: Path, obj: Any) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8", newline="\n") as fh:
-        yaml.safe_dump(obj, fh, sort_keys=True, default_flow_style=False, allow_unicode=True)
-
-
 def _clean_generated_schema_dir(path: Path) -> None:
     path.mkdir(parents=True, exist_ok=True)
     for schema_path in path.glob("*.yaml"):
@@ -328,14 +321,14 @@ def main() -> None:
         "runtime_imports": ["_get"],
         "endpoints": [_endpoint_entry(p, op, spec) for p, op in ops],
     }
-    _write_yaml(ROOT / "tools/codegen/endpoints/on3.yaml", doc)
+    write_yaml(ROOT / "tools/codegen/endpoints/on3.yaml", doc)
     schema_dir = ROOT / "tools/codegen/schemas/native/on3"
     _clean_generated_schema_dir(schema_dir)
     for path, op in ops:
         short = _short_from_path(path)
         if short in _PRESERVE:
             continue
-        _write_yaml(schema_dir / f"{short}.yaml", _schema(short, op, spec))
+        write_yaml(schema_dir / f"{short}.yaml", _schema(short, op, spec))
     print(f"on3: {len(ops)} endpoints")
 
 

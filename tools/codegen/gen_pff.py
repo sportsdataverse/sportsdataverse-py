@@ -26,16 +26,18 @@ Run: ``python tools/codegen/gen_pff.py``
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import yaml
 
+try:  # imported as tools.codegen.<gen> (the tests)
+    from tools.codegen.gen_soccer_common import refs_root, rewrite_schema_dir, write_yaml
+except ModuleNotFoundError:  # run as a script: this file's directory is sys.path[0]
+    from gen_soccer_common import refs_root, rewrite_schema_dir, write_yaml
+
 ROOT = Path(__file__).resolve().parents[2]
-_REFS = Path(
-    os.environ.get("SDV_INTERNAL_REFS_REPO", r"C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs")
-)
+_REFS = refs_root()
 SPEC_PATH = _REFS / "pff" / "pff-premium.openapi.yaml"
 
 HOST = "https://premium.pff.com"
@@ -202,25 +204,13 @@ def build() -> tuple[dict, Dict[str, dict]]:
     return doc, schema_docs
 
 
-def _write_yaml(path: Path, obj: Any) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8", newline="\n") as fh:
-        yaml.safe_dump(obj, fh, sort_keys=True, default_flow_style=False, allow_unicode=True)
-
-
-def _clean_generated_schema_dir(path: Path) -> None:
-    path.mkdir(parents=True, exist_ok=True)
-    for schema_path in path.glob("*.yaml"):
-        schema_path.unlink()
-
-
 def main() -> None:
     doc, schema_docs = build()
-    _write_yaml(ROOT / "tools/codegen/endpoints/pff.yaml", doc)
+    write_yaml(ROOT / "tools/codegen/endpoints/pff.yaml", doc)
     schema_dir = ROOT / "tools/codegen/schemas/native/pff"
-    _clean_generated_schema_dir(schema_dir)
+    rewrite_schema_dir(schema_dir)
     for slug, schema in schema_docs.items():
-        _write_yaml(schema_dir / f"{slug}.yaml", schema)
+        write_yaml(schema_dir / f"{slug}.yaml", schema)
     print(f"pff: {len(doc['endpoints'])} endpoints, {len(schema_docs)} schemas")
 
 

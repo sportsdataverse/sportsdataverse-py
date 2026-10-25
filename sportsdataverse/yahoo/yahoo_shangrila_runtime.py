@@ -26,7 +26,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
-from sportsdataverse._codegen_runtime import _download_json, _where
+from sportsdataverse._codegen_runtime import _CHROME_UA, _download_json, _where
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import AssetFetchError
 
@@ -36,9 +36,7 @@ __all__ = ["_get"]
 _HEADERS = {
     "Origin": "https://sports.yahoo.com",
     "Referer": "https://sports.yahoo.com/",
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
-    ),
+    "User-Agent": _CHROME_UA,
 }
 
 #: Spec defaults for the locale parameters every Yahoo path declares.

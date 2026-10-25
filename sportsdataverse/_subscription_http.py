@@ -45,7 +45,7 @@ from typing import Any, Dict, Optional, Tuple
 
 import requests
 
-from sportsdataverse._codegen_runtime import _text_body, _transport_errors, _where
+from sportsdataverse._codegen_runtime import _CHROME_UA, _text_body, _transport_errors, _where
 from sportsdataverse._html_tables import html_tables
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import AssetFetchError
@@ -63,9 +63,7 @@ __all__ = [
 
 # Browser-ish UA. Both sites serve their member tables to a plain client -- unlike
 # stats.nba.com there is no TLS/JA3 gate here -- so `requests` is sufficient.
-USER_AGENT = (
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
-)
+USER_AGENT = _CHROME_UA
 
 # Package-wide proxy fallback, consulted after a site's own PROXY env var.
 GLOBAL_PROXY_ENV = "SDV_PY_PROXY"

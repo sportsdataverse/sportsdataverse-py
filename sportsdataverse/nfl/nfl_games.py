@@ -33,7 +33,7 @@ from typing import Dict, Optional
 
 import requests
 
-from sportsdataverse._codegen_runtime import _download_json, _json_body, _transport_errors, _where
+from sportsdataverse._codegen_runtime import _CHROME_UA, _download_json, _json_body, _transport_errors, _where
 from sportsdataverse.dl_utils import _DEFAULT_TIMEOUT, _ENV_TIMEOUT, _env_int, download
 from sportsdataverse.errors import AssetFetchError as _AssetFetchError  # private: this module has no __all__
 
@@ -47,9 +47,7 @@ _DEFAULT_CLIENT_SECRET = "CZuvCL49d9OwfGsR"
 _DEFAULT_DEVICE_INFO = (
     "eyJtb2RlbCI6ImRlc2t0b3AiLCJvc05hbWUiOiJXaW5kb3dzIiwib3NWZXJzaW9uIjoiMTAiLCJ2ZXJzaW9uIjoiQ2hyb21lIn0="
 )
-_DEFAULT_UA = (
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
-)
+_DEFAULT_UA = _CHROME_UA
 
 # In-process token cache so back-to-back wrapper calls share one minted token
 # instead of POSTing to /identity/v3/token every time. Keyed by the resolving

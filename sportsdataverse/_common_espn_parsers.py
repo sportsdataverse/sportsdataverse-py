@@ -90,12 +90,9 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse._codegen_runtime import _cast_ids_int64, _documented_empty, _pandas_ids
+from sportsdataverse._parser_common import _FROM_PANDAS_ERRORS, _empty_frame
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _first_row, _object_rows, _warn_schema_drift
-
-# What ``pl.from_pandas`` raises on a mixed-type object column: pyarrow's ArrowInvalid (ValueError),
-# ArrowTypeError (TypeError), ArrowNotImplementedError (NotImplementedError), or a polars error.
-_FROM_PANDAS_ERRORS = (TypeError, ValueError, NotImplementedError, pl.exceptions.PolarsError)
 
 # ---------------------------------------------------------------------------
 # Internal helpers
@@ -170,12 +167,6 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool) -> pl.DataFrame:
         out = pl.from_pandas(df)
     out = _ids_int64(out)
     return _pandas_ids(out, pdf) if return_as_pandas else out
-
-
-def _empty_frame(return_as_pandas: bool = False):
-    """Return an appropriately-typed empty frame."""
-    df = pd.DataFrame()
-    return df if return_as_pandas else pl.DataFrame()
 
 
 # ===========================================================================

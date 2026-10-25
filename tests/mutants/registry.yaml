@@ -999,10 +999,10 @@
   group: codegen-gates
   finding: A-M1
   file: tools/codegen/generate.py
-  snippet: '    tmp = _check_tmp("_check_live_")'
+  snippet: '    stale = _stale_vs_render("_check_live_", rendered, live)'
   mutant: |2-
         return []
-        tmp = _check_tmp("_check_live_")
+        stale = _stale_vs_render("_check_live_", rendered, live)
   test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and live"
   expected: kill
   note: the ledger gate's own mutation (making _live_stale return [] unconditionally)
@@ -1011,10 +1011,10 @@
   group: codegen-gates
   finding: A-M1
   file: tools/codegen/generate.py
-  snippet: '    tmp = _check_tmp("_check_flat_")'
+  snippet: '    return _stale_vs_render("_check_flat_", rendered, live)'
   mutant: |2-
         return []
-        tmp = _check_tmp("_check_flat_")
+        return _stale_vs_render("_check_flat_", rendered, live)
   test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and flat"
   expected: kill
 
@@ -1022,10 +1022,10 @@
   group: codegen-gates
   finding: A-M1
   file: tools/codegen/generate.py
-  snippet: '    tmp = _check_tmp("_check_parsed_")'
+  snippet: '    return _stale_vs_render("_check_parsed_", rendered, {name: LIVE / "parsed" / name for name in rendered})'
   mutant: |2-
         return []
-        tmp = _check_tmp("_check_parsed_")
+        return _stale_vs_render("_check_parsed_", rendered, {name: LIVE / "parsed" / name for name in rendered})
   test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and parsed"
   expected: kill
 
@@ -1033,10 +1033,10 @@
   group: codegen-gates
   finding: A-M1
   file: tools/codegen/generate.py
-  snippet: '    tmp = _check_tmp("_check_loaders_")'
+  snippet: '    return _stale_vs_render("_check_loaders_", rendered, live)'
   mutant: |2-
         return []
-        tmp = _check_tmp("_check_loaders_")
+        return _stale_vs_render("_check_loaders_", rendered, live)
   test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and loaders"
   expected: kill
 
@@ -4146,7 +4146,7 @@
 - id: nhl-web-envelope-is-zero-rows
   group: codegen-runtime
   finding: EX-1.3-a
-  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  file: sportsdataverse/_parser_common.py
   snippet: '    return payload if isinstance(payload, dict) and _error_envelope_code(payload) is None else {}'
   mutant: '    return payload if isinstance(payload, dict) else {}'
   test: tests/test_espn_universal_parsers.py -k "hostile and parse_nhl_web_landing"
@@ -6880,6 +6880,35 @@
   expected: kill
   note: mbb's scoreboard_event_parsing no longer runs the shared body with its home/away step.
 
+# --- task 6.1 (c): one copy of the generator helpers in gen_soccer_common (A-L7, A-L22, A-L23, A-L24, A-N18) ----
+- id: shared-generator-write-yaml-copy-again
+  group: share-generator-helpers
+  finding: A-L22
+  file: tools/codegen/gen_cbs.py
+  snippet: "from gen_soccer_common import load_spec, refs_dir, rewrite_schema_dir, write_yaml\n"
+  mutant: "from gen_soccer_common import load_spec, refs_dir, rewrite_schema_dir\n\n\ndef write_yaml(path, obj):\n    path.write_text(yaml.safe_dump(obj), encoding=\"utf-8\")\n"
+  test: tests/codegen/test_shared_generator_helpers.py -k gen_cbs
+  expected: kill
+  note: The pre-6.1 state, gen_cbs writing YAML through its own copy rather than gen_soccer_common's.
+- id: shared-generator-capture-for-copy-again
+  group: share-generator-helpers
+  finding: A-L7
+  file: tools/codegen/gen_kalshi.py
+  snippet: "    capture_for,\n"
+  mutant: "    capture_for as _shared_capture_for,\n"
+  test: tests/codegen/test_shared_generator_helpers.py -k gen_kalshi
+  expected: kill
+  note: A generator that stops importing the shared capture slug (the pre-6.1 four private copies).
+- id: shared-generator-copy-anywhere
+  group: share-generator-helpers
+  finding: A-L23
+  file: tools/codegen/gen_pff.py
+  snippet: "def main() -> None:\n"
+  mutant: "def _clean_generated_schema_dir(path: Path) -> None:\n    path.mkdir(parents=True, exist_ok=True)\n    for schema_path in path.glob(\"*.yaml\"):\n        schema_path.unlink()\n\n\ndef main() -> None:\n"
+  test: tests/codegen/test_shared_generator_helpers.py -k no_generator_carries_a_copy
+  expected: kill
+  note: A byte-identical copy of rewrite_schema_dir reappearing in any generator (the pre-6.1 four copies).
+
 # --- task 6.1 (b): one private body behind every former copy (B-L26, B-L27, B-L28, B-L46, B-L52, B-GB-11) ----
 - id: shared-box-readers-copy-again
   group: share-private-bodies
@@ -6926,6 +6955,33 @@
   test: tests/test_shared_private_bodies.py -k share_one_crosswalk_read
   expected: kill
   note: Without the one cache a worker reads the cfb_crosswalk asset on every adapter call (the pre-6.1 two caches read it twice).
+- id: shared-parser-empty-frame-copy-again
+  group: share-private-bodies
+  finding: A-N15
+  file: sportsdataverse/nhl/nhl_records_parsers.py
+  snippet: "from sportsdataverse._parser_common import _FROM_PANDAS_ERRORS, _empty_frame, _snake_columns\n"
+  mutant: "from sportsdataverse._parser_common import _FROM_PANDAS_ERRORS, _snake_columns\n\n\ndef _empty_frame(return_as_pandas=False):\n    df = pd.DataFrame()\n    return df if return_as_pandas else pl.DataFrame()\n"
+  test: tests/test_shared_private_bodies.py -k _empty_frame
+  expected: kill
+  note: The pre-6.1d state, the NHL Records parsers' own copy of the empty-frame helper.
+- id: shared-browser-user-agent-copy-again
+  group: share-private-bodies
+  finding: A-L59
+  file: sportsdataverse/yahoo/yahoo_shangrila_runtime.py
+  snippet: '    "User-Agent": _CHROME_UA,'
+  mutant: '    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",'
+  test: tests/test_shared_private_bodies.py -k one_browser_user_agent
+  expected: kill
+  note: The pre-6.1d state, the Yahoo runtime spelling out its own copy of the User-Agent.
+- id: shared-referer-getter-caller-headers-lose
+  group: share-private-bodies
+  finding: A-L8
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    headers = {"Referer": referer, "User-Agent": _CHROME_UA, **(kwargs.pop("headers", None) or {})}'
+  mutant: '    headers = {**(kwargs.pop("headers", None) or {}), "Referer": referer, "User-Agent": _CHROME_UA}'
+  test: tests/test_shared_private_bodies.py -k mls_nwsl_getters
+  expected: kill
+  note: A caller's headers= no longer win key-by-key over the mls / nwsl site defaults.
 
 # --- task 5.1 (devel-dtype-contract): empty results carry their returns table (A-M12, A-M7, MD-3, B-L73, B-GB-09)
 - id: documented-empty-replaces-a-zero-width-frame
@@ -7680,3 +7736,14 @@
   test: tests/hockeytech/test_public_surface.py -k "corsi_fenwick_on_ice_player_level"
   expected: kill
   note: The on-ice Corsi frame keys players by the text ids of the on-ice strings again.
+
+# --- pre-main sweep: R61b-1 (6.1b review) the WBB shots line logs under the WBB logger ----
+- id: wbb-shots-log-under-mbb-logger
+  group: premain-sweep
+  finding: R61b-1
+  file: sportsdataverse/wbb/wbb_ncaa_shots.py
+  snippet: "    return _shot_locations(game_ids, period_model, fetcher, return_as_pandas, log=logger)\n"
+  mutant: "    return _shot_locations(game_ids, period_model, fetcher, return_as_pandas)\n"
+  test: tests/wbb/test_wbb_ncaa_shots_shim.py -k log_under_the_wbb_logger
+  expected: kill
+  note: The 6.1b state, where the shared driver logged a WBB call under sportsdataverse.mbb and the WBB logger was dead.

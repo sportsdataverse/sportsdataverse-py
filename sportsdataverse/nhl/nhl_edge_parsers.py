@@ -68,23 +68,12 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse._codegen_runtime import _cast_id_columns, _pandas_ids
-from sportsdataverse.dl_utils import underscore
+from sportsdataverse._parser_common import _FROM_PANDAS_ERRORS, _empty_frame, _snake_columns
 from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _first_row, _object_rows, _warn_schema_drift
-
-# What ``pl.from_pandas`` raises on a mixed-type object column: pyarrow's ArrowInvalid (ValueError),
-# ArrowTypeError (TypeError), ArrowNotImplementedError (NotImplementedError), or a polars error.
-_FROM_PANDAS_ERRORS = (TypeError, ValueError, NotImplementedError, pl.exceptions.PolarsError)
-
 
 # ---------------------------------------------------------------------------
 # Module-local helpers (mirror _common_espn_parsers conventions)
 # ---------------------------------------------------------------------------
-
-
-def _snake_columns(df: pd.DataFrame) -> pd.DataFrame:
-    """Snake-case all column names in a pandas frame."""
-    df.columns = [underscore(c).replace(".", "_") for c in df.columns]
-    return df
 
 
 def _to_output(df: pd.DataFrame, return_as_pandas: bool):
@@ -100,12 +89,6 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool):
         out = _cast_id_columns(pl.from_pandas(df2), "NHL EDGE parser")
     # R986-1: the pandas frame carries the same ids, as pandas' nullable Int64 (never float64 / object)
     return _pandas_ids(out, df) if return_as_pandas else out
-
-
-def _empty_frame(return_as_pandas: bool = False):
-    """Zero-row, zero-column frame in the requested flavour."""
-    df = pd.DataFrame()
-    return df if return_as_pandas else pl.DataFrame()
 
 
 # ---------------------------------------------------------------------------
