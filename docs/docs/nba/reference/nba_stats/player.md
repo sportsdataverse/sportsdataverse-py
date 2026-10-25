@@ -57,8 +57,6 @@ GET /stats/playerawards
 nba_stats_playerawards()
 ```
 
-_Last validated n/a._
-
 ## nba_stats_playercareerbycollegerollup
 
 GET /stats/playercareerbycollegerollup
@@ -210,8 +208,6 @@ GET /stats/playercareerbycollegerollup
 ```python
 nba_stats_playercareerbycollegerollup(league_id='00', season_nullable='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_playercareerstats
 
@@ -647,8 +643,6 @@ GET /stats/playercareerstats
 nba_stats_playercareerstats(league_id='00')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_playercompare
 
 GET /stats/playercompare
@@ -764,8 +758,6 @@ GET /stats/playercompare
 nba_stats_playercompare(league_id='00')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_playerestimatedmetrics
 
 GET /stats/playerestimatedmetrics
@@ -835,8 +827,6 @@ GET /stats/playerestimatedmetrics
 ```python
 nba_stats_playerestimatedmetrics(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_playerfantasyprofile
 
@@ -1065,8 +1055,6 @@ GET /stats/playerfantasyprofile
 nba_stats_playerfantasyprofile(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_playerfantasyprofilebargraph
 
 GET /stats/playerfantasyprofilebargraph
@@ -1143,8 +1131,6 @@ GET /stats/playerfantasyprofilebargraph
 nba_stats_playerfantasyprofilebargraph(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_playergamelog
 
 GET /stats/playergamelog
@@ -1212,5 +1198,3 @@ GET /stats/playergamelog
 ```python
 nba_stats_playergamelog(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._

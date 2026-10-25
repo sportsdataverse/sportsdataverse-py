@@ -95,7 +95,6 @@ def test_athlete_stats_versions_only_when_bare_player_stats_exists(espn_ext_dir)
 
 def test_generator_collision_guard_skips_clashes():
     # a rename whose target already exists in the module is held back by the guard
-    generate._ESPN_RENAME_SKIPPED.clear()
     cfg = generate.spec.load_leagues(generate.ENDPOINTS / "leagues.yaml")
     params = generate.spec.load_parameters(generate.ENDPOINTS / "parameters.yaml")
     apis = [generate.spec.load_espn_api(generate.ENDPOINTS / f"{a}.yaml", params) for a in generate.ESPN_APIS]

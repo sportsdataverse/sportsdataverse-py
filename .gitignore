@@ -37,7 +37,7 @@ dev/
 dist_check/
 
 # Per-run `generate.py --check` temp dirs (unique names; a killed run leaves one behind).
-tools/codegen/_generated/_check_*/
+tools/codegen/_generated/
 
 # Local environment / API-key secrets — NEVER commit. Keep real keys here and
 # load them into the shell (e.g. `set -a; source .env; set +a`). A committed,
@@ -70,3 +70,7 @@ tests/fixtures/socceraction/_8658_full/
 
 # gen_<stem>.py description output; merged into tools/codegen/manual_column_descriptions.yaml by hand
 tools/codegen/*_column_descriptions.snippet.yaml
+# gen_*_descriptions.py intermediates: the CWD-written `_<name>_descs.yaml` files and gen_fpi's
+# tools/codegen/_fpi_descriptions.yaml; each is folded in by merge_column_descriptions.py, never committed
+/_*_descs.yaml
+tools/codegen/_fpi_descriptions.yaml

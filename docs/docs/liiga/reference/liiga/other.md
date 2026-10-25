@@ -44,8 +44,6 @@ Current state of the league: game week of the season in progress and its last ga
 liiga_tournament()
 ```
 
-_Last validated n/a._
-
 ## liiga_games
 
 Every game of a season and tournament: teams, score, xG, power plays, periods and rink.
@@ -141,8 +139,6 @@ Every game of a season and tournament: teams, score, xG, power plays, periods an
 liiga_games(season=2026, tournament='runkosarja')
 ```
 
-_Last validated n/a._
-
 ## liiga_goals
 
 Every goal of a season and tournament: scorer, assists, strength codes and skaters on ice.
@@ -208,8 +204,6 @@ Every goal of a season and tournament: scorer, assists, strength codes and skate
 ```python
 liiga_goals(season=2026, tournament='runkosarja')
 ```
-
-_Last validated n/a._
 
 ## liiga_schedule
 
@@ -282,8 +276,6 @@ Schedule of a season and tournament: game ids, teams, goals, xG, start and rink.
 liiga_schedule(season=2026, tournament='runkosarja')
 ```
 
-_Last validated n/a._
-
 ## liiga_gameweeks
 
 Number of game weeks of a season and tournament.
@@ -322,8 +314,6 @@ Number of game weeks of a season and tournament.
 ```python
 liiga_gameweeks(season=2026)
 ```
-
-_Last validated n/a._
 
 ## liiga_game
 
@@ -416,8 +406,6 @@ One game's header: teams, score, xG, power plays, periods, rink, referees and at
 liiga_game(game_id=1, season=2026)
 ```
 
-_Last validated n/a._
-
 ## liiga_shotmap
 
 One game's shots with rink-image coordinates (pixels), shooter, blocker and skaters on ice; from 2016.
@@ -468,8 +456,6 @@ One game's shots with rink-image coordinates (pixels), shooter, blocker and skat
 ```python
 liiga_shotmap(game_id=1, season=2026)
 ```
-
-_Last validated n/a._
 
 ## liiga_standings
 
@@ -554,5 +540,3 @@ Standings of a season: regular season, playoffs, preseason, playout and qualific
 ```python
 liiga_standings(season=2026)
 ```
-
-_Last validated n/a._

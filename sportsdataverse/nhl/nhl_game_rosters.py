@@ -100,24 +100,10 @@ def espn_nhl_game_rosters(
     return _pandas_ids(rosters) if return_as_pandas else rosters
 
 
-def helper_nhl_game_items(summary):
-    items = pl.from_pandas(pd.json_normalize(summary, record_path="items", sep="_"))
-    items.columns = [col.replace("$ref", "href") for col in items.columns]
-
-    items.columns = [underscore(c) for c in items.columns]
-    # Older games (e.g. pre-2021) sometimes omit the team-level ``statistics``
-    # ``$ref`` in the competitors payload, so ``statistics_href`` is absent and a
-    # strict rename raises ColumnNotFoundError (the renamed ``team_statistics_href``
-    # is not used downstream). Rename only the keys actually present.
-    rename_map = {"id": "team_id", "uid": "team_uid", "statistics_href": "team_statistics_href"}
-    items = items.rename({k: v for k, v in rename_map.items() if k in items.columns})
-    items = items.with_columns(team_id=pl.col("team_id").cast(pl.Int32))
-
-    return items
+helper_nhl_game_items = _espn_game_rosters.game_items
 
 
-def helper_nhl_team_items(items, **kwargs):
-    return _espn_game_rosters.team_items(items, **kwargs)
+helper_nhl_team_items = _espn_game_rosters.team_items
 
 
 def helper_nhl_roster_items(items, summary_url, **kwargs):
@@ -151,5 +137,4 @@ def helper_nhl_roster_items(items, summary_url, **kwargs):
     return game_rosters
 
 
-def helper_nhl_athlete_items(teams_rosters, **kwargs):
-    return _espn_game_rosters.athlete_items(teams_rosters, **kwargs)
+helper_nhl_athlete_items = _espn_game_rosters.athlete_items

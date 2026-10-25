@@ -65,6 +65,12 @@ def espn_nfl_game_rosters(
             rosters_pd = espn_nfl_game_rosters(game_id=401220403, return_as_pandas=True)
             home = rosters_pd[rosters_pd["home_away"] == "home"]
             away = rosters_pd[rosters_pd["home_away"] == "away"]
+
+        See Also:
+            * `nflfastR`_ -- ``fast_scraper_roster()``, the nflverse roster source
+            * :func:`sportsdataverse.nfl.load_nfl_rosters` -- season rosters from the nflverse release
+
+        .. _nflfastR: https://www.nflfastr.com
     """
     # summary endpoint for pickcenter array
     summary_url = "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{x}/competitions/{x}/competitors".format(
@@ -86,112 +92,13 @@ def espn_nfl_game_rosters(
     return _pandas_ids(rosters) if return_as_pandas else rosters
 
 
-def helper_nfl_game_items(summary):
-    """Internal helper -- normalize the ``items`` array from the ESPN
-    ``/competitors`` endpoint into a tidy team-level DataFrame.
-
-    Used by :func:`espn_nfl_game_rosters`. Exposed for advanced callers
-    who already have the JSON payload and want to skip the network call.
-
-    Example:
-        Reuse against a cached payload::
-
-            from sportsdataverse.dl_utils import download
-            from sportsdataverse.nfl.nfl_game_rosters import helper_nfl_game_items
-            url = (
-                "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/"
-                "events/401220403/competitions/401220403/competitors"
-            )
-            items = helper_nfl_game_items(download(url).json())
-            items.columns
-    """
-    items = pl.from_pandas(pd.json_normalize(summary, record_path="items", sep="_"))
-    items.columns = [col.replace("$ref", "href") for col in items.columns]
-
-    items.columns = [underscore(c) for c in items.columns]
-    # Older games (e.g. pre-2021) sometimes omit the team-level ``statistics``
-    # ``$ref`` in the competitors payload, so ``statistics_href`` is absent and a
-    # strict rename raises ColumnNotFoundError (the renamed ``team_statistics_href``
-    # is not used downstream). Rename only the keys actually present.
-    rename_map = {"id": "team_id", "uid": "team_uid", "statistics_href": "team_statistics_href"}
-    items = items.rename({k: v for k, v in rename_map.items() if k in items.columns})
-    items = items.with_columns(team_id=pl.col("team_id").cast(pl.Int32))
-
-    return items
+helper_nfl_game_items = _espn_game_rosters.game_items
 
 
-def helper_nfl_team_items(items, **kwargs):
-    """Internal helper -- fan out from ``items.team_href`` to the per-team
-    ESPN payloads and return a tidy team-detail DataFrame (logos,
-    colors, slugs).
-
-    Used by :func:`espn_nfl_game_rosters`.
-
-    Example:
-        Pair with :func:`helper_nfl_game_items` for an offline-style flow::
-
-            from sportsdataverse.nfl.nfl_game_rosters import (
-                helper_nfl_game_items, helper_nfl_team_items,
-            )
-            # items = helper_nfl_game_items(...)
-            # teams = helper_nfl_team_items(items)
-    """
-    return _espn_game_rosters.team_items(items, **kwargs)
+helper_nfl_team_items = _espn_game_rosters.team_items
 
 
-def helper_nfl_roster_items(items, summary_url, **kwargs):
-    """Internal helper -- pull each team's roster from ESPN and return a
-    combined per-game roster DataFrame.
-
-    Used by :func:`espn_nfl_game_rosters`.
-
-    Example:
-        Wired into the public flow (preferred entry point)::
-
-            from sportsdataverse.nfl import espn_nfl_game_rosters
-            rosters = espn_nfl_game_rosters(game_id=401220403)
-    """
-    from sportsdataverse.errors import NoDataError
-
-    team_ids = list(items["team_id"])
-    game_rosters = pl.DataFrame()
-    for tm in team_ids:
-        team_roster_url = "{x}/{t}/roster".format(x=summary_url, t=tm)
-        try:
-            entries = _download_json(download, team_roster_url, **kwargs).get("entries", [])
-        except NoDataError:
-            # ESPN has no roster resource for this team in this game (a 404 —
-            # common for older games). Skip it so the other team's roster is
-            # still recovered instead of failing the whole game.
-            continue
-        if not entries:
-            continue
-        team_roster = pl.from_pandas(pd.json_normalize(entries, sep="_"))
-        team_roster.columns = [col.replace("$ref", "href") for col in team_roster.columns]
-        team_roster.columns = [underscore(c) for c in team_roster.columns]
-        team_roster = team_roster.with_columns(team_id=pl.lit(tm).cast(pl.Int32))
-        game_rosters = pl.concat([game_rosters, team_roster], how="diagonal")
-    if game_rosters.is_empty():
-        # No team in this game exposes a roster resource — genuinely no data.
-        raise NoDataError(f"NoDataError: No roster data found for any team at {summary_url}")
-    game_rosters = game_rosters.drop([c for c in ["period", "for_player_id", "active"] if c in game_rosters.columns])
-    game_rosters = game_rosters.with_columns(
-        player_id=pl.col("player_id").cast(pl.Int64),
-        team_id=pl.col("team_id").cast(pl.Int32),
-    )
-    return game_rosters
+helper_nfl_roster_items = _espn_game_rosters.roster_items
 
 
-def helper_nfl_athlete_items(teams_rosters, **kwargs):
-    """Internal helper -- expand each ``athlete_href`` from the team
-    rosters into a tidy per-player DataFrame (names, dob, headshot, etc.).
-
-    Used by :func:`espn_nfl_game_rosters`.
-
-    Example:
-        Wired into the public flow (preferred entry point)::
-
-            from sportsdataverse.nfl import espn_nfl_game_rosters
-            rosters = espn_nfl_game_rosters(game_id=401220403)
-    """
-    return _espn_game_rosters.athlete_items(teams_rosters, **kwargs)
+helper_nfl_athlete_items = _espn_game_rosters.athlete_items

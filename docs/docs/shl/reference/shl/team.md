@@ -72,8 +72,6 @@ One team.
 shl_team(team_uuid='087a-087aTQv9u')
 ```
 
-_Last validated n/a._
-
 ## shl_team_played_games
 
 A team's recent games.
@@ -150,8 +148,6 @@ A team's recent games.
 shl_team_played_games(team_uuid='087a-087aTQv9u')
 ```
 
-_Last validated n/a._
-
 ## shl_team_stats
 
 Team stats per period and total (2023/24 on).
@@ -199,8 +195,6 @@ Team stats per period and total (2023/24 on).
 ```python
 shl_team_stats(game_uuid='bdhvuc5tex')
 ```
-
-_Last validated n/a._
 
 ## shl_team_upcoming_games
 
@@ -278,5 +272,3 @@ A team's next games.
 ```python
 shl_team_upcoming_games(team_uuid='087a-087aTQv9u')
 ```
-
-_Last validated n/a._

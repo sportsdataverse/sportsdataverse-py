@@ -44,8 +44,6 @@ Resolve resources in bulk to save HTTP traffic.
 cbs_bulk()
 ```
 
-_Last validated n/a._
-
 ## cbs_client_config
 
 Get configuration for how a client should access our APIs, or any additional settings they want supplied to them.
@@ -81,8 +79,6 @@ Get configuration for how a client should access our APIs, or any additional set
 cbs_client_config(client_name='cbs')
 ```
 
-_Last validated n/a._
-
 ## cbs_coach_rankings
 
 Get rankings resource for a coach.
@@ -111,8 +107,6 @@ Get rankings resource for a coach.
 ```python
 cbs_coach_rankings()
 ```
-
-_Last validated n/a._
 
 ## cbs_coach_team_associations
 
@@ -144,8 +138,6 @@ Get team associations for a particular coach.
 cbs_coach_team_associations()
 ```
 
-_Last validated n/a._
-
 ## cbs_division_subdivisions
 
 Get subdivisions for a division from Atlas.
@@ -176,8 +168,6 @@ Get subdivisions for a division from Atlas.
 ```python
 cbs_division_subdivisions()
 ```
-
-_Last validated n/a._
 
 ## cbs_endpoint_registry
 
@@ -235,8 +225,6 @@ Get the resource endpoint registry
 cbs_endpoint_registry()
 ```
 
-_Last validated n/a._
-
 ## cbs_event
 
 Get an event resource
@@ -268,8 +256,6 @@ Get an event resource
 cbs_event()
 ```
 
-_Last validated n/a._
-
 ## cbs_event_entrants
 
 Get players entered in a particular event.
@@ -298,8 +284,6 @@ Get players entered in a particular event.
 ```python
 cbs_event_entrants()
 ```
-
-_Last validated n/a._
 
 ## cbs_event_leaderboard
 
@@ -330,8 +314,6 @@ Get a leaderboard data resource for a particular event.
 cbs_event_leaderboard()
 ```
 
-_Last validated n/a._
-
 ## cbs_event_seasons
 
 Get seasons associated to a particular event.
@@ -361,8 +343,6 @@ Get seasons associated to a particular event.
 cbs_event_seasons()
 ```
 
-_Last validated n/a._
-
 ## cbs_event_venues
 
 Get venues associated to a particular event.
@@ -391,8 +371,6 @@ Get venues associated to a particular event.
 ```python
 cbs_event_venues()
 ```
-
-_Last validated n/a._
 
 ## cbs_game
 
@@ -425,8 +403,6 @@ Get a game resource
 cbs_game()
 ```
 
-_Last validated n/a._
-
 ## cbs_golf_event_markets
 
 Get markets for an event.
@@ -455,8 +431,6 @@ Get markets for an event.
 ```python
 cbs_golf_event_markets()
 ```
-
-_Last validated n/a._
 
 ## cbs_golf_player_markets
 
@@ -490,8 +464,6 @@ Get markets for a golfer.
 cbs_golf_player_markets(player_id=1751796)
 ```
 
-_Last validated n/a._
-
 ## cbs_golfer_results
 
 Get golfer tournament results resource for a particular player.
@@ -524,8 +496,6 @@ Get golfer tournament results resource for a particular player.
 ```python
 cbs_golfer_results(player_id=1751796)
 ```
-
-_Last validated n/a._
 
 ## cbs_league
 
@@ -571,8 +541,6 @@ Get a league resource
 cbs_league(league_id=59)
 ```
 
-_Last validated n/a._
-
 ## cbs_league_teams
 
 Get team resources on a league with optional vendor overlay
@@ -605,8 +573,6 @@ Get team resources on a league with optional vendor overlay
 cbs_league_teams(league_id=59)
 ```
 
-_Last validated n/a._
-
 ## cbs_odds
 
 Get an odds resource for a particular game.
@@ -635,8 +601,6 @@ Get an odds resource for a particular game.
 ```python
 cbs_odds()
 ```
-
-_Last validated n/a._
 
 ## cbs_recruit_rankings
 
@@ -668,8 +632,6 @@ Get rankings resource for a recruit.
 ```python
 cbs_recruit_rankings(player_id=1751796)
 ```
-
-_Last validated n/a._
 
 ## cbs_season
 
@@ -703,8 +665,6 @@ Get a season resource from Atlas.
 ```python
 cbs_season(season_id=59)
 ```
-
-_Last validated n/a._
 
 ## cbs_season_teams
 
@@ -772,8 +732,6 @@ Get team resources associated to a season
 cbs_season_teams(season_id=59)
 ```
 
-_Last validated n/a._
-
 ## cbs_sport
 
 Get a sport resource from Atlas.
@@ -806,8 +764,6 @@ Get a sport resource from Atlas.
 cbs_sport(sport_id=1)
 ```
 
-_Last validated n/a._
-
 ## cbs_sport_leagues
 
 Get league resources for a sport.
@@ -839,8 +795,6 @@ Get league resources for a sport.
 cbs_sport_leagues(sport_id=1)
 ```
 
-_Last validated n/a._
-
 ## cbs_venue
 
 Get a venue resource
@@ -871,8 +825,6 @@ Get a venue resource
 cbs_venue()
 ```
 
-_Last validated n/a._
-
 ## cbs_venue_metadata
 
 Get a venues metadata resource
@@ -901,5 +853,3 @@ Get a venues metadata resource
 ```python
 cbs_venue_metadata()
 ```
-
-_Last validated n/a._

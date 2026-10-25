@@ -85,7 +85,7 @@ repos:
     hooks:
       - id: actionlint
   # NOTE: yamlfmt was removed — it reformatted the codegen-generated endpoint YAML
-  # (tools/codegen/endpoints/*.yaml) on every commit, fighting extract.py's output
+  # (tools/codegen/endpoints/*.yaml) on every commit, fighting the generators' output
   # and forcing a re-add/re-commit cycle. check-yaml still validates YAML syntax.
   - repo: https://github.com/thlorenz/doctoc
     rev: "v2.2.0" # substitute a tagged version

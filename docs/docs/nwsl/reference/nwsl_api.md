@@ -50,8 +50,6 @@ All competitions StatsPerform tracks for NWSL (league + friendlies/cups).
 nwsl_competitions()
 ```
 
-_Last validated n/a._
-
 ## nwsl_match_lineups
 
 Team lineups (starting XI + bench + staff) for a match.
@@ -112,8 +110,6 @@ Team lineups (starting XI + bench + staff) for a match.
 nwsl_match_lineups(match_id='nwsl::Football_Match::0b6761e4701749f593690c0f338da74c', season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
 ```
 
-_Last validated n/a._
-
 ## nwsl_matchdays
 
 Match days (rounds) for a season.
@@ -163,8 +159,6 @@ Match days (rounds) for a season.
 ```python
 nwsl_matchdays(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
 ```
-
-_Last validated n/a._
 
 ## nwsl_player_stats
 
@@ -253,8 +247,6 @@ Player-stats leaderboard for a season (paginated).
 ```python
 nwsl_player_stats(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
 ```
-
-_Last validated n/a._
 
 ## nwsl_season_matches
 
@@ -406,8 +398,6 @@ Matches across one or more seasons within a US-format date window.
 nwsl_season_matches()
 ```
 
-_Last validated n/a._
-
 ## nwsl_stages
 
 Competition stages for a season (may be empty for league play).
@@ -445,8 +435,6 @@ Competition stages for a season (may be empty for league play).
 ```python
 nwsl_stages(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
 ```
-
-_Last validated n/a._
 
 ## nwsl_standings
 
@@ -518,8 +506,6 @@ Overall standings table for a season (table/home/away splits).
 nwsl_standings(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
 ```
 
-_Last validated n/a._
-
 ## nwsl_team_stats
 
 Team-stats leaderboard for a season.
@@ -589,8 +575,6 @@ Team-stats leaderboard for a season.
 ```python
 nwsl_team_stats(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
 ```
-
-_Last validated n/a._
 
 ## nwsl_teams
 
@@ -662,5 +646,3 @@ Teams participating in a season.
 ```python
 nwsl_teams(season_id='nwsl::Football_Season::0b6761e4701749f593690c0f338da74c')
 ```
-
-_Last validated n/a._

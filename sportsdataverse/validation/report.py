@@ -50,6 +50,16 @@ class Rule:
         | leagues | tuple[str, ...] | leagues the rule applies to at all; others skip it |
         | sources | tuple[str, ...] | sources the rule applies to at all; others skip it |
         | note | str | why the rule is scoped this way |
+
+    Example:
+        How a rule's scope sets a game's severity::
+
+            from sportsdataverse.validation import RULE_SCOPE
+            rule = next(iter(RULE_SCOPE.values()))
+            rule.applies("nfl", "espn"), rule.severity_for("nfl", 2024)
+
+    See Also:
+        * :func:`validate_game` -- builds the report
     """
 
     id: str
@@ -228,7 +238,7 @@ SOURCE_COLUMNS: dict[str, dict[str, pl.Expr]] = {
         # play-type rules match against.
         "type.text": pl.col("play_type"),
         # ``orig_play_type`` on this path is the raw stats.ncaa.org structural
-        # type ("field_goal", "rush"), NOT ESPN's pre-processor type, so the
+        # play kind ("field_goal", "rush"), NOT ESPN's pre-processor type, so the
         # rules that read it are pointed at the cfbfastR label instead.
         "orig_play_type": pl.col("play_type"),
         "period.number": pl.col("period"),
@@ -401,6 +411,21 @@ class Finding:
         | n_checked | int | rows the rule applied to -- the denominator behind ``n_rows`` |
         | sample_row_ids | list | up to five offending play ids (or the sample's own keys) |
         | message | str | the definition the rows break |
+
+    Example:
+        The findings on a report::
+
+            from sportsdataverse.nfl import NFLPlayProcess
+
+            proc = NFLPlayProcess(gameId=401671801)
+            proc.espn_nfl_pbp()
+            game = proc.run_processing_pipeline()
+            from sportsdataverse.validation import validate_game
+            report = validate_game(proc.plays_frame, "nfl")
+            [f.to_dict() for f in report.errors + report.warnings]
+
+    See Also:
+        * :func:`validate_game` -- builds the report
     """
 
     rule_id: str
@@ -441,6 +466,21 @@ class GameReport:
         | warnings | list[Finding] | findings at ``warn`` severity (``info`` findings are counted, not listed) |
         | counts_by_rule | dict[str, int] | violation count per fired rule, whatever its severity |
         | not_applicable | list[str] | rules the source cannot support, skipped with a reason in :data:`NOT_APPLICABLE` -- a declared skip, not a silent one |
+
+    Example:
+        Gate a processed game and serialise the verdict::
+
+            from sportsdataverse.nfl import NFLPlayProcess
+
+            proc = NFLPlayProcess(gameId=401671801)
+            proc.espn_nfl_pbp()
+            game = proc.run_processing_pipeline()
+            from sportsdataverse.validation import validate_game
+            report = validate_game(proc.plays_frame, "nfl", summary=proc.json, box=game.get("advBoxScore"))
+            report.ok, report.to_dict()["n_errors"]
+
+    See Also:
+        * :func:`validate_game` -- builds the report
     """
 
     game_id: int | None

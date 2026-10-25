@@ -65,8 +65,6 @@ Every team record of an organisation: current, defunct, exhibition and developme
 nbl_rosetta_teams(org='nbl')
 ```
 
-_Last validated n/a._
-
 ## nbl_rosetta_team_players
 
 Roster of one team in a season: player bio, jersey and position.
@@ -129,8 +127,6 @@ Roster of one team in a season: player bio, jersey and position.
 ```python
 nbl_rosetta_team_players(org='nbl', season=2026, team_id='befee10a-410c-11f0-b3f4-1b3c55488bbb')
 ```
-
-_Last validated n/a._
 
 ## nbl_rosetta_team_stats_leaders
 
@@ -235,8 +231,6 @@ Player season totals of one team in a season, optionally one period and sorted.
 nbl_rosetta_team_stats_leaders(org='nbl', period=0, season_id='1f8e4a79-e98b-457b-85a5-e4b898c6c0bd', sort='-points', team_code='PER')
 ```
 
-_Last validated n/a._
-
 ## nbl_rosetta_team_stats
 
 Team season totals and averages by period (0 = whole game, 1-4 quarters, 5 and up overtime).
@@ -326,5 +320,3 @@ Team season totals and averages by period (0 = whole game, 1-4 quarters, 5 and u
 ```python
 nbl_rosetta_team_stats(org='nbl', season=2026)
 ```
-
-_Last validated n/a._

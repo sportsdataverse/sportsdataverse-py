@@ -63,8 +63,6 @@ Games of one day of one competition and division: schedule keys, clubs, scores, 
 bleague_schedule(day=4, month=10, season=2026, tab=1)
 ```
 
-_Last validated n/a._
-
 ## bleague_schedule_clubs
 
 Clubs of the season and division from the schedule page's club filter, with their team ids.
@@ -108,8 +106,6 @@ Clubs of the season and division from the schedule page's club filter, with thei
 ```python
 bleague_schedule_clubs(day=4, month=10, season=2026, tab=1)
 ```
-
-_Last validated n/a._
 
 ## bleague_schedule_events
 
@@ -155,8 +151,6 @@ Competitions the schedule page offers for the season and division.
 bleague_schedule_events(day=4, month=10, season=2026, tab=1)
 ```
 
-_Last validated n/a._
-
 ## bleague_schedule_days
 
 Game days of the requested month for the competition.
@@ -199,5 +193,3 @@ Game days of the requested month for the competition.
 ```python
 bleague_schedule_days(day=4, month=10, season=2026, tab=1)
 ```
-
-_Last validated n/a._

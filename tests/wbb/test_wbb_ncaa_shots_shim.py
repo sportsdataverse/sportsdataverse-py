@@ -67,7 +67,7 @@ def test_wbb_shot_locations_season_pins_the_period_model(monkeypatch) -> None:
     capture to parse: the check records the model handed to the (real-fixture-fed)
     parser rather than counting rows (rules/wbb.yaml#wbb-2016-four-quarters).
     """
-    from sportsdataverse.wbb import wbb_ncaa_shots as mod
+    from sportsdataverse.mbb import mbb_ncaa_shots as mod  # the shared driver's parse call (B-L26)
 
     seen: list = []
 
@@ -91,6 +91,14 @@ class _RecordingFetcher(_FakeFetcher):
         return super().fetch_game_box(gid)
 
 
+def test_wbb_shot_locations_log_under_the_wbb_logger(caplog) -> None:
+    """The shared MBB driver logs a WBB call's per-game line under ``sportsdataverse.wbb`` (R61b-1)."""
+    with caplog.at_level("INFO", logger="sportsdataverse"):
+        ncaa_wbb_shot_locations(["5728709"], fetcher=_FakeFetcher())
+    found = [r for r in caplog.records if "shots found" in r.getMessage()]
+    assert [r.name for r in found] == ["sportsdataverse.wbb.wbb_ncaa_shots"]
+
+
 def test_wbb_shot_locations_float_contest_ids_are_integer_strings() -> None:
     """A float id fetches ``5728709``, never ``5728709.0``; NaN / None are dropped (R853-2)."""
     fetcher = _RecordingFetcher()
@@ -101,7 +109,7 @@ def test_wbb_shot_locations_float_contest_ids_are_integer_strings() -> None:
 
 def test_wbb_shot_locations_float_season_pins_halves(monkeypatch) -> None:
     """``season=2015.0`` resolves the halves model, not "2015.0" -> quarters (R853-5)."""
-    from sportsdataverse.wbb import wbb_ncaa_shots as mod
+    from sportsdataverse.mbb import mbb_ncaa_shots as mod  # the shared driver's parse call (B-L26)
 
     seen: list = []
 

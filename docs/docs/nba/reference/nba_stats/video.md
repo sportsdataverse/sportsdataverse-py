@@ -109,8 +109,6 @@ GET /stats/videodetailsasset
 nba_stats_videodetailsasset(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_videoevents
 
 GET /stats/videoevents
@@ -183,8 +181,6 @@ GET /stats/videoevents
 ```python
 nba_stats_videoevents()
 ```
-
-_Last validated n/a._
 
 ## nba_stats_videoeventsasset
 
@@ -260,8 +256,6 @@ GET /stats/videoeventsasset
 nba_stats_videoeventsasset()
 ```
 
-_Last validated n/a._
-
 ## nba_stats_videostatus
 
 GET /stats/videostatus
@@ -312,5 +306,3 @@ GET /stats/videostatus
 ```python
 nba_stats_videostatus(league_id='00')
 ```
-
-_Last validated n/a._

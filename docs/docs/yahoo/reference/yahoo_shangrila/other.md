@@ -50,8 +50,6 @@ Yahoo shangrila persisted query `OlyMedalCount` -> one row per `olympics` entry
 yahoo_oly_medal_count()
 ```
 
-_Last validated n/a._
-
 ## yahoo_oly_seasons
 
 Yahoo shangrila persisted query `OlySeasons` -> one row per `olympics` entry
@@ -89,8 +87,6 @@ Yahoo shangrila persisted query `OlySeasons` -> one row per `olympics` entry
 ```python
 yahoo_oly_seasons()
 ```
-
-_Last validated n/a._
 
 ## yahoo_alias
 
@@ -148,8 +144,6 @@ Yahoo shangrila persisted query `alias` -> one row per `pageMetaData` entry
 yahoo_alias()
 ```
 
-_Last validated n/a._
-
 ## yahoo_article_list_card_players
 
 Yahoo shangrila persisted query `articleListCardPlayers` -> one row per `players` entry
@@ -200,8 +194,6 @@ Yahoo shangrila persisted query `articleListCardPlayers` -> one row per `players
 ```python
 yahoo_article_list_card_players()
 ```
-
-_Last validated n/a._
 
 ## yahoo_article_list_card_teams
 
@@ -260,8 +252,6 @@ Yahoo shangrila persisted query `articleListCardTeams` -> one row per `teams` en
 yahoo_article_list_card_teams()
 ```
 
-_Last validated n/a._
-
 ## yahoo_basic_players
 
 Yahoo shangrila persisted query `basicPlayers` -> one row per `players` entry
@@ -301,8 +291,6 @@ Yahoo shangrila persisted query `basicPlayers` -> one row per `players` entry
 yahoo_basic_players()
 ```
 
-_Last validated n/a._
-
 ## yahoo_betting_disclaimer
 
 Yahoo shangrila persisted query `bettingDisclaimer` -> one row per `bettingDisclaimers` entry
@@ -339,8 +327,6 @@ Yahoo shangrila persisted query `bettingDisclaimer` -> one row per `bettingDiscl
 ```python
 yahoo_betting_disclaimer()
 ```
-
-_Last validated n/a._
 
 ## yahoo_combat_event_fights
 
@@ -381,8 +367,6 @@ Yahoo shangrila persisted query `combatEventFights` -> one row per `leagues` ent
 yahoo_combat_event_fights()
 ```
 
-_Last validated n/a._
-
 ## yahoo_combat_schedule
 
 Yahoo shangrila persisted query `combatSchedule` -> one row per `leagues` entry
@@ -421,8 +405,6 @@ Yahoo shangrila persisted query `combatSchedule` -> one row per `leagues` entry
 yahoo_combat_schedule()
 ```
 
-_Last validated n/a._
-
 ## yahoo_common_pills
 
 Yahoo shangrila persisted query `common/pills` (response body not captured; shape unknown)
@@ -455,8 +437,6 @@ Yahoo shangrila persisted query `common/pills` (response body not captured; shap
 ```python
 yahoo_common_pills()
 ```
-
-_Last validated n/a._
 
 ## yahoo_consensus_rankings_php
 
@@ -494,8 +474,6 @@ Yahoo shangrila persisted query `consensus-rankings.php` (response body not capt
 yahoo_consensus_rankings_php()
 ```
 
-_Last validated n/a._
-
 ## yahoo_draft
 
 Yahoo shangrila persisted query `draft` -> one row per `leagues` entry
@@ -527,8 +505,6 @@ Yahoo shangrila persisted query `draft` -> one row per `leagues` entry
 ```python
 yahoo_draft()
 ```
-
-_Last validated n/a._
 
 ## yahoo_draft_prospects
 
@@ -564,8 +540,6 @@ Yahoo shangrila persisted query `draftProspects` -> one row per `leagues` entry
 yahoo_draft_prospects()
 ```
 
-_Last validated n/a._
-
 ## yahoo_driver_results
 
 Yahoo shangrila persisted query `driverResults` -> one row per `players` entry
@@ -598,8 +572,6 @@ Yahoo shangrila persisted query `driverResults` -> one row per `players` entry
 yahoo_driver_results()
 ```
 
-_Last validated n/a._
-
 ## yahoo_driver_splits
 
 Yahoo shangrila persisted query `driverSplits` -> one row per `players` entry
@@ -630,8 +602,6 @@ Yahoo shangrila persisted query `driverSplits` -> one row per `players` entry
 ```python
 yahoo_driver_splits()
 ```
-
-_Last validated n/a._
 
 ## yahoo_featured_game_ids
 
@@ -667,8 +637,6 @@ Yahoo shangrila persisted query `featuredGameIds` -> one row per `featuredGames`
 ```python
 yahoo_featured_game_ids()
 ```
-
-_Last validated n/a._
 
 ## yahoo_gametime_game
 
@@ -708,8 +676,6 @@ Yahoo shangrila persisted query `gametimeGame` -> one row per `games` entry
 yahoo_gametime_game()
 ```
 
-_Last validated n/a._
-
 ## yahoo_gametime_team
 
 Yahoo shangrila persisted query `gametimeTeam` -> one row per `teams` entry
@@ -747,8 +713,6 @@ Yahoo shangrila persisted query `gametimeTeam` -> one row per `teams` entry
 yahoo_gametime_team()
 ```
 
-_Last validated n/a._
-
 ## yahoo_golf_tournament_seasons
 
 Yahoo shangrila persisted query `golfTournamentSeasons` (response body not captured; shape unknown)
@@ -779,8 +743,6 @@ Yahoo shangrila persisted query `golfTournamentSeasons` (response body not captu
 ```python
 yahoo_golf_tournament_seasons()
 ```
-
-_Last validated n/a._
 
 ## yahoo_golf_tournaments
 
@@ -838,8 +800,6 @@ Yahoo shangrila persisted query `golfTournaments` -> one row per `golfTournament
 yahoo_golf_tournaments()
 ```
 
-_Last validated n/a._
-
 ## yahoo_golf_tournaments_basic
 
 Yahoo shangrila persisted query `golfTournamentsBasic` -> one row per `golfTournaments` entry
@@ -892,8 +852,6 @@ Yahoo shangrila persisted query `golfTournamentsBasic` -> one row per `golfTourn
 ```python
 yahoo_golf_tournaments_basic()
 ```
-
-_Last validated n/a._
 
 ## yahoo_module_game
 
@@ -1021,8 +979,6 @@ Yahoo shangrila persisted query `moduleGame` -> one row per `games` entry
 yahoo_module_game()
 ```
 
-_Last validated n/a._
-
 ## yahoo_motorsport_standings
 
 Yahoo shangrila persisted query `motorsportStandings` -> one row per `leagues` entry
@@ -1062,8 +1018,6 @@ Yahoo shangrila persisted query `motorsportStandings` -> one row per `leagues` e
 yahoo_motorsport_standings()
 ```
 
-_Last validated n/a._
-
 ## yahoo_nascar_drivers
 
 Yahoo shangrila persisted query `nascarDrivers` -> one row per `leagues` entry
@@ -1100,8 +1054,6 @@ Yahoo shangrila persisted query `nascarDrivers` -> one row per `leagues` entry
 ```python
 yahoo_nascar_drivers()
 ```
-
-_Last validated n/a._
 
 ## yahoo_nav_dropdown_tray
 
@@ -1199,8 +1151,6 @@ Yahoo shangrila persisted query `navDropdownTray` -> tables: nfl, nhl, nba, mlb,
 yahoo_nav_dropdown_tray()
 ```
 
-_Last validated n/a._
-
 ## yahoo_pick_distribution
 
 Yahoo shangrila persisted query `pickDistribution` -> one row per `leagues` entry
@@ -1239,8 +1189,6 @@ Yahoo shangrila persisted query `pickDistribution` -> one row per `leagues` entr
 ```python
 yahoo_pick_distribution()
 ```
-
-_Last validated n/a._
 
 ## yahoo_playoff_bracket
 
@@ -1290,8 +1238,6 @@ Yahoo shangrila persisted query `playoffBracket` -> one row per `leagues.bracket
 yahoo_playoff_bracket()
 ```
 
-_Last validated n/a._
-
 ## yahoo_playoff_series_game
 
 Yahoo shangrila persisted query `playoffSeriesGame` -> one row per `games` entry
@@ -1329,8 +1275,6 @@ Yahoo shangrila persisted query `playoffSeriesGame` -> one row per `games` entry
 yahoo_playoff_series_game()
 ```
 
-_Last validated n/a._
-
 ## yahoo_polymarket_game
 
 Yahoo shangrila persisted query `polymarketGame` -> one row per `games` entry
@@ -1367,8 +1311,6 @@ Yahoo shangrila persisted query `polymarketGame` -> one row per `games` entry
 ```python
 yahoo_polymarket_game()
 ```
-
-_Last validated n/a._
 
 ## yahoo_racing_schedule
 
@@ -1409,5 +1351,3 @@ Yahoo shangrila persisted query `racingSchedule` -> one row per `leagues` entry
 ```python
 yahoo_racing_schedule()
 ```
-
-_Last validated n/a._

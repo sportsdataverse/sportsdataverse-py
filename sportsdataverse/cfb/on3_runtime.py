@@ -43,7 +43,7 @@ import re
 import threading
 from typing import Any, Dict, Optional
 
-from sportsdataverse._codegen_runtime import _json_body, _text_body, _transport_errors, _where
+from sportsdataverse._codegen_runtime import _CHROME_UA, _json_body, _text_body, _transport_errors, _where
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import AssetFetchError, NoDataError
 
@@ -51,7 +51,7 @@ _HOST = "https://www.on3.com"
 _BUILD_ID_RE = re.compile(r'"buildId":"([A-Za-z0-9_-]+)"')
 _RANKINGS_PATH_RE = re.compile(r"^/rivals/rankings/([a-z0-9-]+)/([a-z0-9-]+)/([0-9]{4})\.json$")
 # On3 serves plain requests fine but a browser UA keeps us off the generic-bot path.
-_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+_UA = _CHROME_UA
 
 # Process-lifetime cache; refreshed automatically when a data-route 404 signals
 # that On3 deployed (buildId rotated).

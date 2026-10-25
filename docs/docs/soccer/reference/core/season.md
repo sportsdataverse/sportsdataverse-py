@@ -73,8 +73,6 @@ ESPN endpoint.
 espn_soccer_season_pointer(league='eng.1')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_season_info
 
 ESPN endpoint.
@@ -143,8 +141,6 @@ ESPN endpoint.
 espn_soccer_season_info(league='eng.1', season=2024)
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_season_types
 
 ESPN endpoint.
@@ -182,8 +178,6 @@ ESPN endpoint.
 ```python
 espn_soccer_season_types(league='eng.1', season=2024)
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_season_type
 
@@ -237,8 +231,6 @@ ESPN endpoint.
 espn_soccer_season_type(league='eng.1', season=2024, season_type=2)
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_season_group
 
 ESPN endpoint.
@@ -290,8 +282,6 @@ ESPN endpoint.
 espn_soccer_season_group(league='eng.1', season=2024, season_type=2, group_id=80)
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_season_groups
 
 ESPN endpoint.
@@ -330,8 +320,6 @@ ESPN endpoint.
 ```python
 espn_soccer_season_groups(league='eng.1', season=2024, season_type=2)
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_season_group_teams
 
@@ -374,8 +362,6 @@ ESPN endpoint.
 espn_soccer_season_group_teams(league='eng.1', season=2024, season_type=2, group_id=80)
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_season_group_children
 
 ESPN endpoint.
@@ -417,8 +403,6 @@ ESPN endpoint.
 espn_soccer_season_group_children(league='eng.1', season=2024, season_type=2, group_id=80)
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_season_type_leaders
 
 ESPN endpoint.
@@ -453,8 +437,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 ```python
 espn_soccer_season_type_leaders(league='eng.1', season=2024, season_type=2)
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_season_type_corrections
 
@@ -501,8 +483,6 @@ ESPN endpoint.
 espn_soccer_season_type_corrections(league='eng.1', season=2024, season_type=2)
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_season_weeks
 
 ESPN endpoint.
@@ -541,8 +521,6 @@ ESPN endpoint.
 ```python
 espn_soccer_season_weeks(league='eng.1', season=2024, season_type=2)
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_season_week
 
@@ -586,8 +564,6 @@ ESPN endpoint.
 ```python
 espn_soccer_season_week(league='eng.1', season=2024, season_type=2, week=1)
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_season_week_powerindex
 
@@ -664,8 +640,6 @@ ESPN endpoint.
 espn_soccer_season_week_powerindex(league='eng.1', season=2024, season_type=2, week=8)
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_season_week_games
 
 ESPN endpoint.
@@ -707,8 +681,6 @@ ESPN endpoint.
 espn_soccer_season_week_games(league='eng.1', season=2024, season_type=2, week=1)
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_season_teams
 
 ESPN endpoint.
@@ -748,8 +720,6 @@ ESPN endpoint.
 ```python
 espn_soccer_season_teams(league='eng.1', season=2024)
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_season_team
 
@@ -827,8 +797,6 @@ ESPN endpoint.
 espn_soccer_season_team(league='eng.1', season=2024, team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_season_players
 
 ESPN endpoint.
@@ -869,8 +837,6 @@ ESPN endpoint.
 espn_soccer_season_players(league='eng.1', season=2024)
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_season_coaches
 
 ESPN endpoint.
@@ -907,8 +873,6 @@ ESPN endpoint.
 ```python
 espn_soccer_season_coaches(league='eng.1', season=2024)
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_season_draft
 
@@ -956,8 +920,6 @@ ESPN endpoint.
 espn_soccer_season_draft(league='eng.1', season=2024)
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_season_draft_round_picks
 
 ESPN endpoint.
@@ -992,8 +954,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_soccer_season_draft_round_picks(league='eng.1', season=2024, round_num='1')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_season_futures
 
@@ -1038,8 +998,6 @@ ESPN endpoint.
 espn_soccer_season_futures(league='eng.1', season=2024)
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_season_freeagents
 
 ESPN endpoint.
@@ -1073,8 +1031,6 @@ No returns table is published for this endpoint: no capture: the page holds zero
 ```python
 espn_soccer_season_freeagents(league='eng.1', season=2024)
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_season_powerindex
 
@@ -1123,8 +1079,6 @@ ESPN endpoint.
 espn_soccer_season_powerindex(league='eng.1', season=2024)
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_season_powerindex_leaders
 
 ESPN endpoint.
@@ -1165,8 +1119,6 @@ ESPN endpoint.
 espn_soccer_season_powerindex_leaders(league='eng.1', season=2024)
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_season_awards
 
 ESPN endpoint.
@@ -1205,5 +1157,3 @@ ESPN endpoint.
 ```python
 espn_soccer_season_awards(league='eng.1', season=2024)
 ```
-
-_Last validated n/a._

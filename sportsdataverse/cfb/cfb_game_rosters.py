@@ -96,122 +96,13 @@ def espn_cfb_game_rosters(
     return _pandas_ids(rosters) if return_as_pandas else rosters
 
 
-def helper_cfb_game_items(summary):
-    """Internal helper that flattens the ESPN ``competitions/competitors`` summary
-    payload into a polars DataFrame keyed by ``team_id``.
-
-    Args:
-        summary (dict): Parsed JSON from the ESPN competitors summary endpoint.
-
-    Returns:
-        pl.DataFrame: Polars dataframe with one row per competitor team in the game.
-
-    Example:
-        Used internally by :func:`espn_cfb_game_rosters`::
-
-            from sportsdataverse.cfb import espn_cfb_game_rosters
-            rosters = espn_cfb_game_rosters(game_id=401628334)
-    """
-    items = pl.from_pandas(pd.json_normalize(summary, record_path="items", sep="_"))
-    items.columns = [col.replace("$ref", "href") for col in items.columns]
-
-    items.columns = [underscore(c) for c in items.columns]
-    # Older games (e.g. pre-2021) sometimes omit the team-level ``statistics``
-    # ``$ref`` in the competitors payload, so ``statistics_href`` is absent and a
-    # strict rename raises ColumnNotFoundError (the renamed ``team_statistics_href``
-    # is not used downstream). Rename only the keys actually present.
-    rename_map = {"id": "team_id", "uid": "team_uid", "statistics_href": "team_statistics_href"}
-    items = items.rename({k: v for k, v in rename_map.items() if k in items.columns})
-    items = items.with_columns(team_id=pl.col("team_id").cast(pl.Int32))
-
-    return items
+helper_cfb_game_items = _espn_game_rosters.game_items
 
 
-def helper_cfb_team_items(items, **kwargs):
-    """Internal helper that fetches team detail rows for every team referenced in
-    the competitors summary and returns them as a flat polars DataFrame.
-
-    Args:
-        items (pl.DataFrame): Output of :func:`helper_cfb_game_items`.
-        **kwargs: Forwarded to :func:`sportsdataverse.dl_utils.download`.
-
-    Returns:
-        pl.DataFrame: Team detail rows with logo URLs flattened out.
-
-    Example:
-        Used internally by :func:`espn_cfb_game_rosters`::
-
-            from sportsdataverse.cfb import espn_cfb_game_rosters
-            rosters = espn_cfb_game_rosters(game_id=401628334)
-    """
-    return _espn_game_rosters.team_items(items, **kwargs)
+helper_cfb_team_items = _espn_game_rosters.team_items
 
 
-def helper_cfb_roster_items(items, summary_url, **kwargs):
-    """Internal helper that fetches the roster entries for every team in a game.
-
-    Args:
-        items (pl.DataFrame): Output of :func:`helper_cfb_game_items`.
-        summary_url (str): Base ESPN summary URL used to derive each team's
-            roster endpoint.
-        **kwargs: Forwarded to :func:`sportsdataverse.dl_utils.download`.
-
-    Returns:
-        pl.DataFrame: One row per game-roster entry across both teams.
-
-    Example:
-        Used internally by :func:`espn_cfb_game_rosters`::
-
-            from sportsdataverse.cfb import espn_cfb_game_rosters
-            rosters = espn_cfb_game_rosters(game_id=401628334)
-    """
-    from sportsdataverse.errors import NoDataError
-
-    team_ids = list(items["team_id"])
-    game_rosters = pl.DataFrame()
-    for tm in team_ids:
-        team_roster_url = "{x}/{t}/roster".format(x=summary_url, t=tm)
-        try:
-            entries = _download_json(download, team_roster_url, **kwargs).get("entries", [])
-        except NoDataError:
-            # ESPN has no roster resource for this team in this game (a 404 —
-            # common for older games and FCS opponents). Skip it so the other
-            # team's roster is still recovered instead of failing the whole game.
-            continue
-        if not entries:
-            continue
-        team_roster = pl.from_pandas(pd.json_normalize(entries, sep="_"))
-        team_roster.columns = [col.replace("$ref", "href") for col in team_roster.columns]
-        team_roster.columns = [underscore(c) for c in team_roster.columns]
-        team_roster = team_roster.with_columns(team_id=pl.lit(tm).cast(pl.Int32))
-        game_rosters = pl.concat([game_rosters, team_roster], how="diagonal")
-    if game_rosters.is_empty():
-        # No team in this game exposes a roster resource — genuinely no data.
-        raise NoDataError(f"NoDataError: No roster data found for any team at {summary_url}")
-    game_rosters = game_rosters.drop([c for c in ["period", "for_player_id", "active"] if c in game_rosters.columns])
-    game_rosters = game_rosters.with_columns(
-        player_id=pl.col("player_id").cast(pl.Int64),
-        team_id=pl.col("team_id").cast(pl.Int32),
-    )
-    return game_rosters
+helper_cfb_roster_items = _espn_game_rosters.roster_items
 
 
-def helper_cfb_athlete_items(teams_rosters, **kwargs):
-    """Internal helper that resolves each athlete ``$ref`` in a team-rosters frame
-    to the canonical athlete detail row.
-
-    Args:
-        teams_rosters (pl.DataFrame): Output of :func:`helper_cfb_roster_items`
-            (must contain an ``athlete_href`` column).
-        **kwargs: Forwarded to :func:`sportsdataverse.dl_utils.download`.
-
-    Returns:
-        pl.DataFrame: One row per resolved athlete.
-
-    Example:
-        Used internally by :func:`espn_cfb_game_rosters`::
-
-            from sportsdataverse.cfb import espn_cfb_game_rosters
-            rosters = espn_cfb_game_rosters(game_id=401628334)
-    """
-    return _espn_game_rosters.athlete_items(teams_rosters, **kwargs)
+helper_cfb_athlete_items = _espn_game_rosters.athlete_items

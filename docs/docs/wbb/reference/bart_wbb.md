@@ -88,5 +88,3 @@ GET /ncaaw/{year}_team_results.csv — women's T-Rank team ratings (adjoe/adjde/
 ```python
 bart_wbb_ratings(year=2025)
 ```
-
-_Last validated n/a._

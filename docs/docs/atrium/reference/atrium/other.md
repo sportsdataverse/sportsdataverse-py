@@ -89,8 +89,6 @@ Fixtures (schedule and results) of a season, home and away side by side.
 atrium_fixtures(website_id=14)
 ```
 
-_Last validated n/a._
-
 ## atrium_seasons
 
 Every season (competition and year) a site lists, with the sdv END year of each.
@@ -135,8 +133,6 @@ Every season (competition and year) a site lists, with the sdv END year of each.
 ```python
 atrium_seasons(website_id=12)
 ```
-
-_Last validated n/a._
 
 ## atrium_fixtures_ribbon
 
@@ -200,8 +196,6 @@ The fixtures ribbon: recent and upcoming games across the site's competitions (e
 ```python
 atrium_fixtures_ribbon(website_id=14)
 ```
-
-_Last validated n/a._
 
 ## atrium_fixture
 
@@ -282,8 +276,6 @@ One game's header: teams, score, venue, status, rules (periods, overtime, shot c
 atrium_fixture(fixture_id='0dc631bd-c34c-11f1-8d16-4d5a21afb79d', website_id=14)
 ```
 
-_Last validated n/a._
-
 ## atrium_fixture_periods
 
 One game's periods with the points each team scored in each, overtime periods included (ids 11+).
@@ -335,8 +327,6 @@ One game's periods with the points each team scored in each, overtime periods in
 ```python
 atrium_fixture_periods(fixture_id='0dc631bd-c34c-11f1-8d16-4d5a21afb79d', website_id=14)
 ```
-
-_Last validated n/a._
 
 ## atrium_box_score
 
@@ -416,8 +406,6 @@ One game's box score: one row per rostered player with the statistics the site c
 atrium_box_score(fixture_id='0dc631bd-c34c-11f1-8d16-4d5a21afb79d', website_id=14)
 ```
 
-_Last validated n/a._
-
 ## atrium_pbp
 
 One game's play-by-play: every event with the period clock, the player and the running score.
@@ -477,8 +465,6 @@ One game's play-by-play: every event with the period clock, the player and the r
 atrium_pbp(fixture_id='0dc631bd-c34c-11f1-8d16-4d5a21afb79d', website_id=14)
 ```
 
-_Last validated n/a._
-
 ## atrium_shots
 
 One game's 2pt / 3pt attempts with their court location (percent of the court) and result.
@@ -537,8 +523,6 @@ One game's 2pt / 3pt attempts with their court location (percent of the court) a
 ```python
 atrium_shots(fixture_id='0dc631bd-c34c-11f1-8d16-4d5a21afb79d', website_id=14)
 ```
-
-_Last validated n/a._
 
 ## atrium_standings
 
@@ -608,8 +592,6 @@ Standings of a season, with the columns the site configures (LNB home / away spl
 atrium_standings(website_id=14)
 ```
 
-_Last validated n/a._
-
 ## atrium_standings_summary
 
 Compact standings of a season: position, wins, losses and games played.
@@ -677,8 +659,6 @@ Compact standings of a season: position, wins, losses and games played.
 atrium_standings_summary(website_id=12)
 ```
 
-_Last validated n/a._
-
 ## atrium_leaders
 
 Season leaders per statistic (top 5 each), with their player and team ids.
@@ -731,8 +711,6 @@ Season leaders per statistic (top 5 each), with their player and team ids.
 atrium_leaders(website_id=12)
 ```
 
-_Last validated n/a._
-
 ## atrium_competition_player_stats
 
 Player statistics of a competition in long form (names only: the bodies carry no ids).
@@ -783,8 +761,6 @@ Player statistics of a competition in long form (names only: the bodies carry no
 atrium_competition_player_stats(competition_id='3f4064bb-51ad-11f0-aaaf-2923c944b404', website_id=12)
 ```
 
-_Last validated n/a._
-
 ## atrium_competition_team_stats
 
 Team statistics of a competition in long form (names only: the bodies carry no ids).
@@ -834,5 +810,3 @@ Team statistics of a competition in long form (names only: the bodies carry no i
 ```python
 atrium_competition_team_stats(competition_id='3f4064bb-51ad-11f0-aaaf-2923c944b404', website_id=12)
 ```
-
-_Last validated n/a._

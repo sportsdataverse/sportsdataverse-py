@@ -64,8 +64,6 @@ Legacy player season Defense leaders (NCAAF)
 yahoo_season_stats_football_defense_ncaaf()
 ```
 
-_Last validated n/a._
-
 ## yahoo_season_stats_football_kicking_ncaaf
 
 Legacy player season Kicking leaders (NCAAF)
@@ -122,8 +120,6 @@ Legacy player season Kicking leaders (NCAAF)
 ```python
 yahoo_season_stats_football_kicking_ncaaf()
 ```
-
-_Last validated n/a._
 
 ## yahoo_season_stats_football_passing_ncaaf
 
@@ -182,8 +178,6 @@ Legacy player season Passing leaders (NCAAF)
 yahoo_season_stats_football_passing_ncaaf()
 ```
 
-_Last validated n/a._
-
 ## yahoo_season_stats_football_punting_ncaaf
 
 Legacy player season Punting leaders (NCAAF)
@@ -240,8 +234,6 @@ Legacy player season Punting leaders (NCAAF)
 ```python
 yahoo_season_stats_football_punting_ncaaf()
 ```
-
-_Last validated n/a._
 
 ## yahoo_season_stats_football_receiving_ncaaf
 
@@ -300,8 +292,6 @@ Legacy player season Receiving leaders (NCAAF)
 yahoo_season_stats_football_receiving_ncaaf()
 ```
 
-_Last validated n/a._
-
 ## yahoo_season_stats_football_returns_ncaaf
 
 Legacy player season Returns leaders (NCAAF)
@@ -358,8 +348,6 @@ Legacy player season Returns leaders (NCAAF)
 ```python
 yahoo_season_stats_football_returns_ncaaf()
 ```
-
-_Last validated n/a._
 
 ## yahoo_season_stats_football_rushing_ncaaf
 
@@ -418,8 +406,6 @@ Legacy player season Rushing leaders (NCAAF)
 yahoo_season_stats_football_rushing_ncaaf()
 ```
 
-_Last validated n/a._
-
 ## yahoo_season_team_stats_football_defense
 
 Legacy team season Defense (NCAAF)
@@ -476,8 +462,6 @@ Legacy team season Defense (NCAAF)
 ```python
 yahoo_season_team_stats_football_defense()
 ```
-
-_Last validated n/a._
 
 ## yahoo_season_team_stats_football_kicking
 
@@ -536,8 +520,6 @@ Legacy team season Kicking (NCAAF)
 yahoo_season_team_stats_football_kicking()
 ```
 
-_Last validated n/a._
-
 ## yahoo_season_team_stats_football_kickoffs
 
 Legacy team season Kickoffs (NCAAF)
@@ -594,8 +576,6 @@ Legacy team season Kickoffs (NCAAF)
 ```python
 yahoo_season_team_stats_football_kickoffs()
 ```
-
-_Last validated n/a._
 
 ## yahoo_season_team_stats_football_offense
 
@@ -654,8 +634,6 @@ Legacy team season Offense (NCAAF)
 yahoo_season_team_stats_football_offense()
 ```
 
-_Last validated n/a._
-
 ## yahoo_season_team_stats_football_passing
 
 Legacy team season Passing (NCAAF)
@@ -712,8 +690,6 @@ Legacy team season Passing (NCAAF)
 ```python
 yahoo_season_team_stats_football_passing()
 ```
-
-_Last validated n/a._
 
 ## yahoo_season_team_stats_football_passing_defense
 
@@ -772,8 +748,6 @@ Legacy team Passing defense allowed (NCAAF)
 yahoo_season_team_stats_football_passing_defense()
 ```
 
-_Last validated n/a._
-
 ## yahoo_season_team_stats_football_punting
 
 Legacy team season Punting (NCAAF)
@@ -830,8 +804,6 @@ Legacy team season Punting (NCAAF)
 ```python
 yahoo_season_team_stats_football_punting()
 ```
-
-_Last validated n/a._
 
 ## yahoo_season_team_stats_football_receiving
 
@@ -890,8 +862,6 @@ Legacy team season Receiving (NCAAF)
 yahoo_season_team_stats_football_receiving()
 ```
 
-_Last validated n/a._
-
 ## yahoo_season_team_stats_football_receiving_defense
 
 Legacy team Receiving defense allowed (NCAAF)
@@ -948,8 +918,6 @@ Legacy team Receiving defense allowed (NCAAF)
 ```python
 yahoo_season_team_stats_football_receiving_defense()
 ```
-
-_Last validated n/a._
 
 ## yahoo_season_team_stats_football_returns
 
@@ -1008,8 +976,6 @@ Legacy team season Returns (NCAAF)
 yahoo_season_team_stats_football_returns()
 ```
 
-_Last validated n/a._
-
 ## yahoo_season_team_stats_football_rushing
 
 Legacy team season Rushing (NCAAF)
@@ -1067,8 +1033,6 @@ Legacy team season Rushing (NCAAF)
 yahoo_season_team_stats_football_rushing()
 ```
 
-_Last validated n/a._
-
 ## yahoo_season_team_stats_football_rushing_defense
 
 Legacy team Rushing defense allowed (NCAAF)
@@ -1125,5 +1089,3 @@ Legacy team Rushing defense allowed (NCAAF)
 ```python
 yahoo_season_team_stats_football_rushing_defense()
 ```
-
-_Last validated n/a._

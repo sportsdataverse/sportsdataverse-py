@@ -44,8 +44,6 @@ UI string tables of the site in English, French and Dutch (one row per language 
 sportpress_ui_strings()
 ```
 
-_Last validated n/a._
-
 ## sportpress_club_seasons
 
 Seasons (END years) in which Belgian and Dutch clubs have teams.
@@ -80,8 +78,6 @@ Seasons (END years) in which Belgian and Dutch clubs have teams.
 ```python
 sportpress_club_seasons()
 ```
-
-_Last validated n/a._
 
 ## sportpress_referees
 
@@ -120,8 +116,6 @@ Referees of the league (staff title 2).
 ```python
 sportpress_referees()
 ```
-
-_Last validated n/a._
 
 ## sportpress_phases
 
@@ -163,8 +157,6 @@ The competition of a season with its phases (regular season, playoffs, supercup)
 ```python
 sportpress_phases(season=2026)
 ```
-
-_Last validated n/a._
 
 ## sportpress_competition_teams
 
@@ -209,8 +201,6 @@ Every competition team of one competition: ids, names and country.
 sportpress_competition_teams(competition_id=24)
 ```
 
-_Last validated n/a._
-
 ## sportpress_competition_staff
 
 Coaching staff (head coach, assistants) of every competition team of one competition.
@@ -251,8 +241,6 @@ Coaching staff (head coach, assistants) of every competition team of one competi
 ```python
 sportpress_competition_staff(competition_id=24)
 ```
-
-_Last validated n/a._
 
 ## sportpress_standings
 
@@ -317,8 +305,6 @@ Standings of one phase of a competition: record, points, home/away split, last f
 sportpress_standings(competition_id=24, phase_id=169)
 ```
 
-_Last validated n/a._
-
 ## sportpress_schedule
 
 Every game of a season for Belgian and Dutch clubs, with teams, scores, phase and venue.
@@ -375,8 +361,6 @@ Every game of a season for Belgian and Dutch clubs, with teams, scores, phase an
 sportpress_schedule(season=2026)
 ```
 
-_Last validated n/a._
-
 ## sportpress_season_roster
 
 Every roster entry of a season: player, team, jersey, height, weight and position.
@@ -426,8 +410,6 @@ Every roster entry of a season: player, team, jersey, height, weight and positio
 sportpress_season_roster(season=2026)
 ```
 
-_Last validated n/a._
-
 ## sportpress_nationality_codes
 
 Distinct player nationality codes of a season (dirty: lower case, pairs, empty).
@@ -464,8 +446,6 @@ Distinct player nationality codes of a season (dirty: lower case, pairs, empty).
 ```python
 sportpress_nationality_codes(season=2026)
 ```
-
-_Last validated n/a._
 
 ## sportpress_roster_find
 
@@ -519,5 +499,3 @@ One roster entry with its player, team and season.
 ```python
 sportpress_roster_find(roster_id=11193)
 ```
-
-_Last validated n/a._

@@ -38,8 +38,6 @@ Get futures for a team.
 cbs_team_futures(team_id=404)
 ```
 
-_Last validated n/a._
-
 ## cbs_team_metadata
 
 Get a team metadata resource
@@ -71,8 +69,6 @@ Get a team metadata resource
 ```python
 cbs_team_metadata(team_id=404)
 ```
-
-_Last validated n/a._
 
 ## cbs_team_players
 
@@ -141,8 +137,6 @@ Get player resources on a team.
 cbs_team_players(team_id=404)
 ```
 
-_Last validated n/a._
-
 ## cbs_team_polls
 
 Retrieve team rankings data from our various polls.
@@ -175,8 +169,6 @@ Retrieve team rankings data from our various polls.
 ```python
 cbs_team_polls(team_id=404)
 ```
-
-_Last validated n/a._
 
 ## cbs_team_rankings
 
@@ -212,8 +204,6 @@ Get rankings for a team (by season)
 cbs_team_rankings(team_id=404)
 ```
 
-_Last validated n/a._
-
 ## cbs_team_rankings_sportsline
 
 Get sportsline rankings for a team
@@ -244,8 +234,6 @@ Get sportsline rankings for a team
 ```python
 cbs_team_rankings_sportsline(team_id=404)
 ```
-
-_Last validated n/a._
 
 ## cbs_team_seasons
 
@@ -282,8 +270,6 @@ Get a list of Season resources associated to a Team.
 ```python
 cbs_team_seasons(team_id=404)
 ```
-
-_Last validated n/a._
 
 ## cbs_team_standings
 
@@ -446,8 +432,6 @@ Get standings for a particular team.
 cbs_team_standings(team_id=404)
 ```
 
-_Last validated n/a._
-
 ## cbs_team_standings_sportsline
 
 Get SportsLine standings for a particular team.
@@ -479,8 +463,6 @@ Get SportsLine standings for a particular team.
 ```python
 cbs_team_standings_sportsline(team_id=404)
 ```
-
-_Last validated n/a._
 
 ## cbs_team_stats
 
@@ -516,5 +498,3 @@ Get all statistics for a team.
 ```python
 cbs_team_stats(team_id=404)
 ```
-
-_Last validated n/a._

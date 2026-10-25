@@ -59,8 +59,6 @@ GET /leaderboard/expected_statistics — xBA/xSLG/xwOBA/xISO expected-statistics
 mlb_statcast_leaderboard_expected_stats()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_percentile_rankings
 
 GET /leaderboard/percentile-rankings — player percentile-ranking sliders (xwOBA/xBA/xSLG/…).
@@ -122,8 +120,6 @@ GET /leaderboard/percentile-rankings — player percentile-ranking sliders (xwOB
 mlb_statcast_leaderboard_percentile_rankings()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_sprint_speed
 
 GET /leaderboard/sprint_speed — sprint-speed (ft/sec) leaderboard.
@@ -171,8 +167,6 @@ GET /leaderboard/sprint_speed — sprint-speed (ft/sec) leaderboard.
 ```python
 mlb_statcast_leaderboard_sprint_speed()
 ```
-
-_Last validated n/a._
 
 ## mlb_statcast_leaderboard_running_splits
 
@@ -238,8 +232,6 @@ GET /leaderboard/running_splits — 90-foot running splits leaderboard.
 mlb_statcast_leaderboard_running_splits()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_bat_tracking
 
 GET /leaderboard/bat-tracking — bat-tracking (swing speed / squared-up) leaderboard.
@@ -296,8 +288,6 @@ GET /leaderboard/bat-tracking — bat-tracking (swing speed / squared-up) leader
 mlb_statcast_leaderboard_bat_tracking()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_swing_path
 
 GET /leaderboard/bat-tracking/swing-path-attack-angle — swing path & attack-angle leaderboard.
@@ -348,8 +338,6 @@ GET /leaderboard/bat-tracking/swing-path-attack-angle — swing path & attack-an
 ```python
 mlb_statcast_leaderboard_swing_path()
 ```
-
-_Last validated n/a._
 
 ## mlb_statcast_leaderboard_swing_timing
 
@@ -415,8 +403,6 @@ GET /leaderboard/bat-tracking/swing-timing-miss-distance — swing timing & miss
 mlb_statcast_leaderboard_swing_timing()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_swing_take
 
 GET /leaderboard/swing-take — swing/take run-value leaderboard.
@@ -465,8 +451,6 @@ GET /leaderboard/swing-take — swing/take run-value leaderboard.
 ```python
 mlb_statcast_leaderboard_swing_take()
 ```
-
-_Last validated n/a._
 
 ## mlb_statcast_leaderboard_exit_velocity_barrels
 
@@ -524,8 +508,6 @@ GET /leaderboard/statcast — exit velocity & barrels leaderboard.
 mlb_statcast_leaderboard_exit_velocity_barrels()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_batted_ball
 
 GET /leaderboard/batted-ball — batted-ball profile leaderboard.
@@ -582,8 +564,6 @@ GET /leaderboard/batted-ball — batted-ball profile leaderboard.
 mlb_statcast_leaderboard_batted_ball()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_home_runs
 
 GET /leaderboard/home-runs — Statcast home-runs leaderboard.
@@ -635,8 +615,6 @@ GET /leaderboard/home-runs — Statcast home-runs leaderboard.
 mlb_statcast_leaderboard_home_runs()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_pitch_arsenals
 
 GET /leaderboard/pitch-arsenals — pitch arsenals (velo/spin/movement) leaderboard.
@@ -686,8 +664,6 @@ GET /leaderboard/pitch-arsenals — pitch arsenals (velo/spin/movement) leaderbo
 ```python
 mlb_statcast_leaderboard_pitch_arsenals()
 ```
-
-_Last validated n/a._
 
 ## mlb_statcast_leaderboard_pitch_arsenal_stats
 
@@ -746,8 +722,6 @@ GET /leaderboard/pitch-arsenal-stats — per-pitch-type outcome stats leaderboar
 ```python
 mlb_statcast_leaderboard_pitch_arsenal_stats()
 ```
-
-_Last validated n/a._
 
 ## mlb_statcast_leaderboard_pitch_movement
 
@@ -811,8 +785,6 @@ GET /leaderboard/pitch-movement — pitch-movement leaderboard.
 mlb_statcast_leaderboard_pitch_movement()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_pitch_tempo
 
 GET /leaderboard/pitch-tempo — pitch-tempo leaderboard.
@@ -861,8 +833,6 @@ GET /leaderboard/pitch-tempo — pitch-tempo leaderboard.
 ```python
 mlb_statcast_leaderboard_pitch_tempo()
 ```
-
-_Last validated n/a._
 
 ## mlb_statcast_leaderboard_active_spin
 
@@ -913,8 +883,6 @@ GET /leaderboard/active-spin — active-spin leaderboard.
 ```python
 mlb_statcast_leaderboard_active_spin()
 ```
-
-_Last validated n/a._
 
 ## mlb_statcast_leaderboard_spin_direction
 
@@ -983,8 +951,6 @@ GET /leaderboard/spin-direction-pitches — spin-direction (per-pitch) leaderboa
 mlb_statcast_leaderboard_spin_direction()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_arm_angles
 
 GET /leaderboard/pitcher-arm-angles — pitcher arm-angle leaderboard.
@@ -1032,8 +998,6 @@ GET /leaderboard/pitcher-arm-angles — pitcher arm-angle leaderboard.
 ```python
 mlb_statcast_leaderboard_arm_angles()
 ```
-
-_Last validated n/a._
 
 ## mlb_statcast_leaderboard_pitcher_running_game
 
@@ -1098,8 +1062,6 @@ GET /leaderboard/pitcher-running-game — pitcher running-game (holding runners)
 mlb_statcast_leaderboard_pitcher_running_game()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_outs_above_average
 
 GET /leaderboard/outs_above_average — Outs Above Average (OAA) fielding leaderboard.
@@ -1154,8 +1116,6 @@ GET /leaderboard/outs_above_average — Outs Above Average (OAA) fielding leader
 mlb_statcast_leaderboard_outs_above_average()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_outfield_directional_oaa
 
 GET /leaderboard/outfield_directional_outs_above_average — outfield directional OAA leaderboard.
@@ -1206,8 +1166,6 @@ GET /leaderboard/outfield_directional_outs_above_average — outfield directiona
 mlb_statcast_leaderboard_outfield_directional_oaa()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_outfield_jump
 
 GET /leaderboard/outfield_jump — outfielder jump leaderboard.
@@ -1257,8 +1215,6 @@ GET /leaderboard/outfield_jump — outfielder jump leaderboard.
 ```python
 mlb_statcast_leaderboard_outfield_jump()
 ```
-
-_Last validated n/a._
 
 ## mlb_statcast_leaderboard_catch_probability
 
@@ -1315,8 +1271,6 @@ GET /leaderboard/catch_probability — outfielder catch-probability leaderboard.
 ```python
 mlb_statcast_leaderboard_catch_probability()
 ```
-
-_Last validated n/a._
 
 ## mlb_statcast_leaderboard_arm_strength
 
@@ -1382,8 +1336,6 @@ GET /leaderboard/arm-strength — fielder arm-strength leaderboard.
 mlb_statcast_leaderboard_arm_strength()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_poptime
 
 GET /leaderboard/poptime — catcher pop-time leaderboard.
@@ -1435,8 +1387,6 @@ GET /leaderboard/poptime — catcher pop-time leaderboard.
 ```python
 mlb_statcast_leaderboard_poptime()
 ```
-
-_Last validated n/a._
 
 ## mlb_statcast_leaderboard_catcher_framing
 
@@ -1497,8 +1447,6 @@ GET /leaderboard/catcher-framing — catcher framing leaderboard.
 mlb_statcast_leaderboard_catcher_framing()
 ```
 
-_Last validated n/a._
-
 ## mlb_statcast_leaderboard_catcher_blocking
 
 GET /leaderboard/catcher-blocking — catcher blocking leaderboard.
@@ -1553,5 +1501,3 @@ GET /leaderboard/catcher-blocking — catcher blocking leaderboard.
 ```python
 mlb_statcast_leaderboard_catcher_blocking()
 ```
-
-_Last validated n/a._

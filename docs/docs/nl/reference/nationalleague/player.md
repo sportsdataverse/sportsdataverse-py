@@ -80,8 +80,6 @@ One game's player box score: goals, assists, shots, faceoffs, ice time, goaltend
 nl_player_box(game_id=20261105000325)
 ```
 
-_Last validated n/a._
-
 ## nl_player_stats
 
 Season stats for every player, with playerId.
@@ -262,8 +260,6 @@ Season stats for every player, with playerId.
 ```python
 nl_player_stats(phase=4940, season=2026)
 ```
-
-_Last validated n/a._
 
 ## nl_player_season
 
@@ -446,5 +442,3 @@ One player's season stats.
 ```python
 nl_player_season(phase=4940, player_id=305519, season=2026)
 ```
-
-_Last validated n/a._

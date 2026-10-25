@@ -124,8 +124,6 @@ View a home run derby object based on gamePk.
 mlb_home_run_derby(game_pk=511101)
 ```
 
-_Last validated n/a._
-
 ## mlb_home_run_derby_bracket
 
 View a home run derby object based on bracket.
@@ -243,8 +241,6 @@ View a home run derby object based on bracket.
 mlb_home_run_derby_bracket(game_pk=511101)
 ```
 
-_Last validated n/a._
-
 ## mlb_home_run_derby_pool
 
 View a home run derby object based on pool.
@@ -361,5 +357,3 @@ View a home run derby object based on pool.
 ```python
 mlb_home_run_derby_pool(game_pk=511101)
 ```
-
-_Last validated n/a._

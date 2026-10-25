@@ -124,8 +124,6 @@ ESPN endpoint.
 espn_soccer_game_competition(league='eng.1', event_id='401584793')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_game_teams
 
 ESPN endpoint.
@@ -178,8 +176,6 @@ ESPN endpoint.
 espn_soccer_game_teams(league='eng.1', event_id='401584793')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_game_team
 
 ESPN endpoint.
@@ -231,8 +227,6 @@ ESPN endpoint.
 espn_soccer_game_team(league='eng.1', event_id='401584793', team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_game_team_roster
 
 ESPN endpoint.
@@ -275,8 +269,6 @@ ESPN endpoint.
 espn_soccer_game_team_roster(league='eng.1', event_id='401584793', team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_game_team_linescores
 
 ESPN endpoint.
@@ -312,8 +304,6 @@ No returns table is published for this endpoint: no capture: the page holds zero
 ```python
 espn_soccer_game_team_linescores(league='eng.1', event_id='401584793', team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_game_team_statistics
 
@@ -359,8 +349,6 @@ ESPN endpoint.
 espn_soccer_game_team_statistics(league='eng.1', event_id='401584793', team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_game_team_record
 
 ESPN endpoint.
@@ -397,8 +385,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 espn_soccer_game_team_record(league='eng.1', event_id='401584793', team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_game_team_leaders
 
 ESPN endpoint.
@@ -434,8 +420,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 ```python
 espn_soccer_game_team_leaders(league='eng.1', event_id='401584793', team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_game_odds
 
@@ -650,8 +634,6 @@ ESPN endpoint.
 espn_soccer_game_odds(league='eng.1', event_id='401584793')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_game_probabilities
 
 ESPN endpoint.
@@ -706,8 +688,6 @@ ESPN endpoint.
 ```python
 espn_soccer_game_probabilities(league='eng.1', event_id='401584793')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_game_plays
 
@@ -773,8 +753,6 @@ ESPN endpoint.
 espn_soccer_game_plays(league='eng.1', event_id='401584793')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_game_play
 
 ESPN endpoint.
@@ -838,8 +816,6 @@ ESPN endpoint.
 espn_soccer_game_play(league='eng.1', event_id='401584793', play_id='1')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_game_play_personnel
 
 ESPN endpoint.
@@ -875,8 +851,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 ```python
 espn_soccer_game_play_personnel(league='eng.1', event_id='401584793', play_id='1')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_game_situation
 
@@ -928,8 +902,6 @@ ESPN endpoint.
 espn_soccer_game_situation(league='eng.1', event_id='401584793')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_game_status
 
 ESPN endpoint.
@@ -976,8 +948,6 @@ ESPN endpoint.
 ```python
 espn_soccer_game_status(league='eng.1', event_id='401584793')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_game_officials
 
@@ -1026,8 +996,6 @@ ESPN endpoint.
 ```python
 espn_soccer_game_officials(league='eng.1', event_id='401584793')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_game_broadcasts
 
@@ -1088,8 +1056,6 @@ ESPN endpoint.
 espn_soccer_game_broadcasts(league='eng.1', event_id='401584793')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_game_predictor
 
 ESPN endpoint.
@@ -1133,8 +1099,6 @@ ESPN endpoint.
 espn_soccer_game_predictor(league='eng.1', event_id='401584793')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_game_powerindex
 
 ESPN endpoint.
@@ -1176,8 +1140,6 @@ ESPN endpoint.
 espn_soccer_game_powerindex(league='eng.1', event_id='401584793')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_game_propbets
 
 ESPN endpoint.
@@ -1212,8 +1174,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_soccer_game_propbets(league='eng.1', event_id='401584793')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_game_leaders
 
@@ -1250,8 +1210,6 @@ No returns table is published for this endpoint: no capture: 404 in nfl, mlb, nh
 espn_soccer_game_leaders(league='eng.1', event_id='401584793')
 ```
 
-_Last validated n/a._
-
 ## espn_soccer_game_scoringplays
 
 ESPN endpoint.
@@ -1286,8 +1244,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_soccer_game_scoringplays(league='eng.1', event_id='401584793')
 ```
-
-_Last validated n/a._
 
 ## espn_soccer_game_official_detail
 
@@ -1335,5 +1291,3 @@ ESPN endpoint.
 ```python
 espn_soccer_game_official_detail(league='eng.1', event_id='401584793', official_id='1')
 ```
-
-_Last validated n/a._

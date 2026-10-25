@@ -81,8 +81,6 @@ Schedule and results of one competition season, one row per match, played or not
 metal_schedule(league_id=1, season=2027)
 ```
 
-_Last validated n/a._
-
 ## metal_top_scorers
 
 Skater scoring leaderboard of one competition season.
@@ -129,8 +127,6 @@ Skater scoring leaderboard of one competition season.
 ```python
 metal_top_scorers(league_id=1, season=2027)
 ```
-
-_Last validated n/a._
 
 ## metal_game_info
 
@@ -204,8 +200,6 @@ Game info of one match: state, arena, attendance, officials, coaches, period sco
 ```python
 metal_game_info(match_id=575)
 ```
-
-_Last validated n/a._
 
 ## metal_pbp
 
@@ -295,8 +289,6 @@ Play-by-play of one match: goals, penalties, goalie changes and timeouts, one ro
 metal_pbp(match_id=575)
 ```
 
-_Last validated n/a._
-
 ## metal_player_box
 
 Player boxscore of one team in one match, one row per player.
@@ -384,8 +376,6 @@ Player boxscore of one team in one match, one row per player.
 ```python
 metal_player_box(match_id=575, team_id=8)
 ```
-
-_Last validated n/a._
 
 ## metal_goalie_box
 
@@ -482,8 +472,6 @@ Goalie lines of one match, one row per goalie who played.
 metal_goalie_box(match_id=575)
 ```
 
-_Last validated n/a._
-
 ## metal_standings
 
 Standings of one competition season, one row per team.
@@ -550,8 +538,6 @@ Standings of one competition season, one row per team.
 ```python
 metal_standings(league_id=1, season=2027)
 ```
-
-_Last validated n/a._
 
 ## metal_game_center
 
@@ -712,5 +698,3 @@ Game-center bundle of one match as one row: game data, team stats, goal and pena
 ```python
 metal_game_center(match_id=575)
 ```
-
-_Last validated n/a._

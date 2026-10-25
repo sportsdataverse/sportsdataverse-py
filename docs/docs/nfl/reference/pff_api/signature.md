@@ -160,8 +160,6 @@ Signature stat: time in pocket
 pff_api_signature_passing_time_in_pocket(league='nfl', season='2022', week='1')
 ```
 
-_Last validated n/a._
-
 ## pff_api_signature_pass_blocking_efficiency_line
 
 Signature stat: pass-blocking efficiency, by line
@@ -210,8 +208,6 @@ Signature stat: pass-blocking efficiency, by line
 ```python
 pff_api_signature_pass_blocking_efficiency_line(league='nfl', season='2022', week='1')
 ```
-
-_Last validated n/a._
 
 ## pff_api_signature_defense_outside_pass_rush
 
@@ -295,8 +291,6 @@ Signature stat: outside pass rush
 pff_api_signature_defense_outside_pass_rush(league='nfl', season='2022', week='1')
 ```
 
-_Last validated n/a._
-
 ## pff_api_signature_defense_slot_coverage
 
 Signature stat: slot coverage
@@ -355,5 +349,3 @@ Signature stat: slot coverage
 ```python
 pff_api_signature_defense_slot_coverage(league='nfl', season='2022', week='1')
 ```
-
-_Last validated n/a._

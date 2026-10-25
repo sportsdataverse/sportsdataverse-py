@@ -71,8 +71,6 @@ Games of a league season: date, teams, score, per-period score, decision, status
 sihf_results(season=2026, league_id=1)
 ```
 
-_Last validated n/a._
-
 ## sihf_standings
 
 League table of a season (every game, or home / away games only): rank, games, points, regulation / overtime / shootout wins and losses, goals, streak.
@@ -132,8 +130,6 @@ League table of a season (every game, or home / away games only): rank, games, p
 sihf_standings(season=2026, league_id=1)
 ```
 
-_Last validated n/a._
-
 ## sihf_phases
 
 Phases of a league season (regular season, play-in and playoff rounds, playout): the phase_id values the table wrappers take, with each phase's name and game count.
@@ -175,8 +171,6 @@ Phases of a league season (regular season, play-in and playoff rounds, playout):
 ```python
 sihf_phases(season=2026, league_id=1)
 ```
-
-_Last validated n/a._
 
 ## sihf_pbp
 
@@ -247,5 +241,3 @@ Event timeline of one game: goals, penalties, goaltender changes, revoked goals 
 ```python
 sihf_pbp(game_id=20261105000325)
 ```
-
-_Last validated n/a._

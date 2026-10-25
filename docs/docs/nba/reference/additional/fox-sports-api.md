@@ -526,17 +526,29 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Unique team identifier. |
-| `section` | character |  |
-| `eastern_conference` | character |  |
-| `v1` | character |  |
-| `w_l` | character | W l. |
-| `pct` | character | Win percentage. |
-| `pf` | character | Personal fouls. |
-| `pa` | character |  |
-| `strk` | character | Current streak. |
-| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `western_conference` | character |  |
+| `team_id` | character | The Fox team id the standings were requested for (the path's team id), as a string; the same on every row. |
+| `section` | character | Title of the Fox standings section the row came from ('CONFERENCE', 'DIVISION' or 'PRESEASON'); each team appears once per section. |
+| `eastern_conference` | character | Team's position in the Eastern Conference table, from the first column whose header is the table name; null on rows from other tables. |
+| `v1` | character | Team nickname as Fox displays it (e.g. 'Celtics'); the column is named v1 because its table header cell is blank. |
+| `w_l` | character | Win-loss record as a 'W-L' string (e.g. '42-40'). |
+| `pct` | character | Winning percentage as Fox prints it, a string such as '.524' or '1.000'. |
+| `gb` | character | Games behind the table leader as a one-decimal string (e.g. '11.0'), '-' for the table leader; null on rows from tables without a GB column (the preseason table). |
+| `pf` | character | Points scored per game as a one-decimal string. |
+| `pa` | character | Points allowed per game as a one-decimal string. |
+| `home` | character | Home record as a 'W-L' string; null on rows from tables without a HOME column (the preseason table). |
+| `away` | character | Away record as a 'W-L' string; null on rows from tables without an AWAY column (the preseason table). |
+| `conf` | character | Record against conference opponents as a 'W-L' string; null on rows from tables without a CONF column. |
+| `div` | character | Record against division opponents as a 'W-L' string; null on rows from tables without a DIV column. |
+| `l10` | character | Record over the last 10 games as a 'W-L' string; null on rows from tables without an L10 column. |
+| `strk` | character | Current streak, W or L plus its length (e.g. 'W3', 'L10'). |
+| `entity_id` | character | Fox id of the row's linked team as a string: the trailing number of the row's entityLink contentUri. |
+| `western_conference` | character | Team's position in the Western Conference table, from the first column whose header is the table name; null on rows from other tables. |
+| `atlantic` | character | Team's position in the Atlantic division table, from the first column whose header is the table name; null on rows from other tables. |
+| `central` | character | Team's position in the Central division table, from the first column whose header is the table name; null on rows from other tables. |
+| `southeast` | character | Team's position in the Southeast division table, from the first column whose header is the table name; null on rows from other tables. |
+| `northwest` | character | Team's position in the Northwest division table, from the first column whose header is the table name; null on rows from other tables. |
+| `pacific` | character | Team's position in the Pacific division table, from the first column whose header is the table name; null on rows from other tables. |
+| `southwest` | character | Team's position in the Southwest division table, from the first column whose header is the table name; null on rows from other tables. |
 
 **Example**
 

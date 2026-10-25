@@ -999,10 +999,10 @@
   group: codegen-gates
   finding: A-M1
   file: tools/codegen/generate.py
-  snippet: '    tmp = _check_tmp("_check_live_")'
+  snippet: '    stale = _stale_vs_render("_check_live_", rendered, live)'
   mutant: |2-
         return []
-        tmp = _check_tmp("_check_live_")
+        stale = _stale_vs_render("_check_live_", rendered, live)
   test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and live"
   expected: kill
   note: the ledger gate's own mutation (making _live_stale return [] unconditionally)
@@ -1011,10 +1011,10 @@
   group: codegen-gates
   finding: A-M1
   file: tools/codegen/generate.py
-  snippet: '    tmp = _check_tmp("_check_flat_")'
+  snippet: '    return _stale_vs_render("_check_flat_", rendered, live)'
   mutant: |2-
         return []
-        tmp = _check_tmp("_check_flat_")
+        return _stale_vs_render("_check_flat_", rendered, live)
   test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and flat"
   expected: kill
 
@@ -1022,10 +1022,10 @@
   group: codegen-gates
   finding: A-M1
   file: tools/codegen/generate.py
-  snippet: '    tmp = _check_tmp("_check_parsed_")'
+  snippet: '    return _stale_vs_render("_check_parsed_", rendered, {name: LIVE / "parsed" / name for name in rendered})'
   mutant: |2-
         return []
-        tmp = _check_tmp("_check_parsed_")
+        return _stale_vs_render("_check_parsed_", rendered, {name: LIVE / "parsed" / name for name in rendered})
   test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and parsed"
   expected: kill
 
@@ -1033,22 +1033,11 @@
   group: codegen-gates
   finding: A-M1
   file: tools/codegen/generate.py
-  snippet: '    tmp = _check_tmp("_check_loaders_")'
+  snippet: '    return _stale_vs_render("_check_loaders_", rendered, live)'
   mutant: |2-
         return []
-        tmp = _check_tmp("_check_loaders_")
+        return _stale_vs_render("_check_loaders_", rendered, live)
   test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and loaders"
-  expected: kill
-
-- id: codegen-staging-check-returns-zero
-  group: codegen-gates
-  finding: A-M1
-  file: tools/codegen/generate.py
-  snippet: '    tmp = _check_tmp("_check_")'
-  mutant: |2-
-        return 0
-        tmp = _check_tmp("_check_")
-  test: tests/codegen/test_check.py -k red_path_staging_check
   expected: kill
 
 - id: codegen-docs-stale-no-orphans
@@ -1075,10 +1064,10 @@
   file: tools/codegen/generate.py
   snippet: |2-
             return rc
-        build()
+        n = len(build_live())
   mutant: |2-
             return 0
-        build()
+        n = len(build_live())
   test: tests/codegen/test_check.py -k rc_is_one
   expected: kill
 
@@ -2411,6 +2400,69 @@
   test: tests/test_deprecations.py -k league_config
   expected: kill
   note: league_config.WBB (periods=4, wrong before 2015-16) resolves without a DeprecationWarning.
+- id: dl-utils-espnhttp-access-silent
+  group: dead-public
+  finding: A-L32
+  file: sportsdataverse/dl_utils.py
+  snippet: "        warn_deprecated(\n            f\"sportsdataverse.dl_utils.{name}\","
+  mutant: "        (lambda *a, **k: None)(\n            f\"sportsdataverse.dl_utils.{name}\","
+  test: tests/test_deprecations.py -k dl_utils_http_classes
+  expected: kill
+  note: dl_utils.ESPNHTTP / ESPNResponse resolve without a DeprecationWarning.
+- id: janitor-to-pascal-case-silent
+  group: dead-public
+  finding: C-L59
+  file: sportsdataverse/dl_utils.py
+  snippet: "        warn_deprecated(\n            \"DataFrame.janitor.to_pascal_case\","
+  mutant: "        (lambda *a, **k: None)(\n            \"DataFrame.janitor.to_pascal_case\","
+  test: tests/test_deprecations.py -k "janitor_case_methods and to_pascal_case"
+  expected: kill
+  note: df.janitor.to_pascal_case() renames without a DeprecationWarning.
+- id: janitor-to-camel-case-silent
+  group: dead-public
+  finding: C-L59
+  file: sportsdataverse/dl_utils.py
+  snippet: "        warn_deprecated(\n            \"DataFrame.janitor.to_camel_case\","
+  mutant: "        (lambda *a, **k: None)(\n            \"DataFrame.janitor.to_camel_case\","
+  test: tests/test_deprecations.py -k "janitor_case_methods and to_camel_case"
+  expected: kill
+  note: df.janitor.to_camel_case() renames without a DeprecationWarning.
+- id: janitor-to-kebab-case-silent
+  group: dead-public
+  finding: C-L59
+  file: sportsdataverse/dl_utils.py
+  snippet: "        warn_deprecated(\n            \"DataFrame.janitor.to_kebab_case\","
+  mutant: "        (lambda *a, **k: None)(\n            \"DataFrame.janitor.to_kebab_case\","
+  test: tests/test_deprecations.py -k "janitor_case_methods and to_kebab_case"
+  expected: kill
+  note: df.janitor.to_kebab_case() renames without a DeprecationWarning.
+- id: record-time-usage-not-deprecated
+  group: dead-public
+  finding: C-L46
+  file: sportsdataverse/decorators.py
+  snippet: "@deprecated(replacement=\"sportsdataverse.decorators.timer(number=1)\", since=\"0.1.6\", removed_in=\"0.2.0\")\n"
+  mutant: "@(lambda f: f)\n"
+  test: tests/test_deprecations.py -k record_time_usage
+  expected: kill
+  note: record_time_usage applies without a DeprecationWarning.
+- id: record-mem-usage-not-deprecated
+  group: dead-public
+  finding: C-L46
+  file: sportsdataverse/decorators.py
+  snippet: "@deprecated(\n    replacement=\"tracemalloc or psutil.Process().memory_info() directly\",\n    since=\"0.1.6\",\n    removed_in=\"0.2.0\",\n)\n"
+  mutant: "@(lambda f: f)\n"
+  test: tests/test_deprecations.py -k record_mem_usage
+  expected: kill
+  note: record_mem_usage applies without a DeprecationWarning.
+- id: config-dead-url-access-silent
+  group: dead-public
+  finding: C-L45
+  file: sportsdataverse/config.py
+  snippet: "        warn_deprecated(\n            f\"sportsdataverse.config.{name}\","
+  mutant: "        (lambda *a, **k: None)(\n            f\"sportsdataverse.config.{name}\","
+  test: tests/test_deprecations.py -k config_dead_urls
+  expected: kill
+  note: config.NBA_BASE_URL (unread since the generated loaders) resolves without a DeprecationWarning.
 - id: ncaa-pbp-format-guard-silent
   group: ncaa-era
   finding: B-GB-27
@@ -2477,12 +2529,12 @@
 - id: ncaa-wbb-shots-driver-float-contest-ids
   group: ncaa-era
   finding: B-L38
-  file: sportsdataverse/wbb/wbb_ncaa_shots.py
+  file: sportsdataverse/mbb/mbb_ncaa_shots.py
   snippet: "    ids = [g for g in map(_utf8_id, game_ids) if g is not None]\n"
   mutant: "    ids = [g for g in game_ids if g is not None and g == g]\n"
   test: tests/wbb/test_wbb_ncaa_shots_shim.py -k float_contest_ids
   expected: kill
-  note: The WBB shots driver fetches contests/5728709.0/ for a float id (R853-2).
+  note: The WBB shots driver fetches contests/5728709.0/ for a float id (R853-2); since 6.1 (B-L26) the WBB driver is the MBB body.
 - id: ncaa-box-driver-float-contest-ids
   group: ncaa-era
   finding: B-L38
@@ -4094,7 +4146,7 @@
 - id: nhl-web-envelope-is-zero-rows
   group: codegen-runtime
   finding: EX-1.3-a
-  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  file: sportsdataverse/_parser_common.py
   snippet: '    return payload if isinstance(payload, dict) and _error_envelope_code(payload) is None else {}'
   mutant: '    return payload if isinstance(payload, dict) else {}'
   test: tests/test_espn_universal_parsers.py -k "hostile and parse_nhl_web_landing"
@@ -5196,12 +5248,58 @@
   expected: kill
   note: 'the logo except wrote "" silently'
 
+- id: mlb-game-rosters-game-position-from-the-entry
+  group: espn-rosters
+  finding: B-L25
+  file: sportsdataverse/mlb/mlb_game_rosters.py
+  snippet: '        "game_position_id": _ref_id(entry_position.get("$ref"), _POSITION_ID_RE),'
+  mutant: '        "game_position_id": None,'
+  test: tests/test_espn_game_rosters_family.py -k "game_position_is_the_entrys"
+  expected: kill
+  note: The game position from the entry's position $ref is lost again (PRE-1008 M-1).
+- id: mlb-game-rosters-id-from-the-athlete-ref
+  group: espn-rosters
+  finding: B-L25
+  file: sportsdataverse/mlb/mlb_game_rosters.py
+  snippet: '    player_id = e.get("playerId") if e.get("playerId") is not None else _ref_id(href, _ATHLETE_ID_RE)'
+  mutant: '    player_id = e.get("playerId")'
+  test: tests/test_espn_game_rosters_family.py -k "take_the_id_from_the_athlete_ref"
+  expected: kill
+  note: An entry with an athlete $ref but no playerId has a null join key and drops (PRE-1008 M-2, bodies B2).
+- id: mlb-game-rosters-unmatched-entry-warns
+  group: espn-rosters
+  finding: B-L25
+  file: sportsdataverse/mlb/mlb_game_rosters.py
+  snippet: '        if unmatched:'
+  mutant: '        if False:'
+  test: tests/test_espn_game_rosters_family.py -k "warn_on_an_entry_that_matches_no_athlete_read"
+  expected: kill
+  note: An entry that matches no athlete record read drops in silence (PRE-1008 M-2).
+- id: mlb-game-rosters-no-readable-athlete-raises
+  group: espn-rosters
+  finding: B-L25
+  file: sportsdataverse/mlb/mlb_game_rosters.py
+  snippet: '        if rows:  # entries exist but no athlete is readable: the siblings'' NoDataError (PRE-1008 D-3)'
+  mutant: '        if False:'
+  test: tests/test_espn_game_rosters_family.py -k "every_athlete_ref_404_raises_like_the_siblings"
+  expected: kill
+  note: Every athlete $ref 404 returns an empty frame where the six sibling chains raise NoDataError (PRE-1008 D-3).
+- id: mlb-game-rosters-athletes-deduplicated
+  group: espn-rosters
+  finding: B-L25
+  file: sportsdataverse/mlb/mlb_game_rosters.py
+  snippet: '            .unique("athlete_id", keep="first", maintain_order=True)  # one record per athlete: no row multiplies'
+  mutant: '            .with_columns(pl.col("athlete_id"))'
+  test: tests/test_espn_game_rosters_family.py -k "repeated_athlete_gives_one_row_per_entry"
+  expected: kill
+  note: A repeated playerId multiplies the joined rows (PRE-1008 minor, bodies B1).
+
 - id: mlb-game-rosters-empty-frame
   group: espn-rosters
   finding: B-L25
   file: sportsdataverse/mlb/mlb_game_rosters.py
-  snippet: 'if not rows:  # B-L25: no competitors (or no roster) -> the documented columns, zero rows; was None'
-  mutant: 'if False:'
+  snippet: '        return _espn_game_rosters.roster_ids(pl.DataFrame(schema=schema))'
+  mutant: '        return None'
   test: tests/test_espn_game_rosters_family.py -k mlb_game_rosters_empty
   expected: kill
   note: 'empty competitors returned None (removed) / a zero-column frame'
@@ -6734,6 +6832,280 @@
     At the start clock with the clamped 99 end, 400791544/2058 and 401127996/1913 are scored as the receiver's
     ball on his own 1: EPA -0.431 / -0.316 (R856-15, the round-2 head).
 
+# --- cfb 3.4 R832-6: the half-end play keys on the next real play's team (cfbfastR create_wpa_naive.R) ---
+# Killer on a committed capture: tests/cfb/test_cfb_whole_game_oracle.py (401858224's regulation-ending FG).
+
+- id: cfb-half-end-wp-keys-on-the-next-real-plays-team
+  group: nfl-end-of-half
+  finding: R832-6
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '                .and_(pl.col("start.pos_team.id") != lead_team)'
+  mutant: '                .and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "other_teams_next_play"
+  expected: kill
+  note: >-
+    The pre-fix condition. 401858224's tying field goal keeps its team (start == end) and the next real play is
+    overtime's first snap by the other team: keyed on the play's own possession change it falls through to the
+    model's end state, 0.476, instead of cfbfastR's 1 - 0.502 = 0.498.
+
+- id: cfb-half-end-wp-next-team-rule-on-every-boundary
+  group: nfl-end-of-half
+  finding: R966-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '                .and_(pl.col("start.pos_team.id") != lead_team)'
+  mutant: '                .and_((pl.col("start.pos_team.id") != lead_team) & ((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")) | (pl.col("type.text").shift(-1) == "Timeout")))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "continuous_into_the_next_real_play"
+  expected: kill
+  note: >-
+    Review #966's hand mutant B2: the fix holds only when a Timeout row follows the half-ending play, and
+    every other boundary keeps the pre-fix own-possession-change key. It survived the full tests/cfb (only
+    401858224's regulation end, which has a Timeout, pinned the branch) while it reverts 63 of the 64 moved
+    capture rows, mostly the first half's last snap handing to the other team's 2H kickoff.
+
+# --- W-M8 / supp-004 (task 3.10): CFL is refused, not scored with the NFL boosters -----------------------
+- id: spring-football-cfl-scored-again
+  group: cfl-refused
+  finding: supp-004
+  file: sportsdataverse/football/spring_football_ep_wp.py
+  snippet: '    if league == "cfl":'
+  mutant: '    if league == "cfl-never":'
+  test: tests/football/test_spring_football_ep_wp.py -k "cfl_refused"
+  expected: kill
+  note: >-
+    The pre-3.10 behaviour: `league="cfl"` passes validation and both entry points run end to end, scoring a
+    110-yard, 3-down game with the NFL boosters (158/159 plays scored on the XFL fixture relabelled CFL).
+
+# --- supp-005 / C-L31 (task 3.10): fitting-script citations resolve to tracked files or documented gaps ----
+- id: model-lineage-untracked-citation
+  group: model-lineage
+  finding: supp-005
+  file: sportsdataverse/mbb/mbb_ncaa_rapm_league.py
+  snippet: '#: game-grouped 5-fold CV (``tools/fit_ncaa_rapm_lambda.py``) on the'
+  mutant: '#: game-grouped 5-fold CV (``dev/ncaa_rapm/fit_lambda_league.py``) on the'
+  test: tests/test_model_lineage.py
+  expected: kill
+  note: >-
+    The pre-3.10 citation: a gitignored script that exists only on the maintainer's disk, so the refit
+    instruction for DEFAULT_RIDGE_LAMBDA was not reproducible from a clone.
+
+# --- WB-consolidation-1: an MLB roster with no readable athlete is an empty frame, not NoDataError ----
+- id: mlb-rosters-all-athletes-404-drop-not-raise
+  group: share-private-bodies
+  finding: B-L25
+  file: sportsdataverse/mlb/mlb_game_rosters.py
+  snippet: "        except NoDataError:  # every $ref 404'd: each was already warned about and left out\n"
+  mutant: "        except KeyError:  # every $ref 404'd: each was already warned about and left out\n"
+  test: tests/test_espn_game_rosters_family.py -k every_athlete_ref_404
+  expected: kill
+  note: A game whose every athlete $ref 404s raises NoDataError for the whole game again (WB-consolidation-1).
+
+# --- task 6.1 (a): one private body behind the ESPN schedule and game-roster families (B-M29, B-M30) ----
+- id: shared-game-items-copy-again
+  group: share-private-bodies
+  finding: B-M30
+  file: sportsdataverse/nba/nba_game_rosters.py
+  snippet: "helper_nba_game_items = _espn_game_rosters.game_items\n"
+  mutant: "def helper_nba_game_items(summary):\n    return _espn_game_rosters.game_items(summary)\n"
+  test: tests/test_shared_private_bodies.py -k game_items
+  expected: kill
+  note: The pre-6.1 state, nba's own game_items body instead of the shared one.
+- id: shared-roster-items-copy-again
+  group: share-private-bodies
+  finding: B-M30
+  file: sportsdataverse/wbb/wbb_game_rosters.py
+  snippet: "helper_wbb_roster_items = _espn_game_rosters.roster_items\n"
+  mutant: "def helper_wbb_roster_items(items, summary_url, **kwargs):\n    return _espn_game_rosters.roster_items(items, summary_url, **kwargs)\n"
+  test: tests/test_shared_private_bodies.py -k roster_items
+  expected: kill
+  note: The pre-6.1 state, wbb's own roster_items body instead of the shared one.
+- id: shared-home-away-step-wrong-group
+  group: share-private-bodies
+  finding: B-M29
+  file: sportsdataverse/wnba/wnba_schedule.py
+  snippet: "__extract_home_away = _extract_home_away_nba\n"
+  mutant: "from sportsdataverse._espn_schedule import _extract_home_away_college\n\n__extract_home_away = _extract_home_away_college\n"
+  test: tests/test_shared_private_bodies.py -k extract_home_away_nba
+  expected: kill
+  note: wnba's home/away step bound to the college one (poll rank, vs-conf record) instead of its nba twin.
+- id: shared-scoreboard-event-skipped
+  group: share-private-bodies
+  finding: B-M29
+  file: sportsdataverse/mbb/mbb_schedule.py
+  snippet: "    return _scoreboard_event(event, __extract_home_away)\n"
+  mutant: "    return event\n"
+  test: tests/test_shared_private_bodies.py -k scoreboard_event_parsing_is_one_body
+  expected: kill
+  note: mbb's scoreboard_event_parsing no longer runs the shared body with its home/away step.
+- id: shared-nhl-roster-items-outlier-merged
+  group: share-private-bodies
+  finding: R61a-2
+  file: sportsdataverse/nhl/nhl_game_rosters.py
+  snippet: "def helper_nhl_roster_items(items, summary_url, **kwargs):\n"
+  mutant: "helper_nhl_roster_items = _espn_game_rosters.roster_items\n\n\ndef _own_nhl_roster_items(items, summary_url, **kwargs):\n"
+  test: tests/test_shared_private_bodies.py -k nhl_keeps_its_own_roster_items
+  expected: kill
+  note: nhl's roster_items bound to the shared body, which drops period / for_player_id / active.
+- id: shared-mbb-home-away-outlier-merged
+  group: share-private-bodies
+  finding: R61a-2
+  file: sportsdataverse/mbb/mbb_schedule.py
+  snippet: "def __extract_home_away(event, arg1, arg2):\n"
+  mutant: "from sportsdataverse._espn_schedule import _extract_home_away_college as __extract_home_away\n\n\ndef _own_extract_home_away(event, arg1, arg2):\n"
+  test: tests/test_shared_private_bodies.py -k "outlier_home_away_steps and mbb"
+  expected: kill
+  note: mbb's home/away step bound to the college one (four periods, not two halves).
+- id: shared-nfl-home-away-outlier-merged
+  group: share-private-bodies
+  finding: R61a-2
+  file: sportsdataverse/nfl/nfl_schedule.py
+  snippet: "def __extract_home_away(event, arg1, arg2):\n"
+  mutant: "from sportsdataverse._espn_schedule import _extract_home_away_college as __extract_home_away\n\n\ndef _own_extract_home_away(event, arg1, arg2):\n"
+  test: tests/test_shared_private_bodies.py -k "outlier_home_away_steps and nfl"
+  expected: kill
+  note: nfl's home/away step bound to the college one (unranked = 99 and a vs-conf record; NFL has no poll).
+- id: shared-nhl-home-away-outlier-merged
+  group: share-private-bodies
+  finding: R61a-2
+  file: sportsdataverse/nhl/nhl_schedule.py
+  snippet: "def __extract_home_away(event, arg1, arg2):\n"
+  mutant: "from sportsdataverse._espn_schedule import _extract_home_away_nba as __extract_home_away\n\n\ndef _own_extract_home_away(event, arg1, arg2):\n"
+  test: tests/test_shared_private_bodies.py -k "outlier_home_away_steps and nhl"
+  expected: kill
+  note: nhl's home/away step bound to the nba one (four periods and overall records, not three and YTD).
+
+# --- task 6.1 (c): one copy of the generator helpers in gen_soccer_common (A-L7, A-L22, A-L23, A-L24, A-N18) ----
+- id: shared-generator-write-yaml-copy-again
+  group: share-generator-helpers
+  finding: A-L22
+  file: tools/codegen/gen_cbs.py
+  snippet: "from gen_soccer_common import load_spec, refs_dir, rewrite_schema_dir, snake_path, write_yaml\n"
+  mutant: "from gen_soccer_common import load_spec, refs_dir, rewrite_schema_dir, snake_path\n\n\ndef write_yaml(path, obj):\n    path.write_text(yaml.safe_dump(obj), encoding=\"utf-8\")\n"
+  test: tests/codegen/test_shared_generator_helpers.py -k gen_cbs
+  expected: kill
+  note: The pre-6.1 state, gen_cbs writing YAML through its own copy rather than gen_soccer_common's.
+- id: shared-generator-capture-for-copy-again
+  group: share-generator-helpers
+  finding: A-L7
+  file: tools/codegen/gen_kalshi.py
+  snippet: "    capture_for,\n"
+  mutant: "    capture_for as _shared_capture_for,\n"
+  test: tests/codegen/test_shared_generator_helpers.py -k gen_kalshi
+  expected: kill
+  note: A generator that stops importing the shared capture slug (the pre-6.1 four private copies).
+- id: shared-generator-copy-anywhere
+  group: share-generator-helpers
+  finding: A-L23
+  file: tools/codegen/gen_pff.py
+  snippet: "def main() -> None:\n"
+  mutant: "def _clean_generated_schema_dir(path: Path) -> None:\n    path.mkdir(parents=True, exist_ok=True)\n    for schema_path in path.glob(\"*.yaml\"):\n        schema_path.unlink()\n\n\ndef main() -> None:\n"
+  test: tests/codegen/test_shared_generator_helpers.py -k no_generator_carries_a_copy
+  expected: kill
+  note: A byte-identical copy of rewrite_schema_dir reappearing in any generator (the pre-6.1 four copies).
+
+- id: mlb-game-rosters-ids-from-the-ref
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/mlb/mlb_game_rosters.py
+  snippet: '    "full_name": "athlete_full_name",'
+  mutant: '    "short_name": "athlete_full_name",'
+  test: tests/test_espn_game_rosters_family.py -k "read_each_athlete_from_its_ref"
+  expected: kill
+  note: The MLB roster full name is ESPN's short name again ("T. Hernandez"), not the athlete record's (R1002-1).
+
+- id: game-rosters-athlete-key-collision-keeps-the-first
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/_espn_game_rosters.py
+  snippet: '    keep = sorted(best.values())'
+  mutant: '    keep = list(range(len(names)))'
+  test: tests/test_espn_game_rosters_family.py -k "read_each_athlete_from_its_ref"
+  expected: kill
+  note: An MLB athlete record (debutYear beside debut.year) fails the shared athlete step on a duplicate column.
+
+- id: game-rosters-athlete-key-collision-prefers-top-level
+  group: final-nits
+  finding: R1002-6
+  file: sportsdataverse/_espn_game_rosters.py
+  snippet: '        if name not in best or col.count(_NEST) < frame.columns[best[name]].count(_NEST):'
+  mutant: '        if name not in best:'
+  test: tests/test_espn_game_rosters_family.py -k "keeps_the_top_level_key_in_either_column_order"
+  expected: kill
+  note: A snake-case collision keeps whichever key ESPN serialised first, not the top-level one (R1002-6).
+
+# --- task 6.1 (b): one private body behind every former copy (B-L26, B-L27, B-L28, B-L46, B-L52, B-GB-11) ----
+- id: shared-box-readers-copy-again
+  group: share-private-bodies
+  finding: B-L28
+  file: sportsdataverse/cfb/cfb_ncaa_box.py
+  snippet: "from sportsdataverse.scrape.ncaa._box_html import _cells, _cid, _finish, _int, _rows  # B-L28: one body each\n"
+  mutant: "from sportsdataverse.scrape.ncaa._box_html import _cells, _cid, _finish, _int, _rows  # B-L28: one body each\n\n\ndef _int(v: str) -> \"int | None\":\n    return int(v) if v and v.lstrip(\"-\").isdigit() else None\n"
+  test: tests/test_shared_private_bodies.py -k _box_html
+  expected: kill
+  note: The pre-6.1 state, a third copy of the box readers in the football module.
+- id: shared-jvm-hash-copy-again
+  group: share-private-bodies
+  finding: B-L27
+  file: sportsdataverse/mbb/mbb_ncaa_boxscore_parser.py
+  snippet: "from sportsdataverse.mbb.mbb_ncaa_roster_parser import _hashmap_improve, _hashmap_radix_key, _java_string_hash\n"
+  mutant: "from sportsdataverse.mbb.mbb_ncaa_roster_parser import _hashmap_improve, _hashmap_radix_key\n\n\ndef _java_string_hash(s: str) -> int:\n    h = 0\n    for ch in s:\n        h = (h * 31 + ord(ch)) & 0xFFFFFFFF\n    return h\n"
+  test: tests/test_shared_private_bodies.py -k _java_string_hash
+  expected: kill
+  note: The pre-6.1 state, the box-score parser's own copy of the JVM string hash.
+- id: shared-parse-shard-copy-again
+  group: share-private-bodies
+  finding: B-L46
+  file: sportsdataverse/scrape/ncaa/parse.py
+  snippet: "from .capture import _parse_shard  # B-L46: one body, the capture CLI's\n"
+  mutant: "def _parse_shard(spec: str) -> \"tuple[int, int]\":\n    i_str, _, n_str = spec.partition(\"/\")\n    return int(i_str), int(n_str or \"1\")\n\n\n"
+  test: tests/test_shared_private_bodies.py -k _parse_shard
+  expected: kill
+  note: The pre-6.1 state, a second shard parser in the parse CLI.
+- id: shared-fox-helpers-copy-again
+  group: share-private-bodies
+  finding: B-L52
+  file: sportsdataverse/cfb/cfb_fox_ext.py
+  snippet: "FOX_BASE = API\n"
+  mutant: "FOX_BASE = API\n\n\ndef _uri_id(uri):\n    return uri.rsplit(\"/\", 1)[-1] if uri else None\n"
+  test: tests/test_shared_private_bodies.py -k _uri_id
+  expected: kill
+  note: The pre-6.1 state, the CFB Fox module's own copy of the layout helpers.
+- id: shared-cfb-crosswalk-cache-not-shared
+  group: share-private-bodies
+  finding: B-GB-11
+  file: sportsdataverse/football/sources/idmap.py
+  snippet: "        _CFB_CROSSWALK_CACHE[seasons] = frame\n"
+  mutant: "        pass\n"
+  test: tests/test_shared_private_bodies.py -k share_one_crosswalk_read
+  expected: kill
+  note: Without the one cache a worker reads the cfb_crosswalk asset on every adapter call (the pre-6.1 two caches read it twice).
+- id: shared-parser-empty-frame-copy-again
+  group: share-private-bodies
+  finding: A-N15
+  file: sportsdataverse/nhl/nhl_records_parsers.py
+  snippet: "from sportsdataverse._parser_common import _FROM_PANDAS_ERRORS, _empty_frame, _snake_columns\n"
+  mutant: "from sportsdataverse._parser_common import _FROM_PANDAS_ERRORS, _snake_columns\n\n\ndef _empty_frame(return_as_pandas=False):\n    df = pd.DataFrame()\n    return df if return_as_pandas else pl.DataFrame()\n"
+  test: tests/test_shared_private_bodies.py -k _empty_frame
+  expected: kill
+  note: The pre-6.1d state, the NHL Records parsers' own copy of the empty-frame helper.
+- id: shared-browser-user-agent-copy-again
+  group: share-private-bodies
+  finding: A-L59
+  file: sportsdataverse/yahoo/yahoo_shangrila_runtime.py
+  snippet: '    "User-Agent": _CHROME_UA,'
+  mutant: '    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",'
+  test: tests/test_shared_private_bodies.py -k one_browser_user_agent
+  expected: kill
+  note: The pre-6.1d state, the Yahoo runtime spelling out its own copy of the User-Agent.
+- id: shared-referer-getter-caller-headers-lose
+  group: share-private-bodies
+  finding: A-L8
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    headers = {"Referer": referer, "User-Agent": _CHROME_UA, **(kwargs.pop("headers", None) or {})}'
+  mutant: '    headers = {**(kwargs.pop("headers", None) or {}), "Referer": referer, "User-Agent": _CHROME_UA}'
+  test: tests/test_shared_private_bodies.py -k mls_nwsl_getters
+  expected: kill
+  note: A caller's headers= no longer win key-by-key over the mls / nwsl site defaults.
+
 # --- task 5.1 (devel-dtype-contract): empty results carry their returns table (A-M12, A-M7, MD-3, B-L73, B-GB-09)
 - id: documented-empty-replaces-a-zero-width-frame
   group: dtype-contract-5-1
@@ -7488,6 +7860,27 @@
   expected: kill
   note: The on-ice Corsi frame keys players by the text ids of the on-ice strings again.
 
+# --- pre-main sweep: R61b-1 (6.1b review) the WBB shots line logs under the WBB logger ----
+- id: wbb-shots-log-under-mbb-logger
+  group: premain-sweep
+  finding: R61b-1
+  file: sportsdataverse/wbb/wbb_ncaa_shots.py
+  snippet: "    return _shot_locations(game_ids, period_model, fetcher, return_as_pandas, log=logger)\n"
+  mutant: "    return _shot_locations(game_ids, period_model, fetcher, return_as_pandas)\n"
+  test: tests/wbb/test_wbb_ncaa_shots_shim.py -k log_under_the_wbb_logger
+  expected: kill
+  note: The 6.1b state, where the shared driver logged a WBB call under sportsdataverse.mbb and the WBB logger was dead.
+
+# --- final nits: R1000-1 (#1000 review) an Example: without a literal block is a docstring gap ----
+- id: docstring-check-wants-a-literal-block
+  group: final-nits
+  finding: R1000-1
+  file: tools/check_docstrings.py
+  snippet: '        if "Example:" in doc and "::" not in doc.split("Example:", 1)[1]:'
+  mutant: '        if False:'
+  test: tests/test_docstring_sections.py -k literal_block_in_example
+  expected: kill
+  note: A docstring whose Example section holds prose only (no literal block) passes the check again.
 # --- 2.23 (R2.22-4): NFL usage / special-teams sections sorted by their keys ----------------------
 # Killer: tests/nfl/test_nfl_box_row_order.py, the NFL usage carve-out dropped (in-process key sort on 8
 # captures, plus the two-process compare of every section on 4).
@@ -7937,35 +8330,34 @@
     Reading the very next row, a timeout filed between a safety and its free kick hides the kick: on nfl-raw
     250918010/3832 and 300912002/4199 lose their safety; the test copies a timeout in after 271021019/2661.
 
-# --- cfb 3.4 R832-6: the half-end play keys on the next real play's team (cfbfastR create_wpa_naive.R) ---
-# Killer on a committed capture: tests/cfb/test_cfb_whole_game_oracle.py (401858224's regulation-ending FG).
-
-- id: cfb-half-end-wp-keys-on-the-next-real-plays-team
-  group: nfl-end-of-half
-  finding: R832-6
-  file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: '                .and_(pl.col("start.pos_team.id") != lead_team)'
-  mutant: '                .and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))'
-  test: tests/cfb/test_cfb_whole_game_oracle.py -k "other_teams_next_play"
+# --- PRE-1008 D-1: the saved-payload readers decode UTF-8 on every platform ----
+- id: nba-pbp-disk-reads-utf8
+  group: utf8-reads
+  finding: D-1
+  file: sportsdataverse/nba/nba_pbp.py
+  snippet: '    with open(os.path.join(path_to_json, f"{game_id}.json"), encoding="utf-8") as json_file:'
+  mutant: '    with open(os.path.join(path_to_json, f"{game_id}.json")) as json_file:'
+  test: tests/test_pbp_disk_utf8.py -k "nba"
   expected: kill
-  note: >-
-    The pre-fix condition. 401858224's tying field goal keeps its team (start == end) and the next real play is
-    overtime's first snap by the other team: keyed on the play's own possession change it falls through to the
-    model's end state, 0.476, instead of cfbfastR's 1 - 0.502 = 0.498.
-
-- id: cfb-half-end-wp-next-team-rule-on-every-boundary
-  group: nfl-end-of-half
-  finding: R966-2
-  file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: '                .and_(pl.col("start.pos_team.id") != lead_team)'
-  mutant: '                .and_((pl.col("start.pos_team.id") != lead_team) & ((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")) | (pl.col("type.text").shift(-1) == "Timeout")))'
-  test: tests/cfb/test_cfb_whole_game_oracle.py -k "continuous_into_the_next_real_play"
+  note: The nba disk reader leaves the encoding to the platform again (cp1252 on Windows); PRE-1008 D-1.
+- id: nfl-pbp-disk-reads-utf8
+  group: utf8-reads
+  finding: D-1
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        with open(os.path.join(self.path_to_json, f"{self.gameId}.json"), encoding="utf-8") as json_file:'
+  mutant: '        with open(os.path.join(self.path_to_json, f"{self.gameId}.json")) as json_file:'
+  test: tests/test_pbp_disk_utf8.py -k "nfl"
   expected: kill
-  note: >-
-    Review #966's hand mutant B2: the fix holds only when a Timeout row follows the half-ending play, and
-    every other boundary keeps the pre-fix own-possession-change key. It survived the full tests/cfb (only
-    401858224's regulation end, which has a Timeout, pinned the branch) while it reverts 63 of the 64 moved
-    capture rows, mostly the first half's last snap handing to the other team's 2H kickoff.
+  note: The nfl disk reader leaves the encoding to the platform again (cp1252 on Windows); PRE-1008 D-1.
+- id: cfb-pbp-disk-reads-utf8
+  group: utf8-reads
+  finding: D-1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '        with open(os.path.join(self.path_to_json, f"{self.gameId}.json"), encoding="utf-8") as json_file:'
+  mutant: '        with open(os.path.join(self.path_to_json, f"{self.gameId}.json")) as json_file:'
+  test: tests/test_pbp_disk_utf8.py -k "cfb"
+  expected: kill
+  note: The cfb disk reader leaves the encoding to the platform again (cp1252 on Windows); PRE-1008 D-1.
 
 # --- #1011 T1/T2: a missing cell stays null, never "nan", where a parser stringifies a mixed object column ---
 # Killers: an object column of int, str and NaN, which stays `object` on pandas 3 (3.13, CI) and 2.3 (3.10 floor).

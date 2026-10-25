@@ -7,9 +7,8 @@
 * Architecture (factory + shim): https://py.sportsdataverse.org/docs/architecture/espn-cross-league
 * Reusable patterns: https://py.sportsdataverse.org/docs/architecture/building-blocks
 
-Each parser accepts the raw ``Dict`` returned by the corresponding
-``_common_espn`` helper (or any per-league wrapper that delegates to it)
-and returns a tidy ``polars.DataFrame``.
+Each parser accepts the raw ``Dict`` returned by the corresponding generated
+``espn_<league>_<short>`` wrapper (``return_parsed=False``) and returns a tidy ``polars.DataFrame``.
 
 All parsers:
 
@@ -91,6 +90,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse._codegen_runtime import _cast_ids_int64, _documented_empty, _pandas_ids, _str_or_null
+from sportsdataverse._parser_common import _FROM_PANDAS_ERRORS, _empty_frame
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import (
     _SHAPE_ERRORS,
@@ -100,10 +100,6 @@ from sportsdataverse.errors import (
     _object_rows,
     _warn_schema_drift,
 )
-
-# What ``pl.from_pandas`` raises on a mixed-type object column: pyarrow's ArrowInvalid (ValueError),
-# ArrowTypeError (TypeError), ArrowNotImplementedError (NotImplementedError), or a polars error.
-_FROM_PANDAS_ERRORS = (TypeError, ValueError, NotImplementedError, pl.exceptions.PolarsError)
 
 # ---------------------------------------------------------------------------
 # Internal helpers
@@ -188,12 +184,6 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool) -> pl.DataFrame:
         out = pl.from_pandas(df)
     out = _ids_int64(out)
     return _pandas_ids(out, pdf) if return_as_pandas else out
-
-
-def _empty_frame(return_as_pandas: bool = False):
-    """Return an appropriately-typed empty frame."""
-    df = pd.DataFrame()
-    return df if return_as_pandas else pl.DataFrame()
 
 
 # ===========================================================================
@@ -327,9 +317,9 @@ def parse_scoreboard(payload: Dict, return_as_pandas: bool = False) -> pl.DataFr
         Parse a pre-fetched payload::
 
             from sportsdataverse._common_espn_parsers import parse_scoreboard
-            from sportsdataverse._common_espn import _site_v2_scoreboard
+            from sportsdataverse.nba import espn_nba_scoreboard
 
-            raw = _site_v2_scoreboard("basketball", "nba", dates=20240101)
+            raw = espn_nba_scoreboard(dates=20240101, return_parsed=False)
             df = parse_scoreboard(raw)
             print(df.shape)
     """
@@ -977,8 +967,8 @@ def parse_leaders(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame
 
     Input: raw payload from ``_espn_statistics_byathlete()``.
     Output: one row per athlete in ``categories[].leaders[]`` with
-    athlete_id + per-stat values. Stat column names are drawn from
-    ``glossary[].abbreviation`` or ``categories[].labels``.
+    athlete_id + per-stat values. Stat column names are each category's
+    ``names[]`` (``labels[]`` when a category has no ``names``), snake-cased.
 
     Args:
         payload: Raw JSON dict from the statistics/byathlete endpoint.
@@ -989,12 +979,6 @@ def parse_leaders(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame
     """
     if not payload:
         return _empty_frame(return_as_pandas)
-
-    # Build a glossary mapping abbreviation → description from payload.glossary
-    glossary = {
-        g.get("abbreviation"): g.get("displayName") or g.get("description") or g.get("abbreviation")
-        for g in (payload.get("glossary") or [])
-    }
 
     categories = payload.get("categories") or []
     rows: List[dict] = []
@@ -2333,7 +2317,7 @@ def parse_summary_drive_plays(payload: Dict, return_as_pandas: bool = False) -> 
 
 @_zero_rows_unless_dict
 def parse_summary(
-    payload: Dict, section: str = None, return_as_pandas: bool = False, documented_table: str | None = None
+    payload: Dict, section: str | None = None, return_as_pandas: bool = False, documented_table: str | None = None
 ):
     """Dispatcher: parse one section of a Site v2 summary payload.
 
@@ -2418,7 +2402,7 @@ def _cdn_content(payload: Any) -> dict:
 
 
 def parse_cdn_game(
-    payload: Dict, section: str = None, return_as_pandas: bool = False, documented_table: str | None = None
+    payload: Dict, section: str | None = None, return_as_pandas: bool = False, documented_table: str | None = None
 ):
     """Parse a CDN ``playbyplay`` / ``boxscore`` page through :func:`parse_summary`.
 
@@ -2705,17 +2689,13 @@ def parse_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFram
 # Endpoint -> parser registry
 # ===========================================================================
 #
-# Maps the *short name* used in sportsdataverse._common_espn's wrapper
-# tables (_UNIVERSAL_WRAPPERS, _NCAA_WRAPPERS, _FOOTBALL_WRAPPERS,
-# _MLB_WRAPPERS) to the parser that turns its raw payload into a tidy
-# polars DataFrame.
+# Maps the *short name* of each ESPN endpoint (the ``short:`` keys of the
+# ``tools/codegen/endpoints/espn_*.yaml`` families) to the parser that turns
+# its raw payload into a tidy polars DataFrame.
 #
-# Keys here MUST match the first element of the tuples in those tables.
-# Helpers without a registered parser pass through as raw Dict.
-#
-# This registry is the dispatch table for the ``return_parsed=True`` kwarg
-# wired into every bound wrapper by ``make_league_module()`` -- see
-# ``sportsdataverse._common_espn._bind``.
+# Every generated ``espn_<league>_<short>`` wrapper looks its parser up here
+# for ``return_parsed=True``; a short name without a registered parser passes
+# through as raw Dict.
 
 ENDPOINT_PARSERS = {
     # Site v2 (rich nested)

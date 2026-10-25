@@ -162,8 +162,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_facet_time_in_pockets()
 ```
 
-_Last validated n/a._
-
 ## pff_facet_receiving_concept
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
@@ -279,8 +277,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_facet_receiving_concept()
 ```
 
-_Last validated n/a._
-
 ## pff_facet_special_teams_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /special/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
@@ -351,5 +347,3 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_facet_special_teams_summary()
 ```
-
-_Last validated n/a._

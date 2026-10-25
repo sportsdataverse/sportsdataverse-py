@@ -47,6 +47,7 @@ from gen_soccer_common import (
     parse_capture,
     refs_dir,
     rewrite_schema_dir,
+    snake_path,
     spec_descriptions,
     write_yaml,
 )
@@ -493,10 +494,6 @@ def _short(op: dict) -> str:
     return short.replace("games_gameCode_", "game_")
 
 
-def _snake_path(path: str) -> str:
-    return _TOKEN.sub(lambda m: "{" + underscore(m.group(1)) + "}", path)
-
-
 def _host(spec: dict, path: str) -> Optional[str]:
     """The path's own server (per-path ``servers``) when it is not the family host."""
     servers = spec["paths"][path].get("servers") or []
@@ -576,7 +573,7 @@ def _endpoint_entry(spec: dict, path: str, op: dict) -> Dict[str, Any]:
     entry: Dict[str, Any] = {
         "short": short,
         "summary": (op.get("summary") or f"Fetch {path}").rstrip(".") + ".",
-        "path": _snake_path(path),
+        "path": snake_path(path),
         "parser": _LIVE_PARSERS.get(short, "parse_euroleague"),
         "returns_schema": f"native/{STEM}/{short}",
         "example_args": {k: v for k, v in _EXAMPLE.items() if k in names | {q["name"] for q in qps}},

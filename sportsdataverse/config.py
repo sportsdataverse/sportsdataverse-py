@@ -1,58 +1,21 @@
 from __future__ import annotations
 
-import logging
+from typing import Any
 
-logger = logging.getLogger("sdv.dl_utils")
-logger.addHandler(logging.NullHandler())
+from sportsdataverse._deprecation import warn_deprecated
 
 
 SGITHUB = "https://raw.githubusercontent.com/sportsdataverse/"
 SDVRELEASES = "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/"
 
 CFB_BASE_URL = SDVRELEASES + "espn_cfb_pbp/play_by_play_{season}.parquet"
-CFB_ROSTER_URL = SGITHUB + "cfbfastR-data/main/rosters/parquet/cfb_rosters_{season}.parquet"
 CFB_TEAM_LOGO_URL = f"{SGITHUB}cfbfastR-data/main/teams/teams_colors_logos.parquet"
-CFB_TEAM_SCHEDULE_URL = SDVRELEASES + "cfb_schedules/cfb_schedules_{season}.parquet"
-CFB_TEAM_INFO_URL = SGITHUB + "cfbfastR-data/main/team_info/parquet/cfb_team_info_{season}.parquet"
 CFB_BETTING_LINES_URL = f"{SGITHUB}cfbfastR-data/main/betting/parquet/cfb_line_odds.parquet"
 # Rosters crosswalk is a single current snapshot (ESPN/Fox roster endpoints are
 # current-only), not a per-season historical asset -- hence no {season} token.
 CFB_ROSTERS_CROSSWALK_URL = f"{SDVRELEASES}cfb_crosswalk/cfb_rosters_crosswalk.parquet"
 
-NHL_BASE_URL = SDVRELEASES + "nhl_pbp_full/play_by_play_{season}.parquet"
-NHL_PLAYER_BOX_URL = SDVRELEASES + "nhl_player_boxscores/player_box_{season}.parquet"
-NHL_TEAM_BOX_URL = SDVRELEASES + "nhl_team_boxscores/team_box_{season}.parquet"
-NHL_TEAM_SCHEDULE_URL = SDVRELEASES + "nhl_schedules/nhl_schedule_{season}.parquet"
 NHL_TEAM_LOGO_URL = f"{SGITHUB}fastRhockey-data/main/nhl_teams_colors_logos.csv"
-
-# PHF (Premier Hockey Federation) is a frozen dataset -- the league ceased
-# operations in June 2023. Assets were migrated from the fastRhockey-data git
-# tree into dedicated release tags (2026-07-11): seasons 2016-2023, except pbp
-# which covers 2016 + 2020-2023 (2017-2019 pbp was never published upstream).
-PHF_BASE_URL = SDVRELEASES + "phf_pbp/play_by_play_{season}.parquet"
-PHF_PLAYER_BOX_URL = SDVRELEASES + "phf_player_boxscores/player_box_{season}.parquet"
-PHF_TEAM_BOX_URL = SDVRELEASES + "phf_team_boxscores/team_box_{season}.parquet"
-PHF_TEAM_SCHEDULE_URL = SDVRELEASES + "phf_schedules/phf_schedule_{season}.parquet"
-
-MBB_BASE_URL = SDVRELEASES + "espn_mens_college_basketball_pbp/play_by_play_{season}.parquet"
-MBB_TEAM_BOX_URL = SDVRELEASES + "espn_mens_college_basketball_team_boxscores/team_box_{season}.parquet"
-MBB_PLAYER_BOX_URL = SDVRELEASES + "espn_mens_college_basketball_player_boxscores/player_box_{season}.parquet"
-MBB_TEAM_SCHEDULE_URL = SDVRELEASES + "espn_mens_college_basketball_schedules/mbb_schedule_{season}.parquet"
-
-NBA_BASE_URL = SDVRELEASES + "espn_nba_pbp/play_by_play_{season}.parquet"
-NBA_TEAM_BOX_URL = SDVRELEASES + "espn_nba_team_boxscores/team_box_{season}.parquet"
-NBA_PLAYER_BOX_URL = SDVRELEASES + "espn_nba_player_boxscores/player_box_{season}.parquet"
-NBA_TEAM_SCHEDULE_URL = SDVRELEASES + "espn_nba_schedules/nba_schedule_{season}.parquet"
-
-WBB_BASE_URL = SDVRELEASES + "espn_womens_college_basketball_pbp/play_by_play_{season}.parquet"
-WBB_TEAM_BOX_URL = SDVRELEASES + "espn_womens_college_basketball_team_boxscores/team_box_{season}.parquet"
-WBB_PLAYER_BOX_URL = SDVRELEASES + "espn_womens_college_basketball_player_boxscores/player_box_{season}.parquet"
-WBB_TEAM_SCHEDULE_URL = SDVRELEASES + "espn_womens_college_basketball_schedules/wbb_schedule_{season}.parquet"
-
-WNBA_BASE_URL = SDVRELEASES + "espn_wnba_pbp/play_by_play_{season}.parquet"
-WNBA_TEAM_BOX_URL = SDVRELEASES + "espn_wnba_team_boxscores/team_box_{season}.parquet"
-WNBA_PLAYER_BOX_URL = SDVRELEASES + "espn_wnba_player_boxscores/player_box_{season}.parquet"
-WNBA_TEAM_SCHEDULE_URL = SDVRELEASES + "espn_wnba_schedules/wnba_schedule_{season}.parquet"
 
 # Parameter-cube release tags: one asset per (family, season), not per season.
 # Loaded by the hand-written {league}_loaders_extra.load_{league}_stats_leaguedash.
@@ -71,10 +34,6 @@ NFL_SDV_PLAYER_URL = SDVRELEASES + "nfl_players/players.parquet"
 # The live weekly player-stats release. nflverse FROZE the `player_stats` tag in
 # 2025-05 and publishes here instead -- one asset per season, 1999-2026.
 NFL_PLAYER_STATS_WEEK_URL = NFLVERSEGITHUB + "stats_player/stats_player_week_{season}.parquet"
-# FROZEN 2025-05 (1999-2024 only) and no longer read by `load_nfl_player_stats`.
-# Kept because they are importable public constants.
-NFL_PLAYER_STATS_URL = f"{NFLVERSEGITHUB}player_stats/player_stats.parquet"
-NFL_PLAYER_KICKING_STATS_URL = f"{NFLVERSEGITHUB}player_stats/player_stats_kicking.parquet"
 NFL_SDV_PLAYER_STATS_URL = SDVRELEASES + "nfl_player_stats/player_stats.parquet"
 NFL_PFR_SEASON_DEF_URL = f"{NFLVERSEGITHUB}pfr_advstats/advstats_season_def.parquet"
 NFL_PFR_WEEK_DEF_URL = NFLVERSEGITHUB + "pfr_advstats/advstats_week_def_{season}.parquet"
@@ -135,3 +94,55 @@ NFL_FF_RANKINGS_DRAFT_URL = f"{DYNASTYPROCESSGITHUB}db_fpecr_latest.csv"
 NFL_FF_RANKINGS_WEEK_URL = f"{DYNASTYPROCESSGITHUB}fp_latest_weekly.csv"
 NFL_FF_RANKINGS_ALL_URL = f"{DYNASTYPROCESSGITHUB}db_fpecr.parquet"
 NFL_FF_OPPORTUNITY_URL = FFOPPORTUNITYGITHUB + "{model_version}-data/ep_{stat_type}_{season}.parquet"
+
+
+# C-L45: release URLs nothing reads any more (the generated ``*_loaders`` build theirs from
+# ``tools/codegen/endpoints/releases.yaml``). Deprecated, not deleted: they are public names. The warning fires on the
+# module spellings (``from sportsdataverse.config import X``); the package attribute ``sportsdataverse.config`` is
+# ``sportsdataverse.nfl.config`` (the nfl star import rebinds it, as on main), which never reaches this __getattr__.
+_DEPRECATED: dict[str, str] = {
+    "CFB_ROSTER_URL": SGITHUB + "cfbfastR-data/main/rosters/parquet/cfb_rosters_{season}.parquet",
+    "CFB_TEAM_SCHEDULE_URL": SDVRELEASES + "cfb_schedules/cfb_schedules_{season}.parquet",
+    "CFB_TEAM_INFO_URL": SGITHUB + "cfbfastR-data/main/team_info/parquet/cfb_team_info_{season}.parquet",
+    "NHL_BASE_URL": SDVRELEASES + "nhl_pbp_full/play_by_play_{season}.parquet",
+    "NHL_PLAYER_BOX_URL": SDVRELEASES + "nhl_player_boxscores/player_box_{season}.parquet",
+    "NHL_TEAM_BOX_URL": SDVRELEASES + "nhl_team_boxscores/team_box_{season}.parquet",
+    "NHL_TEAM_SCHEDULE_URL": SDVRELEASES + "nhl_schedules/nhl_schedule_{season}.parquet",
+    # PHF ceased operations in June 2023; its frozen 2016-2023 assets live in the phf_* release tags.
+    "PHF_BASE_URL": SDVRELEASES + "phf_pbp/play_by_play_{season}.parquet",
+    "PHF_PLAYER_BOX_URL": SDVRELEASES + "phf_player_boxscores/player_box_{season}.parquet",
+    "PHF_TEAM_BOX_URL": SDVRELEASES + "phf_team_boxscores/team_box_{season}.parquet",
+    "PHF_TEAM_SCHEDULE_URL": SDVRELEASES + "phf_schedules/phf_schedule_{season}.parquet",
+    "MBB_BASE_URL": SDVRELEASES + "espn_mens_college_basketball_pbp/play_by_play_{season}.parquet",
+    "MBB_TEAM_BOX_URL": SDVRELEASES + "espn_mens_college_basketball_team_boxscores/team_box_{season}.parquet",
+    "MBB_PLAYER_BOX_URL": SDVRELEASES + "espn_mens_college_basketball_player_boxscores/player_box_{season}.parquet",
+    "MBB_TEAM_SCHEDULE_URL": SDVRELEASES + "espn_mens_college_basketball_schedules/mbb_schedule_{season}.parquet",
+    "NBA_BASE_URL": SDVRELEASES + "espn_nba_pbp/play_by_play_{season}.parquet",
+    "NBA_TEAM_BOX_URL": SDVRELEASES + "espn_nba_team_boxscores/team_box_{season}.parquet",
+    "NBA_PLAYER_BOX_URL": SDVRELEASES + "espn_nba_player_boxscores/player_box_{season}.parquet",
+    "NBA_TEAM_SCHEDULE_URL": SDVRELEASES + "espn_nba_schedules/nba_schedule_{season}.parquet",
+    "WBB_BASE_URL": SDVRELEASES + "espn_womens_college_basketball_pbp/play_by_play_{season}.parquet",
+    "WBB_TEAM_BOX_URL": SDVRELEASES + "espn_womens_college_basketball_team_boxscores/team_box_{season}.parquet",
+    "WBB_PLAYER_BOX_URL": SDVRELEASES + "espn_womens_college_basketball_player_boxscores/player_box_{season}.parquet",
+    "WBB_TEAM_SCHEDULE_URL": SDVRELEASES + "espn_womens_college_basketball_schedules/wbb_schedule_{season}.parquet",
+    "WNBA_BASE_URL": SDVRELEASES + "espn_wnba_pbp/play_by_play_{season}.parquet",
+    "WNBA_TEAM_BOX_URL": SDVRELEASES + "espn_wnba_team_boxscores/team_box_{season}.parquet",
+    "WNBA_PLAYER_BOX_URL": SDVRELEASES + "espn_wnba_player_boxscores/player_box_{season}.parquet",
+    "WNBA_TEAM_SCHEDULE_URL": SDVRELEASES + "espn_wnba_schedules/wnba_schedule_{season}.parquet",
+    # nflverse FROZE the `player_stats` tag in 2025-05 (1999-2024 only); `load_nfl_player_stats`
+    # reads NFL_PLAYER_STATS_WEEK_URL instead.
+    "NFL_PLAYER_STATS_URL": f"{NFLVERSEGITHUB}player_stats/player_stats.parquet",
+    "NFL_PLAYER_KICKING_STATS_URL": f"{NFLVERSEGITHUB}player_stats/player_stats_kicking.parquet",
+}
+
+
+def __getattr__(name: str) -> Any:  # PEP 562: warn on access, not on import
+    if name in _DEPRECATED:
+        warn_deprecated(
+            f"sportsdataverse.config.{name}",
+            replacement="the league's generated load_<league>_* loader",
+            since="0.1.6",
+            removed_in="0.2.0",
+        )
+        return _DEPRECATED[name]
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

@@ -29,7 +29,7 @@ def test_reference_block_has_all_sections():
     assert "| API Parameter | Python | Pattern | Required | Nullable | Description |" in md
     assert "### Returns" in md
     assert "### Example" in md
-    assert "Last validated" in md
+    assert "Last validated" not in md  # A-L4: the never-set field and its line are gone
     assert "```python" in md  # runnable example fence
 
 

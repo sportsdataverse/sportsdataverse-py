@@ -16,7 +16,7 @@ matching (case-insensitive) so partial names work.
     from sportsdataverse.find import find_team, find_event
 
     find_team("lakers", league="nba")
-    # {'id': '13', 'abbreviation': 'LAL', 'display_name': 'Los Angeles Lakers'}
+    # {'id': '13', 'abbreviation': 'LAL', 'displayName': 'Los Angeles Lakers', ...}
 
     find_event(date="2024-06-17", league="nba", home="Boston")
     # {'id': '401585607', 'name': 'Dallas Mavericks at Boston Celtics', ...}
@@ -136,14 +136,23 @@ def find_team(
         AssetFetchError: the teams fetch failed (403, rate limit, 5xx, dead
             connection), so the answer is unknown.
 
-    Examples::
+    Example:
+        Quick start::
 
-        find_team("lakers", league="nba")["id"]
-        '13'
-        find_team("LAL", league="nba")["display_name"]
-        'Los Angeles Lakers'
-        find_team("new york", league="nba", multi=True)
-        [{... 'Knicks' ...}, {... 'Liberty' ...}]  # WNBA is separate
+            from sportsdataverse.find import find_team
+            team = find_team("lakers", league="nba")
+            print(team["id"], team["displayName"])  # the raw ESPN team dict (camelCase keys)
+
+        Every candidate::
+
+            find_team("new", league="nba", multi=True)  # New Orleans Pelicans and New York Knicks
+
+        See Also:
+            * :func:`find_athlete` / :func:`find_event` -- the athlete and game resolvers; :func:`clear_team_cache`
+            * `hoopR`_ / `cfbfastR`_ -- the R packages' ESPN team and id helpers
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
     """
     teams = _list_teams(league)
     matches = [
@@ -167,6 +176,25 @@ def find_team(
 # ---------------------------------------------------------------------------
 # find_athlete
 # ---------------------------------------------------------------------------
+
+
+def _roster_athletes(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """The athlete dicts of a raw roster payload, whichever shape it ships.
+
+    NBA / WNBA / MBB / WBB list the athletes flat; MLB / NFL / NHL / CFB group them by position
+    (``{"position": ..., "items": [...]}``), and each grouped athlete gains that ``position_group``.
+    """
+    flat_athletes: List[Dict[str, Any]] = []
+    for entry in payload.get("athletes") or []:
+        if not isinstance(entry, dict):
+            continue
+        if "items" in entry and isinstance(entry["items"], list):
+            flat_athletes.extend(
+                {**p, "position_group": entry.get("position")} for p in entry["items"] if isinstance(p, dict)
+            )
+        else:
+            flat_athletes.append(entry)
+    return flat_athletes
 
 
 def find_athlete(
@@ -197,16 +225,29 @@ def find_athlete(
 
     Raises:
         ValueError: ``league`` is not one of the supported slugs.
-        AssetFetchError: a roster fetch failed (403, rate limit, 5xx, dead
+        NoDataError: the league's teams endpoint answered 404 (it is read to resolve
+            ``team=`` or, without it, to list the teams to search).
+        AssetFetchError: a teams or roster fetch failed (403, rate limit, 5xx, dead
             connection), so whether the athlete exists is unknown. A roster that
             answers 404 is skipped.
 
-    Examples::
+    Example:
+        Quick start (a team filter makes it one roster call)::
 
-        find_athlete("lebron", league="nba", team="lakers")["id"]
-        '1966'
-        find_athlete("Aaron Judge", league="mlb", team="Yankees")["id"]
-        '33192'
+            from sportsdataverse.find import find_athlete
+            athlete = find_athlete("lebron", league="nba", team="lakers")
+            print(athlete["id"], athlete["team_id"])
+
+        Every match across the league (one roster call per team)::
+
+            find_athlete("smith", league="wnba", multi=True)
+
+        See Also:
+            * :func:`find_team` / :func:`find_event` -- the team and game resolvers
+            * `hoopR`_ / `cfbfastR`_ -- the R packages' ESPN team and id helpers
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
     """
     league_attr, *_ = _slugs(league)
     league = league.lower()
@@ -229,22 +270,7 @@ def find_athlete(
             payload = roster_fn(team_id=team_id, return_parsed=False)
         except NoDataError:
             continue  # a 404 roster has no athletes; a failed fetch (AssetFetchError) propagates
-        # Roster shape varies — handle both flat and position-grouped
-        raw_athletes = payload.get("athletes") or []
-        flat_athletes: List[Dict[str, Any]] = []
-        for entry in raw_athletes:
-            if not isinstance(entry, dict):
-                continue
-            if "items" in entry and isinstance(entry["items"], list):
-                # Position-grouped shape (MLB/NFL/NHL/CFB)
-                for p in entry["items"]:
-                    if isinstance(p, dict):
-                        p = {**p, "position_group": entry.get("position")}
-                        flat_athletes.append(p)
-            else:
-                # Flat shape (NBA/WNBA/MBB/WBB)
-                flat_athletes.append(entry)
-        for ath in flat_athletes:
+        for ath in _roster_athletes(payload):
             if _matches(
                 name,
                 ath.get("fullName"),
@@ -298,12 +324,23 @@ def find_event(
         AssetFetchError: the scoreboard fetch failed (403, rate limit, 5xx,
             dead connection), so the answer is unknown.
 
-    Examples::
+    Example:
+        Quick start::
 
-        find_event("2024-06-17", league="nba", home="Boston")["id"]
-        '401585607'
-        find_event("20250209", league="nfl", away="KC")["name"]
-        'Kansas City Chiefs at Philadelphia Eagles'
+            from sportsdataverse.find import find_event
+            event = find_event("2024-06-17", league="nba", home="Boston")
+            print(event["id"], event["name"])
+
+        Every game on a date (double-headers)::
+
+            find_event("20240601", league="mlb", multi=True)
+
+        See Also:
+            * :func:`find_team` / :func:`find_athlete` -- the team and athlete resolvers
+            * `hoopR`_ / `cfbfastR`_ -- the R packages' ESPN team and id helpers
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _cfbfastR: https://cfbfastR.sportsdataverse.org
     """
     _, _, sb_attr = _slugs(league)
     league = league.lower()
@@ -358,6 +395,19 @@ def clear_team_cache(league: Optional[str] = None) -> None:
     Args:
         league: If given, only clear that league's cache. With no arg,
             clear every league.
+
+    Returns:
+        None.
+
+    Example:
+        Refresh after a relocation or expansion::
+
+            from sportsdataverse.find import clear_team_cache, find_team
+            clear_team_cache("nba")
+            find_team("lakers", league="nba")  # re-reads the teams list
+
+    See Also:
+        * :func:`find_team` -- the resolver whose team list this cache holds
     """
     if league is None:
         _TEAM_CACHE.clear()

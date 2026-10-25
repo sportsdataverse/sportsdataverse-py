@@ -18,9 +18,8 @@ adapter exists for:
 
 from __future__ import annotations
 
-from typing import Any, Dict, Mapping, Optional, Tuple
+from typing import Any, Mapping, Optional, Tuple
 
-import polars as pl
 
 from sportsdataverse._codegen_runtime import _id_text
 from sportsdataverse.cfb.yahoo_pbp.teams import _yahoo_team_number
@@ -67,12 +66,6 @@ def _yahoo_cfb_game_id(
     return f"ncaaf.g.{date}{number:04d}"
 
 
-#: ``cfb_crosswalk`` frames already read, keyed by the season tuple. Successful reads only:
-#: caching a miss would make one transient release-asset failure permanent for the life of a
-#: Game on Paper worker, and this runs on its request path.
-_CROSSWALK_CACHE: Dict[Tuple[int, ...], pl.DataFrame] = {}
-
-
 def _crosswalk_yahoo_id(espn_id: Any, seasons: Tuple[int, ...]) -> Optional[str]:
     """``yahoo_game_id`` for an ESPN event id from the published ``cfb_crosswalk`` asset, or None.
 
@@ -80,25 +73,9 @@ def _crosswalk_yahoo_id(espn_id: Any, seasons: Tuple[int, ...]) -> Optional[str]
     (the formula needs a kickoff date, which only a row or a schedule states). Never raises:
     an unreachable release asset is a miss.
     """
-    if seasons not in _CROSSWALK_CACHE:
-        try:
-            from sportsdataverse.cfb import load_cfb_schedule_crosswalk
+    from sportsdataverse.football.sources.idmap import _cfb_crosswalk_id
 
-            frame = load_cfb_schedule_crosswalk(list(seasons))
-        except Exception:  # noqa: BLE001 -- an unreachable asset is a miss, never a raise
-            return None
-        if (
-            not isinstance(frame, pl.DataFrame)
-            or frame.is_empty()
-            or not {"espn_game_id", "yahoo_game_id"} <= set(frame.columns)
-        ):
-            return None
-        _CROSSWALK_CACHE[seasons] = frame
-    frame = _CROSSWALK_CACHE[seasons]
-    hit = frame.filter(pl.col("espn_game_id").cast(pl.Utf8) == str(espn_id))
-    if hit.is_empty():
-        return None
-    return hit.row(0, named=True).get("yahoo_game_id") or None
+    return _cfb_crosswalk_id(espn_id, seasons, "yahoo_game_id")
 
 
 def _resolve_game_id(

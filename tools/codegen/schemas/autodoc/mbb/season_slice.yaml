@@ -1,0 +1,39 @@
+schema: season_slice
+kind: dataframe
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: orapm
+  type: double
+  description: ''
+- name: drapm
+  type: double
+  description: ''
+- name: rapm_net
+  type: double
+  description: ''
+- name: off_poss
+  type: integer
+  description: ''
+- name: def_poss
+  type: integer
+  description: ''
+- name: orapm_se
+  type: double
+  description: ''
+- name: drapm_se
+  type: double
+  description: ''
+- name: rapm_net_se
+  type: double
+  description: ''
+- name: orapm_se_sampling
+  type: double
+  description: ''
+- name: drapm_se_sampling
+  type: double
+  description: ''
+- name: rapm_net_se_sampling
+  type: double
+  description: ''

@@ -48,7 +48,8 @@ def espn_nfl_play_participants(
         **kwargs: Forwarded to ``sportsdataverse.dl_utils.download``.
 
     Returns:
-        Polars (or pandas) DataFrame, one row per play; the raw play dicts when
+        Polars (or pandas) DataFrame, one row per play with at least one participant (a play
+        whose ``participants[]`` is empty has no row); the raw play dicts when
         ``raw=True``.
 
     Example:

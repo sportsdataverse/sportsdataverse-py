@@ -1524,34 +1524,34 @@ One row per possession.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
+| `game_id` | character | stats.ncaa.org game id of the play-by-play page the possession comes from. |
 | `game_date` | character | Game date (YYYY-MM-DD). |
-| `home` | character | Home. |
-| `away` | character | Away record. |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `poss_num` | integer |  |
-| `poss_team` | character |  |
-| `home_1` | character |  |
-| `home_2` | character |  |
-| `home_3` | character |  |
-| `home_4` | character |  |
-| `home_5` | character |  |
-| `away_1` | character |  |
-| `away_2` | character |  |
-| `away_3` | character |  |
-| `away_4` | character |  |
-| `away_5` | character |  |
-| `home_score` | integer | Home team score at the time of the play. |
-| `away_score` | integer | Away team score at the time of the play. |
-| `pts` | integer | Points scored. |
-| `is_assisted` | integer |  |
-| `is_transition` | integer |  |
-| `is_garbage_time` | integer |  |
-| `start_event_type` | character |  |
-| `first_shot_time` | integer |  |
-| `first_shot_type` | character |  |
-| `last_event_time` | integer |  |
-| `last_event_type` | character |  |
+| `home` | character | Home team's name as the stats.ncaa.org play-by-play page lists it. |
+| `away` | character | Away team's name as the stats.ncaa.org play-by-play page lists it. |
+| `period` | integer | Period number from the stats.ncaa.org page: 1-2 for halves (3+ = overtime), or 1-4 for quarters (5+ = overtime) on a quarters page (women's games from 2015-16). |
+| `poss_num` | integer | Possession number within the game, stamped upstream by the play-by-play chain (parse_ncaa_bb_game_pbp). |
+| `poss_team` | character | Name of the team in possession. |
+| `home_1` | character | Home on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always occupies the same columns; simple=True keeps on-court order. |
+| `home_2` | character | Home on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `home_3` | character | Home on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `home_4` | character | Home on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `home_5` | character | Home on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `away_1` | character | Away on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always occupies the same columns; simple=True keeps on-court order. |
+| `away_2` | character | Away on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `away_3` | character | Away on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `away_4` | character | Away on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `away_5` | character | Away on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `home_score` | integer | Home team's score on the possession's first event row (the page's running score after that event). |
+| `away_score` | integer | Away team's score on the possession's first event row (the page's running score after that event). |
+| `pts` | integer | Points scored on the possession, summing shot_value (3, 2, or 1 for a free throw) over its made shots. |
+| `is_assisted` | integer | Count of the possession's events that carry a second player (player_2), usually 0 or 1 -- a count, not a flag, kept from bigballR's get_possessions for parity. |
+| `is_transition` | integer | 1 when the possession is a transition possession, else 0: its first event (a steal or a shot type, or a foul in the possessing team's favour) came within 10 seconds of the possession start and the previous possession ended on a terminal event. Null when any event of the possession has no flag. |
+| `is_garbage_time` | integer | 1 when any event of the possession falls in garbage time, else 0. Garbage time starts at the first event with a margin of 25+ inside the last 10 minutes of regulation (or later), 20+ inside the last 5 or 15+ inside the last 2, while at most 3 of the two teams' 10 starters are on the floor, and lasts to the end of the game. Null when any event has no flag. |
+| `start_event_type` | character | Event type of the play immediately before the possession's first event (what started it, e.g. a defensive rebound or a made basket). Null for a game's first possession (fix_cross_game_leak=True, the default). |
+| `first_shot_time` | integer | Seconds into the possession (poss_length) at its first field-goal attempt; null when the possession had no shot. |
+| `first_shot_type` | character | Event type of the possession's first field-goal attempt ("Layup", "Three Point Jumper", "Two Point Jumper", "Hook", "Dunk", "Tip In"); null when the possession had no shot. |
+| `last_event_time` | integer | Seconds into the possession (poss_length) at its final event. |
+| `last_event_type` | character | Event type of the possession's final event (e.g. a made shot, a turnover or a defensive rebound). |
 
 **Example**
 
@@ -1614,110 +1614,4 @@ All games' shots row-bound (zero-row schema frame when none found).
 from sportsdataverse.wbb.wbb_ncaa_shots import ncaa_wbb_shot_locations
 shots = ncaa_wbb_shot_locations(["5722355"])
 print(shots.shape)
-```
-
-### ncaa_wbb_team_roster {#ncaa_wbb_team_roster}
-
-`ncaa_wbb_team_roster(team_id: 'Optional[int]' = None, *, team: 'Optional[str]' = None, season: 'Optional[str]' = None, fetcher: "Optional['NcaaFetcher']" = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
-
-Scrape a women's team roster from stats.ncaa.org.
-
-Port of wbigballR `get_team_roster` with name resolution fixed to the
-WBB crosswalk (see the module docstring). The roster parser itself is
-league-agnostic; algorithm detail:
-`sportsdataverse.mbb.mbb_ncaa_schedule.ncaa_mbb_team_roster`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `team_id` | `Optional[int]` | `None` | stats.ncaa.org team id (changes every season). |
-| `team` | `Optional[str]` | `None` | School name, e.g. `"South Carolina"`. |
-| `season` | `Optional[str]` | `None` | Season string, e.g. `"2024-25"`; required with `team`. |
-| `fetcher` | `Optional['NcaaFetcher']` | `None` | Injectable `~sportsdataverse.mbb.mbb_ncaa_fetch. NcaaFetcher`; defaults to a fresh browser-transport fetcher. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per player — see `~sportsdataverse.mbb.mbb_ncaa_schedule.parse_ncaa_bb_team_roster` for the column contract.
-
-| col_name | type | description |
-|---|---|---|
-| `gp` | character | Games played. |
-| `gs` | character | Games started. |
-| `jersey` | character | Jersey number worn by the player. |
-| `name` | character | Display name. |
-| `class` | character | College class / draft eligibility note. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `height` | character | Player height (string e.g. '6-2' or inches). |
-| `hometown` | character | Player hometown. |
-| `high_school` | character |  |
-| `player` | character | Player name. |
-| `clean_name` | character |  |
-| `ht_inches` | integer |  |
-| `player_id` | character | Unique player identifier. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | Neither `team_id` nor a resolvable `team`/`season` pair was given. |
-
-**Example**
-
-```python
-from sportsdataverse.wbb.wbb_ncaa_schedule import ncaa_wbb_team_roster
-df = ncaa_wbb_team_roster(team="South Carolina", season="2024-25")
-print(df.select("jersey", "player", "ht_inches").head())
-```
-
-### ncaa_wbb_team_schedule {#ncaa_wbb_team_schedule}
-
-`ncaa_wbb_team_schedule(team_id: 'Optional[int]' = None, *, team: 'Optional[str]' = None, season: 'Optional[str]' = None, fetcher: "Optional['NcaaFetcher']" = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
-
-Scrape a women's team's season schedule from stats.ncaa.org.
-
-Port of wbigballR `get_team_schedule` with name resolution fixed to the
-WBB crosswalk (see the module docstring). Algorithm detail:
-`sportsdataverse.mbb.mbb_ncaa_schedule.ncaa_mbb_team_schedule`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `team_id` | `Optional[int]` | `None` | stats.ncaa.org team id (changes every season). |
-| `team` | `Optional[str]` | `None` | School name, e.g. `"South Carolina"`. |
-| `season` | `Optional[str]` | `None` | Season string, e.g. `"2024-25"`; required with `team`. |
-| `fetcher` | `Optional['NcaaFetcher']` | `None` | Injectable `~sportsdataverse.mbb.mbb_ncaa_fetch. NcaaFetcher`; defaults to a fresh browser-transport fetcher. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per scheduled game — see `~sportsdataverse.mbb.mbb_ncaa_schedule.parse_ncaa_bb_team_schedule` for the column contract.
-
-| col_name | type | description |
-|---|---|---|
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `home` | character | Home. |
-| `home_score` | integer | Home team score at the time of the play. |
-| `away` | character | Away record. |
-| `away_score` | integer | Away team score at the time of the play. |
-| `box_id` | character |  |
-| `game_id` | character | Unique game identifier. |
-| `is_neutral` | logical |  |
-| `detail` | character | Detail. |
-| `attendance` | integer | Reported attendance. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | Neither `team_id` nor a resolvable `team`/`season` pair was given. |
-
-**Example**
-
-```python
-from sportsdataverse.wbb.wbb_ncaa_schedule import ncaa_wbb_team_schedule
-df = ncaa_wbb_team_schedule(team="South Carolina", season="2024-25")
-print(df.shape)
 ```

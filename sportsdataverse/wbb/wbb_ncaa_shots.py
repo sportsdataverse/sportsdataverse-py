@@ -17,11 +17,7 @@ from typing import TYPE_CHECKING, Any, Optional, Sequence, Union
 
 import polars as pl
 
-from sportsdataverse.mbb.mbb_ncaa_shots import (
-    _empty_shots,
-    ncaa_mbb_join_pbp_shots,
-    parse_ncaa_bb_shots,
-)
+from sportsdataverse.mbb.mbb_ncaa_shots import _shot_locations, ncaa_mbb_join_pbp_shots
 from sportsdataverse.scrape.ncaa.identity import _utf8_id
 from sportsdataverse.scrape.ncaa.parse import wbb_period_model
 
@@ -75,35 +71,9 @@ def ncaa_wbb_shot_locations(
             shots = ncaa_wbb_shot_locations(["5722355"])
             print(shots.shape)
     """
-    ids = [g for g in map(_utf8_id, game_ids) if g is not None]
     # _utf8_id, never str(): season=2015.0 must read "2015" (halves), not "2015.0" (quarters)
     period_model = wbb_period_model(_utf8_id(season))
-
-    def _run(f: Any) -> "list[pl.DataFrame]":
-        frames: "list[pl.DataFrame]" = []
-        for gid in ids:
-            df = parse_ncaa_bb_shots(f.fetch_game_box(gid), gid, period_model=period_model)
-            found = sorted({t for t in df["team"].to_list() if t is not None})
-            logger.info(
-                "Game_ID: %s || %s v. %s || %d shots found",
-                gid,
-                found[0] if found else None,
-                found[1] if len(found) > 1 else None,
-                df.height,
-            )
-            frames.append(df)
-        return frames
-
-    if fetcher is None:
-        from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
-
-        with NcaaFetcher.with_browser() as browser_fetcher:
-            frames = _run(browser_fetcher)
-    else:
-        frames = _run(fetcher)
-
-    out = pl.concat(frames) if frames else _empty_shots()
-    return out.to_pandas() if return_as_pandas else out
+    return _shot_locations(game_ids, period_model, fetcher, return_as_pandas, log=logger)
 
 
 def ncaa_wbb_join_pbp_shots(

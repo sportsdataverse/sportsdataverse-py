@@ -130,8 +130,6 @@ GET /stats/cumestatsplayer
 wnba_stats_cumestatsplayer(league_id='10')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_cumestatsplayergames
 
 GET /stats/cumestatsplayergames
@@ -177,8 +175,6 @@ GET /stats/cumestatsplayergames
 ```python
 wnba_stats_cumestatsplayergames(league_id='10')
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_cumestatsteam
 
@@ -312,8 +308,6 @@ GET /stats/cumestatsteam
 wnba_stats_cumestatsteam(league_id='10')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_cumestatsteamgames
 
 GET /stats/cumestatsteamgames
@@ -360,5 +354,3 @@ GET /stats/cumestatsteamgames
 ```python
 wnba_stats_cumestatsteamgames(league_id='10')
 ```
-
-_Last validated n/a._

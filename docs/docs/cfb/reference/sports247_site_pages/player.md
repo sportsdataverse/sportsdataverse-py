@@ -77,8 +77,6 @@ Player detail (identity + primary-sport rating/ranks).
 sports247_site_pages_player()
 ```
 
-_Last validated n/a._
-
 ## sports247_site_pages_player_current_institution
 
 Player's current PlayerInstitution (committed/enrolled school).
@@ -143,8 +141,6 @@ Player's current PlayerInstitution (committed/enrolled school).
 ```python
 sports247_site_pages_player_current_institution(key=46083769)
 ```
-
-_Last validated n/a._
 
 ## sports247_site_pages_player_high_school
 
@@ -211,8 +207,6 @@ Player's high-school PlayerInstitution row.
 sports247_site_pages_player_high_school(key=46051367)
 ```
 
-_Last validated n/a._
-
 ## sports247_site_pages_player_institution
 
 Player-at-institution association detail.
@@ -276,8 +270,6 @@ Player-at-institution association detail.
 sports247_site_pages_player_institution()
 ```
 
-_Last validated n/a._
-
 ## sports247_site_pages_player_institution_evaluation
 
 Scout evaluation of a player-institution fit.
@@ -320,8 +312,6 @@ Scout evaluation of a player-institution fit.
 ```python
 sports247_site_pages_player_institution_evaluation()
 ```
-
-_Last validated n/a._
 
 ## sports247_site_pages_player_primary_sport
 
@@ -394,8 +384,6 @@ Player's primary PlayerSport (rating/class/positions).
 ```python
 sports247_site_pages_player_primary_sport(key=46051367)
 ```
-
-_Last validated n/a._
 
 ## sports247_site_pages_player_search
 
@@ -470,8 +458,6 @@ Player name search.
 sports247_site_pages_player_search()
 ```
 
-_Last validated n/a._
-
 ## sports247_site_pages_playersport
 
 PlayerSport detail (note lowercase route segment).
@@ -541,5 +527,3 @@ PlayerSport detail (note lowercase route segment).
 ```python
 sports247_site_pages_playersport()
 ```
-
-_Last validated n/a._

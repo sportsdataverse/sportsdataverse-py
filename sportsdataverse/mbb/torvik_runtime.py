@@ -4,9 +4,9 @@
 barttorvik.com serves plain data files, not JSON APIs: the T-Rank ratings and
 four-factors endpoints are **CSV with a header row** (``text/csv`` or
 ``text/plain``), and other documented surfaces are positional JSON or HTML. The
-shared no-auth runtime (:mod:`sportsdataverse._codegen_runtime`) always does
-``response.json()`` and returns ``{}`` on any non-JSON body — which would
-silently drop every CSV payload. This module supplies a drop-in ``_get`` that
+shared no-auth runtime (:mod:`sportsdataverse._codegen_runtime`) decodes JSON only
+and raises ``AssetFetchError`` on a non-JSON 2xx body, so no CSV payload would ever
+reach its parser. This module supplies a drop-in ``_get`` that
 returns the parsed JSON ``dict`` for JSON bodies and the **raw text** for
 everything else, so the registered parsers receive the shape they expect.
 

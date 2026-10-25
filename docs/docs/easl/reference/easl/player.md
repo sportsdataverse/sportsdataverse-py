@@ -136,8 +136,6 @@ Player box score of a finished game, one row per rostered player (non-players ha
 easl_player_box(fixture_id='10af8fd4-106e-11f1-960b-5798087c7aa3')
 ```
 
-_Last validated n/a._
-
 ## easl_players
 
 Every EASL player of all seasons; with season and team_id a roster that adds jersey number and position.
@@ -194,8 +192,6 @@ Every EASL player of all seasons; with season and team_id a roster that adds jer
 easl_players(season=2026, team_id='865489e8-b0f5-11ed-8b3f-c199a9dea184')
 ```
 
-_Last validated n/a._
-
 ## easl_player
 
 One player's biography: names, nationality, birth date, height, weight.
@@ -248,8 +244,6 @@ One player's biography: names, nationality, birth date, height, weight.
 ```python
 easl_player(player_id='85c99dab-9f67-11f0-8780-a731edb5aad5')
 ```
-
-_Last validated n/a._
 
 ## easl_player_stats
 
@@ -389,5 +383,3 @@ A player's cumulative statistics over ALL seasons (the server ignores a season f
 ```python
 easl_player_stats(player_id='85c99dab-9f67-11f0-8780-a731edb5aad5')
 ```
-
-_Last validated n/a._

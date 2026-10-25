@@ -107,6 +107,23 @@ class SportsDataverseError(Exception):
 
     Every message is passed through :func:`_redact_secrets`: these messages quote
     request URLs, and a URL can carry an API key in its query string.
+
+    Args:
+        *args: The exception arguments; a ``str`` argument has secrets redacted.
+
+    Example:
+        One handler for every package failure::
+
+            from sportsdataverse.errors import SportsDataverseError
+            from sportsdataverse.nfl import load_nfl_pbp
+
+            try:
+                pbp = load_nfl_pbp([2024])
+            except SportsDataverseError as exc:
+                print(f"sportsdataverse failed: {exc}")
+
+    See Also:
+        * :class:`NoDataError` / :class:`AssetFetchError` -- "nothing there" versus "the fetch failed"
     """
 
     def __init__(self, *args: object) -> None:
@@ -134,6 +151,9 @@ class SeasonNotFoundError(SportsDataverseError):
             except SeasonNotFoundError as exc:
                 print(f"unsupported season: {exc}")
                 # unsupported season: Season 1995 not found, season cannot be less than 2003
+
+    See Also:
+        * :func:`season_not_found_error` -- the guard that raises it
     """
 
     pass
@@ -146,6 +166,9 @@ def season_not_found_error(season: int, min_season: int) -> None:
         season: Caller-supplied season (int or coercible).
         min_season: Inclusive minimum supported season for the data source.
 
+    Returns:
+        None, when ``season`` is supported.
+
     Raises:
         SeasonNotFoundError: When ``int(season) < int(min_season)``.
 
@@ -157,6 +180,9 @@ def season_not_found_error(season: int, min_season: int) -> None:
             def load_thing(season):
                 season_not_found_error(season, min_season=2003)
                 # ... fetch parquet ...
+
+    See Also:
+        * :class:`SeasonNotFoundError` -- what it raises
     """
     if int(season) >= int(min_season):
         return
@@ -192,6 +218,9 @@ class RawStoreMissError(SportsDataverseError):
                 poss = nba_possessions("0022300001", raw_store_readonly=True)
             except RawStoreMissError as exc:
                 print(f"not in the raw store: {exc}")
+
+    See Also:
+        * :func:`sportsdataverse.nba.nba_season_compile.compile_nba_season` -- logs and skips a miss per game
     """
 
 
@@ -219,6 +248,9 @@ class AssetFetchError(SportsDataverseError):
                 sched = load_cfb_schedule([2024])
             except AssetFetchError as exc:
                 print(f"fetch failed, retry later: {exc}")
+
+    See Also:
+        * :class:`NoDataError` -- the "asset is absent" counterpart
     """
 
     #: Set True by a runtime when the failure is a dead connection or a 429/5xx, so a caller
@@ -243,13 +275,17 @@ class NoDataError(SportsDataverseError):
         Catch missing-data responses around an ESPN call::
 
             from sportsdataverse.errors import NoDataError
-            from sportsdataverse.cfb import espn_cfb_pbp
+            from sportsdataverse.cfb import espn_cfb_game_rosters
 
             try:
-                pbp = espn_cfb_pbp(game_id=1)  # not a real ESPN game id
+                rosters = espn_cfb_game_rosters(game_id=1)  # not a real ESPN game id
             except NoDataError as exc:
                 print(f"no data: {exc}")
-                pbp = None
+                rosters = None
+
+    See Also:
+        * :class:`AssetFetchError` -- the "fetch failed, answer unknown" counterpart
+        * :func:`suggest_next_action` -- the resolver hint a 404 message carries
     """
 
     pass
@@ -287,6 +323,9 @@ class InsufficientInputError(SportsDataverseError):
                 ratings = wbb_team_ratings(2008)
             except InsufficientInputError as exc:
                 print(f"not buildable: {exc}")
+
+    See Also:
+        * :class:`NoDataError` / :class:`AssetFetchError` -- "nothing there" versus "the fetch failed"
     """
 
 
@@ -307,6 +346,9 @@ class EmptyResponseWarning(UserWarning):
             import warnings
             from sportsdataverse.errors import EmptyResponseWarning
             warnings.filterwarnings("ignore", category=EmptyResponseWarning)
+
+    See Also:
+        * :mod:`warnings` -- ``filterwarnings`` / ``simplefilter`` turn it into an error or silence it
     """
 
 
@@ -328,6 +370,9 @@ class EraCoverageWarning(UserWarning):
             from sportsdataverse.errors import EraCoverageWarning
 
             warnings.filterwarnings("ignore", category=EraCoverageWarning)
+
+    See Also:
+        * :mod:`warnings` -- ``filterwarnings`` / ``simplefilter`` turn it into an error or silence it
     """
 
 
@@ -348,6 +393,9 @@ class AsOfCutWarning(UserWarning):
             from sportsdataverse.errors import AsOfCutWarning
 
             warnings.filterwarnings("error", category=AsOfCutWarning)
+
+    See Also:
+        * :mod:`warnings` -- ``filterwarnings`` / ``simplefilter`` turn it into an error or silence it
     """
 
 
@@ -367,6 +415,9 @@ class UnsupportedPageFormatWarning(UserWarning):
             from sportsdataverse.errors import UnsupportedPageFormatWarning
 
             warnings.filterwarnings("error", category=UnsupportedPageFormatWarning)
+
+    See Also:
+        * :mod:`warnings` -- ``filterwarnings`` / ``simplefilter`` turn it into an error or silence it
     """
 
 
@@ -386,6 +437,9 @@ class SchemaDriftWarning(UserWarning):
             import warnings
             from sportsdataverse.errors import SchemaDriftWarning
             warnings.filterwarnings("error", category=SchemaDriftWarning)
+
+    See Also:
+        * :mod:`warnings` -- ``filterwarnings`` / ``simplefilter`` turn it into an error or silence it
     """
 
 
@@ -585,6 +639,9 @@ class DefaultOddsWarning(UserWarning):
         Silence it deliberately::
 
             warnings.filterwarnings("ignore", category=DefaultOddsWarning)
+
+    See Also:
+        * :mod:`warnings` -- ``filterwarnings`` / ``simplefilter`` turn it into an error or silence it
     """
 
 
@@ -609,6 +666,9 @@ class PlayOrderWarning(UserWarning):
         Silence it deliberately::
 
             warnings.filterwarnings("ignore", category=PlayOrderWarning)
+
+    See Also:
+        * :mod:`warnings` -- ``filterwarnings`` / ``simplefilter`` turn it into an error or silence it
     """
 
 
@@ -643,6 +703,9 @@ def no_espn_data(response: "requests.Response") -> "requests.Response":
                 )
             except NoDataError:
                 resp = None
+
+    See Also:
+        * :func:`suggest_next_action` -- the hint appended to the 404 message
     """
     if response.status_code == 404:
         raise NoDataError(_format_404(response.url))
@@ -710,21 +773,28 @@ def suggest_next_action(url: str) -> str | None:
 
     Inspects the URL for the failing entity (team / athlete / event /
     season) and suggests the right ``find_*`` resolver call to recover.
-    Returns ``None`` when no specific suggestion fits.
 
-    Examples::
+    Args:
+        url: The ESPN URL that answered 404 (or ``code: 404``).
 
-        suggest_next_action(
-            "https://site.api.espn.com/.../basketball/nba/teams/99999/roster")
-        "Try `find_team(name, league='nba')` to look up a valid team_id."
+    Returns:
+        str | None: The hint, naming the league read from the URL; ``None`` when no specific
+        suggestion fits.
 
-        suggest_next_action(
-            "https://site.api.espn.com/.../baseball/mlb/athletes/0/overview")
-        "Try `find_athlete(name, league='mlb', team=...)` ..."
+    Example:
+        A bad team id::
 
-        suggest_next_action(
-            "https://site.api.espn.com/.../basketball/nba/summary?event=999")
-        "Try `find_event(date, league='nba', home=..., away=...)` ..."
+            from sportsdataverse.errors import suggest_next_action
+            suggest_next_action("https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/99999/roster")
+            # "Try `find_team(name, league='nba')` to look up a valid team_id, then pass its `id` to the wrapper."
+
+        A bad event id::
+
+            suggest_next_action("https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=999")
+            # "Try `find_event(date, league='nba', home=..., away=...)` to look up a valid event_id."
+
+    See Also:
+        * :func:`sportsdataverse.find.find_team` / ``find_athlete`` / ``find_event`` -- the resolvers it names
     """
     league = _infer_league(url) or "<league>"
 

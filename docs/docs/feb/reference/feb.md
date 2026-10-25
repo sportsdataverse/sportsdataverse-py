@@ -76,8 +76,6 @@ Game header: competition, tip-off, venue, officials, status, both teams and the 
 feb_game_info(game_id=2535725)
 ```
 
-_Last validated n/a._
-
 ## feb_period_scores
 
 Points each team scored in each period of a game.
@@ -116,8 +114,6 @@ Points each team scored in each period of a game.
 ```python
 feb_period_scores(game_id=2535725)
 ```
-
-_Last validated n/a._
 
 ## feb_team_stats
 
@@ -193,8 +189,6 @@ Team totals of both teams in a game: shooting, rebounds, assists, turnovers, fou
 feb_team_stats(game_id=2535725)
 ```
 
-_Last validated n/a._
-
 ## feb_player_box
 
 Per-player box score of a game: minutes, points, shooting splits, rebounds, assists, fouls and plus/minus.
@@ -268,8 +262,6 @@ Per-player box score of a game: minutes, points, shooting splits, rebounds, assi
 feb_player_box(game_id=2535725)
 ```
 
-_Last validated n/a._
-
 ## feb_pbp
 
 Play-by-play of a game (KeyFacts): every shot, rebound, foul, substitution and timeout, in Spanish text with coded actions from 2025-26.
@@ -332,8 +324,6 @@ Play-by-play of a game (KeyFacts): every shot, rebound, foul, substitution and t
 feb_pbp(game_id=2535725)
 ```
 
-_Last validated n/a._
-
 ## feb_shots
 
 Every field-goal attempt of a game with its court position (percent of a full-court image).
@@ -379,8 +369,6 @@ Every field-goal attempt of a game with its court position (percent of a full-co
 ```python
 feb_shots(game_id=2535725)
 ```
-
-_Last validated n/a._
 
 ## feb_leaders
 
@@ -428,8 +416,6 @@ Each team's top players of a game by points, rebounds, assists and fouls.
 ```python
 feb_leaders(game_id=2535725)
 ```
-
-_Last validated n/a._
 
 ## feb_overview
 
@@ -490,8 +476,6 @@ Today's (or the latest) games of every live FEB competition, with scores and sta
 feb_overview()
 ```
 
-_Last validated n/a._
-
 ## feb_schedule
 
 Full schedule of one group (phase) of a competition season: every round, game, result and team-season id.
@@ -546,8 +530,6 @@ Full schedule of one group (phase) of a competition season: every round, game, r
 feb_schedule(group=1, season=2027)
 ```
 
-_Last validated n/a._
-
 ## feb_results
 
 Latest round's results and the next round's fixtures of a competition season.
@@ -601,8 +583,6 @@ Latest round's results and the next round's fixtures of a competition season.
 feb_results(group=1, season=2027)
 ```
 
-_Last validated n/a._
-
 ## feb_standings
 
 League table of a competition season (live standings, or the final classification once it is over).
@@ -655,5 +635,3 @@ League table of a competition season (live standings, or the final classificatio
 ```python
 feb_standings(group=1, season=2027)
 ```
-
-_Last validated n/a._

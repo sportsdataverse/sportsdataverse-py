@@ -1,7 +1,7 @@
 ---
 title: "CFB — On3 Recruit Database (api.on3.com) — Recruitment"
 sidebar_label: "Recruitment"
-sidebar_position: 10
+sidebar_position: 8
 description: "CFB — On3 Recruit Database (api.on3.com) — Recruitment — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -41,8 +41,6 @@ No returns table is published for this endpoint: no committed capture with rows;
 on3_recruitment_primary_recruitment_evaluation(recruitment_key=270036)
 ```
 
-_Last validated n/a._
-
 ## on3_recruitment_recruitment_evaluations
 
 GET /rdb/v1/recruitment/{recruitmentKey}/recruitment-evaluations
@@ -76,8 +74,6 @@ No returns table is published for this endpoint: its committed capture has 0 row
 ```python
 on3_recruitment_recruitment_evaluations(recruitment_key=270036)
 ```
-
-_Last validated n/a._
 
 ## on3_recruitments_latest_rpm_picks
 
@@ -360,8 +356,6 @@ Latest RPM (prediction) picks feed — paged {list,pagination}
 on3_recruitments_latest_rpm_picks()
 ```
 
-_Last validated n/a._
-
 ## on3_recruitments_profile
 
 GET /rdb/v1/recruitments/{recKey}/profile
@@ -488,8 +482,6 @@ GET /rdb/v1/recruitments/{recKey}/profile
 on3_recruitments_profile(rec_key=270036)
 ```
 
-_Last validated n/a._
-
 ## on3_recruitments_rpm_picks
 
 GET /rdb/v1/recruitments/{recKey}/rpm-picks
@@ -523,8 +515,6 @@ No returns table is published for this endpoint: its committed capture has 0 row
 ```python
 on3_recruitments_rpm_picks(rec_key=270036)
 ```
-
-_Last validated n/a._
 
 ## on3_recruitments_rpm_summary
 
@@ -562,5 +552,3 @@ GET /rdb/v1/recruitments/{recKey}/rpm-summary
 ```python
 on3_recruitments_rpm_summary(rec_key=270036)
 ```
-
-_Last validated n/a._

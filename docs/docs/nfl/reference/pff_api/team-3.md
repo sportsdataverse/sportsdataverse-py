@@ -1666,5 +1666,3 @@ One of nineteen player reports for a team, one row per player
 ```python
 pff_api_team_report(league='nfl', report='offense', season=2022, team='cincinnati-bengals')
 ```
-
-_Last validated n/a._

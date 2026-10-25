@@ -68,8 +68,6 @@ Player box score of a finished game, both sides, plus a team rebounds/turnovers 
 cba_player_box(schedule_id=100105799)
 ```
 
-_Last validated n/a._
-
 ## cba_player_advanced
 
 Advanced player box of a finished game (usage, true shooting, rebound/steal/block rates, zone splits), one row per player.
@@ -147,8 +145,6 @@ Advanced player box of a finished game (usage, true shooting, rebound/steal/bloc
 cba_player_advanced(schedule_id=100105799)
 ```
 
-_Last validated n/a._
-
 ## cba_player_extras
 
 Fast-break points, dunk points and paint points per player of a finished game, one row per player.
@@ -193,8 +189,6 @@ Fast-break points, dunk points and paint points per player of a finished game, o
 ```python
 cba_player_extras(schedule_id=100105799)
 ```
-
-_Last validated n/a._
 
 ## cba_player_base
 
@@ -281,8 +275,6 @@ Season player box (one page of the season player table).
 cba_player_base(season=2026, team_id=29128)
 ```
 
-_Last validated n/a._
-
 ## cba_player_offensive
 
 Season player offensive rates (one page).
@@ -361,5 +353,3 @@ Season player offensive rates (one page).
 ```python
 cba_player_offensive(season=2026, team_id=29128)
 ```
-
-_Last validated n/a._

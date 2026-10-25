@@ -656,7 +656,7 @@ frames:
     type: character
   - description: ''
     name: id
-    type: integer
+    type: character
   - description: ''
     name: name
     type: character
@@ -665,7 +665,7 @@ frames:
     type: character
   - description: ''
     name: conferences_1_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_1_name
     type: character
@@ -674,7 +674,7 @@ frames:
     type: character
   - description: ''
     name: conferences_4_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_4_name
     type: character
@@ -683,7 +683,7 @@ frames:
     type: character
   - description: ''
     name: conferences_6_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_6_name
     type: character
@@ -692,7 +692,7 @@ frames:
     type: character
   - description: ''
     name: conferences_7_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_7_name
     type: character
@@ -701,7 +701,7 @@ frames:
     type: character
   - description: ''
     name: conferences_8_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_8_name
     type: character
@@ -710,7 +710,7 @@ frames:
     type: character
   - description: ''
     name: conferences_11_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_11_name
     type: character
@@ -719,7 +719,7 @@ frames:
     type: character
   - description: ''
     name: conferences_71_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_71_name
     type: character
@@ -728,7 +728,7 @@ frames:
     type: character
   - description: ''
     name: conferences_72_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_72_name
     type: character
@@ -737,7 +737,7 @@ frames:
     type: character
   - description: ''
     name: conferences_87_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_87_name
     type: character
@@ -746,7 +746,7 @@ frames:
     type: character
   - description: ''
     name: conferences_90_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_90_name
     type: character
@@ -755,7 +755,7 @@ frames:
     type: character
   - description: ''
     name: conferences_90_subdivisions_1_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_90_subdivisions_1_name
     type: character
@@ -764,7 +764,7 @@ frames:
     type: character
   - description: ''
     name: conferences_90_subdivisions_2_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_90_subdivisions_2_name
     type: character
@@ -773,7 +773,7 @@ frames:
     type: character
   - description: ''
     name: conferences_122_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_122_name
     type: character
@@ -782,7 +782,7 @@ frames:
     type: character
   - description: ''
     name: conferences_13_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_13_name
     type: character
@@ -791,7 +791,7 @@ frames:
     type: character
   - description: ''
     name: conferences_14_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_14_name
     type: character
@@ -800,7 +800,7 @@ frames:
     type: character
   - description: ''
     name: conferences_15_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_15_name
     type: character
@@ -809,7 +809,7 @@ frames:
     type: character
   - description: ''
     name: conferences_17_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_17_name
     type: character
@@ -818,7 +818,7 @@ frames:
     type: character
   - description: ''
     name: conferences_19_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_19_name
     type: character
@@ -827,7 +827,7 @@ frames:
     type: character
   - description: ''
     name: conferences_20_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_20_name
     type: character
@@ -836,7 +836,7 @@ frames:
     type: character
   - description: ''
     name: conferences_21_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_21_name
     type: character
@@ -845,7 +845,7 @@ frames:
     type: character
   - description: ''
     name: conferences_22_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_22_name
     type: character
@@ -854,7 +854,7 @@ frames:
     type: character
   - description: ''
     name: conferences_23_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_23_name
     type: character
@@ -863,7 +863,7 @@ frames:
     type: character
   - description: ''
     name: conferences_23_subdivisions_1_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_23_subdivisions_1_name
     type: character
@@ -872,7 +872,7 @@ frames:
     type: character
   - description: ''
     name: conferences_23_subdivisions_2_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_23_subdivisions_2_name
     type: character
@@ -881,7 +881,7 @@ frames:
     type: character
   - description: ''
     name: conferences_73_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_73_name
     type: character
@@ -890,7 +890,7 @@ frames:
     type: character
   - description: ''
     name: conferences_74_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_74_name
     type: character
@@ -899,7 +899,7 @@ frames:
     type: character
   - description: ''
     name: conferences_98_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_98_name
     type: character
@@ -908,7 +908,7 @@ frames:
     type: character
   - description: ''
     name: conferences_282_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_282_name
     type: character
@@ -917,7 +917,7 @@ frames:
     type: character
   - description: ''
     name: conferences_283_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_283_name
     type: character
@@ -926,7 +926,7 @@ frames:
     type: character
   - description: ''
     name: conferences_25_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_25_name
     type: character
@@ -935,7 +935,7 @@ frames:
     type: character
   - description: ''
     name: conferences_27_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_27_name
     type: character
@@ -944,7 +944,7 @@ frames:
     type: character
   - description: ''
     name: conferences_28_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_28_name
     type: character
@@ -953,7 +953,7 @@ frames:
     type: character
   - description: ''
     name: conferences_29_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_29_name
     type: character
@@ -962,7 +962,7 @@ frames:
     type: character
   - description: ''
     name: conferences_33_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_33_name
     type: character
@@ -971,7 +971,7 @@ frames:
     type: character
   - description: ''
     name: conferences_34_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_34_name
     type: character
@@ -980,7 +980,7 @@ frames:
     type: character
   - description: ''
     name: conferences_35_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_35_name
     type: character
@@ -989,7 +989,7 @@ frames:
     type: character
   - description: ''
     name: conferences_36_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_36_name
     type: character
@@ -998,7 +998,7 @@ frames:
     type: character
   - description: ''
     name: conferences_37_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_37_name
     type: character
@@ -1007,7 +1007,7 @@ frames:
     type: character
   - description: ''
     name: conferences_97_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_97_name
     type: character
@@ -1016,7 +1016,7 @@ frames:
     type: character
   - description: ''
     name: conferences_99_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_99_name
     type: character
@@ -1025,7 +1025,7 @@ frames:
     type: character
   - description: ''
     name: conferences_102_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_102_name
     type: character
@@ -1034,7 +1034,7 @@ frames:
     type: character
   - description: ''
     name: conferences_107_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_107_name
     type: character
@@ -1043,7 +1043,7 @@ frames:
     type: character
   - description: ''
     name: conferences_121_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_121_name
     type: character
@@ -1052,7 +1052,7 @@ frames:
     type: character
   - description: ''
     name: conferences_123_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_123_name
     type: character
@@ -1061,7 +1061,7 @@ frames:
     type: character
   - description: ''
     name: conferences_127_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_127_name
     type: character
@@ -1070,7 +1070,7 @@ frames:
     type: character
   - description: ''
     name: conferences_128_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_128_name
     type: character
@@ -1079,7 +1079,7 @@ frames:
     type: character
   - description: ''
     name: conferences_285_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_285_name
     type: character
@@ -1088,7 +1088,7 @@ frames:
     type: character
   - description: ''
     name: conferences_26_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_26_name
     type: character
@@ -1097,7 +1097,7 @@ frames:
     type: character
   - description: ''
     name: conferences_30_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_30_name
     type: character
@@ -1106,7 +1106,7 @@ frames:
     type: character
   - description: ''
     name: conferences_41_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_41_name
     type: character
@@ -1115,7 +1115,7 @@ frames:
     type: character
   - description: ''
     name: conferences_46_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_46_name
     type: character
@@ -1124,7 +1124,7 @@ frames:
     type: character
   - description: ''
     name: conferences_49_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_49_name
     type: character
@@ -1133,7 +1133,7 @@ frames:
     type: character
   - description: ''
     name: conferences_51_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_51_name
     type: character
@@ -1142,7 +1142,7 @@ frames:
     type: character
   - description: ''
     name: conferences_53_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_53_name
     type: character
@@ -1151,7 +1151,7 @@ frames:
     type: character
   - description: ''
     name: conferences_55_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_55_name
     type: character
@@ -1160,7 +1160,7 @@ frames:
     type: character
   - description: ''
     name: conferences_56_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_56_name
     type: character
@@ -1169,7 +1169,7 @@ frames:
     type: character
   - description: ''
     name: conferences_57_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_57_name
     type: character
@@ -1178,7 +1178,7 @@ frames:
     type: character
   - description: ''
     name: conferences_76_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_76_name
     type: character
@@ -1187,7 +1187,7 @@ frames:
     type: character
   - description: ''
     name: conferences_79_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_79_name
     type: character
@@ -1196,7 +1196,7 @@ frames:
     type: character
   - description: ''
     name: conferences_93_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_93_name
     type: character
@@ -1205,7 +1205,7 @@ frames:
     type: character
   - description: ''
     name: conferences_105_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_105_name
     type: character
@@ -1214,7 +1214,7 @@ frames:
     type: character
   - description: ''
     name: conferences_106_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_106_name
     type: character
@@ -1223,7 +1223,7 @@ frames:
     type: character
   - description: ''
     name: conferences_109_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_109_name
     type: character
@@ -1232,7 +1232,7 @@ frames:
     type: character
   - description: ''
     name: conferences_113_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_113_name
     type: character
@@ -1241,7 +1241,7 @@ frames:
     type: character
   - description: ''
     name: conferences_114_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_114_name
     type: character
@@ -1250,7 +1250,7 @@ frames:
     type: character
   - description: ''
     name: conferences_129_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_129_name
     type: character
@@ -1259,7 +1259,7 @@ frames:
     type: character
   - description: ''
     name: conferences_130_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_130_name
     type: character
@@ -1268,7 +1268,7 @@ frames:
     type: character
   - description: ''
     name: conferences_132_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_132_name
     type: character
@@ -1277,7 +1277,7 @@ frames:
     type: character
   - description: ''
     name: conferences_48_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_48_name
     type: character
@@ -1286,7 +1286,7 @@ frames:
     type: character
   - description: ''
     name: conferences_62_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_62_name
     type: character
@@ -1295,7 +1295,7 @@ frames:
     type: character
   - description: ''
     name: conferences_68_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_68_name
     type: character
@@ -1304,7 +1304,7 @@ frames:
     type: character
   - description: ''
     name: conferences_69_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_69_name
     type: character
@@ -1313,7 +1313,7 @@ frames:
     type: character
   - description: ''
     name: conferences_70_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_70_name
     type: character
@@ -1322,7 +1322,7 @@ frames:
     type: character
   - description: ''
     name: conferences_77_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_77_name
     type: character
@@ -1331,7 +1331,7 @@ frames:
     type: character
   - description: ''
     name: conferences_103_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_103_name
     type: character
@@ -1340,7 +1340,7 @@ frames:
     type: character
   - description: ''
     name: conferences_104_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_104_name
     type: character
@@ -1349,7 +1349,7 @@ frames:
     type: character
   - description: ''
     name: conferences_115_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_115_name
     type: character
@@ -1358,7 +1358,7 @@ frames:
     type: character
   - description: ''
     name: conferences_116_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_116_name
     type: character
@@ -1367,7 +1367,7 @@ frames:
     type: character
   - description: ''
     name: conferences_117_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_117_name
     type: character
@@ -1376,7 +1376,7 @@ frames:
     type: character
   - description: ''
     name: conferences_119_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_119_name
     type: character
@@ -1385,7 +1385,7 @@ frames:
     type: character
   - description: ''
     name: conferences_133_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_133_name
     type: character
@@ -1394,7 +1394,7 @@ frames:
     type: character
   - description: ''
     name: conferences_135_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_135_name
     type: character
@@ -1403,7 +1403,7 @@ frames:
     type: character
   - description: ''
     name: conferences_136_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_136_name
     type: character
@@ -1412,7 +1412,7 @@ frames:
     type: character
   - description: ''
     name: conferences_137_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_137_name
     type: character
@@ -1421,7 +1421,7 @@ frames:
     type: character
   - description: ''
     name: conferences_139_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_139_name
     type: character
@@ -1430,7 +1430,7 @@ frames:
     type: character
   - description: ''
     name: conferences_141_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_141_name
     type: character
@@ -1439,7 +1439,7 @@ frames:
     type: character
   - description: ''
     name: conferences_281_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_281_name
     type: character
@@ -1448,7 +1448,7 @@ frames:
     type: character
   - description: ''
     name: conferences_284_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_284_name
     type: character
@@ -1457,7 +1457,7 @@ frames:
     type: character
   - description: ''
     name: conferences_125_id
-    type: numeric
+    type: character
   - description: ''
     name: conferences_125_name
     type: character

@@ -37,6 +37,12 @@ logger = logging.getLogger(__name__)
 _SDV_RELEASES = "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/"
 _RAW_DATA = "https://raw.githubusercontent.com/sportsdataverse/"
 
+#: The browser User-Agent the runtimes send to hosts that reject a bare client (one copy, A-L59).
+#: ``realgm`` and ``nba_salary_draft`` send a different string (``Chrome/124.0.0.0``) and keep their own.
+_CHROME_UA = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+)
+
 
 def _is_missing(v: Any) -> bool:
     """Whether a pandas cell is a missing value: ``None``, a float NaN, ``pd.NA`` or ``pd.NaT``."""
@@ -455,6 +461,22 @@ def _json_body(resp: Any, url: str) -> Any:
     else:
         return _json_data(url, status, body)
     return _json_text(url, status, getattr(resp, "text", "") or "")
+
+
+def _referer_get(
+    fetch: Callable[..., Any], referer: str, url: str, params: Optional[dict], kwargs: dict[str, Any]
+) -> Any:
+    """The shared body of the ``mls_api`` / ``nwsl_api`` getters (A-L8): GET ``url`` as JSON with a site
+    ``Referer`` and :data:`_CHROME_UA`, a caller's ``headers`` mapping winning key-by-key.
+
+    ``fetch`` is the calling module's own ``download``, read at call time, so patching
+    ``<runtime>.download`` still reaches the request.
+    """
+    headers = {"Referer": referer, "User-Agent": _CHROME_UA, **(kwargs.pop("headers", None) or {})}
+    clean = {k: v for k, v in (params or {}).items() if v is not None}
+    with _transport_errors(url):
+        resp = fetch(url=url, params=clean, headers=headers, **kwargs)
+    return _json_body(resp, url)
 
 
 #: Re-fetches of a 2xx JSON body that arrived cut off (see :func:`_download_json`).

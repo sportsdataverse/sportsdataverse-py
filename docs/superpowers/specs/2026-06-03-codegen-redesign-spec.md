@@ -37,6 +37,8 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+> **Superseded (historical record).** This document describes the codegen design as it was planned in June 2026. The bootstraps it names (`extract.py`, `extract_native.py`, `openapi_to_endpoints.py`, `extract_releases.py`), the `tools/codegen/_generated/` staging copies and `sportsdataverse/_common_espn.py` have since been deleted. The current pipeline is documented in `docs/docs/architecture/codegen.md`.
+
 # API Function Codegen Redesign — Specification
 
 **Date:** 2026-06-03 (rev. 2026-06-04)

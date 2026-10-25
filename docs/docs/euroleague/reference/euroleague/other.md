@@ -63,8 +63,6 @@ Clubs in a season.
 euroleague_clubs(competition_code='E', season_code='E2025')
 ```
 
-_Last validated n/a._
-
 ## euroleague_competitions
 
 Competitions (EuroLeague E, EuroCup U, ...).
@@ -100,8 +98,6 @@ Competitions (EuroLeague E, EuroCup U, ...).
 ```python
 euroleague_competitions()
 ```
-
-_Last validated n/a._
 
 ## euroleague_games
 
@@ -236,8 +232,6 @@ Games of a season.
 euroleague_games(competition_code='E', season_code='E2025')
 ```
 
-_Last validated n/a._
-
 ## euroleague_people
 
 People (players, coaches) in a season.
@@ -319,8 +313,6 @@ People (players, coaches) in a season.
 ```python
 euroleague_people(competition_code='E', season_code='E2025')
 ```
-
-_Last validated n/a._
 
 ## euroleague_player_stats
 
@@ -426,8 +418,6 @@ Season player stats, traditional (box-score totals or per-game averages) or adva
 euroleague_player_stats(competition_code='E', season_code='E2025')
 ```
 
-_Last validated n/a._
-
 ## euroleague_rounds
 
 Rounds of a season.
@@ -471,8 +461,6 @@ Rounds of a season.
 ```python
 euroleague_rounds(competition_code='E', season_code='E2025')
 ```
-
-_Last validated n/a._
 
 ## euroleague_seasons
 
@@ -524,8 +512,6 @@ Seasons of a competition.
 ```python
 euroleague_seasons(competition_code='E')
 ```
-
-_Last validated n/a._
 
 ## euroleague_standings
 
@@ -668,8 +654,6 @@ Standings as of a round: basic (W-L, points, home/away/last-10 records), calenda
 euroleague_standings(competition_code='E', round=1, season_code='E2025')
 ```
 
-_Last validated n/a._
-
 ## euroleague_team_stats
 
 Season team stats, traditional (box-score totals or per-game averages) or advanced (eFG%, TS%, four-factor style rates), one row per team.
@@ -765,5 +749,3 @@ Season team stats, traditional (box-score totals or per-game averages) or advanc
 ```python
 euroleague_team_stats(competition_code='E', season_code='E2025')
 ```
-
-_Last validated n/a._

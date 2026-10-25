@@ -366,7 +366,7 @@ predictions themselves (the binding non-market boundary).
 | `games` | `DataFrame` |  | One row per game: `game_id` (Utf8), `home_team_id` / `away_team_id` (Utf8 team abbreviations), `neutral_site` (Boolean). |
 | `ratings` | `DataFrame` |  | The `sportsdataverse.nfl.nfl_ratings.nfl_ratings` output (needs `team_id`, `adj_off_epa`, `adj_def_epa`, `adj_net`). |
 | `era` | `str` | `'modern'` | Constants era key. |
-| `odds` | `DataFrame \| None` | `None` | Optional market frame (`game_id`, `close_spread_home` -- the market's expected home margin, positive = home favored). Games absent from `odds` get a null `market_edge`. |
+| `odds` | `DataFrame \| None` | `None` | Optional market frame (`game_id`, `close_spread_home` -- the market's expected home margin, positive = home favored). A sportsbook quotes the home favourite as `-7`: negate the quoted line (`close_spread_home = 7`) before passing it. Nothing in the package builds this column. Games absent from `odds` get a null `market_edge`. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame. |
 
 **Returns**

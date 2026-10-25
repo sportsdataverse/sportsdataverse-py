@@ -49,8 +49,6 @@ Every competition edition (season) the API knows, one row per edition.
 acb_competition_editions()
 ```
 
-_Last validated n/a._
-
 ## acb_competition_rounds
 
 The rounds of every competition edition: the round ids to crawl.
@@ -93,8 +91,6 @@ The rounds of every competition edition: the round ids to crawl.
 acb_competition_rounds()
 ```
 
-_Last validated n/a._
-
 ## acb_competition_weeks
 
 The weeks of every competition edition: the week ids to crawl.
@@ -135,8 +131,6 @@ The weeks of every competition edition: the week ids to crawl.
 ```python
 acb_competition_weeks()
 ```
-
-_Last validated n/a._
 
 ## acb_competition_current
 
@@ -189,5 +183,3 @@ The API's current pointers: competition, edition, week, round and match.
 ```python
 acb_competition_current()
 ```
-
-_Last validated n/a._

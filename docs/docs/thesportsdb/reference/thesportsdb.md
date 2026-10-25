@@ -93,8 +93,6 @@ One event.
 thesportsdb_event(id='2267073')
 ```
 
-_Last validated n/a._
-
 ## thesportsdb_league
 
 One league.
@@ -176,8 +174,6 @@ One league.
 ```python
 thesportsdb_league(id='4328')
 ```
-
-_Last validated n/a._
 
 ## thesportsdb_league_next_events
 
@@ -262,8 +258,6 @@ Next 15 events of a league.
 ```python
 thesportsdb_league_next_events(id='4328')
 ```
-
-_Last validated n/a._
 
 ## thesportsdb_league_teams
 
@@ -363,8 +357,6 @@ Teams in a league (by league name).
 thesportsdb_league_teams(league_name='English Premier League')
 ```
 
-_Last validated n/a._
-
 ## thesportsdb_leagues
 
 All leagues.
@@ -401,8 +393,6 @@ All leagues.
 ```python
 thesportsdb_leagues()
 ```
-
-_Last validated n/a._
 
 ## thesportsdb_player
 
@@ -510,8 +500,6 @@ One player.
 thesportsdb_player(id='34145937')
 ```
 
-_Last validated n/a._
-
 ## thesportsdb_player_search
 
 Search players by name.
@@ -559,8 +547,6 @@ Search players by name.
 ```python
 thesportsdb_player_search(player_name='Danny Welbeck')
 ```
-
-_Last validated n/a._
 
 ## thesportsdb_season_events
 
@@ -628,8 +614,6 @@ Events of a league-season.
 thesportsdb_season_events(id='4328', season='2025-2026')
 ```
 
-_Last validated n/a._
-
 ## thesportsdb_sports
 
 All sports.
@@ -670,8 +654,6 @@ All sports.
 ```python
 thesportsdb_sports()
 ```
-
-_Last validated n/a._
 
 ## thesportsdb_table
 
@@ -728,8 +710,6 @@ League table.
 ```python
 thesportsdb_table(league_id='4328', season='2025-2026')
 ```
-
-_Last validated n/a._
 
 ## thesportsdb_team
 
@@ -828,8 +808,6 @@ One team.
 ```python
 thesportsdb_team(id='133604')
 ```
-
-_Last validated n/a._
 
 ## thesportsdb_team_players
 
@@ -936,5 +914,3 @@ Players of a team.
 ```python
 thesportsdb_team_players(id='133604')
 ```
-
-_Last validated n/a._

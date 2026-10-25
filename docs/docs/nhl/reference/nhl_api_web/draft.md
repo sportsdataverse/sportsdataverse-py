@@ -66,8 +66,6 @@ Pull NHL draft picks for a year (and optionally one round).
 nhl_draft_picks(year=2024)
 ```
 
-_Last validated n/a._
-
 ## nhl_draft_rankings
 
 Pull NHL Central Scouting rankings for a draft year.
@@ -120,8 +118,6 @@ Pull NHL Central Scouting rankings for a draft year.
 ```python
 nhl_draft_rankings(year=2024)
 ```
-
-_Last validated n/a._
 
 ## nhl_draft_picks_now
 
@@ -179,8 +175,6 @@ Pull the current / most recent draft pick set.
 nhl_draft_picks_now()
 ```
 
-_Last validated n/a._
-
 ## nhl_draft_rankings_now
 
 Pull the current Central Scouting rankings.
@@ -232,8 +226,6 @@ Pull the current Central Scouting rankings.
 nhl_draft_rankings_now()
 ```
 
-_Last validated n/a._
-
 ## nhl_draft_tracker_picks_now
 
 Pull the live draft-tracker pick list (during the draft itself).
@@ -282,5 +274,3 @@ Pull the live draft-tracker pick list (during the draft itself).
 ```python
 nhl_draft_tracker_picks_now()
 ```
-
-_Last validated n/a._

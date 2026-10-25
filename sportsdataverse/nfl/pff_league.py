@@ -1,7 +1,7 @@
 """Self-contained per-league binder for the PFF Premium Stats flat stem.
 
-Replaces the retired ESPN ``make_league_module`` / ``_bind`` factory (which
-``sportsdataverse/_common_espn.py`` no longer provides) for the PFF stem. Given a shim
+Replaces the retired ESPN ``make_league_module`` / ``_bind`` factory (deleted with
+the rest of the runtime factory) for the PFF stem. Given a shim
 namespace and a league slug, it installs league-bound copies of the generated
 :mod:`sportsdataverse.nfl.pff_core` wrappers:
 

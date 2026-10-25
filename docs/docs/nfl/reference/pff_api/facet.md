@@ -76,8 +76,6 @@ League-wide offense summary leaderboard
 pff_api_facet_offense_summary(league='nfl', season='2022')
 ```
 
-_Last validated n/a._
-
 ## pff_api_facet_offense_blocking
 
 League-wide blocking leaderboard
@@ -154,8 +152,6 @@ League-wide blocking leaderboard
 pff_api_facet_offense_blocking(league='nfl', season='2022')
 ```
 
-_Last validated n/a._
-
 ## pff_api_facet_offense_pass_blocking
 
 League-wide pass-blocking leaderboard
@@ -231,8 +227,6 @@ League-wide pass-blocking leaderboard
 pff_api_facet_offense_pass_blocking(league='nfl', season='2022')
 ```
 
-_Last validated n/a._
-
 ## pff_api_facet_offense_run_blocking
 
 League-wide run-blocking leaderboard
@@ -299,8 +293,6 @@ League-wide run-blocking leaderboard
 ```python
 pff_api_facet_offense_run_blocking(league='nfl', season='2022')
 ```
-
-_Last validated n/a._
 
 ## pff_api_facet_passing_allowed_pressure
 
@@ -378,8 +370,6 @@ League-wide pressure-allowed leaderboard
 ```python
 pff_api_facet_passing_allowed_pressure(league='nfl', season='2022')
 ```
-
-_Last validated n/a._
 
 ## pff_api_facet_passing_concept
 
@@ -636,5 +626,3 @@ League-wide passing-by-concept leaderboard
 ```python
 pff_api_facet_passing_concept(league='nfl', season='2022')
 ```
-
-_Last validated n/a._

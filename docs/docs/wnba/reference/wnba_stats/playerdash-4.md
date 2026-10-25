@@ -470,8 +470,6 @@ GET /stats/playerdashboardbylastngames
 wnba_stats_playerdashboardbylastngames(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_playerdashboardbyopponent
 
 GET /stats/playerdashboardbyopponent
@@ -798,5 +796,3 @@ GET /stats/playerdashboardbyopponent
 ```python
 wnba_stats_playerdashboardbyopponent(league_id='10', season='2024')
 ```
-
-_Last validated n/a._

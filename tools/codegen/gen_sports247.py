@@ -37,11 +37,15 @@ bytes — output depends solely on the curated tables above.
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
+
+try:  # imported as tools.codegen.<gen> (the tests)
+    from tools.codegen.gen_soccer_common import refs_root
+except ModuleNotFoundError:  # run as a script: this file's directory is sys.path[0]
+    from gen_soccer_common import refs_root
 
 ROOT = Path(__file__).resolve().parents[2]
 ENDPOINTS_PATH = ROOT / "tools/codegen/endpoints/sports247.yaml"
@@ -595,18 +599,8 @@ def _spec_path(short: str) -> str:
 
 def _load_spec() -> Optional[Dict[str, Any]]:
     """Locate + load the RDB OpenAPI spec, or None if unavailable (never fatal)."""
-    candidates: List[Path] = []
-    env = os.environ.get("SDV_INTERNAL_REFS_REPO")
-    if env:
-        candidates.append(Path(env) / "247sports/recruit-database.openapi.yaml")
-    candidates += [
-        ROOT.parents[2] / "sdv-internal-refs/247sports/recruit-database.openapi.yaml",
-        Path.home() / "Documents/GitHub-Data/sdv-dev/sdv-internal-refs/247sports/recruit-database.openapi.yaml",
-    ]
-    for path in candidates:
-        if path.is_file():
-            return yaml.safe_load(path.read_text(encoding="utf-8"))
-    return None
+    path = refs_root() / "247sports/recruit-database.openapi.yaml"
+    return yaml.safe_load(path.read_text(encoding="utf-8")) if path.is_file() else None
 
 
 def _validate_against_spec() -> None:

@@ -86,5 +86,3 @@ ESPN endpoint.
 ```python
 espn_cfb_fpi(season=2024)
 ```
-
-_Last validated n/a._

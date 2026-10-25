@@ -81,8 +81,6 @@ Player career totals by season.
 shl_athlete_career(athlete_uuid='qQ9-349c7WDv6', master_site_instance_id='shl1_shl')
 ```
 
-_Last validated n/a._
-
 ## shl_athlete_details
 
 Player bio plus playerExtIds (isa, ramses_legacy, ...).
@@ -134,8 +132,6 @@ Player bio plus playerExtIds (isa, ramses_legacy, ...).
 ```python
 shl_athlete_details(athlete_uuid='qQ9-349c7WDv6')
 ```
-
-_Last validated n/a._
 
 ## shl_athlete_game_log
 
@@ -209,8 +205,6 @@ Player game log of one season.
 shl_athlete_game_log(athlete_uuid='qQ9-349c7WDv6', master_site_instance_id='shl1_shl', season=2026)
 ```
 
-_Last validated n/a._
-
 ## shl_athlete_profile
 
 Player profile: age, height, weight, position.
@@ -280,8 +274,6 @@ Player profile: age, height, weight, position.
 shl_athlete_profile(athlete_uuid='qQ9-349c7WDv6', master_site_instance_id='shl1_shl')
 ```
 
-_Last validated n/a._
-
 ## shl_athlete_seasons
 
 Seasons a player has stats for.
@@ -320,5 +312,3 @@ Seasons a player has stats for.
 ```python
 shl_athlete_seasons(athlete_uuid='qQ9-349c7WDv6', master_site_instance_id='shl1_shl')
 ```
-
-_Last validated n/a._

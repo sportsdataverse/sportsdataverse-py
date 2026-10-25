@@ -58,6 +58,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [ValidationError](additional/stats-ncaa-org.md#ValidationError) | The 3 ways a lineup can be declared invalid, in Scala declaration |
 | [add_missing_players](additional/stats-ncaa-org.md#add_missing_players) | Back-fills a clump whose lineups carry TOO FEW players |
 | [add_stats_to_lineups](additional/stats-ncaa-org.md#add_stats_to_lineups) | Enrich a lineup with play-by-play stats for both team and opponent |
+| [aggregate_stints](additional/stats-ncaa-org.md#aggregate_stints) | Collapse id-resolved possessions into matchup stints. |
 | [alias_combos](additional/stats-ncaa-org.md#alias_combos) | Pair each of `combos`' three name variants with a shared alias |
 | [analyze_and_fix_clumps](additional/stats-ncaa-org.md#analyze_and_fix_clumps) | Runs the full self-healing fixer pipeline over one bad-lineup clump |
 | [attr_regex_filter](additional/stats-ncaa-org.md#attr_regex_filter) | JSoup `[attr~=regex]`: candidates whose `attr` value matches |
@@ -67,7 +68,9 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [build_lineup_id](additional/stats-ncaa-org.md#build_lineup_id) | Builds a lineup id from a list of players (`ExtractorUtils.scala:602-606`): |
 | [build_new_player_list](additional/stats-ncaa-org.md#build_new_player_list) | Builds a player list from the previous (or current, if pre-initialized) |
 | [build_partial_lineup_list](additional/stats-ncaa-org.md#build_partial_lineup_list) | Converts a stream of partially parsed events into a list of lineup |
+| [build_person_keys](additional/stats-ncaa-org.md#build_person_keys) | Synthesize a cross-season `person_id` for roster rows. |
 | [build_player_code](additional/stats-ncaa-org.md#build_player_code) | Build a short player code from a name, in any of the NCAA formats |
+| [build_player_xwalk](additional/stats-ncaa-org.md#build_player_xwalk) | Build the `(team, player_key) -> player_id` bridge from `team_rosters`. |
 | [build_strength_adjusted_stats](additional/stats-ncaa-org.md#build_strength_adjusted_stats) | Run the full strength-adjustment compute over a team list. |
 | [build_sub_error](additional/stats-ncaa-org.md#build_sub_error) | Build a location-less `ParseError` from id fragments |
 | [cached_path](additional/stats-ncaa-org.md#cached_path) | Return the on-disk cache file path for *path*, without touching it. |
@@ -80,14 +83,16 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [create_lineup_data](additional/stats-ncaa-org.md#create_lineup_data) | Combines the different methods to build a set of lineup events |
 | [create_player_events](additional/stats-ncaa-org.md#create_player_events) | Split a lineup event into one :class:`~sportsdataverse.mbb |
 | [create_shot_event_data](additional/stats-ncaa-org.md#create_shot_event_data) | Parses a game page's SVG shot map into a list of :class:`~sportsdataverse |
-| [duration_from_period](additional/stats-ncaa-org.md#duration_from_period) | The game duration (minutes elapsed) once `period` has completed |
-| [enrich_and_reverse_game_events](additional/stats-ncaa-org.md#enrich_and_reverse_game_events) | Inserts game-break events and turns descending per-row times into |
-| [enrich_lineup](additional/stats-ncaa-org.md#enrich_lineup) | Populate `pts`/`plus_minus` from the score delta, then run the |
+| [current_ncaa_team_alts](additional/stats-ncaa-org-2.md#current_ncaa_team_alts) | The two team names from a *current* (2026) stats.ncaa.org game page. |
+| [duration_from_period](additional/stats-ncaa-org-2.md#duration_from_period) | The game duration (minutes elapsed) once `period` has completed |
+| [enrich_and_reverse_game_events](additional/stats-ncaa-org-2.md#enrich_and_reverse_game_events) | Inserts game-break events and turns descending per-row times into |
+| [enrich_lineup](additional/stats-ncaa-org-2.md#enrich_lineup) | Populate `pts`/`plus_minus` from the score delta, then run the |
 | [enrich_shot_events_with_pbp](additional/stats-ncaa-org-2.md#enrich_shot_events_with_pbp) | Enrich each shot with its play-by-play event + on-floor lineup |
 | [enrich_stats](additional/stats-ncaa-org-2.md#enrich_stats) | Fold a lineup's raw events into a counting-stat tree (``protected def |
 | [enrich_sub_error](additional/stats-ncaa-org-2.md#enrich_sub_error) | Adds top-level location information to a single sub-error, returning a |
 | [enrich_sub_errors](additional/stats-ncaa-org-2.md#enrich_sub_errors) | Adds top-level location information to a list of sub-errors generated |
 | [ensure_ev_uniqueness](additional/stats-ncaa-org-2.md#ensure_ev_uniqueness) | Nudge each event's `min` by a tiny per-index delta so truly |
+| [expand_xwalk_aliases](additional/stats-ncaa-org-2.md#expand_xwalk_aliases) | Add alias rows for on-floor names the exact key misses. |
 | [extract_player_from_ev](additional/stats-ncaa-org-2.md#extract_player_from_ev) | Resolve the player named in `pbp_event` to a |
 | [field_keys](additional/stats-ncaa-org-2.md#field_keys) | Off/def stat-key names for a field (`fieldKeys`, `ts:77-79`). |
 | [filter_matching_own](additional/stats-ncaa-org-2.md#filter_matching_own) | JSoup `:matchesOwn(regex)` applied to an already-computed candidate |
@@ -125,33 +130,44 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [name_in_v0_box_format](additional/stats-ncaa-org-2.md#name_in_v0_box_format) | Switch a v1-box-format name (`"first_name names"`) to v0-box format |
 | [ncaa_mbb_box_scores](additional/stats-ncaa-org-2.md#ncaa_mbb_box_scores) | Box scores for one or more NCAA games (bigballR `get_box_scores` port). |
 | [ncaa_mbb_date_games](additional/stats-ncaa-org-2.md#ncaa_mbb_date_games) | Discover every NCAA MBB game played on a date (bigballR `get_date_games`). |
-| [ncaa_mbb_join_pbp_shots](additional/stats-ncaa-org-2.md#ncaa_mbb_join_pbp_shots) | Attach shot-chart coordinates to play-by-play rows (bigballR |
+| [ncaa_mbb_join_pbp_shots](additional/stats-ncaa-org-3.md#ncaa_mbb_join_pbp_shots) | Attach shot-chart coordinates to play-by-play rows (bigballR |
 | [ncaa_mbb_player_stats](additional/stats-ncaa-org-3.md#ncaa_mbb_player_stats) | Aggregate bigballR-contract play-by-play into per-player box stats. |
 | [ncaa_mbb_possessions](additional/stats-ncaa-org-3.md#ncaa_mbb_possessions) | Aggregate bigballR-contract play-by-play into one row per possession. |
 | [ncaa_mbb_shot_locations](additional/stats-ncaa-org-3.md#ncaa_mbb_shot_locations) | Scrape MBB shot locations for one or more games (bigballR |
 | [ncaa_mbb_team_stats](additional/stats-ncaa-org-3.md#ncaa_mbb_team_stats) | Aggregate bigballR-contract play-by-play into per-team game stats. |
+| [normalize_player_key](additional/stats-ncaa-org-3.md#normalize_player_key) | Normalize a player name-code so possessions and rosters agree. |
+| [observed_pairs](additional/stats-ncaa-org-3.md#observed_pairs) | Distinct `(team, player)` pairs across the ten on-floor slots. |
 | [phase1_shot_event_enrichment](additional/stats-ncaa-org-3.md#phase1_shot_event_enrichment) | The court-geometry enrichment pass: ascending time, coordinate |
 | [playwright_transport](additional/stats-ncaa-org-3.md#playwright_transport) | Build the **suggested** stats.ncaa.org game-detail scraping transport. |
+| [possession_deciles](additional/stats-ncaa-org-3.md#possession_deciles) | Equal-count possession bins: median of every SE column, mean of every coverage flag. |
 | [remove_diacritics](additional/stats-ncaa-org-3.md#remove_diacritics) | Strip diacritical marks, e.g. `"Juhász"` -> `"Juhasz"` |
 | [remove_html_encoding](additional/stats-ncaa-org-3.md#remove_html_encoding) | Undo a handful of literal HTML entity escapes (``ExtractorUtils |
 | [reorder_and_reverse](additional/stats-ncaa-org-3.md#reorder_and_reverse) | Orders same-minute play-by-play events so subs never enclose the plays |
 | [reset_config](additional/stats-ncaa-org-3.md#reset_config) | Reset the active config to its env-var-derived defaults. |
+| [resolve_possessions](additional/stats-ncaa-org-3.md#resolve_possessions) | Attach a `player_id` to each of the ten on-floor slots. |
 | [right_kind_of_shot](additional/stats-ncaa-org-3.md#right_kind_of_shot) | Whether `pbp_event`'s shot type is compatible with `shot`'s |
 | [run_iterative_adjustment_with_hca](additional/stats-ncaa-org-3.md#run_iterative_adjustment_with_hca) | KenPom-style SoS + HCA fixed-point solver (`runIterativeAdjustmentWithHCA`, `ts:306-527`). |
 | [same_school](additional/stats-ncaa-org-3.md#same_school) | Whether two team-name spellings denote the same school. |
+| [season_slice](additional/stats-ncaa-org-3.md#season_slice) | Cut a POOLED fit's players back to ONE season's participants and exposure. |
 | [select_contains](additional/stats-ncaa-org-3.md#select_contains) | JSoup `root.select(sel + ":contains(text)")`: candidates whose full |
 | [select_matching](additional/stats-ncaa-org-3.md#select_matching) | JSoup `root.select(sel + ":matches(regex)")`: candidates whose full |
 | [select_matching_own](additional/stats-ncaa-org-3.md#select_matching_own) | JSoup `root.select(sel + ":matchesOwn(regex)")`: candidates whose |
 | [shot_js_to_html](additional/stats-ncaa-org-3.md#shot_js_to_html) | Converts client-side `addShot(...)` JS calls into parseable |
 | [shot_value](additional/stats-ncaa-org-3.md#shot_value) | Classify a play-by-play event string as a 3, a 2, or an assist |
+| [sides_from_box](additional/stats-ncaa-org-3.md#sides_from_box) | Lets the play-by-play and shot parsers reuse the pairing `get_box_lineup` |
+| [solve_rapm_league](additional/stats-ncaa-org-3.md#solve_rapm_league) | Weighted sparse joint O/D ridge over matchup stints. |
+| [split_half_se_check](additional/stats-ncaa-org-3.md#split_half_se_check) | Odd-vs-even-game refit: are the standard errors on the right scale? |
+| [stack_seasons](additional/stats-ncaa-org-3.md#stack_seasons) | Pool several seasons' stints into ONE decayed-weight design for `target`. |
 | [start_time_from_period](additional/stats-ncaa-org-3.md#start_time_from_period) | The game-clock time (minutes elapsed) a period starts at |
-| [sum_event_stats](additional/stats-ncaa-org-3.md#sum_event_stats) | Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models |
-| [sum_shot_infos](additional/stats-ncaa-org-3.md#sum_shot_infos) | Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models |
-| [td_at](additional/stats-ncaa-org-3.md#td_at) | JSoup `row >?> element("td:eq(n)")`: the `n`-th `<td>` child. |
-| [transform_shot_location](additional/stats-ncaa-org-3.md#transform_shot_location) | Transforms a raw SVG pixel location into feet from the basket, always |
-| [update_config](additional/stats-ncaa-org-3.md#update_config) | Update the active config in place. |
-| [validate_box_score](additional/stats-ncaa-org-3.md#validate_box_score) | Checks there are no duplicates in the lineup (``BoxscoreParser |
-| [validate_lineup](additional/stats-ncaa-org-3.md#validate_lineup) | Flags a lineup stint as internally inconsistent, via 3 independent |
+| [stint_exposure](additional/stats-ncaa-org-4.md#stint_exposure) | PLAYED, never a count of possessions the fit chose to believe. Callers that |
+| [sum_event_stats](additional/stats-ncaa-org-4.md#sum_event_stats) | Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models |
+| [sum_shot_infos](additional/stats-ncaa-org-4.md#sum_shot_infos) | Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models |
+| [td_at](additional/stats-ncaa-org-4.md#td_at) | JSoup `row >?> element("td:eq(n)")`: the `n`-th `<td>` child. |
+| [team_aggregate](additional/stats-ncaa-org-4.md#team_aggregate) | Model-implied team ratings from player coefficients. |
+| [transform_shot_location](additional/stats-ncaa-org-4.md#transform_shot_location) | Transforms a raw SVG pixel location into feet from the basket, always |
+| [update_config](additional/stats-ncaa-org-4.md#update_config) | Update the active config in place. |
+| [validate_box_score](additional/stats-ncaa-org-4.md#validate_box_score) | Checks there are no duplicates in the lineup (``BoxscoreParser |
+| [validate_lineup](additional/stats-ncaa-org-4.md#validate_lineup) | Flags a lineup stint as internally inconsistent, via 3 independent |
 
 ## KenPom
 

@@ -260,8 +260,6 @@ Passing under pressure for one player
 pff_api_player_passing_pressure(league='nfl', player_id=28022, season=2022)
 ```
 
-_Last validated n/a._
-
 ## pff_api_player_rushing_direction
 
 Rushing by direction for one player
@@ -316,8 +314,6 @@ Rushing by direction for one player
 ```python
 pff_api_player_rushing_direction(league='nfl', player_id=28022, season=2022)
 ```
-
-_Last validated n/a._
 
 ## pff_api_player_rushing_summary
 
@@ -419,5 +415,3 @@ Rushing summary for one player
 ```python
 pff_api_player_rushing_summary(league='nfl', player_id=28022, season=2022)
 ```
-
-_Last validated n/a._

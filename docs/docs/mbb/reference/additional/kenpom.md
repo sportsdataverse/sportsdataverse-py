@@ -1,7 +1,7 @@
 ---
 title: "MBB — additional Python functions — KenPom"
 sidebar_label: "KenPom"
-sidebar_position: 6
+sidebar_position: 7
 description: "MBB — additional Python functions — KenPom — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # MBB — additional Python functions — KenPom

@@ -17,7 +17,7 @@ from sportsdataverse.errors import NoDataError
 from sportsdataverse.hockeytech import hockeytech_api, resolve_season_id
 from sportsdataverse.hockeytech import _parsers as P
 from sportsdataverse.hockeytech._analytics import enrich_pbp
-from sportsdataverse.hockeytech._leagues import most_recent_season_yr
+from sportsdataverse.hockeytech._leagues import _season_id_from_payload, most_recent_season_yr
 
 __all__ = [
     "pwhl_schedule",
@@ -111,9 +111,13 @@ def most_recent_pwhl_season() -> int:
     return most_recent_season_yr(pwhl_season_id(), _LG)
 
 
-def _season_or_latest(season: Optional[int], season_id: Optional[int]) -> Optional[int]:
-    """The caller's season; the newest only when neither season nor season_id is given."""
-    return season if season is not None or season_id is not None else most_recent_pwhl_season()
+def _sid(season: Optional[int], season_id: Optional[int]) -> int:
+    """The caller's season id; the newest regular season's when neither is given, read from one
+    ``modulekit/seasons`` fetch (not one to pick the year and a second to resolve it)."""
+    if season is not None or season_id is not None:
+        return resolve_season_id(_LG, season=season, season_id=season_id)
+    payload = hockeytech_api(_LG, "modulekit", "seasons", {})
+    return _season_id_from_payload(_LG, payload, most_recent_season_yr(P.parse_seasons(payload), _LG))
 
 
 def pwhl_schedule(
@@ -161,7 +165,7 @@ def pwhl_schedule(
 
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
-    sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
+    sid = _sid(season, season_id)
     payload = hockeytech_api(_LG, "modulekit", "schedule", {"season_id": sid})
     return P.parse_schedule(payload, return_as_pandas, season_id=sid)
 
@@ -281,7 +285,7 @@ def pwhl_standings(
 
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
-    sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
+    sid = _sid(season, season_id)
     payload = hockeytech_api(
         _LG,
         "statviewfeed",
@@ -336,7 +340,7 @@ def pwhl_teams(
 
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
-    sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
+    sid = _sid(season, season_id)
     return P.parse_teams(hockeytech_api(_LG, "modulekit", "teamsbyseason", {"season": sid}), return_as_pandas)
 
 
@@ -384,7 +388,7 @@ def pwhl_team_roster(
 
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
-    sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
+    sid = _sid(season, season_id)
     return P.parse_roster(
         hockeytech_api(_LG, "modulekit", "roster", {"team_id": team_id, "season_id": sid}),
         return_as_pandas,
@@ -478,7 +482,7 @@ def pwhl_leaders(
 
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
-    sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
+    sid = _sid(season, season_id)
     payload = hockeytech_api(
         _LG,
         "statviewfeed",
@@ -835,7 +839,7 @@ def pwhl_stats(
 
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
-    sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
+    sid = _sid(season, season_id)
     return P.parse_stats(
         hockeytech_api(_LG, "modulekit", "statviewtype", {"type": position, "season_id": sid}),
         return_as_pandas,

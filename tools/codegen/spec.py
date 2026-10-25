@@ -228,7 +228,6 @@ class Loader:
     returns_schema: Optional[str] = None
     example_args: Dict[str, object] = field(default_factory=dict)
     automation: Dict[str, str] = field(default_factory=dict)
-    notebook: Optional[str] = None
     # Free-text caveat for this dataset -- coverage boundaries, partial
     # seasons, fields that only populate after some date. Rendered into the
     # generated docstring AND the loaders reference page, because a caveat
@@ -533,7 +532,6 @@ def load_releases(path: Path) -> ReleasesConfig:
             returns_schema=ld.get("returns_schema"),
             example_args=ld.get("example_args", {}) or {},
             automation=ld.get("automation", {}) or {},
-            notebook=ld.get("notebook"),
             notes=ld.get("notes"),
             stub=ld.get("stub", False),
             stub_message=ld.get("stub_message"),

@@ -54,8 +54,6 @@ Pull EDGE zone-time detail for a single skater.
 nhl_edge_skater_zone_time(player_id=8480801)
 ```
 
-_Last validated n/a._
-
 ## nhl_edge_skater_zone_time_top_10
 
 Pull the EDGE top-10 skaters by zone time.
@@ -110,8 +108,6 @@ Pull the EDGE top-10 skaters by zone time.
 ```python
 nhl_edge_skater_zone_time_top_10(positions='defense', strength='all', sort_by='offensive', season=20242025)
 ```
-
-_Last validated n/a._
 
 ## nhl_edge_skater_landing
 
@@ -293,5 +289,3 @@ Pull the EDGE skater landing page (summary across all skaters).
 ```python
 nhl_edge_skater_landing()
 ```
-
-_Last validated n/a._

@@ -82,8 +82,6 @@ A player's game log (full box lines) at a competition.
 fiba_gdap_player_game_stats(comp=208182, player_id=211501)
 ```
 
-_Last validated n/a._
-
 ## fiba_gdap_player_info
 
 A player's bio and per-game averages with ranks at a competition.
@@ -147,8 +145,6 @@ A player's bio and per-game averages with ranks at a competition.
 ```python
 fiba_gdap_player_info(comp=208182, player_id=211501)
 ```
-
-_Last validated n/a._
 
 ## fiba_gdap_player_stats
 
@@ -249,5 +245,3 @@ A player's per-game averages, totals and highs at a competition.
 ```python
 fiba_gdap_player_stats(comp=208182, player_id=211501)
 ```
-
-_Last validated n/a._

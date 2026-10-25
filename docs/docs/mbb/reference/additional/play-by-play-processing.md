@@ -1,7 +1,7 @@
 ---
 title: "MBB — additional Python functions — Play-by-play processing"
 sidebar_label: "Play-by-play processing"
-sidebar_position: 8
+sidebar_position: 9
 description: "MBB — additional Python functions — Play-by-play processing — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # MBB — additional Python functions — Play-by-play processing

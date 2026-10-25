@@ -199,7 +199,7 @@ def patch_espn_fetch(monkeypatch, payload):
 
     The generated ``*_espn_ext`` modules import ``_get`` from
     :mod:`sportsdataverse._codegen_runtime`, so rebinding
-    ``sportsdataverse._common_espn._get`` -- a re-export those modules never look at
+    the old ``_common_espn._get`` re-export (since deleted) -- which those modules never looked at
     -- patches nothing and silently leaves the real HTTP call in place. Five tests
     did exactly that and reached live ESPN from inside the "offline" CI job. Patch
     the sink ``download`` instead, which is what every generated wrapper bottoms out

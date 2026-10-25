@@ -86,5 +86,3 @@ ESPN endpoint.
 ```python
 espn_college_softball_fpi(season=2024)
 ```
-
-_Last validated n/a._

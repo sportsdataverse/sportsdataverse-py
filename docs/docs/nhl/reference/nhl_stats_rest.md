@@ -38,8 +38,6 @@ Ping the NHL Stats REST API database.
 nhl_stats_rest_ping()
 ```
 
-_Last validated n/a._
-
 ## nhl_stats_rest_component_season
 
 Retrieve the component-season configuration.
@@ -69,8 +67,6 @@ Retrieve the component-season configuration.
 ```python
 nhl_stats_rest_component_season()
 ```
-
-_Last validated n/a._
 
 ## nhl_stats_rest_config
 
@@ -102,8 +98,6 @@ Retrieve the Stats REST API configuration payload.
 nhl_stats_rest_config()
 ```
 
-_Last validated n/a._
-
 ## nhl_stats_rest_content_module
 
 Retrieve a content module by template key.
@@ -134,8 +128,6 @@ Retrieve a content module by template key.
 ```python
 nhl_stats_rest_content_module(template_key='X')
 ```
-
-_Last validated n/a._
 
 ## nhl_stats_rest_country
 
@@ -183,8 +175,6 @@ Retrieve the list of countries used in NHL data.
 nhl_stats_rest_country()
 ```
 
-_Last validated n/a._
-
 ## nhl_stats_rest_draft
 
 Retrieve draft data, optionally filtered with Cayenne expressions.
@@ -222,8 +212,6 @@ Retrieve draft data, optionally filtered with Cayenne expressions.
 ```python
 nhl_stats_rest_draft()
 ```
-
-_Last validated n/a._
 
 ## nhl_stats_rest_franchise
 
@@ -263,8 +251,6 @@ Retrieve franchise data.
 ```python
 nhl_stats_rest_franchise()
 ```
-
-_Last validated n/a._
 
 ## nhl_stats_rest_game
 
@@ -314,8 +300,6 @@ Retrieve game-level data.
 nhl_stats_rest_game()
 ```
 
-_Last validated n/a._
-
 ## nhl_stats_rest_glossary
 
 Retrieve the NHL Stats glossary of stat definitions.
@@ -357,8 +341,6 @@ Retrieve the NHL Stats glossary of stat definitions.
 ```python
 nhl_stats_rest_glossary()
 ```
-
-_Last validated n/a._
 
 ## nhl_stats_rest_goalie_report
 
@@ -419,8 +401,6 @@ Retrieve a goalie statistical report.
 nhl_stats_rest_goalie_report(report='summary')
 ```
 
-_Last validated n/a._
-
 ## nhl_stats_rest_leaders_goalies
 
 Retrieve league leaders for a goalie statistical attribute.
@@ -472,8 +452,6 @@ Retrieve league leaders for a goalie statistical attribute.
 nhl_stats_rest_leaders_goalies(attribute='X')
 ```
 
-_Last validated n/a._
-
 ## nhl_stats_rest_leaders_skaters
 
 Retrieve league leaders for a skater statistical attribute.
@@ -524,8 +502,6 @@ Retrieve league leaders for a skater statistical attribute.
 ```python
 nhl_stats_rest_leaders_skaters(attribute='X')
 ```
-
-_Last validated n/a._
 
 ## nhl_stats_rest_milestones_goalies
 
@@ -579,8 +555,6 @@ Retrieve milestone data for goalies.
 nhl_stats_rest_milestones_goalies()
 ```
 
-_Last validated n/a._
-
 ## nhl_stats_rest_milestones_skaters
 
 Retrieve milestone data for skaters.
@@ -633,8 +607,6 @@ Retrieve milestone data for skaters.
 nhl_stats_rest_milestones_skaters()
 ```
 
-_Last validated n/a._
-
 ## nhl_stats_rest_players
 
 Retrieve the NHL player registry.
@@ -665,8 +637,6 @@ Retrieve the NHL player registry.
 ```python
 nhl_stats_rest_players()
 ```
-
-_Last validated n/a._
 
 ## nhl_stats_rest_season
 
@@ -726,8 +696,6 @@ Retrieve the list of all NHL seasons.
 nhl_stats_rest_season()
 ```
 
-_Last validated n/a._
-
 ## nhl_stats_rest_shiftcharts
 
 Retrieve shift-chart data.
@@ -781,8 +749,6 @@ Retrieve shift-chart data.
 ```python
 nhl_stats_rest_shiftcharts()
 ```
-
-_Last validated n/a._
 
 ## nhl_stats_rest_skater_report
 
@@ -846,8 +812,6 @@ Retrieve a skater statistical report.
 nhl_stats_rest_skater_report(report='summary')
 ```
 
-_Last validated n/a._
-
 ## nhl_stats_rest_team
 
 Retrieve the list of all NHL teams.
@@ -888,8 +852,6 @@ Retrieve the list of all NHL teams.
 ```python
 nhl_stats_rest_team()
 ```
-
-_Last validated n/a._
 
 ## nhl_stats_rest_team_by_id
 
@@ -932,8 +894,6 @@ Retrieve a single team by its numeric ID.
 ```python
 nhl_stats_rest_team_by_id(team_id=10)
 ```
-
-_Last validated n/a._
 
 ## nhl_stats_rest_team_report
 
@@ -995,5 +955,3 @@ Retrieve a team statistical report.
 ```python
 nhl_stats_rest_team_report(report='summary')
 ```
-
-_Last validated n/a._

@@ -77,8 +77,6 @@ GET /api/secured/stats/team-offense/overview/season — one row per team for the
 nfl_pro_team_offense_overview_season(season=2024, season_type='REG')
 ```
 
-_Last validated n/a._
-
 ## nfl_pro_team_offense_overview_week
 
 GET /api/secured/stats/team-offense/overview/week — one row per team per week — team offensive overview incl. EPA per play, pass and rush splits.
@@ -156,8 +154,6 @@ GET /api/secured/stats/team-offense/overview/week — one row per team per week 
 nfl_pro_team_offense_overview_week(season=2024, season_type='REG')
 ```
 
-_Last validated n/a._
-
 ## nfl_pro_team_defense_overview_season
 
 GET /api/secured/stats/team-defense/overview/season — one row per team for the season — team defensive overview incl. EPA allowed per play and takeaways.
@@ -234,8 +230,6 @@ GET /api/secured/stats/team-defense/overview/season — one row per team for the
 ```python
 nfl_pro_team_defense_overview_season(season=2024, season_type='REG')
 ```
-
-_Last validated n/a._
 
 ## nfl_pro_team_defense_overview_week
 
@@ -320,5 +314,3 @@ GET /api/secured/stats/team-defense/overview/week — one row per team per week 
 ```python
 nfl_pro_team_defense_overview_week(season=2024, season_type='REG')
 ```
-
-_Last validated n/a._

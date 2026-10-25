@@ -60,8 +60,6 @@ Qualified-player per-game leaders in nine categories (one row per player and cat
 sportpress_player_rankings(competition_id=24)
 ```
 
-_Last validated n/a._
-
 ## sportpress_player_career
 
 Season-by-season per-game averages of the player of a roster entry.
@@ -137,8 +135,6 @@ Season-by-season per-game averages of the player of a roster entry.
 ```python
 sportpress_player_career(roster_id=11193)
 ```
-
-_Last validated n/a._
 
 ## sportpress_player_games
 
@@ -225,5 +221,3 @@ Game-by-game box lines of a roster entry (including games with 0 minutes).
 ```python
 sportpress_player_games(roster_id=11193)
 ```
-
-_Last validated n/a._

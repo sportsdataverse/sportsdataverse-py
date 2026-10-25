@@ -193,8 +193,6 @@ GET /stats/teamplayerdashboard
 wnba_stats_teamplayerdashboard(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_teamplayeronoffdetails
 
 GET /stats/teamplayeronoffdetails
@@ -438,8 +436,6 @@ GET /stats/teamplayeronoffdetails
 wnba_stats_teamplayeronoffdetails(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_teamplayeronoffsummary
 
 GET /stats/teamplayeronoffsummary
@@ -590,5 +586,3 @@ GET /stats/teamplayeronoffsummary
 ```python
 wnba_stats_teamplayeronoffsummary(league_id='10', season='2024')
 ```
-
-_Last validated n/a._

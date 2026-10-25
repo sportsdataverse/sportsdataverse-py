@@ -367,7 +367,7 @@ Full game box score + play-by-play (normalized stat dictionaries)
 | `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
 | `media_type` | character | Kind of item carried in the media stream (e.g., "play", "video"). |
 | `media_source` | character | Feed the media item was produced from (e.g., "play_by_play"). |
-| `sequence_id` | integer | Monotonic sequence number that orders items within the game's media stream. |
+| `sequence_id` | character | Monotonic sequence number that orders items within the game's media stream. |
 | `external_id` | character | Provider-side identifier for the media item, matching the play id it accompanies. |
 | `timestamp` | character |  |
 | `official` | logical | Flag indicating that the media item comes from the official league feed rather than an editorial source. |
@@ -467,5 +467,3 @@ Full game box score + play-by-play (normalized stat dictionaries)
 ```python
 yahoo_editorial_boxscore(game_id='ncaaf.g.202509200023')
 ```
-
-_Last validated n/a._

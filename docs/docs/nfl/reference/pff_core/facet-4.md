@@ -73,8 +73,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_facet_run_blocking()
 ```
 
-_Last validated n/a._
-
 ## pff_facet_pass_blocking
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
@@ -148,8 +146,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_facet_pass_blocking()
 ```
-
-_Last validated n/a._
 
 ## pff_facet_passing_summary
 
@@ -239,8 +235,6 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 pff_facet_passing_summary()
 ```
 
-_Last validated n/a._
-
 ## pff_facet_punting_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /punting/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
@@ -313,5 +307,3 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ```python
 pff_facet_punting_summary()
 ```
-
-_Last validated n/a._

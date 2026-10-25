@@ -13,19 +13,23 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+from typing import Any
 from urllib.parse import urlencode
 
 import yaml
 
 # Make ``tools`` importable when run as a script (`python tools/codegen/generate.py`),
-# where sys.path[0] is this file's dir rather than the repo root.
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+# where sys.path[0] is this file's dir rather than the repo root. Imported as
+# ``tools.codegen.generate`` the root is already importable, so sys.path is left alone.
+if not __package__:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from tools.codegen import render, render_notebooks, spec  # noqa: E402
-from tools.hooks import sync_docs_changelog  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 ENDPOINTS = ROOT / "tools" / "codegen" / "endpoints"
+# Scratch root for the ``--check`` gates' per-run temp dirs (gitignored). It sits inside the
+# repo so ruff discovers the repo's format config; nothing is committed under it (A-L1).
 OUT = ROOT / "tools" / "codegen" / "_generated"
 LIVE = ROOT / "sportsdataverse"
 
@@ -641,7 +645,7 @@ def _param_rows(ep: spec.Endpoint, league_prefix: str = "", fn_name: str = "") -
 # (cfbfastR / hoopR / wehoop / baseballr / fastRhockey) plus the nflverse data
 # dictionaries (nflreadr CSVs + nflfastR variable list) into
 # r_column_descriptions.yaml, shape:
-#   {package: {col_name: description}, ..., _merged: {col_name: description}}
+#   {package: {col_name: description}, ...}
 # At RENDER time (NOT capture) we backfill any blank return-table description
 # cell from this dictionary, keyed by column name and league-aware package. A
 # stored (hand-curated) description is never overwritten. Unmatched columns stay
@@ -878,9 +882,8 @@ def _r_col_descs() -> dict:
     Empty dict if the file is absent so the render-time fill is a silent no-op."""
     if not _R_DICT_FILE.exists():
         return {}
-    import yaml
 
-    return yaml.safe_load(_R_DICT_FILE.read_text(encoding="utf-8")) or {}
+    return _yaml_file(_R_DICT_FILE)
 
 
 #: Ordered R packages whose column docs may back a league's blanks -- the packages of
@@ -909,14 +912,13 @@ def _no_r_fallback_schemas() -> frozenset:
     describe play-by-play ("Binary indicator for if the play ended in a sack" on a season total), and
     On3 recruiting tables that render under ``cfb`` but are not cfbfastR's (SP+ on a recruit rating):
     no R fallback at all, manual text only."""
-    import yaml
 
     names: dict = {}  # bare schema name -> {family stem: flagged}
     for stem, _prefix in FLAT_APIS:
         p = ENDPOINTS / f"{stem}.yaml"
         if not p.exists():
             continue
-        doc = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+        doc = _yaml_file(p)
         for ep in doc.get("endpoints") or []:
             rs = ep.get("returns_schema")
             if rs:
@@ -974,11 +976,10 @@ _MANUAL_DESC_FILE = ROOT / "tools" / "codegen" / "manual_column_descriptions.yam
 def _manual_col_descs() -> dict:
     """``{schema: {col: desc}, _global: {col: desc}}`` hand-curated column
     descriptions (committed, deterministic). Empty dict when the file is absent."""
-    import yaml
 
     if not _MANUAL_DESC_FILE.exists():
         return {}
-    return yaml.safe_load(_MANUAL_DESC_FILE.read_text(encoding="utf-8")) or {}
+    return _yaml_file(_MANUAL_DESC_FILE)
 
 
 # A pass-through transformer returns its input frame plus a few columns, so the input's schema
@@ -1090,9 +1091,8 @@ def _r_exports() -> dict:
     parity table is a silent no-op rather than a hard failure on a fresh checkout."""
     if not _R_EXPORTS_FILE.exists():
         return {}
-    import yaml
 
-    return yaml.safe_load(_R_EXPORTS_FILE.read_text(encoding="utf-8")) or {}
+    return _yaml_file(_R_EXPORTS_FILE)
 
 
 @functools.lru_cache(maxsize=1)
@@ -1105,9 +1105,8 @@ def _highlights_map() -> dict:
     league, so a league with no curated list just keeps today's behavior."""
     if not _HIGHLIGHTS_FILE.exists():
         return {}
-    import yaml
 
-    return yaml.safe_load(_HIGHLIGHTS_FILE.read_text(encoding="utf-8")) or {}
+    return _yaml_file(_HIGHLIGHTS_FILE)
 
 
 @functools.lru_cache(maxsize=1)
@@ -1119,9 +1118,8 @@ def _companions_map() -> dict:
     so a league with no entry renders exactly as before."""
     if not _COMPANIONS_FILE.exists():
         return {}
-    import yaml
 
-    return yaml.safe_load(_COMPANIONS_FILE.read_text(encoding="utf-8")) or {}
+    return _yaml_file(_COMPANIONS_FILE)
 
 
 def _companions_for(prefix: str) -> list[dict]:
@@ -1147,9 +1145,8 @@ def _r_parity_aliases() -> dict:
     """``{league: {python_fn: r_fn}}`` curated cross-name equivalents (committed)."""
     if not _R_PARITY_ALIASES_FILE.exists():
         return {}
-    import yaml
 
-    return yaml.safe_load(_R_PARITY_ALIASES_FILE.read_text(encoding="utf-8")) or {}
+    return _yaml_file(_R_PARITY_ALIASES_FILE)
 
 
 def _r_parity_rows(prefix: str, ref_pages: dict, autodoc_names: list[str], moved: dict | None = None) -> list[dict]:
@@ -1202,7 +1199,6 @@ def _schema_doc(schema_name: str | None, league: str | None = None) -> dict:
     """
     if not schema_name:
         return {}
-    import yaml
 
     base = ROOT / "tools" / "codegen" / "schemas"
     p = (base / schema_name / f"{league}.yaml") if league else None
@@ -1210,7 +1206,7 @@ def _schema_doc(schema_name: str | None, league: str | None = None) -> dict:
         p = base / f"{schema_name}.yaml"  # fallback: generic
     if not p.exists():
         return {}
-    return yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+    return _yaml_file(p)
 
 
 def _documented_table(ep: spec.Endpoint, league_key: str) -> str:
@@ -1360,7 +1356,6 @@ class _EndpointView:
         bare = ep.path.replace("[", "").replace("]", "")
         url = f"{ep_host}{_sub_slugs(bare, league.sport, lg_slug)}"
         self.url_fstring = url
-        self.full_url = url  # back-compat alias
 
         needs_build = (
             ep.now_variant is not None
@@ -1426,7 +1421,7 @@ class _EndpointView:
         self.raises_rows = _raises_rows(
             _raises_lines(doc_extras or {}, route_module in _VOCAB_GETTERS, _GETTER_RAISES.get(route_module, ()))
         )
-        self.return_table = _return_table(ep.returns_schema, schema_key)
+        self._returns_schema = ep.returns_schema  # read by the lazy ``return_table``
         schema_doc = _schema_doc(ep.returns_schema, schema_key)
         self.return_frames = schema_doc.get("kind") == "frames"
         self.documented_table = "" if flat else _documented_table(ep, schema_key)
@@ -1442,10 +1437,13 @@ class _EndpointView:
         self.frames_by = str(schema_doc.get("frames_by") or "")
         self.unverified = str(schema_doc.get("unverified") or "")
         self.returns_prose = _normalize_rst(ep.summary or "")
-        self.r_equivalent: dict[str, str] = {}  # reserved for a future R cross-ref map
-        self.notebook: str | None = None
-        self.last_validated: str | None = None
         self.api_name = ""  # set by _espn_league_views for per-API docs filtering
+
+    @functools.cached_property
+    def return_table(self) -> str:
+        """The markdown returns table(s). Docs-only, so built on first read: a code-only render never
+        pays for it (it was ~29 of the ~86 s of ``_render_all``)."""
+        return _return_table(self._returns_schema, self.schema_league)
 
     @staticmethod
     def _build_path_expr(ep: spec.Endpoint, ep_host: str, league: spec.League, quote_path: bool = False) -> str:
@@ -1515,14 +1513,12 @@ def _ruff_format_dir(path: Path) -> None:
 
 
 _ESPN_RENAME_FILE = ROOT / "tools" / "codegen" / "espn_rename_map.yaml"
-_ESPN_RENAME_SKIPPED: dict[str, str] = {}  # old -> reason (collisions held back from the curated map)
 
 
 def _load_espn_renames() -> dict:
     """Approved generated-name -> R-aligned-name overrides (espn_rename_map.yaml)."""
     if not _ESPN_RENAME_FILE.exists():
         return {}
-    import yaml
 
     return yaml.safe_load(_ESPN_RENAME_FILE.read_text(encoding="utf-8")).get("rename", {}) or {}
 
@@ -1531,7 +1527,6 @@ def _load_espn_drops() -> set:
     """Generated full names NOT to emit (a hand-written sibling exposes the same endpoint)."""
     if not _ESPN_RENAME_FILE.exists():
         return set()
-    import yaml
 
     return set(yaml.safe_load(_ESPN_RENAME_FILE.read_text(encoding="utf-8")).get("drop", []) or [])
 
@@ -1709,10 +1704,9 @@ def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
         if new != base:
             if new in base_names or new in handwritten or new in used:
                 versioned = _versioned_on_collision(ep.short, league.prefix)
+                # A collision with no free versioned name keeps the base name (the rename is held back).
                 if versioned and versioned not in base_names and versioned not in handwritten and versioned not in used:
                     fn_name = versioned
-                else:
-                    _ESPN_RENAME_SKIPPED[base] = f"{new} (collision)"
             else:
                 fn_name = new
         renamed_from = None
@@ -1970,9 +1964,8 @@ def _loader_schemas() -> dict:
     p = ENDPOINTS.parent / "schemas" / "loader_schemas.yaml"
     if not p.exists():
         return {}
-    import yaml
 
-    schemas = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+    schemas = _yaml_file(p)
     # Validate at the single chokepoint, not at one call site: _build_loader_docstring
     # reads this dict directly and indexes c["type"], so guarding only the docs table
     # would leave the crash the guard exists to prevent still reachable.
@@ -2200,7 +2193,7 @@ def _empty_dtype(label: str) -> str:
 
 
 def _schema_yaml(path: str) -> dict:
-    return yaml.safe_load((ENDPOINTS.parent / "schemas" / f"{path}.yaml").read_text(encoding="utf-8")) or {}
+    return _yaml_file(ENDPOINTS.parent / "schemas" / f"{path}.yaml")
 
 
 def _schema_kind(path: str) -> str:
@@ -2306,6 +2299,25 @@ def build_loaders_live() -> list[Path]:
     return sorted(written)
 
 
+def _differs(live: Path, expected: str) -> bool:
+    """True when ``live`` is missing or its BYTES differ from ``expected`` encoded as UTF-8.
+
+    Bytes, not text: ``read_text`` folds CRLF into LF, so a generated file committed with CRLF
+    line endings compared equal and passed ``--check`` while differing from what codegen writes
+    (every writer here writes LF)."""
+    return not live.exists() or live.read_bytes() != expected.encode("utf-8")
+
+
+def _yaml_file(path: Path) -> Any:
+    """``path`` parsed as YAML; an empty file reads as ``{}``."""
+    return yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+
+
+def _write_schema_yaml(dest: Path, doc: dict) -> None:
+    """Write a returns-schema ``doc`` the one way every schema writer here does (key order kept, LF)."""
+    dest.write_text(yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n")
+
+
 def _check_tmp(prefix: str) -> Path:
     """A fresh temp dir inside ``OUT`` for one ``--check`` gate run.
 
@@ -2316,26 +2328,34 @@ def _check_tmp(prefix: str) -> Path:
     return Path(tempfile.mkdtemp(prefix=prefix, dir=OUT))
 
 
-def _loaders_stale() -> list[str]:
-    """Live generated {league}_loaders.py files that differ from a fresh render."""
-    tmp = _check_tmp("_check_loaders_")
+def _stale_vs_render(prefix: str, rendered: dict[str, str], live: dict[str, Path]) -> list[str]:
+    """The ``live`` files that differ from (or are missing beside) a ruff-formatted render of ``rendered``.
+
+    ``rendered`` maps a file name to its source; ``live`` maps the same names to the committed paths
+    they are compared against. The render goes to a fresh :func:`_check_tmp` dir, removed afterwards.
+    """
+    tmp = _check_tmp(prefix)
     try:
-        rendered = _render_loaders_all()
-        for lg, src in rendered.items():
-            (tmp / f"{lg}_loaders.py").write_text(src, encoding="utf-8", newline="\n")
-        (tmp / "_returns_schemas.py").write_text(render_returns_schemas(), encoding="utf-8", newline="\n")
+        for name, src in rendered.items():
+            (tmp / name).write_text(src, encoding="utf-8", newline="\n")
         _ruff_format_dir(tmp)
-        stale = []
-        live_files = {f"{lg}_loaders.py": LIVE / lg / f"{lg}_loaders.py" for lg in rendered}
-        live_files["_returns_schemas.py"] = LIVE / "_returns_schemas.py"
-        for name, live_file in live_files.items():
-            if not live_file.exists() or live_file.read_text(encoding="utf-8") != (tmp / name).read_text(
-                encoding="utf-8",
-            ):
-                stale.append(str(live_file.relative_to(ROOT)))
+        return [
+            str(path.relative_to(ROOT))
+            for name, path in live.items()
+            if _differs(path, (tmp / name).read_text(encoding="utf-8"))
+        ]
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
-    return stale
+
+
+def _loaders_stale() -> list[str]:
+    """Live generated {league}_loaders.py files that differ from a fresh render."""
+    loaders = _render_loaders_all()
+    rendered = {f"{lg}_loaders.py": src for lg, src in loaders.items()}
+    rendered["_returns_schemas.py"] = render_returns_schemas()
+    live = {f"{lg}_loaders.py": LIVE / lg / f"{lg}_loaders.py" for lg in loaders}
+    live["_returns_schemas.py"] = LIVE / "_returns_schemas.py"
+    return _stale_vs_render("_check_loaders_", rendered, live)
 
 
 # Legacy / display-name release tags that are not data-loader datasets (old ESPN
@@ -2350,8 +2370,7 @@ def _is_loader_tag(tag: str) -> bool:
 def gh_release_tags(repo: str = "sportsdataverse/sportsdataverse-data", limit: int = 400) -> list[str]:
     """Live release tags for ``repo`` via the ``gh`` CLI (network).
 
-    Defined here (not in the legacy runtime-capture ``extract.py``, which is
-    import-broken post-factory-retirement) so the audit has no dead dependency.
+    Defined here so the audit has no dependency outside this module.
     Raises ``subprocess.CalledProcessError`` if ``gh`` is missing/unauthenticated."""
     out = subprocess.run(
         ["gh", "release", "list", "-R", repo, "--limit", str(limit)],
@@ -2437,8 +2456,6 @@ def _write_auto_espn_schemas(fix_dir: Path, schema_dir: Path) -> int:
         no columns, writes nothing (an empty table would claim the endpoint returns nothing)."""
     import json
 
-    import yaml
-
     written = 0
     cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
     leagues = _LEAGUES + [lg.prefix for lg in cfg.leagues if lg.prefix not in _LEAGUES]
@@ -2459,9 +2476,7 @@ def _write_auto_espn_schemas(fix_dir: Path, schema_dir: Path) -> int:
                 continue
             doc = {"schema": name, "kind": "dataframe", "columns": cols}
         schema_dir.mkdir(parents=True, exist_ok=True)
-        (schema_dir / f"{name}.yaml").write_text(
-            yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n"
-        )
+        _write_schema_yaml(schema_dir / f"{name}.yaml", doc)
         written += 1
     return written
 
@@ -2469,12 +2484,11 @@ def _write_auto_espn_schemas(fix_dir: Path, schema_dir: Path) -> int:
 def _desc_lookup(schema_name: str) -> dict:
     """{column_name: description} from the hand-curated generic schema, used to
     annotate the introspected per-league columns (which carry only name+type)."""
-    import yaml
 
     p = ROOT / "tools" / "codegen" / "schemas" / f"{schema_name}.yaml"
     if not p.exists():
         return {}
-    d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+    d = _yaml_file(p)
     out = {}
     if d.get("kind") == "frames":
         for blk in d.get("frames", []):
@@ -2552,8 +2566,6 @@ def _refresh_sport_specific_return_schemas() -> int:
     import importlib
     import json
 
-    import yaml
-
     def cols(df) -> list:
         return [{"name": n, "type": _pl_to_doc_type(str(t)), "description": ""} for n, t in zip(df.columns, df.dtypes)]
 
@@ -2609,8 +2621,6 @@ def _write_native_schemas(nat: dict) -> tuple[int, list[str]]:
     import importlib
     import json
 
-    import yaml
-
     written, failed = 0, []
     params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
     for api, files in nat.items():
@@ -2639,9 +2649,7 @@ def _write_native_schemas(nat: dict) -> tuple[int, list[str]]:
                     failed.append(f"{api}/{short} ({fname}): {type(e).__name__}: {e}")
                     continue
                 outdir.mkdir(parents=True, exist_ok=True)
-                (outdir / f"{short}.yaml").write_text(
-                    yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n"
-                )
+                _write_schema_yaml(outdir / f"{short}.yaml", doc)
                 written += 1
     return written, failed
 
@@ -2651,8 +2659,6 @@ def refresh_return_schemas() -> int:
     column schemas under schemas/{name}/{league}.yaml. Descriptions are merged
     from the hand-curated generic schemas/{name}.yaml by column name."""
     import json
-
-    import yaml
 
     written = skipped = 0
     for name, (parser, kind) in _return_schema_parsers().items():
@@ -2682,9 +2688,7 @@ def refresh_return_schemas() -> int:
                     skipped += 1
                     continue
                 doc = {"schema": name, "kind": "dataframe", "columns": cols}
-            (outdir / f"{league}.yaml").write_text(
-                yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n"
-            )
+            _write_schema_yaml(outdir / f"{league}.yaml", doc)
             written += 1
 
     written += _write_auto_espn_schemas(_FIX, ROOT / "tools" / "codegen" / "schemas")
@@ -2723,7 +2727,6 @@ def _remote_parquet_schema(url: str):
 def refresh_loader_schemas() -> int:
     """Re-introspect every non-stub loader's release parquet footer and rewrite
     tools/codegen/schemas/loader_schemas.yaml (network; reads metadata only)."""
-    import yaml
 
     rel = _releases_cfg()
     prev = _loader_schemas()  # a loader whose footers could not be read keeps its committed schema
@@ -2884,13 +2887,16 @@ def build_parsed_live() -> list[Path]:
     return sorted(written)
 
 
+@functools.cache
+def _league_group() -> dict[str, str]:
+    """League prefix -> sport-group container, for leagues that nest (soccer, football). Read from
+    leagues.yaml (on first use, not at import) so it cannot drift from the ESPN side's layout."""
+    return {lg.prefix: lg.group for lg in spec.load_leagues(ENDPOINTS / "leagues.yaml").leagues if lg.group}
+
+
 # Flat (non-sport/league) API families: (yaml_stem, league_prefix). Only those
 # whose YAML exists under tools/codegen/endpoints/ are generated, so the NHL/MLB
 # native cutover can land family-by-family.
-#: League prefix -> sport-group container, for leagues that nest (soccer, football).
-#: Read from leagues.yaml so it cannot drift from the ESPN side's layout.
-_LEAGUE_GROUP = {lg.prefix: lg.group for lg in spec.load_leagues(ENDPOINTS / "leagues.yaml").leagues if lg.group}
-
 FLAT_APIS = [
     ("nhl_api_web", "nhl"),
     ("nhl_edge", "nhl"),
@@ -3012,7 +3018,7 @@ def _flat_dest(prefix: str, module: str) -> Path:
     """
     if prefix in _NESTED_HOMES:
         return LIVE.joinpath(*_NESTED_HOMES[prefix].split("."), f"{module}.py")
-    group = _LEAGUE_GROUP.get(prefix, "")
+    group = _league_group().get(prefix, "")
     base = LIVE / group / prefix if group else LIVE / prefix
     return base / f"{module}.py"
 
@@ -3031,44 +3037,16 @@ def build_flat_live() -> list[Path]:
 
 def _flat_stale() -> list[str]:
     """Live flat-API modules that differ from a fresh render."""
-    tmp = _check_tmp("_check_flat_")
-    try:
-        rendered = _render_flat_all()
-        prefixes = {}
-        for module, (prefix, src) in rendered.items():
-            (tmp / f"{module}.py").write_text(src, encoding="utf-8", newline="\n")
-            prefixes[module] = prefix
-        _ruff_format_dir(tmp)
-        stale = []
-        for module, prefix in prefixes.items():
-            live_file = _flat_dest(prefix, module)
-            if not live_file.exists() or live_file.read_text(encoding="utf-8") != (tmp / f"{module}.py").read_text(
-                encoding="utf-8",
-            ):
-                stale.append(str(live_file.relative_to(ROOT)))
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
-    return stale
+    flat = _render_flat_all()
+    rendered = {f"{module}.py": src for module, (_prefix, src) in flat.items()}
+    live = {f"{module}.py": _flat_dest(prefix, module) for module, (prefix, _src) in flat.items()}
+    return _stale_vs_render("_check_flat_", rendered, live)
 
 
 def _parsed_stale() -> list[str]:
     """Live ``parsed/{league}.py`` files that differ from a fresh render."""
-    tmp = _check_tmp("_check_parsed_")
-    try:
-        rendered = _render_parsed_all()
-        for name, src in rendered.items():
-            (tmp / name).write_text(src, encoding="utf-8", newline="\n")
-        _ruff_format_dir(tmp)
-        stale = []
-        for name in rendered:
-            live_file = LIVE / "parsed" / name
-            if not live_file.exists() or live_file.read_text(encoding="utf-8") != (tmp / name).read_text(
-                encoding="utf-8",
-            ):
-                stale.append(str(live_file.relative_to(ROOT)))
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
-    return stale
+    rendered = _render_parsed_all()
+    return _stale_vs_render("_check_parsed_", rendered, {name: LIVE / "parsed" / name for name in rendered})
 
 
 def _render_all() -> dict[str, str]:
@@ -3077,15 +3055,6 @@ def _render_all() -> dict[str, str]:
     apis = [spec.load_espn_api(ENDPOINTS / f"{a}.yaml", params) for a in ESPN_APIS]
     spec.validate_league_keys(apis, cfg)
     return {f"{lg.prefix}_espn_ext.py": _league_module_source(lg, apis, cfg.hosts) for lg in cfg.leagues}
-
-
-def build() -> list[Path]:
-    OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / "__init__.py").write_text("", encoding="utf-8", newline="\n")
-    for name, src in _render_all().items():
-        (OUT / name).write_text(src, encoding="utf-8", newline="\n")
-    _ruff_format_dir(OUT)
-    return sorted(OUT.glob("*_espn_ext.py"))
 
 
 def _ensure_init_import(pkg_dir: Path, prefix: str, dotted: str) -> None:
@@ -3244,59 +3213,23 @@ def build_live() -> list[Path]:
 
 def _live_stale() -> list[str]:
     """Live ``{prefix}_espn_ext.py`` and container ``__init__.py`` files that differ from a fresh render."""
-    tmp = _check_tmp("_check_live_")
-    try:
-        rendered = _render_all()
-        for name, src in rendered.items():
-            (tmp / name).write_text(src, encoding="utf-8", newline="\n")
-        _ruff_format_dir(tmp)
-        groups = {lg.prefix: lg.group for lg in spec.load_leagues(ENDPOINTS / "leagues.yaml").leagues}
-        stale = []
-        for name in rendered:
-            prefix = name[: -len("_espn_ext.py")]
-            group = groups.get(prefix, "")
-            if group:
-                live_file = LIVE / group / prefix / f"{prefix}_espn_ext.py"
-            else:
-                live_file = LIVE / prefix / f"{prefix}_espn_ext.py"
-            if not live_file.exists() or live_file.read_text(encoding="utf-8") != (tmp / name).read_text(
-                encoding="utf-8",
-            ):
-                stale.append(str(live_file.relative_to(ROOT)))
-        # Also check each container __init__.py against its expected body.
-        for group, members in _container_groups(groups).items():
-            container = LIVE / group
-            has_ext = (container / f"{group}_espn_ext.py").exists()
-            expected = _container_init_body(group, members, has_ext)
-            live_init = container / "__init__.py"
-            if not live_init.exists() or live_init.read_text(encoding="utf-8") != expected:
-                stale.append(str(live_init.relative_to(ROOT)))
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
+    rendered = _render_all()
+    groups = {lg.prefix: lg.group for lg in spec.load_leagues(ENDPOINTS / "leagues.yaml").leagues}
+    live = {}
+    for name in rendered:
+        prefix = name[: -len("_espn_ext.py")]
+        group = groups.get(prefix, "")
+        live[name] = (LIVE / group / prefix if group else LIVE / prefix) / f"{prefix}_espn_ext.py"
+    stale = _stale_vs_render("_check_live_", rendered, live)
+    # Also check each container __init__.py against its expected body.
+    for group, members in _container_groups(groups).items():
+        container = LIVE / group
+        has_ext = (container / f"{group}_espn_ext.py").exists()
+        expected = _container_init_body(group, members, has_ext)
+        live_init = container / "__init__.py"
+        if _differs(live_init, expected):
+            stale.append(str(live_init.relative_to(ROOT)))
     return stale
-
-
-def check() -> int:
-    # Render + format in a temp subdir *inside* OUT so ruff discovers the same repo
-    # config, then compare byte-for-byte against the committed generated files.
-    tmp = _check_tmp("_check_")
-    try:
-        rendered = _render_all()
-        for name, src in rendered.items():
-            (tmp / name).write_text(src, encoding="utf-8", newline="\n")
-        _ruff_format_dir(tmp)
-        stale = [
-            name
-            for name in rendered
-            if not (OUT / name).exists()
-            or (OUT / name).read_text(encoding="utf-8") != (tmp / name).read_text(encoding="utf-8")
-        ]
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
-    if stale:
-        print("codegen --check: stale/missing generated files:", ", ".join(sorted(stale)), file=sys.stderr)
-        return 1
-    return 0
 
 
 # ===========================================================================
@@ -3421,9 +3354,8 @@ def _coverage_allowlist() -> dict[str, set[str]]:
     added to the YAML."""
     if not _COVERAGE_ALLOWLIST_FILE.exists():
         return {}
-    import yaml
 
-    d = yaml.safe_load(_COVERAGE_ALLOWLIST_FILE.read_text(encoding="utf-8")) or {}
+    d = _yaml_file(_COVERAGE_ALLOWLIST_FILE)
     return {k: set(v or []) for k, v in d.items()}
 
 
@@ -4212,9 +4144,8 @@ def _autodoc_example_args() -> dict:
     back to a no-arg ``{}`` attempt during capture."""
     if not _AUTODOC_EXAMPLE_ARGS_FILE.exists():
         return {}
-    import yaml
 
-    d = yaml.safe_load(_AUTODOC_EXAMPLE_ARGS_FILE.read_text(encoding="utf-8")) or {}
+    d = _yaml_file(_AUTODOC_EXAMPLE_ARGS_FILE)
     return {k: (v or {}) for k, v in d.items()}
 
 
@@ -4233,9 +4164,8 @@ def _autodoc_return_columns(scope: str, fn: str) -> tuple:
         p = ROOT / "tools" / "codegen" / "schemas" / f"{pointer}.yaml" if pointer else p
     if not p.exists():
         return ()
-    import yaml
 
-    d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+    d = _yaml_file(p)
     return tuple(d.get("columns", []) or [])
 
 
@@ -4246,9 +4176,8 @@ def _autodoc_return_frames(scope: str, fn: str) -> list:
     p = _AUTODOC_SCHEMA_DIR / scope / f"{fn}.yaml"
     if not p.exists():
         return []
-    import yaml
 
-    d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+    d = _yaml_file(p)
     return list(d.get("frames") or []) if d.get("kind") == "frames" else []
 
 
@@ -4257,9 +4186,8 @@ def _autodoc_unverified(scope: str, fn: str) -> str:
     p = _AUTODOC_SCHEMA_DIR / scope / f"{fn}.yaml"
     if not p.exists():
         return ""
-    import yaml
 
-    return str((yaml.safe_load(p.read_text(encoding="utf-8")) or {}).get("unverified") or "")
+    return str(_yaml_file(p).get("unverified") or "")
 
 
 # Modules whose name happens to end in "_parsers" but which are genuine
@@ -4316,12 +4244,25 @@ def _autodoc_family(name: str, highlighted: frozenset[str] = frozenset(), *, mod
     return sources.resolve(name, module, **_resolve_origin(name)).label
 
 
-def _autodoc_signature(obj) -> str:
-    """``str(inspect.signature(obj))`` with a ``"(...)"`` fallback for un-introspectable objects."""
+def _stable_signature(obj):
+    """``inspect.signature(obj)``, the same on every supported Python (PRE-1008 gate sweep).
+
+    An ``Enum`` subclass's signature is ``EnumMeta.__call__``'s, which Python 3.12 changed from
+    ``(value, names=None, *, module=None, ...)`` to ``(*values)``, so the rendered pages differed between the
+    3.10 floor and 3.13. Every Enum renders the 3.12+ form.
+    """
+    import enum
     import inspect
 
+    if isinstance(obj, type) and issubclass(obj, enum.Enum):
+        return inspect.Signature([inspect.Parameter("values", inspect.Parameter.VAR_POSITIONAL)])
+    return inspect.signature(obj)
+
+
+def _autodoc_signature(obj) -> str:
+    """``str(inspect.signature(obj))`` with a ``"(...)"`` fallback for un-introspectable objects."""
     try:
-        return str(inspect.signature(obj))
+        return str(_stable_signature(obj))
     except (TypeError, ValueError):
         return "(...)"
 
@@ -4824,7 +4765,7 @@ def _doc_view(obj) -> dict:
     fb_params = {p["arg_name"]: p for p in fb["params"]}
 
     try:
-        sig = inspect.signature(obj)
+        sig = _stable_signature(obj)
     except (ValueError, TypeError):
         sig = None
     params: list[dict] = []
@@ -5219,8 +5160,6 @@ def refresh_autodoc_schemas() -> int:
     stale."""
     import importlib
 
-    import yaml
-
     captured = skipped = cols_retained = types_preserved = hand_kept = 0
     skip_reasons: list[str] = []
     written_paths: set = set()
@@ -5267,7 +5206,7 @@ def refresh_autodoc_schemas() -> int:
                 skipped += 1
                 continue
             dest = _AUTODOC_SCHEMA_DIR / scope_key / f"{fn}.yaml"
-            committed = (yaml.safe_load(dest.read_text(encoding="utf-8")) or {}) if dest.exists() else {}
+            committed = _yaml_file(dest) if dest.exists() else {}
             if committed.get("hand_authored"):
                 hand_kept += 1
                 continue
@@ -5278,7 +5217,7 @@ def refresh_autodoc_schemas() -> int:
             types_preserved += kept_types
             doc = {"schema": fn, "kind": "dataframe", "columns": cols}
             dest.parent.mkdir(parents=True, exist_ok=True)
-            dest.write_text(yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n")
+            _write_schema_yaml(dest, doc)
             written_paths.add(dest.resolve())
             captured += 1
     # Prune ONLY what is genuinely gone from the autodoc set. "Did not capture
@@ -5295,7 +5234,7 @@ def refresh_autodoc_schemas() -> int:
                 continue
             # Hand-authored schemas (functions the capture step cannot call:
             # frame-valued args or dict-of-frames returns) are kept, not pruned.
-            if (yaml.safe_load(f.read_text(encoding="utf-8")) or {}).get("hand_authored"):
+            if _yaml_file(f).get("hand_authored"):
                 continue
             if (f.parent.name, f.stem) in in_scope:
                 kept_stale += 1
@@ -5959,6 +5898,8 @@ def _render_docs_all() -> dict[str, str]:
     out.update(render_notebooks.relinked_pages(anchor_map))
     out[_LEAGUES_JSON_REL] = render_leagues_json()
     try:
+        from tools.hooks import sync_docs_changelog
+
         pages = sync_docs_changelog.render((ROOT / "CHANGELOG.md").read_text(encoding="utf-8"))
     except ValueError as e:  # an unrecognised CHANGELOG.md heading: name it, no traceback
         raise SystemExit(f"codegen: cannot render the docs changelog pages: {e}") from None
@@ -6021,7 +5962,7 @@ def _docs_stale(rendered: dict[str, str] | None = None) -> list[str]:
     stale = []
     for rel, content in rendered.items():
         f = DOCS / rel
-        if not f.exists() or f.read_text(encoding="utf-8") != content:
+        if _differs(f, content):
             stale.append(rel)
     for root in _generated_docs_roots():
         d = DOCS / root
@@ -6035,7 +5976,7 @@ def _docs_stale(rendered: dict[str, str] | None = None) -> list[str]:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="generate.py")
-    ap.add_argument("--check", action="store_true", help="fail if any generated (staging or live) file is stale")
+    ap.add_argument("--check", action="store_true", help="fail if any generated file is stale")
     ap.add_argument(
         "--audit-releases",
         action="store_true",
@@ -6087,7 +6028,7 @@ def main(argv=None) -> int:
         print(f"codegen --docs: wrote {d} doc files to {DOCS}")
         return 0
     if args.check:
-        rc = check()
+        rc = 0
         live = _live_stale()
         if live:
             print("codegen --check: stale live files:", ", ".join(sorted(live)), file=sys.stderr)
@@ -6136,11 +6077,10 @@ def main(argv=None) -> int:
         if rc == 0:
             print("codegen --check: all generated files current")
         return rc
-    build()
     n = len(build_live())
     f = len(build_flat_live())
     ldr = len(build_loaders_live())
-    print(f"codegen: wrote {n} live + {f} flat-API + {ldr} loader modules + refreshed staging at {OUT}", flush=True)
+    print(f"codegen: wrote {n} live + {f} flat-API + {ldr} loader modules", flush=True)
     # The parsed aliases and the docs read the package's live signatures and docstrings, and this
     # process imported the package (and cached what it read) before the stages above rewrote it.
     # Rendering them here took a second run to converge (A-L10); a fresh interpreter reads what

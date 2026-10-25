@@ -76,8 +76,6 @@ Game info of one match: state, arena, attendance, officials, coaches, period sco
 icehl_game_info(match_id=8161)
 ```
 
-_Last validated n/a._
-
 ## icehl_game_center
 
 Game-center bundle of one match as one row: game data, team stats, goal and penalty lists.
@@ -238,5 +236,3 @@ Game-center bundle of one match as one row: game data, team stats, goal and pena
 ```python
 icehl_game_center(match_id=8161)
 ```
-
-_Last validated n/a._

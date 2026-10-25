@@ -272,8 +272,6 @@ A team's leaders for one position group, with rank and percentile
 pff_api_team_leaders(league='nfl', season=2022, team='cincinnati-bengals')
 ```
 
-_Last validated n/a._
-
 ## pff_api_team_rushing_direction
 
 A team's rushing by direction, one row per rusher and gap, plus totals
@@ -327,5 +325,3 @@ A team's rushing by direction, one row per rusher and gap, plus totals
 ```python
 pff_api_team_rushing_direction(league='nfl', season=2022, team='cincinnati-bengals')
 ```
-
-_Last validated n/a._

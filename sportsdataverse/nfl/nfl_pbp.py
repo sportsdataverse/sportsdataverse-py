@@ -1046,7 +1046,7 @@ class NFLPlayProcess(object):
                 proc.nfl_pbp_disk()
                 result = proc.run_processing_pipeline()
         """
-        with open(os.path.join(self.path_to_json, f"{self.gameId}.json")) as json_file:
+        with open(os.path.join(self.path_to_json, f"{self.gameId}.json"), encoding="utf-8") as json_file:
             pbp_txt = json.load(json_file)
             self.json = pbp_txt
         return self.json

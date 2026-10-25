@@ -58,8 +58,6 @@ The latest 14 finished games of a competition plus every upcoming game, with the
 sportpress_game_slider(competition_id=25)
 ```
 
-_Last validated n/a._
-
 ## sportpress_game_find
 
 One game: teams, scores, phase, venue and the neighbouring game ids.
@@ -116,8 +114,6 @@ One game: teams, scores, phase, venue and the neighbouring game ids.
 sportpress_game_find(game_id=11295)
 ```
 
-_Last validated n/a._
-
 ## sportpress_game_periods
 
 Points each side scored in each period of a game (periods 5 and up are overtimes).
@@ -157,8 +153,6 @@ Points each side scored in each period of a game (periods 5 and up are overtimes
 ```python
 sportpress_game_periods(game_id=11295)
 ```
-
-_Last validated n/a._
 
 ## sportpress_game_overview
 
@@ -229,8 +223,6 @@ Team totals of both sides of a finished game.
 ```python
 sportpress_game_overview(game_id=11295)
 ```
-
-_Last validated n/a._
 
 ## sportpress_game_top_performers
 
@@ -307,8 +299,6 @@ The top performer of each side of a finished game, with his full line.
 sportpress_game_top_performers(game_id=11295)
 ```
 
-_Last validated n/a._
-
 ## sportpress_game_leaders
 
 The game leader of each side in every statistic (one row per side and statistic).
@@ -355,8 +345,6 @@ The game leader of each side in every statistic (one row per side and statistic)
 ```python
 sportpress_game_leaders(game_id=11295)
 ```
-
-_Last validated n/a._
 
 ## sportpress_game_box
 
@@ -439,8 +427,6 @@ Per-player box score of a finished game (one row per player line).
 sportpress_game_box(competition_id=25, game_id=11295)
 ```
 
-_Last validated n/a._
-
 ## sportpress_game_team_box
 
 Team totals of both sides from the box score of a finished game.
@@ -512,8 +498,6 @@ Team totals of both sides from the box score of a finished game.
 sportpress_game_team_box(competition_id=25, game_id=11295)
 ```
 
-_Last validated n/a._
-
 ## sportpress_game_film
 
 Play-by-play ('film') of a finished game with court x/y (2021-22 and 2026-27 only).
@@ -573,5 +557,3 @@ Play-by-play ('film') of a finished game with court x/y (2021-22 and 2026-27 onl
 ```python
 sportpress_game_film(competition_id=25, game_id=11295)
 ```
-
-_Last validated n/a._

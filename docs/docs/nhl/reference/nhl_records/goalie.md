@@ -78,8 +78,6 @@ Goaltender career statistics (regular season).
 nhl_records_goalie_career_stats()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_goalie_career_stats_with_playoffs
 
 Goaltender career stats inclusive of regular season and playoffs.
@@ -135,8 +133,6 @@ Goaltender career stats inclusive of regular season and playoffs.
 ```python
 nhl_records_goalie_career_stats_with_playoffs()
 ```
-
-_Last validated n/a._
 
 ## nhl_records_goalie_season_stats
 
@@ -206,8 +202,6 @@ Goaltender single-season statistics.
 nhl_records_goalie_season_stats()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_goalie_win_streak
 
 Goaltenders with the longest consecutive-win streaks.
@@ -257,8 +251,6 @@ Goaltenders with the longest consecutive-win streaks.
 ```python
 nhl_records_goalie_win_streak()
 ```
-
-_Last validated n/a._
 
 ## nhl_records_goalie_shutout_streak
 
@@ -311,8 +303,6 @@ Goaltenders with the longest consecutive-shutout streaks.
 nhl_records_goalie_shutout_streak()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_goalie_win_plateaus
 
 Goaltenders who reached each win plateau (100, 200, 300 …).
@@ -358,8 +348,6 @@ Goaltenders who reached each win plateau (100, 200, 300 …).
 ```python
 nhl_records_goalie_win_plateaus()
 ```
-
-_Last validated n/a._
 
 ## nhl_records_goalie_playoff_streak
 
@@ -407,8 +395,6 @@ Goaltender consecutive playoff-win streaks.
 ```python
 nhl_records_goalie_playoff_streak()
 ```
-
-_Last validated n/a._
 
 ## nhl_records_goalie_undefeated_streak
 
@@ -458,5 +444,3 @@ Goaltender longest undefeated streaks (wins + ties).
 ```python
 nhl_records_goalie_undefeated_streak()
 ```
-
-_Last validated n/a._

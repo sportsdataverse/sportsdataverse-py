@@ -241,8 +241,6 @@ GET /api/secured/stats/fantasy/season — one row per player for the season — 
 nfl_pro_fantasy_season(season=2024, season_type='REG')
 ```
 
-_Last validated n/a._
-
 ## nfl_pro_fantasy_game
 
 GET /api/secured/stats/fantasy/game — one row per player-game — fantasy scoring by game. Requires `position_group`.
@@ -483,5 +481,3 @@ GET /api/secured/stats/fantasy/game — one row per player-game — fantasy scor
 ```python
 nfl_pro_fantasy_game(season=2024, season_type='REG', position_group='QB')
 ```
-
-_Last validated n/a._

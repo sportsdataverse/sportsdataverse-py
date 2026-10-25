@@ -604,5 +604,3 @@ Passing by target depth for one player
 ```python
 pff_api_player_passing_depth(league='nfl', player_id=28022, season=2022)
 ```
-
-_Last validated n/a._

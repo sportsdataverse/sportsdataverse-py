@@ -44,8 +44,6 @@ Liveness probe of the unofficial sync server: status, message and the server's o
 easl_health()
 ```
 
-_Last validated n/a._
-
 ## easl_seasons
 
 Every configured EASL season (the four editions 2023-24 to 2026-27) with its DataCore season id and END year.
@@ -99,8 +97,6 @@ Every configured EASL season (the four editions 2023-24 to 2026-27) with its Dat
 ```python
 easl_seasons()
 ```
-
-_Last validated n/a._
 
 ## easl_schedule
 
@@ -181,8 +177,6 @@ Every fixture of one season: status, tip-off, stage, pool, venue and both teams 
 easl_schedule(season=2026)
 ```
 
-_Last validated n/a._
-
 ## easl_game
 
 Header of one finished fixture: teams, final score, status, stage, pool, venue and attendance.
@@ -262,8 +256,6 @@ Header of one finished fixture: teams, final score, status, stage, pool, venue a
 easl_game(fixture_id='10af8fd4-106e-11f1-960b-5798087c7aa3')
 ```
 
-_Last validated n/a._
-
 ## easl_pbp
 
 Play-by-play of a finished game in delivered order, with the running score and the points each event scored.
@@ -318,8 +310,6 @@ Play-by-play of a finished game in delivered order, with the running score and t
 ```python
 easl_pbp(fixture_id='10af8fd4-106e-11f1-960b-5798087c7aa3')
 ```
-
-_Last validated n/a._
 
 ## easl_standings
 
@@ -392,8 +382,6 @@ Group-stage standings of one season: rank within the pool, record, splits, point
 easl_standings(season=2026)
 ```
 
-_Last validated n/a._
-
 ## easl_leaders
 
 Tournament top-5 player leaders in nine categories (points, rebounds, assists, steals, blocks, shooting).
@@ -444,5 +432,3 @@ Tournament top-5 player leaders in nine categories (points, rebounds, assists, s
 ```python
 easl_leaders(season=2026)
 ```
-
-_Last validated n/a._

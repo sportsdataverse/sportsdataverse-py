@@ -1,0 +1,21 @@
+schema: team_aggregate
+kind: dataframe
+columns:
+- name: team
+  type: character
+  description: ''
+- name: team_orapm
+  type: double
+  description: ''
+- name: team_drapm
+  type: double
+  description: ''
+- name: team_net
+  type: double
+  description: ''
+- name: off_poss
+  type: integer
+  description: ''
+- name: def_poss
+  type: integer
+  description: ''

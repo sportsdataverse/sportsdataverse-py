@@ -101,8 +101,6 @@ GET /api/v1/game/{gamePk}/playByPlay — play-by-play with at-bat detail.
 mlb_play_by_play(game_pk=716390)
 ```
 
-_Last validated n/a._
-
 ## mlb_play_analytics
 
 View Statcast data for a specific play.
@@ -140,8 +138,6 @@ No returns table is published for this endpoint: no capture: statsapi.mlb.com an
 mlb_play_analytics(game_pk=716390, guid='90groovy-2438-test-guid-placeholder0')
 ```
 
-_Last validated n/a._
-
 ## mlb_play_context_metrics_averages
 
 View Statcast contextMetrics data for a specific play.
@@ -177,5 +173,3 @@ No returns table is published for this endpoint: no capture: statsapi.mlb.com an
 ```python
 mlb_play_context_metrics_averages(game_pk=716390, guid='90groovy-2438-test-guid-placeholder0')
 ```
-
-_Last validated n/a._

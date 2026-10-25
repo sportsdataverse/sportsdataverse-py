@@ -103,8 +103,6 @@ Season team stat table: totals and per-game values, one row per team and stat bl
 scb_team_statistics(display_type='MAIN_ROUND', season=2026)
 ```
 
-_Last validated n/a._
-
 ## scb_team
 
 Club profile: names, code, home page, ticket shop, year joined and honours.
@@ -152,8 +150,6 @@ Club profile: names, code, home page, ticket shop, year joined and honours.
 scb_team(team_id='413')
 ```
 
-_Last validated n/a._
-
 ## scb_team_seasons
 
 Every season a club played: its name that season and its championship and cup titles.
@@ -197,8 +193,6 @@ Every season a club played: its name that season and its championship and cup ti
 ```python
 scb_team_seasons(team_id='413')
 ```
-
-_Last validated n/a._
 
 ## scb_team_rosters
 
@@ -250,5 +244,3 @@ Per club, the current roster, one row per player (BBL only).
 ```python
 scb_team_rosters()
 ```
-
-_Last validated n/a._

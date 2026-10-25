@@ -61,8 +61,6 @@ List all NHL award / trophy records.
 nhl_records_awards()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_awards_by_franchise
 
 List award records for a single franchise.
@@ -93,8 +91,6 @@ List award records for a single franchise.
 ```python
 nhl_records_awards_by_franchise(franchise_id=1)
 ```
-
-_Last validated n/a._
 
 ## nhl_records_awards_trophy_season
 
@@ -151,8 +147,6 @@ Retrieve the trophy winner for a specific season.
 ```python
 nhl_records_awards_trophy_season(trophy_id=1, season_id='X')
 ```
-
-_Last validated n/a._
 
 ## nhl_records_coaches
 
@@ -215,8 +209,6 @@ List NHL head coaches.
 nhl_records_coaches()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_coach
 
 Retrieve one coach by their numeric ID.
@@ -278,8 +270,6 @@ Retrieve one coach by their numeric ID.
 ```python
 nhl_records_coach(coach_id='X')
 ```
-
-_Last validated n/a._
 
 ## nhl_records_all_time_record_vs_franchise
 
@@ -352,8 +342,6 @@ All-time head-to-head records between every franchise pairing.
 nhl_records_all_time_record_vs_franchise()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_skater_career_stats
 
 Skater career statistics (all-time, regular season).
@@ -387,8 +375,6 @@ No returns table is published for this endpoint: no capture: records.nhl.com ans
 nhl_records_skater_career_stats()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_skater_career_leaders
 
 All-time skater career leaderboards.
@@ -421,8 +407,6 @@ No returns table is published for this endpoint: no capture: records.nhl.com ans
 ```python
 nhl_records_skater_career_leaders()
 ```
-
-_Last validated n/a._
 
 ## nhl_records_consecutive_100pt_seasons
 
@@ -472,8 +456,6 @@ Skaters with the most consecutive 100-point seasons.
 nhl_records_consecutive_100pt_seasons()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_expansion_draft_picks
 
 Expansion draft picks (e.g. Vegas 2017, Seattle 2021).
@@ -513,8 +495,6 @@ Expansion draft picks (e.g. Vegas 2017, Seattle 2021).
 nhl_records_expansion_draft_picks()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_attendance
 
 NHL arena attendance records.
@@ -553,8 +533,6 @@ NHL arena attendance records.
 ```python
 nhl_records_attendance()
 ```
-
-_Last validated n/a._
 
 ## nhl_records_hof_players
 
@@ -597,8 +575,6 @@ Hockey Hall of Fame player inductees.
 nhl_records_hof_players()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_hof_players_by_office
 
 Hall of Fame players for a specific induction office/category.
@@ -640,8 +616,6 @@ Hall of Fame players for a specific induction office/category.
 ```python
 nhl_records_hof_players_by_office(office_id='X')
 ```
-
-_Last validated n/a._
 
 ## nhl_records_gm_career
 
@@ -717,8 +691,6 @@ General Manager career records.
 ```python
 nhl_records_gm_career()
 ```
-
-_Last validated n/a._
 
 ## nhl_records_gm_franchise
 
@@ -797,8 +769,6 @@ General Manager records scoped to franchise stints.
 nhl_records_gm_franchise()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_home_team_record
 
 League-wide home-team win/loss record by season.
@@ -850,8 +820,6 @@ League-wide home-team win/loss record by season.
 nhl_records_home_team_record()
 ```
 
-_Last validated n/a._
-
 ## nhl_records_away_team_record
 
 League-wide away-team win/loss record by season.
@@ -902,5 +870,3 @@ League-wide away-team win/loss record by season.
 ```python
 nhl_records_away_team_record()
 ```
-
-_Last validated n/a._

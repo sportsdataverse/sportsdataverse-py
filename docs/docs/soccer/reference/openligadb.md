@@ -47,8 +47,6 @@ Current matchday.
 openligadb_current_group(league_slug='bl1')
 ```
 
-_Last validated n/a._
-
 ## openligadb_goalgetters
 
 Top scorers.
@@ -87,8 +85,6 @@ Top scorers.
 ```python
 openligadb_goalgetters(league_slug='bl1', season='2025')
 ```
-
-_Last validated n/a._
 
 ## openligadb_group_matches
 
@@ -154,8 +150,6 @@ Matches of one matchday.
 openligadb_group_matches(group='1', league_slug='bl1', season='2025')
 ```
 
-_Last validated n/a._
-
 ## openligadb_groups
 
 Matchdays of a league-season.
@@ -195,8 +189,6 @@ Matchdays of a league-season.
 openligadb_groups(league_slug='bl1', season='2025')
 ```
 
-_Last validated n/a._
-
 ## openligadb_last_change_date
 
 Last change timestamp (bare ISO string).
@@ -234,8 +226,6 @@ Last change timestamp (bare ISO string).
 ```python
 openligadb_last_change_date(group='1', league_slug='bl1', season='2025')
 ```
-
-_Last validated n/a._
 
 ## openligadb_leagues
 
@@ -276,8 +266,6 @@ All leagues (shortcut, season, sport).
 ```python
 openligadb_leagues()
 ```
-
-_Last validated n/a._
 
 ## openligadb_match
 
@@ -340,8 +328,6 @@ One match.
 ```python
 openligadb_match(match_id='77264')
 ```
-
-_Last validated n/a._
 
 ## openligadb_next_match
 
@@ -406,8 +392,6 @@ Next match of a team (404 text once the season is over).
 openligadb_next_match(league_id='4937', team_id='40')
 ```
 
-_Last validated n/a._
-
 ## openligadb_season_matches
 
 All matches of a season.
@@ -471,8 +455,6 @@ All matches of a season.
 openligadb_season_matches(league_slug='bl1', season='2025')
 ```
 
-_Last validated n/a._
-
 ## openligadb_table
 
 League table.
@@ -521,8 +503,6 @@ League table.
 openligadb_table(league_slug='bl1', season='2025')
 ```
 
-_Last validated n/a._
-
 ## openligadb_teams
 
 Teams of a league-season.
@@ -563,5 +543,3 @@ Teams of a league-season.
 ```python
 openligadb_teams(league_slug='bl1', season='2025')
 ```
-
-_Last validated n/a._

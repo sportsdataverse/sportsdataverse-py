@@ -357,8 +357,6 @@ GET /stats/teamdashboardbygamesplits
 nba_stats_teamdashboardbygamesplits(league_id='00', season='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_teamdashboardbygeneralsplits
 
 GET /stats/teamdashboardbygeneralsplits
@@ -773,5 +771,3 @@ GET /stats/teamdashboardbygeneralsplits
 ```python
 nba_stats_teamdashboardbygeneralsplits(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._

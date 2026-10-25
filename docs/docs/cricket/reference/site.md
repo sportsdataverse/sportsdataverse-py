@@ -62,8 +62,6 @@ ESPN endpoint.
 espn_cricket_scoreboard(league='eng.1', dates='20240115')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_summary
 
 ESPN endpoint.
@@ -208,8 +206,6 @@ ESPN endpoint.
 espn_cricket_summary(league='eng.1')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_calendar
 
 ESPN endpoint.
@@ -242,8 +238,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_cricket_calendar(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_news
 
@@ -297,8 +291,6 @@ ESPN endpoint.
 espn_cricket_news(league='eng.1')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_injuries
 
 ESPN endpoint.
@@ -335,8 +327,6 @@ ESPN endpoint.
 ```python
 espn_cricket_injuries(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_transactions
 
@@ -384,8 +374,6 @@ ESPN endpoint.
 espn_cricket_transactions(league='eng.1')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_conferences
 
 ESPN endpoint.
@@ -428,8 +416,6 @@ ESPN endpoint.
 espn_cricket_conferences(league='eng.1')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_statistics_league
 
 ESPN endpoint.
@@ -463,8 +449,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 espn_cricket_statistics_league(league='eng.1')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_draft
 
 ESPN endpoint.
@@ -497,8 +481,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 ```python
 espn_cricket_draft(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_teams_site
 
@@ -548,8 +530,6 @@ ESPN endpoint.
 ```python
 espn_cricket_teams_site(league='eng.1')
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_team
 
@@ -626,8 +606,6 @@ ESPN endpoint.
 ```python
 espn_cricket_team(league='eng.1', team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_team_roster
 
@@ -733,8 +711,6 @@ ESPN endpoint.
 espn_cricket_team_roster(league='eng.1', team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_team_schedule
 
 ESPN endpoint.
@@ -784,8 +760,6 @@ ESPN endpoint.
 espn_cricket_team_schedule(league='eng.1', team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_team_record
 
 ESPN endpoint.
@@ -820,8 +794,6 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 espn_cricket_team_record(league='eng.1', team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_team_depthcharts
 
 ESPN endpoint.
@@ -855,8 +827,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 ```python
 espn_cricket_team_depthcharts(league='eng.1', team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_team_injuries
 
@@ -896,8 +866,6 @@ ESPN endpoint.
 espn_cricket_team_injuries(league='eng.1', team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_team_transactions
 
 ESPN endpoint.
@@ -932,8 +900,6 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 espn_cricket_team_transactions(league='eng.1', team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_team_history
 
 ESPN endpoint.
@@ -967,8 +933,6 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 ```python
 espn_cricket_team_history(league='eng.1', team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_team_news
 
@@ -1023,8 +987,6 @@ ESPN endpoint.
 espn_cricket_team_news(league='eng.1', team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_team_leaders
 
 ESPN endpoint.
@@ -1058,8 +1020,6 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 ```python
 espn_cricket_team_leaders(league='eng.1', team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_player_info
 
@@ -1095,8 +1055,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 espn_cricket_player_info(league='eng.1', athlete_id='4239')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_player_bio
 
 ESPN endpoint.
@@ -1130,8 +1088,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_cricket_player_bio(league='eng.1', athlete_id='4239')
 ```
-
-_Last validated n/a._
 
 ## espn_cricket_player_news
 
@@ -1185,8 +1141,6 @@ ESPN endpoint.
 espn_cricket_player_news(league='eng.1', athlete_id='4239')
 ```
 
-_Last validated n/a._
-
 ## espn_cricket_standings
 
 ESPN endpoint.
@@ -1238,5 +1192,3 @@ ESPN endpoint.
 ```python
 espn_cricket_standings(league='eng.1')
 ```
-
-_Last validated n/a._

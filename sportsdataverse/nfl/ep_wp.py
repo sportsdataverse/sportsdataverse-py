@@ -210,10 +210,10 @@ XYAC_FEATURES: list[str] = [
 # XPASS — expected dropback (pass) feature contract (one binary:logistic model)
 # ---------------------------------------------------------------------------
 # Mirrors nflfastR's ``add_xpass`` / ``prepare_xpass_data`` (helper_add_xpass.R):
-# a single ``binary:logistic`` XGBoost model over 17 features.  The model was
-# trained without embedded ``feature_names`` (Booster.feature_names is None), so
-# the input matrix MUST be supplied with columns in EXACTLY this order.  The
-# era2..4 + outdoors/retractable/dome dummies + ``home`` indicator come from the
+# a single ``binary:logistic`` XGBoost model over the 19 features below.  The
+# bundled ``xpass_model.ubj`` embeds these 19 names in this order, and xgboost
+# rejects a DMatrix whose column names differ from them.  The
+# era0..4 + outdoors/retractable/dome dummies + ``home`` indicator come from the
 # same nflfastR make_model_mutations() logic that :func:`_make_cp_mutations`
 # already builds — that helper is reused rather than re-deriving them.
 XPASS_FEATURES: list[str] = [

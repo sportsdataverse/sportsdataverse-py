@@ -47,8 +47,6 @@ The current ten clubs with Korean and English names and the code of each club's 
 kbl_teams()
 ```
 
-_Last validated n/a._
-
 ## kbl_team_box
 
 Team box score of a final game with advanced rates and team-only counts, one row per team.
@@ -152,8 +150,6 @@ Team box score of a final game with advanced rates and team-only counts, one row
 kbl_team_box(gmkey='S47G01N49')
 ```
 
-_Last validated n/a._
-
 ## kbl_team_tracks
 
 Each team's standing after every game of the season, one row per team and game.
@@ -198,5 +194,3 @@ Each team's standing after every game of the season, one row per team and game.
 ```python
 kbl_team_tracks(season=2025)
 ```
-
-_Last validated n/a._

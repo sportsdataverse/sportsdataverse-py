@@ -55,8 +55,6 @@ Coach identity detail.
 sports247_site_pages_coach()
 ```
 
-_Last validated n/a._
-
 ## sports247_site_pages_event
 
 Recruiting event detail (camp/combine/regional).
@@ -98,8 +96,6 @@ Recruiting event detail (camp/combine/regional).
 ```python
 sports247_site_pages_event()
 ```
-
-_Last validated n/a._
 
 ## sports247_site_pages_institution
 
@@ -155,8 +151,6 @@ Institution (school/team) detail.
 ```python
 sports247_site_pages_institution()
 ```
-
-_Last validated n/a._
 
 ## sports247_site_pages_institution_list
 
@@ -215,8 +209,6 @@ Institution directory (paginated list).
 sports247_site_pages_institution_list()
 ```
 
-_Last validated n/a._
-
 ## sports247_site_pages_institution_location
 
 Institution location (city/state/coords/tax).
@@ -263,8 +255,6 @@ Institution location (city/state/coords/tax).
 sports247_site_pages_institution_location(key=24099)
 ```
 
-_Last validated n/a._
-
 ## sports247_site_pages_institution_timeline_events
 
 Institution recruiting timeline (site-authored event blurbs).
@@ -305,8 +295,6 @@ Institution recruiting timeline (site-authored event blurbs).
 ```python
 sports247_site_pages_institution_timeline_events(key=24099, school_slug='florida')
 ```
-
-_Last validated n/a._
 
 ## sports247_site_pages_league_draft_picks
 
@@ -362,8 +350,6 @@ Pro-draft picks embed for a league/year/round.
 ```python
 sports247_site_pages_league_draft_picks(league_slug='NFL')
 ```
-
-_Last validated n/a._
 
 ## sports247_site_pages_league_institutions
 
@@ -423,8 +409,6 @@ Institutions belonging to a league.
 sports247_site_pages_league_institutions(league_id=6)
 ```
 
-_Last validated n/a._
-
 ## sports247_site_pages_page_feeds
 
 News/headline feed items for a site Page.
@@ -464,8 +448,6 @@ News/headline feed items for a site Page.
 ```python
 sports247_site_pages_page_feeds(page_id=100134)
 ```
-
-_Last validated n/a._
 
 ## sports247_site_pages_playersport_institution
 
@@ -532,8 +514,6 @@ PlayerInstitution linked to a PlayerSport.
 sports247_site_pages_playersport_institution(key=279200)
 ```
 
-_Last validated n/a._
-
 ## sports247_site_pages_playersport_rank_history
 
 Ranking history for a PlayerSport (one row per Ranking snapshot).
@@ -596,8 +576,6 @@ Ranking history for a PlayerSport (one row per Ranking snapshot).
 ```python
 sports247_site_pages_playersport_rank_history(key=250563)
 ```
-
-_Last validated n/a._
 
 ## sports247_site_pages_position_rankings
 
@@ -662,8 +640,6 @@ Player-sport rankings for a position.
 sports247_site_pages_position_rankings(key=14)
 ```
 
-_Last validated n/a._
-
 ## sports247_site_pages_recruit_interest
 
 Single recruit-interest (school<->recruit link) detail.
@@ -724,5 +700,3 @@ Single recruit-interest (school<->recruit link) detail.
 ```python
 sports247_site_pages_recruit_interest()
 ```
-
-_Last validated n/a._

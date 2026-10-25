@@ -98,8 +98,6 @@ ESPN endpoint.
 espn_mbb_scoreboard(dates='20240115')
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_summary
 
 ESPN endpoint.
@@ -362,8 +360,6 @@ ESPN endpoint.
 espn_mbb_summary()
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_calendar_site
 
 ESPN endpoint.
@@ -396,8 +392,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_mbb_calendar_site()
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_news
 
@@ -455,8 +449,6 @@ ESPN endpoint.
 espn_mbb_news()
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_injuries
 
 ESPN endpoint.
@@ -493,8 +485,6 @@ ESPN endpoint.
 ```python
 espn_mbb_injuries()
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_transactions
 
@@ -542,8 +532,6 @@ ESPN endpoint.
 espn_mbb_transactions()
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_conferences
 
 ESPN endpoint.
@@ -586,8 +574,6 @@ ESPN endpoint.
 espn_mbb_conferences()
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_statistics_league
 
 ESPN endpoint.
@@ -621,8 +607,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 espn_mbb_statistics_league()
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_draft
 
 ESPN endpoint.
@@ -655,8 +639,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 ```python
 espn_mbb_draft()
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_teams_site
 
@@ -706,8 +688,6 @@ ESPN endpoint.
 ```python
 espn_mbb_teams_site()
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_team
 
@@ -784,8 +764,6 @@ ESPN endpoint.
 ```python
 espn_mbb_team(team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_team_roster
 
@@ -867,8 +845,6 @@ ESPN endpoint.
 espn_mbb_team_roster(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_team_schedule
 
 ESPN endpoint.
@@ -920,8 +896,6 @@ ESPN endpoint.
 espn_mbb_team_schedule(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_team_record
 
 ESPN endpoint.
@@ -956,8 +930,6 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 espn_mbb_team_record(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_team_depthcharts
 
 ESPN endpoint.
@@ -991,8 +963,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 ```python
 espn_mbb_team_depthcharts(team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_team_injuries
 
@@ -1032,8 +1002,6 @@ ESPN endpoint.
 espn_mbb_team_injuries(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_team_transactions
 
 ESPN endpoint.
@@ -1068,8 +1036,6 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 espn_mbb_team_transactions(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_team_history
 
 ESPN endpoint.
@@ -1103,8 +1069,6 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 ```python
 espn_mbb_team_history(team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_team_news
 
@@ -1163,8 +1127,6 @@ ESPN endpoint.
 espn_mbb_team_news(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_team_leaders
 
 ESPN endpoint.
@@ -1198,8 +1160,6 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 ```python
 espn_mbb_team_leaders(team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_player_info
 
@@ -1235,8 +1195,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 espn_mbb_player_info(athlete_id='4239')
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_player_bio
 
 ESPN endpoint.
@@ -1270,8 +1228,6 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 ```python
 espn_mbb_player_bio(athlete_id='4239')
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_player_news
 
@@ -1328,8 +1284,6 @@ ESPN endpoint.
 ```python
 espn_mbb_player_news(athlete_id='4239')
 ```
-
-_Last validated n/a._
 
 ## espn_mbb_standings
 
@@ -1395,8 +1349,6 @@ ESPN endpoint.
 espn_mbb_standings()
 ```
 
-_Last validated n/a._
-
 ## espn_mbb_rankings
 
 ESPN endpoint.
@@ -1455,5 +1407,3 @@ ESPN endpoint.
 ```python
 espn_mbb_rankings()
 ```
-
-_Last validated n/a._

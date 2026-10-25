@@ -116,8 +116,6 @@ GET /stats/boxscoreadvancedv2
 wnba_stats_boxscoreadvancedv2()
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_boxscoreadvancedv3
 
 GET /stats/boxscoreadvancedv3
@@ -237,8 +235,6 @@ GET /stats/boxscoreadvancedv3
 wnba_stats_boxscoreadvancedv3()
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_boxscoredefensivev2
 
 GET /stats/boxscoredefensivev2
@@ -322,8 +318,6 @@ GET /stats/boxscoredefensivev2
 wnba_stats_boxscoredefensivev2()
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_boxscorefourfactorsv2
 
 GET /stats/boxscorefourfactorsv2
@@ -403,8 +397,6 @@ GET /stats/boxscorefourfactorsv2
 ```python
 wnba_stats_boxscorefourfactorsv2()
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_boxscorefourfactorsv3
 
@@ -496,8 +488,6 @@ GET /stats/boxscorefourfactorsv3
 wnba_stats_boxscorefourfactorsv3()
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_boxscorehustlev2
 
 GET /stats/boxscorehustlev2
@@ -544,8 +534,6 @@ GET /stats/boxscorehustlev2
 ```python
 wnba_stats_boxscorehustlev2()
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_boxscorematchupsv3
 
@@ -614,8 +602,6 @@ GET /stats/boxscorematchupsv3
 ```python
 wnba_stats_boxscorematchupsv3()
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_boxscoremiscv2
 
@@ -704,8 +690,6 @@ GET /stats/boxscoremiscv2
 ```python
 wnba_stats_boxscoremiscv2()
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_boxscoremiscv3
 
@@ -804,8 +788,6 @@ GET /stats/boxscoremiscv3
 ```python
 wnba_stats_boxscoremiscv3()
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_boxscoreplayertrackv3
 
@@ -915,8 +897,6 @@ GET /stats/boxscoreplayertrackv3
 wnba_stats_boxscoreplayertrackv3()
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_boxscorescoringv2
 
 GET /stats/boxscorescoringv2
@@ -1010,8 +990,6 @@ GET /stats/boxscorescoringv2
 ```python
 wnba_stats_boxscorescoringv2()
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_boxscorescoringv3
 
@@ -1116,5 +1094,3 @@ GET /stats/boxscorescoringv3
 ```python
 wnba_stats_boxscorescoringv3()
 ```
-
-_Last validated n/a._

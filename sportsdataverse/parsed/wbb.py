@@ -298,6 +298,7 @@ from sportsdataverse.wbb import count_matching as count_matching  # noqa: F401
 from sportsdataverse.wbb import create_lineup_data as create_lineup_data  # noqa: F401
 from sportsdataverse.wbb import create_player_events as create_player_events  # noqa: F401
 from sportsdataverse.wbb import create_shot_event_data as create_shot_event_data  # noqa: F401
+from sportsdataverse.wbb import current_ncaa_team_alts as current_ncaa_team_alts  # noqa: F401
 from sportsdataverse.wbb import display_name_to_roster_key as display_name_to_roster_key  # noqa: F401
 from sportsdataverse.wbb import download as download  # noqa: F401
 from sportsdataverse.wbb import duration_from_period as duration_from_period  # noqa: F401
@@ -728,6 +729,7 @@ __all__ = [
     "create_lineup_data",
     "create_player_events",
     "create_shot_event_data",
+    "current_ncaa_team_alts",
     "display_name_to_roster_key",
     "download",
     "duration_from_period",

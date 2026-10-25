@@ -44,8 +44,6 @@ Every competition edition (league_id): the W League seasons back to 1999-2000, a
 wjbl_leagues()
 ```
 
-_Last validated n/a._
-
 ## wjbl_schedule
 
 Games of a season in ONE month (default: the season's latest month) with teams, venue, status and score.
@@ -123,8 +121,6 @@ Games of a season in ONE month (default: the season's latest month) with teams, 
 wjbl_schedule(game_month='2026-04', season=2026)
 ```
 
-_Last validated n/a._
-
 ## wjbl_game
 
 Game header of a final game: both teams, the result flag and the score by period, one row.
@@ -196,8 +192,6 @@ Game header of a final game: both teams, the result flag and the score by period
 wjbl_game(play_schedule_id=7987)
 ```
 
-_Last validated n/a._
-
 ## wjbl_period_scores
 
 Points of each side in each period played (quarters and overtimes) from the game header.
@@ -238,8 +232,6 @@ Points of each side in each period played (quarters and overtimes) from the game
 ```python
 wjbl_period_scores(play_schedule_id=7987)
 ```
-
-_Last validated n/a._
 
 ## wjbl_box_score
 
@@ -300,8 +292,6 @@ Box score of a final game (2013-14 on): one row per player of both teams.
 wjbl_box_score(play_schedule_id=7987)
 ```
 
-_Last validated n/a._
-
 ## wjbl_pbp
 
 Play-by-play of a final game (2018-19 on): one row per play, Japanese action vocabulary, no shot x/y.
@@ -361,8 +351,6 @@ Play-by-play of a final game (2018-19 on): one row per play, Japanese action voc
 wjbl_pbp(play_schedule_id=7987)
 ```
 
-_Last validated n/a._
-
 ## wjbl_standing_seasons
 
 Every season phase (season_id) with its edition name and standings flags.
@@ -403,8 +391,6 @@ Every season phase (season_id) with its edition name and standings flags.
 ```python
 wjbl_standing_seasons()
 ```
-
-_Last validated n/a._
 
 ## wjbl_head_to_head
 
@@ -447,8 +433,6 @@ Head-to-head results grid (hoshitori-hyo) of one or more season phases: one row 
 ```python
 wjbl_head_to_head(season_ids='169')
 ```
-
-_Last validated n/a._
 
 ## wjbl_roster
 
@@ -508,8 +492,6 @@ Players of a team in a season phase, with the head coach.
 wjbl_roster(season_id=169, team_id=13)
 ```
 
-_Last validated n/a._
-
 ## wjbl_staff
 
 Staff of a team in a season phase (general manager, assistant coaches, support staff).
@@ -555,5 +537,3 @@ Staff of a team in a season phase (general manager, assistant coaches, support s
 ```python
 wjbl_staff(season_id=169, team_id=13)
 ```
-
-_Last validated n/a._

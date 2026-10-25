@@ -17,6 +17,7 @@ import polars as pl
 import requests
 from requests.adapters import HTTPAdapter
 
+from sportsdataverse._deprecation import warn_deprecated
 from sportsdataverse.errors import NoDataError, _is_data_body, _may_be_json, _redact_secrets, no_espn_data
 
 logger = logging.getLogger("sdv.dl_utils")
@@ -294,9 +295,12 @@ def download(
     Canonical HTTP gateway used by every wrapper in the package. Wraps
     :mod:`requests` with an exponential-style retry loop, raises
     :class:`~sportsdataverse.errors.NoDataError` on any 404 -- an ESPN
-    200-with-``code:404`` body included, and release assets on GitHub too --
-    and surfaces transient failures through the supplied ``logger`` rather
-    than raising.
+    200-with-``code:404`` body included, and release assets on GitHub too.
+    Retryable statuses (403/408/429/5xx) and connection failures are retried
+    and logged through ``logger``; once the status budget is spent the last
+    response is RETURNED, not raised, so read its body through
+    ``_codegen_runtime._download_json``. A connection failure that outlives
+    the budget is re-raised (see Raises).
 
     Args:
         url: Target URL.
@@ -370,25 +374,22 @@ def download(
     Example:
         Quick start::
 
+            from sportsdataverse._codegen_runtime import _download_json
             from sportsdataverse.dl_utils import download
 
             url = "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams"
-            resp = download(url)
-            data = resp.json()
+            resp = download(url)  # the Response; check resp.status_code before using it
+            data = _download_json(download, url)  # JSON under the error vocabulary
 
         Custom retries and timeout::
 
             resp = download(url, num_retries=5, timeout=30)
 
-        Add headers (e.g. for a stats.wnba.com endpoint that needs an Origin)::
+        Add headers::
 
             resp = download(
-                "https://stats.wnba.com/stats/leaguedashteamstats",
-                headers={
-                    "Origin": "https://stats.wnba.com",
-                    "Referer": "https://www.wnba.com/",
-                    "User-Agent": "sportsdataverse-py",
-                },
+                "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams",
+                headers={"User-Agent": "sportsdataverse-py"},
             )
 
         Pass query-string parameters with ``params=``::
@@ -590,6 +591,25 @@ def download(
 
 
 def init_request_settings(params, session, logger):
+    """Fill in the defaults :func:`download` uses for anything the caller left as ``None``.
+
+    Args:
+        params: Query parameters; ``None`` becomes ``{}``.
+        session: A ``requests.Session``; ``None`` becomes the package's shared pooled session.
+        logger: A ``logging.Logger``; ``None`` becomes the ``sdv.dl_utils`` module logger.
+
+    Returns:
+        tuple: ``(session, params, logger)`` with every ``None`` replaced.
+
+    Example:
+        The defaults ``download()`` would use::
+
+            from sportsdataverse.dl_utils import init_request_settings
+            session, params, logger = init_request_settings(None, None, None)
+
+    See Also:
+        * :func:`download` -- the only caller
+    """
     if params is None:
         params = {}
 
@@ -597,8 +617,7 @@ def init_request_settings(params, session, logger):
         session = _SHARED_SESSION
 
     if logger is None:
-        logger = logging.getLogger("sdv.dl_utils")
-        logger.addHandler(logging.NullHandler())
+        logger = logging.getLogger("sdv.dl_utils")  # its NullHandler is added once, at import
     return session, params, logger
 
 
@@ -628,6 +647,9 @@ def flatten_json_iterative(dictionary, sep=".", ind_start=0):
             # {'game.id': '401628334',
             #  'game.competitors.0.team': 'Ohio State',
             #  'game.competitors.1.team': 'Marshall'}
+
+        See Also:
+            * :func:`key_check` -- a safe single-key read from the same kind of payload
     """
 
     def unpack_one(parent_key, parent_value):
@@ -704,6 +726,9 @@ def normalize_team_roster_columns(teams_df: pl.DataFrame) -> pl.DataFrame:
 
             from sportsdataverse.dl_utils import normalize_team_roster_columns
             teams_df = normalize_team_roster_columns(teams_df)
+
+        See Also:
+            * :func:`sportsdataverse.nfl.espn_nfl_game_rosters` -- one of the ``*_game_rosters`` callers
     """
     # Canonicalize raw keys: $ref -> href, camelCase -> snake_case. Matches the
     # convention the sibling roster/athlete helpers already use.
@@ -771,25 +796,64 @@ def key_check(obj, key, replacement=np.array([])):
 
             key_check(payload, "missing", replacement=None)
             # None
+
+        See Also:
+            * :func:`flatten_json_iterative` -- flatten a whole payload instead
     """
     return obj[key] if key in obj.keys() else replacement
 
 
 @pl.api.register_dataframe_namespace("janitor")
 class ColumnJanitor:
+    """The ``DataFrame.janitor`` namespace: column-name clean-up on any polars frame.
+
+    Importing ``sportsdataverse`` registers it. ``clean_names()`` snake-cases every column with
+    :func:`underscore`; ``to_pascal_case`` / ``to_camel_case`` / ``to_kebab_case`` are deprecated
+    (0.1.6; removed in 0.2.0) in favour of ``df.rename`` with :func:`camelize` / :func:`kebabize`.
+
+    Example:
+        Snake-case a frame's columns::
+
+            import polars as pl
+            import sportsdataverse  # noqa: F401  (registers the namespace)
+            pl.DataFrame({"homeTeamScore": [1]}).janitor.clean_names().columns  # ["home_team_score"]
+
+        See Also:
+            * :func:`underscore` / :func:`kebabize` / :func:`camelize` -- the three case converters
+    """
+
     def __init__(self, df: pl.DataFrame):
         self._df = df
 
     def clean_names(self) -> pl.DataFrame:
         return self._df.rename({c: underscore(c) for c in self._df.columns})
 
+    # C-L59: no caller anywhere; deprecated, not deleted (public on every DataFrame's ``janitor``).
     def to_pascal_case(self) -> pl.DataFrame:
+        warn_deprecated(
+            "DataFrame.janitor.to_pascal_case",
+            replacement="df.rename(sportsdataverse.dl_utils.camelize)",
+            since="0.1.6",
+            removed_in="0.2.0",
+        )
         return self._df.rename({c: camelize(c, True) for c in self._df.columns})
 
     def to_camel_case(self) -> pl.DataFrame:
+        warn_deprecated(
+            "DataFrame.janitor.to_camel_case",
+            replacement="df.rename(lambda c: sportsdataverse.dl_utils.camelize(c, False))",
+            since="0.1.6",
+            removed_in="0.2.0",
+        )
         return self._df.rename({c: camelize(c, False) for c in self._df.columns})
 
     def to_kebab_case(self) -> pl.DataFrame:
+        warn_deprecated(
+            "DataFrame.janitor.to_kebab_case",
+            replacement="df.rename(sportsdataverse.dl_utils.kebabize)",
+            since="0.1.6",
+            removed_in="0.2.0",
+        )
         return self._df.rename({c: kebabize(c) for c in self._df.columns})
 
 
@@ -820,6 +884,9 @@ def underscore(word):
 
             camelize(underscore("IOError"))
             # 'IoError'
+
+        See Also:
+            * :func:`underscore` / :func:`kebabize` / :func:`camelize` -- the three case converters
     """
 
     word = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1_\2", word)
@@ -838,6 +905,13 @@ def kebabize(word):
     emits dashes instead of underscores. Useful for URL slugs and
     hyphen-friendly schema labels.
 
+    Args:
+        word: The CamelCase, PascalCase or snake_case string to convert.
+
+    Returns:
+        str: The kebab-case form: words split at each case change, underscores turned into
+            dashes, everything lower-cased.
+
     Example:
         Basic input -> output::
 
@@ -848,6 +922,9 @@ def kebabize(word):
 
             kebabize("home_team_score")
             # 'home-team-score'
+
+        See Also:
+            * :func:`underscore` / :func:`kebabize` / :func:`camelize` -- the three case converters
     """
 
     word = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1_\2", word)
@@ -867,6 +944,9 @@ def camelize(string, uppercase_first_letter=True):
             separated form).
         uppercase_first_letter: When ``True`` (default) emit
             ``UpperCamelCase``; when ``False`` emit ``lowerCamelCase``.
+
+    Returns:
+        str: The CamelCase form.
 
     Example:
         Default UpperCamelCase::
@@ -888,6 +968,9 @@ def camelize(string, uppercase_first_letter=True):
 
             camelize(underscore("IOError"))
             # 'IoError'
+
+        See Also:
+            * :func:`underscore` / :func:`kebabize` / :func:`camelize` -- the three case converters
     """
     if uppercase_first_letter:
         return re.sub(r"(?:^|_)(.)", lambda m: m.group(1).upper(), string)
@@ -895,7 +978,7 @@ def camelize(string, uppercase_first_letter=True):
         return string[0].lower() + camelize(string)[1:]
 
 
-class ESPNResponse:
+class _ESPNResponse:
     def __init__(self, response, status_code, url):
         self._response = response
 
@@ -925,8 +1008,8 @@ class ESPNResponse:
         return self._url
 
 
-class ESPNHTTP:
-    espn_response = ESPNResponse
+class _ESPNHTTP:
+    espn_response = _ESPNResponse
 
     base_url = None
 
@@ -986,3 +1069,20 @@ class ESPNHTTP:
             raise Exception("InvalidResponse: Response is not in a valid JSON format.")
 
         return data
+
+
+# A-L32 / C-L59: ``ESPNHTTP`` / ``ESPNResponse`` (an nba_api-derived client) have no caller in the
+# package or the workspace; every request goes through :func:`download`. Deprecated, not deleted.
+_DEPRECATED = {"ESPNHTTP": _ESPNHTTP, "ESPNResponse": _ESPNResponse}
+
+
+def __getattr__(name: str) -> Any:  # PEP 562: warn on access, not on import
+    if name in _DEPRECATED:
+        warn_deprecated(
+            f"sportsdataverse.dl_utils.{name}",
+            replacement="sportsdataverse.dl_utils.download()",
+            since="0.1.6",
+            removed_in="0.2.0",
+        )
+        return _DEPRECATED[name]
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

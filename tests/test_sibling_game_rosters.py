@@ -11,6 +11,7 @@ no network is required.
 from __future__ import annotations
 
 import importlib
+import sys
 
 import polars as pl
 import pytest
@@ -22,6 +23,17 @@ SPORTS = ["wbb", "wnba", "nba", "mbb", "nhl", "nfl"]
 
 def _mod(sport: str):
     return importlib.import_module(f"sportsdataverse.{sport}.{sport}_game_rosters")
+
+
+def _roster_fn(sport: str):
+    """``helper_<lg>_roster_items`` and the module whose ``download`` it reads.
+
+    Five leagues bind the name to the shared ``_espn_game_rosters.roster_items`` (task 6.1), which looks
+    ``download`` up in ``_espn_game_rosters``; nhl keeps its own body. Patching the defining module
+    keeps the stub on the request path either way.
+    """
+    fn = getattr(_mod(sport), f"helper_{sport}_roster_items")
+    return fn, sys.modules[fn.__module__]
 
 
 def _competitor(team_id: int, *, with_statistics: bool) -> dict:
@@ -81,7 +93,7 @@ def test_game_items_with_statistics_ref_renames(sport):
 @pytest.mark.parametrize("sport", SPORTS)
 def test_roster_items_one_team_404_recovers_other(sport, monkeypatch):
     """When one team's roster 404s, the other team's roster is still recovered."""
-    mod = _mod(sport)
+    fn, home = _roster_fn(sport)
     items = pl.DataFrame({"team_id": [52, 2641]})
 
     def fake_download(url, **kwargs):
@@ -89,8 +101,8 @@ def test_roster_items_one_team_404_recovers_other(sport, monkeypatch):
             raise NoESPNDataError("NoESPNDataError: No data found for " + url)
         return _FakeResp({"entries": [_roster_entry(101), _roster_entry(102)]})
 
-    monkeypatch.setattr(mod, "download", fake_download)
-    out = getattr(mod, f"helper_{sport}_roster_items")(items=items, summary_url="http://core/competitors")
+    monkeypatch.setattr(home, "download", fake_download)
+    out = fn(items=items, summary_url="http://core/competitors")
     assert isinstance(out, pl.DataFrame)
     assert out.height == 2
     assert out["team_id"].unique().to_list() == [52]
@@ -100,15 +112,15 @@ def test_roster_items_one_team_404_recovers_other(sport, monkeypatch):
 def test_roster_items_all_teams_404_raises(sport, monkeypatch):
     """When every team's roster 404s the game genuinely has no roster data, so a
     single NoESPNDataError is raised (caught upstream and degraded to empty)."""
-    mod = _mod(sport)
+    fn, home = _roster_fn(sport)
     items = pl.DataFrame({"team_id": [52, 2641]})
 
     def fake_download(url, **kwargs):
         raise NoESPNDataError("NoESPNDataError: No data found for " + url)
 
-    monkeypatch.setattr(mod, "download", fake_download)
+    monkeypatch.setattr(home, "download", fake_download)
     with pytest.raises(NoESPNDataError):
-        getattr(mod, f"helper_{sport}_roster_items")(items=items, summary_url="http://core/competitors")
+        fn(items=items, summary_url="http://core/competitors")
 
 
 @pytest.mark.parametrize("sport", SPORTS)
@@ -116,7 +128,7 @@ def test_roster_items_differing_team_columns_concat(sport, monkeypatch):
     """The two teams' roster-entry payloads can carry different column sets; the
     per-team concat must be diagonal (union + null-fill), not vertical (which
     raised polars ShapeError and lost the whole game)."""
-    mod = _mod(sport)
+    fn, home = _roster_fn(sport)
     items = pl.DataFrame({"team_id": [52, 2641]})
 
     def _entry(pid, **extra):
@@ -136,7 +148,7 @@ def test_roster_items_differing_team_columns_concat(sport, monkeypatch):
             return _FakeResp({"entries": [_entry(101, jersey="7"), _entry(102, jersey="9")]})
         return _FakeResp({"entries": [_entry(201, didNotPlay=True), _entry(202, didNotPlay=False)]})
 
-    monkeypatch.setattr(mod, "download", fake_download)
-    out = getattr(mod, f"helper_{sport}_roster_items")(items=items, summary_url="http://core/competitors")
+    monkeypatch.setattr(home, "download", fake_download)
+    out = fn(items=items, summary_url="http://core/competitors")
     assert out.height == 4
     assert set(out["team_id"].unique().to_list()) == {52, 2641}

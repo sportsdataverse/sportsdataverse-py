@@ -66,6 +66,15 @@ def parse(text: str) -> dict[str, dict[str, float]]:
         ValueError: If a line is not a comment, a blank, a top-level
             ``section:`` / ``section: {}`` or an indented ``name: <number>`` --
             the reader never guesses at a construct it was not written for.
+
+    Example:
+        Read a tolerance file the packaged reader's way::
+
+            from sportsdataverse.validation.thresholds import PATH, parse
+            parse(PATH.read_text(encoding="utf-8"))
+
+    See Also:
+        * :func:`for_league` -- the packaged file's values for one league
     """
     out: dict[str, dict[str, float]] = {}
     section: dict[str, float] | None = None
@@ -110,6 +119,9 @@ def for_league(league: str) -> dict[str, float]:
 
             from sportsdataverse.validation.thresholds import for_league
             for_league("nfl")["null_rate_warn"]
+
+    See Also:
+        * :func:`parse` -- the reader behind :data:`THRESHOLDS`
     """
     merged = dict(DEFAULTS)
     merged.update(THRESHOLDS.get(str(league).lower(), {}))

@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — stats.ncaa.org: BadLineupClump–enrich_lineup"
-sidebar_label: "stats.ncaa.org: BadLineupClump–enrich_lineup"
+title: "MBB — additional Python functions — stats.ncaa.org: BadLineupClump–create_shot"
+sidebar_label: "stats.ncaa.org: BadLineupClump–create_shot"
 sidebar_position: 3
-description: "MBB — additional Python functions — stats.ncaa.org: BadLineupClump–enrich_lineup — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — stats.ncaa.org: BadLineupClump–create_shot — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — stats.ncaa.org: BadLineupClump–enrich_lineup
+# MBB — additional Python functions — stats.ncaa.org: BadLineupClump–create_shot
 
 ### BadLineupClump {#BadLineupClump}
 
@@ -890,6 +890,50 @@ Enrich a lineup with play-by-play stats for both team and opponent
 
 A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEvent` with `team_stats`/`opponent_stats` populated.
 
+### aggregate_stints {#aggregate_stints}
+
+`aggregate_stints(resolved: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+Collapse id-resolved possessions into matchup stints.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `resolved` | `DataFrame` |  | Output of `resolve_possessions` -- needs `home`, `away`, `poss_team`, `pts` and the ten `{slot}_id` columns. Extra columns are ignored. |
+
+**Returns**
+
+One row per unique `(offense five, defense five, home/away offense)` with `n_poss` and total `pts` (schema `STINT_SCHEMA`). Possessions with ANY null slot id are dropped (unresolved player or `TEAM` pseudo-slot -- never imputed), as are possessions whose `poss_team` matches neither side.
+
+| col_name | type | description |
+|---|---|---|
+| `off_ids` | list | Sorted player ids of the five offensive players in the stint (a list), from the resolved slot ids. |
+| `def_ids` | list | Sorted player ids of the five defensive players in the stint (a list). |
+| `off_team` | character | Team on offense during the stint. |
+| `def_team` | character | Team on defense during the stint. |
+| `is_home_offense` | logical | True when the home team is on offense, the home-court term of the RAPM design matrix. |
+| `n_poss` | integer | Possessions the five-on-five unit played together in this offensive direction. |
+| `pts` | integer | Points scored. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | A required column is missing. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_rapm_input import (
+    build_player_xwalk, resolve_possessions,
+)
+from sportsdataverse.mbb.mbb_ncaa_rapm_league import aggregate_stints
+
+resolved = resolve_possessions(possessions, build_player_xwalk(rosters))
+stints = aggregate_stints(resolved)
+```
+
 ### alias_combos {#alias_combos}
 
 `alias_combos(first: 'str', last: 'str', to_name: 'str') -> 'dict[str, str]'`
@@ -1220,6 +1264,54 @@ stints = build_partial_lineup_list(reversed(events), box_lineup)
 print(len(stints))
 ```
 
+### build_person_keys {#build_person_keys}
+
+`build_person_keys(team_rosters: 'pl.DataFrame', *, name_changes: "'pl.DataFrame | None'" = None) -> 'pl.DataFrame'`
+
+Synthesize a cross-season `person_id` for roster rows.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_rosters` | `DataFrame` |  | Concatenated `ncaa_{lg}_team_rosters` across seasons; needs `season`, `team`, `player`, `player_id`, `ht_inches` and `class`. |
+| `name_changes` | `DataFrame \| None` | `None` | Optional crosswalk (see `expand_xwalk_aliases`) so a player who changed their name is one person, not two. |
+
+**Returns**
+
+The input columns plus `player_key` and a `Utf8` `person_id` that is stable across seasons and teams. `player_id` is preserved -- the synthetic key ADDS to the provider's id, never replaces it.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | character | Season year. |
+| `team_id` | character | Unique team identifier. |
+| `team` | character | Team-side label or team identifier. |
+| `player_id` | character | Unique player identifier. |
+| `player` | character | Player name. |
+| `clean_name` | character | Normalized (diacritics- and punctuation-cleaned) player name used to join across the NCAA datasets. |
+| `name` | character | Display name. |
+| `jersey` | character | Jersey number worn by the player. |
+| `class` | character | College class / draft eligibility note. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `height` | character | Player height (string e.g. '6-2' or inches). |
+| `ht_inches` | integer | Player height converted to total inches from the stats.ncaa.org roster listing. |
+| `hometown` | character | Player hometown. |
+| `high_school` | character | High school the player attended, from the stats.ncaa.org roster listing. |
+| `gp` | character | Games played. |
+| `gs` | character | Games started. |
+| `player_key` | character | Normalized name-code (diacritics folded, upper-cased, trailing dots dropped) that joins possessions to rosters. |
+| `person_id` | character | Unique player identifier (V3 endpoints). |
+
+**Example**
+
+```python
+::
+
+from sportsdataverse.mbb.mbb_ncaa_rapm_input import build_person_keys
+
+keys = build_person_keys(all_season_rosters, name_changes=changes)
+```
+
 ### build_player_code {#build_player_code}
 
 `build_player_code(in_name: 'str', team: 'Optional[TeamId]') -> 'PlayerCodeId'`
@@ -1263,6 +1355,36 @@ print(pc.code)  # "MiMitchell"
 # Play-by-play (all-caps, truncated) form
 
 build_player_code("BIGBY-WILLIAM,KAVELL", None).code  # "KaBigby-will"
+```
+
+### build_player_xwalk {#build_player_xwalk}
+
+`build_player_xwalk(team_rosters: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+Build the `(team, player_key) -> player_id` bridge from `team_rosters`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_rosters` | `DataFrame` |  | Published `ncaa_{lg}_team_rosters` frame; needs `team`, `player` and `player_id`. |
+
+**Returns**
+
+Frame of `team`, `player_key`, `player_id` (all `Utf8`), unique on `(team, player_key)`.
+
+| col_name | type | description |
+|---|---|---|
+| `team` | character | Team-side label or team identifier. |
+| `player_key` | character | Normalized name-code (diacritics folded, upper-cased, trailing dots dropped) that joins possessions to rosters. |
+| `player_id` | character | Unique player identifier. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_rapm_input import build_player_xwalk
+
+xwalk = build_player_xwalk(team_rosters)
 ```
 
 ### build_strength_adjusted_stats {#build_strength_adjusted_stats}
@@ -1742,90 +1864,4 @@ from sportsdataverse.mbb.mbb_ncaa_shot_parser import create_shot_event_data
 box_html = Path("tests/fixtures/ncaa/test_lineup.html").read_text(encoding="utf-8")
 box_lineup = get_box_lineup("test_p1.html", box_html, TeamId("TeamA"), format_version=1)
 shots = create_shot_event_data("test_p1.html", box_html, box_lineup)
-```
-
-### duration_from_period {#duration_from_period}
-
-`duration_from_period(period: 'int', is_women_game: 'bool') -> 'float'`
-
-The game duration (minutes elapsed) once `period` has completed
-
-(`ExtractorUtils.scala:286-287`: `start_time_from_period(period + 1,
-...)`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `period` | `int` |  | The 1-indexed period number. |
-| `is_women_game` | `bool` |  | Whether to use the women's or men's period schedule. |
-
-**Returns**
-
-The game-clock minute at the end of `period`.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_stints import duration_from_period
-duration_from_period(2, is_women_game=False)  # 40.0 (end of men's regulation)
-duration_from_period(4, is_women_game=True)  # 40.0 (end of women's regulation)
-```
-
-### enrich_and_reverse_game_events {#enrich_and_reverse_game_events}
-
-`enrich_and_reverse_game_events(in_events: 'list[PlayByPlayEvent]') -> 'list[PlayByPlayEvent]'`
-
-Inserts game-break events and turns descending per-row times into
-
-ascending game-clock minutes, returning the whole list latest-to-earliest
-(`PlayByPlayParser.enrich_and_reverse_game_events`, `:297-370`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `in_events` | `list[PlayByPlayEvent]` |  | The raw parsed events, earliest to latest, with each `.min` still a per-period DESCENDING clock reading. |
-
-**Returns**
-
-`in_events` with `~sportsdataverse.mbb.mbb_ncaa_stints .GameBreakEvent`\ s inserted at every period boundary, every `.min` converted to an ASCENDING whole-game reading, and a trailing (once reversed, LEADING) `~sportsdataverse.mbb .mbb_ncaa_stints.GameEndEvent` -- the whole list in LATEST-TO-EARLIEST order (the caller is expected to `reversed(...)` it back when chronological order is wanted, exactly like `get_sorted_pbp_events` does).
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_models import Score
-from sportsdataverse.mbb.mbb_ncaa_pbp_parser import enrich_and_reverse_game_events
-from sportsdataverse.mbb.mbb_ncaa_stints import OtherTeamEvent
-
-events = [OtherTeamEvent(18.0, Score(1, 1), "tipoff")]
-reversed_enriched = enrich_and_reverse_game_events(events)
-reversed_enriched[0].__class__.__name__  # 'GameEndEvent'
-```
-
-### enrich_lineup {#enrich_lineup}
-
-`enrich_lineup(lineup: 'LineupEvent') -> 'LineupEvent'`
-
-Populate `pts`/`plus_minus` from the score delta, then run the
-
-full stat-tree enrichment (`enrich_lineup`, `LineupUtils.scala:29-46`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `lineup` | `LineupEvent` |  | The lineup event to enrich (not mutated -- see the module docstring's "Scala idiom decisions"). |
-
-**Returns**
-
-A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEvent` with `team_stats`/`opponent_stats` fully populated.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import enrich_lineup
-
-enriched = enrich_lineup(lineup)
-enriched.team_stats.pts
 ```

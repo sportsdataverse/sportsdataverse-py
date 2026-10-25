@@ -83,8 +83,6 @@ Headlines for one league (limit, offset).
 espn_content_league_news(league_slug='nfl', sport_slug='football')
 ```
 
-_Last validated n/a._
-
 ## espn_content_news
 
 Cross-sport headlines (limit, offset).
@@ -156,8 +154,6 @@ Cross-sport headlines (limit, offset).
 espn_content_news()
 ```
 
-_Last validated n/a._
-
 ## espn_content_story
 
 One story (same envelope, one headline).
@@ -226,5 +222,3 @@ One story (same envelope, one headline).
 ```python
 espn_content_story(id='49778940')
 ```
-
-_Last validated n/a._

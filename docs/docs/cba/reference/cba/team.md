@@ -45,8 +45,6 @@ The teams of one season as a select list: team id and the season's display name.
 cba_team_options(season=2026)
 ```
 
-_Last validated n/a._
-
 ## cba_teams
 
 The current team list: logo, team id, club name and display name.
@@ -85,8 +83,6 @@ The current team list: logo, team id, club name and display name.
 cba_teams()
 ```
 
-_Last validated n/a._
-
 ## cba_team_counts
 
 Team counts of one season, keyed by match type.
@@ -123,8 +119,6 @@ Team counts of one season, keyed by match type.
 ```python
 cba_team_counts(season=2026)
 ```
-
-_Last validated n/a._
 
 ## cba_team_basic
 
@@ -193,8 +187,6 @@ A team's per-game averages or totals, one row per season of the team.
 ```python
 cba_team_basic(team_id=29128)
 ```
-
-_Last validated n/a._
 
 ## cba_team_four
 
@@ -304,8 +296,6 @@ A team's four-factors table, one row per season of the team.
 cba_team_four(team_id=29128)
 ```
 
-_Last validated n/a._
-
 ## cba_team_overview
 
 A team's overview table (record, pace, per-100 ratings), one row per season of the team.
@@ -362,8 +352,6 @@ A team's overview table (record, pace, per-100 ratings), one row per season of t
 ```python
 cba_team_overview(team_id=29128)
 ```
-
-_Last validated n/a._
 
 ## cba_team_shots
 
@@ -452,5 +440,3 @@ A team's shot-zone profile, one row per season of the team (zone splits from 201
 ```python
 cba_team_shots(team_id=29128)
 ```
-
-_Last validated n/a._

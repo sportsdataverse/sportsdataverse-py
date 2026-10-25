@@ -133,8 +133,6 @@ GET /stats/playergamelogs
 nba_stats_playergamelogs(league_id='00', season_nullable='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_playergamestreakfinder
 
 GET /stats/playergamestreakfinder
@@ -268,8 +266,6 @@ GET /stats/playergamestreakfinder
 nba_stats_playergamestreakfinder(league_id='00', season_nullable='2024-25')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_playerindex
 
 GET /stats/playerindex
@@ -343,8 +339,6 @@ GET /stats/playerindex
 ```python
 nba_stats_playerindex(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._
 
 ## nba_stats_playerprofilev2
 
@@ -799,8 +793,6 @@ GET /stats/playerprofilev2
 nba_stats_playerprofilev2(league_id='00')
 ```
 
-_Last validated n/a._
-
 ## nba_stats_playervsplayer
 
 GET /stats/playervsplayer
@@ -1042,5 +1034,3 @@ GET /stats/playervsplayer
 ```python
 nba_stats_playervsplayer(league_id='00', season='2024-25')
 ```
-
-_Last validated n/a._

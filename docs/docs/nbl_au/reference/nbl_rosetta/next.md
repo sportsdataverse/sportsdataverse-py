@@ -96,8 +96,6 @@ The organisation's next scheduled match (empty between seasons).
 nbl_rosetta_next_match(org='nbl', season=2027)
 ```
 
-_Last validated n/a._
-
 ## nbl_rosetta_next_match_team
 
 Next match; the team segment is ignored by Rosetta (the body is the organisation's next match).
@@ -188,8 +186,6 @@ Next match; the team segment is ignored by Rosetta (the body is the organisation
 nbl_rosetta_next_match_team(org='nbl', season=2027, team_code='PER')
 ```
 
-_Last validated n/a._
-
 ## nbl_rosetta_next_matches
 
 Each team's next matches: opponent, venue and start time.
@@ -241,5 +237,3 @@ Each team's next matches: opponent, venue and start time.
 ```python
 nbl_rosetta_next_matches(org='nbl', season=2027)
 ```
-
-_Last validated n/a._

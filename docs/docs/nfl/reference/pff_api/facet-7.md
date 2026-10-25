@@ -82,8 +82,6 @@ League-wide field-goal kicking leaderboard
 pff_api_facet_field_goal_summary(league='nfl', season='2022')
 ```
 
-_Last validated n/a._
-
 ## pff_api_facet_kickoff_summary
 
 League-wide kickoff leaderboard
@@ -151,8 +149,6 @@ League-wide kickoff leaderboard
 ```python
 pff_api_facet_kickoff_summary(league='nfl', season='2022')
 ```
-
-_Last validated n/a._
 
 ## pff_api_facet_punting_summary
 
@@ -228,8 +224,6 @@ League-wide punting leaderboard
 pff_api_facet_punting_summary(league='nfl', season='2022')
 ```
 
-_Last validated n/a._
-
 ## pff_api_facet_return_summary
 
 League-wide return leaderboard
@@ -300,8 +294,6 @@ League-wide return leaderboard
 ```python
 pff_api_facet_return_summary(league='nfl', season='2022')
 ```
-
-_Last validated n/a._
 
 ## pff_api_facet_special_summary
 
@@ -374,5 +366,3 @@ League-wide special-teams leaderboard
 ```python
 pff_api_facet_special_summary(league='nfl', season='2022')
 ```
-
-_Last validated n/a._

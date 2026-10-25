@@ -172,8 +172,6 @@ Pull the player profile / overview.
 nhl_player_landing(player_id=8480801)
 ```
 
-_Last validated n/a._
-
 ## nhl_player_game_log
 
 Pull a player's game-by-game log.
@@ -233,8 +231,6 @@ Pull a player's game-by-game log.
 nhl_player_game_log(player_id=8480801)
 ```
 
-_Last validated n/a._
-
 ## nhl_player_spotlight
 
 Pull the league's currently featured players.
@@ -281,5 +277,3 @@ Pull the league's currently featured players.
 ```python
 nhl_player_spotlight()
 ```
-
-_Last validated n/a._

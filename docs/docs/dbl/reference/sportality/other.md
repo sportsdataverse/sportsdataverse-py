@@ -74,8 +74,6 @@ Player box score and team rows of both sides (2023/24 on).
 sportality_boxscore(game_uuid='c4hh5nig6t')
 ```
 
-_Last validated n/a._
-
 ## sportality_last_game_day
 
 Games of the last played match day of an ssgt.
@@ -151,8 +149,6 @@ Games of the last played match day of an ssgt.
 sportality_last_game_day()
 ```
 
-_Last validated n/a._
-
 ## sportality_layout_info
 
 Directory of every ssgt (season + series + game type) with its teams, and the stats modules.
@@ -197,8 +193,6 @@ Directory of every ssgt (season + series + game type) with its teams, and the st
 ```python
 sportality_layout_info()
 ```
-
-_Last validated n/a._
 
 ## sportality_next_game_day
 
@@ -274,8 +268,6 @@ Games of the next match day of an ssgt.
 ```python
 sportality_next_game_day()
 ```
-
-_Last validated n/a._
 
 ## sportality_pbp
 
@@ -361,8 +353,6 @@ Play-by-play events with shot coordinates and the Genius ids (2023/24 on).
 sportality_pbp(game_uuid='c4hh5nig6t')
 ```
 
-_Last validated n/a._
-
 ## sportality_post_game_team_stats
 
 Post-game team comparison (2023/24 on).
@@ -415,8 +405,6 @@ Post-game team comparison (2023/24 on).
 sportality_post_game_team_stats(away_team_uuid='gvvuxe9ysw', game_uuid='c4hh5nig6t', home_team_uuid='rfo82vr830', ssgt_uuid='xs07bd3fmp')
 ```
 
-_Last validated n/a._
-
 ## sportality_roster
 
 Current roster of a team, grouped by position.
@@ -462,8 +450,6 @@ Current roster of a team, grouped by position.
 ```python
 sportality_roster(team_uuid='rfo82vr830')
 ```
-
-_Last validated n/a._
 
 ## sportality_schedule
 
@@ -543,8 +529,6 @@ Schedule and results of one season + series + game type.
 sportality_schedule(season=2026)
 ```
 
-_Last validated n/a._
-
 ## sportality_season_filter
 
 Series, the 25 seasons (2002/03 on), game types and the default ssgt.
@@ -583,8 +567,6 @@ Series, the 25 seasons (2002/03 on), game types and the default ssgt.
 ```python
 sportality_season_filter()
 ```
-
-_Last validated n/a._
 
 ## sportality_sites
 
@@ -626,8 +608,6 @@ Clubs (sites) taking part in an ssgt.
 sportality_sites(ssgt_uuid='xs07bd3fmp')
 ```
 
-_Last validated n/a._
-
 ## sportality_ssgt_provider
 
 Stats provider of an ssgt, a bare word (genius-basketball).
@@ -663,8 +643,6 @@ Stats provider of an ssgt, a bare word (genius-basketball).
 ```python
 sportality_ssgt_provider(ssgt_uuid='xs07bd3fmp')
 ```
-
-_Last validated n/a._
 
 ## sportality_standings
 
@@ -713,8 +691,6 @@ Standings of an ssgt (gameday widget).
 ```python
 sportality_standings(ssgt_uuid='xs07bd3fmp')
 ```
-
-_Last validated n/a._
 
 ## sportality_stats_info
 
@@ -925,5 +901,3 @@ Stats table of one module for a season (players, teams, games, standings).
 ```python
 sportality_stats_info(module='players_summary', season=2026)
 ```
-
-_Last validated n/a._

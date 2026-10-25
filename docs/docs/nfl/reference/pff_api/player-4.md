@@ -555,5 +555,3 @@ Receiving by target depth for one player
 ```python
 pff_api_player_receiving_depth(league='nfl', player_id=28022, season=2022)
 ```
-
-_Last validated n/a._

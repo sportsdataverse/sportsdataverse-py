@@ -56,8 +56,6 @@ ESPN endpoint.
 espn_cfb_teams_site()
 ```
 
-_Last validated n/a._
-
 ## espn_cfb_team
 
 ESPN endpoint.
@@ -133,8 +131,6 @@ ESPN endpoint.
 ```python
 espn_cfb_team(team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_cfb_team_roster
 
@@ -228,8 +224,6 @@ ESPN endpoint.
 espn_cfb_team_roster(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_cfb_team_schedule
 
 ESPN endpoint.
@@ -279,8 +273,6 @@ ESPN endpoint.
 espn_cfb_team_schedule(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_cfb_team_record
 
 ESPN endpoint.
@@ -315,8 +307,6 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 espn_cfb_team_record(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_cfb_team_depthcharts
 
 ESPN endpoint.
@@ -350,8 +340,6 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 ```python
 espn_cfb_team_depthcharts(team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_cfb_team_injuries
 
@@ -391,8 +379,6 @@ ESPN endpoint.
 espn_cfb_team_injuries(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_cfb_team_transactions
 
 ESPN endpoint.
@@ -427,8 +413,6 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 espn_cfb_team_transactions(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_cfb_team_history
 
 ESPN endpoint.
@@ -462,8 +446,6 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 ```python
 espn_cfb_team_history(team_id='4')
 ```
-
-_Last validated n/a._
 
 ## espn_cfb_team_news
 
@@ -522,8 +504,6 @@ ESPN endpoint.
 espn_cfb_team_news(team_id='4')
 ```
 
-_Last validated n/a._
-
 ## espn_cfb_team_leaders
 
 ESPN endpoint.
@@ -557,5 +537,3 @@ No returns table is published for this endpoint: no capture: ESPN answers an emp
 ```python
 espn_cfb_team_leaders(team_id='4')
 ```
-
-_Last validated n/a._

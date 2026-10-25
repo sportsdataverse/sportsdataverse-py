@@ -61,8 +61,6 @@ Skater season totals: games, goals, assists, points, penalty minutes, plus-minus
 sihf_player_stats(season=2026, league_id=1)
 ```
 
-_Last validated n/a._
-
 ## sihf_player_goals_assists
 
 Skater goals and assists by situation: even strength, power play, short-handed, game-winning and overtime goals, hat tricks.
@@ -124,8 +122,6 @@ Skater goals and assists by situation: even strength, power play, short-handed, 
 sihf_player_goals_assists(season=2026, league_id=1)
 ```
 
-_Last validated n/a._
-
 ## sihf_player_shots
 
 Skater shots: on goal (total, slot, shooting percentage), missed, post and blocked, with per-game rates.
@@ -185,8 +181,6 @@ Skater shots: on goal (total, slot, shooting percentage), missed, post and block
 sihf_player_shots(season=2026, league_id=1)
 ```
 
-_Last validated n/a._
-
 ## sihf_player_penalties
 
 Skater penalties: penalty minutes, 2-, 5- and 10-minute penalties, game misconducts and match penalties.
@@ -241,8 +235,6 @@ Skater penalties: penalty minutes, 2-, 5- and 10-minute penalties, game miscondu
 sihf_player_penalties(season=2026, league_id=1)
 ```
 
-_Last validated n/a._
-
 ## sihf_player_shootouts
 
 Skater shootouts: attempts, goals, misses, percentage and shootout-winning goals.
@@ -295,8 +287,6 @@ Skater shootouts: attempts, goals, misses, percentage and shootout-winning goals
 ```python
 sihf_player_shootouts(season=2026, league_id=1)
 ```
-
-_Last validated n/a._
 
 ## sihf_player_faceoffs
 
@@ -355,8 +345,6 @@ Skater faceoffs: taken, won, lost, per game, and win percentage overall and by z
 ```python
 sihf_player_faceoffs(season=2026, league_id=1)
 ```
-
-_Last validated n/a._
 
 ## sihf_player_faceoffs_by_zone
 
@@ -418,8 +406,6 @@ Skater faceoffs by zone (offensive, neutral, defensive): taken, won, lost and wi
 sihf_player_faceoffs_by_zone(season=2026, league_id=1)
 ```
 
-_Last validated n/a._
-
 ## sihf_player_faceoffs_by_zone_per_game
 
 Skater faceoffs by zone (offensive, neutral, defensive) per game: taken, won and lost.
@@ -476,8 +462,6 @@ Skater faceoffs by zone (offensive, neutral, defensive) per game: taken, won and
 ```python
 sihf_player_faceoffs_by_zone_per_game(season=2026, league_id=1)
 ```
-
-_Last validated n/a._
 
 ## sihf_player_time_on_ice
 
@@ -537,5 +521,3 @@ Skater ice time by situation (even strength, power play, penalty kill), totals a
 ```python
 sihf_player_time_on_ice(season=2026, league_id=1)
 ```
-
-_Last validated n/a._

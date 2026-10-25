@@ -62,8 +62,6 @@ GET /stats/commonallplayers
 wnba_stats_commonallplayers(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_commonplayerinfo
 
 GET /stats/commonplayerinfo
@@ -154,8 +152,6 @@ GET /stats/commonplayerinfo
 wnba_stats_commonplayerinfo(league_id='10')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_commonplayoffseries
 
 GET /stats/commonplayoffseries
@@ -198,8 +194,6 @@ GET /stats/commonplayoffseries
 ```python
 wnba_stats_commonplayoffseries(league_id='10', season='2024')
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_commonteamroster
 
@@ -271,8 +265,6 @@ GET /stats/commonteamroster
 wnba_stats_commonteamroster(league_id='10', season='2024')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_commonteamyears
 
 GET /stats/commonteamyears
@@ -313,5 +305,3 @@ GET /stats/commonteamyears
 ```python
 wnba_stats_commonteamyears(league_id='10')
 ```
-
-_Last validated n/a._

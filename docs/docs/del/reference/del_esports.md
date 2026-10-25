@@ -78,8 +78,6 @@ Schedule and results of one competition season, one row per match, played or not
 del_schedule(league_id=1, season=2027)
 ```
 
-_Last validated n/a._
-
 ## del_team_player_stats
 
 Season player stats of one team in one competition, one row per player.
@@ -168,8 +166,6 @@ Season player stats of one team in one competition, one row per player.
 del_team_player_stats(league_id=1, season=2027, team_id=12)
 ```
 
-_Last validated n/a._
-
 ## del_top_scorers
 
 Skater scoring leaderboard of one competition season.
@@ -219,8 +215,6 @@ Skater scoring leaderboard of one competition season.
 del_top_scorers(league_id=1, season=2027)
 ```
 
-_Last validated n/a._
-
 ## del_faceoffs
 
 Every faceoff of one match: time, dot, winner and loser.
@@ -264,8 +258,6 @@ Every faceoff of one match: time, dot, winner and loser.
 ```python
 del_faceoffs(match_id=4444)
 ```
-
-_Last validated n/a._
 
 ## del_game_info
 
@@ -342,8 +334,6 @@ Game info of one match: state, arena, attendance, officials, coaches, period sco
 ```python
 del_game_info(match_id=4444)
 ```
-
-_Last validated n/a._
 
 ## del_pbp
 
@@ -433,8 +423,6 @@ Play-by-play of one match: goals, penalties, goalie changes and timeouts, one ro
 del_pbp(match_id=4444)
 ```
 
-_Last validated n/a._
-
 ## del_roster
 
 Game roster of one match by line slot, one row per dressed player.
@@ -480,8 +468,6 @@ Game roster of one match by line slot, one row per dressed player.
 del_roster(match_id=4444)
 ```
 
-_Last validated n/a._
-
 ## del_shifts
 
 Every shift of one match, one row per player shift.
@@ -526,8 +512,6 @@ Every shift of one match, one row per player shift.
 ```python
 del_shifts(match_id=4444)
 ```
-
-_Last validated n/a._
 
 ## del_player_box
 
@@ -616,8 +600,6 @@ Player boxscore of one team in one match, one row per player.
 del_player_box(match_id=4444, team_id=12)
 ```
 
-_Last validated n/a._
-
 ## del_goalie_box
 
 Goalie lines of one match, one row per goalie who played.
@@ -670,8 +652,6 @@ Goalie lines of one match, one row per goalie who played.
 ```python
 del_goalie_box(match_id=4444)
 ```
-
-_Last validated n/a._
 
 ## del_standings
 
@@ -733,8 +713,6 @@ Standings of one competition season, one row per team.
 del_standings(league_id=1, season=2027)
 ```
 
-_Last validated n/a._
-
 ## del_shots
 
 Shots of one match with rink coordinates and result, one row per shot.
@@ -794,5 +772,3 @@ Shots of one match with rink coordinates and result, one row per shot.
 ```python
 del_shots(match_id=4444)
 ```
-
-_Last validated n/a._

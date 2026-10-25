@@ -5,6 +5,8 @@ import os
 import time
 from functools import wraps
 
+from sportsdataverse._deprecation import deprecated
+
 # psutil is an optional dev-only dep used solely by `record_mem_usage`. Keep
 # the import lazy so module load (and sphinx autodoc) doesn't require it;
 # the decorator will raise a clear ImportError only if someone actually
@@ -62,9 +64,16 @@ def timer(number=10):
     return actual_wrapper
 
 
-# this decorator is used to record memory usage of the decorated function
+# C-L46: no caller in the package or the workspace; deprecated, not deleted.
+@deprecated(
+    replacement="tracemalloc or psutil.Process().memory_info() directly",
+    since="0.1.6",
+    removed_in="0.2.0",
+)
 def record_mem_usage(func):
     """Decorator that prints RSS memory delta around a call.
+
+    Deprecated since 0.1.6, removed in 0.2.0: applying it warns ``DeprecationWarning``.
 
     Snapshots ``psutil.Process(os.getpid()).memory_info()[0]`` (resident
     set size) before and after the wrapped call and prints the
@@ -108,8 +117,11 @@ def record_mem_usage(func):
     return wrapper
 
 
+@deprecated(replacement="sportsdataverse.decorators.timer(number=1)", since="0.1.6", removed_in="0.2.0")
 def record_time_usage(func):
     """Decorator that prints wall-clock time for a single call.
+
+    Deprecated since 0.1.6, removed in 0.2.0: applying it warns ``DeprecationWarning``.
 
     Lightweight counterpart to :func:`timer` -- records exactly one
     invocation rather than averaging across repeated executions. Useful

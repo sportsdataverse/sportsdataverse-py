@@ -1,7 +1,7 @@
 ---
 title: "MBB — additional Python functions — Models and calculators: build_priors–ridge_fit"
 sidebar_label: "Models and calculators: build_priors–ridge_fit"
-sidebar_position: 10
+sidebar_position: 11
 description: "MBB — additional Python functions — Models and calculators: build_priors–ridge_fit — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # MBB — additional Python functions — Models and calculators: build_priors–ridge_fit

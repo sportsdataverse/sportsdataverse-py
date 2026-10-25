@@ -123,8 +123,6 @@ Pull EDGE detail stats for a single team.
 nhl_edge_team_detail(team_id=10)
 ```
 
-_Last validated n/a._
-
 ## nhl_edge_team_landing
 
 Pull the EDGE team landing page (summary across all teams).
@@ -248,8 +246,6 @@ Pull the EDGE team landing page (summary across all teams).
 nhl_edge_team_landing()
 ```
 
-_Last validated n/a._
-
 ## nhl_edge_team_shot_location_detail
 
 Pull EDGE shot-location detail for a single team.
@@ -294,8 +290,6 @@ Pull EDGE shot-location detail for a single team.
 nhl_edge_team_shot_location_detail(team_id=10)
 ```
 
-_Last validated n/a._
-
 ## nhl_edge_team_shot_location_top_10
 
 Pull the EDGE top-10 teams for a shot-location category.
@@ -333,8 +327,6 @@ No returns table is published for this endpoint: no capture: every value tried 4
 ```python
 nhl_edge_team_shot_location_top_10(position='forwards', category='shots', sort_by='points')
 ```
-
-_Last validated n/a._
 
 ## nhl_edge_team_shot_speed_detail
 
@@ -375,8 +367,6 @@ Pull EDGE shot-speed detail for a single team.
 nhl_edge_team_shot_speed_detail(team_id=10)
 ```
 
-_Last validated n/a._
-
 ## nhl_edge_team_skating_distance_detail
 
 Pull EDGE skating-distance detail for a single team.
@@ -408,8 +398,6 @@ Pull EDGE skating-distance detail for a single team.
 ```python
 nhl_edge_team_skating_distance_detail(team_id=10)
 ```
-
-_Last validated n/a._
 
 ## nhl_edge_team_skating_distance_top_10
 
@@ -486,8 +474,6 @@ Pull the EDGE top-10 teams by skating distance.
 nhl_edge_team_skating_distance_top_10(positions='defense', strength='all', sort_by='total', season=20242025)
 ```
 
-_Last validated n/a._
-
 ## nhl_edge_team_skating_speed_detail
 
 Pull EDGE skating-speed detail for a single team.
@@ -519,8 +505,6 @@ Pull EDGE skating-speed detail for a single team.
 ```python
 nhl_edge_team_skating_speed_detail(team_id=10)
 ```
-
-_Last validated n/a._
 
 ## nhl_edge_team_skating_speed_top_10
 
@@ -588,8 +572,6 @@ Pull the EDGE top-10 teams by skating speed.
 nhl_edge_team_skating_speed_top_10(positions='defense', sort_by='max', season=20242025)
 ```
 
-_Last validated n/a._
-
 ## nhl_edge_team_zone_time_details
 
 Pull EDGE zone-time details for a single team.
@@ -636,8 +618,6 @@ Pull EDGE zone-time details for a single team.
 ```python
 nhl_edge_team_zone_time_details(team_id=10)
 ```
-
-_Last validated n/a._
 
 ## nhl_edge_team_zone_time_top_10
 
@@ -687,5 +667,3 @@ Pull the EDGE top-10 teams by zone time.
 ```python
 nhl_edge_team_zone_time_top_10(strength='all', sort_by='offensive', season=20242025)
 ```
-
-_Last validated n/a._

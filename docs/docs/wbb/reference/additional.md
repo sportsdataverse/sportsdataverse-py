@@ -75,6 +75,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [create_lineup_data](additional/stats-ncaa-org.md#create_lineup_data) | Combines the different methods to build a set of lineup events |
 | [create_player_events](additional/stats-ncaa-org.md#create_player_events) | Split a lineup event into one :class:`~sportsdataverse.mbb |
 | [create_shot_event_data](additional/stats-ncaa-org.md#create_shot_event_data) | Parses a game page's SVG shot map into a list of :class:`~sportsdataverse |
+| [current_ncaa_team_alts](additional/stats-ncaa-org.md#current_ncaa_team_alts) | The two team names from a *current* (2026) stats.ncaa.org game page. |
 | [duration_from_period](additional/stats-ncaa-org.md#duration_from_period) | The game duration (minutes elapsed) once `period` has completed |
 | [enrich_and_reverse_game_events](additional/stats-ncaa-org.md#enrich_and_reverse_game_events) | Inserts game-break events and turns descending per-row times into |
 | [enrich_lineup](additional/stats-ncaa-org.md#enrich_lineup) | Populate `pts`/`plus_minus` from the score delta, then run the |
@@ -119,8 +120,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [ncaa_wbb_player_stats](additional/stats-ncaa-org-2.md#ncaa_wbb_player_stats) | Aggregate WBB play-by-play into per-player box stats (wbigballR `get_player_stats`). |
 | [ncaa_wbb_possessions](additional/stats-ncaa-org-2.md#ncaa_wbb_possessions) | Aggregate WBB play-by-play into one row per possession (wbigballR `get_possessions`). |
 | [ncaa_wbb_shot_locations](additional/stats-ncaa-org-2.md#ncaa_wbb_shot_locations) | Scrape WBB shot locations for one or more games. |
-| [ncaa_wbb_team_roster](additional/stats-ncaa-org-2.md#ncaa_wbb_team_roster) | Scrape a women's team roster from stats.ncaa.org. |
-| [ncaa_wbb_team_schedule](additional/stats-ncaa-org-2.md#ncaa_wbb_team_schedule) | Scrape a women's team's season schedule from stats.ncaa.org. |
+| [ncaa_wbb_team_roster](additional/stats-ncaa-org-3.md#ncaa_wbb_team_roster) | Scrape a women's team roster from stats.ncaa.org. |
+| [ncaa_wbb_team_schedule](additional/stats-ncaa-org-3.md#ncaa_wbb_team_schedule) | Scrape a women's team's season schedule from stats.ncaa.org. |
 | [ncaa_wbb_team_stats](additional/stats-ncaa-org-3.md#ncaa_wbb_team_stats) | Aggregate WBB play-by-play into per-team game stats (wbigballR `get_team_stats`). |
 | [phase1_shot_event_enrichment](additional/stats-ncaa-org-3.md#phase1_shot_event_enrichment) | The court-geometry enrichment pass: ascending time, coordinate |
 | [playwright_transport](additional/stats-ncaa-org-3.md#playwright_transport) | Build the **suggested** stats.ncaa.org game-detail scraping transport. |

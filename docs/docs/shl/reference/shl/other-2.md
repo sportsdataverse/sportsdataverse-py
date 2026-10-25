@@ -60,8 +60,6 @@ Standings of an ssgt (gameday widget).
 shl_standings(ssgt_uuid='iuzqg7dqk9')
 ```
 
-_Last validated n/a._
-
 ## shl_stats_info
 
 Stats table of one module for an ssgt (standings, players, goalies, teams, games).
@@ -360,5 +358,3 @@ Stats table of one module for an ssgt (standings, players, goalies, teams, games
 ```python
 shl_stats_info(module='players_summary', season=2026)
 ```
-
-_Last validated n/a._

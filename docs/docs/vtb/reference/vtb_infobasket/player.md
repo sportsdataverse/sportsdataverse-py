@@ -59,8 +59,6 @@ Player profile: names, birth date, height, weight, position.
 vtb_infobasket_player(person_id=423011)
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_player_season_stats
 
 A player's season-by-season totals in the competition tag.
@@ -145,8 +143,6 @@ A player's season-by-season totals in the competition tag.
 vtb_infobasket_player_season_stats(person_id=423011)
 ```
 
-_Last validated n/a._
-
 ## vtb_infobasket_player_career_stats
 
 A player's career totals in the competition tag.
@@ -221,8 +217,6 @@ A player's career totals in the competition tag.
 ```python
 vtb_infobasket_player_career_stats(person_id=423011)
 ```
-
-_Last validated n/a._
 
 ## vtb_infobasket_player_game_log
 
@@ -315,5 +309,3 @@ A player's game log for one season and one team, one row per game.
 ```python
 vtb_infobasket_player_game_log(person_id=423011, season=2026, team=2650)
 ```
-
-_Last validated n/a._

@@ -240,8 +240,8 @@ CONTRIBUTING.md             # uv workflow + new-module standards
 
 The cross-league ESPN wrapper surface is **codegen output**, not a runtime factory:
 
-- `sportsdataverse/_common_espn.py` is **40 lines** — the host constants and a
-  `_get` re-export. Nothing is minted at import time.
+- Nothing is minted at import time: the generated modules import `_get` from
+  `sportsdataverse/_codegen_runtime.py` and their parsers from `_common_espn_parsers.py`.
 - Each `sportsdataverse/<league>/<prefix>_espn_ext.py` is a **generated module of
   ~5,700 lines**, written by `build_live()` from the five ESPN endpoint YAMLs in
   `generate.ESPN_APIS`. Every wrapper is spelled out, so `help()`, IDE
@@ -251,9 +251,10 @@ The cross-league ESPN wrapper surface is **codegen output**, not a runtime facto
   [`docs/docs/architecture/codegen.md`](docs/docs/architecture/codegen.md).
 
 The old runtime wrapper factory — one core module of partials bound into tiny
-per-league ext modules at import time — was retired when codegen took over. Only
-`tools/codegen/extract.py`, a historical bootstrap that no longer runs, still
-expects it. If you find a description of that pattern anywhere, it predates 0.1.x.
+per-league ext modules at import time — was retired when codegen took over, and its
+last remnants (`_common_espn.py`, the `extract*.py` bootstraps and the committed
+`tools/codegen/_generated/` staging copies) were deleted in 0.1.6. If you find a
+description of that pattern anywhere, it predates 0.1.x.
 
 Total cross-league surface: **126 short names** (from the five ESPN
 endpoint YAMLs in `generate.ESPN_APIS`) emitted across 30 league modules
@@ -326,9 +327,8 @@ from sportsdataverse.nhl import nhl_web_pbp, parse_nhl_web_pbp
 df = parse_nhl_web_pbp(nhl_web_pbp(2023030417))                 # 331 plays
 ```
 
-**`ENDPOINT_PARSERS` invariant**: every wrapper short name across
-`_UNIVERSAL_WRAPPERS` + `_NCAA_WRAPPERS` + `_FOOTBALL_WRAPPERS` +
-`_MLB_WRAPPERS` is in the registry. Three generic fall-throughs
+**`ENDPOINT_PARSERS` invariant**: every wrapper short name in the five
+ESPN endpoint YAMLs (`generate.ESPN_APIS`) is in the registry. Three generic fall-throughs
 cover the long tail:
 
 - `parse_single_entity` — Core v2 single-resource payloads
@@ -698,7 +698,7 @@ Two codegen-generated flat-API stems wrap the official stats API surface:
 
 Wrappers default `return_parsed=True` (tidy polars). `return_parsed=False` → raw `Dict`; `return_as_pandas=True` → pandas.
 
-`tools/codegen/gen_nba_stats.py` generates the endpoint YAML (endpoints + params) from the enriched canonical catalog, registered in `FLAT_APIS` in `tools/codegen/generate.py`. The **returns-schemas are NOT taken from the catalog.** They are built from what `parse_nba_stats_result_sets` emits on one vendored real capture per endpoint: `tests/fixtures/{nba_stats,wnba_stats}/endpoints/<slug>.json`, trimmed copies of the `sdv-internal-refs` sweep samples made by `tools/codegen/vendor_captures.py`, or a pilot capture listed in `gen_nba_stats.CAPTURE_OVERRIDES`. A multi-result-set payload becomes `kind: frames`. An endpoint the parser emits nothing for gets `unverified:` and no columns. `tests/codegen/test_stats_on3_schemas_match_parser.py` asserts that names, order and types match the parser on every committed capture. Live tests use the dedicated `@skip_if_no_nba_stats_live` gate (env `SDV_PY_NBA_STATS_LIVE=1`), NOT `SDV_PY_LIVE_TESTS` — stats.nba.com/stats.wnba.com hang on datacenter/cloud IPs, so they're excluded from CI and run only from a residential IP. Returns-table descriptions live in `manual_column_descriptions.yaml` and are back-filled by column name from the SDV R-package docs (`_r_col_desc` → `_merged`). The remaining un-authored columns of the `native/nba_stats` + `native/wnba_stats` buckets are a tracked follow-up, deferred from the coverage ratchet via `_DEFERRED_BUCKETS` in `tools/codegen/extract_residual_columns.py`. Each bucket is capped at its measured count, so a new blank column still fails. Param `default`/`example` values are mined from hoopR/wehoop roxygen **per league** (the catalog's `league_defaults`: hoopR for `nba_stats`, wehoop for `wnba_stats`; never the other league's entity id). A season argument gets the runtime transform `season_latest_with_data` iff hoopR (`nba_stats`) / wehoop (`wnba_stats`) gives that endpoint's season a default season (a call such as `year_to_season(most_recent_nba_season() - 1)`; an R `""`/`NULL` keeps the API default; there is no exemption list, since without a season the API sums every season): the latest season that has rows, at call time, re-dated by `_get` for the league, endpoint and season type (`nba_stats_runtime._FIRST_ROWS`: NBA from November, G League from January, Summer League from August with its own label, combine from June in any league, `drafthistory` a year from July; playoffs, i.e. `commonplayoffseries` or `SeasonType` `Playoffs`/`PlayIn`, from May for the NBA and G League; NBA `SeasonType` `All Star` from March, the G League having no All-Star rows; WNBA from June, its draft from May, its playoffs from October, its All-Star from August). A lockout or pandemic calendar needs an explicit `season`. stats.nba.com answers a missing required `Season` with an empty HTTP 500, which `_get` raises as `AssetFetchError`: it follows the error vocabulary (404 -> `NoDataError`, 400/422 -> `ValueError`, any other non-2xx, a blank or non-JSON body, or a dead connection -> `AssetFetchError`, retried first under `SDV_PY_NBA_STATS_RETRIES`). Only a 2xx empty object (or a 204/205) returns `{}`, and it warns `errors.EmptyResponseWarning` naming the URL and status.
+`tools/codegen/gen_nba_stats.py` generates the endpoint YAML (endpoints + params) from the enriched canonical catalog, registered in `FLAT_APIS` in `tools/codegen/generate.py`. The **returns-schemas are NOT taken from the catalog.** They are built from what `parse_nba_stats_result_sets` emits on one vendored real capture per endpoint: `tests/fixtures/{nba_stats,wnba_stats}/endpoints/<slug>.json`, trimmed copies of the `sdv-internal-refs` sweep samples made by `tools/codegen/vendor_captures.py`, or a pilot capture listed in `gen_nba_stats.CAPTURE_OVERRIDES`. A multi-result-set payload becomes `kind: frames`. An endpoint the parser emits nothing for gets `unverified:` and no columns. `tests/codegen/test_stats_on3_schemas_match_parser.py` asserts that names, order and types match the parser on every committed capture. Live tests use the dedicated `@skip_if_no_nba_stats_live` gate (env `SDV_PY_NBA_STATS_LIVE=1`), NOT `SDV_PY_LIVE_TESTS` — stats.nba.com/stats.wnba.com hang on datacenter/cloud IPs, so they're excluded from CI and run only from a residential IP. Returns-table descriptions live in `manual_column_descriptions.yaml` and are back-filled by column name from the same sport's SDV R-package docs (`_r_col_desc`; there is no cross-sport fallback). The remaining un-authored columns of the `native/nba_stats` + `native/wnba_stats` buckets are a tracked follow-up, deferred from the coverage ratchet via `_DEFERRED_BUCKETS` in `tools/codegen/extract_residual_columns.py`. Each bucket is capped at its measured count, so a new blank column still fails. Param `default`/`example` values are mined from hoopR/wehoop roxygen **per league** (the catalog's `league_defaults`: hoopR for `nba_stats`, wehoop for `wnba_stats`; never the other league's entity id). A season argument gets the runtime transform `season_latest_with_data` iff hoopR (`nba_stats`) / wehoop (`wnba_stats`) gives that endpoint's season a default season (a call such as `year_to_season(most_recent_nba_season() - 1)`; an R `""`/`NULL` keeps the API default; there is no exemption list, since without a season the API sums every season): the latest season that has rows, at call time, re-dated by `_get` for the league, endpoint and season type (`nba_stats_runtime._FIRST_ROWS`: NBA from November, G League from January, Summer League from August with its own label, combine from June in any league, `drafthistory` a year from July; playoffs, i.e. `commonplayoffseries` or `SeasonType` `Playoffs`/`PlayIn`, from May for the NBA and G League; NBA `SeasonType` `All Star` from March, the G League having no All-Star rows; WNBA from June, its draft from May, its playoffs from October, its All-Star from August). A lockout or pandemic calendar needs an explicit `season`. stats.nba.com answers a missing required `Season` with an empty HTTP 500, which `_get` raises as `AssetFetchError`: it follows the error vocabulary (404 -> `NoDataError`, 400/422 -> `ValueError`, any other non-2xx, a blank or non-JSON body, or a dead connection -> `AssetFetchError`, retried first under `SDV_PY_NBA_STATS_RETRIES`). Only a 2xx empty object (or a 204/205) returns `{}`, and it warns `errors.EmptyResponseWarning` naming the URL and status.
 
 ```python
 from sportsdataverse.nba import nba_stats
@@ -1190,6 +1190,11 @@ code at the source; never blanket-ignore a category.
   blind spots. Don't add new regex extraction; extend the participants
   module instead.
 
+- **Model lineage: cite a tracked fitting script.** Every bundled booster and fitted constant is
+  registered in `docs/docs/architecture/model-lineage.md` (one row per `.ubj`, plus the known-gap table of
+  cited scripts that are lost or only on the maintainer's disk). Put a new fitter under `tools/fit_<what>.py`,
+  never the gitignored `dev/`, and label a seeded value as seeded. `tests/test_model_lineage.py` fails on a
+  cited script that is neither tracked nor in the gap table, and on a booster without a row.
 - **Cache invalidation when modifying loaders.** The `@cached_loader`
   decorator hashes `(qualified_name, args, sorted_kwargs)` — it does NOT
   hash the URL or function body. If you change a loader's URL or
@@ -1389,7 +1394,7 @@ crosswalks, `validation`, `wexp`, and the release utilities.
 ## Codegen
 
 Both the API wrappers and the docs site come out of `tools/codegen/generate.py`.
-The full pipeline — inputs, the six build stages, the docs-site renderers, the
+The full pipeline — inputs, the five build stages, the docs-site renderers, the
 family split and anchor map, the league registry, the changelog render, the
 coverage and sources gates, and the sdv-docs index downstream — is documented
 once in [`docs/docs/architecture/codegen.md`](docs/docs/architecture/codegen.md).

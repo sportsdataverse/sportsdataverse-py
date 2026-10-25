@@ -80,8 +80,6 @@ GET /stats/franchisehistory
 wnba_stats_franchisehistory(league_id='10')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_franchiseleaders
 
 GET /stats/franchiseleaders
@@ -134,8 +132,6 @@ GET /stats/franchiseleaders
 ```python
 wnba_stats_franchiseleaders(league_id='10')
 ```
-
-_Last validated n/a._
 
 ## wnba_stats_franchiseleaderswrank
 
@@ -223,8 +219,6 @@ GET /stats/franchiseleaderswrank
 wnba_stats_franchiseleaderswrank(league_id='10')
 ```
 
-_Last validated n/a._
-
 ## wnba_stats_franchiseplayers
 
 GET /stats/franchiseplayers
@@ -289,5 +283,3 @@ GET /stats/franchiseplayers
 ```python
 wnba_stats_franchiseplayers(league_id='10')
 ```
-
-_Last validated n/a._
