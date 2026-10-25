@@ -4244,12 +4244,25 @@ def _autodoc_family(name: str, highlighted: frozenset[str] = frozenset(), *, mod
     return sources.resolve(name, module, **_resolve_origin(name)).label
 
 
-def _autodoc_signature(obj) -> str:
-    """``str(inspect.signature(obj))`` with a ``"(...)"`` fallback for un-introspectable objects."""
+def _stable_signature(obj):
+    """``inspect.signature(obj)``, the same on every supported Python (PRE-1008 gate sweep).
+
+    An ``Enum`` subclass's signature is ``EnumMeta.__call__``'s, which Python 3.12 changed from
+    ``(value, names=None, *, module=None, ...)`` to ``(*values)``, so the rendered pages differed between the
+    3.10 floor and 3.13. Every Enum renders the 3.12+ form.
+    """
+    import enum
     import inspect
 
+    if isinstance(obj, type) and issubclass(obj, enum.Enum):
+        return inspect.Signature([inspect.Parameter("values", inspect.Parameter.VAR_POSITIONAL)])
+    return inspect.signature(obj)
+
+
+def _autodoc_signature(obj) -> str:
+    """``str(inspect.signature(obj))`` with a ``"(...)"`` fallback for un-introspectable objects."""
     try:
-        return str(inspect.signature(obj))
+        return str(_stable_signature(obj))
     except (TypeError, ValueError):
         return "(...)"
 
@@ -4752,7 +4765,7 @@ def _doc_view(obj) -> dict:
     fb_params = {p["arg_name"]: p for p in fb["params"]}
 
     try:
-        sig = inspect.signature(obj)
+        sig = _stable_signature(obj)
     except (ValueError, TypeError):
         sig = None
     params: list[dict] = []
