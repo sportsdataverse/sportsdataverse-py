@@ -288,24 +288,31 @@ def test_stale_gates_never_delete_another_runs_tmp_dir(in_tree):
 
 
 def test_stale_gate_runs_that_overlap_both_stay_green(in_tree, monkeypatch):
-    """A-L2, for ANY fixed temp-dir name: a second ``_live_stale()`` starts and finishes inside the first one's render.
+    """A-L2, for ANY fixed temp-dir name: a second ``_live_stale()`` starts and finishes inside the first one's compare.
 
+    The nested run is hooked into ``_ruff_format_dir``, which ``_stale_vs_render`` calls after it has written
+    the render into its temp dir and before it reads it back, so the outer dir exists and is full when the
+    nested run starts. (Hooking ``_render_all`` would not overlap: the temp dir is made after it returns.)
     With a shared fixed dir the nested run deletes the outer run's rendered files, and the outer run then
     reports them stale (or crashes); with a per-run ``mkdtemp`` both are green.
     """
-    real = generate._render_all
+    real = generate._ruff_format_dir
     nested: list = []
+    outer_dirs: list[Path] = []
 
-    def render_and_overlap() -> dict:
-        out = real()
-        if not nested:  # the outer run's temp dir exists now; mark first, so the nested run does not recurse
+    def format_and_overlap(path: Path) -> None:
+        real(path)
+        # The outer run's temp dir holds its formatted render now; mark first so the nested run does not recurse.
+        if not nested:
+            outer_dirs.append(path)
+            assert any(path.iterdir())
             nested.append(None)
             nested[0] = generate._live_stale()
-        return out
 
-    monkeypatch.setattr(generate, "_render_all", render_and_overlap)
+    monkeypatch.setattr(generate, "_ruff_format_dir", format_and_overlap)
     assert generate._live_stale() == []
     assert nested == [[]]
+    assert len(outer_dirs) == 1 and not outer_dirs[0].exists()
 
 
 # --------------------------------------------------------------------------------------
