@@ -186,6 +186,7 @@ rosters.shape
 
 rosters_pd = espn_nfl_game_rosters(game_id=401220403, return_as_pandas=True)
 home = rosters_pd[rosters_pd["home_away"] == "home"]
+away = rosters_pd[rosters_pd["home_away"] == "away"]
 ```
 
 ### espn_nfl_play_participants {#espn_nfl_play_participants}

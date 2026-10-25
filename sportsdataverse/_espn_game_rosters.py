@@ -101,7 +101,28 @@ def roster_ids(rosters: pl.DataFrame) -> pl.DataFrame:
 
 
 def game_items(summary: dict[str, Any]) -> pl.DataFrame:
-    """Flatten a game's Core v2 ``competitors`` payload to one row per team (``team_id`` Int32, links as ``*_href``)."""
+    """Flatten a game's Core v2 ``competitors`` payload to one row per team.
+
+    Bound as ``helper_<lg>_game_items`` in every ESPN game-rosters module (mbb, wbb, nba, wnba, nfl, nhl, cfb).
+
+    Args:
+        summary: The Core v2 ``/competitors`` payload, as ``espn_<lg>_game_rosters(..., raw=True)`` returns it.
+
+    Returns:
+        pl.DataFrame: One row per competitor: the ``items[]`` flattened and snake-cased, ``$ref`` keys as
+        ``*_href``, with ``team_id`` (Int32), ``team_uid``, ``order``, ``home_away`` and ``winner``.
+
+    Example:
+        Reuse a cached payload::
+
+            from sportsdataverse.nba import espn_nba_game_rosters
+            from sportsdataverse.nba.nba_game_rosters import helper_nba_game_items
+            summary = espn_nba_game_rosters(401585183, raw=True)
+            items = helper_nba_game_items(summary)
+
+    See Also:
+        * :func:`sportsdataverse.nba.espn_nba_game_rosters` -- the public entry point that chains these steps
+    """
     items = pl.from_pandas(pd.json_normalize(summary, record_path="items", sep="_"))
     items.columns = [col.replace("$ref", "href") for col in items.columns]
 
@@ -120,11 +141,30 @@ def game_items(summary: dict[str, Any]) -> pl.DataFrame:
 def roster_items(items: pl.DataFrame, summary_url: str, **kwargs: Any) -> pl.DataFrame:
     """Fetch each team's game roster and stack the entries, one row per rostered player.
 
-    A team whose roster 404s is skipped so the other side is still read (task 6.1 shared this body; nhl keeps its
-    own copy, which does not drop ``period`` / ``for_player_id`` / ``active``).
+    Bound as ``helper_<lg>_roster_items`` in mbb, wbb, nba, wnba, nfl and cfb. A team whose roster 404s is skipped
+    so the other side is still read (task 6.1 shared this body; nhl keeps its own copy, which does not drop
+    ``period`` / ``for_player_id`` / ``active``).
+
+    Args:
+        items: The frame ``game_items`` returns (needs ``team_id``).
+        summary_url: The ``/competitors`` URL; each team's roster is ``<summary_url>/<team_id>/roster``.
+        **kwargs: Passed to each roster download.
+
+    Returns:
+        pl.DataFrame: One row per roster entry of both teams, ``player_id`` (Int64) and ``team_id`` (Int32).
 
     Raises:
-        NoDataError: no team in the game has a roster resource.
+        NoDataError: No team in the game has a roster resource.
+        AssetFetchError: A roster fetch failed (403, 429, 5xx, a dropped connection).
+
+    Example:
+        Wired into the public flow (preferred entry point)::
+
+            from sportsdataverse.nba import espn_nba_game_rosters
+            rosters = espn_nba_game_rosters(game_id=401585183)
+
+    See Also:
+        * :func:`sportsdataverse.nba.espn_nba_game_rosters` -- the public entry point that chains these steps
     """
     from sportsdataverse.errors import NoDataError
 
@@ -158,7 +198,33 @@ def roster_items(items: pl.DataFrame, summary_url: str, **kwargs: Any) -> pl.Dat
 
 
 def team_items(items: pl.DataFrame, **kwargs: Any) -> pl.DataFrame:
-    """Fetch each competitor's Core v2 team and flatten it to one ``team_*`` row per team."""
+    """Fetch each competitor's Core v2 team and flatten it to one ``team_*`` row per team.
+
+    Bound as ``helper_<lg>_team_items`` in every ESPN game-rosters module.
+
+    Args:
+        items: The frame ``game_items`` returns (needs ``team_href``).
+        **kwargs: Passed to the download of each team resource.
+
+    Returns:
+        pl.DataFrame: One row per team keyed by ``team_id`` (Int32), with the canonical ``team_*`` columns and
+        ``logo_href`` / ``logo_dark_href``.
+
+    Raises:
+        NoDataError: A team resource answered 404.
+        AssetFetchError: A team fetch failed (403, 429, 5xx, a dropped connection).
+
+    Example:
+        Pair with ``helper_<lg>_game_items``::
+
+            from sportsdataverse.nba import espn_nba_game_rosters
+            from sportsdataverse.nba.nba_game_rosters import helper_nba_game_items, helper_nba_team_items
+            items = helper_nba_game_items(espn_nba_game_rosters(401585183, raw=True))
+            teams = helper_nba_team_items(items)
+
+    See Also:
+        * :func:`sportsdataverse.nba.espn_nba_game_rosters` -- the public entry point that chains these steps
+    """
     teams_df = pl.DataFrame()
     for href in items["team_href"]:
         team = _download_json(download, href, **kwargs)
@@ -172,8 +238,28 @@ def team_items(items: pl.DataFrame, **kwargs: Any) -> pl.DataFrame:
 def athlete_items(teams_rosters: pl.DataFrame, **kwargs: Any) -> pl.DataFrame:
     """Fetch each rostered athlete's Core v2 resource and flatten it to one row per athlete.
 
+    Bound as ``helper_<lg>_athlete_items`` in every ESPN game-rosters module. An athlete whose ``$ref`` answers
+    404 is left out with a ``UserWarning``; the ``position`` fields are kept (``position_id`` Int32).
+
+    Args:
+        teams_rosters: The roster frame (needs ``athlete_href``).
+        **kwargs: Passed to each athlete download.
+
+    Returns:
+        pl.DataFrame: One row per athlete that answered, keyed by ``athlete_id`` (Int64).
+
     Raises:
-        NoDataError: every athlete ``$ref`` answered 404.
+        NoDataError: Every athlete ``$ref`` answered 404.
+        AssetFetchError: An athlete fetch failed (403, 429, 5xx, a dropped connection).
+
+    Example:
+        Wired into the public flow (preferred entry point)::
+
+            from sportsdataverse.nba import espn_nba_game_rosters
+            rosters = espn_nba_game_rosters(game_id=401585183)
+
+    See Also:
+        * :func:`sportsdataverse.nba.espn_nba_game_rosters` -- the public entry point that chains these steps
     """
     game_athletes = pl.DataFrame()
     for href in teams_rosters["athlete_href"]:
