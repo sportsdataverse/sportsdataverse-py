@@ -3,6 +3,7 @@ the existing hand-written loaders do (faithful), and historical loaders are kept
 """
 
 import importlib
+import warnings
 from pathlib import Path
 from unittest.mock import patch
 
@@ -48,7 +49,12 @@ def _existing_url(fn_name: str, league: str):
     with patch.object(runtime, "_release_bytes", side_effect=fake):  # the release fetch, before the parse (R898-9)
         # `_read_release_parquet` classifies a failed read by asking the transport
         # what the server said, so keep that lookup offline too.
-        with patch.object(runtime, "download", side_effect=NoDataError("404")):
+        with patch.object(runtime, "download", side_effect=NoDataError("404")), warnings.catch_warnings():
+            # A deprecated loader (load_nba_stats_*_v3) warns, then delegates to its replacement. Let it
+            # through, so its URL is still captured: under pytest.ini's `error` the warning used to raise
+            # into the except below and silently skip the comparison. The warning itself is
+            # warn_deprecated's contract, asserted in tests/test_deprecation.py.
+            warnings.filterwarnings("ignore", r"load_\w+ is deprecated", DeprecationWarning)
             try:
                 getattr(mod, fn_name)(seasons=2024)
             except Exception:  # noqa: BLE001 -- the URL is captured before the stubbed 404; what follows is irrelevant

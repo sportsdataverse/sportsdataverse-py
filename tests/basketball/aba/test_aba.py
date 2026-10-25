@@ -150,7 +150,7 @@ def test_pbp_is_in_game_order_and_ends_on_the_final_score():
     )
     ids = pbp["player_id"].drop_nulls()
     box = P.parse_aba_box_players(_full())
-    assert ids.is_in(box["player_id"]).all()  # play-by-play and box score share one id space
+    assert ids.is_in(box["player_id"].implode()).all()  # play-by-play and box score share one id space
     assert pbp.schema["player_id"] == box.schema["player_id"]
 
 
@@ -179,7 +179,7 @@ def test_shots_ids_are_cast_and_the_chart_joins_the_box_score():
     assert shots.schema["player_id"] == pl.Int64 and shots["player_id"].null_count() == 1  # id "0": not recorded
     assert shots.filter(pl.col("player_id").is_null())["player_name"].null_count() == 1
     box = P.parse_aba_box_players(_full())
-    assert shots["player_id"].drop_nulls().is_in(box["player_id"]).all()
+    assert shots["player_id"].drop_nulls().is_in(box["player_id"].implode()).all()
     assert shots.schema["player_id"] == box.schema["player_id"]
     assert shots.filter(pl.col("side") == "home")["x"].max() < 50 < shots.filter(pl.col("side") == "away")["x"].min()
 

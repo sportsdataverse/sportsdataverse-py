@@ -919,7 +919,7 @@ def test_espn_nhl_schedule_known_date_returns_games():
 
 
 def test_espn_mch_teams_site_returns_many_teams():
-    from sportsdataverse.mch.mch_espn_ext import espn_mch_teams_site
+    from sportsdataverse.hockey.mch.mch_espn_ext import espn_mch_teams_site
 
     payload = espn_mch_teams_site(return_parsed=False)
     teams = payload.get("sports", [{}])[0].get("leagues", [{}])[0].get("teams") or []
@@ -927,14 +927,14 @@ def test_espn_mch_teams_site_returns_many_teams():
 
 
 def test_espn_wch_scoreboard_answers():
-    from sportsdataverse.wch.wch_espn_ext import espn_wch_scoreboard
+    from sportsdataverse.hockey.wch.wch_espn_ext import espn_wch_scoreboard
 
     payload = espn_wch_scoreboard(return_parsed=False)
     assert isinstance(payload, dict) and "leagues" in payload
 
 
 def test_espn_college_baseball_teams_site_returns_many_teams():
-    from sportsdataverse.college_baseball.college_baseball_espn_ext import espn_college_baseball_teams_site
+    from sportsdataverse.baseball.college_baseball.college_baseball_espn_ext import espn_college_baseball_teams_site
 
     payload = espn_college_baseball_teams_site(return_parsed=False)
     teams = payload.get("sports", [{}])[0].get("leagues", [{}])[0].get("teams") or []
@@ -942,14 +942,14 @@ def test_espn_college_baseball_teams_site_returns_many_teams():
 
 
 def test_espn_college_softball_scoreboard_answers():
-    from sportsdataverse.college_softball.college_softball_espn_ext import espn_college_softball_scoreboard
+    from sportsdataverse.baseball.college_softball.college_softball_espn_ext import espn_college_softball_scoreboard
 
     payload = espn_college_softball_scoreboard(return_parsed=False)
     assert isinstance(payload, dict) and "leagues" in payload
 
 
 def test_espn_cfl_teams_site_returns_teams():
-    from sportsdataverse.cfl.cfl_espn_ext import espn_cfl_teams_site
+    from sportsdataverse.football.cfl.cfl_espn_ext import espn_cfl_teams_site
 
     payload = espn_cfl_teams_site(return_parsed=False)
     teams = payload.get("sports", [{}])[0].get("leagues", [{}])[0].get("teams") or []
@@ -957,7 +957,7 @@ def test_espn_cfl_teams_site_returns_teams():
 
 
 def test_espn_ufl_scoreboard_answers():
-    from sportsdataverse.ufl.ufl_espn_ext import espn_ufl_scoreboard
+    from sportsdataverse.football.ufl.ufl_espn_ext import espn_ufl_scoreboard
 
     payload = espn_ufl_scoreboard(return_parsed=False)
     assert isinstance(payload, dict) and "leagues" in payload
@@ -989,7 +989,7 @@ def test_espn_soccer_teams_param_league_answers():
 
 
 def test_espn_epl_alias_scoreboard_answers():
-    from sportsdataverse.epl.epl_espn_ext import espn_epl_scoreboard
+    from sportsdataverse.soccer.epl.epl_espn_ext import espn_epl_scoreboard
 
     # fixed-league alias: NO league arg
     payload = espn_epl_scoreboard(return_parsed=False)
@@ -1023,7 +1023,7 @@ def test_espn_soccer_standings_parsed_table():
 
 def test_espn_epl_alias_scoreboard_parsed():
     import polars as pl
-    from sportsdataverse.epl.epl_espn_ext import espn_epl_scoreboard
+    from sportsdataverse.soccer.epl.epl_espn_ext import espn_epl_scoreboard
 
     df = espn_epl_scoreboard()  # fixed-league alias, no league arg, parsed
     assert isinstance(df, pl.DataFrame)
