@@ -234,3 +234,14 @@ def test_live_nba_cdn_playbyplay():
 
     frames = espn_nba_cdn_playbyplay(game_id=401705127)
     assert frames["plays"].height > 400
+
+
+def test_cdn_rankings_pandas_ids_are_nullable_int64():
+    """R981-11: on the real cfb capture most rows carry no team (151 of 217 ``team_id`` null), so a plain
+    ``to_pandas()`` floated the column (``251.0``); the pandas frame carries pandas' nullable ``Int64``."""
+    df = parse_cdn_rankings(_load("rankings_cfb.json"))
+    pdf = parse_cdn_rankings(_load("rankings_cfb.json"), return_as_pandas=True)
+    assert df["team_id"].null_count() > df.height // 2
+    ids = [c for c, t in df.schema.items() if t == pl.Int64 and (c == "id" or c.endswith("_id"))]
+    assert {c: str(pdf[c].dtype) for c in ids} == dict.fromkeys(ids, "Int64")
+    assert int(pdf["team_id"].isna().sum()) == df["team_id"].null_count()
