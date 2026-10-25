@@ -19,8 +19,9 @@
 # accepted and re-seeded, so tools/upstream_baseline.sh adds the UPSTREAM
 # branch's baseline too, and a metric fails only when it is worse than both.
 # It does so only when the PR head contains the upstream tip and the base does
-# not yet; an ordinary task PR gets no allowance. main keeps no baseline/, so
-# a main -> devel-program-setup sync still has the base's baseline only.
+# not yet; an ordinary task PR gets no allowance. main carries baseline/ too
+# (coverage-devel.json, scoreboard-devel.json, scoreboard-program-setup-base.json):
+# a push to main gates against the checkout's own baseline/coverage-devel.json.
 # The allowance covers the WHOLE PR: one that merges the upstream tip AND
 # carries task commits is treated as a sync, so never merge the upstream into
 # a task PR. With two baselines the scoreboard table shows the change against
@@ -34,7 +35,9 @@ on:
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # A push to main runs to completion, so every merge refreshes the coverage badge
+  # (coverage-badge below); PR and devel-* runs still cancel their predecessor.
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 permissions:
   contents: read
 defaults:
@@ -168,6 +171,85 @@ jobs:
           path: |
             coverage.json
             scoreboard-ci.json
+
+  coverage-badge:
+    # Publishes the two coverage numbers of a main push as shields.io endpoint JSON on
+    # the orphan `badges` branch (README badges read them from raw.githubusercontent.com),
+    # the same pattern as the star-history branch. It reuses the coverage job's artifact,
+    # never re-runs the suite, and is the only job here holding a write token.
+    #   coverage.json     = hand-written line coverage, the number the scoreboard gates
+    #   coverage-all.json = the plain pytest-cov total, generated wrappers included
+    name: publish coverage badge (main only)
+    needs: coverage
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: coverage-badge-publish
+      cancel-in-progress: false
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: coverage-scoreboard
+          path: art
+      - name: Check out the badges branch
+        env:
+          REPO: ${{ github.repository }}
+        run: |
+          git init -q out
+          cd out
+          git remote add origin "https://github.com/${REPO}.git"
+          rc=0
+          git ls-remote --exit-code origin refs/heads/badges > /dev/null || rc=$?
+          if [ "$rc" = 0 ]; then
+            git fetch -q --depth 1 origin badges
+            git checkout -q -b badges FETCH_HEAD
+          elif [ "$rc" = 2 ]; then
+            git checkout -q --orphan badges  # first run
+          else
+            exit "$rc"  # a failed lookup must not start a second, unrelated history
+          fi
+      - name: Write the shields.io endpoint JSON
+        id: badge
+        run: |
+          python3 - <<'PY'
+          import json, os
+          board = json.load(open("art/scoreboard-ci.json"))
+          hand = board["metrics"]["coverage_handwritten_percent"]["value"]
+          total = json.load(open("art/coverage.json"))["totals"]["percent_covered"]
+          color = "brightgreen" if hand >= 90 else "green" if hand >= 80 else "yellow" if hand >= 70 else "orange"
+          badges = {
+              "coverage.json": {"label": "coverage", "message": f"{hand:.1f}%", "color": color},
+              # Not gated, so a neutral colour: it is dominated by generated wrappers.
+              "coverage-all.json": {"label": "coverage (all, incl. generated)", "message": f"{total:.1f}%", "color": "informational"},
+          }
+          for name, body in badges.items():
+              with open(os.path.join("out", name), "w") as fh:
+                  json.dump({"schemaVersion": 1, **body}, fh, indent=2)
+                  fh.write("\n")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+              fh.write(f"hand={hand:.1f}%\ntotal={total:.1f}%\n")
+          print(f"coverage {hand:.1f}% (all, incl. generated {total:.1f}%)")
+          PY
+      - name: Push the badges (only when a number changed)
+        working-directory: out
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HAND: ${{ steps.badge.outputs.hand }}
+          TOTAL: ${{ steps.badge.outputs.total }}
+        run: |
+          git add coverage.json coverage-all.json
+          if git diff --cached --quiet; then
+            echo "Badges unchanged ($HAND, all $TOTAL); nothing to publish."
+            exit 0
+          fi
+          git config http.https://github.com/.extraheader \
+            "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -q -m "chore(badges): coverage $HAND (all $TOTAL)"
+          git push -q origin HEAD:badges
 
   mutants:
     # The mutation registry (tests/mutants/registry.yaml): each row applies a text mutant to a
