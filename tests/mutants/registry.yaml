@@ -7251,8 +7251,8 @@
   group: dtype-contract-5-2
   finding: B-H5
   file: sportsdataverse/hockeytech/_parsers.py
-  snippet: '    return _cast_id_columns(pl.from_pandas(pdf)) if len(pdf) else pl.DataFrame()'
-  mutant: '    return pl.from_pandas(pdf) if len(pdf) else pl.DataFrame()'
+  snippet: '    out = _cast_id_columns(pl.from_pandas(pdf))'
+  mutant: '    out = pl.from_pandas(pdf)'
   test: tests/hockeytech/test_parsers.py -k "hockeytech_ids_int64"
   expected: kill
   note: player_id is Float64 in pbp and String in roster / leaders / summary again; game_id copies the caller (B-L72).
