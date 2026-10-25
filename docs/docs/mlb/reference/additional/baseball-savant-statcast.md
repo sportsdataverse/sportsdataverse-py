@@ -336,7 +336,7 @@ halving any window that hits the cap, and stitches the chunks back together.
 
 **Returns**
 
-A polars (or pandas) DataFrame, one row per pitch. A window with no games returns zero rows keeping the documented columns -- MLBAM ids `Int64`, the rest `Null` (no values to infer a dtype from), so the frame widens cleanly into a populated one.
+A polars (or pandas) DataFrame, one row per pitch. A window with no games returns zero rows with the documented columns and dtypes (MLBAM ids `Int64`), so it stacks onto a populated one with either relaxed concat.
 
 | col_name | type | description |
 |---|---|---|
@@ -354,7 +354,7 @@ A polars (or pandas) DataFrame, one row per pitch. A window with no games return
 | `spin_rate_deprecated` | double | Deprecated legacy spin-rate field, no longer populated. |
 | `break_angle_deprecated` | double | Deprecated legacy break-angle field, no longer populated. |
 | `break_length_deprecated` | double | Deprecated legacy break-length field, no longer populated. |
-| `zone` | double | Strike-zone region the pitch crossed (1-14 Gameday zone). |
+| `zone` | integer | Strike-zone region the pitch crossed (1-14 Gameday zone). |
 | `des` | character | Full text description of the play. |
 | `game_type` | character | Game type code (R, P, etc.). |
 | `stand` | character | Side of the plate the batter is standing (L or R). |
@@ -395,7 +395,7 @@ A polars (or pandas) DataFrame, one row per pitch. A window with no games return
 | `launch_speed` | double | Exit velocity of the batted ball (mph). |
 | `launch_angle` | double | Vertical launch angle of the batted ball (degrees). |
 | `effective_speed` | double | Perceived velocity adjusted for release extension (mph). |
-| `release_spin_rate` | double | Spin rate of the pitch at release (rpm). |
+| `release_spin_rate` | integer | Spin rate of the pitch at release (rpm). |
 | `release_extension` | double | Distance toward the plate at release (feet). |
 | `game_pk` | integer | Unique game identifier. |
 | `fielder_2` | integer | MLBAM ID of the catcher. |
@@ -427,7 +427,7 @@ A polars (or pandas) DataFrame, one row per pitch. A window with no games return
 | `post_fld_score` | integer | Fielding team score after the pitch. |
 | `if_fielding_alignment` | character | Infield defensive alignment (Standard, Strategic, Infield shift). |
 | `of_fielding_alignment` | character | Outfield defensive alignment (Standard, Strategic, 4th outfielder). |
-| `spin_axis` | double | Spin axis of the pitch as a clock-face angle (degrees). |
+| `spin_axis` | integer | Spin axis of the pitch as a clock-face angle (degrees). |
 | `delta_home_win_exp` | double | Change in home team win expectancy on the play. |
 | `delta_run_exp` | double | Change in run expectancy on the play. |
 | `bat_speed` | double | Bat speed at the point of contact (mph). |
@@ -446,8 +446,8 @@ A polars (or pandas) DataFrame, one row per pitch. A window with no games return
 | `age_bat` | integer | Batter age for the season. |
 | `n_thruorder_pitcher` | integer | Times through the order the pitcher is facing the lineup. |
 | `n_priorpa_thisgame_player_at_bat` | integer | Number of prior plate appearances by the batter in the game. |
-| `pitcher_days_since_prev_game` | double | Days since the pitcher's previous game appearance. |
-| `batter_days_since_prev_game` | double | Days since the batter's previous game appearance. |
+| `pitcher_days_since_prev_game` | integer | Days since the pitcher's previous game appearance. |
+| `batter_days_since_prev_game` | integer | Days since the batter's previous game appearance. |
 | `pitcher_days_until_next_game` | integer | Days until the pitcher's next game appearance. |
 | `batter_days_until_next_game` | integer | Days until the batter's next game appearance. |
 | `api_break_z_with_gravity` | double | Vertical pitch break including gravity (inches). |
@@ -498,7 +498,7 @@ every other filter rides along. Narrow further with `hfLevel` (`"AAA|"`,
 
 **Returns**
 
-A polars (or pandas) DataFrame, one row per minor-league pitch. A window with no games returns zero rows keeping the documented columns -- MLBAM ids `Int64`, the rest `Null` (no values to infer a dtype from), so the frame widens cleanly into a populated one.
+A polars (or pandas) DataFrame, one row per minor-league pitch. A window with no games returns zero rows with the documented columns and dtypes (MLBAM ids `Int64`), so it stacks onto a populated one with either relaxed concat.
 
 | col_name | type | description |
 |---|---|---|
@@ -516,7 +516,7 @@ A polars (or pandas) DataFrame, one row per minor-league pitch. A window with no
 | `spin_rate_deprecated` | double | Deprecated legacy spin-rate field, no longer populated. |
 | `break_angle_deprecated` | double | Deprecated legacy break-angle field, no longer populated. |
 | `break_length_deprecated` | double | Deprecated legacy break-length field, no longer populated. |
-| `zone` | double | Strike-zone region the pitch crossed (1-14 Gameday zone). |
+| `zone` | integer | Strike-zone region the pitch crossed (1-14 Gameday zone). |
 | `des` | character | Full text description of the play. |
 | `game_type` | character | Game type code (R, P, etc.). |
 | `stand` | character | Side of the plate the batter is standing (L or R). |
@@ -557,7 +557,7 @@ A polars (or pandas) DataFrame, one row per minor-league pitch. A window with no
 | `launch_speed` | double | Exit velocity of the batted ball (mph). |
 | `launch_angle` | double | Vertical launch angle of the batted ball (degrees). |
 | `effective_speed` | double | Perceived velocity adjusted for release extension (mph). |
-| `release_spin_rate` | double | Spin rate of the pitch at release (rpm). |
+| `release_spin_rate` | integer | Spin rate of the pitch at release (rpm). |
 | `release_extension` | double | Distance toward the plate at release (feet). |
 | `game_pk` | integer | Unique game identifier. |
 | `fielder_2` | integer | MLBAM ID of the catcher. |
@@ -589,7 +589,7 @@ A polars (or pandas) DataFrame, one row per minor-league pitch. A window with no
 | `post_fld_score` | integer | Fielding team score after the pitch. |
 | `if_fielding_alignment` | character | Infield defensive alignment (Standard, Strategic, Infield shift). |
 | `of_fielding_alignment` | character | Outfield defensive alignment (Standard, Strategic, 4th outfielder). |
-| `spin_axis` | double | Spin axis of the pitch as a clock-face angle (degrees). |
+| `spin_axis` | integer | Spin axis of the pitch as a clock-face angle (degrees). |
 | `delta_home_win_exp` | double | Change in home team win expectancy on the play. |
 | `delta_run_exp` | double | Change in run expectancy on the play. |
 | `bat_speed` | double | Bat speed at the point of contact (mph). |
@@ -608,10 +608,10 @@ A polars (or pandas) DataFrame, one row per minor-league pitch. A window with no
 | `age_bat` | integer | Batter age for the season. |
 | `n_thruorder_pitcher` | integer | Times through the order the pitcher is facing the lineup. |
 | `n_priorpa_thisgame_player_at_bat` | integer | Number of prior plate appearances by the batter in the game. |
-| `pitcher_days_since_prev_game` | double | Days since the pitcher's previous game appearance. |
-| `batter_days_since_prev_game` | double | Days since the batter's previous game appearance. |
-| `pitcher_days_until_next_game` | double | Days until the pitcher's next game appearance. |
-| `batter_days_until_next_game` | double | Days until the batter's next game appearance. |
+| `pitcher_days_since_prev_game` | integer | Days since the pitcher's previous game appearance. |
+| `batter_days_since_prev_game` | integer | Days since the batter's previous game appearance. |
+| `pitcher_days_until_next_game` | integer | Days until the pitcher's next game appearance. |
+| `batter_days_until_next_game` | integer | Days until the batter's next game appearance. |
 | `api_break_z_with_gravity` | double | Vertical pitch break including gravity (inches). |
 | `api_break_x_arm` | double | Horizontal pitch break to the pitcher's arm side (inches). |
 | `api_break_x_batter_in` | double | Horizontal pitch break toward/away from the batter (inches). |
@@ -661,7 +661,7 @@ quarterfinals, `L` semifinals, `W` championship).
 
 **Returns**
 
-A polars (or pandas) DataFrame, one row per WBC pitch. A window with no games returns zero rows keeping the documented columns -- MLBAM ids `Int64`, the rest `Null` (no values to infer a dtype from), so the frame widens cleanly into a populated one.
+A polars (or pandas) DataFrame, one row per WBC pitch. A window with no games returns zero rows with the documented columns and dtypes (MLBAM ids `Int64`), so it stacks onto a populated one with either relaxed concat.
 
 | col_name | type | description |
 |---|---|---|
@@ -679,7 +679,7 @@ A polars (or pandas) DataFrame, one row per WBC pitch. A window with no games re
 | `spin_rate_deprecated` | double | Deprecated legacy spin-rate field, no longer populated. |
 | `break_angle_deprecated` | double | Deprecated legacy break-angle field, no longer populated. |
 | `break_length_deprecated` | double | Deprecated legacy break-length field, no longer populated. |
-| `zone` | double | Strike-zone region the pitch crossed (1-14 Gameday zone). |
+| `zone` | integer | Strike-zone region the pitch crossed (1-14 Gameday zone). |
 | `des` | character | Full text description of the play. |
 | `game_type` | character | Game type code (R, P, etc.). |
 | `stand` | character | Side of the plate the batter is standing (L or R). |
@@ -720,7 +720,7 @@ A polars (or pandas) DataFrame, one row per WBC pitch. A window with no games re
 | `launch_speed` | double | Exit velocity of the batted ball (mph). |
 | `launch_angle` | double | Vertical launch angle of the batted ball (degrees). |
 | `effective_speed` | double | Perceived velocity adjusted for release extension (mph). |
-| `release_spin_rate` | double | Spin rate of the pitch at release (rpm). |
+| `release_spin_rate` | integer | Spin rate of the pitch at release (rpm). |
 | `release_extension` | double | Distance toward the plate at release (feet). |
 | `game_pk` | integer | Unique game identifier. |
 | `fielder_2` | integer | MLBAM ID of the catcher. |
@@ -752,7 +752,7 @@ A polars (or pandas) DataFrame, one row per WBC pitch. A window with no games re
 | `post_fld_score` | integer | Fielding team score after the pitch. |
 | `if_fielding_alignment` | character | Infield defensive alignment (Standard, Strategic, Infield shift). |
 | `of_fielding_alignment` | character | Outfield defensive alignment (Standard, Strategic, 4th outfielder). |
-| `spin_axis` | double | Spin axis of the pitch as a clock-face angle (degrees). |
+| `spin_axis` | integer | Spin axis of the pitch as a clock-face angle (degrees). |
 | `delta_home_win_exp` | double | Change in home team win expectancy on the play. |
 | `delta_run_exp` | double | Change in run expectancy on the play. |
 | `bat_speed` | double | Bat speed at the point of contact (mph). |
@@ -771,10 +771,10 @@ A polars (or pandas) DataFrame, one row per WBC pitch. A window with no games re
 | `age_bat` | integer | Batter age for the season. |
 | `n_thruorder_pitcher` | integer | Times through the order the pitcher is facing the lineup. |
 | `n_priorpa_thisgame_player_at_bat` | integer | Number of prior plate appearances by the batter in the game. |
-| `pitcher_days_since_prev_game` | double | Days since the pitcher's previous game appearance. |
-| `batter_days_since_prev_game` | double | Days since the batter's previous game appearance. |
-| `pitcher_days_until_next_game` | double | Days until the pitcher's next game appearance. |
-| `batter_days_until_next_game` | double | Days until the batter's next game appearance. |
+| `pitcher_days_since_prev_game` | integer | Days since the pitcher's previous game appearance. |
+| `batter_days_since_prev_game` | integer | Days since the batter's previous game appearance. |
+| `pitcher_days_until_next_game` | integer | Days until the pitcher's next game appearance. |
+| `batter_days_until_next_game` | integer | Days until the batter's next game appearance. |
 | `api_break_z_with_gravity` | double | Vertical pitch break including gravity (inches). |
 | `api_break_x_arm` | double | Horizontal pitch break to the pitcher's arm side (inches). |
 | `api_break_x_batter_in` | double | Horizontal pitch break toward/away from the batter (inches). |

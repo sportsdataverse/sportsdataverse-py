@@ -103,7 +103,7 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `birth_place_city` | character |  |
 | `birth_place_state` | character |  |
 | `birth_place_country` | character |  |
-| `birth_country_alternate_id` | character |  |
+| `birth_country_alternate_id` | integer |  |
 | `birth_country_abbreviation` | character |  |
 | `headshot_href` | character | URL of the athlete headshot image. |
 | `headshot_alt` | character |  |
@@ -113,7 +113,7 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `experience_years` | integer | Years of experience. |
 | `experience_display_value` | character |  |
 | `experience_abbreviation` | character |  |
-| `status_id` | character | ESPN commitment status id. |
+| `status_id` | integer | ESPN commitment status id. |
 | `status_name` | character | Status-type key (e.g. `STATUS_FINAL`). |
 | `status_type` | character | Status type. |
 | `status_abbreviation` | character |  |
@@ -302,7 +302,7 @@ Polars dataframe of the college football teams, one row per team, with the colum
 | `team_alternate_color` | character | Alternate team color. |
 | `team_color` | character | Primary team color. |
 | `team_display_name` | character | Full team display name. |
-| `team_id` | character | ESPN team id. |
+| `team_id` | integer | ESPN team id. |
 | `team_is_active` | logical |  |
 | `team_is_all_star` | logical |  |
 | `team_location` | character | Team location / school name. |

@@ -39,6 +39,13 @@ ambiguous contest lands on NULL rather than a guess:
 A contest that survives all four keeps a NULL ``espn_game_id``. Rows are never
 dropped for failing to match, and an ESPN game id claimed by two different
 contests is voided on both sides rather than assigned to either.
+
+**The ids here are ``Utf8``, on purpose** (task 5.2 kept this pin, B-GB-10): the crosswalk is a JSON file
+keyed by the NCAA ``contest_id`` (stats.ncaa.org text), read back by ``ncaa_identity.enrich_parsed``
+into the NCAA scrape outputs, which publish ``espn_game_id`` as text. Both sides are cast at this
+boundary through ``Int64`` (:func:`_utf8_id`), so a float id never reads ``"123.0"``. A caller joining
+the result to an ESPN frame (``Int64`` ids since 0.1.x) casts ``espn_game_id`` with
+``pl.col("espn_game_id").cast(pl.Int64)``: every value is an ESPN event id.
 """
 
 from __future__ import annotations
@@ -172,6 +179,8 @@ def _apply_tier(
     pending: pl.DataFrame, lookup: pl.DataFrame, keys: List[str], method: str
 ) -> "tuple[pl.DataFrame, pl.DataFrame]":
     """Left-join *pending* against *lookup*; return ``(matched, still_pending)``."""
+    for k in keys:  # CLAUDE.md id discipline: a dtype mismatch here would match nothing, silently
+        assert pending.schema[k] == lookup.schema[k], f"{k}: {pending.schema[k]} vs {lookup.schema[k]}"
     joined = pending.join(lookup, on=keys, how="left")
     matched = joined.filter(pl.col("espn_game_id").is_not_null()).with_columns(
         pl.lit(method, dtype=pl.Utf8).alias("match_method")

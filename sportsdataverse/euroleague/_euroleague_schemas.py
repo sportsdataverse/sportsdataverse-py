@@ -51,7 +51,7 @@ SCHEMAS: Dict[str, Dict[str, str]] = {
     },
     "game_header": {
         "live": "Boolean",
-        "round": "String",
+        "round": "Int64",
         "date": "String",
         "hour": "String",
         "stadium": "String",

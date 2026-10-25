@@ -9,7 +9,8 @@ docstring and hands the request to :func:`teams_frame`:
   package-wide TTL response cache (``sportsdataverse.cache``) is the opt-in cache;
 * a payload without ``sports[0].leagues[0].teams`` returns a zero-row frame with the documented
   columns instead of ``TypeError`` / ``IndexError`` (B-L1);
-* the payload is never mutated.
+* the payload is never mutated;
+* ``team_id`` is ``Int64``, cast from the raw integer (task 5.2, B-M15).
 
 ``TEAMS_SCHEMA`` mirrors ``tools/codegen/schemas/autodoc/<lg>/espn_<lg>_teams.yaml`` (the same 14
 columns in every league); the teams family tests assert the two agree.
@@ -22,7 +23,7 @@ from typing import Any, Callable, TypeVar
 import pandas as pd
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _download_json
+from sportsdataverse._codegen_runtime import _cast_ids_int64, _download_json, _pandas_ids
 from sportsdataverse._deprecation import warn_deprecated
 from sportsdataverse.dl_utils import download, underscore
 
@@ -38,7 +39,7 @@ TEAMS_SCHEMA: dict[str, pl.DataType] = {
     "team_alternate_color": pl.String(),
     "team_color": pl.String(),
     "team_display_name": pl.String(),
-    "team_id": pl.String(),
+    "team_id": pl.Int64(),
     "team_is_active": pl.Boolean(),
     "team_is_all_star": pl.Boolean(),
     "team_location": pl.String(),
@@ -76,10 +77,11 @@ def teams_frame(
     ]
     if not teams:
         empty = pl.DataFrame(schema=TEAMS_SCHEMA)
-        return empty.to_pandas() if return_as_pandas else empty
+        return _pandas_ids(empty) if return_as_pandas else empty
     frame = pd.json_normalize(teams, sep="_")
     frame.columns = [underscore(c) for c in frame.columns.tolist()]
-    return frame if return_as_pandas else pl.from_pandas(frame)
+    out = _cast_ids_int64(pl.from_pandas(frame), ["team_id"])
+    return _pandas_ids(out) if return_as_pandas else out
 
 
 def cache_clear_shim(fn: _F) -> _F:

@@ -38,7 +38,7 @@ columns:
   type: double
   description: ''
 - name: id
-  type: character
+  type: integer
   description: ''
 - name: jersey
   type: character
@@ -131,7 +131,7 @@ columns:
   type: character
   description: ''
 - name: position_id
-  type: character
+  type: integer
   description: ''
 - name: position_leaf
   type: logical
@@ -152,7 +152,7 @@ columns:
   type: character
   description: ''
 - name: status_id
-  type: character
+  type: integer
   description: ''
 - name: status_name
   type: character

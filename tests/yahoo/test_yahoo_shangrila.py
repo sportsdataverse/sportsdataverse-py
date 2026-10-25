@@ -306,3 +306,15 @@ def test_numeric_ids_are_pinned_to_utf8_without_a_float_detour():
     assert teams.schema["conference_id"] == pl.Utf8
     # the same id space, so the two frames must actually be joinable
     assert set(divisions[conf_cols[0]].drop_nulls().to_list()) & set(teams["conference_id"].drop_nulls().to_list())
+
+
+def test_boolean_flags_stay_boolean_when_a_row_lacks_the_key():
+    """B-M17: the real stream with ``official`` dropped from one play: null there, Boolean, never "nan"."""
+    from sportsdataverse.yahoo.yahoo_shangrila_parsers import parse_yahoo_editorial
+
+    raw = _load("editorial_boxscore_ncaaf")
+    plays = next(iter(raw["service"]["boxscore"]["gamemedia_stream"].values()))
+    del plays[0]["official"]
+    df = parse_yahoo_editorial(raw)["gamemedia_stream"]
+    assert df.schema["official"] == pl.Boolean
+    assert df["official"].null_count() == 1 and df["official"].drop_nulls().all()

@@ -33,7 +33,7 @@ def espn_wnba_teams(return_as_pandas=False, **kwargs) -> pl.DataFrame:
 
         Find Las Vegas Aces (team_id 17)::
 
-            teams.filter(__import__("polars").col("team_id") == "17").to_dicts()
+            teams.filter(__import__("polars").col("team_id") == 17).to_dicts()
 
         Pandas round-trip::
 

@@ -505,9 +505,9 @@ Release: [wnba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-dat
 | `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
-| `home_espn_team_id` | Int32 | ESPN home team id (NA for bart-only rows). |
-| `away_espn_team_id` | Int32 | ESPN away team id (NA for bart-only rows). |
-| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `home_espn_team_id` | Int64 | ESPN home team id (NA for bart-only rows). |
+| `away_espn_team_id` | Int64 | ESPN away team id (NA for bart-only rows). |
+| `espn_game_id` | Int64 | ESPN game id (NA for bart-only rows). |
 | `wnba_game_id` | String | Game identifier on stats.wnba.com matched to the ESPN game. |
 | `wnba_game_code` | String | stats.wnba.com game code (date/matchup slug) for the matched game. |
 | `wnba_home_team_id` | String | Home team identifier on stats.wnba.com for the matched game. |
@@ -531,7 +531,7 @@ Release: [wnba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-dat
 | col_name | type | description |
 |---|---|---|
 | `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
-| `espn_team_id` | Int32 | ESPN team id (canonical key). |
+| `espn_team_id` | Int64 | ESPN team id (canonical key). |
 | `espn_abbreviation` | String | ESPN abbreviation. |
 | `espn_display_name` | String | ESPN display name (school + mascot). |
 | `espn_short_name` | String | ESPN short name. |

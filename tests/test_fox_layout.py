@@ -776,3 +776,19 @@ def test_league_polls_team_column_is_layout_stable(monkeypatch, prefix, fixture,
     # RPI has no change column: the name sits in v1 (unchanged), rank_change is null
     assert rpi["team"] == rpi_team and rpi["v1"] == rpi_team and rpi["v2"] is None
     assert rpi["rank_change"] is None
+
+
+def test_frame_warns_when_a_column_mixes_text_and_numbers():
+    """B-L55: the real roster with one jersey sent as a number is read as text, with a warning naming it."""
+    rows = parse_roster(_load("cbk_team_roster.json"), 27)
+    col = next(k for k, v in rows[0].items() if isinstance(v, str) and v.isdigit() and k != "team_id")
+    rows[0][col] = int(rows[0][col])
+    with pytest.warns(UserWarning, match=rf"Fox: {col} mix text and numbers"):
+        df = frame(rows, False)
+    assert df.schema[col] == pl.String
+    clean = parse_roster(_load("cbk_team_roster.json"), 27)
+    import warnings
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        frame(clean, False)

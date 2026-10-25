@@ -31,7 +31,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | ESPN event id. |
+| `game_id` | integer | ESPN event id. |
 | `uid` | character | ESPN UID string. |
 | `date` | character | Match start timestamp (ISO 8601, UTC). |
 | `name` | character | Full event name (e.g. 'Team A at Team B'). |
@@ -39,7 +39,7 @@ ESPN endpoint.
 | `season_year` | integer | Integer season year ESPN assigns the event (e.g. 2025 for the 2025-26 season). |
 | `season_type` | integer | ESPN season-type id of the event's season: 1 preseason, 2 regular season, 3 postseason, 4 offseason for the US leagues; soccer competitions carry their own competition-specific ids (e.g. 13481). |
 | `season_slug` | character | ESPN slug of the event's season type (e.g. 'regular-season', 'post-season'; soccer competitions use their own, such as 'final' or 'torneo-apertura'). |
-| `status_type_id` | character | Unique identifier for status type. |
+| `status_type_id` | integer | Unique identifier for status type. |
 | `status_type_name` | character | Status type name. |
 | `status_type_state` | character | Status type state. |
 | `status_type_completed` | logical | Status type completed. |
@@ -52,14 +52,14 @@ ESPN endpoint.
 | `neutral_site` | logical | Whether the match is played at a neutral venue. |
 | `conference_competition` | logical | Conference competition. |
 | `attendance` | integer | Reported attendance. |
-| `venue_id` | character | Unique venue identifier. |
+| `venue_id` | integer | Unique venue identifier. |
 | `venue_full_name` | character | Venue full name. |
 | `venue_city` | character | Venue city. |
 | `venue_state` | character | Venue state / region. |
 | `venue_indoor` | logical | TRUE if the venue is indoors. |
 | `broadcast` | character | Every network name of the competition in feed order, deduped and ", "-joined (an entry with no names gives its market); "" when the game lists no broadcast. |
 | `note` | character | Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none. |
-| `home_id` | character | Unique identifier for home. |
+| `home_id` | integer | Unique identifier for home. |
 | `home_name` | character | Home name. |
 | `home_abbreviation` | character | Home team's abbreviation. |
 | `home_display_name` | character | Home display name. |
@@ -70,7 +70,7 @@ ESPN endpoint.
 | `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
 | `home_winner` | logical | Home team's winner. |
 | `home_rank` | integer |  |
-| `away_id` | character | Unique identifier for away. |
+| `away_id` | integer | Unique identifier for away. |
 | `away_name` | character | Away name. |
 | `away_abbreviation` | character | Away team's abbreviation. |
 | `away_display_name` | character | Away display name. |
@@ -118,11 +118,11 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |
 | `team_location` | character | Team location. |
-| `athlete_id` | character | Athlete id. |
+| `athlete_id` | integer | Athlete id. |
 | `athlete_display_name` | character | Athlete display name. |
 | `athlete_short_name` | character | Athlete short name. |
 | `athlete_jersey` | character | Athlete jersey. |
@@ -150,7 +150,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |
 | `home_away` | character | Home away. |
@@ -164,7 +164,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Id. |
+| `id` | integer | Id. |
 | `sequence_number` | character | Sequence number. |
 | `text` | character | Text. |
 | `away_score` | integer | Away score. |
@@ -175,12 +175,12 @@ ESPN endpoint.
 | `shooting_play` | logical | Shooting play. |
 | `points_attempted` | integer | Points attempted. |
 | `short_description` | character | Short description. |
-| `type_id` | character | Type id. |
+| `type_id` | integer | Type id. |
 | `type_text` | character | Type text. |
 | `period_number` | integer | Period number. |
 | `period_display_value` | character | Period display value. |
 | `clock_display_value` | character | Clock display value. |
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `coordinate_x` | integer | Coordinate x. |
 | `coordinate_y` | integer | Coordinate y. |
 | `participants` | character | Participants. |
@@ -191,17 +191,17 @@ ESPN endpoint.
 |---|---|---|
 | `home_win_percentage` | double | Home win percentage. |
 | `tie_percentage` | double | Tie percentage. |
-| `play_id` | character | Play id. |
+| `play_id` | integer | Play id. |
 
 **leaders**
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `category_name` | character | Category name. |
 | `category_display_name` | character | Category display name. |
-| `athlete_id` | character | Athlete id. |
+| `athlete_id` | integer | Athlete id. |
 | `athlete_display_name` | character | Athlete display name. |
 | `athlete_position` | character | Athlete position. |
 | `value` | double | Value. |
@@ -214,7 +214,7 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `attendance` | integer | Attendance. |
-| `venue_id` | character | Venue id. |
+| `venue_id` | integer | Venue id. |
 | `venue_guid` | character | Venue guid. |
 | `venue_full_name` | character | Venue full name. |
 | `venue_address_city` | character | Venue address city. |
@@ -231,13 +231,13 @@ ESPN endpoint.
 | `order` | integer | Order. |
 | `position_name` | character | Position name. |
 | `position_display_name` | character | Position display name. |
-| `position_id` | character | Position id. |
+| `position_id` | integer | Position id. |
 
 **header**
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Id. |
+| `id` | integer | Id. |
 | `uid` | character | Uid. |
 | `time_valid` | logical | Time valid. |
 | `competitions` | character | Competitions. |
@@ -247,7 +247,7 @@ ESPN endpoint.
 | `season_year` | integer | Season year. |
 | `season_current` | logical | Season current. |
 | `season_type` | integer | Season type. |
-| `league_id` | character | League id. |
+| `league_id` | integer | League id. |
 | `league_uid` | character | League uid. |
 | `league_name` | character | League name. |
 | `league_abbreviation` | character | League abbreviation. |
@@ -264,7 +264,7 @@ ESPN endpoint.
 | `group_header` | character | Group header. |
 | `conference_header` | character | Conference header. |
 | `division_header` | character | Division header. |
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_uid` | character | Team uid. |
 | `team_location` | character | Team location. |
 | `overall` | character | Overall. |
@@ -279,11 +279,11 @@ ESPN endpoint.
 | `lang` | character | Lang. |
 | `region` | character | Region label. |
 | `is_national` | logical | Boolean flag indicating whether the broadcast is a nationally distributed feed. |
-| `type_id` | character | Type id. |
+| `type_id` | integer | Type id. |
 | `type_short_name` | character | Type short name. |
 | `type_long_name` | character | Type long name. |
 | `type_slug` | character |  |
-| `market_id` | character | Unique identifier for market. |
+| `market_id` | integer | Unique identifier for market. |
 | `market_type` | character | Market type. |
 | `media_call_letters` | character |  |
 | `media_name` | character |  |
@@ -445,7 +445,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ESPN numeric identifier for the athlete. |
+| `id` | integer | ESPN numeric identifier for the athlete. |
 | `display_name` | character | Athlete's full display name as shown on ESPN. |
 | `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
 
@@ -489,7 +489,7 @@ ESPN endpoint.
 | `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
 | `team_color` | character | Team primary color (hex without leading '#'). |
 | `team_display_name` | character | Full team display name. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `team_links` | character |  |
 | `team_location` | character | Team city or location string. |
 | `team_logos` | character |  |
@@ -528,12 +528,12 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `group_id` | character | ESPN group id. |
+| `group_id` | integer | ESPN group id. |
 | `name` | character | Display name. |
 | `abbreviation` | character | Short abbreviation. |
 | `short_name` | character | Short display name. |
 | `is_conference` | logical | Whether this group is a conference. |
-| `parent_group_id` | character | Unique identifier for parent group. |
+| `parent_group_id` | integer | Unique identifier for parent group. |
 | `depth` | integer |  |
 | `children_count` | integer |  |
 
@@ -641,7 +641,7 @@ ESPN endpoint.
 | `team_alternate_color` | character | Secondary team color as a hex string (no leading '#'). |
 | `team_color` | character | Primary team color as a hex string (no leading '#'). |
 | `team_display_name` | character | Full team display name (location + nickname). |
-| `team_id` | character | ESPN team id (stable join key across ESPN endpoints). |
+| `team_id` | integer | ESPN team id (stable join key across ESPN endpoints). |
 | `team_is_active` | logical | Whether the team is currently active. |
 | `team_is_all_star` | logical | Whether the entry is an all-star squad rather than a franchise. |
 | `team_location` | character | Team location / city (e.g. "Boston"). |
@@ -694,7 +694,7 @@ ESPN endpoint.
 | `team_franchise_abbreviation` | character |  |
 | `team_franchise_color` | character |  |
 | `team_franchise_display_name` | character |  |
-| `team_franchise_id` | character |  |
+| `team_franchise_id` | integer |  |
 | `team_franchise_is_active` | logical |  |
 | `team_franchise_location` | character |  |
 | `team_franchise_name` | character |  |
@@ -708,14 +708,14 @@ ESPN endpoint.
 | `team_franchise_venue_full_name` | character |  |
 | `team_franchise_venue_grass` | logical |  |
 | `team_franchise_venue_guid` | character |  |
-| `team_franchise_venue_id` | character |  |
+| `team_franchise_venue_id` | integer |  |
 | `team_franchise_venue_images` | character |  |
 | `team_franchise_venue_indoor` | logical |  |
 | `team_franchise_venue_short_name` | character |  |
-| `team_groups_id` | character |  |
+| `team_groups_id` | integer |  |
 | `team_groups_is_conference` | logical |  |
-| `team_groups_parent_id` | character |  |
-| `team_id` | character | Unique team identifier. |
+| `team_groups_parent_id` | integer |  |
+| `team_id` | integer | Unique team identifier. |
 | `team_is_active` | logical | TRUE if the team is currently active. |
 | `team_links` | character |  |
 | `team_location` | character | Team city or location string. |
@@ -763,7 +763,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Id. |
+| `id` | integer | Id. |
 | `uid` | character | Uid. |
 | `guid` | character | Guid. |
 | `first_name` | character | First name. |
@@ -783,7 +783,7 @@ ESPN endpoint.
 | `birth_place_state` | character | Birth place state. |
 | `birth_place_country` | character | Birth place country. |
 | `birth_place_display_text` | character |  |
-| `birth_country_alternate_id` | character | Alternate identifier for the athlete's country of birth used in ESPN's country-flag reference system. |
+| `birth_country_alternate_id` | integer | Alternate identifier for the athlete's country of birth used in ESPN's country-flag reference system. |
 | `birth_country_abbreviation` | character |  |
 | `headshot_href` | character | Headshot href. |
 | `headshot_alt` | character | Headshot alt. |
@@ -793,7 +793,7 @@ ESPN endpoint.
 | `flag_href` | character | URL of the SVG or PNG flag image representing the athlete's country of birth. |
 | `flag_alt` | character | Alt-text string for the athlete's country-of-birth flag image, typically the full country name. |
 | `flag_rel` | character | Relationship descriptor for the athlete's country-of-birth flag link (e.g., "flag"). |
-| `position_id` | character | Position id. |
+| `position_id` | integer | Position id. |
 | `position_name` | character | Position name. |
 | `position_display_name` | character | Position display name. |
 | `position_abbreviation` | character | Position abbreviation. |
@@ -801,7 +801,7 @@ ESPN endpoint.
 | `experience_years` | integer | Experience years. |
 | `experience_display_value` | character | Experience display value. |
 | `experience_abbreviation` | character | Experience abbreviation. |
-| `status_id` | character | Status id. |
+| `status_id` | integer | Status id. |
 | `status_name` | character | Status name. |
 | `status_type` | character | Status type. |
 | `status_abbreviation` | character | Status abbreviation. |
@@ -841,7 +841,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ESPN numeric event identifier. |
+| `id` | integer | ESPN numeric event identifier. |
 | `date` | character | Event timestamp (ISO 8601, UTC). |
 | `name` | character | Full event name (e.g. 'Team A at Team B'). |
 | `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
@@ -850,7 +850,7 @@ ESPN endpoint.
 | `links` | character | Related links (list, stringified). |
 | `season_year` | integer | Four-digit season year. |
 | `season_display_name` | character | Human-readable season label (e.g. '2024-25'). |
-| `season_type_id` | character | ESPN numeric identifier for the season type. |
+| `season_type_id` | integer | ESPN numeric identifier for the season type. |
 | `season_type_type` | integer | Season type numeric code. |
 | `season_type_name` | character | Season type name (e.g. Regular Season). |
 | `season_type_abbreviation` | character | Season type abbreviation. |
@@ -959,7 +959,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ESPN numeric identifier for the athlete. |
+| `id` | integer | ESPN numeric identifier for the athlete. |
 | `display_name` | character | Athlete's full display name as shown on ESPN. |
 | `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
 
@@ -1276,7 +1276,7 @@ ESPN endpoint.
 |---|---|---|
 | `group_name` | character | Group name. |
 | `group_abbreviation` | character | Group abbreviation. |
-| `team_id` | character | Team id. |
+| `team_id` | integer | Team id. |
 | `team_name` | character | Team name. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |
@@ -1345,7 +1345,7 @@ ESPN endpoint.
 | `week_display` | character | Poll week as ESPN labels it, e.g. 'Week 6'. |
 | `poll_date` | character | Date the poll was released (ISO 8601, UTC). |
 | `ranked` | logical | TRUE for the poll's ranked teams; FALSE for teams that only received votes. |
-| `team_id` | character | ESPN team id as a string (the dtype of scoreboard home_id / away_id). |
+| `team_id` | integer | ESPN team id as a string (the dtype of scoreboard home_id / away_id). |
 | `rank` | integer | Position in the poll (1 = top). Null on vote-receiving rows. |
 | `previous_rank` | integer | Position in the previous poll; 0 when the team was unranked then. |
 | `points` | double | Poll points received (0 for polls ESPN ships without points, such as USCHO). |

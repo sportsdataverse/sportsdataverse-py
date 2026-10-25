@@ -34,7 +34,7 @@ def espn_nhl_teams(return_as_pandas=False, **kwargs) -> pl.DataFrame:
         Find Tampa Bay Lightning (team_id 14)::
 
             import polars as pl
-            teams.filter(pl.col("team_id") == "14").to_dicts()
+            teams.filter(pl.col("team_id") == 14).to_dicts()
 
         Pandas round-trip::
 

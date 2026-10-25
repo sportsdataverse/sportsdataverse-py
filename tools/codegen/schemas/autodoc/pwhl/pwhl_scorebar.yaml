@@ -2,13 +2,13 @@ schema: pwhl_scorebar
 kind: dataframe
 columns:
 - name: id
-  type: character
+  type: integer
   description: ''
 - name: season_id
-  type: character
+  type: integer
   description: ''
 - name: league_id
-  type: character
+  type: integer
   description: ''
 - name: game_number
   type: character
@@ -26,10 +26,10 @@ columns:
   type: character
   description: ''
 - name: flo_core_event_id
-  type: character
+  type: integer
   description: ''
 - name: flo_live_event_id
-  type: character
+  type: integer
   description: ''
 - name: game_date
   type: character
@@ -50,7 +50,7 @@ columns:
   type: character
   description: ''
 - name: home_id
-  type: character
+  type: integer
   description: ''
 - name: home_code
   type: character
@@ -80,7 +80,7 @@ columns:
   type: character
   description: ''
 - name: visitor_id
-  type: character
+  type: integer
   description: ''
 - name: visitor_code
   type: character

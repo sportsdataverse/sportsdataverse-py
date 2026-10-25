@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import os
 import re
+import warnings
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
 
 import polars as pl
@@ -63,6 +64,12 @@ def frame(rows: List[Dict[str, Any]], return_as_pandas: bool) -> Union[pl.DataFr
         inferred over every row, and ``rank_change`` (league polls) is always
         a nullable Int64, even when a pull has no movement at all.
     """
+    keys = {k for r in rows for k in r}
+    mixed = sorted(k for k in keys if len({isinstance(r.get(k), str) for r in rows if r.get(k) is not None}) > 1)
+    if mixed:
+        # B-L55: polars reads a column holding both text and numbers as String; say so rather than
+        # retype a number silently (Fox cells are text, so a mix means the feed changed shape).
+        warnings.warn(f"Fox: {', '.join(mixed)} mix text and numbers; read as text", UserWarning, stacklevel=2)
     if return_as_pandas:
         import pandas as pd
 
