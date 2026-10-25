@@ -1,10 +1,14 @@
-"""Shared helpers for the three soccer flat-API generators (ASA / MLS / NWSL).
+"""Shared helpers for the spec- and capture-driven flat-API generators.
 
-``gen_asa.py``, ``gen_mls.py`` and ``gen_nwsl.py`` all read a frozen OpenAPI spec
-plus the committed sample payloads from the same ``sdv-internal-refs`` checkout
-and emit an endpoint YAML + per-endpoint returns-schemas. Everything they do
-identically lives here so the three scripts carry only their provider-specific
-route curation.
+The name is historical: the module began as the common code of the three soccer
+generators (``gen_asa.py``, ``gen_mls.py``, ``gen_nwsl.py``) and is now imported by
+about fifty ``gen_*.py`` scripts across soccer, hockey, basketball, prediction markets
+and the other intake families. Each reads a frozen OpenAPI spec (or captures) plus the
+committed sample payloads from the ``sdv-internal-refs`` checkout and emits an endpoint
+YAML + per-endpoint returns-schemas. A new generator takes ``refs_dir``, ``load_spec``,
+``spec_descriptions``, ``describe``, ``parse_capture``, ``columns_from_frame``,
+``write_yaml`` and ``rewrite_schema_dir`` from here rather than re-implementing them;
+only its provider-specific route curation belongs in the script.
 
 Returns-schema columns are derived by **running the real parser over the
 committed capture** rather than by reading the spec's declared 200-response
