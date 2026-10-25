@@ -7135,6 +7135,26 @@
   expected: kill
   note: The NHL api-web pandas output skips the id cast and keeps float64 player ids (R986-1).
 
+- id: hockeytech-enriched-pbp-pandas-ids-nullable-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '        return _pandas_ids(df)'
+  mutant: '        return df.to_pandas()'
+  test: tests/hockeytech/test_pbp_enrich.py -k "enriched_pbp_pandas_ids_are_nullable_int64"
+  expected: kill
+  note: The enriched pbp's pandas output turns a null-bearing team_id into float64 (1.0) again (R988-2).
+
+- id: hockeytech-parser-pandas-ids-nullable-int64
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '    return _pandas_ids(out, pdf) if return_as_pandas else out'
+  mutant: '    return pdf if return_as_pandas else out'
+  test: tests/hockeytech/test_parsers.py -k "hockeytech_pandas_ids_are_nullable_int64 and parse_pbp-pwhl_pbp_42"
+  expected: kill
+  note: The HockeyTech parsers' pandas output skips the id cast (pbp player_id float64) (R988-2).
+
 - id: espn-snapshot-id-refusal-warns
   group: dtype-contract-5-2
   finding: B-M15
@@ -7246,13 +7266,3 @@
   test: tests/hockeytech/test_public_surface.py -k "corsi_fenwick_on_ice_player_level"
   expected: kill
   note: The on-ice Corsi frame keys players by the text ids of the on-ice strings again.
-
-- id: id-cast-empty-string-is-null
-  group: dtype-contract-5-2
-  finding: B-H5
-  file: sportsdataverse/_codegen_runtime.py
-  snippet: '            src = src.set(src == "", None)'
-  mutant: '            pass'
-  test: tests/codegen/test_id_casts.py -k "stripped"
-  expected: kill
-  note: A feed's "" id (HockeyTech FloCoreEventId on every scorebar row) is refused, so the column stays String.

@@ -16,6 +16,7 @@ from __future__ import annotations
 
 from typing import Any, Optional
 
+from sportsdataverse._codegen_runtime import _pandas_ids
 from sportsdataverse.hockeytech import hockeytech_api, resolve_season_id
 from sportsdataverse.hockeytech import _parsers as P
 from sportsdataverse.hockeytech._leagues import most_recent_season_yr
@@ -388,7 +389,7 @@ def build_family(league: str) -> dict[str, Any]:
             game_id=game_id,
         )
         if return_as_pandas:
-            return shifts.to_pandas()
+            return _pandas_ids(shifts)
         return shifts
 
     _game_shifts.__name__ = f"{lg}_game_shifts"
@@ -411,7 +412,7 @@ def build_family(league: str) -> dict[str, Any]:
         shifts = _game_shifts(game_id)
         toi = player_toi(shifts)
         if return_as_pandas:
-            return toi.to_pandas()
+            return _pandas_ids(toi)
         return toi
 
     _player_toi.__name__ = f"{lg}_player_toi"
@@ -445,7 +446,7 @@ def build_family(league: str) -> dict[str, Any]:
             .alias("corsi_for_per60")
         )
         if return_as_pandas:
-            return out.to_pandas()
+            return _pandas_ids(out)
         return out
 
     _game_corsi.__name__ = f"{lg}_game_corsi"

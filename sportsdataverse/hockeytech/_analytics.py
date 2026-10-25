@@ -12,7 +12,7 @@ from typing import Any, Optional
 
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _cast_ids_int64, _empty_from_schema
+from sportsdataverse._codegen_runtime import _cast_ids_int64, _empty_from_schema, _pandas_ids
 
 # ---------------------------------------------------------------------------
 # PWHL PBP enrichment: clock + coordinate transforms
@@ -1058,7 +1058,7 @@ def enrich_pbp(
     order = list(_empty_from_schema("autodoc/pwhl/pwhl_pbp").columns)
     df = df.select([c for c in order if c in df.columns] + [c for c in df.columns if c not in order])
     if return_as_pandas:
-        return df.to_pandas()
+        return _pandas_ids(df)
     return df
 
 

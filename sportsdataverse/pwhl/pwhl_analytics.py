@@ -16,6 +16,7 @@ import polars as pl
 if TYPE_CHECKING:
     import pandas as pd
 
+from sportsdataverse._codegen_runtime import _pandas_ids
 from sportsdataverse.hockeytech import hockeytech_api
 from sportsdataverse.hockeytech._analytics import corsi_fenwick_on_ice, per60, player_toi
 from sportsdataverse.hockeytech._parsers import parse_shifts
@@ -49,7 +50,7 @@ def pwhl_game_shifts(game_id: int, return_as_pandas: bool = False) -> "Union[pl.
     payload = hockeytech_api(_LG, "modulekit", "gameshifts", {"game_id": game_id})
     shifts = parse_shifts(payload, game_id=game_id)
     if return_as_pandas:
-        return shifts.to_pandas()
+        return _pandas_ids(shifts)
     return shifts
 
 
@@ -77,7 +78,7 @@ def pwhl_player_toi(game_id: int, return_as_pandas: bool = False) -> "Union[pl.D
     shifts = pwhl_game_shifts(game_id)
     toi = player_toi(shifts)
     if return_as_pandas:
-        return toi.to_pandas()
+        return _pandas_ids(toi)
     return toi
 
 
@@ -139,5 +140,5 @@ def pwhl_game_corsi(game_id: int, return_as_pandas: bool = False) -> "Union[pl.D
     )
 
     if return_as_pandas:
-        return out.to_pandas()
+        return _pandas_ids(out)
     return out

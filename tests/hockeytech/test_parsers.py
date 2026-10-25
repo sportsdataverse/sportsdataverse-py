@@ -450,6 +450,26 @@ def test_hockeytech_ids_int64(parser, stem, kw):
         assert {c: t for c, t in ids.items() if t != pl.Int64} == {}, sec
 
 
+@pytest.mark.parametrize(("parser", "stem", "kw"), _ID_CASES, ids=[f"{p}-{s}" for p, s, _ in _ID_CASES])
+def test_hockeytech_pandas_ids_are_nullable_int64(parser, stem, kw):
+    """R988-2: ``return_as_pandas=True`` carries the same ids as pandas' nullable ``Int64``. Before, the pandas frame
+    skipped the cast (pbp ``player_id`` float64, roster / leaders ids str)."""
+    from sportsdataverse.hockeytech import _parsers as P
+
+    import inspect
+
+    fn = getattr(P, parser)
+    if "return_as_pandas" not in inspect.signature(fn).parameters:
+        pytest.skip(f"{parser} has no pandas output")
+    out, pdf_out = fn(_load(stem), **kw), fn(_load(stem), return_as_pandas=True, **kw)
+    frames = out if isinstance(out, dict) else {"": out}
+    pdfs = pdf_out if isinstance(pdf_out, dict) else {"": pdf_out}
+    for sec, df in frames.items():
+        ids = [c for c, t in df.schema.items() if t == pl.Int64 and (c == "id" or c.endswith("_id"))]
+        if df.height:
+            assert {c: str(pdfs[sec][c].dtype) for c in ids} == dict.fromkeys(ids, "Int64"), sec
+
+
 @pytest.mark.parametrize(
     ("parser", "stem", "kwargs", "table"),
     [

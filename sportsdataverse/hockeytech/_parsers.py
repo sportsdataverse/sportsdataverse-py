@@ -13,7 +13,7 @@ from typing import Any, Dict, List, Optional
 import pandas as pd
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _cast_id_columns, _documented_empty
+from sportsdataverse._codegen_runtime import _cast_id_columns, _documented_empty, _pandas_ids
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import _data_only, _dict_only
 
@@ -44,10 +44,12 @@ def _to_frame(records: List[Dict[str, Any]], return_as_pandas: bool) -> Any:
         kinds = {type(v) for v in pdf[col] if isinstance(v, (int, float, str, bool))}
         if len(kinds) > 1 and str in kinds:
             pdf[col] = pdf[col].map(lambda v: str(v) if isinstance(v, (int, float, bool)) else v)
-    if return_as_pandas:
-        return pdf
-    # every id Int64 from the raw integer (task 5.2: B-H5, B-L72); a text id is refused and keeps its dtype
-    return _cast_id_columns(pl.from_pandas(pdf)) if len(pdf) else pl.DataFrame()
+    if not len(pdf):
+        return pdf if return_as_pandas else pl.DataFrame()
+    # every id Int64 from the raw integer (task 5.2: B-H5, B-L72); a text id is refused and keeps its dtype.
+    # The pandas frame carries the same ids as pandas' nullable Int64, never float64 (R988-2).
+    out = _cast_id_columns(pl.from_pandas(pdf))
+    return _pandas_ids(out, pdf) if return_as_pandas else out
 
 
 def _sitekit(payload: Any, key: str) -> Any:
@@ -175,7 +177,7 @@ def parse_schedule(payload: Any, return_as_pandas: bool = False, season_id: Opti
         rows = [r for r in rows if str(r["season_id"]) == str(season_id)]
     if not rows:
         empty = _cast_id_columns(pl.DataFrame(schema=dict.fromkeys(_SCHEDULE_RENAME.values(), pl.String)))
-        return empty.to_pandas() if return_as_pandas else empty
+        return _pandas_ids(empty) if return_as_pandas else empty
     return _to_frame(rows, return_as_pandas)
 
 
@@ -218,7 +220,7 @@ def parse_standings(payload: Any, return_as_pandas: bool = False) -> Any:
                 + pl.col("non_reg_wins").cast(pl.Int64, strict=False)
             ).alias("wins")
         )
-    return df.to_pandas() if return_as_pandas else df
+    return _pandas_ids(df) if return_as_pandas else df
 
 
 @_documented_empty("autodoc/pwhl/pwhl_teams")
@@ -596,7 +598,7 @@ def parse_shifts(payload: Any, game_id: Any = None, return_as_pandas: bool = Fal
     # A shift still on the ice has no end time: pandas then reads end_s as float. Both are whole seconds.
     df = _to_frame(rows, False)
     df = df.with_columns(pl.col(c).cast(pl.Int64) for c in ("start_s", "end_s") if c in df.columns)
-    return df.to_pandas() if return_as_pandas else df
+    return _pandas_ids(df) if return_as_pandas else df
 
 
 def parse_player_stats(payload: Any, return_as_pandas: bool = False) -> Any:
@@ -992,7 +994,7 @@ def _cell(v: Any, dtype: Any) -> Any:
 def _frame(rows: list[dict[str, Any]], schema: dict[str, Any], return_as_pandas: bool) -> Any:
     rows = [{c: _cell(r.get(c), t) for c, t in schema.items()} for r in rows]
     df = pl.from_dicts(rows, schema=schema) if rows else pl.DataFrame(schema=schema)
-    return df.to_pandas() if return_as_pandas else df
+    return _pandas_ids(df) if return_as_pandas else df
 
 
 def _obj(payload: Any, *path: str) -> dict[str, Any]:
