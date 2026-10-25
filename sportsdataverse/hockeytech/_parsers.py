@@ -7,6 +7,7 @@ tolerates empty/None payloads by returning a zero-row frame.
 from __future__ import annotations
 
 import re
+import sys
 from datetime import date
 from typing import Any, Dict, List, Optional
 
@@ -35,7 +36,13 @@ def _snake_columns(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def _to_frame(records: List[Dict[str, Any]], return_as_pandas: bool) -> Any:
+def _to_frame(records: List[Dict[str, Any]], return_as_pandas: bool, parser: Optional[str] = None) -> Any:
+    """Flatten ``records`` to a frame with every id Int64 (task 5.2).
+
+    ``parser`` names the public parser in an id-refusal warning; it defaults to the calling function's name, and
+    the warning points at that parser's caller (R988-7).
+    """
+    parser = parser or sys._getframe(1).f_code.co_name
     pdf = pd.json_normalize(records or [], sep="_")
     pdf = _snake_columns(pdf)
     for col in [c for c in pdf.columns if pd.api.types.is_object_dtype(pdf[c].dtype)]:
@@ -48,7 +55,7 @@ def _to_frame(records: List[Dict[str, Any]], return_as_pandas: bool) -> Any:
         return pdf if return_as_pandas else pl.DataFrame()
     # every id Int64 from the raw integer (task 5.2: B-H5, B-L72); a text id is refused and keeps its dtype.
     # The pandas frame carries the same ids as pandas' nullable Int64, never float64 (R988-2).
-    out = _cast_id_columns(pl.from_pandas(pdf), "HockeyTech parser")
+    out = _cast_id_columns(pl.from_pandas(pdf), f"HockeyTech {parser}", stacklevel=4)
     return _pandas_ids(out, pdf) if return_as_pandas else out
 
 
@@ -816,7 +823,7 @@ def _flat_sitekit_parser(key: str, rename: Optional[Dict[str, str]] = None, reco
             raw = (raw.get(records) or []) if records else [raw]
         if rename and isinstance(raw, list):
             raw = [{rename.get(k, k): v for k, v in r.items()} for r in raw if isinstance(r, dict)]
-        return _to_frame(list(raw), return_as_pandas)
+        return _to_frame(list(raw), return_as_pandas, parser=f"parse_{key.lower()}")
 
     _parser.__name__ = f"parse_{key.lower()}"
     _parser.__doc__ = (

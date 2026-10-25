@@ -7275,6 +7275,26 @@
   expected: kill
   note: pwhl_player_toi pandas ids are numpy int64 / float64 again (R988-2).
 
+- id: hockeytech-id-warning-points-at-the-caller
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '    out = _cast_id_columns(pl.from_pandas(pdf), f"HockeyTech {parser}", stacklevel=4)'
+  mutant: '    out = _cast_id_columns(pl.from_pandas(pdf), "HockeyTech parser")'
+  test: tests/hockeytech/test_parsers.py -k "hockeytech_id_that_is_not_an_integer"
+  expected: kill
+  note: The id-refusal warning names no parser and points inside _parsers.py (R988-7).
+
+- id: hockeytech-corsi-skips-a-blank-home-team
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '        if team_id is None or home_team_id is None or str(home_team_id).strip() == "":'
+  mutant: '        if team_id is None or home_team_id is None:'
+  test: tests/hockeytech/test_league_families.py -k "blank_home_team_id"
+  expected: kill
+  note: A pbp frame with a blank home_team_id credits every shot to the away skaters (R988-6).
+
 - id: hockeytech-parser-pandas-ids-nullable-int64
   group: dtype-contract-5-2
   finding: B-H5
@@ -7401,7 +7421,7 @@
   group: dtype-contract-5-2
   finding: B-H5
   file: sportsdataverse/hockeytech/_parsers.py
-  snippet: '    out = _cast_id_columns(pl.from_pandas(pdf), "HockeyTech parser")'
+  snippet: '    out = _cast_id_columns(pl.from_pandas(pdf), f"HockeyTech {parser}", stacklevel=4)'
   mutant: '    out = pl.from_pandas(pdf)'
   test: tests/hockeytech/test_parsers.py -k "hockeytech_ids_int64"
   expected: kill

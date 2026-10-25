@@ -514,8 +514,10 @@ def test_a_hockeytech_id_that_is_not_an_integer_stays_as_it_came_and_warns():
 
     raw = _load("pwhl_roster_1_5")
     raw["SiteKit"]["Roster"][0]["person_id"] = "TBD"
-    with pytest.warns(SchemaDriftWarning, match=r"HockeyTech parser: id columns \['person_id'\]"):
+    with pytest.warns(SchemaDriftWarning, match=r"HockeyTech parse_roster: id columns \['person_id'\]") as rec:
         df = P.parse_roster(raw)
+    # R988-7: the warning names the parser and points at its caller, not inside _parsers.py
+    assert [w.filename for w in rec] == [__file__]
     assert df.schema["person_id"] == pl.String and "TBD" in df["person_id"].to_list()
     assert {c: t for c, t in df.schema.items() if c.endswith("_id") and c != "person_id" and t != pl.Int64} == {}
 
