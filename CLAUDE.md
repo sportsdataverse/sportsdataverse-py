@@ -1112,8 +1112,9 @@ PWHL schedule / pbp ids) must be cast with `.cast(pl.Int64)` before joining live
 raises `SchemaError`; an Int32 id joins an Int64 one as it is.
 Producers that store or republish parser frames follow the migration notes and deploy order in
 `changelog.d/ids-int64.breaking.md`: producers first, ids cast to Int64 (not String) with the stored history
-rewritten in one pass, and for RDS the id columns cast to float64 for the `pyreadr` write only
-(`_rds.write_rds` handles flat frames only, not the nested ESPN schedule columns).
+rewritten in one pass, and for the `pyreadr` RDS write only the id columns cast to nullable Int32 when every id
+fits in 32 bits (R integer, NA kept), otherwise float64 (R double) (`_rds.write_rds` handles flat frames only, not
+the nested ESPN schedule columns).
 
 ### Lint and format
 

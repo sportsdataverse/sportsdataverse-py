@@ -56,11 +56,12 @@
     ESPN schedule season masters, and the PWHL schedule master and per-game final JSON, whose seasons mix text
     (`"1"`) and integer (`1`) ids until the JSON is reprocessed.
   - *RDS:* `pyreadr.write_rds` cannot write pandas' nullable `Int64` with a missing value (`TypeError: must be
-    real number, not NAType`). Cast the Int64 id columns to `float64` for the `pyreadr` write only
-    (`df[id_cols] = df[id_cols].astype("float64")`): R reads them as double, with `NA` kept, and the parquet
-    and the frame itself stay Int64. `sportsdataverse._rds.write_rds` writes nullable Int64 as R integer, but
-    only for a flat frame: it raises `ValueError` on a nested column, which every ESPN schedule frame has
-    (`List(Struct)` linescores, records, highlights).
+    real number, not NAType`). For the `pyreadr` write only, cast the Int64 id columns to pandas' nullable
+    `Int32` when every id fits in 32 bits (`df[id_cols] = df[id_cols].astype("Int32")`: R integer, `NA` kept);
+    otherwise to `float64` (R double, `NA` kept). The parquet and the frame itself stay Int64.
+    `sportsdataverse._rds.write_rds` writes nullable Int64 as R integer, but only for a flat frame: it raises
+    `ValueError` on a nested column, which every ESPN schedule frame has (`List(Struct)` linescores, records,
+    highlights).
   - *R packages:* releases rebuilt from these parsers (the ESPN schedule seasons of the hoopR / wehoop raw
     repos, the PWHL schedule and play-by-play releases) carry integer ids, where hoopR, wehoop and
     fastRhockey document some of them as character. Republish every season in the same pass and update the R
