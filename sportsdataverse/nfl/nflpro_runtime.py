@@ -26,7 +26,7 @@ import os
 import time
 from typing import Any, Dict, List, Optional, Union
 
-from sportsdataverse._codegen_runtime import _json_body, _transport_errors, _where
+from sportsdataverse._codegen_runtime import _CHROME_UA, _json_body, _transport_errors, _where
 from sportsdataverse.dl_utils import _ENV_TIMEOUT, _env_int, download
 from sportsdataverse.errors import AssetFetchError
 from sportsdataverse.nfl.nflpro_parsers import _COLLECTION_KEYS
@@ -34,7 +34,7 @@ from sportsdataverse.nfl.nflpro_parsers import _COLLECTION_KEYS
 __all__ = ["_get", "nflpro_token", "nflpro_headers_gen", "NFLProAuthError"]
 
 _HOST = "https://pro.nfl.com"
-_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+_UA = _CHROME_UA
 _MAX_PAGES = 40
 _LOGGER = logging.getLogger(__name__)
 # Keyed by account email -- a plain single-slot cache would silently hand

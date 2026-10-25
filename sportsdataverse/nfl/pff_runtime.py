@@ -40,7 +40,7 @@ import os
 import time
 from typing import Any, Callable, Dict, Optional
 
-from sportsdataverse._codegen_runtime import _json_text, _transport_errors, _where
+from sportsdataverse._codegen_runtime import _CHROME_UA, _json_text, _transport_errors, _where
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import AssetFetchError
 
@@ -75,10 +75,7 @@ def _pff_headers() -> Dict[str, str]:
             print(_pff_headers()["Accept"])  # "application/json, text/plain, */*"
     """
     return {
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
-        ),
+        "User-Agent": _CHROME_UA,
         "Accept": "application/json, text/plain, */*",
         "Accept-Language": "en-US,en;q=0.9",
         "Referer": "https://premium.pff.com/",

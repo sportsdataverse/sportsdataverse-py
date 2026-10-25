@@ -41,7 +41,7 @@ from typing import TYPE_CHECKING, List, Optional
 
 import requests
 
-from sportsdataverse._codegen_runtime import _download_json
+from sportsdataverse._codegen_runtime import _CHROME_UA, _download_json
 from sportsdataverse.dl_utils import _ENV_TIMEOUT, _env_int, download
 
 if TYPE_CHECKING:
@@ -50,7 +50,7 @@ if TYPE_CHECKING:
 API_HOST = "https://nextgenstats.nfl.com/api"
 _HOME = "https://nextgenstats.nfl.com/"
 _REFERER = "https://nextgenstats.nfl.com/stats/passing"
-_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+_UA = _CHROME_UA
 
 # Paths an anonymous session cannot use -- documented here so callers know why
 # they are absent. The live/* routes and participation/team/game 403 on their
