@@ -109,3 +109,19 @@ def test_family_rank_is_never_frozen_at_import():
     """A module-level copy ignores `_family_rank.cache_clear()`, so a split rendered after the
     registry changed (a test patching it, a long-lived process) would still use the import-time order."""
     assert not hasattr(generate, "_FAMILY_RANK")
+
+
+def test_an_enum_renders_the_same_signature_on_every_python(monkeypatch):
+    """PRE-1008 critic minor 5: Python 3.10/3.11 give an Enum class ``EnumMeta.__call__``'s old signature. The 3.10
+    signature is served here so this goes red on 3.13 CI too when the renderer stops special-casing Enums."""
+    import enum
+    import inspect
+
+    from sportsdataverse.mbb.mbb_ncaa_models import Direction
+
+    old = inspect.Signature([inspect.Parameter("value", inspect.Parameter.POSITIONAL_OR_KEYWORD)])
+    real = inspect.signature
+    monkeypatch.setattr(
+        inspect, "signature", lambda o, *a, **k: old if isinstance(o, enum.EnumMeta) else real(o, *a, **k)
+    )
+    assert generate._autodoc_signature(Direction) == "(*values)"

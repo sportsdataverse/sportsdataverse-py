@@ -376,3 +376,22 @@ def test_reexported_third_party_objects_are_not_sdv_functions():
     assert not B._reexport("pwhl_xg", functools.partial(sdv_fn))
     assert not B._reexport("ValueKey", typing.Literal["a", "b"])
     assert not B._reexport("sdv_fn", sdv_fn)
+
+
+def test_an_enum_gets_one_signature_in_the_index_on_every_python(monkeypatch):
+    """PRE-1008 docs nit: the index read ``inspect.signature`` directly, so an Enum's row differed on 3.10. It goes
+    through the docs renderer's normalisation; the 3.10 signature is served so this goes red on 3.13 too."""
+    import enum
+    import inspect
+
+    from sportsdataverse.mbb.mbb_ncaa_models import Direction
+    from tools.codegen import build_docs_index as B
+
+    old = inspect.Signature([inspect.Parameter("value", inspect.Parameter.POSITIONAL_OR_KEYWORD)])
+    real = inspect.signature
+    monkeypatch.setattr(
+        inspect, "signature", lambda o, *a, **k: old if isinstance(o, enum.EnumMeta) else real(o, *a, **k)
+    )
+    rows = B.Rows()
+    B._add_python(rows, "Direction", Direction, "mbb", {}, {}, {})
+    assert any("Direction(*values)" in str(r) for r in rows.functions)
