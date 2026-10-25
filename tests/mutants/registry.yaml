@@ -1907,8 +1907,8 @@
   group: nfl-td-flags
   finding: R840-2
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: 'pl.col("type.text").shift(-1).over("game_id").str.contains(r"^(?:Extra Point|Two Point|Two-Point)")'
-  mutant: 'pl.col("type.text").shift(-1).over("game_id").is_not_null()'
+  snippet: 'try_follows = next_play.str.contains(r"^(?:Extra Point|Two Point|Two-Point)").fill_null(False)'
+  mutant: 'try_follows = next_play.is_not_null()'
   test: tests/nfl/test_nfl_whole_game_oracle.py::test_td_flags_residual_row_matches_nflverse[291129016-2911290162862]
   expected: kill
   note: >-
@@ -1919,7 +1919,7 @@
   group: nfl-td-flags
   finding: R840-1
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '& (pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM)'
+  snippet: '& ((pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM) | (next_play.is_not_null() & ~try_follows))'
   mutant: '& pl.lit(True)'
   test: tests/nfl/test_nfl_whole_game_oracle.py::test_td_flags_residual_row_matches_nflverse[271209034-2712090341856]
   expected: kill
@@ -2028,8 +2028,8 @@
   group: nfl-end-of-half
   finding: C-NF-12
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: ".and_(pl.col(\"start.pos_team.id\") != pl.col(\"end.pos_team.id\"))\n                .and_(pl.col(\"type.text\") != \"Timeout\"),\n            )\n            .then(1 - pl.col(lwb))"
-  mutant: ".and_(pl.col(\"start.pos_team.id\") != pl.col(\"end.pos_team.id\"))\n                .and_(pl.col(\"type.text\") != \"Timeout\"),\n            )\n            .then(1 - pl.col(wb).shift(-1))"
+  snippet: ".and_(pl.col(\"start.pos_team.id\") != lead_team)\n                .and_(pl.col(\"type.text\") != \"Timeout\"),\n            )\n            .then(1 - pl.col(lwb))"
+  mutant: ".and_(pl.col(\"start.pos_team.id\") != lead_team)\n                .and_(pl.col(\"type.text\") != \"Timeout\"),\n            )\n            .then(1 - pl.col(wb).shift(-1))"
   test: tests/cfb/test_cfb_whole_game_oracle.py -k "half_end_possession_change"
   expected: kill
   note: >-
@@ -2037,6 +2037,7 @@
     edited 401234617 (its End of Half marker retyped as a Timeout row) the next ROW is the Timeout.
     Re-keyed at the 10-21 main -> devel-cfb sync: the read is cfb's `lwb` (next non-Timeout row), so
     the mutant reads the next ROW's wp_before.
+    Re-keyed again for R832-6 (#966): branch 2 keys on `lead_team`, not the play's own `end.pos_team.id`.
 
 - id: nfl-end-of-half-try-keeps-its-epa
   group: nfl-end-of-half
@@ -5660,6 +5661,26 @@
   expected: kill
   note: R846-3 -- the special-teams engine must keep a given xG.
 
+- id: nhl-rapm-stints-goal-xg-pre-change
+  group: pwhl-impact-routing
+  finding: WB-hockey-1
+  file: sportsdataverse/nhl/nhl_rapm.py
+  snippet: '(pl.col("game_seconds") > xg_lo) & (pl.col("game_seconds") <= end_s)'
+  mutant: '(pl.col("game_seconds") >= start_s) & (pl.col("game_seconds") < end_s)'
+  test: tests/nhl/test_nhl_stints_goal_credit.py
+  expected: kill
+  note: task 2.27 -- a goal at a change second credits the line on the ice before the change (pre-fix 11/25 PWHL, 1/14 NHL scorers on ice).
+
+- id: nhl-rapm-stints-strength-falls-back-to-xg-window
+  group: pwhl-impact-routing
+  finding: R960-1
+  file: sportsdataverse/nhl/nhl_rapm.py
+  snippet: 'window = xg_window'
+  mutant: 'window = window'
+  test: tests/nhl/test_nhl_stints_goal_credit.py -k nhl
+  expected: kill
+  note: task 2.27 -- a stint whose only event is the shot at its end second reads strength / goalies off the xG window (without it, 9 NHL xG stints carry a null strength_state).
+
 - id: nhl-war-threads-xg-scored
   group: pwhl-impact-routing
   finding: C-NF-5
@@ -7466,3 +7487,482 @@
   test: tests/hockeytech/test_public_surface.py -k "corsi_fenwick_on_ice_player_level"
   expected: kill
   note: The on-ice Corsi frame keys players by the text ids of the on-ice strings again.
+
+# --- 2.23 (R2.22-4): NFL usage / special-teams sections sorted by their keys ----------------------
+# Killer: tests/nfl/test_nfl_box_row_order.py, the NFL usage carve-out dropped (in-process key sort on 8
+# captures, plus the two-process compare of every section on 4).
+- id: nfl-usage-sections-key-sorted
+  group: nfl-row-order
+  finding: R2.22-4
+  file: sportsdataverse/football/usage_box.py
+  snippet: '    return (df.sort(keys, nulls_last=True, maintain_order=True) if keys else df).to_dicts()'
+  mutant: '    return df.to_dicts()'
+  test: tests/nfl/test_nfl_box_row_order.py
+  expected: kill
+  note: >-
+    devel-nfl's unsorted _to_rows: on the 37 NFL captures team_usage / st_kickers / st_punters / st_returners /
+    st_team differ between two processes in 15 / 18 / 18 / 23 / 20 games, and player_usage / drive_scripting
+    are not key-ordered in 35 / 37; the in-process check is red on all 8 order captures.
+
+# --- Task 2.24: a pre-2009 bare "Punt" ends at the receiver's next snap (EX-2.19-a/c) -------------------------
+- id: nfl-bare-punt-ends-at-the-next-snap
+  group: nfl-era-play-order
+  finding: EX-2.19-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                _kick_spot=((kickoff | punt) & unscored & next_snap).fill_null(False),'
+  mutant: '                _kick_spot=(kickoff & unscored & next_snap).fill_null(False),'
+  test: tests/nfl/test_nfl_era_play_order.py -k "bare_punt or punt-td-nullified"
+  expected: kill
+  note: >-
+    Without the punt in the net-spot read, 280921001/594 keeps ESPN's end 1 yard from the receiver's goal
+    (EPA -4.246, nflverse 1.240) and 281109021/3307 goes back to 0.321 (nflverse -1.690).
+
+- id: nfl-bare-punt-next-snap-is-the-receivers
+  group: nfl-era-play-order
+  finding: EX-2.19-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        .then(receiver)'
+  mutant: '        .then(pl.col("start.pos_team.id"))'
+  test: tests/nfl/test_nfl_era_play_order.py -k "bare_punt"
+  expected: kill
+  note: >-
+    A punt row's start.pos_team is the punting team; reading the punter's next snap finds none after a
+    punt, so 280921001/594 keeps ESPN's end at the 1.
+
+- id: nfl-bare-punt-next-snap-not-filed-early
+  group: nfl-era-play-order
+  finding: EX-2.19-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        & (~punt | (pl.col("_nxt").struct.field("clock") <= pl.col("start.TimeSecsRem")))  # not filed early'
+  mutant: '        & pl.lit(True)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "261113029"
+  expected: kill
+  note: >-
+    ESPN files some pre-2009 plays out of id order: 261113029/386 (a punt at 7:26) is followed by TB's 416 at
+    11:45 from the TB 45; without the clock check the punt ends there (EPA -2.632, nflverse -0.119) instead of
+    ESPN's 83, where TB's next snap starts. On the 644 sample games it is the one row the check moves.
+
+- id: nfl-bare-punt-skips-the-punters-next-snap
+  group: nfl-era-play-order
+  finding: EX-2.19-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        & (pl.col("_nxt").struct.field("team") == after_kick)  # the snap of the team with the ball'
+  mutant: '        & (punt | (pl.col("_nxt").struct.field("team") == after_kick))'
+  test: tests/nfl/test_nfl_era_play_order.py -k "punting_teams"
+  expected: kill
+  note: >-
+    R963-1 (review M1). 261113029/126 is followed in id order by the punting team's own 141, filed out of order
+    but not earlier on the clock; without the team check the punt ends at TB's 71 instead of ESPN's 82 (CAR's
+    next snap). Its EPA cannot gate it (nflverse -0.710 is nearer the wrong spot's 0.229 than the right 0.988).
+
+- id: nfl-kick-next-snap-rank-per-game
+  group: nfl-era-play-order
+  finding: R963-4
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    seq_rank = pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("game_id", "half")'
+  mutant: '    seq_rank = pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("half")'
+  test: tests/nfl/test_nfl_era_play_order.py -k "inside_its_game"
+  expected: kill
+  note: >-
+    Ranked by half only, two games' sequence numbers interleave, so on 280921001 + 261113029 in one frame most
+    kick spots fail the "next by sequenceNumber" check (the review measured 36 -> 5).
+
+- id: nfl-kick-next-snap-read-per-game
+  group: nfl-era-play-order
+  finding: R963-4
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    nxt = pl.when(~stop).then(snap).backward_fill().shift(-1).over("game_id", "half")'
+  mutant: '    nxt = pl.when(~stop).then(snap).backward_fill().shift(-1).over("half")'
+  test: tests/nfl/test_nfl_era_play_order.py -k "inside_its_game"
+  expected: kill
+  note: >-
+    Windowed by half only, the next snap is read across the game boundary in a frame of several games: a
+    game's last kick of a half reads the next game's first snap.
+
+- id: nfl-half-end-wp-keys-on-next-real-play-team
+  group: nfl-end-of-half
+  finding: nfl 2.26
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '.and_(pl.col("start.pos_team.id") != half_next_team)'
+  mutant: '.and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "half_end_home_wp_is_continuous"
+  expected: kill
+  note: >-
+    The devel-nfl branch 2 (the NFL analog of R832-6): keyed on the play's own possession change, a
+    half-ending play that kept the ball with the other team receiving next fell through to the model's
+    end state; 18 of the 37 captures broke home WP continuity into the next real play.
+
+- id: nfl-half-end-wp-reads-past-stoppage-rows
+  group: nfl-end-of-half
+  finding: nfl 2.26
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'half_next_team, half_next_wb = _next_play(team, _stoppage), _next_play(pl.col("wp_before"), _stoppage)'
+  mutant: 'half_next_team, half_next_wb = pl.col("lead_pos_team"), pl.col("lead_wp_before")'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "half_end_home_wp_is_continuous"
+  expected: kill
+  note: >-
+    Read from the next ROW, a Timeout after the half-ending play (400791590 among the captures) hands over the
+    Timeout's own model wp_before and its team, not the second-half kickoff's.
+
+# --- Task nfl 2.25: every punt ends at the receiver's next snap, with its clock (R785-6, R963-3, R963-5) -------------
+- id: nfl-punt-next-snap-every-era
+  group: nfl-era-play-order
+  finding: R785-6
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    punt = pl.col("type.text").is_in(punt_vec).fill_null(False)'
+  mutant: '    punt = (pl.col("type.text").is_in(punt_vec) & (pl.col("season") < ESPN_FULL_KICK_TEXT_FROM)).fill_null(False)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "post_2009"
+  expected: kill
+  note: >-
+    The 2.24 floor back: 2009+ punts keep ESPN's end, so 400554340/1481 ends at 8 (EPA -5.360, nflverse 0.077),
+    290927014/3343 at 12 and 401671835/770 at 27 instead of the receiver's next snap (92 / 94 / 73).
+
+- id: nfl-punt-ends-at-the-next-snaps-clock
+  group: nfl-era-play-order
+  finding: R963-3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                    pl.when(pl.col("_kick_spot") & punt).then(n.field(f)).otherwise(pl.col(c)).alias(c)'
+  mutant: '                    pl.when(pl.lit(False)).then(n.field(f)).otherwise(pl.col(c)).alias(c)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "next_snaps_clock"
+  expected: kill
+  note: >-
+    Without the clocks, 270930001/1000 keeps ESPN's end clock 0 and the half-end clamp puts it at the 99 (EPA 0.485)
+    instead of the receiver's snap at 870 s (game clock 2670) and the 90 (EPA 0.386, nflverse 0.061), and
+    291203002/3741 keeps 205 s from a misfiled timeout row instead of the snap's 152.
+
+- id: nfl-punt-clock-carry-not-only-a-zero-clock
+  group: nfl-era-play-order
+  finding: R971-3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                    pl.when(pl.col("_kick_spot") & punt).then(n.field(f)).otherwise(pl.col(c)).alias(c)'
+  mutant: '                    pl.when(pl.col("_kick_spot") & punt & (pl.col("end.TimeSecsRem") <= 0)).then(n.field(f)).otherwise(pl.col(c)).alias(c)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "next_snaps_clock"
+  expected: kill
+  note: >-
+    Review #971 mutant B: carrying the snap's clock only where ESPN's end clock is 0 keeps 291203002/3741's 205 s,
+    the clock of a timeout row ESPN filed after the punt, instead of the snap's 152 (nflverse 152).
+
+- id: nfl-punt-next-snap-not-a-free-kick
+  group: nfl-era-play-order
+  finding: R971-4
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        (pl.col("_nxt").struct.field("kick") == False)'
+  mutant: '        ((pl.col("_nxt").struct.field("kick") == False) | punt)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "free_kick"
+  expected: kill
+  note: >-
+    Review #971 mutant A: if a punt's next play may be a kickoff, 271021019/2661 (a blocked punt out of the end zone
+    for a safety, unscored by ESPN) ends at NYG's free-kick spot instead of keeping ESPN's 99.
+
+- id: nfl-kick-spot-keys-on-scoringplay
+  group: nfl-era-play-order
+  finding: R963-5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                _kick_spot=((kickoff | punt) & unscored & next_snap).fill_null(False),'
+  mutant: '                _kick_spot=((kickoff | punt) & ~(pl.col("text").str.contains("(?i)touchdown") | pl.col("type.text").str.contains("Touchdown")).fill_null(False) & next_snap).fill_null(False),'
+  test: tests/nfl/test_nfl_era_play_order.py -k "unscored_return"
+  expected: kill
+  note: >-
+    Gated on a named touchdown (td_play's test) instead of scoringPlay, an unscored return TD keeps ESPN's end
+    instead of its try: 261022011/1629 wpa -0.136 (try -0.171, nflverse -0.275) and 271209034/1856 0.001 (try 0.101,
+    nflverse 0.116). Task 2.25 measured the td_play gate and rejected it on this evidence.
+
+# --- task 2.28: pre-2009 return "touchdowns" with no try; safeties ESPN did not type as one -----------------
+- id: nfl-td-mistyped-return-pre2009-needs-a-try
+  group: nfl-td-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& ((pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM) | (next_play.is_not_null() & ~try_follows))'
+  mutant: '& (pl.col("season") >= ESPN_FULL_KICK_TEXT_FROM)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "without_a_try"
+  expected: kill
+  note: >-
+    Without the try test before 2009, 251030010/1409 (a punt return ESPN types "Punt Return Touchdown", no text, no
+    score change, no try) keeps td_play: EPA -5.552, nflverse 1.334.
+
+- id: nfl-td-mistyped-return-null-text
+  group: nfl-td-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '& ~text.str.contains("(?i)touchdown|for a TD").fill_null(False)  # pre-2009 kick text is often null'
+  mutant: '& ~text.str.contains("(?i)touchdown|for a TD")  # pre-2009 kick text is often null'
+  test: tests/nfl/test_nfl_era_play_order.py -k "without_a_try"
+  expected: kill
+  note: A null text makes the whole mistyped-return test null, so 251030010/1409 keeps td_play.
+
+- id: nfl-untyped-safety-read
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '_untyped_safety=_untyped_safety())'
+  mutant: '_untyped_safety=pl.lit(False))'
+  test: tests/nfl/test_nfl_era_play_order.py -k "unscored_safety"
+  expected: kill
+  note: >-
+    271021019/2661, NYG's punt blocked out of its end zone (ESPN "Blocked Punt", unscored), stays a punt: EPA 4.292,
+    nflverse 0.624, and SF's 2 points are repaired away.
+
+- id: nfl-untyped-safety-flag
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                | pl.col("_untyped_safety"),'
+  mutant: '                | pl.lit(False),'
+  test: tests/nfl/test_nfl_era_play_order.py -k "unscored_safety"
+  expected: kill
+  note: 271021019/2661's safety flag stays null, so its drive does not end in a safety (fixed_drive_result).
+
+- id: nfl-untyped-safety-takes-the-overlay
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '            .when(def_score.and_(is_safety).or_(untyped_safety))'
+  mutant: '            .when(def_score.and_(is_safety))'
+  test: tests/nfl/test_nfl_era_play_order.py -k "unscored_safety or typed_a_blocked_punt"
+  expected: kill
+  note: >-
+    ESPN types 271021019/2661 and 271223008/738 "Blocked Punt", outside defense_score_vec, so without the untyped
+    flag the -2 overlay skips both (EPA 4.292 / 2.499; nflverse 0.624 / -0.015).
+
+- id: nfl-untyped-safety-keeps-its-points
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        scored = (play_df["scoringPlay"].fill_null(False) | play_df["_untyped_safety"]).to_list()'
+  mutant: '        scored = play_df["scoringPlay"].fill_null(False).to_list()'
+  test: tests/nfl/test_nfl_era_play_order.py -k "unscored_safety"
+  expected: kill
+  note: The score repair takes SF's unscored 2 points for a feed error; the free kick after 271021019/2661 reads 26-7.
+
+- id: nfl-safety-flag-scored-safety-type
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                | ((pl.col("type.text") == "Safety") & (pl.col("scoringPlay") == True))'
+  mutant: '                | pl.lit(False)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "does_not_say"
+  expected: kill
+  note: >-
+    281012016/923 ("Dan Orlovsky tackled in end zone by Jared Allen.", ESPN "Safety", scored) loses its safety flag and
+    falls to the defence-touchdown -6.92: EPA -4.576, nflverse 0.230.
+
+- id: nfl-safety-flag-type-needs-a-score
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                | ((pl.col("type.text") == "Safety") & (pl.col("scoringPlay") == True))'
+  mutant: '                | (pl.col("type.text") == "Safety")'
+  test: tests/nfl/test_nfl_era_play_order.py -k "does_not_say"
+  expected: kill
+  note: 271223008/764, KC's free kick ESPN types "Safety" without scoring it (nflverse a kickoff, safety 0), is flagged a safety.
+
+- id: nfl-safety-overlay-reads-the-flag
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '            .when(def_score.and_(is_safety).or_(untyped_safety))'
+  mutant: '            .when(def_score.and_(_lower.str.contains(r"safety")).or_(untyped_safety))'
+  test: tests/nfl/test_nfl_era_play_order.py -k "does_not_say"
+  expected: kill
+  note: >-
+    Keyed on the text, the -2 overlay misses 281012016/923 (ESPN "Safety", text without "safety"), which falls to the
+    defence-touchdown -6.92.
+
+- id: nfl-untyped-safety-needs-the-rise
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        & (rise == 2)'
+  mutant: '        & pl.lit(True)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "one_safety_signal"
+  expected: kill
+  note: >-
+    Without the defence's 2-point rise, 311218002/4196 (MIA's extra point, the kickoff after it moved back 15 yards to
+    MIA's 20) is typed a safety.
+
+- id: nfl-untyped-safety-needs-a-kick
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        & (nxt.field("kick") == True)'
+  mutant: '        & pl.lit(True)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "one_safety_signal"
+  expected: kill
+  note: >-
+    Without the free kick, 400874522/79 (a 2016 run on which ESPN books TB 2 points it takes back a row later; ATL
+    snaps next from its own 20) is typed a safety.
+
+- id: nfl-untyped-safety-kick-from-the-20
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        & (nxt.field("y2e") == 80)'
+  mutant: '        & pl.lit(True)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "one_safety_signal"
+  expected: kill
+  note: >-
+    Any free kick will do: 271216005/961, on which ESPN books CLE's 2 points a row early, is typed a safety ahead of
+    B.Moorman's real one (996, ESPN "Safety", from the BUF 24).
+
+- id: nfl-untyped-safety-safety-typed-free-kick
+  group: nfl-safety-flags
+  finding: task-2.28
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    free_kick = pl.col("type.text").is_in([*kickoff_vec, "Safety"])'
+  mutant: '    free_kick = pl.col("type.text").is_in(kickoff_vec)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "typed_a_blocked_punt"
+  expected: kill
+  note: >-
+    ESPN types the free kick after 271223008/738 "Safety" (764); counting only kickoff types, the blocked-punt safety
+    ESPN scored as a "Blocked Punt" keeps EPA 2.499 (nflverse -0.015).
+
+- id: nfl-naive-wp-after-flips-on-next-real-play-team
+  group: nfl-end-of-half
+  finding: nfl 2.27
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.when(team != naive_next_team)'
+  mutant: '.when(pl.col("change_of_pos_team") == True)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "home_wp_is_continuous and naive"
+  expected: kill
+  note: >-
+    devel-nfl flipped the naive lead on the play's own possession change: a half-ending kneel before the other
+    team's second-half kickoff took that kickoff's wp unflipped, and a play before a Timeout that ESPN filed to the
+    other team flipped the next snap's wp by mistake (400791686/154: 0.009 against 0.202, R973-4).
+
+- id: nfl-naive-half-end-reads-past-stoppage-rows
+  group: nfl-end-of-half
+  finding: nfl 2.27
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'naive_next_team, naive_next_wb = _next_play(team, stoppage), _next_play(pl.col("wp_before_naive"), stoppage)'
+  mutant: 'naive_next_team, naive_next_wb = team.shift(-1), pl.col("wp_before_naive").shift(-1)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "home_wp_is_continuous and naive"
+  expected: kill
+  note: >-
+    Read from the next ROW, a play followed by a Timeout, Official Timeout or Two-minute warning hands over the
+    stoppage row's own naive wp and team, not the next snap's (400791590's half-ending kneel among the captures).
+
+- id: nfl-naive-home-wp-after-keys-on-start-team
+  group: nfl-end-of-half
+  finding: nfl 2.27
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'home_wp_after_naive=pl.when(team == pl.col("homeTeamId"))'
+  mutant: 'home_wp_after_naive=pl.when(pl.col("end.pos_team.id") == pl.col("homeTeamId"))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "half_end_home_wp_is_continuous and _naive"
+  expected: kill
+  note: >-
+    wp_after_naive is stated in the START team's frame; keyed on the end team, every punt or turnover flipped
+    home_wp_after_naive twice (848 start != end rows in the 59 fixture games), half-ending punts and missed field
+    goals included.
+
+- id: nfl-naive-home-wp-after-start-team-off-half-ends
+  group: nfl-end-of-half
+  finding: R973-1
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'home_wp_after_naive=pl.when(team == pl.col("homeTeamId"))'
+  mutant: 'home_wp_after_naive=pl.when(pl.when(pl.col("end_of_half") == True).then(team).otherwise(pl.col("end.pos_team.id")) == pl.col("homeTeamId"))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "naive_home_wp_is_continuous"
+  expected: kill
+  note: >-
+    Review #973 mutant H1: the start-team key only at half ends, the end-team key elsewhere, survived the half-end
+    test and all of tests/nfl + tests/football; every punt and turnover outside a half end flips home WP twice.
+
+# --- review #975: windows, the try past a stoppage, the walk-off return, the overlay's text fallback ---------------
+- id: nfl-untyped-safety-rise-per-game
+  group: nfl-safety-flags
+  finding: R975-3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        pl.col("awayScore").shift(1).over("game_id")'
+  mutant: '        pl.col("awayScore").shift(1)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "inside_its_game"
+  expected: kill
+  note: >-
+    Unwindowed, the rise of a game's first row reads the previous game's last score: 271021019 cut before 2661 flags
+    2661 in the second game (the visitors' line; the home line mirrors it).
+
+- id: nfl-next-play-per-game
+  group: nfl-safety-flags
+  finding: R975-3
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '    return pl.when(skip).then(None).otherwise(col).backward_fill().shift(-1).over("game_id")'
+  mutant: '    return pl.when(skip).then(None).otherwise(col).backward_fill().shift(-1)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "inside_its_game"
+  expected: kill
+  note: >-
+    The shared next-real-play read (the untyped safety's free kick, the touchdown's try, the naive WP half end)
+    crosses games: 271021019 cut after 2661 reads the next game's free kick and flags 2661 again.
+
+- id: nfl-td-mistyped-return-try-past-a-stoppage
+  group: nfl-td-flags
+  finding: R975-4
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    next_play = _next_play(pl.col("type.text"), pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False))'
+  mutant: '    next_play = pl.col("type.text").shift(-1).over("game_id")'
+  test: tests/nfl/test_nfl_era_play_order.py -k "past_a_stoppage"
+  expected: kill
+  note: >-
+    Reading the very next row, a timeout filed between 261022011/1629 (an unscored punt return touchdown) and its try
+    negates the touchdown.
+
+- id: nfl-td-mistyped-return-walk-off-stands
+  group: nfl-td-flags
+  finding: R975-4
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '| (next_play.is_not_null() & ~try_follows))'
+  mutant: '| ~try_follows)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "past_a_stoppage"
+  expected: kill
+  note: A return touchdown with no next play at all (the game ends on it) loses td_play for want of a try.
+
+- id: nfl-safety-overlay-text-fallback
+  group: nfl-safety-flags
+  finding: R975-2
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '        else _lower.str.contains(r"safety")'
+  mutant: '        else pl.lit(False)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "falls_back"
+  expected: kill
+  note: >-
+    A frame whose safety column is not the Boolean flag (nflverse's Float64, or none) loses the -2 overlay:
+    291122008/3158, a scored "Safety", takes the defence-touchdown -6.92.
+
+- id: nfl-untyped-safety-free-kick-past-a-stoppage
+  group: nfl-safety-flags
+  finding: R975-6
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    nxt = _next_play(kick, stop).struct  # the next real play of the game'
+  mutant: '    nxt = kick.shift(-1).over("game_id").struct  # the next real play of the game'
+  test: tests/nfl/test_nfl_era_play_order.py -k "past_a_timeout"
+  expected: kill
+  note: >-
+    Reading the very next row, a timeout filed between a safety and its free kick hides the kick: on nfl-raw
+    250918010/3832 and 300912002/4199 lose their safety; the test copies a timeout in after 271021019/2661.
+
+# --- cfb 3.4 R832-6: the half-end play keys on the next real play's team (cfbfastR create_wpa_naive.R) ---
+# Killer on a committed capture: tests/cfb/test_cfb_whole_game_oracle.py (401858224's regulation-ending FG).
+
+- id: cfb-half-end-wp-keys-on-the-next-real-plays-team
+  group: nfl-end-of-half
+  finding: R832-6
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '                .and_(pl.col("start.pos_team.id") != lead_team)'
+  mutant: '                .and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "other_teams_next_play"
+  expected: kill
+  note: >-
+    The pre-fix condition. 401858224's tying field goal keeps its team (start == end) and the next real play is
+    overtime's first snap by the other team: keyed on the play's own possession change it falls through to the
+    model's end state, 0.476, instead of cfbfastR's 1 - 0.502 = 0.498.
+
+- id: cfb-half-end-wp-next-team-rule-on-every-boundary
+  group: nfl-end-of-half
+  finding: R966-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '                .and_(pl.col("start.pos_team.id") != lead_team)'
+  mutant: '                .and_((pl.col("start.pos_team.id") != lead_team) & ((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")) | (pl.col("type.text").shift(-1) == "Timeout")))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "continuous_into_the_next_real_play"
+  expected: kill
+  note: >-
+    Review #966's hand mutant B2: the fix holds only when a Timeout row follows the half-ending play, and
+    every other boundary keeps the pre-fix own-possession-change key. It survived the full tests/cfb (only
+    401858224's regulation end, which has a Timeout, pinned the branch) while it reverts 63 of the 64 moved
+    capture rows, mostly the first half's last snap handing to the other team's 2H kickoff.

@@ -1146,7 +1146,11 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             .when(try_to_kickoff)
             .then(kick_board)
             # the play that ends a half borrows the next real play's wp_before, past a Timeout
-            # row (C-NF-12): 401761665's timeout before overtime is filed to the other team
+            # row (C-NF-12): 401761665's timeout before overtime is filed to the other team.
+            # Keyed on that play's team either way, as cfbfastR does (create_wpa_naive.R
+            # wpa_base_nxt_ind / wpa_change_nxt_ind on lead_pos_team2), not on this play's own
+            # possession change (R832-6: 401858224's tying field goal kept its team and took
+            # the model's 0.476, not 1 - overtime's first wp_before, 0.498).
             .when(
                 (pl.col("end_of_half") == True)
                 .and_(pl.col("start.pos_team.id") == lead_team)
@@ -1155,7 +1159,7 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             .then(pl.col(lwb))
             .when(
                 (pl.col("end_of_half") == True)
-                .and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
+                .and_(pl.col("start.pos_team.id") != lead_team)
                 .and_(pl.col("type.text") != "Timeout"),
             )
             .then(1 - pl.col(lwb))

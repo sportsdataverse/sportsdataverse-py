@@ -185,6 +185,42 @@ def test_end_of_half_rows_two_per_game_three_with_overtime(game_id):
     assert f.filter(_t("end_of_half")).height == expected, f.filter(_t("end_of_half")).select("id", "type.text").rows()
 
 
+@pytest.mark.parametrize("game_id", CAPTURES)
+@pytest.mark.parametrize("sfx", ["", "_naive"])
+def test_half_end_home_wp_is_continuous_into_the_next_real_play(game_id, sfx):
+    # 2.26 (the NFL analog of R832-6): nflfastR has no half-end branch, home_wpa = lead(home_wp) -
+    # home_wp with the marker rows filled up from the next play (helper_add_ep_wp.R:1073-1181), so the
+    # play that ends a half hands the home WP to the next real play, past a Timeout or an End Period
+    # row, whichever team has the ball there. 18 of the 37 captures broke it before 2.26: a half-ending
+    # kneel kept the ball and fell through to the model's own end state. 2.27: the naive family
+    # (nflfastR's own wp / home_wp / wpa) had no half-end branch and keyed home WP on the end team.
+    f = run(game_id).plays
+    real = ~pl.col("type.text").is_in(clock_stoppage_vec)
+    before, after = f"home_wp_before{sfx}", f"home_wp_after{sfx}"
+    rows = f.with_columns(_next_home_wp=pl.when(real).then(pl.col(before)).shift(-1).backward_fill()).filter(
+        _t("end_of_half") & real & pl.col("_next_home_wp").is_not_null()
+    )
+    assert rows.height >= 1  # the first half's end always has a next play
+    gap = rows.filter((pl.col(after) - pl.col("_next_home_wp")).abs() > 1e-6)
+    assert gap.select("id", "type.text", after, "_next_home_wp").rows() == []
+
+
+@pytest.mark.parametrize("game_id", CAPTURES)
+def test_naive_home_wp_is_continuous_into_the_next_real_play(game_id):
+    # 2.27 (R973-1/4): nflverse's naive home_wpa is lead(home_wp) - home_wp, so on EVERY real play the
+    # naive home WP after is the next real play's home WP before. Two ways it broke: home_wp_after_naive
+    # keyed on the end team, which flipped it twice on every punt and turnover (every capture), and a
+    # play before a Timeout reading the Timeout's own wp, flipped when ESPN filed it to the other team.
+    f = run(game_id).plays
+    real = ~pl.col("type.text").is_in(clock_stoppage_vec)
+    rows = f.with_columns(
+        _next_home_wp=pl.when(real).then(pl.col("home_wp_before_naive")).shift(-1).backward_fill()
+    ).filter(real & pl.col("_next_home_wp").is_not_null() & pl.col("start.pos_team.id").is_not_null())
+    assert rows.filter(pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).height >= 1  # a punt or turnover
+    gap = rows.filter((pl.col("home_wp_after_naive") - pl.col("_next_home_wp")).abs() > 1e-6)
+    assert gap.select("id", "type.text", "home_wp_after_naive", "_next_home_wp").rows() == []
+
+
 # Games whose last real play is a scored try (fixtures/try_endings/, from nfl-raw; not whole-game captures)
 _TRY_ENDINGS = {291122008: "Extra Point Good", 271021004: "Two Point Pass"}
 
