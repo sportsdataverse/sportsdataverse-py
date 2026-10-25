@@ -7374,11 +7374,21 @@
   group: dtype-contract-5-2
   finding: B-H5
   file: sportsdataverse/_codegen_runtime.py
-  snippet: '    cols = [c for c in df.columns if c == "id" or c.endswith("_id")]'
-  mutant: '    cols = [c for c in df.columns if c.endswith("_id")]'
+  snippet: '    cols = [c for c in df.columns if (c == "id" or c.endswith("_id")) and c not in text_ids]'
+  mutant: '    cols = [c for c in df.columns if c.endswith("_id") and c not in text_ids]'
   test: tests/test_nhl_aux_parsers.py -k "bare_id_with_a_missing_value"
   expected: kill
   note: A bare id column (records id) with a missing value is Float64 again (R986-4).
+
+- id: parser-id-cast-skips-text-by-design-ids
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    cols = [c for c in df.columns if (c == "id" or c.endswith("_id")) and c not in text_ids]'
+  mutant: '    cols = [c for c in df.columns if c == "id" or c.endswith("_id")]'
+  test: tests/test_nhl_aux_parsers.py -k "text_by_design_id_is_never_cast"
+  expected: kill
+  note: An all-null formatted_season_id is cast to Int64 although it is text by design (R986-5).
 
 - id: nhl-pandas-ids-nullable-int64
   group: dtype-contract-5-2
@@ -7470,6 +7480,46 @@
   expected: kill
   note: pwhl_player_toi pandas ids are numpy int64 / float64 again (R988-2).
 
+- id: hockeytech-id-warning-points-at-the-caller
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '    out = _cast_id_columns(pl.from_pandas(pdf), f"HockeyTech {parser}", stacklevel=stacklevel)'
+  mutant: '    out = _cast_id_columns(pl.from_pandas(pdf), "HockeyTech parser")'
+  test: tests/hockeytech/test_parsers.py -k "hockeytech_id_that_is_not_an_integer"
+  expected: kill
+  note: The id-refusal warning names no parser and points inside _parsers.py (R988-7).
+
+- id: hockeytech-corsi-skips-a-blank-home-team
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_analytics.py
+  snippet: '        if team_id is None or home_team_id is None or str(home_team_id).strip() == "":'
+  mutant: '        if team_id is None or home_team_id is None:'
+  test: tests/hockeytech/test_league_families.py -k "blank_home_team_id"
+  expected: kill
+  note: A pbp frame with a blank home_team_id credits every shot to the away skaters (R988-6).
+
+- id: hockeytech-decorated-parser-warning-points-at-the-caller
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '    df = _to_frame(rows, False, stacklevel=5)'
+  mutant: '    df = _to_frame(rows, False)'
+  test: tests/hockeytech/test_parsers.py -k "names_the_parser_and_points and parse_shifts"
+  expected: kill
+  note: A decorated parser's id warning points at the decorator wrapper, not the caller (R989, CodeRabbit).
+
+- id: hockeytech-sitekit-parser-warning-names-the-export
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/hockeytech/_parsers.py
+  snippet: '        return _to_frame(list(raw), return_as_pandas, parser=name)  # the exported name, not parse_<key>'
+  mutant: '        return _to_frame(list(raw), return_as_pandas, parser=f"parse_{key.lower()}")'
+  test: tests/hockeytech/test_parsers.py -k "names_the_parser_and_points and parse_player_game_log"
+  expected: kill
+  note: parse_player_game_log's id warning names it parse_player (R989, CodeRabbit).
+
 - id: hockeytech-parser-pandas-ids-nullable-int64
   group: dtype-contract-5-2
   finding: B-H5
@@ -7494,11 +7544,31 @@
   group: dtype-contract-5-2
   finding: B-M15
   file: sportsdataverse/espn_snapshots.py
-  snippet: '    outcome = "read as null" if recovered is None else f"the player link gives {recovered}"'
+  snippet: '    outcome = "read as null" if recovered is None else f"the {source} gives {recovered}"'
   mutant: '    outcome = "read as null"'
   test: tests/test_espn_snapshots.py -k "bad_athlete_id_the_link_recovers"
   expected: kill
   note: A bad athlete.id the player link still recovers is reported as read as null (R981-10).
+
+- id: espn-snapshot-athlete-id-precedes-the-link
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/espn_snapshots.py
+  snippet: '    return direct if direct is not None else recovered'
+  mutant: '    return recovered if recovered is not None else direct'
+  test: tests/test_espn_snapshots.py -k "athlete_id_wins_over_a_link"
+  expected: kill
+  note: The player link overrides a valid athlete.id (R981-12).
+
+- id: espn-snapshot-headshot-recovery-names-the-headshot
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/espn_snapshots.py
+  snippet: '            recovered, source = int(headshot.group(1)), "headshot"'
+  mutant: '            recovered, source = int(headshot.group(1)), "player link"'
+  test: tests/test_espn_snapshots.py -k "headshot_recovers_names_the_headshot"
+  expected: kill
+  note: An id recovered from the headshot is reported as given by the player link (R981-12).
 
 - id: espn-snapshot-padded-id-not-unpadded
   group: dtype-contract-5-2
@@ -7576,7 +7646,7 @@
   group: dtype-contract-5-2
   finding: B-H5
   file: sportsdataverse/hockeytech/_parsers.py
-  snippet: '    out = _cast_id_columns(pl.from_pandas(pdf), "HockeyTech parser")'
+  snippet: '    out = _cast_id_columns(pl.from_pandas(pdf), f"HockeyTech {parser}", stacklevel=stacklevel)'
   mutant: '    out = pl.from_pandas(pdf)'
   test: tests/hockeytech/test_parsers.py -k "hockeytech_ids_int64"
   expected: kill
