@@ -7145,6 +7145,16 @@
   expected: kill
   note: The country endpoint's ISO-code id warns as payload drift on every call (R986-2).
 
+- id: nhl-player-props-ids-join-the-parser-frames
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/nhl/nhl_player_props.py
+  snippet: '    "player_id": pl.Int64,'
+  mutant: '    "player_id": pl.Utf8,'
+  test: tests/nhl/test_nhl_player_props.py -k "props_join_the_nhl_parser_frames"
+  expected: kill
+  note: nhl_player_props pins player_id to Utf8 again, so it cannot join a parse_nhl_web_* frame (R986-3).
+
 - id: nhl-pandas-ids-nullable-int64
   group: dtype-contract-5-2
   finding: B-H5

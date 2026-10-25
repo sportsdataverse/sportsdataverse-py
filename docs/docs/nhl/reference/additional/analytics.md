@@ -317,13 +317,13 @@ per-projected-game ratings.
 
 **Returns**
 
-A polars (or pandas) DataFrame, one row per (player, game, stat). Empty/malformed input returns a zero-row frame with the documented schema. |col_name |type | |:---------|:------| |season |Int64 | |game_id |String | |player_id |String | |team |String | |opp_team |String | |stat |String | |proj_mean |Float64| |proj_sd |Float64| |p_over |Float64| |line |Float64|
+A polars (or pandas) DataFrame, one row per (player, game, stat). Empty/malformed input returns a zero-row frame with the documented schema. |col_name |type | |:---------|:------| |season |Int64 | |game_id |Int64 | |player_id |Int64 | |team |String | |opp_team |String | |stat |String | |proj_mean |Float64| |proj_sd |Float64| |p_over |Float64| |line |Float64|
 
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Season year (echoed from arg). |
-| `game_id` | character | Unique game identifier. |
-| `player_id` | character | Unique player identifier. |
+| `game_id` | integer | Unique game identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `team` | character | Team name. |
 | `opp_team` | character |  |
 | `stat` | character |  |
@@ -342,7 +342,7 @@ print(props.sort("proj_mean", descending=True).head())
 
 # Pipeline next step (one line)
 
-props.filter(pl.col("player_id") == "8478402")
+props.filter(pl.col("player_id") == 8478402)
 ```
 
 ### nhl_predict_games {#nhl_predict_games}
