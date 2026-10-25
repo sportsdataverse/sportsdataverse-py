@@ -2333,7 +2333,7 @@ cdn_rankings:
   poll_short_name: Short poll label, e.g. 'AP Poll'.
   ranked: TRUE for the poll's ranked teams; FALSE for teams that only received votes, whose rows carry just the team
     name and points.
-  team_id: ESPN team id as a string (the dtype of scoreboard home_id / away_id), read from team_url. Null on
+  team_id: ESPN team id (Int64, like scoreboard home_id / away_id), read from team_url. Null on
     vote-receiving rows and on teams ESPN does not link (most Division II and III entries), so join on it only where
     present.
   team_display_name: Team name as the poll page shows it.
@@ -46444,7 +46444,7 @@ ncaa_espn_team_crosswalk:
   conference_id: SportsDataverse conference (group) id for that season, prefixed by the league (e.g. 'mbb:big-ten'), from the
     {mbb,wbb}_team_group_seasons release table joined on espn_team_id and the season's ending year. Stable across renames and
     shared with the {mbb,wbb}_groups tables; null only when that table has no row for the team that season.
-  espn_conference_id: ESPN conference (group) id for that season as a string (e.g. '23' for the Southeastern Conference). ESPN
+  espn_conference_id: ESPN conference (group) id for that season, Int64 (e.g. 23 for the Southeastern Conference). ESPN
     group ids are sport-scoped (Summit League is 49 in men's, 47 in women's) and can change (men's Summit League was 15 before
     2008). Null on the same rows as conference_id.
   espn_conference_name: Conference name for that season as the {mbb,wbb}_group_seasons table records it (e.g. 'Colonial Athletic
@@ -57612,7 +57612,7 @@ rankings:
   week_display: Poll week as ESPN labels it, e.g. 'Week 6'.
   poll_date: Date the poll was released (ISO 8601, UTC).
   ranked: TRUE for the poll's ranked teams; FALSE for teams that only received votes.
-  team_id: ESPN team id as a string (the dtype of scoreboard home_id / away_id).
+  team_id: ESPN team id (Int64, like scoreboard home_id / away_id).
   rank: Position in the poll (1 = top). Null on vote-receiving rows.
   previous_rank: Position in the previous poll; 0 when the team was unranked then.
   points: Poll points received (0 for polls ESPN ships without points, such as USCHO).
@@ -62418,8 +62418,8 @@ toa_sports_odds:
   outcome_description: Copied from the outcome's description field; all null in the sampled data, which held only h2h outcomes.
   outcome_link: Outcome deep link, only sent when include_links=True; all null in the sampled data, which did not request links.
   outcome_name: Outcome the price applies to; on the sampled h2h rows, a team's full name (e.g. 'Buffalo Bills').
-  outcome_point: Copied from the outcome's point field, stored as text; all null in the sampled data, which held only h2h (moneyline)
-    outcomes.
+  outcome_point: The outcome's point field (the spread or total line, e.g. -3.5) as a float; null for outcomes without one,
+    such as h2h (moneyline), the only market in the sampled data.
   outcome_price: Price of the outcome as an integer in American odds under the default odds_format='american' (e.g. -238, 195).
   outcome_sid: Bookmaker-specific source id for the outcome, only sent when include_sids=True; all null in the sampled data,
     which did not request sids.
@@ -62439,8 +62439,8 @@ toa_sports_odds_history:
   outcome_description: Copied from the outcome's description field; all null in the sampled data, which held only h2h outcomes.
   outcome_link: Outcome deep link, only sent when include_links=True; all null in the sampled data, which did not request links.
   outcome_name: Outcome the price applies to; on the sampled h2h rows, a team's full name (e.g. 'Buffalo Bills').
-  outcome_point: Copied from the outcome's point field, stored as text; all null in the sampled data, which held only h2h (moneyline)
-    outcomes.
+  outcome_point: The outcome's point field (the spread or total line, e.g. -3.5) as a float; null for outcomes without one,
+    such as h2h (moneyline), the only market in the sampled data.
   outcome_price: Price of the outcome as an integer in American odds under the default odds_format='american' (e.g. -238, 195).
   outcome_sid: Bookmaker-specific source id for the outcome, only sent when include_sids=True; all null in the sampled data,
     which did not request sids.

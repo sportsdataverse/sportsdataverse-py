@@ -1,6 +1,10 @@
-- **ESPN parsers (`_common_espn_parsers`, every `espn_<lg>_<short>` wrapper):** every `id` / `*_id` column is
-  `Int64` (it was String, or Float64 where the pandas hop met a missing value), so `parse_fpi` joins
-  `parse_weekly_powerindex`. `now_id` (`"1-44686270"`) is not an integer and stays String. (#981)
+- **ESPN parsers (`_common_espn_parsers`, the `espn_<lg>_<short>` wrappers it parses for):** every `id` /
+  `*_id` column is `Int64` (it was String, or Float64 where the pandas hop met a missing value), so `parse_fpi`
+  joins `parse_weekly_powerindex`. `now_id` (`"1-44686270"`) is not an integer and stays String. Not yet in
+  this release: the soccer leagues' `scoreboard`, `standings`, `summary`, `teams_site` and `team_roster`
+  wrappers and the cricket leagues' `scoreboard`, `standings` and `summary` wrappers. Codegen sends those to
+  `soccer_espn_parsers` / `cricket_espn_parsers`, which do not cast, so their ids stay String for now; the same
+  leagues' other wrappers (`news`, `injuries`, ...) go through the common parsers and are `Int64`. (#981)
 - **ESPN hand-written families:** `espn_<lg>_schedule` (`id`, `game_id`, `*_id`, `home_/away_id`,
   `*_venue_id`, `*_conference_id`, `groups_id`; `game_id` was Int32), `espn_<lg>_teams` (`team_id`),
   `espn_<lg>_game_rosters` (every `*_id`; `team_id` / `game_id` / `position_id` were Int32) are `Int64`. (#981)
