@@ -7169,11 +7169,21 @@
   group: dtype-contract-5-2
   finding: B-H5
   file: sportsdataverse/_codegen_runtime.py
-  snippet: '    cols = [c for c in df.columns if c == "id" or c.endswith("_id")]'
-  mutant: '    cols = [c for c in df.columns if c.endswith("_id")]'
+  snippet: '    cols = [c for c in df.columns if (c == "id" or c.endswith("_id")) and c not in text_ids]'
+  mutant: '    cols = [c for c in df.columns if c.endswith("_id") and c not in text_ids]'
   test: tests/test_nhl_aux_parsers.py -k "bare_id_with_a_missing_value"
   expected: kill
   note: A bare id column (records id) with a missing value is Float64 again (R986-4).
+
+- id: parser-id-cast-skips-text-by-design-ids
+  group: dtype-contract-5-2
+  finding: B-H5
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    cols = [c for c in df.columns if (c == "id" or c.endswith("_id")) and c not in text_ids]'
+  mutant: '    cols = [c for c in df.columns if c == "id" or c.endswith("_id")]'
+  test: tests/test_nhl_aux_parsers.py -k "text_by_design_id_is_never_cast"
+  expected: kill
+  note: An all-null formatted_season_id is cast to Int64 although it is text by design (R986-5).
 
 - id: nhl-pandas-ids-nullable-int64
   group: dtype-contract-5-2
