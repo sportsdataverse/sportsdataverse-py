@@ -6887,8 +6887,8 @@
   group: dtype-contract-5-1
   finding: MD-3
   file: sportsdataverse/_codegen_runtime.py
-  snippet: '    return df.to_pandas(use_pyarrow_extension_array=True) if arrow else df.to_pandas()'
-  mutant: '    return df.to_pandas()'
+  snippet: '    return df.to_pandas(use_pyarrow_extension_array=True) if arrow else _pandas_ids(df)'
+  mutant: '    return _pandas_ids(df)'
   test: tests/nba/test_nba_stats_multifile_loaders.py -k "empty_schema and synergy"
   expected: kill
   note: R978-3, an empty multi-file load would have numpy dtypes while a full one has Arrow dtypes.
@@ -6989,8 +6989,8 @@
   group: dtype-contract-5-2
   finding: A-M15
   file: sportsdataverse/_common_espn_parsers.py
-  snippet: '    return _ids_int64(out)'
-  mutant: '    return out'
+  snippet: '    out = _ids_int64(out)'
+  mutant: '    pass'
   test: tests/test_espn_universal_parsers.py -k "dtype_snapshot_matches_every_committed_capture"
   expected: kill
   note: The pandas-hop parsers hand back their ids as String (or Float64 with a missing value) again.
@@ -7059,8 +7059,8 @@
   group: dtype-contract-5-2
   finding: B-M15
   file: sportsdataverse/espn_snapshots.py
-  snippet: '        return int(text) if _INTEGER_ID.fullmatch(text) else None'
-  mutant: '        return text or None'
+  snippet: '        return int(value.strip())'
+  mutant: '        return value.strip()'
   test: tests/test_espn_snapshots.py -k "as_id_coerces"
   expected: kill
   note: The injuries snapshot reads its ids as text again (the inverted Utf8 pin).
@@ -7139,11 +7139,21 @@
   group: dtype-contract-5-2
   finding: B-M15
   file: sportsdataverse/espn_snapshots.py
-  snippet: '        f"ESPN snapshot id {field}: {value!r} is not an integer id; read as null",'
-  mutant: '        f"ESPN snapshot id {field}: {value!r} read as null",'
+  snippet: '        f"ESPN snapshot id {field}: {value!r} is not an integer id; {outcome}",'
+  mutant: '        f"ESPN snapshot id {field}: {value!r} {outcome}",'
   test: tests/test_espn_snapshots.py -k "as_id_warns_on_a_value_that_is_not_an_integer_id"
   expected: kill
   note: A snapshot id that is not an integer is nulled without saying why (R981-4).
+
+- id: espn-snapshot-athlete-id-warning-names-the-recovery
+  group: dtype-contract-5-2
+  finding: B-M15
+  file: sportsdataverse/espn_snapshots.py
+  snippet: '    outcome = "read as null" if recovered is None else f"the player link gives {recovered}"'
+  mutant: '    outcome = "read as null"'
+  test: tests/test_espn_snapshots.py -k "bad_athlete_id_the_link_recovers"
+  expected: kill
+  note: A bad athlete.id the player link still recovers is reported as read as null (R981-10).
 
 - id: espn-snapshot-padded-id-not-unpadded
   group: dtype-contract-5-2
