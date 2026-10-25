@@ -30,10 +30,10 @@ _SEMVER = re.compile(r"(\d+)\.(\d+)\.(\d+)")
 def _require_minor_bump(version: str, text: str) -> None:
     """Refuse to release ``*.breaking.md`` fragments as a patch: the minor (or major) must rise.
 
-    Compared with the newest ``## x.y.z Release`` heading in the changelog. A version that is not x.y.z is left
-    to the renderer's own check.
+    Compared on the release part (``0.1.6rc1`` is 0.1.6) with the newest ``## x.y.z Release`` heading. A version that
+    does not start with x.y.z (``v0.1.6``) is left to the renderer's own check.
     """
-    new = _SEMVER.fullmatch(version)
+    new = _SEMVER.match(version)  # the release part, so 0.1.6rc1 counts as 0.1.6 and 0.2.0rc1 as 0.2.0
     last = re.search(r"^## (\d+\.\d+\.\d+) Release\b", text, re.M)
     if not new or not last:
         return

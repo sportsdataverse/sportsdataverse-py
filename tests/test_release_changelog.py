@@ -74,7 +74,7 @@ def test_release_refuses_a_version_that_is_already_released(tmp_path):
     assert log.read_text(encoding="utf-8") == TOC + "\n" + OLD
 
 
-@pytest.mark.parametrize("version", ["0.1.1", "0.1.7", "0.0.9"])
+@pytest.mark.parametrize("version", ["0.1.1", "0.1.7", "0.0.9", "0.1.6rc1", "0.1.1.post1"])
 def test_release_refuses_breaking_fragments_in_a_patch(tmp_path, version):
     """C-4: a *.breaking.md fragment needs the minor (or major) to rise past the newest release (0.1.0 here)."""
     log, d = _tree(
@@ -86,7 +86,7 @@ def test_release_refuses_breaking_fragments_in_a_patch(tmp_path, version):
     assert log.read_text(encoding="utf-8") == TOC + "\n" + OLD
 
 
-@pytest.mark.parametrize("version", ["0.2.0", "1.0.0"])
+@pytest.mark.parametrize("version", ["0.2.0", "1.0.0", "0.2.0rc1"])
 def test_release_allows_breaking_fragments_in_a_minor_or_major(tmp_path, version):
     log, d = _tree(tmp_path, {"a.breaking.md": "- **NFL:** ids are Int64. (#9)\n"})
     removed = release_changelog.release(version, dt.date(2026, 10, 25), log, d)
