@@ -315,3 +315,40 @@ def test_snake_collision_keeps_the_top_level_key_in_either_column_order():
     for cols in (("debutYear", f"debut{_NEST}year"), (f"debut{_NEST}year", "debutYear")):
         frame = pl.DataFrame({c: [2018 if c == "debutYear" else 2019] for c in cols})
         assert _snake_flattened(frame).to_dicts() == [{"debut_year": 2018}], cols
+
+
+def test_mlb_game_rosters_with_every_athlete_ref_404_is_empty_not_an_error(monkeypatch):
+    """WB-consolidation-1: when every athlete ``$ref`` 404s each is warned about and left out, and the game returns the
+    documented zero-row frame instead of raising ``NoDataError`` for the whole game."""
+    _, rosters = _serve_mlb_rosters(monkeypatch)
+    every = tuple(e["playerId"] for payload in rosters.values() for e in payload["entries"])
+    game_id, _ = _serve_mlb_rosters(monkeypatch, missing=every)
+    mod = _mod("mlb")
+    with pytest.warns(UserWarning, match=r"no athlete resource at .*left out") as rec:
+        df = mod.espn_mlb_game_rosters(game_id=game_id)
+    assert len(rec) == len(every)
+    assert df.height == 0 and df.columns == list(mod._COLUMNS)
+
+
+def test_mlb_game_rosters_drop_an_entry_with_no_athlete(monkeypatch):
+    """WB-consolidation-1: a real roster entry with neither an inline athlete nor a ``$ref`` is left out with a
+    warning; the other entries keep their rows."""
+    game_id, rosters = _serve_mlb_rosters(monkeypatch)
+    first = next(iter(rosters.values()))["entries"][0]
+    gone = first["playerId"]
+    first.pop("athlete")
+    with pytest.warns(UserWarning, match=r"1 ESPN MLB roster entries carry no athlete record or \$ref"):
+        df = _mod("mlb").espn_mlb_game_rosters(game_id=game_id)
+    entries = [e for payload in rosters.values() for e in payload["entries"]]
+    assert df.height == len(entries) - 1 and gone not in df["athlete_id"].to_list()
+
+
+def test_mlb_game_rosters_raw_rows_keep_the_documented_keys(monkeypatch):
+    """WB-consolidation-1: ``raw=True`` has its pre-#1002 shape again, one dict per entry with the documented columns
+    read from the entry alone (no athlete fetch); ``athlete_id`` is the entry's ``playerId``."""
+    game_id, rosters = _serve_mlb_rosters(monkeypatch)
+    mod = _mod("mlb")
+    out = mod.espn_mlb_game_rosters(game_id=game_id, raw=True)
+    entries = [e for payload in rosters.values() for e in payload["entries"]]
+    assert [list(r) for r in out["rows"]] == [list(mod._COLUMNS)] * len(entries)
+    assert [r["athlete_id"] for r in out["rows"]] == [e["playerId"] for e in entries]
