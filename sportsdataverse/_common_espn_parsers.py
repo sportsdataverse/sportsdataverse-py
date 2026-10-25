@@ -89,10 +89,17 @@ import re
 import pandas as pd
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _cast_ids_int64, _documented_empty, _pandas_ids
+from sportsdataverse._codegen_runtime import _cast_ids_int64, _documented_empty, _pandas_ids, _str_or_null
 from sportsdataverse._parser_common import _FROM_PANDAS_ERRORS, _empty_frame
 from sportsdataverse.dl_utils import underscore
-from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _first_row, _object_rows, _warn_schema_drift
+from sportsdataverse.errors import (
+    _SHAPE_ERRORS,
+    SchemaDriftWarning,
+    _error_envelope_code,
+    _first_row,
+    _object_rows,
+    _warn_schema_drift,
+)
 
 # ---------------------------------------------------------------------------
 # Internal helpers
@@ -127,6 +134,12 @@ def _snake_columns(df: pd.DataFrame) -> pd.DataFrame:
 _TEXT_IDS = frozenset({"now_id"})
 
 
+def _is_text_id(col: str) -> bool:
+    """An ESPN id that is text by design: ``now_id`` (``"1-44686270"``) and the ``uId`` composites, which
+    underscore to ``u_id`` / ``*_u_id`` (``athlete_team_u_id`` = ``"s:40~l:46~t:20"`` on every leaders payload)."""
+    return col in _TEXT_IDS or col == "u_id" or col.endswith("_u_id")
+
+
 def _ids_int64(df: pl.DataFrame) -> pl.DataFrame:
     """Every ESPN ``id`` / ``*_id`` column as ``Int64`` (task 5.2: A-M14, A-M15).
 
@@ -135,11 +148,15 @@ def _ids_int64(df: pl.DataFrame) -> pl.DataFrame:
     (``_cast_ids_int64``). An id column the cast refuses (a value that is not an integer) stays as it came
     and warns: that is new payload shape, not an id to force.
     """
-    cols = [c for c in df.columns if (c == "id" or c.endswith("_id")) and c not in _TEXT_IDS]
+    cols = [c for c in df.columns if (c == "id" or c.endswith("_id")) and not _is_text_id(c)]
     out = _cast_ids_int64(df, cols)
     refused = [c for c in cols if out.schema[c] != pl.Int64]
     if refused:
-        _warn_schema_drift("ESPN id columns", ValueError(f"{refused} hold values that are not integer ids"))
+        warnings.warn(
+            f"ESPN id columns {refused} hold values that are not integer ids; kept as they came",
+            SchemaDriftWarning,
+            stacklevel=3,
+        )
     return out
 
 
@@ -163,7 +180,7 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool) -> pl.DataFrame:
     except _FROM_PANDAS_ERRORS:
         # Last-resort: stringify everything that is still object-typed
         for col in [c for c in df.columns if df[c].dtype == "object"]:
-            df[col] = df[col].astype(str)
+            df[col] = df[col].map(_str_or_null)  # a missing cell stays null, never "nan"
         out = pl.from_pandas(df)
     out = _ids_int64(out)
     return _pandas_ids(out, pdf) if return_as_pandas else out

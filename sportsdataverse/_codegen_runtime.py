@@ -44,6 +44,20 @@ _CHROME_UA = (
 )
 
 
+def _is_missing(v: Any) -> bool:
+    """Whether a pandas cell is a missing value: ``None``, a float NaN, ``pd.NA`` or ``pd.NaT``."""
+    return v is None or (isinstance(v, float) and v != v) or type(v).__name__ in ("NAType", "NaTType")
+
+
+def _str_or_null(v: Any) -> Any:
+    """``str(v)`` for an object cell a parser stringifies, but a missing value stays null.
+
+    ``str(NaN)`` is ``"nan"``: pandas fills a missing JSON key with NaN in an object column (pandas 2.3, the
+    Python 3.10 floor), and a stringified ``"nan"`` makes :func:`_cast_ids_int64` refuse the whole id column.
+    """
+    return None if _is_missing(v) else str(v)
+
+
 def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
     """Canonicalize id columns to ``Int64`` at the loader boundary.
 
