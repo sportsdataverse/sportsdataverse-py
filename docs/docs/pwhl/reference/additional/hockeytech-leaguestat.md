@@ -552,8 +552,8 @@ One row per matching player (String): `person_id`, `player_id`, `first_name` / `
 
 | col_name | type | description |
 |---|---|---|
-| `person_id` | character | Unique person identifier. |
-| `player_id` | character | Unique player identifier. |
+| `person_id` | integer | Unique person identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `active` | character | Whether athlete is currently active. |
 | `first_name` | character | Player first name. |
 | `last_name` | character | Player last name. |
@@ -567,10 +567,10 @@ One row per matching player (String): `person_id`, `player_id`, `first_name` / `
 | `birthtown` | character | Player birth town. |
 | `birthprov` | character | Player birth province/state. |
 | `birthcntry` | character | Player birth country. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `jersey_number` | character | Jersey number. |
-| `role_id` | character | Id of the person's role in the HockeyTech person record ('1' = 'Player' in the captures): player or staff, not a playing position (see position). |
-| `season_id` | character | Season identifier. |
+| `role_id` | integer | Id of the person's role in the HockeyTech person record ('1' = 'Player' in the captures): player or staff, not a playing position (see position). |
+| `season_id` | integer | Season identifier. |
 | `role_name` | character | Label of the person's role in the HockeyTech person record (e.g. 'Player'), not a playing position (see position). |
 | `all_roles` | character | Pipe- or comma-delimited string listing every positional or roster role associated with the player in the PWHL HockeyTech system. |
 | `last_team_name` | character | Full name of the PWHL team on which the player most recently appeared. |
@@ -1099,7 +1099,7 @@ One row per player for that season and position, as the feed ships it (String, ~
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
+| `player_id` | integer | Unique player identifier. |
 | `shortname` | character | Player short name. |
 | `first_name` | character | Player first name. |
 | `last_name` | character | Player last name. |
@@ -1120,7 +1120,7 @@ One row per player for that season and position, as the feed ships it (String, ~
 | `jersey_number` | character | Jersey number. |
 | `team_name` | character | Team name. |
 | `team_code` | character | Team abbreviation. |
-| `team_id` | character | Unique team identifier. |
+| `team_id` | integer | Unique team identifier. |
 | `division` | character | Division name as text (e.g. 'PWHL'), not an identifier. |
 | `birthdate` | character | Date of birth. |
 | `birthdate_year` | character | Player birth year. |
@@ -1177,7 +1177,7 @@ One row per player for that season and position, as the feed ships it (String, ~
 | `faceoff_wa` | character | Faceoff wins-to-attempts metric. |
 | `shots_on` | character | Shots on goal count. |
 | `shootout_percentage` | character | Shootout scoring percentage. |
-| `latest_team_id` | character | Most recent team identifier. |
+| `latest_team_id` | integer | Most recent team identifier. |
 | `num_teams` | character | Number of teams the player has played for. |
 | `logo` | character | URL to the team logo. |
 | `rank` | integer | 1-based position of the player in the feed's sorted stat table. |

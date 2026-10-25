@@ -518,3 +518,30 @@ def test_a_hockeytech_id_that_is_not_an_integer_stays_as_it_came_and_warns():
         df = P.parse_roster(raw)
     assert df.schema["person_id"] == pl.String and "TBD" in df["person_id"].to_list()
     assert {c: t for c, t in df.schema.items() if c.endswith("_id") and c != "person_id" and t != pl.Int64} == {}
+
+
+#: Release loaders read a parquet the producer wrote, not a parser frame; their ids keep the release's dtype.
+_RELEASE_TABLES = {"load_pwhl_games", "as_of_ratings_split"}
+
+
+def test_every_hockeytech_returns_table_documents_its_ids_as_integer():
+    """R988-4: ``pwhl_player_search`` / ``pwhl_stats`` still said ``character`` for ids their parser (``_to_frame``)
+    emits Int64; no capture exists for either, so no parser test noticed. Every HockeyTech parser-backed returns table
+    documents its ids as ``integer``."""
+    import yaml
+
+    from sportsdataverse.hockeytech._leagues import LEAGUES
+    from tests.conftest import _REPO_ROOT as ROOT
+
+    wrong = {}
+    for lg in {*LEAGUES, "pwhl"}:
+        for path in sorted((ROOT / "tools" / "codegen" / "schemas" / "autodoc" / lg).glob("*.yaml")):
+            if path.stem in _RELEASE_TABLES:
+                continue
+            cols = yaml.safe_load(path.read_text(encoding="utf-8")).get("columns") or []
+            bad = [
+                c["name"] for c in cols if (c["name"] == "id" or c["name"].endswith("_id")) and c["type"] != "integer"
+            ]
+            if bad:
+                wrong[f"{lg}/{path.stem}"] = bad
+    assert wrong == {}

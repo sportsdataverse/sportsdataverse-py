@@ -2,10 +2,10 @@ schema: pwhl_player_search
 kind: dataframe
 columns:
 - name: person_id
-  type: character
+  type: integer
   description: ''
 - name: player_id
-  type: character
+  type: integer
   description: ''
 - name: active
   type: character
@@ -47,16 +47,16 @@ columns:
   type: character
   description: ''
 - name: team_id
-  type: character
+  type: integer
   description: ''
 - name: jersey_number
   type: character
   description: ''
 - name: role_id
-  type: character
+  type: integer
   description: ''
 - name: season_id
-  type: character
+  type: integer
   description: ''
 - name: role_name
   type: character
