@@ -76,17 +76,30 @@ def _transient_status(code: int | None) -> bool:
 
 
 def _is_transient(exc: BaseException | None) -> bool:
-    """A timeout, dropped connection, HTTP 429 or any HTTP 5xx anywhere in ``exc``'s cause chain.
+    """A timeout, dropped connection, cut-off body, HTTP 429 or any HTTP 5xx anywhere in ``exc``'s cause chain.
 
     Covers urllib's and requests' errors (requests' ``Timeout`` / ``ConnectionError`` are not the
-    builtin classes) and this package's ``AssetFetchError``, which states the status in its message
-    ("... answered HTTP 503 ..."). A ``raise ... from None`` ends the walk.
+    builtin classes), a body that stopped early (requests' ``ChunkedEncodingError``,
+    ``http.client.IncompleteRead``, and aiohttp's ``ClientPayloadError`` / ``ServerDisconnectedError``
+    on the fsspec path kloppy reads through), and this package's ``AssetFetchError`` when its message
+    states a 429/5xx ("... answered HTTP 503 ...") or a truncated body. A 403 ``AssetFetchError`` is a
+    ban or an entitlement, not a flake, and a bare ``JSONDecodeError`` may be a parser bug: both fail.
+    A ``raise ... from None`` ends the walk.
     """
+    import http.client
     import socket
 
     import requests
 
     from sportsdataverse.errors import AssetFetchError
+
+    cut_off: tuple[type[BaseException], ...] = (requests.exceptions.ChunkedEncodingError, http.client.IncompleteRead)
+    try:
+        import aiohttp
+    except ImportError:  # aiohttp arrives with the soccer extra (kloppy -> fsspec[http]); absent, nothing to match
+        pass
+    else:
+        cut_off += (aiohttp.ClientPayloadError, aiohttp.ServerDisconnectedError)
 
     seen = set()
     while exc is not None and id(exc) not in seen:
@@ -95,11 +108,13 @@ def _is_transient(exc: BaseException | None) -> bool:
             return _transient_status(exc.code)
         if isinstance(exc, requests.HTTPError):
             return _transient_status(getattr(exc.response, "status_code", None))
-        if isinstance(exc, AssetFetchError) and re.search(r"\bHTTP (429|5\d\d)\b", str(exc)):
+        if isinstance(exc, AssetFetchError) and re.search(r"\bHTTP (429|5\d\d)\b|truncated", str(exc)):
             return True
         if isinstance(
             exc, (URLError, ConnectionError, TimeoutError, socket.timeout, requests.Timeout, requests.ConnectionError)
         ):
+            return True
+        if isinstance(exc, cut_off):
             return True
         exc = exc.__cause__ or (None if exc.__suppress_context__ else exc.__context__)
     return False

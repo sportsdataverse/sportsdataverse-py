@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import http.client
+import json
 from urllib.error import HTTPError
 
 import pytest
@@ -54,6 +56,10 @@ def _suppressed_timeout() -> AssertionError:
         AssetFetchError("api.example.test /v1/x answered HTTP 503: upstream unavailable"),
         AssetFetchError("release asset fetch failed with HTTP 502: https://x/y.parquet"),
         AssetFetchError("api.example.test /v1/x answered HTTP 500 with an empty body"),
+        requests.exceptions.ChunkedEncodingError("Connection broken: IncompleteRead(0 bytes read)"),
+        http.client.IncompleteRead(b"partial", 1024),
+        _wrapped(http.client.IncompleteRead(b"partial", 1024)),
+        AssetFetchError("statsbomb open data: truncated or corrupt body for match 8658 (https://x/8658.json)"),
     ],
 )
 def test_upstream_trouble_is_transient(exc):
@@ -70,7 +76,14 @@ def test_upstream_trouble_is_transient(exc):
         AssetFetchError("api.example.test /v1/x answered HTTP 403: entitlement"),
         _requests_http_error(404),
         _suppressed_timeout(),
+        json.JSONDecodeError("Expecting value", "", 0),  # may be a parser bug: never skipped on its own
     ],
 )
 def test_real_failures_are_not(exc):
     assert not _is_transient(exc)
+
+
+def test_aiohttp_payload_and_disconnect_errors_are_transient():
+    aiohttp = pytest.importorskip("aiohttp")
+    assert _is_transient(aiohttp.ClientPayloadError("Response payload is not completed"))
+    assert _is_transient(aiohttp.ServerDisconnectedError())
