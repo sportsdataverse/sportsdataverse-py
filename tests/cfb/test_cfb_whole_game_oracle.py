@@ -345,6 +345,10 @@ _COLUMNS = (
     "end.yardsToEndzone",
     "wp_before",
     "wp_after",
+    "home_wp_before",
+    "home_wp_after",
+    "home_wp_before_naive",
+    "home_wp_after_naive",
 )
 
 
@@ -652,6 +656,43 @@ def test_timeout_ending_half_end_possession_change_wp_after_is_one_minus_next_pl
         pytest.fail("the punt no longer hands the ball to the 2H kickoff's team")
     assert punt["end_of_half"] is True and edited["end_of_half"] is False
     assert abs(punt["wp_after"] - (1 - nxt["wp_before"])) < 1e-9, (punt["wp_after"], nxt["wp_before"])
+
+
+def test_timeout_ending_half_end_to_the_other_teams_next_play_is_one_minus_its_wp_before():
+    # R832-6: 401858224's regulation ends on 2509's tying field goal, then a Timeout row, then 154's
+    # first overtime snap. The kick keeps its own team (start == end), but the next real play is the
+    # other team's. cfbfastR keys the half-end play on that play's team (create_wpa_naive.R:178-187,
+    # wpa_change_nxt_ind = pos_team != lead_pos_team2): 1 - its wp_before (0.498), not the model's
+    # own end state (0.476).
+    f = _frame(401858224).with_row_index("row")
+    last = f.filter((pl.col("period") <= 4) & (pl.col("type.text") != "Timeout")).tail(1).row(0, named=True)
+    nxt = f.filter((pl.col("row") > last["row"]) & (pl.col("type.text") != "Timeout")).head(1).row(0, named=True)
+    if not (last["end_of_half"] is True and last["start.pos_team.id"] == last["end.pos_team.id"]):
+        pytest.fail(f"401858224's regulation no longer ends on a kept-possession play ({last['type.text']})")
+    if nxt["start.pos_team.id"] == last["start.pos_team.id"]:
+        pytest.fail("401858224's first overtime snap is no longer the other team's")
+    assert abs(last["wp_after"] - (1 - nxt["wp_before"])) < 1e-9, (last["wp_after"], nxt["wp_before"])
+
+
+@pytest.mark.parametrize("game_id", _params(CAPTURES))
+def test_half_end_home_wp_is_continuous_into_the_next_real_play(game_id):
+    # R832-6 / R966-2: nothing happens between the play that ends a half and the next real play (past
+    # any Timeout row), so the home team's WP after the one is its WP before the other, whichever team
+    # snaps next (cfbfastR create_wpa_naive.R:178-187). Most such boundaries are the first half's last
+    # snap and the other team's 2H kickoff, which took the model's end state when the play kept the ball
+    # (63 of 158 capture boundaries before the fix).
+    f = _frame(game_id).with_row_index("row").filter(pl.col("type.text").fill_null("") != "Timeout")
+    bad = []
+    for sfx in ("", "_naive"):
+        pairs = f.select(
+            "row",
+            "type.text",
+            "end_of_half",
+            pl.col(f"home_wp_after{sfx}").alias("after"),
+            pl.col(f"home_wp_before{sfx}").shift(-1).alias("next_before"),
+        ).filter((pl.col("end_of_half") == True) & pl.col("next_before").is_not_null())
+        bad += [(sfx, *r) for r in pairs.filter((pl.col("after") - pl.col("next_before")).abs() >= 1e-6).rows()]
+    assert not bad, bad
 
 
 # --- supp-002: ESPN's degenerate end block --------------------------------------------------------
