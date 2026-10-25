@@ -72,3 +72,28 @@ def test_release_refuses_a_version_that_is_already_released(tmp_path):
         release_changelog.release("0.1.0", dt.date(2026, 10, 8), log, d)
     assert (d / "a.fixed.md").exists()
     assert log.read_text(encoding="utf-8") == TOC + "\n" + OLD
+
+
+@pytest.mark.parametrize("version", ["0.1.1", "0.1.7", "0.0.9", "0.1.6rc1", "0.1.1.post1"])
+def test_release_refuses_breaking_fragments_in_a_patch(tmp_path, version):
+    """C-4: a *.breaking.md fragment needs the minor (or major) to rise past the newest release (0.1.0 here)."""
+    log, d = _tree(
+        tmp_path, {"a.breaking.md": "- **NFL:** ids are Int64. (#9)\n", "b.fixed.md": "- **NBA:** c. (#3)\n"}
+    )
+    with pytest.raises(ValueError, match=r"breaking-change fragments.*release 0\.2\.0"):
+        release_changelog.release(version, dt.date(2026, 10, 25), log, d)
+    assert (d / "a.breaking.md").exists()
+    assert log.read_text(encoding="utf-8") == TOC + "\n" + OLD
+
+
+@pytest.mark.parametrize("version", ["0.2.0", "1.0.0", "0.2.0rc1"])
+def test_release_allows_breaking_fragments_in_a_minor_or_major(tmp_path, version):
+    log, d = _tree(tmp_path, {"a.breaking.md": "- **NFL:** ids are Int64. (#9)\n"})
+    removed = release_changelog.release(version, dt.date(2026, 10, 25), log, d)
+    assert [p.name for p in removed] == ["a.breaking.md"]
+    assert f"## {version} Release: October 25, 2026" in log.read_text(encoding="utf-8")
+
+
+def test_release_allows_a_patch_without_breaking_fragments(tmp_path):
+    log, d = _tree(tmp_path, {"a.fixed.md": "- **NFL:** b. (#2)\n"})
+    release_changelog.release("0.1.1", dt.date(2026, 10, 25), log, d)

@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Optional
 import pandas as pd
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _cast_id_columns, _documented_empty, _pandas_ids
+from sportsdataverse._codegen_runtime import _cast_id_columns, _documented_empty, _is_missing, _pandas_ids
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import _data_only, _dict_only
 
@@ -52,9 +52,13 @@ def _to_frame(
     for col in [c for c in pdf.columns if pd.api.types.is_object_dtype(pdf[c].dtype)]:
         # The feed sometimes ships one field as 0 in one row and "1" in the next (gamebygame
         # ``plus_minus``); pyarrow rejects such a column, so a mixed scalar column becomes strings.
-        kinds = {type(v) for v in pdf[col] if isinstance(v, (int, float, str, bool))}
+        # A missing cell (pandas 2.3 fills a missing key with NaN) is neither a kind nor stringified: str(NaN)
+        # is "nan", which makes the id cast refuse the column.
+        kinds = {type(v) for v in pdf[col] if isinstance(v, (int, float, str, bool)) and not _is_missing(v)}
         if len(kinds) > 1 and str in kinds:
-            pdf[col] = pdf[col].map(lambda v: str(v) if isinstance(v, (int, float, bool)) else v)
+            pdf[col] = pdf[col].map(
+                lambda v: None if _is_missing(v) else str(v) if isinstance(v, (int, float, bool)) else v
+            )
     if not len(pdf):
         return pdf if return_as_pandas else pl.DataFrame()
     # every id Int64 from the raw integer (task 5.2: B-H5, B-L72); a text id is refused and keeps its dtype.

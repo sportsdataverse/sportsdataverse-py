@@ -37,7 +37,11 @@ if TYPE_CHECKING:
 # ---------------------------------------------------------------------------
 # Pipeline version — bump to invalidate all per-game caches.
 # ---------------------------------------------------------------------------
-PIPELINE_VERSION: int = 1  # 1 -> initial release
+# 1 -> initial release
+# 2 -> task 5.2: NFLPlayProcess ids are Int64 (`*_player_id` was String; `pos_team` and its leads/lags
+#      were Int32). A v1 frame from the cache would mix with v2 ones, and the season concat
+#      (`diagonal_relaxed`) would turn those columns back into String for every game.
+PIPELINE_VERSION: int = 2
 
 logger = logging.getLogger("sdv.nfl_build")
 logger.addHandler(logging.NullHandler())

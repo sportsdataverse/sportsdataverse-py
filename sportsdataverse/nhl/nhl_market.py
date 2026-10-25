@@ -48,7 +48,9 @@ from scipy.stats import norm
 from sportsdataverse.nhl.nhl_prediction_constants import get_constants
 
 _PREDICT_SCHEMA: dict[str, pl.PolarsDataType] = {
-    "game_id": pl.Utf8,
+    # Int64, the dtype the NHL / ESPN schedule parsers give game_id since task 5.2: an empty slate stacks with a
+    # full one (a full slate passes the caller's game_id through).
+    "game_id": pl.Int64,
     "home_team": pl.Utf8,
     "away_team": pl.Utf8,
     "neutral_site": pl.Boolean,
@@ -235,7 +237,7 @@ def nhl_predict_games(
 
         |col_name      |type   |
         |:-------------|:------|
-        |game_id        |String |
+        |game_id        |Int64  |
         |home_team      |String |
         |away_team      |String |
         |neutral_site   |Boolean|
