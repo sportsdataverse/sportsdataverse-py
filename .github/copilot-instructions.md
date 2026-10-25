@@ -362,7 +362,7 @@ Mirror their structure for any new ESPN-endpoint module:
 
 - Test files mirror the source layout: `tests/<sport>/test_<sport>_<module>.py`.
 - Live-API tests use `@skip_if_no_live` from `tests/conftest.py` and run only
-  when `SDV_PY_LIVE_TESTS=1` is set. `tests.yml`'s live job sets it on pushes to
+  when `SDV_PY_LIVE_TESTS=1` is set. `live-tests.yml` sets it on pushes to
   main and manual runs, not on PRs (opt out with a `workflow_dispatch`
   `live_tests=false`), and `live-tests-cron.yml` always sets it. A timeout, dropped
   connection or 429/5xx skips a live test instead of failing it. `nba_stats` / `wnba_stats` live tests use the separate

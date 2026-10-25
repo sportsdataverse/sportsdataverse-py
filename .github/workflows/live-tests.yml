@@ -1,0 +1,55 @@
+# The live-API suite (every test gated by SDV_PY_LIVE_TESTS=1), on pushes to main and
+# manual runs. Split out of tests.yml on 2026-10-25: these endpoints are third-party,
+# so a red run here usually means an upstream API changed, not that our code broke,
+# and it must not turn the `tests` workflow (and the README `tests` badge) red.
+# Never on PRs: a PR author cannot act on an upstream outage. live-tests-cron.yml adds
+# the weekly schedule leg and the drift tracking issue.
+name: live tests
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      live_tests:
+        description: "Set SDV_PY_LIVE_TESTS=1 to include live API tests"
+        required: false
+        default: "true"
+
+# A newer main push supersedes a running live suite (about 2 h).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+
+jobs:
+  live:
+    name: pytest (live APIs)
+    # Ubuntu: nothing here is platform-specific, and the macOS runners were the flaky part.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - name: Set up Python
+        run: uv python install 3.13.2
+      - name: Install project + extras + dep groups
+        run: uv sync --all-extras --all-groups --frozen --python 3.13.2
+      - name: Run tests (live API tests included)
+        env:
+          SDV_PY_LIVE_TESTS: ${{ github.event.inputs.live_tests != 'false' && '1' || '' }}
+          # Bound the retry budget. The library default is 15 retries at a 30s
+          # timeout -- correct for a scraper that must not lose a game, badly wrong
+          # here, where one unreachable host can park a single call for 15 x 30s
+          # plus backoff. A CI failure should surface in seconds, not minutes.
+          SDV_PY_HTTP_RETRIES: "3"
+          SDV_PY_HTTP_TIMEOUT: "15"
+        # -W default: warnings report here rather than fail; the PR jobs enforce pytest.ini's `error`.
+        # A command-line -W outranks pytest.ini's filterwarnings, so the two known kloppy notices
+        # (its unclosed spool buffer, see pytest.ini, and its StatsBomb licence notice) are re-ignored after it.
+        run: uv run --frozen pytest -n auto --dist loadgroup --maxfail=10 -W default -W "ignore:Unclosed file <kloppy.infra.io.buffered_stream.BufferedStream:ResourceWarning" -W "ignore::UserWarning:kloppy._providers.statsbomb" --cov=sportsdataverse --cov-report=term-missing:skip-covered

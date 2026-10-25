@@ -125,7 +125,7 @@ def pytest_runtest_call(item: pytest.Item):
 # fingerprint block compounds with IP reputation, so even with curl_cffi browser
 # impersonation the request silently stalls (not a fast failure) from CI runners.
 # These live tests therefore need a SEPARATE opt-in that NO CI workflow sets
-# (tests.yml + live-tests-cron.yml only ever set SDV_PY_LIVE_TESTS), so they run
+# (live-tests.yml + live-tests-cron.yml only ever set SDV_PY_LIVE_TESTS), so they run
 # only when a contributor explicitly enables them from a residential IP.
 NBA_STATS_LIVE: bool = os.environ.get("SDV_PY_NBA_STATS_LIVE") == "1"
 

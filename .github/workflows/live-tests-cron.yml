@@ -1,8 +1,8 @@
 # Weekly drift detector for the live-API tests in tests/test_espn_live.py
 # (and any other test gated by SDV_PY_LIVE_TESTS=1).
 #
-# The main tests.yml already runs the live suite on every PR + push to
-# main + workflow_dispatch. This workflow adds the *schedule* leg so
+# live-tests.yml already runs the live suite on every push to main and
+# on workflow_dispatch (never on PRs). This workflow adds the *schedule* leg so
 # upstream API drift surfaces even when the repo is quiet — e.g. ESPN
 # silently renames a column, NHL EDGE goes 404, MLB Stats API moves an
 # endpoint. On failure, the workflow opens (or updates) a single
