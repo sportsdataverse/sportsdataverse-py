@@ -58,3 +58,52 @@ euroleague:
   - name: euroleague-api
     url: https://github.com/giasemidis/euroleague_api
     note: community Python client for the same EuroLeague and EuroCup APIs
+nba:
+  - name: sdvplot
+    url: https://github.com/sportsdataverse/sdvplot
+    note: "`court_coords()` puts stats-API `x_legacy` / `y_legacy` shots on the court `surface(\"nba\")` draws"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the regulation NBA court (and every other surface) sdvplot draws with
+wnba:
+  - name: sdvplot
+    url: https://github.com/sportsdataverse/sdvplot
+    note: "`court_coords()` puts stats-API `x_legacy` / `y_legacy` shots on the court `surface(\"wnba\")` draws"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the regulation WNBA court sdvplot draws with
+nhl:
+  - name: sdvplot
+    url: https://github.com/sportsdataverse/sdvplot
+    note: "`surface(\"nhl\")` draws the rink in a team's colors; `team_colors()` takes NHL stats ids"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the regulation NHL rink sdvplot draws with
+pwhl:
+  - name: sdvplot
+    url: https://github.com/sportsdataverse/sdvplot
+    note: "`surface(\"pwhl\")` draws the rink in a team's colors"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the rink sdvplot draws with
+mlb:
+  - name: sdvplot
+    url: https://github.com/sportsdataverse/sdvplot
+    note: "`surface(\"mlb\")` draws the field in a team's colors"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the regulation MLB field sdvplot draws with
+nfl:
+  - name: sdvplot
+    url: https://github.com/sportsdataverse/sdvplot
+    note: "`surface(\"nfl\")` draws the field with a team's end zones"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the regulation NFL field sdvplot draws with
+cfb:
+  - name: sdvplot
+    url: https://github.com/sportsdataverse/sdvplot
+    note: "`surface(\"cfb\")` draws the field with a team's end zones"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the regulation college football field sdvplot draws with

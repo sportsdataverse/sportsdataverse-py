@@ -126,6 +126,11 @@ description: "sdv-py NHL: endpoint references, dataset loaders and parsers for N
 - [`year_to_season`](reference/additional/dates-and-seasons#year_to_season)
 
 
+## See also
+
+- [sdvplot](https://github.com/sportsdataverse/sdvplot) — `surface("nhl")` draws the rink in a team's colors; `team_colors()` takes NHL stats ids
+- [sportypy](https://sportypy.sportsdataverse.org/) — the regulation NHL rink sdvplot draws with
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):

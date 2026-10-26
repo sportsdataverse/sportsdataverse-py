@@ -32,8 +32,11 @@ def _src(path: Path) -> str:
     return "\n".join("".join(c["source"]) for c in doc["cells"])
 
 
-def test_there_are_fifteen_notebooks():
-    assert len(NOTEBOOKS) == 15
+def test_every_notebook_is_rendered():
+    """Each notebook has a tutorial-page entry in render_notebooks.TUTORIALS, and each entry a notebook."""
+    from tools.codegen.render_notebooks import TUTORIALS
+
+    assert {p.stem for p in NOTEBOOKS} == {stem for stem, _label, _pos in TUTORIALS}
 
 
 def _safe_cell(path: Path) -> str | None:
@@ -84,10 +87,9 @@ def test_notebook_covers_the_missing_families(stem, needles):
     assert not missing, f"{stem}.ipynb does not cover: {missing}"
 
 
-def test_cron_says_fifteen_notebooks():
+def test_cron_counts_the_notebooks():
     body = CRON.read_text(encoding="utf-8")
-    assert "15 live notebooks" in body
-    assert "12 live notebooks" not in body
+    assert f"{len(NOTEBOOKS)} live notebooks" in body
 
 
 @pytest.mark.parametrize("nb", NOTEBOOKS, ids=lambda p: p.stem)

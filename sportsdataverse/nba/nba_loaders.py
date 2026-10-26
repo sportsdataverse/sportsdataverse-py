@@ -2905,6 +2905,11 @@ def load_nba_stats_shots(seasons, return_as_pandas: bool = False):
         Quick start::
 
             load_nba_stats_shots(seasons=2025)
+
+        See Also:
+            * `sdvplot`_ - court_coords() converts x_legacy / y_legacy to the court surface("nba") draws
+
+        .. _sdvplot: https://sdvplot.sportsdataverse.org/
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):

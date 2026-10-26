@@ -63,6 +63,10 @@ TUTORIALS: list[tuple[str, str, int]] = [
     ("14_cricket_intro", "Cricket", 13),
     ("15_other_espn_leagues_intro", "Other ESPN leagues", 14),
     ("12_odds_intro", "Betting odds", 15),
+    ("16_international_basketball_intro", "International basketball", 16),
+    ("17_european_college_hockey_intro", "European & college hockey", 17),
+    ("18_prediction_markets_intro", "Prediction markets", 18),
+    ("19_more_sources_intro", "More sources", 19),
 ]
 
 

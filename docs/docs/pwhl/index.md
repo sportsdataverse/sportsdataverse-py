@@ -51,6 +51,11 @@ description: "sdv-py PWHL: endpoint references, dataset loaders and parsers for 
 - [`pwhl_season_id`](reference/additional/dates-and-seasons#pwhl_season_id)
 
 
+## See also
+
+- [sdvplot](https://github.com/sportsdataverse/sdvplot) — `surface("pwhl")` draws the rink in a team's colors
+- [sportypy](https://sportypy.sportsdataverse.org/) — the rink sdvplot draws with
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):

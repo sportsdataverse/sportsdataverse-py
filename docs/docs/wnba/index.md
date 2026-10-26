@@ -107,6 +107,11 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_team_crosswalk`](reference/additional/ids-and-crosswalks#wnba_team_crosswalk)
 
 
+## See also
+
+- [sdvplot](https://github.com/sportsdataverse/sdvplot) — `court_coords()` puts stats-API `x_legacy` / `y_legacy` shots on the court `surface("wnba")` draws
+- [sportypy](https://sportypy.sportsdataverse.org/) — the regulation WNBA court sdvplot draws with
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):

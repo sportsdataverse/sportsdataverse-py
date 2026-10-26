@@ -400,6 +400,19 @@ def test_loader_without_notes_emits_no_empty_caveat_block():
     assert ":::caution" not in page
 
 
+def test_loader_see_also_renders_after_the_example():
+    """A manifest `see_also` becomes the docstring's See Also block; none means no block."""
+    from tools.codegen import spec
+
+    kw = dict(fn="load_demo_shots", league="nba", base="sdv", url="demo/demo_{season}.parquet", tag="demo")
+    link = {"name": "sdvplot", "note": "draws the court", "url": "https://sdvplot.sportsdataverse.org/"}
+    doc = generate._build_loader_docstring(spec.Loader(**kw, see_also=[link]))
+    assert doc.index("Example:") < doc.index("See Also:")
+    assert "* `sdvplot`_ - draws the court" in doc
+    assert ".. _sdvplot: https://sdvplot.sportsdataverse.org/" in doc
+    assert "See Also:" not in generate._build_loader_docstring(spec.Loader(**kw))
+
+
 def _failing_import(exc):
     def fake(name, *a, **k):
         raise exc

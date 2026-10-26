@@ -476,9 +476,12 @@ def shot_coordinates(pbp: pl.DataFrame) -> pl.DataFrame:
         See Also:
             * `hoopR`_ -- the R companion for NBA and men's college play-by-play
             * `wehoop`_ -- the R companion for WNBA and women's college play-by-play
+            * `sdvplot`_ -- ``court_coords()`` converts ``x_legacy`` / ``y_legacy`` to the court
+              ``surface("nba")`` draws
 
         .. _hoopR: https://hoopR.sportsdataverse.org
         .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _sdvplot: https://sdvplot.sportsdataverse.org/
     """
     located = (
         (pl.col("shooting_play") == True)

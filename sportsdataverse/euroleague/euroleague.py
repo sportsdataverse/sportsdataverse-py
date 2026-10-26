@@ -351,9 +351,11 @@ def euroleague_game_points(
         See Also:
             * `EuroLeague Basketball`_ - the site the Competition Engine and live APIs serve (competitions, seasons, clubs, games)
             * `euroleague-api`_ - community Python client over the same v2 / v3 / live APIs
+            * `sdvplot`_ - court_coords(provider="euroleague") converts coord_x / coord_y to meters on the FIBA court surface("fiba") draws
 
         .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
         .. _euroleague-api: https://github.com/giasemidis/euroleague_api
+        .. _sdvplot: https://sdvplot.sportsdataverse.org/
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
