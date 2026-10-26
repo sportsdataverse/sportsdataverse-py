@@ -1,11 +1,11 @@
 ---
-title: EUROLEAGUE — EuroLeague APIs (api-live.euroleague.net v2 + v3, live.euroleague.net/api)
+title: EuroLeague — EuroLeague APIs (api-live.euroleague.net v2 + v3, live.euroleague.net/api)
 sidebar_label: EuroLeague APIs (api-live.euroleague.net v2 + v3, live.euroleague.net/api)
-description: "EUROLEAGUE — EuroLeague APIs (api-live.euroleague.net v2 + v3, live.euroleague.net/api) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "EuroLeague — EuroLeague APIs (api-live.euroleague.net v2 + v3, live.euroleague.net/api) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
 ---
-# EUROLEAGUE — EuroLeague APIs (api-live.euroleague.net v2 + v3, live.euroleague.net/api)
+# EuroLeague — EuroLeague APIs (api-live.euroleague.net v2 + v3, live.euroleague.net/api)
 
 `sportsdataverse.basketball.euroleague` — 15 endpoints.
 

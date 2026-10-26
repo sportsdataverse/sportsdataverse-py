@@ -1,58 +1,10 @@
 ---
-title: "CFB — additional Python functions — Models and calculators: cfb_adjusted–fit_field"
+title: "College football — additional Python functions — Models and calculators: cfb_adjusted–fit_field"
 sidebar_label: "Models and calculators: cfb_adjusted–fit_field"
 sidebar_position: 8
-description: "CFB — additional Python functions — Models and calculators: cfb_adjusted–fit_field — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — additional Python functions — Models and calculators: cfb_adjusted–fit_field — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# CFB — additional Python functions — Models and calculators: cfb_adjusted–fit_field
-
-### cfb_adjusted_epa {#cfb_adjusted_epa}
-
-`cfb_adjusted_epa(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Season opponent-adjusted per-team EPA from a season's play-by-play.
-
-Fits one ridge of per-play `EPA` on offense-team, defense-team, and
-home-field indicators (every team shrunk toward the league average by its own
-play count) over the `0.05 <= wp_before_naive <= 0.95` pass
-and rush plays, nets each team's per-game raw EPA against the opponent's
-fitted strength, and averages to a season figure. In-sample/descriptive (the
-fit uses the whole season); for leak-free per-game values use
-`cfb_adjusted_epa_by_game`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the columns listed in the module docstring. One season at a time. |
-| `ridge_lambda` | `float \| None` | `None` | Ridge penalty. Under `method="current"` it is per play of a full team season: each team keeps `n / (n + ridge_lambda * 577)` of its own signal for its `n` fit plays and is shrunk toward the league average by the rest (~7% at a full season, most of it on a handful of plays); must be > 0. Under `method="pre598"` it is passed unscaled to the old standardized ridge (the per-observation penalty; no 577 scaling, no positivity check). `None` (default) means 0.075 for `"current"` (the owner's choice, `_ADJ_EPA_LAMBDA`) and 0.035 for `"pre598"`. |
-| `method` | `Literal['current', 'pre598']` | `'current'` | `"current"` (default) or `"pre598"`, the fit this function used before #598 (`0.1 <= wp_before <= 0.9` band, standardized ridge with the first team id as the reference level, lambda 0.035). pre598 reads `wp_before` instead of `wp_before_naive`. It exists for nfl-data's NFL team summaries, is not validated for NFL either, and is kept only for continuity until NFL is validated. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
-
-**Returns**
-
-One row per team (>= 2 valid games): `team_id`, `pos_team`, `valid_games`, `adj_off_epa`, `adj_def_epa`, `off_strength_faced`, `def_strength_faced`, `net_adj_epa` and their `*_rank` columns.
-
-No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `KeyError` | If `plays` is missing a required column. |
-| `ValueError` | If `method` is unknown, or (`"current"`) if `ridge_lambda` is not positive or no play falls in the `wp_before_naive` fit band. |
-
-**Example**
-
-```python
-import sportsdataverse.cfb as cfb
-pbp = cfb.load_cfb_pbp(seasons=[2023])
-cfb.cfb_adjusted_epa(pbp).sort("net_adj_epa_rank").head()
-
-# NFL team summaries (the pre-#598 method; reads wp_before)
-
-cfb.cfb_adjusted_epa(nfl_plays, method="pre598")
-```
+# College football — additional Python functions — Models and calculators: cfb_adjusted–fit_field
 
 ### cfb_adjusted_epa_by_game {#cfb_adjusted_epa_by_game}
 
@@ -126,13 +78,13 @@ simplification).
 
 | col_name | type | description |
 |---|---|---|
-| `sim` | integer | Simulation identifier the game row belongs to (1..n simulated seasons; ELO ratings never mix across simulations). |
-| `week` | integer | Week of the season the game is played in; only games matching the requested week_num are filled. |
-| `game_type` | character | Game classification in the seedr engine schema - REG (regular season), CONF_CHAMP (conference championship) or POST (postseason/CFP). |
-| `home_team` | character | Team name of the home team in the simulated game (returned games frame). |
-| `away_team` | character | Team name of the away team in the simulated game (returned games frame). |
-| `result` | double | Home-team margin of victory (home score minus away score) - real results are preserved and the target week's unplayed games are filled from the ELO model. |
-| `neutral` | integer | Neutral-site flag (1 = neutral site, 0 = true home game; only non-neutral games receive the ELO home bump). |
+| `sim` | Int64 | Simulation identifier the game row belongs to (1..n simulated seasons; ELO ratings never mix across simulations). |
+| `week` | Int64 | Week of the season the game is played in; only games matching the requested week_num are filled. |
+| `game_type` | String | Game classification in the seedr engine schema - REG (regular season), CONF_CHAMP (conference championship) or POST (postseason/CFP). |
+| `home_team` | String | Team name of the home team in the simulated game (returned games frame). |
+| `away_team` | String | Team name of the away team in the simulated game (returned games frame). |
+| `result` | Float64 | Home-team margin of victory (home score minus away score) - real results are preserved and the target week's unplayed games are filled from the ELO model. |
+| `neutral` | Int64 | Neutral-site flag (1 = neutral site, 0 = true home game; only non-neutral games receive the ELO home bump). |
 
 **Example**
 
@@ -204,13 +156,13 @@ One row per (season, team_id); zero-row frame with the documented schema on empt
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season the field-position stats cover. |
-| `team_id` | character | Team ESPN id (character join key). |
-| `drives` | integer | Offensive drives counted (garbage-time drives excluded by default). |
-| `avg_start_yardline` | double | Mean drive-start yard line from the team's own goal (higher = better field position). |
-| `fp_ep` | double | Mean bundled expected points of the team's drive starts. |
-| `fp_margin` | double | Own fp_ep minus the mean drive-start EP of opponents' drives faced. |
-| `points_per_drive` | double | Mean realized offensive points per drive (TD=7, FG=3). |
+| `season` | Int64 | Season the field-position stats cover. |
+| `team_id` | String | Team ESPN id (character join key). |
+| `drives` | Int64 | Offensive drives counted (garbage-time drives excluded by default). |
+| `avg_start_yardline` | Float64 | Mean drive-start yard line from the team's own goal (higher = better field position). |
+| `fp_ep` | Float64 | Mean bundled expected points of the team's drive starts. |
+| `fp_margin` | Float64 | Own fp_ep minus the mean drive-start EP of opponents' drives faced. |
+| `points_per_drive` | Float64 | Mean realized offensive points per drive (TD=7, FG=3). |
 
 **Example**
 
@@ -280,13 +232,13 @@ One row per game with `game_id`, `home_team_id`, `away_team_id`, `neutral_site`,
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | Game identifier carried through from the input schedule. |
-| `home_team_id` | character | Home team ESPN id (character; the ratings `team_id` join key). |
-| `away_team_id` | character | Away team ESPN id (character; the ratings `team_id` join key). |
-| `neutral_site` | logical | Whether the game is at a neutral site (home-field advantage is dropped when true). |
-| `exp_margin` | double | Expected home scoring margin in points (net_points_scale * net rating differential + the ridge-native home-field advantage on non-neutral fields). |
-| `home_win_prob` | double | Home win probability, Phi(exp_margin / margin_sd) under a Gaussian margin model. |
-| `exp_total` | double | Expected combined point total from the fitted efficiency + pace totals model. |
+| `game_id` | Int64 | Game identifier carried through from the input schedule. |
+| `home_team_id` | String | Home team ESPN id (character; the ratings `team_id` join key). |
+| `away_team_id` | String | Away team ESPN id (character; the ratings `team_id` join key). |
+| `neutral_site` | Boolean | Whether the game is at a neutral site (home-field advantage is dropped when true). |
+| `exp_margin` | Float64 | Expected home scoring margin in points (net_points_scale * net rating differential + the ridge-native home-field advantage on non-neutral fields). |
+| `home_win_prob` | Float64 | Home win probability, Phi(exp_margin / margin_sd) under a Gaussian margin model. |
+| `exp_total` | Float64 | Expected combined point total from the fitted efficiency + pace totals model. |
 
 **Raises**
 
@@ -338,24 +290,24 @@ A DataFrame with one row per `team_id`, columns in this order: `season` (Int64 -
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season (4-digit year). |
-| `team_id` | character | ESPN team id. |
-| `adj_off_epa` | double |  |
-| `adj_def_epa` | double |  |
-| `adj_st_epa` | double |  |
-| `adj_net` | double |  |
-| `fei_off` | double |  |
-| `fei_def` | double |  |
-| `fei_net` | double |  |
-| `games` | integer | Number of games included in the ATS summary. |
-| `off_pace` | double |  |
-| `off_rank` | integer |  |
-| `def_rank` | integer |  |
-| `net_rank` | integer |  |
-| `net_z` | double |  |
-| `fei_off_rank` | integer |  |
-| `fei_def_rank` | integer |  |
-| `fei_net_rank` | integer |  |
+| `season` | Int64 | Season (4-digit year). |
+| `team_id` | String | ESPN team id. |
+| `adj_off_epa` | Float64 |  |
+| `adj_def_epa` | Float64 |  |
+| `adj_st_epa` | Float64 |  |
+| `adj_net` | Float64 |  |
+| `fei_off` | Float64 |  |
+| `fei_def` | Float64 |  |
+| `fei_net` | Float64 |  |
+| `games` | Int64 | Number of games included in the ATS summary. |
+| `off_pace` | Float64 |  |
+| `off_rank` | Int64 |  |
+| `def_rank` | Int64 |  |
+| `net_rank` | Int64 |  |
+| `net_z` | Float64 |  |
+| `fei_off_rank` | Int64 |  |
+| `fei_def_rank` | Int64 |  |
+| `fei_net_rank` | Int64 |  |
 
 **Raises**
 
@@ -410,11 +362,11 @@ Per team: `season` (Int64, = target), `team_id` (Utf8 ESPN id), `pred_wins`, `pr
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Target season being projected (equals the requested target_season). |
-| `team_id` | character | ESPN team id as a string (integer-origin). |
-| `pred_wins` | double | Ridge-projected season win total from preseason roster features. |
-| `pred_margin` | double | Ridge-projected average scoring margin per game. |
-| `pred_net_epa` | double | Reserved adjusted-EPA projection - currently null (the hosted pbp source 404s). |
+| `season` | Int64 | Target season being projected (equals the requested target_season). |
+| `team_id` | String | ESPN team id as a string (integer-origin). |
+| `pred_wins` | Float64 | Ridge-projected season win total from preseason roster features. |
+| `pred_margin` | Float64 | Ridge-projected average scoring margin per game. |
+| `pred_net_epa` | Float64 | Reserved adjusted-EPA projection - currently null (the hosted pbp source 404s). |
 
 **Example**
 
@@ -454,13 +406,13 @@ Per `(season, team_id)`: `team` (Utf8), `talent_composite` (Float64), `talent_ra
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season the talent composite describes (trailing eligible classes aggregated). |
-| `team_id` | character | 247Sports signed-institution team key as a string (integer-origin; joins to the recruit feed, not ESPN). |
-| `team` | character | 247Sports full team name - the cross-source name-join key (the recruit-feed and talent-feed id spaces differ). |
-| `talent_composite` | double | Class-recency-weighted sum of per-recruit star points (247 Team Talent Composite style); the 247 snapshot value when composite_247 is supplied. |
-| `talent_rank` | integer | Dense rank on talent_composite descending within season (best = 1). |
-| `blue_chip_ratio` | double | Share of the trailing four signing classes rated 4+ stars. |
-| `n_recruits` | integer | Total signees across the trailing recruiting-class window. |
+| `season` | Int64 | Season the talent composite describes (trailing eligible classes aggregated). |
+| `team_id` | String | 247Sports signed-institution team key as a string (integer-origin; joins to the recruit feed, not ESPN). |
+| `team` | String | 247Sports full team name - the cross-source name-join key (the recruit-feed and talent-feed id spaces differ). |
+| `talent_composite` | Float64 | Class-recency-weighted sum of per-recruit star points (247 Team Talent Composite style); the 247 snapshot value when composite_247 is supplied. |
+| `talent_rank` | Int64 | Dense rank on talent_composite descending within season (best = 1). |
+| `blue_chip_ratio` | Float64 | Share of the trailing four signing classes rated 4+ stars. |
+| `n_recruits` | Int64 | Total signees across the trailing recruiting-class window. |
 
 **Raises**
 
@@ -509,16 +461,16 @@ Dict of frames mirroring the nflseedR summary list: * `"standings"` — per (sim
 
 | col_name | type | description |
 |---|---|---|
-| `team` | character | Team name the simulated probabilities belong to (overall summary frame). |
-| `conference` | character | Conference the team belongs to; null or "FBS Independents" marks an independent. |
-| `wins` | double | Mean wins per simulated season (all game types through the conference championship). |
-| `losses` | double | Mean losses per simulated season (all game types through the conference championship). |
-| `ties` | double | Mean ties per simulated season. |
-| `win_pct` | double | Mean overall win percentage across the simulated seasons. |
-| `won_conf` | double | Share of simulations in which the team won its conference (CONF_CHAMP game winner, or rank-1 fallback). |
-| `made_playoff` | double | Share of simulations in which the team made the College Football Playoff field. |
-| `first_round_bye` | double | Share of simulations in which the team earned a CFP first-round bye (seed 4 or better). |
-| `won_cfp` | double | Share of simulations in which the team won the College Football Playoff national championship. |
+| `team` | String | Team name the simulated probabilities belong to (overall summary frame). |
+| `conference` | String | Conference the team belongs to; null or "FBS Independents" marks an independent. |
+| `wins` | Float64 | Mean wins per simulated season (all game types through the conference championship). |
+| `losses` | Float64 | Mean losses per simulated season (all game types through the conference championship). |
+| `ties` | Float64 | Mean ties per simulated season. |
+| `win_pct` | Float64 | Mean overall win percentage across the simulated seasons. |
+| `won_conf` | Float64 | Share of simulations in which the team won its conference (CONF_CHAMP game winner, or rank-1 fallback). |
+| `made_playoff` | Float64 | Share of simulations in which the team made the College Football Playoff field. |
+| `first_round_bye` | Float64 | Share of simulations in which the team earned a CFP first-round bye (seed 4 or better). |
+| `won_cfp` | Float64 | Share of simulations in which the team won the College Football Playoff national championship. |
 
 **Raises**
 
@@ -692,8 +644,8 @@ interpolated onto the full 1..99 grid.
 
 | col_name | type | description |
 |---|---|---|
-| `yardline_own` | integer | Starting yard line from the offense's own goal (1-99). |
-| `ep` | double | Fitted expected points for a drive starting at this yard line (isotonic, non-decreasing). |
+| `yardline_own` | Int64 | Starting yard line from the offense's own goal (1-99). |
+| `ep` | Float64 | Fitted expected points for a drive starting at this yard line (isotonic, non-decreasing). |
 
 **Example**
 

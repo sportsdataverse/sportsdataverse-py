@@ -30,35 +30,35 @@ A polars (or pandas) DataFrame of all games in the data repository.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `season` | integer | Season year (echoed from arg). |
-| `game_date` | character | Game date. |
-| `game_status` | character | Game status text. |
-| `home_team` | character | Home team name. |
-| `home_team_id` | character | Home team identifier. |
-| `away_team` | character | Away team name. |
-| `away_team_id` | character | Away team identifier. |
-| `home_score` | character | Home team final score. |
-| `away_score` | character | Away team final score. |
-| `winner` | character | Whether this competitor won the game. |
-| `venue` | character | Venue where the game was played. |
-| `venue_url` | character | URL for the venue. |
-| `game_type` | character | Game type the row belongs to. |
-| `game_json` | logical | Whether processed game JSON is available. |
-| `game_json_url` | character | URL to the processed game JSON. |
-| `PBP` | logical | Whether play-by-play data is available. |
-| `player_box` | logical | Whether player box score data is available. |
-| `skater_box` | logical | Whether skater box data is available. |
-| `goalie_box` | logical | Whether goalie box data is available. |
-| `team_box` | logical | Whether team box score data is available. |
-| `game_info` | logical | Whether game info data is available. |
-| `game_rosters` | logical | Whether game rosters data is available. |
-| `scoring_summary` | logical | Whether scoring summary data is available. |
-| `penalty_summary` | logical | Whether penalty summary data is available. |
-| `three_stars` | logical | Whether three stars data is available. |
-| `officials` | logical | Whether officials data is available. |
-| `shots_by_period` | logical | Whether shots-by-period data is available. |
-| `shootout` | logical | Whether shootout data is available. |
+| `game_id` | String | Unique game identifier. |
+| `season` | Int64 | Season year (echoed from arg). |
+| `game_date` | String | Game date. |
+| `game_status` | String | Game status text. |
+| `home_team` | String | Home team name. |
+| `home_team_id` | String | Home team identifier. |
+| `away_team` | String | Away team name. |
+| `away_team_id` | String | Away team identifier. |
+| `home_score` | String | Home team final score. |
+| `away_score` | String | Away team final score. |
+| `winner` | String | Whether this competitor won the game. |
+| `venue` | String | Venue where the game was played. |
+| `venue_url` | String | URL for the venue. |
+| `game_type` | String | Game type the row belongs to. |
+| `game_json` | Boolean | Whether processed game JSON is available. |
+| `game_json_url` | String | URL to the processed game JSON. |
+| `PBP` | Boolean | Whether play-by-play data is available. |
+| `player_box` | Boolean | Whether player box score data is available. |
+| `skater_box` | Boolean | Whether skater box data is available. |
+| `goalie_box` | Boolean | Whether goalie box data is available. |
+| `team_box` | Boolean | Whether team box score data is available. |
+| `game_info` | Boolean | Whether game info data is available. |
+| `game_rosters` | Boolean | Whether game rosters data is available. |
+| `scoring_summary` | Boolean | Whether scoring summary data is available. |
+| `penalty_summary` | Boolean | Whether penalty summary data is available. |
+| `three_stars` | Boolean | Whether three stars data is available. |
+| `officials` | Boolean | Whether officials data is available. |
+| `shots_by_period` | Boolean | Whether shots-by-period data is available. |
+| `shootout` | Boolean | Whether shootout data is available. |
 
 **Example**
 

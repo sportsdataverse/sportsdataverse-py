@@ -2921,7 +2921,7 @@ class CFBPlayProcess(object):
         Reads ``{path_to_json}/{gameId}.json`` where ``path_to_json`` was passed
         to the :class:`CFBPlayProcess` constructor.
 
-        Reading from disk does not make the pipeline offline (C-L3): with the defaults,
+        Reading from disk does not make the pipeline offline: with the defaults,
         ``run_processing_pipeline()`` still requests ESPN participants for every play, and a summary
         with fewer than two pickcenter providers still requests ESPN's odds endpoint. For a rebuild
         that makes no request, pass ``join_participants=False`` and the persisted ``odds_override``

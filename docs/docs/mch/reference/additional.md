@@ -1,10 +1,10 @@
 ---
-title: MCH — additional Python functions
+title: Men's college hockey — additional Python functions
 sidebar_label: Additional functions
-description: "MCH — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
+description: "Men's college hockey — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
-# MCH — additional Python functions
+# Men's college hockey — additional Python functions
 
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.mch` that are not
 generated API-endpoint wrappers (those have their own reference pages).
@@ -34,13 +34,13 @@ One row per team: `team_id, adj_off, adj_def, adj_net, raw_off, raw_def, games`.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character |  |
-| `adj_off` | double |  |
-| `adj_def` | double |  |
-| `adj_net` | double |  |
-| `raw_off` | double |  |
-| `raw_def` | double |  |
-| `games` | integer |  |
+| `team_id` | String |  |
+| `adj_off` | Float64 |  |
+| `adj_def` | Float64 |  |
+| `adj_net` | Float64 |  |
+| `raw_off` | Float64 |  |
+| `raw_def` | Float64 |  |
+| `games` | Int64 |  |
 
 **Example**
 

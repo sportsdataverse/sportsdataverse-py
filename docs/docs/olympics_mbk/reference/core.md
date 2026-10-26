@@ -1,11 +1,11 @@
 ---
-title: OLYMPICS_MBK — ESPN core API (v2)
+title: Olympics men's basketball — ESPN core API (v2)
 sidebar_label: ESPN core API (v2)
-description: "OLYMPICS_MBK — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "Olympics men's basketball — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 22
 toc_max_heading_level: 2
 ---
-# OLYMPICS_MBK — ESPN core API (v2)
+# Olympics men's basketball — ESPN core API (v2)
 
 `sportsdataverse.basketball.olympics_mbk` — 82 endpoints.
 

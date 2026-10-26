@@ -1,10 +1,10 @@
 ---
-title: "CFB — additional Python functions — Yahoo Sports Shangrila"
+title: "College football — additional Python functions — Yahoo Sports Shangrila"
 sidebar_label: "Yahoo Sports Shangrila"
 sidebar_position: 5
-description: "CFB — additional Python functions — Yahoo Sports Shangrila — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — additional Python functions — Yahoo Sports Shangrila — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# CFB — additional Python functions — Yahoo Sports Shangrila
+# College football — additional Python functions — Yahoo Sports Shangrila
 
 ### yahoo_cfb_boxscore {#yahoo_cfb_boxscore}
 
@@ -36,16 +36,16 @@ A polars DataFrame by default (pandas when `return_as_pandas=True`) with one row
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | ESPN game identifier. |
-| `team_id` | character | ESPN team id. |
-| `home_away` | character | `home` or `away`. |
-| `player_id` | character | ESPN player id from the roster entry. |
-| `stat_category` | character |  |
-| `stat_type_id` | character |  |
-| `stat_name` | character | Internal stat key (e.g. `passingYards`). |
-| `stat_abbreviation` | character |  |
-| `stat_variation` | character |  |
-| `value` | character | Metric value. |
+| `game_id` | String | ESPN game identifier. |
+| `team_id` | String | ESPN team id. |
+| `home_away` | String | `home` or `away`. |
+| `player_id` | String | ESPN player id from the roster entry. |
+| `stat_category` | String |  |
+| `stat_type_id` | String |  |
+| `stat_name` | String | Internal stat key (e.g. `passingYards`). |
+| `stat_abbreviation` | String |  |
+| `stat_variation` | String |  |
+| `value` | String | Metric value. |
 
 **Raises**
 
@@ -95,95 +95,95 @@ A wide polars DataFrame (default), a pandas DataFrame when `return_as_pandas=Tru
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | ESPN player id from the roster entry. |
-| `display_name` | character | Human-readable metric name. |
-| `team` | character | Team name. |
-| `team_abbreviation` | character | Team abbreviation. |
-| `passing_completions` | character | Pass completions (split from CFBD's `C/ATT` field). |
-| `rushing_attempts_per_game` | character |  |
-| `sacks_yards_lost` | character |  |
-| `solo_tackles` | character |  |
-| `kickoff_return_touchdowns` | character |  |
-| `field_goals_30_to_39` | character |  |
-| `longest_punt` | character |  |
-| `passing_touchdowns` | character |  |
-| `field_goals_20_to_29` | character |  |
-| `kickoff_returns` | character |  |
-| `field_goals_made_20_29` | character |  |
-| `games_rushing` | character |  |
-| `games_defense` | character |  |
-| `forced_fumbles` | character |  |
-| `interception_return_yards` | character |  |
-| `punt_return_touchdowns` | character |  |
-| `longest_field_goal` | character |  |
-| `sacks_taken` | character |  |
-| `receiving_yards_per_reception` | character |  |
-| `receiving_yards` | character |  |
-| `field_goals_made_30_39` | character |  |
-| `field_goals_made_50_plus` | character |  |
-| `games_offense` | character |  |
-| `punts` | character |  |
-| `field_goals_made` | character |  |
-| `field_goals_50_plus` | character |  |
-| `all_purpose_yards` | character |  |
-| `interception_return_touchdowns` | character |  |
-| `field_goal_percentage` | character |  |
-| `field_goals_made_0_19` | character |  |
-| `rushing_touchdowns` | character |  |
-| `punt_yards_per_punt` | character |  |
-| `field_goal_attempts_40_49` | character |  |
-| `sacks` | character | Team sacks. |
-| `field_goals_made_40_49` | character |  |
-| `longest_rush` | character |  |
-| `games_returns` | character |  |
-| `return_yards_per_kickoff` | character |  |
-| `rushing_yards_per_game` | character |  |
-| `longest_reception` | character |  |
-| `rushing_yards` | character | Team rushing yards. |
-| `games_kicking` | character |  |
-| `passing_yards_per_attempt` | character |  |
-| `rushing_yards_per_attempt` | character |  |
-| `completion_percentage` | character |  |
-| `total_tackles` | character |  |
-| `games_punting` | character |  |
-| `passing_yards_per_game` | character |  |
-| `passes_defended` | character |  |
-| `longest_pass` | character |  |
-| `points_scored_kicking` | character |  |
-| `passing_yards` | character |  |
-| `receiving_yards_per_game` | character |  |
-| `rushing_attempts` | character | Team rushing attempts. |
-| `games_passing` | character |  |
-| `field_goal_attempts_50_plus` | character |  |
-| `targets` | character |  |
-| `qb_rating` | character |  |
-| `games_receiving` | character |  |
-| `longest_kickoff_return` | character |  |
-| `safeties` | character |  |
-| `tackle_assists` | character |  |
-| `passing_attempts` | character | Pass attempts (split from CFBD's `C/ATT` field). |
-| `extra_point_attempts` | character |  |
-| `interceptions_forced` | character |  |
-| `extra_points_made` | character |  |
-| `punt_yards` | character |  |
-| `receptions` | character |  |
-| `field_goal_attempts_30_39` | character |  |
-| `field_goals_40_to_49` | character |  |
-| `punt_return_yards` | character | Team punt return yards. |
-| `field_goal_attempts` | character |  |
-| `longest_punt_return` | character |  |
-| `field_goal_attempts_20_29` | character |  |
-| `field_goal_attempts_0_19` | character |  |
-| `kickoff_return_yards` | character |  |
-| `punt_returns` | character | Number of punt returns. |
-| `sacks_yards` | character |  |
-| `field_goals_0_to_19` | character |  |
-| `receiving_touchdowns` | character |  |
-| `extra_point_percentage` | character |  |
-| `tackles_for_loss` | character | Team tackles for a loss. |
-| `passing_interceptions` | character |  |
-| `return_yards_per_punt` | character |  |
-| `season` | integer | Season (4-digit year). |
+| `player_id` | String | ESPN player id from the roster entry. |
+| `display_name` | String | Human-readable metric name. |
+| `team` | String | Team name. |
+| `team_abbreviation` | String | Team abbreviation. |
+| `passing_completions` | String | Pass completions (split from CFBD's `C/ATT` field). |
+| `rushing_attempts_per_game` | String |  |
+| `sacks_yards_lost` | String |  |
+| `solo_tackles` | String |  |
+| `kickoff_return_touchdowns` | String |  |
+| `field_goals_30_to_39` | String |  |
+| `longest_punt` | String |  |
+| `passing_touchdowns` | String |  |
+| `field_goals_20_to_29` | String |  |
+| `kickoff_returns` | String |  |
+| `field_goals_made_20_29` | String |  |
+| `games_rushing` | String |  |
+| `games_defense` | String |  |
+| `forced_fumbles` | String |  |
+| `interception_return_yards` | String |  |
+| `punt_return_touchdowns` | String |  |
+| `longest_field_goal` | String |  |
+| `sacks_taken` | String |  |
+| `receiving_yards_per_reception` | String |  |
+| `receiving_yards` | String |  |
+| `field_goals_made_30_39` | String |  |
+| `field_goals_made_50_plus` | String |  |
+| `games_offense` | String |  |
+| `punts` | String |  |
+| `field_goals_made` | String |  |
+| `field_goals_50_plus` | String |  |
+| `all_purpose_yards` | String |  |
+| `interception_return_touchdowns` | String |  |
+| `field_goal_percentage` | String |  |
+| `field_goals_made_0_19` | String |  |
+| `rushing_touchdowns` | String |  |
+| `punt_yards_per_punt` | String |  |
+| `field_goal_attempts_40_49` | String |  |
+| `sacks` | String | Team sacks. |
+| `field_goals_made_40_49` | String |  |
+| `longest_rush` | String |  |
+| `games_returns` | String |  |
+| `return_yards_per_kickoff` | String |  |
+| `rushing_yards_per_game` | String |  |
+| `longest_reception` | String |  |
+| `rushing_yards` | String | Team rushing yards. |
+| `games_kicking` | String |  |
+| `passing_yards_per_attempt` | String |  |
+| `rushing_yards_per_attempt` | String |  |
+| `completion_percentage` | String |  |
+| `total_tackles` | String |  |
+| `games_punting` | String |  |
+| `passing_yards_per_game` | String |  |
+| `passes_defended` | String |  |
+| `longest_pass` | String |  |
+| `points_scored_kicking` | String |  |
+| `passing_yards` | String |  |
+| `receiving_yards_per_game` | String |  |
+| `rushing_attempts` | String | Team rushing attempts. |
+| `games_passing` | String |  |
+| `field_goal_attempts_50_plus` | String |  |
+| `targets` | String |  |
+| `qb_rating` | String |  |
+| `games_receiving` | String |  |
+| `longest_kickoff_return` | String |  |
+| `safeties` | String |  |
+| `tackle_assists` | String |  |
+| `passing_attempts` | String | Pass attempts (split from CFBD's `C/ATT` field). |
+| `extra_point_attempts` | String |  |
+| `interceptions_forced` | String |  |
+| `extra_points_made` | String |  |
+| `punt_yards` | String |  |
+| `receptions` | String |  |
+| `field_goal_attempts_30_39` | String |  |
+| `field_goals_40_to_49` | String |  |
+| `punt_return_yards` | String | Team punt return yards. |
+| `field_goal_attempts` | String |  |
+| `longest_punt_return` | String |  |
+| `field_goal_attempts_20_29` | String |  |
+| `field_goal_attempts_0_19` | String |  |
+| `kickoff_return_yards` | String |  |
+| `punt_returns` | String | Number of punt returns. |
+| `sacks_yards` | String |  |
+| `field_goals_0_to_19` | String |  |
+| `receiving_touchdowns` | String |  |
+| `extra_point_percentage` | String |  |
+| `tackles_for_loss` | String | Team tackles for a loss. |
+| `passing_interceptions` | String |  |
+| `return_yards_per_punt` | String |  |
+| `season` | Int64 | Season (4-digit year). |
 
 **Raises**
 
@@ -225,19 +225,19 @@ A wide polars DataFrame (default), a pandas DataFrame when `return_as_pandas=Tru
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | ESPN player id from the roster entry. |
-| `display_name` | character | Human-readable metric name. |
-| `team` | character | Team name. |
-| `team_abbreviation` | character | Team abbreviation. |
-| `games_rushing` | character |  |
-| `rushing_attempts` | character | Team rushing attempts. |
-| `rushing_yards` | character | Team rushing yards. |
-| `rushing_yards_per_game` | character |  |
-| `rushing_yards_per_attempt` | character |  |
-| `rushing_touchdowns` | character |  |
-| `longest_rush` | character |  |
-| `season` | integer | Season (4-digit year). |
-| `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
+| `player_id` | String | ESPN player id from the roster entry. |
+| `display_name` | String | Human-readable metric name. |
+| `team` | String | Team name. |
+| `team_abbreviation` | String | Team abbreviation. |
+| `games_rushing` | String |  |
+| `rushing_attempts` | String | Team rushing attempts. |
+| `rushing_yards` | String | Team rushing yards. |
+| `rushing_yards_per_game` | String |  |
+| `rushing_yards_per_attempt` | String |  |
+| `rushing_touchdowns` | String |  |
+| `longest_rush` | String |  |
+| `season` | Int64 | Season (4-digit year). |
+| `category` | String | CFBD stats category name (e.g. passing, rushing, defensive). |
 
 **Raises**
 
@@ -281,102 +281,102 @@ A polars DataFrame (default) with one row per game, a pandas DataFrame when `ret
 
 | col_name | type | description |
 |---|---|---|
-| `gameid` | character | Date-encoded Yahoo composite game id for this row (e.g., "ncaaf.g.202509200023"). |
-| `global_gameid` | character | Yahoo cross-provider game id, distinct from the date-encoded gameid (e.g., "ncaaf.g.13556882"). |
-| `start_time` | character | Game start time. |
-| `is_time_tba` | logical | Flag indicating that the scheduled start time has not yet been announced. |
-| `season_phase_id` | character | Identifier of the season phase the game falls in (e.g., "season.phase.season"). |
-| `game_type` | character |  |
-| `winning_team_id` | character | Composite Yahoo team id of the side that won the game (e.g., "ncaaf.t.29"). |
-| `is_rank_upset` | logical | Flag indicating that the lower-ranked side won, judged against the teams' poll rankings. |
-| `is_spread_upset` | logical | Flag indicating that the winning side was the betting underdog against the closing spread. |
-| `outcome_type` | character | Outcome classification for a completed game (e.g., "outcome.type.won", "outcome.type.tied"). |
-| `home_team_id` | character | ESPN home team id (parsed from `home_team_ref`). |
-| `away_team_id` | character | ESPN away team id (parsed from `away_team_ref`). |
-| `week_number` | character |  |
-| `navigation_links` | character |  |
-| `sportacular_url` | character | Deep link into the Yahoo Sportacular mobile app for this game (a "ysportacular://" URL). |
-| `status_display_name` | character | Short game or event status as shown on the scoreboard (e.g., "Final", "12:00 pm ET"). |
-| `status_description` | character |  |
-| `status_type` | character | Status type. |
-| `total_away_points` | character | Points scored by the away team in the game. |
-| `current_period_id` | character | Ordinal number of the period currently in progress, counting from 1. |
-| `total_home_points` | character | Points scored by the home team in the game. |
-| `total_away_shootout_points` | character | Shootout goals converted by the away team, populated only for sports that break ties by shootout. |
-| `total_home_shootout_points` | character | Shootout goals converted by the home team, populated only for sports that break ties by shootout. |
-| `home_team_stats` | character | JSON-encoded team-stat block for the home team, populated once the game is under way. |
-| `away_team_stats` | character | JSON-encoded team-stat block for the away team, populated once the game is under way. |
-| `game_period_balls` | character | Balls in the count for the at-bat in progress; baseball only. |
-| `game_period_strikes` | character | Strikes in the count for the at-bat in progress; baseball only. |
-| `game_period_outs` | character | Outs recorded so far in the current half-inning; baseball only. |
-| `yards_to_endzone` | character | Distance from the current ball spot to the opponent's goal line, in yards. |
-| `start_yardline` | character | Yard line at the drive start. |
-| `distance` | character | Yards to gain for a first down (or to the goal line in goal-to-go situations). |
-| `down` | character | Down of the play (1-4). |
-| `team_in_possession` | character | Yahoo team id of the side currently in possession of the ball. |
-| `power_play_strength_home` | character | Number of skaters the home team has on the ice during special-teams play; hockey only. |
-| `power_play_strength_away` | character | Number of skaters the away team has on the ice during special-teams play; hockey only. |
-| `game_time_elapsed` | character | Playing time elapsed in the game, in seconds. |
-| `game_time_elapsed_display` | character | Playing time elapsed formatted for display (e.g., "67:12"), used by sports whose clock counts up. |
-| `inning_status` | character | Half-inning indicator for a game in progress (e.g., "Top", "Bottom"); baseball only. |
-| `away_timeouts` | character | Away-team timeouts remaining. |
-| `home_timeouts` | character | Home-team timeouts remaining. |
-| `is_halftime` | character | Flag indicating that the game is currently stopped at halftime. |
-| `minimum_periods` | integer | Number of periods a game of this sport runs before overtime is required (4 for football, 9 for baseball). |
-| `game_periods` | integer | JSON-encoded list of the game's period nodes, each carrying a period number and its display names. |
-| `baserunners` | character | JSON-encoded baserunner occupancy for the game in progress; baseball only. |
-| `season` | integer | Season (4-digit year). |
-| `subleague` | character | Sub-league the game belongs to, for leagues split into constituent circuits. |
-| `subleague_display_name` | character | Display name of the sub-league the game belongs to. |
-| `agg_score` | character | Aggregate score across the legs of a two-leg tie, populated only for competitions decided on aggregate. |
-| `leg_number` | character | Ordinal of this leg within a multi-leg tie, counting from 1. |
-| `tv_coverage` | character | Network carrying the game, as a short broadcast abbreviation (e.g., "CBS", "ESPN"). |
-| `provider_coverage` | character |  |
-| `seatgeek_id` | character | SeatGeek performer or event identifier used to build the ticket-purchase link. |
-| `last_updated` | character | Timestamp ESPN last refreshed the power index. |
-| `teams` | character |  |
-| `play_by_play` | character | JSON-encoded data-island pointer to the game's play-by-play collection in the same editorial payload. |
-| `pitches` | character | JSON-encoded data-island pointer to the game's pitch-level feed; baseball only. |
-| `at_bat` | character | JSON-encoded data-island pointer to the game's current at-bat feed; baseball only. |
-| `penalty_summary` | character |  |
-| `scoring_summary` | character |  |
-| `stat_categories` | character | JSON-encoded pointer to the stat-category dictionary that groups this feed's statistics. |
-| `stadium` | character |  |
-| `stadium_id` | character |  |
-| `stadium_image` | character | JSON-encoded data-island pointer to the venue photograph used on the game page. |
-| `attendance` | character | Reported attendance at the game. |
-| `lineups` | character | JSON-encoded data-island pointer to the game's lineup collection. |
-| `top_performer` | character | JSON-encoded data-island pointer to the game's top-performing players. |
-| `players` | character |  |
-| `byline` | character |  |
-| `highlight` | character | JSON-encoded data-island pointer to the game's highlight video. |
-| `highlights` | character | Game highlight urls. |
-| `live_video` | character | JSON-encoded data-island pointer to the live video stream for the game. |
-| `odds` | character | JSON-encoded data-island pointer to the game's odds collection. |
-| `current_players` | character | JSON-encoded data-island pointer to the players currently on the field, ice or court. |
-| `last_play` | character | Free-text description of the most recent play. |
-| `series_type` | character | JSON-encoded data-island pointer to the kind of series the game belongs to. |
-| `series_status` | character | JSON-encoded data-island pointer to the current state of the series the game belongs to. |
-| `games` | character | Number of games included in the ATS summary. |
-| `series_games` | character | JSON-encoded data-island pointer to the games making up the series. |
-| `game_details` | character | JSON-encoded data-island pointer to supplementary detail notes for the game. |
-| `section_notes` | character | JSON-encoded data-island pointer to editorial section notes attached to the game page. |
-| `articles` | character | JSON-encoded data-island pointer to the editorial articles attached to the game. |
-| `tweets` | character | JSON-encoded data-island pointer to the social posts attached to the game page. |
-| `playoff_round` | character |  |
-| `media_stream` | character | JSON-encoded data-island pointer to the game's media-stream collection. |
-| `playoff_series_status` | character | JSON-encoded data-island pointer to the current state of the playoff series the game belongs to. |
-| `playoff_series_details` | character | JSON-encoded data-island pointer to detail about the playoff series the game belongs to. |
-| `drives` | character | JSON-encoded data-island pointer to the game's drive collection; football only. |
-| `user_teams_game` | character | JSON-encoded data-island pointer to the viewer's followed-team context for the game. |
-| `page_metadata` | character | JSON-encoded data-island pointer to the SEO and page metadata for the entity. |
-| `penalty_box` | character | JSON-encoded data-island pointer to the game's penalty-box feed; hockey only. |
-| `starting_pitchers` | character | JSON-encoded data-island pointer to the game's announced starting pitchers; baseball only. |
-| `unrestricted_streams` | character | JSON-encoded data-island pointer to the streams viewable without a subscription. |
-| `tv_details` | character | JSON-encoded list of broadcast entries for the game, each carrying a network abbreviation and full channel name (e.g., [{"abbr": "NBC", "name": "NBC/Peacock"}]). |
-| `away_seed` | character |  |
-| `home_seed` | character |  |
-| `week` | integer | Game week of the season. |
+| `gameid` | String | Date-encoded Yahoo composite game id for this row (e.g., "ncaaf.g.202509200023"). |
+| `global_gameid` | String | Yahoo cross-provider game id, distinct from the date-encoded gameid (e.g., "ncaaf.g.13556882"). |
+| `start_time` | String | Game start time. |
+| `is_time_tba` | Boolean | Flag indicating that the scheduled start time has not yet been announced. |
+| `season_phase_id` | String | Identifier of the season phase the game falls in (e.g., "season.phase.season"). |
+| `game_type` | String |  |
+| `winning_team_id` | String | Composite Yahoo team id of the side that won the game (e.g., "ncaaf.t.29"). |
+| `is_rank_upset` | Boolean | Flag indicating that the lower-ranked side won, judged against the teams' poll rankings. |
+| `is_spread_upset` | Boolean | Flag indicating that the winning side was the betting underdog against the closing spread. |
+| `outcome_type` | String | Outcome classification for a completed game (e.g., "outcome.type.won", "outcome.type.tied"). |
+| `home_team_id` | String | ESPN home team id (parsed from `home_team_ref`). |
+| `away_team_id` | String | ESPN away team id (parsed from `away_team_ref`). |
+| `week_number` | String |  |
+| `navigation_links` | String |  |
+| `sportacular_url` | String | Deep link into the Yahoo Sportacular mobile app for this game (a "ysportacular://" URL). |
+| `status_display_name` | String | Short game or event status as shown on the scoreboard (e.g., "Final", "12:00 pm ET"). |
+| `status_description` | String |  |
+| `status_type` | String | Status type. |
+| `total_away_points` | String | Points scored by the away team in the game. |
+| `current_period_id` | String | Ordinal number of the period currently in progress, counting from 1. |
+| `total_home_points` | String | Points scored by the home team in the game. |
+| `total_away_shootout_points` | String | Shootout goals converted by the away team, populated only for sports that break ties by shootout. |
+| `total_home_shootout_points` | String | Shootout goals converted by the home team, populated only for sports that break ties by shootout. |
+| `home_team_stats` | String | JSON-encoded team-stat block for the home team, populated once the game is under way. |
+| `away_team_stats` | String | JSON-encoded team-stat block for the away team, populated once the game is under way. |
+| `game_period_balls` | String | Balls in the count for the at-bat in progress; baseball only. |
+| `game_period_strikes` | String | Strikes in the count for the at-bat in progress; baseball only. |
+| `game_period_outs` | String | Outs recorded so far in the current half-inning; baseball only. |
+| `yards_to_endzone` | String | Distance from the current ball spot to the opponent's goal line, in yards. |
+| `start_yardline` | String | Yard line at the drive start. |
+| `distance` | String | Yards to gain for a first down (or to the goal line in goal-to-go situations). |
+| `down` | String | Down of the play (1-4). |
+| `team_in_possession` | String | Yahoo team id of the side currently in possession of the ball. |
+| `power_play_strength_home` | String | Number of skaters the home team has on the ice during special-teams play; hockey only. |
+| `power_play_strength_away` | String | Number of skaters the away team has on the ice during special-teams play; hockey only. |
+| `game_time_elapsed` | String | Playing time elapsed in the game, in seconds. |
+| `game_time_elapsed_display` | String | Playing time elapsed formatted for display (e.g., "67:12"), used by sports whose clock counts up. |
+| `inning_status` | String | Half-inning indicator for a game in progress (e.g., "Top", "Bottom"); baseball only. |
+| `away_timeouts` | String | Away-team timeouts remaining. |
+| `home_timeouts` | String | Home-team timeouts remaining. |
+| `is_halftime` | String | Flag indicating that the game is currently stopped at halftime. |
+| `minimum_periods` | Int64 | Number of periods a game of this sport runs before overtime is required (4 for football, 9 for baseball). |
+| `game_periods` | Int64 | JSON-encoded list of the game's period nodes, each carrying a period number and its display names. |
+| `baserunners` | String | JSON-encoded baserunner occupancy for the game in progress; baseball only. |
+| `season` | Int64 | Season (4-digit year). |
+| `subleague` | String | Sub-league the game belongs to, for leagues split into constituent circuits. |
+| `subleague_display_name` | String | Display name of the sub-league the game belongs to. |
+| `agg_score` | String | Aggregate score across the legs of a two-leg tie, populated only for competitions decided on aggregate. |
+| `leg_number` | String | Ordinal of this leg within a multi-leg tie, counting from 1. |
+| `tv_coverage` | String | Network carrying the game, as a short broadcast abbreviation (e.g., "CBS", "ESPN"). |
+| `provider_coverage` | String |  |
+| `seatgeek_id` | String | SeatGeek performer or event identifier used to build the ticket-purchase link. |
+| `last_updated` | String | Timestamp ESPN last refreshed the power index. |
+| `teams` | String |  |
+| `play_by_play` | String | JSON-encoded data-island pointer to the game's play-by-play collection in the same editorial payload. |
+| `pitches` | String | JSON-encoded data-island pointer to the game's pitch-level feed; baseball only. |
+| `at_bat` | String | JSON-encoded data-island pointer to the game's current at-bat feed; baseball only. |
+| `penalty_summary` | String |  |
+| `scoring_summary` | String |  |
+| `stat_categories` | String | JSON-encoded pointer to the stat-category dictionary that groups this feed's statistics. |
+| `stadium` | String |  |
+| `stadium_id` | String |  |
+| `stadium_image` | String | JSON-encoded data-island pointer to the venue photograph used on the game page. |
+| `attendance` | String | Reported attendance at the game. |
+| `lineups` | String | JSON-encoded data-island pointer to the game's lineup collection. |
+| `top_performer` | String | JSON-encoded data-island pointer to the game's top-performing players. |
+| `players` | String |  |
+| `byline` | String |  |
+| `highlight` | String | JSON-encoded data-island pointer to the game's highlight video. |
+| `highlights` | String | Game highlight urls. |
+| `live_video` | String | JSON-encoded data-island pointer to the live video stream for the game. |
+| `odds` | String | JSON-encoded data-island pointer to the game's odds collection. |
+| `current_players` | String | JSON-encoded data-island pointer to the players currently on the field, ice or court. |
+| `last_play` | String | Free-text description of the most recent play. |
+| `series_type` | String | JSON-encoded data-island pointer to the kind of series the game belongs to. |
+| `series_status` | String | JSON-encoded data-island pointer to the current state of the series the game belongs to. |
+| `games` | String | Number of games included in the ATS summary. |
+| `series_games` | String | JSON-encoded data-island pointer to the games making up the series. |
+| `game_details` | String | JSON-encoded data-island pointer to supplementary detail notes for the game. |
+| `section_notes` | String | JSON-encoded data-island pointer to editorial section notes attached to the game page. |
+| `articles` | String | JSON-encoded data-island pointer to the editorial articles attached to the game. |
+| `tweets` | String | JSON-encoded data-island pointer to the social posts attached to the game page. |
+| `playoff_round` | String |  |
+| `media_stream` | String | JSON-encoded data-island pointer to the game's media-stream collection. |
+| `playoff_series_status` | String | JSON-encoded data-island pointer to the current state of the playoff series the game belongs to. |
+| `playoff_series_details` | String | JSON-encoded data-island pointer to detail about the playoff series the game belongs to. |
+| `drives` | String | JSON-encoded data-island pointer to the game's drive collection; football only. |
+| `user_teams_game` | String | JSON-encoded data-island pointer to the viewer's followed-team context for the game. |
+| `page_metadata` | String | JSON-encoded data-island pointer to the SEO and page metadata for the entity. |
+| `penalty_box` | String | JSON-encoded data-island pointer to the game's penalty-box feed; hockey only. |
+| `starting_pitchers` | String | JSON-encoded data-island pointer to the game's announced starting pitchers; baseball only. |
+| `unrestricted_streams` | String | JSON-encoded data-island pointer to the streams viewable without a subscription. |
+| `tv_details` | String | JSON-encoded list of broadcast entries for the game, each carrying a network abbreviation and full channel name (e.g., [{"abbr": "NBC", "name": "NBC/Peacock"}]). |
+| `away_seed` | String |  |
+| `home_seed` | String |  |
+| `week` | Int64 | Game week of the season. |
 
 **Raises**
 
@@ -416,107 +416,107 @@ A wide polars DataFrame (default), a pandas DataFrame when `return_as_pandas=Tru
 
 | col_name | type | description |
 |---|---|---|
-| `team` | character | Team name. |
-| `team_abbreviation` | character | Team abbreviation. |
-| `receiving_yards_rank` | character |  |
-| `passing_touchdowns` | character |  |
-| `rushing_attempts` | character | Team rushing attempts. |
-| `rushing_yards_allowed_per_attempt` | character |  |
-| `points_per_game` | character |  |
-| `receiving_first_downs_allowed` | character |  |
-| `receiving_yards_allowed_per_game` | character |  |
-| `passing_yards_per_game` | character |  |
-| `total_offensive_yards_per_game` | character |  |
-| `interceptions_forced_rank` | character |  |
-| `rushing_yards_allowed_per_game` | character |  |
-| `total_offensive_yards_per_game_rank` | character |  |
-| `receiving_yards` | character |  |
-| `points_per_game_rank` | character |  |
-| `rushing_yards_rank` | character |  |
-| `receiving_yards_allowed` | character |  |
-| `rushing_touchdowns` | character |  |
-| `points_allowed_per_game_rank` | character |  |
-| `third_down_attempts` | character |  |
-| `sacks_taken` | character |  |
-| `total_yards_allowed_per_game_rank` | character |  |
-| `rushing_yards_per_attempt` | character |  |
-| `rushing_touchdowns_allowed_per_game` | character |  |
-| `longest_pass` | character |  |
-| `completion_percentage` | character |  |
-| `receptions` | character |  |
-| `receiving_yards_per_reception` | character |  |
-| `interceptions_forced` | character |  |
-| `passing_completions_per_game` | character |  |
-| `team_penalties` | character |  |
-| `rushing_first_downs_allowed` | character |  |
-| `receiving_yards_per_game` | character |  |
-| `points_allowed` | character | Points for the opponent. |
-| `points_allowed_rank` | character |  |
-| `total_yards_allowed_per_game` | character |  |
-| `rushing_attempts_allowed` | character | Opponent rushing attempts. |
-| `games_kicking` | character |  |
-| `completion_percentage_allowed` | character |  |
-| `rushing_yards_allowed_per_game_rank` | character |  |
-| `receiving_touchdowns` | character |  |
-| `games_punting` | character |  |
-| `total_offensive_yards` | character |  |
-| `points` | character | Total points accumulated by the school in the poll's weighted voting. |
-| `rushing_yards_per_game_rank` | character |  |
-| `passing_yards_per_attempt` | character |  |
-| `receptions_per_game` | character |  |
-| `rushing_first_downs` | character |  |
-| `receiving_first_downs` | character |  |
-| `passing_first_downs` | character |  |
-| `points_rank` | character |  |
-| `passing_yards_allowed_per_game` | character |  |
-| `fourth_down_conversions` | character |  |
-| `receptions_allowed` | character |  |
-| `passing_attempts_per_game` | character |  |
-| `passing_yards` | character |  |
-| `rushing_touchdowns_allowed` | character |  |
-| `receiving_touchdowns_allowed` | character |  |
-| `receptions_allowed_per_game` | character |  |
-| `rushing_yards_allowed` | character | Opponent rushing yards. |
-| `games_receiving` | character |  |
-| `sacks_rank` | character |  |
-| `points_allowed_per_game` | character |  |
-| `rushing_yards` | character | Team rushing yards. |
-| `games_rushing` | character |  |
-| `longest_rush` | character |  |
-| `games_offense` | character |  |
-| `fourth_down_conversion_percentage` | character |  |
-| `receiving_touchdowns_allowed_per_game` | character |  |
-| `passing_attempts_allowed_per_game` | character |  |
-| `passing_first_downs_allowed` | character |  |
-| `passing_completions` | character | Pass completions (split from CFBD's `C/ATT` field). |
-| `total_offensive_yards_rank` | character |  |
-| `time_of_possession_per_game_rank` | character |  |
-| `offensive_penalty_yards_lost` | character |  |
-| `team_penalty_yards_lost` | character |  |
-| `passing_yards_per_game_rank` | character |  |
-| `interception_return_touchdowns` | character |  |
-| `passing_yards_allowed_per_game_rank` | character |  |
-| `sacks_yards_lost` | character |  |
-| `games_defense` | character |  |
-| `passing_yards_allowed` | character |  |
-| `passing_touchdowns_allowed` | character |  |
-| `games_passing` | character |  |
-| `passing_completions_allowed_per_game` | character |  |
-| `passing_touchdowns_allowed_per_game` | character |  |
-| `rushing_yards_per_game` | character |  |
-| `fourth_down_attempts` | character |  |
-| `passing_yards_rank` | character |  |
-| `rushing_attempts_per_game` | character |  |
-| `third_down_conversion_percentage` | character |  |
-| `passing_attempts` | character | Pass attempts (split from CFBD's `C/ATT` field). |
-| `passing_interceptions` | character |  |
-| `first_downs` | character | First downs earned by the team. |
-| `first_downs_per_game` | character |  |
-| `rushing_attempts_allowed_per_game` | character |  |
-| `third_down_conversions` | character |  |
-| `time_of_possession_per_game` | character |  |
-| `offensive_penalties` | character |  |
-| `season` | integer | Season (4-digit year). |
+| `team` | String | Team name. |
+| `team_abbreviation` | String | Team abbreviation. |
+| `receiving_yards_rank` | String |  |
+| `passing_touchdowns` | String |  |
+| `rushing_attempts` | String | Team rushing attempts. |
+| `rushing_yards_allowed_per_attempt` | String |  |
+| `points_per_game` | String |  |
+| `receiving_first_downs_allowed` | String |  |
+| `receiving_yards_allowed_per_game` | String |  |
+| `passing_yards_per_game` | String |  |
+| `total_offensive_yards_per_game` | String |  |
+| `interceptions_forced_rank` | String |  |
+| `rushing_yards_allowed_per_game` | String |  |
+| `total_offensive_yards_per_game_rank` | String |  |
+| `receiving_yards` | String |  |
+| `points_per_game_rank` | String |  |
+| `rushing_yards_rank` | String |  |
+| `receiving_yards_allowed` | String |  |
+| `rushing_touchdowns` | String |  |
+| `points_allowed_per_game_rank` | String |  |
+| `third_down_attempts` | String |  |
+| `sacks_taken` | String |  |
+| `total_yards_allowed_per_game_rank` | String |  |
+| `rushing_yards_per_attempt` | String |  |
+| `rushing_touchdowns_allowed_per_game` | String |  |
+| `longest_pass` | String |  |
+| `completion_percentage` | String |  |
+| `receptions` | String |  |
+| `receiving_yards_per_reception` | String |  |
+| `interceptions_forced` | String |  |
+| `passing_completions_per_game` | String |  |
+| `team_penalties` | String |  |
+| `rushing_first_downs_allowed` | String |  |
+| `receiving_yards_per_game` | String |  |
+| `points_allowed` | String | Points for the opponent. |
+| `points_allowed_rank` | String |  |
+| `total_yards_allowed_per_game` | String |  |
+| `rushing_attempts_allowed` | String | Opponent rushing attempts. |
+| `games_kicking` | String |  |
+| `completion_percentage_allowed` | String |  |
+| `rushing_yards_allowed_per_game_rank` | String |  |
+| `receiving_touchdowns` | String |  |
+| `games_punting` | String |  |
+| `total_offensive_yards` | String |  |
+| `points` | String | Total points accumulated by the school in the poll's weighted voting. |
+| `rushing_yards_per_game_rank` | String |  |
+| `passing_yards_per_attempt` | String |  |
+| `receptions_per_game` | String |  |
+| `rushing_first_downs` | String |  |
+| `receiving_first_downs` | String |  |
+| `passing_first_downs` | String |  |
+| `points_rank` | String |  |
+| `passing_yards_allowed_per_game` | String |  |
+| `fourth_down_conversions` | String |  |
+| `receptions_allowed` | String |  |
+| `passing_attempts_per_game` | String |  |
+| `passing_yards` | String |  |
+| `rushing_touchdowns_allowed` | String |  |
+| `receiving_touchdowns_allowed` | String |  |
+| `receptions_allowed_per_game` | String |  |
+| `rushing_yards_allowed` | String | Opponent rushing yards. |
+| `games_receiving` | String |  |
+| `sacks_rank` | String |  |
+| `points_allowed_per_game` | String |  |
+| `rushing_yards` | String | Team rushing yards. |
+| `games_rushing` | String |  |
+| `longest_rush` | String |  |
+| `games_offense` | String |  |
+| `fourth_down_conversion_percentage` | String |  |
+| `receiving_touchdowns_allowed_per_game` | String |  |
+| `passing_attempts_allowed_per_game` | String |  |
+| `passing_first_downs_allowed` | String |  |
+| `passing_completions` | String | Pass completions (split from CFBD's `C/ATT` field). |
+| `total_offensive_yards_rank` | String |  |
+| `time_of_possession_per_game_rank` | String |  |
+| `offensive_penalty_yards_lost` | String |  |
+| `team_penalty_yards_lost` | String |  |
+| `passing_yards_per_game_rank` | String |  |
+| `interception_return_touchdowns` | String |  |
+| `passing_yards_allowed_per_game_rank` | String |  |
+| `sacks_yards_lost` | String |  |
+| `games_defense` | String |  |
+| `passing_yards_allowed` | String |  |
+| `passing_touchdowns_allowed` | String |  |
+| `games_passing` | String |  |
+| `passing_completions_allowed_per_game` | String |  |
+| `passing_touchdowns_allowed_per_game` | String |  |
+| `rushing_yards_per_game` | String |  |
+| `fourth_down_attempts` | String |  |
+| `passing_yards_rank` | String |  |
+| `rushing_attempts_per_game` | String |  |
+| `third_down_conversion_percentage` | String |  |
+| `passing_attempts` | String | Pass attempts (split from CFBD's `C/ATT` field). |
+| `passing_interceptions` | String |  |
+| `first_downs` | String | First downs earned by the team. |
+| `first_downs_per_game` | String |  |
+| `rushing_attempts_allowed_per_game` | String |  |
+| `third_down_conversions` | String |  |
+| `time_of_possession_per_game` | String |  |
+| `offensive_penalties` | String |  |
+| `season` | Int64 | Season (4-digit year). |
 
 **Raises**
 
@@ -558,21 +558,21 @@ A wide polars DataFrame (default), a pandas DataFrame when `return_as_pandas=Tru
 
 | col_name | type | description |
 |---|---|---|
-| `team` | character | Team name. |
-| `team_abbreviation` | character | Team abbreviation. |
-| `games_rushing` | character |  |
-| `rushing_attempts` | character | Team rushing attempts. |
-| `rushing_yards` | character | Team rushing yards. |
-| `rushing_yards_per_attempt` | character |  |
-| `rushing_attempts_per_game` | character |  |
-| `rushing_yards_per_game` | character |  |
-| `rushing_touchdowns` | character |  |
-| `rushing_first_downs` | character |  |
-| `longest_rush` | character |  |
-| `rushing_fumbles` | character |  |
-| `rushing_fumbles_lost` | character |  |
-| `season` | integer | Season (4-digit year). |
-| `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
+| `team` | String | Team name. |
+| `team_abbreviation` | String | Team abbreviation. |
+| `games_rushing` | String |  |
+| `rushing_attempts` | String | Team rushing attempts. |
+| `rushing_yards` | String | Team rushing yards. |
+| `rushing_yards_per_attempt` | String |  |
+| `rushing_attempts_per_game` | String |  |
+| `rushing_yards_per_game` | String |  |
+| `rushing_touchdowns` | String |  |
+| `rushing_first_downs` | String |  |
+| `longest_rush` | String |  |
+| `rushing_fumbles` | String |  |
+| `rushing_fumbles_lost` | String |  |
+| `season` | Int64 | Season (4-digit year). |
+| `category` | String | CFBD stats category name (e.g. passing, rushing, defensive). |
 
 **Raises**
 
@@ -618,18 +618,18 @@ A polars DataFrame (default) with one row per team -- columns `team_id`, `abbrev
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | ESPN team id. |
-| `abbreviation` | character | Metric abbreviation. |
-| `display_name` | character | Human-readable metric name. |
-| `full_name` | character | Venue full name (e.g. `Tenney Stadium`). |
-| `location` | character | Team location / school name. |
-| `nickname` | character | Team nickname / location label. |
-| `conference` | character | Conference of the team. |
-| `conference_abbreviation` | character |  |
-| `conference_id` | character | Referencing conference id. |
-| `division` | character | Division in the conference for the team. |
-| `division_id` | character |  |
-| `seatgeek_id` | character | SeatGeek performer or event identifier used to build the ticket-purchase link. |
+| `team_id` | String | ESPN team id. |
+| `abbreviation` | String | Metric abbreviation. |
+| `display_name` | String | Human-readable metric name. |
+| `full_name` | String | Venue full name (e.g. `Tenney Stadium`). |
+| `location` | String | Team location / school name. |
+| `nickname` | String | Team nickname / location label. |
+| `conference` | String | Conference of the team. |
+| `conference_abbreviation` | String |  |
+| `conference_id` | String | Referencing conference id. |
+| `division` | String | Division in the conference for the team. |
+| `division_id` | String |  |
+| `seatgeek_id` | String | SeatGeek performer or event identifier used to build the ticket-purchase link. |
 
 **Raises**
 

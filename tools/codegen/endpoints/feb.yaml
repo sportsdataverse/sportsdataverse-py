@@ -2,7 +2,7 @@ api: feb
 docstring:
   example_import: true
   notes:
-  - 'Legal notice (sdv-internal-refs/feb/README.md): the FEB''s aviso legal asserts
+  - 'Legal notice: the FEB''s aviso legal asserts
     intellectual-property rights over the site''s content and databases (the EU database
     right). It has no explicit scraping clause and robots.txt returns 404 on both
     hosts, but SportsDataverse has not ruled on it: fetching on your own machine is

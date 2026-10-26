@@ -29,15 +29,15 @@ segments are ever written: ``total`` (always), ``early`` (the
 These are PLAY-TYPE heuristics, not shot-clock timer derivations -- there is
 no game-clock arithmetic anywhere in this file. Only shots/FTs/TOs/assists
 are ever eligible for ``early``/``orb`` tagging; rebounds/steals/blocks/fouls
-are permanently total-only (``LineupUtils.scala:1332-1433`` never wraps those
+are permanently total-only (``LineupUtils.scala`` never wraps those
 branches' ``implicit`` selector in ``shot_clock_selector_builder``, using the
 static ``basic_shotclock_selector`` instead).
 
 **The dispatch seam (wired, Task 5c.3).** :func:`_shot_clock_selector_builder`
-mirrors the Scala's ``shot_clock_selector_builder`` closure (``:996-1004``):
+mirrors the Scala's ``shot_clock_selector_builder`` closure:
 it takes the per-clump ``is_scramble_builder``/``is_transition_builder``
 predicates (computed ONCE per clump in :func:`_enrich_stats_with_clump`,
-mirroring ``LineupUtils.scala:949-960``) and returns ``["total"]`` plus
+mirroring ``LineupUtils.scala``) and returns ``["total"]`` plus
 ``"orb"`` if the event is a scramble and/or ``"early"`` if it's a
 (non-scramble) transition play -- **scramble always wins**:
 ``is_transition_builder(ev, is_scramble)`` takes the just-computed scramble
@@ -47,8 +47,8 @@ branches (ORB/DRB/STL/BLK/foul) use the module-level :data:`_BASE_SELECTORS`
 constant directly and are UNAFFECTED by this wiring -- exactly per the
 plan's "only shots/FTs/TOs/assists get transition/scramble tagging" fact.
 
-**3pt shot-info bucketing (Task 5c.4).** :func:`_increment_player_3p_shot_info`
-(``increment_player_3p_shot_info``, ``LineupUtils.scala:1147-1178``) buckets
+**3pt shot-info bucketing.** :func:`_increment_player_3p_shot_info`
+(``increment_player_3p_shot_info``) buckets
 a 3pt shot into the shooter's per-lineup-slot :class:`~sportsdataverse.mbb
 .mbb_ncaa_models.PlayerShotInfo` tuple; it is a no-op unless ``player_index``
 is in ``[0, 5)`` -- the only caller that ever passes a non-default
@@ -57,7 +57,7 @@ match wins): assisted (only possible on a make) -> ``ast_3pm``; else
 transition -> ``early_3pa``; else unassisted make -> ``unast_3pm``; else
 (unassisted miss) -> ``unknown_3pm``.
 
-**``is_scramble`` port notes (Task 5c.2).**
+**``is_scramble`` port notes.**
 
 * **Returns ``(predicate, tag)``, not just the predicate.** The oracle
   (``LineupUtilsTests.scala``'s ``"is_scramble"`` block) asserts the debug
@@ -111,7 +111,7 @@ transition -> ``early_3pa``; else unassisted make -> ``unast_3pm``; else
   defensive deep copy, mutating the private working tree directly is simpler
   than porting quicklens' ``PathLazyModify`` machinery.
 * **``AssistEvent`` list increment-or-prepend** (:func:`_increment_player_assist`,
-  ``increment_player_assist``, ``:1040-1060``) mutates the list and its
+  ``increment_player_assist``) mutates the list and its
   matching entry's counts in place rather than rebuilding via ``::``/``.map``
   -- behaviorally identical (at most one ``AssistEvent`` per distinct
   ``player_code`` ever exists), simpler in a mutable-by-convention port.
@@ -220,7 +220,7 @@ play-by-play name, returns ``(is_this_player, this_players_code)``."""
 
 def enrich_lineup(lineup: LineupEvent) -> LineupEvent:
     """Populate ``pts``/``plus_minus`` from the score delta, then run the
-    full stat-tree enrichment (``enrich_lineup``, ``LineupUtils.scala:29-46``).
+    full stat-tree enrichment (``enrich_lineup``).
 
     Args:
         lineup: The lineup event to enrich (not mutated -- see the module
@@ -250,7 +250,7 @@ def enrich_lineup(lineup: LineupEvent) -> LineupEvent:
 
 def fix_possible_score_swap_bug(lineup: list[LineupEvent], box_lineup: LineupEvent) -> list[LineupEvent]:
     """Undo a rare NCAA data bug where the scores get transposed
-    (``fix_possible_score_swap_bug``, ``LineupUtils.scala:51-90``).
+    (``fix_possible_score_swap_bug``).
 
     If the last lineup's ending score is the exact transpose of the box
     score's ending score, every lineup's ``score_info`` is un-transposed and
@@ -305,7 +305,7 @@ def fix_possible_score_swap_bug(lineup: list[LineupEvent], box_lineup: LineupEve
 def ensure_ev_uniqueness(clump: ConcurrentClump) -> ConcurrentClump:
     """Nudge each event's ``min`` by a tiny per-index delta so truly
     concurrent (identical-``min``) events within a clump don't collapse
-    under ``==`` (``ensure_ev_uniqueness``, ``LineupUtils.scala:105-111``).
+    under ``==`` (``ensure_ev_uniqueness``).
 
     Args:
         clump: The clump whose events to nudge.
@@ -325,8 +325,7 @@ def ensure_ev_uniqueness(clump: ConcurrentClump) -> ConcurrentClump:
 # ---------------------------------------------------------------------------
 
 _BASE_SELECTORS: list[str] = ["total"]
-"""The ``total``-only selector list (``shotclock_selectors``,
-``LineupUtils.scala:995``) -- used directly (never extended) by the ORB/DRB/
+"""The ``total``-only selector list (``shotclock_selectors``) -- used directly (never extended) by the ORB/DRB/
 STL/BLK/foul branches, which are permanently total-only per the module
 docstring's "critical port fact"."""
 
@@ -337,7 +336,7 @@ def _shot_clock_selector_builder(
     is_transition_builder: Callable[[RawGameEvent, bool], bool],
 ) -> list[str]:
     """Segment names to increment for one shot/FT/TO/assist event
-    (``shot_clock_selector_builder``, ``LineupUtils.scala:996-1004``).
+    (``shot_clock_selector_builder``).
 
     Args:
         ev: The event being dispatched.
@@ -362,8 +361,7 @@ def _shot_clock_selector_builder(
 
 
 def _increment_shot_clock(stat: ShotClockStats, selectors: list[str]) -> None:
-    """Apply ``+1`` to each named segment (``increment_misc_count``,
-    ``LineupUtils.scala:1006-1015``) -- ``selectors`` is a list of segment
+    """Apply ``+1`` to each named segment (``increment_misc_count``) -- ``selectors`` is a list of segment
     names rather than quicklens ``PathLazyModify`` objects, since Python has
     no lens library.
 
@@ -388,7 +386,7 @@ def _increment_shot_clock(stat: ShotClockStats, selectors: list[str]) -> None:
 
 def _get_or_create_shot_clock(obj: Any, attr: str) -> ShotClockStats:
     """Get-or-create an ``Optional[ShotClockStats]`` field by name (quicklens
-    ``.atOrElse(emptyShotClock)``, e.g. ``LineupUtils.scala:167-168``).
+    ``.atOrElse(emptyShotClock)``, e.g. ``LineupUtils.scala``).
 
     Args:
         obj: The dataclass instance owning the field.
@@ -407,7 +405,7 @@ def _get_or_create_shot_clock(obj: Any, attr: str) -> ShotClockStats:
 
 def _get_or_create_assist_info(obj: Any, attr: str) -> AssistInfo:
     """Get-or-create an ``Optional[AssistInfo]`` field by name (quicklens
-    ``.atOrElse(emptyAssist)``, ``LineupUtils.scala:165``).
+    ``.atOrElse(emptyAssist)``).
 
     Args:
         obj: The dataclass instance owning the field.
@@ -427,7 +425,7 @@ def _get_or_create_assist_info(obj: Any, attr: str) -> AssistInfo:
 def _get_or_create_assist_list(assist_info: AssistInfo, attr: str) -> list[AssistEvent]:
     """Get-or-create the ``target``/``source`` ``Optional[list[AssistEvent]]``
     field on an :class:`~sportsdataverse.mbb.mbb_ncaa_models.AssistInfo`
-    (quicklens ``.atOrElse(Nil)``, ``LineupUtils.scala:1076``).
+    (quicklens ``.atOrElse(Nil)``).
 
     Args:
         assist_info: The assist-info instance owning the field.
@@ -444,8 +442,7 @@ def _get_or_create_assist_list(assist_info: AssistInfo, attr: str) -> list[Assis
 
 
 def _find_matching_assist(evs: list[RawGameEvent], event_parser: PossessionEvent) -> Optional[str]:
-    """First co-located assist event's player, if any (``find_matching_assist``,
-    ``LineupUtils.scala:176-186``).
+    """First co-located assist event's player, if any (``find_matching_assist``).
 
     Args:
         evs: The clump's events (co-location = same clump).
@@ -466,7 +463,7 @@ def _find_matching_assist(evs: list[RawGameEvent], event_parser: PossessionEvent
 
 def _find_matching_fg(evs: list[RawGameEvent], event_parser: PossessionEvent) -> Optional[tuple[str, str]]:
     """First co-located made shot's player + bucket, if any
-    (``find_matching_fg``, ``LineupUtils.scala:191-209``).
+    (``find_matching_fg``).
 
     Args:
         evs: The clump's events (co-location = same clump).
@@ -496,7 +493,7 @@ def _find_matching_fg(evs: list[RawGameEvent], event_parser: PossessionEvent) ->
 
 def _increment_player_assist(assist_events: list[AssistEvent], player_code: str, selectors: list[str]) -> None:
     """Increment-if-present else prepend a fresh :class:`AssistEvent`
-    (``increment_player_assist``, ``LineupUtils.scala:1040-1060``).
+    (``increment_player_assist``).
 
     Args:
         assist_events: The list to mutate in place.
@@ -524,7 +521,7 @@ def _maybe_increment_assisted_stats(
     """Called from a made-shot branch: if a co-located assist exists,
     increments the shooter's own ``fg_XX.ast`` and (team-direction,
     player-coded calls only) appends the assister into ``ast_XX.source``
-    (``maybe_increment_assisted_stats``, ``LineupUtils.scala:1095-1118``).
+    (``maybe_increment_assisted_stats``).
 
     Args:
         stats: The stat tree being mutated.
@@ -558,8 +555,7 @@ def _increment_assisted_fg_stats(
     """Called from the assist branch: finds the co-located made shot (first
     match in clump order -- rim, then mid, then 3p) and increments that
     bucket's ``AssistInfo.counts`` plus (team-direction, player-coded calls
-    only) ``.target`` (``increment_assisted_fg_stats``, ``LineupUtils.scala
-    :1119-1144``). Preserves the upstream TODO: multiple shots co-located in
+    only) ``.target`` (``increment_assisted_fg_stats``). Preserves the upstream TODO: multiple shots co-located in
     the same clump aren't handled -- only the first is credited.
 
     Args:
@@ -583,7 +579,7 @@ def _increment_assisted_fg_stats(
 
 def _get_or_create_player_shot_info(stats: LineupEventStats) -> PlayerShotInfo:
     """Get-or-create ``stats.player_shot_info`` (quicklens
-    ``.atOrElse(emptyPlayerShotInfo)``, ``LineupUtils.scala:1169-1171``).
+    ``.atOrElse(emptyPlayerShotInfo)``).
 
     Args:
         stats: The stat tree owning the field.
@@ -601,7 +597,7 @@ def _bump_player_tuple(shot_info: PlayerShotInfo, attr: str, player_index: int) 
     """``+1`` at ``player_index`` of a 5-slot ``PlayerTuple[Int]`` field,
     get-or-create'ing an all-zero tuple first (quicklens
     ``.atOrElse(emptyPlayerTupleInt) andThenModify player_tuple_selector
-    (player_index)).using(_ + 1)``, ``LineupUtils.scala:970-992,1169-1174``).
+    (player_index)).using(_ + 1)``).
     Tuples are immutable in Python, so this reads-mutates-as-list-writes-back
     rather than mutating in place.
 
@@ -630,7 +626,7 @@ def _increment_player_3p_shot_info(
 ) -> None:
     """Bucket a 3pt shot into the shooter's per-lineup-slot
     :class:`~sportsdataverse.mbb.mbb_ncaa_models.PlayerShotInfo` tuple
-    (``increment_player_3p_shot_info``, ``LineupUtils.scala:1147-1178``).
+    (``increment_player_3p_shot_info``).
     No-op unless ``player_index`` is in ``[0, 5)`` (team-level calls pass
     ``-1``).
 
@@ -682,7 +678,7 @@ def _enrich_stats_with_clump(
     stats: LineupEventStats,
 ) -> LineupEventStats:
     """Dispatch one merged clump's events onto the stat tree (``private def
-    enrich_stats_with_clump``, ``LineupUtils.scala:936-1437``). ``stats`` is
+    enrich_stats_with_clump``). ``stats`` is
     mutated in place and returned.
 
     Args:
@@ -691,10 +687,9 @@ def _enrich_stats_with_clump(
             predicate/coder for per-player scoping.
         clump: The merged clump to dispatch.
         prev_clumps: Prior merged clumps, most-recent-first -- feeds the
-            per-clump :func:`is_scramble`/:func:`is_transition` builders
-            (``LineupUtils.scala:949-960``).
+            per-clump :func:`is_scramble`/:func:`is_transition` builders.
         player_index: Lineup-slot index for :class:`~sportsdataverse.mbb
-            .mbb_ncaa_models.PlayerShotInfo` tuples (Task 5c.4) -- ``-1`` for
+            .mbb_ncaa_models.PlayerShotInfo` tuples -- ``-1`` for
             team-level calls, in which case :func:`_increment_player_3p_shot_info`
             is a no-op.
         stats: The stat tree to mutate in place.
@@ -895,11 +890,11 @@ def enrich_stats(
     player_index: int = -1,
 ) -> LineupEventStats:
     """Fold a lineup's raw events into a counting-stat tree (``protected def
-    enrich_stats``, ``LineupUtils.scala:115-162``). Reuses the Task 5a.3
+    enrich_stats``). Reuses the
     concurrent-clump batching (:func:`~sportsdataverse.mbb.mbb_ncaa_possessions
     .lineup_as_raw_clumps` + :func:`~sportsdataverse.mbb.mbb_ncaa_possessions
     .concurrent_event_handler`) rather than duplicating it -- both were
-    already public/exported from Task 5a.3.
+    already public/exported.
 
     ``stats`` is deep-copied once up front (see the module docstring's
     "Scala idiom decisions"), so this function never mutates the caller's
@@ -911,10 +906,10 @@ def enrich_stats(
         event_parser: Selects which side (team/opponent) is "attacking".
         stats: The starting stat tree (not mutated -- see above).
         player_filter_coder: Optional ``name -> (is_this_player, code)``
-            predicate/coder, for per-player scoping (Task 5c.4).
+            predicate/coder, for per-player scoping.
         player_index: Lineup-slot index for :class:`~sportsdataverse.mbb
-            .mbb_ncaa_models.PlayerShotInfo` tuples (Task 5c.4; ``-1`` for
-            team-level calls, the only value exercised before then).
+            .mbb_ncaa_models.PlayerShotInfo` tuples (``-1`` for
+            team-level calls).
 
     Returns:
         A new :class:`~sportsdataverse.mbb.mbb_ncaa_models.LineupEventStats`
@@ -933,7 +928,7 @@ def enrich_stats(
 
 def add_stats_to_lineups(lineup: LineupEvent) -> LineupEvent:
     """Enrich a lineup with play-by-play stats for both team and opponent
-    (``add_stats_to_lineups``, ``LineupUtils.scala:1441-1451``).
+    (``add_stats_to_lineups``).
 
     Args:
         lineup: The lineup event to enrich (not mutated).
@@ -952,7 +947,7 @@ def add_stats_to_lineups(lineup: LineupEvent) -> LineupEvent:
 
 
 # ---------------------------------------------------------------------------
-# is_scramble (Task 5c.2)
+# is_scramble
 # ---------------------------------------------------------------------------
 
 
@@ -960,8 +955,7 @@ def _clump_has_event(
     evs: list[RawGameEvent], event_parser: PossessionEvent, check: Callable[[str], Optional[str]]
 ) -> bool:
     """``True`` iff some attacking-side event in ``evs`` matches ``check``
-    (shared by ``curr_clump_has_offense``/``curr_clump_has_orb``,
-    ``LineupUtils.scala:415-431``).
+    (shared by ``curr_clump_has_offense``/``curr_clump_has_orb``).
 
     Args:
         evs: The events to scan.
@@ -980,7 +974,7 @@ def _clump_has_event(
 
 def _is_off_ev(ev: RawGameEvent, event_parser: PossessionEvent) -> bool:
     """Shot (made or missed) / FT-attempt / turnover membership test
-    (``get_off_ev``, ``LineupUtils.scala:298-309``).
+    (``get_off_ev``).
 
     Args:
         ev: The event to test.
@@ -1009,8 +1003,7 @@ def _get_first_off_ev_set(
     skip_2nd_chance: bool,
 ) -> tuple[list[RawGameEvent], list[str], str]:
     """Find the event(s) making up the *first* offensive play in ``off_evs``
-    (private, recursive; ``get_first_off_ev_set``, ``LineupUtils.scala
-    :318-411``). See the module docstring's ``is_scramble`` port notes for
+    (private, recursive; ``get_first_off_ev_set``). See the module docstring's ``is_scramble`` port notes for
     why the Scala's ``Set[RawGameEvent]`` becomes a ``list[RawGameEvent]``
     here.
 
@@ -1123,7 +1116,7 @@ def is_scramble(
 ) -> tuple[Callable[[RawGameEvent], bool], str]:
     """Figure out if (each event of) the current clump is part of a
     "scramble scenario" following an ORB (``is_scramble``, ``LineupUtils
-    .scala:222-597``).
+    .scala``).
 
     Returns a ``(predicate, debug_tag)`` tuple -- **the tuple shape is
     load-bearing**: the oracle asserts the debug tag string directly
@@ -1232,14 +1225,13 @@ def is_scramble(
 
 
 # ---------------------------------------------------------------------------
-# is_end_of_game_fouling_vs_fastbreak (Task 5c.2)
+# is_end_of_game_fouling_vs_fastbreak
 # ---------------------------------------------------------------------------
 
 
 def _near_end_of_game(minute: float) -> bool:
     """``True`` iff ``minute`` falls in the last ~2 minutes of regulation or
-    any of 5 possible overtimes (``near_end_of_game``, ``LineupUtils.scala
-    :613-615``).
+    any of 5 possible overtimes (``near_end_of_game``).
 
     Args:
         minute: The game-clock minute (fractional).
@@ -1260,8 +1252,7 @@ def _near_end_of_game(minute: float) -> bool:
 
 def _scores_close_but_behind(ev: RawGameEvent, event_parser: PossessionEvent, last_shot_made: bool) -> bool:
     """``True`` iff the attacking team is ahead by ``(0, 10]`` points, per
-    ``ev``'s embedded score string (``scores_close_but_behind``,
-    ``LineupUtils.scala:617-635``).
+    ``ev``'s embedded score string (``scores_close_but_behind``).
 
     Args:
         ev: The event whose ``score_str`` to parse.
@@ -1282,7 +1273,7 @@ def _scores_close_but_behind(ev: RawGameEvent, event_parser: PossessionEvent, la
 def is_end_of_game_fouling_vs_fastbreak(curr_clump: ConcurrentClump, event_parser: PossessionEvent) -> bool:
     """Check for intentional fouling to prolong the game, specifically so it
     can be excluded from being counted as a fast break
-    (``is_end_of_game_fouling_vs_fastbreak``, ``LineupUtils.scala:603-656``).
+    (``is_end_of_game_fouling_vs_fastbreak``).
 
     Args:
         curr_clump: The clump to classify.
@@ -1313,7 +1304,7 @@ def is_end_of_game_fouling_vs_fastbreak(curr_clump: ConcurrentClump, event_parse
 
 
 # ---------------------------------------------------------------------------
-# is_transition (Task 5c.3)
+# is_transition
 # ---------------------------------------------------------------------------
 
 
@@ -1324,8 +1315,7 @@ def is_transition(
     player_version: bool,
 ) -> tuple[Callable[[RawGameEvent, bool], bool], str]:
     """Figure out if the current clump is part of a transition offense
-    following opponent offense (or a marked-fastbreak play) (``is_transition``,
-    ``LineupUtils.scala:668-927``).
+    following opponent offense (or a marked-fastbreak play) (``is_transition``).
 
     Returns a ``(predicate, debug_tag)`` tuple mirroring :func:`is_scramble`
     -- the oracle asserts the debug tag directly (``"N/A"``/``"0a.X"``/
@@ -1461,7 +1451,7 @@ def is_transition(
 
 
 # ---------------------------------------------------------------------------
-# create_player_events (Task 5c.4)
+# create_player_events
 # ---------------------------------------------------------------------------
 
 
@@ -1470,7 +1460,7 @@ def _player_tidier(
 ) -> list[PlayerCodeId]:
     """Re-resolve one lineup-slot player against the (possibly corrupted)
     box score, dropping it if it isn't actually in the box lineup
-    (``player_tidier``, ``LineupUtils.scala:1463-1473``).
+    (``player_tidier``).
 
     Args:
         player: The player to re-resolve.
@@ -1494,7 +1484,7 @@ def _player_tidier(
 def create_player_events(lineup_event_maybe_bad: LineupEvent, box_lineup: LineupEvent) -> list[PlayerEvent]:
     """Split a lineup event into one :class:`~sportsdataverse.mbb
     .mbb_ncaa_models.PlayerEvent` per player on the floor
-    (``create_player_events``, ``LineupUtils.scala:1454-1529``).
+    (``create_player_events``).
 
     First re-tidies ``lineup_event_maybe_bad``'s ``players``/``players_in``/
     ``players_out`` against ``box_lineup`` (via :func:`_player_tidier`),
@@ -1604,15 +1594,14 @@ def create_player_events(lineup_event_maybe_bad: LineupEvent, box_lineup: Lineup
 
 
 def _sum_opt_int(a: Optional[int], b: Optional[int]) -> Optional[int]:
-    """``Some(l+r).filter(_ > 0)`` (``sum_int.case_maybe_int2``,
-    ``LineupUtils.scala:1540-1543``) -- ``None`` if the sum isn't positive."""
+    """``Some(l+r).filter(_ > 0)`` (``sum_int.case_maybe_int2``) -- ``None`` if the sum isn't positive."""
     total = (a or 0) + (b or 0)
     return total if total > 0 else None
 
 
 def _sum_shot_clock(a: ShotClockStats, b: ShotClockStats) -> ShotClockStats:
     """Field-wise sum of two :class:`ShotClockStats`
-    (``sum_shot.case_shot2``, ``LineupUtils.scala:1548-1554``)."""
+    (``sum_shot.case_shot2``)."""
     return ShotClockStats(
         total=a.total + b.total,
         early=_sum_opt_int(a.early, b.early),
@@ -1624,7 +1613,7 @@ def _sum_shot_clock(a: ShotClockStats, b: ShotClockStats) -> ShotClockStats:
 
 def _sum_opt_shot_clock(a: Optional[ShotClockStats], b: Optional[ShotClockStats]) -> Optional[ShotClockStats]:
     """Field-wise sum if both present, else whichever one is present
-    (``sum_shot.case_maybe_shot2``, ``LineupUtils.scala:1556-1570``)."""
+    (``sum_shot.case_maybe_shot2``)."""
     if a is not None and b is not None:
         return _sum_shot_clock(a, b)
     return a if a is not None else b
@@ -1632,7 +1621,7 @@ def _sum_opt_shot_clock(a: Optional[ShotClockStats], b: Optional[ShotClockStats]
 
 def _sum_field_goal(a: FieldGoalStats, b: FieldGoalStats) -> FieldGoalStats:
     """Field-wise sum of two :class:`FieldGoalStats`
-    (``sum.case_field2``, ``LineupUtils.scala:1602-1608``)."""
+    (``sum.case_field2``)."""
     return FieldGoalStats(
         attempts=_sum_shot_clock(a.attempts, b.attempts),
         made=_sum_shot_clock(a.made, b.made),
@@ -1642,7 +1631,7 @@ def _sum_field_goal(a: FieldGoalStats, b: FieldGoalStats) -> FieldGoalStats:
 
 def _merge_assist_events(a: Optional[list[AssistEvent]], b: Optional[list[AssistEvent]]) -> Optional[list[AssistEvent]]:
     """``Some(l.getOrElse(Nil) ++ r.getOrElse(Nil)).filter(_.nonEmpty)``
-    (``sum_assist.case_maybe_assist2``, ``LineupUtils.scala:1589-1592``) --
+    (``sum_assist.case_maybe_assist2``) --
     debug-only concatenation, no de-duplication (matches the Scala TODO)."""
     merged = (a or []) + (b or [])
     return merged if merged else None
@@ -1650,7 +1639,7 @@ def _merge_assist_events(a: Optional[list[AssistEvent]], b: Optional[list[Assist
 
 def _sum_opt_assist_info(a: Optional[AssistInfo], b: Optional[AssistInfo]) -> Optional[AssistInfo]:
     """Field-wise sum if both present, else whichever one is present
-    (``sum_assist.case_maybe_assist2``, ``LineupUtils.scala:1575-1597``)."""
+    (``sum_assist.case_maybe_assist2``)."""
     if a is not None and b is not None:
         return AssistInfo(
             counts=_sum_shot_clock(a.counts, b.counts),
@@ -1664,8 +1653,7 @@ def _sum_player_tuple(
     a: Optional[tuple[int, int, int, int, int]], b: Optional[tuple[int, int, int, int, int]]
 ) -> Optional[tuple[int, int, int, int, int]]:
     """Elementwise sum of two 5-slot ``PlayerTuple[Int]``\\ s if both
-    present, else whichever one is present (``combine_info.case_tuple5x2``,
-    ``LineupUtils.scala:1631-1643``)."""
+    present, else whichever one is present (``combine_info.case_tuple5x2``)."""
     if a is not None and b is not None:
         x0, x1, x2, x3, x4 = a
         y0, y1, y2, y3, y4 = b
@@ -1675,7 +1663,7 @@ def _sum_player_tuple(
 
 def sum_shot_infos(shot_infos: list[PlayerShotInfo]) -> Optional[PlayerShotInfo]:
     """Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models
-    .PlayerShotInfo`\\ s (``sum_shot_infos``, ``LineupUtils.scala:1625-1655``,
+    .PlayerShotInfo`\\ s (``sum_shot_infos``,
     debug-only).
 
     Args:
@@ -1709,8 +1697,7 @@ def sum_shot_infos(shot_infos: list[PlayerShotInfo]) -> Optional[PlayerShotInfo]
 
 def sum_event_stats(lhs: LineupEventStats, rhs: LineupEventStats) -> LineupEventStats:
     """Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models
-    .LineupEventStats` (``protected def sum_event_stats``, ``LineupUtils.scala
-    :1534-1622``, debug-only -- the Scala's own docstring says "just used for
+    .LineupEventStats` (``protected def sum_event_stats``, debug-only -- the Scala's own docstring says "just used for
     debug"). The Scala builds this via ``shapeless.Generic`` field-zipping;
     this port is an explicit field-by-field call since Python has no
     equivalent generic-programming machinery.

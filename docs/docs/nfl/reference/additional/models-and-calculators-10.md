@@ -43,62 +43,62 @@ Dict of frames mirroring the nflseedR simulation list: `standings` (one row per 
 
 | col_name | type | description |
 |---|---|---|
-| `standings.sim` | integer | Simulated season identifier (1 through `simulations`). |
-| `standings.conf` | character | Conference of the team (AFC or NFC). |
-| `standings.division` | character | Division of the team (e.g. "AFC East"). |
-| `standings.team` | character | Team abbreviation. |
-| `standings.games` | integer | Number of regular season games played in the simulated season. |
-| `standings.wins` | double | Regular season wins in the simulated season with ties counted as half a win. |
-| `standings.true_wins` | integer | Regular season wins in the simulated season excluding ties. |
-| `standings.losses` | integer | Regular season losses in the simulated season. |
-| `standings.ties` | integer | Regular season ties in the simulated season. |
-| `standings.win_pct` | double | Regular season win percentage in the simulated season with ties counted as half a win. |
-| `standings.div_pct` | double | Win percentage against division opponents in the simulated season (0 when no division games). |
-| `standings.conf_pct` | double | Win percentage against conference opponents in the simulated season (0 when no conference games). |
-| `standings.sov` | double | Strength of victory in the simulated season - combined win percentage of all defeated opponents. |
-| `standings.sos` | double | Strength of schedule in the simulated season - combined win percentage of all opponents faced. |
-| `standings.div_rank` | integer | Division rank (1-4) in the simulated season after the NFL division tiebreakers. |
-| `standings.div_tie_broken_by` | character | Tiebreaker step that resolved the division rank in this simulated season; null when no tiebreaker was needed. |
-| `standings.conf_rank` | integer | Conference rank (playoff seed) in the simulated season after the NFL conference tiebreakers; null beyond `playoff_seeds`. |
-| `standings.conf_tie_broken_by` | character | Tiebreaker step that resolved the conference rank in this simulated season; null when no tiebreaker was needed. |
-| `standings.exit` | character | Round of the team's final game in the simulated season - REG, WC, DIV, CON, SB, or SB_WIN for the Super Bowl winner. |
-| `standings.draft_rank` | integer | Draft pick position (1 = first overall) in the simulated season (present when sim_include="DRAFT"). |
-| `standings.draft_tie_broken_by` | character | Tiebreaker step that resolved the draft rank in this simulated season; null when no tiebreaker was needed. |
-| `games.sim` | integer | Simulated season identifier the game row belongs to. |
-| `games.game_type` | character | Game type - REG for regular season or the playoff round (WC, DIV, CON, SB). |
-| `games.week` | integer | Week number of the game; simulated playoff rounds are numbered from the last regular season week (+1 for WC through +4 for SB). |
-| `games.away_team` | character | Team abbreviation of the away team (simulated playoff matchups are filled by seed). |
-| `games.home_team` | character | Team abbreviation of the home team (simulated playoff matchups are filled by seed). |
-| `games.away_rest` | integer | Days of rest for the away team before the game. |
-| `games.home_rest` | integer | Days of rest for the home team before the game (14 for the top seed's divisional round game). |
-| `games.location` | character | Game site indicator - "Home" or "Neutral" (Super Bowl). |
-| `games.result` | integer | Home margin (home score minus away score); real where the input schedule had one, simulated otherwise. |
-| `overall.conf` | character | Conference of the team (AFC or NFC). |
-| `overall.division` | character | Division of the team (e.g. "AFC East"). |
-| `overall.team` | character | Team abbreviation. |
-| `overall.wins` | double | Mean regular season wins across all simulated seasons (ties counted as half a win). |
-| `overall.playoff` | double | Share of simulated seasons in which the team made the playoffs (conference rank within `playoff_seeds`). |
-| `overall.div1` | double | Share of simulated seasons in which the team won its division. |
-| `overall.seed1` | double | Share of simulated seasons in which the team earned the conference number one seed. |
-| `overall.won_conf` | double | Share of simulated seasons in which the team won the conference championship; null when sim_include="REG". |
-| `overall.won_sb` | double | Share of simulated seasons in which the team won the Super Bowl; null when sim_include="REG". |
-| `overall.draft1` | double | Share of simulated seasons in which the team held the first overall draft pick; null unless sim_include="DRAFT". |
-| `overall.draft5` | double | Share of simulated seasons in which the team held a top-five draft pick; null unless sim_include="DRAFT". |
-| `team_wins.team` | character | Team abbreviation. |
-| `team_wins.wins` | double | Half-win line the over/under probabilities are evaluated against (0, 0.5, ... up to the number of regular season games). |
-| `team_wins.over_prob` | double | Probability across simulated seasons that the team's outright win total exceeds the line. |
-| `team_wins.under_prob` | double | Probability across simulated seasons that the team's outright win total falls below the line (exact pushes are the remainder). |
-| `game_summary.game_type` | character | Game type of the matchup - REG for regular season or the playoff round (WC, DIV, CON, SB). |
-| `game_summary.week` | integer | Week number of the matchup. |
-| `game_summary.away_team` | character | Team abbreviation of the away team in the matchup. |
-| `game_summary.home_team` | character | Team abbreviation of the home team in the matchup. |
-| `game_summary.away_wins` | integer | Number of simulated seasons in which the away team won the matchup. |
-| `game_summary.home_wins` | integer | Number of simulated seasons in which the home team won the matchup. |
-| `game_summary.ties` | integer | Number of simulated seasons in which the matchup ended in a tie. |
-| `game_summary.result` | double | Mean home margin of the matchup across the simulated seasons in which it was played. |
-| `game_summary.games_played` | integer | Number of simulated seasons in which this exact matchup occurred (playoff pairings only arise in the simulations that produce them). |
-| `game_summary.away_percentage` | double | Share of played simulations won by the away team, with ties counted as half a win. |
-| `game_summary.home_percentage` | double | Share of played simulations won by the home team, with ties counted as half a win. |
+| `standings.sim` | Int64 | Simulated season identifier (1 through `simulations`). |
+| `standings.conf` | String | Conference of the team (AFC or NFC). |
+| `standings.division` | String | Division of the team (e.g. "AFC East"). |
+| `standings.team` | String | Team abbreviation. |
+| `standings.games` | Int64 | Number of regular season games played in the simulated season. |
+| `standings.wins` | Float64 | Regular season wins in the simulated season with ties counted as half a win. |
+| `standings.true_wins` | Int64 | Regular season wins in the simulated season excluding ties. |
+| `standings.losses` | Int64 | Regular season losses in the simulated season. |
+| `standings.ties` | Int64 | Regular season ties in the simulated season. |
+| `standings.win_pct` | Float64 | Regular season win percentage in the simulated season with ties counted as half a win. |
+| `standings.div_pct` | Float64 | Win percentage against division opponents in the simulated season (0 when no division games). |
+| `standings.conf_pct` | Float64 | Win percentage against conference opponents in the simulated season (0 when no conference games). |
+| `standings.sov` | Float64 | Strength of victory in the simulated season - combined win percentage of all defeated opponents. |
+| `standings.sos` | Float64 | Strength of schedule in the simulated season - combined win percentage of all opponents faced. |
+| `standings.div_rank` | Int64 | Division rank (1-4) in the simulated season after the NFL division tiebreakers. |
+| `standings.div_tie_broken_by` | String | Tiebreaker step that resolved the division rank in this simulated season; null when no tiebreaker was needed. |
+| `standings.conf_rank` | Int64 | Conference rank (playoff seed) in the simulated season after the NFL conference tiebreakers; null beyond `playoff_seeds`. |
+| `standings.conf_tie_broken_by` | String | Tiebreaker step that resolved the conference rank in this simulated season; null when no tiebreaker was needed. |
+| `standings.exit` | String | Round of the team's final game in the simulated season - REG, WC, DIV, CON, SB, or SB_WIN for the Super Bowl winner. |
+| `standings.draft_rank` | Int64 | Draft pick position (1 = first overall) in the simulated season (present when sim_include="DRAFT"). |
+| `standings.draft_tie_broken_by` | String | Tiebreaker step that resolved the draft rank in this simulated season; null when no tiebreaker was needed. |
+| `games.sim` | Int64 | Simulated season identifier the game row belongs to. |
+| `games.game_type` | String | Game type - REG for regular season or the playoff round (WC, DIV, CON, SB). |
+| `games.week` | Int64 | Week number of the game; simulated playoff rounds are numbered from the last regular season week (+1 for WC through +4 for SB). |
+| `games.away_team` | String | Team abbreviation of the away team (simulated playoff matchups are filled by seed). |
+| `games.home_team` | String | Team abbreviation of the home team (simulated playoff matchups are filled by seed). |
+| `games.away_rest` | Int64 | Days of rest for the away team before the game. |
+| `games.home_rest` | Int64 | Days of rest for the home team before the game (14 for the top seed's divisional round game). |
+| `games.location` | String | Game site indicator - "Home" or "Neutral" (Super Bowl). |
+| `games.result` | Int64 | Home margin (home score minus away score); real where the input schedule had one, simulated otherwise. |
+| `overall.conf` | String | Conference of the team (AFC or NFC). |
+| `overall.division` | String | Division of the team (e.g. "AFC East"). |
+| `overall.team` | String | Team abbreviation. |
+| `overall.wins` | Float64 | Mean regular season wins across all simulated seasons (ties counted as half a win). |
+| `overall.playoff` | Float64 | Share of simulated seasons in which the team made the playoffs (conference rank within `playoff_seeds`). |
+| `overall.div1` | Float64 | Share of simulated seasons in which the team won its division. |
+| `overall.seed1` | Float64 | Share of simulated seasons in which the team earned the conference number one seed. |
+| `overall.won_conf` | Float64 | Share of simulated seasons in which the team won the conference championship; null when sim_include="REG". |
+| `overall.won_sb` | Float64 | Share of simulated seasons in which the team won the Super Bowl; null when sim_include="REG". |
+| `overall.draft1` | Float64 | Share of simulated seasons in which the team held the first overall draft pick; null unless sim_include="DRAFT". |
+| `overall.draft5` | Float64 | Share of simulated seasons in which the team held a top-five draft pick; null unless sim_include="DRAFT". |
+| `team_wins.team` | String | Team abbreviation. |
+| `team_wins.wins` | Float64 | Half-win line the over/under probabilities are evaluated against (0, 0.5, ... up to the number of regular season games). |
+| `team_wins.over_prob` | Float64 | Probability across simulated seasons that the team's outright win total exceeds the line. |
+| `team_wins.under_prob` | Float64 | Probability across simulated seasons that the team's outright win total falls below the line (exact pushes are the remainder). |
+| `game_summary.game_type` | String | Game type of the matchup - REG for regular season or the playoff round (WC, DIV, CON, SB). |
+| `game_summary.week` | Int64 | Week number of the matchup. |
+| `game_summary.away_team` | String | Team abbreviation of the away team in the matchup. |
+| `game_summary.home_team` | String | Team abbreviation of the home team in the matchup. |
+| `game_summary.away_wins` | Int64 | Number of simulated seasons in which the away team won the matchup. |
+| `game_summary.home_wins` | Int64 | Number of simulated seasons in which the home team won the matchup. |
+| `game_summary.ties` | Int64 | Number of simulated seasons in which the matchup ended in a tie. |
+| `game_summary.result` | Float64 | Mean home margin of the matchup across the simulated seasons in which it was played. |
+| `game_summary.games_played` | Int64 | Number of simulated seasons in which this exact matchup occurred (playoff pairings only arise in the simulations that produce them). |
+| `game_summary.away_percentage` | Float64 | Share of played simulations won by the away team, with ties counted as half a win. |
+| `game_summary.home_percentage` | Float64 | Share of played simulations won by the home team, with ties counted as half a win. |
 
 **Raises**
 
@@ -152,15 +152,15 @@ As-of-date clean: only seasons strictly before `target_season` are used.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | nflverse gsis player id (character join key). |
-| `target_season` | integer | The season being projected (features use strictly earlier seasons only). |
-| `position_group` | character | nflverse offensive position group. |
-| `proj_team` | character | Most recent team (max season, tiebreak most targets) - the renormalization group. |
-| `proj_target_share` | double | Projected share of team targets - Marcel share blend renormalized to sum to 1.0 within proj_team. |
-| `proj_air_yards_share` | double | Projected share of team air yards, renormalized within proj_team. |
-| `proj_wopr` | double | Projected weighted opportunity rating - 1.5 x proj_target_share + 0.7 x proj_air_yards_share. |
-| `proj_targets` | double | Projected targets - proj_target_share x team pass-target carry-forward. |
-| `proj_air_yards` | double | Projected receiving air yards - proj_air_yards_share x team air-yards carry-forward. |
+| `player_id` | String | nflverse gsis player id (character join key). |
+| `target_season` | Int64 | The season being projected (features use strictly earlier seasons only). |
+| `position_group` | String | nflverse offensive position group. |
+| `proj_team` | String | Most recent team (max season, tiebreak most targets) - the renormalization group. |
+| `proj_target_share` | Float64 | Projected share of team targets - Marcel share blend renormalized to sum to 1.0 within proj_team. |
+| `proj_air_yards_share` | Float64 | Projected share of team air yards, renormalized within proj_team. |
+| `proj_wopr` | Float64 | Projected weighted opportunity rating - 1.5 x proj_target_share + 0.7 x proj_air_yards_share. |
+| `proj_targets` | Float64 | Projected targets - proj_target_share x team pass-target carry-forward. |
+| `proj_air_yards` | Float64 | Projected receiving air yards - proj_air_yards_share x team air-yards carry-forward. |
 
 **Example**
 
@@ -231,11 +231,11 @@ One row per (`season`, `off_team`, `def_team`) matchup, with `dropbacks` and `pr
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season of the matchup aggregate. |
-| `off_team` | character | Offense team abbreviation. |
-| `def_team` | character | Defense team abbreviation. |
-| `dropbacks` | integer | Offense dropbacks in the matchup. |
-| `pressures` | integer | Sacks plus QB hits in the matchup. |
+| `season` | Int64 | Season of the matchup aggregate. |
+| `off_team` | String | Offense team abbreviation. |
+| `def_team` | String | Defense team abbreviation. |
+| `dropbacks` | Int64 | Offense dropbacks in the matchup. |
+| `pressures` | Int64 | Sacks plus QB hits in the matchup. |
 
 ### special_teams_ratings {#special_teams_ratings}
 
@@ -262,8 +262,8 @@ One row per `team_id` (Utf8) with `adj_st_epa` (Float64). Zero-row, correctly-ty
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character |  |
-| `adj_st_epa` | double |  |
+| `team_id` | String |  |
+| `adj_st_epa` | Float64 |  |
 
 **Example**
 
@@ -291,14 +291,14 @@ Per `(season, team)`: `dropbacks_off`, `pressures_allowed`, `pressure_rate_allow
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season of the aggregate. |
-| `team` | character | Team abbreviation. |
-| `dropbacks_off` | integer | Offensive dropbacks (qb_dropback plays). |
-| `pressures_allowed` | integer | Sacks plus QB hits allowed on the team's own dropbacks. |
-| `pressure_rate_allowed` | double | pressures_allowed / dropbacks_off. |
-| `dropbacks_def` | integer | Opponent dropbacks faced on defense. |
-| `pressures_generated` | integer | Sacks plus QB hits generated against opponent dropbacks. |
-| `pressure_rate_generated` | double | pressures_generated / dropbacks_def. |
+| `season` | Int64 | Season of the aggregate. |
+| `team` | String | Team abbreviation. |
+| `dropbacks_off` | Int64 | Offensive dropbacks (qb_dropback plays). |
+| `pressures_allowed` | Int64 | Sacks plus QB hits allowed on the team's own dropbacks. |
+| `pressure_rate_allowed` | Float64 | pressures_allowed / dropbacks_off. |
+| `dropbacks_def` | Int64 | Opponent dropbacks faced on defense. |
+| `pressures_generated` | Int64 | Sacks plus QB hits generated against opponent dropbacks. |
+| `pressure_rate_generated` | Float64 | pressures_generated / dropbacks_def. |
 
 **Example**
 

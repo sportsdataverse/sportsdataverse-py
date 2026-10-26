@@ -1,11 +1,11 @@
 ---
-title: "FOX — Fox Sports API (api.foxsports.com) — Team"
+title: "Fox Sports — Fox Sports API (api.foxsports.com) — Team"
 sidebar_label: "Team"
 sidebar_position: 3
-description: "FOX — Fox Sports API (api.foxsports.com) — Team — function reference in sdv-py, the SportsDataverse Python package."
+description: "Fox Sports — Fox Sports API (api.foxsports.com) — Team — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# FOX — Fox Sports API (api.foxsports.com) — Team
+# Fox Sports — Fox Sports API (api.foxsports.com) — Team
 
 ## fox_api_team_gamelog
 
@@ -28,13 +28,13 @@ GET /bifrost/v1/{sport}/team/{team_id}/gamelog -- Fox Sports API team gamelog.
 
 | col_name | type | description |
 |---|---|---|
-| `emphasized` | logical |  |
-| `index` | integer |  |
-| `priority` | integer |  |
-| `sortable` | character |  |
-| `template` | character |  |
-| `text` | character |  |
-| `weight` | double |  |
+| `emphasized` | Boolean |  |
+| `index` | Int64 |  |
+| `priority` | Int64 |  |
+| `sortable` | String |  |
+| `template` | String |  |
+| `text` | String |  |
+| `weight` | Float64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -73,16 +73,16 @@ GET /bifrost/v1/{sport}/team/{team_id}/header -- Fox Sports API team header.
 
 | col_name | type | description |
 |---|---|---|
-| `template` | character |  |
-| `title` | character |  |
-| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `content_uri` | character |  |
-| `content_type` | character |  |
-| `color` | character |  |
-| `logo_url` | character |  |
-| `image_alt_text` | character |  |
-| `rank` | character |  |
-| `details` | character |  |
+| `template` | String |  |
+| `title` | String |  |
+| `entity_id` | String | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `content_uri` | String |  |
+| `content_type` | String |  |
+| `color` | String |  |
+| `logo_url` | String |  |
+| `image_alt_text` | String |  |
+| `rank` | String |  |
+| `details` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -121,14 +121,14 @@ GET /bifrost/v1/{sport}/team/{team_id}/roster -- Fox Sports API team roster.
 
 | col_name | type | description |
 |---|---|---|
-| `position_group` | character |  |
-| `player` | character |  |
-| `pos` | character |  |
-| `age` | character | Athlete age in years. |
-| `ht` | character |  |
-| `wt` | character |  |
-| `college` | character |  |
-| `athlete_id` | character | ESPN numeric identifier for the athlete. |
+| `position_group` | String |  |
+| `player` | String |  |
+| `pos` | String |  |
+| `age` | String | Athlete age in years. |
+| `ht` | String |  |
+| `wt` | String |  |
+| `college` | String |  |
+| `athlete_id` | String | ESPN numeric identifier for the athlete. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -167,28 +167,28 @@ GET /bifrost/v1/{sport}/team/{team_id}/standings -- Fox Sports API team standing
 
 | col_name | type | description |
 |---|---|---|
-| `section` | character |  |
-| `nfc_south` | character |  |
-| `v1` | character |  |
-| `w_l_t` | character |  |
-| `pct` | character |  |
-| `pf` | character |  |
-| `pa` | character |  |
-| `home` | character |  |
-| `away` | character |  |
-| `conf` | character |  |
-| `div` | character |  |
-| `strk` | character |  |
-| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `nfc_east` | character |  |
-| `nfc_north` | character |  |
-| `nfc_west` | character |  |
-| `afc_east` | character |  |
-| `afc_north` | character |  |
-| `afc_south` | character |  |
-| `afc_west` | character |  |
-| `national_football_conference` | character |  |
-| `american_football_conference` | character |  |
+| `section` | String |  |
+| `nfc_south` | String |  |
+| `v1` | String |  |
+| `w_l_t` | String |  |
+| `pct` | String |  |
+| `pf` | String |  |
+| `pa` | String |  |
+| `home` | String |  |
+| `away` | String |  |
+| `conf` | String |  |
+| `div` | String |  |
+| `strk` | String |  |
+| `entity_id` | String | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `nfc_east` | String |  |
+| `nfc_north` | String |  |
+| `nfc_west` | String |  |
+| `afc_east` | String |  |
+| `afc_north` | String |  |
+| `afc_south` | String |  |
+| `afc_west` | String |  |
+| `national_football_conference` | String |  |
+| `american_football_conference` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -227,18 +227,18 @@ GET /bifrost/v1/{sport}/team/{team_id}/stats -- Fox Sports API team stats.
 
 | col_name | type | description |
 |---|---|---|
-| `condensed_uri` | character |  |
-| `image_alt_text` | character |  |
-| `image_type` | character |  |
-| `image_url` | character |  |
-| `name` | character |  |
-| `selection_id` | character |  |
-| `short_name` | character |  |
-| `stat_abbreviation` | character |  |
-| `stat_value` | character |  |
-| `template` | character |  |
-| `title` | character |  |
-| `web_url` | character |  |
+| `condensed_uri` | String |  |
+| `image_alt_text` | String |  |
+| `image_type` | String |  |
+| `image_url` | String |  |
+| `name` | String |  |
+| `selection_id` | String |  |
+| `short_name` | String |  |
+| `stat_abbreviation` | String |  |
+| `stat_value` | String |  |
+| `template` | String |  |
+| `title` | String |  |
+| `web_url` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

@@ -2,7 +2,7 @@ api: vtb_infobasket
 docstring:
   example_import: true
   notes:
-  - 'Owner flag (sdv-internal-refs/vtb/README.md): the VTB United League is run from
+  - 'Owner flag: the VTB United League is run from
     Russia and several clubs are owned or sponsored by sanctioned state companies
     (the KHL precedent); Infobasket is the Russian basketball federation''s stats
     platform. Fetching on your own machine is fine; any published data release, hosted

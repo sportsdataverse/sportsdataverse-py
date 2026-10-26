@@ -30,34 +30,34 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 | col_name | type | description |
 |---|---|---|
-| `assists` | numeric | Assisted tackles credited to the player. |
-| `avg_depth_of_tackle` | numeric | Average depth downfield, in yards, at which the player made his tackles on run plays. |
-| `declined_penalties` | numeric | Penalties committed by the player that were declined. |
-| `draft_season` | numeric | Season of the player's NFL draft class, per PFF. |
-| `eligible_season` | numeric | Season of the player's NFL draft eligibility, per PFF. |
-| `forced_fumbles` | numeric | Fumbles forced by the player. |
-| `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
-| `grades_coverage_defense` | numeric | PFF coverage grade, 0-100. |
-| `grades_defense` | numeric | PFF overall defense grade, 0-100. |
-| `grades_defense_penalty` | numeric | PFF defensive penalty grade, 0-100. |
-| `grades_pass_rush_defense` | numeric | PFF pass-rush grade, 0-100. |
-| `grades_run_defense` | numeric | PFF run-defense grade, 0-100. |
-| `grades_tackle` | numeric | PFF tackling grade, 0-100. |
-| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
-| `missed_tackle_rate` | numeric | Share of tackle attempts the player missed. |
-| `missed_tackles` | numeric | Missed tackles. |
-| `penalties` | numeric | Penalties charged to the player over the covered span. |
-| `player` | character | Player's display name as PFF lists it. |
-| `player_game_count` | numeric | Number of games the player appeared in over the covered span. |
-| `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
-| `position` | character | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
-| `run_stop_opp` | numeric | Run-defense snaps PFF counts as run-stop opportunities. |
-| `snap_counts_run` | numeric | Run-defense snaps played. |
-| `stop_percent` | numeric | Percentage of run-stop opportunities converted into stops. |
-| `stops` | numeric | Stops, PFF's tackles that constitute a failed play for the offense. |
-| `tackles` | numeric | Tackles made by the player, as charted by PFF. |
-| `team` | character | Team abbreviation the player is credited to for the range. |
-| `team_name` | character | Team abbreviation the player is credited to for the range. |
+| `assists` | Float64 | Assisted tackles credited to the player. |
+| `avg_depth_of_tackle` | Float64 | Average depth downfield, in yards, at which the player made his tackles on run plays. |
+| `declined_penalties` | Float64 | Penalties committed by the player that were declined. |
+| `draft_season` | Float64 | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | Float64 | Season of the player's NFL draft eligibility, per PFF. |
+| `forced_fumbles` | Float64 | Fumbles forced by the player. |
+| `franchise_id` | Float64 | PFF franchise (team) id (integer join key). |
+| `grades_coverage_defense` | Float64 | PFF coverage grade, 0-100. |
+| `grades_defense` | Float64 | PFF overall defense grade, 0-100. |
+| `grades_defense_penalty` | Float64 | PFF defensive penalty grade, 0-100. |
+| `grades_pass_rush_defense` | Float64 | PFF pass-rush grade, 0-100. |
+| `grades_run_defense` | Float64 | PFF run-defense grade, 0-100. |
+| `grades_tackle` | Float64 | PFF tackling grade, 0-100. |
+| `jersey_number` | String | Jersey number (string; zero-padded, e.g. "09"). |
+| `missed_tackle_rate` | Float64 | Share of tackle attempts the player missed. |
+| `missed_tackles` | Float64 | Missed tackles. |
+| `penalties` | Float64 | Penalties charged to the player over the covered span. |
+| `player` | String | Player's display name as PFF lists it. |
+| `player_game_count` | Float64 | Number of games the player appeared in over the covered span. |
+| `player_id` | Float64 | PFF player id (integer; matches the /players id and every player_id join key). |
+| `position` | String | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
+| `run_stop_opp` | Float64 | Run-defense snaps PFF counts as run-stop opportunities. |
+| `snap_counts_run` | Float64 | Run-defense snaps played. |
+| `stop_percent` | Float64 | Percentage of run-stop opportunities converted into stops. |
+| `stops` | Float64 | Stops, PFF's tackles that constitute a failed play for the offense. |
+| `tackles` | Float64 | Tackles made by the player, as charted by PFF. |
+| `team` | String | Team abbreviation the player is credited to for the range. |
+| `team_name` | String | Team abbreviation the player is credited to for the range. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -98,40 +98,40 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 | col_name | type | description |
 |---|---|---|
-| `twenty_attempts` | numeric | Field goals attempted from 20-29 yards. |
-| `pat_percent` | numeric | Extra-point percentage. |
-| `draft_season` | numeric | Season of the player's NFL draft class, per PFF. |
-| `forty_made` | numeric | Field goals made from 40-49 yards. |
-| `team_name` | character | Team abbreviation the player is credited to for the range. |
-| `fifty_percent` | numeric | Field-goal percentage from 50 or more yards. |
-| `total_made` | numeric | Total field goals made across all distances. |
-| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
-| `one_made` | numeric | Field goals made from 1-19 yards. |
-| `fifty_attempts` | numeric | Field goals attempted from 50 or more yards. |
-| `forty_attempts` | numeric | Field goals attempted from 40-49 yards. |
-| `player_game_count` | numeric | Number of games the player appeared in over the covered span. |
-| `eligible_season` | numeric | Season of the player's NFL draft eligibility, per PFF. |
-| `thirty_percent` | numeric | Field-goal percentage from 30-39 yards. |
-| `total_attempts` | numeric | Total field goals attempted across all distances. |
-| `pat_attempts` | numeric | Extra points attempted. |
-| `twenty_made` | numeric | Field goals made from 20-29 yards. |
-| `one_attempts` | numeric | Field goals attempted from 1-19 yards. |
-| `grades_fgep_kicker` | numeric | PFF field-goal and extra-point kicking grade, 0-100. |
-| `thirty_attempts` | numeric | Field goals attempted from 30-39 yards. |
-| `penalties` | numeric | Penalties charged to the player over the covered span. |
-| `pat_made` | numeric | Extra points made. |
-| `team` | character | Team abbreviation the player is credited to for the range. |
-| `declined_penalties` | numeric | Penalties committed by the player that were declined. |
-| `one_percent` | numeric | Field-goal percentage from 1-19 yards. |
-| `total_percent` | numeric | Overall field-goal percentage. |
-| `position` | character | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
-| `twenty_percent` | numeric | Field-goal percentage from 20-29 yards. |
-| `forty_percent` | numeric | Field-goal percentage from 40-49 yards. |
-| `player` | character | Player's display name as PFF lists it. |
-| `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
-| `fifty_made` | numeric | Field goals made from 50 or more yards. |
-| `thirty_made` | numeric | Field goals made from 30-39 yards. |
-| `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
+| `twenty_attempts` | Float64 | Field goals attempted from 20-29 yards. |
+| `pat_percent` | Float64 | Extra-point percentage. |
+| `draft_season` | Float64 | Season of the player's NFL draft class, per PFF. |
+| `forty_made` | Float64 | Field goals made from 40-49 yards. |
+| `team_name` | String | Team abbreviation the player is credited to for the range. |
+| `fifty_percent` | Float64 | Field-goal percentage from 50 or more yards. |
+| `total_made` | Float64 | Total field goals made across all distances. |
+| `jersey_number` | String | Jersey number (string; zero-padded, e.g. "09"). |
+| `one_made` | Float64 | Field goals made from 1-19 yards. |
+| `fifty_attempts` | Float64 | Field goals attempted from 50 or more yards. |
+| `forty_attempts` | Float64 | Field goals attempted from 40-49 yards. |
+| `player_game_count` | Float64 | Number of games the player appeared in over the covered span. |
+| `eligible_season` | Float64 | Season of the player's NFL draft eligibility, per PFF. |
+| `thirty_percent` | Float64 | Field-goal percentage from 30-39 yards. |
+| `total_attempts` | Float64 | Total field goals attempted across all distances. |
+| `pat_attempts` | Float64 | Extra points attempted. |
+| `twenty_made` | Float64 | Field goals made from 20-29 yards. |
+| `one_attempts` | Float64 | Field goals attempted from 1-19 yards. |
+| `grades_fgep_kicker` | Float64 | PFF field-goal and extra-point kicking grade, 0-100. |
+| `thirty_attempts` | Float64 | Field goals attempted from 30-39 yards. |
+| `penalties` | Float64 | Penalties charged to the player over the covered span. |
+| `pat_made` | Float64 | Extra points made. |
+| `team` | String | Team abbreviation the player is credited to for the range. |
+| `declined_penalties` | Float64 | Penalties committed by the player that were declined. |
+| `one_percent` | Float64 | Field-goal percentage from 1-19 yards. |
+| `total_percent` | Float64 | Overall field-goal percentage. |
+| `position` | String | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
+| `twenty_percent` | Float64 | Field-goal percentage from 20-29 yards. |
+| `forty_percent` | Float64 | Field-goal percentage from 40-49 yards. |
+| `player` | String | Player's display name as PFF lists it. |
+| `franchise_id` | Float64 | PFF franchise (team) id (integer join key). |
+| `fifty_made` | Float64 | Field goals made from 50 or more yards. |
+| `thirty_made` | Float64 | Field goals made from 30-39 yards. |
+| `player_id` | Float64 | PFF player id (integer; matches the /players id and every player_id join key). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -172,50 +172,50 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 | col_name | type | description |
 |---|---|---|
-| `targets` | numeric | Passes thrown into the player's coverage (targets allowed). |
-| `yards_per_coverage_snap` | numeric | Receiving yards allowed per coverage snap. |
-| `draft_season` | numeric | Season of the player's NFL draft class, per PFF. |
-| `missed_tackles` | numeric | Missed tackles. |
-| `catch_rate` | numeric | Completion percentage allowed on targets into the player's coverage. |
-| `team_name` | character | Team abbreviation the player is credited to for the range. |
-| `tackles` | numeric | Tackles made by the player, as charted by PFF. |
-| `coverage_percent` | numeric | Share of pass-play snaps spent in coverage. |
-| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
-| `dropped_ints` | numeric | Interception chances PFF charted as dropped. |
-| `player_game_count` | numeric | Number of games the player appeared in over the covered span. |
-| `eligible_season` | numeric | Season of the player's NFL draft eligibility, per PFF. |
-| `grades_tackle` | numeric | PFF tackling grade, 0-100. |
-| `yards` | numeric | Receiving yards allowed in the player's coverage. |
-| `receptions` | numeric | Receptions allowed in the player's coverage. |
-| `forced_incompletion_rate` | numeric | Share of targets into the player's coverage with a PFF-charted forced incompletion. |
-| `grades_coverage_defense` | numeric | PFF coverage grade, 0-100. |
-| `interceptions` | numeric | Interceptions made by the player in coverage. |
-| `snap_counts_coverage` | numeric | Coverage snaps played. |
-| `grades_run_defense` | numeric | PFF run-defense grade, 0-100. |
-| `snap_counts_pass_play` | numeric | Pass-play snaps. |
-| `penalties` | numeric | Penalties charged to the player over the covered span. |
-| `forced_incompletes` | numeric | Incompletions forced by the player's coverage, per PFF charting. |
-| `team` | character | Team abbreviation the player is credited to for the range. |
-| `coverage_snaps_per_target` | numeric | Coverage snaps played per target into the player's coverage. |
-| `stops` | numeric | Stops, PFF's tackles that constitute a failed play for the offense. |
-| `declined_penalties` | numeric | Penalties committed by the player that were declined. |
-| `position` | character | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
-| `longest` | numeric | Longest completion allowed, in yards. |
-| `missed_tackle_rate` | numeric | Share of tackle attempts the player missed. |
-| `grades_defense` | numeric | PFF overall defense grade, 0-100. |
-| `yards_per_reception` | numeric | Average yards allowed per reception. |
-| `grades_defense_penalty` | numeric | PFF defensive penalty grade, 0-100. |
-| `player` | character | Player's display name as PFF lists it. |
-| `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
-| `yards_after_catch` | numeric | Yards after the catch allowed in the player's coverage. |
-| `avg_depth_of_target` | numeric | Average depth of targets into the player's coverage, in yards downfield. |
-| `pass_break_ups` | numeric | Passes broken up. |
-| `qb_rating_against` | numeric | NFL passer rating allowed on targets into the player's coverage. |
-| `coverage_snaps_per_reception` | numeric | Coverage snaps played per reception allowed. |
-| `assists` | numeric | Assisted tackles credited to the player. |
-| `grades_pass_rush_defense` | numeric | PFF pass-rush grade, 0-100. |
-| `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
-| `touchdowns` | numeric | Touchdowns allowed into the player's coverage. |
+| `targets` | Float64 | Passes thrown into the player's coverage (targets allowed). |
+| `yards_per_coverage_snap` | Float64 | Receiving yards allowed per coverage snap. |
+| `draft_season` | Float64 | Season of the player's NFL draft class, per PFF. |
+| `missed_tackles` | Float64 | Missed tackles. |
+| `catch_rate` | Float64 | Completion percentage allowed on targets into the player's coverage. |
+| `team_name` | String | Team abbreviation the player is credited to for the range. |
+| `tackles` | Float64 | Tackles made by the player, as charted by PFF. |
+| `coverage_percent` | Float64 | Share of pass-play snaps spent in coverage. |
+| `jersey_number` | String | Jersey number (string; zero-padded, e.g. "09"). |
+| `dropped_ints` | Float64 | Interception chances PFF charted as dropped. |
+| `player_game_count` | Float64 | Number of games the player appeared in over the covered span. |
+| `eligible_season` | Float64 | Season of the player's NFL draft eligibility, per PFF. |
+| `grades_tackle` | Float64 | PFF tackling grade, 0-100. |
+| `yards` | Float64 | Receiving yards allowed in the player's coverage. |
+| `receptions` | Float64 | Receptions allowed in the player's coverage. |
+| `forced_incompletion_rate` | Float64 | Share of targets into the player's coverage with a PFF-charted forced incompletion. |
+| `grades_coverage_defense` | Float64 | PFF coverage grade, 0-100. |
+| `interceptions` | Float64 | Interceptions made by the player in coverage. |
+| `snap_counts_coverage` | Float64 | Coverage snaps played. |
+| `grades_run_defense` | Float64 | PFF run-defense grade, 0-100. |
+| `snap_counts_pass_play` | Float64 | Pass-play snaps. |
+| `penalties` | Float64 | Penalties charged to the player over the covered span. |
+| `forced_incompletes` | Float64 | Incompletions forced by the player's coverage, per PFF charting. |
+| `team` | String | Team abbreviation the player is credited to for the range. |
+| `coverage_snaps_per_target` | Float64 | Coverage snaps played per target into the player's coverage. |
+| `stops` | Float64 | Stops, PFF's tackles that constitute a failed play for the offense. |
+| `declined_penalties` | Float64 | Penalties committed by the player that were declined. |
+| `position` | String | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
+| `longest` | Float64 | Longest completion allowed, in yards. |
+| `missed_tackle_rate` | Float64 | Share of tackle attempts the player missed. |
+| `grades_defense` | Float64 | PFF overall defense grade, 0-100. |
+| `yards_per_reception` | Float64 | Average yards allowed per reception. |
+| `grades_defense_penalty` | Float64 | PFF defensive penalty grade, 0-100. |
+| `player` | String | Player's display name as PFF lists it. |
+| `franchise_id` | Float64 | PFF franchise (team) id (integer join key). |
+| `yards_after_catch` | Float64 | Yards after the catch allowed in the player's coverage. |
+| `avg_depth_of_target` | Float64 | Average depth of targets into the player's coverage, in yards downfield. |
+| `pass_break_ups` | Float64 | Passes broken up. |
+| `qb_rating_against` | Float64 | NFL passer rating allowed on targets into the player's coverage. |
+| `coverage_snaps_per_reception` | Float64 | Coverage snaps played per reception allowed. |
+| `assists` | Float64 | Assisted tackles credited to the player. |
+| `grades_pass_rush_defense` | Float64 | PFF pass-rush grade, 0-100. |
+| `player_id` | Float64 | PFF player id (integer; matches the /players id and every player_id join key). |
+| `touchdowns` | Float64 | Touchdowns allowed into the player's coverage. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -256,33 +256,33 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 | col_name | type | description |
 |---|---|---|
-| `attempts` | numeric | Kickoffs by the player. |
-| `attempts_with_hangtime` | numeric | Kickoffs with a PFF-recorded hangtime. |
-| `average_distance` | numeric | Average kickoff distance in yards. |
-| `average_hangtime` | numeric | Average kickoff hangtime in seconds. |
-| `average_starting_field_position` | numeric | Average opponent starting field position following the player's kickoffs. |
-| `average_yards_per_return` | numeric | Average return yards allowed per kickoff returned. |
-| `declined_penalties` | numeric | Penalties committed by the player that were declined. |
-| `draft_season` | numeric | Season of the player's NFL draft class, per PFF. |
-| `eligible_season` | numeric | Season of the player's NFL draft eligibility, per PFF. |
-| `fair_catches` | numeric | Kickoffs fair-caught by the return team. |
-| `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
-| `grades_kickoff_kicker` | numeric | PFF kickoff kicking grade, 0-100. |
-| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
-| `kicked_yards` | numeric | Total kickoff yards. |
-| `kicks_returned` | numeric | Kickoffs returned by the opponent. |
-| `onside_kicks` | numeric | Onside kicks attempted. |
-| `penalties` | numeric | Penalties charged to the player over the covered span. |
-| `percent_returned` | numeric | Percentage of the player's kickoffs that were returned. |
-| `player` | character | Player's display name as PFF lists it. |
-| `player_game_count` | numeric | Number of games the player appeared in over the covered span. |
-| `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
-| `position` | character | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
-| `return_yards` | numeric | Return yards gained by the return team on the player's kickoffs. |
-| `team` | character | Team abbreviation the player is credited to for the range. |
-| `team_name` | character | Team abbreviation the player is credited to for the range. |
-| `total_hangtime` | numeric | Total kickoff hangtime in seconds. |
-| `touchbacks` | numeric | Kickoffs resulting in touchbacks. |
+| `attempts` | Float64 | Kickoffs by the player. |
+| `attempts_with_hangtime` | Float64 | Kickoffs with a PFF-recorded hangtime. |
+| `average_distance` | Float64 | Average kickoff distance in yards. |
+| `average_hangtime` | Float64 | Average kickoff hangtime in seconds. |
+| `average_starting_field_position` | Float64 | Average opponent starting field position following the player's kickoffs. |
+| `average_yards_per_return` | Float64 | Average return yards allowed per kickoff returned. |
+| `declined_penalties` | Float64 | Penalties committed by the player that were declined. |
+| `draft_season` | Float64 | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | Float64 | Season of the player's NFL draft eligibility, per PFF. |
+| `fair_catches` | Float64 | Kickoffs fair-caught by the return team. |
+| `franchise_id` | Float64 | PFF franchise (team) id (integer join key). |
+| `grades_kickoff_kicker` | Float64 | PFF kickoff kicking grade, 0-100. |
+| `jersey_number` | String | Jersey number (string; zero-padded, e.g. "09"). |
+| `kicked_yards` | Float64 | Total kickoff yards. |
+| `kicks_returned` | Float64 | Kickoffs returned by the opponent. |
+| `onside_kicks` | Float64 | Onside kicks attempted. |
+| `penalties` | Float64 | Penalties charged to the player over the covered span. |
+| `percent_returned` | Float64 | Percentage of the player's kickoffs that were returned. |
+| `player` | String | Player's display name as PFF lists it. |
+| `player_game_count` | Float64 | Number of games the player appeared in over the covered span. |
+| `player_id` | Float64 | PFF player id (integer; matches the /players id and every player_id join key). |
+| `position` | String | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
+| `return_yards` | Float64 | Return yards gained by the return team on the player's kickoffs. |
+| `team` | String | Team abbreviation the player is credited to for the range. |
+| `team_name` | String | Team abbreviation the player is credited to for the range. |
+| `total_hangtime` | Float64 | Total kickoff hangtime in seconds. |
+| `touchbacks` | Float64 | Kickoffs resulting in touchbacks. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -323,41 +323,41 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 | col_name | type | description |
 |---|---|---|
-| `grades_pass_block` | numeric | PFF pass-blocking grade, 0-100. |
-| `grades_offense` | numeric | PFF overall offense grade, 0-100. |
-| `pbe` | numeric | PFF Pass Blocking Efficiency rating, pressures allowed per pass-blocking snap weighted toward sacks. |
-| `non_spike_pass_block_percentage` | numeric | Share of non-spike pass-play snaps spent pass blocking. |
-| `draft_season` | numeric | Season of the player's NFL draft class, per PFF. |
-| `snap_counts_rg` | numeric | Snaps aligned at right guard. |
-| `team_name` | character | Team abbreviation the player is credited to for the range. |
-| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
-| `snap_counts_ce` | numeric | Snaps aligned at center. |
-| `hits_allowed` | numeric | Quarterback hits allowed. |
-| `block_percent` | numeric | Share of offensive snaps spent blocking. |
-| `snap_counts_offense` | numeric | Offensive snaps played. |
-| `player_game_count` | numeric | Number of games the player appeared in over the covered span. |
-| `eligible_season` | numeric | Season of the player's NFL draft eligibility, per PFF. |
-| `snap_counts_block` | numeric | Total blocking snaps played. |
-| `hurries_allowed` | numeric | Quarterback hurries allowed. |
-| `grades_run_block` | numeric | PFF run-blocking grade, 0-100. |
-| `snap_counts_run_block` | numeric | Run-blocking snaps played. |
-| `pressures_allowed` | numeric | Total pressures allowed (sacks, hits, and hurries). |
-| `snap_counts_pass_play` | numeric | Pass-play snaps. |
-| `penalties` | numeric | Penalties charged to the player over the covered span. |
-| `sacks_allowed` | numeric | Sacks allowed by the player in pass protection. |
-| `team` | character | Team abbreviation the player is credited to for the range. |
-| `declined_penalties` | numeric | Penalties committed by the player that were declined. |
-| `snap_counts_te` | numeric | Snaps aligned at tight end. |
-| `snap_counts_rt` | numeric | Snaps aligned at right tackle. |
-| `position` | character | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
-| `non_spike_pass_block` | numeric | Pass-blocking snaps excluding spike plays. |
-| `snap_counts_lt` | numeric | Snaps aligned at left tackle. |
-| `player` | character | Player's display name as PFF lists it. |
-| `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
-| `snap_counts_pass_block` | numeric | Pass-blocking snaps played. |
-| `pass_block_percent` | numeric | Share of pass-play snaps spent pass blocking. |
-| `snap_counts_lg` | numeric | Snaps aligned at left guard. |
-| `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
+| `grades_pass_block` | Float64 | PFF pass-blocking grade, 0-100. |
+| `grades_offense` | Float64 | PFF overall offense grade, 0-100. |
+| `pbe` | Float64 | PFF Pass Blocking Efficiency rating, pressures allowed per pass-blocking snap weighted toward sacks. |
+| `non_spike_pass_block_percentage` | Float64 | Share of non-spike pass-play snaps spent pass blocking. |
+| `draft_season` | Float64 | Season of the player's NFL draft class, per PFF. |
+| `snap_counts_rg` | Float64 | Snaps aligned at right guard. |
+| `team_name` | String | Team abbreviation the player is credited to for the range. |
+| `jersey_number` | String | Jersey number (string; zero-padded, e.g. "09"). |
+| `snap_counts_ce` | Float64 | Snaps aligned at center. |
+| `hits_allowed` | Float64 | Quarterback hits allowed. |
+| `block_percent` | Float64 | Share of offensive snaps spent blocking. |
+| `snap_counts_offense` | Float64 | Offensive snaps played. |
+| `player_game_count` | Float64 | Number of games the player appeared in over the covered span. |
+| `eligible_season` | Float64 | Season of the player's NFL draft eligibility, per PFF. |
+| `snap_counts_block` | Float64 | Total blocking snaps played. |
+| `hurries_allowed` | Float64 | Quarterback hurries allowed. |
+| `grades_run_block` | Float64 | PFF run-blocking grade, 0-100. |
+| `snap_counts_run_block` | Float64 | Run-blocking snaps played. |
+| `pressures_allowed` | Float64 | Total pressures allowed (sacks, hits, and hurries). |
+| `snap_counts_pass_play` | Float64 | Pass-play snaps. |
+| `penalties` | Float64 | Penalties charged to the player over the covered span. |
+| `sacks_allowed` | Float64 | Sacks allowed by the player in pass protection. |
+| `team` | String | Team abbreviation the player is credited to for the range. |
+| `declined_penalties` | Float64 | Penalties committed by the player that were declined. |
+| `snap_counts_te` | Float64 | Snaps aligned at tight end. |
+| `snap_counts_rt` | Float64 | Snaps aligned at right tackle. |
+| `position` | String | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
+| `non_spike_pass_block` | Float64 | Pass-blocking snaps excluding spike plays. |
+| `snap_counts_lt` | Float64 | Snaps aligned at left tackle. |
+| `player` | String | Player's display name as PFF lists it. |
+| `franchise_id` | Float64 | PFF franchise (team) id (integer join key). |
+| `snap_counts_pass_block` | Float64 | Pass-blocking snaps played. |
+| `pass_block_percent` | Float64 | Share of pass-play snaps spent pass blocking. |
+| `snap_counts_lg` | Float64 | Snaps aligned at left guard. |
+| `player_id` | Float64 | PFF player id (integer; matches the /players id and every player_id join key). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -398,65 +398,65 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 | col_name | type | description |
 |---|---|---|
-| `targets` | numeric | Passes thrown into the player's coverage (targets allowed). |
-| `interception_touchdowns` | numeric | Touchdowns scored on interception returns. |
-| `draft_season` | numeric | Season of the player's NFL draft class, per PFF. |
-| `forced_fumbles` | numeric | Forced fumbles. |
-| `missed_tackles` | numeric | Missed tackles. |
-| `catch_rate` | numeric | Completion percentage allowed on targets into the player's coverage. |
-| `team_name` | character | Team abbreviation the player is credited to for the range. |
-| `tackles` | numeric | Total tackles made by the defender. |
-| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
-| `snap_counts_offball` | numeric | Snaps aligned as an off-ball linebacker. |
-| `snap_counts_box` | numeric | Snaps aligned in the box. |
-| `sacks` | numeric | Sacks credited. |
-| `snap_counts_pass_rush` | numeric | Pass-rush snaps played. |
-| `player_game_count` | numeric | Games with at least one qualifying snap in the requested range. |
-| `eligible_season` | numeric | Season of the player's NFL draft eligibility, per PFF. |
-| `snap_counts_dl` | numeric | Snaps aligned on the defensive line. |
-| `grades_tackle` | numeric | PFF tackling grade, 0-100. |
-| `yards` | numeric | Receiving yards allowed in the player's coverage. |
-| `receptions` | numeric | Receptions allowed in the player's coverage. |
-| `grades_coverage_defense` | numeric | PFF coverage grade (0-100). |
-| `hurries` | numeric | Quarterback hurries recorded. |
-| `interceptions` | numeric | Interceptions made in coverage. |
-| `snap_counts_coverage` | numeric | Coverage snaps played. |
-| `snap_counts_dl_over_t` | numeric | Defensive-line snaps aligned head-up over the offensive tackle. |
-| `snap_counts_dl_a_gap` | numeric | Defensive-line snaps aligned in the A gap. |
-| `fumble_recoveries` | numeric | Opponent fumbles recovered by the player. |
-| `grades_run_defense` | numeric | PFF run-defense grade (0-100). |
-| `snap_counts_corner` | numeric | Snaps aligned at outside cornerback. |
-| `hits` | numeric | Quarterback hits recorded by the player. |
-| `penalties` | numeric | Penalties charged to the player over the covered span. |
-| `batted_passes` | numeric | Passes batted down at the line of scrimmage. |
-| `team` | character | Team abbreviation the player is credited to for the range. |
-| `stops` | numeric | Tackles that constitute an offensive failure ("stops"). |
-| `declined_penalties` | numeric | Penalties committed by the player that were declined. |
-| `total_pressures` | numeric | Total quarterback pressures (sacks + hits + hurries). |
-| `position` | character | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
-| `fumble_recovery_touchdowns` | numeric | Touchdowns scored on fumble recoveries. |
-| `longest` | numeric | Longest completion allowed, in yards. |
-| `snap_counts_slot` | numeric | Snaps aligned in the slot. |
-| `missed_tackle_rate` | numeric | Share of tackle attempts the player missed. |
-| `grades_defense` | numeric | PFF overall defense grade (0-100). |
-| `yards_per_reception` | numeric | Average yards allowed per reception. |
-| `grades_defense_penalty` | numeric | PFF defensive penalty grade, 0-100. |
-| `safeties` | numeric | Safeties recorded by the player. |
-| `player` | character | Player's display name as PFF lists it. |
-| `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
-| `snap_counts_defense` | numeric | Total defensive snaps played. |
-| `yards_after_catch` | numeric | Yards after the catch allowed in the player's coverage. |
-| `snap_counts_dl_b_gap` | numeric | Defensive-line snaps aligned in the B gap. |
-| `pass_break_ups` | numeric | Passes broken up. |
-| `qb_rating_against` | numeric | NFL passer rating allowed on targets into the player's coverage. |
-| `snap_counts_run_defense` | numeric | Run-defense snaps played. |
-| `tackles_for_loss` | numeric | Tackles for loss made by the player. |
-| `assists` | numeric | Assisted tackles. |
-| `grades_pass_rush_defense` | numeric | PFF pass-rush grade, 0-100. |
-| `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
-| `snap_counts_fs` | numeric | Snaps aligned at free safety. |
-| `touchdowns` | numeric | Touchdowns allowed into the player's coverage. |
-| `snap_counts_dl_outside_t` | numeric | Defensive-line snaps aligned outside the offensive tackle. |
+| `targets` | Float64 | Passes thrown into the player's coverage (targets allowed). |
+| `interception_touchdowns` | Float64 | Touchdowns scored on interception returns. |
+| `draft_season` | Float64 | Season of the player's NFL draft class, per PFF. |
+| `forced_fumbles` | Float64 | Forced fumbles. |
+| `missed_tackles` | Float64 | Missed tackles. |
+| `catch_rate` | Float64 | Completion percentage allowed on targets into the player's coverage. |
+| `team_name` | String | Team abbreviation the player is credited to for the range. |
+| `tackles` | Float64 | Total tackles made by the defender. |
+| `jersey_number` | String | Jersey number (string; zero-padded, e.g. "09"). |
+| `snap_counts_offball` | Float64 | Snaps aligned as an off-ball linebacker. |
+| `snap_counts_box` | Float64 | Snaps aligned in the box. |
+| `sacks` | Float64 | Sacks credited. |
+| `snap_counts_pass_rush` | Float64 | Pass-rush snaps played. |
+| `player_game_count` | Float64 | Games with at least one qualifying snap in the requested range. |
+| `eligible_season` | Float64 | Season of the player's NFL draft eligibility, per PFF. |
+| `snap_counts_dl` | Float64 | Snaps aligned on the defensive line. |
+| `grades_tackle` | Float64 | PFF tackling grade, 0-100. |
+| `yards` | Float64 | Receiving yards allowed in the player's coverage. |
+| `receptions` | Float64 | Receptions allowed in the player's coverage. |
+| `grades_coverage_defense` | Float64 | PFF coverage grade (0-100). |
+| `hurries` | Float64 | Quarterback hurries recorded. |
+| `interceptions` | Float64 | Interceptions made in coverage. |
+| `snap_counts_coverage` | Float64 | Coverage snaps played. |
+| `snap_counts_dl_over_t` | Float64 | Defensive-line snaps aligned head-up over the offensive tackle. |
+| `snap_counts_dl_a_gap` | Float64 | Defensive-line snaps aligned in the A gap. |
+| `fumble_recoveries` | Float64 | Opponent fumbles recovered by the player. |
+| `grades_run_defense` | Float64 | PFF run-defense grade (0-100). |
+| `snap_counts_corner` | Float64 | Snaps aligned at outside cornerback. |
+| `hits` | Float64 | Quarterback hits recorded by the player. |
+| `penalties` | Float64 | Penalties charged to the player over the covered span. |
+| `batted_passes` | Float64 | Passes batted down at the line of scrimmage. |
+| `team` | String | Team abbreviation the player is credited to for the range. |
+| `stops` | Float64 | Tackles that constitute an offensive failure ("stops"). |
+| `declined_penalties` | Float64 | Penalties committed by the player that were declined. |
+| `total_pressures` | Float64 | Total quarterback pressures (sacks + hits + hurries). |
+| `position` | String | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
+| `fumble_recovery_touchdowns` | Float64 | Touchdowns scored on fumble recoveries. |
+| `longest` | Float64 | Longest completion allowed, in yards. |
+| `snap_counts_slot` | Float64 | Snaps aligned in the slot. |
+| `missed_tackle_rate` | Float64 | Share of tackle attempts the player missed. |
+| `grades_defense` | Float64 | PFF overall defense grade (0-100). |
+| `yards_per_reception` | Float64 | Average yards allowed per reception. |
+| `grades_defense_penalty` | Float64 | PFF defensive penalty grade, 0-100. |
+| `safeties` | Float64 | Safeties recorded by the player. |
+| `player` | String | Player's display name as PFF lists it. |
+| `franchise_id` | Float64 | PFF franchise (team) id (integer join key). |
+| `snap_counts_defense` | Float64 | Total defensive snaps played. |
+| `yards_after_catch` | Float64 | Yards after the catch allowed in the player's coverage. |
+| `snap_counts_dl_b_gap` | Float64 | Defensive-line snaps aligned in the B gap. |
+| `pass_break_ups` | Float64 | Passes broken up. |
+| `qb_rating_against` | Float64 | NFL passer rating allowed on targets into the player's coverage. |
+| `snap_counts_run_defense` | Float64 | Run-defense snaps played. |
+| `tackles_for_loss` | Float64 | Tackles for loss made by the player. |
+| `assists` | Float64 | Assisted tackles. |
+| `grades_pass_rush_defense` | Float64 | PFF pass-rush grade, 0-100. |
+| `player_id` | Float64 | PFF player id (integer; matches the /players id and every player_id join key). |
+| `snap_counts_fs` | Float64 | Snaps aligned at free safety. |
+| `touchdowns` | Float64 | Touchdowns allowed into the player's coverage. |
+| `snap_counts_dl_outside_t` | Float64 | Defensive-line snaps aligned outside the offensive tackle. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -497,34 +497,34 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 | col_name | type | description |
 |---|---|---|
-| `declined_penalties` | numeric | Penalties committed by the player that were declined. |
-| `draft_season` | numeric | Season of the player's NFL draft class, per PFF. |
-| `eligible_season` | numeric | Season of the player's NFL draft eligibility, per PFF. |
-| `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
-| `grades_hands_fumble` | numeric | PFF ball-security (hands/fumble) grade, 0-100. |
-| `grades_offense` | numeric | PFF overall offense grade (0-100). |
-| `grades_offense_penalty` | numeric | PFF offensive penalty grade, 0-100. |
-| `grades_pass` | numeric | PFF passing grade (0-100). |
-| `grades_run` | numeric | PFF rushing grade (0-100). |
-| `grades_run_block` | numeric | PFF run-blocking grade (0-100). |
-| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
-| `penalties` | numeric | Penalties charged to the player over the covered span. |
-| `player` | character | Player's display name as PFF lists it. |
-| `player_game_count` | numeric | Games with at least one qualifying snap in the requested range. |
-| `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
-| `position` | character | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
-| `snap_counts_pass` | numeric | Pass-play snaps spent as the passer, rather than blocking or running a route. |
-| `snap_counts_pass_block` | numeric | Pass-blocking snaps played. |
-| `snap_counts_pass_route` | numeric | Snaps spent running a pass route. |
-| `snap_counts_run` | numeric | Run-play snaps spent as a runner, rather than run blocking. |
-| `snap_counts_run_block` | numeric | Run-blocking snaps played. |
-| `snap_counts_total` | numeric | Total offensive snaps played. |
-| `snap_counts_total_pass` | numeric | Total pass-play snaps across passing, pass blocking, and route running. |
-| `snap_counts_total_run` | numeric | Total run-play snaps across rushing and run blocking. |
-| `team` | character | Team abbreviation the player is credited to for the range. |
-| `team_name` | character | Team abbreviation the player is credited to for the range. |
-| `grades_pass_block` | numeric | PFF pass-blocking grade (0-100). |
-| `grades_pass_route` | numeric | PFF receiving/route grade (0-100). |
+| `declined_penalties` | Float64 | Penalties committed by the player that were declined. |
+| `draft_season` | Float64 | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | Float64 | Season of the player's NFL draft eligibility, per PFF. |
+| `franchise_id` | Float64 | PFF franchise (team) id (integer join key). |
+| `grades_hands_fumble` | Float64 | PFF ball-security (hands/fumble) grade, 0-100. |
+| `grades_offense` | Float64 | PFF overall offense grade (0-100). |
+| `grades_offense_penalty` | Float64 | PFF offensive penalty grade, 0-100. |
+| `grades_pass` | Float64 | PFF passing grade (0-100). |
+| `grades_run` | Float64 | PFF rushing grade (0-100). |
+| `grades_run_block` | Float64 | PFF run-blocking grade (0-100). |
+| `jersey_number` | String | Jersey number (string; zero-padded, e.g. "09"). |
+| `penalties` | Float64 | Penalties charged to the player over the covered span. |
+| `player` | String | Player's display name as PFF lists it. |
+| `player_game_count` | Float64 | Games with at least one qualifying snap in the requested range. |
+| `player_id` | Float64 | PFF player id (integer; matches the /players id and every player_id join key). |
+| `position` | String | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
+| `snap_counts_pass` | Float64 | Pass-play snaps spent as the passer, rather than blocking or running a route. |
+| `snap_counts_pass_block` | Float64 | Pass-blocking snaps played. |
+| `snap_counts_pass_route` | Float64 | Snaps spent running a pass route. |
+| `snap_counts_run` | Float64 | Run-play snaps spent as a runner, rather than run blocking. |
+| `snap_counts_run_block` | Float64 | Run-blocking snaps played. |
+| `snap_counts_total` | Float64 | Total offensive snaps played. |
+| `snap_counts_total_pass` | Float64 | Total pass-play snaps across passing, pass blocking, and route running. |
+| `snap_counts_total_run` | Float64 | Total run-play snaps across rushing and run blocking. |
+| `team` | String | Team abbreviation the player is credited to for the range. |
+| `team_name` | String | Team abbreviation the player is credited to for the range. |
+| `grades_pass_block` | Float64 | PFF pass-blocking grade (0-100). |
+| `grades_pass_route` | Float64 | PFF receiving/route grade (0-100). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -565,42 +565,42 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 | col_name | type | description |
 |---|---|---|
-| `te_percent` | numeric | Share of allowed pressures attributed to tight ends, expressed as a percentage. |
-| `draft_season` | numeric | NFL season (year) in which the player was drafted, per PFF player metadata. |
-| `pressures_lt` | numeric | Number of allowed pressures PFF attributes to left tackle. |
-| `pressures_rg` | numeric | Number of allowed pressures PFF attributes to right guard. |
-| `team_name` | character | Team abbreviation the player is credited to for the range. |
-| `lt_percent` | numeric | Share of allowed pressures attributed to left tackle, expressed as a percentage. |
-| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
-| `hits_allowed` | numeric | Number of quarterback hits allowed on the player's dropbacks, as charted by PFF. |
-| `pressures_lg` | numeric | Number of allowed pressures PFF attributes to left guard. |
-| `player_game_count` | numeric | Number of games the player appeared in during the period covered. |
-| `eligible_season` | numeric | Season (year) of the player's NFL draft eligibility, per PFF player metadata. |
-| `hurries_allowed` | numeric | Number of hurries allowed on the player's dropbacks, as charted by PFF. |
-| `self_percent` | numeric | Share of allowed pressures attributed to the quarterback himself, expressed as a percentage. |
-| `pressures_rt` | numeric | Number of allowed pressures PFF attributes to right tackle. |
-| `pressures_allowed` | numeric | Total pressures allowed on the quarterback's dropbacks, as attributed by PFF. |
-| `pressures_ol_te` | numeric | Number of allowed pressures PFF attributes to the offensive line and tight ends combined. |
-| `pressures_ce` | numeric | Number of allowed pressures PFF attributes to center. |
-| `penalties` | numeric | Penalties charged to the player over the covered span. |
-| `sacks_allowed` | numeric | Sacks allowed on the quarterback's dropbacks, as attributed by PFF. |
-| `ol_te_percent` | numeric | Share of allowed pressures attributed to the offensive line and tight ends combined, expressed as a percentage. |
-| `allowed_pressure_dropbacks` | numeric | Number of dropbacks over which allowed pressures are attributed, from the PFF allowed-pressure facet. |
-| `pressures_other` | numeric | Number of allowed pressures PFF attributes to other players outside the listed blocking positions. |
-| `team` | character | Team abbreviation the player is credited to for the range. |
-| `declined_penalties` | numeric | Number of declined penalties committed by the player. |
-| `ce_percent` | numeric | Share of allowed pressures attributed to center, expressed as a percentage. |
-| `position` | character | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
-| `pressures_te` | numeric | Number of allowed pressures PFF attributes to tight ends. |
-| `pressures_self` | numeric | Number of allowed pressures PFF attributes to the quarterback himself. |
-| `lg_percent` | numeric | Share of allowed pressures attributed to left guard, expressed as a percentage. |
-| `player` | character | Player's display name as PFF lists it. |
-| `rt_percent` | numeric | Share of allowed pressures attributed to right tackle, expressed as a percentage. |
-| `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
-| `other_percent` | numeric | Share of allowed pressures attributed to other players outside the listed blocking positions, expressed as a percentage. |
-| `pressures_off` | numeric | Number of allowed pressures PFF attributes to the offense without a specific blocker charged. |
-| `rg_percent` | numeric | Share of allowed pressures attributed to right guard, expressed as a percentage. |
-| `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
+| `te_percent` | Float64 | Share of allowed pressures attributed to tight ends, expressed as a percentage. |
+| `draft_season` | Float64 | NFL season (year) in which the player was drafted, per PFF player metadata. |
+| `pressures_lt` | Float64 | Number of allowed pressures PFF attributes to left tackle. |
+| `pressures_rg` | Float64 | Number of allowed pressures PFF attributes to right guard. |
+| `team_name` | String | Team abbreviation the player is credited to for the range. |
+| `lt_percent` | Float64 | Share of allowed pressures attributed to left tackle, expressed as a percentage. |
+| `jersey_number` | String | Jersey number (string; zero-padded, e.g. "09"). |
+| `hits_allowed` | Float64 | Number of quarterback hits allowed on the player's dropbacks, as charted by PFF. |
+| `pressures_lg` | Float64 | Number of allowed pressures PFF attributes to left guard. |
+| `player_game_count` | Float64 | Number of games the player appeared in during the period covered. |
+| `eligible_season` | Float64 | Season (year) of the player's NFL draft eligibility, per PFF player metadata. |
+| `hurries_allowed` | Float64 | Number of hurries allowed on the player's dropbacks, as charted by PFF. |
+| `self_percent` | Float64 | Share of allowed pressures attributed to the quarterback himself, expressed as a percentage. |
+| `pressures_rt` | Float64 | Number of allowed pressures PFF attributes to right tackle. |
+| `pressures_allowed` | Float64 | Total pressures allowed on the quarterback's dropbacks, as attributed by PFF. |
+| `pressures_ol_te` | Float64 | Number of allowed pressures PFF attributes to the offensive line and tight ends combined. |
+| `pressures_ce` | Float64 | Number of allowed pressures PFF attributes to center. |
+| `penalties` | Float64 | Penalties charged to the player over the covered span. |
+| `sacks_allowed` | Float64 | Sacks allowed on the quarterback's dropbacks, as attributed by PFF. |
+| `ol_te_percent` | Float64 | Share of allowed pressures attributed to the offensive line and tight ends combined, expressed as a percentage. |
+| `allowed_pressure_dropbacks` | Float64 | Number of dropbacks over which allowed pressures are attributed, from the PFF allowed-pressure facet. |
+| `pressures_other` | Float64 | Number of allowed pressures PFF attributes to other players outside the listed blocking positions. |
+| `team` | String | Team abbreviation the player is credited to for the range. |
+| `declined_penalties` | Float64 | Number of declined penalties committed by the player. |
+| `ce_percent` | Float64 | Share of allowed pressures attributed to center, expressed as a percentage. |
+| `position` | String | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
+| `pressures_te` | Float64 | Number of allowed pressures PFF attributes to tight ends. |
+| `pressures_self` | Float64 | Number of allowed pressures PFF attributes to the quarterback himself. |
+| `lg_percent` | Float64 | Share of allowed pressures attributed to left guard, expressed as a percentage. |
+| `player` | String | Player's display name as PFF lists it. |
+| `rt_percent` | Float64 | Share of allowed pressures attributed to right tackle, expressed as a percentage. |
+| `franchise_id` | Float64 | PFF franchise (team) id (integer join key). |
+| `other_percent` | Float64 | Share of allowed pressures attributed to other players outside the listed blocking positions, expressed as a percentage. |
+| `pressures_off` | Float64 | Number of allowed pressures PFF attributes to the offense without a specific blocker charged. |
+| `rg_percent` | Float64 | Share of allowed pressures attributed to right guard, expressed as a percentage. |
+| `player_id` | Float64 | PFF player id (integer; matches the /players id and every player_id join key). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -641,44 +641,44 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 | col_name | type | description |
 |---|---|---|
-| `true_pass_set_total_pressures` | numeric | Total pressures generated (sacks, hits, and hurries) on PFF-designated true pass sets. |
-| `draft_season` | numeric | Season of the player's NFL draft class, per PFF. |
-| `true_pass_set_prp` | numeric | PFF Pass Rush Productivity rating, pressure generated per pass-rush snap weighted toward sacks on PFF-designated true pass sets. |
-| `true_pass_set_hurries` | numeric | Quarterback hurries recorded on PFF-designated true pass sets. |
-| `team_name` | character | Team abbreviation the player is credited to for the range. |
-| `prp` | numeric | PFF Pass Rush Productivity rating, pressure generated per pass-rush snap weighted toward sacks. |
-| `true_pass_set_sacks` | numeric | Sacks recorded on PFF-designated true pass sets. |
-| `pass_rush_win_rate` | numeric | Percentage of pass-rush snaps with a PFF-charted pass-rush win. |
-| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
-| `sacks` | numeric | Sacks recorded by the pass rusher. |
-| `snap_counts_pass_rush` | numeric | Pass-rush snaps played. |
-| `player_game_count` | numeric | Number of games the player appeared in over the covered span. |
-| `eligible_season` | numeric | Season of the player's NFL draft eligibility, per PFF. |
-| `true_pass_set_snap_counts_pass_play` | numeric | Pass-play snaps on PFF-designated true pass sets. |
-| `pass_rush_wins` | numeric | PFF-charted pass-rush wins. |
-| `hurries` | numeric | Quarterback hurries recorded. |
-| `pass_rush_opp` | numeric | Pass-rush snaps PFF counts as pressure opportunities. |
-| `snap_counts_pass_play` | numeric | Pass-play snaps. |
-| `hits` | numeric | Quarterback hits recorded by the pass rusher. |
-| `true_pass_set_pass_rush_win_rate` | numeric | Percentage of pass-rush snaps with a PFF-charted pass-rush win on PFF-designated true pass sets. |
-| `penalties` | numeric | Penalties charged to the player over the covered span. |
-| `batted_passes` | numeric | Passes batted down at the line of scrimmage. |
-| `true_pass_set_hits` | numeric | Quarterback hits recorded on PFF-designated true pass sets. |
-| `true_pass_set_snap_counts_pass_rush` | numeric | Pass-rush snaps played on PFF-designated true pass sets. |
-| `team` | character | Team abbreviation the player is credited to for the range. |
-| `declined_penalties` | numeric | Penalties committed by the player that were declined. |
-| `true_pass_set_pass_rush_wins` | numeric | PFF-charted pass-rush wins on PFF-designated true pass sets. |
-| `total_pressures` | numeric | Total pressures generated (sacks, hits, and hurries). |
-| `position` | character | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
-| `true_pass_set_grades_pass_rush_defense` | numeric | PFF pass-rush grade on PFF-designated true pass sets, 0-100. |
-| `true_pass_set_batted_passes` | numeric | Passes batted down at the line of scrimmage on PFF-designated true pass sets. |
-| `player` | character | Player's display name as PFF lists it. |
-| `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
-| `pass_rush_percent` | numeric | Share of pass-play snaps spent rushing the passer. |
-| `true_pass_set_pass_rush_opp` | numeric | Pass-rush snaps PFF counts as pressure opportunities on PFF-designated true pass sets. |
-| `true_pass_set_pass_rush_percent` | numeric | Share of pass-play snaps spent rushing the passer on PFF-designated true pass sets. |
-| `grades_pass_rush_defense` | numeric | PFF pass-rush grade, 0-100. |
-| `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
+| `true_pass_set_total_pressures` | Float64 | Total pressures generated (sacks, hits, and hurries) on PFF-designated true pass sets. |
+| `draft_season` | Float64 | Season of the player's NFL draft class, per PFF. |
+| `true_pass_set_prp` | Float64 | PFF Pass Rush Productivity rating, pressure generated per pass-rush snap weighted toward sacks on PFF-designated true pass sets. |
+| `true_pass_set_hurries` | Float64 | Quarterback hurries recorded on PFF-designated true pass sets. |
+| `team_name` | String | Team abbreviation the player is credited to for the range. |
+| `prp` | Float64 | PFF Pass Rush Productivity rating, pressure generated per pass-rush snap weighted toward sacks. |
+| `true_pass_set_sacks` | Float64 | Sacks recorded on PFF-designated true pass sets. |
+| `pass_rush_win_rate` | Float64 | Percentage of pass-rush snaps with a PFF-charted pass-rush win. |
+| `jersey_number` | String | Jersey number (string; zero-padded, e.g. "09"). |
+| `sacks` | Float64 | Sacks recorded by the pass rusher. |
+| `snap_counts_pass_rush` | Float64 | Pass-rush snaps played. |
+| `player_game_count` | Float64 | Number of games the player appeared in over the covered span. |
+| `eligible_season` | Float64 | Season of the player's NFL draft eligibility, per PFF. |
+| `true_pass_set_snap_counts_pass_play` | Float64 | Pass-play snaps on PFF-designated true pass sets. |
+| `pass_rush_wins` | Float64 | PFF-charted pass-rush wins. |
+| `hurries` | Float64 | Quarterback hurries recorded. |
+| `pass_rush_opp` | Float64 | Pass-rush snaps PFF counts as pressure opportunities. |
+| `snap_counts_pass_play` | Float64 | Pass-play snaps. |
+| `hits` | Float64 | Quarterback hits recorded by the pass rusher. |
+| `true_pass_set_pass_rush_win_rate` | Float64 | Percentage of pass-rush snaps with a PFF-charted pass-rush win on PFF-designated true pass sets. |
+| `penalties` | Float64 | Penalties charged to the player over the covered span. |
+| `batted_passes` | Float64 | Passes batted down at the line of scrimmage. |
+| `true_pass_set_hits` | Float64 | Quarterback hits recorded on PFF-designated true pass sets. |
+| `true_pass_set_snap_counts_pass_rush` | Float64 | Pass-rush snaps played on PFF-designated true pass sets. |
+| `team` | String | Team abbreviation the player is credited to for the range. |
+| `declined_penalties` | Float64 | Penalties committed by the player that were declined. |
+| `true_pass_set_pass_rush_wins` | Float64 | PFF-charted pass-rush wins on PFF-designated true pass sets. |
+| `total_pressures` | Float64 | Total pressures generated (sacks, hits, and hurries). |
+| `position` | String | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
+| `true_pass_set_grades_pass_rush_defense` | Float64 | PFF pass-rush grade on PFF-designated true pass sets, 0-100. |
+| `true_pass_set_batted_passes` | Float64 | Passes batted down at the line of scrimmage on PFF-designated true pass sets. |
+| `player` | String | Player's display name as PFF lists it. |
+| `franchise_id` | Float64 | PFF franchise (team) id (integer join key). |
+| `pass_rush_percent` | Float64 | Share of pass-play snaps spent rushing the passer. |
+| `true_pass_set_pass_rush_opp` | Float64 | Pass-rush snaps PFF counts as pressure opportunities on PFF-designated true pass sets. |
+| `true_pass_set_pass_rush_percent` | Float64 | Share of pass-play snaps spent rushing the passer on PFF-designated true pass sets. |
+| `grades_pass_rush_defense` | Float64 | PFF pass-rush grade, 0-100. |
+| `player_id` | Float64 | PFF player id (integer; matches the /players id and every player_id join key). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

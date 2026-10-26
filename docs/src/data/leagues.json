@@ -6,7 +6,7 @@
       "leagues": [
         {
           "prefix": "cfb",
-          "label": "CFB"
+          "label": "College football"
         },
         {
           "prefix": "nfl",
@@ -97,11 +97,11 @@
         },
         {
           "prefix": "mbb",
-          "label": "MBB"
+          "label": "Men's college basketball"
         },
         {
           "prefix": "wbb",
-          "label": "WBB"
+          "label": "Women's college basketball"
         },
         {
           "prefix": "euroleague",
@@ -240,12 +240,12 @@
         },
         {
           "prefix": "mch",
-          "label": "MCH",
+          "label": "Men's college hockey",
           "group": "College hockey"
         },
         {
           "prefix": "wch",
-          "label": "WCH",
+          "label": "Women's college hockey",
           "group": "College hockey"
         },
         {
@@ -479,12 +479,12 @@
         },
         {
           "prefix": "ucl",
-          "label": "UCL",
+          "label": "UEFA Champions League",
           "group": "Leagues"
         },
         {
           "prefix": "uel",
-          "label": "UEL",
+          "label": "UEFA Europa League",
           "group": "Leagues"
         },
         {
@@ -494,12 +494,12 @@
         },
         {
           "prefix": "wwc",
-          "label": "WWC",
+          "label": "FIFA Women's World Cup",
           "group": "Leagues"
         },
         {
           "prefix": "wc",
-          "label": "WC",
+          "label": "FIFA World Cup",
           "group": "Leagues"
         }
       ]

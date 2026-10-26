@@ -1,15 +1,15 @@
 ---
-title: "CFB — On3 Recruit Database (api.on3.com) — Team"
+title: "College football — On3 Recruit Database (api.on3.com) — Team"
 sidebar_label: "Team"
 sidebar_position: 9
-description: "CFB — On3 Recruit Database (api.on3.com) — Team — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — On3 Recruit Database (api.on3.com) — Team — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# CFB — On3 Recruit Database (api.on3.com) — Team
+# College football — On3 Recruit Database (api.on3.com) — Team
 
 ## on3_team_ranking
 
-GET /rdb/v1/team-ranking
+Team ranking.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/team-ranking`
 
@@ -46,7 +46,7 @@ on3_team_ranking()
 
 ## on3_team_ranking_bluechips_team_rankings
 
-GET /rdb/v1/team-ranking/{sport}-{year}/bluechips-team-rankings
+Team ranking bluechips team rankings.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/team-ranking/{sport_slug}-{year}/bluechips-team-rankings`
 
@@ -81,7 +81,7 @@ on3_team_ranking_bluechips_team_rankings(sport_slug='football', year=2025)
 
 ## on3_team_ranking_consensus_team_rankings
 
-GET /rdb/v1/team-ranking/{sport}-{year}/consensus-team-rankings
+Team ranking consensus team rankings.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/team-ranking/{sport_slug}-{year}/consensus-team-rankings`
 
@@ -116,7 +116,7 @@ on3_team_ranking_consensus_team_rankings(sport_slug='football', year=2025)
 
 ## on3_team_ranking_organizations_summary
 
-GET /rdb/v1/team-ranking/organizations/{orgKey}/summary
+Team ranking organizations summary.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/team-ranking/organizations/{org_key}/summary`
 
@@ -150,7 +150,7 @@ on3_team_ranking_organizations_summary(org_key=1867)
 
 ## on3_team_ranking_team_rankings
 
-GET /rdb/v1/team-ranking/{sport}-{year}/team-rankings
+Team ranking team rankings.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/team-ranking/{sport_slug}-{year}/team-rankings`
 
@@ -167,56 +167,56 @@ GET /rdb/v1/team-ranking/{sport}-{year}/team-rankings
 
 | col_name | type | description |
 |---|---|---|
-| `key` | integer | On3 organization-ranking key for the class row. |
-| `year` | integer | Recruiting class year of the row. |
-| `applied_total_rating` | numeric | Total On3 rating applied to the class after deductions. |
-| `applied_total_consensus_rating` | numeric | Total consensus rating applied to the class after deductions. |
-| `applied_average_rating` | numeric | Average On3 rating applied to the class after deductions. |
-| `applied_average_consensus_rating` | numeric | Average consensus rating applied to the class after deductions. |
-| `commits` | integer | Number of commits in the recruiting class. |
-| `applied_commits` | integer | Number of commits counted toward the applied class rating. |
-| `deductions` | numeric | Rating deductions applied to the class (e.g. for roster limits). |
-| `deductions_description` | character | Human-readable explanation of any applied deductions. |
-| `five_stars` | integer | Count of On3 five-star commits in the class. |
-| `consensus_five_stars` | integer | Count of consensus five-star commits in the class. |
-| `four_stars` | integer | Count of On3 four-star commits in the class. |
-| `consensus_four_stars` | integer | Count of consensus four-star commits in the class. |
-| `three_stars` | integer | Count of On3 three-star commits in the class. |
-| `consensus_three_stars` | integer | Count of consensus three-star commits in the class. |
-| `overall_rank` | integer | National rank of the class by On3 score. |
-| `overall_consensus_rank` | integer | National rank of the class by consensus score. |
-| `dispay_consensus_score` | numeric | Display consensus score for the class (On3 sic spelling of "display"). |
-| `dispay_on3_score` | numeric | Display On3 score for the class (On3 sic spelling of "display"). |
-| `average_nil_value` | numeric | Average On3 NIL valuation across the class's commits (US dollars). |
-| `conference_rank` | integer | Rank of the class within its conference by On3 score. |
-| `conference_consensus_rank` | integer | Rank of the class within its conference by consensus score. |
-| `organization_key` | integer | On3 numeric key of the program. |
-| `organization_full_name` | character | Full name of the program (e.g. 'Alabama Crimson Tide'). |
-| `organization_name` | character | Short name of the program. |
-| `organization_mascot` | character | Mascot of the program. |
-| `organization_abbreviation` | character | Abbreviation of the program. |
-| `organization_asset_url` | character | Convenience CDN URL of the program's logo. |
-| `organization_asset_key` | integer | On3 asset key of the program's logo asset. |
-| `organization_asset_domain_override` | character | CDN domain override for the program's logo asset (usually null). |
-| `organization_asset_domain` | character | CDN domain serving the program's logo asset. |
-| `organization_asset_source_override` | character | Source-path override for the program's logo asset (usually null). |
-| `organization_asset_source` | character | CDN-relative source path of the program's logo asset. |
-| `organization_asset_title` | character | Editorial title attached to the program's logo asset. |
-| `organization_asset_description` | character | Editorial description attached to the program's logo asset (usually null). |
-| `organization_asset_caption` | character | Editorial caption attached to the program's logo asset (usually null). |
-| `organization_asset_category` | character | Editorial category label of the program's logo asset (usually null). |
-| `organization_asset_alt_text` | character | Accessibility alt text of the program's logo asset (usually null). |
-| `organization_asset_height` | integer | Pixel height of the program's logo asset. |
-| `organization_asset_width` | integer | Pixel width of the program's logo asset. |
-| `organization_asset_asset_type` | character | On3 asset-type discriminator of the program's logo asset (e.g. Image). |
-| `organization_asset_file_system` | character | Storage file-system flag of the program's logo asset. |
-| `organization_asset_path` | character | Storage path of the program's logo asset. |
-| `organization_asset_type` | character | Media type field of the program's logo asset (file extension, e.g. png). |
-| `organization_asset_thumbnail` | character | Thumbnail variant of the program's logo asset (video assets; usually null). |
-| `organization_asset_duration` | integer | Duration of the program's logo asset when it is a video (usually null or 0). |
-| `organization_asset_mime_type` | character | MIME type of the program's logo asset. |
-| `organization_slug` | character | URL slug of the program on On3. |
-| `organization_primary_color` | character | Primary hex color of the program. |
+| `key` | Int64 | On3 organization-ranking key for the class row. |
+| `year` | Int64 | Recruiting class year of the row. |
+| `applied_total_rating` | Float64 | Total On3 rating applied to the class after deductions. |
+| `applied_total_consensus_rating` | Float64 | Total consensus rating applied to the class after deductions. |
+| `applied_average_rating` | Float64 | Average On3 rating applied to the class after deductions. |
+| `applied_average_consensus_rating` | Float64 | Average consensus rating applied to the class after deductions. |
+| `commits` | Int64 | Number of commits in the recruiting class. |
+| `applied_commits` | Int64 | Number of commits counted toward the applied class rating. |
+| `deductions` | Float64 | Rating deductions applied to the class (e.g. for roster limits). |
+| `deductions_description` | String | Human-readable explanation of any applied deductions. |
+| `five_stars` | Int64 | Count of On3 five-star commits in the class. |
+| `consensus_five_stars` | Int64 | Count of consensus five-star commits in the class. |
+| `four_stars` | Int64 | Count of On3 four-star commits in the class. |
+| `consensus_four_stars` | Int64 | Count of consensus four-star commits in the class. |
+| `three_stars` | Int64 | Count of On3 three-star commits in the class. |
+| `consensus_three_stars` | Int64 | Count of consensus three-star commits in the class. |
+| `overall_rank` | Int64 | National rank of the class by On3 score. |
+| `overall_consensus_rank` | Int64 | National rank of the class by consensus score. |
+| `dispay_consensus_score` | Float64 | Display consensus score for the class (On3 sic spelling of "display"). |
+| `dispay_on3_score` | Float64 | Display On3 score for the class (On3 sic spelling of "display"). |
+| `average_nil_value` | Float64 | Average On3 NIL valuation across the class's commits (US dollars). |
+| `conference_rank` | Int64 | Rank of the class within its conference by On3 score. |
+| `conference_consensus_rank` | Int64 | Rank of the class within its conference by consensus score. |
+| `organization_key` | Int64 | On3 numeric key of the program. |
+| `organization_full_name` | String | Full name of the program (e.g. 'Alabama Crimson Tide'). |
+| `organization_name` | String | Short name of the program. |
+| `organization_mascot` | String | Mascot of the program. |
+| `organization_abbreviation` | String | Abbreviation of the program. |
+| `organization_asset_url` | String | Convenience CDN URL of the program's logo. |
+| `organization_asset_key` | Int64 | On3 asset key of the program's logo asset. |
+| `organization_asset_domain_override` | String | CDN domain override for the program's logo asset (usually null). |
+| `organization_asset_domain` | String | CDN domain serving the program's logo asset. |
+| `organization_asset_source_override` | String | Source-path override for the program's logo asset (usually null). |
+| `organization_asset_source` | String | CDN-relative source path of the program's logo asset. |
+| `organization_asset_title` | String | Editorial title attached to the program's logo asset. |
+| `organization_asset_description` | String | Editorial description attached to the program's logo asset (usually null). |
+| `organization_asset_caption` | String | Editorial caption attached to the program's logo asset (usually null). |
+| `organization_asset_category` | String | Editorial category label of the program's logo asset (usually null). |
+| `organization_asset_alt_text` | String | Accessibility alt text of the program's logo asset (usually null). |
+| `organization_asset_height` | Int64 | Pixel height of the program's logo asset. |
+| `organization_asset_width` | Int64 | Pixel width of the program's logo asset. |
+| `organization_asset_asset_type` | String | On3 asset-type discriminator of the program's logo asset (e.g. Image). |
+| `organization_asset_file_system` | String | Storage file-system flag of the program's logo asset. |
+| `organization_asset_path` | String | Storage path of the program's logo asset. |
+| `organization_asset_type` | String | Media type field of the program's logo asset (file extension, e.g. png). |
+| `organization_asset_thumbnail` | String | Thumbnail variant of the program's logo asset (video assets; usually null). |
+| `organization_asset_duration` | Int64 | Duration of the program's logo asset when it is a video (usually null or 0). |
+| `organization_asset_mime_type` | String | MIME type of the program's logo asset. |
+| `organization_slug` | String | URL slug of the program on On3. |
+| `organization_primary_color` | String | Primary hex color of the program. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

@@ -1,10 +1,10 @@
 ---
-title: "WBB — additional Python functions — Her Hoop Stats"
+title: "Women's college basketball — additional Python functions — Her Hoop Stats"
 sidebar_label: "Her Hoop Stats"
 sidebar_position: 6
-description: "WBB — additional Python functions — Her Hoop Stats — function reference in sdv-py, the SportsDataverse Python package."
+description: "Women's college basketball — additional Python functions — Her Hoop Stats — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — Her Hoop Stats
+# Women's college basketball — additional Python functions — Her Hoop Stats
 
 ### has_herhoopstats_login {#has_herhoopstats_login}
 
@@ -89,20 +89,20 @@ One row per player. A zero-row frame with the roster columns when the page carri
 
 | col_name | type | description |
 |---|---|---|
-| `player` | character | Player name. |
-| `g` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `min` | double | Minutes played. |
-| `pts` | double | Points scored. |
-| `trb` | double | Career total rebounds. |
-| `ast` | double | Assists. |
-| `tov` | double | Turnovers. |
-| `stl` | double | Steals. |
-| `blk` | double | Blocks. |
-| `fg_pct` | character | Field goal percentage (0-1). |
-| `ft_pct` | character | Free throw percentage (0-1). |
-| `2_p_pct` | character |  |
-| `3_p_pct` | character |  |
+| `player` | String | Player name. |
+| `g` | Int64 | Games played. |
+| `gs` | Int64 | Games started. |
+| `min` | Float64 | Minutes played. |
+| `pts` | Float64 | Points scored. |
+| `trb` | Float64 | Career total rebounds. |
+| `ast` | Float64 | Assists. |
+| `tov` | Float64 | Turnovers. |
+| `stl` | Float64 | Steals. |
+| `blk` | Float64 | Blocks. |
+| `fg_pct` | String | Field goal percentage (0-1). |
+| `ft_pct` | String | Free throw percentage (0-1). |
+| `2_p_pct` | String |  |
+| `3_p_pct` | String |  |
 
 **Raises**
 
@@ -185,23 +185,23 @@ One row per team-season, plus a `team_link` column carrying each team's page pat
 
 | col_name | type | description |
 |---|---|---|
-| `season` | character | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `team` | character | Team-side label or team identifier. |
-| `g` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `win_pct` | character | Win percentage (0-1 decimal). |
-| `pts` | double | Points scored. |
-| `opp_pts` | double | Opponent points. |
-| `net_pts` | double |  |
-| `off_rtg` | double |  |
-| `def_rtg` | double |  |
-| `net_rtg` | double |  |
-| `pace` | double | Possessions per 48 minutes. |
-| `team_link` | character |  |
-| `min_season` | integer |  |
-| `max_season` | integer |  |
-| `division` | integer | Team division. |
+| `season` | String | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `team` | String | Team-side label or team identifier. |
+| `g` | Int64 | Games played. |
+| `w` | Int64 | Wins. |
+| `l` | Int64 | Losses. |
+| `win_pct` | String | Win percentage (0-1 decimal). |
+| `pts` | Float64 | Points scored. |
+| `opp_pts` | Float64 | Opponent points. |
+| `net_pts` | Float64 |  |
+| `off_rtg` | Float64 |  |
+| `def_rtg` | Float64 |  |
+| `net_rtg` | Float64 |  |
+| `pace` | Float64 | Possessions per 48 minutes. |
+| `team_link` | String |  |
+| `min_season` | Int64 |  |
+| `max_season` | Int64 |  |
+| `division` | Int64 | Team division. |
 
 **Raises**
 

@@ -1,9 +1,9 @@
 ---
-title: LBA
-sidebar_label: LBA
-description: "sdv-py LBA: endpoint references, dataset loaders and parsers for LBA in the SportsDataverse Python package."
+title: Lega Basket Serie A
+sidebar_label: Lega Basket Serie A
+description: "sdv-py Lega Basket Serie A: endpoint references, dataset loaders and parsers for Lega Basket Serie A in the SportsDataverse Python package."
 ---
-# LBA (`sportsdataverse.basketball.lba`)
+# Lega Basket Serie A (`sportsdataverse.basketball.lba`)
 
 ## Data sources
 

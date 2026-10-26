@@ -1,11 +1,11 @@
 ---
-title: SOCCER — OpenLigaDB (api.openligadb.de, community German football)
+title: Soccer (all) — OpenLigaDB (api.openligadb.de, community German football)
 sidebar_label: OpenLigaDB (api.openligadb.de, community German football)
-description: "SOCCER — OpenLigaDB (api.openligadb.de, community German football) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "Soccer (all) — OpenLigaDB (api.openligadb.de, community German football) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 15
 toc_max_heading_level: 2
 ---
-# SOCCER — OpenLigaDB (api.openligadb.de, community German football)
+# Soccer (all) — OpenLigaDB (api.openligadb.de, community German football)
 
 `sportsdataverse.soccer` — 11 endpoints.
 
@@ -27,9 +27,9 @@ Current matchday.
 
 | col_name | type | description |
 |---|---|---|
-| `group_name` | character |  |
-| `group_order_id` | character |  |
-| `group_id` | character |  |
+| `group_name` | String |  |
+| `group_order_id` | String |  |
+| `group_id` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -66,9 +66,9 @@ Top scorers.
 
 | col_name | type | description |
 |---|---|---|
-| `goal_getter_id` | character |  |
-| `goal_getter_name` | character |  |
-| `goal_count` | integer |  |
+| `goal_getter_id` | String |  |
+| `goal_getter_name` | String |  |
+| `goal_count` | Int64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -106,33 +106,33 @@ Matches of one matchday.
 
 | col_name | type | description |
 |---|---|---|
-| `match_id` | character |  |
-| `match_date_time` | character |  |
-| `time_zone_id` | character |  |
-| `league_id` | character |  |
-| `league_name` | character |  |
-| `league_season` | integer |  |
-| `league_shortcut` | character |  |
-| `match_date_time_utc` | character |  |
-| `last_update_date_time` | character |  |
-| `match_is_finished` | logical |  |
-| `match_results` | character |  |
-| `goals` | character |  |
-| `location` | character |  |
-| `number_of_viewers` | character |  |
-| `group_group_name` | character |  |
-| `group_group_order_id` | character |  |
-| `group_group_id` | character |  |
-| `team1_team_id` | character |  |
-| `team1_team_name` | character |  |
-| `team1_short_name` | character |  |
-| `team1_team_icon_url` | character |  |
-| `team1_team_group_name` | character |  |
-| `team2_team_id` | character |  |
-| `team2_team_name` | character |  |
-| `team2_short_name` | character |  |
-| `team2_team_icon_url` | character |  |
-| `team2_team_group_name` | character |  |
+| `match_id` | String |  |
+| `match_date_time` | String |  |
+| `time_zone_id` | String |  |
+| `league_id` | String |  |
+| `league_name` | String |  |
+| `league_season` | Int64 |  |
+| `league_shortcut` | String |  |
+| `match_date_time_utc` | String |  |
+| `last_update_date_time` | String |  |
+| `match_is_finished` | Boolean |  |
+| `match_results` | String |  |
+| `goals` | String |  |
+| `location` | String |  |
+| `number_of_viewers` | String |  |
+| `group_group_name` | String |  |
+| `group_group_order_id` | String |  |
+| `group_group_id` | String |  |
+| `team1_team_id` | String |  |
+| `team1_team_name` | String |  |
+| `team1_short_name` | String |  |
+| `team1_team_icon_url` | String |  |
+| `team1_team_group_name` | String |  |
+| `team2_team_id` | String |  |
+| `team2_team_name` | String |  |
+| `team2_short_name` | String |  |
+| `team2_team_icon_url` | String |  |
+| `team2_team_group_name` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -169,9 +169,9 @@ Matchdays of a league-season.
 
 | col_name | type | description |
 |---|---|---|
-| `group_name` | character |  |
-| `group_order_id` | character |  |
-| `group_id` | character |  |
+| `group_name` | String |  |
+| `group_order_id` | String |  |
+| `group_id` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -209,7 +209,7 @@ Last change timestamp (bare ISO string).
 
 | col_name | type | description |
 |---|---|---|
-| `value` | character |  |
+| `value` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -244,12 +244,12 @@ All leagues (shortcut, season, sport).
 
 | col_name | type | description |
 |---|---|---|
-| `league_id` | character |  |
-| `league_name` | character |  |
-| `league_shortcut` | character |  |
-| `league_season` | character |  |
-| `sport_sport_id` | character | Yahoo identifier of the sport the league belongs to. |
-| `sport_sport_name` | character |  |
+| `league_id` | String |  |
+| `league_name` | String |  |
+| `league_shortcut` | String |  |
+| `league_season` | String |  |
+| `sport_sport_id` | String | Yahoo identifier of the sport the league belongs to. |
+| `sport_sport_name` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -285,33 +285,33 @@ One match.
 
 | col_name | type | description |
 |---|---|---|
-| `match_id` | character |  |
-| `match_date_time` | character |  |
-| `time_zone_id` | character |  |
-| `league_id` | character |  |
-| `league_name` | character |  |
-| `league_season` | integer |  |
-| `league_shortcut` | character |  |
-| `match_date_time_utc` | character |  |
-| `last_update_date_time` | character |  |
-| `match_is_finished` | logical |  |
-| `match_results` | character |  |
-| `goals` | character |  |
-| `location` | character |  |
-| `number_of_viewers` | character |  |
-| `group_group_name` | character |  |
-| `group_group_order_id` | character |  |
-| `group_group_id` | character |  |
-| `team1_team_id` | character |  |
-| `team1_team_name` | character |  |
-| `team1_short_name` | character |  |
-| `team1_team_icon_url` | character |  |
-| `team1_team_group_name` | character |  |
-| `team2_team_id` | character |  |
-| `team2_team_name` | character |  |
-| `team2_short_name` | character |  |
-| `team2_team_icon_url` | character |  |
-| `team2_team_group_name` | character |  |
+| `match_id` | String |  |
+| `match_date_time` | String |  |
+| `time_zone_id` | String |  |
+| `league_id` | String |  |
+| `league_name` | String |  |
+| `league_season` | Int64 |  |
+| `league_shortcut` | String |  |
+| `match_date_time_utc` | String |  |
+| `last_update_date_time` | String |  |
+| `match_is_finished` | Boolean |  |
+| `match_results` | String |  |
+| `goals` | String |  |
+| `location` | String |  |
+| `number_of_viewers` | String |  |
+| `group_group_name` | String |  |
+| `group_group_order_id` | String |  |
+| `group_group_id` | String |  |
+| `team1_team_id` | String |  |
+| `team1_team_name` | String |  |
+| `team1_short_name` | String |  |
+| `team1_team_icon_url` | String |  |
+| `team1_team_group_name` | String |  |
+| `team2_team_id` | String |  |
+| `team2_team_name` | String |  |
+| `team2_short_name` | String |  |
+| `team2_team_icon_url` | String |  |
+| `team2_team_group_name` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -348,33 +348,33 @@ Next match of a team (404 text once the season is over).
 
 | col_name | type | description |
 |---|---|---|
-| `match_id` | character |  |
-| `match_date_time` | character |  |
-| `time_zone_id` | character |  |
-| `league_id` | character |  |
-| `league_name` | character |  |
-| `league_season` | integer |  |
-| `league_shortcut` | character |  |
-| `match_date_time_utc` | character |  |
-| `last_update_date_time` | character |  |
-| `match_is_finished` | logical |  |
-| `match_results` | character |  |
-| `goals` | character |  |
-| `location` | character |  |
-| `number_of_viewers` | character |  |
-| `group_group_name` | character |  |
-| `group_group_order_id` | character |  |
-| `group_group_id` | character |  |
-| `team1_team_id` | character |  |
-| `team1_team_name` | character |  |
-| `team1_short_name` | character |  |
-| `team1_team_icon_url` | character |  |
-| `team1_team_group_name` | character |  |
-| `team2_team_id` | character |  |
-| `team2_team_name` | character |  |
-| `team2_short_name` | character |  |
-| `team2_team_icon_url` | character |  |
-| `team2_team_group_name` | character |  |
+| `match_id` | String |  |
+| `match_date_time` | String |  |
+| `time_zone_id` | String |  |
+| `league_id` | String |  |
+| `league_name` | String |  |
+| `league_season` | Int64 |  |
+| `league_shortcut` | String |  |
+| `match_date_time_utc` | String |  |
+| `last_update_date_time` | String |  |
+| `match_is_finished` | Boolean |  |
+| `match_results` | String |  |
+| `goals` | String |  |
+| `location` | String |  |
+| `number_of_viewers` | String |  |
+| `group_group_name` | String |  |
+| `group_group_order_id` | String |  |
+| `group_group_id` | String |  |
+| `team1_team_id` | String |  |
+| `team1_team_name` | String |  |
+| `team1_short_name` | String |  |
+| `team1_team_icon_url` | String |  |
+| `team1_team_group_name` | String |  |
+| `team2_team_id` | String |  |
+| `team2_team_name` | String |  |
+| `team2_short_name` | String |  |
+| `team2_team_icon_url` | String |  |
+| `team2_team_group_name` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -411,33 +411,33 @@ All matches of a season.
 
 | col_name | type | description |
 |---|---|---|
-| `match_id` | character |  |
-| `match_date_time` | character |  |
-| `time_zone_id` | character |  |
-| `league_id` | character |  |
-| `league_name` | character |  |
-| `league_season` | integer |  |
-| `league_shortcut` | character |  |
-| `match_date_time_utc` | character |  |
-| `last_update_date_time` | character |  |
-| `match_is_finished` | logical |  |
-| `match_results` | character |  |
-| `goals` | character |  |
-| `location` | character |  |
-| `number_of_viewers` | character |  |
-| `group_group_name` | character |  |
-| `group_group_order_id` | character |  |
-| `group_group_id` | character |  |
-| `team1_team_id` | character |  |
-| `team1_team_name` | character |  |
-| `team1_short_name` | character |  |
-| `team1_team_icon_url` | character |  |
-| `team1_team_group_name` | character |  |
-| `team2_team_id` | character |  |
-| `team2_team_name` | character |  |
-| `team2_short_name` | character |  |
-| `team2_team_icon_url` | character |  |
-| `team2_team_group_name` | character |  |
+| `match_id` | String |  |
+| `match_date_time` | String |  |
+| `time_zone_id` | String |  |
+| `league_id` | String |  |
+| `league_name` | String |  |
+| `league_season` | Int64 |  |
+| `league_shortcut` | String |  |
+| `match_date_time_utc` | String |  |
+| `last_update_date_time` | String |  |
+| `match_is_finished` | Boolean |  |
+| `match_results` | String |  |
+| `goals` | String |  |
+| `location` | String |  |
+| `number_of_viewers` | String |  |
+| `group_group_name` | String |  |
+| `group_group_order_id` | String |  |
+| `group_group_id` | String |  |
+| `team1_team_id` | String |  |
+| `team1_team_name` | String |  |
+| `team1_short_name` | String |  |
+| `team1_team_icon_url` | String |  |
+| `team1_team_group_name` | String |  |
+| `team2_team_id` | String |  |
+| `team2_team_name` | String |  |
+| `team2_short_name` | String |  |
+| `team2_team_icon_url` | String |  |
+| `team2_team_group_name` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -474,18 +474,18 @@ League table.
 
 | col_name | type | description |
 |---|---|---|
-| `team_info_id` | character |  |
-| `team_name` | character |  |
-| `short_name` | character |  |
-| `team_icon_url` | character |  |
-| `points` | integer |  |
-| `opponent_goals` | integer |  |
-| `goals` | integer |  |
-| `matches` | integer |  |
-| `won` | integer |  |
-| `lost` | integer |  |
-| `draw` | integer |  |
-| `goal_diff` | integer |  |
+| `team_info_id` | String |  |
+| `team_name` | String |  |
+| `short_name` | String |  |
+| `team_icon_url` | String |  |
+| `points` | Int64 |  |
+| `opponent_goals` | Int64 |  |
+| `goals` | Int64 |  |
+| `matches` | Int64 |  |
+| `won` | Int64 |  |
+| `lost` | Int64 |  |
+| `draw` | Int64 |  |
+| `goal_diff` | Int64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -522,11 +522,11 @@ Teams of a league-season.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | ESPN numeric identifier for the team. |
-| `team_name` | character |  |
-| `short_name` | character |  |
-| `team_icon_url` | character |  |
-| `team_group_name` | character |  |
+| `team_id` | String | ESPN numeric identifier for the team. |
+| `team_name` | String |  |
+| `short_name` | String |  |
+| `team_icon_url` | String |  |
+| `team_group_name` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

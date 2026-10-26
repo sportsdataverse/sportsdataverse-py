@@ -26,17 +26,17 @@ Season leaders in points: the server's top 20 by season total and by per-game av
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
-| `competition` | character | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
-| `category` | character | Statistic of the wrapper: points, assists, blocks, rebounds, steals, minutes, threes, turnovers or efficiency. |
-| `kind` | character | total = the server's top 20 by season TOTAL; average = the top 20 by PER-GAME average. |
-| `rank` | integer | Rank in the list, 1 = best (the API's order). |
-| `person_id` | integer | TBF person id (oyuncuKodu, sent as a string; key space: TBF persons). |
-| `player_name` | character | Player name as TBF prints it for that route (title case, Turkish letters kept). |
-| `team_process_id` | integer | Team-season id (takimKodu, sent as a string; key space: TBF team registrations; despite the name NOT the club id). |
-| `team_name` | character | Team name as registered for that season, uppercase with Turkish letters (sponsor name: 'PİZZABULLS BORDO BANDIRMA'). |
-| `games` | integer | Games played (macSayisi, sent as a string). |
-| `value` | numeric | The ranked statistic: the season total for kind total, the per-game average for kind average (the API names the field grup and sends it as a string). |
+| `season` | Int64 | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
+| `competition` | String | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
+| `category` | String | Statistic of the wrapper: points, assists, blocks, rebounds, steals, minutes, threes, turnovers or efficiency. |
+| `kind` | String | total = the server's top 20 by season TOTAL; average = the top 20 by PER-GAME average. |
+| `rank` | Int64 | Rank in the list, 1 = best (the API's order). |
+| `person_id` | Int64 | TBF person id (oyuncuKodu, sent as a string; key space: TBF persons). |
+| `player_name` | String | Player name as TBF prints it for that route (title case, Turkish letters kept). |
+| `team_process_id` | Int64 | Team-season id (takimKodu, sent as a string; key space: TBF team registrations; despite the name NOT the club id). |
+| `team_name` | String | Team name as registered for that season, uppercase with Turkish letters (sponsor name: 'PİZZABULLS BORDO BANDIRMA'). |
+| `games` | Int64 | Games played (macSayisi, sent as a string). |
+| `value` | Float64 | The ranked statistic: the season total for kind total, the per-game average for kind average (the API names the field grup and sends it as a string). |
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
 
@@ -73,17 +73,17 @@ Season leaders in assists: the server's top 20 by season total and by per-game a
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
-| `competition` | character | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
-| `category` | character | Statistic of the wrapper: points, assists, blocks, rebounds, steals, minutes, threes, turnovers or efficiency. |
-| `kind` | character | total = the server's top 20 by season TOTAL; average = the top 20 by PER-GAME average. |
-| `rank` | integer | Rank in the list, 1 = best (the API's order). |
-| `person_id` | integer | TBF person id (oyuncuKodu, sent as a string; key space: TBF persons). |
-| `player_name` | character | Player name as TBF prints it for that route (title case, Turkish letters kept). |
-| `team_process_id` | integer | Team-season id (takimKodu, sent as a string; key space: TBF team registrations; despite the name NOT the club id). |
-| `team_name` | character | Team name as registered for that season, uppercase with Turkish letters (sponsor name: 'PİZZABULLS BORDO BANDIRMA'). |
-| `games` | integer | Games played (macSayisi, sent as a string). |
-| `value` | numeric | The ranked statistic: the season total for kind total, the per-game average for kind average (the API names the field grup and sends it as a string). |
+| `season` | Int64 | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
+| `competition` | String | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
+| `category` | String | Statistic of the wrapper: points, assists, blocks, rebounds, steals, minutes, threes, turnovers or efficiency. |
+| `kind` | String | total = the server's top 20 by season TOTAL; average = the top 20 by PER-GAME average. |
+| `rank` | Int64 | Rank in the list, 1 = best (the API's order). |
+| `person_id` | Int64 | TBF person id (oyuncuKodu, sent as a string; key space: TBF persons). |
+| `player_name` | String | Player name as TBF prints it for that route (title case, Turkish letters kept). |
+| `team_process_id` | Int64 | Team-season id (takimKodu, sent as a string; key space: TBF team registrations; despite the name NOT the club id). |
+| `team_name` | String | Team name as registered for that season, uppercase with Turkish letters (sponsor name: 'PİZZABULLS BORDO BANDIRMA'). |
+| `games` | Int64 | Games played (macSayisi, sent as a string). |
+| `value` | Float64 | The ranked statistic: the season total for kind total, the per-game average for kind average (the API names the field grup and sends it as a string). |
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
 
@@ -120,17 +120,17 @@ Season leaders in blocks: the server's top 20 by season total and by per-game av
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
-| `competition` | character | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
-| `category` | character | Statistic of the wrapper: points, assists, blocks, rebounds, steals, minutes, threes, turnovers or efficiency. |
-| `kind` | character | total = the server's top 20 by season TOTAL; average = the top 20 by PER-GAME average. |
-| `rank` | integer | Rank in the list, 1 = best (the API's order). |
-| `person_id` | integer | TBF person id (oyuncuKodu, sent as a string; key space: TBF persons). |
-| `player_name` | character | Player name as TBF prints it for that route (title case, Turkish letters kept). |
-| `team_process_id` | integer | Team-season id (takimKodu, sent as a string; key space: TBF team registrations; despite the name NOT the club id). |
-| `team_name` | character | Team name as registered for that season, uppercase with Turkish letters (sponsor name: 'PİZZABULLS BORDO BANDIRMA'). |
-| `games` | integer | Games played (macSayisi, sent as a string). |
-| `value` | numeric | The ranked statistic: the season total for kind total, the per-game average for kind average (the API names the field grup and sends it as a string). |
+| `season` | Int64 | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
+| `competition` | String | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
+| `category` | String | Statistic of the wrapper: points, assists, blocks, rebounds, steals, minutes, threes, turnovers or efficiency. |
+| `kind` | String | total = the server's top 20 by season TOTAL; average = the top 20 by PER-GAME average. |
+| `rank` | Int64 | Rank in the list, 1 = best (the API's order). |
+| `person_id` | Int64 | TBF person id (oyuncuKodu, sent as a string; key space: TBF persons). |
+| `player_name` | String | Player name as TBF prints it for that route (title case, Turkish letters kept). |
+| `team_process_id` | Int64 | Team-season id (takimKodu, sent as a string; key space: TBF team registrations; despite the name NOT the club id). |
+| `team_name` | String | Team name as registered for that season, uppercase with Turkish letters (sponsor name: 'PİZZABULLS BORDO BANDIRMA'). |
+| `games` | Int64 | Games played (macSayisi, sent as a string). |
+| `value` | Float64 | The ranked statistic: the season total for kind total, the per-game average for kind average (the API names the field grup and sends it as a string). |
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
 
@@ -167,17 +167,17 @@ Season leaders in rebounds: the server's top 20 by season total and by per-game 
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
-| `competition` | character | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
-| `category` | character | Statistic of the wrapper: points, assists, blocks, rebounds, steals, minutes, threes, turnovers or efficiency. |
-| `kind` | character | total = the server's top 20 by season TOTAL; average = the top 20 by PER-GAME average. |
-| `rank` | integer | Rank in the list, 1 = best (the API's order). |
-| `person_id` | integer | TBF person id (oyuncuKodu, sent as a string; key space: TBF persons). |
-| `player_name` | character | Player name as TBF prints it for that route (title case, Turkish letters kept). |
-| `team_process_id` | integer | Team-season id (takimKodu, sent as a string; key space: TBF team registrations; despite the name NOT the club id). |
-| `team_name` | character | Team name as registered for that season, uppercase with Turkish letters (sponsor name: 'PİZZABULLS BORDO BANDIRMA'). |
-| `games` | integer | Games played (macSayisi, sent as a string). |
-| `value` | numeric | The ranked statistic: the season total for kind total, the per-game average for kind average (the API names the field grup and sends it as a string). |
+| `season` | Int64 | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
+| `competition` | String | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
+| `category` | String | Statistic of the wrapper: points, assists, blocks, rebounds, steals, minutes, threes, turnovers or efficiency. |
+| `kind` | String | total = the server's top 20 by season TOTAL; average = the top 20 by PER-GAME average. |
+| `rank` | Int64 | Rank in the list, 1 = best (the API's order). |
+| `person_id` | Int64 | TBF person id (oyuncuKodu, sent as a string; key space: TBF persons). |
+| `player_name` | String | Player name as TBF prints it for that route (title case, Turkish letters kept). |
+| `team_process_id` | Int64 | Team-season id (takimKodu, sent as a string; key space: TBF team registrations; despite the name NOT the club id). |
+| `team_name` | String | Team name as registered for that season, uppercase with Turkish letters (sponsor name: 'PİZZABULLS BORDO BANDIRMA'). |
+| `games` | Int64 | Games played (macSayisi, sent as a string). |
+| `value` | Float64 | The ranked statistic: the season total for kind total, the per-game average for kind average (the API names the field grup and sends it as a string). |
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
 
@@ -214,17 +214,17 @@ Season leaders in steals: the server's top 20 by season total and by per-game av
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
-| `competition` | character | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
-| `category` | character | Statistic of the wrapper: points, assists, blocks, rebounds, steals, minutes, threes, turnovers or efficiency. |
-| `kind` | character | total = the server's top 20 by season TOTAL; average = the top 20 by PER-GAME average. |
-| `rank` | integer | Rank in the list, 1 = best (the API's order). |
-| `person_id` | integer | TBF person id (oyuncuKodu, sent as a string; key space: TBF persons). |
-| `player_name` | character | Player name as TBF prints it for that route (title case, Turkish letters kept). |
-| `team_process_id` | integer | Team-season id (takimKodu, sent as a string; key space: TBF team registrations; despite the name NOT the club id). |
-| `team_name` | character | Team name as registered for that season, uppercase with Turkish letters (sponsor name: 'PİZZABULLS BORDO BANDIRMA'). |
-| `games` | integer | Games played (macSayisi, sent as a string). |
-| `value` | numeric | The ranked statistic: the season total for kind total, the per-game average for kind average (the API names the field grup and sends it as a string). |
+| `season` | Int64 | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
+| `competition` | String | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
+| `category` | String | Statistic of the wrapper: points, assists, blocks, rebounds, steals, minutes, threes, turnovers or efficiency. |
+| `kind` | String | total = the server's top 20 by season TOTAL; average = the top 20 by PER-GAME average. |
+| `rank` | Int64 | Rank in the list, 1 = best (the API's order). |
+| `person_id` | Int64 | TBF person id (oyuncuKodu, sent as a string; key space: TBF persons). |
+| `player_name` | String | Player name as TBF prints it for that route (title case, Turkish letters kept). |
+| `team_process_id` | Int64 | Team-season id (takimKodu, sent as a string; key space: TBF team registrations; despite the name NOT the club id). |
+| `team_name` | String | Team name as registered for that season, uppercase with Turkish letters (sponsor name: 'PİZZABULLS BORDO BANDIRMA'). |
+| `games` | Int64 | Games played (macSayisi, sent as a string). |
+| `value` | Float64 | The ranked statistic: the season total for kind total, the per-game average for kind average (the API names the field grup and sends it as a string). |
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
 
@@ -261,17 +261,17 @@ Season leaders in minutes played: the server's top 20 by season total and by per
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
-| `competition` | character | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
-| `category` | character | Statistic of the wrapper: points, assists, blocks, rebounds, steals, minutes, threes, turnovers or efficiency. |
-| `kind` | character | total = the server's top 20 by season TOTAL; average = the top 20 by PER-GAME average. |
-| `rank` | integer | Rank in the list, 1 = best (the API's order). |
-| `person_id` | integer | TBF person id (oyuncuKodu, sent as a string; key space: TBF persons). |
-| `player_name` | character | Player name as TBF prints it for that route (title case, Turkish letters kept). |
-| `team_process_id` | integer | Team-season id (takimKodu, sent as a string; key space: TBF team registrations; despite the name NOT the club id). |
-| `team_name` | character | Team name as registered for that season, uppercase with Turkish letters (sponsor name: 'PİZZABULLS BORDO BANDIRMA'). |
-| `games` | integer | Games played (macSayisi, sent as a string). |
-| `value` | numeric | The ranked statistic: the season total for kind total, the per-game average for kind average (the API names the field grup and sends it as a string). |
+| `season` | Int64 | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
+| `competition` | String | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
+| `category` | String | Statistic of the wrapper: points, assists, blocks, rebounds, steals, minutes, threes, turnovers or efficiency. |
+| `kind` | String | total = the server's top 20 by season TOTAL; average = the top 20 by PER-GAME average. |
+| `rank` | Int64 | Rank in the list, 1 = best (the API's order). |
+| `person_id` | Int64 | TBF person id (oyuncuKodu, sent as a string; key space: TBF persons). |
+| `player_name` | String | Player name as TBF prints it for that route (title case, Turkish letters kept). |
+| `team_process_id` | Int64 | Team-season id (takimKodu, sent as a string; key space: TBF team registrations; despite the name NOT the club id). |
+| `team_name` | String | Team name as registered for that season, uppercase with Turkish letters (sponsor name: 'PİZZABULLS BORDO BANDIRMA'). |
+| `games` | Int64 | Games played (macSayisi, sent as a string). |
+| `value` | Float64 | The ranked statistic: the season total for kind total, the per-game average for kind average (the API names the field grup and sends it as a string). |
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
 
@@ -308,17 +308,17 @@ Season leaders in three-point field goals made: the server's top 20 by season to
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
-| `competition` | character | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
-| `category` | character | Statistic of the wrapper: points, assists, blocks, rebounds, steals, minutes, threes, turnovers or efficiency. |
-| `kind` | character | total = the server's top 20 by season TOTAL; average = the top 20 by PER-GAME average. |
-| `rank` | integer | Rank in the list, 1 = best (the API's order). |
-| `person_id` | integer | TBF person id (oyuncuKodu, sent as a string; key space: TBF persons). |
-| `player_name` | character | Player name as TBF prints it for that route (title case, Turkish letters kept). |
-| `team_process_id` | integer | Team-season id (takimKodu, sent as a string; key space: TBF team registrations; despite the name NOT the club id). |
-| `team_name` | character | Team name as registered for that season, uppercase with Turkish letters (sponsor name: 'PİZZABULLS BORDO BANDIRMA'). |
-| `games` | integer | Games played (macSayisi, sent as a string). |
-| `value` | numeric | The ranked statistic: the season total for kind total, the per-game average for kind average (the API names the field grup and sends it as a string). |
+| `season` | Int64 | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
+| `competition` | String | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
+| `category` | String | Statistic of the wrapper: points, assists, blocks, rebounds, steals, minutes, threes, turnovers or efficiency. |
+| `kind` | String | total = the server's top 20 by season TOTAL; average = the top 20 by PER-GAME average. |
+| `rank` | Int64 | Rank in the list, 1 = best (the API's order). |
+| `person_id` | Int64 | TBF person id (oyuncuKodu, sent as a string; key space: TBF persons). |
+| `player_name` | String | Player name as TBF prints it for that route (title case, Turkish letters kept). |
+| `team_process_id` | Int64 | Team-season id (takimKodu, sent as a string; key space: TBF team registrations; despite the name NOT the club id). |
+| `team_name` | String | Team name as registered for that season, uppercase with Turkish letters (sponsor name: 'PİZZABULLS BORDO BANDIRMA'). |
+| `games` | Int64 | Games played (macSayisi, sent as a string). |
+| `value` | Float64 | The ranked statistic: the season total for kind total, the per-game average for kind average (the API names the field grup and sends it as a string). |
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
 
@@ -355,17 +355,17 @@ Season leaders in turnovers: the server's top 20 by season total and by per-game
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
-| `competition` | character | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
-| `category` | character | Statistic of the wrapper: points, assists, blocks, rebounds, steals, minutes, threes, turnovers or efficiency. |
-| `kind` | character | total = the server's top 20 by season TOTAL; average = the top 20 by PER-GAME average. |
-| `rank` | integer | Rank in the list, 1 = best (the API's order). |
-| `person_id` | integer | TBF person id (oyuncuKodu, sent as a string; key space: TBF persons). |
-| `player_name` | character | Player name as TBF prints it for that route (title case, Turkish letters kept). |
-| `team_process_id` | integer | Team-season id (takimKodu, sent as a string; key space: TBF team registrations; despite the name NOT the club id). |
-| `team_name` | character | Team name as registered for that season, uppercase with Turkish letters (sponsor name: 'PİZZABULLS BORDO BANDIRMA'). |
-| `games` | integer | Games played (macSayisi, sent as a string). |
-| `value` | numeric | The ranked statistic: the season total for kind total, the per-game average for kind average (the API names the field grup and sends it as a string). |
+| `season` | Int64 | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
+| `competition` | String | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
+| `category` | String | Statistic of the wrapper: points, assists, blocks, rebounds, steals, minutes, threes, turnovers or efficiency. |
+| `kind` | String | total = the server's top 20 by season TOTAL; average = the top 20 by PER-GAME average. |
+| `rank` | Int64 | Rank in the list, 1 = best (the API's order). |
+| `person_id` | Int64 | TBF person id (oyuncuKodu, sent as a string; key space: TBF persons). |
+| `player_name` | String | Player name as TBF prints it for that route (title case, Turkish letters kept). |
+| `team_process_id` | Int64 | Team-season id (takimKodu, sent as a string; key space: TBF team registrations; despite the name NOT the club id). |
+| `team_name` | String | Team name as registered for that season, uppercase with Turkish letters (sponsor name: 'PİZZABULLS BORDO BANDIRMA'). |
+| `games` | Int64 | Games played (macSayisi, sent as a string). |
+| `value` | Float64 | The ranked statistic: the season total for kind total, the per-game average for kind average (the API names the field grup and sends it as a string). |
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
 
@@ -402,17 +402,17 @@ Season leaders in efficiency rating: the server's top 20 by season total and by 
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
-| `competition` | character | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
-| `category` | character | Statistic of the wrapper: points, assists, blocks, rebounds, steals, minutes, threes, turnovers or efficiency. |
-| `kind` | character | total = the server's top 20 by season TOTAL; average = the top 20 by PER-GAME average. |
-| `rank` | integer | Rank in the list, 1 = best (the API's order). |
-| `person_id` | integer | TBF person id (oyuncuKodu, sent as a string; key space: TBF persons). |
-| `player_name` | character | Player name as TBF prints it for that route (title case, Turkish letters kept). |
-| `team_process_id` | integer | Team-season id (takimKodu, sent as a string; key space: TBF team registrations; despite the name NOT the club id). |
-| `team_name` | character | Team name as registered for that season, uppercase with Turkish letters (sponsor name: 'PİZZABULLS BORDO BANDIRMA'). |
-| `games` | integer | Games played (macSayisi, sent as a string). |
-| `value` | numeric | The ranked statistic: the season total for kind total, the per-game average for kind average (the API names the field grup and sends it as a string). |
+| `season` | Int64 | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
+| `competition` | String | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
+| `category` | String | Statistic of the wrapper: points, assists, blocks, rebounds, steals, minutes, threes, turnovers or efficiency. |
+| `kind` | String | total = the server's top 20 by season TOTAL; average = the top 20 by PER-GAME average. |
+| `rank` | Int64 | Rank in the list, 1 = best (the API's order). |
+| `person_id` | Int64 | TBF person id (oyuncuKodu, sent as a string; key space: TBF persons). |
+| `player_name` | String | Player name as TBF prints it for that route (title case, Turkish letters kept). |
+| `team_process_id` | Int64 | Team-season id (takimKodu, sent as a string; key space: TBF team registrations; despite the name NOT the club id). |
+| `team_name` | String | Team name as registered for that season, uppercase with Turkish letters (sponsor name: 'PİZZABULLS BORDO BANDIRMA'). |
+| `games` | Int64 | Games played (macSayisi, sent as a string). |
+| `value` | Float64 | The ranked statistic: the season total for kind total, the per-game average for kind average (the API names the field grup and sends it as a string). |
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
 

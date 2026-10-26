@@ -1,9 +1,9 @@
 ---
-title: OLYMPICS_MBK
-sidebar_label: OLYMPICS_MBK
-description: "sdv-py OLYMPICS_MBK: endpoint references, dataset loaders and parsers for OLYMPICS_MBK in the SportsDataverse Python package."
+title: Olympics men's basketball
+sidebar_label: Olympics men's basketball
+description: "sdv-py Olympics men's basketball: endpoint references, dataset loaders and parsers for Olympics men's basketball in the SportsDataverse Python package."
 ---
-# OLYMPICS_MBK (`sportsdataverse.basketball.olympics_mbk`)
+# Olympics men's basketball (`sportsdataverse.basketball.olympics_mbk`)
 
 ## Data sources
 

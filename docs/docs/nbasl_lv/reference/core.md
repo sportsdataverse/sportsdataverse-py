@@ -1,11 +1,11 @@
 ---
-title: NBASL_LV — ESPN core API (v2)
+title: NBA Summer League (Las Vegas) — ESPN core API (v2)
 sidebar_label: ESPN core API (v2)
-description: "NBASL_LV — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "NBA Summer League (Las Vegas) — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 22
 toc_max_heading_level: 2
 ---
-# NBASL_LV — ESPN core API (v2)
+# NBA Summer League (Las Vegas) — ESPN core API (v2)
 
 `sportsdataverse.basketball.nbasl_lv` — 82 endpoints.
 

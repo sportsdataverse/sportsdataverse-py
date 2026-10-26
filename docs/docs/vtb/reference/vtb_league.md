@@ -9,7 +9,7 @@ toc_max_heading_level: 2
 
 `sportsdataverse.basketball.vtb` — 3 endpoints.
 
-> **Note:** Owner flag (sdv-internal-refs/vtb/README.md): the VTB United League is run from Russia and several clubs are owned or sponsored by sanctioned state companies (the KHL precedent); Infobasket is the Russian basketball federation's stats platform. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first. No accounts or payments are involved.
+> **Note:** Owner flag: the VTB United League is run from Russia and several clubs are owned or sponsored by sanctioned state companies (the KHL precedent); Infobasket is the Russian basketball federation's stats platform. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first. No accounts or payments are involved.
 
 > **Note:** Unofficial and unsupported: both hosts are keyless public JSON backends of vtb-league.com. No terms of use are published; robots.txt is a 404 on api.vtb-league.com and org.infobasket.su (no rules; vtb-league.com disallows only /wp/wp-admin/). The runtime waits at least 1 s before every request, retries included, and honours Retry-After on 429 / 503. No key, cookie or proxy is used (live-verified direct from the droplet 2026-10-12).
 
@@ -36,12 +36,12 @@ The leagues served by the API: vtb, vtbyouth, wbc.
 
 | col_name | type | description |
 |---|---|---|
-| `league_id` | integer | v2 league id (1 vtb, 2 vtbyouth, 3 wbc). Not an Infobasket id. |
-| `league` | character | League slug used in the paths: 'vtb' (VTB United League), 'vtbyouth' (youth league), 'wbc' (WINLINE Basket Cup). |
-| `league_name_en` | character | The league name in English. |
-| `league_name_ru` | character | The league name in Russian. |
-| `league_abbrev_en` | character | The league abbreviation in English. |
-| `league_abbrev_ru` | character | The league abbreviation in Russian. |
+| `league_id` | Int64 | v2 league id (1 vtb, 2 vtbyouth, 3 wbc). Not an Infobasket id. |
+| `league` | String | League slug used in the paths: 'vtb' (VTB United League), 'vtbyouth' (youth league), 'wbc' (WINLINE Basket Cup). |
+| `league_name_en` | String | The league name in English. |
+| `league_name_ru` | String | The league name in Russian. |
+| `league_abbrev_en` | String | The league abbreviation in English. |
+| `league_abbrev_ru` | String | The league abbreviation in Russian. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -77,11 +77,11 @@ The seasons the API serves for one league (new seasons only, from 2024-25).
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season END year (2026 = 2025-26); the sdv season key and the `{season}` path param. |
-| `league` | character | League slug, echoed. |
-| `is_current` | logical | True for the current season. |
-| `season_name` | character | Season name ('Season 2025/2026'). |
-| `season_abbrev` | character | Season abbreviation ('25/26'). |
+| `season` | Int64 | Season END year (2026 = 2025-26); the sdv season key and the `{season}` path param. |
+| `league` | String | League slug, echoed. |
+| `is_current` | Boolean | True for the current season. |
+| `season_name` | String | Season name ('Season 2025/2026'). |
+| `season_abbrev` | String | Season abbreviation ('25/26'). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -118,63 +118,63 @@ Every match of one league-season (schedule, scores, quarter points, venue), in o
 
 | col_name | type | description |
 |---|---|---|
-| `match_id` | integer | Match id; equals the Infobasket GameID (/Widget/GetOnline/{gameId}). |
-| `league` | character | League slug, echoed. |
-| `season` | integer | Season END year, echoed. |
-| `competition` | character | Competition slug: 'vtb' (league games), 'vtb-supercup', 'vtb-allstars', 'wbc'. |
-| `phase_id` | integer | v2 phase id of the stage (not an Infobasket CompID). |
-| `phase_name_en` | character | The stage name in English. |
-| `phase_name_ru` | character | The stage name in Russian. |
-| `match_number` | character | Game number ('1/2-2' = semi-final 2; regular-season numbers otherwise). |
-| `match_type` | character | Game type: REGULAR, FINALS (any playoff or cup knockout game), ALLSTARS. |
-| `match_status` | character | Status: SCHEDULED, IN_PROGRESS, COMPLETE, POSTPONED, CANCELLED, UNKNOWN (the site filters on the first four). |
-| `match_time` | character | Tip-off in venue local time, ISO 8601 with offset. |
-| `match_time_msk` | character | Tip-off in Moscow time (UTC+3), ISO 8601. |
-| `match_time_utc` | character | Tip-off in UTC, ISO 8601. |
-| `is_time_set` | logical | True when the tip-off time is fixed. |
-| `time_actual` | character | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
-| `time_end_actual` | character | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
-| `duration` | integer | Game duration; 0 in every sample (unverified). |
-| `periods` | integer | Periods played (4 in regulation). |
-| `extra_periods_used` | logical | True when the game went to overtime. |
-| `attendance` | integer | Spectators (null when not recorded). |
-| `hosting_team_id` | integer | Home team id (Infobasket TeamID). |
-| `venue_id` | integer | Venue id; equals the Infobasket arena id (ArenaId). |
-| `venue_name_en` | character | The venue name in English. |
-| `venue_name_ru` | character | The venue name in Russian. |
-| `venue_region_name_en` | character | The venue city in English. |
-| `venue_region_name_ru` | character | The venue city in Russian. |
-| `home_team_id` | integer | Infobasket TeamID of the home team. |
-| `home_score` | integer | Final points of the home team (an integer; 0 for a cancelled match). |
-| `home_team_name_en` | character | The home team's name in English. |
-| `home_team_name_ru` | character | The home team's name in Russian. |
-| `home_team_code_en` | character | The home team's short code in English. |
-| `home_team_code_ru` | character | The home team's short code in Russian. |
-| `home_region_name_en` | character | Region or city of the home team in English. |
-| `home_region_name_ru` | character | Region or city of the home team in Russian. |
-| `away_team_id` | integer | Infobasket TeamID of the away team. |
-| `away_score` | integer | Final points of the away team (an integer; 0 for a cancelled match). |
-| `away_team_name_en` | character | The away team's name in English. |
-| `away_team_name_ru` | character | The away team's name in Russian. |
-| `away_team_code_en` | character | The away team's short code in English. |
-| `away_team_code_ru` | character | The away team's short code in Russian. |
-| `away_region_name_en` | character | Region or city of the away team in English. |
-| `away_region_name_ru` | character | Region or city of the away team in Russian. |
-| `subtitle_en` | character | The site subtitle of the match in English. |
-| `subtitle_ru` | character | The site subtitle of the match in Russian. |
-| `necessary_label_en` | character | The site label of the match in English. |
-| `necessary_label_ru` | character | The site label of the match in Russian. |
-| `points_by_quarters` | character | Points per period as [home, away] pairs; null before the game. The home team (isHomeCompetitor true) is listed first in `competitors` on every probed row (vtb seasons 2025 and 2026, wbc 2026: 620 of 620), and the first value of each pair summed to that team's score on every finished one. |
-| `home_q1` | integer | Points of the home team in period 1. |
-| `away_q1` | integer | Points of the away team in period 1. |
-| `home_q2` | integer | Points of the home team in period 2. |
-| `away_q2` | integer | Points of the away team in period 2. |
-| `home_q3` | integer | Points of the home team in period 3. |
-| `away_q3` | integer | Points of the away team in period 3. |
-| `home_q4` | integer | Points of the home team in period 4. |
-| `away_q4` | integer | Points of the away team in period 4. |
-| `home_ot` | integer | Points of the home team in all overtimes together (null without overtime). |
-| `away_ot` | integer | Points of the away team in all overtimes together (null without overtime). |
+| `match_id` | Int64 | Match id; equals the Infobasket GameID (/Widget/GetOnline/{gameId}). |
+| `league` | String | League slug, echoed. |
+| `season` | Int64 | Season END year, echoed. |
+| `competition` | String | Competition slug: 'vtb' (league games), 'vtb-supercup', 'vtb-allstars', 'wbc'. |
+| `phase_id` | Int64 | v2 phase id of the stage (not an Infobasket CompID). |
+| `phase_name_en` | String | The stage name in English. |
+| `phase_name_ru` | String | The stage name in Russian. |
+| `match_number` | String | Game number ('1/2-2' = semi-final 2; regular-season numbers otherwise). |
+| `match_type` | String | Game type: REGULAR, FINALS (any playoff or cup knockout game), ALLSTARS. |
+| `match_status` | String | Status: SCHEDULED, IN_PROGRESS, COMPLETE, POSTPONED, CANCELLED, UNKNOWN (the site filters on the first four). |
+| `match_time` | String | Tip-off in venue local time, ISO 8601 with offset. |
+| `match_time_msk` | String | Tip-off in Moscow time (UTC+3), ISO 8601. |
+| `match_time_utc` | String | Tip-off in UTC, ISO 8601. |
+| `is_time_set` | Boolean | True when the tip-off time is fixed. |
+| `time_actual` | String | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
+| `time_end_actual` | String | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
+| `duration` | Int64 | Game duration; 0 in every sample (unverified). |
+| `periods` | Int64 | Periods played (4 in regulation). |
+| `extra_periods_used` | Boolean | True when the game went to overtime. |
+| `attendance` | Int64 | Spectators (null when not recorded). |
+| `hosting_team_id` | Int64 | Home team id (Infobasket TeamID). |
+| `venue_id` | Int64 | Venue id; equals the Infobasket arena id (ArenaId). |
+| `venue_name_en` | String | The venue name in English. |
+| `venue_name_ru` | String | The venue name in Russian. |
+| `venue_region_name_en` | String | The venue city in English. |
+| `venue_region_name_ru` | String | The venue city in Russian. |
+| `home_team_id` | Int64 | Infobasket TeamID of the home team. |
+| `home_score` | Int64 | Final points of the home team (an integer; 0 for a cancelled match). |
+| `home_team_name_en` | String | The home team's name in English. |
+| `home_team_name_ru` | String | The home team's name in Russian. |
+| `home_team_code_en` | String | The home team's short code in English. |
+| `home_team_code_ru` | String | The home team's short code in Russian. |
+| `home_region_name_en` | String | Region or city of the home team in English. |
+| `home_region_name_ru` | String | Region or city of the home team in Russian. |
+| `away_team_id` | Int64 | Infobasket TeamID of the away team. |
+| `away_score` | Int64 | Final points of the away team (an integer; 0 for a cancelled match). |
+| `away_team_name_en` | String | The away team's name in English. |
+| `away_team_name_ru` | String | The away team's name in Russian. |
+| `away_team_code_en` | String | The away team's short code in English. |
+| `away_team_code_ru` | String | The away team's short code in Russian. |
+| `away_region_name_en` | String | Region or city of the away team in English. |
+| `away_region_name_ru` | String | Region or city of the away team in Russian. |
+| `subtitle_en` | String | The site subtitle of the match in English. |
+| `subtitle_ru` | String | The site subtitle of the match in Russian. |
+| `necessary_label_en` | String | The site label of the match in English. |
+| `necessary_label_ru` | String | The site label of the match in Russian. |
+| `points_by_quarters` | String | Points per period as [home, away] pairs; null before the game. The home team (isHomeCompetitor true) is listed first in `competitors` on every probed row (vtb seasons 2025 and 2026, wbc 2026: 620 of 620), and the first value of each pair summed to that team's score on every finished one. |
+| `home_q1` | Int64 | Points of the home team in period 1. |
+| `away_q1` | Int64 | Points of the away team in period 1. |
+| `home_q2` | Int64 | Points of the home team in period 2. |
+| `away_q2` | Int64 | Points of the away team in period 2. |
+| `home_q3` | Int64 | Points of the home team in period 3. |
+| `away_q3` | Int64 | Points of the away team in period 3. |
+| `home_q4` | Int64 | Points of the home team in period 4. |
+| `away_q4` | Int64 | Points of the away team in period 4. |
+| `home_ot` | Int64 | Points of the home team in all overtimes together (null without overtime). |
+| `away_ot` | Int64 | Points of the away team in all overtimes together (null without overtime). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

@@ -1,11 +1,11 @@
 ---
-title: SIHF — SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)
+title: SIHF (Swiss hockey) — SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)
 sidebar_label: SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)
-description: "SIHF — SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "SIHF (Swiss hockey) — SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
 ---
-# SIHF — SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)
+# SIHF (Swiss hockey) — SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)
 
 `sportsdataverse.hockey.sihf` — 33 endpoints.
 

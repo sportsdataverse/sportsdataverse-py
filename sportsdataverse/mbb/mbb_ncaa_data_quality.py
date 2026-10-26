@@ -5,8 +5,8 @@ package ``org.piggottfamily.cbb_explorer``) data-quality layer -- the first
 of six Phase-5b modules. **Task 5b.1 ports the curated data tables**
 (``DataQualityIssues.scala``) and the minimal error-reporting scaffolding
 (``ParseError.scala`` + ``ParseUtils.build_sub_error``) that
-``build_player_code`` / ``parse_team_name`` (Task 5b.2) and the
-``tidy_player`` name-resolution chain (Task 5b.3) consume on every
+``build_player_code`` / ``parse_team_name`` and the
+``tidy_player`` name-resolution chain consume on every
 substitution event.
 
 **Scope is mostly data, not logic** -- the module's job is to transcribe
@@ -34,8 +34,7 @@ the plain (unmerged) ``generic_misspellings`` via Scala's ``withDefault``.
 merge; team miss (including ``team=None``, which is never a real key in
 the Scala literal either) → a copy of :data:`generic_misspellings`.
 
-**``players_missing_from_boxscore`` (Task 5e.2 addition).** Deferred by
-Task 5b.1 (its only caller, ``BoxscoreParser.scala:245``'s
+**``players_missing_from_boxscore`` (Task 5e.2 addition).** Deferred (its only caller, ``BoxscoreParser.scala``'s
 ``inject_validated_players``, was out of scope then); ported now verbatim
 alongside the ``BoxscoreParser`` port that consumes it
 (``mbb_ncaa_boxscore_parser.py``).
@@ -91,7 +90,7 @@ __all__ = [
 
 @dataclass
 class ParseError:
-    """A parse-time error (``ParseError``, ``ParseError.scala:9``).
+    """A parse-time error (``ParseError``).
 
     Args:
         location: The module in which the error occurred.
@@ -105,8 +104,7 @@ class ParseError:
 
     @classmethod
     def single(cls, location: str, id: str, message: str) -> "ParseError":
-        """Single-message convenience constructor (``ParseError.apply``,
-        ``ParseError.scala:19-21`` -- the companion object's single-``message``
+        """Single-message convenience constructor (``ParseError.apply`` -- the companion object's single-``message``
         overload). Python has no method overloading, so this is a
         ``classmethod`` rather than a second constructor signature.
 
@@ -123,13 +121,13 @@ class ParseError:
 
 def _build_error_id(value: str) -> str:
     """Wrap a non-empty id fragment in brackets, else ``""``
-    (``ParseUtils.build_error_id``, ``ParseUtils.scala:57``)."""
+    (``ParseUtils.build_error_id``)."""
     return f"[{value}]" if value else ""
 
 
 def build_sub_error(*subids: str, error: str) -> ParseError:
     """Build a location-less :class:`ParseError` from id fragments
-    (``ParseUtils.build_sub_error``, ``ParseUtils.scala:83-85``, delegating
+    (``ParseUtils.build_sub_error``, delegating
     through ``build_error``/``build_errors``/``build_error_id`` with
     ``location=""``/``base_id=""``; the ``shapeless``-based
     ``sequence_kv_results`` accumulation machinery in the same file is out
@@ -163,7 +161,7 @@ def build_sub_error(*subids: str, error: str) -> ParseError:
 
 def enrich_sub_errors(location: str, base_id: str, errors: list[ParseError]) -> list[ParseError]:
     """Adds top-level location information to a list of sub-errors generated
-    by a child parser (``ParseUtils.enrich_sub_errors``, ``ParseUtils.scala:87-89``).
+    by a child parser (``ParseUtils.enrich_sub_errors``).
 
     Args:
         location: The module in which the (now top-level) error occurred.
@@ -195,7 +193,7 @@ def enrich_sub_errors(location: str, base_id: str, errors: list[ParseError]) -> 
 
 def enrich_sub_error(location: str, base_id: str, error: ParseError) -> list[ParseError]:
     """Adds top-level location information to a single sub-error, returning a
-    list for consistency (``ParseUtils.enrich_sub_error``, ``ParseUtils.scala:91-93``).
+    list for consistency (``ParseUtils.enrich_sub_error``).
 
     Args:
         location: The module in which the (now top-level) error occurred.
@@ -220,7 +218,7 @@ def enrich_sub_error(location: str, base_id: str, error: ParseError) -> list[Par
 
 def combos(first: str, last: str) -> list[str]:
     """Generate the three name-string variants NCAA sources use for one
-    player (``DataQualityIssues.combos``, ``DataQualityIssues.scala:330-337``).
+    player (``DataQualityIssues.combos``).
 
     The Scala signature takes a single ``(String, String)`` tuple, but every
     call site (including the ``fix_combos``/``alias_combos`` helpers below
@@ -250,8 +248,7 @@ def combos(first: str, last: str) -> list[str]:
 
 def fix_combos(first: str, last: str, code_start: Optional[str] = None) -> list[tuple[str, Optional[str]]]:
     """Pair each of :func:`combos`' three name variants with a shared
-    player-code override (``DataQualityIssues.fix_combos``,
-    ``DataQualityIssues.scala:340-346``).
+    player-code override (``DataQualityIssues.fix_combos``).
 
     Args:
         first: The player's first name.
@@ -268,7 +265,7 @@ def fix_combos(first: str, last: str, code_start: Optional[str] = None) -> list[
 
 def alias_combos(first: str, last: str, to_name: str) -> dict[str, str]:
     """Pair each of :func:`combos`' three name variants with a shared alias
-    target (``DataQualityIssues.alias_combos``, ``DataQualityIssues.scala:351-356``).
+    target (``DataQualityIssues.alias_combos``).
 
     Args:
         first: The player's first (mis-recorded) first name.
@@ -481,8 +478,7 @@ _DUPLICATE_NAME_SPECS: list[tuple[str, str, Optional[str]]] = [
 
 def _build_duplicate_name_table() -> dict[str, Optional[str]]:
     """Flatten :data:`_DUPLICATE_NAME_SPECS` into the lower-cased lookup
-    table (``.map { case (name, fix) => (name.toLowerCase, fix) }.toMap``,
-    ``DataQualityIssues.scala:158-160``).
+    table (``.map { case (name, fix) => (name.toLowerCase, fix) }.toMap``).
 
     A later spec's variant overwrites an earlier one on key collision --
     matching Scala's ``List[(String, T)].toMap`` (last-listed value wins),
@@ -591,7 +587,7 @@ _MISSPELLINGS_MERGED: dict[TeamId, dict[str, str]] = {
 
 def misspellings(team: Optional[TeamId]) -> dict[str, str]:
     """Team-scoped misspelling map, falling back to the generic map
-    (``DataQualityIssues.misspellings``, ``DataQualityIssues.scala:165-322``
+    (``DataQualityIssues.misspellings``
     -- see the module docstring's "fallback semantics" note for why this is
     a precomputed merge, not a runtime two-level lookup).
 

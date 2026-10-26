@@ -30,56 +30,56 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | ESPN event id. |
-| `uid` | character |  |
-| `date` | character | Match start timestamp (ISO 8601, UTC). |
-| `name` | character | Full event name (e.g. 'Team A at Team B'). |
-| `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
-| `season_year` | integer | Integer season year ESPN assigns the event (e.g. 2025 for the 2025-26 season). |
-| `season_type` | integer | ESPN season-type id of the event's season: 1 preseason, 2 regular season, 3 postseason, 4 offseason for the US leagues; soccer competitions carry their own competition-specific ids (e.g. 13481). |
-| `season_slug` | character | ESPN slug of the event's season type (e.g. 'regular-season', 'post-season'; soccer competitions use their own, such as 'final' or 'torneo-apertura'). |
-| `status_type_id` | integer |  |
-| `status_type_name` | character |  |
-| `status_type_state` | character |  |
-| `status_type_completed` | logical |  |
-| `status_type_description` | character |  |
-| `status_type_detail` | character |  |
-| `status_type_short_detail` | character |  |
-| `status_clock` | double | Game clock in seconds as ESPN reports it: time remaining in the period for clock sports, elapsed seconds for soccer (e.g. 5400.0 at full time); 0.0 once a game has ended. |
-| `status_display_clock` | character |  |
-| `status_period` | integer | Current or final period number (quarter, half, inning or period, depending on the sport). |
-| `neutral_site` | logical | Whether the match is played at a neutral venue. |
-| `conference_competition` | logical |  |
-| `attendance` | integer |  |
-| `venue_id` | integer |  |
-| `venue_full_name` | character |  |
-| `venue_city` | character |  |
-| `venue_state` | character |  |
-| `venue_indoor` | logical |  |
-| `broadcast` | character | Every network name of the competition in feed order, deduped and ", "-joined (an entry with no names gives its market); "" when the game lists no broadcast. |
-| `note` | character | Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none. |
-| `home_id` | integer |  |
-| `home_name` | character |  |
-| `home_abbreviation` | character |  |
-| `home_display_name` | character |  |
-| `home_location` | character |  |
-| `home_color` | character |  |
-| `home_alternate_color` | character |  |
-| `home_logo` | character |  |
-| `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
-| `home_winner` | logical |  |
-| `home_rank` | character |  |
-| `away_id` | integer |  |
-| `away_name` | character |  |
-| `away_abbreviation` | character |  |
-| `away_display_name` | character |  |
-| `away_location` | character |  |
-| `away_color` | character |  |
-| `away_alternate_color` | character |  |
-| `away_logo` | character |  |
-| `away_score` | character | Away team's score. For cricket, the innings string. |
-| `away_winner` | logical |  |
-| `away_rank` | character |  |
+| `game_id` | Int64 | ESPN event id. |
+| `uid` | String |  |
+| `date` | String | Match start timestamp (ISO 8601, UTC). |
+| `name` | String | Full event name (e.g. 'Team A at Team B'). |
+| `short_name` | String | Abbreviated event name (e.g. 'TA @ TB'). |
+| `season_year` | Int64 | Integer season year ESPN assigns the event (e.g. 2025 for the 2025-26 season). |
+| `season_type` | Int64 | ESPN season-type id of the event's season: 1 preseason, 2 regular season, 3 postseason, 4 offseason for the US leagues; soccer competitions carry their own competition-specific ids (e.g. 13481). |
+| `season_slug` | String | ESPN slug of the event's season type (e.g. 'regular-season', 'post-season'; soccer competitions use their own, such as 'final' or 'torneo-apertura'). |
+| `status_type_id` | Int64 |  |
+| `status_type_name` | String |  |
+| `status_type_state` | String |  |
+| `status_type_completed` | Boolean |  |
+| `status_type_description` | String |  |
+| `status_type_detail` | String |  |
+| `status_type_short_detail` | String |  |
+| `status_clock` | Float64 | Game clock in seconds as ESPN reports it: time remaining in the period for clock sports, elapsed seconds for soccer (e.g. 5400.0 at full time); 0.0 once a game has ended. |
+| `status_display_clock` | String |  |
+| `status_period` | Int64 | Current or final period number (quarter, half, inning or period, depending on the sport). |
+| `neutral_site` | Boolean | Whether the match is played at a neutral venue. |
+| `conference_competition` | Boolean |  |
+| `attendance` | Int64 |  |
+| `venue_id` | Int64 |  |
+| `venue_full_name` | String |  |
+| `venue_city` | String |  |
+| `venue_state` | String |  |
+| `venue_indoor` | Boolean |  |
+| `broadcast` | String | Every network name of the competition in feed order, deduped and ", "-joined (an entry with no names gives its market); "" when the game lists no broadcast. |
+| `note` | String | Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none. |
+| `home_id` | Int64 |  |
+| `home_name` | String |  |
+| `home_abbreviation` | String |  |
+| `home_display_name` | String |  |
+| `home_location` | String |  |
+| `home_color` | String |  |
+| `home_alternate_color` | String |  |
+| `home_logo` | String |  |
+| `home_score` | String | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
+| `home_winner` | Boolean |  |
+| `home_rank` | String |  |
+| `away_id` | Int64 |  |
+| `away_name` | String |  |
+| `away_abbreviation` | String |  |
+| `away_display_name` | String |  |
+| `away_location` | String |  |
+| `away_color` | String |  |
+| `away_alternate_color` | String |  |
+| `away_logo` | String |  |
+| `away_score` | String | Away team's score. For cricket, the innings string. |
+| `away_winner` | Boolean |  |
+| `away_rank` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

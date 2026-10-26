@@ -1,11 +1,11 @@
 ---
-title: DBL — Basketligaen site API (www.basketligaen.dk/api, Denmark; Sportality)
+title: Basketligaen — Basketligaen site API (www.basketligaen.dk/api, Denmark; Sportality)
 sidebar_label: Basketligaen site API (www.basketligaen.dk/api, Denmark; Sportality)
-description: "DBL — Basketligaen site API (www.basketligaen.dk/api, Denmark; Sportality) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "Basketligaen — Basketligaen site API (www.basketligaen.dk/api, Denmark; Sportality) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
 ---
-# DBL — Basketligaen site API (www.basketligaen.dk/api, Denmark; Sportality)
+# Basketligaen — Basketligaen site API (www.basketligaen.dk/api, Denmark; Sportality)
 
 `sportsdataverse.basketball.dbl` — 25 endpoints.
 

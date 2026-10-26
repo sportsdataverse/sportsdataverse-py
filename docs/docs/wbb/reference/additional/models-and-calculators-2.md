@@ -1,10 +1,10 @@
 ---
-title: "WBB — additional Python functions — Models and calculators: build_wbb–win_prob"
+title: "Women's college basketball — additional Python functions — Models and calculators: build_wbb–win_prob"
 sidebar_label: "Models and calculators: build_wbb–win_prob"
 sidebar_position: 9
-description: "WBB — additional Python functions — Models and calculators: build_wbb–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "Women's college basketball — additional Python functions — Models and calculators: build_wbb–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — Models and calculators: build_wbb–win_prob
+# Women's college basketball — additional Python functions — Models and calculators: build_wbb–win_prob
 
 ### build_wbb_season_wp {#build_wbb_season_wp}
 
@@ -28,72 +28,72 @@ The season's `load_wbb_pbp` frame with `pregame_home_prob` + `home_win_prob` app
 
 | col_name | type | description |
 |---|---|---|
-| `game_play_number` | integer | Game play number |
-| `id` | integer | Unique play identification number |
-| `sequence_number` | integer | Sequence number representing a shot-possession (V3 PBP). |
-| `type_id` | integer | Type identifier (numeric). |
-| `type_text` | character | Display text for the type field. |
-| `text` | character | Text description of the play / record. |
-| `away_score` | integer | Away team score at the time of the play. |
-| `home_score` | integer | Home team score at the time of the play. |
-| `period_number` | integer | Numeric period (1-4 for quarters; 5+ for OT). |
-| `period_display_value` | character | Period display label (e.g. '1st Quarter', 'OT'). |
-| `clock_display_value` | character | Game clock display string (e.g. '8:32'). |
-| `scoring_play` | logical | TRUE if the play resulted in points scored. |
-| `score_value` | integer | Point value of the play (2 / 3 / 1). |
-| `team_id` | integer | Unique team identifier. |
-| `athlete_id_1` | integer | Primary athlete identifier (e.g. shooter). |
-| `wallclock` | character | Wallclock. |
-| `shooting_play` | logical | TRUE if the play was a shooting attempt. |
-| `athlete_id_2` | integer | Secondary athlete identifier (e.g. assister / fouler). |
-| `game_id` | integer | Unique game identifier. |
-| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `home_team_name` | character | Home team name. |
-| `home_team_mascot` | character | Home team mascot. |
-| `home_team_abbrev` | character | Home team three-letter abbreviation. |
-| `home_team_name_alt` | character | Alternate versions of the home team abbreviation |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `away_team_name` | character | Away team name. |
-| `away_team_mascot` | character | Away team mascot. |
-| `away_team_abbrev` | character | Away team three-letter abbreviation. |
-| `away_team_name_alt` | character | Alternate versions of the away team abbreviation |
-| `game_spread` | double | Game spread in (-X Team) format. There are almost none, I would recommend not trusting any of these three columns |
-| `home_favorite` | logical | Logical (TRUE/FALSE) indicating whether the home team is favored |
-| `game_spread_available` | logical | Logical (TRUE/FALSE) indicating whether the spread was available from ESPN. Basically, I would just not recommend using any of the spread information, I think I defaulted a lot of them to -2.5 for the home team. Most games probably do not have spread information. This column should really be listed first |
-| `home_team_spread` | double | The game spread with respect to the home team |
-| `qtr` | integer | Quarter of the game |
-| `time` | character | Time left within the period |
-| `clock_minutes` | integer | Clock minutes split from seconds for developer convenience |
-| `clock_seconds` | integer | Clock seconds split from minutes for developer convenience |
-| `home_timeout_called` | logical |  |
-| `away_timeout_called` | logical |  |
-| `half` | integer | Half of the game |
-| `game_half` | integer | Half of the game |
-| `lag_qtr` | integer | A lag column on the quarter |
-| `lead_qtr` | integer | A lead column on the quarter |
-| `lag_half` | integer | A lag column on the half |
-| `lead_half` | integer | A lead column on the half |
-| `start_quarter_seconds_remaining` | integer | Quarter seconds remaining at the start of the play (these are more or less code artifacts from other sports, but may eventually be used more seriously) |
-| `start_half_seconds_remaining` | integer | Game half seconds remaining at the start of the play (these are more or less code artifacts from other sports, but may eventually be used more seriously) |
-| `start_game_seconds_remaining` | integer | Game seconds remaining at the start of the play (''') |
-| `end_quarter_seconds_remaining` | integer | Quarter seconds remaining at the end of the play (''') |
-| `end_half_seconds_remaining` | integer | Game half seconds remaining at the end of the play (''') |
-| `end_game_seconds_remaining` | integer | Game seconds remaining at the end of the play (''') |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `game_date_time` | character | Game start date/time (ISO 8601). |
-| `coordinate_x` | double | X coordinate on the court (half-court layout). |
-| `coordinate_y` | double | Y coordinate on the court (half-court layout). |
-| `coordinate_x_raw` | double | X coordinate as returned by the API before any adjustment. |
-| `coordinate_y_raw` | double | Y coordinate as returned by the API before any adjustment. |
-| `athlete_name_1` | character |  |
-| `athlete_name_2` | character |  |
-| `athlete_name_3` | character |  |
-| `media_id` | integer | Where did you come from |
-| `pregame_home_prob` | double |  |
-| `home_win_prob` | double |  |
+| `game_play_number` | Int64 | Game play number |
+| `id` | Int64 | Unique play identification number |
+| `sequence_number` | Int64 | Sequence number representing a shot-possession (V3 PBP). |
+| `type_id` | Int64 | Type identifier (numeric). |
+| `type_text` | String | Display text for the type field. |
+| `text` | String | Text description of the play / record. |
+| `away_score` | Int64 | Away team score at the time of the play. |
+| `home_score` | Int64 | Home team score at the time of the play. |
+| `period_number` | Int64 | Numeric period (1-4 for quarters; 5+ for OT). |
+| `period_display_value` | String | Period display label (e.g. '1st Quarter', 'OT'). |
+| `clock_display_value` | String | Game clock display string (e.g. '8:32'). |
+| `scoring_play` | Boolean | TRUE if the play resulted in points scored. |
+| `score_value` | Int64 | Point value of the play (2 / 3 / 1). |
+| `team_id` | Int64 | Unique team identifier. |
+| `athlete_id_1` | Int64 | Primary athlete identifier (e.g. shooter). |
+| `wallclock` | String | Wallclock. |
+| `shooting_play` | Boolean | TRUE if the play was a shooting attempt. |
+| `athlete_id_2` | Int64 | Secondary athlete identifier (e.g. assister / fouler). |
+| `game_id` | Int64 | Unique game identifier. |
+| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season_type` | Int64 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `home_team_id` | Int64 | Unique identifier for the home team. |
+| `home_team_name` | String | Home team name. |
+| `home_team_mascot` | String | Home team mascot. |
+| `home_team_abbrev` | String | Home team three-letter abbreviation. |
+| `home_team_name_alt` | String | Alternate versions of the home team abbreviation |
+| `away_team_id` | Int64 | Unique identifier for the away team. |
+| `away_team_name` | String | Away team name. |
+| `away_team_mascot` | String | Away team mascot. |
+| `away_team_abbrev` | String | Away team three-letter abbreviation. |
+| `away_team_name_alt` | String | Alternate versions of the away team abbreviation |
+| `game_spread` | Float64 | Game spread in (-X Team) format. There are almost none, I would recommend not trusting any of these three columns |
+| `home_favorite` | Boolean | Logical (TRUE/FALSE) indicating whether the home team is favored |
+| `game_spread_available` | Boolean | Logical (TRUE/FALSE) indicating whether the spread was available from ESPN. Basically, I would just not recommend using any of the spread information, I think I defaulted a lot of them to -2.5 for the home team. Most games probably do not have spread information. This column should really be listed first |
+| `home_team_spread` | Float64 | The game spread with respect to the home team |
+| `qtr` | Int64 | Quarter of the game |
+| `time` | String | Time left within the period |
+| `clock_minutes` | Int64 | Clock minutes split from seconds for developer convenience |
+| `clock_seconds` | Int64 | Clock seconds split from minutes for developer convenience |
+| `home_timeout_called` | Boolean |  |
+| `away_timeout_called` | Boolean |  |
+| `half` | Int64 | Half of the game |
+| `game_half` | Int64 | Half of the game |
+| `lag_qtr` | Int64 | A lag column on the quarter |
+| `lead_qtr` | Int64 | A lead column on the quarter |
+| `lag_half` | Int64 | A lag column on the half |
+| `lead_half` | Int64 | A lead column on the half |
+| `start_quarter_seconds_remaining` | Int64 | Quarter seconds remaining at the start of the play (these are more or less code artifacts from other sports, but may eventually be used more seriously) |
+| `start_half_seconds_remaining` | Int64 | Game half seconds remaining at the start of the play (these are more or less code artifacts from other sports, but may eventually be used more seriously) |
+| `start_game_seconds_remaining` | Int64 | Game seconds remaining at the start of the play (''') |
+| `end_quarter_seconds_remaining` | Int64 | Quarter seconds remaining at the end of the play (''') |
+| `end_half_seconds_remaining` | Int64 | Game half seconds remaining at the end of the play (''') |
+| `end_game_seconds_remaining` | Int64 | Game seconds remaining at the end of the play (''') |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `game_date_time` | String | Game start date/time (ISO 8601). |
+| `coordinate_x` | Float64 | X coordinate on the court (half-court layout). |
+| `coordinate_y` | Float64 | Y coordinate on the court (half-court layout). |
+| `coordinate_x_raw` | Float64 | X coordinate as returned by the API before any adjustment. |
+| `coordinate_y_raw` | Float64 | Y coordinate as returned by the API before any adjustment. |
+| `athlete_name_1` | String |  |
+| `athlete_name_2` | String |  |
+| `athlete_name_3` | String |  |
+| `media_id` | Int64 | Where did you come from |
+| `pregame_home_prob` | Float64 |  |
+| `home_win_prob` | Float64 |  |
 
 **Example**
 
@@ -119,8 +119,7 @@ recursive prior" per the upstream `/** For "recursive" prior */` comment.
 `"pickRidgeRegression"` test never calls this function. Ported
 faithfully from TS regardless (per "TS governs"); flagged as a documented
 gap rather than backed by a synthetic test, matching this module's
-existing convention for other upstream-untested branches (e.g. the
-"Task 3.3 coverage gap" note above).
+existing convention for other upstream-untested branches.
 
 **Parameters**
 
@@ -179,8 +178,8 @@ implementation returns values in, the final result only depends on the
 descending convention vs whatever order `svd-js` happens to return.
 
 **`correl_matrix`/`poss_correl_matrix` stay `numpy.ndarray`** (see
-the module docstring's "Task 3.6 notes" for why this doesn't hit the
-Task 3.5 "`ndarray` breaks deep `==`" concern).
+the module docstring for why an `ndarray` here does not break deep `==`
+comparisons).
 
 **Parameters**
 
@@ -229,7 +228,7 @@ this function has a visibly different shape, see the classification map
 in `tests/fixtures/hoop_explorer/README.md`). This port still
 materializes both output vectors as `numpy.ndarray` for consistency
 with `calc_player_weights` at the same dict -> array boundary --
-Task 3.4's ridge-regression solve consumes both as arrays regardless of
+the ridge-regression solve consumes both as arrays regardless of
 the upstream distinction.
 
 **Parameters**
@@ -241,7 +240,7 @@ the upstream distinction.
 | `def_offset` | `float` |  | The D1-average defensive value for `field`. |
 | `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext`, e.g. from `build_player_context`. |
 | `adaptive_correl_weights` | `list[float] \| None` | `None` | Optional per-player adaptive-correlation weights (index-aligned with `ctx["col_to_player"]`), used as the strong-prior blend fallback when `ctx["prior_info"] ["strong_weight"] < 0` -- see `_get_strong_weight`. |
-| `use_old_val_if_possible` | `tuple[bool, bool]` | `(False, False)` | `(use_old_val_for_off, use_old_val_for_def)` -- whether to prefer each lineup/team stat's luck-adjusted `old_value` over its raw `value` when present. This is the luck-adjustment hook Task 3.1's classification map flags as an **inherited coverage gap**: the vendored oracle fixture has `old_value == value` on every field (via `insertOldValues`), so neither jest nor this port's replay test ever observes this flag change the resulting numbers -- only that passing it doesn't crash. See the module docstring's "Task 3.3 coverage gap" note. |
+| `use_old_val_if_possible` | `tuple[bool, bool]` | `(False, False)` | `(use_old_val_for_off, use_old_val_for_def)` -- whether to prefer each lineup/team stat's luck-adjusted `old_value` over its raw `value` when present. This is the luck-adjustment hook, an **inherited coverage gap**: the vendored oracle fixture has `old_value == value` on every field (via `insertOldValues`), so neither jest nor this port's replay test ever observes this flag change the resulting numbers -- only that passing it doesn't crash. See the module docstring's coverage-gap note. |
 
 **Returns**
 
@@ -273,8 +272,7 @@ Build the off/def player-weight (design) matrices for the RAPM solve.
 Faithful port of `RapmUtils.calcPlayerWeights` (`RapmUtils.ts:544-595`).
 One row per (filtered) lineup, one column per remaining player; each
 filled cell is `sqrt(lineup_possessions / total_side_possessions)` --
-the possession-weighted design-matrix entry the ridge regression (Task
-3.4) solves against. This is the first function in the module where a
+the possession-weighted design-matrix entry the ridge regression solves against. This is the first function in the module where a
 `dict`-shaped `RapmPlayerContext` gets materialized into a
 `numpy.ndarray` -- see the module docstring's "dict -> `numpy.ndarray`
 boundary" note.
@@ -347,7 +345,7 @@ dead in this function).
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `player_weight_matrix` | `NDArray[float64]` |  | The off/def design matrix, shape `(num_lineups, num_players)`. |
-| `regressed_players` | `list[float]` |  | The fitted per-player values (e.g. the final, strong-prior-blended RAPM from Task 3.5's `pickRidgeRegression`, or a raw `calculate_rapm` output), length `num_players`. |
+| `regressed_players` | `list[float]` |  | The fitted per-player values (e.g. the final, strong-prior-blended RAPM from the `pickRidgeRegression`, or a raw `calculate_rapm` output), length `num_players`. |
 | `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext` (unused). |
 
 **Returns**
@@ -451,7 +449,7 @@ Per-player RAPM standard errors.
 Faithful port of the inline `sdRapm` computation in
 `RapmUtils.pickRidgeRegression` (`RapmUtils.ts:1373-1390`, not itself
 a named TS function -- promoted to a standalone, independently testable
-helper here since Task 3.4's brief calls out the formula explicitly).
+helper here since the brief calls out the formula explicitly).
 Cites [arXiv:1509.09169](https://arxiv.org/pdf/1509.09169.pdf).
 
 **Two NaN/error regimes (landmines 8-9):**
@@ -518,10 +516,10 @@ A `polars.DataFrame` with columns `bin_mid`, `mean_pred`, `mean_actual`, `n` (on
 
 | col_name | type | description |
 |---|---|---|
-| `bin_mid` | double |  |
-| `mean_pred` | double |  |
-| `mean_actual` | double |  |
-| `n` | integer |  |
+| `bin_mid` | Float64 |  |
+| `mean_pred` | Float64 |  |
+| `mean_actual` | Float64 |  |
+| `n` | Int64 |  |
 
 **Example**
 
@@ -632,11 +630,11 @@ One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- 
 
 | col_name | type | description |
 |---|---|---|
-| `score_diff` | double |  |
-| `sec_left` | double |  |
-| `sqrt_sec_left` | double |  |
-| `pregame_logit` | double |  |
-| `home_has_ball` | integer |  |
+| `score_diff` | Float64 |  |
+| `sec_left` | Float64 |  |
+| `sqrt_sec_left` | Float64 |  |
+| `pregame_logit` | Float64 |  |
+| `home_has_ball` | Int64 |  |
 
 **Example**
 
@@ -902,7 +900,7 @@ addition, not upstream's own shape):** upstream also computes
 behind the same hardcoded-`False` `debugMode` as
 `apply_weak_priors` -- none of the four is ever stored on
 `acc.output` upstream (`RapmProcessingInputs` has no `sdRapm`
-field there either). Since Task 3.4 built
+field there either). Since this module builds
 `calculate_predicted_out`/`calculate_residual_error`/
 `calc_slow_pseudo_inverse`/`calculate_sd_rapm` specifically
 so this task could surface real standard errors, this port keeps
@@ -966,26 +964,26 @@ One row per (player_id, season): ids as `Utf8` plus the 17 rate / per-100 featur
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `team_id` | character | Unique team identifier. |
-| `min` | double | Minutes played. |
-| `usage` | double | Usage rate. |
-| `ts_pct` | double | True shooting percentage (0-1). |
-| `efg_pct` | double |  |
-| `ast_pct` | double | Assist percentage. |
-| `tov_pct` | double |  |
-| `oreb_pct` | double |  |
-| `dreb_pct` | double |  |
-| `blk_pct` | double | Blocks percentage (0-1 decimal). |
-| `stl_pct` | double | Steals percentage (0-1 decimal). |
-| `ftr` | double | Free-throw rate (offense). |
-| `rim_share` | double |  |
-| `mid_share` | double |  |
-| `three_share` | double |  |
-| `pts_per100` | double |  |
-| `reb_per100` | double |  |
-| `ast_per100` | double |  |
+| `player_id` | String | Unique player identifier. |
+| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `team_id` | String | Unique team identifier. |
+| `min` | Float64 | Minutes played. |
+| `usage` | Float64 | Usage rate. |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `efg_pct` | Float64 |  |
+| `ast_pct` | Float64 | Assist percentage. |
+| `tov_pct` | Float64 |  |
+| `oreb_pct` | Float64 |  |
+| `dreb_pct` | Float64 |  |
+| `blk_pct` | Float64 | Blocks percentage (0-1 decimal). |
+| `stl_pct` | Float64 | Steals percentage (0-1 decimal). |
+| `ftr` | Float64 | Free-throw rate (offense). |
+| `rim_share` | Float64 |  |
+| `mid_share` | Float64 |  |
+| `three_share` | Float64 |  |
+| `pts_per100` | Float64 |  |
+| `reb_per100` | Float64 |  |
+| `ast_per100` | Float64 |  |
 
 **Example**
 
@@ -1000,7 +998,7 @@ feats = player_per100_features(season_stats)
 
 Field-wise add two `PossCalcFragment`\ s
 
-(`PossCalcFragment.sum`, `PossessionUtils.scala:146-153`).
+(`PossCalcFragment.sum`).
 
 The Scala original uses `shapeless.Generic` to zip the two case
 classes' fields and sum pairwise; since every field is a plain `Int`,
@@ -1108,16 +1106,16 @@ One row per (game_id, team_id): `game_id, season, date, team_id, opp_team_id, is
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `date` | character | Date in YYYY-MM-DD format. |
-| `team_id` | character | Unique team identifier. |
-| `opp_team_id` | character |  |
-| `is_home` | logical | Whether the team was home. |
-| `neutral_site` | logical | Neutral site. |
-| `poss` | double | Poss. |
-| `off_eff` | double | Off eff. |
-| `def_eff` | double | Def eff. |
+| `game_id` | String | Unique game identifier. |
+| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `date` | String | Date in YYYY-MM-DD format. |
+| `team_id` | String | Unique team identifier. |
+| `opp_team_id` | String |  |
+| `is_home` | Boolean | Whether the team was home. |
+| `neutral_site` | Boolean | Neutral site. |
+| `poss` | Float64 | Poss. |
+| `off_eff` | Float64 | Off eff. |
+| `def_eff` | Float64 | Def eff. |
 
 **Raises**
 
@@ -1232,9 +1230,7 @@ save_artifact("mbb_box_bpm", {"league": "mens", "coef": [0.1]})
 
 `score_to_tuple(s: 'str') -> 'tuple[int, int]'`
 
-Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`,
-
-`ExtractorUtils.scala:107-113`).
+Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`).
 
 Scala's `str match { case regex(s1, s2) => ... }` on a compiled
 `Regex` requires the ENTIRE string to match (`Regex.unapplySeq` calls
@@ -1428,11 +1424,11 @@ consecutive seasons.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `from_team_id` | character | Unique identifier for from team. |
-| `to_team_id` | character | Unique identifier for to team. |
-| `from_season` | integer |  |
-| `to_season` | integer |  |
+| `player_id` | String | Unique player identifier. |
+| `from_team_id` | String | Unique identifier for from team. |
+| `to_team_id` | String | Unique identifier for to team. |
+| `from_season` | Int64 |  |
+| `to_season` | Int64 |  |
 
 **Example**
 
@@ -1495,12 +1491,12 @@ One row per play: the five feature columns plus `home_win_prob` -- see the mbb c
 
 | col_name | type | description |
 |---|---|---|
-| `score_diff` | double |  |
-| `sec_left` | double |  |
-| `sqrt_sec_left` | double |  |
-| `pregame_logit` | double |  |
-| `home_has_ball` | integer |  |
-| `home_win_prob` | double |  |
+| `score_diff` | Float64 |  |
+| `sec_left` | Float64 |  |
+| `sqrt_sec_left` | Float64 |  |
+| `pregame_logit` | Float64 |  |
+| `home_has_ball` | Int64 |  |
+| `home_win_prob` | Float64 |  |
 
 **Example**
 
@@ -1591,17 +1587,17 @@ One row per (season, team_id) -- see the mbb core for the schema.
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `team_id` | character | Unique team identifier. |
-| `adj_o` | double | Adj o. |
-| `adj_d` | double | Adj d. |
-| `adj_em` | double | Adj em. |
-| `adj_tempo` | double |  |
-| `raw_o` | double | Raw o. |
-| `raw_d` | double | Raw d. |
-| `games` | integer | Games played. |
-| `rank` | integer | Rank. |
-| `adj_em_z` | double |  |
+| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `team_id` | String | Unique team identifier. |
+| `adj_o` | Float64 | Adj o. |
+| `adj_d` | Float64 | Adj d. |
+| `adj_em` | Float64 | Adj em. |
+| `adj_tempo` | Float64 |  |
+| `raw_o` | Float64 | Raw o. |
+| `raw_d` | Float64 | Raw d. |
+| `games` | Int64 | Games played. |
+| `rank` | Int64 | Rank. |
+| `adj_em_z` | Float64 |  |
 
 **Example**
 

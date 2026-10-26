@@ -1,15 +1,15 @@
 ---
-title: "NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Shot charts"
+title: "NBA G League — G League Stats API (stats.nba.com, LeagueID=20) — Shot charts"
 sidebar_label: "Shot charts"
 sidebar_position: 16
-description: "NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Shot charts — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA G League — G League Stats API (stats.nba.com, LeagueID=20) — Shot charts — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Shot charts
+# NBA G League — G League Stats API (stats.nba.com, LeagueID=20) — Shot charts
 
 ## nbagl_stats_shotchartdetail
 
-GET /stats/shotchartdetail
+Shot chart detail.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/shotchartdetail`
 
@@ -57,42 +57,42 @@ GET /stats/shotchartdetail
 
 | col_name | type | description |
 |---|---|---|
-| `grid_type` | character | Shot chart grid type label returned by the stats API (e.g. "Shot Chart Detail"). |
-| `game_id` | character |  |
-| `game_event_id` | character |  |
-| `player_id` | character |  |
-| `player_name` | character |  |
-| `team_id` | character |  |
-| `team_name` | character |  |
-| `period` | character |  |
-| `minutes_remaining` | character |  |
-| `seconds_remaining` | character |  |
-| `event_type` | character |  |
-| `action_type` | character |  |
-| `shot_type` | character |  |
-| `shot_zone_basic` | character |  |
-| `shot_zone_area` | character |  |
-| `shot_zone_range` | character |  |
-| `shot_distance` | character |  |
-| `loc_x` | character |  |
-| `loc_y` | character |  |
-| `shot_attempted_flag` | character |  |
-| `shot_made_flag` | character |  |
-| `game_date` | character |  |
-| `htm` | character | Home team abbreviation for the game. |
-| `vtm` | character | Visiting team abbreviation for the game. |
+| `grid_type` | String | Shot chart grid type label returned by the stats API (e.g. "Shot Chart Detail"). |
+| `game_id` | String |  |
+| `game_event_id` | String |  |
+| `player_id` | String |  |
+| `player_name` | String |  |
+| `team_id` | String |  |
+| `team_name` | String |  |
+| `period` | String |  |
+| `minutes_remaining` | String |  |
+| `seconds_remaining` | String |  |
+| `event_type` | String |  |
+| `action_type` | String |  |
+| `shot_type` | String |  |
+| `shot_zone_basic` | String |  |
+| `shot_zone_area` | String |  |
+| `shot_zone_range` | String |  |
+| `shot_distance` | String |  |
+| `loc_x` | String |  |
+| `loc_y` | String |  |
+| `shot_attempted_flag` | String |  |
+| `shot_made_flag` | String |  |
+| `game_date` | String |  |
+| `htm` | String | Home team abbreviation for the game. |
+| `vtm` | String | Visiting team abbreviation for the game. |
 
 **LeagueAverages**
 
 | col_name | type | description |
 |---|---|---|
-| `grid_type` | character | Shot chart grid type label returned by the stats API (e.g. "Shot Chart Detail"). |
-| `shot_zone_basic` | character |  |
-| `shot_zone_area` | character |  |
-| `shot_zone_range` | character |  |
-| `fga` | integer |  |
-| `fgm` | integer |  |
-| `fg_pct` | numeric |  |
+| `grid_type` | String | Shot chart grid type label returned by the stats API (e.g. "Shot Chart Detail"). |
+| `shot_zone_basic` | String |  |
+| `shot_zone_area` | String |  |
+| `shot_zone_range` | String |  |
+| `fga` | Int64 |  |
+| `fgm` | Int64 |  |
+| `fg_pct` | Float64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -113,7 +113,7 @@ nbagl_stats_shotchartdetail(league_id='20', season_nullable='2024-25')
 
 ## nbagl_stats_shotchartleaguewide
 
-GET /stats/shotchartleaguewide
+Shot chart league wide.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/shotchartleaguewide`
 
@@ -130,13 +130,13 @@ GET /stats/shotchartleaguewide
 
 | col_name | type | description |
 |---|---|---|
-| `grid_type` | character | NBA or WNBA Stats value for grid type in the shotchartleaguewide result set. |
-| `shot_zone_basic` | character |  |
-| `shot_zone_area` | character |  |
-| `shot_zone_range` | character |  |
-| `fga` | integer |  |
-| `fgm` | integer |  |
-| `fg_pct` | numeric |  |
+| `grid_type` | String | NBA or WNBA Stats value for grid type in the shotchartleaguewide result set. |
+| `shot_zone_basic` | String |  |
+| `shot_zone_area` | String |  |
+| `shot_zone_range` | String |  |
+| `fga` | Int64 |  |
+| `fgm` | Int64 |  |
+| `fg_pct` | Float64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -157,7 +157,7 @@ nbagl_stats_shotchartleaguewide(league_id='20', season='2024-25')
 
 ## nbagl_stats_shotchartlineupdetail
 
-GET /stats/shotchartlineupdetail
+Shot chart lineup detail.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/shotchartlineupdetail`
 
@@ -192,44 +192,44 @@ GET /stats/shotchartlineupdetail
 
 | col_name | type | description |
 |---|---|---|
-| `grid_type` | character | Shot chart grid type label returned by the stats API (e.g. "Shot Chart Detail"). |
-| `game_id` | character |  |
-| `game_event_id` | character |  |
-| `group_id` | character |  |
-| `group_name` | character | The lineup's five players as a ' - ' separated string of abbreviated names. |
-| `player_id` | character |  |
-| `player_name` | character |  |
-| `team_id` | character |  |
-| `team_name` | character |  |
-| `period` | character |  |
-| `minutes_remaining` | character |  |
-| `seconds_remaining` | character |  |
-| `event_type` | character |  |
-| `action_type` | character |  |
-| `shot_type` | character |  |
-| `shot_zone_basic` | character |  |
-| `shot_zone_area` | character |  |
-| `shot_zone_range` | character |  |
-| `shot_distance` | character |  |
-| `loc_x` | character |  |
-| `loc_y` | character |  |
-| `shot_attempted_flag` | character |  |
-| `shot_made_flag` | character |  |
-| `game_date` | character |  |
-| `htm` | character | Home team abbreviation for the game. |
-| `vtm` | character | Visiting team abbreviation for the game. |
+| `grid_type` | String | Shot chart grid type label returned by the stats API (e.g. "Shot Chart Detail"). |
+| `game_id` | String |  |
+| `game_event_id` | String |  |
+| `group_id` | String |  |
+| `group_name` | String | The lineup's five players as a ' - ' separated string of abbreviated names. |
+| `player_id` | String |  |
+| `player_name` | String |  |
+| `team_id` | String |  |
+| `team_name` | String |  |
+| `period` | String |  |
+| `minutes_remaining` | String |  |
+| `seconds_remaining` | String |  |
+| `event_type` | String |  |
+| `action_type` | String |  |
+| `shot_type` | String |  |
+| `shot_zone_basic` | String |  |
+| `shot_zone_area` | String |  |
+| `shot_zone_range` | String |  |
+| `shot_distance` | String |  |
+| `loc_x` | String |  |
+| `loc_y` | String |  |
+| `shot_attempted_flag` | String |  |
+| `shot_made_flag` | String |  |
+| `game_date` | String |  |
+| `htm` | String | Home team abbreviation for the game. |
+| `vtm` | String | Visiting team abbreviation for the game. |
 
 **ShotChartLineupLeagueAverage**
 
 | col_name | type | description |
 |---|---|---|
-| `grid_type` | character | Shot chart grid type label returned by the stats API (e.g. "Shot Chart Detail"). |
-| `shot_zone_basic` | character |  |
-| `shot_zone_area` | character |  |
-| `shot_zone_range` | character |  |
-| `fga` | integer |  |
-| `fgm` | integer |  |
-| `fg_pct` | numeric |  |
+| `grid_type` | String | Shot chart grid type label returned by the stats API (e.g. "Shot Chart Detail"). |
+| `shot_zone_basic` | String |  |
+| `shot_zone_area` | String |  |
+| `shot_zone_range` | String |  |
+| `fga` | Int64 |  |
+| `fgm` | Int64 |  |
+| `fg_pct` | Float64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

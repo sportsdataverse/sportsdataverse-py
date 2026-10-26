@@ -47,12 +47,12 @@ One row per coach -- `staff`, `team`, `start_season`, `years_in_role`, `birth_da
 
 | col_name | type | description |
 |---|---|---|
-| `staff` | character | Coach name. |
-| `team` | character | Team-side label or team identifier. |
-| `start_season` | character | Season the coach started with the team. |
-| `years_in_role` | integer | Seasons in the role. |
-| `birth_date` | character | Date of birth (YYYY-MM-DD). |
-| `nationality` | character | Player nationality. |
+| `staff` | String | Coach name. |
+| `team` | String | Team-side label or team identifier. |
+| `start_season` | String | Season the coach started with the team. |
+| `years_in_role` | Int64 | Seasons in the role. |
+| `birth_date` | String | Date of birth (YYYY-MM-DD). |
+| `nationality` | String | Player nationality. |
 
 **Raises**
 
@@ -96,20 +96,20 @@ One row per selection -- `pick`, `player`, `team`, `draft_trades`, `pos`, `ht`, 
 
 | col_name | type | description |
 |---|---|---|
-| `pick` | integer | Pick number within the round. |
-| `player` | character | Player name. |
-| `team` | character | Team-side label or team identifier. |
-| `draft_trades` | character | Draft-night trade note, if any. |
-| `pos` | character | Position. |
-| `ht` | character | Listed height. |
-| `wt` | integer | Listed weight (lbs). |
-| `age` | integer | Player age (in years). |
-| `yos` | integer | Years of service. |
-| `pre_draft_team` | character | Pre-draft team / school / club. |
-| `class` | character | College class / draft eligibility note. |
-| `nationality` | character | Player nationality. |
-| `round` | integer | Tournament / playoff round. |
-| `draft_year` | integer | Draft year (4-digit). |
+| `pick` | Int64 | Pick number within the round. |
+| `player` | String | Player name. |
+| `team` | String | Team-side label or team identifier. |
+| `draft_trades` | String | Draft-night trade note, if any. |
+| `pos` | String | Position. |
+| `ht` | String | Listed height. |
+| `wt` | Int64 | Listed weight (lbs). |
+| `age` | Int64 | Player age (in years). |
+| `yos` | Int64 | Years of service. |
+| `pre_draft_team` | String | Pre-draft team / school / club. |
+| `class` | String | College class / draft eligibility note. |
+| `nationality` | String | Player nationality. |
+| `round` | Int64 | Tournament / playoff round. |
+| `draft_year` | Int64 | Draft year (4-digit). |
 
 **Raises**
 
@@ -192,17 +192,17 @@ One row per candidate -- `player`, `pos`, `ht`, `wt`, `birth_date`, `college` / 
 
 | col_name | type | description |
 |---|---|---|
-| `player` | character | Player name. |
-| `pos` | character | Position. |
-| `ht` | character | Listed height. |
-| `wt` | double | Listed weight (lbs). |
-| `birth_date` | character | Date of birth (YYYY-MM-DD). |
-| `college` | character | College. |
-| `class` | character | College class / draft eligibility note. |
-| `draft_status` | character | Draft pick / undrafted status. |
-| `yos` | integer | Years of service. |
-| `nationality` | character | Player nationality. |
-| `pre_draft_team` | character | Pre-draft team / school / club. |
+| `player` | String | Player name. |
+| `pos` | String | Position. |
+| `ht` | String | Listed height. |
+| `wt` | Float64 | Listed weight (lbs). |
+| `birth_date` | String | Date of birth (YYYY-MM-DD). |
+| `college` | String | College. |
+| `class` | String | College class / draft eligibility note. |
+| `draft_status` | String | Draft pick / undrafted status. |
+| `yos` | Int64 | Years of service. |
+| `nationality` | String | Player nationality. |
+| `pre_draft_team` | String | Pre-draft team / school / club. |
 
 **Raises**
 
@@ -243,19 +243,19 @@ One row per upcoming free agent -- `player`, `pos`, `team`, `season`, `age`, `yo
 
 | col_name | type | description |
 |---|---|---|
-| `player` | character | Player name. |
-| `pos` | character | Position. |
-| `team` | character | Team-side label or team identifier. |
-| `season` | character | Season year. |
-| `age` | integer | Player age (in years). |
-| `yos` | integer | Years of service. |
-| `veteran_fa_status` | character | Bird / Non-Bird / veteran FA status. |
-| `gp` | integer | Games played. |
-| `pts` | double | Points scored. |
-| `reb` | double | Rebounds per game. |
-| `ast` | double | Assists. |
-| `per` | double | Player Efficiency Rating. |
-| `agent` | character | Listed player agent. |
+| `player` | String | Player name. |
+| `pos` | String | Position. |
+| `team` | String | Team-side label or team identifier. |
+| `season` | String | Season year. |
+| `age` | Int64 | Player age (in years). |
+| `yos` | Int64 | Years of service. |
+| `veteran_fa_status` | String | Bird / Non-Bird / veteran FA status. |
+| `gp` | Int64 | Games played. |
+| `pts` | Float64 | Points scored. |
+| `reb` | Float64 | Rebounds per game. |
+| `ast` | Float64 | Assists. |
+| `per` | Float64 | Player Efficiency Rating. |
+| `agent` | String | Listed player agent. |
 
 **Raises**
 
@@ -299,12 +299,12 @@ One row per general manager -- `staff`, `team`, `start_season`, `years_in_role`,
 
 | col_name | type | description |
 |---|---|---|
-| `staff` | character | Coach name. |
-| `team` | character | Team-side label or team identifier. |
-| `start_season` | character | Season the coach started with the team. |
-| `years_in_role` | integer | Seasons in the role. |
-| `birth_date` | character | Date of birth (YYYY-MM-DD). |
-| `nationality` | character | Player nationality. |
+| `staff` | String | Coach name. |
+| `team` | String | Team-side label or team identifier. |
+| `start_season` | String | Season the coach started with the team. |
+| `years_in_role` | Int64 | Seasons in the role. |
+| `birth_date` | String | Date of birth (YYYY-MM-DD). |
+| `nationality` | String | Player nationality. |
 
 **Raises**
 
@@ -382,30 +382,30 @@ One row per player-season -- `player`, `season`, `team`, `gp`, `min`, `pts`, sho
 
 | col_name | type | description |
 |---|---|---|
-| `number` | double | Number. |
-| `player` | character | Player name. |
-| `season` | integer | Season year. |
-| `team` | character | Team-side label or team identifier. |
-| `gp` | integer | Games played. |
-| `min` | double | Minutes played. |
-| `pts` | double | Points scored. |
-| `fgm` | double | Field goals made. |
-| `fga` | double | Field goal attempts. |
-| `fg_pct` | double | Field goal percentage (0-1). |
-| `3_pm` | character |  |
-| `3_pa` | character |  |
-| `3_p_pct` | character |  |
-| `ftm` | double | Free throws made. |
-| `fta` | double | Free throw attempts. |
-| `ft_pct` | double | Free throw percentage (0-1). |
-| `orb` | character |  |
-| `drb` | character |  |
-| `reb` | double | Rebounds per game. |
-| `ast` | double | Assists. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `tov` | character | Turnovers. |
-| `pf` | double | Personal fouls. |
+| `number` | Float64 | Number. |
+| `player` | String | Player name. |
+| `season` | Int64 | Season year. |
+| `team` | String | Team-side label or team identifier. |
+| `gp` | Int64 | Games played. |
+| `min` | Float64 | Minutes played. |
+| `pts` | Float64 | Points scored. |
+| `fgm` | Float64 | Field goals made. |
+| `fga` | Float64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `3_pm` | String |  |
+| `3_pa` | String |  |
+| `3_p_pct` | String |  |
+| `ftm` | Float64 | Free throws made. |
+| `fta` | Float64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `orb` | String |  |
+| `drb` | String |  |
+| `reb` | Float64 | Rebounds per game. |
+| `ast` | Float64 | Assists. |
+| `stl` | String | Steals. |
+| `blk` | String | Blocks. |
+| `tov` | String | Turnovers. |
+| `pf` | Float64 | Personal fouls. |
 
 **Raises**
 
@@ -448,32 +448,32 @@ One row per qualified player, columns varying by `stat_type` (for `"Averages"`: 
 
 | col_name | type | description |
 |---|---|---|
-| `number` | double | Number. |
-| `player` | character | Player name. |
-| `team` | character | Team-side label or team identifier. |
-| `gp` | integer | Games played. |
-| `mpg` | double | Minutes per game. |
-| `ppg` | double | Points per game. |
-| `fgm` | double | Field goals made. |
-| `fga` | double | Field goal attempts. |
-| `fg_pct` | double | Field goal percentage (0-1). |
-| `3_pm` | double |  |
-| `3_pa` | double |  |
-| `3_p_pct` | double |  |
-| `ftm` | double | Free throws made. |
-| `fta` | double | Free throw attempts. |
-| `ft_pct` | double | Free throw percentage (0-1). |
-| `orb` | double |  |
-| `drb` | double |  |
-| `rpg` | double | Rebounds per game. |
-| `apg` | double | Assists per game. |
-| `spg` | double | Steals per game. |
-| `bpg` | double | Blocks per game. |
-| `tov` | double | Turnovers. |
-| `pf` | double | Personal fouls. |
-| `season` | integer | Season year. |
-| `stat_type` | character | Stat type code (e.g. "win", "loss"). |
-| `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `number` | Float64 | Number. |
+| `player` | String | Player name. |
+| `team` | String | Team-side label or team identifier. |
+| `gp` | Int64 | Games played. |
+| `mpg` | Float64 | Minutes per game. |
+| `ppg` | Float64 | Points per game. |
+| `fgm` | Float64 | Field goals made. |
+| `fga` | Float64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `3_pm` | Float64 |  |
+| `3_pa` | Float64 |  |
+| `3_p_pct` | Float64 |  |
+| `ftm` | Float64 | Free throws made. |
+| `fta` | Float64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `orb` | Float64 |  |
+| `drb` | Float64 |  |
+| `rpg` | Float64 | Rebounds per game. |
+| `apg` | Float64 | Assists per game. |
+| `spg` | Float64 | Steals per game. |
+| `bpg` | Float64 | Blocks per game. |
+| `tov` | Float64 | Turnovers. |
+| `pf` | Float64 | Personal fouls. |
+| `season` | Int64 | Season year. |
+| `stat_type` | String | Stat type code (e.g. "win", "loss"). |
+| `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 
 **Raises**
 
@@ -519,17 +519,17 @@ One row per active player -- `number`, `player`, `pos`, `ht`, `wt`, `age`, `curr
 
 | col_name | type | description |
 |---|---|---|
-| `number` | double | Number. |
-| `player` | character | Player name. |
-| `pos` | character | Position. |
-| `ht` | character | Listed height. |
-| `wt` | integer | Listed weight (lbs). |
-| `age` | integer | Player age (in years). |
-| `current_team` | character | Current NBA team. |
-| `yos` | integer | Years of service. |
-| `pre_draft_team` | character | Pre-draft team / school / club. |
-| `draft_status` | character | Draft pick / undrafted status. |
-| `nationality` | character | Player nationality. |
+| `number` | Float64 | Number. |
+| `player` | String | Player name. |
+| `pos` | String | Position. |
+| `ht` | String | Listed height. |
+| `wt` | Int64 | Listed weight (lbs). |
+| `age` | Int64 | Player age (in years). |
+| `current_team` | String | Current NBA team. |
+| `yos` | Int64 | Years of service. |
+| `pre_draft_team` | String | Pre-draft team / school / club. |
+| `draft_status` | String | Draft pick / undrafted status. |
+| `nationality` | String | Player nationality. |
 
 **Raises**
 
@@ -578,17 +578,17 @@ One row per player -- `player`, `pos`, `ht`, `wt`, `nba_status`, `team_s`, `gp`,
 
 | col_name | type | description |
 |---|---|---|
-| `player` | character | Player name. |
-| `pos` | character | Position. |
-| `ht` | character | Listed height. |
-| `wt` | integer | Listed weight (lbs). |
-| `nba_status` | character | NBA contract / rights status. |
-| `team_s` | character | Current overseas team(s) and NBA affiliation. |
-| `gp` | integer | Games played. |
-| `mpg` | double | Minutes per game. |
-| `ppg` | double | Points per game. |
-| `rpg` | double | Rebounds per game. |
-| `apg` | double | Assists per game. |
+| `player` | String | Player name. |
+| `pos` | String | Position. |
+| `ht` | String | Listed height. |
+| `wt` | Int64 | Listed weight (lbs). |
+| `nba_status` | String | NBA contract / rights status. |
+| `team_s` | String | Current overseas team(s) and NBA affiliation. |
+| `gp` | Int64 | Games played. |
+| `mpg` | Float64 | Minutes per game. |
+| `ppg` | Float64 | Points per game. |
+| `rpg` | Float64 | Rebounds per game. |
+| `apg` | Float64 | Assists per game. |
 
 **Raises**
 
@@ -629,12 +629,12 @@ One row per first-round pick -- `pick`, the four contract-year amounts, the 4th-
 
 | col_name | type | description |
 |---|---|---|
-| `pick` | integer | Pick number within the round. |
-| `1st_year_salary` | character |  |
-| `2nd_year_salary` | character |  |
-| `3rd_year_option_salary` | character |  |
-| `4th_year_option_percentage_increased_over_3rd_year_salary` | character |  |
-| `qualifying_offer_percentage_increase_over_4th_year_salary` | character |  |
+| `pick` | Int64 | Pick number within the round. |
+| `1st_year_salary` | String |  |
+| `2nd_year_salary` | String |  |
+| `3rd_year_option_salary` | String |  |
+| `4th_year_option_percentage_increased_over_3rd_year_salary` | String |  |
+| `qualifying_offer_percentage_increase_over_4th_year_salary` | String |  |
 
 **Raises**
 
@@ -676,15 +676,15 @@ One row per season -- `season`, `salary_cap`, `luxury_tax`, `x1st_apron`, `x2nd_
 
 | col_name | type | description |
 |---|---|---|
-| `season` | character | Season year. |
-| `salary_cap` | character | Salary cap. |
-| `luxury_tax` | character | Luxury-tax threshold. |
-| `1st_apron` | character |  |
-| `2nd_apron` | character |  |
-| `bae` | character | Bi-annual exception. |
-| `non_taxpayer_mle` | character | Non-taxpayer mid-level exception. |
-| `taxpayer_mle` | character | Taxpayer mid-level exception. |
-| `team_room_mle` | character | Room mid-level exception. |
+| `season` | String | Season year. |
+| `salary_cap` | String | Salary cap. |
+| `luxury_tax` | String | Luxury-tax threshold. |
+| `1st_apron` | String |  |
+| `2nd_apron` | String |  |
+| `bae` | String | Bi-annual exception. |
+| `non_taxpayer_mle` | String | Non-taxpayer mid-level exception. |
+| `taxpayer_mle` | String | Taxpayer mid-level exception. |
+| `team_room_mle` | String | Room mid-level exception. |
 
 **Raises**
 
@@ -731,24 +731,24 @@ One row per team -- `number`, `team`, `w`, `l`, `pct`, `gb`, `l10`, `strk`, `ppg
 
 | col_name | type | description |
 |---|---|---|
-| `number` | integer | Number. |
-| `team` | character | Team-side label or team identifier. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `pct` | double | Win percentage. |
-| `gb` | integer | Games behind the conference leader. |
-| `l10` | character | Last-ten record. |
-| `strk` | integer | Current streak. |
-| `ppg` | integer | Points per game. |
-| `oppg` | integer | Opponent points per game. |
-| `diff` | integer | Scoring margin. |
-| `home` | character | Home. |
-| `away` | character | Away record. |
-| `div` | character |  |
-| `conf` | character | character. |
-| `rem` | integer |  |
-| `rowp` | double |  |
-| `conference` | character | Conference name. |
+| `number` | Int64 | Number. |
+| `team` | String | Team-side label or team identifier. |
+| `w` | Int64 | Wins. |
+| `l` | Int64 | Losses. |
+| `pct` | Float64 | Win percentage. |
+| `gb` | Int64 | Games behind the conference leader. |
+| `l10` | String | Last-ten record. |
+| `strk` | Int64 | Current streak. |
+| `ppg` | Int64 | Points per game. |
+| `oppg` | Int64 | Opponent points per game. |
+| `diff` | Int64 | Scoring margin. |
+| `home` | String | Home. |
+| `away` | String | Away record. |
+| `div` | String |  |
+| `conf` | String | character. |
+| `rem` | Int64 |  |
+| `rowp` | Float64 |  |
+| `conference` | String | Conference name. |
 
 **Raises**
 
@@ -795,28 +795,28 @@ One row per team (`team`, `gp`, `mpg`, `ppg`, `rpg`, `apg`, ... for `"Averages"`
 
 | col_name | type | description |
 |---|---|---|
-| `number` | double | Number. |
-| `team` | character | Team-side label or team identifier. |
-| `ts_pct` | double | True shooting percentage (0-1). |
-| `e_fg_pct` | double | E field goals percentage (0-1 decimal). |
-| `total_s_pct` | double |  |
-| `orb_pct` | double | Offensive rebound percentage. |
-| `drb_pct` | double | Defensive rebound percentage. |
-| `trb_pct` | double |  |
-| `ast_pct` | double | Assist percentage. |
-| `tov_pct` | double |  |
-| `stl_pct` | double | Steals percentage (0-1 decimal). |
-| `blk_pct` | double | Blocks percentage (0-1 decimal). |
-| `pps` | double |  |
-| `fic40` | double |  |
-| `o_rtg` | double | O rtg. |
-| `d_rtg` | double |  |
-| `e_diff` | double |  |
-| `poss` | double | Poss. |
-| `pace` | double | Possessions per 48 minutes. |
-| `season` | integer | Season year. |
-| `stat_type` | character | Stat type code (e.g. "win", "loss"). |
-| `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `number` | Float64 | Number. |
+| `team` | String | Team-side label or team identifier. |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `e_fg_pct` | Float64 | E field goals percentage (0-1 decimal). |
+| `total_s_pct` | Float64 |  |
+| `orb_pct` | Float64 | Offensive rebound percentage. |
+| `drb_pct` | Float64 | Defensive rebound percentage. |
+| `trb_pct` | Float64 |  |
+| `ast_pct` | Float64 | Assist percentage. |
+| `tov_pct` | Float64 |  |
+| `stl_pct` | Float64 | Steals percentage (0-1 decimal). |
+| `blk_pct` | Float64 | Blocks percentage (0-1 decimal). |
+| `pps` | Float64 |  |
+| `fic40` | Float64 |  |
+| `o_rtg` | Float64 | O rtg. |
+| `d_rtg` | Float64 |  |
+| `e_diff` | Float64 |  |
+| `poss` | Float64 | Poss. |
+| `pace` | Float64 | Possessions per 48 minutes. |
+| `season` | Int64 | Season year. |
+| `stat_type` | String | Stat type code (e.g. "win", "loss"). |
+| `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 
 **Raises**
 
@@ -858,9 +858,9 @@ One row per team -- `team`, `division`, `conference`. Zero rows (with that schem
 
 | col_name | type | description |
 |---|---|---|
-| `team` | character | Team-side label or team identifier. |
-| `division` | character | Team division. |
-| `conference` | character | Conference name. |
+| `team` | String | Team-side label or team identifier. |
+| `division` | String | Team division. |
+| `conference` | String | Conference name. |
 
 **Raises**
 
@@ -902,8 +902,8 @@ One row per transaction -- `date` (`polars.Date`) and `transaction` (text). Zero
 
 | col_name | type | description |
 |---|---|---|
-| `date` | character | Date in YYYY-MM-DD format. |
-| `transaction` | character | Transaction description. |
+| `date` | String | Date in YYYY-MM-DD format. |
+| `transaction` | String | Transaction description. |
 
 **Raises**
 

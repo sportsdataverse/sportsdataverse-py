@@ -1,11 +1,11 @@
 ---
-title: MBB — KenPom (kenpom.com, subscription)
+title: Men's college basketball — KenPom (kenpom.com, subscription)
 sidebar_label: KenPom (kenpom.com, subscription)
-description: "MBB — KenPom (kenpom.com, subscription) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — KenPom (kenpom.com, subscription) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 11
 toc_max_heading_level: 2
 ---
-# MBB — KenPom (kenpom.com, subscription)
+# Men's college basketball — KenPom (kenpom.com, subscription)
 
 `sportsdataverse.mbb` — 30 endpoints.
 
@@ -46,5 +46,5 @@ toc_max_heading_level: 2
 | [kenpom_home_court_advantage](kenpom/other.md#kenpom_home_court_advantage) | GET /hca.php - per-team home-court advantage estimates. Port of hoopR kp_hca(). |
 | [kenpom_arenas](kenpom/other.md#kenpom_arenas) | GET /arenas.php - arena reference (name, capacity, average attendance) by team. Port of hoopR kp_arenas(). |
 | [kenpom_officials](kenpom/other.md#kenpom_officials) | GET /officials.php - referee ratings for one season. Port of hoopR kp_officials(). |
-| [kenpom_referee](kenpom/other-2.md#kenpom_referee) | GET /referee.php - one referee's game log and splits for a season. Port of hoopR kp_referee(). |
-| [kenpom_game_attributes](kenpom/other-2.md#kenpom_game_attributes) | GET /game_attrs.php - season game leaderboards by attribute (thrill score, comebacks, upsets, ...). Port of hoopR kp_game_attrs(). |
+| [kenpom_referee](kenpom/other.md#kenpom_referee) | GET /referee.php - one referee's game log and splits for a season. Port of hoopR kp_referee(). |
+| [kenpom_game_attributes](kenpom/other.md#kenpom_game_attributes) | GET /game_attrs.php - season game leaderboards by attribute (thrill score, comebacks, upsets, ...). Port of hoopR kp_game_attrs(). |

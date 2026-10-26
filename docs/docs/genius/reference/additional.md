@@ -1,10 +1,10 @@
 ---
-title: GENIUS — additional Python functions
+title: Genius Sports LiveStats — additional Python functions
 sidebar_label: Additional functions
-description: "GENIUS — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
+description: "Genius Sports LiveStats — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
-# GENIUS — additional Python functions
+# Genius Sports LiveStats — additional Python functions
 
 Additional functions in `sportsdataverse.basketball.genius` that are not generated API-endpoint wrappers (those
 have their own reference pages): per-competition functions minted from the competition registry

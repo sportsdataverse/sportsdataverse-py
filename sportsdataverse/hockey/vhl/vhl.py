@@ -384,12 +384,12 @@ def vhl_schedule(
     Args:
         season: Season END year (2026 = 2025/26; the calendar covers 2010/11 on). The runtime maps it, with ``stage``, to the site's tournament id (tn) in this path segment.
         stage: Season stage: regular (default) or playoff.
-        return_parsed: parse the payload through parse_vhl_schedule -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for).
+        return_parsed: parse the payload through parse_vhl_schedule -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
@@ -410,7 +410,7 @@ def vhl_schedule(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
+        * Owner flag: the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -447,12 +447,12 @@ def vhl_game_info(
         season: Season END year (2026 = 2025/26; the calendar covers 2010/11 on). The runtime maps it, with ``stage``, to the site's tournament id (tn) in this path segment.
         game_id: Required. Game id (game_id in vhl_schedule; the report's and the broadcast's idgame), e.g. 899223.
         stage: Season stage: regular (default) or playoff.
-        return_parsed: parse the payload through parse_vhl_game_info -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for).
+        return_parsed: parse the payload through parse_vhl_game_info -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
@@ -473,7 +473,7 @@ def vhl_game_info(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
+        * Owner flag: the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -511,12 +511,12 @@ def vhl_goals(
         season: Season END year (2026 = 2025/26; the calendar covers 2010/11 on). The runtime maps it, with ``stage``, to the site's tournament id (tn) in this path segment.
         game_id: Required. Game id (game_id in vhl_schedule; the report's and the broadcast's idgame), e.g. 899223.
         stage: Season stage: regular (default) or playoff.
-        return_parsed: parse the payload through parse_vhl_goals -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for).
+        return_parsed: parse the payload through parse_vhl_goals -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
@@ -537,7 +537,7 @@ def vhl_goals(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
+        * Owner flag: the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -575,12 +575,12 @@ def vhl_penalties(
         season: Season END year (2026 = 2025/26; the calendar covers 2010/11 on). The runtime maps it, with ``stage``, to the site's tournament id (tn) in this path segment.
         game_id: Required. Game id (game_id in vhl_schedule; the report's and the broadcast's idgame), e.g. 899223.
         stage: Season stage: regular (default) or playoff.
-        return_parsed: parse the payload through parse_vhl_penalties -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for).
+        return_parsed: parse the payload through parse_vhl_penalties -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
@@ -601,7 +601,7 @@ def vhl_penalties(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
+        * Owner flag: the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -639,12 +639,12 @@ def vhl_player_box(
         season: Season END year (2026 = 2025/26; the calendar covers 2010/11 on). The runtime maps it, with ``stage``, to the site's tournament id (tn) in this path segment.
         game_id: Required. Game id (game_id in vhl_schedule; the report's and the broadcast's idgame), e.g. 899223.
         stage: Season stage: regular (default) or playoff.
-        return_parsed: parse the payload through parse_vhl_player_box -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for).
+        return_parsed: parse the payload through parse_vhl_player_box -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
@@ -665,7 +665,7 @@ def vhl_player_box(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
+        * Owner flag: the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -703,12 +703,12 @@ def vhl_goalie_box(
         season: Season END year (2026 = 2025/26; the calendar covers 2010/11 on). The runtime maps it, with ``stage``, to the site's tournament id (tn) in this path segment.
         game_id: Required. Game id (game_id in vhl_schedule; the report's and the broadcast's idgame), e.g. 899223.
         stage: Season stage: regular (default) or playoff.
-        return_parsed: parse the payload through parse_vhl_goalie_box -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for).
+        return_parsed: parse the payload through parse_vhl_goalie_box -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
@@ -729,7 +729,7 @@ def vhl_goalie_box(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
+        * Owner flag: the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -767,12 +767,12 @@ def vhl_pbp(
         game_id: Game id (game_id in vhl_schedule; the report's and the broadcast's idgame), e.g. 899223.
         season: Required. Season END year of the game; with ``stage`` it locates the game in the calendar, whose game number the broadcast page must carry (the page names no game id).
         stage: Season stage: regular (default) or playoff.
-        return_parsed: parse the payload through parse_vhl_pbp -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for).
+        return_parsed: parse the payload through parse_vhl_pbp -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
@@ -793,7 +793,7 @@ def vhl_pbp(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
+        * Owner flag: the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -827,12 +827,12 @@ def vhl_standings(
 
     Args:
         season: Season END year (2026 = 2025/26; the calendar covers 2010/11 on). The runtime maps it, with ``stage``, to the site's tournament id (tn) in this path segment.
-        return_parsed: parse the payload through parse_vhl_standings -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for).
+        return_parsed: parse the payload through parse_vhl_standings -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
@@ -853,7 +853,7 @@ def vhl_standings(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
+        * Owner flag: the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -884,12 +884,12 @@ def vhl_skater_stats(
     Args:
         season: Season END year (2026 = 2025/26; the calendar covers 2010/11 on). The runtime maps it, with ``stage``, to the site's tournament id (tn) in this path segment.
         stage: Season stage: regular (default) or playoff.
-        return_parsed: parse the payload through parse_vhl_skater_stats -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for).
+        return_parsed: parse the payload through parse_vhl_skater_stats -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
@@ -910,7 +910,7 @@ def vhl_skater_stats(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
+        * Owner flag: the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -945,12 +945,12 @@ def vhl_goalie_stats(
     Args:
         season: Season END year (2026 = 2025/26; the calendar covers 2010/11 on). The runtime maps it, with ``stage``, to the site's tournament id (tn) in this path segment.
         stage: Season stage: regular (default) or playoff.
-        return_parsed: parse the payload through parse_vhl_goalie_stats -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for).
+        return_parsed: parse the payload through parse_vhl_goalie_stats -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
@@ -971,7 +971,7 @@ def vhl_goalie_stats(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
+        * Owner flag: the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -1004,12 +1004,12 @@ def vhl_player(
 
     Args:
         player_id: Player id (player_id in any VHL frame), e.g. 34526.
-        return_parsed: parse the payload through parse_vhl_player -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for).
+        return_parsed: parse the payload through parse_vhl_player -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
@@ -1030,7 +1030,7 @@ def vhl_player(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
+        * Owner flag: the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1059,12 +1059,12 @@ def vhl_player_career(
 
     Args:
         player_id: Player id (player_id in any VHL frame), e.g. 34526.
-        return_parsed: parse the payload through parse_vhl_player_career -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for).
+        return_parsed: parse the payload through parse_vhl_player_career -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
@@ -1085,7 +1085,7 @@ def vhl_player_career(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
+        * Owner flag: the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1114,12 +1114,12 @@ def vhl_roster(
 
     Args:
         team_page_id: Team page id (home_team_page_id / away_team_page_id in vhl_game_info), e.g. 390. Neither a club id nor a team-season id.
-        return_parsed: parse the payload through parse_vhl_roster -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for).
+        return_parsed: parse the payload through parse_vhl_roster -> polars DataFrame (default True). Pass return_parsed=False for the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the page's parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
@@ -1140,7 +1140,7 @@ def vhl_roster(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
+        * Owner flag: the VHL is run by Russian league operators, and several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}

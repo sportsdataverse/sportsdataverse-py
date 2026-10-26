@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — Fox Sports API"
+title: "Men's college basketball — additional Python functions — Fox Sports API"
 sidebar_label: "Fox Sports API"
 sidebar_position: 8
-description: "MBB — additional Python functions — Fox Sports API — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Fox Sports API — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Fox Sports API
+# Men's college basketball — additional Python functions — Fox Sports API
 
 ### fox_mbb_boxscore {#fox_mbb_boxscore}
 
@@ -26,13 +26,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `team` | character | Team-side label or team identifier. |
-| `stat_group` | character |  |
-| `player` | character | Player name. |
-| `athlete_id` | character | Unique athlete identifier (ESPN). |
-| `stat` | character | Stat. |
-| `value` | character | Numeric or string value field. |
+| `game_id` | String | Unique game identifier. |
+| `team` | String | Team-side label or team identifier. |
+| `stat_group` | String |  |
+| `player` | String | Player name. |
+| `athlete_id` | String | Unique athlete identifier (ESPN). |
+| `stat` | String | Stat. |
+| `value` | String | Numeric or string value field. |
 
 **Example**
 
@@ -112,15 +112,15 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `group` | character | Group identifier (e.g. conference 'group_id'). |
-| `fox_id` | character | Fox Sports conference id as a string, the trailing number of content_uri; ids are assigned per feed and usually differ between the men's and women's feeds (ACC 11 vs 12), though some coincide (America East is 9 in both), so never join the two feeds on it. |
-| `abbreviation` | character | Short abbreviation. |
-| `name` | character | Display name. |
-| `content_uri` | character | Fox Bifrost content URI identifying the conference (e.g. 'basketball/cbk/groups/11'); fox_id is its trailing number. |
-| `content_type` | character | Fox entity type from the conference's entity link; always 'league' in sampled data, even though each row is a conference. |
-| `web_url` | character | Site-relative foxsports.com path of the conference page (e.g. '/college-basketball/acc'). |
-| `color` | character | Primary color (hex without leading '#'). |
-| `logo_url` | character | NBA CDN primary logo URL. |
+| `group` | String | Group identifier (e.g. conference 'group_id'). |
+| `fox_id` | String | Fox Sports conference id as a string, the trailing number of content_uri; ids are assigned per feed and usually differ between the men's and women's feeds (ACC 11 vs 12), though some coincide (America East is 9 in both), so never join the two feeds on it. |
+| `abbreviation` | String | Short abbreviation. |
+| `name` | String | Display name. |
+| `content_uri` | String | Fox Bifrost content URI identifying the conference (e.g. 'basketball/cbk/groups/11'); fox_id is its trailing number. |
+| `content_type` | String | Fox entity type from the conference's entity link; always 'league' in sampled data, even though each row is a conference. |
+| `web_url` | String | Site-relative foxsports.com path of the conference page (e.g. '/college-basketball/acc'). |
+| `color` | String | Primary color (hex without leading '#'). |
+| `logo_url` | String | NBA CDN primary logo URL. |
 
 **Example**
 
@@ -143,16 +143,16 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `template` | character | Fox layout template name for the header block; always 'entity-header' in sampled data. |
-| `title` | character | Title or label for the record. |
-| `entity_id` | character | Fox id of the league entity as a string: the trailing number of the league's Fox contentUri. |
-| `content_uri` | character | Fox Bifrost content URI of the league entity ('basketball/cbk/league/1' in sampled data). |
-| `content_type` | character | Fox entity type of the header's entity; 'league' in sampled data. |
-| `color` | character | Primary color (hex without leading '#'). |
-| `logo_url` | character | NBA CDN primary logo URL. |
-| `image_alt_text` | character | Alt text Fox attaches to the header image, which reads as the league's display name ('College Basketball' in sampled data). |
-| `rank` | character | Rank. |
-| `details` | character | Details. |
+| `template` | String | Fox layout template name for the header block; always 'entity-header' in sampled data. |
+| `title` | String | Title or label for the record. |
+| `entity_id` | String | Fox id of the league entity as a string: the trailing number of the league's Fox contentUri. |
+| `content_uri` | String | Fox Bifrost content URI of the league entity ('basketball/cbk/league/1' in sampled data). |
+| `content_type` | String | Fox entity type of the header's entity; 'league' in sampled data. |
+| `color` | String | Primary color (hex without leading '#'). |
+| `logo_url` | String | NBA CDN primary logo URL. |
+| `image_alt_text` | String | Alt text Fox attaches to the header image, which reads as the league's display name ('College Basketball' in sampled data). |
+| `rank` | String | Rank. |
+| `details` | String | Details. |
 
 **Example**
 
@@ -183,14 +183,14 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `players` | character | Nested list of per-player box scores. |
-| `v1` | character | Leader's name as Fox abbreviates it, first initial plus surname (e.g. 'T. Moore'); the column is named v1 because its table header cell is blank. |
-| `gp` | character | Games played. |
-| `entity_id` | character | Fox id of the row's linked player or team as a string: the trailing number of the row's entityLink contentUri. |
-| `gs` | character | Games started. |
-| `mpg` | character | Minutes per game. |
-| `ppg` | character | Points per game. |
-| `pts` | character | Points scored. |
+| `players` | String | Nested list of per-player box scores. |
+| `v1` | String | Leader's name as Fox abbreviates it, first initial plus surname (e.g. 'T. Moore'); the column is named v1 because its table header cell is blank. |
+| `gp` | String | Games played. |
+| `entity_id` | String | Fox id of the row's linked player or team as a string: the trailing number of the row's entityLink contentUri. |
+| `gs` | String | Games started. |
+| `mpg` | String | Minutes per game. |
+| `ppg` | String | Points per game. |
+| `pts` | String | Points scored. |
 
 **Example**
 
@@ -251,19 +251,19 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `section` | character | Ranking the row belongs to: 'ASSOCIATED PRESS', 'USA TODAY COACHES POLL' or 'RPI RANKINGS' (25 rows each in sampled data). |
-| `ranking` | character | Team recruiting ranking. |
-| `v1` | character | Unlabeled second table column whose meaning depends on section: in the two polls it is Fox's rank-change cell, an unsigned number string (e.g. '5') that is null when no change is shown; on 'RPI RANKINGS' rows it holds the team name. |
-| `v2` | character | Team name on poll rows, with first-place votes in parentheses when the team received any (e.g. 'Michigan (57)'); null on 'RPI RANKINGS' rows, where the name is in v1. |
-| `pts` | character | Points scored. |
-| `entity_id` | character | Fox id of the row's linked team as a string: the trailing number of the row's entityLink contentUri. |
-| `rpi` | character | RPI value as a decimal string with a leading dot (e.g. '.6808'); populated only on 'RPI RANKINGS' rows and null on both poll sections. |
-| `sos` | character | Strength of schedule. |
-| `home` | character | Home. |
-| `away` | character | Away record. |
-| `neutral` | character | Neutral. |
-| `team` | character | Team-side label or team identifier. |
-| `rank_change` | integer |  |
+| `section` | String | Ranking the row belongs to: 'ASSOCIATED PRESS', 'USA TODAY COACHES POLL' or 'RPI RANKINGS' (25 rows each in sampled data). |
+| `ranking` | String | Team recruiting ranking. |
+| `v1` | String | Unlabeled second table column whose meaning depends on section: in the two polls it is Fox's rank-change cell, an unsigned number string (e.g. '5') that is null when no change is shown; on 'RPI RANKINGS' rows it holds the team name. |
+| `v2` | String | Team name on poll rows, with first-place votes in parentheses when the team received any (e.g. 'Michigan (57)'); null on 'RPI RANKINGS' rows, where the name is in v1. |
+| `pts` | String | Points scored. |
+| `entity_id` | String | Fox id of the row's linked team as a string: the trailing number of the row's entityLink contentUri. |
+| `rpi` | String | RPI value as a decimal string with a leading dot (e.g. '.6808'); populated only on 'RPI RANKINGS' rows and null on both poll sections. |
+| `sos` | String | Strength of schedule. |
+| `home` | String | Home. |
+| `away` | String | Away record. |
+| `neutral` | String | Neutral. |
+| `team` | String | Team-side label or team identifier. |
+| `rank_change` | Int64 |  |
 
 **Example**
 
@@ -286,14 +286,14 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `selection_list` | character | Which Fox navigation list the row came from: 'groupList' (group filters such as FEATURED, TOP 25 and each conference; uri is null) or 'dailyList' (one row per game date). |
-| `id` | character | Id. |
-| `title` | character | Title or label for the record. |
-| `date` | character | Date in YYYY-MM-DD format. |
-| `uri` | character | Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../league/schedule-segment/<season start year>-YYYYMMDD?groupId=...); null on groupList rows. |
-| `web_url` | character | Site-relative foxsports.com path of the page the selection opens (e.g. '/college-basketball/schedule?groupId=top25'). |
-| `selected` | logical | Fox's default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never False) on every other row. |
-| `group_id` | character | ESPN group id. |
+| `selection_list` | String | Which Fox navigation list the row came from: 'groupList' (group filters such as FEATURED, TOP 25 and each conference; uri is null) or 'dailyList' (one row per game date). |
+| `id` | String | Id. |
+| `title` | String | Title or label for the record. |
+| `date` | String | Date in YYYY-MM-DD format. |
+| `uri` | String | Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../league/schedule-segment/<season start year>-YYYYMMDD?groupId=...); null on groupList rows. |
+| `web_url` | String | Site-relative foxsports.com path of the page the selection opens (e.g. '/college-basketball/schedule?groupId=top25'). |
+| `selected` | Boolean | Fox's default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never False) on every other row. |
+| `group_id` | String | ESPN group id. |
 
 **Example**
 
@@ -316,14 +316,14 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `selection_list` | character | Which Fox navigation list the row came from: 'groupList' (group filters such as FEATURED, TOP 25 and each conference; uri is null) or 'dailyList' (one row per game date). |
-| `id` | character | Id. |
-| `title` | character | Title or label for the record. |
-| `date` | character | Date in YYYY-MM-DD format. |
-| `uri` | character | Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../league/scores-segment/YYYYMMDD?groupId=...); null on groupList rows. |
-| `web_url` | character | Site-relative foxsports.com path of the page the selection opens (e.g. '/college-basketball/scores?groupId=top25'). |
-| `selected` | logical | Fox's default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never False) on every other row. |
-| `group_id` | character | ESPN group id. |
+| `selection_list` | String | Which Fox navigation list the row came from: 'groupList' (group filters such as FEATURED, TOP 25 and each conference; uri is null) or 'dailyList' (one row per game date). |
+| `id` | String | Id. |
+| `title` | String | Title or label for the record. |
+| `date` | String | Date in YYYY-MM-DD format. |
+| `uri` | String | Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../league/scores-segment/YYYYMMDD?groupId=...); null on groupList rows. |
+| `web_url` | String | Site-relative foxsports.com path of the page the selection opens (e.g. '/college-basketball/scores?groupId=top25'). |
+| `selected` | Boolean | Fox's default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never False) on every other row. |
+| `group_id` | String | ESPN group id. |
 
 **Example**
 
@@ -365,11 +365,11 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `category` | character | Category label. |
-| `stat` | character | Stat. |
-| `stat_abbreviation` | character | Fox's short code for the leader stat, such as 'PPG', 'RPG', '3FGM/G', 'TS%' or 'HIGH'; the spelled-out name is in stat. |
-| `player` | character | Player name. |
-| `value` | character | Numeric or string value field. |
+| `category` | String | Category label. |
+| `stat` | String | Stat. |
+| `stat_abbreviation` | String | Fox's short code for the leader stat, such as 'PPG', 'RPG', '3FGM/G', 'TS%' or 'HIGH'; the spelled-out name is in stat. |
+| `player` | String | Player name. |
+| `value` | String | Numeric or string value field. |
 
 **Example**
 
@@ -425,16 +425,16 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `period` | character | Period of the game (1-4 quarters; 5+ for OT). |
-| `left_team` | character |  |
-| `right_team` | character |  |
-| `play_id` | character | Unique play identifier within a game. |
-| `clock` | character | Game clock value. |
-| `team` | character | Team-side label or team identifier. |
-| `left_score_change` | logical |  |
-| `right_score_change` | logical |  |
-| `play_text` | character | Play description text. |
+| `game_id` | String | Unique game identifier. |
+| `period` | String | Period of the game (1-4 quarters; 5+ for OT). |
+| `left_team` | String |  |
+| `right_team` | String |  |
+| `play_id` | String | Unique play identifier within a game. |
+| `clock` | String | Game clock value. |
+| `team` | String | Team-side label or team identifier. |
+| `left_score_change` | Boolean |  |
+| `right_score_change` | Boolean |  |
+| `play_text` | String | Play description text. |
 
 **Example**
 
@@ -457,14 +457,14 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `selection_list` | character | Which Fox navigation list the row came from: 'groupList' (group filters such as FEATURED, TOP 25 and each conference; uri is null) or 'dailyList' (one row per game date). |
-| `id` | character | Id. |
-| `title` | character | Title or label for the record. |
-| `date` | character | Date in YYYY-MM-DD format. |
-| `uri` | character | Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../scoreboard/segment/YYYYMMDD?groupId=...); null on groupList rows. |
-| `web_url` | character | Site-relative foxsports.com path of the page the selection opens (e.g. '/scores/college-basketball?groupId=top25'). |
-| `selected` | logical | Fox's default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never False) on every other row. |
-| `group_id` | character | ESPN group id. |
+| `selection_list` | String | Which Fox navigation list the row came from: 'groupList' (group filters such as FEATURED, TOP 25 and each conference; uri is null) or 'dailyList' (one row per game date). |
+| `id` | String | Id. |
+| `title` | String | Title or label for the record. |
+| `date` | String | Date in YYYY-MM-DD format. |
+| `uri` | String | Absolute api.foxsports.com Bifrost URL of that date's segment payload (.../scoreboard/segment/YYYYMMDD?groupId=...); null on groupList rows. |
+| `web_url` | String | Site-relative foxsports.com path of the page the selection opens (e.g. '/scores/college-basketball?groupId=top25'). |
+| `selected` | Boolean | Fox's default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never False) on every other row. |
+| `group_id` | String | ESPN group id. |
 
 **Example**
 
@@ -531,19 +531,19 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Unique team identifier. |
-| `section` | character |  |
-| `acc` | character |  |
-| `v1` | character |  |
-| `conf` | character | character. |
-| `w_l` | character | W l. |
-| `top_25` | character |  |
-| `home` | character | Home. |
-| `away` | character | Away record. |
-| `pf` | character | Personal fouls. |
-| `pa` | character |  |
-| `strk` | character | Current streak. |
-| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `team_id` | String | Unique team identifier. |
+| `section` | String |  |
+| `acc` | String |  |
+| `v1` | String |  |
+| `conf` | String | character. |
+| `w_l` | String | W l. |
+| `top_25` | String |  |
+| `home` | String | Home. |
+| `away` | String | Away record. |
+| `pf` | String | Personal fouls. |
+| `pa` | String |  |
+| `strk` | String | Current streak. |
+| `entity_id` | String | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
 
 **Example**
 
@@ -572,14 +572,14 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Unique team identifier. |
-| `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `category` | character | Category label. |
-| `game_id` | character | Unique game identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `opponent` | character | Opponent. |
-| `stat` | character | Stat. |
-| `value` | character | Numeric or string value field. |
+| `team_id` | String | Unique team identifier. |
+| `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `category` | String | Category label. |
+| `game_id` | String | Unique game identifier. |
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `opponent` | String | Opponent. |
+| `stat` | String | Stat. |
+| `value` | String | Numeric or string value field. |
 
 **Example**
 
@@ -627,14 +627,14 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Unique team identifier. |
-| `position_group` | character |  |
-| `player` | character | Player name. |
-| `pos` | character | Position. |
-| `cls` | character |  |
-| `ht` | character | Listed height. |
-| `wt` | character | Listed weight (lbs). |
-| `athlete_id` | character | Unique athlete identifier (ESPN). |
+| `team_id` | String | Unique team identifier. |
+| `position_group` | String |  |
+| `player` | String | Player name. |
+| `pos` | String | Position. |
+| `cls` | String |  |
+| `ht` | String | Listed height. |
+| `wt` | String | Listed weight (lbs). |
+| `athlete_id` | String | Unique athlete identifier (ESPN). |
 
 **Example**
 
@@ -663,12 +663,12 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Unique team identifier. |
-| `category` | character | Category label. |
-| `stat` | character | Stat. |
-| `stat_abbreviation` | character |  |
-| `player` | character | Player name. |
-| `value` | character | Numeric or string value field. |
+| `team_id` | String | Unique team identifier. |
+| `category` | String | Category label. |
+| `stat` | String | Stat. |
+| `stat_abbreviation` | String |  |
+| `player` | String | Player name. |
+| `value` | String | Numeric or string value field. |
 
 **Example**
 
@@ -691,15 +691,15 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `group` | character | Group identifier (e.g. conference 'group_id'). |
-| `fox_id` | character | Fox Sports team id as a string, the trailing number of content_uri; ids are league-specific, so a school can have different ids in the men's and women's feeds. |
-| `abbreviation` | character | Short abbreviation. |
-| `name` | character | Display name. |
-| `content_uri` | character | Fox Bifrost content URI identifying the team, shaped 'basketball/cbk/teams/<fox_id>'. |
-| `content_type` | character | Fox entity type from the team's entity link; always 'team' in sampled data. |
-| `web_url` | character | Site-relative foxsports.com path of the team page (e.g. '/college-basketball/michigan-wolverines-team'). |
-| `color` | character | Primary color (hex without leading '#'). |
-| `logo_url` | character | NBA CDN primary logo URL. |
+| `group` | String | Group identifier (e.g. conference 'group_id'). |
+| `fox_id` | String | Fox Sports team id as a string, the trailing number of content_uri; ids are league-specific, so a school can have different ids in the men's and women's feeds. |
+| `abbreviation` | String | Short abbreviation. |
+| `name` | String | Display name. |
+| `content_uri` | String | Fox Bifrost content URI identifying the team, shaped 'basketball/cbk/teams/<fox_id>'. |
+| `content_type` | String | Fox entity type from the team's entity link; always 'team' in sampled data. |
+| `web_url` | String | Site-relative foxsports.com path of the team page (e.g. '/college-basketball/michigan-wolverines-team'). |
+| `color` | String | Primary color (hex without leading '#'). |
+| `logo_url` | String | NBA CDN primary logo URL. |
 
 **Example**
 
@@ -732,9 +732,9 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `fox_team_id` | character | Fox Bifrost team id (NA if unmatched). |
-| `fox_team_name` | character | Fox team name (NA if unmatched). |
-| `fox_section` | character | Fox conference/section label (NA if unmatched). |
+| `fox_team_id` | String | Fox Bifrost team id (NA if unmatched). |
+| `fox_team_name` | String | Fox team name (NA if unmatched). |
+| `fox_section` | String | Fox conference/section label (NA if unmatched). |
 
 **Raises**
 
@@ -775,9 +775,9 @@ A polars DataFrame (default) or pandas DataFrame, one row per team: `fox_team_id
 
 | col_name | type | description |
 |---|---|---|
-| `fox_team_id` | character | Fox Bifrost team id (NA if unmatched). |
-| `fox_team_name` | character | Fox team name (NA if unmatched). |
-| `fox_section` | character | Fox conference/section label (NA if unmatched). |
+| `fox_team_id` | String | Fox Bifrost team id (NA if unmatched). |
+| `fox_team_name` | String | Fox team name (NA if unmatched). |
+| `fox_section` | String | Fox conference/section label (NA if unmatched). |
 
 **Raises**
 

@@ -1,9 +1,9 @@
 ---
-title: WJBL
-sidebar_label: WJBL
-description: "sdv-py WJBL: endpoint references, dataset loaders and parsers for WJBL in the SportsDataverse Python package."
+title: W League (Japan)
+sidebar_label: W League (Japan)
+description: "sdv-py W League (Japan): endpoint references, dataset loaders and parsers for W League (Japan) in the SportsDataverse Python package."
 ---
-# WJBL (`sportsdataverse.basketball.wjbl`)
+# W League (Japan) (`sportsdataverse.basketball.wjbl`)
 
 ## Data sources
 

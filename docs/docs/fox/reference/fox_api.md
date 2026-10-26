@@ -1,11 +1,11 @@
 ---
-title: FOX — Fox Sports API (api.foxsports.com)
+title: Fox Sports — Fox Sports API (api.foxsports.com)
 sidebar_label: Fox Sports API (api.foxsports.com)
-description: "FOX — Fox Sports API (api.foxsports.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "Fox Sports — Fox Sports API (api.foxsports.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
 ---
-# FOX — Fox Sports API (api.foxsports.com)
+# Fox Sports — Fox Sports API (api.foxsports.com)
 
 `sportsdataverse.providers.fox` — 33 endpoints.
 

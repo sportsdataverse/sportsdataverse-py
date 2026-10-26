@@ -1,9 +1,9 @@
 ---
-title: MCH
-sidebar_label: MCH
-description: "sdv-py MCH: endpoint references, dataset loaders and parsers for MCH in the SportsDataverse Python package."
+title: Men's college hockey
+sidebar_label: Men's college hockey
+description: "sdv-py Men's college hockey: endpoint references, dataset loaders and parsers for Men's college hockey in the SportsDataverse Python package."
 ---
-# MCH (`sportsdataverse.hockey.mch`)
+# Men's college hockey (`sportsdataverse.hockey.mch`)
 
 ## Data sources
 

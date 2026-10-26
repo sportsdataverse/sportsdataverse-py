@@ -1,11 +1,11 @@
 ---
-title: CFB — 247Sports Recruit Database (ipa.247sports.com)
+title: College football — 247Sports Recruit Database (ipa.247sports.com)
 sidebar_label: 247Sports Recruit Database (ipa.247sports.com)
-description: "CFB — 247Sports Recruit Database (ipa.247sports.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "College football — 247Sports Recruit Database (ipa.247sports.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 11
 toc_max_heading_level: 2
 ---
-# CFB — 247Sports Recruit Database (ipa.247sports.com)
+# College football — 247Sports Recruit Database (ipa.247sports.com)
 
 `sportsdataverse.cfb` — 12 endpoints.
 
@@ -29,13 +29,13 @@ toc_max_heading_level: 2
 
 | col_name | type | description |
 |---|---|---|
-| `name` | character | Team display name (school + nickname). |
-| `team_id` | integer | 247Sports RDB team id (per-sport). |
-| `institution_key` | integer | 247Sports institution key (school-level, sport-agnostic). |
-| `conference` | character | Full name of the athletic conference the team competes in (e.g. ACC, Big Ten). |
-| `conference_abbreviation` | character | Conference abbreviation. |
-| `sport` | character | Sport name (Football, Basketball, ...). |
-| `type` | character | Institution type (College, ...). |
+| `name` | String | Team display name (school + nickname). |
+| `team_id` | Int64 | 247Sports RDB team id (per-sport). |
+| `institution_key` | Int64 | 247Sports institution key (school-level, sport-agnostic). |
+| `conference` | String | Full name of the athletic conference the team competes in (e.g. ACC, Big Ten). |
+| `conference_abbreviation` | String | Conference abbreviation. |
+| `sport` | String | Sport name (Football, Basketball, ...). |
+| `type` | String | Institution type (College, ...). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -77,38 +77,38 @@ sports247_teams()
 
 | col_name | type | description |
 |---|---|---|
-| `name` | character | Short display name of the institution as shown on the 247Sports class-ranking page (e.g. USC, Notre Dame). |
-| `full_name` | character | Institution full name (school + nickname). |
-| `conference_rank` | integer | 247Sports class rank within the conference. |
-| `conference_composite_rank` | integer | Composite class rank within the conference. |
-| `rank` | integer | 247Sports national team-class rank. |
-| `composite_rank` | integer | Industry-composite national team-class rank. |
-| `institution_key` | integer | 247Sports institution key (school-level). |
-| `team_key` | integer | 247Sports RDB team key (per-sport). |
-| `average_rating` | double | Average 247Sports rating of counted commits. |
-| `rating` | double | Total 247Sports class rating (team-ranking formula points). |
-| `composite_rating` | double | Total composite class rating (formula points). |
-| `average_composite_rating` | double | Average composite rating of counted commits. |
-| `default_asset` | character | CDN URL of the institution's default logo. |
-| `alternate_asset` | character | CDN URL of the institution's alternate logo. |
-| `light_asset` | character | CDN URL of the institution's light-background logo. |
-| `high_school_ranking_position` | character | Position of the class in the high-school-only ranking. |
-| `transfer_points` | character | Transfer-portal points contributed to the class rating. |
-| `transfer_number` | integer | Number of incoming transfers counted in the class. |
-| `five_stars` | integer | Count of 247Sports five-star commits. |
-| `composite_five_stars` | integer | Count of composite five-star commits. |
-| `four_stars` | integer | Count of 247Sports four-star commits. |
-| `composite_four_stars` | integer | Count of composite four-star commits. |
-| `three_stars` | integer | Count of 247Sports three-star commits. |
-| `composite_three_stars` | integer | Count of composite three-star commits. |
-| `commits` | integer | Number of commits in the class. |
-| `site_key` | integer | 247Sports team-site key. |
-| `institution_root_path` | character | 247sports.com root path of the institution's team site. |
-| `ranking_date` | character | Timestamp the ranking row was last updated. |
-| `city` | character | Institution city. |
-| `state` | character | Full name of the U.S. state where the institution is located. |
-| `state_abbreviation` | character | Institution state abbreviation. |
-| `institution_ranking_url` | character | 247sports.com URL of the institution's class-ranking page. |
+| `name` | String | Short display name of the institution as shown on the 247Sports class-ranking page (e.g. USC, Notre Dame). |
+| `full_name` | String | Institution full name (school + nickname). |
+| `conference_rank` | Int64 | 247Sports class rank within the conference. |
+| `conference_composite_rank` | Int64 | Composite class rank within the conference. |
+| `rank` | Int64 | 247Sports national team-class rank. |
+| `composite_rank` | Int64 | Industry-composite national team-class rank. |
+| `institution_key` | Int64 | 247Sports institution key (school-level). |
+| `team_key` | Int64 | 247Sports RDB team key (per-sport). |
+| `average_rating` | Float64 | Average 247Sports rating of counted commits. |
+| `rating` | Float64 | Total 247Sports class rating (team-ranking formula points). |
+| `composite_rating` | Float64 | Total composite class rating (formula points). |
+| `average_composite_rating` | Float64 | Average composite rating of counted commits. |
+| `default_asset` | String | CDN URL of the institution's default logo. |
+| `alternate_asset` | String | CDN URL of the institution's alternate logo. |
+| `light_asset` | String | CDN URL of the institution's light-background logo. |
+| `high_school_ranking_position` | String | Position of the class in the high-school-only ranking. |
+| `transfer_points` | String | Transfer-portal points contributed to the class rating. |
+| `transfer_number` | Int64 | Number of incoming transfers counted in the class. |
+| `five_stars` | Int64 | Count of 247Sports five-star commits. |
+| `composite_five_stars` | Int64 | Count of composite five-star commits. |
+| `four_stars` | Int64 | Count of 247Sports four-star commits. |
+| `composite_four_stars` | Int64 | Count of composite four-star commits. |
+| `three_stars` | Int64 | Count of 247Sports three-star commits. |
+| `composite_three_stars` | Int64 | Count of composite three-star commits. |
+| `commits` | Int64 | Number of commits in the class. |
+| `site_key` | Int64 | 247Sports team-site key. |
+| `institution_root_path` | String | 247sports.com root path of the institution's team site. |
+| `ranking_date` | String | Timestamp the ranking row was last updated. |
+| `city` | String | Institution city. |
+| `state` | String | Full name of the U.S. state where the institution is located. |
+| `state_abbreviation` | String | Institution state abbreviation. |
+| `institution_ranking_url` | String | 247sports.com URL of the institution's class-ranking page. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -149,39 +149,39 @@ sports247_institution_rankings(year=2026, sport_key=1)
 
 | col_name | type | description |
 |---|---|---|
-| `key` | integer | 247Sports player key of the recruit. |
-| `cbs_key` | integer | Legacy CBS player key (0 when unmapped). |
-| `first_name` | character | Given name of the recruit. |
-| `last_name` | character | Family (surname) of the recruit. |
-| `profile_url` | character | 247sports.com path to the recruit's profile. |
-| `default_asset_url` | character | CDN URL of the recruit's headshot. |
-| `primary_position` | character | Recruit's primary position abbreviation. |
-| `composite_rating` | double | 247Sports Composite rating (industry-blended 0-1 scale). |
-| `composite_star_rating` | integer | 247Sports Composite star rating (2-5). |
-| `composite_national_rank` | integer | Composite national rank. |
-| `composite_position_rank` | integer | Composite rank at the recruit's position. |
-| `composite_state_rank` | integer | Composite rank within the recruit's state. |
-| `signed_institution` | double | Signed-program object when present; null (this scalar) for unsigned recruits (see signed_institution_* columns). |
-| `home_town_city` | character | Recruit's home-town city. |
-| `home_town_state` | character | Recruit's home-town state. |
-| `committed_institution_institution_key` | integer | 247Sports institution key of the program the recruit is committed to. |
-| `committed_institution_team_key` | integer | 247Sports RDB team key of the program the recruit is committed to. |
-| `committed_institution_cbs_key` | integer | Legacy CBS key of the program the recruit is committed to. |
-| `committed_institution_name` | character | Short name of the program the recruit is committed to. |
-| `committed_institution_abbreviation` | character | Abbreviation of the program the recruit is committed to. |
-| `committed_institution_full_name` | character | Full name of the program the recruit is committed to. |
-| `current_institution_institution_key` | integer | 247Sports institution key of the recruit's current program. |
-| `current_institution_team_key` | double | 247Sports RDB team key of the recruit's current program. |
-| `current_institution_cbs_key` | double | Legacy CBS key of the recruit's current program. |
-| `current_institution_name` | character | Short name of the recruit's current program. |
-| `current_institution_abbreviation` | character | Abbreviation of the recruit's current program. |
-| `current_institution_full_name` | character | Full name of the recruit's current program. |
-| `signed_institution_institution_key` | double | 247Sports institution key of the program the recruit signed with. |
-| `signed_institution_team_key` | double | 247Sports RDB team key of the program the recruit signed with. |
-| `signed_institution_cbs_key` | double | Legacy CBS key of the program the recruit signed with. |
-| `signed_institution_name` | character | Short name of the program the recruit signed with. |
-| `signed_institution_abbreviation` | character | Abbreviation of the program the recruit signed with. |
-| `signed_institution_full_name` | character | Full name of the program the recruit signed with. |
+| `key` | Int64 | 247Sports player key of the recruit. |
+| `cbs_key` | Int64 | Legacy CBS player key (0 when unmapped). |
+| `first_name` | String | Given name of the recruit. |
+| `last_name` | String | Family (surname) of the recruit. |
+| `profile_url` | String | 247sports.com path to the recruit's profile. |
+| `default_asset_url` | String | CDN URL of the recruit's headshot. |
+| `primary_position` | String | Recruit's primary position abbreviation. |
+| `composite_rating` | Float64 | 247Sports Composite rating (industry-blended 0-1 scale). |
+| `composite_star_rating` | Int64 | 247Sports Composite star rating (2-5). |
+| `composite_national_rank` | Int64 | Composite national rank. |
+| `composite_position_rank` | Int64 | Composite rank at the recruit's position. |
+| `composite_state_rank` | Int64 | Composite rank within the recruit's state. |
+| `signed_institution` | Float64 | Signed-program object when present; null (this scalar) for unsigned recruits (see signed_institution_* columns). |
+| `home_town_city` | String | Recruit's home-town city. |
+| `home_town_state` | String | Recruit's home-town state. |
+| `committed_institution_institution_key` | Int64 | 247Sports institution key of the program the recruit is committed to. |
+| `committed_institution_team_key` | Int64 | 247Sports RDB team key of the program the recruit is committed to. |
+| `committed_institution_cbs_key` | Int64 | Legacy CBS key of the program the recruit is committed to. |
+| `committed_institution_name` | String | Short name of the program the recruit is committed to. |
+| `committed_institution_abbreviation` | String | Abbreviation of the program the recruit is committed to. |
+| `committed_institution_full_name` | String | Full name of the program the recruit is committed to. |
+| `current_institution_institution_key` | Int64 | 247Sports institution key of the recruit's current program. |
+| `current_institution_team_key` | Float64 | 247Sports RDB team key of the recruit's current program. |
+| `current_institution_cbs_key` | Float64 | Legacy CBS key of the recruit's current program. |
+| `current_institution_name` | String | Short name of the recruit's current program. |
+| `current_institution_abbreviation` | String | Abbreviation of the recruit's current program. |
+| `current_institution_full_name` | String | Full name of the recruit's current program. |
+| `signed_institution_institution_key` | Float64 | 247Sports institution key of the program the recruit signed with. |
+| `signed_institution_team_key` | Float64 | 247Sports RDB team key of the program the recruit signed with. |
+| `signed_institution_cbs_key` | Float64 | Legacy CBS key of the program the recruit signed with. |
+| `signed_institution_name` | String | Short name of the program the recruit signed with. |
+| `signed_institution_abbreviation` | String | Abbreviation of the program the recruit signed with. |
+| `signed_institution_full_name` | String | Full name of the program the recruit signed with. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -220,45 +220,45 @@ sports247_recruits(year=2026, sport_key=1)
 
 | col_name | type | description |
 |---|---|---|
-| `player_key` | integer | 247Sports player key of the transfer. |
-| `player_first_name` | character | Given name of the transfer player. |
-| `player_last_name` | character | Family (surname) of the transfer player. |
-| `player_avatar` | character | CDN URL of the transfer's headshot. |
-| `player_transfer_date` | character | Timestamp the player entered the transfer portal. |
-| `player_transfer_rating` | double | 247Sports transfer rating. |
-| `player_high_school_rating` | double | The player's original high-school recruiting rating. |
-| `player_rating` | double | 247Sports current rating. |
-| `player_star_rating` | double | 247Sports star rating (2-5). |
-| `player_transfer_rank` | double | National rank among transfers. |
-| `player_high_school_rank` | double | The player's original high-school national rank. |
-| `player_rank` | double | 247Sports current national rank. |
-| `player_rank_trend` | double | Change in rank since the previous update. |
-| `player_institution_status` | character | Transfer status relative to institutions (e.g. Entered, Committed). |
-| `player_position` | character | Position abbreviation. |
-| `player_position_key` | integer | 247Sports position key. |
-| `player_eligibility_type` | character | Eligibility classification (e.g. Grad, Underclassman). |
-| `player_eligibility_years` | double | Years of eligibility remaining. |
-| `player_state_rank` | double | Rank within the player's state. |
-| `player_status` | character | Portal status label. |
-| `player_status_date` | character | Timestamp of the latest status change. |
-| `player_transfer_source_institution` | character | Name of the program the player is transferring from. |
-| `player_transfer_source_institution_key` | integer | 247Sports institution key of the source program. |
-| `player_transfer_source_logo` | character | CDN URL of the source program's logo. |
-| `player_transfer_source_default_asset` | character | CDN URL of the source program's default logo asset. |
-| `player_transfer_source_alternate_asset` | character | CDN URL of the source program's alternate logo asset. |
-| `player_transfer_source_light_asset` | character | CDN URL of the source program's light-background logo asset. |
-| `player_transfer_source_institution_root_path` | character | 247sports.com root path of the source program's team site. |
-| `player_transfer_destination` | character | Name of the program the player is transferring to (null if uncommitted). |
-| `player_position_group_key` | integer | 247Sports position-group key. |
-| `player_position_group_name` | character | Position-group name (e.g. Quarterback). |
-| `player_position_rank` | double | Rank at the player's position among transfers. |
-| `player_last_update_date` | character | Timestamp of the last record update. |
-| `player_transfer_commit_date_time` | character | Timestamp of the transfer commitment (null if uncommitted). |
-| `player_weight` | integer | Weight in pounds. |
-| `player_height` | character | Height as a formatted string. |
-| `player_player_profile_url` | character | 247sports.com path to the player's profile. |
-| `player_start_date` | character | Start date of the transfer window record. |
-| `player_end_date` | character | End date of the transfer window record. |
+| `player_key` | Int64 | 247Sports player key of the transfer. |
+| `player_first_name` | String | Given name of the transfer player. |
+| `player_last_name` | String | Family (surname) of the transfer player. |
+| `player_avatar` | String | CDN URL of the transfer's headshot. |
+| `player_transfer_date` | String | Timestamp the player entered the transfer portal. |
+| `player_transfer_rating` | Float64 | 247Sports transfer rating. |
+| `player_high_school_rating` | Float64 | The player's original high-school recruiting rating. |
+| `player_rating` | Float64 | 247Sports current rating. |
+| `player_star_rating` | Float64 | 247Sports star rating (2-5). |
+| `player_transfer_rank` | Float64 | National rank among transfers. |
+| `player_high_school_rank` | Float64 | The player's original high-school national rank. |
+| `player_rank` | Float64 | 247Sports current national rank. |
+| `player_rank_trend` | Float64 | Change in rank since the previous update. |
+| `player_institution_status` | String | Transfer status relative to institutions (e.g. Entered, Committed). |
+| `player_position` | String | Position abbreviation. |
+| `player_position_key` | Int64 | 247Sports position key. |
+| `player_eligibility_type` | String | Eligibility classification (e.g. Grad, Underclassman). |
+| `player_eligibility_years` | Float64 | Years of eligibility remaining. |
+| `player_state_rank` | Float64 | Rank within the player's state. |
+| `player_status` | String | Portal status label. |
+| `player_status_date` | String | Timestamp of the latest status change. |
+| `player_transfer_source_institution` | String | Name of the program the player is transferring from. |
+| `player_transfer_source_institution_key` | Int64 | 247Sports institution key of the source program. |
+| `player_transfer_source_logo` | String | CDN URL of the source program's logo. |
+| `player_transfer_source_default_asset` | String | CDN URL of the source program's default logo asset. |
+| `player_transfer_source_alternate_asset` | String | CDN URL of the source program's alternate logo asset. |
+| `player_transfer_source_light_asset` | String | CDN URL of the source program's light-background logo asset. |
+| `player_transfer_source_institution_root_path` | String | 247sports.com root path of the source program's team site. |
+| `player_transfer_destination` | String | Name of the program the player is transferring to (null if uncommitted). |
+| `player_position_group_key` | Int64 | 247Sports position-group key. |
+| `player_position_group_name` | String | Position-group name (e.g. Quarterback). |
+| `player_position_rank` | Float64 | Rank at the player's position among transfers. |
+| `player_last_update_date` | String | Timestamp of the last record update. |
+| `player_transfer_commit_date_time` | String | Timestamp of the transfer commitment (null if uncommitted). |
+| `player_weight` | Int64 | Weight in pounds. |
+| `player_height` | String | Height as a formatted string. |
+| `player_player_profile_url` | String | 247sports.com path to the player's profile. |
+| `player_start_date` | String | Start date of the transfer window record. |
+| `player_end_date` | String | End date of the transfer window record. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -297,24 +297,24 @@ sports247_transfers(year=2026, sport_key=1)
 
 | col_name | type | description |
 |---|---|---|
-| `key` | integer | 247Sports coach key. |
-| `cbs_key` | integer | Legacy CBS coach key. |
-| `first_name` | character | Given name of the coach. |
-| `last_name` | character | Family (surname) of the coach. |
-| `profile_url` | character | 247sports.com path to the coach's profile. |
-| `default_asset_url` | character | CDN URL of the coach's headshot. |
-| `composite_rating` | character | Coach's composite recruiting rating (formula points). |
-| `current_job` | double | Current-job program object when present; null (this scalar) otherwise (see current_job_* columns). |
-| `average_composite_rating` | character | Coach's average composite recruit rating. |
-| `overall_rank` | character | Coach's national recruiting rank. |
-| `division_rank` | character | Coach's rank within the division. |
-| `conference_rank` | character | Coach's rank within the conference. |
-| `current_job_institution_key` | double | 247Sports institution key of the coach's current program. |
-| `current_job_team_key` | double | 247Sports RDB team key of the coach's current program. |
-| `current_job_cbs_key` | double | Legacy CBS key of the coach's current program. |
-| `current_job_name` | character | Short name of the coach's current program. |
-| `current_job_abbreviation` | character | Abbreviation of the coach's current program. |
-| `current_job_full_name` | character | Full name of the coach's current program. |
+| `key` | Int64 | 247Sports coach key. |
+| `cbs_key` | Int64 | Legacy CBS coach key. |
+| `first_name` | String | Given name of the coach. |
+| `last_name` | String | Family (surname) of the coach. |
+| `profile_url` | String | 247sports.com path to the coach's profile. |
+| `default_asset_url` | String | CDN URL of the coach's headshot. |
+| `composite_rating` | String | Coach's composite recruiting rating (formula points). |
+| `current_job` | Float64 | Current-job program object when present; null (this scalar) otherwise (see current_job_* columns). |
+| `average_composite_rating` | String | Coach's average composite recruit rating. |
+| `overall_rank` | String | Coach's national recruiting rank. |
+| `division_rank` | String | Coach's rank within the division. |
+| `conference_rank` | String | Coach's rank within the conference. |
+| `current_job_institution_key` | Float64 | 247Sports institution key of the coach's current program. |
+| `current_job_team_key` | Float64 | 247Sports RDB team key of the coach's current program. |
+| `current_job_cbs_key` | Float64 | Legacy CBS key of the coach's current program. |
+| `current_job_name` | String | Short name of the coach's current program. |
+| `current_job_abbreviation` | String | Abbreviation of the coach's current program. |
+| `current_job_full_name` | String | Full name of the coach's current program. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -352,25 +352,25 @@ sports247_coaches(year=2026, sport_key=1)
 
 | col_name | type | description |
 |---|---|---|
-| `key` | integer | 247Sports player key. |
-| `target_institution` | character | Name of the program the player is targeting / committed to. |
-| `target_institution_key` | character | 247Sports institution key of the target program. |
-| `full_name` | character | Full name of the transfer player. |
-| `position_abbr` | character | Position abbreviation. |
-| `current_institution` | character | Name of the player's current program. |
-| `current_institution_key` | integer | 247Sports institution key of the current program. |
-| `current_institution_state_abbreviation` | character | State abbreviation of the current program. |
-| `current_institution_city` | character | City of the current program. |
-| `first_name` | character | Given name of the transfer player. |
-| `last_name` | character | Family (surname) of the transfer player. |
-| `state_abbreviation` | character | Player's state abbreviation. |
-| `player_image` | character | CDN URL of the player's headshot. |
-| `star_rating` | integer | 247Sports star rating (2-5). |
-| `group_rank` | integer | Rank within the transfer position group. |
-| `position_rank` | integer | Rank at the player's position among transfers. |
-| `state_rank` | integer | Rank within the player's state. |
-| `formatted_height` | character | Height as a formatted string. |
-| `weight` | double | Weight in pounds. |
+| `key` | Int64 | 247Sports player key. |
+| `target_institution` | String | Name of the program the player is targeting / committed to. |
+| `target_institution_key` | String | 247Sports institution key of the target program. |
+| `full_name` | String | Full name of the transfer player. |
+| `position_abbr` | String | Position abbreviation. |
+| `current_institution` | String | Name of the player's current program. |
+| `current_institution_key` | Int64 | 247Sports institution key of the current program. |
+| `current_institution_state_abbreviation` | String | State abbreviation of the current program. |
+| `current_institution_city` | String | City of the current program. |
+| `first_name` | String | Given name of the transfer player. |
+| `last_name` | String | Family (surname) of the transfer player. |
+| `state_abbreviation` | String | Player's state abbreviation. |
+| `player_image` | String | CDN URL of the player's headshot. |
+| `star_rating` | Int64 | 247Sports star rating (2-5). |
+| `group_rank` | Int64 | Rank within the transfer position group. |
+| `position_rank` | Int64 | Rank at the player's position among transfers. |
+| `state_rank` | Int64 | Rank within the player's state. |
+| `formatted_height` | String | Height as a formatted string. |
+| `weight` | Float64 | Weight in pounds. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -408,30 +408,30 @@ sports247_transfer_portal_player_feed(year=2026, sport_key=1)
 
 | col_name | type | description |
 |---|---|---|
-| `name` | character | Short display name of the program. |
-| `full_name` | character | Full name of the program (school plus nickname). |
-| `state_abbreviation` | character | Program's state abbreviation. |
-| `conference_name` | character | Name of the athletic conference the program competes in. |
-| `key` | integer | 247Sports institution/team key. |
-| `logo` | character | CDN URL of the program's logo. |
-| `alternate_logo` | character | CDN URL of the program's alternate logo. |
-| `position` | integer | Row position in the feed. |
-| `team_ranking_position` | integer | Rank in the high-school team recruiting class. |
-| `transfer_ranking_position` | integer | Rank in the transfer-portal team class. |
-| `overall_rank` | integer | 247Sports overall national team-class rank. |
-| `composite_overall_rank` | integer | Composite overall national team-class rank. |
-| `conference_rank` | integer | 247Sports class rank within the conference. |
-| `composite_conference_rank` | integer | Composite class rank within the conference. |
-| `five_stars` | integer | Count of 247Sports five-star commits. |
-| `composite_five_stars` | integer | Count of composite five-star commits. |
-| `four_stars` | integer | Count of 247Sports four-star commits. |
-| `composite_four_stars` | integer | Count of composite four-star commits. |
-| `three_stars` | integer | Count of 247Sports three-star commits. |
-| `composite_three_stars` | integer | Count of composite three-star commits. |
-| `average_rating` | integer | Average 247Sports commit rating. |
-| `composite_average_rating` | double | Average composite commit rating. |
-| `rating` | integer | Total 247Sports class rating (formula points). |
-| `composite_rating` | double | Total composite class rating (formula points). |
+| `name` | String | Short display name of the program. |
+| `full_name` | String | Full name of the program (school plus nickname). |
+| `state_abbreviation` | String | Program's state abbreviation. |
+| `conference_name` | String | Name of the athletic conference the program competes in. |
+| `key` | Int64 | 247Sports institution/team key. |
+| `logo` | String | CDN URL of the program's logo. |
+| `alternate_logo` | String | CDN URL of the program's alternate logo. |
+| `position` | Int64 | Row position in the feed. |
+| `team_ranking_position` | Int64 | Rank in the high-school team recruiting class. |
+| `transfer_ranking_position` | Int64 | Rank in the transfer-portal team class. |
+| `overall_rank` | Int64 | 247Sports overall national team-class rank. |
+| `composite_overall_rank` | Int64 | Composite overall national team-class rank. |
+| `conference_rank` | Int64 | 247Sports class rank within the conference. |
+| `composite_conference_rank` | Int64 | Composite class rank within the conference. |
+| `five_stars` | Int64 | Count of 247Sports five-star commits. |
+| `composite_five_stars` | Int64 | Count of composite five-star commits. |
+| `four_stars` | Int64 | Count of 247Sports four-star commits. |
+| `composite_four_stars` | Int64 | Count of composite four-star commits. |
+| `three_stars` | Int64 | Count of 247Sports three-star commits. |
+| `composite_three_stars` | Int64 | Count of composite three-star commits. |
+| `average_rating` | Int64 | Average 247Sports commit rating. |
+| `composite_average_rating` | Float64 | Average composite commit rating. |
+| `rating` | Int64 | Total 247Sports class rating (formula points). |
+| `composite_rating` | Float64 | Total composite class rating (formula points). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -469,13 +469,13 @@ sports247_composite_team_ranking_feed(year=2026, sport_key=1)
 
 | col_name | type | description |
 |---|---|---|
-| `name` | character | Display name of the program. |
-| `key` | integer | 247Sports institution/team key. |
-| `logo` | character | CDN URL of the program's logo. |
-| `alternate_logo` | character | CDN URL of the program's alternate logo. |
-| `position` | integer | Rank in the transfer-portal team class. |
-| `number_of_transfers` | integer | Number of incoming transfers in the class. |
-| `transfer_points` | double | Total transfer-portal class rating points. |
+| `name` | String | Display name of the program. |
+| `key` | Int64 | 247Sports institution/team key. |
+| `logo` | String | CDN URL of the program's logo. |
+| `alternate_logo` | String | CDN URL of the program's alternate logo. |
+| `position` | Int64 | Rank in the transfer-portal team class. |
+| `number_of_transfers` | Int64 | Number of incoming transfers in the class. |
+| `transfer_points` | Float64 | Total transfer-portal class rating points. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -514,33 +514,33 @@ sports247_transfer_portal_team_feed(year=2026, sport_key=1)
 
 | col_name | type | description |
 |---|---|---|
-| `player_key` | integer | 247Sports player key of the recruit the prediction is about. |
-| `player_institution_key` | integer | 247Sports institution key predicted for the recruit. |
-| `prediction_type` | integer | Numeric prediction-type discriminator. |
-| `rating` | double | Recruit's 247Sports rating at prediction time. |
-| `star_rating` | integer | Recruit's star rating (2-5). |
-| `position` | character | Recruit's position abbreviation. |
-| `weight` | double | Recruit's weight in pounds. |
-| `height` | character | Recruit's height as a formatted string. |
-| `prediction` | character | Predicted destination program name. |
-| `prediction_level` | integer | Expert confidence level of the prediction. |
-| `image` | character | CDN URL of the predicted program's logo. |
-| `alt_image` | character | CDN URL of the predicted program's alternate logo. |
-| `light_image` | character | CDN URL of the predicted program's light-background logo. |
-| `player_name` | character | Recruit's full name. |
-| `player_image` | character | CDN URL of the recruit's headshot. |
-| `prediction_date` | character | Timestamp the prediction was made. |
-| `expert_name` | character | Name of the expert who made the prediction. |
-| `expert_alias` | character | 247Sports handle of the expert. |
-| `expert_key` | integer | 247Sports key of the expert. |
-| `expert_role` | character | Expert's role/title. |
-| `expert_image` | character | CDN URL of the expert's avatar. |
-| `expert_prediction_year` | integer | Class year the expert's accuracy stats cover. |
-| `expert_yearly_total_correct` | integer | Expert's correct predictions this year. |
-| `expert_yearly_total_made` | integer | Expert's total predictions made this year. |
-| `expert_all_time_total_correct` | integer | Expert's correct predictions all-time. |
-| `expert_all_time_total_made` | integer | Expert's total predictions made all-time. |
-| `prediction_page_url` | character | 247sports.com path to the prediction detail. |
+| `player_key` | Int64 | 247Sports player key of the recruit the prediction is about. |
+| `player_institution_key` | Int64 | 247Sports institution key predicted for the recruit. |
+| `prediction_type` | Int64 | Numeric prediction-type discriminator. |
+| `rating` | Float64 | Recruit's 247Sports rating at prediction time. |
+| `star_rating` | Int64 | Recruit's star rating (2-5). |
+| `position` | String | Recruit's position abbreviation. |
+| `weight` | Float64 | Recruit's weight in pounds. |
+| `height` | String | Recruit's height as a formatted string. |
+| `prediction` | String | Predicted destination program name. |
+| `prediction_level` | Int64 | Expert confidence level of the prediction. |
+| `image` | String | CDN URL of the predicted program's logo. |
+| `alt_image` | String | CDN URL of the predicted program's alternate logo. |
+| `light_image` | String | CDN URL of the predicted program's light-background logo. |
+| `player_name` | String | Recruit's full name. |
+| `player_image` | String | CDN URL of the recruit's headshot. |
+| `prediction_date` | String | Timestamp the prediction was made. |
+| `expert_name` | String | Name of the expert who made the prediction. |
+| `expert_alias` | String | 247Sports handle of the expert. |
+| `expert_key` | Int64 | 247Sports key of the expert. |
+| `expert_role` | String | Expert's role/title. |
+| `expert_image` | String | CDN URL of the expert's avatar. |
+| `expert_prediction_year` | Int64 | Class year the expert's accuracy stats cover. |
+| `expert_yearly_total_correct` | Int64 | Expert's correct predictions this year. |
+| `expert_yearly_total_made` | Int64 | Expert's total predictions made this year. |
+| `expert_all_time_total_correct` | Int64 | Expert's correct predictions all-time. |
+| `expert_all_time_total_made` | Int64 | Expert's total predictions made all-time. |
+| `prediction_page_url` | String | 247sports.com path to the prediction detail. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -576,7 +576,7 @@ Class years for which the 247Sports RDB has data for a given sport.
 
 | col_name | type | description |
 |---|---|---|
-| `value` | integer | A class year for which the 247Sports RDB has data for the sport. |
+| `value` | Int64 | A class year for which the 247Sports RDB has data for the sport. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -613,10 +613,10 @@ sports247_sport_years(sport_key=1)
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | 247Sports tag id (prefixed key, e.g. Player_46151084). |
-| `name` | character | Display name of the tagged entity. |
-| `type` | character | Tag entity type (Player, Team, Institution, ...). |
-| `annotation` | character | Disambiguating annotation (e.g. class year, position, school). |
+| `id` | String | 247Sports tag id (prefixed key, e.g. Player_46151084). |
+| `name` | String | Display name of the tagged entity. |
+| `type` | String | Tag entity type (Player, Team, Institution, ...). |
+| `annotation` | String | Disambiguating annotation (e.g. class year, position, school). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -654,11 +654,11 @@ sports247_tags_autocomplete(default_name='smith')
 
 | col_name | type | description |
 |---|---|---|
-| `group` | character | Position group name (e.g. Quarterback, Running Back). |
-| `group_key` | integer | 247Sports position group key. |
-| `name` | character | Full position group name (e.g. Quarterback). |
-| `label` | character | Position abbreviation label (e.g. QB, RB). |
-| `value` | character | 247Sports position key (returned as a string). |
+| `group` | String | Position group name (e.g. Quarterback, Running Back). |
+| `group_key` | Int64 | 247Sports position group key. |
+| `name` | String | Full position group name (e.g. Quarterback). |
+| `label` | String | Position abbreviation label (e.g. QB, RB). |
+| `value` | String | 247Sports position key (returned as a string). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

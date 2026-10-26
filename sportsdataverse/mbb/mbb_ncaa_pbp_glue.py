@@ -10,21 +10,19 @@ pure logic before the wbb shims (5e.7).
 Ported members (Scala anchors in each docstring):
 
 * :func:`inject_starting_lineup_into_box` -- infer the starting five from
-  play-by-play sub sequencing (v1 box scores dropped the ordered starter list)
-  (``PlayByPlayUtils.scala:684-845``).
+  play-by-play sub sequencing (v1 box scores dropped the ordered starter list).
 * :func:`enrich_shot_events_with_pbp` -- the main fold that matches each
   :class:`~sportsdataverse.mbb.mbb_ncaa_models.ShotEvent` to its play-by-play
   event and on-floor lineup, filling in the fields Task 5e.5 left as
-  placeholders (``:28-278``).
+  placeholders.
 * :func:`find_lineup` -- the recursive lineup-matching state machine, branch
-  cases 2.1-2.4 (``:352-517``).
+  cases 2.1-2.4.
 * :func:`find_pbp_clump` -- gather the play-by-play events sharing a shot's
-  time (``:556-608``).
+  time.
 * :func:`matching_player` / :func:`extract_player_from_ev` -- resolve and
-  compare the shooter/assister against the shot's player (``:610-652``).
-* :func:`right_kind_of_shot` -- make/miss + 2/3 gating (``:659-679``).
-* :func:`shot_value` -- ``event_string`` -> point value classifier
-  (``:534-542``).
+  compare the shooter/assister against the shot's player.
+* :func:`right_kind_of_shot` -- make/miss + 2/3 gating.
+* :func:`shot_value` -- ``event_string`` -> point value classifier.
 * :class:`PeekableIterator` -- the Python stand-in for Scala's
   ``scala.collection.Iterator`` (see the "Scala idiom decisions" note).
 
@@ -61,7 +59,7 @@ Ported members (Scala anchors in each docstring):
 
 * **``eq`` (reference identity) becomes ``is``, NOT ``==``.** The clump
   de-duplication ``pbp_clump.filterNot(ev => (ev eq selected_pbp) ||
-  maybe_assist_pbp.exists(_ eq ev))`` (``:215-220``) removes *the specific
+  maybe_assist_pbp.exists(_ eq ev))`` removes *the specific
   matched objects*, by reference. Using ``==`` would be a real bug: two
   distinct play-by-play events at the same time can carry identical strings
   (the oracle's "two valid shots at the same time" case -- shot5/shot6 at
@@ -77,9 +75,7 @@ Ported members (Scala anchors in each docstring):
 * **Debug ``println``\\ s dropped.** The Scala scatters
   ``println(s"[enrich_shot_events_with_pbp] WARN: ...")`` on every discard
   path, plus a ``maybe_debug_event`` summary printer and four
-  ``debug_*``/``no_*_debug`` ``val ... = false`` gated blocks
-  (``:54-56, 78-80, 103-105, 121-123, 164-169, 222, 229-264, 285-336,
-  713-720, 738-807, 819-826``). None affects a return value -- they are
+  ``debug_*``/``no_*_debug`` ``val ... = false`` gated blocks. None affects a return value -- they are
   maintainer diagnostics with no logging surface in this port to route to
   (matching ``mbb_ncaa_names.py``'s dropped ``fixes_for_debug`` and
   ``mbb_ncaa_stints.py``'s dropped debug prints). All dropped; the control
@@ -87,8 +83,7 @@ Ported members (Scala anchors in each docstring):
 
 * **``inject_starting_lineup_into_box``'s ``external_roster`` /
   ``format_version`` params are unused, ported for signature parity.** The
-  Scala signature carries both (its ``create_lineup_data`` caller -- Task
-  5e.3's pipeline -- passes them), but the function body references neither
+  Scala signature carries both (its ``create_lineup_data`` caller -- the pipeline -- passes them), but the function body references neither
   (verified across ``:684-845``). Kept so the eventual pipeline call site
   matches upstream; documented here rather than silently dropped.
 
@@ -253,13 +248,13 @@ class PeekableIterator(Generic[_T]):
 
 
 # ---------------------------------------------------------------------------
-# ShotEnrichmentUtils (flattened -- ``PlayByPlayUtils.scala:283-680``)
+# ShotEnrichmentUtils (flattened -- ``PlayByPlayUtils.scala``)
 # ---------------------------------------------------------------------------
 
 
 def shot_value(event_str: str) -> int:
     """Classify a play-by-play event string as a 3, a 2, or an assist
-    (``ShotEnrichmentUtils.shot_value``, ``PlayByPlayUtils.scala:534-542``).
+    (``ShotEnrichmentUtils.shot_value``).
 
     Ported as an ordered first-match cascade, exactly mirroring the Scala
     ``match`` arm order (assist is tested first, so an assist string never
@@ -297,8 +292,7 @@ def shot_value(event_str: str) -> int:
 def _shot_or_assist_finder(ev: PlayByPlayEvent) -> Optional[MiscGameEvent]:
     """Return ``ev`` iff it is a shot/assist :data:`~sportsdataverse.mbb
     .mbb_ncaa_stints.MiscGameEvent`, else ``None``
-    (``ShotEnrichmentUtils.ShotOrAssistFinder.unapply``,
-    ``PlayByPlayUtils.scala:520-532``)."""
+    (``ShotEnrichmentUtils.ShotOrAssistFinder.unapply``)."""
     if isinstance(ev, (OtherTeamEvent, OtherOpponentEvent)):
         s = ev.event_string
         if parse_assist(s) is not None or parse_shot_made(s) is not None or parse_shot_missed(s) is not None:
@@ -308,8 +302,7 @@ def _shot_or_assist_finder(ev: PlayByPlayEvent) -> Optional[MiscGameEvent]:
 
 def _pbp_clump_matcher(pbp_it: "PeekableIterator[PlayByPlayEvent]", shot_time: float) -> Optional[MiscGameEvent]:
     """Advance ``pbp_it`` to the next shot/assist event at or after
-    ``shot_time`` (``ShotEnrichmentUtils.pbp_clump_matcher``,
-    ``PlayByPlayUtils.scala:545-553``). Returns ``None`` when the iterator is
+    ``shot_time`` (``ShotEnrichmentUtils.pbp_clump_matcher``). Returns ``None`` when the iterator is
     exhausted without a match."""
 
     def pred(ev: PlayByPlayEvent) -> bool:
@@ -331,7 +324,7 @@ def find_pbp_clump(
     maybe_next_pbp_event: Optional[MiscGameEvent],
 ) -> tuple[list[MiscGameEvent], Optional[MiscGameEvent]]:
     """Gather every play-by-play shot/assist event sharing ``shot_time``
-    (``ShotEnrichmentUtils.find_pbp_clump``, ``PlayByPlayUtils.scala:556-608``).
+    (``ShotEnrichmentUtils.find_pbp_clump``).
 
     If ``curr_pbp_clump`` (carried over from the previous shot) already holds
     events at ``shot_time`` they are returned as-is; otherwise the iterator is
@@ -399,8 +392,7 @@ def extract_player_from_ev(
 ) -> Optional[PlayerCodeId]:
     """Resolve the player named in ``pbp_event`` to a
     :class:`~sportsdataverse.mbb.mbb_ncaa_models.PlayerCodeId`
-    (``ShotEnrichmentUtils.extract_player_from_ev``,
-    ``PlayByPlayUtils.scala:613-635``).
+    (``ShotEnrichmentUtils.extract_player_from_ev``).
 
     For a shot by the team under analysis (``shot.is_off``) the name is
     tidied against the box score before coding (so a mis-spelled play-by-play
@@ -440,7 +432,7 @@ def matching_player(
     code_match: bool,
 ) -> bool:
     """Whether the player in ``pbp_event`` matches ``shot``'s shooter
-    (``ShotEnrichmentUtils.matching_player``, ``PlayByPlayUtils.scala:638-652``).
+    (``ShotEnrichmentUtils.matching_player``).
 
     Args:
         shot: The shot being enriched.
@@ -471,8 +463,7 @@ def matching_player(
 
 def right_kind_of_shot(shot: ShotEvent, pbp_event: MiscGameEvent, strict: bool) -> bool:
     """Whether ``pbp_event``'s shot type is compatible with ``shot``'s
-    distance and make/miss (``ShotEnrichmentUtils.right_kind_of_shot``,
-    ``PlayByPlayUtils.scala:659-679``).
+    distance and make/miss (``ShotEnrichmentUtils.right_kind_of_shot``).
 
     The distance-in-the-data is approximate, so exact 2-vs-3 discrimination is
     impossible; this only rules out the *obvious* mismatches (a clearly-short
@@ -515,7 +506,7 @@ def find_lineup(
     lineup_it: "PeekableIterator[LineupEvent]",
 ) -> tuple[Optional[LineupEvent], list[LineupEvent]]:
     """Find the lineup (stint) event on the floor for ``shot``
-    (``ShotEnrichmentUtils.find_lineup``, ``PlayByPlayUtils.scala:352-517``).
+    (``ShotEnrichmentUtils.find_lineup``).
 
     A recursive state machine over three lists: ``curr_lineup`` (the current
     candidate), ``fallback_lineups`` (time-matching lineups whose raw events
@@ -629,7 +620,7 @@ def find_lineup(
 
 
 # ---------------------------------------------------------------------------
-# enrich_shot_events_with_pbp (``PlayByPlayUtils.scala:28-278``)
+# enrich_shot_events_with_pbp
 # ---------------------------------------------------------------------------
 
 
@@ -641,8 +632,7 @@ def enrich_shot_events_with_pbp(
     box_lineup: LineupEvent,
 ) -> list[ShotEvent]:
     """Enrich each shot with its play-by-play event + on-floor lineup
-    (``PlayByPlayUtils.enrich_shot_events_with_pbp``,
-    ``PlayByPlayUtils.scala:28-278``).
+    (``PlayByPlayUtils.enrich_shot_events_with_pbp``).
 
     Folds over the (time-sorted) shots, threading two iterators (play-by-play
     and lineup) and a small amount of carry-over state. For each shot it:
@@ -657,7 +647,7 @@ def enrich_shot_events_with_pbp(
     4. attributes an assist (a same-time non-self assist event) and transition
        flag (``"fastbreak"`` in the event string), and fills in ``lineup_id`` /
        ``players`` / ``pts`` / ``value`` / ``ast_by`` / ``is_ast`` / ``is_trans``
-       -- exactly the fields Task 5e.5's parser left as placeholders.
+       -- exactly the fields the parser left as placeholders.
 
     Shots with no matching play-by-play clump, no matching shot event, or no
     matching lineup are dropped (the Scala logs a ``WARN`` and discards; the
@@ -790,8 +780,7 @@ def _select_pbp_shot(
     pbp_shots: list[MiscGameEvent],
     tidy_ctx: TidyPlayerContext,
 ) -> Optional[MiscGameEvent]:
-    """The strict -> loose -> first-of-N shot-selection cascade
-    (``PlayByPlayUtils.scala:73-142``).
+    """The strict -> loose -> first-of-N shot-selection cascade.
 
     Extracted from :func:`enrich_shot_events_with_pbp`'s fold body for
     readability (the Scala inlines it); pure, so the extraction is behavior-
@@ -842,8 +831,7 @@ def _copy_shot(
     ast_by: Optional[PlayerCodeId],
     is_trans: Optional[bool],
 ) -> ShotEvent:
-    """Build the enriched ``ShotEvent`` copy (Scala ``shot.copy(...)``,
-    ``PlayByPlayUtils.scala:192-213``). All non-overridden fields carry over
+    """Build the enriched ``ShotEvent`` copy (Scala ``shot.copy(...)``). All non-overridden fields carry over
     from ``shot``."""
     return ShotEvent(
         player=player,
@@ -869,7 +857,7 @@ def _copy_shot(
 
 
 # ---------------------------------------------------------------------------
-# inject_starting_lineup_into_box (``PlayByPlayUtils.scala:684-845``)
+# inject_starting_lineup_into_box
 # ---------------------------------------------------------------------------
 
 
@@ -880,8 +868,7 @@ def inject_starting_lineup_into_box(
     format_version: int,
 ) -> LineupEvent:
     """Infer the starting five and reorder the box-score roster so they lead
-    (``PlayByPlayUtils.inject_starting_lineup_into_box``,
-    ``PlayByPlayUtils.scala:684-845``).
+    (``PlayByPlayUtils.inject_starting_lineup_into_box``).
 
     The v1 (2018+) NCAA box score dropped the ordered list of starters, so we
     reconstruct it from the play-by-play sub sequencing. A player is a starter

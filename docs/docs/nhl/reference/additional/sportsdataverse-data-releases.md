@@ -30,41 +30,41 @@ A polars (or pandas) DataFrame of all games in the data repository.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | Unique game identifier. |
-| `season_full` | character | Full season label (e.g. 20212022). |
-| `game_type` | character | Game type the row belongs to. |
-| `game_date` | character | Game date. |
-| `game_time` | character | Scheduled start time of the game. |
-| `home_team_abbr` | character | Home team abbreviation. |
-| `away_team_abbr` | character | Away team abbreviation. |
-| `home_team_name` | character | Home team name. |
-| `away_team_name` | character | Away team name. |
-| `home_score` | integer | Home team final score. |
-| `away_score` | integer | Away team final score. |
-| `game_state` | character | Game state (e.g., FINAL, LIVE). |
-| `venue` | character | Venue where the game was played. |
-| `series_letter` | character | Single-letter identifier for the playoff series to which this game belongs, used to group games within the same bracket matchup in the NHL games dataset. |
-| `playoff_round` | integer | Playoff round identifier. |
-| `series_game_number` | integer |  |
-| `season` | integer | Season year (echoed from arg). |
-| `game_json` | logical | Whether processed game JSON is available. |
-| `game_json_url` | character | URL to the processed game JSON. |
-| `PBP` | logical | Whether play-by-play data is available. |
-| `team_box` | logical | Whether team box score data is available. |
-| `player_box` | logical | Whether player box score data is available. |
-| `skater_box` | logical | Whether skater box data is available. |
-| `goalie_box` | logical | Whether goalie box data is available. |
-| `game_info` | logical | Whether game info data is available. |
-| `game_rosters` | logical | Whether game rosters data is available. |
-| `scoring` | logical |  |
-| `penalties` | logical | Penalty count. |
-| `scratches` | logical | Logical flag indicating whether a scratches list (players healthy-scratched and not dressing) is available for this game in the NHL games loader output. |
-| `linescore` | logical | Logical flag indicating whether linescore data (period-by-period scoring breakdown) is available for this game in the NHL games loader output. |
-| `three_stars` | logical | Whether three stars data is available. |
-| `shifts` | logical | Number of shifts. |
-| `officials` | logical | Whether officials data is available. |
-| `shots_by_period` | logical | Whether shots-by-period data is available. |
-| `shootout` | logical | Whether shootout data is available. |
+| `game_id` | Int64 | Unique game identifier. |
+| `season_full` | String | Full season label (e.g. 20212022). |
+| `game_type` | String | Game type the row belongs to. |
+| `game_date` | String | Game date. |
+| `game_time` | String | Scheduled start time of the game. |
+| `home_team_abbr` | String | Home team abbreviation. |
+| `away_team_abbr` | String | Away team abbreviation. |
+| `home_team_name` | String | Home team name. |
+| `away_team_name` | String | Away team name. |
+| `home_score` | Int64 | Home team final score. |
+| `away_score` | Int64 | Away team final score. |
+| `game_state` | String | Game state (e.g., FINAL, LIVE). |
+| `venue` | String | Venue where the game was played. |
+| `series_letter` | String | Single-letter identifier for the playoff series to which this game belongs, used to group games within the same bracket matchup in the NHL games dataset. |
+| `playoff_round` | Int64 | Playoff round identifier. |
+| `series_game_number` | Int64 |  |
+| `season` | Int64 | Season year (echoed from arg). |
+| `game_json` | Boolean | Whether processed game JSON is available. |
+| `game_json_url` | String | URL to the processed game JSON. |
+| `PBP` | Boolean | Whether play-by-play data is available. |
+| `team_box` | Boolean | Whether team box score data is available. |
+| `player_box` | Boolean | Whether player box score data is available. |
+| `skater_box` | Boolean | Whether skater box data is available. |
+| `goalie_box` | Boolean | Whether goalie box data is available. |
+| `game_info` | Boolean | Whether game info data is available. |
+| `game_rosters` | Boolean | Whether game rosters data is available. |
+| `scoring` | Boolean |  |
+| `penalties` | Boolean | Penalty count. |
+| `scratches` | Boolean | Logical flag indicating whether a scratches list (players healthy-scratched and not dressing) is available for this game in the NHL games loader output. |
+| `linescore` | Boolean | Logical flag indicating whether linescore data (period-by-period scoring breakdown) is available for this game in the NHL games loader output. |
+| `three_stars` | Boolean | Whether three stars data is available. |
+| `shifts` | Boolean | Number of shifts. |
+| `officials` | Boolean | Whether officials data is available. |
+| `shots_by_period` | Boolean | Whether shots-by-period data is available. |
+| `shootout` | Boolean | Whether shootout data is available. |
 
 **Example**
 

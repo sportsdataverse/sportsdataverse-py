@@ -1,53 +1,11 @@
 ---
-title: "MLB — MLB Stats API — Other: venue–stats_metrics"
-sidebar_label: "Other: venue–stats_metrics"
+title: "MLB — MLB Stats API — Other: meta–stats_metrics"
+sidebar_label: "Other: meta–stats_metrics"
 sidebar_position: 9
-description: "MLB — MLB Stats API — Other: venue–stats_metrics — function reference in sdv-py, the SportsDataverse Python package."
+description: "MLB — MLB Stats API — Other: meta–stats_metrics — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# MLB — MLB Stats API — Other: venue–stats_metrics
-
-## mlb_venue
-
-GET /api/v1/venues/{venueId} — single venue detail.
-
-**Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/venues/{venue_id}`
-
-**Valid URL:** [https://statsapi.mlb.com/api/v1/venues/15](https://statsapi.mlb.com/api/v1/venues/15)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `venue_id` | `venue_id` |  | `Y` |  | venue_id path parameter. |
-| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
-| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
-
-### Returns {#mlb_venue-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `id` | integer | Id. |
-| `name` | character | Display name. |
-| `link` | character | API link to the game feed. |
-| `active` | logical | Whether the player is currently active. |
-| `season` | character | Season year. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Raises {#mlb_venue-raises}
-
-| Exception | Description |
-|---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
-| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
-
-### Example {#mlb_venue-example}
-
-```python
-mlb_venue(venue_id=15)
-```
+# MLB — MLB Stats API — Other: meta–stats_metrics
 
 ## mlb_meta
 
@@ -98,16 +56,16 @@ GET /api/v1/awards — list award IDs (call with no params to enumerate).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Id. |
-| `name` | character | Display name. |
-| `description` | character | Long-form description text. |
-| `sort_order` | double | Display sort order for the sport. |
-| `active` | logical | Whether the player is currently active. |
-| `sport_id` | double | Sport MLBAM ID. |
-| `sport_link` | character | API link to the sport. |
-| `league_id` | double | League MLBAM ID. |
-| `league_link` | character | API link to the league. |
-| `notes` | character | Notes. |
+| `id` | String | Id. |
+| `name` | String | Display name. |
+| `description` | String | Long-form description text. |
+| `sort_order` | Float64 | Display sort order for the sport. |
+| `active` | Boolean | Whether the player is currently active. |
+| `sport_id` | Float64 | Sport MLBAM ID. |
+| `sport_link` | String | API link to the sport. |
+| `league_id` | Float64 | League MLBAM ID. |
+| `league_link` | String | API link to the league. |
+| `notes` | String | Notes. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -146,20 +104,20 @@ GET /api/v1/awards/{awardId}/recipients — historical winners of one award.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Id. |
-| `name` | character | Display name. |
-| `date` | character | Date in YYYY-MM-DD format. |
-| `season` | character | Season year. |
-| `team_id` | integer | Unique ESPN team identifier. |
-| `team_link` | character | API link to the team. |
-| `player_id` | integer | stats.ncaa.org player identifier. |
-| `player_link` | character | API relative link to the player. |
-| `player_primary_position_code` | character | Recipient primary fielding position code. |
-| `player_primary_position_name` | character | Recipient primary fielding position name. |
-| `player_primary_position_type` | character | Participant primary position type (e.g. 'Hitter'). |
-| `player_primary_position_abbreviation` | character | Participant primary position abbreviation (e.g. 'DH'). |
-| `player_name_first_last` | character | Participant name in first-last order. |
-| `votes` | double | Number of votes received. |
+| `id` | String | Id. |
+| `name` | String | Display name. |
+| `date` | String | Date in YYYY-MM-DD format. |
+| `season` | String | Season year. |
+| `team_id` | Int64 | Unique ESPN team identifier. |
+| `team_link` | String | API link to the team. |
+| `player_id` | Int64 | stats.ncaa.org player identifier. |
+| `player_link` | String | API relative link to the player. |
+| `player_primary_position_code` | String | Recipient primary fielding position code. |
+| `player_primary_position_name` | String | Recipient primary fielding position name. |
+| `player_primary_position_type` | String | Participant primary position type (e.g. 'Hitter'). |
+| `player_primary_position_abbreviation` | String | Participant primary position abbreviation (e.g. 'DH'). |
+| `player_name_first_last` | String | Participant name in first-last order. |
+| `votes` | Float64 | Number of votes received. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -194,13 +152,13 @@ GET /api/v1/jobs/umpires — current umpire crew assignments.
 
 | col_name | type | description |
 |---|---|---|
-| `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
-| `job` | character | Job title (e.g. 'Umpire'). |
-| `job_id` | character | Job code identifier. |
-| `title` | character | Specific role title for the assignment. |
-| `person_id` | integer | MLB player ID. |
-| `person_full_name` | character | Player full name. |
-| `person_link` | character | API relative link to the person. |
+| `jersey_number` | String | Jersey number worn (often blank for non-uniformed roles). |
+| `job` | String | Job title (e.g. 'Umpire'). |
+| `job_id` | String | Job code identifier. |
+| `title` | String | Specific role title for the assignment. |
+| `person_id` | Int64 | MLB player ID. |
+| `person_full_name` | String | Player full name. |
+| `person_link` | String | API relative link to the person. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -238,16 +196,16 @@ View all PCL conferences.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
-| `name` | character | Display name. |
-| `link` | character | API link to the game feed. |
-| `abbreviation` | character | Short abbreviation. |
-| `has_wildcard` | logical | Whether the season has a wild card round. |
-| `name_short` | character |  |
-| `league_id` | integer | League MLBAM ID. |
-| `league_link` | character | API link to the league. |
-| `sport_id` | integer | Sport MLBAM ID. |
-| `sport_link` | character | API link to the sport. |
+| `id` | Int64 | Id. |
+| `name` | String | Display name. |
+| `link` | String | API link to the game feed. |
+| `abbreviation` | String | Short abbreviation. |
+| `has_wildcard` | Boolean | Whether the season has a wild card round. |
+| `name_short` | String |  |
+| `league_id` | Int64 | League MLBAM ID. |
+| `league_link` | String | API link to the league. |
+| `sport_id` | Int64 | Sport MLBAM ID. |
+| `sport_link` | String | API link to the sport. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -285,16 +243,16 @@ View PCL conferences by conferenceId.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
-| `name` | character | Display name. |
-| `link` | character | API link to the game feed. |
-| `abbreviation` | character | Short abbreviation. |
-| `has_wildcard` | logical | Whether the season has a wild card round. |
-| `name_short` | character |  |
-| `league_id` | integer | League MLBAM ID. |
-| `league_link` | character | API link to the league. |
-| `sport_id` | integer | Sport MLBAM ID. |
-| `sport_link` | character | API link to the sport. |
+| `id` | Int64 | Id. |
+| `name` | String | Display name. |
+| `link` | String | API link to the game feed. |
+| `abbreviation` | String | Short abbreviation. |
+| `has_wildcard` | Boolean | Whether the season has a wild card round. |
+| `name_short` | String |  |
+| `league_id` | Int64 | League MLBAM ID. |
+| `league_link` | String | API link to the league. |
+| `sport_id` | Int64 | Sport MLBAM ID. |
+| `sport_link` | String | API link to the sport. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -419,24 +377,24 @@ View high/low stats by player or team.
 
 | col_name | type | description |
 |---|---|---|
-| `total_splits` | integer | Total number of splits in the leaderboard. |
-| `exemptions` | character | Serialized list of exemption codes or player IDs excluded from the high/low statistical split calculation. |
-| `splits` | character | Splits. |
-| `splits_tied_with_offset` | character | Players tied at the offset boundary. |
-| `splits_tied_with_limit` | character | Players tied at the limit boundary. |
-| `season` | character | Season year. |
-| `combined_stats` | logical | Whether the stat combines multiple split sources. |
-| `group_display_name` | character | Stat group display name. |
-| `game_type_id` | character | Game type code (e.g., R for regular season). |
-| `game_type_description` | character | Game type description. |
-| `sort_stat_name` | character | Snake-case name of the sorted statistic (e.g. 'at_bats'). |
-| `sort_stat_lookup_param` | character | API lookup parameter for the sorted statistic (e.g. 'atBats'). |
-| `sort_stat_is_counting` | logical | Whether the sorted statistic is a counting stat. |
-| `sort_stat_label` | character | Human-readable label of the sorted statistic (e.g. 'At bats'). |
-| `sort_stat_stat_groups` | character | Serialized list of statistical group identifiers (e.g., hitting, pitching) used to filter this high/low query. |
-| `sort_stat_org_types` | character | Serialized list of organization types (e.g., MLB, MiLB) in scope for this high/low stat sort. |
-| `sort_stat_high_low_types` | character | Serialized list of high/low result type codes (e.g., high, low) applicable to this stat leader query. |
-| `sort_stat_streak_levels` | character | Serialized list of streak level codes defining the streak lengths tracked in this high/low query. |
+| `total_splits` | Int64 | Total number of splits in the leaderboard. |
+| `exemptions` | String | Serialized list of exemption codes or player IDs excluded from the high/low statistical split calculation. |
+| `splits` | String | Splits. |
+| `splits_tied_with_offset` | String | Players tied at the offset boundary. |
+| `splits_tied_with_limit` | String | Players tied at the limit boundary. |
+| `season` | String | Season year. |
+| `combined_stats` | Boolean | Whether the stat combines multiple split sources. |
+| `group_display_name` | String | Stat group display name. |
+| `game_type_id` | String | Game type code (e.g., R for regular season). |
+| `game_type_description` | String | Game type description. |
+| `sort_stat_name` | String | Snake-case name of the sorted statistic (e.g. 'at_bats'). |
+| `sort_stat_lookup_param` | String | API lookup parameter for the sorted statistic (e.g. 'atBats'). |
+| `sort_stat_is_counting` | Boolean | Whether the sorted statistic is a counting stat. |
+| `sort_stat_label` | String | Human-readable label of the sorted statistic (e.g. 'At bats'). |
+| `sort_stat_stat_groups` | String | Serialized list of statistical group identifiers (e.g., hitting, pitching) used to filter this high/low query. |
+| `sort_stat_org_types` | String | Serialized list of organization types (e.g., MLB, MiLB) in scope for this high/low stat sort. |
+| `sort_stat_high_low_types` | String | Serialized list of high/low result type codes (e.g., high, low) applicable to this stat leader query. |
+| `sort_stat_streak_levels` | String | Serialized list of streak level codes defining the streak lengths tracked in this high/low query. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -475,23 +433,23 @@ View biographical information and stats for Free Agents.
 
 | col_name | type | description |
 |---|---|---|
-| `notes` | character | Notes. |
-| `date_declared` | character | Date the player declared free agency (YYYY-MM-DD). |
-| `player_id` | integer | stats.ncaa.org player identifier. |
-| `player_full_name` | character | Player full name. |
-| `player_link` | character | API relative link to the player. |
-| `original_team_id` | double | Team id the player left. |
-| `original_team_name` | character | Name of the team the player left. |
-| `original_team_link` | character | API relative link to the original team. |
-| `new_team_link` | character | API relative link to the new team. |
-| `position_code` | character | Numeric scorekeeping position code. |
-| `position_name` | character | Position name. |
-| `position_type` | character | Position category (e.g. 'Pitcher', 'Infielder'). |
-| `position_abbreviation` | character | Position abbreviation. |
-| `date_signed` | character | Date the player signed a new contract (YYYY-MM-DD). |
-| `new_team_id` | double | Team id the player signed with. |
-| `new_team_name` | character | Name of the team the player signed with. |
-| `sort_order` | double | Display sort order for the sport. |
+| `notes` | String | Notes. |
+| `date_declared` | String | Date the player declared free agency (YYYY-MM-DD). |
+| `player_id` | Int64 | stats.ncaa.org player identifier. |
+| `player_full_name` | String | Player full name. |
+| `player_link` | String | API relative link to the player. |
+| `original_team_id` | Float64 | Team id the player left. |
+| `original_team_name` | String | Name of the team the player left. |
+| `original_team_link` | String | API relative link to the original team. |
+| `new_team_link` | String | API relative link to the new team. |
+| `position_code` | String | Numeric scorekeeping position code. |
+| `position_name` | String | Position name. |
+| `position_type` | String | Position category (e.g. 'Pitcher', 'Infielder'). |
+| `position_abbreviation` | String | Position abbreviation. |
+| `date_signed` | String | Date the player signed a new contract (YYYY-MM-DD). |
+| `new_team_id` | Float64 | Team id the player signed with. |
+| `new_team_name` | String | Name of the team the player signed with. |
+| `sort_order` | Float64 | Display sort order for the sport. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -530,13 +488,13 @@ View directory by jobType.
 
 | col_name | type | description |
 |---|---|---|
-| `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
-| `job` | character | Job title (e.g. 'Umpire'). |
-| `job_id` | character | Job code identifier. |
-| `title` | character | Specific role title for the assignment. |
-| `person_id` | integer | MLB player ID. |
-| `person_full_name` | character | Player full name. |
-| `person_link` | character | API relative link to the person. |
+| `jersey_number` | String | Jersey number worn (often blank for non-uniformed roles). |
+| `job` | String | Job title (e.g. 'Umpire'). |
+| `job_id` | String | Job code identifier. |
+| `title` | String | Specific role title for the assignment. |
+| `person_id` | Int64 | MLB player ID. |
+| `person_full_name` | String | Player full name. |
+| `person_link` | String | API relative link to the person. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -575,13 +533,13 @@ View datacasters directory.
 
 | col_name | type | description |
 |---|---|---|
-| `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
-| `job` | character | Job title (e.g. 'Umpire'). |
-| `job_id` | character | Job code identifier. |
-| `title` | character | Specific role title for the assignment. |
-| `person_id` | integer | MLB player ID. |
-| `person_full_name` | character | Player full name. |
-| `person_link` | character | API relative link to the person. |
+| `jersey_number` | String | Jersey number worn (often blank for non-uniformed roles). |
+| `job` | String | Job title (e.g. 'Umpire'). |
+| `job_id` | String | Job code identifier. |
+| `title` | String | Specific role title for the assignment. |
+| `person_id` | Int64 | MLB player ID. |
+| `person_full_name` | String | Player full name. |
+| `person_link` | String | API relative link to the person. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -620,13 +578,13 @@ View official scorer directory.
 
 | col_name | type | description |
 |---|---|---|
-| `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
-| `job` | character | Job title (e.g. 'Umpire'). |
-| `job_id` | character | Job code identifier. |
-| `title` | character | Specific role title for the assignment. |
-| `person_id` | integer | MLB player ID. |
-| `person_full_name` | character | Player full name. |
-| `person_link` | character | API relative link to the person. |
+| `jersey_number` | String | Jersey number worn (often blank for non-uniformed roles). |
+| `job` | String | Job title (e.g. 'Umpire'). |
+| `job_id` | String | Job code identifier. |
+| `title` | String | Specific role title for the assignment. |
+| `person_id` | Int64 | MLB player ID. |
+| `person_full_name` | String | Player full name. |
+| `person_link` | String | API relative link to the person. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -703,27 +661,27 @@ View information for all seasons based on id.
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | character | stats.ncaa.org season identifier. |
-| `has_wildcard` | logical | Whether the season has a wild card round. |
-| `pre_season_start_date` | character | Pre-season start date. |
-| `season_start_date` | character | Season start date. |
-| `regular_season_start_date` | character | Regular season start date. |
-| `regular_season_end_date` | character | Regular season end date. |
-| `season_end_date` | character | Season end date. |
-| `offseason_start_date` | character | Off-season start date. |
-| `off_season_end_date` | character | Off-season end date. |
-| `season_level_gameday_type` | character | Season-level Gameday data feed type. |
-| `game_level_gameday_type` | character | Game-level Gameday data feed type. |
-| `qualifier_plate_appearances` | double | Plate appearances per team game to qualify. |
-| `qualifier_outs_pitched` | double | Outs pitched per team game to qualify. |
-| `post_season_start_date` | character | Post-season start date. |
-| `post_season_end_date` | character | Post-season end date. |
-| `last_date1st_half` | character | Last date of the first half. |
-| `all_star_date` | character | All-Star Game date. |
-| `first_date2nd_half` | character | First date of the second half. |
-| `pre_season_end_date` | character | Pre-season end date. |
-| `spring_start_date` | character | Spring training start date. |
-| `spring_end_date` | character | Spring training end date. |
+| `season_id` | String | stats.ncaa.org season identifier. |
+| `has_wildcard` | Boolean | Whether the season has a wild card round. |
+| `pre_season_start_date` | String | Pre-season start date. |
+| `season_start_date` | String | Season start date. |
+| `regular_season_start_date` | String | Regular season start date. |
+| `regular_season_end_date` | String | Regular season end date. |
+| `season_end_date` | String | Season end date. |
+| `offseason_start_date` | String | Off-season start date. |
+| `off_season_end_date` | String | Off-season end date. |
+| `season_level_gameday_type` | String | Season-level Gameday data feed type. |
+| `game_level_gameday_type` | String | Game-level Gameday data feed type. |
+| `qualifier_plate_appearances` | Float64 | Plate appearances per team game to qualify. |
+| `qualifier_outs_pitched` | Float64 | Outs pitched per team game to qualify. |
+| `post_season_start_date` | String | Post-season start date. |
+| `post_season_end_date` | String | Post-season end date. |
+| `last_date1st_half` | String | Last date of the first half. |
+| `all_star_date` | String | All-Star Game date. |
+| `first_date2nd_half` | String | First date of the second half. |
+| `pre_season_end_date` | String | Pre-season end date. |
+| `spring_start_date` | String | Spring training start date. |
+| `spring_end_date` | String | Spring training end date. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -760,13 +718,13 @@ View information for any given sportId.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
-| `code` | character | Fielder detail type code. |
-| `link` | character | API link to the game feed. |
-| `name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | integer | Display sort order for the sport. |
-| `active_status` | logical | Whether the sport/level is active. |
+| `id` | Int64 | Id. |
+| `code` | String | Fielder detail type code. |
+| `link` | String | API link to the game feed. |
+| `name` | String | Display name. |
+| `abbreviation` | String | Short abbreviation. |
+| `sort_order` | Int64 | Display sort order for the sport. |
+| `active_status` | Boolean | Whether the sport/level is active. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

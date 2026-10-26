@@ -1,18 +1,16 @@
 ---
-title: "WBB — additional Python functions — Models and calculators: AssistEvent–build_productivity"
+title: "Women's college basketball — additional Python functions — Models and calculators: AssistEvent–build_productivity"
 sidebar_label: "Models and calculators: AssistEvent–build_productivity"
 sidebar_position: 8
-description: "WBB — additional Python functions — Models and calculators: AssistEvent–build_productivity — function reference in sdv-py, the SportsDataverse Python package."
+description: "Women's college basketball — additional Python functions — Models and calculators: AssistEvent–build_productivity — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — Models and calculators: AssistEvent–build_productivity
+# Women's college basketball — additional Python functions — Models and calculators: AssistEvent–build_productivity
 
 ### AssistEvent {#AssistEvent}
 
 `AssistEvent(player_code: 'str', count: 'ShotClockStats' = <factory>) -> None`
 
-One assist relationship's counts (`LineupEventStats.AssistEvent`,
-
-`LineupEventStats.scala:64-67`).
+One assist relationship's counts (`LineupEventStats.AssistEvent`).
 
 **Parameters**
 
@@ -27,7 +25,7 @@ One assist relationship's counts (`LineupEventStats.AssistEvent`,
 
 Detailed assist info, split into given/received
 
-(`LineupEventStats.AssistInfo`, `LineupEventStats.scala:87-91`).
+(`LineupEventStats.AssistInfo`).
 
 **Parameters**
 
@@ -43,19 +41,18 @@ Detailed assist info, split into given/received
 
 CBB conference identifier (`ConferenceId`, ``models/ConferenceId
 
-.scala:7`, `AnyVal`). **Scope addition, Task 5e.4** -- the first model
+.scala`, `AnyVal`). **Scope addition** -- the first model
 consumed by `mbb_ncaa_team_parsers.py` (`TeamIdParser.get_team_triples`
 / `build_lineup_cli_array` / `build_available_team_list``). Appended
 here (not inserted among the 5a-reviewed classes above) to keep this an
 additive-only change, matching `RosterEntry`'s precedent.
 
-**`ConferenceId.is_high_major` (the companion object's other member,
-`models/ConferenceId.scala:11-16`) is NOT ported.** It has no call site
+**`ConferenceId.is_high_major` (the companion object's other member) is NOT ported.** It has no call site
 anywhere in `TeamIdParser`/`TeamScheduleParser` (verified: the only
 other `ConferenceId` construction sites in the upstream tree are
 `kenpom/TeamParser.scala` and `BuildIngestPipeline.scala`, neither of
 which is in this port's scope, and neither calls `is_high_major`
-either) -- nothing in Phase 5e would exercise it. Noted here rather than
+either) -- nothing in the ported parsers would exercise it. Noted here rather than
 silently dropped, matching this module's precedent for other
 unreferenced companion-object members (see the module docstring's
 `Year.until` / `Game.Score.by_winner` notes).
@@ -72,15 +69,14 @@ unreferenced companion-object members (see the module docstring's
 
 A narrowed `ShotEvent`, keeping only the fields needed once a
 
-shot has been matched to a player/lineup event (`CutdownShotEvent`,
-`models/ncaa/ShotEvent.scala:31-40`). **Scope addition, Task 5e.5** --
+shot has been matched to a player/lineup event (`CutdownShotEvent`). **Scope addition** --
 ported for shape fidelity even though **it is dead code in the ENTIRE
 upstream tree**: grepping shows it appears only in its own definition
 (`ShotEvent.scala`) and as the never-populated `shot_info:
 Option[CutdownShotEvent]` field on `PlayerEvent.scala` -- it is never
 constructed anywhere. (`PlayByPlayUtils.shot_value` is an UNRELATED
 `event_str -> int` point-value classifier that merely shares a similar
-name -- Task 5e.6 will NOT produce this type either.) Appended here (not
+name -- the enrichment pass does NOT produce this type either.) Appended here (not
 inserted among the 5a-reviewed classes above) to keep this an
 additive-only change, matching `RosterEntry`/`ConferenceId`'s
 precedent.
@@ -102,15 +98,13 @@ precedent.
 
 `Direction(*values)`
 
-Which team is in possession (`RawGameEvent.Direction`, `:119-121`).
+Which team is in possession (`RawGameEvent.Direction`).
 
 ### FieldGoalStats {#FieldGoalStats}
 
 `FieldGoalStats(attempts: 'ShotClockStats' = <factory>, made: 'ShotClockStats' = <factory>, ast: 'Optional[ShotClockStats]' = None) -> None`
 
-Field-goal counting stats (`LineupEventStats.FieldGoalStats`,
-
-`LineupEventStats.scala:75-79`).
+Field-goal counting stats (`LineupEventStats.FieldGoalStats`).
 
 **Parameters**
 
@@ -149,7 +143,7 @@ number lives here so a WBB caller is a by-reference shim plus this table
 
 A portion of a game during which a given lineup was on the floor
 
-(`LineupEvent`, `LineupEvent.scala:41-58`).
+(`LineupEvent`).
 
 **Parameters**
 
@@ -176,12 +170,10 @@ A portion of a game during which a given lineup was on the floor
 
 `LineupEventStats(num_events: 'int' = 0, num_possessions: 'int' = 0, fg: 'FieldGoalStats' = <factory>, fg_rim: 'FieldGoalStats' = <factory>, fg_mid: 'FieldGoalStats' = <factory>, fg_2p: 'FieldGoalStats' = <factory>, fg_3p: 'FieldGoalStats' = <factory>, ft: 'FieldGoalStats' = <factory>, orb: 'Optional[ShotClockStats]' = None, drb: 'Optional[ShotClockStats]' = None, to: 'ShotClockStats' = <factory>, stl: 'Optional[ShotClockStats]' = None, blk: 'Optional[ShotClockStats]' = None, assist: 'Optional[ShotClockStats]' = None, ast_rim: 'Optional[AssistInfo]' = None, ast_mid: 'Optional[AssistInfo]' = None, ast_3p: 'Optional[AssistInfo]' = None, foul: 'Optional[ShotClockStats]' = None, player_shot_info: 'Optional[PlayerShotInfo]' = None, pts: 'int' = 0, plus_minus: 'int' = 0) -> None`
 
-A lineup event's full counting-stat tree (`LineupEventStats`,
-
-`LineupEventStats.scala:7-38`).
+A lineup event's full counting-stat tree (`LineupEventStats`).
 
 Only `num_events`/`num_possessions`/`pts`/`plus_minus` are
-exercised by Phase 5a -- see the module docstring's scope note.
+exercised by the possession builder -- see the module docstring's scope note.
 
 **Parameters**
 
@@ -215,7 +207,7 @@ exercised by Phase 5a -- see the module docstring's scope note.
 
 `LineupEventStats.empty() -> "'LineupEventStats'"`
 
-A fresh all-defaults `LineupEventStats` (`:41`).
+A fresh all-defaults `LineupEventStats`.
 
 ### LineupId {#LineupId}
 
@@ -223,7 +215,7 @@ A fresh all-defaults `LineupEventStats` (`:41`).
 
 The set of players on the floor, as an opaque id string
 
-(`LineupEvent.LineupId`, `LineupEvent.scala:172`, `AnyVal`).
+(`LineupEvent.LineupId`, `AnyVal`).
 
 **Parameters**
 
@@ -235,7 +227,7 @@ The set of players on the floor, as an opaque id string
 
 `LocationType(*values)`
 
-Game location (`Game.LocationType`, `Game.scala:36-38`).
+Game location (`Game.LocationType`).
 
 ### PlayerCodeId {#PlayerCodeId}
 
@@ -243,7 +235,7 @@ Game location (`Game.LocationType`, `Game.scala:36-38`).
 
 A player's within-team-season code paired with their full identity
 
-(`LineupEvent.PlayerCodeId`, `LineupEvent.scala:185-189`).
+(`LineupEvent.PlayerCodeId`).
 
 **Parameters**
 
@@ -257,9 +249,8 @@ A player's within-team-season code paired with their full identity
 
 `PlayerEvent(player: 'PlayerCodeId', player_stats: 'LineupEventStats', date: 'datetime', location_type: 'LocationType', start_min: 'float', end_min: 'float', duration_mins: 'float', score_info: 'ScoreInfo', team: 'TeamSeasonId', opponent: 'TeamSeasonId', lineup_id: 'LineupId', players: 'list[PlayerCodeId]', players_in: 'list[PlayerCodeId]', players_out: 'list[PlayerCodeId]', raw_game_events: 'list[RawGameEvent]', team_stats: 'LineupEventStats', opponent_stats: 'LineupEventStats', player_count_error: 'Optional[int]' = None) -> None`
 
-A lineup event's stats, narrowed to one player (`PlayerEvent`,
+A lineup event's stats, narrowed to one player (`PlayerEvent`). **Scope addition**
 
-`models/ncaa/PlayerEvent.scala:48-70`). **Scope addition, Task 5c.4**
 -- deferred by 5a since only `~sportsdataverse.mbb
 .mbb_ncaa_lineup_enrich.create_player_events` (5c.4) returns it. Appended
 here (not inserted among the 5a-reviewed classes above) to keep this an
@@ -276,8 +267,7 @@ constructs the dataclass directly instead.
 **`SingleEventMeta` / `event_meta` / `game_id` are NOT ported.**
 `PlayerEvent.scala`'s companion object nests a `SingleEventMeta` case
 class, but the two fields that would carry it (`event_meta`,
-`game_id`) are commented out in the Scala source itself
-(`PlayerEvent.scala:67-69`) -- never part of the live case class, and
+`game_id`) are commented out in the Scala source itself -- never part of the live case class, and
 `create_player_events` never constructs a `SingleEventMeta`. Nothing
 to defer; there is no live field to port.
 
@@ -322,7 +312,7 @@ CBB player identifier (`PlayerId`, `PlayerId.scala`, `AnyVal`).
 
 Per-player shot-quality info, keyed by lineup slot
 
-(`LineupEventStats.PlayerShotInfo`, `LineupEventStats.scala:98-103`).
+(`LineupEventStats.PlayerShotInfo`).
 Each tuple is a fixed-arity 5-slot (one per lineup spot), mirroring the
 Scala `PlayerTuple[Int] = Tuple5[Int, Int, Int, Int, Int]` alias.
 
@@ -355,8 +345,7 @@ Per-league constants for the player-value spine.
 
 Running stats needed to calculate possessions for one lineup event,
 
-one direction at a time (`PossessionUtils.PossCalcFragment`,
-`PossessionUtils.scala:124-144`).
+one direction at a time (`PossessionUtils.PossCalcFragment`).
 
 **Parameters**
 
@@ -377,7 +366,7 @@ one direction at a time (`PossessionUtils.PossCalcFragment`,
 
 Decomposes `RawGameEvent`\ s into attacking/defending sides
 
-(`RawGameEvent.PossessionEvent`, `LineupEvent.scala:126-149`).
+(`RawGameEvent.PossessionEvent`).
 
 **Parameters**
 
@@ -454,7 +443,7 @@ Port of `RapmPriorInfo` (`RapmUtils.ts:124-133`).
 
 Port of `RapmProcessingInputs` (`RapmUtils.ts:196-203`).
 
-See the module docstring's "Task 3.5 notes" for why `soln_matrix` and
+See the module docstring for why `soln_matrix` and
 `sd_rapm` are plain nested `list`s rather than `NDArray`s, and why
 `sd_rapm` exists at all (a Python-only addition beyond upstream's own
 return shape).
@@ -463,9 +452,7 @@ return shape).
 
 `RawGameEvent(min: 'float', team: 'Optional[str]' = None, opponent: 'Optional[str]' = None) -> None`
 
-A single NCAA play-by-play event line (`LineupEvent.RawGameEvent`,
-
-`LineupEvent.scala:65-105`).
+A single NCAA play-by-play event line (`LineupEvent.RawGameEvent`).
 
 Exactly one of `team` / `opponent` is populated per event -- the raw
 string is the literal `"date,time,event"` line from the NCAA website.
@@ -486,7 +473,7 @@ string is the literal `"date,time,event"` line from the NCAA website.
 
 Build an opponent-side event (Scala ``RawGameEvent.opponent(s,
 
-min)`, `LineupEvent.scala:109-110` -- renamed per the "Scala
+min)` -- renamed per the "Scala
 idiom decisions" module note to avoid colliding with the
 `opponent`` field).
 
@@ -501,9 +488,8 @@ idiom decisions" module note to avoid colliding with the
 
 `RawGameEvent.for_team(s: 'str', min: 'float') -> "'RawGameEvent'"`
 
-Build a team-side event (Scala `RawGameEvent.team(s, min)`,
+Build a team-side event (Scala `RawGameEvent.team(s, min)` -- renamed per the "Scala idiom
 
-`LineupEvent.scala:107-108` -- renamed per the "Scala idiom
 decisions" module note to avoid colliding with the `team` field).
 
 **Parameters**
@@ -519,7 +505,7 @@ decisions" module note to avoid colliding with the `team` field).
 
 An entry in an NCAA team roster (`RosterEntry`, ``models/ncaa
 
-/RosterEntry.scala:11-21`). **Scope addition, Task 5e.1** -- the first
+/RosterEntry.scala`). **Scope addition** -- the first
 model consumed by the HTML-parser layer (`mbb_ncaa_roster_parser.py``).
 Appended here (not inserted among the 5a-reviewed classes above) to keep
 this an additive-only change, matching `PlayerEvent`'s precedent.
@@ -529,7 +515,7 @@ never populated by `RosterParser.parse_roster` -- every construction
 site there, both the real-player and `__coach__` branches, passes the
 literal `None` for it) is presumably set by a later phase's box-score
 parser (`BoxscoreParser`, out of this task's scope); it is carried
-here for shape fidelity even though Task 5e.1's only producer never
+here for shape fidelity even though the only producer never
 populates it.
 
 **Parameters**
@@ -550,7 +536,7 @@ populates it.
 
 `Score(scored: 'int', allowed: 'int') -> None`
 
-Points scored / allowed (`Game.Score`, `Game.scala:22`).
+Points scored / allowed (`Game.Score`).
 
 **Parameters**
 
@@ -565,7 +551,7 @@ Points scored / allowed (`Game.Score`, `Game.scala:22`).
 
 Score context at the start/end of a lineup event
 
-(`LineupEvent.ScoreInfo`, `LineupEvent.scala:153-158`).
+(`LineupEvent.ScoreInfo`).
 
 **Parameters**
 
@@ -582,7 +568,7 @@ Score context at the start/end of a lineup event
 
 `ScoreInfo.empty() -> "'ScoreInfo'"`
 
-A fresh zeroed `ScoreInfo` (`ScoreInfo.empty`, `:161-166`).
+A fresh zeroed `ScoreInfo` (`ScoreInfo.empty`).
 
 ### ShotClockStats {#ShotClockStats}
 
@@ -590,7 +576,7 @@ A fresh zeroed `ScoreInfo` (`ScoreInfo.empty`, `:161-166`).
 
 Counting stats broken down by shot-clock segment
 
-(`LineupEventStats.ShotClockStats`, `LineupEventStats.scala:51-57`).
+(`LineupEventStats.ShotClockStats`).
 
 **Parameters**
 
@@ -608,8 +594,7 @@ Counting stats broken down by shot-clock segment
 
 Info about one shot taken during a game, all distances in feet
 
-(`ShotEvent`, `models/ncaa/ShotEvent.scala:9-29`). **Scope addition,
-Task 5e.5** -- the model produced by
+(`ShotEvent`). **Scope addition** -- the model produced by
 `~sportsdataverse.mbb.mbb_ncaa_shot_parser.create_shot_event_data`.
 
 **Fields `mbb_ncaa_shot_parser.create_shot_event_data` (this task)
@@ -623,18 +608,17 @@ coordinates + Euclidean distance from the basket, after the
 self-correcting flip pass), `geo` (synthetic lat/lon), `raw_event`
 (the SVG `<title>` text, for debugging).
 
-**Fields left as placeholders for a LATER phase (Task 5e.6,
-`PlayByPlayUtils`/`ShotEnrichmentUtils`):** `lineup_id` (always
+**Fields left as placeholders for the later enrichment pass
+(`PlayByPlayUtils`/`ShotEnrichmentUtils`):** `lineup_id` (always
 `None` here -- "discard if bad lineup" per the Scala comment, filled in
 once the shot is matched against an actual on-floor lineup), `players`
 (always `[]` here -- filled in from the matched lineup), `pts`
 (**not the real point value** -- this task only sets it to `1`/`0`
 for made/missed, matching the Scala's own `// (enrich in final phase)`
-comment; the real 2pt/3pt value comes from `PlayByPlayUtils.shot_value`
-in Task 5e.6), `value` (always `0` here, same "final phase" note),
+comment; the real 2pt/3pt value comes from `PlayByPlayUtils.shot_value`), `value` (always `0` here, same "final phase" note),
 `ast_by`/`is_ast`/`is_trans` (always `None` here -- assist/
-transition attribution needs the play-by-play cross-reference Task 5e.6
-builds).
+transition attribution needs the play-by-play cross-reference that the
+enrichment pass builds).
 
 **Parameters**
 
@@ -666,8 +650,8 @@ builds).
 
 A shot's synthetic lat/lon, for geo-aware visualization tooling
 
-(`ShotEvent.ShotGeo`, `models/ncaa/ShotEvent.scala:45`). **Scope
-addition, Task 5e.5** -- flattened per `ShotLocation`'s note.
+(`ShotEvent.ShotGeo`). **Scope
+addition** -- flattened per `ShotLocation`'s note.
 
 **Parameters**
 
@@ -680,9 +664,8 @@ addition, Task 5e.5** -- flattened per `ShotLocation`'s note.
 
 `ShotLocation(x: 'float', y: 'float') -> None`
 
-A shot's court-relative coordinates, in feet (`ShotEvent.ShotLocation`,
+A shot's court-relative coordinates, in feet (`ShotEvent.ShotLocation`). **Scope addition** --
 
-`models/ncaa/ShotEvent.scala:48`). **Scope addition, Task 5e.5** --
 flattened out of the Scala `ShotEvent` companion object per this
 module's established nested-object-flattening precedent (see the module
 docstring's "Scala idiom decisions": `ScoreInfo`/`PlayerCodeId` were
@@ -783,14 +766,14 @@ One row per (season, team_id): `season, team_id, adj_o, adj_d, adj_em, raw_o, ra
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `team_id` | character | Unique team identifier. |
-| `adj_o` | double | Adj o. |
-| `adj_d` | double | Adj d. |
-| `adj_em` | double | Adj em. |
-| `raw_o` | double | Raw o. |
-| `raw_d` | double | Raw d. |
-| `games` | integer | Games played. |
+| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `team_id` | String | Unique team identifier. |
+| `adj_o` | Float64 | Adj o. |
+| `adj_d` | Float64 | Adj d. |
+| `adj_em` | Float64 | Adj em. |
+| `raw_o` | Float64 | Raw o. |
+| `raw_d` | Float64 | Raw d. |
+| `games` | Int64 | Games played. |
 
 **Example**
 
@@ -867,9 +850,9 @@ One row per (season, team_id): `season, team_id, adj_tempo`. Empty input returns
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `team_id` | character | Unique team identifier. |
-| `adj_tempo` | double |  |
+| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `team_id` | String | Unique team identifier. |
+| `adj_tempo` | Float64 |  |
 
 **Example**
 
@@ -906,28 +889,28 @@ One row per (player_id, season, team_id): `player_id:Utf8, season, team_id:Utf8,
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `team_id` | character | Unique team identifier. |
-| `player` | character | Player name. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `minutes` | double | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
-| `field_goals_made` | double | Field goals made (2-pt + 3-pt). |
-| `field_goals_attempted` | double | Field goal attempts (2-pt + 3-pt). |
-| `three_point_field_goals_made` | double | Three-point field goals made. |
-| `three_point_field_goals_attempted` | double | Three-point field goal attempts. |
-| `free_throws_made` | double | Free throws made. |
-| `free_throws_attempted` | double | Free throw attempts. |
-| `offensive_rebounds` | double | Offensive rebounds. |
-| `defensive_rebounds` | double | Defensive rebounds. |
-| `assists` | double | Total assists. |
-| `steals` | double | Total steals. |
-| `blocks` | double | Total blocks. |
-| `turnovers` | double | Total turnovers. |
-| `points` | double | Points scored. |
-| `player_id` | character | Unique player identifier. |
-| `fga_rim` | double |  |
-| `fga_mid` | double |  |
-| `fga_three` | double |  |
+| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `team_id` | String | Unique team identifier. |
+| `player` | String | Player name. |
+| `position` | String | Listed roster position (G, F, C, etc.). |
+| `minutes` | Float64 | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `field_goals_made` | Float64 | Field goals made (2-pt + 3-pt). |
+| `field_goals_attempted` | Float64 | Field goal attempts (2-pt + 3-pt). |
+| `three_point_field_goals_made` | Float64 | Three-point field goals made. |
+| `three_point_field_goals_attempted` | Float64 | Three-point field goal attempts. |
+| `free_throws_made` | Float64 | Free throws made. |
+| `free_throws_attempted` | Float64 | Free throw attempts. |
+| `offensive_rebounds` | Float64 | Offensive rebounds. |
+| `defensive_rebounds` | Float64 | Defensive rebounds. |
+| `assists` | Float64 | Total assists. |
+| `steals` | Float64 | Total steals. |
+| `blocks` | Float64 | Total blocks. |
+| `turnovers` | Float64 | Total turnovers. |
+| `points` | Float64 | Points scored. |
+| `player_id` | String | Unique player identifier. |
+| `fga_rim` | Float64 |  |
+| `fga_mid` | Float64 |  |
+| `fga_three` | Float64 |  |
 
 **Example**
 
@@ -995,89 +978,89 @@ A `polars.DataFrame` containing only rows with `date < cutoff_date`.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique play identification number |
-| `uid` | character | ESPN UID string. |
-| `attendance` | double | Reported attendance. |
-| `time_valid` | logical | Time valid. |
-| `neutral_site` | logical | Neutral site. |
-| `conference_competition` | logical | Conference competition. |
-| `play_by_play_available` | logical |  |
-| `recent` | logical | Recent. |
-| `start_date` | character | Start date (YYYY-MM-DD). |
-| `notes_type` | character | Notes type. |
-| `notes_headline` | character | Notes headline. |
-| `broadcast_market` | character | Broadcast market label (e.g. 'national', 'home'). |
-| `broadcast_name` | character | Broadcast name. |
-| `type_id` | integer | Type identifier (numeric). |
-| `type_abbreviation` | character | Play type abbreviation |
-| `venue_id` | integer | Unique venue identifier. |
-| `venue_full_name` | character | Venue full name. |
-| `venue_address_city` | character | Venue address city. |
-| `venue_address_state` | character | Venue address state / region. |
-| `venue_indoor` | logical | TRUE if the venue is indoors. |
-| `status_clock` | double | Status clock. |
-| `status_display_clock` | character | Status display clock. |
-| `status_period` | double | Status period. |
-| `status_type_id` | integer | Unique identifier for status type. |
-| `status_type_name` | character | Status type name. |
-| `status_type_state` | character | Status type state. |
-| `status_type_completed` | logical | Status type completed. |
-| `status_type_description` | character | Status type description. |
-| `status_type_detail` | character | Status type detail. |
-| `status_type_short_detail` | character | Status type short detail. |
-| `format_regulation_periods` | double | Format regulation periods. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `home_uid` | character | Home team's uid. |
-| `home_location` | character | Home team's location. |
-| `home_name` | character | Home name. |
-| `home_abbreviation` | character | Home team's abbreviation. |
-| `home_display_name` | character | Home display name. |
-| `home_short_display_name` | character | Home short display name. |
-| `home_color` | character | Color code (hex) for home. |
-| `home_alternate_color` | character | Color code (hex) for home alternate. |
-| `home_is_active` | logical | Home team's is active. |
-| `home_venue_id` | integer | Unique identifier for home venue. |
-| `home_logo` | character | Home team logo URL. |
-| `home_conference_id` | integer | Unique identifier for home conference. |
-| `home_score` | integer | Home team score at the time of the play. |
-| `home_winner` | logical | Home team's winner. |
-| `home_current_rank` | double |  |
-| `home_linescores` | character |  |
-| `home_records` | character |  |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `away_uid` | character | Away team's uid. |
-| `away_location` | character | Away team's location. |
-| `away_name` | character | Away name. |
-| `away_abbreviation` | character | Away team's abbreviation. |
-| `away_display_name` | character | Away display name. |
-| `away_short_display_name` | character | Away short display name. |
-| `away_color` | character | Color code (hex) for away. |
-| `away_alternate_color` | character | Color code (hex) for away alternate. |
-| `away_is_active` | logical | Away team's is active. |
-| `away_venue_id` | integer | Unique identifier for away venue. |
-| `away_logo` | character | Away team logo URL. |
-| `away_conference_id` | integer | Unique identifier for away conference. |
-| `away_score` | integer | Away team score at the time of the play. |
-| `away_winner` | logical | Away team's winner. |
-| `away_current_rank` | double |  |
-| `away_linescores` | character |  |
-| `away_records` | character |  |
-| `game_id` | integer | Unique game identifier. |
-| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `status_type_alt_detail` | character | Status type alt detail. |
-| `tournament_id` | integer | ESPN tournament identifier. |
-| `groups_id` | integer | Unique identifier for groups. |
-| `groups_name` | character | Groups name. |
-| `groups_short_name` | character | Groups short name. |
-| `groups_is_conference` | logical | Groups is conference. |
-| `game_json` | logical |  |
-| `game_json_url` | character |  |
-| `game_date_time` | character | Game start date/time (ISO 8601). |
-| `date` | character | Date in YYYY-MM-DD format. |
-| `PBP` | logical |  |
-| `team_box` | logical | Team box. |
-| `player_box` | logical | Player box. |
+| `id` | Int64 | Unique play identification number |
+| `uid` | String | ESPN UID string. |
+| `attendance` | Float64 | Reported attendance. |
+| `time_valid` | Boolean | Time valid. |
+| `neutral_site` | Boolean | Neutral site. |
+| `conference_competition` | Boolean | Conference competition. |
+| `play_by_play_available` | Boolean |  |
+| `recent` | Boolean | Recent. |
+| `start_date` | String | Start date (YYYY-MM-DD). |
+| `notes_type` | String | Notes type. |
+| `notes_headline` | String | Notes headline. |
+| `broadcast_market` | String | Broadcast market label (e.g. 'national', 'home'). |
+| `broadcast_name` | String | Broadcast name. |
+| `type_id` | Int64 | Type identifier (numeric). |
+| `type_abbreviation` | String | Play type abbreviation |
+| `venue_id` | Int64 | Unique venue identifier. |
+| `venue_full_name` | String | Venue full name. |
+| `venue_address_city` | String | Venue address city. |
+| `venue_address_state` | String | Venue address state / region. |
+| `venue_indoor` | Boolean | TRUE if the venue is indoors. |
+| `status_clock` | Float64 | Status clock. |
+| `status_display_clock` | String | Status display clock. |
+| `status_period` | Float64 | Status period. |
+| `status_type_id` | Int64 | Unique identifier for status type. |
+| `status_type_name` | String | Status type name. |
+| `status_type_state` | String | Status type state. |
+| `status_type_completed` | Boolean | Status type completed. |
+| `status_type_description` | String | Status type description. |
+| `status_type_detail` | String | Status type detail. |
+| `status_type_short_detail` | String | Status type short detail. |
+| `format_regulation_periods` | Float64 | Format regulation periods. |
+| `home_team_id` | Int64 | Unique identifier for the home team. |
+| `home_uid` | String | Home team's uid. |
+| `home_location` | String | Home team's location. |
+| `home_name` | String | Home name. |
+| `home_abbreviation` | String | Home team's abbreviation. |
+| `home_display_name` | String | Home display name. |
+| `home_short_display_name` | String | Home short display name. |
+| `home_color` | String | Color code (hex) for home. |
+| `home_alternate_color` | String | Color code (hex) for home alternate. |
+| `home_is_active` | Boolean | Home team's is active. |
+| `home_venue_id` | Int64 | Unique identifier for home venue. |
+| `home_logo` | String | Home team logo URL. |
+| `home_conference_id` | Int64 | Unique identifier for home conference. |
+| `home_score` | Int64 | Home team score at the time of the play. |
+| `home_winner` | Boolean | Home team's winner. |
+| `home_current_rank` | Float64 |  |
+| `home_linescores` | String |  |
+| `home_records` | String |  |
+| `away_team_id` | Int64 | Unique identifier for the away team. |
+| `away_uid` | String | Away team's uid. |
+| `away_location` | String | Away team's location. |
+| `away_name` | String | Away name. |
+| `away_abbreviation` | String | Away team's abbreviation. |
+| `away_display_name` | String | Away display name. |
+| `away_short_display_name` | String | Away short display name. |
+| `away_color` | String | Color code (hex) for away. |
+| `away_alternate_color` | String | Color code (hex) for away alternate. |
+| `away_is_active` | Boolean | Away team's is active. |
+| `away_venue_id` | Int64 | Unique identifier for away venue. |
+| `away_logo` | String | Away team logo URL. |
+| `away_conference_id` | Int64 | Unique identifier for away conference. |
+| `away_score` | Int64 | Away team score at the time of the play. |
+| `away_winner` | Boolean | Away team's winner. |
+| `away_current_rank` | Float64 |  |
+| `away_linescores` | String |  |
+| `away_records` | String |  |
+| `game_id` | Int64 | Unique game identifier. |
+| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `season_type` | Int64 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `status_type_alt_detail` | String | Status type alt detail. |
+| `tournament_id` | Int64 | ESPN tournament identifier. |
+| `groups_id` | Int64 | Unique identifier for groups. |
+| `groups_name` | String | Groups name. |
+| `groups_short_name` | String | Groups short name. |
+| `groups_is_conference` | Boolean | Groups is conference. |
+| `game_json` | Boolean |  |
+| `game_json_url` | String |  |
+| `game_date_time` | String | Game start date/time (ISO 8601). |
+| `date` | String | Date in YYYY-MM-DD format. |
+| `PBP` | Boolean |  |
+| `team_box` | Boolean | Team box. |
+| `player_box` | Boolean | Player box. |
 
 **Example**
 
@@ -1106,17 +1089,17 @@ The subset with `season < target_season`.
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `team_id` | character | Unique team identifier. |
-| `adj_o` | double | Adj o. |
-| `adj_d` | double | Adj d. |
-| `adj_em` | double | Adj em. |
-| `adj_tempo` | double |  |
-| `raw_o` | double | Raw o. |
-| `raw_d` | double | Raw d. |
-| `games` | integer | Games played. |
-| `rank` | integer | Rank. |
-| `adj_em_z` | double |  |
+| `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `team_id` | String | Unique team identifier. |
+| `adj_o` | Float64 | Adj o. |
+| `adj_d` | Float64 | Adj d. |
+| `adj_em` | Float64 | Adj em. |
+| `adj_tempo` | Float64 |  |
+| `raw_o` | Float64 | Raw o. |
+| `raw_d` | Float64 | Raw d. |
+| `games` | Int64 | Games played. |
+| `rank` | Int64 | Rank. |
+| `adj_em_z` | Float64 |  |
 
 **Example**
 
@@ -1395,15 +1378,14 @@ print(priors["players_weak"][0])
 
 Public port of `RatingUtils.buildProductivity` (`RatingUtils.ts:963-990`).
 
-Promoted to public in Task 2.3 -- see the module docstring's "Ported
-behavior" section for the promotion rationale (Phase-3 RAPM needs to
+Promoted to public -- see the module docstring's "Ported
+behavior" section for the promotion rationale (RAPM needs to
 import this across module boundaries).
 
 Converts `ORtg` and a few other numbers into "productivity" using Dean
 Oliver's PUE ("Player Usage Efficiency") formulation, SoS-adjusted via
-`o_adj = avgEfficiency / Def_SOS`. **RAPM prior source (Phase 3):**
-`Adj_ORtgPlus` is the value RAPM uses as an individual-offense prior --
-see `PLAN-phase2.md`'s self-review notes.
+`o_adj = avgEfficiency / Def_SOS`. **RAPM prior source:**
+`Adj_ORtgPlus` is the value RAPM uses as an individual-offense prior.
 
 **Parameters**
 

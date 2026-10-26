@@ -1,45 +1,10 @@
 ---
-title: "MBB — additional Python functions — Models and calculators: build_priors–ridge_fit"
-sidebar_label: "Models and calculators: build_priors–ridge_fit"
+title: "Men's college basketball — additional Python functions — Models and calculators: build_productivity–score_to"
+sidebar_label: "Models and calculators: build_productivity–score_to"
 sidebar_position: 11
-description: "MBB — additional Python functions — Models and calculators: build_priors–ridge_fit — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Models and calculators: build_productivity–score_to — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Models and calculators: build_priors–ridge_fit
-
-### build_priors {#build_priors}
-
-`build_priors(players_baseline: 'dict[PlayerId, IndivStatSet]', stats_averages: 'PureStatSet', avg_efficiency: 'float', col_to_player: 'list[str]', prior_mode: 'float', value_key: 'ValueKey' = 'value') -> 'RapmPriorInfo'`
-
-Build strong/weak per-player RAPM priors for every column.
-
-Faithful port of `RapmUtils.buildPriors` (`RapmUtils.ts:237-407`).
-See the module docstring's landmine list, item 1, for the critical
-Python-vs-JS `{}`-truthiness gotcha this function's implementation
-deliberately avoids.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `players_baseline` | `dict[PlayerId, IndivStatSet]` |  | `{player_id: IndivStatSet}` -- the most-general per-player baseline info (in production, sourced from `mbb_ratings.build_productivity`'s output; see the module docstring's "RAPM prior source" note). |
-| `stats_averages` | `PureStatSet` |  | League/context average stat set, used by the (currently dead-code, see landmine 4) `get_prior_basis` fallback and by `with_avg_or_undef`'s nil-check gate. |
-| `avg_efficiency` | `float` |  | League/context average efficiency. |
-| `col_to_player` | `list[str]` |  | The player ids, in column order -- `playersStrong`/ `playersWeak` are index-aligned with this list. |
-| `prior_mode` | `float` |  | `-1` for adaptive mode, `-2` (or lower) for no prior, `0`-`1` for a fixed strong-prior weight. |
-| `value_key` | `ValueKey` | `'value'` | `"value"` or `"old_value"` -- allows priors to be built from luck-adjusted parameters. |
-
-**Returns**
-
-A `RapmPriorInfo`.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_rapm import build_priors
-
-priors = build_priors({}, {}, 100.0, ["Wiggins, Aaron"], -1)
-print(priors["players_weak"][0])
-```
+# Men's college basketball — additional Python functions — Models and calculators: build_productivity–score_to
 
 ### build_productivity {#build_productivity}
 
@@ -47,15 +12,14 @@ print(priors["players_weak"][0])
 
 Public port of `RatingUtils.buildProductivity` (`RatingUtils.ts:963-990`).
 
-Promoted to public in Task 2.3 -- see the module docstring's "Ported
-behavior" section for the promotion rationale (Phase-3 RAPM needs to
+Promoted to public -- see the module docstring's "Ported
+behavior" section for the promotion rationale (RAPM needs to
 import this across module boundaries).
 
 Converts `ORtg` and a few other numbers into "productivity" using Dean
 Oliver's PUE ("Player Usage Efficiency") formulation, SoS-adjusted via
-`o_adj = avgEfficiency / Def_SOS`. **RAPM prior source (Phase 3):**
-`Adj_ORtgPlus` is the value RAPM uses as an individual-offense prior --
-see `PLAN-phase2.md`'s self-review notes.
+`o_adj = avgEfficiency / Def_SOS`. **RAPM prior source:**
+`Adj_ORtgPlus` is the value RAPM uses as an individual-offense prior.
 
 **Parameters**
 
@@ -87,8 +51,7 @@ recursive prior" per the upstream `/** For "recursive" prior */` comment.
 `"pickRidgeRegression"` test never calls this function. Ported
 faithfully from TS regardless (per "TS governs"); flagged as a documented
 gap rather than backed by a synthetic test, matching this module's
-existing convention for other upstream-untested branches (e.g. the
-"Task 3.3 coverage gap" note above).
+existing convention for other upstream-untested branches.
 
 **Parameters**
 
@@ -147,8 +110,8 @@ implementation returns values in, the final result only depends on the
 descending convention vs whatever order `svd-js` happens to return.
 
 **`correl_matrix`/`poss_correl_matrix` stay `numpy.ndarray`** (see
-the module docstring's "Task 3.6 notes" for why this doesn't hit the
-Task 3.5 "`ndarray` breaks deep `==`" concern).
+the module docstring for why an `ndarray` here does not break deep `==`
+comparisons).
 
 **Parameters**
 
@@ -197,7 +160,7 @@ this function has a visibly different shape, see the classification map
 in `tests/fixtures/hoop_explorer/README.md`). This port still
 materializes both output vectors as `numpy.ndarray` for consistency
 with `calc_player_weights` at the same dict -> array boundary --
-Task 3.4's ridge-regression solve consumes both as arrays regardless of
+the ridge-regression solve consumes both as arrays regardless of
 the upstream distinction.
 
 **Parameters**
@@ -209,7 +172,7 @@ the upstream distinction.
 | `def_offset` | `float` |  | The D1-average defensive value for `field`. |
 | `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext`, e.g. from `build_player_context`. |
 | `adaptive_correl_weights` | `list[float] \| None` | `None` | Optional per-player adaptive-correlation weights (index-aligned with `ctx["col_to_player"]`), used as the strong-prior blend fallback when `ctx["prior_info"] ["strong_weight"] < 0` -- see `_get_strong_weight`. |
-| `use_old_val_if_possible` | `tuple[bool, bool]` | `(False, False)` | `(use_old_val_for_off, use_old_val_for_def)` -- whether to prefer each lineup/team stat's luck-adjusted `old_value` over its raw `value` when present. This is the luck-adjustment hook Task 3.1's classification map flags as an **inherited coverage gap**: the vendored oracle fixture has `old_value == value` on every field (via `insertOldValues`), so neither jest nor this port's replay test ever observes this flag change the resulting numbers -- only that passing it doesn't crash. See the module docstring's "Task 3.3 coverage gap" note. |
+| `use_old_val_if_possible` | `tuple[bool, bool]` | `(False, False)` | `(use_old_val_for_off, use_old_val_for_def)` -- whether to prefer each lineup/team stat's luck-adjusted `old_value` over its raw `value` when present. This is the luck-adjustment hook, an **inherited coverage gap**: the vendored oracle fixture has `old_value == value` on every field (via `insertOldValues`), so neither jest nor this port's replay test ever observes this flag change the resulting numbers -- only that passing it doesn't crash. See the module docstring's coverage-gap note. |
 
 **Returns**
 
@@ -241,8 +204,7 @@ Build the off/def player-weight (design) matrices for the RAPM solve.
 Faithful port of `RapmUtils.calcPlayerWeights` (`RapmUtils.ts:544-595`).
 One row per (filtered) lineup, one column per remaining player; each
 filled cell is `sqrt(lineup_possessions / total_side_possessions)` --
-the possession-weighted design-matrix entry the ridge regression (Task
-3.4) solves against. This is the first function in the module where a
+the possession-weighted design-matrix entry the ridge regression solves against. This is the first function in the module where a
 `dict`-shaped `RapmPlayerContext` gets materialized into a
 `numpy.ndarray` -- see the module docstring's "dict -> `numpy.ndarray`
 boundary" note.
@@ -315,7 +277,7 @@ dead in this function).
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `player_weight_matrix` | `NDArray[float64]` |  | The off/def design matrix, shape `(num_lineups, num_players)`. |
-| `regressed_players` | `list[float]` |  | The fitted per-player values (e.g. the final, strong-prior-blended RAPM from Task 3.5's `pickRidgeRegression`, or a raw `calculate_rapm` output), length `num_players`. |
+| `regressed_players` | `list[float]` |  | The fitted per-player values (e.g. the final, strong-prior-blended RAPM from the `pickRidgeRegression`, or a raw `calculate_rapm` output), length `num_players`. |
 | `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext` (unused). |
 
 **Returns**
@@ -419,7 +381,7 @@ Per-player RAPM standard errors.
 Faithful port of the inline `sdRapm` computation in
 `RapmUtils.pickRidgeRegression` (`RapmUtils.ts:1373-1390`, not itself
 a named TS function -- promoted to a standalone, independently testable
-helper here since Task 3.4's brief calls out the formula explicitly).
+helper here since the brief calls out the formula explicitly).
 Cites [arXiv:1509.09169](https://arxiv.org/pdf/1509.09169.pdf).
 
 **Two NaN/error regimes (landmines 8-9):**
@@ -486,10 +448,10 @@ A `polars.DataFrame` with columns `bin_mid`, `mean_pred`, `mean_actual`, `n` (on
 
 | col_name | type | description |
 |---|---|---|
-| `bin_mid` | double |  |
-| `mean_pred` | double |  |
-| `mean_actual` | double |  |
-| `n` | integer |  |
+| `bin_mid` | Float64 |  |
+| `mean_pred` | Float64 |  |
+| `mean_actual` | Float64 |  |
+| `n` | Int64 |  |
 
 **Example**
 
@@ -600,11 +562,11 @@ One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- 
 
 | col_name | type | description |
 |---|---|---|
-| `score_diff` | double |  |
-| `sec_left` | double |  |
-| `sqrt_sec_left` | double |  |
-| `pregame_logit` | double |  |
-| `home_has_ball` | integer |  |
+| `score_diff` | Float64 |  |
+| `sec_left` | Float64 |  |
+| `sqrt_sec_left` | Float64 |  |
+| `pregame_logit` | Float64 |  |
+| `home_has_ball` | Int64 |  |
 
 **Example**
 
@@ -828,14 +790,14 @@ One row per (player_id, season, team_id): `player_id:Utf8, player, season, team_
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `player` | character | Player name. |
-| `season` | integer | Season year. |
-| `team_id` | character | Unique team identifier. |
-| `min` | double | Minutes played. |
-| `box_obpm` | double |  |
-| `box_dbpm` | double |  |
-| `box_bpm` | double |  |
+| `player_id` | String | Unique player identifier. |
+| `player` | String | Player name. |
+| `season` | Int64 | Season year. |
+| `team_id` | String | Unique team identifier. |
+| `min` | Float64 | Minutes played. |
+| `box_obpm` | Float64 |  |
+| `box_dbpm` | Float64 |  |
+| `box_bpm` | Float64 |  |
 
 **Example**
 
@@ -916,13 +878,13 @@ One row per qualifying player-season: `player_id:Utf8, player, season, team_id:U
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `player` | character | Player name. |
-| `season` | integer | Season year. |
-| `team_id` | character | Unique team identifier. |
-| `draft_prob` | double |  |
-| `projected_pick` | double |  |
-| `pro_tier` | character |  |
+| `player_id` | String | Unique player identifier. |
+| `player` | String | Player name. |
+| `season` | Int64 | Season year. |
+| `team_id` | String | Unique team identifier. |
+| `draft_prob` | Float64 |  |
+| `projected_pick` | Float64 |  |
+| `pro_tier` | String |  |
 
 **Example**
 
@@ -960,12 +922,12 @@ One row per play: the five feature columns plus `home_win_prob`.
 
 | col_name | type | description |
 |---|---|---|
-| `score_diff` | double |  |
-| `sec_left` | double |  |
-| `sqrt_sec_left` | double |  |
-| `pregame_logit` | double |  |
-| `home_has_ball` | integer |  |
-| `home_win_prob` | double |  |
+| `score_diff` | Float64 |  |
+| `sec_left` | Float64 |  |
+| `sqrt_sec_left` | Float64 |  |
+| `pregame_logit` | Float64 |  |
+| `home_has_ball` | Int64 |  |
+| `home_win_prob` | Float64 |  |
 
 **Raises**
 
@@ -1048,15 +1010,15 @@ One row per recruit: `recruit_id:Utf8, player_id:Utf8 (nullable), player, season
 
 | col_name | type | description |
 |---|---|---|
-| `recruit_id` | character |  |
-| `player_id` | character | Unique player identifier. |
-| `player` | character | Player name. |
-| `season` | integer | Season year. |
-| `team_id` | character | Unique team identifier. |
-| `composite` | double |  |
-| `rank_nat` | integer |  |
-| `exp_box_bpm` | double |  |
-| `resume_residual` | double |  |
+| `recruit_id` | String |  |
+| `player_id` | String | Unique player identifier. |
+| `player` | String | Player name. |
+| `season` | Int64 | Season year. |
+| `team_id` | String | Unique team identifier. |
+| `composite` | Float64 |  |
+| `rank_nat` | Int64 |  |
+| `exp_box_bpm` | Float64 |  |
+| `resume_residual` | Float64 |  |
 
 **Example**
 
@@ -1126,14 +1088,14 @@ One row per shooter: `shooter_id:Utf8, n_shots, make_rate, xmake_mean, oe_pct, o
 
 | col_name | type | description |
 |---|---|---|
-| `shooter_id` | character | Unique identifier for shooter. |
-| `n_shots` | integer |  |
-| `make_rate` | double |  |
-| `xmake_mean` | double |  |
-| `oe_pct` | double |  |
-| `oe_pct_regressed` | double |  |
-| `points_over_expected` | double |  |
-| `poe_per_100` | double |  |
+| `shooter_id` | String | Unique identifier for shooter. |
+| `n_shots` | Int64 |  |
+| `make_rate` | Float64 |  |
+| `xmake_mean` | Float64 |  |
+| `oe_pct` | Float64 |  |
+| `oe_pct_regressed` | Float64 |  |
+| `points_over_expected` | Float64 |  |
+| `poe_per_100` | Float64 |  |
 
 **Example**
 
@@ -1167,22 +1129,22 @@ Score each shot with `xmake` / `xpoints` from the cell table.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `season` | integer | Season year. |
-| `team_id` | character | Unique team identifier. |
-| `shooter_id` | character | Unique identifier for shooter. |
-| `shot_x` | double |  |
-| `shot_y` | double |  |
-| `dist_ft` | double |  |
-| `shot_zone` | character |  |
-| `shot_type` | character | Shot type label (e.g. 'Jump Shot', 'Layup'). |
-| `made` | logical |  |
-| `point_value` | integer |  |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `sec_left` | double |  |
-| `source` | character |  |
-| `xmake` | double |  |
-| `xpoints` | double |  |
+| `game_id` | String | Unique game identifier. |
+| `season` | Int64 | Season year. |
+| `team_id` | String | Unique team identifier. |
+| `shooter_id` | String | Unique identifier for shooter. |
+| `shot_x` | Float64 |  |
+| `shot_y` | Float64 |  |
+| `dist_ft` | Float64 |  |
+| `shot_zone` | String |  |
+| `shot_type` | String | Shot type label (e.g. 'Jump Shot', 'Layup'). |
+| `made` | Boolean |  |
+| `point_value` | Int64 |  |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `sec_left` | Float64 |  |
+| `source` | String |  |
+| `xmake` | Float64 |  |
+| `xpoints` | Float64 |  |
 
 **Example**
 
@@ -1221,13 +1183,13 @@ One row per `(shot_zone, shot_type)`: `shot_zone, shot_type, n, make_rate_raw, m
 
 | col_name | type | description |
 |---|---|---|
-| `shot_zone` | character |  |
-| `shot_type` | character | Shot type label (e.g. 'Jump Shot', 'Layup'). |
-| `n` | integer |  |
-| `make_rate_raw` | double |  |
-| `make_rate_shrunk` | double |  |
-| `point_value` | double |  |
-| `xpoints` | double |  |
+| `shot_zone` | String |  |
+| `shot_type` | String | Shot type label (e.g. 'Jump Shot', 'Layup'). |
+| `n` | Int64 |  |
+| `make_rate_raw` | Float64 |  |
+| `make_rate_shrunk` | Float64 |  |
+| `point_value` | Float64 |  |
+| `xpoints` | Float64 |  |
 
 **Example**
 
@@ -1264,17 +1226,17 @@ One row per (season, team_id) with columns `season, team_id, adj_o, adj_d, adj_e
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season year. |
-| `team_id` | character | Unique team identifier. |
-| `adj_o` | double | Adj o. |
-| `adj_d` | double | Adj d. |
-| `adj_em` | double | Adj em. |
-| `adj_tempo` | double |  |
-| `raw_o` | double | Raw o. |
-| `raw_d` | double | Raw d. |
-| `games` | integer | Games played. |
-| `rank` | integer | Rank. |
-| `adj_em_z` | double |  |
+| `season` | Int64 | Season year. |
+| `team_id` | String | Unique team identifier. |
+| `adj_o` | Float64 | Adj o. |
+| `adj_d` | Float64 | Adj d. |
+| `adj_em` | Float64 | Adj em. |
+| `adj_tempo` | Float64 |  |
+| `raw_o` | Float64 | Raw o. |
+| `raw_d` | Float64 | Raw d. |
+| `games` | Int64 | Games played. |
+| `rank` | Int64 | Rank. |
+| `adj_em_z` | Float64 |  |
 
 **Raises**
 
@@ -1319,14 +1281,14 @@ One row per transfer: `player_id:Utf8, player, from_team_id:Utf8, to_team_id:Utf
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `player` | character | Player name. |
-| `from_team_id` | character | Unique identifier for from team. |
-| `to_team_id` | character | Unique identifier for to team. |
-| `to_season` | integer |  |
-| `pre_box_bpm` | double |  |
-| `proj_box_bpm` | double |  |
-| `proj_delta` | double |  |
+| `player_id` | String | Unique player identifier. |
+| `player` | String | Player name. |
+| `from_team_id` | String | Unique identifier for from team. |
+| `to_team_id` | String | Unique identifier for to team. |
+| `to_season` | Int64 |  |
+| `pre_box_bpm` | Float64 |  |
+| `proj_box_bpm` | Float64 |  |
+| `proj_delta` | Float64 |  |
 
 **Example**
 
@@ -1407,7 +1369,7 @@ addition, not upstream's own shape):** upstream also computes
 behind the same hardcoded-`False` `debugMode` as
 `apply_weak_priors` -- none of the four is ever stored on
 `acc.output` upstream (`RapmProcessingInputs` has no `sdRapm`
-field there either). Since Task 3.4 built
+field there either). Since this module builds
 `calculate_predicted_out`/`calculate_residual_error`/
 `calc_slow_pseudo_inverse`/`calculate_sd_rapm` specifically
 so this task could surface real standard errors, this port keeps
@@ -1471,26 +1433,26 @@ One row per (player_id, season): ids as `Utf8` plus the 17 rate / per-100 featur
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `season` | integer | Season year. |
-| `team_id` | character | Unique team identifier. |
-| `min` | double | Minutes played. |
-| `usage` | double | Usage rate. |
-| `ts_pct` | double | True shooting percentage (0-1). |
-| `efg_pct` | double |  |
-| `ast_pct` | double | Assist percentage. |
-| `tov_pct` | double |  |
-| `oreb_pct` | double |  |
-| `dreb_pct` | double |  |
-| `blk_pct` | double | Blocks percentage (0-1 decimal). |
-| `stl_pct` | double | Steals percentage (0-1 decimal). |
-| `ftr` | double | Free-throw rate (offense). |
-| `rim_share` | double |  |
-| `mid_share` | double |  |
-| `three_share` | double |  |
-| `pts_per100` | double |  |
-| `reb_per100` | double |  |
-| `ast_per100` | double |  |
+| `player_id` | String | Unique player identifier. |
+| `season` | Int64 | Season year. |
+| `team_id` | String | Unique team identifier. |
+| `min` | Float64 | Minutes played. |
+| `usage` | Float64 | Usage rate. |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `efg_pct` | Float64 |  |
+| `ast_pct` | Float64 | Assist percentage. |
+| `tov_pct` | Float64 |  |
+| `oreb_pct` | Float64 |  |
+| `dreb_pct` | Float64 |  |
+| `blk_pct` | Float64 | Blocks percentage (0-1 decimal). |
+| `stl_pct` | Float64 | Steals percentage (0-1 decimal). |
+| `ftr` | Float64 | Free-throw rate (offense). |
+| `rim_share` | Float64 |  |
+| `mid_share` | Float64 |  |
+| `three_share` | Float64 |  |
+| `pts_per100` | Float64 |  |
+| `reb_per100` | Float64 |  |
+| `ast_per100` | Float64 |  |
 
 **Example**
 
@@ -1505,7 +1467,7 @@ feats = player_per100_features(season_stats)
 
 Field-wise add two `PossCalcFragment`\ s
 
-(`PossCalcFragment.sum`, `PossessionUtils.scala:146-153`).
+(`PossCalcFragment.sum`).
 
 The Scala original uses `shapeless.Generic` to zip the two case
 classes' fields and sum pairwise; since every field is a plain `Int`,
@@ -1645,16 +1607,16 @@ One row per (game_id, team_id): `game_id, season, date, team_id, opp_team_id, is
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `season` | integer | Season year. |
-| `date` | character | Date in YYYY-MM-DD format. |
-| `team_id` | character | Unique team identifier. |
-| `opp_team_id` | character |  |
-| `is_home` | logical | Whether the team was home. |
-| `neutral_site` | logical | Neutral site. |
-| `poss` | double | Poss. |
-| `off_eff` | double | Off eff. |
-| `def_eff` | double | Def eff. |
+| `game_id` | String | Unique game identifier. |
+| `season` | Int64 | Season year. |
+| `date` | String | Date in YYYY-MM-DD format. |
+| `team_id` | String | Unique team identifier. |
+| `opp_team_id` | String |  |
+| `is_home` | Boolean | Whether the team was home. |
+| `neutral_site` | Boolean | Neutral site. |
+| `poss` | Float64 | Poss. |
+| `off_eff` | Float64 | Off eff. |
+| `def_eff` | Float64 | Def eff. |
 
 **Raises**
 
@@ -1719,4 +1681,78 @@ Coefficient vector of length `d + 1` (intercept first).
 import numpy as np
 from sportsdataverse.mbb.mbb_player_value_constants import ridge_fit
 beta = ridge_fit(np.random.rand(50, 3), np.random.rand(50), lam=1.0)
+```
+
+### roc_auc {#roc_auc}
+
+`roc_auc(y_true: 'np.ndarray', score: 'np.ndarray') -> 'float'`
+
+Area under the ROC curve via the rank-sum (Mann-Whitney) identity.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | Binary outcomes (0/1). |
+| `score` | `ndarray` |  | Predicted scores (any monotone scale). |
+
+**Returns**
+
+AUC in `[0, 1]`; `nan` when only one class is present.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_player_value_constants import roc_auc
+roc_auc(np.array([0, 1]), np.array([0.2, 0.9]))
+```
+
+### save_artifact {#save_artifact}
+
+`save_artifact(name: 'str', obj: 'dict') -> 'None'`
+
+Write a bundled artifact (dev/fitter use -- writes into the source tree).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `str` |  | Artifact stem, e.g. `"mbb_box_bpm"`. |
+| `obj` | `dict` |  | JSON-serializable artifact payload. |
+
+**Example**
+
+```python
+save_artifact("mbb_box_bpm", {"league": "mens", "coef": [0.1]})
+```
+
+### score_to_tuple {#score_to_tuple}
+
+`score_to_tuple(s: 'str') -> 'tuple[int, int]'`
+
+Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`).
+
+Scala's `str match { case regex(s1, s2) => ... }` on a compiled
+`Regex` requires the ENTIRE string to match (`Regex.unapplySeq` calls
+`Matcher.matches()`, not `find()`) -- ported here as
+`re.fullmatch`, not `re.match`/`re.search`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `s` | `str` |  | The raw score string, e.g. `"55-68"`. |
+
+**Returns**
+
+`(scored, allowed)` as a tuple of ints, or `(0, 0)` if `s` doesn't fully match `([0-9]+)-([0-9]+)`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_models import score_to_tuple
+
+score_to_tuple("55-68")   # (55, 68)
+score_to_tuple("garbage")  # (0, 0)
 ```

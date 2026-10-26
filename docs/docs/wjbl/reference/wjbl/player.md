@@ -1,11 +1,11 @@
 ---
-title: "WJBL — W League API (api.wjbl.01core.app, Japan women) — Player"
+title: "W League (Japan) — W League API (api.wjbl.01core.app, Japan women) — Player"
 sidebar_label: "Player"
 sidebar_position: 2
-description: "WJBL — W League API (api.wjbl.01core.app, Japan women) — Player — function reference in sdv-py, the SportsDataverse Python package."
+description: "W League (Japan) — W League API (api.wjbl.01core.app, Japan women) — Player — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# WJBL — W League API (api.wjbl.01core.app, Japan women) — Player
+# W League (Japan) — W League API (api.wjbl.01core.app, Japan women) — Player
 
 ## wjbl_player_period_leaders
 
@@ -25,23 +25,23 @@ Leading scorer, passer and rebounder of each team per period, half and game (201
 
 | col_name | type | description |
 |---|---|---|
-| `play_schedule_id` | integer | Game id play_schedule_id (key space: W League games, ONE global sequence across every league_id and season, e.g. 4243 = 2013-14 final, 7987 = 2025-26 final). The play_schedule_id parameter of every game route and of the site's /schedule_result/detail/*?play_schedule_id= pages. |
-| `home_team_id` | integer | Home team: Franchise id team_id (key space: W League franchises, STABLE across seasons and sponsor renames: 13 = Toyota Antelopes, 12 = Denso Iris, 8 = ENEOS Sunflowers; all-star sides have their own ids, e.g. 591). The team_id of /team/roster and of the site's /team/roster/?team_id=. Not season_team_id. |
-| `away_team_id` | integer | Away team: Franchise id team_id (key space: W League franchises, STABLE across seasons and sponsor renames: 13 = Toyota Antelopes, 12 = Denso Iris, 8 = ENEOS Sunflowers; all-star sides have their own ids, e.g. 591). The team_id of /team/roster and of the site's /team/roster/?team_id=. Not season_team_id. |
-| `period_category` | integer | The period category again, as an integer (camelCase here, period_category on /pbp/team-stats). |
-| `period_label` | character | Readable period: Q1-Q4 quarters, OT1-OT10 overtimes (period categories 5-14), H1 / H2 halves (15 / 16), OT all overtimes together (17), GAME the whole game (18). |
-| `home_point_player` | character | Home points leader(s) in the period as '#NUMBER NAME' (Japanese); ties are joined with ' , '. |
-| `home_point_value` | character | Their points with the counter 点 ('5点'); ties joined with ' , ' in the same order. |
-| `home_assist_player` | character | Home assist leader(s), '#NUMBER NAME', ties joined with ' , '. |
-| `home_assist_value` | character | Their assists with the counter 本 ('2本'), ' , '-joined for ties. |
-| `home_rebound_player` | character | Home rebound leader(s), '#NUMBER NAME', ties joined with ' , '. |
-| `home_rebound_value` | character | Their rebounds 'offensive-defensive-total' ('0-3-3'), ' , '-joined for ties. |
-| `away_point_player` | character | Away points leader(s) in the period as '#NUMBER NAME' (Japanese); ties are joined with ' , '. |
-| `away_point_value` | character | Their points with the counter 点 ('5点'); ties joined with ' , ' in the same order. |
-| `away_assist_player` | character | Away assist leader(s), '#NUMBER NAME', ties joined with ' , '. |
-| `away_assist_value` | character | Their assists with the counter 本 ('2本'), ' , '-joined for ties. |
-| `away_rebound_player` | character | Away rebound leader(s), '#NUMBER NAME', ties joined with ' , '. |
-| `away_rebound_value` | character | Their rebounds 'offensive-defensive-total' ('0-3-3'), ' , '-joined for ties. |
+| `play_schedule_id` | Int64 | Game id play_schedule_id (key space: W League games, ONE global sequence across every league_id and season, e.g. 4243 = 2013-14 final, 7987 = 2025-26 final). The play_schedule_id parameter of every game route and of the site's /schedule_result/detail/*?play_schedule_id= pages. |
+| `home_team_id` | Int64 | Home team: Franchise id team_id (key space: W League franchises, STABLE across seasons and sponsor renames: 13 = Toyota Antelopes, 12 = Denso Iris, 8 = ENEOS Sunflowers; all-star sides have their own ids, e.g. 591). The team_id of /team/roster and of the site's /team/roster/?team_id=. Not season_team_id. |
+| `away_team_id` | Int64 | Away team: Franchise id team_id (key space: W League franchises, STABLE across seasons and sponsor renames: 13 = Toyota Antelopes, 12 = Denso Iris, 8 = ENEOS Sunflowers; all-star sides have their own ids, e.g. 591). The team_id of /team/roster and of the site's /team/roster/?team_id=. Not season_team_id. |
+| `period_category` | Int64 | The period category again, as an integer (camelCase here, period_category on /pbp/team-stats). |
+| `period_label` | String | Readable period: Q1-Q4 quarters, OT1-OT10 overtimes (period categories 5-14), H1 / H2 halves (15 / 16), OT all overtimes together (17), GAME the whole game (18). |
+| `home_point_player` | String | Home points leader(s) in the period as '#NUMBER NAME' (Japanese); ties are joined with ' , '. |
+| `home_point_value` | String | Their points with the counter 点 ('5点'); ties joined with ' , ' in the same order. |
+| `home_assist_player` | String | Home assist leader(s), '#NUMBER NAME', ties joined with ' , '. |
+| `home_assist_value` | String | Their assists with the counter 本 ('2本'), ' , '-joined for ties. |
+| `home_rebound_player` | String | Home rebound leader(s), '#NUMBER NAME', ties joined with ' , '. |
+| `home_rebound_value` | String | Their rebounds 'offensive-defensive-total' ('0-3-3'), ' , '-joined for ties. |
+| `away_point_player` | String | Away points leader(s) in the period as '#NUMBER NAME' (Japanese); ties are joined with ' , '. |
+| `away_point_value` | String | Their points with the counter 点 ('5点'); ties joined with ' , ' in the same order. |
+| `away_assist_player` | String | Away assist leader(s), '#NUMBER NAME', ties joined with ' , '. |
+| `away_assist_value` | String | Their assists with the counter 本 ('2本'), ' , '-joined for ties. |
+| `away_rebound_player` | String | Away rebound leader(s), '#NUMBER NAME', ties joined with ' , '. |
+| `away_rebound_value` | String | Their rebounds 'offensive-defensive-total' ('0-3-3'), ' , '-joined for ties. |
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON (a bare list as `{'items': [...]}`) plus `_request` (the ids asked for, with `season` the END year).
 
@@ -77,42 +77,42 @@ Player profile: current team, names, bio and career notes, one row.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Player id player_id (key space: W League persons, STABLE across seasons and teams). The player_id of /player and the pi= of the site's /player/detail?pi=; joins the play-by-play player_id1 / player_id2. |
-| `player_name` | character | Name in Japanese, 'SURNAME GIVEN'. |
-| `player_name_en` | character | Name in romaji, uppercase, 'SURNAME GIVEN' ('OKAMOTO MIYUU'). |
-| `player_furigana` | character | Name reading in hiragana ('おかもと みゆう'). |
-| `team_id` | integer | Current (or last) team: Franchise id team_id (key space: W League franchises, STABLE across seasons and sponsor renames: 13 = Toyota Antelopes, 12 = Denso Iris, 8 = ENEOS Sunflowers; all-star sides have their own ids, e.g. 591). The team_id of /team/roster and of the site's /team/roster/?team_id=. Not season_team_id. |
-| `season_team_name` | character | Team name as registered for the season, in Japanese (company + nickname: 'トヨタ自動車 アンテロープス' = Toyota Antelopes). |
-| `season_team_short_name` | character | Short team name for that season, Japanese ('トヨタ自動車' = Toyota). |
-| `season_team_player_number` | character | Shirt number this season, a string. |
-| `team_logo_image` | character | Team logo path, relative to https://www.wjbl.org ('/static/images/base_team/...png' or '/assets/img/team/...png'). |
-| `team_url` | character | Team's own website URL. |
-| `player_birthday` | character | Date of birth 'YYYY/MM/DD' (public player bio). |
-| `player_nickname` | character | Nickname, Japanese. |
-| `player_position` | character | Playing position code ('PG', 'SG', 'SF', 'PF', 'C'). |
-| `player_home_town` | character | Home prefecture, Japanese ('北海道' = Hokkaido). |
-| `player_height` | character | Height with unit, a string ('179cm'). |
-| `player_weight` | character | Weight with unit, a string ('77kg'). |
-| `player_height_cm` | integer | Height in whole centimetres, parsed from player_height ('179cm'). |
-| `player_weight_kg` | integer | Weight in whole kilograms, parsed from player_weight ('77kg'). |
-| `player_affiliation_history` | character | Career path, Japanese, '→'-separated (mini-basketball club → junior high → high school → university → team). |
-| `player_independent_flg` | integer | Retired flag (the site greys the team and hides the number): 1 = retired / no longer registered, 0 = active. |
-| `player_national_team` | character | National-team history, Japanese free text ('ユニバ' = Universiade). |
-| `player_awards` | character | Awards and honours, Japanese free text. |
-| `player_coach_history` | character | Coaching history (for players who became coaches); empty string in the sample. |
-| `player_coach_record` | character | Coaching record; empty string in the sample. |
-| `player_picture` | character | Photo path relative to https://www.wjbl.org. |
-| `player_wjbl_flg` | integer | 1 = a W League player (0 presumably for others; unverified). |
-| `player_rookie` | integer | Rookie (ルーキー icon): 1 = yes, 0 = no. |
-| `player_early_entry` | integer | Early-entry player (アーリーエントリー, a student who joined before graduating): 1 = yes, 0 = no. |
-| `player_foreign_national_flg` | integer | Foreign national (外国籍 icon): 1 = yes, 0 = no. |
-| `player_naturalized_flg` | integer | Naturalised player (帰化 icon): 1 = yes, 0 = no. |
-| `player_appeal` | character | Self-introduction text; empty string in the sample. |
-| `player_championships` | character | Championships text; empty string in the sample. |
-| `player_url` | character | Personal website URL; empty string in the sample. |
-| `player_facebook_url` | character | Facebook URL; empty string in the sample. |
-| `player_twitter_url` | character | X (Twitter) URL; empty string in the sample. |
-| `player_instagram_url` | character | Instagram URL; empty string in the sample. |
+| `player_id` | Int64 | Player id player_id (key space: W League persons, STABLE across seasons and teams). The player_id of /player and the pi= of the site's /player/detail?pi=; joins the play-by-play player_id1 / player_id2. |
+| `player_name` | String | Name in Japanese, 'SURNAME GIVEN'. |
+| `player_name_en` | String | Name in romaji, uppercase, 'SURNAME GIVEN' ('OKAMOTO MIYUU'). |
+| `player_furigana` | String | Name reading in hiragana ('おかもと みゆう'). |
+| `team_id` | Int64 | Current (or last) team: Franchise id team_id (key space: W League franchises, STABLE across seasons and sponsor renames: 13 = Toyota Antelopes, 12 = Denso Iris, 8 = ENEOS Sunflowers; all-star sides have their own ids, e.g. 591). The team_id of /team/roster and of the site's /team/roster/?team_id=. Not season_team_id. |
+| `season_team_name` | String | Team name as registered for the season, in Japanese (company + nickname: 'トヨタ自動車 アンテロープス' = Toyota Antelopes). |
+| `season_team_short_name` | String | Short team name for that season, Japanese ('トヨタ自動車' = Toyota). |
+| `season_team_player_number` | String | Shirt number this season, a string. |
+| `team_logo_image` | String | Team logo path, relative to https://www.wjbl.org ('/static/images/base_team/...png' or '/assets/img/team/...png'). |
+| `team_url` | String | Team's own website URL. |
+| `player_birthday` | String | Date of birth 'YYYY/MM/DD' (public player bio). |
+| `player_nickname` | String | Nickname, Japanese. |
+| `player_position` | String | Playing position code ('PG', 'SG', 'SF', 'PF', 'C'). |
+| `player_home_town` | String | Home prefecture, Japanese ('北海道' = Hokkaido). |
+| `player_height` | String | Height with unit, a string ('179cm'). |
+| `player_weight` | String | Weight with unit, a string ('77kg'). |
+| `player_height_cm` | Int64 | Height in whole centimetres, parsed from player_height ('179cm'). |
+| `player_weight_kg` | Int64 | Weight in whole kilograms, parsed from player_weight ('77kg'). |
+| `player_affiliation_history` | String | Career path, Japanese, '→'-separated (mini-basketball club → junior high → high school → university → team). |
+| `player_independent_flg` | Int64 | Retired flag (the site greys the team and hides the number): 1 = retired / no longer registered, 0 = active. |
+| `player_national_team` | String | National-team history, Japanese free text ('ユニバ' = Universiade). |
+| `player_awards` | String | Awards and honours, Japanese free text. |
+| `player_coach_history` | String | Coaching history (for players who became coaches); empty string in the sample. |
+| `player_coach_record` | String | Coaching record; empty string in the sample. |
+| `player_picture` | String | Photo path relative to https://www.wjbl.org. |
+| `player_wjbl_flg` | Int64 | 1 = a W League player (0 presumably for others; unverified). |
+| `player_rookie` | Int64 | Rookie (ルーキー icon): 1 = yes, 0 = no. |
+| `player_early_entry` | Int64 | Early-entry player (アーリーエントリー, a student who joined before graduating): 1 = yes, 0 = no. |
+| `player_foreign_national_flg` | Int64 | Foreign national (外国籍 icon): 1 = yes, 0 = no. |
+| `player_naturalized_flg` | Int64 | Naturalised player (帰化 icon): 1 = yes, 0 = no. |
+| `player_appeal` | String | Self-introduction text; empty string in the sample. |
+| `player_championships` | String | Championships text; empty string in the sample. |
+| `player_url` | String | Personal website URL; empty string in the sample. |
+| `player_facebook_url` | String | Facebook URL; empty string in the sample. |
+| `player_twitter_url` | String | X (Twitter) URL; empty string in the sample. |
+| `player_instagram_url` | String | Instagram URL; empty string in the sample. |
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON (a bare list as `{'items': [...]}`) plus `_request` (the ids asked for, with `season` the END year).
 

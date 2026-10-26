@@ -140,8 +140,7 @@ Ported behavior (``LuckUtils.ts`` anchors):
   ``off_to``/``off_2p``/``off_ft`` override deltas are additionally folded
   into ``deltaOffEfg``/``deltaOffPpp``.
 - :func:`calc_off_player_luck_adj` -- **public** port of
-  ``calcOffPlayerLuckAdj`` (``LuckUtils.ts:174-187``). Per Task 2.1's
-  surprise #4, this is a **literal 1-player-team delegation** to
+  ``calcOffPlayerLuckAdj`` (``LuckUtils.ts:174-187``). Per the surprise #4, this is a **literal 1-player-team delegation** to
   :func:`calc_off_team_luck_adj` (``calc_off_team_luck_adj(sample_player,
   [sample_player], base_player, {base_player["key"]: base_player},
   avg_eff)``) -- confirmed by the jest test's own assertion
@@ -900,8 +899,7 @@ def calc_off_team_luck_adj(
         # NOTE: the TS `if (playerInfo) {...} else {return []}` else-branch
         # is unreachable dead code -- `playerInfo` is unconditionally an
         # object from the ternary above, so the "player not in this lineup"
-        # branch never fires. Not ported (same style as Task 2.1's
-        # `samplePlayerNeedingOverride` dead-code finding).
+        # branch never fires. Not ported (same style as the # `samplePlayerNeedingOverride` dead-code finding).
         var_total_3pa += player_info["shot_info_total_3p"]
 
         manual_3p_over = manual_3p_pct.get(player["key"])
@@ -1016,7 +1014,7 @@ def calc_off_player_luck_adj(
     """Offensive 3P-luck adjustment for a single player.
 
     Faithful port of ``LuckUtils.calcOffPlayerLuckAdj`` (``LuckUtils.ts:174-187``).
-    Per Task 2.1's surprise #4, this is a literal 1-player-team delegation
+    Per the surprise #4, this is a literal 1-player-team delegation
     to :func:`calc_off_team_luck_adj` -- ORB effects are ignored for an
     individual player (the upstream comment: "the team calc basically
     works fine here, apart from ORBs, which we'll ignore").

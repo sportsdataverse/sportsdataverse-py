@@ -9,7 +9,7 @@ toc_max_heading_level: 2
 
 ## nba_stats_draftcombinedrillresults
 
-GET /stats/draftcombinedrillresults
+Draft combine drill results.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/draftcombinedrillresults`
 
@@ -26,18 +26,18 @@ GET /stats/draftcombinedrillresults
 
 | col_name | type | description |
 |---|---|---|
-| `temp_player_id` | integer | Temporary combine player identifier assigned by the NBA before a permanent player id exists. |
-| `player_id` | integer | Unique player identifier. |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
-| `player_name` | character | Player name. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `standing_vertical_leap` | numeric | Standing (no-step) vertical leap, in inches. |
-| `max_vertical_leap` | numeric | Maximum (running) vertical leap, in inches. |
-| `lane_agility_time` | numeric | Lane agility drill time, in seconds. |
-| `modified_lane_agility_time` | numeric | Modified (shuttle) lane agility drill time, in seconds. |
-| `three_quarter_sprint` | numeric | Three-quarter-court sprint time, in seconds. |
-| `bench_press` | character | Repetitions of 185 pounds completed on the bench press. |
+| `temp_player_id` | Int64 | Temporary combine player identifier assigned by the NBA before a permanent player id exists. |
+| `player_id` | Int64 | Unique player identifier. |
+| `first_name` | String | Player's first name. |
+| `last_name` | String | Player's last name. |
+| `player_name` | String | Player name. |
+| `position` | String | Listed roster position (G, F, C, etc.). |
+| `standing_vertical_leap` | Float64 | Standing (no-step) vertical leap, in inches. |
+| `max_vertical_leap` | Float64 | Maximum (running) vertical leap, in inches. |
+| `lane_agility_time` | Float64 | Lane agility drill time, in seconds. |
+| `modified_lane_agility_time` | Float64 | Modified (shuttle) lane agility drill time, in seconds. |
+| `three_quarter_sprint` | Float64 | Three-quarter-court sprint time, in seconds. |
+| `bench_press` | String | Repetitions of 185 pounds completed on the bench press. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -58,7 +58,7 @@ nba_stats_draftcombinedrillresults(league_id='00', season_year='2024-25')
 
 ## nba_stats_draftcombinenonstationaryshooting
 
-GET /stats/draftcombinenonstationaryshooting
+Draft combine non stationary shooting.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/draftcombinenonstationaryshooting`
 
@@ -75,36 +75,36 @@ GET /stats/draftcombinenonstationaryshooting
 
 | col_name | type | description |
 |---|---|---|
-| `temp_player_id` | integer | Temporary combine player identifier assigned by the NBA before a permanent player id exists. |
-| `player_id` | integer | Unique player identifier. |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
-| `player_name` | character | Player name. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `off_drib_fifteen_break_left_made` | character | Shots made from the 15-foot left wing (break) spot in the off-the-dribble shooting drill at the combine. |
-| `off_drib_fifteen_break_left_attempt` | character | Shots attempted from the 15-foot left wing (break) spot in the off-the-dribble shooting drill at the combine. |
-| `off_drib_fifteen_break_left_pct` | character | Shooting percentage from the 15-foot left wing (break) spot in the off-the-dribble shooting drill, as a decimal. |
-| `off_drib_fifteen_top_key_made` | character | Shots made from the 15-foot top of the key spot in the off-the-dribble shooting drill at the combine. |
-| `off_drib_fifteen_top_key_attempt` | character | Shots attempted from the 15-foot top of the key spot in the off-the-dribble shooting drill at the combine. |
-| `off_drib_fifteen_top_key_pct` | character | Shooting percentage from the 15-foot top of the key spot in the off-the-dribble shooting drill, as a decimal. |
-| `off_drib_fifteen_break_right_made` | character | Shots made from the 15-foot right wing (break) spot in the off-the-dribble shooting drill at the combine. |
-| `off_drib_fifteen_break_right_attempt` | character | Shots attempted from the 15-foot right wing (break) spot in the off-the-dribble shooting drill at the combine. |
-| `off_drib_fifteen_break_right_pct` | character | Shooting percentage from the 15-foot right wing (break) spot in the off-the-dribble shooting drill, as a decimal. |
-| `off_drib_college_break_left_made` | integer | Shots made from the college three-point left wing (break) spot in the off-the-dribble shooting drill at the combine. |
-| `off_drib_college_break_left_attempt` | integer | Shots attempted from the college three-point left wing (break) spot in the off-the-dribble shooting drill at the combine. |
-| `off_drib_college_break_left_pct` | numeric | Shooting percentage from the college three-point left wing (break) spot in the off-the-dribble shooting drill, as a decimal. |
-| `off_drib_college_top_key_made` | character | Shots made from the college three-point top of the key spot in the off-the-dribble shooting drill at the combine. |
-| `off_drib_college_top_key_attempt` | character | Shots attempted from the college three-point top of the key spot in the off-the-dribble shooting drill at the combine. |
-| `off_drib_college_top_key_pct` | character | Shooting percentage from the college three-point top of the key spot in the off-the-dribble shooting drill, as a decimal. |
-| `off_drib_college_break_right_made` | character | Shots made from the college three-point right wing (break) spot in the off-the-dribble shooting drill at the combine. |
-| `off_drib_college_break_right_attempt` | character | Shots attempted from the college three-point right wing (break) spot in the off-the-dribble shooting drill at the combine. |
-| `off_drib_college_break_right_pct` | character | Shooting percentage from the college three-point right wing (break) spot in the off-the-dribble shooting drill, as a decimal. |
-| `on_move_fifteen_made` | character | Shots made from the 15-foot spot in the shooting-on-the-move drill at the combine. |
-| `on_move_fifteen_attempt` | character | Shots attempted from the 15-foot spot in the shooting-on-the-move drill at the combine. |
-| `on_move_fifteen_pct` | character | Shooting percentage from the 15-foot spot in the shooting-on-the-move drill, as a decimal. |
-| `on_move_college_made` | integer | Shots made from the college three-point spot in the shooting-on-the-move drill at the combine. |
-| `on_move_college_attempt` | integer | Shots attempted from the college three-point spot in the shooting-on-the-move drill at the combine. |
-| `on_move_college_pct` | numeric | Shooting percentage from the college three-point spot in the shooting-on-the-move drill, as a decimal. |
+| `temp_player_id` | Int64 | Temporary combine player identifier assigned by the NBA before a permanent player id exists. |
+| `player_id` | Int64 | Unique player identifier. |
+| `first_name` | String | Player's first name. |
+| `last_name` | String | Player's last name. |
+| `player_name` | String | Player name. |
+| `position` | String | Listed roster position (G, F, C, etc.). |
+| `off_drib_fifteen_break_left_made` | String | Shots made from the 15-foot left wing (break) spot in the off-the-dribble shooting drill at the combine. |
+| `off_drib_fifteen_break_left_attempt` | String | Shots attempted from the 15-foot left wing (break) spot in the off-the-dribble shooting drill at the combine. |
+| `off_drib_fifteen_break_left_pct` | String | Shooting percentage from the 15-foot left wing (break) spot in the off-the-dribble shooting drill, as a decimal. |
+| `off_drib_fifteen_top_key_made` | String | Shots made from the 15-foot top of the key spot in the off-the-dribble shooting drill at the combine. |
+| `off_drib_fifteen_top_key_attempt` | String | Shots attempted from the 15-foot top of the key spot in the off-the-dribble shooting drill at the combine. |
+| `off_drib_fifteen_top_key_pct` | String | Shooting percentage from the 15-foot top of the key spot in the off-the-dribble shooting drill, as a decimal. |
+| `off_drib_fifteen_break_right_made` | String | Shots made from the 15-foot right wing (break) spot in the off-the-dribble shooting drill at the combine. |
+| `off_drib_fifteen_break_right_attempt` | String | Shots attempted from the 15-foot right wing (break) spot in the off-the-dribble shooting drill at the combine. |
+| `off_drib_fifteen_break_right_pct` | String | Shooting percentage from the 15-foot right wing (break) spot in the off-the-dribble shooting drill, as a decimal. |
+| `off_drib_college_break_left_made` | Int64 | Shots made from the college three-point left wing (break) spot in the off-the-dribble shooting drill at the combine. |
+| `off_drib_college_break_left_attempt` | Int64 | Shots attempted from the college three-point left wing (break) spot in the off-the-dribble shooting drill at the combine. |
+| `off_drib_college_break_left_pct` | Float64 | Shooting percentage from the college three-point left wing (break) spot in the off-the-dribble shooting drill, as a decimal. |
+| `off_drib_college_top_key_made` | String | Shots made from the college three-point top of the key spot in the off-the-dribble shooting drill at the combine. |
+| `off_drib_college_top_key_attempt` | String | Shots attempted from the college three-point top of the key spot in the off-the-dribble shooting drill at the combine. |
+| `off_drib_college_top_key_pct` | String | Shooting percentage from the college three-point top of the key spot in the off-the-dribble shooting drill, as a decimal. |
+| `off_drib_college_break_right_made` | String | Shots made from the college three-point right wing (break) spot in the off-the-dribble shooting drill at the combine. |
+| `off_drib_college_break_right_attempt` | String | Shots attempted from the college three-point right wing (break) spot in the off-the-dribble shooting drill at the combine. |
+| `off_drib_college_break_right_pct` | String | Shooting percentage from the college three-point right wing (break) spot in the off-the-dribble shooting drill, as a decimal. |
+| `on_move_fifteen_made` | String | Shots made from the 15-foot spot in the shooting-on-the-move drill at the combine. |
+| `on_move_fifteen_attempt` | String | Shots attempted from the 15-foot spot in the shooting-on-the-move drill at the combine. |
+| `on_move_fifteen_pct` | String | Shooting percentage from the 15-foot spot in the shooting-on-the-move drill, as a decimal. |
+| `on_move_college_made` | Int64 | Shots made from the college three-point spot in the shooting-on-the-move drill at the combine. |
+| `on_move_college_attempt` | Int64 | Shots attempted from the college three-point spot in the shooting-on-the-move drill at the combine. |
+| `on_move_college_pct` | Float64 | Shooting percentage from the college three-point spot in the shooting-on-the-move drill, as a decimal. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -125,7 +125,7 @@ nba_stats_draftcombinenonstationaryshooting(league_id='00', season_year='2024-25
 
 ## nba_stats_draftcombineplayeranthro
 
-GET /stats/draftcombineplayeranthro
+Draft combine player anthro.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/draftcombineplayeranthro`
 
@@ -142,24 +142,24 @@ GET /stats/draftcombineplayeranthro
 
 | col_name | type | description |
 |---|---|---|
-| `temp_player_id` | integer | Temporary combine player identifier assigned by the NBA before a permanent player id exists. |
-| `player_id` | integer | Unique player identifier. |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
-| `player_name` | character | Player name. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `height_wo_shoes` | numeric | Height measured without shoes, in inches. |
-| `height_wo_shoes_ft_in` | character | Height without shoes formatted as feet and inches. |
-| `height_w_shoes` | character | Height measured with shoes, in inches. |
-| `height_w_shoes_ft_in` | character | Height with shoes formatted as feet and inches. |
-| `weight` | character | Player weight in pounds. |
-| `wingspan` | numeric | Wingspan measured at the combine, in inches. |
-| `wingspan_ft_in` | character | Wingspan formatted as feet and inches. |
-| `standing_reach` | numeric | Standing reach measured at the combine, in inches. |
-| `standing_reach_ft_in` | character | Standing reach formatted as feet and inches. |
-| `body_fat_pct` | character | Body fat percentage measured at the combine. |
-| `hand_length` | numeric | Hand length measured at the combine, in inches. |
-| `hand_width` | numeric | Hand width measured at the combine, in inches. |
+| `temp_player_id` | Int64 | Temporary combine player identifier assigned by the NBA before a permanent player id exists. |
+| `player_id` | Int64 | Unique player identifier. |
+| `first_name` | String | Player's first name. |
+| `last_name` | String | Player's last name. |
+| `player_name` | String | Player name. |
+| `position` | String | Listed roster position (G, F, C, etc.). |
+| `height_wo_shoes` | Float64 | Height measured without shoes, in inches. |
+| `height_wo_shoes_ft_in` | String | Height without shoes formatted as feet and inches. |
+| `height_w_shoes` | String | Height measured with shoes, in inches. |
+| `height_w_shoes_ft_in` | String | Height with shoes formatted as feet and inches. |
+| `weight` | String | Player weight in pounds. |
+| `wingspan` | Float64 | Wingspan measured at the combine, in inches. |
+| `wingspan_ft_in` | String | Wingspan formatted as feet and inches. |
+| `standing_reach` | Float64 | Standing reach measured at the combine, in inches. |
+| `standing_reach_ft_in` | String | Standing reach formatted as feet and inches. |
+| `body_fat_pct` | String | Body fat percentage measured at the combine. |
+| `hand_length` | Float64 | Hand length measured at the combine, in inches. |
+| `hand_width` | Float64 | Hand width measured at the combine, in inches. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -180,7 +180,7 @@ nba_stats_draftcombineplayeranthro(league_id='00', season_year='2024-25')
 
 ## nba_stats_draftcombinespotshooting
 
-GET /stats/draftcombinespotshooting
+Draft combine spot shooting.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/draftcombinespotshooting`
 
@@ -197,57 +197,57 @@ GET /stats/draftcombinespotshooting
 
 | col_name | type | description |
 |---|---|---|
-| `temp_player_id` | integer | Temporary combine player identifier assigned by the NBA before a permanent player id exists. |
-| `player_id` | integer | Unique player identifier. |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
-| `player_name` | character | Player name. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `fifteen_corner_left_made` | character | Shots made from the 15-foot left corner spot in the stationary spot-up shooting drill at the combine. |
-| `fifteen_corner_left_attempt` | character | Shots attempted from the 15-foot left corner spot in the stationary spot-up shooting drill at the combine. |
-| `fifteen_corner_left_pct` | character | Shooting percentage from the 15-foot left corner spot in the stationary spot-up shooting drill, as a decimal. |
-| `fifteen_break_left_made` | character | Shots made from the 15-foot left wing (break) spot in the stationary spot-up shooting drill at the combine. |
-| `fifteen_break_left_attempt` | character | Shots attempted from the 15-foot left wing (break) spot in the stationary spot-up shooting drill at the combine. |
-| `fifteen_break_left_pct` | character | Shooting percentage from the 15-foot left wing (break) spot in the stationary spot-up shooting drill, as a decimal. |
-| `fifteen_top_key_made` | character | Shots made from the 15-foot top of the key spot in the stationary spot-up shooting drill at the combine. |
-| `fifteen_top_key_attempt` | character | Shots attempted from the 15-foot top of the key spot in the stationary spot-up shooting drill at the combine. |
-| `fifteen_top_key_pct` | character | Shooting percentage from the 15-foot top of the key spot in the stationary spot-up shooting drill, as a decimal. |
-| `fifteen_break_right_made` | character | Shots made from the 15-foot right wing (break) spot in the stationary spot-up shooting drill at the combine. |
-| `fifteen_break_right_attempt` | character | Shots attempted from the 15-foot right wing (break) spot in the stationary spot-up shooting drill at the combine. |
-| `fifteen_break_right_pct` | character | Shooting percentage from the 15-foot right wing (break) spot in the stationary spot-up shooting drill, as a decimal. |
-| `fifteen_corner_right_made` | character | Shots made from the 15-foot right corner spot in the stationary spot-up shooting drill at the combine. |
-| `fifteen_corner_right_attempt` | character | Shots attempted from the 15-foot right corner spot in the stationary spot-up shooting drill at the combine. |
-| `fifteen_corner_right_pct` | character | Shooting percentage from the 15-foot right corner spot in the stationary spot-up shooting drill, as a decimal. |
-| `college_corner_left_made` | integer | Shots made from the college three-point left corner spot in the stationary spot-up shooting drill at the combine. |
-| `college_corner_left_attempt` | integer | Shots attempted from the college three-point left corner spot in the stationary spot-up shooting drill at the combine. |
-| `college_corner_left_pct` | numeric | Shooting percentage from the college three-point left corner spot in the stationary spot-up shooting drill, as a decimal. |
-| `college_break_left_made` | character | Shots made from the college three-point left wing (break) spot in the stationary spot-up shooting drill at the combine. |
-| `college_break_left_attempt` | character | Shots attempted from the college three-point left wing (break) spot in the stationary spot-up shooting drill at the combine. |
-| `college_break_left_pct` | character | Shooting percentage from the college three-point left wing (break) spot in the stationary spot-up shooting drill, as a decimal. |
-| `college_top_key_made` | character | Shots made from the college three-point top of the key spot in the stationary spot-up shooting drill at the combine. |
-| `college_top_key_attempt` | character | Shots attempted from the college three-point top of the key spot in the stationary spot-up shooting drill at the combine. |
-| `college_top_key_pct` | character | Shooting percentage from the college three-point top of the key spot in the stationary spot-up shooting drill, as a decimal. |
-| `college_break_right_made` | character | Shots made from the college three-point right wing (break) spot in the stationary spot-up shooting drill at the combine. |
-| `college_break_right_attempt` | character | Shots attempted from the college three-point right wing (break) spot in the stationary spot-up shooting drill at the combine. |
-| `college_break_right_pct` | character | Shooting percentage from the college three-point right wing (break) spot in the stationary spot-up shooting drill, as a decimal. |
-| `college_corner_right_made` | character | Shots made from the college three-point right corner spot in the stationary spot-up shooting drill at the combine. |
-| `college_corner_right_attempt` | character | Shots attempted from the college three-point right corner spot in the stationary spot-up shooting drill at the combine. |
-| `college_corner_right_pct` | character | Shooting percentage from the college three-point right corner spot in the stationary spot-up shooting drill, as a decimal. |
-| `nba_corner_left_made` | character | Shots made from the NBA three-point left corner spot in the stationary spot-up shooting drill at the combine. |
-| `nba_corner_left_attempt` | character | Shots attempted from the NBA three-point left corner spot in the stationary spot-up shooting drill at the combine. |
-| `nba_corner_left_pct` | character | Shooting percentage from the NBA three-point left corner spot in the stationary spot-up shooting drill, as a decimal. |
-| `nba_break_left_made` | character | Shots made from the NBA three-point left wing (break) spot in the stationary spot-up shooting drill at the combine. |
-| `nba_break_left_attempt` | character | Shots attempted from the NBA three-point left wing (break) spot in the stationary spot-up shooting drill at the combine. |
-| `nba_break_left_pct` | character | Shooting percentage from the NBA three-point left wing (break) spot in the stationary spot-up shooting drill, as a decimal. |
-| `nba_top_key_made` | character | Shots made from the NBA three-point top of the key spot in the stationary spot-up shooting drill at the combine. |
-| `nba_top_key_attempt` | character | Shots attempted from the NBA three-point top of the key spot in the stationary spot-up shooting drill at the combine. |
-| `nba_top_key_pct` | character | Shooting percentage from the NBA three-point top of the key spot in the stationary spot-up shooting drill, as a decimal. |
-| `nba_break_right_made` | character | Shots made from the NBA three-point right wing (break) spot in the stationary spot-up shooting drill at the combine. |
-| `nba_break_right_attempt` | character | Shots attempted from the NBA three-point right wing (break) spot in the stationary spot-up shooting drill at the combine. |
-| `nba_break_right_pct` | character | Shooting percentage from the NBA three-point right wing (break) spot in the stationary spot-up shooting drill, as a decimal. |
-| `nba_corner_right_made` | character | Shots made from the NBA three-point right corner spot in the stationary spot-up shooting drill at the combine. |
-| `nba_corner_right_attempt` | character | Shots attempted from the NBA three-point right corner spot in the stationary spot-up shooting drill at the combine. |
-| `nba_corner_right_pct` | character | Shooting percentage from the NBA three-point right corner spot in the stationary spot-up shooting drill, as a decimal. |
+| `temp_player_id` | Int64 | Temporary combine player identifier assigned by the NBA before a permanent player id exists. |
+| `player_id` | Int64 | Unique player identifier. |
+| `first_name` | String | Player's first name. |
+| `last_name` | String | Player's last name. |
+| `player_name` | String | Player name. |
+| `position` | String | Listed roster position (G, F, C, etc.). |
+| `fifteen_corner_left_made` | String | Shots made from the 15-foot left corner spot in the stationary spot-up shooting drill at the combine. |
+| `fifteen_corner_left_attempt` | String | Shots attempted from the 15-foot left corner spot in the stationary spot-up shooting drill at the combine. |
+| `fifteen_corner_left_pct` | String | Shooting percentage from the 15-foot left corner spot in the stationary spot-up shooting drill, as a decimal. |
+| `fifteen_break_left_made` | String | Shots made from the 15-foot left wing (break) spot in the stationary spot-up shooting drill at the combine. |
+| `fifteen_break_left_attempt` | String | Shots attempted from the 15-foot left wing (break) spot in the stationary spot-up shooting drill at the combine. |
+| `fifteen_break_left_pct` | String | Shooting percentage from the 15-foot left wing (break) spot in the stationary spot-up shooting drill, as a decimal. |
+| `fifteen_top_key_made` | String | Shots made from the 15-foot top of the key spot in the stationary spot-up shooting drill at the combine. |
+| `fifteen_top_key_attempt` | String | Shots attempted from the 15-foot top of the key spot in the stationary spot-up shooting drill at the combine. |
+| `fifteen_top_key_pct` | String | Shooting percentage from the 15-foot top of the key spot in the stationary spot-up shooting drill, as a decimal. |
+| `fifteen_break_right_made` | String | Shots made from the 15-foot right wing (break) spot in the stationary spot-up shooting drill at the combine. |
+| `fifteen_break_right_attempt` | String | Shots attempted from the 15-foot right wing (break) spot in the stationary spot-up shooting drill at the combine. |
+| `fifteen_break_right_pct` | String | Shooting percentage from the 15-foot right wing (break) spot in the stationary spot-up shooting drill, as a decimal. |
+| `fifteen_corner_right_made` | String | Shots made from the 15-foot right corner spot in the stationary spot-up shooting drill at the combine. |
+| `fifteen_corner_right_attempt` | String | Shots attempted from the 15-foot right corner spot in the stationary spot-up shooting drill at the combine. |
+| `fifteen_corner_right_pct` | String | Shooting percentage from the 15-foot right corner spot in the stationary spot-up shooting drill, as a decimal. |
+| `college_corner_left_made` | Int64 | Shots made from the college three-point left corner spot in the stationary spot-up shooting drill at the combine. |
+| `college_corner_left_attempt` | Int64 | Shots attempted from the college three-point left corner spot in the stationary spot-up shooting drill at the combine. |
+| `college_corner_left_pct` | Float64 | Shooting percentage from the college three-point left corner spot in the stationary spot-up shooting drill, as a decimal. |
+| `college_break_left_made` | String | Shots made from the college three-point left wing (break) spot in the stationary spot-up shooting drill at the combine. |
+| `college_break_left_attempt` | String | Shots attempted from the college three-point left wing (break) spot in the stationary spot-up shooting drill at the combine. |
+| `college_break_left_pct` | String | Shooting percentage from the college three-point left wing (break) spot in the stationary spot-up shooting drill, as a decimal. |
+| `college_top_key_made` | String | Shots made from the college three-point top of the key spot in the stationary spot-up shooting drill at the combine. |
+| `college_top_key_attempt` | String | Shots attempted from the college three-point top of the key spot in the stationary spot-up shooting drill at the combine. |
+| `college_top_key_pct` | String | Shooting percentage from the college three-point top of the key spot in the stationary spot-up shooting drill, as a decimal. |
+| `college_break_right_made` | String | Shots made from the college three-point right wing (break) spot in the stationary spot-up shooting drill at the combine. |
+| `college_break_right_attempt` | String | Shots attempted from the college three-point right wing (break) spot in the stationary spot-up shooting drill at the combine. |
+| `college_break_right_pct` | String | Shooting percentage from the college three-point right wing (break) spot in the stationary spot-up shooting drill, as a decimal. |
+| `college_corner_right_made` | String | Shots made from the college three-point right corner spot in the stationary spot-up shooting drill at the combine. |
+| `college_corner_right_attempt` | String | Shots attempted from the college three-point right corner spot in the stationary spot-up shooting drill at the combine. |
+| `college_corner_right_pct` | String | Shooting percentage from the college three-point right corner spot in the stationary spot-up shooting drill, as a decimal. |
+| `nba_corner_left_made` | String | Shots made from the NBA three-point left corner spot in the stationary spot-up shooting drill at the combine. |
+| `nba_corner_left_attempt` | String | Shots attempted from the NBA three-point left corner spot in the stationary spot-up shooting drill at the combine. |
+| `nba_corner_left_pct` | String | Shooting percentage from the NBA three-point left corner spot in the stationary spot-up shooting drill, as a decimal. |
+| `nba_break_left_made` | String | Shots made from the NBA three-point left wing (break) spot in the stationary spot-up shooting drill at the combine. |
+| `nba_break_left_attempt` | String | Shots attempted from the NBA three-point left wing (break) spot in the stationary spot-up shooting drill at the combine. |
+| `nba_break_left_pct` | String | Shooting percentage from the NBA three-point left wing (break) spot in the stationary spot-up shooting drill, as a decimal. |
+| `nba_top_key_made` | String | Shots made from the NBA three-point top of the key spot in the stationary spot-up shooting drill at the combine. |
+| `nba_top_key_attempt` | String | Shots attempted from the NBA three-point top of the key spot in the stationary spot-up shooting drill at the combine. |
+| `nba_top_key_pct` | String | Shooting percentage from the NBA three-point top of the key spot in the stationary spot-up shooting drill, as a decimal. |
+| `nba_break_right_made` | String | Shots made from the NBA three-point right wing (break) spot in the stationary spot-up shooting drill at the combine. |
+| `nba_break_right_attempt` | String | Shots attempted from the NBA three-point right wing (break) spot in the stationary spot-up shooting drill at the combine. |
+| `nba_break_right_pct` | String | Shooting percentage from the NBA three-point right wing (break) spot in the stationary spot-up shooting drill, as a decimal. |
+| `nba_corner_right_made` | String | Shots made from the NBA three-point right corner spot in the stationary spot-up shooting drill at the combine. |
+| `nba_corner_right_attempt` | String | Shots attempted from the NBA three-point right corner spot in the stationary spot-up shooting drill at the combine. |
+| `nba_corner_right_pct` | String | Shooting percentage from the NBA three-point right corner spot in the stationary spot-up shooting drill, as a decimal. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -268,7 +268,7 @@ nba_stats_draftcombinespotshooting(league_id='00', season_year='2024-25')
 
 ## nba_stats_draftcombinestats
 
-GET /stats/draftcombinestats
+Draft combine stats.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/draftcombinestats`
 
@@ -285,53 +285,53 @@ GET /stats/draftcombinestats
 
 | col_name | type | description |
 |---|---|---|
-| `season` | character | Season year. |
-| `player_id` | integer | Unique player identifier. |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
-| `player_name` | character | Player name. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `height_wo_shoes` | numeric | Height measured without shoes, in inches. |
-| `height_wo_shoes_ft_in` | character | Height without shoes formatted as feet and inches. |
-| `height_w_shoes` | character | Height measured with shoes, in inches. |
-| `height_w_shoes_ft_in` | character | Height with shoes formatted as feet and inches. |
-| `weight` | character | Player weight in pounds. |
-| `wingspan` | numeric | Wingspan measured at the combine, in inches. |
-| `wingspan_ft_in` | character | Wingspan formatted as feet and inches. |
-| `standing_reach` | numeric | Standing reach measured at the combine, in inches. |
-| `standing_reach_ft_in` | character | Standing reach formatted as feet and inches. |
-| `body_fat_pct` | character | Body fat percentage measured at the combine. |
-| `hand_length` | numeric | Hand length measured at the combine, in inches. |
-| `hand_width` | numeric | Hand width measured at the combine, in inches. |
-| `standing_vertical_leap` | numeric | Standing (no-step) vertical leap, in inches. |
-| `max_vertical_leap` | numeric | Maximum (running) vertical leap, in inches. |
-| `lane_agility_time` | numeric | Lane agility drill time, in seconds. |
-| `modified_lane_agility_time` | numeric | Modified (shuttle) lane agility drill time, in seconds. |
-| `three_quarter_sprint` | numeric | Three-quarter-court sprint time, in seconds. |
-| `bench_press` | character | Repetitions of 185 pounds completed on the bench press. |
-| `spot_fifteen_corner_left` | character | Made-attempted result (e.g. "3-5") from the 15-foot left corner spot-up shooting station at the combine. |
-| `spot_fifteen_break_left` | character | Made-attempted result (e.g. "3-5") from the 15-foot left wing (break) spot-up shooting station at the combine. |
-| `spot_fifteen_top_key` | character | Made-attempted result (e.g. "3-5") from the 15-foot top of the key spot-up shooting station at the combine. |
-| `spot_fifteen_break_right` | character | Made-attempted result (e.g. "3-5") from the 15-foot right wing (break) spot-up shooting station at the combine. |
-| `spot_fifteen_corner_right` | character | Made-attempted result (e.g. "3-5") from the 15-foot right corner spot-up shooting station at the combine. |
-| `spot_college_corner_left` | character | Made-attempted result (e.g. "3-5") from the college three-point left corner spot-up shooting station at the combine. |
-| `spot_college_break_left` | character | Made-attempted result (e.g. "3-5") from the college three-point left wing (break) spot-up shooting station at the combine. |
-| `spot_college_top_key` | character | Made-attempted result (e.g. "3-5") from the college three-point top of the key spot-up shooting station at the combine. |
-| `spot_college_break_right` | character | Made-attempted result (e.g. "3-5") from the college three-point right wing (break) spot-up shooting station at the combine. |
-| `spot_college_corner_right` | character | Made-attempted result (e.g. "3-5") from the college three-point right corner spot-up shooting station at the combine. |
-| `spot_nba_corner_left` | character | Made-attempted result (e.g. "3-5") from the NBA three-point left corner spot-up shooting station at the combine. |
-| `spot_nba_break_left` | character | Made-attempted result (e.g. "3-5") from the NBA three-point left wing (break) spot-up shooting station at the combine. |
-| `spot_nba_top_key` | character | Made-attempted result (e.g. "3-5") from the NBA three-point top of the key spot-up shooting station at the combine. |
-| `spot_nba_break_right` | character | Made-attempted result (e.g. "3-5") from the NBA three-point right wing (break) spot-up shooting station at the combine. |
-| `spot_nba_corner_right` | character | Made-attempted result (e.g. "3-5") from the NBA three-point right corner spot-up shooting station at the combine. |
-| `off_drib_fifteen_break_left` | character | Made-attempted result from the 15-foot left wing (break) off-the-dribble shooting station at the combine. |
-| `off_drib_fifteen_top_key` | character | Made-attempted result from the 15-foot top of the key off-the-dribble shooting station at the combine. |
-| `off_drib_fifteen_break_right` | character | Made-attempted result from the 15-foot right wing (break) off-the-dribble shooting station at the combine. |
-| `off_drib_college_break_left` | character | Made-attempted result from the college three-point left wing (break) off-the-dribble shooting station at the combine. |
-| `off_drib_college_top_key` | character | Made-attempted result from the college three-point top of the key off-the-dribble shooting station at the combine. |
-| `off_drib_college_break_right` | character | Made-attempted result from the college three-point right wing (break) off-the-dribble shooting station at the combine. |
-| `on_move_fifteen` | character | Made-attempted result from the 15-foot shooting-on-the-move station at the combine. |
-| `on_move_college` | character | Made-attempted result from the college three-point shooting-on-the-move station at the combine. |
+| `season` | String | Season year. |
+| `player_id` | Int64 | Unique player identifier. |
+| `first_name` | String | Player's first name. |
+| `last_name` | String | Player's last name. |
+| `player_name` | String | Player name. |
+| `position` | String | Listed roster position (G, F, C, etc.). |
+| `height_wo_shoes` | Float64 | Height measured without shoes, in inches. |
+| `height_wo_shoes_ft_in` | String | Height without shoes formatted as feet and inches. |
+| `height_w_shoes` | String | Height measured with shoes, in inches. |
+| `height_w_shoes_ft_in` | String | Height with shoes formatted as feet and inches. |
+| `weight` | String | Player weight in pounds. |
+| `wingspan` | Float64 | Wingspan measured at the combine, in inches. |
+| `wingspan_ft_in` | String | Wingspan formatted as feet and inches. |
+| `standing_reach` | Float64 | Standing reach measured at the combine, in inches. |
+| `standing_reach_ft_in` | String | Standing reach formatted as feet and inches. |
+| `body_fat_pct` | String | Body fat percentage measured at the combine. |
+| `hand_length` | Float64 | Hand length measured at the combine, in inches. |
+| `hand_width` | Float64 | Hand width measured at the combine, in inches. |
+| `standing_vertical_leap` | Float64 | Standing (no-step) vertical leap, in inches. |
+| `max_vertical_leap` | Float64 | Maximum (running) vertical leap, in inches. |
+| `lane_agility_time` | Float64 | Lane agility drill time, in seconds. |
+| `modified_lane_agility_time` | Float64 | Modified (shuttle) lane agility drill time, in seconds. |
+| `three_quarter_sprint` | Float64 | Three-quarter-court sprint time, in seconds. |
+| `bench_press` | String | Repetitions of 185 pounds completed on the bench press. |
+| `spot_fifteen_corner_left` | String | Made-attempted result (e.g. "3-5") from the 15-foot left corner spot-up shooting station at the combine. |
+| `spot_fifteen_break_left` | String | Made-attempted result (e.g. "3-5") from the 15-foot left wing (break) spot-up shooting station at the combine. |
+| `spot_fifteen_top_key` | String | Made-attempted result (e.g. "3-5") from the 15-foot top of the key spot-up shooting station at the combine. |
+| `spot_fifteen_break_right` | String | Made-attempted result (e.g. "3-5") from the 15-foot right wing (break) spot-up shooting station at the combine. |
+| `spot_fifteen_corner_right` | String | Made-attempted result (e.g. "3-5") from the 15-foot right corner spot-up shooting station at the combine. |
+| `spot_college_corner_left` | String | Made-attempted result (e.g. "3-5") from the college three-point left corner spot-up shooting station at the combine. |
+| `spot_college_break_left` | String | Made-attempted result (e.g. "3-5") from the college three-point left wing (break) spot-up shooting station at the combine. |
+| `spot_college_top_key` | String | Made-attempted result (e.g. "3-5") from the college three-point top of the key spot-up shooting station at the combine. |
+| `spot_college_break_right` | String | Made-attempted result (e.g. "3-5") from the college three-point right wing (break) spot-up shooting station at the combine. |
+| `spot_college_corner_right` | String | Made-attempted result (e.g. "3-5") from the college three-point right corner spot-up shooting station at the combine. |
+| `spot_nba_corner_left` | String | Made-attempted result (e.g. "3-5") from the NBA three-point left corner spot-up shooting station at the combine. |
+| `spot_nba_break_left` | String | Made-attempted result (e.g. "3-5") from the NBA three-point left wing (break) spot-up shooting station at the combine. |
+| `spot_nba_top_key` | String | Made-attempted result (e.g. "3-5") from the NBA three-point top of the key spot-up shooting station at the combine. |
+| `spot_nba_break_right` | String | Made-attempted result (e.g. "3-5") from the NBA three-point right wing (break) spot-up shooting station at the combine. |
+| `spot_nba_corner_right` | String | Made-attempted result (e.g. "3-5") from the NBA three-point right corner spot-up shooting station at the combine. |
+| `off_drib_fifteen_break_left` | String | Made-attempted result from the 15-foot left wing (break) off-the-dribble shooting station at the combine. |
+| `off_drib_fifteen_top_key` | String | Made-attempted result from the 15-foot top of the key off-the-dribble shooting station at the combine. |
+| `off_drib_fifteen_break_right` | String | Made-attempted result from the 15-foot right wing (break) off-the-dribble shooting station at the combine. |
+| `off_drib_college_break_left` | String | Made-attempted result from the college three-point left wing (break) off-the-dribble shooting station at the combine. |
+| `off_drib_college_top_key` | String | Made-attempted result from the college three-point top of the key off-the-dribble shooting station at the combine. |
+| `off_drib_college_break_right` | String | Made-attempted result from the college three-point right wing (break) off-the-dribble shooting station at the combine. |
+| `on_move_fifteen` | String | Made-attempted result from the 15-foot shooting-on-the-move station at the combine. |
+| `on_move_college` | String | Made-attempted result from the college three-point shooting-on-the-move station at the combine. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

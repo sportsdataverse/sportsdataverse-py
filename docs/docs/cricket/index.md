@@ -1,9 +1,9 @@
 ---
-title: CRICKET
-sidebar_label: CRICKET
-description: "sdv-py CRICKET: endpoint references, dataset loaders and parsers for CRICKET in the SportsDataverse Python package."
+title: Cricket
+sidebar_label: Cricket
+description: "sdv-py Cricket: endpoint references, dataset loaders and parsers for Cricket in the SportsDataverse Python package."
 ---
-# CRICKET (`sportsdataverse.cricket`)
+# Cricket (`sportsdataverse.cricket`)
 
 ## Data sources
 

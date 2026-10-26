@@ -28,12 +28,27 @@ def test_patch_between_markers_names_the_missing_marker():
 
 def test_table_lists_every_documented_league_with_its_providers():
     body = generate.render_intro_sources_table({p: [] for p in generate._doc_leagues()})
-    assert body.startswith("| League | Module | Data sources |")
+    assert body.startswith("| Sport | League | Module | Data sources |")
     for prefix in ("nfl", "nba", "pwhl", "soccer", "fox", "cbs", "yahoo"):
         assert (
             f"`{generate._home_module(prefix)}`" in body
         )  # the league's home, nested or not (providers.fox, basketball.dbl)
     assert "ESPN" in body and "nflverse data releases" in body
+
+
+def test_table_follows_the_sidebar_order_and_names_an_espn_only_leagues_apis():
+    """Rows run sport by sport, headline leagues before groups, as the sidebar and leagues.json do: PWHL sits
+    with the NHL, EuroLeague with the other international leagues."""
+    text = (generate.DOCS / "intro.md").read_text(encoding="utf-8")  # the committed table (current, per the test below)
+    body = text[text.index(BEGIN) + len(BEGIN) : text.index(END)].strip()
+    rows = body.splitlines()[2:]
+    prefixes = [line.split("](", 1)[1].split("/)", 1)[0] for line in rows]
+    assert prefixes == [p for _, p, _ in generate._sidebar_order() if p in prefixes]
+    assert prefixes.index("pwhl") < prefixes.index("ahl") < prefixes.index("sihf")
+    assert prefixes.index("euroleague") + 1 == prefixes.index("fiba_hub")
+    nbl = next(line for line in rows if "](nbl/)" in line)
+    assert nbl.startswith("| Basketball (International (ESPN)) |")
+    assert "ESPN (112): site API (v2) 24" in nbl
 
 
 @pytest.mark.xdist_group("codegen_render")

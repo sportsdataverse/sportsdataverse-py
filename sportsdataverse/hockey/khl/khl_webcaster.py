@@ -451,7 +451,7 @@ def khl_webcaster_stages(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
     """
     if locale not in ("en", "ru"):
         raise ValueError(f"locale must be one of ('en', 'ru'); got {locale!r}")
@@ -512,7 +512,7 @@ def khl_webcaster_event(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
     """
     if locale not in ("en", "ru"):
         raise ValueError(f"locale must be one of ('en', 'ru'); got {locale!r}")
@@ -586,7 +586,7 @@ def khl_webcaster_events(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -660,7 +660,7 @@ def khl_webcaster_leaders(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -732,7 +732,7 @@ def khl_webcaster_players(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -797,7 +797,7 @@ def khl_webcaster_players_light(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
     """
     if locale not in ("en", "ru"):
         raise ValueError(f"locale must be one of ('en', 'ru'); got {locale!r}")
@@ -856,7 +856,7 @@ def khl_webcaster_tables(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
     """
     if locale not in ("en", "ru"):
         raise ValueError(f"locale must be one of ('en', 'ru'); got {locale!r}")
@@ -923,7 +923,7 @@ def khl_webcaster_team(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -994,7 +994,7 @@ def khl_webcaster_teams(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")

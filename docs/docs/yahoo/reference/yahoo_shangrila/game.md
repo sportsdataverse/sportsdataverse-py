@@ -1,11 +1,11 @@
 ---
-title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Game"
+title: "Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Game"
 sidebar_label: "Game"
 sidebar_position: 3
-description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Game — function reference in sdv-py, the SportsDataverse Python package."
+description: "Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Game — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Game
+# Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Game
 
 ## yahoo_game_prop_bets
 
@@ -25,20 +25,20 @@ Yahoo shangrila persisted query `gamePropBets` -> one row per `games` entry
 
 | col_name | type | description |
 |---|---|---|
-| `alias_path` | character | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
-| `alias_lang` | character | Language/locale tag attached to the entity's Yahoo alias (e.g., "en-US"). |
-| `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
-| `alias_domain` | character | Host the entity's Yahoo alias resolves against (e.g., "sports.yahoo.com"). |
-| `game_id` | character |  |
-| `status` | character |  |
-| `away_team_team_id` | character | Yahoo composite team id of the away team (e.g., "ncaaf.t.29"). |
-| `away_team_primary_color` | character | Primary brand color of the away team, as a hex RGB string without the leading hash. |
-| `away_team_display_name` | character |  |
-| `home_team_team_id` | character | Yahoo composite team id of the home team (e.g., "ncaaf.t.29"). |
-| `home_team_primary_color` | character | Primary brand color of the home team, as a hex RGB string without the leading hash. |
-| `home_team_display_name` | character |  |
-| `active_prop_bets` | character | JSON-encoded list of the prop-bet markets currently open for the game. |
-| `game_props` | character | JSON-encoded list of player and game prop markets offered on the game. |
+| `alias_path` | String | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
+| `alias_lang` | String | Language/locale tag attached to the entity's Yahoo alias (e.g., "en-US"). |
+| `alias_url` | String | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
+| `alias_domain` | String | Host the entity's Yahoo alias resolves against (e.g., "sports.yahoo.com"). |
+| `game_id` | String |  |
+| `status` | String |  |
+| `away_team_team_id` | String | Yahoo composite team id of the away team (e.g., "ncaaf.t.29"). |
+| `away_team_primary_color` | String | Primary brand color of the away team, as a hex RGB string without the leading hash. |
+| `away_team_display_name` | String |  |
+| `home_team_team_id` | String | Yahoo composite team id of the home team (e.g., "ncaaf.t.29"). |
+| `home_team_primary_color` | String | Primary brand color of the home team, as a hex RGB string without the leading hash. |
+| `home_team_display_name` | String |  |
+| `active_prop_bets` | String | JSON-encoded list of the prop-bet markets currently open for the game. |
+| `game_props` | String | JSON-encoded list of player and game prop markets offered on the game. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -232,74 +232,74 @@ Yahoo shangrila persisted query `gameStatsLeaders` -> one row per `games` entry
 
 | col_name | type | description |
 |---|---|---|
-| `status` | character |  |
-| `league_full_name` | character | Full league name (e.g., "NCAA Football"). |
-| `league_football_team_season_stats0` | character | JSON-encoded league-wide team season-stat leader board occupying slot 0 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `league_football_team_season_stats1` | character | JSON-encoded league-wide team season-stat leader board occupying slot 1 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `league_football_team_season_stats2` | character | JSON-encoded league-wide team season-stat leader board occupying slot 2 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `league_football_team_season_stats3` | character | JSON-encoded league-wide team season-stat leader board occupying slot 3 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `league_football_team_season_stats4` | character | JSON-encoded league-wide team season-stat leader board occupying slot 4 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `league_football_team_season_stats5` | character | JSON-encoded league-wide team season-stat leader board occupying slot 5 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `league_football_team_season_stats6` | character | JSON-encoded league-wide team season-stat leader board occupying slot 6 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `league_football_team_season_stats7` | character | JSON-encoded league-wide team season-stat leader board occupying slot 7 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `league_football_team_season_stats8` | character | JSON-encoded league-wide team season-stat leader board occupying slot 8 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `league_football_team_season_stats9` | character | JSON-encoded league-wide team season-stat leader board occupying slot 9 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `league_football_team_season_stats10` | character | JSON-encoded league-wide team season-stat leader board occupying slot 10 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `league_football_team_season_stats11` | character | JSON-encoded league-wide team season-stat leader board occupying slot 11 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `game_leader_stats0` | character | JSON-encoded in-game statistical leader board occupying slot 0 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `game_leader_stats1` | character | JSON-encoded in-game statistical leader board occupying slot 1 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `game_leader_stats2` | character | JSON-encoded in-game statistical leader board occupying slot 2 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `game_leader_stats3` | character | JSON-encoded in-game statistical leader board occupying slot 3 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `away_team_game_stats0_stats` | character | JSON-encoded away-team game-stat block occupying slot 0 of that team's game-stats list; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `away_team_game_stats1_stats` | character | JSON-encoded away-team game-stat block occupying slot 1 of that team's game-stats list; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `home_team_game_stats0_stats` | character | JSON-encoded home-team game-stat block occupying slot 0 of that team's game-stats list; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `home_team_game_stats1_stats` | character | JSON-encoded home-team game-stat block occupying slot 1 of that team's game-stats list; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `home_team_lineup` | character | JSON-encoded starting lineup fielded by the home team. |
-| `away_team_lineup` | character | JSON-encoded starting lineup fielded by the away team. |
-| `away_team_id` | character |  |
-| `away_team_full_name` | character |  |
-| `away_team_team_id` | character | Yahoo composite team id of the away team (e.g., "ncaaf.t.29"). |
-| `away_team_primary_color` | character | Primary brand color of the away team, as a hex RGB string without the leading hash. |
-| `away_team_secondary_color` | character | Secondary brand color of the away team, as a hex RGB string without the leading hash. |
-| `away_team_display_name` | character |  |
-| `away_team_abbreviation` | character |  |
-| `away_team_team_logo_white` | character | JSON-encoded image node for the away team's white knockout logo, used on dark backgrounds. |
-| `away_team_team_logo` | character | JSON-encoded image node for the away team's standard logo. |
-| `away_team_league` | character | JSON-encoded league node identifying the league the away team plays in. |
-| `away_team_season_leader_stats0` | character | JSON-encoded away-team season leader board occupying slot 0 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `away_team_season_leader_stats1` | character | JSON-encoded away-team season leader board occupying slot 1 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `away_team_season_leader_stats2` | character | JSON-encoded away-team season leader board occupying slot 2 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `away_team_season_leader_stats3` | character | JSON-encoded away-team season leader board occupying slot 3 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `away_team_player_season_stats0` | character | JSON-encoded away-team player season-stat block occupying slot 0 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `away_team_player_season_stats1` | character | JSON-encoded away-team player season-stat block occupying slot 1 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `away_team_player_season_stats2` | character | JSON-encoded away-team player season-stat block occupying slot 2 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `away_team_player_season_stats3` | character | JSON-encoded away-team player season-stat block occupying slot 3 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `away_team_player_season_stats4` | character | JSON-encoded away-team player season-stat block occupying slot 4 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `away_team_player_season_stats5` | character | JSON-encoded away-team player season-stat block occupying slot 5 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `away_team_player_season_stats6` | character | JSON-encoded away-team player season-stat block occupying slot 6 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `away_team_player_season_stats7` | character | JSON-encoded away-team player season-stat block occupying slot 7 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `home_team_id` | character |  |
-| `home_team_full_name` | character |  |
-| `home_team_team_id` | character | Yahoo composite team id of the home team (e.g., "ncaaf.t.29"). |
-| `home_team_primary_color` | character | Primary brand color of the home team, as a hex RGB string without the leading hash. |
-| `home_team_secondary_color` | character | Secondary brand color of the home team, as a hex RGB string without the leading hash. |
-| `home_team_display_name` | character |  |
-| `home_team_abbreviation` | character |  |
-| `home_team_team_logo_white` | character | JSON-encoded image node for the home team's white knockout logo, used on dark backgrounds. |
-| `home_team_team_logo` | character | JSON-encoded image node for the home team's standard logo. |
-| `home_team_league` | character | JSON-encoded league node identifying the league the home team plays in. |
-| `home_team_season_leader_stats0` | character | JSON-encoded home-team season leader board occupying slot 0 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `home_team_season_leader_stats1` | character | JSON-encoded home-team season leader board occupying slot 1 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `home_team_season_leader_stats2` | character | JSON-encoded home-team season leader board occupying slot 2 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `home_team_season_leader_stats3` | character | JSON-encoded home-team season leader board occupying slot 3 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `home_team_player_season_stats0` | character | JSON-encoded home-team player season-stat block occupying slot 0 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `home_team_player_season_stats1` | character | JSON-encoded home-team player season-stat block occupying slot 1 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `home_team_player_season_stats2` | character | JSON-encoded home-team player season-stat block occupying slot 2 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `home_team_player_season_stats3` | character | JSON-encoded home-team player season-stat block occupying slot 3 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `home_team_player_season_stats4` | character | JSON-encoded home-team player season-stat block occupying slot 4 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `home_team_player_season_stats5` | character | JSON-encoded home-team player season-stat block occupying slot 5 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `home_team_player_season_stats6` | character | JSON-encoded home-team player season-stat block occupying slot 6 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `home_team_player_season_stats7` | character | JSON-encoded home-team player season-stat block occupying slot 7 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `status` | String |  |
+| `league_full_name` | String | Full league name (e.g., "NCAA Football"). |
+| `league_football_team_season_stats0` | String | JSON-encoded league-wide team season-stat leader board occupying slot 0 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `league_football_team_season_stats1` | String | JSON-encoded league-wide team season-stat leader board occupying slot 1 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `league_football_team_season_stats2` | String | JSON-encoded league-wide team season-stat leader board occupying slot 2 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `league_football_team_season_stats3` | String | JSON-encoded league-wide team season-stat leader board occupying slot 3 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `league_football_team_season_stats4` | String | JSON-encoded league-wide team season-stat leader board occupying slot 4 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `league_football_team_season_stats5` | String | JSON-encoded league-wide team season-stat leader board occupying slot 5 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `league_football_team_season_stats6` | String | JSON-encoded league-wide team season-stat leader board occupying slot 6 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `league_football_team_season_stats7` | String | JSON-encoded league-wide team season-stat leader board occupying slot 7 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `league_football_team_season_stats8` | String | JSON-encoded league-wide team season-stat leader board occupying slot 8 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `league_football_team_season_stats9` | String | JSON-encoded league-wide team season-stat leader board occupying slot 9 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `league_football_team_season_stats10` | String | JSON-encoded league-wide team season-stat leader board occupying slot 10 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `league_football_team_season_stats11` | String | JSON-encoded league-wide team season-stat leader board occupying slot 11 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `game_leader_stats0` | String | JSON-encoded in-game statistical leader board occupying slot 0 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `game_leader_stats1` | String | JSON-encoded in-game statistical leader board occupying slot 1 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `game_leader_stats2` | String | JSON-encoded in-game statistical leader board occupying slot 2 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `game_leader_stats3` | String | JSON-encoded in-game statistical leader board occupying slot 3 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `away_team_game_stats0_stats` | String | JSON-encoded away-team game-stat block occupying slot 0 of that team's game-stats list; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `away_team_game_stats1_stats` | String | JSON-encoded away-team game-stat block occupying slot 1 of that team's game-stats list; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `home_team_game_stats0_stats` | String | JSON-encoded home-team game-stat block occupying slot 0 of that team's game-stats list; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `home_team_game_stats1_stats` | String | JSON-encoded home-team game-stat block occupying slot 1 of that team's game-stats list; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `home_team_lineup` | String | JSON-encoded starting lineup fielded by the home team. |
+| `away_team_lineup` | String | JSON-encoded starting lineup fielded by the away team. |
+| `away_team_id` | String |  |
+| `away_team_full_name` | String |  |
+| `away_team_team_id` | String | Yahoo composite team id of the away team (e.g., "ncaaf.t.29"). |
+| `away_team_primary_color` | String | Primary brand color of the away team, as a hex RGB string without the leading hash. |
+| `away_team_secondary_color` | String | Secondary brand color of the away team, as a hex RGB string without the leading hash. |
+| `away_team_display_name` | String |  |
+| `away_team_abbreviation` | String |  |
+| `away_team_team_logo_white` | String | JSON-encoded image node for the away team's white knockout logo, used on dark backgrounds. |
+| `away_team_team_logo` | String | JSON-encoded image node for the away team's standard logo. |
+| `away_team_league` | String | JSON-encoded league node identifying the league the away team plays in. |
+| `away_team_season_leader_stats0` | String | JSON-encoded away-team season leader board occupying slot 0 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `away_team_season_leader_stats1` | String | JSON-encoded away-team season leader board occupying slot 1 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `away_team_season_leader_stats2` | String | JSON-encoded away-team season leader board occupying slot 2 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `away_team_season_leader_stats3` | String | JSON-encoded away-team season leader board occupying slot 3 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `away_team_player_season_stats0` | String | JSON-encoded away-team player season-stat block occupying slot 0 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `away_team_player_season_stats1` | String | JSON-encoded away-team player season-stat block occupying slot 1 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `away_team_player_season_stats2` | String | JSON-encoded away-team player season-stat block occupying slot 2 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `away_team_player_season_stats3` | String | JSON-encoded away-team player season-stat block occupying slot 3 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `away_team_player_season_stats4` | String | JSON-encoded away-team player season-stat block occupying slot 4 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `away_team_player_season_stats5` | String | JSON-encoded away-team player season-stat block occupying slot 5 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `away_team_player_season_stats6` | String | JSON-encoded away-team player season-stat block occupying slot 6 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `away_team_player_season_stats7` | String | JSON-encoded away-team player season-stat block occupying slot 7 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `home_team_id` | String |  |
+| `home_team_full_name` | String |  |
+| `home_team_team_id` | String | Yahoo composite team id of the home team (e.g., "ncaaf.t.29"). |
+| `home_team_primary_color` | String | Primary brand color of the home team, as a hex RGB string without the leading hash. |
+| `home_team_secondary_color` | String | Secondary brand color of the home team, as a hex RGB string without the leading hash. |
+| `home_team_display_name` | String |  |
+| `home_team_abbreviation` | String |  |
+| `home_team_team_logo_white` | String | JSON-encoded image node for the home team's white knockout logo, used on dark backgrounds. |
+| `home_team_team_logo` | String | JSON-encoded image node for the home team's standard logo. |
+| `home_team_league` | String | JSON-encoded league node identifying the league the home team plays in. |
+| `home_team_season_leader_stats0` | String | JSON-encoded home-team season leader board occupying slot 0 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `home_team_season_leader_stats1` | String | JSON-encoded home-team season leader board occupying slot 1 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `home_team_season_leader_stats2` | String | JSON-encoded home-team season leader board occupying slot 2 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `home_team_season_leader_stats3` | String | JSON-encoded home-team season leader board occupying slot 3 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `home_team_player_season_stats0` | String | JSON-encoded home-team player season-stat block occupying slot 0 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `home_team_player_season_stats1` | String | JSON-encoded home-team player season-stat block occupying slot 1 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `home_team_player_season_stats2` | String | JSON-encoded home-team player season-stat block occupying slot 2 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `home_team_player_season_stats3` | String | JSON-encoded home-team player season-stat block occupying slot 3 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `home_team_player_season_stats4` | String | JSON-encoded home-team player season-stat block occupying slot 4 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `home_team_player_season_stats5` | String | JSON-encoded home-team player season-stat block occupying slot 5 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `home_team_player_season_stats6` | String | JSON-encoded home-team player season-stat block occupying slot 6 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
+| `home_team_player_season_stats7` | String | JSON-encoded home-team player season-stat block occupying slot 7 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

@@ -63,15 +63,13 @@ does not apply here.
 
 **Tuple overload (Task 5e.3 addition).** ``ParseTeamSubIn``/``ParseTeamSubOut``
 also carry a ``(Option[String], Option[String])``-tuple overload in the
-Scala source (``EventUtils.scala:39-42,53-56``), matched directly against a
-raw ``(team, opponent)`` pair during play-by-play *construction*. Task 5a.2's
-original docstring guessed this was consumed by
+Scala source, matched directly against a
+raw ``(team, opponent)`` pair during play-by-play *construction*. the original docstring guessed this was consumed by
 ``ExtractorUtils.build_partial_lineup_list`` and deferred it to "Phase 5b" --
 that guess was wrong: ``build_partial_lineup_list`` (ported in Task 5b, see
 ``mbb_ncaa_stints.py``) already receives fully-constructed ``SubInEvent``/
 ``SubOutEvent`` objects, never raw ``(team, opponent)`` string pairs. The
-actual (and only) consumer is ``PlayByPlayParser.parse_game_event``
-(``PlayByPlayParser.scala:414-456``), ported in Task 5e.3 --
+actual (and only) consumer is ``PlayByPlayParser.parse_game_event``, ported --
 :func:`parse_team_sub_in_pair`/:func:`parse_team_sub_out_pair` below.
 
 Apache-2.0 third-party port — see the ``NOTICE`` file at the repository root for the upstream copyright and full attribution.
@@ -149,8 +147,7 @@ __all__ = [
 
 
 def is_gen2(ev: RawGameEvent) -> bool:
-    """Detect the new/"gen2" NCAA event format (``EventUtils.is_gen2``,
-    ``EventUtils.scala:12-14``).
+    """Detect the new/"gen2" NCAA event format (``EventUtils.is_gen2``).
 
     Args:
         ev: The raw game event to inspect.
@@ -171,7 +168,7 @@ _TIME_REGEX = re.compile(r"([0-9]+):([0-9]+)(?:[:]([0-9]+))?")
 
 def parse_game_time(x: str) -> Optional[float]:
     """Parse the game-clock time from a raw event's leading field
-    (``ParseGameTime``, ``EventUtils.scala:19-28``).
+    (``ParseGameTime``).
 
     Args:
         x: The raw ``"HH:MM"`` or ``"HH:MM:SS"`` time field.
@@ -196,8 +193,7 @@ _SUB_REGEX_IN_NEW_FORMAT = re.compile(r"(.+), +substitution in")
 
 
 def parse_team_sub_in(x: str) -> Optional[str]:
-    """Team (not opponent) substitution in (``ParseTeamSubIn``,
-    ``EventUtils.scala:36-48``, string overload).
+    """Team (not opponent) substitution in (``ParseTeamSubIn``, string overload).
 
     Args:
         x: The raw event string.
@@ -221,8 +217,7 @@ _SUB_REGEX_OUT_NEW_FORMAT = re.compile(r"(.+), +substitution out")
 
 
 def parse_team_sub_out(x: str) -> Optional[str]:
-    """Team (not opponent) substitution out (``ParseTeamSubOut``,
-    ``EventUtils.scala:50-62``, string overload).
+    """Team (not opponent) substitution out (``ParseTeamSubOut``, string overload).
 
     Args:
         x: The raw event string.
@@ -243,7 +238,7 @@ def parse_team_sub_out(x: str) -> Optional[str]:
 
 def parse_team_sub_in_pair(team: Optional[str], opponent: Optional[str]) -> Optional[str]:
     """Team substitution in, tuple overload (``ParseTeamSubIn.unapply(x:
-    (Option[String], Option[String]))``, ``EventUtils.scala:39-42``).
+    (Option[String], Option[String]))``).
 
     Matched directly against a raw ``(team_text, opponent_text)`` pair during
     play-by-play event construction (``PlayByPlayParser.parse_game_event``,
@@ -266,7 +261,7 @@ def parse_team_sub_in_pair(team: Optional[str], opponent: Optional[str]) -> Opti
 
 def parse_team_sub_out_pair(team: Optional[str], opponent: Optional[str]) -> Optional[str]:
     """Team substitution out, tuple overload (``ParseTeamSubOut.unapply(x:
-    (Option[String], Option[String]))``, ``EventUtils.scala:53-56``).
+    (Option[String], Option[String]))``).
 
     See :func:`parse_team_sub_in_pair` for the shared shape/rationale.
 
@@ -292,8 +287,7 @@ _ANY_PLAY_REGEX_OLD = re.compile(r"[^,]+,[^,]+,([ A-Z.,-]+) .*")
 
 
 def parse_any_play(x: str) -> Optional[str]:
-    """Pull the player/team name out of any play line (``ParseAnyPlay``,
-    ``EventUtils.scala:69-79``).
+    """Pull the player/team name out of any play line (``ParseAnyPlay``).
 
     Order matters -- new-format is tried first (the old-format regex could
     spuriously match a new-format line; per the Scala's own comment "can't
@@ -322,8 +316,7 @@ _JUMPBALL_WON_OR_LOST_REGEX = re.compile(r"[^,]+,[^,]+,(.+), +jumpball (?:won|lo
 
 
 def parse_jumpball_won_or_lost(x: str) -> Optional[str]:
-    """Jump ball, won or lost -- doesn't matter which (``ParseJumpballWonOrLost``,
-    ``EventUtils.scala:84-95``). New format only (no legacy examples).
+    """Jump ball, won or lost -- doesn't matter which (``ParseJumpballWonOrLost``). New format only (no legacy examples).
 
     Args:
         x: The raw event string.
@@ -339,8 +332,7 @@ _JUMPBALL_WON_REGEX = re.compile(r"[^,]+,[^,]+,(.+), +jumpball won")
 
 
 def parse_jumpball_won(x: str) -> Optional[str]:
-    """Jump ball won specifically (``ParseJumpballWon``,
-    ``EventUtils.scala:97-107``). New format only.
+    """Jump ball won specifically (``ParseJumpballWon``). New format only.
 
     Args:
         x: The raw event string.
@@ -357,7 +349,7 @@ _TIMEOUT_REGEX_NEW = re.compile(r"[^,]+,[^,]+,(.+), +timeout.*")
 
 
 def parse_timeout(x: str) -> Optional[str]:
-    """Timeout (``ParseTimeout``, ``EventUtils.scala:110-122``).
+    """Timeout (``ParseTimeout``).
 
     **Port trap:** the captured group is discarded -- the Scala match arm
     is ``case Some(timeout_regex(_)) => Some("TEAM")`` (old format) /
@@ -389,7 +381,7 @@ _RIM_HOOK_MADE_NEW = re.compile(r"[^,]+,[^,]+,(.+), +2pt +(?:hookshot.*pointsint
 
 def parse_rim_made(x: str) -> Optional[str]:
     """Dunk / alley-oop / layup make, including rim-forced hookshots
-    (``ParseRimMade``, ``EventUtils.scala:127-151``).
+    (``ParseRimMade``).
 
     Args:
         x: The raw event string.
@@ -411,7 +403,7 @@ _RIM_HOOK_MISSED_NEW = re.compile(r"[^,]+,[^,]+,(.+), +2pt +(?:hookshot.*pointsi
 
 def parse_rim_missed(x: str) -> Optional[str]:
     """Dunk / alley-oop / layup miss, including rim-forced hookshots
-    (``ParseRimMissed``, ``EventUtils.scala:154-173``).
+    (``ParseRimMissed``).
 
     Args:
         x: The raw event string.
@@ -431,8 +423,7 @@ _TWO_PT_MADE_NEW = re.compile(r"[^,]+,[^,]+,(.+), +2pt +(?:.* +)?made")
 
 
 def parse_two_pointer_made(x: str) -> Optional[str]:
-    """Any 2pt make (rim shots plus jumpers/etc.) (``ParseTwoPointerMade``,
-    ``EventUtils.scala:175-189``).
+    """Any 2pt make (rim shots plus jumpers/etc.) (``ParseTwoPointerMade``).
 
     Args:
         x: The raw event string.
@@ -454,7 +445,7 @@ _TWO_PT_MISSED_NEW = re.compile(r"[^,]+,[^,]+,(.+), +2pt +(?:.* +)?missed")
 
 
 def parse_two_pointer_missed(x: str) -> Optional[str]:
-    """Any 2pt miss (``ParseTwoPointerMissed``, ``EventUtils.scala:191-206``).
+    """Any 2pt miss (``ParseTwoPointerMissed``).
 
     Args:
         x: The raw event string.
@@ -476,7 +467,7 @@ _THREE_PT_MADE_NEW = re.compile(r"[^,]+,[^,]+,(.+), +3pt +(?:.* +)?made")
 
 
 def parse_three_pointer_made(x: str) -> Optional[str]:
-    """Any 3pt make (``ParseThreePointerMade``, ``EventUtils.scala:208-221``).
+    """Any 3pt make (``ParseThreePointerMade``).
 
     Args:
         x: The raw event string.
@@ -498,7 +489,7 @@ _THREE_PT_MISSED_NEW = re.compile(r"[^,]+,[^,]+,(.+), +3pt +(?:.* +)?missed")
 
 
 def parse_three_pointer_missed(x: str) -> Optional[str]:
-    """Any 3pt miss (``ParseThreePointerMissed``, ``EventUtils.scala:222-235``).
+    """Any 3pt miss (``ParseThreePointerMissed``).
 
     Args:
         x: The raw event string.
@@ -520,8 +511,7 @@ _SHOT_MADE_UNION_NEW = re.compile(r"[^,]+,[^,]+,(.+), +[23]pt +(?:.* +)?made")
 
 
 def parse_shot_made(x: str) -> Optional[str]:
-    """Umbrella for all made (non-free-throw) shots (``ParseShotMade``,
-    ``EventUtils.scala:238-251``).
+    """Umbrella for all made (non-free-throw) shots (``ParseShotMade``).
 
     Args:
         x: The raw event string.
@@ -543,8 +533,7 @@ _SHOT_MISSED_UNION_NEW = re.compile(r"[^,]+,[^,]+,(.+), +[23]pt +(?:.* +)?(?:mis
 
 
 def parse_shot_missed(x: str) -> Optional[str]:
-    """Umbrella for all missed (non-free-throw) shots (``ParseShotMissed``,
-    ``EventUtils.scala:254-267``).
+    """Umbrella for all missed (non-free-throw) shots (``ParseShotMissed``).
 
     **Port trap:** the new-format regex matches ``missed`` **or**
     ``blocked`` -- a blocked shot counts as a missed shot here.
@@ -569,8 +558,7 @@ _BLOCKED_SHOT_NEW = re.compile(r"[^,]+,[^,]+,(.+), +block")
 
 
 def parse_shot_blocked(x: str) -> Optional[str]:
-    """Blocked shot -- captures the *blocker* (``ParseShotBlocked``,
-    ``EventUtils.scala:270-282``).
+    """Blocked shot -- captures the *blocker* (``ParseShotBlocked``).
 
     Args:
         x: The raw event string.
@@ -597,7 +585,7 @@ _REBOUND_NEW = re.compile(r"[^,]+,[^,]+,(.+), +rebound +.*")
 
 def parse_rebound(x: str) -> Optional[str]:
     """Any rebound, offensive/defensive/deadball/team, uncategorized
-    (``ParseRebound``, ``EventUtils.scala:287-304``).
+    (``ParseRebound``).
 
     Args:
         x: The raw event string.
@@ -619,7 +607,7 @@ _OFF_REBOUND_NEW = re.compile(r"[^,]+,[^,]+,(.+), +rebound +offensive.*")
 
 
 def parse_offensive_rebound(x: str) -> Optional[str]:
-    """Offensive rebound (``ParseOffensiveRebound``, ``EventUtils.scala:307-322``).
+    """Offensive rebound (``ParseOffensiveRebound``).
 
     **Port trap:** the new-format regex (``rebound offensive.*``) matches
     **both** live and dead-ball offensive rebounds -- the legacy format has
@@ -646,7 +634,7 @@ _DEF_REBOUND_NEW = re.compile(r"[^,]+,[^,]+,(.+), +rebound +defensive.*")
 
 
 def parse_defensive_rebound(x: str) -> Optional[str]:
-    """Defensive rebound (``ParseDefensiveRebound``, ``EventUtils.scala:325-340``).
+    """Defensive rebound (``ParseDefensiveRebound``).
 
     Args:
         x: The raw event string.
@@ -668,7 +656,7 @@ _OFF_DEADBALL_REBOUND_NEW = re.compile(r"[^,]+,[^,]+,(.+), +rebound offensivedea
 
 def parse_offensive_deadball_rebound(x: str) -> Optional[str]:
     """Offensive dead-ball rebound -- **new format only**, no legacy
-    equivalent (``ParseOffensiveDeadballRebound``, ``EventUtils.scala:369-380``).
+    equivalent (``ParseOffensiveDeadballRebound``).
 
     Args:
         x: The raw event string.
@@ -685,8 +673,7 @@ _DEADBALL_REBOUND_DEF_NEW = re.compile(r"[^,]+,[^,]+,(.+), +rebound defensivedea
 
 
 def parse_deadball_rebound(x: str) -> Optional[str]:
-    """Any dead-ball rebound, offensive or defensive (``ParseDeadballRebound``,
-    ``EventUtils.scala:346-363``).
+    """Any dead-ball rebound, offensive or defensive (``ParseDeadballRebound``).
 
     Tries :func:`parse_offensive_deadball_rebound` first (matching the
     Scala's ``ParseOffensiveDeadballRebound.unapply(x).orElse { ... }``),
@@ -714,8 +701,7 @@ def parse_deadball_rebound(x: str) -> Optional[str]:
 def parse_live_offensive_rebound(x: str) -> Optional[str]:
     """Live-ball (non-deadball) offensive rebound -- new format only gives
     you this distinction; in old format identical to
-    :func:`parse_offensive_rebound` (``ParseLiveOffensiveRebound``,
-    ``EventUtils.scala:383-388``).
+    :func:`parse_offensive_rebound` (``ParseLiveOffensiveRebound``).
 
     Args:
         x: The raw event string.
@@ -742,7 +728,7 @@ _FT_MADE_NEW = re.compile(r"[^,]+,[^,]+,(.+), +freethrow [0-9]of[0-9] +(?:.* +)?
 
 
 def parse_free_throw_made(x: str) -> Optional[str]:
-    """Any made free throw (``ParseFreeThrowMade``, ``EventUtils.scala:393-405``).
+    """Any made free throw (``ParseFreeThrowMade``).
 
     Args:
         x: The raw event string.
@@ -764,7 +750,7 @@ _FT_MISSED_NEW = re.compile(r"[^,]+,[^,]+,(.+), +freethrow [0-9]of[0-9] +(?:.* +
 
 
 def parse_free_throw_missed(x: str) -> Optional[str]:
-    """Any missed free throw (``ParseFreeThrowMissed``, ``EventUtils.scala:408-420``).
+    """Any missed free throw (``ParseFreeThrowMissed``).
 
     Args:
         x: The raw event string.
@@ -782,8 +768,7 @@ def parse_free_throw_missed(x: str) -> Optional[str]:
 
 
 def parse_free_throw_attempt(x: str) -> Optional[str]:
-    """Any free throw attempt, missed or made (``ParseFreeThrowAttempt``,
-    ``EventUtils.scala:423-427``). Tries missed first (matching the Scala's
+    """Any free throw attempt, missed or made (``ParseFreeThrowAttempt``). Tries missed first (matching the Scala's
     ``ParseFreeThrowMissed.unapply(x).orElse { ParseFreeThrowMade.unapply(x) }``).
 
     Args:
@@ -803,8 +788,7 @@ _FT_START_NEW = re.compile(r"[^,]+,[^,]+,(.+), +freethrow 1of[123] .*")
 
 def parse_free_throw_event(x: str) -> Optional[str]:
     """Presence of 1+ free throws in a possession -- old format only (will
-    double-count if a set is split across clumps) (``ParseFreeThrowEvent``,
-    ``EventUtils.scala:430-441``).
+    double-count if a set is split across clumps) (``ParseFreeThrowEvent``).
 
     **Port trap:** the new-format branch only matches ``freethrow
     1of[123]`` -- the *first* free throw of a set. A ``2of2``/``2of3``/
@@ -834,7 +818,7 @@ _FT_GEN2_NEW = re.compile(r"[^,]+,[^,]+,(.+), +freethrow ([123])of([123]) .*")
 
 def parse_free_throw_event_attempt_gen2(x: str) -> Optional[tuple[str, int, int]]:
     """New-format ("gen2") free throw, telling you whether it's the final
-    FT of the set (``ParseFreeThrowEventAttemptGen2``, ``EventUtils.scala:444-450``).
+    FT of the set (``ParseFreeThrowEventAttemptGen2``).
 
     Args:
         x: The raw event string.
@@ -859,7 +843,7 @@ _TURNOVER_NEW = re.compile(r"[^,]+,[^,]+,(.+), +turnover +.*")
 
 
 def parse_turnover(x: str) -> Optional[str]:
-    """Turnover (``ParseTurnover``, ``EventUtils.scala:454-470``).
+    """Turnover (``ParseTurnover``).
 
     Args:
         x: The raw event string.
@@ -881,7 +865,7 @@ _STOLEN_NEW = re.compile(r"[^,]+,[^,]+,(.+), +steal")
 
 
 def parse_stolen(x: str) -> Optional[str]:
-    """Steal (``ParseStolen``, ``EventUtils.scala:473-485``).
+    """Steal (``ParseStolen``).
 
     Args:
         x: The raw event string.
@@ -903,7 +887,7 @@ _ASSIST_NEW = re.compile(r"[^,]+,[^,]+,(.+), +assist")
 
 
 def parse_assist(x: str) -> Optional[str]:
-    """Assist (``ParseAssist``, ``EventUtils.scala:488-500``).
+    """Assist (``ParseAssist``).
 
     Args:
         x: The raw event string.
@@ -929,8 +913,7 @@ _PERSONAL_FOUL_NEW = re.compile(r"[^,]+,[^,]+,(.+), +foul personal.*")
 
 
 def parse_personal_foul(x: str) -> Optional[str]:
-    """Personal foul, offensive or defensive (``ParsePersonalFoul``,
-    ``EventUtils.scala:505-517``).
+    """Personal foul, offensive or defensive (``ParsePersonalFoul``).
 
     **Port trap:** the old-format regex excludes the literal name
     ``TEAM`` via ``(?!TEAM)`` -- that string is the technical-foul
@@ -959,7 +942,7 @@ _TECHNICAL_FOUL_NEW = re.compile(r"[^,]+,[^,]+,(.+), +foul technical.*")
 
 
 def parse_technical_foul(x: str) -> Optional[str]:
-    """Technical foul (``ParseTechnicalFoul``, ``EventUtils.scala:520-532``).
+    """Technical foul (``ParseTechnicalFoul``).
 
     **Port trap:** the old-format regex captures the literal ``TEAM`` on
     purpose -- old format only records coach technicals this way, with no
@@ -986,7 +969,7 @@ _FLAGRANT_FOUL_NEW = re.compile(r"[^,]+,[^,]+,(.+), +foul personal flagrant.*")
 
 def parse_flagrant_foul(x: str) -> Optional[str]:
     """Flagrant foul -- new format only, no legacy examples found
-    (``ParseFlagrantFoul``, ``EventUtils.scala:535-545``).
+    (``ParseFlagrantFoul``).
 
     Args:
         x: The raw event string.
@@ -1004,7 +987,7 @@ _OFF_FOUL_NEW = re.compile(r"[^,]+,[^,]+,(.+), +foul offensive.*")
 def parse_offensive_foul(x: str) -> Optional[str]:
     """Offensive foul -- new format only, no legacy examples found; used
     just for counting stats, not distinguishing flagrant/normal
-    (``ParseOffensiveFoul``, ``EventUtils.scala:548-558``).
+    (``ParseOffensiveFoul``).
 
     Args:
         x: The raw event string.
@@ -1021,7 +1004,7 @@ _FOUL_INFO_NEW = re.compile(r"[^,]+,[^,]+,(.+), +foulon")
 
 def parse_foul_info(x: str) -> Optional[str]:
     """Who was fouled -- new format only, no legacy examples found
-    (``ParseFoulInfo``, ``EventUtils.scala:561-571``).
+    (``ParseFoulInfo``).
 
     Args:
         x: The raw event string.
@@ -1041,7 +1024,7 @@ def parse_foul_info(x: str) -> Optional[str]:
 def parse_offensive_event(x: str) -> Optional[str]:
     """A primary offensive event (not assists) that directly tells us which
     side is in possession -- free throws, shots, turnovers
-    (``ParseOffensiveEvent``, ``EventUtils.scala:576-587``). Offensive
+    (``ParseOffensiveEvent``). Offensive
     rebounds are deliberately excluded (they're implied by one of these).
 
     Tried in Scala-declared order: FT made, FT missed, shot made, shot
@@ -1069,7 +1052,7 @@ def parse_offensive_event(x: str) -> Optional[str]:
 
 def parse_defensive_action_event(x: str) -> Optional[str]:
     """A defensive event that tells us which side is in possession -- just
-    defensive rebounds (``ParseDefensiveActionEvent``, ``EventUtils.scala:590-596``).
+    defensive rebounds (``ParseDefensiveActionEvent``).
 
     Args:
         x: The raw event string.
@@ -1083,7 +1066,7 @@ def parse_defensive_action_event(x: str) -> Optional[str]:
 def parse_defensive_info_event(x: str) -> Optional[str]:
     """A defensive event that provides context to an offensive action (e.g.
     a turnover caused by a steal) -- blocks, steals
-    (``ParseDefensiveInfoEvent``, ``EventUtils.scala:599-605``).
+    (``ParseDefensiveInfoEvent``).
 
     Args:
         x: The raw event string.
@@ -1100,8 +1083,7 @@ def parse_defensive_info_event(x: str) -> Optional[str]:
 
 def parse_defensive_event(x: str) -> Optional[str]:
     """Any defensive event -- union of :func:`parse_defensive_action_event`
-    and :func:`parse_defensive_info_event` (``ParseDefensiveEvent``,
-    ``EventUtils.scala:608-611``).
+    and :func:`parse_defensive_info_event` (``ParseDefensiveEvent``).
 
     Args:
         x: The raw event string.

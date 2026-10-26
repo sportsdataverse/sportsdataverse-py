@@ -111,67 +111,67 @@ Polars (or pandas) DataFrame with the full v2 schema (game/event identifiers, ev
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `event_num` | character | Sequential event number within the game (V2 PBP). |
-| `event_type` | character | Event / play type code (V2 PBP). |
-| `event_action_type` | character | Numeric event-action-type code (V2 PBP). |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `clock` | character | Game clock value. |
-| `minute_game` | double | Minute game. |
-| `time_remaining` | double | Time remaining. |
-| `wc_time_string` | character | Wc time string. |
-| `time_quarter` | character | Time quarter. |
-| `minute_remaining_quarter` | integer | Minute remaining quarter. |
-| `seconds_remaining_quarter` | integer | Seconds remaining quarter. |
-| `action_type` | character | Action type label (e.g. 'Made Shot', 'Substitution'). |
-| `sub_type` | character | Action sub-type label. |
-| `home_description` | character | Home team's description. |
-| `neutral_description` | character | Neutral description. |
-| `visitor_description` | character | Visitor description. |
-| `description` | character | Long-form description text. |
-| `location` | character | Location. |
-| `score` | character | Final score. |
-| `away_score` | integer | Away team score at the time of the play. |
-| `home_score` | integer | Home team score at the time of the play. |
-| `score_margin` | character | Score margin. |
-| `team_leading` | character | Team leading. |
-| `person1type` | character | Person1type. |
-| `player1_id` | character | V2 PBP primary player ID (e.g. shooter / fouler). |
-| `player1_name` | character | V2 PBP primary player name. |
-| `player1_team_id` | character | Team ID of player1. |
-| `player1_team_city` | character | Player1 team city. |
-| `player1_team_nickname` | character | Player1 team nickname. |
-| `player1_team_abbreviation` | character | Player1 team abbreviation. |
-| `person2type` | character | Person2type. |
-| `player2_id` | character | V2 PBP secondary player ID (e.g. assister / fouled-by). |
-| `player2_name` | character | V2 PBP secondary player name. |
-| `player2_team_id` | character | Team ID of player2. |
-| `player2_team_city` | character | Player2 team city. |
-| `player2_team_nickname` | character | Player2 team nickname. |
-| `player2_team_abbreviation` | character | Player2 team abbreviation. |
-| `person3type` | character | Person3type. |
-| `player3_id` | character | V2 PBP tertiary player ID (e.g. blocker). |
-| `player3_name` | character | V2 PBP tertiary player name. |
-| `player3_team_id` | character | Team ID of player3. |
-| `player3_team_city` | character | Player3 team city. |
-| `player3_team_nickname` | character | Player3 team nickname. |
-| `player3_team_abbreviation` | character | Player3 team abbreviation. |
-| `video_available_flag` | character | Video available flag. |
-| `x_legacy` | integer | V2-format X coordinate (preserved for V3-to-V2 compatibility). |
-| `y_legacy` | integer | V2-format Y coordinate (preserved for V3-to-V2 compatibility). |
-| `shot_distance` | integer | Shot distance from the basket, in feet. |
-| `shot_result` | character | Shot result ('Made' / 'Missed'). |
-| `is_field_goal` | integer | 1 if the action was a field goal; 0 otherwise. |
-| `points_total` | integer | Running total of points scored. |
-| `shot_value` | integer | Point value of the shot (2 or 3). |
-| `action_number` | integer | Sequential action number within a game (V3 PBP). |
-| `team_id` | integer | Unique team identifier. |
-| `team_tricode` | character | Three-letter team code (e.g. 'LAS' / 'NYL'). |
-| `person_id` | integer | Unique player identifier (V3 endpoints). |
-| `player_name` | character | Player name. |
-| `score_home` | character | Score home. |
-| `score_away` | character | Score away. |
-| `action_id` | integer | Unique action identifier within a game (V3 PBP). |
+| `game_id` | String | Unique game identifier. |
+| `event_num` | String | Sequential event number within the game (V2 PBP). |
+| `event_type` | String | Event / play type code (V2 PBP). |
+| `event_action_type` | String | Numeric event-action-type code (V2 PBP). |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `clock` | String | Game clock value. |
+| `minute_game` | Float64 | Minute game. |
+| `time_remaining` | Float64 | Time remaining. |
+| `wc_time_string` | String | Wc time string. |
+| `time_quarter` | String | Time quarter. |
+| `minute_remaining_quarter` | Int64 | Minute remaining quarter. |
+| `seconds_remaining_quarter` | Int64 | Seconds remaining quarter. |
+| `action_type` | String | Action type label (e.g. 'Made Shot', 'Substitution'). |
+| `sub_type` | String | Action sub-type label. |
+| `home_description` | String | Home team's description. |
+| `neutral_description` | String | Neutral description. |
+| `visitor_description` | String | Visitor description. |
+| `description` | String | Long-form description text. |
+| `location` | String | Location. |
+| `score` | String | Final score. |
+| `away_score` | Int64 | Away team score at the time of the play. |
+| `home_score` | Int64 | Home team score at the time of the play. |
+| `score_margin` | String | Score margin. |
+| `team_leading` | String | Team leading. |
+| `person1type` | String | Person1type. |
+| `player1_id` | String | V2 PBP primary player ID (e.g. shooter / fouler). |
+| `player1_name` | String | V2 PBP primary player name. |
+| `player1_team_id` | String | Team ID of player1. |
+| `player1_team_city` | String | Player1 team city. |
+| `player1_team_nickname` | String | Player1 team nickname. |
+| `player1_team_abbreviation` | String | Player1 team abbreviation. |
+| `person2type` | String | Person2type. |
+| `player2_id` | String | V2 PBP secondary player ID (e.g. assister / fouled-by). |
+| `player2_name` | String | V2 PBP secondary player name. |
+| `player2_team_id` | String | Team ID of player2. |
+| `player2_team_city` | String | Player2 team city. |
+| `player2_team_nickname` | String | Player2 team nickname. |
+| `player2_team_abbreviation` | String | Player2 team abbreviation. |
+| `person3type` | String | Person3type. |
+| `player3_id` | String | V2 PBP tertiary player ID (e.g. blocker). |
+| `player3_name` | String | V2 PBP tertiary player name. |
+| `player3_team_id` | String | Team ID of player3. |
+| `player3_team_city` | String | Player3 team city. |
+| `player3_team_nickname` | String | Player3 team nickname. |
+| `player3_team_abbreviation` | String | Player3 team abbreviation. |
+| `video_available_flag` | String | Video available flag. |
+| `x_legacy` | Int64 | V2-format X coordinate (preserved for V3-to-V2 compatibility). |
+| `y_legacy` | Int64 | V2-format Y coordinate (preserved for V3-to-V2 compatibility). |
+| `shot_distance` | Int64 | Shot distance from the basket, in feet. |
+| `shot_result` | String | Shot result ('Made' / 'Missed'). |
+| `is_field_goal` | Int64 | 1 if the action was a field goal; 0 otherwise. |
+| `points_total` | Int64 | Running total of points scored. |
+| `shot_value` | Int64 | Point value of the shot (2 or 3). |
+| `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_tricode` | String | Three-letter team code (e.g. 'LAS' / 'NYL'). |
+| `person_id` | Int64 | Unique player identifier (V3 endpoints). |
+| `player_name` | String | Player name. |
+| `score_home` | String | Score home. |
+| `score_away` | String | Score away. |
+| `action_id` | Int64 | Unique action identifier within a game (V3 PBP). |
 
 **Example**
 

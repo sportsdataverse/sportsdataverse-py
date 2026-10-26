@@ -1,10 +1,10 @@
 ---
-title: PLG — additional Python functions
+title: P. LEAGUE+ — additional Python functions
 sidebar_label: Additional functions
-description: "PLG — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
+description: "P. LEAGUE+ — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
-# PLG — additional Python functions
+# P. LEAGUE+ — additional Python functions
 
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.basketball.plg` that are not
 generated API-endpoint wrappers (those have their own reference pages).
@@ -66,8 +66,8 @@ polars.DataFrame | pandas.DataFrame: eight rows, `team_id` (`Int64`) and `team_u
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | P. LEAGUE+ site team id (1-8), stable across seasons and renames. |
-| `team_uuid` | character | Preciser team uuid of the same club (team_uuid of the pleague_preciser frames). |
+| `team_id` | Int64 | P. LEAGUE+ site team id (1-8), stable across seasons and renames. |
+| `team_uuid` | String | Preciser team uuid of the same club (team_uuid of the pleague_preciser frames). |
 
 **Raises**
 

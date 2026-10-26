@@ -26,22 +26,22 @@ Player profile: names, birth date, height, weight, position.
 
 | col_name | type | description |
 |---|---|---|
-| `person_id` | integer | Infobasket PersonID: one person across clubs and seasons; players, coaches and officials share the space. |
-| `person_last_name_ru` | character | Last name, Russian. |
-| `person_first_name_ru` | character | First name, Russian. |
-| `person_last_name_en` | character | Last name, English. |
-| `person_first_name_en` | character | First name, English. |
-| `person_gender` | integer | Person gender: 1 on every sampled (male) person. |
-| `birth_date` | character | Birth date (ISO 8601 date) of a player: public bio, kept; coaches' and officials' birth data is never output. |
-| `person_height` | integer | Height in centimetres. |
-| `person_weight` | integer | Weight in kilograms. |
-| `person_status` | integer | Person record status (1 active, 0 otherwise); meaning unverified. |
-| `player_position` | integer | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
-| `player_hand` | character | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
-| `is_naturalized` | logical | True for naturalised players. |
-| `position_id` | integer | Position id of the player (PosID), with its names in position_name_ru / position_name_en. |
-| `position_name_ru` | character | Position name in Russian. |
-| `position_name_en` | character | Position name in English. |
+| `person_id` | Int64 | Infobasket PersonID: one person across clubs and seasons; players, coaches and officials share the space. |
+| `person_last_name_ru` | String | Last name, Russian. |
+| `person_first_name_ru` | String | First name, Russian. |
+| `person_last_name_en` | String | Last name, English. |
+| `person_first_name_en` | String | First name, English. |
+| `person_gender` | Int64 | Person gender: 1 on every sampled (male) person. |
+| `birth_date` | String | Birth date (ISO 8601 date) of a player: public bio, kept; coaches' and officials' birth data is never output. |
+| `person_height` | Int64 | Height in centimetres. |
+| `person_weight` | Int64 | Weight in kilograms. |
+| `person_status` | Int64 | Person record status (1 active, 0 otherwise); meaning unverified. |
+| `player_position` | Int64 | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
+| `player_hand` | String | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
+| `is_naturalized` | Boolean | True for naturalised players. |
+| `position_id` | Int64 | Position id of the player (PosID), with its names in position_name_ru / position_name_en. |
+| `position_name_ru` | String | Position name in Russian. |
+| `position_name_en` | String | Position name in English. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -78,54 +78,54 @@ A player's season-by-season totals in the competition tag.
 
 | col_name | type | description |
 |---|---|---|
-| `person_id` | integer | Infobasket person id (PersonID): one person (player, coach or official) across clubs and seasons. Joins to /Widget/PlayerPage/{personId} (players) and /Widget/CoachPage/{personId} (coaches). |
-| `season` | integer | Season END year (2026 = 2025-26). The wire sends it as Season.CompID, a third meaning of CompID. |
-| `season_name_ru` | character | Season name in Russian ('Сезон 2025/2026'). |
-| `season_name_en` | character | Season name in English ('Season 2025/2026'). |
-| `team_short_name_ru` | character | The the team's short name in Russian (as the competition names it). |
-| `team_short_name_en` | character | The the team's short name in English (as the competition names it). |
-| `team_name_ru` | character | The the team's name in Russian (as the competition names it). |
-| `team_name_en` | character | The the team's name in English (as the competition names it). |
-| `team_region_name_ru` | character | The the team's region or city in Russian (as the competition names it). |
-| `team_region_name_en` | character | The the team's region or city in English (as the competition names it). |
-| `team_id` | integer | Infobasket team id (TeamID): one club's entry in a competition family (Lokomotiv Kuban = 2650). Joins to /Widget/Team*/{teamId} and equals the v2 API `teamId`. |
-| `game_count` | integer | Games in the totals. |
-| `in_game_count` | integer | Games actually played (on the court). |
-| `start_count` | integer | Games the person started. |
-| `points` | integer | Points. The wire's null is 0 here (null counts are filled). |
-| `shot1` | integer | Free throws attempted. The wire's null is 0 here (null counts are filled). |
-| `goal1` | integer | Free throws made. The wire's null is 0 here (null counts are filled). |
-| `shot2` | integer | 2-point field goals attempted. The wire's null is 0 here (null counts are filled). |
-| `goal2` | integer | 2-point field goals made. The wire's null is 0 here (null counts are filled). |
-| `shot3` | integer | 3-point field goals attempted. The wire's null is 0 here (null counts are filled). |
-| `goal3` | integer | 3-point field goals made. The wire's null is 0 here (null counts are filled). |
-| `shot1_percent` | numeric | Free-throw percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `shot2_percent` | numeric | 2-point percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `shot3_percent` | numeric | 3-point percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `assist` | integer | Assists. The wire's null is 0 here (null counts are filled). |
-| `blocks` | integer | Blocked shots. The wire's null is 0 here (null counts are filled). |
-| `def_rebound` | integer | Defensive rebounds. The wire's null is 0 here (null counts are filled). |
-| `off_rebound` | integer | Offensive rebounds. The wire's null is 0 here (null counts are filled). |
-| `rebound` | integer | Total rebounds. The wire's null is 0 here (null counts are filled). |
-| `steal` | integer | Steals. The wire's null is 0 here (null counts are filled). |
-| `turnover` | integer | Turnovers. The wire's null is 0 here (null counts are filled). |
-| `foul` | integer | Personal fouls committed. The wire's null is 0 here (null counts are filled). |
-| `opponent_foul` | integer | Fouls drawn. The wire's null is 0 here (null counts are filled). |
-| `avg_points` | numeric | Per-game average of: points; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_assist` | numeric | Per-game average of: assists; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_blocks` | numeric | Per-game average of: blocked shots; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_def_rebound` | numeric | Per-game average of: defensive rebounds; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_off_rebound` | numeric | Per-game average of: offensive rebounds; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_rebound` | numeric | Per-game average of: total rebounds; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_steal` | numeric | Per-game average of: steals; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_turnover` | numeric | Per-game average of: turnovers; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_foul` | numeric | Per-game average of: personal fouls committed; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_opponent_foul` | numeric | Per-game average of: fouls drawn; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_plus_minus` | numeric | Per-game average of: plus-minus: point differential while on the court; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `seconds` | integer | Playing time in seconds. |
-| `played_time` | character | Playing time as 'minutes:seconds' (team rows sum the five players: '200:00' = 40 minutes x 5). |
-| `avg_played_time` | character | Average playing time per game as 'minutes:seconds'. |
-| `plus_minus` | integer | Plus-minus: point differential while on the court. Null where the host sends none. |
+| `person_id` | Int64 | Infobasket person id (PersonID): one person (player, coach or official) across clubs and seasons. Joins to /Widget/PlayerPage/{personId} (players) and /Widget/CoachPage/{personId} (coaches). |
+| `season` | Int64 | Season END year (2026 = 2025-26). The wire sends it as Season.CompID, a third meaning of CompID. |
+| `season_name_ru` | String | Season name in Russian ('Сезон 2025/2026'). |
+| `season_name_en` | String | Season name in English ('Season 2025/2026'). |
+| `team_short_name_ru` | String | The the team's short name in Russian (as the competition names it). |
+| `team_short_name_en` | String | The the team's short name in English (as the competition names it). |
+| `team_name_ru` | String | The the team's name in Russian (as the competition names it). |
+| `team_name_en` | String | The the team's name in English (as the competition names it). |
+| `team_region_name_ru` | String | The the team's region or city in Russian (as the competition names it). |
+| `team_region_name_en` | String | The the team's region or city in English (as the competition names it). |
+| `team_id` | Int64 | Infobasket team id (TeamID): one club's entry in a competition family (Lokomotiv Kuban = 2650). Joins to /Widget/Team*/{teamId} and equals the v2 API `teamId`. |
+| `game_count` | Int64 | Games in the totals. |
+| `in_game_count` | Int64 | Games actually played (on the court). |
+| `start_count` | Int64 | Games the person started. |
+| `points` | Int64 | Points. The wire's null is 0 here (null counts are filled). |
+| `shot1` | Int64 | Free throws attempted. The wire's null is 0 here (null counts are filled). |
+| `goal1` | Int64 | Free throws made. The wire's null is 0 here (null counts are filled). |
+| `shot2` | Int64 | 2-point field goals attempted. The wire's null is 0 here (null counts are filled). |
+| `goal2` | Int64 | 2-point field goals made. The wire's null is 0 here (null counts are filled). |
+| `shot3` | Int64 | 3-point field goals attempted. The wire's null is 0 here (null counts are filled). |
+| `goal3` | Int64 | 3-point field goals made. The wire's null is 0 here (null counts are filled). |
+| `shot1_percent` | Float64 | Free-throw percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `shot2_percent` | Float64 | 2-point percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `shot3_percent` | Float64 | 3-point percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `assist` | Int64 | Assists. The wire's null is 0 here (null counts are filled). |
+| `blocks` | Int64 | Blocked shots. The wire's null is 0 here (null counts are filled). |
+| `def_rebound` | Int64 | Defensive rebounds. The wire's null is 0 here (null counts are filled). |
+| `off_rebound` | Int64 | Offensive rebounds. The wire's null is 0 here (null counts are filled). |
+| `rebound` | Int64 | Total rebounds. The wire's null is 0 here (null counts are filled). |
+| `steal` | Int64 | Steals. The wire's null is 0 here (null counts are filled). |
+| `turnover` | Int64 | Turnovers. The wire's null is 0 here (null counts are filled). |
+| `foul` | Int64 | Personal fouls committed. The wire's null is 0 here (null counts are filled). |
+| `opponent_foul` | Int64 | Fouls drawn. The wire's null is 0 here (null counts are filled). |
+| `avg_points` | Float64 | Per-game average of: points; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_assist` | Float64 | Per-game average of: assists; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_blocks` | Float64 | Per-game average of: blocked shots; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_def_rebound` | Float64 | Per-game average of: defensive rebounds; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_off_rebound` | Float64 | Per-game average of: offensive rebounds; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_rebound` | Float64 | Per-game average of: total rebounds; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_steal` | Float64 | Per-game average of: steals; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_turnover` | Float64 | Per-game average of: turnovers; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_foul` | Float64 | Per-game average of: personal fouls committed; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_opponent_foul` | Float64 | Per-game average of: fouls drawn; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_plus_minus` | Float64 | Per-game average of: plus-minus: point differential while on the court; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `seconds` | Int64 | Playing time in seconds. |
+| `played_time` | String | Playing time as 'minutes:seconds' (team rows sum the five players: '200:00' = 40 minutes x 5). |
+| `avg_played_time` | String | Average playing time per game as 'minutes:seconds'. |
+| `plus_minus` | Int64 | Plus-minus: point differential while on the court. Null where the host sends none. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -162,45 +162,45 @@ A player's career totals in the competition tag.
 
 | col_name | type | description |
 |---|---|---|
-| `person_id` | integer | Infobasket person id (PersonID): one person (player, coach or official) across clubs and seasons. Joins to /Widget/PlayerPage/{personId} (players) and /Widget/CoachPage/{personId} (coaches). The scope check compares it with the request. |
-| `game_count` | integer | Games in the totals. |
-| `in_game_count` | integer | Games actually played (on the court). |
-| `start_count` | integer | Games the person started. |
-| `has_more_seasons` | logical | True when the host holds more seasons than listed (False in every sample). |
-| `points` | integer | Points. The wire's null is 0 here (null counts are filled). |
-| `shot1` | integer | Free throws attempted. The wire's null is 0 here (null counts are filled). |
-| `goal1` | integer | Free throws made. The wire's null is 0 here (null counts are filled). |
-| `shot2` | integer | 2-point field goals attempted. The wire's null is 0 here (null counts are filled). |
-| `goal2` | integer | 2-point field goals made. The wire's null is 0 here (null counts are filled). |
-| `shot3` | integer | 3-point field goals attempted. The wire's null is 0 here (null counts are filled). |
-| `goal3` | integer | 3-point field goals made. The wire's null is 0 here (null counts are filled). |
-| `shot1_percent` | numeric | Free-throw percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `shot2_percent` | numeric | 2-point percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `shot3_percent` | numeric | 3-point percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `assist` | integer | Assists. The wire's null is 0 here (null counts are filled). |
-| `blocks` | integer | Blocked shots. The wire's null is 0 here (null counts are filled). |
-| `def_rebound` | integer | Defensive rebounds. The wire's null is 0 here (null counts are filled). |
-| `off_rebound` | integer | Offensive rebounds. The wire's null is 0 here (null counts are filled). |
-| `rebound` | integer | Total rebounds. The wire's null is 0 here (null counts are filled). |
-| `steal` | integer | Steals. The wire's null is 0 here (null counts are filled). |
-| `turnover` | integer | Turnovers. The wire's null is 0 here (null counts are filled). |
-| `foul` | integer | Personal fouls committed. The wire's null is 0 here (null counts are filled). |
-| `opponent_foul` | integer | Fouls drawn. The wire's null is 0 here (null counts are filled). |
-| `avg_points` | numeric | Per-game average of: points; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_assist` | numeric | Per-game average of: assists; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_blocks` | numeric | Per-game average of: blocked shots; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_def_rebound` | numeric | Per-game average of: defensive rebounds; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_off_rebound` | numeric | Per-game average of: offensive rebounds; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_rebound` | numeric | Per-game average of: total rebounds; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_steal` | numeric | Per-game average of: steals; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_turnover` | numeric | Per-game average of: turnovers; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_foul` | numeric | Per-game average of: personal fouls committed; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_opponent_foul` | numeric | Per-game average of: fouls drawn; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `avg_plus_minus` | numeric | Per-game average of: plus-minus: point differential while on the court; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `seconds` | integer | Playing time in seconds. |
-| `played_time` | character | Playing time as 'minutes:seconds' (team rows sum the five players: '200:00' = 40 minutes x 5). |
-| `avg_played_time` | character | Average playing time per game as 'minutes:seconds'. |
-| `plus_minus` | integer | Plus-minus: point differential while on the court. Null where the host sends none. |
+| `person_id` | Int64 | Infobasket person id (PersonID): one person (player, coach or official) across clubs and seasons. Joins to /Widget/PlayerPage/{personId} (players) and /Widget/CoachPage/{personId} (coaches). The scope check compares it with the request. |
+| `game_count` | Int64 | Games in the totals. |
+| `in_game_count` | Int64 | Games actually played (on the court). |
+| `start_count` | Int64 | Games the person started. |
+| `has_more_seasons` | Boolean | True when the host holds more seasons than listed (False in every sample). |
+| `points` | Int64 | Points. The wire's null is 0 here (null counts are filled). |
+| `shot1` | Int64 | Free throws attempted. The wire's null is 0 here (null counts are filled). |
+| `goal1` | Int64 | Free throws made. The wire's null is 0 here (null counts are filled). |
+| `shot2` | Int64 | 2-point field goals attempted. The wire's null is 0 here (null counts are filled). |
+| `goal2` | Int64 | 2-point field goals made. The wire's null is 0 here (null counts are filled). |
+| `shot3` | Int64 | 3-point field goals attempted. The wire's null is 0 here (null counts are filled). |
+| `goal3` | Int64 | 3-point field goals made. The wire's null is 0 here (null counts are filled). |
+| `shot1_percent` | Float64 | Free-throw percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `shot2_percent` | Float64 | 2-point percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `shot3_percent` | Float64 | 3-point percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `assist` | Int64 | Assists. The wire's null is 0 here (null counts are filled). |
+| `blocks` | Int64 | Blocked shots. The wire's null is 0 here (null counts are filled). |
+| `def_rebound` | Int64 | Defensive rebounds. The wire's null is 0 here (null counts are filled). |
+| `off_rebound` | Int64 | Offensive rebounds. The wire's null is 0 here (null counts are filled). |
+| `rebound` | Int64 | Total rebounds. The wire's null is 0 here (null counts are filled). |
+| `steal` | Int64 | Steals. The wire's null is 0 here (null counts are filled). |
+| `turnover` | Int64 | Turnovers. The wire's null is 0 here (null counts are filled). |
+| `foul` | Int64 | Personal fouls committed. The wire's null is 0 here (null counts are filled). |
+| `opponent_foul` | Int64 | Fouls drawn. The wire's null is 0 here (null counts are filled). |
+| `avg_points` | Float64 | Per-game average of: points; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_assist` | Float64 | Per-game average of: assists; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_blocks` | Float64 | Per-game average of: blocked shots; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_def_rebound` | Float64 | Per-game average of: defensive rebounds; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_off_rebound` | Float64 | Per-game average of: offensive rebounds; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_rebound` | Float64 | Per-game average of: total rebounds; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_steal` | Float64 | Per-game average of: steals; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_turnover` | Float64 | Per-game average of: turnovers; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_foul` | Float64 | Per-game average of: personal fouls committed; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_opponent_foul` | Float64 | Per-game average of: fouls drawn; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `avg_plus_minus` | Float64 | Per-game average of: plus-minus: point differential while on the court; parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `seconds` | Int64 | Playing time in seconds. |
+| `played_time` | String | Playing time as 'minutes:seconds' (team rows sum the five players: '200:00' = 40 minutes x 5). |
+| `avg_played_time` | String | Average playing time per game as 'minutes:seconds'. |
+| `plus_minus` | Int64 | Plus-minus: point differential while on the court. Null where the host sends none. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -240,59 +240,59 @@ A player's game log for one season and one team, one row per game.
 
 | col_name | type | description |
 |---|---|---|
-| `person_id` | integer | 0 on every game row (the player is the body's PersonID). |
-| `game_id` | integer | Infobasket game id (GameID); equals the v2 API `matchId`. Joins to /Widget/GetOnline/{gameId} and /Widget/GamePage/{gameId}. |
-| `game_number` | character | Game number within the competition, e.g. 'RS-002' (RS = regular season); playoff games use the series code. |
-| `game_status` | integer | Game status in the game-record code set: 21 completed. |
-| `team_id` | integer | Infobasket TeamID the player played for in that game. |
-| `team_a_id` | integer | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
-| `team_b_id` | integer | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
-| `score_a` | integer | Final points of team A (listed first). |
-| `score_b` | integer | Final points of team B (listed second). |
-| `team_a_short_name_ru` | character | The team A (the home side in the calendar)'s short name in Russian (as the competition names it). |
-| `team_a_short_name_en` | character | The team A (the home side in the calendar)'s short name in English (as the competition names it). |
-| `team_a_name_ru` | character | The team A (the home side in the calendar)'s name in Russian (as the competition names it). |
-| `team_a_name_en` | character | The team A (the home side in the calendar)'s name in English (as the competition names it). |
-| `team_a_region_name_ru` | character | The team A (the home side in the calendar)'s region or city in Russian (as the competition names it). |
-| `team_a_region_name_en` | character | The team A (the home side in the calendar)'s region or city in English (as the competition names it). |
-| `team_b_short_name_ru` | character | The team B (the away side)'s short name in Russian (as the competition names it). |
-| `team_b_short_name_en` | character | The team B (the away side)'s short name in English (as the competition names it). |
-| `team_b_name_ru` | character | The team B (the away side)'s name in Russian (as the competition names it). |
-| `team_b_name_en` | character | The team B (the away side)'s name in English (as the competition names it). |
-| `team_b_region_name_ru` | character | The team B (the away side)'s region or city in Russian (as the competition names it). |
-| `team_b_region_name_en` | character | The team B (the away side)'s region or city in English (as the competition names it). |
-| `game_date` | character | Game date as an ISO 8601 date (YYYY-MM-DD); the wire sends DD.MM.YYYY. |
-| `team_number` | integer | Side (1 or 2) the player's team had in the game. |
-| `player_number` | integer | Shirt number as an integer (-1 when none). |
-| `display_number` | character | Shirt number as displayed ('0' and '00' differ). |
-| `points` | integer | Points. The wire's null is 0 here (null counts are filled). |
-| `shot1` | integer | Free throws attempted. The wire's null is 0 here (null counts are filled). |
-| `goal1` | integer | Free throws made. The wire's null is 0 here (null counts are filled). |
-| `shot2` | integer | 2-point field goals attempted. The wire's null is 0 here (null counts are filled). |
-| `goal2` | integer | 2-point field goals made. The wire's null is 0 here (null counts are filled). |
-| `shot3` | integer | 3-point field goals attempted. The wire's null is 0 here (null counts are filled). |
-| `goal3` | integer | 3-point field goals made. The wire's null is 0 here (null counts are filled). |
-| `shot23` | integer | Field goals (2 + 3 points) attempted. The wire's null is 0 here (null counts are filled). |
-| `goal23` | integer | Field goals (2 + 3 points) made. The wire's null is 0 here (null counts are filled). |
-| `shot1_percent` | numeric | Free-throw percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `shot2_percent` | numeric | 2-point percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `shot3_percent` | numeric | 3-point percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `shot23_percent` | numeric | Field-goal percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
-| `assist` | integer | Assists. The wire's null is 0 here (null counts are filled). |
-| `blocks` | integer | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
-| `def_rebound` | integer | Defensive rebounds. The wire's null is 0 here (null counts are filled). |
-| `off_rebound` | integer | Offensive rebounds. The wire's null is 0 here (null counts are filled). |
-| `rebound` | integer | Total rebounds. The wire's null is 0 here (null counts are filled). |
-| `steal` | integer | Steals. The wire's null is 0 here (null counts are filled). |
-| `turnover` | integer | Turnovers. The wire's null is 0 here (null counts are filled). |
-| `foul` | integer | Personal fouls committed. The wire's null is 0 here (null counts are filled). |
-| `opponent_foul` | integer | Fouls drawn. The wire's null is 0 here (null counts are filled). |
-| `seconds` | integer | Playing time in seconds. |
-| `played_time` | character | Playing time as 'minutes:seconds' (team rows sum the five players: '200:00' = 40 minutes x 5). |
-| `plus_minus` | integer | Plus-minus: point differential while on the court. Null where the host sends none. |
-| `is_start` | logical | True for a starter. |
-| `start_mark` | character | '+' for a starter, else empty. |
-| `kpi` | integer | Efficiency index (KPI, the platform's 'КПИ'); formula unverified. |
+| `person_id` | Int64 | 0 on every game row (the player is the body's PersonID). |
+| `game_id` | Int64 | Infobasket game id (GameID); equals the v2 API `matchId`. Joins to /Widget/GetOnline/{gameId} and /Widget/GamePage/{gameId}. |
+| `game_number` | String | Game number within the competition, e.g. 'RS-002' (RS = regular season); playoff games use the series code. |
+| `game_status` | Int64 | Game status in the game-record code set: 21 completed. |
+| `team_id` | Int64 | Infobasket TeamID the player played for in that game. |
+| `team_a_id` | Int64 | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
+| `team_b_id` | Int64 | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
+| `score_a` | Int64 | Final points of team A (listed first). |
+| `score_b` | Int64 | Final points of team B (listed second). |
+| `team_a_short_name_ru` | String | The team A (the home side in the calendar)'s short name in Russian (as the competition names it). |
+| `team_a_short_name_en` | String | The team A (the home side in the calendar)'s short name in English (as the competition names it). |
+| `team_a_name_ru` | String | The team A (the home side in the calendar)'s name in Russian (as the competition names it). |
+| `team_a_name_en` | String | The team A (the home side in the calendar)'s name in English (as the competition names it). |
+| `team_a_region_name_ru` | String | The team A (the home side in the calendar)'s region or city in Russian (as the competition names it). |
+| `team_a_region_name_en` | String | The team A (the home side in the calendar)'s region or city in English (as the competition names it). |
+| `team_b_short_name_ru` | String | The team B (the away side)'s short name in Russian (as the competition names it). |
+| `team_b_short_name_en` | String | The team B (the away side)'s short name in English (as the competition names it). |
+| `team_b_name_ru` | String | The team B (the away side)'s name in Russian (as the competition names it). |
+| `team_b_name_en` | String | The team B (the away side)'s name in English (as the competition names it). |
+| `team_b_region_name_ru` | String | The team B (the away side)'s region or city in Russian (as the competition names it). |
+| `team_b_region_name_en` | String | The team B (the away side)'s region or city in English (as the competition names it). |
+| `game_date` | String | Game date as an ISO 8601 date (YYYY-MM-DD); the wire sends DD.MM.YYYY. |
+| `team_number` | Int64 | Side (1 or 2) the player's team had in the game. |
+| `player_number` | Int64 | Shirt number as an integer (-1 when none). |
+| `display_number` | String | Shirt number as displayed ('0' and '00' differ). |
+| `points` | Int64 | Points. The wire's null is 0 here (null counts are filled). |
+| `shot1` | Int64 | Free throws attempted. The wire's null is 0 here (null counts are filled). |
+| `goal1` | Int64 | Free throws made. The wire's null is 0 here (null counts are filled). |
+| `shot2` | Int64 | 2-point field goals attempted. The wire's null is 0 here (null counts are filled). |
+| `goal2` | Int64 | 2-point field goals made. The wire's null is 0 here (null counts are filled). |
+| `shot3` | Int64 | 3-point field goals attempted. The wire's null is 0 here (null counts are filled). |
+| `goal3` | Int64 | 3-point field goals made. The wire's null is 0 here (null counts are filled). |
+| `shot23` | Int64 | Field goals (2 + 3 points) attempted. The wire's null is 0 here (null counts are filled). |
+| `goal23` | Int64 | Field goals (2 + 3 points) made. The wire's null is 0 here (null counts are filled). |
+| `shot1_percent` | Float64 | Free-throw percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `shot2_percent` | Float64 | 2-point percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `shot3_percent` | Float64 | 3-point percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `shot23_percent` | Float64 | Field-goal percentage (0-100); parsed to a number (the wire sends a comma-decimal string, null when there were no attempts). |
+| `assist` | Int64 | Assists. The wire's null is 0 here (null counts are filled). |
+| `blocks` | Int64 | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
+| `def_rebound` | Int64 | Defensive rebounds. The wire's null is 0 here (null counts are filled). |
+| `off_rebound` | Int64 | Offensive rebounds. The wire's null is 0 here (null counts are filled). |
+| `rebound` | Int64 | Total rebounds. The wire's null is 0 here (null counts are filled). |
+| `steal` | Int64 | Steals. The wire's null is 0 here (null counts are filled). |
+| `turnover` | Int64 | Turnovers. The wire's null is 0 here (null counts are filled). |
+| `foul` | Int64 | Personal fouls committed. The wire's null is 0 here (null counts are filled). |
+| `opponent_foul` | Int64 | Fouls drawn. The wire's null is 0 here (null counts are filled). |
+| `seconds` | Int64 | Playing time in seconds. |
+| `played_time` | String | Playing time as 'minutes:seconds' (team rows sum the five players: '200:00' = 40 minutes x 5). |
+| `plus_minus` | Int64 | Plus-minus: point differential while on the court. Null where the host sends none. |
+| `is_start` | Boolean | True for a starter. |
+| `start_mark` | String | '+' for a starter, else empty. |
+| `kpi` | Int64 | Efficiency index (KPI, the platform's 'КПИ'); formula unverified. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

@@ -195,7 +195,7 @@ def _add_python(
     rows: Rows,
     name: str,
     obj: Any,
-    leaf: str,
+    leaf: Optional[str],
     wrappers: dict[str, Wrapper],
     loaders: dict[str, Any],
     anchors: dict[str, str],
@@ -243,6 +243,12 @@ def _reexport(name: str, obj: Any) -> bool:
     return not mod.startswith("sportsdataverse") and getattr(sys.modules.get(mod), name, None) is obj
 
 
+# Packages whose public helpers are exported only at the ``sportsdataverse`` top level, not by any league module.
+_HELPER_HOMES = tuple(
+    f"sportsdataverse.{pkg}" for pkg in ("analytics", "validation", "wexp", "registry", "release", "espn_snapshots")
+)
+
+
 def python_functions(
     wrappers: dict[str, Wrapper], loaders: dict[str, Any], anchors: dict[str, str], rows: Rows
 ) -> dict[str, str]:
@@ -257,6 +263,13 @@ def python_functions(
             obj = getattr(mod, name, None)
             if name not in seen and obj is not None and not _reexport(name, obj):
                 seen[name] = _add_python(rows, name, obj, leaf, wrappers, loaders, anchors)
+    # Cross-league helpers (analytics, validation, ...) live outside every league module but are exported at
+    # the package top level; they carry no league.
+    for name in sorted(n for n in dir(sportsdataverse) if not n.startswith("_") and n not in seen):
+        obj = getattr(sportsdataverse, name)
+        mod = getattr(obj, "__module__", None) or ""
+        if callable(obj) and not isinstance(obj, type(sportsdataverse)) and mod.startswith(_HELPER_HOMES):
+            seen[name] = _add_python(rows, name, obj, None, wrappers, loaders, anchors)
     for name, ld in loaders.items():  # loader-only leagues (e.g. pwhl) surface at the package top level
         obj = getattr(sportsdataverse, name, None)
         if name not in seen and obj is not None:
@@ -313,7 +326,7 @@ def python_columns(funcs: dict[str, str], wrappers: dict[str, Wrapper], loaders:
                 desc = G._table_cell_desc("", league, c["name"], schema=name)
                 rows.columns.append((name, None, c["name"], c.get("type"), _clean(desc)))
         else:
-            for scope in (league, "global"):
+            for scope in (league, "global") if league else ("global",):
                 cols = G._autodoc_return_columns(scope, name)
                 frames = [{"section": None, "columns": cols}] if cols else G._autodoc_return_frames(scope, name)
                 for fr in frames:

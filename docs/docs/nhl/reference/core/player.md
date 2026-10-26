@@ -27,9 +27,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -65,60 +65,60 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `active` | logical | Whether athlete is currently active. |
-| `age` | integer | Player age. |
-| `date_of_birth` | character | Date of birth (ISO 8601). |
-| `debut_year` | integer | Year of NHL debut. |
-| `display_height` | character | Formatted height string. |
-| `display_name` | character | Player display name. |
-| `display_weight` | character | Formatted weight string. |
-| `first_name` | character | Player first name. |
-| `full_name` | character | Player full name. |
-| `guid` | character | Athlete global unique identifier. |
-| `height` | double | Player height in inches. |
-| `id` | integer | Unique player identifier. |
-| `jersey` | character | Jersey number. |
-| `last_name` | character | Player last name. |
-| `linked` | logical |  |
-| `links` | character |  |
-| `short_name` | character | Short game name. |
-| `slug` | character | URL slug. |
-| `type` | character | Competitor type (e.g. "team"). |
-| `uid` | character | Competitor uid string. |
-| `weight` | double | Player weight in pounds. |
-| `alternate_ids_sdr` | character | Alternate ids sdr. |
-| `birth_place_city` | character | Birth place city. |
-| `birth_place_state` | character | Birth place state. |
-| `college_$ref` | character |  |
-| `college_athlete_$ref` | character |  |
-| `contracts_$ref` | character |  |
-| `draft_display_text` | character |  |
-| `draft_pick_$ref` | character |  |
-| `draft_round` | integer | Draft round. |
-| `draft_selection` | integer |  |
-| `draft_team_$ref` | character |  |
-| `draft_year` | integer | Draft year the lottery applies to. |
-| `experience_years` | integer | Experience years. |
-| `hand_abbreviation` | character | Hand abbreviation. |
-| `hand_display_value` | character | Hand display value. |
-| `hand_type` | character | Shooting/catching hand type. |
-| `headshot_alt` | character | Headshot alt text. |
-| `headshot_href` | character | Player headshot image URL. |
-| `position_$ref` | character |  |
-| `position_abbreviation` | character | Position abbreviation. |
-| `position_display_name` | character | Position display name. |
-| `position_id` | integer | Official position identifier. |
-| `position_leaf` | logical | Whether position is a leaf node. |
-| `position_name` | character | Official position name (e.g. "Referee", "Linesman"). |
-| `seasons_$ref` | character |  |
-| `statistics_$ref` | character |  |
-| `statisticslog_$ref` | character |  |
-| `status_abbreviation` | character | Status abbreviation. |
-| `status_id` | integer | Status identifier. |
-| `status_name` | character | Status name. |
-| `status_type` | character | Status type. |
-| `team_$ref` | character |  |
+| `$ref` | String |  |
+| `active` | Boolean | Whether athlete is currently active. |
+| `age` | Int64 | Player age. |
+| `date_of_birth` | String | Date of birth (ISO 8601). |
+| `debut_year` | Int64 | Year of NHL debut. |
+| `display_height` | String | Formatted height string. |
+| `display_name` | String | Player display name. |
+| `display_weight` | String | Formatted weight string. |
+| `first_name` | String | Player first name. |
+| `full_name` | String | Player full name. |
+| `guid` | String | Athlete global unique identifier. |
+| `height` | Float64 | Player height in inches. |
+| `id` | Int64 | Unique player identifier. |
+| `jersey` | String | Jersey number. |
+| `last_name` | String | Player last name. |
+| `linked` | Boolean |  |
+| `links` | String |  |
+| `short_name` | String | Short game name. |
+| `slug` | String | URL slug. |
+| `type` | String | Competitor type (e.g. "team"). |
+| `uid` | String | Competitor uid string. |
+| `weight` | Float64 | Player weight in pounds. |
+| `alternate_ids_sdr` | String | Alternate ids sdr. |
+| `birth_place_city` | String | Birth place city. |
+| `birth_place_state` | String | Birth place state. |
+| `college_$ref` | String |  |
+| `college_athlete_$ref` | String |  |
+| `contracts_$ref` | String |  |
+| `draft_display_text` | String |  |
+| `draft_pick_$ref` | String |  |
+| `draft_round` | Int64 | Draft round. |
+| `draft_selection` | Int64 |  |
+| `draft_team_$ref` | String |  |
+| `draft_year` | Int64 | Draft year the lottery applies to. |
+| `experience_years` | Int64 | Experience years. |
+| `hand_abbreviation` | String | Hand abbreviation. |
+| `hand_display_value` | String | Hand display value. |
+| `hand_type` | String | Shooting/catching hand type. |
+| `headshot_alt` | String | Headshot alt text. |
+| `headshot_href` | String | Player headshot image URL. |
+| `position_$ref` | String |  |
+| `position_abbreviation` | String | Position abbreviation. |
+| `position_display_name` | String | Position display name. |
+| `position_id` | Int64 | Official position identifier. |
+| `position_leaf` | Boolean | Whether position is a leaf node. |
+| `position_name` | String | Official position name (e.g. "Referee", "Linesman"). |
+| `seasons_$ref` | String |  |
+| `statistics_$ref` | String |  |
+| `statisticslog_$ref` | String |  |
+| `status_abbreviation` | String | Status abbreviation. |
+| `status_id` | Int64 | Status identifier. |
+| `status_name` | String | Status name. |
+| `status_type` | String | Status type. |
+| `team_$ref` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -189,10 +189,10 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `statistics` | character |  |
-| `season_$ref` | character |  |
-| `count` | integer | Always null, since the statisticslog payload ships its rows under entries with no page envelope. |
-| `page_count` | integer | Always null, since the statisticslog payload ships its rows under entries with no page envelope. |
+| `statistics` | String |  |
+| `season_$ref` | String |  |
+| `count` | Int64 | Always null, since the statisticslog payload ships its rows under entries with no page envelope. |
+| `page_count` | Int64 | Always null, since the statisticslog payload ships its rows under entries with no page envelope. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -262,9 +262,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -334,9 +334,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -406,9 +406,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | ESPN numeric identifier for the athlete. |
-| `display_name` | character | Athlete's full display name as shown on ESPN. |
-| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+| `id` | Int64 | ESPN numeric identifier for the athlete. |
+| `display_name` | String | Athlete's full display name as shown on ESPN. |
+| `injuries` | String | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

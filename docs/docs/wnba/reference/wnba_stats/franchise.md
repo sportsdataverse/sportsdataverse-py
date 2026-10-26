@@ -9,7 +9,7 @@ toc_max_heading_level: 2
 
 ## wnba_stats_franchisehistory
 
-GET /stats/franchisehistory
+Franchise history.
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/franchisehistory`
 
@@ -27,41 +27,41 @@ GET /stats/franchisehistory
 
 | col_name | type | description |
 |---|---|---|
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `start_year` | character | First season (start year) of the franchise span, as a string (e.g. '1949'). |
-| `end_year` | character | Last season (start year) of the franchise span, as a string; the current season for an active franchise. |
-| `years` | integer | Years. |
-| `games` | integer | Games played. |
-| `wins` | integer | Total wins. |
-| `losses` | integer | Total losses. |
-| `win_pct` | numeric | Win percentage (0-1 decimal). |
-| `po_appearances` | integer | NBA or WNBA Stats value for playoff appearances in the franchisehistory result set. |
-| `div_titles` | integer | NBA or WNBA Stats value for div titles in the franchisehistory result set. |
-| `conf_titles` | integer | NBA or WNBA Stats value for conf titles in the franchisehistory result set. |
-| `league_titles` | integer | NBA or WNBA Stats value for league titles in the franchisehistory result set. |
+| `league_id` | String | League identifier ('10' = WNBA). |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_city` | String | Team city or region (e.g. 'Las Vegas'). |
+| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
+| `start_year` | String | First season (start year) of the franchise span, as a string (e.g. '1949'). |
+| `end_year` | String | Last season (start year) of the franchise span, as a string; the current season for an active franchise. |
+| `years` | Int64 | Years. |
+| `games` | Int64 | Games played. |
+| `wins` | Int64 | Total wins. |
+| `losses` | Int64 | Total losses. |
+| `win_pct` | Float64 | Win percentage (0-1 decimal). |
+| `po_appearances` | Int64 | NBA or WNBA Stats value for playoff appearances in the franchisehistory result set. |
+| `div_titles` | Int64 | NBA or WNBA Stats value for div titles in the franchisehistory result set. |
+| `conf_titles` | Int64 | NBA or WNBA Stats value for conf titles in the franchisehistory result set. |
+| `league_titles` | Int64 | NBA or WNBA Stats value for league titles in the franchisehistory result set. |
 
 **DefunctTeams**
 
 | col_name | type | description |
 |---|---|---|
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `start_year` | character | First season (start year) of the franchise span, as a string (e.g. '1949'). |
-| `end_year` | character | Last season (start year) of the franchise span, as a string; the current season for an active franchise. |
-| `years` | integer | Years. |
-| `games` | integer | Games played. |
-| `wins` | integer | Total wins. |
-| `losses` | integer | Total losses. |
-| `win_pct` | numeric | Win percentage (0-1 decimal). |
-| `po_appearances` | integer | NBA or WNBA Stats value for playoff appearances in the franchisehistory result set. |
-| `div_titles` | integer | NBA or WNBA Stats value for div titles in the franchisehistory result set. |
-| `conf_titles` | integer | NBA or WNBA Stats value for conf titles in the franchisehistory result set. |
-| `league_titles` | integer | NBA or WNBA Stats value for league titles in the franchisehistory result set. |
+| `league_id` | String | League identifier ('10' = WNBA). |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_city` | String | Team city or region (e.g. 'Las Vegas'). |
+| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
+| `start_year` | String | First season (start year) of the franchise span, as a string (e.g. '1949'). |
+| `end_year` | String | Last season (start year) of the franchise span, as a string; the current season for an active franchise. |
+| `years` | Int64 | Years. |
+| `games` | Int64 | Games played. |
+| `wins` | Int64 | Total wins. |
+| `losses` | Int64 | Total losses. |
+| `win_pct` | Float64 | Win percentage (0-1 decimal). |
+| `po_appearances` | Int64 | NBA or WNBA Stats value for playoff appearances in the franchisehistory result set. |
+| `div_titles` | Int64 | NBA or WNBA Stats value for div titles in the franchisehistory result set. |
+| `conf_titles` | Int64 | NBA or WNBA Stats value for conf titles in the franchisehistory result set. |
+| `league_titles` | Int64 | NBA or WNBA Stats value for league titles in the franchisehistory result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -82,7 +82,7 @@ wnba_stats_franchisehistory(league_id='10')
 
 ## wnba_stats_franchiseleaders
 
-GET /stats/franchiseleaders
+Franchise leaders.
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/franchiseleaders`
 
@@ -99,22 +99,22 @@ GET /stats/franchiseleaders
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | Unique team identifier. |
-| `pts` | integer | Points scored. |
-| `pts_person_id` | integer | Stats API identifier for points person identifier associated with this NBA or WNBA Stats row. |
-| `pts_player` | character | Scoring or score-margin metric for points player in the requested NBA or WNBA Stats split. |
-| `ast` | integer | Assists. |
-| `ast_person_id` | integer | Stats API identifier for assists person identifier associated with this NBA or WNBA Stats row. |
-| `ast_player` | character | NBA or WNBA Stats value for assists player in the franchiseleaders result set. |
-| `reb` | integer | Total rebounds. |
-| `reb_person_id` | integer | Stats API identifier for rebounds person identifier associated with this NBA or WNBA Stats row. |
-| `reb_player` | character | Rebounding metric for rebounds player in the requested NBA or WNBA Stats split. |
-| `blk` | integer | Blocks. |
-| `blk_person_id` | integer | Stats API identifier for blocks person identifier associated with this NBA or WNBA Stats row. |
-| `blk_player` | character | NBA or WNBA Stats value for blocks player in the franchiseleaders result set. |
-| `stl` | integer | Steals. |
-| `stl_person_id` | integer | Stats API identifier for steals person identifier associated with this NBA or WNBA Stats row. |
-| `stl_player` | character | NBA or WNBA Stats value for steals player in the franchiseleaders result set. |
+| `team_id` | Int64 | Unique team identifier. |
+| `pts` | Int64 | Points scored. |
+| `pts_person_id` | Int64 | Stats API identifier for points person identifier associated with this NBA or WNBA Stats row. |
+| `pts_player` | String | Scoring or score-margin metric for points player in the requested NBA or WNBA Stats split. |
+| `ast` | Int64 | Assists. |
+| `ast_person_id` | Int64 | Stats API identifier for assists person identifier associated with this NBA or WNBA Stats row. |
+| `ast_player` | String | NBA or WNBA Stats value for assists player in the franchiseleaders result set. |
+| `reb` | Int64 | Total rebounds. |
+| `reb_person_id` | Int64 | Stats API identifier for rebounds person identifier associated with this NBA or WNBA Stats row. |
+| `reb_player` | String | Rebounding metric for rebounds player in the requested NBA or WNBA Stats split. |
+| `blk` | Int64 | Blocks. |
+| `blk_person_id` | Int64 | Stats API identifier for blocks person identifier associated with this NBA or WNBA Stats row. |
+| `blk_player` | String | NBA or WNBA Stats value for blocks player in the franchiseleaders result set. |
+| `stl` | Int64 | Steals. |
+| `stl_person_id` | Int64 | Stats API identifier for steals person identifier associated with this NBA or WNBA Stats row. |
+| `stl_player` | String | NBA or WNBA Stats value for steals player in the franchiseleaders result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -135,7 +135,7 @@ wnba_stats_franchiseleaders(league_id='10')
 
 ## wnba_stats_franchiseleaderswrank
 
-GET /stats/franchiseleaderswrank
+Franchise leaders w rank.
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/franchiseleaderswrank`
 
@@ -154,53 +154,53 @@ GET /stats/franchiseleaderswrank
 
 | col_name | type | description |
 |---|---|---|
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `team` | character | Team-side label or team identifier. |
-| `person_id` | integer | Unique player identifier (V3 endpoints). |
-| `player` | character | Player name. |
-| `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `active_with_team` | integer | Flag indicating whether the franchise leader is still active with the team. |
-| `gp` | integer | Games played. |
-| `minutes` | numeric | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Total rebounds. |
-| `ast` | numeric | Assists. |
-| `pf` | numeric | Personal fouls. |
-| `stl` | numeric | Steals. |
-| `tov` | numeric | Turnovers. |
-| `blk` | numeric | Blocks. |
-| `pts` | numeric | Points scored. |
-| `f_rank_gp` | integer | Franchise all-time rank of the player's career games played. |
-| `f_rank_minutes` | integer | Franchise all-time rank of the player's career minutes played. |
-| `f_rank_fgm` | integer | Franchise all-time rank of the player's career field goals made. |
-| `f_rank_fga` | integer | Franchise all-time rank of the player's career field goals attempted. |
-| `f_rank_fg_pct` | integer | Franchise all-time rank of the player's career field goal percentage. |
-| `f_rank_fg3_m` | integer | Franchise all-time rank of the player's career three-point field goals made. |
-| `f_rank_fg3_a` | integer | Franchise all-time rank of the player's career three-point field goals attempted. |
-| `f_rank_fg3_pct` | integer | Franchise all-time rank of the player's career three-point field goal percentage. |
-| `f_rank_ftm` | integer | Franchise all-time rank of the player's career free throws made. |
-| `f_rank_fta` | integer | Franchise all-time rank of the player's career free throws attempted. |
-| `f_rank_ft_pct` | integer | Franchise all-time rank of the player's career free throw percentage. |
-| `f_rank_oreb` | integer | Franchise all-time rank of the player's career offensive rebounds. |
-| `f_rank_dreb` | integer | Franchise all-time rank of the player's career defensive rebounds. |
-| `f_rank_reb` | integer | Franchise all-time rank of the player's career total rebounds. |
-| `f_rank_ast` | integer | Franchise all-time rank of the player's career assists. |
-| `f_rank_pf` | integer | Franchise all-time rank of the player's career personal fouls committed. |
-| `f_rank_stl` | integer | Franchise all-time rank of the player's career steals. |
-| `f_rank_tov` | integer | Franchise all-time rank of the player's career turnovers. |
-| `f_rank_blk` | integer | Franchise all-time rank of the player's career blocked shots. |
-| `f_rank_pts` | integer | Franchise all-time rank of the player's career points scored. |
+| `league_id` | String | League identifier ('10' = WNBA). |
+| `team_id` | Int64 | Unique team identifier. |
+| `team` | String | Team-side label or team identifier. |
+| `person_id` | Int64 | Unique player identifier (V3 endpoints). |
+| `player` | String | Player name. |
+| `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `active_with_team` | Int64 | Flag indicating whether the franchise leader is still active with the team. |
+| `gp` | Int64 | Games played. |
+| `minutes` | Float64 | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `fgm` | Float64 | Field goals made. |
+| `fga` | Float64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `ftm` | Float64 | Free throws made. |
+| `fta` | Float64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `oreb` | Float64 | Offensive rebounds. |
+| `dreb` | Float64 | Defensive rebounds. |
+| `reb` | Float64 | Total rebounds. |
+| `ast` | Float64 | Assists. |
+| `pf` | Float64 | Personal fouls. |
+| `stl` | Float64 | Steals. |
+| `tov` | Float64 | Turnovers. |
+| `blk` | Float64 | Blocks. |
+| `pts` | Float64 | Points scored. |
+| `f_rank_gp` | Int64 | Franchise all-time rank of the player's career games played. |
+| `f_rank_minutes` | Int64 | Franchise all-time rank of the player's career minutes played. |
+| `f_rank_fgm` | Int64 | Franchise all-time rank of the player's career field goals made. |
+| `f_rank_fga` | Int64 | Franchise all-time rank of the player's career field goals attempted. |
+| `f_rank_fg_pct` | Int64 | Franchise all-time rank of the player's career field goal percentage. |
+| `f_rank_fg3_m` | Int64 | Franchise all-time rank of the player's career three-point field goals made. |
+| `f_rank_fg3_a` | Int64 | Franchise all-time rank of the player's career three-point field goals attempted. |
+| `f_rank_fg3_pct` | Int64 | Franchise all-time rank of the player's career three-point field goal percentage. |
+| `f_rank_ftm` | Int64 | Franchise all-time rank of the player's career free throws made. |
+| `f_rank_fta` | Int64 | Franchise all-time rank of the player's career free throws attempted. |
+| `f_rank_ft_pct` | Int64 | Franchise all-time rank of the player's career free throw percentage. |
+| `f_rank_oreb` | Int64 | Franchise all-time rank of the player's career offensive rebounds. |
+| `f_rank_dreb` | Int64 | Franchise all-time rank of the player's career defensive rebounds. |
+| `f_rank_reb` | Int64 | Franchise all-time rank of the player's career total rebounds. |
+| `f_rank_ast` | Int64 | Franchise all-time rank of the player's career assists. |
+| `f_rank_pf` | Int64 | Franchise all-time rank of the player's career personal fouls committed. |
+| `f_rank_stl` | Int64 | Franchise all-time rank of the player's career steals. |
+| `f_rank_tov` | Int64 | Franchise all-time rank of the player's career turnovers. |
+| `f_rank_blk` | Int64 | Franchise all-time rank of the player's career blocked shots. |
+| `f_rank_pts` | Int64 | Franchise all-time rank of the player's career points scored. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -221,7 +221,7 @@ wnba_stats_franchiseleaderswrank(league_id='10')
 
 ## wnba_stats_franchiseplayers
 
-GET /stats/franchiseplayers
+Franchise players.
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/franchiseplayers`
 
@@ -240,32 +240,32 @@ GET /stats/franchiseplayers
 
 | col_name | type | description |
 |---|---|---|
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `team` | character | Team-side label or team identifier. |
-| `person_id` | integer | Unique player identifier (V3 endpoints). |
-| `player` | character | Player name. |
-| `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `active_with_team` | integer | Flag indicating whether the player is still active with the franchise. |
-| `gp` | integer | Games played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Total rebounds. |
-| `ast` | numeric | Assists. |
-| `pf` | numeric | Personal fouls. |
-| `stl` | numeric | Steals. |
-| `tov` | numeric | Turnovers. |
-| `blk` | numeric | Blocks. |
-| `pts` | numeric | Points scored. |
+| `league_id` | String | League identifier ('10' = WNBA). |
+| `team_id` | Int64 | Unique team identifier. |
+| `team` | String | Team-side label or team identifier. |
+| `person_id` | Int64 | Unique player identifier (V3 endpoints). |
+| `player` | String | Player name. |
+| `season_type` | String | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `active_with_team` | Int64 | Flag indicating whether the player is still active with the franchise. |
+| `gp` | Int64 | Games played. |
+| `fgm` | Float64 | Field goals made. |
+| `fga` | Float64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `ftm` | Float64 | Free throws made. |
+| `fta` | Float64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `oreb` | Float64 | Offensive rebounds. |
+| `dreb` | Float64 | Defensive rebounds. |
+| `reb` | Float64 | Total rebounds. |
+| `ast` | Float64 | Assists. |
+| `pf` | Float64 | Personal fouls. |
+| `stl` | Float64 | Steals. |
+| `tov` | Float64 | Turnovers. |
+| `blk` | Float64 | Blocks. |
+| `pts` | Float64 | Points scored. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

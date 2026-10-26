@@ -1,9 +1,9 @@
 ---
-title: SIHF
-sidebar_label: SIHF
-description: "sdv-py SIHF: endpoint references, dataset loaders and parsers for SIHF in the SportsDataverse Python package."
+title: SIHF (Swiss hockey)
+sidebar_label: SIHF (Swiss hockey)
+description: "sdv-py SIHF (Swiss hockey): endpoint references, dataset loaders and parsers for SIHF (Swiss hockey) in the SportsDataverse Python package."
 ---
-# SIHF (`sportsdataverse.hockey.sihf`)
+# SIHF (Swiss hockey) (`sportsdataverse.hockey.sihf`)
 
 ## Data sources
 

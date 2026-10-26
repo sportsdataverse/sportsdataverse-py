@@ -1,9 +1,9 @@
 ---
-title: NBASL_SAC
-sidebar_label: NBASL_SAC
-description: "sdv-py NBASL_SAC: endpoint references, dataset loaders and parsers for NBASL_SAC in the SportsDataverse Python package."
+title: NBA Summer League (Sacramento)
+sidebar_label: NBA Summer League (Sacramento)
+description: "sdv-py NBA Summer League (Sacramento): endpoint references, dataset loaders and parsers for NBA Summer League (Sacramento) in the SportsDataverse Python package."
 ---
-# NBASL_SAC (`sportsdataverse.basketball.nbasl_sac`)
+# NBA Summer League (Sacramento) (`sportsdataverse.basketball.nbasl_sac`)
 
 ## Data sources
 

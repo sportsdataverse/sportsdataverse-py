@@ -1113,7 +1113,7 @@ def _endpoint(short: str, entry: Entry) -> Dict[str, Any]:
 # --- family docs --------------------------------------------------------------------------------------------------------
 
 OWNER_FLAG = (
-    "Owner flag (sdv-internal-refs/vtb/README.md): the VTB United League is run from Russia and several clubs are owned or "
+    "Owner flag: the VTB United League is run from Russia and several clubs are owned or "
     "sponsored by sanctioned state companies (the KHL precedent); Infobasket is the Russian basketball federation's stats "
     "platform. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs "
     "owner (sanctions / legal) sign-off first. No accounts or payments are involved."

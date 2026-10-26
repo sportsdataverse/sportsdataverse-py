@@ -1,9 +1,9 @@
 ---
-title: UCL
-sidebar_label: UCL
-description: "sdv-py UCL: endpoint references, dataset loaders and parsers for UCL in the SportsDataverse Python package."
+title: UEFA Champions League
+sidebar_label: UEFA Champions League
+description: "sdv-py UEFA Champions League: endpoint references, dataset loaders and parsers for UEFA Champions League in the SportsDataverse Python package."
 ---
-# UCL (`sportsdataverse.soccer.ucl`)
+# UEFA Champions League (`sportsdataverse.soccer.ucl`)
 
 ## Data sources
 

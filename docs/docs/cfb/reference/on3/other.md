@@ -1,15 +1,15 @@
 ---
-title: "CFB — On3 Recruit Database (api.on3.com) — Other"
+title: "College football — On3 Recruit Database (api.on3.com) — Other"
 sidebar_label: "Other"
 sidebar_position: 11
-description: "CFB — On3 Recruit Database (api.on3.com) — Other — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — On3 Recruit Database (api.on3.com) — Other — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# CFB — On3 Recruit Database (api.on3.com) — Other
+# College football — On3 Recruit Database (api.on3.com) — Other
 
 ## on3_coaches_history
 
-GET /rdb/v1/coaches/{personKey}/history
+Coaches history.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/coaches/{person_key}/history`
 
@@ -45,7 +45,7 @@ on3_coaches_history(person_key=89617)
 
 ## on3_coaches_profile
 
-GET /rdb/v1/coaches/{personKey}/profile
+Coaches profile.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/coaches/{person_key}/profile`
 
@@ -79,7 +79,7 @@ on3_coaches_profile(person_key=89617)
 
 ## on3_filters_conferences
 
-GET /rdb/v1/filters/conferences
+Filters conferences.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/filters/conferences`
 
@@ -114,7 +114,7 @@ on3_filters_conferences()
 
 ## on3_filters_draft_rounds
 
-GET /rdb/v1/filters/draft-rounds
+Filters draft rounds.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/filters/draft-rounds`
 
@@ -131,7 +131,7 @@ GET /rdb/v1/filters/draft-rounds
 
 | col_name | type | description |
 |---|---|---|
-| `round` | integer | Draft round number. |
+| `round` | Int64 | Draft round number. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -151,7 +151,7 @@ on3_filters_draft_rounds()
 
 ## on3_filters_positions
 
-GET /rdb/v1/filters/positions
+Filters positions.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/filters/positions`
 
@@ -186,7 +186,7 @@ on3_filters_positions()
 
 ## on3_filters_sports
 
-GET /rdb/v1/filters/sports
+Filters sports.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/filters/sports`
 
@@ -219,7 +219,7 @@ on3_filters_sports()
 
 ## on3_filters_status
 
-GET /rdb/v1/filters/status
+Filters status.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/filters/status`
 
@@ -234,7 +234,7 @@ GET /rdb/v1/filters/status
 
 | col_name | type | description |
 |---|---|---|
-| `value` | character | Filter value as On3 lists it. |
+| `value` | String | Filter value as On3 lists it. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -254,7 +254,7 @@ on3_filters_status()
 
 ## on3_filters_teams
 
-GET /rdb/v1/filters/teams
+Filters teams.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/filters/teams`
 
@@ -290,7 +290,7 @@ on3_filters_teams()
 
 ## on3_filters_years
 
-GET /rdb/v1/filters/years
+Filters years.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/filters/years`
 
@@ -323,7 +323,7 @@ on3_filters_years()
 
 ## on3_person_connections_connection_key
 
-GET /rdb/v1/person-connections/{connectionKey}
+Person connections connection key.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/person-connections/{connection_key}`
 
@@ -357,7 +357,7 @@ on3_person_connections_connection_key(connection_key=89617)
 
 ## on3_person_primary_recruitment_evaluation
 
-GET /rdb/v1/person/{personKey}/primary-recruitment-evaluation
+Person primary recruitment evaluation.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/person/{person_key}/primary-recruitment-evaluation`
 
@@ -391,7 +391,7 @@ on3_person_primary_recruitment_evaluation(person_key=89617)
 
 ## on3_person_recruitment_evaluations
 
-GET /rdb/v1/person/{personKey}/recruitment-evaluations
+Person recruitment evaluations.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/person/{person_key}/recruitment-evaluations`
 
@@ -425,7 +425,7 @@ on3_person_recruitment_evaluations(person_key=89617)
 
 ## on3_person_sport_profile_recruit
 
-GET /rdb/v1/person-sport/{psKey}/profile-recruit
+Person sport profile recruit.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/person-sport/{ps_key}/profile-recruit`
 
@@ -459,7 +459,7 @@ on3_person_sport_profile_recruit(ps_key=89617)
 
 ## on3_person_sport_rankings
 
-GET /rdb/v1/person-sport-rankings
+Person sport rankings.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/person-sport-rankings`
 
@@ -532,7 +532,7 @@ on3_predictions_user_key(user_key=89617)
 
 ## on3_quotes
 
-GET /rdb/v1/quotes
+Quotes.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/quotes`
 
@@ -549,23 +549,23 @@ GET /rdb/v1/quotes
 
 | col_name | type | description |
 |---|---|---|
-| `key` | integer | On3 RDB key for the quote record. |
-| `body` | character | Full text of the quote. |
-| `category` | character | Category label On3 attaches to the row. |
-| `person_key` | integer | On3 person key of the person quoted or quoted about. |
-| `date_added` | character | Date the quote was added to the On3 database. |
-| `date_updated` | character | Date the quote was last updated. |
-| `person_key_2` | integer | Person key repeated from the nested person object (json_normalize de-duplication suffix). |
-| `person_known_as_name` | character | Preferred name of the person, when it differs from the given name. |
-| `person_first_name` | character | First name of the person. |
-| `person_last_name` | character | Last name of the person. |
-| `person_twitter_handle` | character | Twitter/X handle of the person, when listed. |
-| `person_instagram_profile` | character | Instagram profile of the person, when listed. |
-| `person_tik_tok_handle` | character | TikTok handle of the person, when listed. |
-| `person_espn_profile` | character | ESPN profile link of the person, when listed. |
-| `person_class_year` | integer | High-school graduating class year of the person. |
-| `person_two_four_seven_profile` | character | 247Sports profile link of the person, when listed. |
-| `person_rivals_profile` | character | Rivals profile link of the person, when listed. |
+| `key` | Int64 | On3 RDB key for the quote record. |
+| `body` | String | Full text of the quote. |
+| `category` | String | Category label On3 attaches to the row. |
+| `person_key` | Int64 | On3 person key of the person quoted or quoted about. |
+| `date_added` | String | Date the quote was added to the On3 database. |
+| `date_updated` | String | Date the quote was last updated. |
+| `person_key_2` | Int64 | Person key repeated from the nested person object (json_normalize de-duplication suffix). |
+| `person_known_as_name` | String | Preferred name of the person, when it differs from the given name. |
+| `person_first_name` | String | First name of the person. |
+| `person_last_name` | String | Last name of the person. |
+| `person_twitter_handle` | String | Twitter/X handle of the person, when listed. |
+| `person_instagram_profile` | String | Instagram profile of the person, when listed. |
+| `person_tik_tok_handle` | String | TikTok handle of the person, when listed. |
+| `person_espn_profile` | String | ESPN profile link of the person, when listed. |
+| `person_class_year` | Int64 | High-school graduating class year of the person. |
+| `person_two_four_seven_profile` | String | 247Sports profile link of the person, when listed. |
+| `person_rivals_profile` | String | Rivals profile link of the person, when listed. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -585,7 +585,7 @@ on3_quotes()
 
 ## on3_quotes_key
 
-GET /rdb/v1/quotes/{key}
+Quotes key.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/quotes/{key}`
 
@@ -619,7 +619,7 @@ on3_quotes_key(key=1)
 
 ## on3_videos_video_key
 
-GET /rdb/v1/videos/{videoKey}
+Videos video key.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/videos/{video_key}`
 

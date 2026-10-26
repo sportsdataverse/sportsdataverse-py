@@ -1,9 +1,9 @@
 ---
-title: COLLEGE_BASEBALL
-sidebar_label: COLLEGE_BASEBALL
-description: "sdv-py COLLEGE_BASEBALL: endpoint references, dataset loaders and parsers for COLLEGE_BASEBALL in the SportsDataverse Python package."
+title: College baseball
+sidebar_label: College baseball
+description: "sdv-py College baseball: endpoint references, dataset loaders and parsers for College baseball in the SportsDataverse Python package."
 ---
-# COLLEGE_BASEBALL (`sportsdataverse.baseball.college_baseball`)
+# College baseball (`sportsdataverse.baseball.college_baseball`)
 
 ## Data sources
 

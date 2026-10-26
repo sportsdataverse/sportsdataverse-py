@@ -1,11 +1,11 @@
 ---
-title: "DBL — Basketligaen site API (www.basketligaen.dk/api, Denmark; Sportality) — Player"
+title: "Basketligaen — Basketligaen site API (www.basketligaen.dk/api, Denmark; Sportality) — Player"
 sidebar_label: "Player"
 sidebar_position: 3
-description: "DBL — Basketligaen site API (www.basketligaen.dk/api, Denmark; Sportality) — Player — function reference in sdv-py, the SportsDataverse Python package."
+description: "Basketligaen — Basketligaen site API (www.basketligaen.dk/api, Denmark; Sportality) — Player — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# DBL — Basketligaen site API (www.basketligaen.dk/api, Denmark; Sportality) — Player
+# Basketligaen — Basketligaen site API (www.basketligaen.dk/api, Denmark; Sportality) — Player
 
 ## sportality_player_box
 
@@ -25,40 +25,40 @@ Box score with jersey and Genius shirt numbers (2023/24 on).
 
 | col_name | type | description |
 |---|---|---|
-| `team_side` | character | home or away: the side the row belongs to. |
-| `row_type` | character | Kind of row: player, team_coach (the bench row: team rebounds, turnovers and fouls charged to the team or coach) or team_totals. |
-| `player_id` | integer | Genius person id (Int64). A string key in the players maps, an integer in play-by-play and box-score rows; cast here so the frames join, and join the genius family. |
-| `team_id` | integer | Genius team id (Int64): in gameday bodies, an integer in standings and stats tables. |
-| `team_name` | character | Name of the team. |
-| `period` | integer | Period of the line: 0 = the whole game (the only value seen). |
-| `full_name` | character | Full display name of the player. |
-| `first_name` | character | Given (first) name(s) of the player. |
-| `last_name` | character | Family name (surname) of the player. |
-| `nr` | integer | Jersey number (null on the bench and totals rows). |
-| `pos` | character | Position code of the line (G, F, C; null on the bench and totals rows). |
-| `mins` | character | Minutes played as 'MM:SS' (null on the bench and totals rows). |
-| `pts` | integer | Number of points scored. |
-| `fg` | character | Field goals as 'made-attempted'. |
-| `fg_perc` | numeric | Field-goal percentage, 0-100. |
-| `2_p` | character | Two-pointers as 'made-attempted'. |
-| `2_p_perc` | numeric | Two-point percentage, 0-100. |
-| `3_p` | character | Three-pointers as 'made-attempted'. |
-| `3_p_perc` | numeric | Three-point percentage, 0-100. |
-| `ft` | character | Free throws as 'made-attempted'. |
-| `ft_perc` | numeric | Free-throw percentage, 0-100. |
-| `off` | integer | Offensive rebounds. |
-| `def` | integer | Defensive rebounds. |
-| `reb` | integer | Total rebounds. |
-| `ast` | integer | Number of assists credited. |
-| `to` | integer | Number of turnovers committed. |
-| `stl` | integer | Number of steals. |
-| `blk` | integer | Number of blocked shots made. |
-| `blkr` | integer | Blocks received (shots of the player that were blocked). |
-| `pf` | integer | Personal fouls. |
-| `f_on` | integer | Fouls on (fouls drawn). |
-| `plus_minus` | integer | Plus/minus while on court. |
-| `team_number` | integer | Team number in the game (1 home, 2 away) as Genius numbers the shirt table. |
-| `pno` | integer | Genius shirt-table number of the player (player-stats only). |
+| `team_side` | String | home or away: the side the row belongs to. |
+| `row_type` | String | Kind of row: player, team_coach (the bench row: team rebounds, turnovers and fouls charged to the team or coach) or team_totals. |
+| `player_id` | Int64 | Genius person id (Int64). A string key in the players maps, an integer in play-by-play and box-score rows; cast here so the frames join, and join the genius family. |
+| `team_id` | Int64 | Genius team id (Int64): in gameday bodies, an integer in standings and stats tables. |
+| `team_name` | String | Name of the team. |
+| `period` | Int64 | Period of the line: 0 = the whole game (the only value seen). |
+| `full_name` | String | Full display name of the player. |
+| `first_name` | String | Given (first) name(s) of the player. |
+| `last_name` | String | Family name (surname) of the player. |
+| `nr` | Int64 | Jersey number (null on the bench and totals rows). |
+| `pos` | String | Position code of the line (G, F, C; null on the bench and totals rows). |
+| `mins` | String | Minutes played as 'MM:SS' (null on the bench and totals rows). |
+| `pts` | Int64 | Number of points scored. |
+| `fg` | String | Field goals as 'made-attempted'. |
+| `fg_perc` | Float64 | Field-goal percentage, 0-100. |
+| `2_p` | String | Two-pointers as 'made-attempted'. |
+| `2_p_perc` | Float64 | Two-point percentage, 0-100. |
+| `3_p` | String | Three-pointers as 'made-attempted'. |
+| `3_p_perc` | Float64 | Three-point percentage, 0-100. |
+| `ft` | String | Free throws as 'made-attempted'. |
+| `ft_perc` | Float64 | Free-throw percentage, 0-100. |
+| `off` | Int64 | Offensive rebounds. |
+| `def` | Int64 | Defensive rebounds. |
+| `reb` | Int64 | Total rebounds. |
+| `ast` | Int64 | Number of assists credited. |
+| `to` | Int64 | Number of turnovers committed. |
+| `stl` | Int64 | Number of steals. |
+| `blk` | Int64 | Number of blocked shots made. |
+| `blkr` | Int64 | Blocks received (shots of the player that were blocked). |
+| `pf` | Int64 | Personal fouls. |
+| `f_on` | Int64 | Fouls on (fouls drawn). |
+| `plus_minus` | Int64 | Plus/minus while on court. |
+| `team_number` | Int64 | Team number in the game (1 home, 2 away) as Genius numbers the shirt table. |
+| `pno` | Int64 | Genius shirt-table number of the player (player-stats only). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -97,60 +97,60 @@ Player head-to-head of a matchup with per-game and season lines.
 
 | col_name | type | description |
 |---|---|---|
-| `uuid` | character | Athlete uuid (platform key space). |
-| `first_name` | character | Given (first) name(s) of the player. |
-| `last_name` | character | Family name (surname) of the player. |
-| `full_name` | character | Full display name of the player. |
-| `nationality` | character | ISO 3166-1 alpha-2 country code. |
-| `gender` | character | Gender of the person as recorded by the site (male in every row seen). |
-| `jersey_number` | integer | Jersey (shirt) number of the player. |
-| `position` | character | Position name (Guard, Forward, Center ...). |
-| `position_code` | character | Position code. Values: `C` = center; `G` = guard; `N/A` = not applicable (career rows); `PF` = power forward; `PG` = point guard; `SF` = small forward; `SG` = shooting guard. |
-| `age_value` | integer | Age in whole years. |
-| `age_format` | character | Unit of the value (years). Values: `years` = years. |
-| `height_value` | integer | Height of the player in centimetres. |
-| `height_format` | character | Unit of the value (cm). Values: `cm` = centimetres. |
-| `weight_value` | integer | Weight of the player in kilograms. |
-| `weight_format` | character | Unit of the value (kg). Values: `kg` = kilograms. |
-| `team_uuid` | character | Platform team uuid. |
-| `team_instance_id` | character | Site instance id of the club (platform key space). |
-| `team_name` | character | Name of the team. |
-| `team_code` | character | Platform team code (HOL, RAN). |
-| `team_media` | character | URL of the team logo image. |
-| `media_url` | character | Portrait image URL (imgix CDN). |
-| `media_alt` | character | Image alt text (''). |
-| `media_srcset` | character | Responsive image set (imgix CDN URLs with widths). |
-| `season_stats` | character | Season totals as field/value pairs (absent for some players). |
-| `career_stats` | character | Career totals as field/value pairs (absent for some players). |
-| `match_stats_nr` | integer | Jersey (shirt) number of the player. |
-| `match_stats_pos` | character | Playing position code of the player (G, F, C, ...). |
-| `match_stats_team_number` | integer | Team number in the game. |
-| `match_stats_pno` | integer | Genius shirt-table number. |
-| `match_stats_mins` | character | Minutes played 'MM:SS'. |
-| `match_stats_pts` | integer | Number of points scored. |
-| `match_stats_fg` | character | Field goals 'made-attempted'. |
-| `match_stats_fg_perc` | numeric | Field-goal percentage, 0-100. |
-| `match_stats_2_p` | character | Two-pointers 'made-attempted'. |
-| `match_stats_2_p_perc` | numeric | Two-point percentage, 0-100. |
-| `match_stats_3_p` | character | Three-pointers 'made-attempted'. |
-| `match_stats_3_p_perc` | numeric | Three-point percentage, 0-100. |
-| `match_stats_ft` | character | Free throws 'made-attempted'. |
-| `match_stats_ft_perc` | numeric | Free-throw percentage, 0-100. |
-| `match_stats_off` | integer | Offensive rebounds. |
-| `match_stats_def` | integer | Defensive rebounds. |
-| `match_stats_reb` | integer | Total rebounds. |
-| `match_stats_ast` | integer | Number of assists credited. |
-| `match_stats_to` | integer | Number of turnovers committed. |
-| `match_stats_stl` | integer | Number of steals. |
-| `match_stats_blk` | integer | Number of blocked shots made. |
-| `match_stats_blkr` | integer | Blocks received. |
-| `match_stats_pf` | integer | Personal fouls. |
-| `match_stats_f_on` | integer | Fouls on (fouls drawn). |
-| `match_stats_plus_minus` | integer | Plus/minus while on court. |
-| `season_avg_stats` | character | The player's season averages (an object keyed by stat). |
-| `statistics_provider` | character | Stats provider (genius-basketball). |
-| `is_in_squad` | logical | Whether the player is in the squad. |
-| `effective_ssgt_uuid` | character | The ssgt the head-to-head was computed for: the CURRENT season, whatever the path asked. |
+| `uuid` | String | Athlete uuid (platform key space). |
+| `first_name` | String | Given (first) name(s) of the player. |
+| `last_name` | String | Family name (surname) of the player. |
+| `full_name` | String | Full display name of the player. |
+| `nationality` | String | ISO 3166-1 alpha-2 country code. |
+| `gender` | String | Gender of the person as recorded by the site (male in every row seen). |
+| `jersey_number` | Int64 | Jersey (shirt) number of the player. |
+| `position` | String | Position name (Guard, Forward, Center ...). |
+| `position_code` | String | Position code. Values: `C` = center; `G` = guard; `N/A` = not applicable (career rows); `PF` = power forward; `PG` = point guard; `SF` = small forward; `SG` = shooting guard. |
+| `age_value` | Int64 | Age in whole years. |
+| `age_format` | String | Unit of the value (years). Values: `years` = years. |
+| `height_value` | Int64 | Height of the player in centimetres. |
+| `height_format` | String | Unit of the value (cm). Values: `cm` = centimetres. |
+| `weight_value` | Int64 | Weight of the player in kilograms. |
+| `weight_format` | String | Unit of the value (kg). Values: `kg` = kilograms. |
+| `team_uuid` | String | Platform team uuid. |
+| `team_instance_id` | String | Site instance id of the club (platform key space). |
+| `team_name` | String | Name of the team. |
+| `team_code` | String | Platform team code (HOL, RAN). |
+| `team_media` | String | URL of the team logo image. |
+| `media_url` | String | Portrait image URL (imgix CDN). |
+| `media_alt` | String | Image alt text (''). |
+| `media_srcset` | String | Responsive image set (imgix CDN URLs with widths). |
+| `season_stats` | String | Season totals as field/value pairs (absent for some players). |
+| `career_stats` | String | Career totals as field/value pairs (absent for some players). |
+| `match_stats_nr` | Int64 | Jersey (shirt) number of the player. |
+| `match_stats_pos` | String | Playing position code of the player (G, F, C, ...). |
+| `match_stats_team_number` | Int64 | Team number in the game. |
+| `match_stats_pno` | Int64 | Genius shirt-table number. |
+| `match_stats_mins` | String | Minutes played 'MM:SS'. |
+| `match_stats_pts` | Int64 | Number of points scored. |
+| `match_stats_fg` | String | Field goals 'made-attempted'. |
+| `match_stats_fg_perc` | Float64 | Field-goal percentage, 0-100. |
+| `match_stats_2_p` | String | Two-pointers 'made-attempted'. |
+| `match_stats_2_p_perc` | Float64 | Two-point percentage, 0-100. |
+| `match_stats_3_p` | String | Three-pointers 'made-attempted'. |
+| `match_stats_3_p_perc` | Float64 | Three-point percentage, 0-100. |
+| `match_stats_ft` | String | Free throws 'made-attempted'. |
+| `match_stats_ft_perc` | Float64 | Free-throw percentage, 0-100. |
+| `match_stats_off` | Int64 | Offensive rebounds. |
+| `match_stats_def` | Int64 | Defensive rebounds. |
+| `match_stats_reb` | Int64 | Total rebounds. |
+| `match_stats_ast` | Int64 | Number of assists credited. |
+| `match_stats_to` | Int64 | Number of turnovers committed. |
+| `match_stats_stl` | Int64 | Number of steals. |
+| `match_stats_blk` | Int64 | Number of blocked shots made. |
+| `match_stats_blkr` | Int64 | Blocks received. |
+| `match_stats_pf` | Int64 | Personal fouls. |
+| `match_stats_f_on` | Int64 | Fouls on (fouls drawn). |
+| `match_stats_plus_minus` | Int64 | Plus/minus while on court. |
+| `season_avg_stats` | String | The player's season averages (an object keyed by stat). |
+| `statistics_provider` | String | Stats provider (genius-basketball). |
+| `is_in_squad` | Boolean | Whether the player is in the squad. |
+| `effective_ssgt_uuid` | String | The ssgt the head-to-head was computed for: the CURRENT season, whatever the path asked. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

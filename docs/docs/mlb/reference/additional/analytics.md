@@ -35,14 +35,14 @@ Every lag/rank is `.over(...)` scoped to avoid cross-game leakage.
 
 | col_name | type | description |
 |---|---|---|
-| `prev_pitch_type` | character | Pitch type of the previous pitch in the same plate appearance (null on the first pitch). |
-| `prev_release_pos_x` | double | Horizontal release position of the previous pitch in the same plate appearance. |
-| `prev_release_pos_z` | double | Vertical release position of the previous pitch in the same plate appearance. |
-| `prev_plate_x` | double | Horizontal plate location of the previous pitch in the same plate appearance. |
-| `prev_plate_z` | double | Vertical plate location of the previous pitch in the same plate appearance. |
-| `cum_pitches_game` | integer | Running count of pitches thrown by this pitcher so far in this game (inclusive of the current pitch). |
-| `batter_faced_index` | integer | Dense rank of this plate appearance's at_bat_number within the game (1 = first batter faced). |
-| `times_through_order` | integer | Times through the batting order, min(3, (batter_faced_index-1)//9 + 1). |
+| `prev_pitch_type` | String | Pitch type of the previous pitch in the same plate appearance (null on the first pitch). |
+| `prev_release_pos_x` | Float64 | Horizontal release position of the previous pitch in the same plate appearance. |
+| `prev_release_pos_z` | Float64 | Vertical release position of the previous pitch in the same plate appearance. |
+| `prev_plate_x` | Float64 | Horizontal plate location of the previous pitch in the same plate appearance. |
+| `prev_plate_z` | Float64 | Vertical plate location of the previous pitch in the same plate appearance. |
+| `cum_pitches_game` | Int64 | Running count of pitches thrown by this pitcher so far in this game (inclusive of the current pitch). |
+| `batter_faced_index` | Int64 | Dense rank of this plate appearance's at_bat_number within the game (1 = first batter faced). |
+| `times_through_order` | Int64 | Times through the batting order, min(3, (batter_faced_index-1)//9 + 1). |
 
 **Example**
 
@@ -75,9 +75,9 @@ one row per detected opportunity. | Column | Type | Description | |---|---|---| 
 
 | col_name | type | description |
 |---|---|---|
-| `runner_id` | character |  |
-| `opp_type` | character |  |
-| `took_extra` | integer |  |
+| `runner_id` | String |  |
+| `opp_type` | String |  |
+| `took_extra` | Int64 |  |
 
 **Example**
 
@@ -108,130 +108,130 @@ first base).
 
 | col_name | type | description |
 |---|---|---|
-| `pitch_type` | character | Abbreviation of the pitch type thrown (e.g. FF, SL, CH). |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `release_speed` | double | Pitch velocity out of the hand (mph). |
-| `release_pos_x` | double | Horizontal release position of the ball, catcher's perspective (feet). |
-| `release_pos_z` | double | Vertical release position of the ball, catcher's perspective (feet). |
-| `player_name` | character | Player name carried through from the input Statcast frame, `Last, First` -- the batter for a default mlb_statcast_search pull, the pitcher for a `player_type="pitcher"` search. |
-| `batter` | integer | MLBAM player id of the batter. |
-| `pitcher` | integer | MLBAM player id of the pitcher. |
-| `events` | character | Nested list of non-game events. |
-| `description` | character | Long-form description text. |
-| `spin_dir` | double | Deprecated spin direction field, no longer populated. |
-| `spin_rate_deprecated` | double | Deprecated legacy spin-rate field, no longer populated. |
-| `break_angle_deprecated` | double | Deprecated legacy break-angle field, no longer populated. |
-| `break_length_deprecated` | double | Deprecated legacy break-length field, no longer populated. |
-| `zone` | double | Strike-zone region the pitch crossed (1-14 Gameday zone). |
-| `des` | character | Full text description of the play. |
-| `game_type` | character | Game type code (R, P, etc.). |
-| `stand` | character | Side of the plate the batter is standing (L or R). |
-| `p_throws` | character | Hand the pitcher throws with (L or R). |
-| `home_team` | character | Home team name. |
-| `away_team` | character | Away team name. |
-| `type` | character | Record type / category. |
-| `hit_location` | double | Fielder position number that fielded the ball. |
-| `bb_type` | character | Batted-ball type (ground_ball, line_drive, fly_ball, popup). |
-| `balls` | integer | Ball count before the pitch. |
-| `strikes` | integer | Strike count before the pitch. |
-| `game_year` | integer | Season year of the game. |
-| `pfx_x` | double | Horizontal pitch movement from the catcher's perspective (feet). |
-| `pfx_z` | double | Vertical pitch movement from the catcher's perspective (feet). |
-| `plate_x` | double | Horizontal position of the pitch crossing the plate (feet from center). |
-| `plate_z` | double | Vertical position of the pitch crossing the plate (feet above ground). |
-| `on_3b` | integer | MLBAM ID of the runner on third base, if any. |
-| `on_2b` | integer | MLBAM ID of the runner on second base, if any. |
-| `on_1b` | integer | MLBAM ID of the runner on first base, if any. |
-| `outs_when_up` | integer | Number of outs when the batter came to the plate. |
-| `inning` | integer | Inning number. |
-| `inning_topbot` | character | Half of the inning (Top or Bot). |
-| `hc_x` | double | Hit coordinate X on the field diagram. |
-| `hc_y` | double | Hit coordinate Y on the field diagram. |
-| `tfs_deprecated` | double | Deprecated time-from-start field, no longer populated. |
-| `tfs_zulu_deprecated` | double | Deprecated Zulu time-from-start field, no longer populated. |
-| `umpire` | double | Deprecated umpire field, no longer populated. |
-| `sv_id` | double | Deprecated Sportvision/Statcast pitch identifier, no longer populated. |
-| `vx0` | double | Velocity of the pitch in the x-direction at y=50 ft (ft/s). |
-| `vy0` | double | Velocity of the pitch in the y-direction at y=50 ft (ft/s). |
-| `vz0` | double | Velocity of the pitch in the z-direction at y=50 ft (ft/s). |
-| `ax` | double | Acceleration of the pitch in the x-direction at y=50 ft (ft/s^2). |
-| `ay` | double | Acceleration of the pitch in the y-direction at y=50 ft (ft/s^2). |
-| `az` | double | Acceleration of the pitch in the z-direction at y=50 ft (ft/s^2). |
-| `sz_top` | double | Top of the batter's strike zone for the pitch (feet). |
-| `sz_bot` | double | Bottom of the batter's strike zone for the pitch (feet). |
-| `hit_distance_sc` | double | Statcast-measured projected distance of the batted ball (feet). |
-| `launch_speed` | double | Exit velocity of the batted ball (mph). |
-| `launch_angle` | double | Vertical launch angle of the batted ball (degrees). |
-| `effective_speed` | double | Perceived velocity adjusted for release extension (mph). |
-| `release_spin_rate` | double | Spin rate of the pitch at release (rpm). |
-| `release_extension` | double | Distance toward the plate at release (feet). |
-| `game_pk` | integer | Unique game identifier. |
-| `fielder_2` | integer | MLBAM ID of the catcher. |
-| `fielder_3` | integer | MLBAM ID of the first baseman. |
-| `fielder_4` | integer | MLBAM ID of the second baseman. |
-| `fielder_5` | integer | MLBAM ID of the third baseman. |
-| `fielder_6` | integer | MLBAM ID of the shortstop. |
-| `fielder_7` | integer | MLBAM ID of the left fielder. |
-| `fielder_8` | integer | MLBAM ID of the center fielder. |
-| `fielder_9` | integer | MLBAM ID of the right fielder. |
-| `release_pos_y` | double | Release position of the ball toward the plate (feet). |
-| `estimated_ba_using_speedangle` | double | Expected batting average based on exit velocity and launch angle. |
-| `estimated_woba_using_speedangle` | double | Expected wOBA based on exit velocity and launch angle. |
-| `woba_value` | double | wOBA value assigned to the event. |
-| `woba_denom` | double | wOBA denominator (plate-appearance weight) for the event. |
-| `babip_value` | double | BABIP value assigned to the event (0 or 1). |
-| `iso_value` | double | Isolated power value assigned to the event. |
-| `launch_speed_angle` | double | Batted-ball classification code (1-6) from exit velocity and angle. |
-| `at_bat_number` | integer | Sequential plate-appearance number within the game. |
-| `pitch_number` | integer | Pitch number within the plate appearance. |
-| `pitch_name` | character | Full name of the pitch type (e.g. 4-Seam Fastball, Slider). |
-| `home_score` | integer | Home team score before the pitch (see post_home_score). |
-| `away_score` | integer | Away team score before the pitch (see post_away_score). |
-| `bat_score` | integer | Batting team score before the pitch. |
-| `fld_score` | integer | Fielding team score before the pitch. |
-| `post_away_score` | integer | Away team score after the pitch. |
-| `post_home_score` | integer | Home team score after the pitch. |
-| `post_bat_score` | integer | Batting team score after the pitch. |
-| `post_fld_score` | integer | Fielding team score after the pitch. |
-| `if_fielding_alignment` | character | Infield defensive alignment (Standard, Strategic, Infield shift). |
-| `of_fielding_alignment` | character | Outfield defensive alignment (Standard, Strategic, 4th outfielder). |
-| `spin_axis` | double | Spin axis of the pitch as a clock-face angle (degrees). |
-| `delta_home_win_exp` | double | Change in home team win expectancy on the play. |
-| `delta_run_exp` | double | Change in run expectancy on the play. |
-| `bat_speed` | double | Bat speed at the point of contact (mph). |
-| `swing_length` | double | Length of the swing path to contact (feet). |
-| `miss_distance` | double |  |
-| `estimated_slg_using_speedangle` | double | Expected slugging based on exit velocity and launch angle. |
-| `delta_pitcher_run_exp` | double | Change in run expectancy credited to the pitcher. |
-| `hyper_speed` | double | Adjusted (90th-percentile) exit velocity (mph). |
-| `home_score_diff` | integer | Home team score minus away team score before the pitch. |
-| `bat_score_diff` | integer | Batting team score minus fielding team score before the pitch. |
-| `home_win_exp` | double | Home team win expectancy before the play. |
-| `bat_win_exp` | double | Batting team win expectancy before the play. |
-| `age_pit_legacy` | integer | Pitcher age using the legacy calculation. |
-| `age_bat_legacy` | integer | Batter age using the legacy calculation. |
-| `age_pit` | integer | Pitcher age for the season. |
-| `age_bat` | integer | Batter age for the season. |
-| `n_thruorder_pitcher` | integer | Times through the order the pitcher is facing the lineup. |
-| `n_priorpa_thisgame_player_at_bat` | integer | Number of prior plate appearances by the batter in the game. |
-| `pitcher_days_since_prev_game` | double | Days since the pitcher's previous game appearance. |
-| `batter_days_since_prev_game` | integer | Days since the batter's previous game appearance. |
-| `pitcher_days_until_next_game` | double | Days until the pitcher's next game appearance. |
-| `batter_days_until_next_game` | double | Days until the batter's next game appearance. |
-| `api_break_z_with_gravity` | double | Vertical pitch break including gravity (inches). |
-| `api_break_x_arm` | double | Horizontal pitch break to the pitcher's arm side (inches). |
-| `api_break_x_batter_in` | double | Horizontal pitch break toward/away from the batter (inches). |
-| `arm_angle` | double | Pitcher's arm angle at release (degrees). |
-| `attack_angle` | double | Angle of the bat's path at contact (degrees). |
-| `attack_direction` | double | Horizontal direction of the swing at contact (degrees). |
-| `swing_path_tilt` | double | Vertical tilt of the swing path (degrees). |
-| `intercept_ball_minus_batter_pos_x_inches` | double | Horizontal offset of ball-bat intercept from batter position (inches). |
-| `intercept_ball_minus_batter_pos_y_inches` | double | Depth offset of ball-bat intercept from batter position (inches). |
-| `spray_angle` | double |  |
-| `hit_dist` | double |  |
-| `la_bin` | integer |  |
-| `is_out` | integer |  |
-| `position` | integer | Listed roster position (G, F, C, etc.). |
+| `pitch_type` | String | Abbreviation of the pitch type thrown (e.g. FF, SL, CH). |
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `release_speed` | Float64 | Pitch velocity out of the hand (mph). |
+| `release_pos_x` | Float64 | Horizontal release position of the ball, catcher's perspective (feet). |
+| `release_pos_z` | Float64 | Vertical release position of the ball, catcher's perspective (feet). |
+| `player_name` | String | Player name carried through from the input Statcast frame, `Last, First` -- the batter for a default mlb_statcast_search pull, the pitcher for a `player_type="pitcher"` search. |
+| `batter` | Int64 | MLBAM player id of the batter. |
+| `pitcher` | Int64 | MLBAM player id of the pitcher. |
+| `events` | String | Nested list of non-game events. |
+| `description` | String | Long-form description text. |
+| `spin_dir` | Float64 | Deprecated spin direction field, no longer populated. |
+| `spin_rate_deprecated` | Float64 | Deprecated legacy spin-rate field, no longer populated. |
+| `break_angle_deprecated` | Float64 | Deprecated legacy break-angle field, no longer populated. |
+| `break_length_deprecated` | Float64 | Deprecated legacy break-length field, no longer populated. |
+| `zone` | Float64 | Strike-zone region the pitch crossed (1-14 Gameday zone). |
+| `des` | String | Full text description of the play. |
+| `game_type` | String | Game type code (R, P, etc.). |
+| `stand` | String | Side of the plate the batter is standing (L or R). |
+| `p_throws` | String | Hand the pitcher throws with (L or R). |
+| `home_team` | String | Home team name. |
+| `away_team` | String | Away team name. |
+| `type` | String | Record type / category. |
+| `hit_location` | Float64 | Fielder position number that fielded the ball. |
+| `bb_type` | String | Batted-ball type (ground_ball, line_drive, fly_ball, popup). |
+| `balls` | Int64 | Ball count before the pitch. |
+| `strikes` | Int64 | Strike count before the pitch. |
+| `game_year` | Int64 | Season year of the game. |
+| `pfx_x` | Float64 | Horizontal pitch movement from the catcher's perspective (feet). |
+| `pfx_z` | Float64 | Vertical pitch movement from the catcher's perspective (feet). |
+| `plate_x` | Float64 | Horizontal position of the pitch crossing the plate (feet from center). |
+| `plate_z` | Float64 | Vertical position of the pitch crossing the plate (feet above ground). |
+| `on_3b` | Int64 | MLBAM ID of the runner on third base, if any. |
+| `on_2b` | Int64 | MLBAM ID of the runner on second base, if any. |
+| `on_1b` | Int64 | MLBAM ID of the runner on first base, if any. |
+| `outs_when_up` | Int64 | Number of outs when the batter came to the plate. |
+| `inning` | Int64 | Inning number. |
+| `inning_topbot` | String | Half of the inning (Top or Bot). |
+| `hc_x` | Float64 | Hit coordinate X on the field diagram. |
+| `hc_y` | Float64 | Hit coordinate Y on the field diagram. |
+| `tfs_deprecated` | Float64 | Deprecated time-from-start field, no longer populated. |
+| `tfs_zulu_deprecated` | Float64 | Deprecated Zulu time-from-start field, no longer populated. |
+| `umpire` | Float64 | Deprecated umpire field, no longer populated. |
+| `sv_id` | Float64 | Deprecated Sportvision/Statcast pitch identifier, no longer populated. |
+| `vx0` | Float64 | Velocity of the pitch in the x-direction at y=50 ft (ft/s). |
+| `vy0` | Float64 | Velocity of the pitch in the y-direction at y=50 ft (ft/s). |
+| `vz0` | Float64 | Velocity of the pitch in the z-direction at y=50 ft (ft/s). |
+| `ax` | Float64 | Acceleration of the pitch in the x-direction at y=50 ft (ft/s^2). |
+| `ay` | Float64 | Acceleration of the pitch in the y-direction at y=50 ft (ft/s^2). |
+| `az` | Float64 | Acceleration of the pitch in the z-direction at y=50 ft (ft/s^2). |
+| `sz_top` | Float64 | Top of the batter's strike zone for the pitch (feet). |
+| `sz_bot` | Float64 | Bottom of the batter's strike zone for the pitch (feet). |
+| `hit_distance_sc` | Float64 | Statcast-measured projected distance of the batted ball (feet). |
+| `launch_speed` | Float64 | Exit velocity of the batted ball (mph). |
+| `launch_angle` | Float64 | Vertical launch angle of the batted ball (degrees). |
+| `effective_speed` | Float64 | Perceived velocity adjusted for release extension (mph). |
+| `release_spin_rate` | Float64 | Spin rate of the pitch at release (rpm). |
+| `release_extension` | Float64 | Distance toward the plate at release (feet). |
+| `game_pk` | Int64 | Unique game identifier. |
+| `fielder_2` | Int64 | MLBAM ID of the catcher. |
+| `fielder_3` | Int64 | MLBAM ID of the first baseman. |
+| `fielder_4` | Int64 | MLBAM ID of the second baseman. |
+| `fielder_5` | Int64 | MLBAM ID of the third baseman. |
+| `fielder_6` | Int64 | MLBAM ID of the shortstop. |
+| `fielder_7` | Int64 | MLBAM ID of the left fielder. |
+| `fielder_8` | Int64 | MLBAM ID of the center fielder. |
+| `fielder_9` | Int64 | MLBAM ID of the right fielder. |
+| `release_pos_y` | Float64 | Release position of the ball toward the plate (feet). |
+| `estimated_ba_using_speedangle` | Float64 | Expected batting average based on exit velocity and launch angle. |
+| `estimated_woba_using_speedangle` | Float64 | Expected wOBA based on exit velocity and launch angle. |
+| `woba_value` | Float64 | wOBA value assigned to the event. |
+| `woba_denom` | Float64 | wOBA denominator (plate-appearance weight) for the event. |
+| `babip_value` | Float64 | BABIP value assigned to the event (0 or 1). |
+| `iso_value` | Float64 | Isolated power value assigned to the event. |
+| `launch_speed_angle` | Float64 | Batted-ball classification code (1-6) from exit velocity and angle. |
+| `at_bat_number` | Int64 | Sequential plate-appearance number within the game. |
+| `pitch_number` | Int64 | Pitch number within the plate appearance. |
+| `pitch_name` | String | Full name of the pitch type (e.g. 4-Seam Fastball, Slider). |
+| `home_score` | Int64 | Home team score before the pitch (see post_home_score). |
+| `away_score` | Int64 | Away team score before the pitch (see post_away_score). |
+| `bat_score` | Int64 | Batting team score before the pitch. |
+| `fld_score` | Int64 | Fielding team score before the pitch. |
+| `post_away_score` | Int64 | Away team score after the pitch. |
+| `post_home_score` | Int64 | Home team score after the pitch. |
+| `post_bat_score` | Int64 | Batting team score after the pitch. |
+| `post_fld_score` | Int64 | Fielding team score after the pitch. |
+| `if_fielding_alignment` | String | Infield defensive alignment (Standard, Strategic, Infield shift). |
+| `of_fielding_alignment` | String | Outfield defensive alignment (Standard, Strategic, 4th outfielder). |
+| `spin_axis` | Float64 | Spin axis of the pitch as a clock-face angle (degrees). |
+| `delta_home_win_exp` | Float64 | Change in home team win expectancy on the play. |
+| `delta_run_exp` | Float64 | Change in run expectancy on the play. |
+| `bat_speed` | Float64 | Bat speed at the point of contact (mph). |
+| `swing_length` | Float64 | Length of the swing path to contact (feet). |
+| `miss_distance` | Float64 |  |
+| `estimated_slg_using_speedangle` | Float64 | Expected slugging based on exit velocity and launch angle. |
+| `delta_pitcher_run_exp` | Float64 | Change in run expectancy credited to the pitcher. |
+| `hyper_speed` | Float64 | Adjusted (90th-percentile) exit velocity (mph). |
+| `home_score_diff` | Int64 | Home team score minus away team score before the pitch. |
+| `bat_score_diff` | Int64 | Batting team score minus fielding team score before the pitch. |
+| `home_win_exp` | Float64 | Home team win expectancy before the play. |
+| `bat_win_exp` | Float64 | Batting team win expectancy before the play. |
+| `age_pit_legacy` | Int64 | Pitcher age using the legacy calculation. |
+| `age_bat_legacy` | Int64 | Batter age using the legacy calculation. |
+| `age_pit` | Int64 | Pitcher age for the season. |
+| `age_bat` | Int64 | Batter age for the season. |
+| `n_thruorder_pitcher` | Int64 | Times through the order the pitcher is facing the lineup. |
+| `n_priorpa_thisgame_player_at_bat` | Int64 | Number of prior plate appearances by the batter in the game. |
+| `pitcher_days_since_prev_game` | Float64 | Days since the pitcher's previous game appearance. |
+| `batter_days_since_prev_game` | Int64 | Days since the batter's previous game appearance. |
+| `pitcher_days_until_next_game` | Float64 | Days until the pitcher's next game appearance. |
+| `batter_days_until_next_game` | Float64 | Days until the batter's next game appearance. |
+| `api_break_z_with_gravity` | Float64 | Vertical pitch break including gravity (inches). |
+| `api_break_x_arm` | Float64 | Horizontal pitch break to the pitcher's arm side (inches). |
+| `api_break_x_batter_in` | Float64 | Horizontal pitch break toward/away from the batter (inches). |
+| `arm_angle` | Float64 | Pitcher's arm angle at release (degrees). |
+| `attack_angle` | Float64 | Angle of the bat's path at contact (degrees). |
+| `attack_direction` | Float64 | Horizontal direction of the swing at contact (degrees). |
+| `swing_path_tilt` | Float64 | Vertical tilt of the swing path (degrees). |
+| `intercept_ball_minus_batter_pos_x_inches` | Float64 | Horizontal offset of ball-bat intercept from batter position (inches). |
+| `intercept_ball_minus_batter_pos_y_inches` | Float64 | Depth offset of ball-bat intercept from batter position (inches). |
+| `spray_angle` | Float64 |  |
+| `hit_dist` | Float64 |  |
+| `la_bin` | Int64 |  |
+| `is_out` | Int64 |  |
+| `position` | Int64 | Listed roster position (G, F, C, etc.). |
 
 **Example**
 
@@ -267,11 +267,11 @@ one row per observed `(stand, px_bin, pz_bin)`. | Column | Type | Description | 
 
 | col_name | type | description |
 |---|---|---|
-| `stand` | character | Side of the plate the batter is standing (L or R). |
-| `px_bin` | integer |  |
-| `pz_bin` | integer |  |
-| `p_strike` | double |  |
-| `n` | integer |  |
+| `stand` | String | Side of the plate the batter is standing (L or R). |
+| `px_bin` | Int64 |  |
+| `pz_bin` | Int64 |  |
+| `p_strike` | Float64 |  |
+| `n` | Int64 |  |
 
 **Example**
 
@@ -303,12 +303,12 @@ one row per observed `(position, dist_b, spray_b, la_bin)`. | Column | Type | De
 
 | col_name | type | description |
 |---|---|---|
-| `position` | integer | Listed roster position (G, F, C, etc.). |
-| `dist_b` | integer |  |
-| `spray_b` | integer |  |
-| `la_bin` | integer |  |
-| `p_catch` | double |  |
-| `n` | integer |  |
+| `position` | Int64 | Listed roster position (G, F, C, etc.). |
+| `dist_b` | Int64 |  |
+| `spray_b` | Int64 |  |
+| `la_bin` | Int64 |  |
+| `p_catch` | Float64 |  |
+| `n` | Int64 |  |
 
 **Example**
 
@@ -410,10 +410,10 @@ one row per catcher. | Column | Type | Description | |---|---|---| | catcher_id 
 
 | col_name | type | description |
 |---|---|---|
-| `catcher_id` | character |  |
-| `block_opps` | integer |  |
-| `blocks_above_expected` | double |  |
-| `blocking_runs` | double |  |
+| `catcher_id` | String |  |
+| `block_opps` | Int64 |  |
+| `blocks_above_expected` | Float64 |  |
+| `blocking_runs` | Float64 |  |
 
 **Example**
 
@@ -467,11 +467,11 @@ one row per catcher and era (one per catcher on a frame that does not span 2026)
 
 | col_name | type | description |
 |---|---|---|
-| `catcher_id` | character |  |
-| `abs_era` | logical | The pitch is from 2026 on -- Savant location at the middle of the plate against the ABS zone, and the call was challengeable (rules/mlb.yaml#mlb-2026-abs-challenge-system); excluded from the fit, scored and reported on its own row. |
-| `takes` | integer |  |
-| `framing_runs` | double |  |
-| `strikes_gained` | double |  |
+| `catcher_id` | String |  |
+| `abs_era` | Boolean | The pitch is from 2026 on -- Savant location at the middle of the plate against the ABS zone, and the call was challengeable (rules/mlb.yaml#mlb-2026-abs-challenge-system); excluded from the fit, scored and reported on its own row. |
+| `takes` | Int64 |  |
+| `framing_runs` | Float64 |  |
+| `strikes_gained` | Float64 |  |
 
 **Example**
 
@@ -526,10 +526,10 @@ one row per catcher. | Column | Type | Description | |---|---|---| | catcher_id 
 
 | col_name | type | description |
 |---|---|---|
-| `catcher_id` | character |  |
-| `attempts` | integer | Number of batted-ball events (attempts). |
-| `cs_above_expected` | double |  |
-| `throwing_runs` | double |  |
+| `catcher_id` | String |  |
+| `attempts` | Int64 | Number of batted-ball events (attempts). |
+| `cs_above_expected` | Float64 |  |
+| `throwing_runs` | Float64 |  |
 
 **Example**
 
@@ -570,11 +570,11 @@ one row per `(fielder_id, position)` -- or per `(fielder_id, position, direction
 
 | col_name | type | description |
 |---|---|---|
-| `fielder_id` | character | Responsible fielder's MLBAM id (the fielder charged with the ball in play). |
-| `position` | integer | Fielding position from Savant's `hit_location`, 1-9. |
-| `direction` | character | Movement direction the catch required -- `in`, `back` or `lateral`. Present only when the call passes `by_direction=True`; the three rows re-group the same scored balls in play, so they sum exactly to the undirected `oaa`. |
-| `opportunities` | integer | Balls in play charged to this fielder (the denominator of the OAA sum). |
-| `oaa` | double | Outs above average -- the sum of (out - expected catch probability) over this fielder's opportunities. |
+| `fielder_id` | String | Responsible fielder's MLBAM id (the fielder charged with the ball in play). |
+| `position` | Int64 | Fielding position from Savant's `hit_location`, 1-9. |
+| `direction` | String | Movement direction the catch required -- `in`, `back` or `lateral`. Present only when the call passes `by_direction=True`; the three rows re-group the same scored balls in play, so they sum exactly to the undirected `oaa`. |
+| `opportunities` | Int64 | Balls in play charged to this fielder (the denominator of the OAA sum). |
+| `oaa` | Float64 | Outs above average -- the sum of (out - expected catch probability) over this fielder's opportunities. |
 
 **Example**
 
@@ -612,10 +612,10 @@ Composite pitcher injury-risk index from leakage-safe trailing trends.
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | integer | MLB Advanced Media (MLBAM) id for the pitcher. |
-| `game_pk` | integer | Game identifier. |
-| `game_date` | date | Calendar date of the game (YYYY-MM-DD). |
-| `injury_risk_index` | double | Equal-weighted composite of standardized adverse trailing features (higher = more risk). |
+| `pitcher` | Int64 | MLB Advanced Media (MLBAM) id for the pitcher. |
+| `game_pk` | Int64 | Game identifier. |
+| `game_date` | Date | Calendar date of the game (YYYY-MM-DD). |
+| `injury_risk_index` | Float64 | Equal-weighted composite of standardized adverse trailing features (higher = more risk). |
 
 **Example**
 
@@ -645,14 +645,14 @@ Combined xERA + SIERA-like estimator (model ③).
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | integer | MLB Advanced Media (MLBAM) id for the pitcher. |
-| `season` | integer | MLB season (4-digit start year). |
-| `x_woba` | double | Mean estimated_woba_using_speedangle allowed on batted balls. |
-| `x_era` | double | Parametric xERA converted from x_woba via the season's league baselines. |
-| `k_pct` | double | Strikeout rate (strikeouts / batters faced). |
-| `bb_pct` | double | Walk rate (walks + HBP / batters faced). |
-| `gb_pct` | double | Ground-ball rate among batted balls. |
-| `siera_like` | double | SIERA-like ERA estimate from the fitted K%/BB%/GB% OLS coefficients. |
+| `pitcher` | Int64 | MLB Advanced Media (MLBAM) id for the pitcher. |
+| `season` | Int64 | MLB season (4-digit start year). |
+| `x_woba` | Float64 | Mean estimated_woba_using_speedangle allowed on batted balls. |
+| `x_era` | Float64 | Parametric xERA converted from x_woba via the season's league baselines. |
+| `k_pct` | Float64 | Strikeout rate (strikeouts / batters faced). |
+| `bb_pct` | Float64 | Walk rate (walks + HBP / batters faced). |
+| `gb_pct` | Float64 | Ground-ball rate among batted balls. |
+| `siera_like` | Float64 | SIERA-like ERA estimate from the fitted K%/BB%/GB% OLS coefficients. |
 
 **Example**
 
@@ -682,13 +682,13 @@ Per-pitch release/plate distance from the previous pitch + tunnel ratio.
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | integer | MLB Advanced Media (MLBAM) id for the pitcher. |
-| `game_pk` | integer | Game identifier. |
-| `at_bat_number` | integer | Game-level plate-appearance sequence number. |
-| `pitch_number` | integer | Pitch sequence number within the plate appearance. |
-| `release_dist` | double | Euclidean distance between this pitch's release point and the previous pitch's release point. |
-| `plate_dist` | double | Euclidean distance between this pitch's plate location and the previous pitch's plate location. |
-| `tunnel_ratio` | double | plate_dist / max(release_dist, eps) -- higher means better tunneling (similar release, different result). |
+| `pitcher` | Int64 | MLB Advanced Media (MLBAM) id for the pitcher. |
+| `game_pk` | Int64 | Game identifier. |
+| `at_bat_number` | Int64 | Game-level plate-appearance sequence number. |
+| `pitch_number` | Int64 | Pitch sequence number within the plate appearance. |
+| `release_dist` | Float64 | Euclidean distance between this pitch's release point and the previous pitch's release point. |
+| `plate_dist` | Float64 | Euclidean distance between this pitch's plate location and the previous pitch's plate location. |
+| `tunnel_ratio` | Float64 | plate_dist / max(release_dist, eps) -- higher means better tunneling (similar release, different result). |
 
 **Example**
 
@@ -719,10 +719,10 @@ Mean run value grouped by the ordered `(prev_pitch_type, pitch_type)` sequence.
 
 | col_name | type | description |
 |---|---|---|
-| `prev_pitch_type` | character | Pitch type of the preceding pitch in the sequence. |
-| `pitch_type` | character | Pitch type of the current pitch. |
-| `mean_run_value` | double | Mean run value of the current pitch, grouped by the ordered (prev_pitch_type, pitch_type) pair. |
-| `n` | integer | Number of pitches observed for this ordered pair. |
+| `prev_pitch_type` | String | Pitch type of the preceding pitch in the sequence. |
+| `pitch_type` | String | Pitch type of the current pitch. |
+| `mean_run_value` | Float64 | Mean run value of the current pitch, grouped by the ordered (prev_pitch_type, pitch_type) pair. |
+| `n` | Int64 | Number of pitches observed for this ordered pair. |
 
 **Example**
 
@@ -764,10 +764,10 @@ one row per runner. | Column | Type | Description | |---|---|---| | runner_id | 
 
 | col_name | type | description |
 |---|---|---|
-| `runner_id` | character |  |
-| `attempts` | integer | Number of batted-ball events (attempts). |
-| `p_success_mean` | double |  |
-| `sb_run_value` | double |  |
+| `runner_id` | String |  |
+| `attempts` | Int64 | Number of batted-ball events (attempts). |
+| `p_success_mean` | Float64 |  |
+| `sb_run_value` | Float64 |  |
 
 **Example**
 
@@ -796,12 +796,12 @@ Per-pitch fitted times-through-order fatigue adjustment.
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | integer | MLB Advanced Media (MLBAM) id for the pitcher. |
-| `game_pk` | integer | Game identifier. |
-| `at_bat_number` | integer | Game-level plate-appearance sequence number. |
-| `pitch_number` | integer | Pitch sequence number within the plate appearance. |
-| `times_through_order` | integer | Times through the batting order (1-3). |
-| `fatigue_rv_adj` | double | Fitted per-TTO run-value marginal (mlb_pitching_constants.tto_penalty) for this pitch's TTO level. |
+| `pitcher` | Int64 | MLB Advanced Media (MLBAM) id for the pitcher. |
+| `game_pk` | Int64 | Game identifier. |
+| `at_bat_number` | Int64 | Game-level plate-appearance sequence number. |
+| `pitch_number` | Int64 | Pitch sequence number within the plate appearance. |
+| `times_through_order` | Int64 | Times through the batting order (1-3). |
+| `fatigue_rv_adj` | Float64 | Fitted per-TTO run-value marginal (mlb_pitching_constants.tto_penalty) for this pitch's TTO level. |
 
 **Example**
 
@@ -833,12 +833,12 @@ one row per umpire and era (`abs_era` splits an umpire's 2026+ calls from the ea
 
 | col_name | type | description |
 |---|---|---|
-| `umpire_id` | character | Umpire identifier (statsapi people id, stringified). |
-| `abs_era` | logical | The pitch is from 2026 on -- Savant location at the middle of the plate against the ABS zone, and the call was challengeable (rules/mlb.yaml#mlb-2026-abs-challenge-system); excluded from the fit, scored and reported on its own row. |
-| `n_called` | integer | Called pitches (strike or ball) observed for this umpire. |
-| `obs_strike_rate` | double | Realized called-strike rate for this umpire. |
-| `exp_strike_rate` | double | Mean model-predicted called-strike probability for this umpire's pitches. |
-| `bias` | double | obs_strike_rate minus exp_strike_rate (positive = strike-generous). |
+| `umpire_id` | String | Umpire identifier (statsapi people id, stringified). |
+| `abs_era` | Boolean | The pitch is from 2026 on -- Savant location at the middle of the plate against the ABS zone, and the call was challengeable (rules/mlb.yaml#mlb-2026-abs-challenge-system); excluded from the fit, scored and reported on its own row. |
+| `n_called` | Int64 | Called pitches (strike or ball) observed for this umpire. |
+| `obs_strike_rate` | Float64 | Realized called-strike rate for this umpire. |
+| `exp_strike_rate` | Float64 | Mean model-predicted called-strike probability for this umpire's pitches. |
+| `bias` | Float64 | obs_strike_rate minus exp_strike_rate (positive = strike-generous). |
 
 **Example**
 
@@ -867,8 +867,8 @@ one row per input pitch. | Column | Type | Description | |---|---|---| | called_
 
 | col_name | type | description |
 |---|---|---|
-| `called_strike_prob` | double | P(called strike \| pitch location) from the standardized zone-coordinate logistic. |
-| `abs_era` | logical | The pitch is from 2026 on -- Savant location at the middle of the plate against the ABS zone, and the call was challengeable (rules/mlb.yaml#mlb-2026-abs-challenge-system); excluded from the fit, scored and reported on its own row. |
+| `called_strike_prob` | Float64 | P(called strike \| pitch location) from the standardized zone-coordinate logistic. |
+| `abs_era` | Boolean | The pitch is from 2026 on -- Savant location at the middle of the plate against the ABS zone, and the call was challengeable (rules/mlb.yaml#mlb-2026-abs-challenge-system); excluded from the fit, scored and reported on its own row. |
 
 **Example**
 
@@ -910,18 +910,18 @@ One row per pitch with the input columns plus `velo_z`, `spin_z`, `pfx_x_z`, `pf
 
 | col_name | type | description |
 |---|---|---|
-| `velo_z` | double | Release speed standardized (z-score) within pitcher. |
-| `spin_z` | double | Release spin rate standardized (z-score) within pitcher. |
-| `pfx_x_z` | double | Horizontal movement (pfx_x) standardized (z-score) within pitcher. |
-| `pfx_z_z` | double | Vertical movement (pfx_z) standardized (z-score) within pitcher. |
-| `release_pos_x_z` | double | Horizontal release position standardized (z-score) within pitcher. |
-| `release_pos_z_z` | double | Vertical release position standardized (z-score) within pitcher. |
-| `extension_z` | double | Release extension standardized (z-score) within pitcher. |
-| `run_value` | double | Savant per-pitch delta_run_exp, passed through unchanged as the spine's single run-value label. |
-| `plate_x_abs` | double | Absolute horizontal plate location (distance from the center of the zone). |
-| `plate_z_norm` | double | Vertical plate location normalized to the batter's own strike zone, 0 = bottom, 1 = top. |
-| `in_zone` | integer | 1 if the pitch crossed the strike zone (normalized location + horizontal bound), else 0. |
-| `dist_from_heart` | double | Euclidean distance from the normalized zone center (0, 0.5) -- lower is more hittable. |
+| `velo_z` | Float64 | Release speed standardized (z-score) within pitcher. |
+| `spin_z` | Float64 | Release spin rate standardized (z-score) within pitcher. |
+| `pfx_x_z` | Float64 | Horizontal movement (pfx_x) standardized (z-score) within pitcher. |
+| `pfx_z_z` | Float64 | Vertical movement (pfx_z) standardized (z-score) within pitcher. |
+| `release_pos_x_z` | Float64 | Horizontal release position standardized (z-score) within pitcher. |
+| `release_pos_z_z` | Float64 | Vertical release position standardized (z-score) within pitcher. |
+| `extension_z` | Float64 | Release extension standardized (z-score) within pitcher. |
+| `run_value` | Float64 | Savant per-pitch delta_run_exp, passed through unchanged as the spine's single run-value label. |
+| `plate_x_abs` | Float64 | Absolute horizontal plate location (distance from the center of the zone). |
+| `plate_z_norm` | Float64 | Vertical plate location normalized to the batter's own strike zone, 0 = bottom, 1 = top. |
+| `in_zone` | Int64 | 1 if the pitch crossed the strike zone (normalized location + horizontal bound), else 0. |
+| `dist_from_heart` | Float64 | Euclidean distance from the normalized zone center (0, 0.5) -- lower is more hittable. |
 
 **Example**
 
@@ -957,15 +957,15 @@ Per `(pitcher, game_pk, game_date)`: `fb_velo` (this game's mean fastball `relea
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | integer | MLB Advanced Media (MLBAM) id for the pitcher. |
-| `game_pk` | integer | Game identifier. |
-| `game_date` | date | Calendar date of the game (YYYY-MM-DD). |
-| `fb_velo` | double | Mean fastball release speed for this appearance. |
-| `velo_trend` | double | OLS slope of fb_velo over the trailing prior appearances (leakage-safe). |
-| `velo_drop` | double | Trailing-baseline mean fb_velo minus this appearance's fb_velo. |
-| `pitches_game` | integer | Pitches thrown in this appearance. |
-| `trailing_workload` | double | Mean pitches_game over the trailing prior appearances (leakage-safe). |
-| `days_rest` | double | Days since the pitcher's previous appearance. |
+| `pitcher` | Int64 | MLB Advanced Media (MLBAM) id for the pitcher. |
+| `game_pk` | Int64 | Game identifier. |
+| `game_date` | Date | Calendar date of the game (YYYY-MM-DD). |
+| `fb_velo` | Float64 | Mean fastball release speed for this appearance. |
+| `velo_trend` | Float64 | OLS slope of fb_velo over the trailing prior appearances (leakage-safe). |
+| `velo_drop` | Float64 | Trailing-baseline mean fb_velo minus this appearance's fb_velo. |
+| `pitches_game` | Int64 | Pitches thrown in this appearance. |
+| `trailing_workload` | Float64 | Mean pitches_game over the trailing prior appearances (leakage-safe). |
+| `days_rest` | Float64 | Days since the pitcher's previous appearance. |
 
 **Example**
 
@@ -1005,9 +1005,9 @@ one row per scored attempt. | Column | Type | Description | |---|---|---| | runn
 
 | col_name | type | description |
 |---|---|---|
-| `runner_id` | character |  |
-| `base` | character |  |
-| `p_success` | double |  |
+| `runner_id` | String |  |
+| `base` | String |  |
+| `p_success` | Float64 |  |
 
 **Example**
 
@@ -1040,11 +1040,11 @@ one row per attempt. | Column | Type | Description | |---|---|---| | game_date |
 
 | col_name | type | description |
 |---|---|---|
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `runner_id` | character |  |
-| `catcher_id` | character |  |
-| `base` | character |  |
-| `outcome` | character |  |
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `runner_id` | String |  |
+| `catcher_id` | String |  |
+| `base` | String |  |
+| `outcome` | String |  |
 
 **Example**
 
@@ -1079,11 +1079,11 @@ one row per observed `(speed_b, pop_b, base)`. | Column | Type | Description | |
 
 | col_name | type | description |
 |---|---|---|
-| `speed_b` | integer |  |
-| `pop_b` | integer |  |
-| `base` | character |  |
-| `p_success` | double |  |
-| `n` | integer |  |
+| `speed_b` | Int64 |  |
+| `pop_b` | Int64 |  |
+| `base` | String |  |
+| `p_success` | Float64 |  |
+| `n` | Int64 |  |
 
 **Example**
 
@@ -1118,12 +1118,12 @@ ERA; use `x_era` (oracle-gated vs Savant's xERA) for a fitted number.
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | integer | MLB Advanced Media (MLBAM) id for the pitcher. |
-| `season` | integer | Season year (carried through for join convenience with x_era). |
-| `k_pct` | double | Strikeout rate (strikeouts / batters faced). |
-| `bb_pct` | double | Walk rate (walks + HBP / batters faced). |
-| `gb_pct` | double | Ground-ball rate among batted balls. |
-| `siera_like` | double | SIERA-like ERA estimate from the fitted K%/BB%/GB% OLS coefficients. |
+| `pitcher` | Int64 | MLB Advanced Media (MLBAM) id for the pitcher. |
+| `season` | Int64 | Season year (carried through for join convenience with x_era). |
+| `k_pct` | Float64 | Strikeout rate (strikeouts / batters faced). |
+| `bb_pct` | Float64 | Walk rate (walks + HBP / batters faced). |
+| `gb_pct` | Float64 | Ground-ball rate among batted balls. |
+| `siera_like` | Float64 | SIERA-like ERA estimate from the fitted K%/BB%/GB% OLS coefficients. |
 
 **Example**
 
@@ -1152,10 +1152,10 @@ Observed mean run value by times-through-order, with the penalty vs TTO=1.
 
 | col_name | type | description |
 |---|---|---|
-| `times_through_order` | integer | Times through the batting order (1-3). |
-| `mean_run_value` | double | Mean observed run value for pitches at this TTO level. |
-| `penalty_vs_first` | double | mean_run_value minus the TTO=1 mean run value. |
-| `n` | integer | Number of pitches observed at this TTO level. |
+| `times_through_order` | Int64 | Times through the batting order (1-3). |
+| `mean_run_value` | Float64 | Mean observed run value for pitches at this TTO level. |
+| `penalty_vs_first` | Float64 | mean_run_value minus the TTO=1 mean run value. |
+| `n` | Int64 | Number of pitches observed at this TTO level. |
 
 **Example**
 
@@ -1187,10 +1187,10 @@ Parametric xERA from Statcast expected wOBA allowed.
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | integer | Whether the position is a pitcher. |
-| `season` | integer | Season year. |
-| `x_woba` | double | Expected wOBA allowed, the mean of Statcast estimated_woba_using_speedangle over the pitcher's pitches that carry one (batted balls). |
-| `x_era` | double | Parametric xERA, league ERA + (x_woba - league wOBA) / wOBA scale * PA per 9, from the season's league baselines. |
+| `pitcher` | Int64 | Whether the position is a pitcher. |
+| `season` | Int64 | Season year. |
+| `x_woba` | Float64 | Expected wOBA allowed, the mean of Statcast estimated_woba_using_speedangle over the pitcher's pitches that carry one (batted balls). |
+| `x_era` | Float64 | Parametric xERA, league ERA + (x_woba - league wOBA) / wOBA scale * PA per 9, from the season's league baselines. |
 
 **Example**
 

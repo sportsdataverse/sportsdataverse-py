@@ -342,13 +342,13 @@ One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_e
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `team_id` | character | Unique team identifier. |
-| `stat_pts_exp` | double |  |
-| `stat_reb_exp` | double |  |
-| `stat_ast_exp` | double |  |
-| `stat_fg3m_exp` | double |  |
-| `pace_proj` | double |  |
+| `player_id` | String | Unique player identifier. |
+| `team_id` | String | Unique team identifier. |
+| `stat_pts_exp` | Float64 |  |
+| `stat_reb_exp` | Float64 |  |
+| `stat_ast_exp` | Float64 |  |
+| `stat_fg3m_exp` | Float64 |  |
+| `pace_proj` | Float64 |  |
 
 ### wnba_playtype_ratings {#wnba_playtype_ratings}
 
@@ -413,24 +413,24 @@ A dict with keys `"officials"` and `"replay_center"` mapping to DataFrames. If `
 
 | col_name | type | description |
 |---|---|---|
-| `officials.league` | character | League the assignment belongs to: nba, gl (G League), or wnba. |
-| `officials.game_id` | character | 10-digit game id (zero-padded) for the assigned game. |
-| `officials.game_date` | date | Game date parsed from the feed's MM/DD/YYYY format. |
-| `officials.season` | integer | Season end year, converted from the feed's <season-type digit><start year> code: start year + 1 for NBA/G League's two-calendar-year seasons, start year unchanged for WNBA's single-year seasons. |
-| `officials.season_type` | character | Season type decoded from the feed's season code first digit: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
-| `officials.game_code` | character | League game code in YYYYMMDD/AWYHOM format, matching the away and home team abbreviations. |
-| `officials.home_team_id` | integer | 10-digit team id of the home team. |
-| `officials.home_team_abbr` | character | Three-letter abbreviation of the home team. |
-| `officials.away_team_id` | integer | 10-digit team id of the away team. |
-| `officials.away_team_abbr` | character | Three-letter abbreviation of the away team. |
-| `officials.crew_position` | integer | Feed's official slot order (1-4); slot 1 is inferred to be the crew chief since the API does not label roles. |
-| `officials.official_id` | integer | Numeric official id from the feed (source field official{n}_code); expected to match stats.nba.com's OFFICIAL_ID. |
-| `officials.official_name` | character | Official's display name for this crew slot. |
-| `officials.jersey_num` | character | Official's jersey number as a string, from the feed's official{n}_JNum field. |
-| `replay_center.league` | character | League the replay-center staffing belongs to: nba, gl, or wnba. |
-| `replay_center.game_date` | date | Date the replay-center official worked; a date-level staffing record, not tied to one game. |
-| `replay_center.official_id` | integer | Numeric replay-center official id from the feed. |
-| `replay_center.official_name` | character | Replay-center official's display name for that date. |
+| `officials.league` | String | League the assignment belongs to: nba, gl (G League), or wnba. |
+| `officials.game_id` | String | 10-digit game id (zero-padded) for the assigned game. |
+| `officials.game_date` | Date | Game date parsed from the feed's MM/DD/YYYY format. |
+| `officials.season` | Int64 | Season end year, converted from the feed's <season-type digit><start year> code: start year + 1 for NBA/G League's two-calendar-year seasons, start year unchanged for WNBA's single-year seasons. |
+| `officials.season_type` | String | Season type decoded from the feed's season code first digit: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
+| `officials.game_code` | String | League game code in YYYYMMDD/AWYHOM format, matching the away and home team abbreviations. |
+| `officials.home_team_id` | Int64 | 10-digit team id of the home team. |
+| `officials.home_team_abbr` | String | Three-letter abbreviation of the home team. |
+| `officials.away_team_id` | Int64 | 10-digit team id of the away team. |
+| `officials.away_team_abbr` | String | Three-letter abbreviation of the away team. |
+| `officials.crew_position` | Int64 | Feed's official slot order (1-4); slot 1 is inferred to be the crew chief since the API does not label roles. |
+| `officials.official_id` | Int64 | Numeric official id from the feed (source field official{n}_code); expected to match stats.nba.com's OFFICIAL_ID. |
+| `officials.official_name` | String | Official's display name for this crew slot. |
+| `officials.jersey_num` | String | Official's jersey number as a string, from the feed's official{n}_JNum field. |
+| `replay_center.league` | String | League the replay-center staffing belongs to: nba, gl, or wnba. |
+| `replay_center.game_date` | Date | Date the replay-center official worked; a date-level staffing record, not tied to one game. |
+| `replay_center.official_id` | Int64 | Numeric replay-center official id from the feed. |
+| `replay_center.official_name` | String | Replay-center official's display name for that date. |
 
 **Raises**
 

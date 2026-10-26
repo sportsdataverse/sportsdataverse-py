@@ -1,11 +1,11 @@
 ---
-title: COLLEGE_SOFTBALL — ESPN core API (v2)
+title: College softball — ESPN core API (v2)
 sidebar_label: ESPN core API (v2)
-description: "COLLEGE_SOFTBALL — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "College softball — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 22
 toc_max_heading_level: 2
 ---
-# COLLEGE_SOFTBALL — ESPN core API (v2)
+# College softball — ESPN core API (v2)
 
 `sportsdataverse.baseball.college_softball` — 87 endpoints.
 

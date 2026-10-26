@@ -163,6 +163,7 @@ _CLEAN = {
     "_coverage_gaps": [],
     "_source_gaps": [],
     "_returns_gaps": [],
+    "_internal_leaks": [],
 }
 _RED = {
     "_live_stale": (["sportsdataverse/x/x_espn_ext.py"], "stale live files: sportsdataverse/x/x_espn_ext.py"),
@@ -173,6 +174,7 @@ _RED = {
     "_coverage_gaps": ([("x", ["fn_a"])], "undocumented user-facing functions: fn_a"),
     "_source_gaps": ([("x", "fn_b", "why")], "public functions with no single source: x.fn_b: why"),
     "_returns_gaps": ([("x", "fn_c")], "public functions with no documented return: x.fn_c"),
+    "_internal_leaks": (["x.md:2: private repository: see sdv-internal-refs"], "maintainer-only references"),
 }
 
 

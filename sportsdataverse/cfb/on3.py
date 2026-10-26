@@ -105,7 +105,7 @@ def on3_coaches_history(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/coaches/{personKey}/history
+    """Coaches history.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/coaches/{person_key}/history``
     Example URL: https://api.on3.com/public/rdb/v1/coaches/89617/history
@@ -153,7 +153,7 @@ def on3_coaches_profile(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/coaches/{personKey}/profile
+    """Coaches profile.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/coaches/{person_key}/profile``
     Example URL: https://api.on3.com/public/rdb/v1/coaches/89617/profile
@@ -201,7 +201,7 @@ def on3_collective_groups(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/collective-groups
+    """Collective groups.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/collective-groups``
     Example URL: https://api.on3.com/public/rdb/v1/collective-groups
@@ -256,7 +256,7 @@ def on3_collective_groups_deals(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/collective-groups/{key}/deals
+    """Collective groups deals.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/collective-groups/{key}/deals``
     Example URL: https://api.on3.com/public/rdb/v1/collective-groups/1/deals
@@ -304,7 +304,7 @@ def on3_collective_groups_key(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/collective-groups/{key}
+    """Collective groups key.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/collective-groups/{key}``
     Example URL: https://api.on3.com/public/rdb/v1/collective-groups/1
@@ -350,7 +350,7 @@ def on3_commits_latest(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/commits/latest
+    """Commits latest.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/commits/latest``
     Example URL: https://api.on3.com/public/rdb/v1/commits/latest
@@ -399,7 +399,7 @@ def on3_commits_organizations_latest_commits(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/commits/organizations/{orgKey}/latest-commits
+    """Commits organizations latest commits.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/commits/organizations/{org_key}/latest-commits``
     Example URL: https://api.on3.com/public/rdb/v1/commits/organizations/1867/latest-commits
@@ -443,7 +443,7 @@ def on3_commits_organizations_org_key(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/commits/organizations/{orgKey}
+    """Commits organizations org key.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/commits/organizations/{org_key}``
     Example URL: https://api.on3.com/public/rdb/v1/commits/organizations/1867
@@ -490,7 +490,7 @@ def on3_draft_organization_rank(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/draft-organization-rank
+    """Draft organization rank.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/draft-organization-rank``
     Example URL: https://api.on3.com/public/rdb/v1/draft-organization-rank
@@ -544,7 +544,7 @@ def on3_draft_pick_organization_rank(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/draft-pick-organization-rank
+    """Draft pick organization rank.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/draft-pick-organization-rank``
     Example URL: https://api.on3.com/public/rdb/v1/draft-pick-organization-rank
@@ -597,7 +597,7 @@ def on3_drafts(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/drafts
+    """Drafts.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/drafts``
     Example URL: https://api.on3.com/public/rdb/v1/drafts
@@ -648,7 +648,7 @@ def on3_drafts_by_stars(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/drafts-by-stars
+    """Drafts by stars.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/drafts-by-stars``
     Example URL: https://api.on3.com/public/rdb/v1/drafts-by-stars
@@ -698,7 +698,7 @@ def on3_drafts_by_stars_summary(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/drafts-by-stars-summary
+    """Drafts by stars summary.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/drafts-by-stars-summary``
     Example URL: https://api.on3.com/public/rdb/v1/drafts-by-stars-summary
@@ -746,7 +746,7 @@ def on3_drafts_players(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/drafts/{orgKey}/players
+    """Drafts players.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/drafts/{org_key}/players``
     Example URL: https://api.on3.com/public/rdb/v1/drafts/1867/players
@@ -793,7 +793,7 @@ def on3_filters_conferences(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/filters/conferences
+    """Filters conferences.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/filters/conferences``
     Example URL: https://api.on3.com/public/rdb/v1/filters/conferences
@@ -841,7 +841,7 @@ def on3_filters_draft_rounds(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/filters/draft-rounds
+    """Filters draft rounds.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/filters/draft-rounds``
     Example URL: https://api.on3.com/public/rdb/v1/filters/draft-rounds
@@ -889,7 +889,7 @@ def on3_filters_positions(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/filters/positions
+    """Filters positions.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/filters/positions``
     Example URL: https://api.on3.com/public/rdb/v1/filters/positions
@@ -935,7 +935,7 @@ def on3_filters_sports(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/filters/sports
+    """Filters sports.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/filters/sports``
     Example URL: https://api.on3.com/public/rdb/v1/filters/sports
@@ -977,7 +977,7 @@ def on3_filters_status(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/filters/status
+    """Filters status.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/filters/status``
     Example URL: https://api.on3.com/public/rdb/v1/filters/status
@@ -1022,7 +1022,7 @@ def on3_filters_teams(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/filters/teams
+    """Filters teams.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/filters/teams``
     Example URL: https://api.on3.com/public/rdb/v1/filters/teams
@@ -1070,7 +1070,7 @@ def on3_filters_years(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/filters/years
+    """Filters years.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/filters/years``
     Example URL: https://api.on3.com/public/rdb/v1/filters/years
@@ -1113,7 +1113,7 @@ def on3_nil_100(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/nil-100
+    """Nil 100.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/nil-100``
     Example URL: https://api.on3.com/public/rdb/v1/nil-100
@@ -1161,7 +1161,7 @@ def on3_nil_100_v2(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v2/nil-100
+    """Nil 100 v2.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v2/nil-100``
     Example URL: https://api.on3.com/public/rdb/v2/nil-100
@@ -1212,7 +1212,7 @@ def on3_nil_compliances_state(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/nil-compliances/state
+    """Nil compliances state.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/nil-compliances/state``
     Example URL: https://api.on3.com/public/rdb/v1/nil-compliances/state
@@ -1262,7 +1262,7 @@ def on3_nil_rankings(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/nil-rankings
+    """Nil rankings.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/nil-rankings``
     Example URL: https://api.on3.com/public/rdb/v1/nil-rankings
@@ -1319,7 +1319,7 @@ def on3_organizations_draft_class_by_state(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/organizations/{organizationKey}/draft-class-by-state
+    """Organizations draft class by state.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/organizations/{organization_key}/draft-class-by-state``
     Example URL: https://api.on3.com/public/rdb/v1/organizations/1867/draft-class-by-state
@@ -1369,7 +1369,7 @@ def on3_organizations_draft_class_by_year(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/organizations/{organizationKey}/draft-class-by-year
+    """Organizations draft class by year.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/organizations/{organization_key}/draft-class-by-year``
     Example URL: https://api.on3.com/public/rdb/v1/organizations/1867/draft-class-by-year
@@ -1417,7 +1417,7 @@ def on3_organizations_draft_count_by_stars(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/organizations/{organizationKey}/draft-count-by-stars
+    """Organizations draft count by stars.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/organizations/{organization_key}/draft-count-by-stars``
     Example URL: https://api.on3.com/public/rdb/v1/organizations/1867/draft-count-by-stars
@@ -1463,7 +1463,7 @@ def on3_organizations_draft_count_by_year(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/organizations/{organizationKey}/draft-count-by-year
+    """Organizations draft count by year.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/organizations/{organization_key}/draft-count-by-year``
     Example URL: https://api.on3.com/public/rdb/v1/organizations/1867/draft-count-by-year
@@ -1512,7 +1512,7 @@ def on3_organizations_draft_ranking_summary(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/organizations/{organizationKey}/draft-ranking-summary
+    """Organizations draft ranking summary.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/organizations/{organization_key}/draft-ranking-summary``
     Example URL: https://api.on3.com/public/rdb/v1/organizations/1867/draft-ranking-summary
@@ -1560,7 +1560,7 @@ def on3_organizations_drafted_players(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/organizations/{organizationKey}/drafted-players
+    """Organizations drafted players.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/organizations/{organization_key}/drafted-players``
     Example URL: https://api.on3.com/public/rdb/v1/organizations/1867/drafted-players
@@ -1609,7 +1609,7 @@ def on3_organizations_drafts_by_stars_summary(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/organizations/{organizationKey}/drafts-by-stars-summary
+    """Organizations drafts by stars summary.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/organizations/{organization_key}/drafts-by-stars-summary``
     Example URL: https://api.on3.com/public/rdb/v1/organizations/1867/drafts-by-stars-summary
@@ -1659,7 +1659,7 @@ def on3_organizations_roster(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/organizations/{organizationKey}/roster
+    """Organizations roster.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/organizations/{organization_key}/roster``
     Example URL: https://api.on3.com/public/rdb/v1/organizations/1867/roster
@@ -1713,7 +1713,7 @@ def on3_organizations_roster_header(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/organizations/{organizationKey}/roster-header
+    """Organizations roster header.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/organizations/{organization_key}/roster-header``
     Example URL: https://api.on3.com/public/rdb/v1/organizations/1867/roster-header
@@ -1761,7 +1761,7 @@ def on3_people_combine_measurements(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/people/{personKey}/combine-measurements
+    """People combine measurements.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/people/{person_key}/combine-measurements``
     Example URL: https://api.on3.com/public/rdb/v1/people/89617/combine-measurements
@@ -1805,7 +1805,7 @@ def on3_people_latest_valuation(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/people/{personKey}/latest-valuation
+    """People latest valuation.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/people/{person_key}/latest-valuation``
     Example URL: https://api.on3.com/public/rdb/v1/people/89617/latest-valuation
@@ -1849,7 +1849,7 @@ def on3_people_measurements(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/people/{personKey}/measurements
+    """People measurements.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/people/{person_key}/measurements``
     Example URL: https://api.on3.com/public/rdb/v1/people/89617/measurements
@@ -1895,7 +1895,7 @@ def on3_people_measurements_averages(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/people/{personKey}/measurements/averages
+    """People measurements averages.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/people/{person_key}/measurements/averages``
     Example URL: https://api.on3.com/public/rdb/v1/people/89617/measurements/averages
@@ -1945,7 +1945,7 @@ def on3_people_person_connections(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/people/{personKey}/person-connections
+    """People person connections.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/people/{person_key}/person-connections``
     Example URL: https://api.on3.com/public/rdb/v1/people/89617/person-connections
@@ -1993,7 +1993,7 @@ def on3_people_social(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/people/{personKey}/social
+    """People social.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/people/{person_key}/social``
     Example URL: https://api.on3.com/public/rdb/v1/people/89617/social
@@ -2037,7 +2037,7 @@ def on3_people_social_post_summary(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/people/{personKey}/social-post-summary
+    """People social post summary.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/people/{person_key}/social-post-summary``
     Example URL: https://api.on3.com/public/rdb/v1/people/89617/social-post-summary
@@ -2081,7 +2081,7 @@ def on3_people_track_and_field_measurements(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/people/{personKey}/track-and-field-measurements
+    """People track and field measurements.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/people/{person_key}/track-and-field-measurements``
     Example URL: https://api.on3.com/public/rdb/v1/people/89617/track-and-field-measurements
@@ -2125,7 +2125,7 @@ def on3_people_valuation_growth(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/people/{personKey}/valuation-growth
+    """People valuation growth.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/people/{person_key}/valuation-growth``
     Example URL: https://api.on3.com/public/rdb/v1/people/89617/valuation-growth
@@ -2169,7 +2169,7 @@ def on3_person_connections_connection_key(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/person-connections/{connectionKey}
+    """Person connections connection key.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/person-connections/{connection_key}``
     Example URL: https://api.on3.com/public/rdb/v1/person-connections/89617
@@ -2213,7 +2213,7 @@ def on3_person_primary_recruitment_evaluation(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/person/{personKey}/primary-recruitment-evaluation
+    """Person primary recruitment evaluation.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/person/{person_key}/primary-recruitment-evaluation``
     Example URL: https://api.on3.com/public/rdb/v1/person/89617/primary-recruitment-evaluation
@@ -2257,7 +2257,7 @@ def on3_person_recruitment_evaluations(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/person/{personKey}/recruitment-evaluations
+    """Person recruitment evaluations.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/person/{person_key}/recruitment-evaluations``
     Example URL: https://api.on3.com/public/rdb/v1/person/89617/recruitment-evaluations
@@ -2301,7 +2301,7 @@ def on3_person_sport_profile_recruit(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/person-sport/{psKey}/profile-recruit
+    """Person sport profile recruit.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/person-sport/{ps_key}/profile-recruit``
     Example URL: https://api.on3.com/public/rdb/v1/person-sport/89617/profile-recruit
@@ -2348,7 +2348,7 @@ def on3_person_sport_rankings(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/person-sport-rankings
+    """Person sport rankings.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/person-sport-rankings``
     Example URL: https://api.on3.com/public/rdb/v1/person-sport-rankings
@@ -2399,7 +2399,7 @@ def on3_player_all_rankings(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/player/{personKey}/all-rankings
+    """Player all rankings.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/player/{person_key}/all-rankings``
     Example URL: https://api.on3.com/public/rdb/v1/player/89617/all-rankings
@@ -2443,7 +2443,7 @@ def on3_player_database_updates(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/player/{personKey}/database-updates
+    """Player database updates.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/player/{person_key}/database-updates``
     Example URL: https://api.on3.com/public/rdb/v1/player/89617/database-updates
@@ -2487,7 +2487,7 @@ def on3_player_images(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/player/{personKey}/images
+    """Player images.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/player/{person_key}/images``
     Example URL: https://api.on3.com/public/rdb/v1/player/89617/images
@@ -2531,7 +2531,7 @@ def on3_player_organizations(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/player/{personKey}/organizations
+    """Player organizations.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/player/{person_key}/organizations``
     Example URL: https://api.on3.com/public/rdb/v1/player/89617/organizations
@@ -2576,7 +2576,7 @@ def on3_player_organizations_org_key(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/player/{playerKey}/organizations/{orgKey}
+    """Player organizations org key.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/player/{player_key}/organizations/{org_key}``
     Example URL: https://api.on3.com/public/rdb/v1/player/89617/organizations/1867
@@ -2621,7 +2621,7 @@ def on3_player_person_rankings(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/player/{personKey}/rankings
+    """Player person rankings.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/player/{person_key}/rankings``
     Example URL: https://api.on3.com/public/rdb/v1/player/89617/rankings
@@ -2665,7 +2665,7 @@ def on3_player_profile(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/player/{personKey}/profile
+    """Player profile.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/player/{person_key}/profile``
     Example URL: https://api.on3.com/public/rdb/v1/player/89617/profile
@@ -2709,7 +2709,7 @@ def on3_player_team_targets(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/player/{playerKey}/team-targets
+    """Player team targets.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/player/{player_key}/team-targets``
     Example URL: https://api.on3.com/public/rdb/v1/player/89617/team-targets
@@ -2755,7 +2755,7 @@ def on3_player_verified(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/player/verified
+    """Player verified.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/player/verified``
     Example URL: https://api.on3.com/public/rdb/v1/player/verified
@@ -2804,7 +2804,7 @@ def on3_player_videos(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/player/{personKey}/videos
+    """Player videos.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/player/{person_key}/videos``
     Example URL: https://api.on3.com/public/rdb/v1/player/89617/videos
@@ -2848,7 +2848,7 @@ def on3_player_visit_center(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/player/{playerKey}/visit-center
+    """Player visit center.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/player/{player_key}/visit-center``
     Example URL: https://api.on3.com/public/rdb/v1/player/89617/visit-center
@@ -2897,7 +2897,7 @@ def on3_players_industry_comparision(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/players/industry-comparision
+    """Players industry comparision.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/players/industry-comparision``
     Example URL: https://api.on3.com/public/rdb/v1/players/industry-comparision
@@ -2955,7 +2955,7 @@ def on3_players_industry_comparision_list(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/players/industry-comparision-list
+    """Players industry comparision list.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/players/industry-comparision-list``
     Example URL: https://api.on3.com/public/rdb/v1/players/industry-comparision-list
@@ -3057,7 +3057,7 @@ def on3_quotes(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/quotes
+    """Quotes.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/quotes``
     Example URL: https://api.on3.com/public/rdb/v1/quotes
@@ -3104,7 +3104,7 @@ def on3_quotes_key(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/quotes/{key}
+    """Quotes key.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/quotes/{key}``
     Example URL: https://api.on3.com/public/rdb/v1/quotes/1
@@ -3148,7 +3148,7 @@ def on3_recruitment_primary_recruitment_evaluation(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/recruitment/{recruitmentKey}/primary-recruitment-evaluation
+    """Recruitment primary recruitment evaluation.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/recruitment/{recruitment_key}/primary-recruitment-evaluation``
     Example URL: https://api.on3.com/public/rdb/v1/recruitment/270036/primary-recruitment-evaluation
@@ -3192,7 +3192,7 @@ def on3_recruitment_recruitment_evaluations(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/recruitment/{recruitmentKey}/recruitment-evaluations
+    """Recruitment recruitment evaluations.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/recruitment/{recruitment_key}/recruitment-evaluations``
     Example URL: https://api.on3.com/public/rdb/v1/recruitment/270036/recruitment-evaluations
@@ -3290,7 +3290,7 @@ def on3_recruitments_profile(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/recruitments/{recKey}/profile
+    """Recruitments profile.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/recruitments/{rec_key}/profile``
     Example URL: https://api.on3.com/public/rdb/v1/recruitments/270036/profile
@@ -3334,7 +3334,7 @@ def on3_recruitments_rpm_picks(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/recruitments/{recKey}/rpm-picks
+    """Recruitments rpm picks.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/recruitments/{rec_key}/rpm-picks``
     Example URL: https://api.on3.com/public/rdb/v1/recruitments/270036/rpm-picks
@@ -3378,7 +3378,7 @@ def on3_recruitments_rpm_summary(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/recruitments/{recKey}/rpm-summary
+    """Recruitments rpm summary.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/recruitments/{rec_key}/rpm-summary``
     Example URL: https://api.on3.com/public/rdb/v1/recruitments/270036/rpm-summary
@@ -3425,7 +3425,7 @@ def on3_team_ranking(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/team-ranking
+    """Team ranking.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/team-ranking``
     Example URL: https://api.on3.com/public/rdb/v1/team-ranking
@@ -3477,7 +3477,7 @@ def on3_team_ranking_bluechips_team_rankings(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/team-ranking/{sport}-{year}/bluechips-team-rankings
+    """Team ranking bluechips team rankings.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/team-ranking/{sport_slug}-{year}/bluechips-team-rankings``
     Example URL: https://api.on3.com/public/rdb/v1/team-ranking/football-2025/bluechips-team-rankings
@@ -3523,7 +3523,7 @@ def on3_team_ranking_consensus_team_rankings(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/team-ranking/{sport}-{year}/consensus-team-rankings
+    """Team ranking consensus team rankings.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/team-ranking/{sport_slug}-{year}/consensus-team-rankings``
     Example URL: https://api.on3.com/public/rdb/v1/team-ranking/football-2025/consensus-team-rankings
@@ -3568,7 +3568,7 @@ def on3_team_ranking_organizations_summary(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/team-ranking/organizations/{orgKey}/summary
+    """Team ranking organizations summary.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/team-ranking/organizations/{org_key}/summary``
     Example URL: https://api.on3.com/public/rdb/v1/team-ranking/organizations/1867/summary
@@ -3613,7 +3613,7 @@ def on3_team_ranking_team_rankings(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/team-ranking/{sport}-{year}/team-rankings
+    """Team ranking team rankings.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/team-ranking/{sport_slug}-{year}/team-rankings``
     Example URL: https://api.on3.com/public/rdb/v1/team-ranking/football-2025/team-rankings
@@ -3665,7 +3665,7 @@ def on3_transfers_best_available(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/transfers/best-available
+    """Transfers best available.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/transfers/best-available``
     Example URL: https://api.on3.com/public/rdb/v1/transfers/best-available
@@ -3729,7 +3729,7 @@ def on3_transfers_latest(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/transfers/latest
+    """Transfers latest.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/transfers/latest``
     Example URL: https://api.on3.com/public/rdb/v1/transfers/latest
@@ -3784,7 +3784,7 @@ def on3_videos_video_key(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /rdb/v1/videos/{videoKey}
+    """Videos video key.
 
     Endpoint: ``GET https://api.on3.com/public/rdb/v1/videos/{video_key}``
     Example URL: https://api.on3.com/public/rdb/v1/videos/1

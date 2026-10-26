@@ -1,9 +1,9 @@
 ---
-title: LIGAMX
-sidebar_label: LIGAMX
-description: "sdv-py LIGAMX: endpoint references, dataset loaders and parsers for LIGAMX in the SportsDataverse Python package."
+title: Liga MX
+sidebar_label: Liga MX
+description: "sdv-py Liga MX: endpoint references, dataset loaders and parsers for Liga MX in the SportsDataverse Python package."
 ---
-# LIGAMX (`sportsdataverse.soccer.ligamx`)
+# Liga MX (`sportsdataverse.soccer.ligamx`)
 
 ## Data sources
 

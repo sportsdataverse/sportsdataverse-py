@@ -1,10 +1,10 @@
 ---
-title: "CFB — additional Python functions — Validation"
+title: "College football — additional Python functions — Validation"
 sidebar_label: "Validation"
 sidebar_position: 15
-description: "CFB — additional Python functions — Validation — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — additional Python functions — Validation — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# CFB — additional Python functions — Validation
+# College football — additional Python functions — Validation
 
 ### check_box_invariants {#check_box_invariants}
 

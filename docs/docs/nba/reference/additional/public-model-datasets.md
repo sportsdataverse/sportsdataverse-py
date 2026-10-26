@@ -30,11 +30,11 @@ Frame with schema `DARKO_DPM_ORACLE_SCHEMA`. Zero rows (with that schema) when t
 
 | col_name | type | description |
 |---|---|---|
-| `player_name` | character | Player name. |
-| `team` | character | Team-side label or team identifier. |
-| `dpm` | integer |  |
-| `odpm` | integer |  |
-| `ddpm` | integer |  |
+| `player_name` | String | Player name. |
+| `team` | String | Team-side label or team identifier. |
+| `dpm` | Int64 |  |
+| `odpm` | Int64 |  |
+| `ddpm` | Int64 |  |
 
 **Raises**
 
@@ -73,11 +73,11 @@ Frame with schema `DT_STATS_ORACLE_SCHEMA`. Zero rows (with that schema) when th
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `season` | integer | Season year. |
-| `player_name` | character | Player name. |
-| `team_alias` | character | JSON-encoded alias object for the entity's team, carrying its Yahoo page URL and path. |
-| `ewins` | double |  |
+| `player_id` | Int64 | Unique player identifier. |
+| `season` | Int64 | Season year. |
+| `player_name` | String | Player name. |
+| `team_alias` | String | JSON-encoded alias object for the entity's team, carrying its Yahoo page URL and path. |
+| `ewins` | Float64 |  |
 
 **Raises**
 
@@ -110,13 +110,13 @@ Frame with schema `EPM_ORACLE_SCHEMA`. Zero rows (with that schema) when the fil
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `season` | integer | Season year. |
-| `player_name` | character | Player name. |
-| `team` | character | Team-side label or team identifier. |
-| `oepm` | double |  |
-| `depm` | double |  |
-| `epm` | double |  |
+| `player_id` | Int64 | Unique player identifier. |
+| `season` | Int64 | Season year. |
+| `player_name` | String | Player name. |
+| `team` | String | Team-side label or team identifier. |
+| `oepm` | Float64 |  |
+| `depm` | Float64 |  |
+| `epm` | Float64 |  |
 
 **Raises**
 
@@ -149,15 +149,15 @@ Frame with schema `LEBRON_DAILY_ORACLE_SCHEMA`. Zero rows (with that schema) whe
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `through_date` | character |  |
-| `season` | character | Season year. |
-| `player_name` | character | Player name. |
-| `mins` | double |  |
-| `lebron` | double |  |
-| `o_lebron` | double |  |
-| `d_lebron` | double |  |
-| `war` | double |  |
+| `player_id` | Int64 | Unique player identifier. |
+| `through_date` | String |  |
+| `season` | String | Season year. |
+| `player_name` | String | Player name. |
+| `mins` | Float64 |  |
+| `lebron` | Float64 |  |
+| `o_lebron` | Float64 |  |
+| `d_lebron` | Float64 |  |
+| `war` | Float64 |  |
 
 **Raises**
 
@@ -196,14 +196,14 @@ Frame with schema `LEBRON_SEASON_ORACLE_SCHEMA`. Zero rows (with that schema) wh
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `seasons` | character | NBA seasons played. |
-| `team` | character | Team-side label or team identifier. |
-| `lebron` | double |  |
-| `o_lebron` | double |  |
-| `d_lebron` | double |  |
-| `war` | double |  |
+| `player_id` | Int64 | Unique player identifier. |
+| `player_name` | String | Player name. |
+| `seasons` | String | NBA seasons played. |
+| `team` | String | Team-side label or team identifier. |
+| `lebron` | Float64 |  |
+| `o_lebron` | Float64 |  |
+| `d_lebron` | Float64 |  |
+| `war` | Float64 |  |
 
 **Raises**
 
@@ -243,15 +243,15 @@ Frame with schema `RAPM_ORACLE_SCHEMA`. Zero rows (with that schema) when the fi
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `season` | character | Season year. |
-| `LA_RAPM` | double |  |
-| `RAPM` | double |  |
-| `RA_EFG` | double |  |
-| `RA_FTR` | double |  |
-| `RA_ORBD` | double |  |
-| `RA_TOV` | double |  |
+| `player_id` | Int64 | Unique player identifier. |
+| `player_name` | String | Player name. |
+| `season` | String | Season year. |
+| `LA_RAPM` | Float64 |  |
+| `RAPM` | Float64 |  |
+| `RA_EFG` | Float64 |  |
+| `RA_FTR` | Float64 |  |
+| `RA_ORBD` | Float64 |  |
+| `RA_TOV` | Float64 |  |
 
 **Raises**
 

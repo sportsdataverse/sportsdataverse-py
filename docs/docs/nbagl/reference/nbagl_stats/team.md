@@ -1,15 +1,15 @@
 ---
-title: "NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Team"
+title: "NBA G League — G League Stats API (stats.nba.com, LeagueID=20) — Team"
 sidebar_label: "Team"
 sidebar_position: 17
-description: "NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Team — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA G League — G League Stats API (stats.nba.com, LeagueID=20) — Team — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Team
+# NBA G League — G League Stats API (stats.nba.com, LeagueID=20) — Team
 
 ## nbagl_stats_teamdetails
 
-GET /stats/teamdetails
+Team details.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teamdetails`
 
@@ -27,84 +27,84 @@ GET /stats/teamdetails
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer |  |
-| `abbreviation` | character |  |
-| `nickname` | character |  |
-| `yearfounded` | integer | Year the franchise was founded. |
-| `city` | character |  |
-| `arena` | character |  |
-| `arenacapacity` | character | Seating capacity of the team's home arena. |
-| `owner` | character | Name of the team's owner or ownership group. |
-| `generalmanager` | character | Name of the team's general manager. |
-| `headcoach` | character | Name of the team's head coach. |
-| `dleagueaffiliation` | character | Name of the team's G League (formerly D-League) affiliate. |
+| `team_id` | Int64 |  |
+| `abbreviation` | String |  |
+| `nickname` | String |  |
+| `yearfounded` | Int64 | Year the franchise was founded. |
+| `city` | String |  |
+| `arena` | String |  |
+| `arenacapacity` | String | Seating capacity of the team's home arena. |
+| `owner` | String | Name of the team's owner or ownership group. |
+| `generalmanager` | String | Name of the team's general manager. |
+| `headcoach` | String | Name of the team's head coach. |
+| `dleagueaffiliation` | String | Name of the team's G League (formerly D-League) affiliate. |
 
 **TeamHistory**
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer |  |
-| `city` | character |  |
-| `nickname` | character |  |
-| `yearfounded` | integer | Year the franchise was founded. |
-| `yearactivetill` | integer |  |
+| `team_id` | Int64 |  |
+| `city` | String |  |
+| `nickname` | String |  |
+| `yearfounded` | Int64 | Year the franchise was founded. |
+| `yearactivetill` | Int64 |  |
 
 **TeamSocialSites**
 
 | col_name | type | description |
 |---|---|---|
-| `accounttype` | character |  |
-| `website_link` | character |  |
+| `accounttype` | String |  |
+| `website_link` | String |  |
 
 **TeamAwardsChampionships**
 
 | col_name | type | description |
 |---|---|---|
-| `yearawarded` | integer |  |
-| `oppositeteam` | character |  |
+| `yearawarded` | Int64 |  |
+| `oppositeteam` | String |  |
 
 **TeamAwardsConf**
 
 | col_name | type | description |
 |---|---|---|
-| `yearawarded` | integer |  |
-| `oppositeteam` | character |  |
+| `yearawarded` | Int64 |  |
+| `oppositeteam` | String |  |
 
 **TeamAwardsDiv**
 
 | col_name | type | description |
 |---|---|---|
-| `yearawarded` | integer |  |
-| `oppositeteam` | character |  |
+| `yearawarded` | Int64 |  |
+| `oppositeteam` | String |  |
 
 **TeamHof**
 
 | col_name | type | description |
 |---|---|---|
-| `playerid` | integer |  |
-| `player` | character |  |
-| `position` | character |  |
-| `jersey` | character |  |
-| `seasonswithteam` | character |  |
-| `year` | integer |  |
+| `playerid` | Int64 |  |
+| `player` | String |  |
+| `position` | String |  |
+| `jersey` | String |  |
+| `seasonswithteam` | String |  |
+| `year` | Int64 |  |
 
 **TeamRetired**
 
 | col_name | type | description |
 |---|---|---|
-| `playerid` | integer |  |
-| `player` | character |  |
-| `position` | character |  |
-| `jersey` | character |  |
-| `seasonswithteam` | character |  |
-| `year` | integer |  |
+| `playerid` | Int64 |  |
+| `player` | String |  |
+| `position` | String |  |
+| `jersey` | String |  |
+| `seasonswithteam` | String |  |
+| `year` | Int64 |  |
 
 **TeamAwardsCommCup**
 
 | col_name | type | description |
 |---|---|---|
-| `yearawarded` | integer |  |
-| `oppositeteam` | character |  |
+| `yearawarded` | Int64 |  |
+| `oppositeteam` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -125,7 +125,7 @@ nbagl_stats_teamdetails()
 
 ## nbagl_stats_teamestimatedmetrics
 
-GET /stats/teamestimatedmetrics
+Team estimated metrics.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teamestimatedmetrics`
 
@@ -143,36 +143,36 @@ GET /stats/teamestimatedmetrics
 
 | col_name | type | description |
 |---|---|---|
-| `team_name` | character |  |
-| `team_id` | integer |  |
-| `gp` | integer |  |
-| `w` | integer |  |
-| `l` | integer |  |
-| `w_pct` | numeric |  |
-| `min` | numeric |  |
-| `e_off_rating` | numeric | Estimated offensive rating for the requested NBA or WNBA Stats split. |
-| `e_def_rating` | numeric | Estimated defensive rating for the requested NBA or WNBA Stats split. |
-| `e_net_rating` | numeric | Estimated net rating for the requested NBA or WNBA Stats split. |
-| `e_pace` | numeric | Estimated pace for the requested NBA or WNBA Stats split. |
-| `e_ast_ratio` | numeric | Estimated assist ratio for the requested NBA or WNBA Stats split. |
-| `e_oreb_pct` | numeric | Estimated offensive rebound percentage for the requested NBA or WNBA Stats split. |
-| `e_dreb_pct` | numeric | Estimated defensive rebound percentage for the requested NBA or WNBA Stats split. |
-| `e_reb_pct` | numeric | Estimated rebound percentage for the requested NBA or WNBA Stats split. |
-| `e_tm_tov_pct` | numeric | Estimated team turnover percentage for the requested NBA or WNBA Stats split. |
-| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `e_off_rating_rank` | integer | Rank for e offensive rating within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `e_def_rating_rank` | integer | Rank for e defensive rating within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `e_net_rating_rank` | integer | Rank for e net rating within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `e_ast_ratio_rank` | integer | Rank for e assists ratio within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `e_oreb_pct_rank` | integer | Rank for e offensive rebounds percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `e_dreb_pct_rank` | integer | Rank for e defensive rebounds percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `e_reb_pct_rank` | integer | Rank for e rebounds percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `e_tm_tov_pct_rank` | integer | Rank for e team turnovers percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `e_pace_rank` | integer | Rank for e pace within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `team_name` | String |  |
+| `team_id` | Int64 |  |
+| `gp` | Int64 |  |
+| `w` | Int64 |  |
+| `l` | Int64 |  |
+| `w_pct` | Float64 |  |
+| `min` | Float64 |  |
+| `e_off_rating` | Float64 | Estimated offensive rating for the requested NBA or WNBA Stats split. |
+| `e_def_rating` | Float64 | Estimated defensive rating for the requested NBA or WNBA Stats split. |
+| `e_net_rating` | Float64 | Estimated net rating for the requested NBA or WNBA Stats split. |
+| `e_pace` | Float64 | Estimated pace for the requested NBA or WNBA Stats split. |
+| `e_ast_ratio` | Float64 | Estimated assist ratio for the requested NBA or WNBA Stats split. |
+| `e_oreb_pct` | Float64 | Estimated offensive rebound percentage for the requested NBA or WNBA Stats split. |
+| `e_dreb_pct` | Float64 | Estimated defensive rebound percentage for the requested NBA or WNBA Stats split. |
+| `e_reb_pct` | Float64 | Estimated rebound percentage for the requested NBA or WNBA Stats split. |
+| `e_tm_tov_pct` | Float64 | Estimated team turnover percentage for the requested NBA or WNBA Stats split. |
+| `gp_rank` | Int64 | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | Int64 | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | Int64 | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | Int64 | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | Int64 | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_off_rating_rank` | Int64 | Rank for e offensive rating within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_def_rating_rank` | Int64 | Rank for e defensive rating within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_net_rating_rank` | Int64 | Rank for e net rating within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_ast_ratio_rank` | Int64 | Rank for e assists ratio within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_oreb_pct_rank` | Int64 | Rank for e offensive rebounds percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_dreb_pct_rank` | Int64 | Rank for e defensive rebounds percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_reb_pct_rank` | Int64 | Rank for e rebounds percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_tm_tov_pct_rank` | Int64 | Rank for e team turnovers percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_pace_rank` | Int64 | Rank for e pace within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -193,7 +193,7 @@ nbagl_stats_teamestimatedmetrics(league_id='20', season='2024-25')
 
 ## nbagl_stats_teamgamelog
 
-GET /stats/teamgamelog
+Team game log.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teamgamelog`
 
@@ -214,33 +214,33 @@ GET /stats/teamgamelog
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer |  |
-| `game_id` | character |  |
-| `game_date` | character |  |
-| `matchup` | character |  |
-| `wl` | character |  |
-| `w` | integer |  |
-| `l` | integer |  |
-| `w_pct` | numeric |  |
-| `min` | integer |  |
-| `fgm` | integer |  |
-| `fga` | integer |  |
-| `fg_pct` | numeric |  |
-| `fg3_m` | integer | Three-point field goals made. |
-| `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric |  |
-| `ftm` | integer |  |
-| `fta` | integer |  |
-| `ft_pct` | numeric |  |
-| `oreb` | integer |  |
-| `dreb` | integer |  |
-| `reb` | integer |  |
-| `ast` | integer |  |
-| `stl` | integer |  |
-| `blk` | integer |  |
-| `tov` | integer |  |
-| `pf` | integer |  |
-| `pts` | integer |  |
+| `team_id` | Int64 |  |
+| `game_id` | String |  |
+| `game_date` | String |  |
+| `matchup` | String |  |
+| `wl` | String |  |
+| `w` | Int64 |  |
+| `l` | Int64 |  |
+| `w_pct` | Float64 |  |
+| `min` | Int64 |  |
+| `fgm` | Int64 |  |
+| `fga` | Int64 |  |
+| `fg_pct` | Float64 |  |
+| `fg3_m` | Int64 | Three-point field goals made. |
+| `fg3_a` | Int64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 |  |
+| `ftm` | Int64 |  |
+| `fta` | Int64 |  |
+| `ft_pct` | Float64 |  |
+| `oreb` | Int64 |  |
+| `dreb` | Int64 |  |
+| `reb` | Int64 |  |
+| `ast` | Int64 |  |
+| `stl` | Int64 |  |
+| `blk` | Int64 |  |
+| `tov` | Int64 |  |
+| `pf` | Int64 |  |
+| `pts` | Int64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -261,7 +261,7 @@ nbagl_stats_teamgamelog(league_id='20', season='2024-25')
 
 ## nbagl_stats_teamgamelogs
 
-GET /stats/teamgamelogs
+Team game logs.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teamgamelogs`
 
@@ -297,63 +297,63 @@ GET /stats/teamgamelogs
 
 | col_name | type | description |
 |---|---|---|
-| `season_year` | character |  |
-| `team_id` | integer |  |
-| `team_abbreviation` | character |  |
-| `team_name` | character |  |
-| `game_id` | character |  |
-| `game_date` | character |  |
-| `matchup` | character |  |
-| `wl` | character |  |
-| `min` | numeric |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric |  |
-| `ftm` | numeric |  |
-| `fta` | numeric |  |
-| `ft_pct` | numeric |  |
-| `oreb` | numeric |  |
-| `dreb` | numeric |  |
-| `reb` | numeric |  |
-| `ast` | numeric |  |
-| `tov` | numeric |  |
-| `stl` | numeric |  |
-| `blk` | numeric |  |
-| `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
-| `pf` | numeric |  |
-| `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
-| `pts` | numeric |  |
-| `plus_minus` | numeric |  |
-| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `ft_pct_rank` | integer | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `oreb_rank` | integer | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `dreb_rank` | integer | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `reb_rank` | integer | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `ast_rank` | integer | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `tov_rank` | integer | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `stl_rank` | integer | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `blk_rank` | integer | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pf_rank` | integer | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pfd_rank` | integer | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `pts_rank` | integer | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `plus_minus_rank` | integer | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `available_flag` | integer | Flag indicating whether the requested NBA or WNBA Stats video or data asset is available. |
+| `season_year` | String |  |
+| `team_id` | Int64 |  |
+| `team_abbreviation` | String |  |
+| `team_name` | String |  |
+| `game_id` | String |  |
+| `game_date` | String |  |
+| `matchup` | String |  |
+| `wl` | String |  |
+| `min` | Float64 |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 |  |
+| `ftm` | Float64 |  |
+| `fta` | Float64 |  |
+| `ft_pct` | Float64 |  |
+| `oreb` | Float64 |  |
+| `dreb` | Float64 |  |
+| `reb` | Float64 |  |
+| `ast` | Float64 |  |
+| `tov` | Float64 |  |
+| `stl` | Float64 |  |
+| `blk` | Float64 |  |
+| `blka` | Float64 | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pf` | Float64 |  |
+| `pfd` | Float64 | Personal fouls drawn for the requested NBA or WNBA Stats split. |
+| `pts` | Float64 |  |
+| `plus_minus` | Float64 |  |
+| `gp_rank` | Int64 | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | Int64 | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | Int64 | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | Int64 | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | Int64 | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | Int64 | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | Int64 | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | Int64 | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_m_rank` | Int64 | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_a_rank` | Int64 | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | Int64 | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | Int64 | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | Int64 | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | Int64 | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | Int64 | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | Int64 | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | Int64 | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | Int64 | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | Int64 | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | Int64 | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | Int64 | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | Int64 | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | Int64 | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | Int64 | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | Int64 | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | Int64 | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `available_flag` | Int64 | Flag indicating whether the requested NBA or WNBA Stats video or data asset is available. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -374,7 +374,7 @@ nbagl_stats_teamgamelogs(league_id='20', season_nullable='2024-25')
 
 ## nbagl_stats_teaminfocommon
 
-GET /stats/teaminfocommon
+Team info common.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teaminfocommon`
 
@@ -395,44 +395,44 @@ GET /stats/teaminfocommon
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer |  |
-| `season_year` | character |  |
-| `team_city` | character |  |
-| `team_name` | character |  |
-| `team_abbreviation` | character |  |
-| `team_conference` | character | Conference the team belongs to. |
-| `team_division` | character | Division the team belongs to. |
-| `team_code` | character | Lowercase slug of the team used in stats.nba.com URLs (e.g. 'lakers'). |
-| `team_slug` | character |  |
-| `w` | integer |  |
-| `l` | integer |  |
-| `pct` | numeric |  |
-| `conf_rank` | integer | Team's current rank within its conference. |
-| `div_rank` | integer | Team's current rank within its division. |
-| `min_year` | character |  |
-| `max_year` | character |  |
+| `team_id` | Int64 |  |
+| `season_year` | String |  |
+| `team_city` | String |  |
+| `team_name` | String |  |
+| `team_abbreviation` | String |  |
+| `team_conference` | String | Conference the team belongs to. |
+| `team_division` | String | Division the team belongs to. |
+| `team_code` | String | Lowercase slug of the team used in stats.nba.com URLs (e.g. 'lakers'). |
+| `team_slug` | String |  |
+| `w` | Int64 |  |
+| `l` | Int64 |  |
+| `pct` | Float64 |  |
+| `conf_rank` | Int64 | Team's current rank within its conference. |
+| `div_rank` | Int64 | Team's current rank within its division. |
+| `min_year` | String |  |
+| `max_year` | String |  |
 
 **TeamSeasonRanks**
 
 | col_name | type | description |
 |---|---|---|
-| `league_id` | character |  |
-| `season_id` | character |  |
-| `team_id` | integer |  |
-| `pts_rank` | integer |  |
-| `pts_pg` | numeric |  |
-| `reb_rank` | integer |  |
-| `reb_pg` | numeric |  |
-| `ast_rank` | integer |  |
-| `ast_pg` | numeric |  |
-| `opp_pts_rank` | integer |  |
-| `opp_pts_pg` | numeric |  |
+| `league_id` | String |  |
+| `season_id` | String |  |
+| `team_id` | Int64 |  |
+| `pts_rank` | Int64 |  |
+| `pts_pg` | Float64 |  |
+| `reb_rank` | Int64 |  |
+| `reb_pg` | Float64 |  |
+| `ast_rank` | Int64 |  |
+| `ast_pg` | Float64 |  |
+| `opp_pts_rank` | Int64 |  |
+| `opp_pts_pg` | Float64 |  |
 
 **AvailableSeasons**
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | character |  |
+| `season_id` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -453,7 +453,7 @@ nbagl_stats_teaminfocommon(league_id='20', season_nullable='2024-25')
 
 ## nbagl_stats_teamvsplayer
 
-GET /stats/teamvsplayer
+Team vs player.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teamvsplayer`
 
@@ -493,285 +493,285 @@ GET /stats/teamvsplayer
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `group_value` | character | Value of the split within the group (e.g. a specific opponent, month, or result). |
-| `team_id` | integer |  |
-| `team_abbreviation` | character |  |
-| `gp` | integer |  |
-| `w` | integer |  |
-| `l` | integer |  |
-| `w_pct` | numeric |  |
-| `min` | numeric |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric |  |
-| `ftm` | numeric |  |
-| `fta` | numeric |  |
-| `ft_pct` | numeric |  |
-| `oreb` | numeric |  |
-| `dreb` | numeric |  |
-| `reb` | numeric |  |
-| `ast` | numeric |  |
-| `tov` | numeric |  |
-| `stl` | numeric |  |
-| `blk` | numeric |  |
-| `blka` | numeric | Shot attempts blocked by opponents (blocks against). |
-| `pf` | numeric |  |
-| `pfd` | numeric | Personal fouls drawn. |
-| `pts` | numeric |  |
-| `plus_minus` | numeric |  |
-| `gp_rank` | integer | League rank of the row's games played for the season and split. |
-| `w_rank` | integer | League rank of the row's wins for the season and split. |
-| `l_rank` | integer | League rank of the row's losses for the season and split. |
-| `w_pct_rank` | integer | League rank of the row's win percentage for the season and split. |
-| `min_rank` | integer | League rank of the row's minutes played for the season and split. |
-| `fgm_rank` | integer | League rank of the row's field goals made for the season and split. |
-| `fga_rank` | integer | League rank of the row's field goals attempted for the season and split. |
-| `fg_pct_rank` | integer | League rank of the row's field goal percentage for the season and split. |
-| `fg3_m_rank` | integer | League rank of the row's three-point field goals made for the season and split. |
-| `fg3_a_rank` | integer | League rank of the row's three-point field goals attempted for the season and split. |
-| `fg3_pct_rank` | integer | League rank of the row's three-point field goal percentage for the season and split. |
-| `ftm_rank` | integer | League rank of the row's free throws made for the season and split. |
-| `fta_rank` | integer | League rank of the row's free throws attempted for the season and split. |
-| `ft_pct_rank` | integer | League rank of the row's free throw percentage for the season and split. |
-| `oreb_rank` | integer | League rank of the row's offensive rebounds for the season and split. |
-| `dreb_rank` | integer | League rank of the row's defensive rebounds for the season and split. |
-| `reb_rank` | integer | League rank of the row's total rebounds for the season and split. |
-| `ast_rank` | integer | League rank of the row's assists for the season and split. |
-| `tov_rank` | integer | League rank of the row's turnovers for the season and split. |
-| `stl_rank` | integer | League rank of the row's steals for the season and split. |
-| `blk_rank` | integer | League rank of the row's blocked shots for the season and split. |
-| `blka_rank` | integer | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
-| `pf_rank` | integer | League rank of the row's personal fouls committed for the season and split. |
-| `pfd_rank` | integer | League rank of the row's personal fouls drawn for the season and split. |
-| `pts_rank` | integer | League rank of the row's points scored for the season and split. |
-| `plus_minus_rank` | integer | League rank of the row's plus-minus point differential while on the floor for the season and split. |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `group_value` | String | Value of the split within the group (e.g. a specific opponent, month, or result). |
+| `team_id` | Int64 |  |
+| `team_abbreviation` | String |  |
+| `gp` | Int64 |  |
+| `w` | Int64 |  |
+| `l` | Int64 |  |
+| `w_pct` | Float64 |  |
+| `min` | Float64 |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 |  |
+| `ftm` | Float64 |  |
+| `fta` | Float64 |  |
+| `ft_pct` | Float64 |  |
+| `oreb` | Float64 |  |
+| `dreb` | Float64 |  |
+| `reb` | Float64 |  |
+| `ast` | Float64 |  |
+| `tov` | Float64 |  |
+| `stl` | Float64 |  |
+| `blk` | Float64 |  |
+| `blka` | Float64 | Shot attempts blocked by opponents (blocks against). |
+| `pf` | Float64 |  |
+| `pfd` | Float64 | Personal fouls drawn. |
+| `pts` | Float64 |  |
+| `plus_minus` | Float64 |  |
+| `gp_rank` | Int64 | League rank of the row's games played for the season and split. |
+| `w_rank` | Int64 | League rank of the row's wins for the season and split. |
+| `l_rank` | Int64 | League rank of the row's losses for the season and split. |
+| `w_pct_rank` | Int64 | League rank of the row's win percentage for the season and split. |
+| `min_rank` | Int64 | League rank of the row's minutes played for the season and split. |
+| `fgm_rank` | Int64 | League rank of the row's field goals made for the season and split. |
+| `fga_rank` | Int64 | League rank of the row's field goals attempted for the season and split. |
+| `fg_pct_rank` | Int64 | League rank of the row's field goal percentage for the season and split. |
+| `fg3_m_rank` | Int64 | League rank of the row's three-point field goals made for the season and split. |
+| `fg3_a_rank` | Int64 | League rank of the row's three-point field goals attempted for the season and split. |
+| `fg3_pct_rank` | Int64 | League rank of the row's three-point field goal percentage for the season and split. |
+| `ftm_rank` | Int64 | League rank of the row's free throws made for the season and split. |
+| `fta_rank` | Int64 | League rank of the row's free throws attempted for the season and split. |
+| `ft_pct_rank` | Int64 | League rank of the row's free throw percentage for the season and split. |
+| `oreb_rank` | Int64 | League rank of the row's offensive rebounds for the season and split. |
+| `dreb_rank` | Int64 | League rank of the row's defensive rebounds for the season and split. |
+| `reb_rank` | Int64 | League rank of the row's total rebounds for the season and split. |
+| `ast_rank` | Int64 | League rank of the row's assists for the season and split. |
+| `tov_rank` | Int64 | League rank of the row's turnovers for the season and split. |
+| `stl_rank` | Int64 | League rank of the row's steals for the season and split. |
+| `blk_rank` | Int64 | League rank of the row's blocked shots for the season and split. |
+| `blka_rank` | Int64 | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
+| `pf_rank` | Int64 | League rank of the row's personal fouls committed for the season and split. |
+| `pfd_rank` | Int64 | League rank of the row's personal fouls drawn for the season and split. |
+| `pts_rank` | Int64 | League rank of the row's points scored for the season and split. |
+| `plus_minus_rank` | Int64 | League rank of the row's plus-minus point differential while on the floor for the season and split. |
 
 **vsPlayerOverall**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `group_value` | character | Value of the split within the group (e.g. a specific opponent, month, or result). |
-| `player_id` | integer |  |
-| `gp` | integer |  |
-| `w` | integer |  |
-| `l` | integer |  |
-| `w_pct` | numeric |  |
-| `min` | numeric |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric |  |
-| `ftm` | numeric |  |
-| `fta` | numeric |  |
-| `ft_pct` | numeric |  |
-| `oreb` | numeric |  |
-| `dreb` | numeric |  |
-| `reb` | numeric |  |
-| `ast` | numeric |  |
-| `tov` | numeric |  |
-| `stl` | numeric |  |
-| `blk` | numeric |  |
-| `blka` | numeric | Shot attempts blocked by opponents (blocks against). |
-| `pf` | numeric |  |
-| `pfd` | numeric | Personal fouls drawn. |
-| `pts` | numeric |  |
-| `plus_minus` | numeric |  |
-| `nba_fantasy_pts` | numeric | Fantasy points under the NBA's fantasy scoring formula. |
-| `dd2` | integer | Double-doubles recorded over the split. |
-| `td3` | integer | Triple-doubles recorded over the split. |
-| `wnba_fantasy_pts` | numeric | Fantasy points under the WNBA's fantasy scoring formula. |
-| `gp_rank` | integer | League rank of the row's games played for the season and split. |
-| `w_rank` | integer | League rank of the row's wins for the season and split. |
-| `l_rank` | integer | League rank of the row's losses for the season and split. |
-| `w_pct_rank` | integer | League rank of the row's win percentage for the season and split. |
-| `min_rank` | integer | League rank of the row's minutes played for the season and split. |
-| `fgm_rank` | integer | League rank of the row's field goals made for the season and split. |
-| `fga_rank` | integer | League rank of the row's field goals attempted for the season and split. |
-| `fg_pct_rank` | integer | League rank of the row's field goal percentage for the season and split. |
-| `fg3_m_rank` | integer | League rank of the row's three-point field goals made for the season and split. |
-| `fg3_a_rank` | integer | League rank of the row's three-point field goals attempted for the season and split. |
-| `fg3_pct_rank` | integer | League rank of the row's three-point field goal percentage for the season and split. |
-| `ftm_rank` | integer | League rank of the row's free throws made for the season and split. |
-| `fta_rank` | integer | League rank of the row's free throws attempted for the season and split. |
-| `ft_pct_rank` | integer | League rank of the row's free throw percentage for the season and split. |
-| `oreb_rank` | integer | League rank of the row's offensive rebounds for the season and split. |
-| `dreb_rank` | integer | League rank of the row's defensive rebounds for the season and split. |
-| `reb_rank` | integer | League rank of the row's total rebounds for the season and split. |
-| `ast_rank` | integer | League rank of the row's assists for the season and split. |
-| `tov_rank` | integer | League rank of the row's turnovers for the season and split. |
-| `stl_rank` | integer | League rank of the row's steals for the season and split. |
-| `blk_rank` | integer | League rank of the row's blocked shots for the season and split. |
-| `blka_rank` | integer | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
-| `pf_rank` | integer | League rank of the row's personal fouls committed for the season and split. |
-| `pfd_rank` | integer | League rank of the row's personal fouls drawn for the season and split. |
-| `pts_rank` | integer | League rank of the row's points scored for the season and split. |
-| `plus_minus_rank` | integer | League rank of the row's plus-minus point differential while on the floor for the season and split. |
-| `nba_fantasy_pts_rank` | integer | League rank of the row's NBA fantasy points (league scoring formula) for the season and split. |
-| `dd2_rank` | integer | League rank of the row's double-doubles for the season and split. |
-| `td3_rank` | integer | League rank of the row's triple-doubles for the season and split. |
-| `wnba_fantasy_pts_rank` | integer | League rank of the row's WNBA fantasy points (league scoring formula) for the season and split. |
-| `team_count` | integer | Number of distinct teams aggregated into the split row. |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `group_value` | String | Value of the split within the group (e.g. a specific opponent, month, or result). |
+| `player_id` | Int64 |  |
+| `gp` | Int64 |  |
+| `w` | Int64 |  |
+| `l` | Int64 |  |
+| `w_pct` | Float64 |  |
+| `min` | Float64 |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 |  |
+| `ftm` | Float64 |  |
+| `fta` | Float64 |  |
+| `ft_pct` | Float64 |  |
+| `oreb` | Float64 |  |
+| `dreb` | Float64 |  |
+| `reb` | Float64 |  |
+| `ast` | Float64 |  |
+| `tov` | Float64 |  |
+| `stl` | Float64 |  |
+| `blk` | Float64 |  |
+| `blka` | Float64 | Shot attempts blocked by opponents (blocks against). |
+| `pf` | Float64 |  |
+| `pfd` | Float64 | Personal fouls drawn. |
+| `pts` | Float64 |  |
+| `plus_minus` | Float64 |  |
+| `nba_fantasy_pts` | Float64 | Fantasy points under the NBA's fantasy scoring formula. |
+| `dd2` | Int64 | Double-doubles recorded over the split. |
+| `td3` | Int64 | Triple-doubles recorded over the split. |
+| `wnba_fantasy_pts` | Float64 | Fantasy points under the WNBA's fantasy scoring formula. |
+| `gp_rank` | Int64 | League rank of the row's games played for the season and split. |
+| `w_rank` | Int64 | League rank of the row's wins for the season and split. |
+| `l_rank` | Int64 | League rank of the row's losses for the season and split. |
+| `w_pct_rank` | Int64 | League rank of the row's win percentage for the season and split. |
+| `min_rank` | Int64 | League rank of the row's minutes played for the season and split. |
+| `fgm_rank` | Int64 | League rank of the row's field goals made for the season and split. |
+| `fga_rank` | Int64 | League rank of the row's field goals attempted for the season and split. |
+| `fg_pct_rank` | Int64 | League rank of the row's field goal percentage for the season and split. |
+| `fg3_m_rank` | Int64 | League rank of the row's three-point field goals made for the season and split. |
+| `fg3_a_rank` | Int64 | League rank of the row's three-point field goals attempted for the season and split. |
+| `fg3_pct_rank` | Int64 | League rank of the row's three-point field goal percentage for the season and split. |
+| `ftm_rank` | Int64 | League rank of the row's free throws made for the season and split. |
+| `fta_rank` | Int64 | League rank of the row's free throws attempted for the season and split. |
+| `ft_pct_rank` | Int64 | League rank of the row's free throw percentage for the season and split. |
+| `oreb_rank` | Int64 | League rank of the row's offensive rebounds for the season and split. |
+| `dreb_rank` | Int64 | League rank of the row's defensive rebounds for the season and split. |
+| `reb_rank` | Int64 | League rank of the row's total rebounds for the season and split. |
+| `ast_rank` | Int64 | League rank of the row's assists for the season and split. |
+| `tov_rank` | Int64 | League rank of the row's turnovers for the season and split. |
+| `stl_rank` | Int64 | League rank of the row's steals for the season and split. |
+| `blk_rank` | Int64 | League rank of the row's blocked shots for the season and split. |
+| `blka_rank` | Int64 | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
+| `pf_rank` | Int64 | League rank of the row's personal fouls committed for the season and split. |
+| `pfd_rank` | Int64 | League rank of the row's personal fouls drawn for the season and split. |
+| `pts_rank` | Int64 | League rank of the row's points scored for the season and split. |
+| `plus_minus_rank` | Int64 | League rank of the row's plus-minus point differential while on the floor for the season and split. |
+| `nba_fantasy_pts_rank` | Int64 | League rank of the row's NBA fantasy points (league scoring formula) for the season and split. |
+| `dd2_rank` | Int64 | League rank of the row's double-doubles for the season and split. |
+| `td3_rank` | Int64 | League rank of the row's triple-doubles for the season and split. |
+| `wnba_fantasy_pts_rank` | Int64 | League rank of the row's WNBA fantasy points (league scoring formula) for the season and split. |
+| `team_count` | Int64 | Number of distinct teams aggregated into the split row. |
 
 **OnOffCourt**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `team_id` | character |  |
-| `team_abbreviation` | character |  |
-| `team_name` | character |  |
-| `vs_player_id` | character |  |
-| `vs_player_name` | character |  |
-| `court_status` | character |  |
-| `gp` | character |  |
-| `w` | character |  |
-| `l` | character |  |
-| `w_pct` | character |  |
-| `min` | character |  |
-| `fgm` | character |  |
-| `fga` | character |  |
-| `fg_pct` | character |  |
-| `fg3_m` | character | Three-point field goals made. |
-| `fg3_a` | character | Three-point field goal attempts. |
-| `fg3_pct` | character |  |
-| `ftm` | character |  |
-| `fta` | character |  |
-| `ft_pct` | character |  |
-| `oreb` | character |  |
-| `dreb` | character |  |
-| `reb` | character |  |
-| `ast` | character |  |
-| `tov` | character |  |
-| `stl` | character |  |
-| `blk` | character |  |
-| `blka` | character | Shot attempts blocked by opponents (blocks against). |
-| `pf` | character |  |
-| `pfd` | character | Personal fouls drawn. |
-| `pts` | character |  |
-| `plus_minus` | character |  |
-| `gp_rank` | character | League rank of the row's games played for the season and split. |
-| `w_rank` | character | League rank of the row's wins for the season and split. |
-| `l_rank` | character | League rank of the row's losses for the season and split. |
-| `w_pct_rank` | character | League rank of the row's win percentage for the season and split. |
-| `min_rank` | character | League rank of the row's minutes played for the season and split. |
-| `fgm_rank` | character | League rank of the row's field goals made for the season and split. |
-| `fga_rank` | character | League rank of the row's field goals attempted for the season and split. |
-| `fg_pct_rank` | character | League rank of the row's field goal percentage for the season and split. |
-| `fg3_m_rank` | character | League rank of the row's three-point field goals made for the season and split. |
-| `fg3_a_rank` | character | League rank of the row's three-point field goals attempted for the season and split. |
-| `fg3_pct_rank` | character | League rank of the row's three-point field goal percentage for the season and split. |
-| `ftm_rank` | character | League rank of the row's free throws made for the season and split. |
-| `fta_rank` | character | League rank of the row's free throws attempted for the season and split. |
-| `ft_pct_rank` | character | League rank of the row's free throw percentage for the season and split. |
-| `oreb_rank` | character | League rank of the row's offensive rebounds for the season and split. |
-| `dreb_rank` | character | League rank of the row's defensive rebounds for the season and split. |
-| `reb_rank` | character | League rank of the row's total rebounds for the season and split. |
-| `ast_rank` | character | League rank of the row's assists for the season and split. |
-| `tov_rank` | character | League rank of the row's turnovers for the season and split. |
-| `stl_rank` | character | League rank of the row's steals for the season and split. |
-| `blk_rank` | character | League rank of the row's blocked shots for the season and split. |
-| `blka_rank` | character | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
-| `pf_rank` | character | League rank of the row's personal fouls committed for the season and split. |
-| `pfd_rank` | character | League rank of the row's personal fouls drawn for the season and split. |
-| `pts_rank` | character | League rank of the row's points scored for the season and split. |
-| `plus_minus_rank` | character | League rank of the row's plus-minus point differential while on the floor for the season and split. |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `team_id` | String |  |
+| `team_abbreviation` | String |  |
+| `team_name` | String |  |
+| `vs_player_id` | String |  |
+| `vs_player_name` | String |  |
+| `court_status` | String |  |
+| `gp` | String |  |
+| `w` | String |  |
+| `l` | String |  |
+| `w_pct` | String |  |
+| `min` | String |  |
+| `fgm` | String |  |
+| `fga` | String |  |
+| `fg_pct` | String |  |
+| `fg3_m` | String | Three-point field goals made. |
+| `fg3_a` | String | Three-point field goal attempts. |
+| `fg3_pct` | String |  |
+| `ftm` | String |  |
+| `fta` | String |  |
+| `ft_pct` | String |  |
+| `oreb` | String |  |
+| `dreb` | String |  |
+| `reb` | String |  |
+| `ast` | String |  |
+| `tov` | String |  |
+| `stl` | String |  |
+| `blk` | String |  |
+| `blka` | String | Shot attempts blocked by opponents (blocks against). |
+| `pf` | String |  |
+| `pfd` | String | Personal fouls drawn. |
+| `pts` | String |  |
+| `plus_minus` | String |  |
+| `gp_rank` | String | League rank of the row's games played for the season and split. |
+| `w_rank` | String | League rank of the row's wins for the season and split. |
+| `l_rank` | String | League rank of the row's losses for the season and split. |
+| `w_pct_rank` | String | League rank of the row's win percentage for the season and split. |
+| `min_rank` | String | League rank of the row's minutes played for the season and split. |
+| `fgm_rank` | String | League rank of the row's field goals made for the season and split. |
+| `fga_rank` | String | League rank of the row's field goals attempted for the season and split. |
+| `fg_pct_rank` | String | League rank of the row's field goal percentage for the season and split. |
+| `fg3_m_rank` | String | League rank of the row's three-point field goals made for the season and split. |
+| `fg3_a_rank` | String | League rank of the row's three-point field goals attempted for the season and split. |
+| `fg3_pct_rank` | String | League rank of the row's three-point field goal percentage for the season and split. |
+| `ftm_rank` | String | League rank of the row's free throws made for the season and split. |
+| `fta_rank` | String | League rank of the row's free throws attempted for the season and split. |
+| `ft_pct_rank` | String | League rank of the row's free throw percentage for the season and split. |
+| `oreb_rank` | String | League rank of the row's offensive rebounds for the season and split. |
+| `dreb_rank` | String | League rank of the row's defensive rebounds for the season and split. |
+| `reb_rank` | String | League rank of the row's total rebounds for the season and split. |
+| `ast_rank` | String | League rank of the row's assists for the season and split. |
+| `tov_rank` | String | League rank of the row's turnovers for the season and split. |
+| `stl_rank` | String | League rank of the row's steals for the season and split. |
+| `blk_rank` | String | League rank of the row's blocked shots for the season and split. |
+| `blka_rank` | String | League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split. |
+| `pf_rank` | String | League rank of the row's personal fouls committed for the season and split. |
+| `pfd_rank` | String | League rank of the row's personal fouls drawn for the season and split. |
+| `pts_rank` | String | League rank of the row's points scored for the season and split. |
+| `plus_minus_rank` | String | League rank of the row's plus-minus point differential while on the floor for the season and split. |
 
 **ShotDistanceOverall**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `group_value` | character | Value of the split within the group (e.g. a specific opponent, month, or result). |
-| `team_id` | integer |  |
-| `team_abbreviation` | character |  |
-| `team_name` | character |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `group_value` | String | Value of the split within the group (e.g. a specific opponent, month, or result). |
+| `team_id` | Int64 |  |
+| `team_abbreviation` | String |  |
+| `team_name` | String |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
 
 **ShotDistanceOnCourt**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `team_id` | character |  |
-| `team_abbreviation` | character |  |
-| `team_name` | character |  |
-| `vs_player_id` | character |  |
-| `vs_player_name` | character |  |
-| `court_status` | character |  |
-| `group_value` | character | Value of the split within the group (e.g. a specific opponent, month, or result). |
-| `fgm` | character |  |
-| `fga` | character |  |
-| `fg_pct` | character |  |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `team_id` | String |  |
+| `team_abbreviation` | String |  |
+| `team_name` | String |  |
+| `vs_player_id` | String |  |
+| `vs_player_name` | String |  |
+| `court_status` | String |  |
+| `group_value` | String | Value of the split within the group (e.g. a specific opponent, month, or result). |
+| `fgm` | String |  |
+| `fga` | String |  |
+| `fg_pct` | String |  |
 
 **ShotDistanceOffCourt**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `team_id` | character |  |
-| `team_abbreviation` | character |  |
-| `team_name` | character |  |
-| `vs_player_id` | character |  |
-| `vs_player_name` | character |  |
-| `court_status` | character |  |
-| `group_value` | character | Value of the split within the group (e.g. a specific opponent, month, or result). |
-| `fgm` | character |  |
-| `fga` | character |  |
-| `fg_pct` | character |  |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `team_id` | String |  |
+| `team_abbreviation` | String |  |
+| `team_name` | String |  |
+| `vs_player_id` | String |  |
+| `vs_player_name` | String |  |
+| `court_status` | String |  |
+| `group_value` | String | Value of the split within the group (e.g. a specific opponent, month, or result). |
+| `fgm` | String |  |
+| `fga` | String |  |
+| `fg_pct` | String |  |
 
 **ShotAreaOverall**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `group_value` | character | Value of the split within the group (e.g. a specific opponent, month, or result). |
-| `team_id` | integer |  |
-| `team_abbreviation` | character |  |
-| `team_name` | character |  |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `group_value` | String | Value of the split within the group (e.g. a specific opponent, month, or result). |
+| `team_id` | Int64 |  |
+| `team_abbreviation` | String |  |
+| `team_name` | String |  |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
 
 **ShotAreaOnCourt**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `team_id` | character |  |
-| `team_abbreviation` | character |  |
-| `team_name` | character |  |
-| `vs_player_id` | character |  |
-| `vs_player_name` | character |  |
-| `court_status` | character |  |
-| `group_value` | character | Value of the split within the group (e.g. a specific opponent, month, or result). |
-| `fgm` | character |  |
-| `fga` | character |  |
-| `fg_pct` | character |  |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `team_id` | String |  |
+| `team_abbreviation` | String |  |
+| `team_name` | String |  |
+| `vs_player_id` | String |  |
+| `vs_player_name` | String |  |
+| `court_status` | String |  |
+| `group_value` | String | Value of the split within the group (e.g. a specific opponent, month, or result). |
+| `fgm` | String |  |
+| `fga` | String |  |
+| `fg_pct` | String |  |
 
 **ShotAreaOffCourt**
 
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
-| `team_id` | character |  |
-| `team_abbreviation` | character |  |
-| `team_name` | character |  |
-| `vs_player_id` | character |  |
-| `vs_player_name` | character |  |
-| `court_status` | character |  |
-| `group_value` | character | Value of the split within the group (e.g. a specific opponent, month, or result). |
-| `fgm` | character |  |
-| `fga` | character |  |
-| `fg_pct` | character |  |
+| `group_set` | String | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
+| `team_id` | String |  |
+| `team_abbreviation` | String |  |
+| `team_name` | String |  |
+| `vs_player_id` | String |  |
+| `vs_player_name` | String |  |
+| `court_status` | String |  |
+| `group_value` | String | Value of the split within the group (e.g. a specific opponent, month, or result). |
+| `fgm` | String |  |
+| `fga` | String |  |
+| `fg_pct` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -792,7 +792,7 @@ nbagl_stats_teamvsplayer(league_id='20', season='2024-25')
 
 ## nbagl_stats_teamyearbyyearstats
 
-GET /stats/teamyearbyyearstats
+Team year by year stats.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/teamyearbyyearstats`
 
@@ -811,40 +811,40 @@ GET /stats/teamyearbyyearstats
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer |  |
-| `team_city` | character |  |
-| `team_name` | character |  |
-| `year` | character |  |
-| `gp` | integer |  |
-| `wins` | integer |  |
-| `losses` | integer |  |
-| `win_pct` | numeric |  |
-| `conf_rank` | integer | Team's final rank within its conference for the season. |
-| `div_rank` | integer | Team's final rank within its division for the season. |
-| `po_wins` | integer | Playoff wins recorded by the team that season. |
-| `po_losses` | integer | Playoff losses recorded by the team that season. |
-| `conf_count` | integer | Number of teams in the team's conference that season. |
-| `div_count` | integer | Number of teams in the team's division that season. |
-| `nba_finals_appearance` | character | Whether the team reached the league finals that season (e.g. "FINALS APPEARANCE" or "N/A"). |
-| `fgm` | numeric |  |
-| `fga` | numeric |  |
-| `fg_pct` | numeric |  |
-| `fg3_m` | numeric | Three-point field goals made. |
-| `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric |  |
-| `ftm` | numeric |  |
-| `fta` | numeric |  |
-| `ft_pct` | numeric |  |
-| `oreb` | numeric |  |
-| `dreb` | numeric |  |
-| `reb` | numeric |  |
-| `ast` | numeric |  |
-| `pf` | numeric |  |
-| `stl` | numeric |  |
-| `tov` | numeric |  |
-| `blk` | numeric |  |
-| `pts` | numeric |  |
-| `pts_rank` | integer | League rank of the team's points scored for the season. |
+| `team_id` | Int64 |  |
+| `team_city` | String |  |
+| `team_name` | String |  |
+| `year` | String |  |
+| `gp` | Int64 |  |
+| `wins` | Int64 |  |
+| `losses` | Int64 |  |
+| `win_pct` | Float64 |  |
+| `conf_rank` | Int64 | Team's final rank within its conference for the season. |
+| `div_rank` | Int64 | Team's final rank within its division for the season. |
+| `po_wins` | Int64 | Playoff wins recorded by the team that season. |
+| `po_losses` | Int64 | Playoff losses recorded by the team that season. |
+| `conf_count` | Int64 | Number of teams in the team's conference that season. |
+| `div_count` | Int64 | Number of teams in the team's division that season. |
+| `nba_finals_appearance` | String | Whether the team reached the league finals that season (e.g. "FINALS APPEARANCE" or "N/A"). |
+| `fgm` | Float64 |  |
+| `fga` | Float64 |  |
+| `fg_pct` | Float64 |  |
+| `fg3_m` | Float64 | Three-point field goals made. |
+| `fg3_a` | Float64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 |  |
+| `ftm` | Float64 |  |
+| `fta` | Float64 |  |
+| `ft_pct` | Float64 |  |
+| `oreb` | Float64 |  |
+| `dreb` | Float64 |  |
+| `reb` | Float64 |  |
+| `ast` | Float64 |  |
+| `pf` | Float64 |  |
+| `stl` | Float64 |  |
+| `tov` | Float64 |  |
+| `blk` | Float64 |  |
+| `pts` | Float64 |  |
+| `pts_rank` | Int64 | League rank of the team's points scored for the season. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

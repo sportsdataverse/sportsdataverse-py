@@ -28,20 +28,20 @@ GET /leaderboard/expected_statistics — xBA/xSLG/xwOBA/xISO expected-statistics
 
 | col_name | type | description |
 |---|---|---|
-| `last_name, first_name` | character | Last name, first name. |
-| `player_id` | integer | MLBAM player id. |
-| `year` | integer | Season year. |
-| `pa` | integer | Plate appearances. |
-| `bip` | integer | Balls in play. |
-| `ba` | numeric | Batting average. |
-| `est_ba` | numeric | Expected batting average (xBA). |
-| `est_ba_minus_ba_diff` | numeric | xBA minus actual BA (over/under-performance). |
-| `slg` | numeric | Slugging percentage. |
-| `est_slg` | numeric | Expected slugging (xSLG). |
-| `est_slg_minus_slg_diff` | numeric | xSLG minus actual SLG. |
-| `woba` | numeric | Weighted on-base average. |
-| `est_woba` | numeric | Expected wOBA (xwOBA). |
-| `est_woba_minus_woba_diff` | numeric | xwOBA minus actual wOBA. |
+| `last_name, first_name` | String | Last name, first name. |
+| `player_id` | Int64 | MLBAM player id. |
+| `year` | Int64 | Season year. |
+| `pa` | Int64 | Plate appearances. |
+| `bip` | Int64 | Balls in play. |
+| `ba` | Float64 | Batting average. |
+| `est_ba` | Float64 | Expected batting average (xBA). |
+| `est_ba_minus_ba_diff` | Float64 | xBA minus actual BA (over/under-performance). |
+| `slg` | Float64 | Slugging percentage. |
+| `est_slg` | Float64 | Expected slugging (xSLG). |
+| `est_slg_minus_slg_diff` | Float64 | xSLG minus actual SLG. |
+| `woba` | Float64 | Weighted on-base average. |
+| `est_woba` | Float64 | Expected wOBA (xwOBA). |
+| `est_woba_minus_woba_diff` | Float64 | xwOBA minus actual wOBA. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -80,29 +80,29 @@ GET /leaderboard/percentile-rankings — player percentile-ranking sliders (xwOB
 
 | col_name | type | description |
 |---|---|---|
-| `player_name` | character | Player name. |
-| `player_id` | integer | MLBAM player id. |
-| `year` | integer | Season year. |
-| `xwoba` | character | Expected wOBA. |
-| `xba` | character | Expected batting average. |
-| `xslg` | character | Expected slugging. |
-| `xiso` | character | Expected isolated power. |
-| `xobp` | character | Expected on-base percentage. |
-| `brl` | character | Barrels. |
-| `brl_percent` | character | Barrel rate (% of batted balls). |
-| `exit_velocity` | character | Exit velocity (mph). |
-| `max_ev` | integer | Max ev. |
-| `hard_hit_percent` | character | Hard-hit rate (95+ mph EV). |
-| `k_percent` | character | Strikeout rate. |
-| `bb_percent` | character | Walk rate. |
-| `whiff_percent` | character | Whiff rate (swings and misses / swings). |
-| `chase_percent` | character | Chase rate. |
-| `arm_strength` | integer | Arm strength (mph, top throws). |
-| `sprint_speed` | integer | Sprint speed (ft/sec, top 50% of competitive runs). |
-| `oaa` | integer | Outs Above Average. |
-| `bat_speed` | character | Bat speed (mph). |
-| `squared_up_rate` | character | Squared up rate. |
-| `swing_length` | character | Swing length (ft, head travel). |
+| `player_name` | String | Player name. |
+| `player_id` | Int64 | MLBAM player id. |
+| `year` | Int64 | Season year. |
+| `xwoba` | String | Expected wOBA. |
+| `xba` | String | Expected batting average. |
+| `xslg` | String | Expected slugging. |
+| `xiso` | String | Expected isolated power. |
+| `xobp` | String | Expected on-base percentage. |
+| `brl` | String | Barrels. |
+| `brl_percent` | String | Barrel rate (% of batted balls). |
+| `exit_velocity` | String | Exit velocity (mph). |
+| `max_ev` | Int64 | Max ev. |
+| `hard_hit_percent` | String | Hard-hit rate (95+ mph EV). |
+| `k_percent` | String | Strikeout rate. |
+| `bb_percent` | String | Walk rate. |
+| `whiff_percent` | String | Whiff rate (swings and misses / swings). |
+| `chase_percent` | String | Chase rate. |
+| `arm_strength` | Int64 | Arm strength (mph, top throws). |
+| `sprint_speed` | Int64 | Sprint speed (ft/sec, top 50% of competitive runs). |
+| `oaa` | Int64 | Outs Above Average. |
+| `bat_speed` | String | Bat speed (mph). |
+| `squared_up_rate` | String | Squared up rate. |
+| `swing_length` | String | Swing length (ft, head travel). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -141,16 +141,16 @@ GET /leaderboard/sprint_speed — sprint-speed (ft/sec) leaderboard.
 
 | col_name | type | description |
 |---|---|---|
-| `last_name, first_name` | character | Last name, first name. |
-| `player_id` | integer | MLBAM player id. |
-| `team_id` | integer | MLBAM team id. |
-| `team` | character | Team abbreviation. |
-| `position` | character | Position. |
-| `age` | integer | Player age. |
-| `competitive_runs` | integer | Competitive runs (qualifying sprint-speed runs). |
-| `bolts` | integer | Bolts. |
-| `hp_to_1b` | numeric | Home-to-first time (s). |
-| `sprint_speed` | numeric | Sprint speed (ft/sec, top 50% of competitive runs). |
+| `last_name, first_name` | String | Last name, first name. |
+| `player_id` | Int64 | MLBAM player id. |
+| `team_id` | Int64 | MLBAM team id. |
+| `team` | String | Team abbreviation. |
+| `position` | String | Position. |
+| `age` | Int64 | Player age. |
+| `competitive_runs` | Int64 | Competitive runs (qualifying sprint-speed runs). |
+| `bolts` | Int64 | Bolts. |
+| `hp_to_1b` | Float64 | Home-to-first time (s). |
+| `sprint_speed` | Float64 | Sprint speed (ft/sec, top 50% of competitive runs). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -189,32 +189,32 @@ GET /leaderboard/running_splits — 90-foot running splits leaderboard.
 
 | col_name | type | description |
 |---|---|---|
-| `last_name, first_name` | character | Last name, first name. |
-| `player_id` | integer | MLBAM player id. |
-| `name_abbrev` | character | Team/name abbreviation. |
-| `team_id` | integer | MLBAM team id. |
-| `position_name` | character | Position name. |
-| `age` | integer | Player age. |
-| `bat_side` | character | Batter side (R/L/S). |
-| `seconds_since_hit_000` | numeric | Seconds since hit 000. |
-| `seconds_since_hit_005` | numeric | Seconds since hit 005. |
-| `seconds_since_hit_010` | numeric | Seconds since hit 010. |
-| `seconds_since_hit_015` | numeric | Seconds since hit 015. |
-| `seconds_since_hit_020` | numeric | Seconds since hit 020. |
-| `seconds_since_hit_025` | numeric | Seconds since hit 025. |
-| `seconds_since_hit_030` | numeric | Seconds since hit 030. |
-| `seconds_since_hit_035` | numeric | Seconds since hit 035. |
-| `seconds_since_hit_040` | numeric | Seconds since hit 040. |
-| `seconds_since_hit_045` | numeric | Seconds since hit 045. |
-| `seconds_since_hit_050` | numeric | Seconds since hit 050. |
-| `seconds_since_hit_055` | numeric | Seconds since hit 055. |
-| `seconds_since_hit_060` | numeric | Seconds since hit 060. |
-| `seconds_since_hit_065` | numeric | Seconds since hit 065. |
-| `seconds_since_hit_070` | numeric | Seconds since hit 070. |
-| `seconds_since_hit_075` | numeric | Seconds since hit 075. |
-| `seconds_since_hit_080` | numeric | Seconds since hit 080. |
-| `seconds_since_hit_085` | numeric | Seconds since hit 085. |
-| `seconds_since_hit_090` | numeric | Seconds since hit 090. |
+| `last_name, first_name` | String | Last name, first name. |
+| `player_id` | Int64 | MLBAM player id. |
+| `name_abbrev` | String | Team/name abbreviation. |
+| `team_id` | Int64 | MLBAM team id. |
+| `position_name` | String | Position name. |
+| `age` | Int64 | Player age. |
+| `bat_side` | String | Batter side (R/L/S). |
+| `seconds_since_hit_000` | Float64 | Seconds since hit 000. |
+| `seconds_since_hit_005` | Float64 | Seconds since hit 005. |
+| `seconds_since_hit_010` | Float64 | Seconds since hit 010. |
+| `seconds_since_hit_015` | Float64 | Seconds since hit 015. |
+| `seconds_since_hit_020` | Float64 | Seconds since hit 020. |
+| `seconds_since_hit_025` | Float64 | Seconds since hit 025. |
+| `seconds_since_hit_030` | Float64 | Seconds since hit 030. |
+| `seconds_since_hit_035` | Float64 | Seconds since hit 035. |
+| `seconds_since_hit_040` | Float64 | Seconds since hit 040. |
+| `seconds_since_hit_045` | Float64 | Seconds since hit 045. |
+| `seconds_since_hit_050` | Float64 | Seconds since hit 050. |
+| `seconds_since_hit_055` | Float64 | Seconds since hit 055. |
+| `seconds_since_hit_060` | Float64 | Seconds since hit 060. |
+| `seconds_since_hit_065` | Float64 | Seconds since hit 065. |
+| `seconds_since_hit_070` | Float64 | Seconds since hit 070. |
+| `seconds_since_hit_075` | Float64 | Seconds since hit 075. |
+| `seconds_since_hit_080` | Float64 | Seconds since hit 080. |
+| `seconds_since_hit_085` | Float64 | Seconds since hit 085. |
+| `seconds_since_hit_090` | Float64 | Seconds since hit 090. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -253,24 +253,24 @@ GET /leaderboard/bat-tracking — bat-tracking (swing speed / squared-up) leader
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | MLBAM player id. |
-| `name` | character | Player (or entity) name. |
-| `swings_competitive` | integer | Competitive swings. |
-| `percent_swings_competitive` | numeric | Share of swings that are competitive. |
-| `contact` | integer | Contact. |
-| `avg_bat_speed` | numeric | Average bat speed (mph). |
-| `hard_swing_rate` | numeric | Hard swing rate. |
-| `squared_up_per_bat_contact` | numeric | Squared up per bat contact. |
-| `squared_up_per_swing` | numeric | Squared-up rate per swing. |
-| `blast_per_bat_contact` | numeric | Blast per bat contact. |
-| `blast_per_swing` | numeric | Blasts per swing. |
-| `swing_length` | numeric | Swing length (ft, head travel). |
-| `swords` | integer | Swords. |
-| `batter_run_value` | numeric | Batter run value. |
-| `whiffs` | character | Whiffs. |
-| `whiff_per_swing` | character | Whiff per swing. |
-| `batted_ball_events` | integer | Batted ball events. |
-| `batted_ball_event_per_swing` | numeric | Batted ball event per swing. |
+| `id` | Int64 | MLBAM player id. |
+| `name` | String | Player (or entity) name. |
+| `swings_competitive` | Int64 | Competitive swings. |
+| `percent_swings_competitive` | Float64 | Share of swings that are competitive. |
+| `contact` | Int64 | Contact. |
+| `avg_bat_speed` | Float64 | Average bat speed (mph). |
+| `hard_swing_rate` | Float64 | Hard swing rate. |
+| `squared_up_per_bat_contact` | Float64 | Squared up per bat contact. |
+| `squared_up_per_swing` | Float64 | Squared-up rate per swing. |
+| `blast_per_bat_contact` | Float64 | Blast per bat contact. |
+| `blast_per_swing` | Float64 | Blasts per swing. |
+| `swing_length` | Float64 | Swing length (ft, head travel). |
+| `swords` | Int64 | Swords. |
+| `batter_run_value` | Float64 | Batter run value. |
+| `whiffs` | String | Whiffs. |
+| `whiff_per_swing` | String | Whiff per swing. |
+| `batted_ball_events` | Int64 | Batted ball events. |
+| `batted_ball_event_per_swing` | Float64 | Batted ball event per swing. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -309,19 +309,19 @@ GET /leaderboard/bat-tracking/swing-path-attack-angle — swing path & attack-an
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | MLBAM player id. |
-| `name` | character | Player (or entity) name. |
-| `side` | character | Side. |
-| `avg_bat_speed` | numeric | Average bat speed (mph). |
-| `swing_tilt` | numeric | Swing tilt (deg). |
-| `attack_angle` | numeric | Attack angle (deg, bat path at contact). |
-| `attack_direction` | numeric | Attack direction (deg, pull/oppo). |
-| `ideal_attack_angle_rate` | numeric | Rate of swings in the ideal attack-angle window. |
-| `avg_intercept_y_vs_plate` | numeric | Avg intercept y vs plate. |
-| `avg_intercept_y_vs_batter` | numeric | Avg intercept y vs batter. |
-| `avg_batter_y_position` | numeric | Avg batter y position. |
-| `avg_batter_x_position` | numeric | Avg batter x position. |
-| `competitive_swings` | integer | Competitive swings. |
+| `id` | Int64 | MLBAM player id. |
+| `name` | String | Player (or entity) name. |
+| `side` | String | Side. |
+| `avg_bat_speed` | Float64 | Average bat speed (mph). |
+| `swing_tilt` | Float64 | Swing tilt (deg). |
+| `attack_angle` | Float64 | Attack angle (deg, bat path at contact). |
+| `attack_direction` | Float64 | Attack direction (deg, pull/oppo). |
+| `ideal_attack_angle_rate` | Float64 | Rate of swings in the ideal attack-angle window. |
+| `avg_intercept_y_vs_plate` | Float64 | Avg intercept y vs plate. |
+| `avg_intercept_y_vs_batter` | Float64 | Avg intercept y vs batter. |
+| `avg_batter_y_position` | Float64 | Avg batter y position. |
+| `avg_batter_x_position` | Float64 | Avg batter x position. |
+| `competitive_swings` | Int64 | Competitive swings. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -360,32 +360,32 @@ GET /leaderboard/bat-tracking/swing-timing-miss-distance — swing timing & miss
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | MLBAM player id. |
-| `name` | character | Player (or entity) name. |
-| `year` | integer | Season year. |
-| `team_name` | character | Team name. |
-| `bat_side_formatted` | character | Batter side (formatted). |
-| `miss_distance` | numeric | Average miss distance (in) on swings. |
-| `flawed_percent` | numeric | Flawed rate. |
-| `perfect_percent` | numeric | Perfect rate. |
-| `tied_up_percent` | numeric | Tied up rate. |
-| `avg_x_tied_up` | numeric | Avg x tied up. |
-| `centered_percent` | numeric | Centered rate. |
-| `flailed_percent` | numeric | Flailed rate. |
-| `avg_x_flail` | numeric | Avg x flail. |
-| `early_percent` | numeric | Early rate. |
-| `avg_y_early` | numeric | Avg y early. |
-| `on_time_percent` | numeric | On time rate. |
-| `late_percent` | numeric | Late rate. |
-| `avg_y_late` | numeric | Avg y late. |
-| `n_swings` | integer | Number of swings. |
-| `whiff_rate` | numeric | Whiff rate. |
-| `competitive_percent` | numeric | Competitive rate. |
-| `over_percent` | numeric | Over rate. |
-| `avg_z_over` | numeric | Avg z over. |
-| `lined_up_percent` | numeric | Lined up rate. |
-| `under_percent` | numeric | Under rate. |
-| `avg_z_under` | numeric | Avg z under. |
+| `id` | Int64 | MLBAM player id. |
+| `name` | String | Player (or entity) name. |
+| `year` | Int64 | Season year. |
+| `team_name` | String | Team name. |
+| `bat_side_formatted` | String | Batter side (formatted). |
+| `miss_distance` | Float64 | Average miss distance (in) on swings. |
+| `flawed_percent` | Float64 | Flawed rate. |
+| `perfect_percent` | Float64 | Perfect rate. |
+| `tied_up_percent` | Float64 | Tied up rate. |
+| `avg_x_tied_up` | Float64 | Avg x tied up. |
+| `centered_percent` | Float64 | Centered rate. |
+| `flailed_percent` | Float64 | Flailed rate. |
+| `avg_x_flail` | Float64 | Avg x flail. |
+| `early_percent` | Float64 | Early rate. |
+| `avg_y_early` | Float64 | Avg y early. |
+| `on_time_percent` | Float64 | On time rate. |
+| `late_percent` | Float64 | Late rate. |
+| `avg_y_late` | Float64 | Avg y late. |
+| `n_swings` | Int64 | Number of swings. |
+| `whiff_rate` | Float64 | Whiff rate. |
+| `competitive_percent` | Float64 | Competitive rate. |
+| `over_percent` | Float64 | Over rate. |
+| `avg_z_over` | Float64 | Avg z over. |
+| `lined_up_percent` | Float64 | Lined up rate. |
+| `under_percent` | Float64 | Under rate. |
+| `avg_z_under` | Float64 | Avg z under. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -424,17 +424,17 @@ GET /leaderboard/swing-take — swing/take run-value leaderboard.
 
 | col_name | type | description |
 |---|---|---|
-| `year` | character | Season year. |
-| `last_name, first_name` | character | Last name, first name. |
-| `player_id` | character | MLBAM player id. |
-| `team_id` | character | MLBAM team id. |
-| `pa` | character | Plate appearances. |
-| `pitches` | character | Pitches. |
-| `runs_all` | character | Runs all. |
-| `runs_heart` | character | Runs heart. |
-| `runs_shadow` | character | Runs shadow. |
-| `runs_chase` | character | Runs chase. |
-| `runs_waste` | character | Runs waste. |
+| `year` | String | Season year. |
+| `last_name, first_name` | String | Last name, first name. |
+| `player_id` | String | MLBAM player id. |
+| `team_id` | String | MLBAM team id. |
+| `pa` | String | Plate appearances. |
+| `pitches` | String | Pitches. |
+| `runs_all` | String | Runs all. |
+| `runs_heart` | String | Runs heart. |
+| `runs_shadow` | String | Runs shadow. |
+| `runs_chase` | String | Runs chase. |
+| `runs_waste` | String | Runs waste. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -473,24 +473,24 @@ GET /leaderboard/statcast — exit velocity & barrels leaderboard.
 
 | col_name | type | description |
 |---|---|---|
-| `last_name, first_name` | character | Last name, first name. |
-| `player_id` | integer | MLBAM player id. |
-| `attempts` | integer | Opportunities/attempts. |
-| `avg_hit_angle` | numeric | Average launch angle (deg). |
-| `anglesweetspotpercent` | numeric | Anglesweetspotpercent. |
-| `max_hit_speed` | numeric | Max exit velocity (mph). |
-| `avg_hit_speed` | numeric | Average exit velocity (mph). |
-| `ev50` | numeric | Ev50. |
-| `fbld` | numeric | Fbld. |
-| `gb` | numeric | Gb. |
-| `max_distance` | integer | Max distance. |
-| `avg_distance` | integer | Avg distance. |
-| `avg_hr_distance` | integer | Avg hr distance. |
-| `ev95plus` | integer | Ev95plus. |
-| `ev95percent` | numeric | Ev95percent. |
-| `barrels` | integer | Barrels. |
-| `brl_percent` | numeric | Barrel rate (% of batted balls). |
-| `brl_pa` | numeric | Barrels per plate appearance. |
+| `last_name, first_name` | String | Last name, first name. |
+| `player_id` | Int64 | MLBAM player id. |
+| `attempts` | Int64 | Opportunities/attempts. |
+| `avg_hit_angle` | Float64 | Average launch angle (deg). |
+| `anglesweetspotpercent` | Float64 | Anglesweetspotpercent. |
+| `max_hit_speed` | Float64 | Max exit velocity (mph). |
+| `avg_hit_speed` | Float64 | Average exit velocity (mph). |
+| `ev50` | Float64 | Ev50. |
+| `fbld` | Float64 | Fbld. |
+| `gb` | Float64 | Gb. |
+| `max_distance` | Int64 | Max distance. |
+| `avg_distance` | Int64 | Avg distance. |
+| `avg_hr_distance` | Int64 | Avg hr distance. |
+| `ev95plus` | Int64 | Ev95plus. |
+| `ev95percent` | Float64 | Ev95percent. |
+| `barrels` | Int64 | Barrels. |
+| `brl_percent` | Float64 | Barrel rate (% of batted balls). |
+| `brl_pa` | Float64 | Barrels per plate appearance. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -529,24 +529,24 @@ GET /leaderboard/batted-ball — batted-ball profile leaderboard.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | MLBAM player id. |
-| `name` | character | Player (or entity) name. |
-| `year` | integer | Season year. |
-| `bbe` | integer | Batted-ball events. |
-| `gb_rate` | numeric | Gb rate. |
-| `air_rate` | numeric | Air rate. |
-| `fb_rate` | numeric | Fb rate. |
-| `ld_rate` | numeric | Ld rate. |
-| `pu_rate` | numeric | Pu rate. |
-| `pull_rate` | numeric | Pull rate. |
-| `straight_rate` | numeric | Straight rate. |
-| `oppo_rate` | numeric | Oppo rate. |
-| `pull_gb_rate` | numeric | Pull gb rate. |
-| `straight_gb_rate` | numeric | Straight gb rate. |
-| `oppo_gb_rate` | numeric | Oppo gb rate. |
-| `pull_air_rate` | numeric | Pull air rate. |
-| `straight_air_rate` | numeric | Straight air rate. |
-| `oppo_air_rate` | numeric | Oppo air rate. |
+| `id` | Int64 | MLBAM player id. |
+| `name` | String | Player (or entity) name. |
+| `year` | Int64 | Season year. |
+| `bbe` | Int64 | Batted-ball events. |
+| `gb_rate` | Float64 | Gb rate. |
+| `air_rate` | Float64 | Air rate. |
+| `fb_rate` | Float64 | Fb rate. |
+| `ld_rate` | Float64 | Ld rate. |
+| `pu_rate` | Float64 | Pu rate. |
+| `pull_rate` | Float64 | Pull rate. |
+| `straight_rate` | Float64 | Straight rate. |
+| `oppo_rate` | Float64 | Oppo rate. |
+| `pull_gb_rate` | Float64 | Pull gb rate. |
+| `straight_gb_rate` | Float64 | Straight gb rate. |
+| `oppo_gb_rate` | Float64 | Oppo gb rate. |
+| `pull_air_rate` | Float64 | Pull air rate. |
+| `straight_air_rate` | Float64 | Straight air rate. |
+| `oppo_air_rate` | Float64 | Oppo air rate. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -585,19 +585,19 @@ GET /leaderboard/home-runs — Statcast home-runs leaderboard.
 
 | col_name | type | description |
 |---|---|---|
-| `player` | character | Player. |
-| `player_id` | integer | MLBAM player id. |
-| `team_abbrev` | character | Team abbreviation. |
-| `year` | integer | Season year. |
-| `type` | character | Record/pitch type. |
-| `avg_hr_trot` | numeric | Avg hr trot. |
-| `doubters` | integer | Doubters. |
-| `mostly_gone` | integer | Mostly gone. |
-| `no_doubters` | integer | No doubters. |
-| `no_doubter_per` | numeric | No doubter per. |
-| `hr_total` | integer | Hr total. |
-| `xhr` | numeric | Xhr. |
-| `xhr_diff` | numeric | Xhr diff. |
+| `player` | String | Player. |
+| `player_id` | Int64 | MLBAM player id. |
+| `team_abbrev` | String | Team abbreviation. |
+| `year` | Int64 | Season year. |
+| `type` | String | Record/pitch type. |
+| `avg_hr_trot` | Float64 | Avg hr trot. |
+| `doubters` | Int64 | Doubters. |
+| `mostly_gone` | Int64 | Mostly gone. |
+| `no_doubters` | Int64 | No doubters. |
+| `no_doubter_per` | Float64 | No doubter per. |
+| `hr_total` | Int64 | Hr total. |
+| `xhr` | Float64 | Xhr. |
+| `xhr_diff` | Float64 | Xhr diff. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -636,18 +636,18 @@ GET /leaderboard/pitch-arsenals — pitch arsenals (velo/spin/movement) leaderbo
 
 | col_name | type | description |
 |---|---|---|
-| `last_name, first_name` | character | Last name, first name. |
-| `pitcher` | integer | MLBAM id of the pitcher. |
-| `ff_batter` | character | Ff batter. |
-| `si_batter` | character | Si batter. |
-| `fc_batter` | character | Fc batter. |
-| `sl_batter` | character | Sl batter. |
-| `ch_batter` | character | Ch batter. |
-| `cu_batter` | character | Cu batter. |
-| `fs_batter` | character | Fs batter. |
-| `kn_batter` | character | Kn batter. |
-| `st_batter` | character | St batter. |
-| `sv_batter` | character | Sv batter. |
+| `last_name, first_name` | String | Last name, first name. |
+| `pitcher` | Int64 | MLBAM id of the pitcher. |
+| `ff_batter` | String | Ff batter. |
+| `si_batter` | String | Si batter. |
+| `fc_batter` | String | Fc batter. |
+| `sl_batter` | String | Sl batter. |
+| `ch_batter` | String | Ch batter. |
+| `cu_batter` | String | Cu batter. |
+| `fs_batter` | String | Fs batter. |
+| `kn_batter` | String | Kn batter. |
+| `st_batter` | String | St batter. |
+| `sv_batter` | String | Sv batter. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -686,26 +686,26 @@ GET /leaderboard/pitch-arsenal-stats — per-pitch-type outcome stats leaderboar
 
 | col_name | type | description |
 |---|---|---|
-| `last_name, first_name` | character | Last name, first name. |
-| `player_id` | integer | MLBAM player id. |
-| `team_name_alt` | character | Team name (alternate form). |
-| `pitch_type` | character | Pitch type code. |
-| `pitch_name` | character | Pitch type name. |
-| `run_value_per_100` | numeric | Run value per 100 pitches. |
-| `run_value` | integer | Run value (runs). |
-| `pitches` | integer | Pitches. |
-| `pitch_usage` | numeric | Pitch usage. |
-| `pa` | integer | Plate appearances. |
-| `ba` | numeric | Batting average. |
-| `slg` | numeric | Slugging percentage. |
-| `woba` | numeric | Weighted on-base average. |
-| `whiff_percent` | numeric | Whiff rate (swings and misses / swings). |
-| `k_percent` | numeric | Strikeout rate. |
-| `put_away` | numeric | Put away. |
-| `est_ba` | numeric | Expected batting average (xBA). |
-| `est_slg` | numeric | Expected slugging (xSLG). |
-| `est_woba` | numeric | Expected wOBA (xwOBA). |
-| `hard_hit_percent` | numeric | Hard-hit rate (95+ mph EV). |
+| `last_name, first_name` | String | Last name, first name. |
+| `player_id` | Int64 | MLBAM player id. |
+| `team_name_alt` | String | Team name (alternate form). |
+| `pitch_type` | String | Pitch type code. |
+| `pitch_name` | String | Pitch type name. |
+| `run_value_per_100` | Float64 | Run value per 100 pitches. |
+| `run_value` | Int64 | Run value (runs). |
+| `pitches` | Int64 | Pitches. |
+| `pitch_usage` | Float64 | Pitch usage. |
+| `pa` | Int64 | Plate appearances. |
+| `ba` | Float64 | Batting average. |
+| `slg` | Float64 | Slugging percentage. |
+| `woba` | Float64 | Weighted on-base average. |
+| `whiff_percent` | Float64 | Whiff rate (swings and misses / swings). |
+| `k_percent` | Float64 | Strikeout rate. |
+| `put_away` | Float64 | Put away. |
+| `est_ba` | Float64 | Expected batting average (xBA). |
+| `est_slg` | Float64 | Expected slugging (xSLG). |
+| `est_woba` | Float64 | Expected wOBA (xwOBA). |
+| `hard_hit_percent` | Float64 | Hard-hit rate (95+ mph EV). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -744,30 +744,30 @@ GET /leaderboard/pitch-movement — pitch-movement leaderboard.
 
 | col_name | type | description |
 |---|---|---|
-| `year` | integer | Season year. |
-| `last_name, first_name` | character | Last name, first name. |
-| `pitcher_id` | integer | MLBAM id of the pitcher. |
-| `team_name` | character | Team name. |
-| `team_name_abbrev` | character | Team name abbrev. |
-| `pitch_hand` | character | Pitcher handedness (R/L). |
-| `avg_speed` | integer | Average pitch velocity (mph). |
-| `pitches_thrown` | integer | Pitches thrown. |
-| `total_pitches` | integer | Total pitches. |
-| `pitches_per_game` | numeric | Pitches per game. |
-| `pitch_per` | numeric | Pitch per. |
-| `pitch_type` | character | Pitch type code. |
-| `pitch_type_name` | character | Pitch type name. |
-| `pitcher_break_z` | numeric | Pitcher break z. |
-| `league_break_z` | numeric | League break z. |
-| `diff_z` | numeric | Diff z. |
-| `rise` | integer | Rise. |
-| `pitcher_break_z_induced` | numeric | Pitcher break z induced. |
-| `pitcher_break_x` | numeric | Pitcher break x. |
-| `league_break_x` | numeric | League break x. |
-| `diff_x` | numeric | Diff x. |
-| `tail` | integer | Tail. |
-| `percent_rank_diff_z` | numeric | Percent rank diff z. |
-| `percent_rank_diff_x` | numeric | Percent rank diff x. |
+| `year` | Int64 | Season year. |
+| `last_name, first_name` | String | Last name, first name. |
+| `pitcher_id` | Int64 | MLBAM id of the pitcher. |
+| `team_name` | String | Team name. |
+| `team_name_abbrev` | String | Team name abbrev. |
+| `pitch_hand` | String | Pitcher handedness (R/L). |
+| `avg_speed` | Int64 | Average pitch velocity (mph). |
+| `pitches_thrown` | Int64 | Pitches thrown. |
+| `total_pitches` | Int64 | Total pitches. |
+| `pitches_per_game` | Float64 | Pitches per game. |
+| `pitch_per` | Float64 | Pitch per. |
+| `pitch_type` | String | Pitch type code. |
+| `pitch_type_name` | String | Pitch type name. |
+| `pitcher_break_z` | Float64 | Pitcher break z. |
+| `league_break_z` | Float64 | League break z. |
+| `diff_z` | Float64 | Diff z. |
+| `rise` | Int64 | Rise. |
+| `pitcher_break_z_induced` | Float64 | Pitcher break z induced. |
+| `pitcher_break_x` | Float64 | Pitcher break x. |
+| `league_break_x` | Float64 | League break x. |
+| `diff_x` | Float64 | Diff x. |
+| `tail` | Int64 | Tail. |
+| `percent_rank_diff_z` | Float64 | Percent rank diff z. |
+| `percent_rank_diff_x` | Float64 | Percent rank diff x. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -806,17 +806,17 @@ GET /leaderboard/pitch-tempo — pitch-tempo leaderboard.
 
 | col_name | type | description |
 |---|---|---|
-| `entity_id` | integer | MLBAM id of the player/team entity. |
-| `entity_name` | character | Player (or team) entity name. |
-| `entity_code` | character | Entity code. |
-| `team_id` | integer | MLBAM team id. |
-| `total_pitches` | integer | Total pitches. |
-| `total_pitches_empty` | integer | Total pitches empty. |
-| `median_seconds_empty` | numeric | Median tempo (s) with bases empty. |
-| `total_pitches_onbase` | integer | Total pitches onbase. |
-| `freq_hot` | numeric | Freq hot. |
-| `freq_warm` | numeric | Freq warm. |
-| `freq_cold` | numeric | Freq cold. |
+| `entity_id` | Int64 | MLBAM id of the player/team entity. |
+| `entity_name` | String | Player (or team) entity name. |
+| `entity_code` | String | Entity code. |
+| `team_id` | Int64 | MLBAM team id. |
+| `total_pitches` | Int64 | Total pitches. |
+| `total_pitches_empty` | Int64 | Total pitches empty. |
+| `median_seconds_empty` | Float64 | Median tempo (s) with bases empty. |
+| `total_pitches_onbase` | Int64 | Total pitches onbase. |
+| `freq_hot` | Float64 | Freq hot. |
+| `freq_warm` | Float64 | Freq warm. |
+| `freq_cold` | Float64 | Freq cold. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -855,18 +855,18 @@ GET /leaderboard/active-spin — active-spin leaderboard.
 
 | col_name | type | description |
 |---|---|---|
-| `entity_name` | character | Player (or team) entity name. |
-| `entity_id` | integer | MLBAM id of the player/team entity. |
-| `pitch_hand` | character | Pitcher handedness (R/L). |
-| `active_spin_fourseam` | character | Active spin fourseam. |
-| `active_spin_sinker` | numeric | Active spin sinker. |
-| `active_spin_cutter` | numeric | Active spin cutter. |
-| `active_spin_changeup` | numeric | Active spin changeup. |
-| `active_spin_splitter` | character | Active spin splitter. |
-| `active_spin_curve` | character | Active spin curve. |
-| `active_spin_slider` | numeric | Active spin slider. |
-| `active_spin_sweeper` | numeric | Active spin sweeper. |
-| `active_spin_slurve` | character | Active spin slurve. |
+| `entity_name` | String | Player (or team) entity name. |
+| `entity_id` | Int64 | MLBAM id of the player/team entity. |
+| `pitch_hand` | String | Pitcher handedness (R/L). |
+| `active_spin_fourseam` | String | Active spin fourseam. |
+| `active_spin_sinker` | Float64 | Active spin sinker. |
+| `active_spin_cutter` | Float64 | Active spin cutter. |
+| `active_spin_changeup` | Float64 | Active spin changeup. |
+| `active_spin_splitter` | String | Active spin splitter. |
+| `active_spin_curve` | String | Active spin curve. |
+| `active_spin_slider` | Float64 | Active spin slider. |
+| `active_spin_sweeper` | Float64 | Active spin sweeper. |
+| `active_spin_slurve` | String | Active spin slurve. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -905,35 +905,35 @@ GET /leaderboard/spin-direction-pitches — spin-direction (per-pitch) leaderboa
 
 | col_name | type | description |
 |---|---|---|
-| `year` | integer | Season year. |
-| `last_name, first_name` | character | Last name, first name. |
-| `player_id` | integer | MLBAM player id. |
-| `pitch_hand` | character | Pitcher handedness (R/L). |
-| `api_pitch_type` | character | Pitch type (API code). |
-| `n_pitches` | integer | Number of pitches. |
-| `release_speed` | numeric | Release speed. |
-| `spin_rate` | integer | Spin rate (rpm). |
-| `movement_inches` | numeric | Movement inches. |
-| `alan_active_spin_pct` | numeric | Alan active spin rate. |
-| `active_spin` | numeric | Active (useful) spin (%). |
-| `hawkeye_measured` | numeric | Hawkeye measured. |
-| `movement_inferred` | numeric | Movement inferred. |
-| `api_pitch_name` | character | Api pitch name. |
-| `active_spin_formatted` | integer | Active spin (formatted, %). |
-| `hawkeye_measured_clock_minutes` | integer | Hawkeye measured clock minutes. |
-| `movement_inferred_clock_minutes` | integer | Movement inferred clock minutes. |
-| `diff_measured_inferred` | numeric | Diff measured inferred. |
-| `diff2` | numeric | Diff2. |
-| `diff_measured_inferred_minutes` | integer | Diff measured inferred minutes. |
-| `hawkeye_measured_clock_hh` | integer | Hawkeye measured clock hh. |
-| `hawkeye_measured_clock_mm` | integer | Hawkeye measured clock mm. |
-| `movement_inferred_clock_hh` | integer | Movement inferred clock hh. |
-| `movement_inferred_clock_mm` | integer | Movement inferred clock mm. |
-| `diff_clock_hh` | integer | Diff clock hh. |
-| `diff_clock_mm` | integer | Diff clock mm. |
-| `hawkeye_measured_clock_label` | character | Hawkeye measured clock label. |
-| `movement_inferred_clock_label` | character | Movement inferred clock label. |
-| `diff_clock_label` | character | Diff clock label. |
+| `year` | Int64 | Season year. |
+| `last_name, first_name` | String | Last name, first name. |
+| `player_id` | Int64 | MLBAM player id. |
+| `pitch_hand` | String | Pitcher handedness (R/L). |
+| `api_pitch_type` | String | Pitch type (API code). |
+| `n_pitches` | Int64 | Number of pitches. |
+| `release_speed` | Float64 | Release speed. |
+| `spin_rate` | Int64 | Spin rate (rpm). |
+| `movement_inches` | Float64 | Movement inches. |
+| `alan_active_spin_pct` | Float64 | Alan active spin rate. |
+| `active_spin` | Float64 | Active (useful) spin (%). |
+| `hawkeye_measured` | Float64 | Hawkeye measured. |
+| `movement_inferred` | Float64 | Movement inferred. |
+| `api_pitch_name` | String | Api pitch name. |
+| `active_spin_formatted` | Int64 | Active spin (formatted, %). |
+| `hawkeye_measured_clock_minutes` | Int64 | Hawkeye measured clock minutes. |
+| `movement_inferred_clock_minutes` | Int64 | Movement inferred clock minutes. |
+| `diff_measured_inferred` | Float64 | Diff measured inferred. |
+| `diff2` | Float64 | Diff2. |
+| `diff_measured_inferred_minutes` | Int64 | Diff measured inferred minutes. |
+| `hawkeye_measured_clock_hh` | Int64 | Hawkeye measured clock hh. |
+| `hawkeye_measured_clock_mm` | Int64 | Hawkeye measured clock mm. |
+| `movement_inferred_clock_hh` | Int64 | Movement inferred clock hh. |
+| `movement_inferred_clock_mm` | Int64 | Movement inferred clock mm. |
+| `diff_clock_hh` | Int64 | Diff clock hh. |
+| `diff_clock_mm` | Int64 | Diff clock mm. |
+| `hawkeye_measured_clock_label` | String | Hawkeye measured clock label. |
+| `movement_inferred_clock_label` | String | Movement inferred clock label. |
+| `diff_clock_label` | String | Diff clock label. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -972,16 +972,16 @@ GET /leaderboard/pitcher-arm-angles — pitcher arm-angle leaderboard.
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | integer | MLBAM id of the pitcher. |
-| `pitcher_name` | character | Pitcher name. |
-| `pitch_hand` | character | Pitcher handedness (R/L). |
-| `n_pitches` | integer | Number of pitches. |
-| `team_id` | integer | MLBAM team id. |
-| `ball_angle` | numeric | Arm slot angle (deg). |
-| `relative_release_ball_x` | numeric | Relative release ball x. |
-| `release_ball_z` | numeric | Release ball z. |
-| `relative_shoulder_x` | numeric | Relative shoulder x. |
-| `shoulder_z` | numeric | Shoulder z. |
+| `pitcher` | Int64 | MLBAM id of the pitcher. |
+| `pitcher_name` | String | Pitcher name. |
+| `pitch_hand` | String | Pitcher handedness (R/L). |
+| `n_pitches` | Int64 | Number of pitches. |
+| `team_id` | Int64 | MLBAM team id. |
+| `ball_angle` | Float64 | Arm slot angle (deg). |
+| `relative_release_ball_x` | Float64 | Relative release ball x. |
+| `release_ball_z` | Float64 | Release ball z. |
+| `relative_shoulder_x` | Float64 | Relative shoulder x. |
+| `shoulder_z` | Float64 | Shoulder z. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1020,31 +1020,31 @@ GET /leaderboard/pitcher-running-game — pitcher running-game (holding runners)
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | MLBAM player id. |
-| `player_name` | character | Player name. |
-| `team_name` | character | Team name. |
-| `start_year` | integer | First season in the range. |
-| `end_year` | integer | Last season in the range. |
-| `key_target_base` | character | Key target base. |
-| `runs_prevented_on_running_attr` | numeric | Runs prevented on running attr. |
-| `n_pitcher_cs_aa` | numeric | Number of pitcher cs aa. |
-| `n_init` | integer | Number of init. |
-| `rate_sbx` | numeric | Rate sbx. |
-| `n_sb` | integer | Stolen bases allowed (count). |
-| `n_cs` | integer | Caught stealing (count). |
-| `n_pk` | integer | Number of pk. |
-| `n_bk` | integer | Number of bk. |
-| `n_fb` | integer | Number of fb. |
-| `n_plus` | integer | Number of plus. |
-| `n_minus` | integer | Number of minus. |
-| `net_attr_plus` | numeric | Net attr plus. |
-| `net_attr_minus` | numeric | Net attr minus. |
-| `r_primary_lead` | numeric | Average primary lead distance (ft). |
-| `r_secondary_lead` | numeric | Average secondary lead (ft). |
-| `r_sec_minus_prim_lead` | numeric | R sec minus prim lead. |
-| `r_primary_lead_sbx` | numeric | R primary lead sbx. |
-| `r_secondary_lead_sbx` | numeric | R secondary lead sbx. |
-| `r_sec_minus_prim_lead_sbx` | numeric | R sec minus prim lead sbx. |
+| `player_id` | Int64 | MLBAM player id. |
+| `player_name` | String | Player name. |
+| `team_name` | String | Team name. |
+| `start_year` | Int64 | First season in the range. |
+| `end_year` | Int64 | Last season in the range. |
+| `key_target_base` | String | Key target base. |
+| `runs_prevented_on_running_attr` | Float64 | Runs prevented on running attr. |
+| `n_pitcher_cs_aa` | Float64 | Number of pitcher cs aa. |
+| `n_init` | Int64 | Number of init. |
+| `rate_sbx` | Float64 | Rate sbx. |
+| `n_sb` | Int64 | Stolen bases allowed (count). |
+| `n_cs` | Int64 | Caught stealing (count). |
+| `n_pk` | Int64 | Number of pk. |
+| `n_bk` | Int64 | Number of bk. |
+| `n_fb` | Int64 | Number of fb. |
+| `n_plus` | Int64 | Number of plus. |
+| `n_minus` | Int64 | Number of minus. |
+| `net_attr_plus` | Float64 | Net attr plus. |
+| `net_attr_minus` | Float64 | Net attr minus. |
+| `r_primary_lead` | Float64 | Average primary lead distance (ft). |
+| `r_secondary_lead` | Float64 | Average secondary lead (ft). |
+| `r_sec_minus_prim_lead` | Float64 | R sec minus prim lead. |
+| `r_primary_lead_sbx` | Float64 | R primary lead sbx. |
+| `r_secondary_lead_sbx` | Float64 | R secondary lead sbx. |
+| `r_sec_minus_prim_lead_sbx` | Float64 | R sec minus prim lead sbx. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1083,22 +1083,22 @@ GET /leaderboard/outs_above_average — Outs Above Average (OAA) fielding leader
 
 | col_name | type | description |
 |---|---|---|
-| `last_name, first_name` | character | Last name, first name. |
-| `player_id` | character | MLBAM player id. |
-| `display_team_name` | character | Team display name. |
-| `year` | character | Season year. |
-| `primary_pos_formatted` | character | Primary position (formatted). |
-| `fielding_runs_prevented` | character | Fielding Run Value (runs). |
-| `outs_above_average` | character | Outs Above Average. |
-| `outs_above_average_infront` | character | Outs above average infront. |
-| `outs_above_average_lateral_toward3bline` | character | Outs above average lateral toward3bline. |
-| `outs_above_average_lateral_toward1bline` | character | Outs above average lateral toward1bline. |
-| `outs_above_average_behind` | character | Outs above average behind. |
-| `outs_above_average_rhh` | character | Outs above average rhh. |
-| `outs_above_average_lhh` | character | Outs above average lhh. |
-| `actual_success_rate_formatted` | character | Actual success rate formatted. |
-| `adj_estimated_success_rate_formatted` | character | Adj estimated success rate formatted. |
-| `diff_success_rate_formatted` | character | Diff success rate formatted. |
+| `last_name, first_name` | String | Last name, first name. |
+| `player_id` | String | MLBAM player id. |
+| `display_team_name` | String | Team display name. |
+| `year` | String | Season year. |
+| `primary_pos_formatted` | String | Primary position (formatted). |
+| `fielding_runs_prevented` | String | Fielding Run Value (runs). |
+| `outs_above_average` | String | Outs Above Average. |
+| `outs_above_average_infront` | String | Outs above average infront. |
+| `outs_above_average_lateral_toward3bline` | String | Outs above average lateral toward3bline. |
+| `outs_above_average_lateral_toward1bline` | String | Outs above average lateral toward1bline. |
+| `outs_above_average_behind` | String | Outs above average behind. |
+| `outs_above_average_rhh` | String | Outs above average rhh. |
+| `outs_above_average_lhh` | String | Outs above average lhh. |
+| `actual_success_rate_formatted` | String | Actual success rate formatted. |
+| `adj_estimated_success_rate_formatted` | String | Adj estimated success rate formatted. |
+| `diff_success_rate_formatted` | String | Diff success rate formatted. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1137,18 +1137,18 @@ GET /leaderboard/outfield_directional_outs_above_average — outfield directiona
 
 | col_name | type | description |
 |---|---|---|
-| `last_name, first_name` | character | Last name, first name. |
-| `player_id` | integer | MLBAM player id. |
-| `attempts` | integer | Opportunities/attempts. |
-| `n_outs_above_average` | integer | Outs Above Average (count). |
-| `n_oaa_slice_back_left` | integer | Number of oaa slice back left. |
-| `n_oaa_slice_back` | integer | Number of oaa slice back. |
-| `n_oaa_slice_back_right` | integer | Number of oaa slice back right. |
-| `n_oaa_slice_back_all` | integer | Number of oaa slice back all. |
-| `n_oaa_slice_in_left` | integer | Number of oaa slice in left. |
-| `n_oaa_slice_in` | integer | Number of oaa slice in. |
-| `n_oaa_slice_in_right` | integer | Number of oaa slice in right. |
-| `n_oaa_slice_in_all` | integer | Number of oaa slice in all. |
+| `last_name, first_name` | String | Last name, first name. |
+| `player_id` | Int64 | MLBAM player id. |
+| `attempts` | Int64 | Opportunities/attempts. |
+| `n_outs_above_average` | Int64 | Outs Above Average (count). |
+| `n_oaa_slice_back_left` | Int64 | Number of oaa slice back left. |
+| `n_oaa_slice_back` | Int64 | Number of oaa slice back. |
+| `n_oaa_slice_back_right` | Int64 | Number of oaa slice back right. |
+| `n_oaa_slice_back_all` | Int64 | Number of oaa slice back all. |
+| `n_oaa_slice_in_left` | Int64 | Number of oaa slice in left. |
+| `n_oaa_slice_in` | Int64 | Number of oaa slice in. |
+| `n_oaa_slice_in_right` | Int64 | Number of oaa slice in right. |
+| `n_oaa_slice_in_all` | Int64 | Number of oaa slice in all. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1187,18 +1187,18 @@ GET /leaderboard/outfield_jump — outfielder jump leaderboard.
 
 | col_name | type | description |
 |---|---|---|
-| `last_name, first_name` | character | Last name, first name. |
-| `resp_fielder_id` | integer | MLBAM id of the responsible fielder. |
-| `year` | integer | Season year. |
-| `outs_above_average` | integer | Outs Above Average. |
-| `outs_per_play` | numeric | Outs per play. |
-| `rel_league_burst_distance` | integer | Rel league burst distance. |
-| `rel_league_reaction_distance` | numeric | Rel league reaction distance. |
-| `rel_league_routing_distance` | numeric | Rel league routing distance. |
-| `rel_league_bootup_distance` | numeric | Rel league bootup distance. |
-| `f_bootup_distance` | numeric | F bootup distance. |
-| `n` | integer | Sample count (pitches/events). |
-| `n_outs` | integer | Number of outs. |
+| `last_name, first_name` | String | Last name, first name. |
+| `resp_fielder_id` | Int64 | MLBAM id of the responsible fielder. |
+| `year` | Int64 | Season year. |
+| `outs_above_average` | Int64 | Outs Above Average. |
+| `outs_per_play` | Float64 | Outs per play. |
+| `rel_league_burst_distance` | Int64 | Rel league burst distance. |
+| `rel_league_reaction_distance` | Float64 | Rel league reaction distance. |
+| `rel_league_routing_distance` | Float64 | Rel league routing distance. |
+| `rel_league_bootup_distance` | Float64 | Rel league bootup distance. |
+| `f_bootup_distance` | Float64 | F bootup distance. |
+| `n` | Int64 | Sample count (pitches/events). |
+| `n_outs` | Int64 | Number of outs. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1237,24 +1237,24 @@ GET /leaderboard/catch_probability — outfielder catch-probability leaderboard.
 
 | col_name | type | description |
 |---|---|---|
-| `last_name, first_name` | character | Last name, first name. |
-| `player_id` | character | MLBAM player id. |
-| `oaa` | character | Outs Above Average. |
-| `n_fieldout_5stars` | character | 5-star (hardest) plays made. |
-| `n_opp_5stars` | character | 5-star play opportunities. |
-| `n_5star_percent` | character | Number of 5star rate. |
-| `n_fieldout_4stars` | character | Number of fieldout 4stars. |
-| `n_opp_4stars` | character | Number of opp 4stars. |
-| `n_4star_percent` | character | Number of 4star rate. |
-| `n_fieldout_3stars` | character | Number of fieldout 3stars. |
-| `n_opp_3stars` | character | Number of opp 3stars. |
-| `n_3star_percent` | character | Number of 3star rate. |
-| `n_fieldout_2stars` | character | Number of fieldout 2stars. |
-| `n_opp_2stars` | character | Number of opp 2stars. |
-| `n_2star_percent` | character | Number of 2star rate. |
-| `n_fieldout_1stars` | character | Number of fieldout 1stars. |
-| `n_opp_1stars` | character | Number of opp 1stars. |
-| `n_1star_percent` | character | Number of 1star rate. |
+| `last_name, first_name` | String | Last name, first name. |
+| `player_id` | String | MLBAM player id. |
+| `oaa` | String | Outs Above Average. |
+| `n_fieldout_5stars` | String | 5-star (hardest) plays made. |
+| `n_opp_5stars` | String | 5-star play opportunities. |
+| `n_5star_percent` | String | Number of 5star rate. |
+| `n_fieldout_4stars` | String | Number of fieldout 4stars. |
+| `n_opp_4stars` | String | Number of opp 4stars. |
+| `n_4star_percent` | String | Number of 4star rate. |
+| `n_fieldout_3stars` | String | Number of fieldout 3stars. |
+| `n_opp_3stars` | String | Number of opp 3stars. |
+| `n_3star_percent` | String | Number of 3star rate. |
+| `n_fieldout_2stars` | String | Number of fieldout 2stars. |
+| `n_opp_2stars` | String | Number of opp 2stars. |
+| `n_2star_percent` | String | Number of 2star rate. |
+| `n_fieldout_1stars` | String | Number of fieldout 1stars. |
+| `n_opp_1stars` | String | Number of opp 1stars. |
+| `n_1star_percent` | String | Number of 1star rate. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1293,32 +1293,32 @@ GET /leaderboard/arm-strength — fielder arm-strength leaderboard.
 
 | col_name | type | description |
 |---|---|---|
-| `fielder_name` | character | Fielder name. |
-| `player_id` | integer | MLBAM player id. |
-| `team_name` | character | Team name. |
-| `primary_position` | integer | Primary fielding position. |
-| `primary_position_name` | character | Primary position name. |
-| `total_throws` | integer | Total throws. |
-| `total_throws_1b` | integer | Total throws 1b. |
-| `total_throws_2b` | integer | Total throws 2b. |
-| `total_throws_3b` | integer | Total throws 3b. |
-| `total_throws_ss` | integer | Total throws ss. |
-| `total_throws_lf` | integer | Total throws lf. |
-| `total_throws_cf` | integer | Total throws cf. |
-| `total_throws_rf` | integer | Total throws rf. |
-| `total_throws_inf` | integer | Total throws inf. |
-| `total_throws_of` | integer | Total throws of. |
-| `max_arm_strength` | numeric | Max arm strength (mph). |
-| `arm_1b` | numeric | Arm 1b. |
-| `arm_2b` | character | Arm 2b. |
-| `arm_3b` | character | Arm 3b. |
-| `arm_ss` | character | Arm ss. |
-| `arm_lf` | character | Arm lf. |
-| `arm_cf` | character | Arm cf. |
-| `arm_rf` | character | Arm rf. |
-| `arm_inf` | character | Arm inf. |
-| `arm_of` | character | Arm of. |
-| `arm_overall` | numeric | Arm overall. |
+| `fielder_name` | String | Fielder name. |
+| `player_id` | Int64 | MLBAM player id. |
+| `team_name` | String | Team name. |
+| `primary_position` | Int64 | Primary fielding position. |
+| `primary_position_name` | String | Primary position name. |
+| `total_throws` | Int64 | Total throws. |
+| `total_throws_1b` | Int64 | Total throws 1b. |
+| `total_throws_2b` | Int64 | Total throws 2b. |
+| `total_throws_3b` | Int64 | Total throws 3b. |
+| `total_throws_ss` | Int64 | Total throws ss. |
+| `total_throws_lf` | Int64 | Total throws lf. |
+| `total_throws_cf` | Int64 | Total throws cf. |
+| `total_throws_rf` | Int64 | Total throws rf. |
+| `total_throws_inf` | Int64 | Total throws inf. |
+| `total_throws_of` | Int64 | Total throws of. |
+| `max_arm_strength` | Float64 | Max arm strength (mph). |
+| `arm_1b` | Float64 | Arm 1b. |
+| `arm_2b` | String | Arm 2b. |
+| `arm_3b` | String | Arm 3b. |
+| `arm_ss` | String | Arm ss. |
+| `arm_lf` | String | Arm lf. |
+| `arm_cf` | String | Arm cf. |
+| `arm_rf` | String | Arm rf. |
+| `arm_inf` | String | Arm inf. |
+| `arm_of` | String | Arm of. |
+| `arm_overall` | Float64 | Arm overall. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1357,20 +1357,20 @@ GET /leaderboard/poptime — catcher pop-time leaderboard.
 
 | col_name | type | description |
 |---|---|---|
-| `entity_name` | character | Player (or team) entity name. |
-| `entity_id` | integer | MLBAM id of the player/team entity. |
-| `team_id` | integer | MLBAM team id. |
-| `age` | integer | Player age. |
-| `maxeff_arm_2b_3b_sba` | numeric | Max-effort arm velo to 2B/3B (mph). |
-| `exchange_2b_3b_sba` | numeric | Transfer/exchange time (s). |
-| `pop_2b_sba_count` | integer | Pop-time sample (throws to 2B). |
-| `pop_2b_sba` | numeric | Pop time to 2B on stolen-base attempts (s). |
-| `pop_2b_cs` | numeric | Pop 2b cs. |
-| `pop_2b_sb` | numeric | Pop 2b sb. |
-| `pop_3b_sba_count` | integer | Pop 3b sba count. |
-| `pop_3b_sba` | numeric | Pop 3b sba. |
-| `pop_3b_cs` | numeric | Pop 3b cs. |
-| `pop_3b_sb` | numeric | Pop 3b sb. |
+| `entity_name` | String | Player (or team) entity name. |
+| `entity_id` | Int64 | MLBAM id of the player/team entity. |
+| `team_id` | Int64 | MLBAM team id. |
+| `age` | Int64 | Player age. |
+| `maxeff_arm_2b_3b_sba` | Float64 | Max-effort arm velo to 2B/3B (mph). |
+| `exchange_2b_3b_sba` | Float64 | Transfer/exchange time (s). |
+| `pop_2b_sba_count` | Int64 | Pop-time sample (throws to 2B). |
+| `pop_2b_sba` | Float64 | Pop time to 2B on stolen-base attempts (s). |
+| `pop_2b_cs` | Float64 | Pop 2b cs. |
+| `pop_2b_sb` | Float64 | Pop 2b sb. |
+| `pop_3b_sba_count` | Int64 | Pop 3b sba count. |
+| `pop_3b_sba` | Float64 | Pop 3b sba. |
+| `pop_3b_cs` | Float64 | Pop 3b cs. |
+| `pop_3b_sb` | Float64 | Pop 3b sb. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1409,27 +1409,27 @@ GET /leaderboard/catcher-framing — catcher framing leaderboard.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | MLBAM player id. |
-| `name` | character | Player (or entity) name. |
-| `pitches` | integer | Pitches. |
-| `rv_tot` | numeric | Total framing run value. |
-| `pct_tot` | numeric | Total called-strike rate. |
-| `rv_11` | integer | Rv 11. |
-| `pct_11` | numeric | Pct 11. |
-| `rv_12` | integer | Rv 12. |
-| `pct_12` | numeric | Pct 12. |
-| `rv_13` | integer | Rv 13. |
-| `pct_13` | integer | Pct 13. |
-| `rv_14` | integer | Rv 14. |
-| `pct_14` | numeric | Pct 14. |
-| `rv_16` | integer | Rv 16. |
-| `pct_16` | numeric | Pct 16. |
-| `rv_17` | integer | Rv 17. |
-| `pct_17` | numeric | Pct 17. |
-| `rv_18` | integer | Rv 18. |
-| `pct_18` | numeric | Pct 18. |
-| `rv_19` | integer | Rv 19. |
-| `pct_19` | numeric | Pct 19. |
+| `id` | Int64 | MLBAM player id. |
+| `name` | String | Player (or entity) name. |
+| `pitches` | Int64 | Pitches. |
+| `rv_tot` | Float64 | Total framing run value. |
+| `pct_tot` | Float64 | Total called-strike rate. |
+| `rv_11` | Int64 | Rv 11. |
+| `pct_11` | Float64 | Pct 11. |
+| `rv_12` | Int64 | Rv 12. |
+| `pct_12` | Float64 | Pct 12. |
+| `rv_13` | Int64 | Rv 13. |
+| `pct_13` | Int64 | Pct 13. |
+| `rv_14` | Int64 | Rv 14. |
+| `pct_14` | Float64 | Pct 14. |
+| `rv_16` | Int64 | Rv 16. |
+| `pct_16` | Float64 | Pct 16. |
+| `rv_17` | Int64 | Rv 17. |
+| `pct_17` | Float64 | Pct 17. |
+| `rv_18` | Int64 | Rv 18. |
+| `pct_18` | Float64 | Pct 18. |
+| `rv_19` | Int64 | Rv 19. |
+| `pct_19` | Float64 | Pct 19. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1468,23 +1468,23 @@ GET /leaderboard/catcher-blocking — catcher blocking leaderboard.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | MLBAM player id. |
-| `player_name` | character | Player name. |
-| `team_name` | character | Team name. |
-| `start_year` | integer | First season in the range. |
-| `end_year` | character | Last season in the range. |
-| `pitches` | integer | Pitches. |
-| `catcher_blocking_runs` | integer | Catcher blocking runs. |
-| `blocks_above_average` | integer | Blocks above average. |
-| `n_pbwp` | integer | Number of pbwp. |
-| `x_pbwp` | numeric | X pbwp. |
-| `blocks_above_average_per_game` | numeric | Blocks above average per game. |
-| `freq_pbwp_easy` | numeric | Freq pbwp easy. |
-| `freq_pbwp_medium` | numeric | Freq pbwp medium. |
-| `freq_pbwp_tough` | numeric | Freq pbwp tough. |
-| `diff_pbwp_easy` | numeric | Diff pbwp easy. |
-| `diff_pbwp_medium` | numeric | Diff pbwp medium. |
-| `diff_pbwp_tough` | numeric | Diff pbwp tough. |
+| `player_id` | Int64 | MLBAM player id. |
+| `player_name` | String | Player name. |
+| `team_name` | String | Team name. |
+| `start_year` | Int64 | First season in the range. |
+| `end_year` | String | Last season in the range. |
+| `pitches` | Int64 | Pitches. |
+| `catcher_blocking_runs` | Int64 | Catcher blocking runs. |
+| `blocks_above_average` | Int64 | Blocks above average. |
+| `n_pbwp` | Int64 | Number of pbwp. |
+| `x_pbwp` | Float64 | X pbwp. |
+| `blocks_above_average_per_game` | Float64 | Blocks above average per game. |
+| `freq_pbwp_easy` | Float64 | Freq pbwp easy. |
+| `freq_pbwp_medium` | Float64 | Freq pbwp medium. |
+| `freq_pbwp_tough` | Float64 | Freq pbwp tough. |
+| `diff_pbwp_easy` | Float64 | Diff pbwp easy. |
+| `diff_pbwp_medium` | Float64 | Diff pbwp medium. |
+| `diff_pbwp_tough` | Float64 | Diff pbwp tough. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

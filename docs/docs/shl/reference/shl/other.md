@@ -25,35 +25,35 @@ Skater and goalie box score per team (2023/24 on).
 
 | col_name | type | description |
 |---|---|---|
-| `team_side` | character | Side of the game: home or away. |
-| `position_group` | character | skater or goalie (goalies come from the body's gkStats rows). |
-| `player_id` | integer | isa (StatNet) player id, Int64. Play-by-play sends it as a string, every other route as an integer; it is cast here so the frames join. |
-| `team_id` | character | Team code (e.g. FHC) in gameday and standings payloads; not the team uuid. |
-| `period` | integer | Period: 0 = the whole game, 1-3 the periods, 4 and up overtime. |
-| `full_name` | character | Given name and surname. |
-| `first_name` | character | Given (first) name of the player. |
-| `last_name` | character | Surname (family name) of the player. |
-| `nr` | integer | Jersey (shirt) number of the player. |
-| `pos` | character | Position code in this game (e.g. CE, LW, RW, D, GK). |
-| `line` | integer | Line (unit) number the player was listed on. |
-| `g` | numeric | Number of goals scored. |
-| `a` | numeric | Number of assists credited. |
-| `ppg` | numeric | Power-play goals. |
-| `sw` | numeric | Number of shots that missed the net. |
-| `pim` | numeric | Penalty minutes. |
-| `sog` | numeric | Number of shots on goal. |
-| `ppsog` | numeric | Power-play shots on goal. |
-| `plus_minus` | numeric | Plus/minus in the game. |
-| `toi` | character | Time on ice (mm:ss). Clock/duration as an mm:ss string. |
-| `hits` | numeric | Body checks delivered. |
-| `fow` | numeric | Number of face-offs won. |
-| `fol` | numeric | Face-offs lost. |
-| `fo_perc` | numeric | Face-off win %. |
-| `ga` | numeric | Number of goals conceded (goals against). |
-| `soga` | numeric | Shots on goal against. |
-| `spga` | numeric | Unverified goalie column (box score). |
-| `svs` | numeric | Number of saves made by the goalie. |
-| `svs_perc` | numeric | Save percentage of the game as a FRACTION 0-1 (e.g. '0.9655...'); integer 0 for a goalie without shots. Numeric, but sent as a string in some rows and as a number in others. |
+| `team_side` | String | Side of the game: home or away. |
+| `position_group` | String | skater or goalie (goalies come from the body's gkStats rows). |
+| `player_id` | Int64 | isa (StatNet) player id, Int64. Play-by-play sends it as a string, every other route as an integer; it is cast here so the frames join. |
+| `team_id` | String | Team code (e.g. FHC) in gameday and standings payloads; not the team uuid. |
+| `period` | Int64 | Period: 0 = the whole game, 1-3 the periods, 4 and up overtime. |
+| `full_name` | String | Given name and surname. |
+| `first_name` | String | Given (first) name of the player. |
+| `last_name` | String | Surname (family name) of the player. |
+| `nr` | Int64 | Jersey (shirt) number of the player. |
+| `pos` | String | Position code in this game (e.g. CE, LW, RW, D, GK). |
+| `line` | Int64 | Line (unit) number the player was listed on. |
+| `g` | Float64 | Number of goals scored. |
+| `a` | Float64 | Number of assists credited. |
+| `ppg` | Float64 | Power-play goals. |
+| `sw` | Float64 | Number of shots that missed the net. |
+| `pim` | Float64 | Penalty minutes. |
+| `sog` | Float64 | Number of shots on goal. |
+| `ppsog` | Float64 | Power-play shots on goal. |
+| `plus_minus` | Float64 | Plus/minus in the game. |
+| `toi` | String | Time on ice (mm:ss). Clock/duration as an mm:ss string. |
+| `hits` | Float64 | Body checks delivered. |
+| `fow` | Float64 | Number of face-offs won. |
+| `fol` | Float64 | Face-offs lost. |
+| `fo_perc` | Float64 | Face-off win %. |
+| `ga` | Float64 | Number of goals conceded (goals against). |
+| `soga` | Float64 | Shots on goal against. |
+| `spga` | Float64 | Unverified goalie column (box score). |
+| `svs` | Float64 | Number of saves made by the goalie. |
+| `svs_perc` | Float64 | Save percentage of the game as a FRACTION 0-1 (e.g. '0.9655...'); integer 0 for a goalie without shots. Numeric, but sent as a string in some rows and as a number in others. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -90,45 +90,45 @@ Games of the last played match day of an ssgt.
 
 | col_name | type | description |
 |---|---|---|
-| `game_uuid` | character | Platform game uuid (bdhvuc5tex); every gameday route takes it. |
-| `start_date_time` | character | Scheduled start, local time (Europe/Stockholm). |
-| `state` | character | Game state: pre-game or post-game (hyphenated; a live value was not observed). |
-| `overtime` | logical | Whether the game went to overtime. |
-| `shootout` | logical | Whether the game went to a shootout. |
-| `ssgt_uuid` | character | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
-| `home_team_status` | character | Result for the team (WIN, LOSE) or record status. |
-| `home_team_uuid` | character | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
-| `home_team_owner_instance_id` | character | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
-| `home_team_code` | character | Home team code (e.g. FHC); joins to gameday teamId and the code-keyed teams{} maps. |
-| `home_team_names_code` | character | Display abbreviation; differs from the team code for some clubs (SKE vs SAIK, ÖRE vs OHK). |
-| `home_team_names_short` | character | Short club name ('Herr' = men's team). |
-| `home_team_names_long` | character | Long club name ('Herr' = men's team). |
-| `home_team_names_full` | character | Full club name ('Herr' = men's team). |
-| `home_team_names_code_site` | character | Display abbreviation on the site; 'Herr' = men's team (e.g. 'DIF Herr'). |
-| `home_team_names_short_site` | character | Short club name as shown on the site ('Herr' = men's team). |
-| `home_team_names_full_site` | character | Full club name as shown on the site ('Herr' = men's team). |
-| `home_team_names_long_site` | character | Long club name as shown on the site ('Herr' = men's team). |
-| `home_team_score` | integer | Goals scored by the team in the game. |
-| `home_team_icon` | character | URL of the team logo image. |
-| `away_team_status` | character | Result for the team (WIN, LOSE) or record status. |
-| `away_team_uuid` | character | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
-| `away_team_owner_instance_id` | character | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
-| `away_team_code` | character | Away team code (e.g. LHC); joins to gameday teamId and the code-keyed teams{} maps. |
-| `away_team_names_code` | character | Display abbreviation; differs from the team code for some clubs (SKE vs SAIK, ÖRE vs OHK). |
-| `away_team_names_short` | character | Short club name ('Herr' = men's team). |
-| `away_team_names_long` | character | Long club name ('Herr' = men's team). |
-| `away_team_names_full` | character | Full club name ('Herr' = men's team). |
-| `away_team_names_code_site` | character | Display abbreviation on the site; 'Herr' = men's team (e.g. 'DIF Herr'). |
-| `away_team_names_short_site` | character | Short club name as shown on the site ('Herr' = men's team). |
-| `away_team_names_full_site` | character | Full club name as shown on the site ('Herr' = men's team). |
-| `away_team_names_long_site` | character | Long club name as shown on the site ('Herr' = men's team). |
-| `away_team_score` | integer | Goals scored by the team in the game. |
-| `away_team_icon` | character | URL of the team logo image. |
-| `venue_uuid` | character | Arena uuid (platform key space). |
-| `venue_name` | character | Name of the arena (venue). |
-| `series_uuid` | character | Series uuid (platform key space; SHL = qQ9-bb0bzEWUk). |
-| `series_code` | character | Series code (SHL, CHL). |
-| `series_display_name` | character | Series label shown on the site (SHL, CHL). |
+| `game_uuid` | String | Platform game uuid (bdhvuc5tex); every gameday route takes it. |
+| `start_date_time` | String | Scheduled start, local time (Europe/Stockholm). |
+| `state` | String | Game state: pre-game or post-game (hyphenated; a live value was not observed). |
+| `overtime` | Boolean | Whether the game went to overtime. |
+| `shootout` | Boolean | Whether the game went to a shootout. |
+| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
+| `home_team_status` | String | Result for the team (WIN, LOSE) or record status. |
+| `home_team_uuid` | String | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
+| `home_team_owner_instance_id` | String | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
+| `home_team_code` | String | Home team code (e.g. FHC); joins to gameday teamId and the code-keyed teams{} maps. |
+| `home_team_names_code` | String | Display abbreviation; differs from the team code for some clubs (SKE vs SAIK, ÖRE vs OHK). |
+| `home_team_names_short` | String | Short club name ('Herr' = men's team). |
+| `home_team_names_long` | String | Long club name ('Herr' = men's team). |
+| `home_team_names_full` | String | Full club name ('Herr' = men's team). |
+| `home_team_names_code_site` | String | Display abbreviation on the site; 'Herr' = men's team (e.g. 'DIF Herr'). |
+| `home_team_names_short_site` | String | Short club name as shown on the site ('Herr' = men's team). |
+| `home_team_names_full_site` | String | Full club name as shown on the site ('Herr' = men's team). |
+| `home_team_names_long_site` | String | Long club name as shown on the site ('Herr' = men's team). |
+| `home_team_score` | Int64 | Goals scored by the team in the game. |
+| `home_team_icon` | String | URL of the team logo image. |
+| `away_team_status` | String | Result for the team (WIN, LOSE) or record status. |
+| `away_team_uuid` | String | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
+| `away_team_owner_instance_id` | String | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
+| `away_team_code` | String | Away team code (e.g. LHC); joins to gameday teamId and the code-keyed teams{} maps. |
+| `away_team_names_code` | String | Display abbreviation; differs from the team code for some clubs (SKE vs SAIK, ÖRE vs OHK). |
+| `away_team_names_short` | String | Short club name ('Herr' = men's team). |
+| `away_team_names_long` | String | Long club name ('Herr' = men's team). |
+| `away_team_names_full` | String | Full club name ('Herr' = men's team). |
+| `away_team_names_code_site` | String | Display abbreviation on the site; 'Herr' = men's team (e.g. 'DIF Herr'). |
+| `away_team_names_short_site` | String | Short club name as shown on the site ('Herr' = men's team). |
+| `away_team_names_full_site` | String | Full club name as shown on the site ('Herr' = men's team). |
+| `away_team_names_long_site` | String | Long club name as shown on the site ('Herr' = men's team). |
+| `away_team_score` | Int64 | Goals scored by the team in the game. |
+| `away_team_icon` | String | URL of the team logo image. |
+| `venue_uuid` | String | Arena uuid (platform key space). |
+| `venue_name` | String | Name of the arena (venue). |
+| `series_uuid` | String | Series uuid (platform key space; SHL = qQ9-bb0bzEWUk). |
+| `series_code` | String | Series code (SHL, CHL). |
+| `series_display_name` | String | Series label shown on the site (SHL, CHL). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -163,17 +163,17 @@ Directory of every SHL ssgt (season + series + game type) with teams and the sta
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season END year (2026 = 2025/26). |
-| `season_code` | character | Provider season code: the START year as a string (2025 = 2025/26). |
-| `season_name` | character | Season label (e.g. 2025/2026). |
-| `game_type` | character | Game type record (uuid, code regular / playoff / qualdown, Swedish name). |
-| `game_type_name` | character | Game type label in Swedish: Grundserie = regular season, Slutspel = playoffs, Kvalspel nedflyttning = relegation qualification, Kvalserien = the old promotion/relegation series. |
-| `series_code` | character | Series code (SHL, CHL; HA and Kvalserien in old career logs). |
-| `ssgt_uuid` | character | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
-| `state` | character | ssgt state: active (the current season) or closed. |
-| `season_uuid` | character | Season uuid (platform key space; code 2025 = 2025/2026); the seasonUuid param of game-schedule. |
-| `series_uuid` | character | Series uuid (platform key space; SHL = qQ9-bb0bzEWUk). |
-| `game_type_uuid` | character | Game type uuid (platform key space; regular qQ9-af37Ti40B); the gameTypeUuid param of game-schedule. |
+| `season` | Int64 | Season END year (2026 = 2025/26). |
+| `season_code` | String | Provider season code: the START year as a string (2025 = 2025/26). |
+| `season_name` | String | Season label (e.g. 2025/2026). |
+| `game_type` | String | Game type record (uuid, code regular / playoff / qualdown, Swedish name). |
+| `game_type_name` | String | Game type label in Swedish: Grundserie = regular season, Slutspel = playoffs, Kvalspel nedflyttning = relegation qualification, Kvalserien = the old promotion/relegation series. |
+| `series_code` | String | Series code (SHL, CHL; HA and Kvalserien in old career logs). |
+| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
+| `state` | String | ssgt state: active (the current season) or closed. |
+| `season_uuid` | String | Season uuid (platform key space; code 2025 = 2025/2026); the seasonUuid param of game-schedule. |
+| `series_uuid` | String | Series uuid (platform key space; SHL = qQ9-bb0bzEWUk). |
+| `game_type_uuid` | String | Game type uuid (platform key space; regular qQ9-af37Ti40B); the gameTypeUuid param of game-schedule. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -210,45 +210,45 @@ Games of the next match day of an ssgt.
 
 | col_name | type | description |
 |---|---|---|
-| `game_uuid` | character | Platform game uuid (bdhvuc5tex); every gameday route takes it. |
-| `start_date_time` | character | Scheduled start, local time (Europe/Stockholm). |
-| `state` | character | Game state: pre-game or post-game (hyphenated; a live value was not observed). |
-| `overtime` | logical | Whether the game went to overtime. |
-| `shootout` | logical | Whether the game went to a shootout. |
-| `ssgt_uuid` | character | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
-| `home_team_status` | character | Result for the team (WIN, LOSE) or record status. |
-| `home_team_uuid` | character | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
-| `home_team_owner_instance_id` | character | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
-| `home_team_code` | character | Home team code (e.g. FHC); joins to gameday teamId and the code-keyed teams{} maps. |
-| `home_team_names_code` | character | Display abbreviation; differs from the team code for some clubs (SKE vs SAIK, ÖRE vs OHK). |
-| `home_team_names_short` | character | Short club name ('Herr' = men's team). |
-| `home_team_names_long` | character | Long club name ('Herr' = men's team). |
-| `home_team_names_full` | character | Full club name ('Herr' = men's team). |
-| `home_team_names_code_site` | character | Display abbreviation on the site; 'Herr' = men's team (e.g. 'DIF Herr'). |
-| `home_team_names_short_site` | character | Short club name as shown on the site ('Herr' = men's team). |
-| `home_team_names_full_site` | character | Full club name as shown on the site ('Herr' = men's team). |
-| `home_team_names_long_site` | character | Long club name as shown on the site ('Herr' = men's team). |
-| `home_team_score` | integer | Goals scored by the team in the game. |
-| `home_team_icon` | character | URL of the team logo image. |
-| `away_team_status` | character | Result for the team (WIN, LOSE) or record status. |
-| `away_team_uuid` | character | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
-| `away_team_owner_instance_id` | character | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
-| `away_team_code` | character | Away team code (e.g. LHC); joins to gameday teamId and the code-keyed teams{} maps. |
-| `away_team_names_code` | character | Display abbreviation; differs from the team code for some clubs (SKE vs SAIK, ÖRE vs OHK). |
-| `away_team_names_short` | character | Short club name ('Herr' = men's team). |
-| `away_team_names_long` | character | Long club name ('Herr' = men's team). |
-| `away_team_names_full` | character | Full club name ('Herr' = men's team). |
-| `away_team_score` | integer | Goals scored by the team in the game. |
-| `away_team_icon` | character | URL of the team logo image. |
-| `venue_uuid` | character | Arena uuid (platform key space). |
-| `venue_name` | character | Name of the arena (venue). |
-| `series_uuid` | character | Series uuid (platform key space; SHL = qQ9-bb0bzEWUk). |
-| `series_code` | character | Series code (SHL, CHL). |
-| `series_display_name` | character | Series label shown on the site (SHL, CHL). |
-| `away_team_names_code_site` | character | Display abbreviation on the site; 'Herr' = men's team (e.g. 'DIF Herr'). |
-| `away_team_names_short_site` | character | Short club name as shown on the site ('Herr' = men's team). |
-| `away_team_names_full_site` | character | Full club name as shown on the site ('Herr' = men's team). |
-| `away_team_names_long_site` | character | Long club name as shown on the site ('Herr' = men's team). |
+| `game_uuid` | String | Platform game uuid (bdhvuc5tex); every gameday route takes it. |
+| `start_date_time` | String | Scheduled start, local time (Europe/Stockholm). |
+| `state` | String | Game state: pre-game or post-game (hyphenated; a live value was not observed). |
+| `overtime` | Boolean | Whether the game went to overtime. |
+| `shootout` | Boolean | Whether the game went to a shootout. |
+| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
+| `home_team_status` | String | Result for the team (WIN, LOSE) or record status. |
+| `home_team_uuid` | String | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
+| `home_team_owner_instance_id` | String | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
+| `home_team_code` | String | Home team code (e.g. FHC); joins to gameday teamId and the code-keyed teams{} maps. |
+| `home_team_names_code` | String | Display abbreviation; differs from the team code for some clubs (SKE vs SAIK, ÖRE vs OHK). |
+| `home_team_names_short` | String | Short club name ('Herr' = men's team). |
+| `home_team_names_long` | String | Long club name ('Herr' = men's team). |
+| `home_team_names_full` | String | Full club name ('Herr' = men's team). |
+| `home_team_names_code_site` | String | Display abbreviation on the site; 'Herr' = men's team (e.g. 'DIF Herr'). |
+| `home_team_names_short_site` | String | Short club name as shown on the site ('Herr' = men's team). |
+| `home_team_names_full_site` | String | Full club name as shown on the site ('Herr' = men's team). |
+| `home_team_names_long_site` | String | Long club name as shown on the site ('Herr' = men's team). |
+| `home_team_score` | Int64 | Goals scored by the team in the game. |
+| `home_team_icon` | String | URL of the team logo image. |
+| `away_team_status` | String | Result for the team (WIN, LOSE) or record status. |
+| `away_team_uuid` | String | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
+| `away_team_owner_instance_id` | String | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
+| `away_team_code` | String | Away team code (e.g. LHC); joins to gameday teamId and the code-keyed teams{} maps. |
+| `away_team_names_code` | String | Display abbreviation; differs from the team code for some clubs (SKE vs SAIK, ÖRE vs OHK). |
+| `away_team_names_short` | String | Short club name ('Herr' = men's team). |
+| `away_team_names_long` | String | Long club name ('Herr' = men's team). |
+| `away_team_names_full` | String | Full club name ('Herr' = men's team). |
+| `away_team_score` | Int64 | Goals scored by the team in the game. |
+| `away_team_icon` | String | URL of the team logo image. |
+| `venue_uuid` | String | Arena uuid (platform key space). |
+| `venue_name` | String | Name of the arena (venue). |
+| `series_uuid` | String | Series uuid (platform key space; SHL = qQ9-bb0bzEWUk). |
+| `series_code` | String | Series code (SHL, CHL). |
+| `series_display_name` | String | Series label shown on the site (SHL, CHL). |
+| `away_team_names_code_site` | String | Display abbreviation on the site; 'Herr' = men's team (e.g. 'DIF Herr'). |
+| `away_team_names_short_site` | String | Short club name as shown on the site ('Herr' = men's team). |
+| `away_team_names_full_site` | String | Full club name as shown on the site ('Herr' = men's team). |
+| `away_team_names_long_site` | String | Long club name as shown on the site ('Herr' = men's team). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -284,73 +284,73 @@ Play-by-play events with shot coordinates (2023/24 on).
 
 | col_name | type | description |
 |---|---|---|
-| `game_source_id` | character | StatNet game key, date-HOME-AWAY (e.g. 20250913-FHC-LHC); the same game as gameId. |
-| `game_id` | integer | StatNet game number (StatNet key space, e.g. 22003); keys stats-info games{} and equals sports-v2 game-info extId. Not the game uuid. |
-| `event_id` | integer | StatNet event sequence number; unique within one game only (pair it with gameId or gameUuid). |
-| `event_uuid` | character | Event uuid (platform key space), unique across games. eventId is the StatNet per-game sequence number. |
-| `round` | integer | Schedule round of the game (1 = first game day). |
-| `game_type` | character | StatNet league label: Elitserien (SHL's name until 2013). |
-| `arena` | character | Name of the arena hosting the game. |
-| `attendance` | integer | Spectators at the game. |
-| `start_date_and_time` | character | Scheduled start (local). |
-| `period` | integer | Period (1-3, 4 = overtime, 5 = shootout). |
-| `time` | character | Game clock in the period (MM:SS, counting up from 00:00). Clock/duration as an mm:ss string. |
-| `game_state` | character | Game state (e.g. GameEnded). |
-| `revision` | integer | Event revision counter. |
-| `type` | character | Event type: goal, shot, penalty, goalkeeper (goalie in / out), period (start / end), timeout. |
-| `real_world_time` | character | Wall-clock time of the event (local). |
-| `updated_time` | character | Last update time of the event. |
-| `home_team_id` | character | Team code (e.g. FHC) in gameday and standings payloads; not the team uuid. |
-| `home_team_name` | character | Team display name (e.g. Frölunda HC). |
-| `home_team_code` | character | Team code (FHC, LHC, ...). |
-| `home_score` | integer | Goals scored by the team in the game. |
-| `away_team_id` | character | Team code (e.g. FHC) in gameday and standings payloads; not the team uuid. |
-| `away_team_name` | character | Team display name (e.g. Frölunda HC). |
-| `away_team_code` | character | Team code (FHC, LHC, ...). |
-| `away_score` | integer | Goals scored by the team in the game. |
-| `event_team_id` | character | Team code (e.g. FHC) in gameday and standings payloads; not the team uuid. |
-| `event_place` | character | Side of the game: home or away. |
-| `event_team_code` | character | Team code (FHC, LHC, ...). |
-| `event_team_name` | character | Team display name (e.g. Frölunda HC). |
-| `player_id` | integer | isa (StatNet) player id, Int64. Play-by-play sends it as a string, every other route as an integer; it is cast here so the frames join. |
-| `player_first_name` | character | Given (first) name of the player. |
-| `player_family_name` | character | Surname (family name) of the player. |
-| `player_jersey_today` | character | Jersey number in this game. Numeric value sent as a string. |
-| `is_entering` | logical | Goalie event, true when the goalie enters the ice and false when leaving. |
-| `game_uuid` | character | Platform game uuid (bdhvuc5tex); every gameday route takes it. |
-| `location_x` | integer | Shot x coordinate. Units, origin and orientation unverified; range -29..481 over the 118 located events of game bdhvuc5tex (discovery download, 2026-10-12). |
-| `location_y` | integer | Shot y coordinate. Units, origin and orientation unverified; range -140..129 over the 118 located events of game bdhvuc5tex (discovery download, 2026-10-12). |
-| `goal_section` | integer | Goal-mouth section of the shot/goal (-3 lines up with blocked shots; unverified). |
-| `is_penalty_shot` | logical | Whether the shot/goal was a penalty shot. |
-| `variant_short_name` | character | Penalty type (Minor, Major, ...). |
-| `variant_minor_time` | character | Minor-penalty minutes. Numeric value sent as a string. |
-| `variant_double_minor_time` | character | Double-minor minutes in the penalty. Numeric value sent as a string. |
-| `variant_bench_time` | character | Bench minor minutes in the penalty. Numeric value sent as a string. |
-| `variant_major_time` | character | Major-penalty minutes. Numeric value sent as a string. |
-| `variant_misconduct_time` | character | Misconduct minutes. Numeric value sent as a string. |
-| `variant_g_m_time` | character | Game-misconduct minutes in the penalty. Numeric value sent as a string. |
-| `variant_m_p_time` | character | Match-penalty minutes. Numeric value sent as a string. |
-| `variant_description` | character | Text description (penalty, media). |
-| `offence` | character | Penalty offence code (e.g. CROSS, HOOK, TRIP). |
-| `did_render_in_penalty_shot` | logical | Whether the penalty led to a penalty shot. |
-| `home_goals` | integer | Home goals after this event (running score). |
-| `away_goals` | integer | Away goals after this event (running score). |
-| `is_empty_net_goal` | logical | Whether the goal went into an empty net. |
-| `pop_player_ids` | character | isa ids of the scoring side's players on the ice for the goal (List[Int64]). |
-| `nep_player_ids` | character | isa ids of the conceding side's players on the ice for the goal (List[Int64]). |
-| `assist1_player_id` | integer | isa id of the first assist. |
-| `assist1_first_name` | character | First assist: given name. |
-| `assist1_family_name` | character | First assist: surname. |
-| `assist1_jersey_today` | character | First assist: jersey number in this game (string). |
-| `assist2_player_id` | integer | isa id of the second assist. |
-| `assist2_first_name` | character | Second assist: given name. |
-| `assist2_family_name` | character | Second assist: surname. |
-| `assist2_jersey_today` | character | Second assist: jersey number in this game (string). |
-| `goal_status` | character | Goal strength (e.g. EQ, PP1, SH1). |
-| `started` | logical | Whether the period has started. |
-| `started_at` | character | Period start time (ISO 8601 UTC). |
-| `finished` | logical | Whether the period is finished. |
-| `finished_at` | character | Period end time (ISO 8601 UTC). |
+| `game_source_id` | String | StatNet game key, date-HOME-AWAY (e.g. 20250913-FHC-LHC); the same game as gameId. |
+| `game_id` | Int64 | StatNet game number (StatNet key space, e.g. 22003); keys stats-info games{} and equals sports-v2 game-info extId. Not the game uuid. |
+| `event_id` | Int64 | StatNet event sequence number; unique within one game only (pair it with gameId or gameUuid). |
+| `event_uuid` | String | Event uuid (platform key space), unique across games. eventId is the StatNet per-game sequence number. |
+| `round` | Int64 | Schedule round of the game (1 = first game day). |
+| `game_type` | String | StatNet league label: Elitserien (SHL's name until 2013). |
+| `arena` | String | Name of the arena hosting the game. |
+| `attendance` | Int64 | Spectators at the game. |
+| `start_date_and_time` | String | Scheduled start (local). |
+| `period` | Int64 | Period (1-3, 4 = overtime, 5 = shootout). |
+| `time` | String | Game clock in the period (MM:SS, counting up from 00:00). Clock/duration as an mm:ss string. |
+| `game_state` | String | Game state (e.g. GameEnded). |
+| `revision` | Int64 | Event revision counter. |
+| `type` | String | Event type: goal, shot, penalty, goalkeeper (goalie in / out), period (start / end), timeout. |
+| `real_world_time` | String | Wall-clock time of the event (local). |
+| `updated_time` | String | Last update time of the event. |
+| `home_team_id` | String | Team code (e.g. FHC) in gameday and standings payloads; not the team uuid. |
+| `home_team_name` | String | Team display name (e.g. Frölunda HC). |
+| `home_team_code` | String | Team code (FHC, LHC, ...). |
+| `home_score` | Int64 | Goals scored by the team in the game. |
+| `away_team_id` | String | Team code (e.g. FHC) in gameday and standings payloads; not the team uuid. |
+| `away_team_name` | String | Team display name (e.g. Frölunda HC). |
+| `away_team_code` | String | Team code (FHC, LHC, ...). |
+| `away_score` | Int64 | Goals scored by the team in the game. |
+| `event_team_id` | String | Team code (e.g. FHC) in gameday and standings payloads; not the team uuid. |
+| `event_place` | String | Side of the game: home or away. |
+| `event_team_code` | String | Team code (FHC, LHC, ...). |
+| `event_team_name` | String | Team display name (e.g. Frölunda HC). |
+| `player_id` | Int64 | isa (StatNet) player id, Int64. Play-by-play sends it as a string, every other route as an integer; it is cast here so the frames join. |
+| `player_first_name` | String | Given (first) name of the player. |
+| `player_family_name` | String | Surname (family name) of the player. |
+| `player_jersey_today` | String | Jersey number in this game. Numeric value sent as a string. |
+| `is_entering` | Boolean | Goalie event, true when the goalie enters the ice and false when leaving. |
+| `game_uuid` | String | Platform game uuid (bdhvuc5tex); every gameday route takes it. |
+| `location_x` | Int64 | Shot x coordinate. Units, origin and orientation unverified; range -29..481 over the 118 located events of game bdhvuc5tex (discovery download, 2026-10-12). |
+| `location_y` | Int64 | Shot y coordinate. Units, origin and orientation unverified; range -140..129 over the 118 located events of game bdhvuc5tex (discovery download, 2026-10-12). |
+| `goal_section` | Int64 | Goal-mouth section of the shot/goal (-3 lines up with blocked shots; unverified). |
+| `is_penalty_shot` | Boolean | Whether the shot/goal was a penalty shot. |
+| `variant_short_name` | String | Penalty type (Minor, Major, ...). |
+| `variant_minor_time` | String | Minor-penalty minutes. Numeric value sent as a string. |
+| `variant_double_minor_time` | String | Double-minor minutes in the penalty. Numeric value sent as a string. |
+| `variant_bench_time` | String | Bench minor minutes in the penalty. Numeric value sent as a string. |
+| `variant_major_time` | String | Major-penalty minutes. Numeric value sent as a string. |
+| `variant_misconduct_time` | String | Misconduct minutes. Numeric value sent as a string. |
+| `variant_g_m_time` | String | Game-misconduct minutes in the penalty. Numeric value sent as a string. |
+| `variant_m_p_time` | String | Match-penalty minutes. Numeric value sent as a string. |
+| `variant_description` | String | Text description (penalty, media). |
+| `offence` | String | Penalty offence code (e.g. CROSS, HOOK, TRIP). |
+| `did_render_in_penalty_shot` | Boolean | Whether the penalty led to a penalty shot. |
+| `home_goals` | Int64 | Home goals after this event (running score). |
+| `away_goals` | Int64 | Away goals after this event (running score). |
+| `is_empty_net_goal` | Boolean | Whether the goal went into an empty net. |
+| `pop_player_ids` | String | isa ids of the scoring side's players on the ice for the goal (List[Int64]). |
+| `nep_player_ids` | String | isa ids of the conceding side's players on the ice for the goal (List[Int64]). |
+| `assist1_player_id` | Int64 | isa id of the first assist. |
+| `assist1_first_name` | String | First assist: given name. |
+| `assist1_family_name` | String | First assist: surname. |
+| `assist1_jersey_today` | String | First assist: jersey number in this game (string). |
+| `assist2_player_id` | Int64 | isa id of the second assist. |
+| `assist2_first_name` | String | Second assist: given name. |
+| `assist2_family_name` | String | Second assist: surname. |
+| `assist2_jersey_today` | String | Second assist: jersey number in this game (string). |
+| `goal_status` | String | Goal strength (e.g. EQ, PP1, SH1). |
+| `started` | Boolean | Whether the period has started. |
+| `started_at` | String | Period start time (ISO 8601 UTC). |
+| `finished` | Boolean | Whether the period is finished. |
+| `finished_at` | String | Period end time (ISO 8601 UTC). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -386,43 +386,43 @@ Extended skater and goalie game stats per team (2023/24 on).
 
 | col_name | type | description |
 |---|---|---|
-| `team_side` | character | Side of the game: home or away. |
-| `position_group` | character | skater or goalie (goalies come from the body's gkStats rows). |
-| `player_id` | integer | isa (StatNet) player id, Int64. Play-by-play sends it as a string, every other route as an integer; it is cast here so the frames join. |
-| `team_id` | character | Team code (e.g. FHC) in gameday and standings payloads; not the team uuid. |
-| `period` | integer | Period: 0 = the whole game, 1-3 the periods, 4 and up overtime. |
-| `full_name` | character | Given name and surname. |
-| `first_name` | character | Given (first) name of the player. |
-| `last_name` | character | Surname (family name) of the player. |
-| `nr` | integer | Jersey (shirt) number of the player. |
-| `pos` | character | Position code in this game (e.g. CE, LW, RW, D, GK). |
-| `line` | integer | Line (unit) number the player was listed on. |
-| `g` | numeric | Number of goals scored. |
-| `a` | numeric | Number of assists credited. |
-| `ppg` | numeric | Power-play goals. |
-| `sw` | numeric | Number of shots that missed the net. |
-| `pim` | numeric | Penalty minutes. |
-| `sog` | numeric | Number of shots on goal. |
-| `ppsog` | numeric | Power-play shots on goal. |
-| `plus_minus` | numeric | Plus/minus in the game. |
-| `toi` | character | Time on ice (mm:ss). Clock/duration as an mm:ss string. |
-| `hits` | numeric | Body checks delivered. |
-| `fow` | numeric | Number of face-offs won. |
-| `fol` | numeric | Face-offs lost. |
-| `fo_perc` | numeric | Face-off win %. |
-| `ga` | numeric | Number of goals conceded (goals against). |
-| `soga` | numeric | Shots on goal against. |
-| `spga` | numeric | Unverified goalie column (box score). |
-| `svs` | numeric | Number of saves made by the goalie. |
-| `svs_perc` | numeric | Save percentage of the game as a FRACTION 0-1 (e.g. '0.9655...'); integer 0 for a goalie without shots. Numeric, but sent as a string in some rows and as a number in others. |
-| `tp` | numeric | Points (goals + assists). |
-| `shg` | numeric | Shorthanded goals. |
-| `nep` | numeric | On ice for goals against (count). |
-| `pop` | numeric | On ice for goals for (count). |
-| `fo_tot` | numeric | Face-offs taken. |
-| `num_pen` | numeric | Number of penalties. |
-| `ms` | numeric | Missed shots (wide + blocked). |
-| `bk_s` | numeric | Number of blocked shots. |
+| `team_side` | String | Side of the game: home or away. |
+| `position_group` | String | skater or goalie (goalies come from the body's gkStats rows). |
+| `player_id` | Int64 | isa (StatNet) player id, Int64. Play-by-play sends it as a string, every other route as an integer; it is cast here so the frames join. |
+| `team_id` | String | Team code (e.g. FHC) in gameday and standings payloads; not the team uuid. |
+| `period` | Int64 | Period: 0 = the whole game, 1-3 the periods, 4 and up overtime. |
+| `full_name` | String | Given name and surname. |
+| `first_name` | String | Given (first) name of the player. |
+| `last_name` | String | Surname (family name) of the player. |
+| `nr` | Int64 | Jersey (shirt) number of the player. |
+| `pos` | String | Position code in this game (e.g. CE, LW, RW, D, GK). |
+| `line` | Int64 | Line (unit) number the player was listed on. |
+| `g` | Float64 | Number of goals scored. |
+| `a` | Float64 | Number of assists credited. |
+| `ppg` | Float64 | Power-play goals. |
+| `sw` | Float64 | Number of shots that missed the net. |
+| `pim` | Float64 | Penalty minutes. |
+| `sog` | Float64 | Number of shots on goal. |
+| `ppsog` | Float64 | Power-play shots on goal. |
+| `plus_minus` | Float64 | Plus/minus in the game. |
+| `toi` | String | Time on ice (mm:ss). Clock/duration as an mm:ss string. |
+| `hits` | Float64 | Body checks delivered. |
+| `fow` | Float64 | Number of face-offs won. |
+| `fol` | Float64 | Face-offs lost. |
+| `fo_perc` | Float64 | Face-off win %. |
+| `ga` | Float64 | Number of goals conceded (goals against). |
+| `soga` | Float64 | Shots on goal against. |
+| `spga` | Float64 | Unverified goalie column (box score). |
+| `svs` | Float64 | Number of saves made by the goalie. |
+| `svs_perc` | Float64 | Save percentage of the game as a FRACTION 0-1 (e.g. '0.9655...'); integer 0 for a goalie without shots. Numeric, but sent as a string in some rows and as a number in others. |
+| `tp` | Float64 | Points (goals + assists). |
+| `shg` | Float64 | Shorthanded goals. |
+| `nep` | Float64 | On ice for goals against (count). |
+| `pop` | Float64 | On ice for goals for (count). |
+| `fo_tot` | Float64 | Face-offs taken. |
+| `num_pen` | Float64 | Number of penalties. |
+| `ms` | Float64 | Missed shots (wide + blocked). |
+| `bk_s` | Float64 | Number of blocked shots. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -461,60 +461,60 @@ Player head-to-head for a matchup.
 
 | col_name | type | description |
 |---|---|---|
-| `uuid` | character | Athlete uuid (platform key space; qQ9-... or 10-char form); joins to the athlete routes and stats-info stats[].info.uuid. Not the isa or ramses_legacy id. |
-| `first_name` | character | Given (first) name of the player. |
-| `last_name` | character | Surname (family name) of the player. |
-| `full_name` | character | Given name and surname. |
-| `birth_date` | character | Date of birth (YYYY-MM-DD). |
-| `nationality` | character | Nationality (ISO country code). |
-| `gender` | character | Sex of the athlete or team (male / female). |
-| `jersey_number` | character | Jersey (shirt) number of the player. |
-| `position` | character | Position label in English (e.g. Forward); N/A when unknown. |
-| `position_code` | character | Position code (GK, D, F; CE / LW / RW in stats rows); N/A when unknown. |
-| `age_value` | integer | Age of the player in whole years. |
-| `age_format` | character | Unit of value: years. |
-| `height_value` | integer | Height of the player in centimetres. |
-| `height_format` | character | Unit of value: cm. |
-| `weight_value` | integer | Weight of the player in kilograms. |
-| `weight_format` | character | Unit of value: kg. |
-| `team_uuid` | character | Platform team uuid. |
-| `team_instance_id` | character | Club site instance id (e.g. fhc1_fhc). |
-| `team_name` | character | Name of the team. |
-| `team_code` | character | StatNet team code (SAIK, FHC). |
-| `team_media` | character | Media URL or string. |
-| `media_url` | character | Portrait URL on the imgix CDN. |
-| `media_alt` | character | Image alt text. Empty string in every sample (placeholder). |
-| `media_srcset` | character | Responsive image srcset. |
-| `season_stats` | character | Current-season stat rows of the player (empty in the sample). |
-| `career_stats` | character | Career stat rows of the player (empty in the sample). |
-| `match_stats_nr` | integer | Jersey (shirt) number of the player. |
-| `match_stats_pos` | character | Position code in this game (e.g. CE, LW, RW, D, GK). |
-| `match_stats_line` | integer | Line (unit) number the player was listed on. |
-| `match_stats_g` | integer | Number of goals scored. |
-| `match_stats_a` | integer | Number of assists credited. |
-| `match_stats_tp` | integer | Points (goals + assists). |
-| `match_stats_shg` | integer | Shorthanded goals. |
-| `match_stats_ppg` | integer | Power-play goals. |
-| `match_stats_sw` | integer | Number of shots that missed the net. |
-| `match_stats_pim` | integer | Penalty minutes. |
-| `match_stats_sog` | integer | Number of shots on goal. |
-| `match_stats_ppsog` | integer | Power-play shots on goal. |
-| `match_stats_nep` | integer | On ice for goals against (count). |
-| `match_stats_pop` | integer | On ice for goals for (count). |
-| `match_stats_toi` | character | Time on ice (mm:ss). Clock/duration as an mm:ss string. |
-| `match_stats_hits` | integer | Body checks delivered. |
-| `match_stats_fo_tot` | integer | Face-offs taken. |
-| `match_stats_fow` | integer | Number of face-offs won. |
-| `match_stats_fol` | integer | Face-offs lost. |
-| `match_stats_num_pen` | integer | Number of penalties. |
-| `match_stats_fo_perc` | numeric | Face-off win %. |
-| `match_stats_ms` | integer | Missed shots (wide + blocked). |
-| `match_stats_bk_s` | integer | Number of blocked shots. |
-| `match_stats_plus_minus` | integer | Goals for minus goals against while on ice (+/-). |
-| `season_avg_stats` | character | Head-to-head season averages. |
-| `statistics_provider` | character | Stats provider of the data (statnet seen). |
-| `is_in_squad` | logical | Whether the player is in the current squad. |
-| `effective_ssgt_uuid` | character | The ssgt the head-to-head was computed for: the CURRENT season, whatever the path asked. |
+| `uuid` | String | Athlete uuid (platform key space; qQ9-... or 10-char form); joins to the athlete routes and stats-info stats[].info.uuid. Not the isa or ramses_legacy id. |
+| `first_name` | String | Given (first) name of the player. |
+| `last_name` | String | Surname (family name) of the player. |
+| `full_name` | String | Given name and surname. |
+| `birth_date` | String | Date of birth (YYYY-MM-DD). |
+| `nationality` | String | Nationality (ISO country code). |
+| `gender` | String | Sex of the athlete or team (male / female). |
+| `jersey_number` | String | Jersey (shirt) number of the player. |
+| `position` | String | Position label in English (e.g. Forward); N/A when unknown. |
+| `position_code` | String | Position code (GK, D, F; CE / LW / RW in stats rows); N/A when unknown. |
+| `age_value` | Int64 | Age of the player in whole years. |
+| `age_format` | String | Unit of value: years. |
+| `height_value` | Int64 | Height of the player in centimetres. |
+| `height_format` | String | Unit of value: cm. |
+| `weight_value` | Int64 | Weight of the player in kilograms. |
+| `weight_format` | String | Unit of value: kg. |
+| `team_uuid` | String | Platform team uuid. |
+| `team_instance_id` | String | Club site instance id (e.g. fhc1_fhc). |
+| `team_name` | String | Name of the team. |
+| `team_code` | String | StatNet team code (SAIK, FHC). |
+| `team_media` | String | Media URL or string. |
+| `media_url` | String | Portrait URL on the imgix CDN. |
+| `media_alt` | String | Image alt text. Empty string in every sample (placeholder). |
+| `media_srcset` | String | Responsive image srcset. |
+| `season_stats` | String | Current-season stat rows of the player (empty in the sample). |
+| `career_stats` | String | Career stat rows of the player (empty in the sample). |
+| `match_stats_nr` | Int64 | Jersey (shirt) number of the player. |
+| `match_stats_pos` | String | Position code in this game (e.g. CE, LW, RW, D, GK). |
+| `match_stats_line` | Int64 | Line (unit) number the player was listed on. |
+| `match_stats_g` | Int64 | Number of goals scored. |
+| `match_stats_a` | Int64 | Number of assists credited. |
+| `match_stats_tp` | Int64 | Points (goals + assists). |
+| `match_stats_shg` | Int64 | Shorthanded goals. |
+| `match_stats_ppg` | Int64 | Power-play goals. |
+| `match_stats_sw` | Int64 | Number of shots that missed the net. |
+| `match_stats_pim` | Int64 | Penalty minutes. |
+| `match_stats_sog` | Int64 | Number of shots on goal. |
+| `match_stats_ppsog` | Int64 | Power-play shots on goal. |
+| `match_stats_nep` | Int64 | On ice for goals against (count). |
+| `match_stats_pop` | Int64 | On ice for goals for (count). |
+| `match_stats_toi` | String | Time on ice (mm:ss). Clock/duration as an mm:ss string. |
+| `match_stats_hits` | Int64 | Body checks delivered. |
+| `match_stats_fo_tot` | Int64 | Face-offs taken. |
+| `match_stats_fow` | Int64 | Number of face-offs won. |
+| `match_stats_fol` | Int64 | Face-offs lost. |
+| `match_stats_num_pen` | Int64 | Number of penalties. |
+| `match_stats_fo_perc` | Float64 | Face-off win %. |
+| `match_stats_ms` | Int64 | Missed shots (wide + blocked). |
+| `match_stats_bk_s` | Int64 | Number of blocked shots. |
+| `match_stats_plus_minus` | Int64 | Goals for minus goals against while on ice (+/-). |
+| `season_avg_stats` | String | Head-to-head season averages. |
+| `statistics_provider` | String | Stats provider of the data (statnet seen). |
+| `is_in_squad` | Boolean | Whether the player is in the current squad. |
+| `effective_ssgt_uuid` | String | The ssgt the head-to-head was computed for: the CURRENT season, whatever the path asked. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -553,20 +553,20 @@ Post-game team comparison.
 
 | col_name | type | description |
 |---|---|---|
-| `home_team_side_translate_key` | character | Translation key of the side. |
-| `home_team_left_type` | character | Stat code compared on the left (e.g. G, PPG). |
-| `home_team_left_value` | integer | Value (string-encoded). |
-| `home_team_right_type` | character | Stat code compared on the right (e.g. SOG, PPOpp). |
-| `home_team_right_value` | integer | Value (string-encoded). |
-| `home_team_center_type` | character | Stat code compared in the middle (e.g. SEff, PPPerc). |
-| `home_team_center_value` | character | Value (string-encoded). Numeric, but sent as a string in some rows and as a number in others. |
-| `away_team_side_translate_key` | character | Translation key of the side. |
-| `away_team_left_type` | character | Stat code compared on the left (e.g. G, PPG). |
-| `away_team_left_value` | integer | Value (string-encoded). |
-| `away_team_right_type` | character | Stat code compared on the right (e.g. SOG, PPOpp). |
-| `away_team_right_value` | integer | Value (string-encoded). |
-| `away_team_center_type` | character | Stat code compared in the middle (e.g. SEff, PPPerc). |
-| `away_team_center_value` | character | Value (string-encoded). Numeric, but sent as a string in some rows and as a number in others. |
+| `home_team_side_translate_key` | String | Translation key of the side. |
+| `home_team_left_type` | String | Stat code compared on the left (e.g. G, PPG). |
+| `home_team_left_value` | Int64 | Value (string-encoded). |
+| `home_team_right_type` | String | Stat code compared on the right (e.g. SOG, PPOpp). |
+| `home_team_right_value` | Int64 | Value (string-encoded). |
+| `home_team_center_type` | String | Stat code compared in the middle (e.g. SEff, PPPerc). |
+| `home_team_center_value` | String | Value (string-encoded). Numeric, but sent as a string in some rows and as a number in others. |
+| `away_team_side_translate_key` | String | Translation key of the side. |
+| `away_team_left_type` | String | Stat code compared on the left (e.g. G, PPG). |
+| `away_team_left_value` | Int64 | Value (string-encoded). |
+| `away_team_right_type` | String | Stat code compared on the right (e.g. SOG, PPOpp). |
+| `away_team_right_value` | Int64 | Value (string-encoded). |
+| `away_team_center_type` | String | Stat code compared in the middle (e.g. SEff, PPPerc). |
+| `away_team_center_value` | String | Value (string-encoded). Numeric, but sent as a string in some rows and as a number in others. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -602,17 +602,17 @@ Current roster of a team, grouped by position.
 
 | col_name | type | description |
 |---|---|---|
-| `position` | character | Position group label: Målvakter = goalkeepers, Backar = defencemen, Forwards. |
-| `position_code` | character | Position code (GK, D, F; CE / LW / RW in stats rows); N/A when unknown. |
-| `player_type` | character | Roster role of the player (unverified). |
-| `gender` | character | Sex of the athlete or team (male / female). |
-| `uuid` | character | Athlete uuid (platform key space; qQ9-... or 10-char form); joins to the athlete routes and stats-info stats[].info.uuid. Not the isa or ramses_legacy id. |
-| `first_name` | character | Given (first) name of the player. |
-| `last_name` | character | Surname (family name) of the player. |
-| `full_name` | character | Given name and surname. |
-| `nationality` | character | Nationality (ISO country code). |
-| `jersey_number` | integer | Jersey (shirt) number of the player. |
-| `portrait_url` | character | URL of the player's latest rendered portrait. |
+| `position` | String | Position group label: Målvakter = goalkeepers, Backar = defencemen, Forwards. |
+| `position_code` | String | Position code (GK, D, F; CE / LW / RW in stats rows); N/A when unknown. |
+| `player_type` | String | Roster role of the player (unverified). |
+| `gender` | String | Sex of the athlete or team (male / female). |
+| `uuid` | String | Athlete uuid (platform key space; qQ9-... or 10-char form); joins to the athlete routes and stats-info stats[].info.uuid. Not the isa or ramses_legacy id. |
+| `first_name` | String | Given (first) name of the player. |
+| `last_name` | String | Surname (family name) of the player. |
+| `full_name` | String | Given name and surname. |
+| `nationality` | String | Nationality (ISO country code). |
+| `jersey_number` | Int64 | Jersey (shirt) number of the player. |
+| `portrait_url` | String | URL of the player's latest rendered portrait. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -649,48 +649,48 @@ Schedule and results of one season + series + game type.
 
 | col_name | type | description |
 |---|---|---|
-| `game_uuid` | character | Platform game uuid (bdhvuc5tex); every gameday route takes it. |
-| `raw_start_date_time` | character | Start time, UTC ISO 8601. |
-| `start_date_time` | character | Scheduled start, local time (Europe/Stockholm). |
-| `state` | character | Game state: pre-game or post-game (hyphenated; a live value was not observed). |
-| `overtime` | logical | Whether the game went to overtime. |
-| `shootout` | logical | Whether the game went to a shootout. |
-| `ssgt_uuid` | character | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
-| `home_team_status` | character | Result for the team (WIN, LOSE) or record status. |
-| `home_team_uuid` | character | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
-| `home_team_owner_instance_id` | character | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
-| `home_team_code` | character | Home team code (e.g. FHC); joins to gameday teamId and the code-keyed teams{} maps. |
-| `home_team_names_code` | character | Display abbreviation; differs from the team code for some clubs (SKE vs SAIK, ÖRE vs OHK). |
-| `home_team_names_short` | character | Short club name ('Herr' = men's team). |
-| `home_team_names_long` | character | Long club name ('Herr' = men's team). |
-| `home_team_names_full` | character | Full club name ('Herr' = men's team). |
-| `home_team_names_code_site` | character | Display abbreviation on the site; 'Herr' = men's team (e.g. 'DIF Herr'). |
-| `home_team_names_short_site` | character | Short club name as shown on the site ('Herr' = men's team). |
-| `home_team_names_full_site` | character | Full club name as shown on the site ('Herr' = men's team). |
-| `home_team_names_long_site` | character | Long club name as shown on the site ('Herr' = men's team). |
-| `home_team_score` | integer | Goals scored by the team in the game. |
-| `home_team_icon` | character | URL of the team logo image. |
-| `away_team_status` | character | Result for the team (WIN, LOSE) or record status. |
-| `away_team_uuid` | character | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
-| `away_team_owner_instance_id` | character | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
-| `away_team_code` | character | Away team code (e.g. LHC); joins to gameday teamId and the code-keyed teams{} maps. |
-| `away_team_names_code` | character | Display abbreviation; differs from the team code for some clubs (SKE vs SAIK, ÖRE vs OHK). |
-| `away_team_names_short` | character | Short club name ('Herr' = men's team). |
-| `away_team_names_long` | character | Long club name ('Herr' = men's team). |
-| `away_team_names_full` | character | Full club name ('Herr' = men's team). |
-| `away_team_names_code_site` | character | Display abbreviation on the site; 'Herr' = men's team (e.g. 'DIF Herr'). |
-| `away_team_names_short_site` | character | Short club name as shown on the site ('Herr' = men's team). |
-| `away_team_names_full_site` | character | Full club name as shown on the site ('Herr' = men's team). |
-| `away_team_names_long_site` | character | Long club name as shown on the site ('Herr' = men's team). |
-| `away_team_score` | integer | Goals scored by the team in the game. |
-| `away_team_icon` | character | URL of the team logo image. |
-| `venue_uuid` | character | Arena uuid (platform key space). |
-| `venue_name` | character | Name of the arena (venue). |
-| `series_uuid` | character | Series uuid (platform key space; SHL = qQ9-bb0bzEWUk). |
-| `series_code` | character | Series code (SHL, CHL). |
-| `series_display_name` | character | Series label shown on the site (SHL, CHL). |
-| `round_number` | integer | Schedule round (1 = first game day of the season). |
-| `round_label` | character | Round label (often empty). Empty string in every sample (placeholder). |
+| `game_uuid` | String | Platform game uuid (bdhvuc5tex); every gameday route takes it. |
+| `raw_start_date_time` | String | Start time, UTC ISO 8601. |
+| `start_date_time` | String | Scheduled start, local time (Europe/Stockholm). |
+| `state` | String | Game state: pre-game or post-game (hyphenated; a live value was not observed). |
+| `overtime` | Boolean | Whether the game went to overtime. |
+| `shootout` | Boolean | Whether the game went to a shootout. |
+| `ssgt_uuid` | String | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
+| `home_team_status` | String | Result for the team (WIN, LOSE) or record status. |
+| `home_team_uuid` | String | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
+| `home_team_owner_instance_id` | String | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
+| `home_team_code` | String | Home team code (e.g. FHC); joins to gameday teamId and the code-keyed teams{} maps. |
+| `home_team_names_code` | String | Display abbreviation; differs from the team code for some clubs (SKE vs SAIK, ÖRE vs OHK). |
+| `home_team_names_short` | String | Short club name ('Herr' = men's team). |
+| `home_team_names_long` | String | Long club name ('Herr' = men's team). |
+| `home_team_names_full` | String | Full club name ('Herr' = men's team). |
+| `home_team_names_code_site` | String | Display abbreviation on the site; 'Herr' = men's team (e.g. 'DIF Herr'). |
+| `home_team_names_short_site` | String | Short club name as shown on the site ('Herr' = men's team). |
+| `home_team_names_full_site` | String | Full club name as shown on the site ('Herr' = men's team). |
+| `home_team_names_long_site` | String | Long club name as shown on the site ('Herr' = men's team). |
+| `home_team_score` | Int64 | Goals scored by the team in the game. |
+| `home_team_icon` | String | URL of the team logo image. |
+| `away_team_status` | String | Result for the team (WIN, LOSE) or record status. |
+| `away_team_uuid` | String | Team uuid (platform key space, e.g. 087a-087aTQv9u); joins to /sports-v2/teams/{team_uuid} and schedule homeTeamInfo/awayTeamInfo.uuid. Not the team code. |
+| `away_team_owner_instance_id` | String | Club site instance id (e.g. fhc1_fhc); also names the logo at sportality.cdn.s8y.se/team-logos/{id}.svg. |
+| `away_team_code` | String | Away team code (e.g. LHC); joins to gameday teamId and the code-keyed teams{} maps. |
+| `away_team_names_code` | String | Display abbreviation; differs from the team code for some clubs (SKE vs SAIK, ÖRE vs OHK). |
+| `away_team_names_short` | String | Short club name ('Herr' = men's team). |
+| `away_team_names_long` | String | Long club name ('Herr' = men's team). |
+| `away_team_names_full` | String | Full club name ('Herr' = men's team). |
+| `away_team_names_code_site` | String | Display abbreviation on the site; 'Herr' = men's team (e.g. 'DIF Herr'). |
+| `away_team_names_short_site` | String | Short club name as shown on the site ('Herr' = men's team). |
+| `away_team_names_full_site` | String | Full club name as shown on the site ('Herr' = men's team). |
+| `away_team_names_long_site` | String | Long club name as shown on the site ('Herr' = men's team). |
+| `away_team_score` | Int64 | Goals scored by the team in the game. |
+| `away_team_icon` | String | URL of the team logo image. |
+| `venue_uuid` | String | Arena uuid (platform key space). |
+| `venue_name` | String | Name of the arena (venue). |
+| `series_uuid` | String | Series uuid (platform key space; SHL = qQ9-bb0bzEWUk). |
+| `series_code` | String | Series code (SHL, CHL). |
+| `series_display_name` | String | Series label shown on the site (SHL, CHL). |
+| `round_number` | Int64 | Schedule round (1 = first game day of the season). |
+| `round_label` | String | Round label (often empty). Empty string in every sample (placeholder). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -727,11 +727,11 @@ Series, seasons (1975/76 on) and game types with their uuids, plus the default s
 
 | col_name | type | description |
 |---|---|---|
-| `kind` | character | Directory entry kind: series, season or game_type. |
-| `code` | character | Game type code: regular, playoff, qualdown (legacy career logs: qualification). |
-| `name` | character | Game type label in Swedish: Grundserie = regular season, Slutspel = playoffs, Kvalspel nedflyttning = relegation qualification, Kvalserien = the old promotion/relegation series. |
-| `uuid` | character | Game type uuid (platform key space; regular qQ9-af37Ti40B); the gameTypeUuid param of game-schedule. |
-| `deleted` | logical | Soft-delete flag of the record (false in every sample). |
+| `kind` | String | Directory entry kind: series, season or game_type. |
+| `code` | String | Game type code: regular, playoff, qualdown (legacy career logs: qualification). |
+| `name` | String | Game type label in Swedish: Grundserie = regular season, Slutspel = playoffs, Kvalspel nedflyttning = relegation qualification, Kvalserien = the old promotion/relegation series. |
+| `uuid` | String | Game type uuid (platform key space; regular qQ9-af37Ti40B); the gameTypeUuid param of game-schedule. |
+| `deleted` | Boolean | Soft-delete flag of the record (false in every sample). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -767,11 +767,11 @@ Teams (sites) taking part in an ssgt.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Club site instance id (e.g. bif1_bif); equals instanceId. Not a team uuid or code. |
-| `instance_id` | character | Club site instance id (e.g. fhc1_fhc). |
-| `public_url` | character | Public image URL. |
-| `name` | character | Full name of the club. |
-| `icon` | character | URL of the team logo image. |
+| `id` | String | Club site instance id (e.g. bif1_bif); equals instanceId. Not a team uuid or code. |
+| `instance_id` | String | Club site instance id (e.g. fhc1_fhc). |
+| `public_url` | String | Public image URL. |
+| `name` | String | Full name of the club. |
+| `icon` | String | URL of the team logo image. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -807,7 +807,7 @@ Stats provider of an ssgt, a bare string such as statnet.
 
 | col_name | type | description |
 |---|---|---|
-| `provider` | character | Stats provider of the ssgt (statnet, impleo). |
+| `provider` | String | Stats provider of the ssgt (statnet, impleo). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

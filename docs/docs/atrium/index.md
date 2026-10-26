@@ -1,9 +1,9 @@
 ---
-title: ATRIUM
-sidebar_label: ATRIUM
-description: "sdv-py ATRIUM: endpoint references, dataset loaders and parsers for ATRIUM in the SportsDataverse Python package."
+title: Sportradar Atrium
+sidebar_label: Sportradar Atrium
+description: "sdv-py Sportradar Atrium: endpoint references, dataset loaders and parsers for Sportradar Atrium in the SportsDataverse Python package."
 ---
-# ATRIUM (`sportsdataverse.basketball.atrium`)
+# Sportradar Atrium (`sportsdataverse.basketball.atrium`)
 
 ## Data sources
 

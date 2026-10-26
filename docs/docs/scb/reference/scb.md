@@ -1,11 +1,11 @@
 ---
-title: SCB — SCB basketball API (BBL and DBBL, Germany)
+title: BBL / DBBL (SCB) — SCB basketball API (BBL and DBBL, Germany)
 sidebar_label: SCB basketball API (BBL and DBBL, Germany)
-description: "SCB — SCB basketball API (BBL and DBBL, Germany) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "BBL / DBBL (SCB) — SCB basketball API (BBL and DBBL, Germany) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
 ---
-# SCB — SCB basketball API (BBL and DBBL, Germany)
+# BBL / DBBL (SCB) — SCB basketball API (BBL and DBBL, Germany)
 
 `sportsdataverse.basketball.scb` — 23 endpoints.
 

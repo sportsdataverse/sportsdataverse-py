@@ -105,27 +105,27 @@ Jaro-Winkler with jersey and DOB tiebreaks); Fox contributes
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season year. |
-| `espn_team_id` | integer | ESPN team id (canonical key). |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `player_name` | character | Player name. |
-| `espn_athlete_id` | character | ESPN athlete id. |
-| `espn_full_name` | character | ESPN full name. |
-| `espn_jersey` | character | ESPN jersey number. |
-| `espn_position` | character | ESPN position abbreviation. |
-| `nba_player_id` | character | NBA Stats API (stats.nba.com) player id as a string, matched to the ESPN athlete within the same team by normalized exact name, then Jaro-Winkler fuzzy name match (min_confidence, default 0.92) with jersey and birth-date tiebreaks; null when the athlete had no Stats match. |
-| `nba_player_name` | character | Player name from the NBA Stats commonteamroster row matched to the ESPN athlete; null when the athlete had no Stats match. |
-| `nba_jersey_num` | character | Jersey number as a string from the NBA Stats commonteamroster row matched to the ESPN athlete; null when the athlete had no Stats match. |
-| `nba_position` | character | Position from the NBA Stats commonteamroster row matched to the ESPN athlete; null when the athlete had no Stats match. |
-| `fox_athlete_id` | character | Fox athlete id (NA if unmatched). |
-| `fox_player` | character | Fox player name (NA if unmatched). |
-| `fox_jersey` | character | Fox jersey number (NA if unmatched). |
-| `fox_position_group` | character | Fox position group label (NA if unmatched). |
-| `yahoo_player_id` | character | Yahoo player id (NA placeholder). |
-| `yahoo_player_name` | character | Yahoo player name (NA placeholder). |
-| `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
-| `match_confidence` | double | Jaro-Winkler score or 1 for exact (NA if none). |
-| `match_keys` | character | NA (reserved for future use). |
+| `season` | Int64 | Season year. |
+| `espn_team_id` | Int64 | ESPN team id (canonical key). |
+| `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
+| `player_name` | String | Player name. |
+| `espn_athlete_id` | String | ESPN athlete id. |
+| `espn_full_name` | String | ESPN full name. |
+| `espn_jersey` | String | ESPN jersey number. |
+| `espn_position` | String | ESPN position abbreviation. |
+| `nba_player_id` | String | NBA Stats API (stats.nba.com) player id as a string, matched to the ESPN athlete within the same team by normalized exact name, then Jaro-Winkler fuzzy name match (min_confidence, default 0.92) with jersey and birth-date tiebreaks; null when the athlete had no Stats match. |
+| `nba_player_name` | String | Player name from the NBA Stats commonteamroster row matched to the ESPN athlete; null when the athlete had no Stats match. |
+| `nba_jersey_num` | String | Jersey number as a string from the NBA Stats commonteamroster row matched to the ESPN athlete; null when the athlete had no Stats match. |
+| `nba_position` | String | Position from the NBA Stats commonteamroster row matched to the ESPN athlete; null when the athlete had no Stats match. |
+| `fox_athlete_id` | String | Fox athlete id (NA if unmatched). |
+| `fox_player` | String | Fox player name (NA if unmatched). |
+| `fox_jersey` | String | Fox jersey number (NA if unmatched). |
+| `fox_position_group` | String | Fox position group label (NA if unmatched). |
+| `yahoo_player_id` | String | Yahoo player id (NA placeholder). |
+| `yahoo_player_name` | String | Yahoo player name (NA placeholder). |
+| `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
+| `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |
+| `match_keys` | String | NA (reserved for future use). |
 
 **Raises**
 
@@ -219,27 +219,27 @@ historical relocations are not back-modelled.
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season year. |
-| `espn_team_id` | integer | ESPN team id (canonical key). |
-| `espn_abbreviation` | character | ESPN abbreviation. |
-| `espn_display_name` | character | ESPN display name (school + mascot). |
-| `espn_short_name` | character | ESPN short name. |
-| `espn_location` | character | ESPN school/location only. |
-| `espn_mascot` | character | ESPN mascot/nickname. |
-| `nba_team_id` | character | NBA Stats API (stats.nba.com) team id as a string, attached to the ESPN team row on espn_team_id after the Stats team nickname is matched to ESPN's short_name; null when no Stats team matched the ESPN team. |
-| `nba_team_abbreviation` | character | NBA Stats team tricode, taken from nba_stats_leaguegamelog's team_abbreviation because leaguestandingsv3 publishes none; null when no Stats team matched the ESPN team. |
-| `nba_team_name` | character | Full NBA Stats team name built as team_city plus team_name (city then nickname) from nba_stats_leaguestandingsv3; null when no Stats team matched the ESPN team. |
-| `nba_team_city` | character | Team city (team_city) from nba_stats_leaguestandingsv3; null when no Stats team matched the ESPN team. |
-| `nba_team_slug` | character | URL slug for the team (team_slug) from nba_stats_leaguestandingsv3; null when no Stats team matched the ESPN team. |
-| `nba_conference` | character | Team's conference as NBA Stats labels it (conference) from nba_stats_leaguestandingsv3; null when no Stats team matched the ESPN team. |
-| `nba_division` | character | Team's division as NBA Stats labels it (division) from nba_stats_leaguestandingsv3; null when no Stats team matched the ESPN team. |
-| `fox_team_id` | character | Fox Bifrost team id (NA if unmatched). |
-| `fox_team_name` | character | Fox team name (NA if unmatched). |
-| `yahoo_team_id` | character | Yahoo Sports team id, nba.t.<espn_team_id> (Yahoo's NBA ids equal ESPN's), from the 2014 season on; null for earlier seasons. |
-| `yahoo_team_abbreviation` | character | Yahoo abbreviation (NA placeholder). |
-| `yahoo_team_name` | character | Yahoo team name (NA placeholder). |
-| `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
-| `match_confidence` | double | Jaro-Winkler score or 1 for exact (NA if none). |
+| `season` | Int64 | Season year. |
+| `espn_team_id` | Int64 | ESPN team id (canonical key). |
+| `espn_abbreviation` | String | ESPN abbreviation. |
+| `espn_display_name` | String | ESPN display name (school + mascot). |
+| `espn_short_name` | String | ESPN short name. |
+| `espn_location` | String | ESPN school/location only. |
+| `espn_mascot` | String | ESPN mascot/nickname. |
+| `nba_team_id` | String | NBA Stats API (stats.nba.com) team id as a string, attached to the ESPN team row on espn_team_id after the Stats team nickname is matched to ESPN's short_name; null when no Stats team matched the ESPN team. |
+| `nba_team_abbreviation` | String | NBA Stats team tricode, taken from nba_stats_leaguegamelog's team_abbreviation because leaguestandingsv3 publishes none; null when no Stats team matched the ESPN team. |
+| `nba_team_name` | String | Full NBA Stats team name built as team_city plus team_name (city then nickname) from nba_stats_leaguestandingsv3; null when no Stats team matched the ESPN team. |
+| `nba_team_city` | String | Team city (team_city) from nba_stats_leaguestandingsv3; null when no Stats team matched the ESPN team. |
+| `nba_team_slug` | String | URL slug for the team (team_slug) from nba_stats_leaguestandingsv3; null when no Stats team matched the ESPN team. |
+| `nba_conference` | String | Team's conference as NBA Stats labels it (conference) from nba_stats_leaguestandingsv3; null when no Stats team matched the ESPN team. |
+| `nba_division` | String | Team's division as NBA Stats labels it (division) from nba_stats_leaguestandingsv3; null when no Stats team matched the ESPN team. |
+| `fox_team_id` | String | Fox Bifrost team id (NA if unmatched). |
+| `fox_team_name` | String | Fox team name (NA if unmatched). |
+| `yahoo_team_id` | String | Yahoo Sports team id, nba.t.<espn_team_id> (Yahoo's NBA ids equal ESPN's), from the 2014 season on; null for earlier seasons. |
+| `yahoo_team_abbreviation` | String | Yahoo abbreviation (NA placeholder). |
+| `yahoo_team_name` | String | Yahoo team name (NA placeholder). |
+| `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
+| `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |
 
 **Raises**
 

@@ -55,7 +55,7 @@ inline low-level tests reference ``v0_builders`` directly by name).
   ``event.select_one(...)``.
 
 **The ``index(is, want)`` team/opponent-column trick.** Both eras share the
-same 1-or-3 column-selection logic (``PlayByPlayParser.scala:78-79,127-128``):
+same 1-or-3 column-selection logic:
 column 1 if ``is_team == target_team_first`` else column 3. Ported as
 :func:`_column_index`, shared by both builder tables (the Scala duplicates
 this private method verbatim inside each ``object``; deduplicating it here
@@ -101,10 +101,10 @@ narrows ``result[0]``'s type, not ``result``'s.
 
 **``build_sub_error`` vs ``enrich_sub_error`` -- two different error shapes
 in the same function, ported literally.** Re-reading
-``PlayByPlayParser.scala:391-457`` closely: the score/time sub-errors are
+``PlayByPlayParser.scala`` closely: the score/time sub-errors are
 wrapped through ``ParseUtils.enrich_sub_error(`ncaa.parse_playbyplay`,
 `parent_fills_in`)`` (``parent_fills_in = ""`` per
-``ExtractorUtils.scala:20``) -- giving them ``location="ncaa.parse_playbyplay"``,
+``ExtractorUtils.scala``) -- giving them ``location="ncaa.parse_playbyplay"``,
 ``id`` unchanged (an empty ``base_id`` contributes nothing). But the
 "both team and opponent" / "neither team nor opponent" terminal errors use
 a DIFFERENT, un-enriched shape: ``ParseUtils.build_sub_error(
@@ -196,11 +196,11 @@ __all__ = [
 ]
 
 #: Error-reporter location tag (``` `ncaa.parse_playbyplay` ```,
-#: ``PlayByPlayParser.scala:34``).
+#: ``PlayByPlayParser.scala``).
 _LOCATION_PARSE_PBP = "ncaa.parse_playbyplay"
 
 #: ``ParseUtils.enrich_sub_error``'s ``base_id`` at the ``parse_game_event``
-#: call site (``` `parent_fills_in` = "" ```, ``ExtractorUtils.scala:20``).
+#: call site (``` `parent_fills_in` = "" ```).
 _PARENT_FILLS_IN = ""
 
 _SCORE_REGEX = re.compile(r"([0-9]+)[-]([0-9]+)")
@@ -208,14 +208,14 @@ _SCORE_REGEX = re.compile(r"([0-9]+)[-]([0-9]+)")
 
 # ---------------------------------------------------------------------------
 # v0/v1 builder tables (``base_builders``/``v0_builders``/``v1_builders``,
-# ``PlayByPlayParser.scala:37-149``)
+# ``PlayByPlayParser.scala``)
 # ---------------------------------------------------------------------------
 
 
 @dataclass(frozen=True)
 class PbpBuilders:
     """One version-era's HTML finder functions (``PlayByPlayParser
-    .base_builders``, ``PlayByPlayParser.scala:37-51``)."""
+    .base_builders``)."""
 
     team_finder: Callable[[BeautifulSoup], list[str]]
     event_finder: Callable[[BeautifulSoup], list[Tag]]
@@ -227,8 +227,7 @@ class PbpBuilders:
 
 
 def _column_index(is_team: bool, want_team_first: bool) -> int:
-    """Shared team/opponent column-selection trick (``index(is, want)``,
-    ``PlayByPlayParser.scala:78-79,127-128`` -- byte-identical in both
+    """Shared team/opponent column-selection trick (``index(is, want)`` -- byte-identical in both
     ``v0_builders`` and ``v1_builders``, deduplicated here).
 
     Args:
@@ -244,8 +243,7 @@ def _column_index(is_team: bool, want_team_first: bool) -> int:
 
 
 def _v0_team_finder(doc: BeautifulSoup) -> list[str]:
-    """``div#contentarea table.mytable[width~=[45]0%] td a[href]``
-    (``:55-59``)."""
+    """``div#contentarea table.mytable[width~=[45]0%] td a[href]``."""
     tables = attr_regex_filter(doc.select("div#contentarea table.mytable"), "width", r"[45]0%")
     els: list[Tag] = []
     for table in tables:
@@ -254,7 +252,7 @@ def _v0_team_finder(doc: BeautifulSoup) -> list[str]:
 
 
 def _v0_event_finder(doc: BeautifulSoup) -> list[Tag]:
-    """``table.mytable tr:has(td.smtext)`` (``:62-65``)."""
+    """``table.mytable tr:has(td.smtext)``."""
     return doc.select("table.mytable tr:has(td.smtext)")
 
 
@@ -272,37 +270,37 @@ def _smtext_at(event: Tag, n: int) -> Optional[Tag]:
 
 
 def _v0_event_time_finder(event: Tag) -> Optional[str]:
-    """``td.smtext:eq(0)`` (``:67-68``)."""
+    """``td.smtext:eq(0)``."""
     text = jsoup_text(_smtext_at(event, 0))
     return text if text else None
 
 
 def _v0_event_score_finder(event: Tag) -> Optional[str]:
-    """``td.smtext:eq(2)`` (``:70-71``)."""
+    """``td.smtext:eq(2)``."""
     text = jsoup_text(_smtext_at(event, 2))
     return text if text else None
 
 
 def _v0_game_event_finder(event: Tag) -> Optional[str]:
-    """``td.boldtext:not(.smtext)`` (``:73-76``) -- ``:not()`` is plain CSS."""
+    """``td.boldtext:not(.smtext)`` -- ``:not()`` is plain CSS."""
     text = jsoup_text(event.select_one("td.boldtext:not(.smtext)"))
     return text if text else None
 
 
 def _v0_event_team_finder(event: Tag, target_team_first: bool) -> Optional[str]:
-    """``td.smtext:eq(index(true, target_team_first))`` (``:81-89``)."""
+    """``td.smtext:eq(index(true, target_team_first))``."""
     text = jsoup_text(_smtext_at(event, _column_index(True, target_team_first)))
     return text if text else None
 
 
 def _v0_event_opponent_finder(event: Tag, target_team_first: bool) -> Optional[str]:
-    """``td.smtext:eq(index(false, target_team_first))`` (``:91-99``)."""
+    """``td.smtext:eq(index(false, target_team_first))``."""
     text = jsoup_text(_smtext_at(event, _column_index(False, target_team_first)))
     return text if text else None
 
 
 #: The legacy (pre-2018-ish) NCAA play-by-play page layout
-#: (``PlayByPlayParser.v0_builders``, ``:52-100``).
+#: (``PlayByPlayParser.v0_builders``).
 v0_builders = PbpBuilders(
     team_finder=_v0_team_finder,
     event_finder=_v0_event_finder,
@@ -315,7 +313,7 @@ v0_builders = PbpBuilders(
 
 
 def _v1_team_finder(doc: BeautifulSoup) -> list[str]:
-    """``table[align=center] > tbody a > img[alt]`` (``:103-106``) -- reads
+    """``table[align=center] > tbody a > img[alt]`` -- reads
     the ``alt`` attribute, not
     :func:`~sportsdataverse.mbb.mbb_ncaa_html.jsoup_text`.
 
@@ -328,37 +326,36 @@ def _v1_team_finder(doc: BeautifulSoup) -> list[str]:
 
 
 def _v1_event_finder(doc: BeautifulSoup) -> list[Tag]:
-    """``div.card-body > table.table > tbody tr:matches([0-9]+:[0-9]+(:[0-9]+)?)``
-    (``:108-114``)."""
+    """``div.card-body > table.table > tbody tr:matches([0-9]+:[0-9]+(:[0-9]+)?)``."""
     return select_matching(doc, "div.card-body > table.table > tbody tr", r"[0-9]+:[0-9]+(:[0-9]+)?")
 
 
 def _v1_event_time_finder(event: Tag) -> Optional[str]:
-    """``td:eq(0)`` (``:116-117``)."""
+    """``td:eq(0)``."""
     text = jsoup_text(td_at(event, 0))
     return text if text else None
 
 
 def _v1_event_score_finder(event: Tag) -> Optional[str]:
-    """``td:eq(2)`` (``:119-120``)."""
+    """``td:eq(2)``."""
     text = jsoup_text(td_at(event, 2))
     return text if text else None
 
 
 def _v1_game_event_finder(event: Tag) -> Optional[str]:
-    """``td.boldtext`` (``:122-125``)."""
+    """``td.boldtext``."""
     text = jsoup_text(event.select_one("td.boldtext"))
     return text if text else None
 
 
 def _v1_event_team_finder(event: Tag, target_team_first: bool) -> Optional[str]:
-    """``td:eq(index(true, target_team_first))`` (``:130-138``)."""
+    """``td:eq(index(true, target_team_first))``."""
     text = jsoup_text(td_at(event, _column_index(True, target_team_first)))
     return text if text else None
 
 
 def _v1_event_opponent_finder(event: Tag, target_team_first: bool) -> Optional[str]:
-    """``td:eq(index(false, target_team_first))`` (``:140-148``)."""
+    """``td:eq(index(false, target_team_first))``."""
     text = jsoup_text(td_at(event, _column_index(False, target_team_first)))
     return text if text else None
 
@@ -375,18 +372,18 @@ v1_builders = PbpBuilders(
     event_opponent_finder=_v1_event_opponent_finder,
 )
 
-#: Indexed by ``format_version`` (``PlayByPlayParser.builders_from_version``, ``:150``).
+#: Indexed by ``format_version`` (``PlayByPlayParser.builders_from_version``).
 _BUILDERS_FROM_VERSION = (v0_builders, v1_builders)
 
 
 # ---------------------------------------------------------------------------
-# Row-level parsing (``PlayByPlayParser.scala:372-510``)
+# Row-level parsing
 # ---------------------------------------------------------------------------
 
 
 def parse_game_score(el: Tag, builders: PbpBuilders) -> Union[tuple[str, Score], ParseError]:
     """Parses the ``NN-MM`` score string off one play-by-play row
-    (``PlayByPlayParser.parse_game_score``, ``:462-484``).
+    (``PlayByPlayParser.parse_game_score``).
 
     Args:
         el: The play-by-play row element.
@@ -422,7 +419,7 @@ def parse_game_score(el: Tag, builders: PbpBuilders) -> Union[tuple[str, Score],
 
 def parse_desc_game_time(el: Tag, builders: PbpBuilders) -> Union[tuple[str, float], ParseError]:
     """Parses a DESCENDING ``NN:MM`` (or ``NN:MM:SS``) time string off one
-    play-by-play row (``PlayByPlayParser.parse_desc_game_time``, ``:489-510``).
+    play-by-play row (``PlayByPlayParser.parse_desc_game_time``).
     The value still descends here; :func:`enrich_and_reverse_game_events`
     is the separate stateful pass that turns it ascending.
 
@@ -462,8 +459,7 @@ def parse_game_event(
     el: Tag, target_team_first: bool, builders: PbpBuilders
 ) -> Union[list[PlayByPlayEvent], list[ParseError]]:
     """Turns one play-by-play row into 0 or 1 :data:`~sportsdataverse.mbb
-    .mbb_ncaa_stints.PlayByPlayEvent`\\ s (``PlayByPlayParser.parse_game_event``,
-    ``:375-459``).
+    .mbb_ncaa_stints.PlayByPlayEvent`\\ s (``PlayByPlayParser.parse_game_event``).
 
     A row identified by ``game_event_finder`` (a non-score/time narrative
     row, e.g. a timeout banner) is deliberately ignored -- see the module
@@ -555,14 +551,14 @@ def parse_game_event(
 
 
 # ---------------------------------------------------------------------------
-# enrich_and_reverse_game_events (``PlayByPlayParser.scala:297-370``)
+# enrich_and_reverse_game_events
 # ---------------------------------------------------------------------------
 
 
 def enrich_and_reverse_game_events(in_events: list[PlayByPlayEvent]) -> list[PlayByPlayEvent]:
     """Inserts game-break events and turns descending per-row times into
     ascending game-clock minutes, returning the whole list latest-to-earliest
-    (``PlayByPlayParser.enrich_and_reverse_game_events``, ``:297-370``).
+    (``PlayByPlayParser.enrich_and_reverse_game_events``).
 
     Args:
         in_events: The raw parsed events, earliest to latest, with each
@@ -652,7 +648,7 @@ def enrich_and_reverse_game_events(in_events: list[PlayByPlayEvent]) -> list[Pla
 
 
 # ---------------------------------------------------------------------------
-# parse_game_events / get_sorted_pbp_events (``PlayByPlayParser.scala:219-289``)
+# parse_game_events / get_sorted_pbp_events
 # ---------------------------------------------------------------------------
 
 
@@ -667,8 +663,7 @@ def parse_game_events(
     away_team: Optional[str] = None,
 ) -> Union[list[PlayByPlayEvent], list[ParseError]]:
     """Creates a list of raw play-by-play events from the HTML, fixes the
-    dates, and injects game breaks (``PlayByPlayParser.parse_game_events``,
-    ``:244-289``). The returned list is reversed (latest to earliest) when
+    dates, and injects game breaks (``PlayByPlayParser.parse_game_events``). The returned list is reversed (latest to earliest) when
     ``enrich`` is ``True``.
 
     Args:
@@ -742,8 +737,7 @@ def get_sorted_pbp_events(
     format_version: int,
 ) -> Union[list[PlayByPlayEvent], list[ParseError]]:
     """Handy util to return the play-by-play events in chronological order,
-    used in a few other places (``PlayByPlayParser.get_sorted_pbp_events``,
-    ``:221-239``).
+    used in a few other places (``PlayByPlayParser.get_sorted_pbp_events``).
 
     Args:
         filename: The source file name, used only for error reporting.
@@ -793,7 +787,7 @@ def get_sorted_pbp_events(
 
 # ---------------------------------------------------------------------------
 # create_lineup_data -- the full pipeline orchestration
-# (``PlayByPlayParser.scala:153-217``)
+#
 # ---------------------------------------------------------------------------
 
 
@@ -804,8 +798,8 @@ def create_lineup_data(
     format_version: int,
 ) -> Union[tuple[list[LineupEvent], list[LineupEvent]], list[ParseError]]:
     """Combines the different methods to build a set of lineup events
-    (``PlayByPlayParser.create_lineup_data``, ``:153-217``) -- the
-    orchestrator that chains the ENTIRE Phase 5a-5d surface:
+    (``PlayByPlayParser.create_lineup_data``) -- the
+    orchestrator that chains the whole ported parsing surface:
 
     1. :func:`parse_game_events` -- HTML -> reversed
        :data:`~sportsdataverse.mbb.mbb_ncaa_stints.PlayByPlayEvent`\\ s.

@@ -52,7 +52,7 @@ REST_WIRE = (
     "X-Requested-With, Origin and Referer headers."
 )
 SANCTIONS = (
-    "Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian "
+    "Owner flag: the KHL and its webcaster platform are run by Russian "
     "operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any "
     "published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first."
 )

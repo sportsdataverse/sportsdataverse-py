@@ -35,24 +35,24 @@ If `raw=True`, the raw JSON dict with keys "nba", "gl", "wnba". Otherwise, a dic
 
 | col_name | type | description |
 |---|---|---|
-| `officials.league` | character | League the assignment belongs to: nba, gl (G League), or wnba. |
-| `officials.game_id` | character | 10-digit game id (zero-padded) for the assigned game. |
-| `officials.game_date` | date | Game date parsed from the feed's MM/DD/YYYY format. |
-| `officials.season` | integer | Season end year, converted from the feed's <season-type digit><start year> code: start year + 1 for NBA/G League's two-calendar-year seasons, start year unchanged for WNBA's single-year seasons. |
-| `officials.season_type` | character | Season type decoded from the feed's season code first digit: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
-| `officials.game_code` | character | League game code in YYYYMMDD/AWYHOM format, matching the away and home team abbreviations. |
-| `officials.home_team_id` | integer | 10-digit team id of the home team. |
-| `officials.home_team_abbr` | character | Three-letter abbreviation of the home team. |
-| `officials.away_team_id` | integer | 10-digit team id of the away team. |
-| `officials.away_team_abbr` | character | Three-letter abbreviation of the away team. |
-| `officials.crew_position` | integer | Feed's official slot order (1-4); slot 1 is inferred to be the crew chief since the API does not label roles. |
-| `officials.official_id` | integer | Numeric official id from the feed (source field official{n}_code); expected to match stats.nba.com's OFFICIAL_ID. |
-| `officials.official_name` | character | Official's display name for this crew slot. |
-| `officials.jersey_num` | character | Official's jersey number as a string, from the feed's official{n}_JNum field. |
-| `replay_center.league` | character | League the replay-center staffing belongs to: nba, gl, or wnba. |
-| `replay_center.game_date` | date | Date the replay-center official worked; a date-level staffing record, not tied to one game. |
-| `replay_center.official_id` | integer | Numeric replay-center official id from the feed. |
-| `replay_center.official_name` | character | Replay-center official's display name for that date. |
+| `officials.league` | String | League the assignment belongs to: nba, gl (G League), or wnba. |
+| `officials.game_id` | String | 10-digit game id (zero-padded) for the assigned game. |
+| `officials.game_date` | Date | Game date parsed from the feed's MM/DD/YYYY format. |
+| `officials.season` | Int64 | Season end year, converted from the feed's <season-type digit><start year> code: start year + 1 for NBA/G League's two-calendar-year seasons, start year unchanged for WNBA's single-year seasons. |
+| `officials.season_type` | String | Season type decoded from the feed's season code first digit: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
+| `officials.game_code` | String | League game code in YYYYMMDD/AWYHOM format, matching the away and home team abbreviations. |
+| `officials.home_team_id` | Int64 | 10-digit team id of the home team. |
+| `officials.home_team_abbr` | String | Three-letter abbreviation of the home team. |
+| `officials.away_team_id` | Int64 | 10-digit team id of the away team. |
+| `officials.away_team_abbr` | String | Three-letter abbreviation of the away team. |
+| `officials.crew_position` | Int64 | Feed's official slot order (1-4); slot 1 is inferred to be the crew chief since the API does not label roles. |
+| `officials.official_id` | Int64 | Numeric official id from the feed (source field official{n}_code); expected to match stats.nba.com's OFFICIAL_ID. |
+| `officials.official_name` | String | Official's display name for this crew slot. |
+| `officials.jersey_num` | String | Official's jersey number as a string, from the feed's official{n}_JNum field. |
+| `replay_center.league` | String | League the replay-center staffing belongs to: nba, gl, or wnba. |
+| `replay_center.game_date` | Date | Date the replay-center official worked; a date-level staffing record, not tied to one game. |
+| `replay_center.official_id` | Int64 | Numeric replay-center official id from the feed. |
+| `replay_center.official_name` | String | Replay-center official's display name for that date. |
 
 **Raises**
 
@@ -461,15 +461,15 @@ One row per pick with `round` (1 or 2), `pick`, `team`, `player`, `height`, `wei
 
 | col_name | type | description |
 |---|---|---|
-| `round` | integer | Tournament / playoff round. |
-| `pick` | integer | Pick number within the round. |
-| `team` | character | Team-side label or team identifier. |
-| `player` | character | Player name. |
-| `height` | character | Player height (string e.g. '6-2' or inches). |
-| `weight` | integer | Player weight in pounds. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `school` | character | Player school / pre-draft team. |
-| `class` | character | College class / draft eligibility note. |
+| `round` | Int64 | Tournament / playoff round. |
+| `pick` | Int64 | Pick number within the round. |
+| `team` | String | Team-side label or team identifier. |
+| `player` | String | Player name. |
+| `height` | String | Player height (string e.g. '6-2' or inches). |
+| `weight` | Int64 | Player weight in pounds. |
+| `position` | String | Listed roster position (G, F, C, etc.). |
+| `school` | String | Player school / pre-draft team. |
+| `class` | String | College class / draft eligibility note. |
 
 **Raises**
 
@@ -533,26 +533,26 @@ One row per (player, team) with `PLAYER_PLAY_CONTEXT_SCHEMA`. Empty input return
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `offense_team_id` | integer | Unique identifier for offense team. |
-| `on_poss` | integer |  |
-| `off_poss` | integer |  |
-| `on_points` | integer |  |
-| `off_points` | integer |  |
-| `on_pts_per_100` | double |  |
-| `off_pts_per_100` | double |  |
-| `diff_pts_per_100` | double |  |
-| `on_transition_freq` | double |  |
-| `off_transition_freq` | double |  |
-| `diff_transition_freq` | double |  |
-| `on_transition_pts_per_100` | double |  |
-| `off_transition_pts_per_100` | double |  |
-| `diff_transition_pts_per_100` | double |  |
-| `on_halfcourt_pts_per_100` | double |  |
-| `off_halfcourt_pts_per_100` | double |  |
-| `diff_halfcourt_pts_per_100` | double |  |
-| `on_transition_pts_added_per_100` | double |  |
-| `off_transition_pts_added_per_100` | double |  |
+| `player_id` | Int64 | Unique player identifier. |
+| `offense_team_id` | Int64 | Unique identifier for offense team. |
+| `on_poss` | Int64 |  |
+| `off_poss` | Int64 |  |
+| `on_points` | Int64 |  |
+| `off_points` | Int64 |  |
+| `on_pts_per_100` | Float64 |  |
+| `off_pts_per_100` | Float64 |  |
+| `diff_pts_per_100` | Float64 |  |
+| `on_transition_freq` | Float64 |  |
+| `off_transition_freq` | Float64 |  |
+| `diff_transition_freq` | Float64 |  |
+| `on_transition_pts_per_100` | Float64 |  |
+| `off_transition_pts_per_100` | Float64 |  |
+| `diff_transition_pts_per_100` | Float64 |  |
+| `on_halfcourt_pts_per_100` | Float64 |  |
+| `off_halfcourt_pts_per_100` | Float64 |  |
+| `diff_halfcourt_pts_per_100` | Float64 |  |
+| `on_transition_pts_added_per_100` | Float64 |  |
+| `off_transition_pts_added_per_100` | Float64 |  |
 
 **Raises**
 
@@ -593,14 +593,14 @@ One row per player: `player_id, team_id, games, minutes_pg, pts_per_min, reb_per
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `team_id` | character | Unique team identifier. |
-| `games` | integer | Games played. |
-| `minutes_pg` | double |  |
-| `pts_per_min` | double |  |
-| `reb_per_min` | double |  |
-| `ast_per_min` | double |  |
-| `fg3m_per_min` | double |  |
+| `player_id` | String | Unique player identifier. |
+| `team_id` | String | Unique team identifier. |
+| `games` | Int64 | Games played. |
+| `minutes_pg` | Float64 |  |
+| `pts_per_min` | Float64 |  |
+| `reb_per_min` | Float64 |  |
+| `ast_per_min` | Float64 |  |
+| `fg3m_per_min` | Float64 |  |
 
 **Example**
 
@@ -635,19 +635,19 @@ Pure function (no network). A gamerotation-free alternative to
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `action_number` | integer | Sequential action number within a game (V3 PBP). |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `home_player_1` | integer |  |
-| `home_player_2` | integer |  |
-| `home_player_3` | integer |  |
-| `home_player_4` | integer |  |
-| `home_player_5` | integer |  |
-| `away_player_1` | integer |  |
-| `away_player_2` | integer |  |
-| `away_player_3` | integer |  |
-| `away_player_4` | integer |  |
-| `away_player_5` | integer |  |
+| `game_id` | String | Unique game identifier. |
+| `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `home_player_1` | Int64 |  |
+| `home_player_2` | Int64 |  |
+| `home_player_3` | Int64 |  |
+| `home_player_4` | Int64 |  |
+| `home_player_5` | Int64 |  |
+| `away_player_1` | Int64 |  |
+| `away_player_2` | Int64 |  |
+| `away_player_3` | Int64 |  |
+| `away_player_4` | Int64 |  |
+| `away_player_5` | Int64 |  |
 
 **Example**
 
@@ -723,19 +723,19 @@ late, stat-less bench appearance (see
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `action_number` | integer | Sequential action number within a game (V3 PBP). |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `home_player_1` | integer |  |
-| `home_player_2` | integer |  |
-| `home_player_3` | integer |  |
-| `home_player_4` | integer |  |
-| `home_player_5` | integer |  |
-| `away_player_1` | integer |  |
-| `away_player_2` | integer |  |
-| `away_player_3` | integer |  |
-| `away_player_4` | integer |  |
-| `away_player_5` | integer |  |
+| `game_id` | String | Unique game identifier. |
+| `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `home_player_1` | Int64 |  |
+| `home_player_2` | Int64 |  |
+| `home_player_3` | Int64 |  |
+| `home_player_4` | Int64 |  |
+| `home_player_5` | Int64 |  |
+| `away_player_1` | Int64 |  |
+| `away_player_2` | Int64 |  |
+| `away_player_3` | Int64 |  |
+| `away_player_4` | Int64 |  |
+| `away_player_5` | Int64 |  |
 
 **Example**
 
@@ -785,19 +785,19 @@ The rotation dict may use either `"HomeTeam"`/`"AwayTeam"` or
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `action_number` | integer | Sequential action number within a game (V3 PBP). |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `home_player_1` | integer |  |
-| `home_player_2` | integer |  |
-| `home_player_3` | integer |  |
-| `home_player_4` | integer |  |
-| `home_player_5` | integer |  |
-| `away_player_1` | integer |  |
-| `away_player_2` | integer |  |
-| `away_player_3` | integer |  |
-| `away_player_4` | integer |  |
-| `away_player_5` | integer |  |
+| `game_id` | String | Unique game identifier. |
+| `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `home_player_1` | Int64 |  |
+| `home_player_2` | Int64 |  |
+| `home_player_3` | Int64 |  |
+| `home_player_4` | Int64 |  |
+| `home_player_5` | Int64 |  |
+| `away_player_1` | Int64 |  |
+| `away_player_2` | Int64 |  |
+| `away_player_3` | Int64 |  |
+| `away_player_4` | Int64 |  |
+| `away_player_5` | Int64 |  |
 
 **Example**
 
@@ -977,16 +977,16 @@ One row per injured player with `player_id`, `player`, `first_name`, `last_name`
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `player` | character | Player name. |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
-| `team` | character | Team-side label or team identifier. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `injury` | character | Injury (body part / description). |
-| `status` | character | Status label. |
-| `return_date` | character | Projected return (`NA` unless a subscriber). |
-| `url` | character | RotoWire player page URL. |
+| `player_id` | String | Unique player identifier. |
+| `player` | String | Player name. |
+| `first_name` | String | Player's first name. |
+| `last_name` | String | Player's last name. |
+| `team` | String | Team-side label or team identifier. |
+| `position` | String | Listed roster position (G, F, C, etc.). |
+| `injury` | String | Injury (body part / description). |
+| `status` | String | Status label. |
+| `return_date` | String | Projected return (`NA` unless a subscriber). |
+| `url` | String | RotoWire player page URL. |
 
 **Raises**
 
@@ -1187,14 +1187,14 @@ One row per team. Columns follow Spotrac's table -- `rank`, `team`, `record`, `p
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Rank. |
-| `team` | character | Team-side label or team identifier. |
-| `record` | character | Overall win-loss record. |
-| `players_active` | integer | Number of active players. |
-| `avg_age_team` | double | Average roster age. |
-| `total_cap_allocations` | double | Total cap allocations (USD). |
-| `cap_space_all` | double | Cap space / over-the-cap amount (USD). |
-| `season` | integer | Season year. |
+| `rank` | Int64 | Rank. |
+| `team` | String | Team-side label or team identifier. |
+| `record` | String | Overall win-loss record. |
+| `players_active` | Int64 | Number of active players. |
+| `avg_age_team` | Float64 | Average roster age. |
+| `total_cap_allocations` | Float64 | Total cap allocations (USD). |
+| `cap_space_all` | Float64 | Cap space / over-the-cap amount (USD). |
+| `season` | Int64 | Season year. |
 
 **Raises**
 
@@ -1313,20 +1313,20 @@ One row per `offense_team_id`. Empty input returns a zero-row frame.
 
 | col_name | type | description |
 |---|---|---|
-| `offense_team_id` | integer | Unique identifier for offense team. |
-| `poss` | integer | Poss. |
-| `points` | integer | Points scored. |
-| `transition_poss` | integer |  |
-| `transition_points` | integer |  |
-| `halfcourt_poss` | integer |  |
-| `pts_per_100` | double |  |
-| `transition_freq` | double |  |
-| `transition_pts_per_100` | double |  |
-| `non_transition_pts_per_100` | double |  |
-| `freq_off_steal` | double |  |
-| `freq_off_live_rebound` | double |  |
-| `transition_pts_added_per_100` | double |  |
-| `halfcourt_pts_per_100` | double |  |
+| `offense_team_id` | Int64 | Unique identifier for offense team. |
+| `poss` | Int64 | Poss. |
+| `points` | Int64 | Points scored. |
+| `transition_poss` | Int64 |  |
+| `transition_points` | Int64 |  |
+| `halfcourt_poss` | Int64 |  |
+| `pts_per_100` | Float64 |  |
+| `transition_freq` | Float64 |  |
+| `transition_pts_per_100` | Float64 |  |
+| `non_transition_pts_per_100` | Float64 |  |
+| `freq_off_steal` | Float64 |  |
+| `freq_off_live_rebound` | Float64 |  |
+| `transition_pts_added_per_100` | Float64 |  |
+| `halfcourt_pts_per_100` | Float64 |  |
 
 **Example**
 
@@ -1357,11 +1357,11 @@ One row per `(shot_zone_basic, shot_zone_area, shot_zone_range)`: `... base_fg_p
 
 | col_name | type | description |
 |---|---|---|
-| `shot_zone_basic` | character | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
-| `shot_zone_area` | character | Shot zone area ('Left Side', 'Right Side', 'Center'). |
-| `shot_zone_range` | character | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
-| `base_fg_pct` | double |  |
-| `is_three` | logical |  |
+| `shot_zone_basic` | String | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
+| `shot_zone_area` | String | Shot zone area ('Left Side', 'Right Side', 'Center'). |
+| `shot_zone_range` | String | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
+| `base_fg_pct` | Float64 |  |
+| `is_three` | Boolean |  |
 
 **Example**
 

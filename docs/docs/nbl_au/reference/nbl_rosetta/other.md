@@ -26,17 +26,17 @@ Every season of an organisation: regular, preseason, in-season cups and test sea
 
 | col_name | type | description |
 |---|---|---|
-| `org` | character | Organisation the row belongs to: nbl, wnbl or nbl1. From the row's competition, else from the request. |
-| `season_id` | character | DataCore season id (UUID v1); accepted as {season_id}. |
-| `rosetta_season_id` | character | Rosetta season id (UUID v4; v5 on NBL1); the {season_id} route key. |
-| `name` | character | Season name as Rosetta spells it (NBL26, WNBL 2024/25, 2025 South Men); names drift, key on season_year. |
-| `season_year` | integer | Rosetta's year of the season: the START year for the NBL and WNBL from 1998-99 (2025 = 2025-26), the calendar year for NBL1 and the 1979-1997 winter seasons. See season_end_year for the sdv key. |
-| `season_type` | character | Season type: regular (includes finals), preseason, in_season (cups, blitz, exhibition), test. |
-| `start_date` | character | First day of the season, ISO date-time without offset. |
-| `end_date` | character | Last day of the season, ISO date-time without offset; null on older seasons. |
-| `competition_league_name` | character | Name of the league the season's competition belongs to (NBL, WNBL or NBL1). |
-| `competition_division` | character | NBL1 divisions (conference x gender); empty for NBL and WNBL. |
-| `season_end_year` | integer | sdv season key: the END year of the season (2026 = 2025-26), derived from season_year (a START year for the NBL and WNBL from 1998-99, a calendar year for NBL1 and the 1979-1997 winter seasons; year 1998 is split on the start date). Where the body carries no year it is the season asked for. |
+| `org` | String | Organisation the row belongs to: nbl, wnbl or nbl1. From the row's competition, else from the request. |
+| `season_id` | String | DataCore season id (UUID v1); accepted as {season_id}. |
+| `rosetta_season_id` | String | Rosetta season id (UUID v4; v5 on NBL1); the {season_id} route key. |
+| `name` | String | Season name as Rosetta spells it (NBL26, WNBL 2024/25, 2025 South Men); names drift, key on season_year. |
+| `season_year` | Int64 | Rosetta's year of the season: the START year for the NBL and WNBL from 1998-99 (2025 = 2025-26), the calendar year for NBL1 and the 1979-1997 winter seasons. See season_end_year for the sdv key. |
+| `season_type` | String | Season type: regular (includes finals), preseason, in_season (cups, blitz, exhibition), test. |
+| `start_date` | String | First day of the season, ISO date-time without offset. |
+| `end_date` | String | Last day of the season, ISO date-time without offset; null on older seasons. |
+| `competition_league_name` | String | Name of the league the season's competition belongs to (NBL, WNBL or NBL1). |
+| `competition_division` | String | NBL1 divisions (conference x gender); empty for NBL and WNBL. |
+| `season_end_year` | Int64 | sdv season key: the END year of the season (2026 = 2025-26), derived from season_year (a START year for the NBL and WNBL from 1998-99, a calendar year for NBL1 and the 1979-1997 winter seasons; year 1998 is split on the start date). Where the body carries no year it is the season asked for. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -72,18 +72,18 @@ The season in progress (empty between seasons: NoDataError).
 
 | col_name | type | description |
 |---|---|---|
-| `org` | character | Organisation the row belongs to: nbl, wnbl or nbl1. From the row's competition, else from the request. |
-| `season_id` | character | DataCore season id (UUID v1); accepted as {season_id}. |
-| `rosetta_season_id` | character | Rosetta season id (UUID v4; v5 on NBL1); the {season_id} route key. |
-| `name` | character | Season name as Rosetta spells it (NBL26, WNBL 2024/25); names drift, key on season_year. |
-| `season_year` | integer | Rosetta's year of the season: the START year for the NBL and WNBL from 1998-99 (2025 = 2025-26), the calendar year for NBL1 and the 1979-1997 winter seasons. See season_end_year for the sdv key. |
-| `season_type` | character | Season type: regular (includes finals), preseason, in_season (cups, blitz, exhibition), test. |
-| `start_date` | character | First day of the season, ISO date-time without offset. |
-| `end_date` | character | Last day of the season, ISO date-time without offset; null on older seasons. |
-| `competition_name` | character | Name of the competition the season belongs to (e.g. NBL). |
-| `competition_age_group` | character | Unobserved in samples (null in every capture); type and meaning unverified. |
-| `next_match_start_datetime` | character | Tip-off of the season's next match, UTC; null when none. |
-| `season_end_year` | integer | sdv season key: the END year of the season (2026 = 2025-26), derived from season_year (a START year for the NBL and WNBL from 1998-99, a calendar year for NBL1 and the 1979-1997 winter seasons; year 1998 is split on the start date). Where the body carries no year it is the season asked for. |
+| `org` | String | Organisation the row belongs to: nbl, wnbl or nbl1. From the row's competition, else from the request. |
+| `season_id` | String | DataCore season id (UUID v1); accepted as {season_id}. |
+| `rosetta_season_id` | String | Rosetta season id (UUID v4; v5 on NBL1); the {season_id} route key. |
+| `name` | String | Season name as Rosetta spells it (NBL26, WNBL 2024/25); names drift, key on season_year. |
+| `season_year` | Int64 | Rosetta's year of the season: the START year for the NBL and WNBL from 1998-99 (2025 = 2025-26), the calendar year for NBL1 and the 1979-1997 winter seasons. See season_end_year for the sdv key. |
+| `season_type` | String | Season type: regular (includes finals), preseason, in_season (cups, blitz, exhibition), test. |
+| `start_date` | String | First day of the season, ISO date-time without offset. |
+| `end_date` | String | Last day of the season, ISO date-time without offset; null on older seasons. |
+| `competition_name` | String | Name of the competition the season belongs to (e.g. NBL). |
+| `competition_age_group` | String | Unobserved in samples (null in every capture); type and meaning unverified. |
+| `next_match_start_datetime` | String | Tip-off of the season's next match, UTC; null when none. |
+| `season_end_year` | Int64 | sdv season key: the END year of the season (2026 = 2025-26), derived from season_year (a START year for the NBL and WNBL from 1998-99, a calendar year for NBL1 and the 1979-1997 winter seasons; year 1998 is split on the start date). Where the body carries no year it is the season asked for. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -123,65 +123,65 @@ Matches of a season: ids, teams, venue, status, scores and start time (UTC).
 
 | col_name | type | description |
 |---|---|---|
-| `org` | character | Organisation the row belongs to: nbl, wnbl or nbl1. From the row's competition, else from the request. |
-| `match_id` | character | DataCore fixture id (UUID v1); equal to `id`. |
-| `external_media_id` | character | Media id. Through NBL25 (2024-25): the Genius Sports match id (7 digits, e.g. 2636769; 6 or fewer in older seasons). From NBL26: mostly an 8-digit number of unverified origin (e.g. 61386925), date-like codes on some games (05042026 = DDMMYYYY on the 2026 Championship game, 1409252 = DDMMYY + n on the Blitz), null on many preseason games. NBL1 and WNBL 2025 carry 8-digit numbers. |
-| `date_updated` | character | Record last-edit time, ISO 8601 UTC. |
-| `start_time` | character | Tip-off, UTC, with no offset or a Z suffix (ESPN dates the same Perth v SE Melbourne game 2025-12-18T10:30Z; Rosetta says 2025-12-18T10:30:00) |
-| `start_time_datetime` | character | Tip-off, UTC; same value as start_time. |
-| `round` | character | Round label: a number as a string in the regular season ("13"), words in the finals ("SEMI FINAL SERIES 1", "CHAMPIONSHIP") |
-| `match_type` | character | Match type: regular, final (FINAL upper case seen) |
-| `match_status` | character | Status of the match in Rosetta's words (complete for a finished game): box score and play-by-play of any other status are partial. |
-| `status` | character | Provider fixture status: CONFIRMED, SCHEDULED. |
-| `home_score` | integer | Home final score, a STRING; null before tip-off. |
-| `away_score` | integer | Away final score, a STRING; null before tip-off. |
-| `attendance` | integer | Attendance, a STRING; null when not recorded. |
-| `match_slug` | character | URL slug of the match page on nbl.com.au. |
-| `match_title` | character | Match title ("<home> v <away> <men\|women> DD-MM-YYYY") |
-| `venue_id` | character | DataCore id (UUID v1, Sportradar) of the venue; stable across seasons and the id to join on across routes. |
-| `rosetta_venue_id` | character | Rosetta's own id (UUID v4; v5 on NBL1) of the venue; routes that take this entity accept it as well as the DataCore id. |
-| `venue_name` | character | Name of the venue (arena), e.g. RAC Arena. |
-| `venue_address` | character | Unobserved in samples (null in every capture); type and meaning unverified. |
-| `venue_suburb` | character | Unobserved in samples (null in every capture); type and meaning unverified. |
-| `venue_state` | character | Unobserved in samples (null in every capture); type and meaning unverified. |
-| `venue_country` | character | Country; often null. |
-| `venue_capacity` | integer | Unobserved in samples (null in every capture); type and meaning unverified. |
-| `venue_timezone` | character | IANA time zone of the venue, e.g. Australia/Sydney. |
-| `venue_code` | character | Venue code; often null. |
-| `venue_latitude` | numeric | Unobserved in samples (null in every capture); type and meaning unverified. |
-| `venue_longitude` | numeric | Unobserved in samples (null in every capture); type and meaning unverified. |
-| `home_team_id` | character | DataCore id (UUID v1, Sportradar) of the home team; stable across seasons and the id to join on across routes. |
-| `rosetta_home_team_id` | character | Rosetta's own id (UUID v4; v5 on NBL1) of the home team; routes that take this entity accept it as well as the DataCore id. |
-| `home_team_name` | character | Display name of the team. |
-| `home_team_external_team_name` | character | Team name as DataCore spells it. |
-| `home_team_code` | character | Team code of the home team, e.g. PER or SYD. |
-| `home_team_division_abbreviation` | character | Division code, e.g. EM (East Men) |
-| `home_team_division_name` | character | Division name (NBL1 conference + gender) |
-| `home_team_conference_name` | character | Name of the NBL1 conference of the home team; null outside NBL1. |
-| `away_team_id` | character | DataCore id (UUID v1, Sportradar) of the away team; stable across seasons and the id to join on across routes. |
-| `rosetta_away_team_id` | character | Rosetta's own id (UUID v4; v5 on NBL1) of the away team; routes that take this entity accept it as well as the DataCore id. |
-| `away_team_name` | character | Display name of the team. |
-| `away_team_external_team_name` | character | Team name as DataCore spells it. |
-| `away_team_code` | character | Team code of the away team, e.g. PER or SYD. |
-| `away_team_division_abbreviation` | character | Division code, e.g. EM (East Men) |
-| `away_team_division_name` | character | Division name (NBL1 conference + gender) |
-| `away_team_conference_name` | character | Name of the NBL1 conference of the away team; null outside NBL1. |
-| `season_id` | character | DataCore id (UUID v1, Sportradar) of the season; stable across seasons and the id to join on across routes. |
-| `rosetta_season_id` | character | Rosetta's own id (UUID v4; v5 on NBL1) of the season; routes that take this entity accept it as well as the DataCore id. |
-| `season_name` | character | Season name (NBL26, WNBL 2024/25, 2025 South Men) |
-| `season_year` | integer | Rosetta's year of the season: the START year for the NBL and WNBL from 1998-99 (2025 = 2025-26), the calendar year for NBL1 and the 1979-1997 winter seasons. See season_end_year for the sdv key. |
-| `season_type` | character | Season type: regular (includes finals), preseason, in_season (cups, blitz, exhibition), test. |
-| `season_gender` | character | Gender (MALE/FEMALE upper case on seasons and players, male/female lower case on competitions and divisions; UNKNOWN seen) |
-| `season_competition_id` | character | Rosetta competition id (UUID v4) |
-| `season_competition_name` | character | Name of the competition the season belongs to (e.g. NBL, WNBL, NBL1 North Men). |
-| `season_competition_gender` | character | Gender (MALE/FEMALE upper case on seasons and players, male/female lower case on competitions and divisions; UNKNOWN seen) |
-| `season_competition_league_name` | character | Name of the league the competition belongs to (NBL, WNBL or NBL1). |
-| `season_competition_division` | character | NBL1 divisions (conference x gender); empty for NBL and WNBL. |
-| `season_end_year` | integer | sdv season key: the END year of the season (2026 = 2025-26), derived from season_year (a START year for the NBL and WNBL from 1998-99, a calendar year for NBL1 and the 1979-1997 winter seasons; year 1998 is split on the start date). Where the body carries no year it is the season asked for. |
-| `home_team_division` | character | NBL1 divisions (conference x gender); empty for NBL and WNBL. |
-| `home_team_conference` | character | Conference of the division. |
-| `away_team_division` | character | NBL1 divisions (conference x gender); empty for NBL and WNBL. |
-| `away_team_conference` | character | Conference of the division. |
+| `org` | String | Organisation the row belongs to: nbl, wnbl or nbl1. From the row's competition, else from the request. |
+| `match_id` | String | DataCore fixture id (UUID v1); equal to `id`. |
+| `external_media_id` | String | Media id. Through NBL25 (2024-25): the Genius Sports match id (7 digits, e.g. 2636769; 6 or fewer in older seasons). From NBL26: mostly an 8-digit number of unverified origin (e.g. 61386925), date-like codes on some games (05042026 = DDMMYYYY on the 2026 Championship game, 1409252 = DDMMYY + n on the Blitz), null on many preseason games. NBL1 and WNBL 2025 carry 8-digit numbers. |
+| `date_updated` | String | Record last-edit time, ISO 8601 UTC. |
+| `start_time` | String | Tip-off, UTC, with no offset or a Z suffix (ESPN dates the same Perth v SE Melbourne game 2025-12-18T10:30Z; Rosetta says 2025-12-18T10:30:00) |
+| `start_time_datetime` | String | Tip-off, UTC; same value as start_time. |
+| `round` | String | Round label: a number as a string in the regular season ("13"), words in the finals ("SEMI FINAL SERIES 1", "CHAMPIONSHIP") |
+| `match_type` | String | Match type: regular, final (FINAL upper case seen) |
+| `match_status` | String | Status of the match in Rosetta's words (complete for a finished game): box score and play-by-play of any other status are partial. |
+| `status` | String | Provider fixture status: CONFIRMED, SCHEDULED. |
+| `home_score` | Int64 | Home final score, a STRING; null before tip-off. |
+| `away_score` | Int64 | Away final score, a STRING; null before tip-off. |
+| `attendance` | Int64 | Attendance, a STRING; null when not recorded. |
+| `match_slug` | String | URL slug of the match page on nbl.com.au. |
+| `match_title` | String | Match title ("<home> v <away> <men\|women> DD-MM-YYYY") |
+| `venue_id` | String | DataCore id (UUID v1, Sportradar) of the venue; stable across seasons and the id to join on across routes. |
+| `rosetta_venue_id` | String | Rosetta's own id (UUID v4; v5 on NBL1) of the venue; routes that take this entity accept it as well as the DataCore id. |
+| `venue_name` | String | Name of the venue (arena), e.g. RAC Arena. |
+| `venue_address` | String | Unobserved in samples (null in every capture); type and meaning unverified. |
+| `venue_suburb` | String | Unobserved in samples (null in every capture); type and meaning unverified. |
+| `venue_state` | String | Unobserved in samples (null in every capture); type and meaning unverified. |
+| `venue_country` | String | Country; often null. |
+| `venue_capacity` | Int64 | Unobserved in samples (null in every capture); type and meaning unverified. |
+| `venue_timezone` | String | IANA time zone of the venue, e.g. Australia/Sydney. |
+| `venue_code` | String | Venue code; often null. |
+| `venue_latitude` | Float64 | Unobserved in samples (null in every capture); type and meaning unverified. |
+| `venue_longitude` | Float64 | Unobserved in samples (null in every capture); type and meaning unverified. |
+| `home_team_id` | String | DataCore id (UUID v1, Sportradar) of the home team; stable across seasons and the id to join on across routes. |
+| `rosetta_home_team_id` | String | Rosetta's own id (UUID v4; v5 on NBL1) of the home team; routes that take this entity accept it as well as the DataCore id. |
+| `home_team_name` | String | Display name of the team. |
+| `home_team_external_team_name` | String | Team name as DataCore spells it. |
+| `home_team_code` | String | Team code of the home team, e.g. PER or SYD. |
+| `home_team_division_abbreviation` | String | Division code, e.g. EM (East Men) |
+| `home_team_division_name` | String | Division name (NBL1 conference + gender) |
+| `home_team_conference_name` | String | Name of the NBL1 conference of the home team; null outside NBL1. |
+| `away_team_id` | String | DataCore id (UUID v1, Sportradar) of the away team; stable across seasons and the id to join on across routes. |
+| `rosetta_away_team_id` | String | Rosetta's own id (UUID v4; v5 on NBL1) of the away team; routes that take this entity accept it as well as the DataCore id. |
+| `away_team_name` | String | Display name of the team. |
+| `away_team_external_team_name` | String | Team name as DataCore spells it. |
+| `away_team_code` | String | Team code of the away team, e.g. PER or SYD. |
+| `away_team_division_abbreviation` | String | Division code, e.g. EM (East Men) |
+| `away_team_division_name` | String | Division name (NBL1 conference + gender) |
+| `away_team_conference_name` | String | Name of the NBL1 conference of the away team; null outside NBL1. |
+| `season_id` | String | DataCore id (UUID v1, Sportradar) of the season; stable across seasons and the id to join on across routes. |
+| `rosetta_season_id` | String | Rosetta's own id (UUID v4; v5 on NBL1) of the season; routes that take this entity accept it as well as the DataCore id. |
+| `season_name` | String | Season name (NBL26, WNBL 2024/25, 2025 South Men) |
+| `season_year` | Int64 | Rosetta's year of the season: the START year for the NBL and WNBL from 1998-99 (2025 = 2025-26), the calendar year for NBL1 and the 1979-1997 winter seasons. See season_end_year for the sdv key. |
+| `season_type` | String | Season type: regular (includes finals), preseason, in_season (cups, blitz, exhibition), test. |
+| `season_gender` | String | Gender (MALE/FEMALE upper case on seasons and players, male/female lower case on competitions and divisions; UNKNOWN seen) |
+| `season_competition_id` | String | Rosetta competition id (UUID v4) |
+| `season_competition_name` | String | Name of the competition the season belongs to (e.g. NBL, WNBL, NBL1 North Men). |
+| `season_competition_gender` | String | Gender (MALE/FEMALE upper case on seasons and players, male/female lower case on competitions and divisions; UNKNOWN seen) |
+| `season_competition_league_name` | String | Name of the league the competition belongs to (NBL, WNBL or NBL1). |
+| `season_competition_division` | String | NBL1 divisions (conference x gender); empty for NBL and WNBL. |
+| `season_end_year` | Int64 | sdv season key: the END year of the season (2026 = 2025-26), derived from season_year (a START year for the NBL and WNBL from 1998-99, a calendar year for NBL1 and the 1979-1997 winter seasons; year 1998 is split on the start date). Where the body carries no year it is the season asked for. |
+| `home_team_division` | String | NBL1 divisions (conference x gender); empty for NBL and WNBL. |
+| `home_team_conference` | String | Conference of the division. |
+| `away_team_division` | String | NBL1 divisions (conference x gender); empty for NBL and WNBL. |
+| `away_team_conference` | String | Conference of the division. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -217,58 +217,58 @@ One match's header: status, scores, clock, venue, season and teams. Box score an
 
 | col_name | type | description |
 |---|---|---|
-| `org` | character | Organisation the row belongs to: nbl, wnbl or nbl1. From the row's competition, else from the request. |
-| `match_id` | character | DataCore fixture id (UUID v1); equal to `id`. |
-| `match_status` | character | Status of the match in Rosetta's words (complete for a finished game): box score and play-by-play of any other status are partial. |
-| `start_time_datetime` | character | Tip-off, UTC; same value as start_time. |
-| `match_type` | character | Match type: regular, final (FINAL upper case seen) |
-| `attendance` | integer | Attendance, a STRING; null when not recorded. |
-| `clock` | character | Game clock of the latest event, HH:MM:SS remaining in the period. |
-| `current_period` | integer | Latest period number as a STRING; null on older matches. |
-| `clock_running` | logical | Game clock is running. |
-| `home_score` | integer | Home final score, a STRING; null before tip-off. |
-| `away_score` | integer | Away final score, a STRING; null before tip-off. |
-| `round` | character | Round label: a number as a string in the regular season ("13"), words in the finals ("SEMI FINAL SERIES 1", "CHAMPIONSHIP") |
-| `start_time` | character | Tip-off, UTC, with no offset or a Z suffix (ESPN dates the same Perth v SE Melbourne game 2025-12-18T10:30Z; Rosetta says 2025-12-18T10:30:00) |
-| `status` | character | Provider fixture status: CONFIRMED, SCHEDULED. |
-| `external_media_id` | character | Media id. Through NBL25 (2024-25): the Genius Sports match id (7 digits, e.g. 2636769; 6 or fewer in older seasons). From NBL26: mostly an 8-digit number of unverified origin (e.g. 61386925), date-like codes on some games (05042026 = DDMMYYYY on the 2026 Championship game, 1409252 = DDMMYY + n on the Blitz), null on many preseason games. NBL1 and WNBL 2025 carry 8-digit numbers. |
-| `match_slug` | character | URL slug of the match page on nbl.com.au. |
-| `match_title` | character | Match title ("<home> v <away> <men\|women> DD-MM-YYYY") |
-| `secondary_external_id` | character | Unobserved in samples (null in every capture); type and meaning unverified. |
-| `live_exclusive` | logical | Match is a live-stream exclusive. |
-| `season_id` | character | DataCore id (UUID v1, Sportradar) of the season; stable across seasons and the id to join on across routes. |
-| `rosetta_season_id` | character | Rosetta's own id (UUID v4; v5 on NBL1) of the season; routes that take this entity accept it as well as the DataCore id. |
-| `season_year` | integer | Rosetta's year of the season: the START year for the NBL and WNBL from 1998-99 (2025 = 2025-26), the calendar year for NBL1 and the 1979-1997 winter seasons. See season_end_year for the sdv key. |
-| `season_type` | character | Season type: regular (includes finals), preseason, in_season (cups, blitz, exhibition), test. |
-| `season_competition_id` | character | Rosetta competition id (UUID v4) |
-| `season_competition_name` | character | Name of the competition the season belongs to (e.g. NBL, WNBL, NBL1 North Men). |
-| `season_competition_gender` | character | Gender (MALE/FEMALE upper case on seasons and players, male/female lower case on competitions and divisions; UNKNOWN seen) |
-| `season_competition_league_name` | character | Name of the league the competition belongs to (NBL, WNBL or NBL1). |
-| `season_competition_division` | character | NBL1 divisions (conference x gender); empty for NBL and WNBL. |
-| `venue_id` | character | DataCore id (UUID v1, Sportradar) of the venue; stable across seasons and the id to join on across routes. |
-| `rosetta_venue_id` | character | Rosetta's own id (UUID v4; v5 on NBL1) of the venue; routes that take this entity accept it as well as the DataCore id. |
-| `venue_name` | character | Name of the venue (arena), e.g. RAC Arena. |
-| `venue_address` | character | Unobserved in samples (null in every capture); type and meaning unverified. |
-| `venue_capacity` | integer | Unobserved in samples (null in every capture); type and meaning unverified. |
-| `venue_timezone` | character | IANA time zone of the venue, e.g. Australia/Sydney. |
-| `venue_code` | character | Venue code; often null. |
-| `venue_state` | character | Unobserved in samples (null in every capture); type and meaning unverified. |
-| `venue_suburb` | character | Unobserved in samples (null in every capture); type and meaning unverified. |
-| `venue_latitude` | numeric | Unobserved in samples (null in every capture); type and meaning unverified. |
-| `venue_longitude` | numeric | Unobserved in samples (null in every capture); type and meaning unverified. |
-| `venue_country` | character | Country; often null. |
-| `home_team_id` | character | DataCore id (UUID v1, Sportradar) of the home team; stable across seasons and the id to join on across routes. |
-| `home_team_name` | character | Display name of the team. |
-| `home_team_external_team_name` | character | Team name as DataCore spells it. |
-| `home_team_code` | character | Team code of the home team, e.g. PER or SYD. |
-| `away_team_id` | character | DataCore id (UUID v1, Sportradar) of the away team; stable across seasons and the id to join on across routes. |
-| `away_team_name` | character | Display name of the team. |
-| `away_team_external_team_name` | character | Team name as DataCore spells it. |
-| `away_team_code` | character | Team code of the away team, e.g. PER or SYD. |
-| `data_source` | character | Backend that built the body: nexus-api or lambda-cache (observed). It varies between requests for the same match (the NBL 2025-26 sample game came back lambda-cache from /live/all and nexus-api from /match/{match_id} minutes apart, with identical play-by-play), so it says nothing about the data. |
-| `match_status_string` | character | Status banner text, e.g. FINAL. |
-| `play_by_play_updated_datetime` | character | Last play-by-play update, ISO 8601 UTC. |
-| `season_end_year` | integer | sdv season key: the END year of the season (2026 = 2025-26), derived from season_year (a START year for the NBL and WNBL from 1998-99, a calendar year for NBL1 and the 1979-1997 winter seasons; year 1998 is split on the start date). Where the body carries no year it is the season asked for. |
+| `org` | String | Organisation the row belongs to: nbl, wnbl or nbl1. From the row's competition, else from the request. |
+| `match_id` | String | DataCore fixture id (UUID v1); equal to `id`. |
+| `match_status` | String | Status of the match in Rosetta's words (complete for a finished game): box score and play-by-play of any other status are partial. |
+| `start_time_datetime` | String | Tip-off, UTC; same value as start_time. |
+| `match_type` | String | Match type: regular, final (FINAL upper case seen) |
+| `attendance` | Int64 | Attendance, a STRING; null when not recorded. |
+| `clock` | String | Game clock of the latest event, HH:MM:SS remaining in the period. |
+| `current_period` | Int64 | Latest period number as a STRING; null on older matches. |
+| `clock_running` | Boolean | Game clock is running. |
+| `home_score` | Int64 | Home final score, a STRING; null before tip-off. |
+| `away_score` | Int64 | Away final score, a STRING; null before tip-off. |
+| `round` | String | Round label: a number as a string in the regular season ("13"), words in the finals ("SEMI FINAL SERIES 1", "CHAMPIONSHIP") |
+| `start_time` | String | Tip-off, UTC, with no offset or a Z suffix (ESPN dates the same Perth v SE Melbourne game 2025-12-18T10:30Z; Rosetta says 2025-12-18T10:30:00) |
+| `status` | String | Provider fixture status: CONFIRMED, SCHEDULED. |
+| `external_media_id` | String | Media id. Through NBL25 (2024-25): the Genius Sports match id (7 digits, e.g. 2636769; 6 or fewer in older seasons). From NBL26: mostly an 8-digit number of unverified origin (e.g. 61386925), date-like codes on some games (05042026 = DDMMYYYY on the 2026 Championship game, 1409252 = DDMMYY + n on the Blitz), null on many preseason games. NBL1 and WNBL 2025 carry 8-digit numbers. |
+| `match_slug` | String | URL slug of the match page on nbl.com.au. |
+| `match_title` | String | Match title ("<home> v <away> <men\|women> DD-MM-YYYY") |
+| `secondary_external_id` | String | Unobserved in samples (null in every capture); type and meaning unverified. |
+| `live_exclusive` | Boolean | Match is a live-stream exclusive. |
+| `season_id` | String | DataCore id (UUID v1, Sportradar) of the season; stable across seasons and the id to join on across routes. |
+| `rosetta_season_id` | String | Rosetta's own id (UUID v4; v5 on NBL1) of the season; routes that take this entity accept it as well as the DataCore id. |
+| `season_year` | Int64 | Rosetta's year of the season: the START year for the NBL and WNBL from 1998-99 (2025 = 2025-26), the calendar year for NBL1 and the 1979-1997 winter seasons. See season_end_year for the sdv key. |
+| `season_type` | String | Season type: regular (includes finals), preseason, in_season (cups, blitz, exhibition), test. |
+| `season_competition_id` | String | Rosetta competition id (UUID v4) |
+| `season_competition_name` | String | Name of the competition the season belongs to (e.g. NBL, WNBL, NBL1 North Men). |
+| `season_competition_gender` | String | Gender (MALE/FEMALE upper case on seasons and players, male/female lower case on competitions and divisions; UNKNOWN seen) |
+| `season_competition_league_name` | String | Name of the league the competition belongs to (NBL, WNBL or NBL1). |
+| `season_competition_division` | String | NBL1 divisions (conference x gender); empty for NBL and WNBL. |
+| `venue_id` | String | DataCore id (UUID v1, Sportradar) of the venue; stable across seasons and the id to join on across routes. |
+| `rosetta_venue_id` | String | Rosetta's own id (UUID v4; v5 on NBL1) of the venue; routes that take this entity accept it as well as the DataCore id. |
+| `venue_name` | String | Name of the venue (arena), e.g. RAC Arena. |
+| `venue_address` | String | Unobserved in samples (null in every capture); type and meaning unverified. |
+| `venue_capacity` | Int64 | Unobserved in samples (null in every capture); type and meaning unverified. |
+| `venue_timezone` | String | IANA time zone of the venue, e.g. Australia/Sydney. |
+| `venue_code` | String | Venue code; often null. |
+| `venue_state` | String | Unobserved in samples (null in every capture); type and meaning unverified. |
+| `venue_suburb` | String | Unobserved in samples (null in every capture); type and meaning unverified. |
+| `venue_latitude` | Float64 | Unobserved in samples (null in every capture); type and meaning unverified. |
+| `venue_longitude` | Float64 | Unobserved in samples (null in every capture); type and meaning unverified. |
+| `venue_country` | String | Country; often null. |
+| `home_team_id` | String | DataCore id (UUID v1, Sportradar) of the home team; stable across seasons and the id to join on across routes. |
+| `home_team_name` | String | Display name of the team. |
+| `home_team_external_team_name` | String | Team name as DataCore spells it. |
+| `home_team_code` | String | Team code of the home team, e.g. PER or SYD. |
+| `away_team_id` | String | DataCore id (UUID v1, Sportradar) of the away team; stable across seasons and the id to join on across routes. |
+| `away_team_name` | String | Display name of the team. |
+| `away_team_external_team_name` | String | Team name as DataCore spells it. |
+| `away_team_code` | String | Team code of the away team, e.g. PER or SYD. |
+| `data_source` | String | Backend that built the body: nexus-api or lambda-cache (observed). It varies between requests for the same match (the NBL 2025-26 sample game came back lambda-cache from /live/all and nexus-api from /match/{match_id} minutes apart, with identical play-by-play), so it says nothing about the data. |
+| `match_status_string` | String | Status banner text, e.g. FINAL. |
+| `play_by_play_updated_datetime` | String | Last play-by-play update, ISO 8601 UTC. |
+| `season_end_year` | Int64 | sdv season key: the END year of the season (2026 = 2025-26), derived from season_year (a START year for the NBL and WNBL from 1998-99, a calendar year for NBL1 and the 1979-1997 winter seasons; year 1998 is split on the start date). Where the body carries no year it is the season asked for. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -306,30 +306,30 @@ Regular-season ladder: position, record, points for and against, home and away s
 
 | col_name | type | description |
 |---|---|---|
-| `org` | character | Organisation the row belongs to: nbl, wnbl or nbl1. From the row's competition, else from the request. |
-| `rosetta_standing_id` | character | Rosetta's id of this ladder row (UUID v4); not an entity id. |
-| `position` | integer | Ladder position (1 = top) |
-| `won` | integer | Wins in the season. |
-| `lost` | integer | Losses in the season. |
-| `played` | integer | Games played in the season (wins plus losses). |
-| `points_percentage` | numeric | points_for / points_against, a RATIO (1.1379 = 113.79 %) |
-| `win_percentage` | numeric | Won / played, a 0-1 FRACTION. |
-| `last_5` | character | Results string, W/L oldest first. Despite the name it can hold the whole season (33 characters in NBL 2025-26) |
-| `streak` | integer | Current streak length (the type is the last letter of last_5) |
-| `points_for` | integer | Points scored by the team in the season. |
-| `points_against` | integer | Points conceded. |
-| `away_losses` | integer | Away losses in the season. |
-| `away_wins` | integer | Away wins in the season. |
-| `home_losses` | integer | Home losses in the season. |
-| `home_wins` | integer | Home wins in the season. |
-| `team_id` | character | DataCore id (UUID v1, Sportradar) of the team; stable across seasons and the id to join on across routes. |
-| `rosetta_team_id` | character | Rosetta's own id (UUID v4; v5 on NBL1) of the team; routes that take this entity accept it as well as the DataCore id. |
-| `team_code` | character | Team code, e.g. PER (the {team_code} path value) |
-| `team_name` | character | Name of the team as Rosetta spells it, e.g. Perth Wildcats. |
-| `season_year` | integer | Rosetta's year of the season: the START year for the NBL and WNBL from 1998-99 (2025 = 2025-26), the calendar year for NBL1 and the 1979-1997 winter seasons. See season_end_year for the sdv key. |
-| `season_type` | character | Season type: regular (includes finals), preseason, in_season (cups, blitz, exhibition), test. |
-| `season_competition_division` | character | NBL1 divisions (conference x gender); empty for NBL and WNBL. |
-| `season_end_year` | integer | sdv season key: the END year of the season (2026 = 2025-26), derived from season_year (a START year for the NBL and WNBL from 1998-99, a calendar year for NBL1 and the 1979-1997 winter seasons; year 1998 is split on the start date). Where the body carries no year it is the season asked for. |
+| `org` | String | Organisation the row belongs to: nbl, wnbl or nbl1. From the row's competition, else from the request. |
+| `rosetta_standing_id` | String | Rosetta's id of this ladder row (UUID v4); not an entity id. |
+| `position` | Int64 | Ladder position (1 = top) |
+| `won` | Int64 | Wins in the season. |
+| `lost` | Int64 | Losses in the season. |
+| `played` | Int64 | Games played in the season (wins plus losses). |
+| `points_percentage` | Float64 | points_for / points_against, a RATIO (1.1379 = 113.79 %) |
+| `win_percentage` | Float64 | Won / played, a 0-1 FRACTION. |
+| `last_5` | String | Results string, W/L oldest first. Despite the name it can hold the whole season (33 characters in NBL 2025-26) |
+| `streak` | Int64 | Current streak length (the type is the last letter of last_5) |
+| `points_for` | Int64 | Points scored by the team in the season. |
+| `points_against` | Int64 | Points conceded. |
+| `away_losses` | Int64 | Away losses in the season. |
+| `away_wins` | Int64 | Away wins in the season. |
+| `home_losses` | Int64 | Home losses in the season. |
+| `home_wins` | Int64 | Home wins in the season. |
+| `team_id` | String | DataCore id (UUID v1, Sportradar) of the team; stable across seasons and the id to join on across routes. |
+| `rosetta_team_id` | String | Rosetta's own id (UUID v4; v5 on NBL1) of the team; routes that take this entity accept it as well as the DataCore id. |
+| `team_code` | String | Team code, e.g. PER (the {team_code} path value) |
+| `team_name` | String | Name of the team as Rosetta spells it, e.g. Perth Wildcats. |
+| `season_year` | Int64 | Rosetta's year of the season: the START year for the NBL and WNBL from 1998-99 (2025 = 2025-26), the calendar year for NBL1 and the 1979-1997 winter seasons. See season_end_year for the sdv key. |
+| `season_type` | String | Season type: regular (includes finals), preseason, in_season (cups, blitz, exhibition), test. |
+| `season_competition_division` | String | NBL1 divisions (conference x gender); empty for NBL and WNBL. |
+| `season_end_year` | Int64 | sdv season key: the END year of the season (2026 = 2025-26), derived from season_year (a START year for the NBL and WNBL from 1998-99, a calendar year for NBL1 and the 1979-1997 winter seasons; year 1998 is split on the start date). Where the body carries no year it is the season asked for. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -367,14 +367,14 @@ Win-loss record and last 10, 5 and 3 results per team, keyed by team name.
 
 | col_name | type | description |
 |---|---|---|
-| `org` | character | Organisation the row belongs to: nbl, wnbl or nbl1. From the row's competition, else from the request. |
-| `team_name` | character | Name of the team, the key of Rosetta's outcomes map (the body carries no team id). |
-| `wins` | integer | Wins of the team in the season type asked for. |
-| `losses` | integer | Losses of the team in the season type asked for. |
-| `last10` | character | Results of the team's last 10 games as a W/L string, oldest first. |
-| `last5` | character | Results of the team's last 5 games as a W/L string, oldest first. |
-| `last3` | character | Results of the team's last 3 games as a W/L string, oldest first. |
-| `season_end_year` | integer | sdv season key: the END year of the season (2026 = 2025-26), derived from season_year (a START year for the NBL and WNBL from 1998-99, a calendar year for NBL1 and the 1979-1997 winter seasons; year 1998 is split on the start date). Where the body carries no year it is the season asked for. |
+| `org` | String | Organisation the row belongs to: nbl, wnbl or nbl1. From the row's competition, else from the request. |
+| `team_name` | String | Name of the team, the key of Rosetta's outcomes map (the body carries no team id). |
+| `wins` | Int64 | Wins of the team in the season type asked for. |
+| `losses` | Int64 | Losses of the team in the season type asked for. |
+| `last10` | String | Results of the team's last 10 games as a W/L string, oldest first. |
+| `last5` | String | Results of the team's last 5 games as a W/L string, oldest first. |
+| `last3` | String | Results of the team's last 3 games as a W/L string, oldest first. |
+| `season_end_year` | Int64 | sdv season key: the END year of the season (2026 = 2025-26), derived from season_year (a START year for the NBL and WNBL from 1998-99, a calendar year for NBL1 and the 1979-1997 winter seasons; year 1998 is split on the start date). Where the body carries no year it is the season asked for. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -412,86 +412,86 @@ Player season totals and averages of a season (the leaderboard), one row per pla
 
 | col_name | type | description |
 |---|---|---|
-| `org` | character | Organisation the row belongs to: nbl, wnbl or nbl1. From the row's competition, else from the request. |
-| `assists_average` | numeric | Assists per game. |
-| `blocks_average` | numeric | Blocks per game. |
-| `field_goals_attempted` | integer | Field goals attempted, season total. |
-| `field_goals_made` | integer | Field goals made, season total. |
-| `field_goals_attempted_average` | numeric | Field goals attempted per game. |
-| `field_goals_made_average` | numeric | Field goals made per game. |
-| `field_goals_percentage` | numeric | Field goals made / attempted, a 0-1 FRACTION. |
-| `fouls_average` | numeric | Fouls committed (personal + technical + others) per game. |
-| `free_throws_attempted` | integer | Free throws attempted, season total. |
-| `free_throws_made` | integer | Free throws made, season total. |
-| `free_throws_attempted_average` | numeric | Free throws attempted per game. |
-| `free_throws_made_average` | numeric | Free throws made per game. |
-| `free_throws_percentage` | numeric | Free throws made / attempted, a 0-1 FRACTION. |
-| `games` | integer | Games played in the season (in the period rows, by the player or team). |
-| `games_started` | integer | Games in the starting five. |
-| `offensive_rebounds` | integer | Offensive rebounds, season total. |
-| `fouls` | integer | Fouls committed (personal + technical + others), season total. |
-| `personal_fouls` | integer | Personal fouls, season total. |
-| `technical_fouls` | integer | Technical fouls, season total. |
-| `period` | integer | Period as a STRING: 0 = game or season total, 1-4 = quarters, 11/12/13 = first/second/third overtime (inferred: fewer teams have each) |
-| `three_points_attempted` | integer | Three-point field goals attempted, season total. |
-| `three_points_attempted_average` | numeric | Three-point field goals attempted per game. |
-| `three_points_made` | integer | Three-point field goals made, season total. |
-| `three_points_made_average` | numeric | Three-point field goals made per game. |
-| `three_points_percentage` | numeric | Three-point field goals made / attempted, a 0-1 FRACTION. |
-| `turnovers_average` | numeric | Turnovers per game. |
-| `turnovers` | integer | Turnovers, season total. |
-| `two_points_attempted` | integer | Two-point field goals attempted, season total. |
-| `two_points_attempted_average` | numeric | Two-point field goals attempted per game. |
-| `two_points_made` | integer | Two-point field goals made, season total. |
-| `two_points_made_average` | numeric | Two-point field goals made per game. |
-| `two_points_percentage` | numeric | Two-point field goals made / attempted, a 0-1 FRACTION. |
-| `minutes` | numeric | Minutes played, decimal minutes. |
-| `minutes_average` | numeric | Minutes per game, decimal minutes. |
-| `points` | integer | Points, season total. |
-| `rebounds` | integer | Total rebounds, season total. |
-| `assists` | integer | Assists, season total. |
-| `blocks` | integer | Blocks, season total. |
-| `steals` | integer | Steals, season total. |
-| `plus_minus` | integer | Point differential while on court, season total. |
-| `plus_minus_average` | numeric | Point differential while on court per game. |
-| `efficiency` | integer | Efficiency rating (PTS + REB + AST + STL + BLK - missed FG - missed FT - TOV), season total. |
-| `efficiency_average` | numeric | Efficiency rating (PTS + REB + AST + STL + BLK - missed FG - missed FT - TOV) per game. |
-| `points_average` | numeric | Points per game. |
-| `rebounds_average` | numeric | Total rebounds per game. |
-| `steals_average` | numeric | Steals per game. |
-| `player_id` | character | DataCore id (UUID v1, Sportradar) of the player; stable across seasons and the id to join on across routes. |
-| `rosetta_player_id` | character | Rosetta's own id (UUID v4; v5 on NBL1) of the player; routes that take this entity accept it as well as the DataCore id. |
-| `player_first_name` | character | The player's given name, e.g. Elijah. |
-| `player_jersey_number` | character | Jersey number, a STRING. |
-| `player_last_name` | character | The player's family name, e.g. Pepper. |
-| `player_playing_position` | character | Playing position code (G, F, C, PG, SF, FC, ...); null when not recorded. |
-| `team_id` | character | DataCore id (UUID v1, Sportradar) of the team; stable across seasons and the id to join on across routes. |
-| `rosetta_team_id` | character | Rosetta's own id (UUID v4; v5 on NBL1) of the team; routes that take this entity accept it as well as the DataCore id. |
-| `team_name` | character | Name of the team as Rosetta spells it, e.g. Perth Wildcats. |
-| `team_code` | character | Team code, e.g. PER (the {team_code} path value) |
-| `season_id` | character | DataCore id (UUID v1, Sportradar) of the season; stable across seasons and the id to join on across routes. |
-| `rosetta_season_id` | character | Rosetta's own id (UUID v4; v5 on NBL1) of the season; routes that take this entity accept it as well as the DataCore id. |
-| `season_year` | integer | Rosetta's year of the season: the START year for the NBL and WNBL from 1998-99 (2025 = 2025-26), the calendar year for NBL1 and the 1979-1997 winter seasons. See season_end_year for the sdv key. |
-| `season_type` | character | Season type: regular (includes finals), preseason, in_season (cups, blitz, exhibition), test. |
-| `season_competition_division` | character | NBL1 divisions (conference x gender); empty for NBL and WNBL. |
-| `sc_total_score` | integer | SuperCoach score including double-double / triple-double bonuses. |
-| `sc_total_score_without_dd_and_td` | integer | SuperCoach score without those bonuses. |
-| `sc_breakdown_points_value` | integer | The stat's value for the game or season. |
-| `sc_breakdown_points_points` | integer | SuperCoach points this stat earns (e.g. 3 per steal or block, -2 per turnover) |
-| `sc_breakdown_rebounds_value` | integer | The stat's value for the game or season. |
-| `sc_breakdown_rebounds_points` | integer | SuperCoach points this stat earns (e.g. 3 per steal or block, -2 per turnover) |
-| `sc_breakdown_assists_value` | integer | The stat's value for the game or season. |
-| `sc_breakdown_assists_points` | integer | SuperCoach points this stat earns (e.g. 3 per steal or block, -2 per turnover) |
-| `sc_breakdown_blocks_value` | integer | The stat's value for the game or season. |
-| `sc_breakdown_blocks_points` | integer | SuperCoach points this stat earns (e.g. 3 per steal or block, -2 per turnover) |
-| `sc_breakdown_steals_value` | integer | The stat's value for the game or season. |
-| `sc_breakdown_steals_points` | integer | SuperCoach points this stat earns (e.g. 3 per steal or block, -2 per turnover) |
-| `sc_breakdown_turnovers_value` | integer | The stat's value for the game or season. |
-| `sc_breakdown_turnovers_points` | integer | SuperCoach points this stat earns (e.g. 3 per steal or block, -2 per turnover) |
-| `sc_breakdown_triple_double_value` | integer | The stat's value for the game or season. |
-| `sc_breakdown_triple_double_points` | integer | SuperCoach points this stat earns (e.g. 3 per steal or block, -2 per turnover) |
-| `sc_double_figure_count` | integer | Stats in double figures (for the double-double / triple-double bonus) |
-| `season_end_year` | integer | sdv season key: the END year of the season (2026 = 2025-26), derived from season_year (a START year for the NBL and WNBL from 1998-99, a calendar year for NBL1 and the 1979-1997 winter seasons; year 1998 is split on the start date). Where the body carries no year it is the season asked for. |
+| `org` | String | Organisation the row belongs to: nbl, wnbl or nbl1. From the row's competition, else from the request. |
+| `assists_average` | Float64 | Assists per game. |
+| `blocks_average` | Float64 | Blocks per game. |
+| `field_goals_attempted` | Int64 | Field goals attempted, season total. |
+| `field_goals_made` | Int64 | Field goals made, season total. |
+| `field_goals_attempted_average` | Float64 | Field goals attempted per game. |
+| `field_goals_made_average` | Float64 | Field goals made per game. |
+| `field_goals_percentage` | Float64 | Field goals made / attempted, a 0-1 FRACTION. |
+| `fouls_average` | Float64 | Fouls committed (personal + technical + others) per game. |
+| `free_throws_attempted` | Int64 | Free throws attempted, season total. |
+| `free_throws_made` | Int64 | Free throws made, season total. |
+| `free_throws_attempted_average` | Float64 | Free throws attempted per game. |
+| `free_throws_made_average` | Float64 | Free throws made per game. |
+| `free_throws_percentage` | Float64 | Free throws made / attempted, a 0-1 FRACTION. |
+| `games` | Int64 | Games played in the season (in the period rows, by the player or team). |
+| `games_started` | Int64 | Games in the starting five. |
+| `offensive_rebounds` | Int64 | Offensive rebounds, season total. |
+| `fouls` | Int64 | Fouls committed (personal + technical + others), season total. |
+| `personal_fouls` | Int64 | Personal fouls, season total. |
+| `technical_fouls` | Int64 | Technical fouls, season total. |
+| `period` | Int64 | Period as a STRING: 0 = game or season total, 1-4 = quarters, 11/12/13 = first/second/third overtime (inferred: fewer teams have each) |
+| `three_points_attempted` | Int64 | Three-point field goals attempted, season total. |
+| `three_points_attempted_average` | Float64 | Three-point field goals attempted per game. |
+| `three_points_made` | Int64 | Three-point field goals made, season total. |
+| `three_points_made_average` | Float64 | Three-point field goals made per game. |
+| `three_points_percentage` | Float64 | Three-point field goals made / attempted, a 0-1 FRACTION. |
+| `turnovers_average` | Float64 | Turnovers per game. |
+| `turnovers` | Int64 | Turnovers, season total. |
+| `two_points_attempted` | Int64 | Two-point field goals attempted, season total. |
+| `two_points_attempted_average` | Float64 | Two-point field goals attempted per game. |
+| `two_points_made` | Int64 | Two-point field goals made, season total. |
+| `two_points_made_average` | Float64 | Two-point field goals made per game. |
+| `two_points_percentage` | Float64 | Two-point field goals made / attempted, a 0-1 FRACTION. |
+| `minutes` | Float64 | Minutes played, decimal minutes. |
+| `minutes_average` | Float64 | Minutes per game, decimal minutes. |
+| `points` | Int64 | Points, season total. |
+| `rebounds` | Int64 | Total rebounds, season total. |
+| `assists` | Int64 | Assists, season total. |
+| `blocks` | Int64 | Blocks, season total. |
+| `steals` | Int64 | Steals, season total. |
+| `plus_minus` | Int64 | Point differential while on court, season total. |
+| `plus_minus_average` | Float64 | Point differential while on court per game. |
+| `efficiency` | Int64 | Efficiency rating (PTS + REB + AST + STL + BLK - missed FG - missed FT - TOV), season total. |
+| `efficiency_average` | Float64 | Efficiency rating (PTS + REB + AST + STL + BLK - missed FG - missed FT - TOV) per game. |
+| `points_average` | Float64 | Points per game. |
+| `rebounds_average` | Float64 | Total rebounds per game. |
+| `steals_average` | Float64 | Steals per game. |
+| `player_id` | String | DataCore id (UUID v1, Sportradar) of the player; stable across seasons and the id to join on across routes. |
+| `rosetta_player_id` | String | Rosetta's own id (UUID v4; v5 on NBL1) of the player; routes that take this entity accept it as well as the DataCore id. |
+| `player_first_name` | String | The player's given name, e.g. Elijah. |
+| `player_jersey_number` | String | Jersey number, a STRING. |
+| `player_last_name` | String | The player's family name, e.g. Pepper. |
+| `player_playing_position` | String | Playing position code (G, F, C, PG, SF, FC, ...); null when not recorded. |
+| `team_id` | String | DataCore id (UUID v1, Sportradar) of the team; stable across seasons and the id to join on across routes. |
+| `rosetta_team_id` | String | Rosetta's own id (UUID v4; v5 on NBL1) of the team; routes that take this entity accept it as well as the DataCore id. |
+| `team_name` | String | Name of the team as Rosetta spells it, e.g. Perth Wildcats. |
+| `team_code` | String | Team code, e.g. PER (the {team_code} path value) |
+| `season_id` | String | DataCore id (UUID v1, Sportradar) of the season; stable across seasons and the id to join on across routes. |
+| `rosetta_season_id` | String | Rosetta's own id (UUID v4; v5 on NBL1) of the season; routes that take this entity accept it as well as the DataCore id. |
+| `season_year` | Int64 | Rosetta's year of the season: the START year for the NBL and WNBL from 1998-99 (2025 = 2025-26), the calendar year for NBL1 and the 1979-1997 winter seasons. See season_end_year for the sdv key. |
+| `season_type` | String | Season type: regular (includes finals), preseason, in_season (cups, blitz, exhibition), test. |
+| `season_competition_division` | String | NBL1 divisions (conference x gender); empty for NBL and WNBL. |
+| `sc_total_score` | Int64 | SuperCoach score including double-double / triple-double bonuses. |
+| `sc_total_score_without_dd_and_td` | Int64 | SuperCoach score without those bonuses. |
+| `sc_breakdown_points_value` | Int64 | The stat's value for the game or season. |
+| `sc_breakdown_points_points` | Int64 | SuperCoach points this stat earns (e.g. 3 per steal or block, -2 per turnover) |
+| `sc_breakdown_rebounds_value` | Int64 | The stat's value for the game or season. |
+| `sc_breakdown_rebounds_points` | Int64 | SuperCoach points this stat earns (e.g. 3 per steal or block, -2 per turnover) |
+| `sc_breakdown_assists_value` | Int64 | The stat's value for the game or season. |
+| `sc_breakdown_assists_points` | Int64 | SuperCoach points this stat earns (e.g. 3 per steal or block, -2 per turnover) |
+| `sc_breakdown_blocks_value` | Int64 | The stat's value for the game or season. |
+| `sc_breakdown_blocks_points` | Int64 | SuperCoach points this stat earns (e.g. 3 per steal or block, -2 per turnover) |
+| `sc_breakdown_steals_value` | Int64 | The stat's value for the game or season. |
+| `sc_breakdown_steals_points` | Int64 | SuperCoach points this stat earns (e.g. 3 per steal or block, -2 per turnover) |
+| `sc_breakdown_turnovers_value` | Int64 | The stat's value for the game or season. |
+| `sc_breakdown_turnovers_points` | Int64 | SuperCoach points this stat earns (e.g. 3 per steal or block, -2 per turnover) |
+| `sc_breakdown_triple_double_value` | Int64 | The stat's value for the game or season. |
+| `sc_breakdown_triple_double_points` | Int64 | SuperCoach points this stat earns (e.g. 3 per steal or block, -2 per turnover) |
+| `sc_double_figure_count` | Int64 | Stats in double figures (for the double-double / triple-double bonus) |
+| `season_end_year` | Int64 | sdv season key: the END year of the season (2026 = 2025-26), derived from season_year (a START year for the NBL and WNBL from 1998-99, a calendar year for NBL1 and the 1979-1997 winter seasons; year 1998 is split on the start date). Where the body carries no year it is the season asked for. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

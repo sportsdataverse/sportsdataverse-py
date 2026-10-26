@@ -44,7 +44,7 @@ SPEC_PATHS = FIXTURES / "spec_paths.json"
 BANNED = re.compile(r"^(the\s+)?\w+(\s+\w+)?\s+(column|field|value|id|name)\.?$", re.IGNORECASE)
 
 ACCESS = (
-    "Access (sdv-internal-refs/ibba/README.md): unofficial and reverse-engineered, keyless, for internal use. The "
+    "Access: unofficial and reverse-engineered, keyless, for internal use. The "
     "wrappers read basket.co.il's ASP.NET web service (the ops its own site calls) and space requests at least one "
     "second apart; keep crawls slow and incremental. Payloads are not redistributed as release assets. Contact "
     "details (e-mail, phone, fax) and coaches' dates of birth are dropped by the parsers."

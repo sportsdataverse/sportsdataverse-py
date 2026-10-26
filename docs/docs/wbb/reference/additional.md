@@ -1,10 +1,10 @@
 ---
-title: WBB — additional Python functions
+title: Women's college basketball — additional Python functions
 sidebar_label: Additional functions
-description: "WBB — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
+description: "Women's college basketball — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
-# WBB — additional Python functions
+# Women's college basketball — additional Python functions
 
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.wbb` that are not
 generated API-endpoint wrappers (those have their own reference pages).
@@ -32,23 +32,23 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [BadLineupClump](additional/stats-ncaa-org.md#BadLineupClump) | A run of consecutive bad :class:`~sportsdataverse.mbb.mbb_ncaa_models |
 | [FieldAverage](additional/stats-ncaa-org.md#FieldAverage) | League average + estimated HCA for one stat field (`ts:620-625`). |
 | [GameBreakEvent](additional/stats-ncaa-org.md#GameBreakEvent) | A break in play (timeout, end of period, etc.) short of the end of |
-| [GameEndEvent](additional/stats-ncaa-org.md#GameEndEvent) | The end of the game (`Model.GameEndEvent`, `ExtractorUtils.scala:878-881`). |
+| [GameEndEvent](additional/stats-ncaa-org.md#GameEndEvent) | The end of the game (`Model.GameEndEvent`). |
 | [IterationResult](additional/stats-ncaa-org.md#IterationResult) | Return of `run_iterative_adjustment_with_hca` (`ts:314-317`). |
 | [LineupBuildingState](additional/stats-ncaa-org.md#LineupBuildingState) | State for building raw lineup data across a fold over play-by-play |
 | [NcaaFetchConfig](additional/stats-ncaa-org.md#NcaaFetchConfig) | Runtime configuration for the stats.ncaa.org fetch layer. |
 | [NcaaFetcher](additional/stats-ncaa-org.md#NcaaFetcher) | Cache-first stats.ncaa.org fetcher, proxy-bound per the binding directive. |
-| [OtherOpponentEvent](additional/stats-ncaa-org.md#OtherOpponentEvent) | A non-sub event belonging to the opponent (`Model.OtherOpponentEvent`, |
+| [OtherOpponentEvent](additional/stats-ncaa-org.md#OtherOpponentEvent) | A non-sub event belonging to the opponent (`Model.OtherOpponentEvent`). |
 | [OtherTeamEvent](additional/stats-ncaa-org.md#OtherTeamEvent) | A non-sub event belonging to the team under analysis |
-| [ParseError](additional/stats-ncaa-org.md#ParseError) | A parse-time error (`ParseError`, `ParseError.scala:9`). |
+| [ParseError](additional/stats-ncaa-org.md#ParseError) | A parse-time error (`ParseError`). |
 | [PbpBuilders](additional/stats-ncaa-org.md#PbpBuilders) | One version-era's HTML finder functions (``PlayByPlayParser |
 | [PeekableIterator](additional/stats-ncaa-org.md#PeekableIterator) | A stateful iterator with one element of look-ahead, the Python |
 | [PossessionSplits](additional/stats-ncaa-org.md#PossessionSplits) | Home/away/neutral possession totals for one team (`ts:143-152`). |
 | [ScheduleBuilders](additional/stats-ncaa-org.md#ScheduleBuilders) | One version-era's HTML finder functions (``TeamScheduleParser |
-| [ShotEventBuilders](additional/stats-ncaa-org.md#ShotEventBuilders) | The HTML finder-function table (`ShotEventParser.base_builders`, |
+| [ShotEventBuilders](additional/stats-ncaa-org.md#ShotEventBuilders) | The HTML finder-function table (`ShotEventParser.base_builders`). v1-only -- SVG shot maps did not exist in the v0 page |
 | [ShotMapDimensions](additional/stats-ncaa-org.md#ShotMapDimensions) | SVG shot-map pixel<->feet conversion constants, taken from the |
 | [StrengthAdjustedResult](additional/stats-ncaa-org.md#StrengthAdjustedResult) | The compute output of `build_strength_adjusted_stats`. |
-| [SubInEvent](additional/stats-ncaa-org.md#SubInEvent) | A player subs into the game (`Model.SubInEvent`, `ExtractorUtils.scala:850-853`). |
-| [SubOutEvent](additional/stats-ncaa-org.md#SubOutEvent) | A player subs out of the game (`Model.SubOutEvent`, `ExtractorUtils.scala:854-857`). |
+| [SubInEvent](additional/stats-ncaa-org.md#SubInEvent) | A player subs into the game (`Model.SubInEvent`). |
+| [SubOutEvent](additional/stats-ncaa-org.md#SubOutEvent) | A player subs out of the game (`Model.SubOutEvent`). |
 | [TeamStrengthAdjusted](additional/stats-ncaa-org.md#TeamStrengthAdjusted) | One team's raw / adjusted / HCA-adjusted rates (`ts:642-648`). |
 | [ValidationError](additional/stats-ncaa-org.md#ValidationError) | The 3 ways a lineup can be declared invalid, in Scala declaration |
 | [add_missing_players](additional/stats-ncaa-org.md#add_missing_players) | Back-fills a clump whose lineups carry TOO FEW players |
@@ -59,10 +59,10 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [build_available_team_list](additional/stats-ncaa-org.md#build_available_team_list) | Builds a per-conference team-index JSON fragment for |
 | [build_base_event](additional/stats-ncaa-org.md#build_base_event) | Fills in the fields a shot event can borrow straight from the |
 | [build_lineup_cli_array](additional/stats-ncaa-org.md#build_lineup_cli_array) | Builds the per-conference team array for `lineups-cli.sh` files |
-| [build_lineup_id](additional/stats-ncaa-org.md#build_lineup_id) | Builds a lineup id from a list of players (`ExtractorUtils.scala:602-606`): |
+| [build_lineup_id](additional/stats-ncaa-org.md#build_lineup_id) | Builds a lineup id from a list of players: |
 | [build_new_player_list](additional/stats-ncaa-org.md#build_new_player_list) | Builds a player list from the previous (or current, if pre-initialized) |
 | [build_partial_lineup_list](additional/stats-ncaa-org.md#build_partial_lineup_list) | Converts a stream of partially parsed events into a list of lineup |
-| [build_player_code](additional/stats-ncaa-org.md#build_player_code) | Build a short player code from a name, in any of the NCAA formats |
+| [build_player_code](additional/stats-ncaa-org.md#build_player_code) | Build a short player code from a name, in any of the NCAA formats. |
 | [build_strength_adjusted_stats](additional/stats-ncaa-org.md#build_strength_adjusted_stats) | Run the full strength-adjustment compute over a team list. |
 | [build_sub_error](additional/stats-ncaa-org.md#build_sub_error) | Build a location-less `ParseError` from id fragments |
 | [cached_path](additional/stats-ncaa-org.md#cached_path) | Return the on-disk cache file path for *path*, without touching it. |
@@ -105,7 +105,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [inject_validated_players](additional/stats-ncaa-org-2.md#inject_validated_players) | Validates box players against the roster (if available) and any |
 | [is_cached](additional/stats-ncaa-org-2.md#is_cached) | Return whether *path* already has a cache file on disk. |
 | [is_end_of_game_fouling_vs_fastbreak](additional/stats-ncaa-org-2.md#is_end_of_game_fouling_vs_fastbreak) | Check for intentional fouling to prolong the game, specifically so it |
-| [is_gen2](additional/stats-ncaa-org-2.md#is_gen2) | Detect the new/"gen2" NCAA event format (`EventUtils.is_gen2`, |
+| [is_gen2](additional/stats-ncaa-org-2.md#is_gen2) | Detect the new/"gen2" NCAA event format (`EventUtils.is_gen2`). |
 | [is_scramble](additional/stats-ncaa-org-2.md#is_scramble) | Figure out if (each event of) the current clump is part of a |
 | [is_team_shooting_left_to_start](additional/stats-ncaa-org-2.md#is_team_shooting_left_to_start) | Infers which side of the SVG court the team under analysis shoots |
 | [is_transition](additional/stats-ncaa-org-2.md#is_transition) | Figure out if the current clump is part of a transition offense |
@@ -120,7 +120,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [ncaa_wbb_player_stats](additional/stats-ncaa-org-2.md#ncaa_wbb_player_stats) | Aggregate WBB play-by-play into per-player box stats (wbigballR `get_player_stats`). |
 | [ncaa_wbb_possessions](additional/stats-ncaa-org-2.md#ncaa_wbb_possessions) | Aggregate WBB play-by-play into one row per possession (wbigballR `get_possessions`). |
 | [ncaa_wbb_shot_locations](additional/stats-ncaa-org-2.md#ncaa_wbb_shot_locations) | Scrape WBB shot locations for one or more games. |
-| [ncaa_wbb_team_roster](additional/stats-ncaa-org-3.md#ncaa_wbb_team_roster) | Scrape a women's team roster from stats.ncaa.org. |
+| [ncaa_wbb_team_roster](additional/stats-ncaa-org-2.md#ncaa_wbb_team_roster) | Scrape a women's team roster from stats.ncaa.org. |
 | [ncaa_wbb_team_schedule](additional/stats-ncaa-org-3.md#ncaa_wbb_team_schedule) | Scrape a women's team's season schedule from stats.ncaa.org. |
 | [ncaa_wbb_team_stats](additional/stats-ncaa-org-3.md#ncaa_wbb_team_stats) | Aggregate WBB play-by-play into per-team game stats (wbigballR `get_team_stats`). |
 | [phase1_shot_event_enrichment](additional/stats-ncaa-org-3.md#phase1_shot_event_enrichment) | The court-geometry enrichment pass: ascending time, coordinate |
@@ -135,7 +135,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [select_matching_own](additional/stats-ncaa-org-3.md#select_matching_own) | JSoup `root.select(sel + ":matchesOwn(regex)")`: candidates whose |
 | [shot_js_to_html](additional/stats-ncaa-org-3.md#shot_js_to_html) | Converts client-side `addShot(...)` JS calls into parseable |
 | [shot_value](additional/stats-ncaa-org-3.md#shot_value) | Classify a play-by-play event string as a 3, a 2, or an assist |
-| [start_time_from_period](additional/stats-ncaa-org-3.md#start_time_from_period) | The game-clock time (minutes elapsed) a period starts at |
+| [start_time_from_period](additional/stats-ncaa-org-3.md#start_time_from_period) | The game-clock time (minutes elapsed) a period starts at. |
 | [sum_event_stats](additional/stats-ncaa-org-3.md#sum_event_stats) | Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models |
 | [sum_shot_infos](additional/stats-ncaa-org-3.md#sum_shot_infos) | Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models |
 | [td_at](additional/stats-ncaa-org-3.md#td_at) | JSoup `row >?> element("td:eq(n)")`: the `n`-th `<td>` child. |
@@ -206,19 +206,19 @@ generated API-endpoint wrappers (those have their own reference pages).
 
 | Function | Summary |
 |---|---|
-| [AssistEvent](additional/models-and-calculators.md#AssistEvent) | One assist relationship's counts (`LineupEventStats.AssistEvent`, |
+| [AssistEvent](additional/models-and-calculators.md#AssistEvent) | One assist relationship's counts (`LineupEventStats.AssistEvent`). |
 | [AssistInfo](additional/models-and-calculators.md#AssistInfo) | Detailed assist info, split into given/received |
 | [ConferenceId](additional/models-and-calculators.md#ConferenceId) | CBB conference identifier (`ConferenceId`, ``models/ConferenceId |
 | [CutdownShotEvent](additional/models-and-calculators.md#CutdownShotEvent) | A narrowed `ShotEvent`, keeping only the fields needed once a |
-| [Direction](additional/models-and-calculators.md#Direction) | Which team is in possession (`RawGameEvent.Direction`, `:119-121`). |
-| [FieldGoalStats](additional/models-and-calculators.md#FieldGoalStats) | Field-goal counting stats (`LineupEventStats.FieldGoalStats`, |
+| [Direction](additional/models-and-calculators.md#Direction) | Which team is in possession (`RawGameEvent.Direction`). |
+| [FieldGoalStats](additional/models-and-calculators.md#FieldGoalStats) | Field-goal counting stats (`LineupEventStats.FieldGoalStats`). |
 | [LeagueConstants](additional/models-and-calculators.md#LeagueConstants) | Per-league fitted constants for the prediction & tournament stack. |
 | [LineupEvent](additional/models-and-calculators.md#LineupEvent) | A portion of a game during which a given lineup was on the floor |
-| [LineupEventStats](additional/models-and-calculators.md#LineupEventStats) | A lineup event's full counting-stat tree (`LineupEventStats`, |
+| [LineupEventStats](additional/models-and-calculators.md#LineupEventStats) | A lineup event's full counting-stat tree (`LineupEventStats`). |
 | [LineupId](additional/models-and-calculators.md#LineupId) | The set of players on the floor, as an opaque id string |
-| [LocationType](additional/models-and-calculators.md#LocationType) | Game location (`Game.LocationType`, `Game.scala:36-38`). |
+| [LocationType](additional/models-and-calculators.md#LocationType) | Game location (`Game.LocationType`). |
 | [PlayerCodeId](additional/models-and-calculators.md#PlayerCodeId) | A player's within-team-season code paired with their full identity |
-| [PlayerEvent](additional/models-and-calculators.md#PlayerEvent) | A lineup event's stats, narrowed to one player (`PlayerEvent`, |
+| [PlayerEvent](additional/models-and-calculators.md#PlayerEvent) | A lineup event's stats, narrowed to one player (`PlayerEvent`). **Scope addition** |
 | [PlayerId](additional/models-and-calculators.md#PlayerId) | CBB player identifier (`PlayerId`, `PlayerId.scala`, `AnyVal`). |
 | [PlayerShotInfo](additional/models-and-calculators.md#PlayerShotInfo) | Per-player shot-quality info, keyed by lineup slot |
 | [PlayerValueConstants](additional/models-and-calculators.md#PlayerValueConstants) | Per-league constants for the player-value spine. |
@@ -229,14 +229,14 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [RapmPreProcDiagnostics](additional/models-and-calculators.md#RapmPreProcDiagnostics) | Port of `RapmPreProcDiagnostics` (`RapmUtils.ts:187-194`) -- the |
 | [RapmPriorInfo](additional/models-and-calculators.md#RapmPriorInfo) | Port of `RapmPriorInfo` (`RapmUtils.ts:124-133`). |
 | [RapmProcessingInputs](additional/models-and-calculators.md#RapmProcessingInputs) | Port of `RapmProcessingInputs` (`RapmUtils.ts:196-203`). |
-| [RawGameEvent](additional/models-and-calculators.md#RawGameEvent) | A single NCAA play-by-play event line (`LineupEvent.RawGameEvent`, |
+| [RawGameEvent](additional/models-and-calculators.md#RawGameEvent) | A single NCAA play-by-play event line (`LineupEvent.RawGameEvent`). |
 | [RosterEntry](additional/models-and-calculators.md#RosterEntry) | An entry in an NCAA team roster (`RosterEntry`, ``models/ncaa |
-| [Score](additional/models-and-calculators.md#Score) | Points scored / allowed (`Game.Score`, `Game.scala:22`). |
+| [Score](additional/models-and-calculators.md#Score) | Points scored / allowed (`Game.Score`). |
 | [ScoreInfo](additional/models-and-calculators.md#ScoreInfo) | Score context at the start/end of a lineup event |
 | [ShotClockStats](additional/models-and-calculators.md#ShotClockStats) | Counting stats broken down by shot-clock segment |
 | [ShotEvent](additional/models-and-calculators.md#ShotEvent) | Info about one shot taken during a game, all distances in feet |
 | [ShotGeo](additional/models-and-calculators.md#ShotGeo) | A shot's synthetic lat/lon, for geo-aware visualization tooling |
-| [ShotLocation](additional/models-and-calculators.md#ShotLocation) | A shot's court-relative coordinates, in feet (`ShotEvent.ShotLocation`, |
+| [ShotLocation](additional/models-and-calculators.md#ShotLocation) | A shot's court-relative coordinates, in feet (`ShotEvent.ShotLocation`). **Scope addition** -- |
 | [ShotQualityConstants](additional/models-and-calculators.md#ShotQualityConstants) | Per-league rule + fitted constants for the shot-quality spine. |
 | [TeamId](additional/models-and-calculators.md#TeamId) | CBB team identifier (`TeamId`, `TeamId.scala`, `AnyVal`). |
 | [TeamSeasonId](additional/models-and-calculators.md#TeamSeasonId) | A team's season identifier (`TeamSeasonId`, `TeamSeasonId.scala`). |
@@ -287,7 +287,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [ridge_fit](additional/models-and-calculators-2.md#ridge_fit) | Closed-form ridge with an unpenalized intercept (coefficient 0). |
 | [roc_auc](additional/models-and-calculators-2.md#roc_auc) | Area under the ROC curve via the rank-sum (Mann-Whitney) identity. |
 | [save_artifact](additional/models-and-calculators-2.md#save_artifact) | Write a bundled artifact (dev/fitter use -- writes into the source tree). |
-| [score_to_tuple](additional/models-and-calculators-2.md#score_to_tuple) | Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`, |
+| [score_to_tuple](additional/models-and-calculators-2.md#score_to_tuple) | Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`). |
 | [simulate_game](additional/models-and-calculators-2.md#simulate_game) | Sample one women's game outcome (women's sigma/HFA/em_scale). |
 | [slow_regression](additional/models-and-calculators-2.md#slow_regression) | Build the Tikhonov (ridge) regression solver matrix. |
 | [spearman_corr](additional/models-and-calculators-2.md#spearman_corr) | Spearman rank correlation between two arrays. |

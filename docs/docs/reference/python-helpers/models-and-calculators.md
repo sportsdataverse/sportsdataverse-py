@@ -25,23 +25,23 @@ The input rows plus `exp_runs_remaining:Float64` (`proj_final - runs`, floored a
 
 | col_name | type | description |
 |---|---|---|
-| `event_id` | character |  |
-| `innings_number` | integer |  |
-| `batting_team_id` | character |  |
-| `runs` | integer |  |
-| `wickets` | integer |  |
-| `balls_bowled` | integer |  |
-| `balls_total` | integer |  |
-| `target` | integer |  |
-| `fmt` | character |  |
-| `overs_left` | integer |  |
-| `wickets_left` | integer |  |
-| `resources_left` | double |  |
-| `proj_final` | double |  |
-| `win_prob_raw` | double |  |
-| `win_prob` | double |  |
-| `exp_runs_remaining` | double |  |
-| `exp_run_rate` | double |  |
+| `event_id` | String |  |
+| `innings_number` | Int64 |  |
+| `batting_team_id` | String |  |
+| `runs` | Int64 |  |
+| `wickets` | Int64 |  |
+| `balls_bowled` | Int64 |  |
+| `balls_total` | Int64 |  |
+| `target` | Int64 |  |
+| `fmt` | String |  |
+| `overs_left` | Int64 |  |
+| `wickets_left` | Int64 |  |
+| `resources_left` | Float64 |  |
+| `proj_final` | Float64 |  |
+| `win_prob_raw` | Float64 |  |
+| `win_prob` | Float64 |  |
+| `exp_runs_remaining` | Float64 |  |
+| `exp_run_rate` | Float64 |  |
 
 **Example**
 
@@ -80,15 +80,15 @@ A `polars.DataFrame` (or pandas) with the documented state schema; a zero-row fr
 
 | col_name | type | description |
 |---|---|---|
-| `event_id` | character |  |
-| `innings_number` | integer |  |
-| `batting_team_id` | character |  |
-| `runs` | integer |  |
-| `wickets` | integer |  |
-| `balls_bowled` | integer |  |
-| `balls_total` | integer |  |
-| `target` | integer |  |
-| `fmt` | character |  |
+| `event_id` | String |  |
+| `innings_number` | Int64 |  |
+| `batting_team_id` | String |  |
+| `runs` | Int64 |  |
+| `wickets` | Int64 |  |
+| `balls_bowled` | Int64 |  |
+| `balls_total` | Int64 |  |
+| `target` | Int64 |  |
+| `fmt` | String |  |
 
 **Raises**
 
@@ -124,21 +124,21 @@ The input rows plus `regime:Utf8` (the match's regime id, `~sportsdataverse.cric
 
 | col_name | type | description |
 |---|---|---|
-| `event_id` | character |  |
-| `innings_number` | integer |  |
-| `batting_team_id` | character |  |
-| `runs` | integer |  |
-| `wickets` | integer |  |
-| `balls_bowled` | integer |  |
-| `balls_total` | integer |  |
-| `target` | integer |  |
-| `fmt` | character |  |
-| `overs_left` | integer |  |
-| `wickets_left` | integer |  |
-| `resources_left` | double |  |
-| `proj_final` | double |  |
-| `win_prob_raw` | double |  |
-| `win_prob` | double |  |
+| `event_id` | String |  |
+| `innings_number` | Int64 |  |
+| `batting_team_id` | String |  |
+| `runs` | Int64 |  |
+| `wickets` | Int64 |  |
+| `balls_bowled` | Int64 |  |
+| `balls_total` | Int64 |  |
+| `target` | Int64 |  |
+| `fmt` | String |  |
+| `overs_left` | Int64 |  |
+| `wickets_left` | Int64 |  |
+| `resources_left` | Float64 |  |
+| `proj_final` | Float64 |  |
+| `win_prob_raw` | Float64 |  |
+| `win_prob` | Float64 |  |
 
 **Raises**
 
@@ -182,24 +182,24 @@ The input rows (sorted by `event_id, innings_number, balls_bowled`) plus `win_pr
 
 | col_name | type | description |
 |---|---|---|
-| `event_id` | character |  |
-| `innings_number` | integer |  |
-| `batting_team_id` | character |  |
-| `runs` | integer |  |
-| `wickets` | integer |  |
-| `balls_bowled` | integer |  |
-| `balls_total` | integer |  |
-| `target` | integer |  |
-| `fmt` | character |  |
-| `overs_left` | integer |  |
-| `wickets_left` | integer |  |
-| `resources_left` | double |  |
-| `proj_final` | double |  |
-| `win_prob_raw` | double |  |
-| `win_prob` | double |  |
-| `win_prob_before` | double |  |
-| `wpa_batting` | double |  |
-| `wpa_bowling` | double |  |
+| `event_id` | String |  |
+| `innings_number` | Int64 |  |
+| `batting_team_id` | String |  |
+| `runs` | Int64 |  |
+| `wickets` | Int64 |  |
+| `balls_bowled` | Int64 |  |
+| `balls_total` | Int64 |  |
+| `target` | Int64 |  |
+| `fmt` | String |  |
+| `overs_left` | Int64 |  |
+| `wickets_left` | Int64 |  |
+| `resources_left` | Float64 |  |
+| `proj_final` | Float64 |  |
+| `win_prob_raw` | Float64 |  |
+| `win_prob` | Float64 |  |
+| `win_prob_before` | Float64 |  |
+| `wpa_batting` | Float64 |  |
+| `wpa_bowling` | Float64 |  |
 
 **Example**
 
@@ -235,13 +235,13 @@ one row per `(season, team_id)`, sorted by them: `games`, `wins`, `deserved_wins
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season of the games rolled up, as the pbp keys it (CFB and NFL starting year). |
-| `team_id` | integer | Team id as paper_index_games carries it (the released pbp's pos_team_id dtype, ESPN team id). |
-| `games` | integer | Games the team played that season that paper_index_games scored (completed, not tied, both sides at least 20 scrimmage snaps; NFL Pro Bowl excluded). |
-| `wins` | integer | Games the team won among those scored games. |
-| `deserved_wins` | double | Sum of the team's paper_share over the season: the wins the Paper Index says its play earned. |
-| `luck_wins` | double | wins minus deserved_wins; positive means the team won more games than its play deserved. |
-| `luck_z` | double | luck_wins / sqrt(sum(p * (1 - p))) over the team's game shares p: luck in standard deviations of a sum of independent Bernoulli(p) wins; null when that variance is 0. |
+| `season` | Int64 | Season of the games rolled up, as the pbp keys it (CFB and NFL starting year). |
+| `team_id` | Int64 | Team id as paper_index_games carries it (the released pbp's pos_team_id dtype, ESPN team id). |
+| `games` | Int64 | Games the team played that season that paper_index_games scored (completed, not tied, both sides at least 20 scrimmage snaps; NFL Pro Bowl excluded). |
+| `wins` | Int64 | Games the team won among those scored games. |
+| `deserved_wins` | Float64 | Sum of the team's paper_share over the season: the wins the Paper Index says its play earned. |
+| `luck_wins` | Float64 | wins minus deserved_wins; positive means the team won more games than its play deserved. |
+| `luck_z` | Float64 | luck_wins / sqrt(sum(p * (1 - p))) over the team's game shares p: luck in standard deviations of a sum of independent Bernoulli(p) wins; null when that variance is 0. |
 
 **Raises**
 
@@ -328,22 +328,22 @@ keyed by `(game_id, team_id)`, sorted by them; `game_id` and `team_id` keep the 
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | ESPN game id, typed as the released pbp's game_id (Int64 in espn_cfb_pbp and espn_nfl_pbp). |
-| `team_id` | integer | ESPN id of the team the row describes, typed as the released pbp's pos_team_id (Int64 in espn_cfb_pbp and espn_nfl_pbp). |
-| `season` | integer | Season of the game, as the pbp keys it (CFB and NFL starting year). |
-| `season_type` | integer | ESPN season type of the game (seasonType): 2 regular season, 3 postseason. |
-| `week` | integer | ESPN week number of the game within its season type. |
-| `won` | logical | Whether the team outscored its opponent (final score from the game's last play). |
-| `paper_share` | double | The team's Paper Index share in [0, 1]: its deserved-win probability from the eight margins through the league's fitted intercept-free logistic. |
-| `opp_share` | double | The opponent's Paper Index share; paper_share + opp_share = 1. |
-| `success_margin` | double | Team EPA success rate minus the opponent's, over scrimmage snaps. |
-| `explosive_margin` | double | Team explosive-play rate (EPA_explosive) minus the opponent's, over scrimmage snaps. |
-| `explosive_epa_margin` | double | Team explosiveness (mean EPA per successful snap) minus the opponent's. |
-| `opp_conversion_margin` | double | Team scoring-opportunity conversion (share of opportunity drives that scored; 0.5 with no opportunities) minus the opponent's. |
-| `pts_per_opp_margin` | double | Team points per scoring opportunity minus the opponent's (NFL counts made field goals; no opportunities takes the league's train-season average). |
-| `field_position_margin` | double | Expected points of the team's average drive start on the league's bundled EP-by-yardline curve minus the opponent's. |
-| `havoc_margin` | double | Havoc rate the team's defense created (havoc allowed on opponent snaps) minus the havoc rate its offense allowed. |
-| `turnovers_margin` | double | Turnovers the opponent's offense committed minus the team's. |
+| `game_id` | Int64 | ESPN game id, typed as the released pbp's game_id (Int64 in espn_cfb_pbp and espn_nfl_pbp). |
+| `team_id` | Int64 | ESPN id of the team the row describes, typed as the released pbp's pos_team_id (Int64 in espn_cfb_pbp and espn_nfl_pbp). |
+| `season` | Int64 | Season of the game, as the pbp keys it (CFB and NFL starting year). |
+| `season_type` | Int64 | ESPN season type of the game (seasonType): 2 regular season, 3 postseason. |
+| `week` | Int64 | ESPN week number of the game within its season type. |
+| `won` | Boolean | Whether the team outscored its opponent (final score from the game's last play). |
+| `paper_share` | Float64 | The team's Paper Index share in [0, 1]: its deserved-win probability from the eight margins through the league's fitted intercept-free logistic. |
+| `opp_share` | Float64 | The opponent's Paper Index share; paper_share + opp_share = 1. |
+| `success_margin` | Float64 | Team EPA success rate minus the opponent's, over scrimmage snaps. |
+| `explosive_margin` | Float64 | Team explosive-play rate (EPA_explosive) minus the opponent's, over scrimmage snaps. |
+| `explosive_epa_margin` | Float64 | Team explosiveness (mean EPA per successful snap) minus the opponent's. |
+| `opp_conversion_margin` | Float64 | Team scoring-opportunity conversion (share of opportunity drives that scored; 0.5 with no opportunities) minus the opponent's. |
+| `pts_per_opp_margin` | Float64 | Team points per scoring opportunity minus the opponent's (NFL counts made field goals; no opportunities takes the league's train-season average). |
+| `field_position_margin` | Float64 | Expected points of the team's average drive start on the league's bundled EP-by-yardline curve minus the opponent's. |
+| `havoc_margin` | Float64 | Havoc rate the team's defense created (havoc allowed on opponent snaps) minus the havoc rate its offense allowed. |
+| `turnovers_margin` | Float64 | Turnovers the opponent's offense committed minus the team's. |
 
 **Raises**
 
@@ -391,13 +391,13 @@ One row per team: `team_id, adj_off, adj_def, adj_net, raw_off, raw_def, games`.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character |  |
-| `adj_off` | double |  |
-| `adj_def` | double |  |
-| `adj_net` | double |  |
-| `raw_off` | double |  |
-| `raw_def` | double |  |
-| `games` | integer |  |
+| `team_id` | String |  |
+| `adj_off` | Float64 |  |
+| `adj_def` | Float64 |  |
+| `adj_net` | Float64 |  |
+| `raw_off` | Float64 |  |
+| `raw_def` | Float64 |  |
+| `games` | Int64 |  |
 
 **Example**
 

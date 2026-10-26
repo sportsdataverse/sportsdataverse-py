@@ -60,13 +60,13 @@ A polars DataFrame, one row per play. |col_name |type | |:-------------------|:-
 
 | col_name | type | description |
 |---|---|---|
-| `score_diff` | integer |  |
-| `sec_remaining` | double |  |
-| `sqrt_sec_remaining` | double |  |
-| `strength_diff` | integer |  |
-| `home_goalie_pulled` | integer |  |
-| `away_goalie_pulled` | integer |  |
-| `pregame_logit` | double |  |
+| `score_diff` | Int64 |  |
+| `sec_remaining` | Float64 |  |
+| `sqrt_sec_remaining` | Float64 |  |
+| `strength_diff` | Int64 |  |
+| `home_goalie_pulled` | Int64 |  |
+| `away_goalie_pulled` | Int64 |  |
+| `pregame_logit` | Float64 |  |
 
 **Example**
 
@@ -99,14 +99,14 @@ Per-skater frame: `player_id`, `season`, `top_speed`, `distance_km`, `speed_burs
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `season` | integer | Season year (echoed from arg). |
-| `top_speed` | double |  |
-| `distance_km` | double |  |
-| `speed_bursts_20` | double |  |
-| `oz_time_pct` | double |  |
-| `skating_value` | double |  |
-| `skating_value_rank` | integer |  |
+| `player_id` | Int64 | Unique player identifier. |
+| `season` | Int64 | Season year (echoed from arg). |
+| `top_speed` | Float64 |  |
+| `distance_km` | Float64 |  |
+| `speed_bursts_20` | Float64 |  |
+| `oz_time_pct` | Float64 |  |
+| `skating_value` | Float64 |  |
+| `skating_value_rank` | Int64 |  |
 
 **Example**
 
@@ -147,12 +147,12 @@ Per-player frame: `player_id`, `faceoffs_taken`, `faceoffs_won`, `fo_win_pct`, `
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `faceoffs_taken` | integer | Faceoffs taken in the season. |
-| `faceoffs_won` | integer | Faceoffs won in the season. |
-| `fo_win_pct` | double |  |
-| `fo_win_pct_above_exp` | double |  |
-| `faceoff_value` | double |  |
+| `player_id` | String | Unique player identifier. |
+| `faceoffs_taken` | Int64 | Faceoffs taken in the season. |
+| `faceoffs_won` | Int64 | Faceoffs won in the season. |
+| `fo_win_pct` | Float64 |  |
+| `fo_win_pct_above_exp` | Float64 |  |
+| `faceoff_value` | Float64 |  |
 
 **Example**
 
@@ -226,7 +226,7 @@ A polars (or pandas) DataFrame, one row per play, with a single `home_win_prob: 
 
 | col_name | type | description |
 |---|---|---|
-| `home_win_prob` | double |  |
+| `home_win_prob` | Float64 |  |
 
 **Example**
 
@@ -265,15 +265,15 @@ Per-player frame: `player_id`, `penalties_drawn`, `penalties_taken`, `minors_dra
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `penalties_drawn` | integer |  |
-| `penalties_taken` | integer |  |
-| `minors_drawn` | integer |  |
-| `minors_taken` | integer |  |
-| `majors_drawn` | integer |  |
-| `majors_taken` | integer |  |
-| `net_penalties` | integer |  |
-| `net_penalty_value` | double |  |
+| `player_id` | String | Unique player identifier. |
+| `penalties_drawn` | Int64 |  |
+| `penalties_taken` | Int64 |  |
+| `minors_drawn` | Int64 |  |
+| `minors_taken` | Int64 |  |
+| `majors_drawn` | Int64 |  |
+| `majors_taken` | Int64 |  |
+| `net_penalties` | Int64 |  |
+| `net_penalty_value` | Float64 |  |
 
 **Example**
 
@@ -321,16 +321,16 @@ A polars (or pandas) DataFrame, one row per (player, game, stat). Empty/malforme
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season year (echoed from arg). |
-| `game_id` | integer | Unique game identifier. |
-| `player_id` | integer | Unique player identifier. |
-| `team` | character | Team name. |
-| `opp_team` | character |  |
-| `stat` | character |  |
-| `proj_mean` | double |  |
-| `proj_sd` | double |  |
-| `p_over` | double |  |
-| `line` | double |  |
+| `season` | Int64 | Season year (echoed from arg). |
+| `game_id` | Int64 | Unique game identifier. |
+| `player_id` | Int64 | Unique player identifier. |
+| `team` | String | Team name. |
+| `opp_team` | String |  |
+| `stat` | String |  |
+| `proj_mean` | Float64 |  |
+| `proj_sd` | Float64 |  |
+| `p_over` | Float64 |  |
+| `line` | Float64 |  |
 
 **Example**
 
@@ -399,11 +399,11 @@ Per-skater power-play/penalty-kill value (goals) above/below league baseline.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `pp_toi_minutes` | double |  |
-| `pk_toi_minutes` | double |  |
-| `pp_value` | double |  |
-| `pk_value` | double |  |
+| `player_id` | Int64 | Unique player identifier. |
+| `pp_toi_minutes` | Float64 |  |
+| `pk_toi_minutes` | Float64 |  |
+| `pp_value` | Float64 |  |
+| `pk_value` | Float64 |  |
 
 **Example**
 
@@ -441,13 +441,13 @@ Per-player frame: `player_id`, `controlled_entries`, `dump_entries`, `exits`, `c
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `controlled_entries` | integer |  |
-| `dump_entries` | integer |  |
-| `exits` | integer |  |
-| `controlled_entry_rate` | double |  |
-| `entry_value` | double |  |
-| `exit_value` | double |  |
+| `player_id` | String | Unique player identifier. |
+| `controlled_entries` | Int64 |  |
+| `dump_entries` | Int64 |  |
+| `exits` | Int64 |  |
+| `controlled_entry_rate` | Float64 |  |
+| `entry_value` | Float64 |  |
+| `exit_value` | Float64 |  |
 
 **Example**
 

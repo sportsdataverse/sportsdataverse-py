@@ -9,7 +9,7 @@ toc_max_heading_level: 2
 
 ## nba_stats_videodetailsasset
 
-GET /stats/videodetailsasset
+Video details asset.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/videodetailsasset`
 
@@ -56,41 +56,41 @@ GET /stats/videodetailsasset
 
 | col_name | type | description |
 |---|---|---|
-| `uuid` | character | Uuid. |
-| `sdur` | integer | Sdur. |
-| `surl` | character | Surl. |
-| `sth` | character | Sth. |
-| `mdur` | integer | Mdur. |
-| `murl` | character | Murl. |
-| `mth` | character | Mth. |
-| `ldur` | integer | Ldur. |
-| `lurl` | character | Lurl. |
-| `lth` | character | Lth. |
-| `vtt` | character | Vtt. |
-| `scc` | character | Scc. |
-| `srt` | character | Srt. |
+| `uuid` | String | Uuid. |
+| `sdur` | Int64 | Sdur. |
+| `surl` | String | Surl. |
+| `sth` | String | Sth. |
+| `mdur` | Int64 | Mdur. |
+| `murl` | String | Murl. |
+| `mth` | String | Mth. |
+| `ldur` | Int64 | Ldur. |
+| `lurl` | String | Lurl. |
+| `lth` | String | Lth. |
+| `vtt` | String | Vtt. |
+| `scc` | String | Scc. |
+| `srt` | String | Srt. |
 
 **playlist**
 
 | col_name | type | description |
 |---|---|---|
-| `gi` | character | Gi. |
-| `ei` | integer | Ei. |
-| `y` | integer | Y. |
-| `m` | character | M. |
-| `d` | character | D. |
-| `gc` | character | Gc. |
-| `p` | integer | P. |
-| `dsc` | character | Dsc. |
-| `ha` | character | Ha. |
-| `hid` | integer | Hid. |
-| `va` | character | Va. |
-| `vid` | integer | Vid. |
-| `hpb` | integer | Hpb. |
-| `hpa` | integer | Hpa. |
-| `vpb` | integer | Vpb. |
-| `vpa` | integer | Vpa. |
-| `pta` | integer | Pta. |
+| `gi` | String | Gi. |
+| `ei` | Int64 | Ei. |
+| `y` | Int64 | Y. |
+| `m` | String | M. |
+| `d` | String | D. |
+| `gc` | String | Gc. |
+| `p` | Int64 | P. |
+| `dsc` | String | Dsc. |
+| `ha` | String | Ha. |
+| `hid` | Int64 | Hid. |
+| `va` | String | Va. |
+| `vid` | Int64 | Vid. |
+| `hpb` | Int64 | Hpb. |
+| `hpa` | Int64 | Hpa. |
+| `vpb` | Int64 | Vpb. |
+| `vpa` | Int64 | Vpa. |
+| `pta` | Int64 | Pta. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -111,7 +111,7 @@ nba_stats_videodetailsasset(league_id='00', season='2024-25')
 
 ## nba_stats_videoevents
 
-GET /stats/videoevents
+Video events.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/videoevents`
 
@@ -130,40 +130,40 @@ GET /stats/videoevents
 
 | col_name | type | description |
 |---|---|---|
-| `uuid` | character | Uuid. |
-| `dur` | character | Dur. |
-| `stt` | character | Stt. |
-| `stp` | character | Stp. |
-| `sth` | character | Sth. |
-| `stw` | character | Stw. |
-| `mtt` | character | Mtt. |
-| `mtp` | character | Mtp. |
-| `mth` | character | Mth. |
-| `mtw` | character | Mtw. |
-| `ltt` | character | Ltt. |
-| `ltp` | character | Ltp. |
-| `lth` | character | Lth. |
-| `ltw` | character | Ltw. |
+| `uuid` | String | Uuid. |
+| `dur` | String | Dur. |
+| `stt` | String | Stt. |
+| `stp` | String | Stp. |
+| `sth` | String | Sth. |
+| `stw` | String | Stw. |
+| `mtt` | String | Mtt. |
+| `mtp` | String | Mtp. |
+| `mth` | String | Mth. |
+| `mtw` | String | Mtw. |
+| `ltt` | String | Ltt. |
+| `ltp` | String | Ltp. |
+| `lth` | String | Lth. |
+| `ltw` | String | Ltw. |
 
 **playlist**
 
 | col_name | type | description |
 |---|---|---|
-| `gi` | character | Gi. |
-| `ei` | integer | Ei. |
-| `y` | integer | Y. |
-| `m` | character | M. |
-| `d` | character | D. |
-| `gc` | character | Gc. |
-| `p` | integer | P. |
-| `dsc` | character | Dsc. |
-| `ha` | character | Ha. |
-| `va` | character | Va. |
-| `hpb` | integer | Hpb. |
-| `hpa` | integer | Hpa. |
-| `vpb` | integer | Vpb. |
-| `vpa` | integer | Vpa. |
-| `pta` | integer | Pta. |
+| `gi` | String | Gi. |
+| `ei` | Int64 | Ei. |
+| `y` | Int64 | Y. |
+| `m` | String | M. |
+| `d` | String | D. |
+| `gc` | String | Gc. |
+| `p` | Int64 | P. |
+| `dsc` | String | Dsc. |
+| `ha` | String | Ha. |
+| `va` | String | Va. |
+| `hpb` | Int64 | Hpb. |
+| `hpa` | Int64 | Hpa. |
+| `vpb` | Int64 | Vpb. |
+| `vpa` | Int64 | Vpa. |
+| `pta` | Int64 | Pta. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -184,7 +184,7 @@ nba_stats_videoevents()
 
 ## nba_stats_videoeventsasset
 
-GET /stats/videoeventsasset
+Video events asset.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/videoeventsasset`
 
@@ -203,41 +203,41 @@ GET /stats/videoeventsasset
 
 | col_name | type | description |
 |---|---|---|
-| `uuid` | character | Uuid. |
-| `sdur` | integer | Sdur. |
-| `surl` | character | Surl. |
-| `sth` | character | Sth. |
-| `mdur` | integer | Mdur. |
-| `murl` | character | Murl. |
-| `mth` | character | Mth. |
-| `ldur` | integer | Ldur. |
-| `lurl` | character | Lurl. |
-| `lth` | character | Lth. |
-| `vtt` | character | Vtt. |
-| `scc` | character | Scc. |
-| `srt` | character | Srt. |
+| `uuid` | String | Uuid. |
+| `sdur` | Int64 | Sdur. |
+| `surl` | String | Surl. |
+| `sth` | String | Sth. |
+| `mdur` | Int64 | Mdur. |
+| `murl` | String | Murl. |
+| `mth` | String | Mth. |
+| `ldur` | Int64 | Ldur. |
+| `lurl` | String | Lurl. |
+| `lth` | String | Lth. |
+| `vtt` | String | Vtt. |
+| `scc` | String | Scc. |
+| `srt` | String | Srt. |
 
 **playlist**
 
 | col_name | type | description |
 |---|---|---|
-| `gi` | character | Gi. |
-| `ei` | integer | Ei. |
-| `y` | integer | Y. |
-| `m` | character | M. |
-| `d` | character | D. |
-| `gc` | character | Gc. |
-| `p` | integer | P. |
-| `dsc` | character | Dsc. |
-| `ha` | character | Ha. |
-| `hid` | integer | Hid. |
-| `va` | character | Va. |
-| `vid` | integer | Vid. |
-| `hpb` | integer | Hpb. |
-| `hpa` | integer | Hpa. |
-| `vpb` | integer | Vpb. |
-| `vpa` | integer | Vpa. |
-| `pta` | integer | Pta. |
+| `gi` | String | Gi. |
+| `ei` | Int64 | Ei. |
+| `y` | Int64 | Y. |
+| `m` | String | M. |
+| `d` | String | D. |
+| `gc` | String | Gc. |
+| `p` | Int64 | P. |
+| `dsc` | String | Dsc. |
+| `ha` | String | Ha. |
+| `hid` | Int64 | Hid. |
+| `va` | String | Va. |
+| `vid` | Int64 | Vid. |
+| `hpb` | Int64 | Hpb. |
+| `hpa` | Int64 | Hpa. |
+| `vpb` | Int64 | Vpb. |
+| `vpa` | Int64 | Vpa. |
+| `pta` | Int64 | Pta. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -258,7 +258,7 @@ nba_stats_videoeventsasset()
 
 ## nba_stats_videostatus
 
-GET /stats/videostatus
+Video status.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/videostatus`
 
@@ -275,20 +275,20 @@ GET /stats/videostatus
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `visitor_team_id` | integer | Unique identifier for visitor team. |
-| `visitor_team_city` | character | City name of the visiting team. |
-| `visitor_team_name` | character | Nickname of the visiting team. |
-| `visitor_team_abbreviation` | character | Abbreviation of the visiting team. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `home_team_city` | character | Home team city / location. |
-| `home_team_name` | character | Home team name. |
-| `home_team_abbreviation` | character | Home team's three-letter tricode (e.g. 'PHI'). |
-| `game_status` | integer | Game status label. |
-| `game_status_text` | character | Game status display text (e.g. 'Final', '4:32 - 4th'). |
-| `is_available` | integer | Flag indicating whether game video is available in the league's stats video system. |
-| `pt_xyz_available` | integer | Pt xyz available. |
+| `game_id` | String | Unique game identifier. |
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `visitor_team_id` | Int64 | Unique identifier for visitor team. |
+| `visitor_team_city` | String | City name of the visiting team. |
+| `visitor_team_name` | String | Nickname of the visiting team. |
+| `visitor_team_abbreviation` | String | Abbreviation of the visiting team. |
+| `home_team_id` | Int64 | Unique identifier for the home team. |
+| `home_team_city` | String | Home team city / location. |
+| `home_team_name` | String | Home team name. |
+| `home_team_abbreviation` | String | Home team's three-letter tricode (e.g. 'PHI'). |
+| `game_status` | Int64 | Game status label. |
+| `game_status_text` | String | Game status display text (e.g. 'Final', '4:32 - 4th'). |
+| `is_available` | Int64 | Flag indicating whether game video is available in the league's stats video system. |
+| `pt_xyz_available` | Int64 | Pt xyz available. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

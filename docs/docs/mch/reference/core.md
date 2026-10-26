@@ -1,11 +1,11 @@
 ---
-title: MCH — ESPN core API (v2)
+title: Men's college hockey — ESPN core API (v2)
 sidebar_label: ESPN core API (v2)
-description: "MCH — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college hockey — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 22
 toc_max_heading_level: 2
 ---
-# MCH — ESPN core API (v2)
+# Men's college hockey — ESPN core API (v2)
 
 `sportsdataverse.hockey.mch` — 87 endpoints.
 

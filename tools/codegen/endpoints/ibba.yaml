@@ -2,7 +2,7 @@ api: ibba
 docstring:
   example_import: true
   notes:
-  - 'Access (sdv-internal-refs/ibba/README.md): unofficial and reverse-engineered,
+  - 'Access: unofficial and reverse-engineered,
     keyless, for internal use. The wrappers read basket.co.il''s ASP.NET web service
     (the ops its own site calls) and space requests at least one second apart; keep
     crawls slow and incremental. Payloads are not redistributed as release assets.

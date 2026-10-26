@@ -1,9 +1,9 @@
 ---
-title: HA
-sidebar_label: HA
-description: "sdv-py HA: endpoint references, dataset loaders and parsers for HA in the SportsDataverse Python package."
+title: HockeyAllsvenskan
+sidebar_label: HockeyAllsvenskan
+description: "sdv-py HockeyAllsvenskan: endpoint references, dataset loaders and parsers for HockeyAllsvenskan in the SportsDataverse Python package."
 ---
-# HA (`sportsdataverse.hockey.ha`)
+# HockeyAllsvenskan (`sportsdataverse.hockey.ha`)
 
 ## Data sources
 
