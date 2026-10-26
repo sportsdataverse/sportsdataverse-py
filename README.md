@@ -260,6 +260,7 @@ under [`examples/notebooks/`](examples/notebooks):
 | `16_international_basketball_intro.ipynb` | EuroLeague, Genius Sports (SLB), NBL Australia, ACB; a EuroLeague shot chart on a FIBA court (sdvplot) |
 | `17_european_college_hockey_intro.ipynb` | SHL, Liiga, DEL, KHL and NCAA hockey; a DEL shot map, college team colors (sdvplot) |
 | `18_prediction_markets_intro.ipynb` | Kalshi and Polymarket market data: events, markets, order books |
+| `19_more_sources_intro.ipynb` | NBA G League (ESPN), Formula 1, TheSportsDB, ESPN content |
 
 ## Using with AI agents
 
