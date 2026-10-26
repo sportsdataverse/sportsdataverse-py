@@ -257,6 +257,7 @@ under [`examples/notebooks/`](examples/notebooks):
 | `13_soccer_intro.ipynb` | ESPN soccer — league-parameterized wrappers |
 | `14_cricket_intro.ipynb` | ESPN cricket + win-probability models |
 | `15_other_espn_leagues_intro.ipynb` | UFL/XFL/CFL, college hockey, college baseball/softball ESPN families |
+| `16_international_basketball_intro.ipynb` | EuroLeague, Genius Sports (SLB), NBL Australia, ACB; a EuroLeague shot chart on a FIBA court (sdvplot) |
 
 ## Using with AI agents
 
