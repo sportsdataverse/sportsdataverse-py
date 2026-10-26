@@ -368,7 +368,7 @@ def test_empty_and_invalid_inputs(cfb_pbp):
 def test_package_level_export_and_reference_docs():
     import sportsdataverse
 
-    assert sportsdataverse.analytics.metric_curves is metric_curves
+    assert sportsdataverse.metric_curves is metric_curves
     assert sportsdataverse.football_attempts is football_attempts
     assert sportsdataverse.nflfastr_attempts is nflfastr_attempts
     assert sportsdataverse.shot_attempts is shot_attempts

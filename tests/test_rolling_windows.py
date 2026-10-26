@@ -310,7 +310,7 @@ def test_windows_override_and_empty_season(cfb_events):
 def test_package_level_export_and_reference_docs():
     import sportsdataverse
 
-    assert sportsdataverse.analytics.rolling_windows is rolling_windows
+    assert sportsdataverse.rolling_windows is rolling_windows
     assert sportsdataverse.football_events is football_events
     assert sportsdataverse.shot_events is shot_events
     # the page is split into family pages under reference/python-helpers/ (the overview stays at the old path)
