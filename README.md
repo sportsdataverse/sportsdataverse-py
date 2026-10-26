@@ -259,6 +259,7 @@ under [`examples/notebooks/`](examples/notebooks):
 | `15_other_espn_leagues_intro.ipynb` | UFL/XFL/CFL, college hockey, college baseball/softball ESPN families |
 | `16_international_basketball_intro.ipynb` | EuroLeague, Genius Sports (SLB), NBL Australia, ACB; a EuroLeague shot chart on a FIBA court (sdvplot) |
 | `17_european_college_hockey_intro.ipynb` | SHL, Liiga, DEL, KHL and NCAA hockey; a DEL shot map, college team colors (sdvplot) |
+| `18_prediction_markets_intro.ipynb` | Kalshi and Polymarket market data: events, markets, order books |
 
 ## Using with AI agents
 
