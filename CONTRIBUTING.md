@@ -8,6 +8,9 @@
     - [Worktrees](#worktrees)
   - [Python version support](#python-version-support)
   - [Code standards for new modules](#code-standards-for-new-modules)
+  - [Quality gates (`quality.yml`)](#quality-gates-qualityyml)
+    - [The scoreboard and its baselines](#the-scoreboard-and-its-baselines)
+    - [Mutation registry](#mutation-registry)
   - [Deprecating a public API](#deprecating-a-public-api)
   - [Codegen and the docs site](#codegen-and-the-docs-site)
   - [Documentation & the docs site](#documentation--the-docs-site)
@@ -227,6 +230,104 @@ the separate `SDV_PY_NBA_STATS_LIVE=1` gate that no workflow sets. The gates kee
   `col_name | type | description` table; column names must match the parser's
   snake-cased output. Validate the parser against a **real captured payload**,
   not a hand-written fixture.
+
+## Quality gates (`quality.yml`)
+
+`.github/workflows/quality.yml` runs on every pull request into `main` or a `devel-*` branch,
+on pushes to those branches, and on manual dispatch. Its gating jobs:
+
+- **`ruff + mypy`**: the quality scoreboard (below), `ruff check` and `ruff format --check` over
+  `sportsdataverse/ tests/ tools/`, `uv run --frozen mypy` (the `[tool.mypy] files` ratchet) and
+  `pytest tests/contracts/`. The install step is `uv sync --locked`, so a stale `uv.lock` fails here.
+- **`coverage delta (offline suite)`**: the offline suite once under pytest-cov
+  (`pytest -n auto --dist loadgroup --ignore=tests/codegen --cov=sportsdataverse`), then the
+  scoreboard with `--coverage-json`. It uploads `coverage.json` + `scoreboard-ci.json` as the
+  `coverage-scoreboard` artifact; on `main` the `publish coverage badge` job turns that into the
+  README badges (see [Coverage numbers](#coverage-numbers)).
+- **`mutation registry (I/N)`**: see [Mutation registry](#mutation-registry).
+
+### The scoreboard and its baselines
+
+`tools/quality_scoreboard.py` measures hand-written code only (generated modules are excluded):
+counts of ruff rule families (`UP`, `B`, `SIM`, `C901`, stale `noqa` comments, ...), size metrics
+and, when given a pytest-cov JSON report, hand-written coverage overall and per hotspot module.
+`--check` exits 1 when any metric is worse than the baseline and otherwise ends with
+`SCOREBOARD OK: no metric regressed`. Counts are strict; a coverage percentage may drop by
+0.1 point (`COVERAGE_TOLERANCE`) before it counts. Run it locally (about 15 s without coverage):
+
+```sh
+uv run --frozen python tools/quality_scoreboard.py --check --baseline baseline/scoreboard-devel.json
+```
+
+Which baseline gates a pull request:
+
+- **Read from the base branch, never the PR.** CI fetches `baseline/` from the PR's base branch,
+  so a PR cannot lower its own bar by editing it. A PR that does edit
+  `baseline/scoreboard-devel.json` to loosen it gets a warning annotation for reviewers.
+- **Scoreboard file.** A PR into `devel-<topic>` is held to `baseline/scoreboard-<topic>-base.json`
+  (the topic's branch-point snapshot) when the base branch has one, otherwise to
+  `baseline/scoreboard-devel.json`. A PR into `main` uses `scoreboard-devel.json`, and the coverage
+  job always uses `baseline/coverage-devel.json`. A push gates against the checkout's own files.
+- **BOOTSTRAP.** When the base branch has no such baseline file yet, CI warns `BOOTSTRAP` and uses
+  the PR's own copy. This is the only case where the PR's file is trusted; once it merges, every
+  later PR reads the base branch.
+- **Worse than both baselines.** A sync PR (an upstream branch merged into its topic, such as
+  `devel-test-harness` into `devel-<topic>`) carries metrics the upstream already accepted, so
+  `tools/upstream_baseline.sh` adds the upstream's baseline as a second `--baseline`. A metric then
+  fails only when it is worse than **both**. The allowance applies only when the PR head contains
+  the upstream tip and the base does not; an ordinary task PR gets none, so never merge the upstream
+  into a task PR.
+
+**Refreshing a baseline** is a deliberate, reviewed commit to `baseline/`, made after the code
+it measures has merged. The two files differ: `scoreboard-devel.json` holds lint and size
+metrics only (the lint job passes no coverage report), while `coverage-devel.json` adds the
+coverage metrics. Re-seed them with `--write`:
+
+```sh
+# lint + size only; never give this file coverage metrics, or the lint job fails them as "not measured"
+uv run --frozen python tools/quality_scoreboard.py --write baseline/scoreboard-devel.json
+# coverage: copy scoreboard-ci.json from the coverage-scoreboard artifact of a green CI run of the
+# branch head (CI numbers, not a local run), or measure from a pytest-cov JSON report:
+uv run --frozen python tools/quality_scoreboard.py --write baseline/coverage-devel.json --coverage-json coverage.json
+```
+
+A metric a baseline tracks can only disappear by re-seeding that baseline, never by omission.
+
+### Mutation registry
+
+`tests/mutants/registry.yaml` lists mutations that some test must catch, and
+`tools/run_mutants.py` applies each one. A row names the source `file`, a `snippet` that occurs
+**exactly once** in it (never a line number), the `mutant` that replaces it, the pytest `test`
+(a file or node id, `-k` allowed) that must go red, the audit `finding` it guards, an optional
+`group`, and `expected`:
+
+- **`expected: kill`**: the run fails if `test` stays green under the mutant. The test must also
+  be green without it.
+- **`expected: {survive_until: <task>}`**: documents a measured test gap. It is reported, never
+  fatal, until the named task lands its killing test; then flip the row to `kill` and point `test`
+  at that test. An early kill is reported as `killed early`.
+
+Whatever `expected` says, a row that cannot be applied fails the run: the snippet drifted or is
+duplicated, the test file is gone, the mutant does not compile, or pytest selects nothing,
+crashes or hangs. Fix the row in the PR that moved the code. The mutation is a text replacement
+made in place and restored in a `finally`; if the runner is killed hard, `git checkout -- <file>`
+restores the source.
+
+```sh
+uv run --frozen python tools/run_mutants.py --list                      # print the rows, run nothing
+uv run --frozen python tools/run_mutants.py --dry-run                   # validate every snippet + test path
+uv run --frozen python tools/run_mutants.py --only <id|finding|group>   # one row, finding or group
+uv run --frozen python tools/run_mutants.py --shard 2/12                # one round-robin CI shard
+uv run --frozen python tools/run_mutants.py                             # every row (slow: ~20 s a row)
+```
+
+In CI the `mutants` job is a 12-shard matrix; each shard runs `--shard I/N` with I/N taken from
+`strategy.job-index` / `strategy.job-total`, so editing the matrix can never leave a row unrun.
+When the slowest shard nears the job's `timeout-minutes`, add a shard or raise the timeout.
+
+**A new guard gets a row.** A test written to stop a specific bug lands with a registry row in
+the same PR: the mutant re-introduces the bug and `test` names the new test, so the row proves
+the test can fail. Run `--only <id>` before pushing.
 
 ## Deprecating a public API
 
