@@ -7,7 +7,8 @@ description: "Every breaking change in sportsdataverse-py 0.2.0, with before and
 
 # Migrating to 0.2.0
 
-0.2.0 is the release after 0.1.4 (0.1.5 was never published; its changes ship in 0.2.0). It carries fifteen breaking changes, each recorded
+0.2.0 is the release after 0.1.4 (0.1.5 was never published; its changes ship in 0.2.0); it ships first as the
+`0.2.0b1` pre-release (`pip install --pre sportsdataverse`). It carries fifteen breaking changes, each recorded
 as a `changelog.d/*.breaking.md` fragment; the changes are on `main` already. This
 page takes them one at a time: what changed, who is affected, a before/after
 snippet and how to migrate. The fragments are the source of record, and the
@@ -443,3 +444,21 @@ cfl = get_sf_constants("cfl")    # the rule constants still work
 
 **How to migrate.** Drop CFL from spring-football EP/WP runs. The UFL and XFL are
 unchanged.
+
+## Deprecations are removed in 0.4.0
+
+Nothing deprecated in 0.2.0 breaks yet. Each name below still works, warns
+`DeprecationWarning` naming its replacement, and is removed in 0.4.0, two minor releases on:
+
+- the old package paths moved under `sportsdataverse.basketball`, `sportsdataverse.providers` and
+  `sportsdataverse.analytics`;
+- the 12 old `*_espn_ext` names of the wrappers renamed to `*_site`;
+- 29 unread `sportsdataverse.config` release URLs;
+- `dl_utils.ESPNHTTP` / `ESPNResponse`, the `df.janitor` case methods and
+  `decorators.record_mem_usage` / `record_time_usage`;
+- `espn_<lg>_teams.cache_clear()` and `sportsdataverse.scrape.ncaa.league_config`;
+- `pwhl_team_ratings(league=...)`;
+- the `load_nba_stats_*_v3` and four `load_wnba_stats_*` loader shims.
+
+**How to migrate.** Run your code with `python -W error::DeprecationWarning` (or
+`pytest -W error::DeprecationWarning`) and follow each message.

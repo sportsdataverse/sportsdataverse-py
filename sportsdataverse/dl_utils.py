@@ -809,7 +809,7 @@ class ColumnJanitor:
 
     Importing ``sportsdataverse`` registers it. ``clean_names()`` snake-cases every column with
     :func:`underscore`; ``to_pascal_case`` / ``to_camel_case`` / ``to_kebab_case`` are deprecated
-    (0.1.6; removed in 0.2.0) in favour of ``df.rename`` with :func:`camelize` / :func:`kebabize`.
+    (0.2.0; removed in 0.4.0) in favour of ``df.rename`` with :func:`camelize` / :func:`kebabize`.
 
     Example:
         Snake-case a frame's columns::
@@ -833,8 +833,8 @@ class ColumnJanitor:
         warn_deprecated(
             "DataFrame.janitor.to_pascal_case",
             replacement="df.rename(sportsdataverse.dl_utils.camelize)",
-            since="0.1.6",
-            removed_in="0.2.0",
+            since="0.2.0",
+            removed_in="0.4.0",
         )
         return self._df.rename({c: camelize(c, True) for c in self._df.columns})
 
@@ -842,8 +842,8 @@ class ColumnJanitor:
         warn_deprecated(
             "DataFrame.janitor.to_camel_case",
             replacement="df.rename(lambda c: sportsdataverse.dl_utils.camelize(c, False))",
-            since="0.1.6",
-            removed_in="0.2.0",
+            since="0.2.0",
+            removed_in="0.4.0",
         )
         return self._df.rename({c: camelize(c, False) for c in self._df.columns})
 
@@ -851,8 +851,8 @@ class ColumnJanitor:
         warn_deprecated(
             "DataFrame.janitor.to_kebab_case",
             replacement="df.rename(sportsdataverse.dl_utils.kebabize)",
-            since="0.1.6",
-            removed_in="0.2.0",
+            since="0.2.0",
+            removed_in="0.4.0",
         )
         return self._df.rename({c: kebabize(c) for c in self._df.columns})
 
@@ -1081,8 +1081,8 @@ def __getattr__(name: str) -> Any:  # PEP 562: warn on access, not on import
         warn_deprecated(
             f"sportsdataverse.dl_utils.{name}",
             replacement="sportsdataverse.dl_utils.download()",
-            since="0.1.6",
-            removed_in="0.2.0",
+            since="0.2.0",
+            removed_in="0.4.0",
         )
         return _DEPRECATED[name]
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sportsdataverse"
-version = "0.1.5"
+version = "0.2.0b1"
 description = "Tidy sports data in Python: play-by-play, box scores, schedules, rosters and models across 100+ leagues"
 readme = "README.md"
 license = "MIT"

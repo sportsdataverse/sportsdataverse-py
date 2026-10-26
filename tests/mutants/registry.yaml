@@ -2440,7 +2440,7 @@
   group: dead-public
   finding: C-L46
   file: sportsdataverse/decorators.py
-  snippet: "@deprecated(replacement=\"sportsdataverse.decorators.timer(number=1)\", since=\"0.1.6\", removed_in=\"0.2.0\")\n"
+  snippet: "@deprecated(replacement=\"sportsdataverse.decorators.timer(number=1)\", since=\"0.2.0\", removed_in=\"0.4.0\")\n"
   mutant: "@(lambda f: f)\n"
   test: tests/test_deprecations.py -k record_time_usage
   expected: kill
@@ -2449,7 +2449,7 @@
   group: dead-public
   finding: C-L46
   file: sportsdataverse/decorators.py
-  snippet: "@deprecated(\n    replacement=\"tracemalloc or psutil.Process().memory_info() directly\",\n    since=\"0.1.6\",\n    removed_in=\"0.2.0\",\n)\n"
+  snippet: "@deprecated(\n    replacement=\"tracemalloc or psutil.Process().memory_info() directly\",\n    since=\"0.2.0\",\n    removed_in=\"0.4.0\",\n)\n"
   mutant: "@(lambda f: f)\n"
   test: tests/test_deprecations.py -k record_mem_usage
   expected: kill
@@ -5493,7 +5493,7 @@
   mutant: 'pass'
   test: tests/test_espn_teams_family.py -k cache_clear_shim
   expected: kill
-  note: 'cache_clear() stays one deprecation cycle (removed in 0.2.0) and warns; the old docstrings named a clear_cache() that never existed'
+  note: 'cache_clear() stays one deprecation cycle (removed in 0.4.0) and warns; the old docstrings named a clear_cache() that never existed'
 
 # --- B-M9 / B-GB-17: PWHL statviewfeed gameSummary / player (task 2.14) ----------------------------
 # Killers: tests/pwhl/test_pwhl_api.py on the live captures pwhl_svf_gamesummary_164.json and

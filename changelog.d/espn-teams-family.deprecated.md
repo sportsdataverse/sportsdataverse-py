@@ -1,1 +1,2 @@
-- **ESPN teams:** `espn_<lg>_teams.cache_clear()` (the eight leagues) is kept for one deprecation cycle as a no-op that warns `DeprecationWarning`; it will be removed in 0.2.0. The functions no longer cache, so there is nothing to clear. (#888)
+- **ESPN teams:** `espn_<lg>_teams.cache_clear()` (the eight leagues) is a no-op that warns `DeprecationWarning` and is
+  removed in 0.4.0. The functions no longer cache, so there is nothing to clear. (#888)

@@ -1,1 +1,2 @@
-- `ncaa_wbb_shot_locations` takes `season=`, resolved through `wbb_period_model` (halves through 2014-15, quarters from 2015-16) instead of binding quarters unconditionally; the default stays quarters because stats.ncaa.org shot locations only exist from 2019. (sdv-internal-refs `rules/wbb.yaml#wbb-2016-four-quarters`)
+- **WBB NCAA:** `ncaa_wbb_shot_locations` takes `season=`, resolved through `wbb_period_model` (halves through 2014-15,
+  quarters from 2015-16); the default stays quarters, since stats.ncaa.org shot locations only exist from 2019. (#742)

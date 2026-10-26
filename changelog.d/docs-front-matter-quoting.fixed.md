@@ -1,1 +1,3 @@
-- **Docs build:** reference-page front matter now quotes a `title` or `sidebar_label` only when plain YAML would misread it. The ABA and TBF pages (labels containing `: `) failed the Docusaurus build after #859. Split-page category labels are read back as YAML, and new tests check every page's front matter and every `_category_.json`. The scb `x-api-secret` note no longer claims to mirror the site's own front-end code.
+- **Docs build:** reference-page front matter quotes a `title` or `sidebar_label` only when plain YAML would misread
+  it, so the ABA and TBF pages (labels with a colon and a space) build again; tests now check every page's front
+  matter and every `_category_.json`. The scb `x-api-secret` note no longer claims to mirror the site's code. (#861)

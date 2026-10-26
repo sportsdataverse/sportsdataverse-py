@@ -193,7 +193,7 @@ which loads PWHL pbp, schedules and game info only.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `seasons` | `Any` |  | an int or iterable of PWHL season end-years (`>= 2024`). |
-| `league` | `Any` | `None` | deprecated and ignored (the ratings are always PWHL); passing it warns. |
+| `league` | `Any` | `None` | deprecated and ignored (the ratings are always PWHL); passing it warns. Removed in 0.4.0. |
 
 **Returns**
 
