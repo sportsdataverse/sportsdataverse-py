@@ -1,16 +1,17 @@
 schema: leaders
 kind: dataframe
 columns:
-- name: rank
+- name: sort_order
   type: integer
-  description: 'Place of the athlete in ESPN''s leaderboard order (the requested category or sort), counted across pages:
-    (page - 1) * limit + position on the page.'
+  description: 'Position of the athlete in ESPN''s leaderboard order (the requested category or sort), counted across
+    pages: (page - 1) * limit + position on the page. A position, not a rank: tied athletes still count up; ESPN''s
+    per-stat ranks stay in the raw payload (return_parsed=False).'
 - name: athlete_id
   type: integer
   description: ESPN id of the athlete, the key the athlete endpoints (athlete_overview, athlete_stats) take.
 - name: athlete_uid
   type: character
-  description: ESPN composite athlete uid (s:<sport>~l:<league>~a:<athlete id>), kept as text.
+  description: ESPN composite athlete uid (`s:<sport>~l:<league>~a:<athlete id>`), kept as text.
 - name: athlete_display_name
   type: character
   description: Athlete's full display name.

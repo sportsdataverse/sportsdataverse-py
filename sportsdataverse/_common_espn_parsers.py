@@ -56,7 +56,7 @@ Endpoint → parser mapping
      - ``categories[].splits[]``
    * - ``_espn_statistics_byathlete``
      - :func:`parse_leaders`
-     - ``categories[].leaders[]``
+     - ``athletes[]``
    * - ``_core_v2_season_coaches``
      - :func:`parse_coaches`
      - ``items[]``
@@ -960,6 +960,35 @@ def parse_athlete_splits(payload: Dict, return_as_pandas: bool = False) -> pl.Da
 # ===========================================================================
 
 
+def _leaders_stat_columns(categories: List[dict]) -> Dict[str, List[str]]:
+    """``{category name: [column per values[] slot]}`` from the payload's top-level ``categories``.
+
+    ``names[i]`` labels ``values[i]`` (``labels`` only where a category ships no ``names``). Labels repeat inside a
+    category (``PTS`` is both points and points per game), so a name already taken falls back to ``stat_{i}``
+    rather than letting the second value overwrite the first.
+    """
+    columns: Dict[str, List[str]] = {}
+    for cat in categories:
+        if not isinstance(cat, dict):
+            continue
+        prefix = underscore(cat.get("name") or "")
+        cols: List[str] = []
+        for i, stat in enumerate(cat.get("names") or cat.get("labels") or []):
+            col = f"{prefix}_{underscore(stat)}"
+            cols.append(col if col not in cols else f"{prefix}_stat_{i}")
+        columns[cat.get("name")] = cols
+    return columns
+
+
+def _leaders_sort_offset(pagination: Any, page_size: int) -> int:
+    """Rows before this page in ESPN's order: ``(page - 1) * limit``; the page's own size when ``limit`` is absent."""
+    page = pagination if isinstance(pagination, dict) else {}
+    try:
+        return (int(page.get("page") or 1) - 1) * int(page.get("limit") or page_size)
+    except (TypeError, ValueError):
+        return 0
+
+
 @_documented_empty("leaders")
 @_zero_rows_unless_dict
 def parse_leaders(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -970,97 +999,69 @@ def parse_leaders(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame
     athlete and team identity plus one column per stat, named
     ``{category}_{stat}`` (``passing_passing_yards``): the stat names come from the
     payload's top-level ``categories[].names[]`` and the values from the athlete's
-    ``categories[].values[]``, matched by category name. ``rank`` is the row's place
-    in ESPN's order across pages (``(page - 1) * limit + n``).
+    ``categories[].values[]``, matched by category name. Every declared stat gets a
+    Float64 column, null where no athlete on the page carries that category.
 
-    The older shape, rows under ``categories[].leaders[]``, still parses: one row per
-    leader with the category in ``category`` and the stats under their own names. A
-    league without a leaderboard (ESPN answers ``{currentSeason}`` alone) gives zero rows.
+    The stats stay wide and category-prefixed (unlike :func:`parse_athlete_splits`)
+    because the same stat name means different things in different categories:
+    football ``interceptions`` is thrown under ``passing`` and made under
+    ``defensive``. ``sort_order`` is the row's place in ESPN's order across pages,
+    ``(page - 1) * limit + n``; it is a position, not a rank (ties still count up).
+    ESPN's own per-stat ranks and the page counts stay in the raw payload
+    (``return_parsed=False``). A league without a leaderboard (ESPN answers
+    ``{currentSeason}`` alone) gives zero rows.
 
     Args:
         payload: Raw JSON dict from the statistics/byathlete endpoint.
         return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
 
     Returns:
-        pl.DataFrame: Tidy frame; zero rows if payload is empty.
+        pl.DataFrame: One row per athlete, columns as above (pandas with ``return_as_pandas=True``). The
+        generated ``espn_<league>_leaders`` wrappers document the columns in the ``leaders`` returns table
+        (``leaders/<league>`` where a league has its own), and give that table's columns at zero rows.
     """
-    if not payload:
+    athletes = payload.get("athletes") if payload else None
+    if not isinstance(athletes, list) or not athletes:
         return _empty_frame(return_as_pandas)
 
-    categories = payload.get("categories") or []
+    columns = _leaders_stat_columns(payload.get("categories") or [])
+    # declared first, so a category no athlete on the page carries still gets its (all-null) columns
+    stat_cols = dict.fromkeys(col for cols in columns.values() for col in cols)
+    offset = _leaders_sort_offset(payload.get("pagination"), len(athletes))
     rows: List[dict] = []
-    stat_cols: dict = {}  # insertion-ordered set of the byathlete stat columns
-
-    if payload.get("athletes"):
-        # names[i] labels values[i]; labels only where a category ships no names
-        stat_names = {c.get("name"): c.get("names") or c.get("labels") or [] for c in categories}
-        page = payload.get("pagination") or {}
-        offset = (int(page.get("page") or 1) - 1) * int(page.get("limit") or 0)
-        for n, entry in enumerate(payload["athletes"], start=1):
-            athlete = entry.get("athlete") or {}
-            row = {
-                "rank": offset + n,
-                "athlete_id": athlete.get("id"),
-                "athlete_uid": athlete.get("uid"),
-                "athlete_display_name": athlete.get("displayName"),
-                "athlete_short_name": athlete.get("shortName"),
-                "athlete_first_name": athlete.get("firstName"),
-                "athlete_last_name": athlete.get("lastName"),
-                "athlete_position": (athlete.get("position") or {}).get("abbreviation"),
-                "athlete_status": (athlete.get("status") or {}).get("name"),
-                "team_id": athlete.get("teamId"),
-                "team_abbreviation": athlete.get("teamShortName"),
-                "team_name": athlete.get("teamName"),
-            }
-            for cat in entry.get("categories") or []:
-                names = stat_names.get(cat.get("name")) or []
-                for i, val in enumerate(cat.get("values") or []):
-                    stat = underscore(names[i]) if i < len(names) else f"stat_{i}"
-                    col = f"{underscore(cat.get('name') or '')}_{stat}"
-                    stat_cols[col] = None
-                    row[col] = val
-            rows.append(row)
-
-    for cat in categories:
-        cat_name = cat.get("name") or cat.get("displayName") or ""
-        labels: List[str] = cat.get("labels") or cat.get("names") or []
-        names: List[str] = cat.get("names") or labels
-        leaders = cat.get("leaders") or []
-        for leader in leaders:
-            athlete = leader.get("athlete") or {}
-            team = leader.get("team") or {}
-            row = {
-                "category": cat_name,
-                "rank": leader.get("rank"),
-                "athlete_id": athlete.get("id"),
-                "athlete_display_name": athlete.get("displayName"),
-                "athlete_short_name": athlete.get("shortName"),
-                "athlete_jersey": athlete.get("jersey"),
-                "athlete_position": (athlete.get("position") or {}).get("abbreviation"),
-                "team_id": team.get("id"),
-                "team_abbreviation": team.get("abbreviation"),
-                "team_display_name": team.get("displayName"),
-            }
-            stats: List = leader.get("stats") or []
-            for i, val in enumerate(stats):
-                if i < len(names):
-                    col = underscore(names[i])
-                elif labels and i < len(labels):
-                    col = underscore(labels[i])
-                else:
-                    col = f"stat_{i}"
+    for n, entry in enumerate((e for e in athletes if isinstance(e, dict)), start=1):
+        athlete = entry.get("athlete") or {}
+        row = {
+            "sort_order": offset + n,
+            "athlete_id": athlete.get("id"),
+            "athlete_uid": athlete.get("uid"),
+            "athlete_display_name": athlete.get("displayName"),
+            "athlete_short_name": athlete.get("shortName"),
+            "athlete_first_name": athlete.get("firstName"),
+            "athlete_last_name": athlete.get("lastName"),
+            "athlete_position": (athlete.get("position") or {}).get("abbreviation"),
+            "athlete_status": (athlete.get("status") or {}).get("name"),
+            "team_id": athlete.get("teamId"),
+            "team_abbreviation": athlete.get("teamShortName"),
+            "team_name": athlete.get("teamName"),
+        }
+        for cat in entry.get("categories") or []:
+            cols = columns.get(cat.get("name")) or []
+            for i, val in enumerate(cat.get("values") or []):
+                # a slot past the declared names (or an undeclared category) keeps its value under stat_{i}
+                col = cols[i] if i < len(cols) else f"{underscore(cat.get('name') or '')}_stat_{i}"
+                stat_cols[col] = None
                 row[col] = val
-            rows.append(row)
-
+        rows.append(row)
     if not rows:
         return _empty_frame(return_as_pandas)
 
-    df = pd.DataFrame(rows)
+    identity = [c for c in rows[0] if c not in stat_cols]
+    df = pd.DataFrame(rows).reindex(columns=[*identity, *stat_cols])
     # values[] is numeric or null; a category no athlete on the page has (all null) must stay Float64,
     # not ride the pandas hop to an all-null String column
     for col in stat_cols:
         df[col] = pd.to_numeric(df[col], errors="coerce").astype("float64")
-    df = _snake_columns(df)
     return _to_output(df, return_as_pandas)
 
 

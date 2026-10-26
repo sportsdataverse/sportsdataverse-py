@@ -1865,7 +1865,7 @@ SCHEMAS: dict[str, dict[str, pl.DataType]] = {
     "injuries/nhl": {"id": pl.Int64, "display_name": pl.String, "injuries": pl.String},
     "injuries/wnba": {"id": pl.Int64, "display_name": pl.String, "injuries": pl.String},
     "leaders": {
-        "rank": pl.Int64,
+        "sort_order": pl.Int64,
         "athlete_id": pl.Int64,
         "athlete_uid": pl.String,
         "athlete_display_name": pl.String,
@@ -1879,7 +1879,7 @@ SCHEMAS: dict[str, dict[str, pl.DataType]] = {
         "team_name": pl.String,
     },
     "leaders/cfb": {
-        "rank": pl.Int64,
+        "sort_order": pl.Int64,
         "athlete_id": pl.Int64,
         "athlete_uid": pl.String,
         "athlete_display_name": pl.String,
@@ -1993,7 +1993,7 @@ SCHEMAS: dict[str, dict[str, pl.DataType]] = {
         "punting_avg_punt_return_yards": pl.Float64,
     },
     "leaders/mbb": {
-        "rank": pl.Int64,
+        "sort_order": pl.Int64,
         "athlete_id": pl.Int64,
         "athlete_uid": pl.String,
         "athlete_display_name": pl.String,
@@ -2045,7 +2045,7 @@ SCHEMAS: dict[str, dict[str, pl.DataType]] = {
         "defensive_blocks": pl.Float64,
     },
     "leaders/mlb": {
-        "rank": pl.Int64,
+        "sort_order": pl.Int64,
         "athlete_id": pl.Int64,
         "athlete_uid": pl.String,
         "athlete_display_name": pl.String,
@@ -2108,7 +2108,7 @@ SCHEMAS: dict[str, dict[str, pl.DataType]] = {
         "fielding_catcher_caught_stealing_pct": pl.Float64,
     },
     "leaders/nba": {
-        "rank": pl.Int64,
+        "sort_order": pl.Int64,
         "athlete_id": pl.Int64,
         "athlete_uid": pl.String,
         "athlete_display_name": pl.String,
@@ -2159,7 +2159,7 @@ SCHEMAS: dict[str, dict[str, pl.DataType]] = {
         "defensive_blocks": pl.Float64,
     },
     "leaders/nfl": {
-        "rank": pl.Int64,
+        "sort_order": pl.Int64,
         "athlete_id": pl.Int64,
         "athlete_uid": pl.String,
         "athlete_display_name": pl.String,
@@ -2273,7 +2273,7 @@ SCHEMAS: dict[str, dict[str, pl.DataType]] = {
         "punting_avg_punt_return_yards": pl.Float64,
     },
     "leaders/nhl": {
-        "rank": pl.Int64,
+        "sort_order": pl.Int64,
         "athlete_id": pl.Int64,
         "athlete_uid": pl.String,
         "athlete_display_name": pl.String,
@@ -2320,7 +2320,7 @@ SCHEMAS: dict[str, dict[str, pl.DataType]] = {
         "penalties_penalty_minutes": pl.Float64,
     },
     "leaders/wbb": {
-        "rank": pl.Int64,
+        "sort_order": pl.Int64,
         "athlete_id": pl.Int64,
         "athlete_uid": pl.String,
         "athlete_display_name": pl.String,
@@ -2371,7 +2371,7 @@ SCHEMAS: dict[str, dict[str, pl.DataType]] = {
         "defensive_blocks": pl.Float64,
     },
     "leaders/wnba": {
-        "rank": pl.Int64,
+        "sort_order": pl.Int64,
         "athlete_id": pl.Int64,
         "athlete_uid": pl.String,
         "athlete_display_name": pl.String,

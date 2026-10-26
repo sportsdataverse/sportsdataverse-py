@@ -5834,7 +5834,7 @@ leaders:
   athlete_short_name: Athlete's abbreviated name (e.g. 'B. Nix').
   athlete_status: Athlete's ESPN status name (e.g. Active, Inactive) as ESPN reports it at request time, not for the requested
     season.
-  athlete_uid: ESPN composite athlete uid (s:<sport>~l:<league>~a:<athlete id>), kept as text.
+  athlete_uid: ESPN composite athlete uid (`s:<sport>~l:<league>~a:<athlete id>`), kept as text.
   batting_at_bats: 'At Bats (ESPN ''batting'' category): The number of times a batter comes up to bat not counting walks and sacrifices.'
   batting_avg: 'Batting Average (ESPN ''batting'' category): The average number of times the batter reached successfully on base
     due to a hit: hits / atBats.'
@@ -6067,8 +6067,9 @@ leaders:
   punting_punts_blocked: 'Punts Blocked (ESPN ''punting'' category): The number of times a punt was blocked.'
   punting_punts_inside20: 'Punts Inside 20 (ESPN ''punting'' category): The number of times a punt is downed inside the 20.'
   punting_touchbacks: 'Touchbacks (ESPN ''punting'' category): The number of kickoffs that result in touchbacks.'
-  rank: 'Place of the athlete in ESPN''s leaderboard order (the requested category or sort), counted across pages: (page - 1) *
-    limit + position on the page.'
+  sort_order: 'Position of the athlete in ESPN''s leaderboard order (the requested category or sort), counted across
+    pages: (page - 1) * limit + position on the page. A position, not a rank: tied athletes still count up; ESPN''s
+    per-stat ranks stay in the raw payload (return_parsed=False).'
   receiving_long_reception: 'Long Reception (ESPN ''receiving'' category): The amount of yards for the longest reception.'
   receiving_receiving_big_plays: '20+ Yard Receiving Plays (ESPN ''receiving'' category): The number of receiving big plays gained.'
   receiving_receiving_first_downs: 'Receiving First Downs (ESPN ''receiving'' category): The number of times a first down is picked

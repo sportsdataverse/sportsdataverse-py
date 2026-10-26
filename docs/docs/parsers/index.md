@@ -57,7 +57,7 @@ df  = parse_team_roster(raw, return_as_pandas=True)
 | `parse_athlete_stats` | `*_athlete_stats` | One row per stat category |
 | `parse_athlete_gamelog` | `*_athlete_gamelog` | One row per game |
 | `parse_athlete_splits` | `*_athlete_splits` | One row per split |
-| `parse_leaders` | `*_leaders` | One row per (category × leader) |
+| `parse_leaders` | `*_leaders` | One row per athlete, stats as `{category}_{stat}` columns |
 | `parse_coaches` | `*_coaches`, `*_season_coaches` | One row per coach |
 | `parse_draft` | `*_season_draft` | One row per pick |
 | `parse_event_competitor_roster` | `*_event_competitor_roster` | One row per athlete |

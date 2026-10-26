@@ -1205,7 +1205,7 @@
  },
  "leaders_cfb": {
   "": {
-   "rank": "Int64",
+   "sort_order": "Int64",
    "athlete_id": "Int64",
    "athlete_uid": "String",
    "athlete_display_name": "String",
@@ -1321,7 +1321,7 @@
  },
  "leaders_cfb_2023_offense_passing": {
   "": {
-   "rank": "Int64",
+   "sort_order": "Int64",
    "athlete_id": "Int64",
    "athlete_uid": "String",
    "athlete_display_name": "String",
@@ -1437,7 +1437,7 @@
  },
  "leaders_mbb": {
   "": {
-   "rank": "Int64",
+   "sort_order": "Int64",
    "athlete_id": "Int64",
    "athlete_uid": "String",
    "athlete_display_name": "String",
@@ -1491,7 +1491,7 @@
  },
  "leaders_mbb_2024_sort_avg_points": {
   "": {
-   "rank": "Int64",
+   "sort_order": "Int64",
    "athlete_id": "Int64",
    "athlete_uid": "String",
    "athlete_display_name": "String",
@@ -1545,7 +1545,7 @@
  },
  "leaders_mlb": {
   "": {
-   "rank": "Int64",
+   "sort_order": "Int64",
    "athlete_id": "Int64",
    "athlete_uid": "String",
    "athlete_display_name": "String",
@@ -1610,7 +1610,7 @@
  },
  "leaders_nba": {
   "": {
-   "rank": "Int64",
+   "sort_order": "Int64",
    "athlete_id": "Int64",
    "athlete_uid": "String",
    "athlete_display_name": "String",
@@ -1663,7 +1663,7 @@
  },
  "leaders_nfl": {
   "": {
-   "rank": "Int64",
+   "sort_order": "Int64",
    "athlete_id": "Int64",
    "athlete_uid": "String",
    "athlete_display_name": "String",
@@ -1779,7 +1779,7 @@
  },
  "leaders_nhl": {
   "": {
-   "rank": "Int64",
+   "sort_order": "Int64",
    "athlete_id": "Int64",
    "athlete_uid": "String",
    "athlete_display_name": "String",
@@ -1831,7 +1831,7 @@
  },
  "leaders_wbb": {
   "": {
-   "rank": "Int64",
+   "sort_order": "Int64",
    "athlete_id": "Int64",
    "athlete_uid": "String",
    "athlete_display_name": "String",
@@ -1884,7 +1884,7 @@
  },
  "leaders_wnba": {
   "": {
-   "rank": "Int64",
+   "sort_order": "Int64",
    "athlete_id": "Int64",
    "athlete_uid": "String",
    "athlete_display_name": "String",
