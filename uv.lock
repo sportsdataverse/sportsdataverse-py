@@ -5306,6 +5306,27 @@ wheels = [
 ]
 
 [[package]]
+name = "sdvplot"
+version = "0.1.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "narwhals" },
+    { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
+    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "pillow", version = "12.3.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "pillow", version = "13.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "platformdirs" },
+    { name = "polars" },
+    { name = "requests" },
+    { name = "urllib3" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/55/45/b4c8e7b6dc19ad15f6f683b0dd11e5d1e676612ed757b1af80c424ac9b34/sdvplot-0.1.1.tar.gz", hash = "sha256:5c4393222b8db4c0111a04736cfaa0271910ba29d91b87bcf439958f24134ff4", size = 1054630, upload-time = "2026-10-26T04:40:11.624Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/84/64/2441484c7707d7f7e50aad19ceb4a38f94b28bb36b824cb223c425debbae/sdvplot-0.1.1-py3-none-any.whl", hash = "sha256:6c686648845091e3e3db808019a924c93c16e355a9520b58008320bc958a16e5", size = 661676, upload-time = "2026-10-26T04:40:09.686Z" },
+]
+
+[[package]]
 name = "secretstorage"
 version = "3.5.0"
 source = { registry = "https://pypi.org/simple" }
@@ -5386,6 +5407,7 @@ all = [
     { name = "pytest-xdist" },
     { name = "pyyaml" },
     { name = "ruff" },
+    { name = "sdvplot" },
     { name = "sportypy" },
 ]
 mcp = [
@@ -5396,6 +5418,9 @@ nflpro = [
 ]
 pff = [
     { name = "playwright" },
+]
+sdvplot = [
+    { name = "sdvplot" },
 ]
 soccer = [
     { name = "kloppy", extra = ["polars"] },
@@ -5481,6 +5506,8 @@ requires-dist = [
     { name = "ruff", marker = "extra == 'tests'", specifier = ">=0.1.0" },
     { name = "scikit-learn", specifier = ">=1.0.0" },
     { name = "scipy", specifier = ">=1.10.0" },
+    { name = "sdvplot", marker = "extra == 'all'", specifier = ">=0.1.1" },
+    { name = "sdvplot", marker = "extra == 'sdvplot'", specifier = ">=0.1.1" },
     { name = "sportypy", marker = "extra == 'all'", specifier = ">=1.0" },
     { name = "sportypy", marker = "extra == 'sportypy'", specifier = ">=1.0" },
     { name = "tomli", marker = "python_full_version < '3.11'", specifier = ">=2.0" },
@@ -5489,7 +5516,7 @@ requires-dist = [
     { name = "urllib3", specifier = ">=2.8.0" },
     { name = "xgboost", specifier = ">=2.0.0" },
 ]
-provides-extras = ["tests", "soccer", "nflpro", "models", "pff", "sportypy", "mcp", "all"]
+provides-extras = ["tests", "soccer", "nflpro", "models", "pff", "sdvplot", "sportypy", "mcp", "all"]
 
 [package.metadata.requires-dev]
 dev = [
