@@ -92,6 +92,9 @@ _YAHOO_FLAG = {
 #: leagueGameIdsByDate stops at 1000 rows; a busy college week holds about 450 games.
 _YAHOO_ROW_CAP = 1000
 _YAHOO_CHUNK_DAYS = 7
+#: Leagues whose leagueGameIdsByDate ignores startRange/endRange (every range answers the
+#: season's first 1,000 games, probed 2026-10-26): list them one date at a time with ``dates=``.
+_YAHOO_BY_DATE = frozenset({"cfb"})
 
 
 class HarvestBlocked(RuntimeError):
@@ -363,17 +366,20 @@ def yahoo_listing(store: Store, pacer: Pacer, league: str, season: int, refresh:
     from sportsdataverse.yahoo.yahoo_shangrila import yahoo_league_game_ids_by_date
 
     slug, window = _YAHOO_LEAGUE[league], season_window(league, season)
+    by_date = league in _YAHOO_BY_DATE
     dates = _sweep_dates(window)
     chunks: List[Tuple[date, date]] = []
     start = dates[0] if dates else None
     while start is not None and start <= dates[-1]:
-        end = min(start + timedelta(days=_YAHOO_CHUNK_DAYS - 1), dates[-1])
+        end = start if by_date else min(start + timedelta(days=_YAHOO_CHUNK_DAYS - 1), dates[-1])
         chunks.append((start, end))
         start = end + timedelta(days=1)
     games: Dict[str, Dict[str, Any]] = {}
     while chunks:
         lo, hi = chunks.pop(0)
-        key = f"{lo:%Y%m%d}_{hi:%Y%m%d}"
+        # by-date keys differ from range keys, so a stored range listing is never trusted for them
+        key = f"{lo:%Y%m%d}" if by_date else f"{lo:%Y%m%d}_{hi:%Y%m%d}"
+        when = {"dates": lo.isoformat()} if by_date else {"start_range": lo.isoformat(), "end_range": hi.isoformat()}
         raw = None if refresh else store.load("game_ids_by_date", season, key)
         pending = raw is not None and any(g.get("status") != "FINAL" for g in _yahoo_games(raw))
         if pending:
@@ -384,8 +390,7 @@ def yahoo_listing(store: Store, pacer: Pacer, league: str, season: int, refresh:
                 partial(
                     yahoo_league_game_ids_by_date,
                     leagues=slug,
-                    start_range=lo.isoformat(),
-                    end_range=hi.isoformat(),
+                    **when,
                     season=str(_yahoo_season(league, season)),
                     return_parsed=False,
                     **_FETCH_KW,

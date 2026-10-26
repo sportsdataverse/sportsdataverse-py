@@ -97,6 +97,30 @@ def test_yahoo_listing_games_and_box_checks() -> None:
     assert xh.box_players("yahoo", box) == 5
 
 
+def test_yahoo_cfb_lists_one_date_at_a_time(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    import sportsdataverse.yahoo.yahoo_shangrila as shangrila
+
+    calls: List[Dict[str, Any]] = []
+
+    def fake(**kwargs: Any) -> Dict[str, Any]:
+        calls.append(kwargs)
+        day = kwargs["dates"]
+        game = {"gameId": f"ncaaf.g.{day.replace('-', '')}01", "startTime": f"{day}T12:00:00-05:00", "status": "FINAL"}
+        return {"data": {"leagues": [{"games": [game]}]}}
+
+    monkeypatch.setattr(shangrila, "yahoo_league_game_ids_by_date", fake)
+    monkeypatch.setattr(xh, "_sweep_dates", lambda window: [date(2024, 11, 29), date(2024, 11, 30)])
+    store = xh.Store(tmp_path, "yahoo", "cfb")
+    games = xh.yahoo_listing(store, xh.Pacer("yahoo"), "cfb", 2024, refresh=False)
+    # ncaaf ignores startRange/endRange: one dates= request per day, no range parameters
+    assert [c["dates"] for c in calls] == ["2024-11-29", "2024-11-30"]
+    assert not any("start_range" in c or "end_range" in c for c in calls)
+    assert sorted(g["date"] for g in games) == ["2024-11-29", "2024-11-30"]
+    assert store.has("game_ids_by_date", 2024, "20241130")
+    # a stored range listing (the old key) is not trusted for a by-date league
+    assert not store.has("game_ids_by_date", 2024, "20241130_20241130")
+
+
 def test_cbs_envelope_and_box_players() -> None:
     window = xh.season_window("nfl", 2024)
     envelope = _load("cbs_cfb_game_boxscore_2168097_404_envelope.json")
