@@ -14,6 +14,7 @@
   - [Deprecating a public API](#deprecating-a-public-api)
   - [Codegen and the docs site](#codegen-and-the-docs-site)
   - [Adding a league](#adding-a-league)
+  - [Test fixtures](#test-fixtures)
   - [Documentation & the docs site](#documentation--the-docs-site)
     - [Updating docs (everyday — including a commit after a release)](#updating-docs-everyday--including-a-commit-after-a-release)
     - [At release time](#at-release-time)
@@ -417,6 +418,29 @@ function resolves in `tools/codegen/sources.yaml`, or `--check` fails naming it.
   `hockey/echl/__init__.py`); add the league to `_HOCKEYTECH_MODULE_LEAGUES` in `generate.py`;
   add its wildcard import and its `_MOVED` back-compat entry to `sportsdataverse/__init__.py`. See
   `CLAUDE.md`, "Hockey — HockeyTech multi-league", for the canvas, `league_id` and key caveats.
+
+## Test fixtures
+
+Committed fixtures live under `tests/fixtures/<surface>/` (about 150 directories). Each directory
+carries a `README.md` recording provenance (source URL and capture date); give a new one its README. A
+parser test asserts against a **real captured payload**, never a hand-written one; adding a parser
+means dropping a fixture in the right directory (with its README) and a test in the matching
+`test_*_parsers.py`.
+
+Capture tools, all run once with network access and their output committed:
+
+- `uv run python -m tools.capture_espn_fixtures`: per-league ESPN scoreboard / teams / standings /
+  leaders payloads into `tests/fixtures/espn/`, which `generate.py --schemas` introspects offline.
+- `uv run python -m tools.capture_cfb_fixtures`: ESPN CFB summary payloads into
+  `tests/cfb/fixtures/summary_<game_id>.json`.
+- `tools/fixtures/gen_*_fixtures.py`: the NBA, WNBA and G League engine fixtures and the NBA tracking
+  fixtures (`uv run python tools/fixtures/gen_wnba_engine_fixtures.py --game-ids ...`; each script's
+  docstring gives its arguments). They call stats.nba.com / stats.wnba.com, so run them from a
+  residential IP.
+- `SDV_INTERNAL_REFS_REPO=<path> uv run python tools/codegen/vendor_captures.py`: trimmed copies of
+  the private `sdv-internal-refs` real captures (nba_stats, wnba_stats, On3) into `tests/fixtures/`,
+  for the returns-schema generators. It refuses to write a trimmed file that parses to different
+  columns or dtypes than the full capture.
 
 ## Documentation & the docs site
 
