@@ -2,6 +2,7 @@
 title: ESPN cross-league architecture
 sidebar_label: ESPN cross-league architecture
 sidebar_position: 1
+description: "How sportsdataverse-py generates one ESPN wrapper per endpoint for 40 leagues, how the names are chosen and what each wrapper returns."
 ---
 
 # ESPN cross-league architecture
@@ -96,13 +97,13 @@ optional kwargs (`return_parsed` / `return_as_pandas`), described next.
 ## The `return_parsed` shim
 
 Every wrapper with a registered parser defaults to returning a polars
-DataFrame (0.0.54+). Pass `return_parsed=False` to recover the raw
+DataFrame. Pass `return_parsed=False` to recover the raw
 `Dict`, or `return_as_pandas=True` to get a pandas DataFrame:
 
 ```python
 from sportsdataverse.nba import espn_nba_teams_site, espn_nba_scoreboard
 
-# Default (0.0.54+): polars DataFrame
+# Default: polars DataFrame
 df   = espn_nba_teams_site()                # → polars DataFrame
 print(df.select(["team_id", "team_abbreviation", "team_display_name"]).head())
 

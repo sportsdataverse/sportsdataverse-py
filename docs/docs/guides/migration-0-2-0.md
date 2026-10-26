@@ -2,11 +2,12 @@
 title: Migrating to 0.2.0
 sidebar_label: Migrating to 0.2.0
 sidebar_position: 2
+description: "Every breaking change in sportsdataverse-py 0.2.0, with before and after code and how to migrate."
 ---
 
 # Migrating to 0.2.0
 
-0.2.0 is the release after 0.1.5. It carries fifteen breaking changes, each recorded
+0.2.0 is the release after 0.1.4 (0.1.5 was never published; its changes ship in 0.2.0). It carries fifteen breaking changes, each recorded
 as a `changelog.d/*.breaking.md` fragment; the changes are on `main` already. This
 page takes them one at a time: what changed, who is affected, a before/after
 snippet and how to migrate. The fragments are the source of record, and the

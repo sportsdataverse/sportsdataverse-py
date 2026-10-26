@@ -2,6 +2,7 @@
 title: Models, validation and analytics
 sidebar_label: Modeling guide
 sidebar_position: 5
+description: "The expected-points, win-probability and fourth-down models in sportsdataverse-py, plus the validation and analytics helpers."
 ---
 
 # Models, validation and analytics

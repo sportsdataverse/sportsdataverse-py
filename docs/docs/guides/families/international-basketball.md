@@ -2,11 +2,12 @@
 title: International basketball
 sidebar_label: International basketball
 sidebar_position: 3
+description: "The 25 international basketball homes under sportsdataverse.basketball, from EuroLeague and FIBA to the B.LEAGUE and CBA, and the conventions they share."
 ---
 
 # International basketball
 
-Twenty-four international basketball families live under
+Twenty-five international basketball families live under
 `sportsdataverse.basketball.<home>`. A home is named for a **provider family**, not
 always a league: some providers serve many competitions, and some leagues are served
 by a provider that also serves others. The international competitions ESPN covers
@@ -17,6 +18,7 @@ are separate, in the ESPN league modules (`fiba`, `olympics_mbk`, `olympics_wbk`
 
 | Home | Provider | Covers | Function prefix |
 |---|---|---|---|
+| `euroleague` | EuroLeague Competition Engine | EuroLeague and EuroCup | `euroleague_*` |
 | `fiba_hub` | FIBA's digital API and game pages | FIBA competitions and national teams | `fiba_gdap_*`, `fiba_gamepage_*`, and per competition (`fiba_eurobasket_*`, `fiba_wc_*`, `fiba_bcl_*`, ...) |
 | `genius` | Genius Sports LiveStats | many competitions that publish through LiveStats, including the WBBL | `genius_*`, `wbbl_*` |
 | `atrium` | Sportradar Atrium | many competitions | `atrium_*` |
@@ -53,7 +55,7 @@ through a league or competition argument (`scb_games(league="dbbl")`,
 Most homes have a schedule or results, standings, box scores and play-by-play;
 many add shot charts, leaders and player pages. Each also exports its parsers
 (`parse_<home>_*`). The league pages list every function with its parameters and
-Returns table: [FIBA](../../fiba_hub/index.md), [Genius](../../genius/index.md),
+Returns table: [EuroLeague](../../euroleague/index.md), [FIBA](../../fiba_hub/index.md), [Genius](../../genius/index.md),
 [Atrium](../../atrium/index.md), [CEBL](../../cebl/index.md) and the rest under
 Basketball in the sidebar.
 

@@ -2,6 +2,7 @@
 title: Install and the command line
 sidebar_label: Install & CLI
 sidebar_position: 1
+description: "Install sportsdataverse-py with pip or uv, choose the optional extras, and use the sdv command line and the sdv-docs MCP server."
 ---
 
 # Install and the command line

@@ -2,11 +2,12 @@
 title: The parser layer
 sidebar_label: Parsers
 sidebar_position: 1
+description: "How sportsdataverse-py turns raw API payloads into tidy polars or pandas DataFrames, and how to call a parser directly."
 ---
 
 # The parser layer
 
-Parser-backed wrappers return a tidy polars DataFrame by default (0.0.54+);
+Parser-backed wrappers return a tidy polars DataFrame by default;
 pass `return_parsed=False` to recover the raw `Dict`. The parser layer in
 [`sportsdataverse._common_espn_parsers`](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/sportsdataverse/_common_espn_parsers.py)
 turns those payloads into tidy polars (or pandas) DataFrames. Parsers
@@ -18,7 +19,7 @@ because ESPN's payload shapes are identical across leagues.
 ### 1. The `return_parsed` default (recommended)
 
 Wrappers whose short name is in `ENDPOINT_PARSERS` return a polars
-DataFrame by default (0.0.54+). Pass `return_parsed=False` for the raw
+DataFrame by default. Pass `return_parsed=False` for the raw
 `Dict`, or `return_as_pandas=True` for pandas:
 
 ```python
@@ -120,7 +121,7 @@ The package ships one parser module per data surface
 holds the ESPN cross-league parsers, including the 21-section `parse_summary`
 dispatcher.
 
-**Errors (0.1.5).** A parser never raises on an empty or malformed payload — it
+**Errors.** A parser never raises on an empty or malformed payload — it
 returns a zero-row frame with the documented schema. The *fetch* is what raises:
 `NoDataError` when the answer is "nothing here", `AssetFetchError` when the fetch
 failed, and `ValueError` on a 400 / 422.
