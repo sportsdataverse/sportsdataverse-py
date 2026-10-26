@@ -64,6 +64,8 @@ _CLAUDE_STALE = [
     "polars 1.x/2.x",
     # a path argument bypasses the [tool.mypy] files ratchet
     "uv run mypy sportsdataverse/<your_module>.py",
+    # only ruff defaults + BLE001 run; `I` is off on purpose (pre-commit config header)
+    "`I` rules own import order",
 ]
 
 _CLAUDE_CURRENT = [
@@ -192,6 +194,8 @@ _COPILOT_STALE = [
     "Polars 1.x and 2.x",
     "`polars>=1.0,<3`",
     "the floor stays 1.0",
+    "`I` rules own import order",
+    "import sorting, pyupgrade",
 ]
 
 _COPILOT_CURRENT = [

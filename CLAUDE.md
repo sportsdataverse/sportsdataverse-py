@@ -1121,8 +1121,10 @@ the nested ESPN schedule columns).
 
 ruff is both linter and formatter. `line-length = 120` and `line-ending = "lf"` in
 `pyproject.toml`; invoke it as `uv run ruff check sportsdataverse/` and
-`uv run ruff format`. The isort hook in the pre-commit config is inactive — ruff's
-`I` rules own import order.
+`uv run ruff format`. Only ruff's default rules plus `BLE001` are enabled (`[tool.ruff.lint]`):
+import order is NOT enforced. The standalone isort hook was removed in 0.0.51 because a re-sort
+breaks the load-bearing import order in `sportsdataverse/__init__.py` (its `# isort: off` block),
+and the `I` rules stay off for the same reason.
 
 ### Module naming
 

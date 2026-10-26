@@ -82,10 +82,12 @@ is the sole attributable contributor.
 ## Code Style
 
 - Follow PEP 8 with Ruff formatting (line-length 120, configured in
-  `pyproject.toml [tool.ruff]`, with `line-ending = "lf"`). Ruff also handles
-  import sorting, pyupgrade, and unused-import removal — black, pycln and
-  flake8 are NOT used directly, and ruff's `I` rules own import order. The
-  standalone import-sorting hook in `.pre-commit-config.yaml` is inactive.
+  `pyproject.toml [tool.ruff]`, with `line-ending = "lf"`). Ruff runs its
+  default rules plus `BLE001` only, so it removes unused imports but does NOT
+  sort imports or apply pyupgrade (`I` and `UP` are off) — black, pycln and
+  flake8 are NOT used. Import order is not enforced: the standalone isort hook
+  was removed because a re-sort breaks the load-bearing order in
+  `sportsdataverse/__init__.py` (its `# isort: off` block).
 - Lint, format, and type-check before committing:
 
   ```sh
