@@ -345,11 +345,11 @@ def test_docs_state_the_polars_floor_pyproject_declares():
 # --- the docs-site conceptual pages ---------------------------------------
 
 _SITE_STALE = {
-    "intro": ["PWHL + 20", "import mlb_api_person_stats"],
-    "qol": ["~4,400 callables"],
+    "intro": ["PWHL + 20", "import mlb_api_person_stats", "from sportsdataverse.parsed", '"event_id", "home_name"'],
+    "qol": ["~4,400 callables", "remains fully supported", "Explicit parsed namespace (unchanged"],
     "espn": ["800+", "| NBA | 113 |"],
     "parsers": ["All 121 wrapper short names", "make_league_module", "18 parsers"],
-    "ecosystem": ["ten executed"],
+    "ecosystem": ["ten executed", "explicit parsed-by-default namespace"],
 }
 
 _SITE_CURRENT = {

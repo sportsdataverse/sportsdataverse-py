@@ -51,15 +51,12 @@ namespace is a thin alias kept for back-compat.
 :::
 
 ```python
-# Today's NBA scoreboard as a polars DataFrame — no kwargs needed via parsed.*
-from sportsdataverse.parsed.nba import espn_nba_scoreboard
-df = espn_nba_scoreboard()                              # → polars
-
-# Or via the original module with the return_parsed=True opt-in:
+# Today's NBA scoreboard: a polars DataFrame by default
 from sportsdataverse.nba import espn_nba_scoreboard
-df = espn_nba_scoreboard(return_parsed=True)
-print(df.select(["event_id", "home_name", "away_name",
+df = espn_nba_scoreboard()                              # → polars
+print(df.select(["game_id", "home_name", "away_name",
                  "home_score", "away_score"]).head())
+raw = espn_nba_scoreboard(return_parsed=False)          # → the raw Dict
 
 # Aaron Judge's 2024 season stats from the official MLB API
 from sportsdataverse.mlb import mlb_person_stats, parse_mlb_api_person_stats
