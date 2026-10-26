@@ -1,3 +1,4 @@
+<!-- DOCTOC SKIP -->
 ## Summary
 
 <!--
@@ -31,7 +32,7 @@ tests should pass without it.
 
 - [ ] `uv run pytest tests/<scope>/` passes offline
 - [ ] `SDV_PY_LIVE_TESTS=1 uv run pytest tests/<scope>/` passes (if data-touching)
-- [ ] `uv run mypy sportsdataverse/<modules>` passes for newly-typed modules
+- [ ] `uv run mypy` passes (new typed modules appended to the `[tool.mypy] files` ratchet; run it bare, since a path bypasses that list)
 - [ ] `uv run ruff check sportsdataverse/<modules>` passes
 
 ## Breaking changes

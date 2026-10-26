@@ -69,7 +69,7 @@ df  = parse_team_roster(raw, return_as_pandas=True)
 | `parse_news` | `*_news`, `*_team_news`, `*_athlete_news` | One row per article |
 | `parse_injuries` | `*_injuries`, `*_team_injuries`, `*_athlete_injuries` | One row per team with injuries |
 | `parse_items` | Generic — Core v2 paginated `{items: [...]}` + Core v2 `{entries: [...]}` (athlete_statisticslog, etc.) | One row per item |
-| `parse_summary` | Site v2 `summary` (dispatcher) | Dict of 18 sub-frames |
+| `parse_summary` | Site v2 `summary` (dispatcher) | Dict of 21 sub-frames |
 | `parse_summary_boxscore_player` | summary section: per-athlete boxscore | One row per (team × athlete) |
 | `parse_summary_boxscore_team` | summary section: per-team boxscore | One row per (team × stat) |
 | `parse_summary_plays` | summary section: play-by-play | One row per play |
@@ -115,9 +115,10 @@ per-league wiring. (The wrapper factory this page once described is retired: the
 `*_espn_ext.py` modules are codegen output — see
 [Codegen](../architecture/codegen.md).)
 
-The package ships **33 parser modules** in all, one per data surface;
-`_common_espn_parsers.py` alone defines 49 parsers plus the 21-section
-`parse_summary` dispatcher.
+The package ships one parser module per data surface
+(`find sportsdataverse -name '*_parsers.py'` lists them); `_common_espn_parsers.py`
+holds the ESPN cross-league parsers, including the 21-section `parse_summary`
+dispatcher.
 
 **Errors (0.1.5).** A parser never raises on an empty or malformed payload — it
 returns a zero-row frame with the documented schema. The *fetch* is what raises:
@@ -131,7 +132,7 @@ failed, and `ValueError` on a 400 / 422.
 >>> parser_for("venue").__name__
 'parse_single_entity'
 >>> len(ENDPOINT_PARSERS)
-121
+131
 ```
 
 The registry uses three generic parsers as fall-throughs for
@@ -145,7 +146,7 @@ endpoint families that share a shape:
   Core v2 `{entries: [...]}` payload (athlete_statisticslog, calendar
   variants, draft, event lists, season_powerindex, talentpicks, etc.).
 - **`parse_summary`** — for the rich Site v2 summary dispatcher
-  (returns a dict of 20 sub-frames).
+  (returns a dict of 21 sub-frames).
 
 ## Adding a new parser
 

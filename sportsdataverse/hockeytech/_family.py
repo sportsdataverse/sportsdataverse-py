@@ -175,11 +175,15 @@ def build_family(league: str) -> dict[str, Any]:
         f"{cfg.name} play-by-play — one row per event, fully enriched.\n\n" + _GAME_ARGS + "Returns:\n"
         "    polars.DataFrame: One row per event (shot, goal, penalty, faceoff, hit, goalie change ...):\n"
         "        ``game_id``, ``event``, ``team_id``, ``period_of_game``, ``time_of_period``, rink\n"
-        "        ``x_coord`` / ``y_coord`` (Float64, raw 600×300 coordinates), the primary / second / third\n"
-        "        player and goalie ids and names, the plus / minus skaters on a goal, game metadata from\n"
-        "        the game summary, and derived ``shot_distance`` / ``shot_angle`` / ``scoring_chance`` and\n"
-        "        the ``on_ice_home`` / ``on_ice_away`` skaters from the shift feed. Player ids are Float64\n"
-        "        here. Some leagues (USHL, MJHL) publish only goals, penalties and goalie changes, with no\n"
+        "        ``x_coord`` / ``y_coord`` (Float64, the raw 600×300 feed canvas, NOT feet), the feet frames\n"
+        "        ``x_coord_fixed`` / ``y_coord_fixed`` (home team shoots right) and ``x_coord_right`` /\n"
+        "        ``y_coord_right`` (every team shoots right), the primary / second / third player and goalie\n"
+        "        ids (Int64) and names, the plus / minus skaters on a goal, game metadata from the game\n"
+        "        summary, and derived ``shot_distance`` / ``shot_angle`` / ``scoring_chance`` and the\n"
+        "        ``on_ice_home`` / ``on_ice_away`` skaters from the shift feed. The release loader\n"
+        "        ``load_pwhl_pbp`` publishes ``x_coord`` in feet, so compare it with ``x_coord_fixed`` /\n"
+        "        ``x_coord_right`` here, never with this ``x_coord``. Some leagues (USHL, MJHL) publish only\n"
+        "        goals, penalties and goalie changes, with no\n"
         f"        coordinates. {_PANDAS}" + _RAISES
     )
 

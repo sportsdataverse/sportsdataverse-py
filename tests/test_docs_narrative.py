@@ -62,17 +62,29 @@ _CLAUDE_STALE = [
     "run on both 1.x and 2.0",
     "don't exist in 1.x",
     "polars 1.x/2.x",
+    # a path argument bypasses the [tool.mypy] files ratchet
+    "uv run mypy sportsdataverse/<your_module>.py",
+    # only ruff defaults + BLE001 run; `I` is off on purpose (pre-commit config header)
+    "`I` rules own import order",
+    # counts that went stale within weeks; the prose no longer pins them (see the computed tests below)
+    "33 parser modules",
+    "universal across all 6 modules",
+    "147 directories",
+    "11,446",
+    "3,446 wrappers",
+    "30 league modules",
+    "docs_instructions.md",
+    "a 4-line",
+    "bump polars to >=1.0,<2.0",
+    "add py3.14 to the test matrix",
 ]
 
 _CLAUDE_CURRENT = [
-    "30 league modules",
-    "3,446 wrappers",
-    "33 parser modules",
     "45 canonical load_nfl_*",
     "24 nflreadpy-style aliases",
     "291 generated call sites",
     "PWHL + 19",
-    "`tests`, `nflpro`, `models`, `pff`, `soccer`, `mcp`, `all`",
+    "`tests`, `nflpro`, `models`, `pff`, `soccer`, `sdvplot`, `sportypy`, `mcp`, `all`",
     "architecture/codegen.md",
     "main (latest)",
     "VERSIONS_TO_KEEP=3",
@@ -136,12 +148,46 @@ def test_claude_md_mentions_the_family(family):
     assert family in text("claude")
 
 
-def test_claude_md_test_counts_are_current():
-    body = text("claude")
-    for n in ("| 134 |", "**241**", "| 80 |", "11,446"):
-        assert n in body, f"stale test count: {n} missing"
-    for n in ("| 128 |", "**235**", "| 41 |"):
-        assert n not in body, f"stale test count still present: {n}"
+def test_claude_md_test_table_names_real_files_and_no_counts():
+    """The table once pinned per-file and whole-suite test counts, which went stale with every PR.
+    It now lists files only (counts come from ``pytest --collect-only``); each file must exist."""
+    import re
+
+    body = text("claude").split("### Test infrastructure summary", 1)[1].split("\n## ", 1)[0]
+    files = re.findall(r"`(tests/[\w/]+\.py)`", body)
+    assert len(files) >= 5
+    for f in files:
+        assert (ROOT / f).is_file(), f"test table names a missing file: {f}"
+    assert "--collect-only" in body
+    assert not re.search(r"\| \*{0,2}[\d,]+\*{0,2} \|", body), "the test table pins a count again"
+
+
+def _espn_wrapper_totals() -> tuple[int, int]:
+    """(league modules, generated ``espn_*`` wrappers), resolved the way codegen emits them."""
+    from tools.codegen import generate, spec
+
+    params = spec.load_parameters(generate.ENDPOINTS / "parameters.yaml")
+    cfg = spec.load_leagues(generate.ENDPOINTS / "leagues.yaml")
+    apis = [spec.load_espn_api(generate.ENDPOINTS / f"{a}.yaml", params) for a in generate.ESPN_APIS]
+    return len(cfg.leagues), sum(len(generate._espn_league_views(lg, apis, cfg.hosts)) for lg in cfg.leagues)
+
+
+@pytest.mark.parametrize("key", ["claude", "copilot"])
+def test_espn_wrapper_total_matches_the_code(key):
+    n_leagues, n_wrappers = _espn_wrapper_totals()
+    body = flat(key)
+    assert f"{n_leagues} league modules" in body, f"{key} should say {n_leagues} league modules"
+    assert f"{n_wrappers:,} wrappers" in body, f"{key} should say {n_wrappers:,} wrappers"
+
+
+@pytest.mark.parametrize("key", ["claude", "copilot", "parsers"])
+def test_any_parser_module_count_matches_the_code(key):
+    """The prose may omit the number, but a stated one must be the real count."""
+    import re
+
+    real = len(list((ROOT / "sportsdataverse").rglob("*_parsers.py")))
+    for claimed in re.findall(r"\*{0,2}(\d+) parser modules", flat(key)):
+        assert int(claimed) == real, f"{key} claims {claimed} parser modules; there are {real}"
 
 
 def test_claude_md_has_a_codegen_section_linking_the_architecture_page():
@@ -170,6 +216,16 @@ def test_claude_md_flat_api_count_matches_the_code():
     assert f"`FLAT_APIS` has {len(generate.FLAT_APIS)} families" in text("claude")
 
 
+@pytest.mark.parametrize("key", ["claude", "copilot"])
+def test_nflreadpy_alias_count_matches_the_code(key):
+    """Counted from the ``load_nfl_* as load_*`` imports in ``sportsdataverse/nfl/__init__.py``."""
+    import re
+
+    init = (ROOT / "sportsdataverse" / "nfl" / "__init__.py").read_text(encoding="utf-8")
+    n = len(re.findall(r"\bload_nfl_\w+ as load_\w+", init))
+    assert f"{n} nflreadpy-style" in flat(key), f"{key} should say {n} nflreadpy-style aliases"
+
+
 # --- .github/copilot-instructions.md ---------------------------------------
 
 _COPILOT_STALE = [
@@ -190,6 +246,13 @@ _COPILOT_STALE = [
     "Polars 1.x and 2.x",
     "`polars>=1.0,<3`",
     "the floor stays 1.0",
+    "`I` rules own import order",
+    "import sorting, pyupgrade",
+    "25 nflreadpy-style",
+    "442 entries",
+    "682 of 729",
+    "4-line module",
+    "bump polars to >=1.0,<2.0",
 ]
 
 _COPILOT_CURRENT = [
@@ -261,6 +324,8 @@ _README_STALE = [
     "from the next release (0.1.5+)",
     "git+https://github.com/sportsdataverse/sportsdataverse-py' sdv-docs`",
     "polars 1.x or 2.x",
+    "will become the one-shot",
+    "PFF Developer + Premium clients",
 ]
 
 _README_CURRENT = [
@@ -339,18 +404,25 @@ def test_docs_state_the_polars_floor_pyproject_declares():
 # --- the docs-site conceptual pages ---------------------------------------
 
 _SITE_STALE = {
-    "intro": ["PWHL + 20", "import mlb_api_person_stats"],
-    "qol": ["~4,400 callables"],
-    "espn": ["800+", "| NBA | 113 |"],
-    "parsers": ["All 121 wrapper short names", "make_league_module", "18 parsers"],
-    "ecosystem": ["ten executed"],
+    "intro": ["PWHL + 20", "import mlb_api_person_stats", "from sportsdataverse.parsed", '"event_id", "home_name"'],
+    "qol": ["~4,400 callables", "remains fully supported", "Explicit parsed namespace (unchanged"],
+    "espn": ["800+", "| NBA | 113 |", "**84** wrappers per league", "plain partial", "30 documented leagues"],
+    "parsers": [
+        "All 121 wrapper short names",
+        "make_league_module",
+        "18 parsers",
+        "33 parser modules",
+        "18 sub-frames",
+        "20 sub-frames",
+    ],
+    "ecosystem": ["ten executed", "explicit parsed-by-default namespace"],
 }
 
 _SITE_CURRENT = {
     "intro": ["## Errors (0.1.5)", "AssetFetchError", "sdv-docs", "is deprecated"],
     "qol": ["~6,170 callables", "**deprecated**"],
-    "espn": ["126 short names across 30 leagues", "| CFB | 125 |", "default to `return_parsed=True`"],
-    "parsers": ["All 131 entries", "33 parser modules", "21-section", "Errors (0.1.5)"],
+    "espn": ["| CFB | 125 |", "default to `return_parsed=True`"],
+    "parsers": ["21-section", "Errors (0.1.5)", "21 sub-frames"],
     "ecosystem": ["fifteen executed"],
 }
 
@@ -371,6 +443,15 @@ def test_site_page_states_the_current_fact(key, current):
     assert current in flat(key)
 
 
+def test_parsers_page_registry_counts_match_the_code():
+    from sportsdataverse._common_espn_parsers import ENDPOINT_PARSERS, SUMMARY_SECTION_PARSERS
+
+    body = flat("parsers")
+    assert f"All {len(ENDPOINT_PARSERS)} entries" in body
+    assert f">>> len(ENDPOINT_PARSERS) {len(ENDPOINT_PARSERS)} " in body
+    assert f"{len(SUMMARY_SECTION_PARSERS)}-section" in body
+
+
 def test_espn_page_per_league_counts_match_the_code():
     """The per-league table is a snapshot, but a wrong snapshot is what this program is fixing."""
     from tools.codegen import generate, spec
@@ -379,6 +460,11 @@ def test_espn_page_per_league_counts_match_the_code():
     cfg = spec.load_leagues(generate.ENDPOINTS / "leagues.yaml")
     apis = [spec.load_espn_api(generate.ENDPOINTS / f"{a}.yaml", params) for a in generate.ESPN_APIS]
     body = flat("espn")
+    assert f"126 short names across {len(cfg.leagues)} leagues" in body
+    universal = sum(
+        1 for a in apis if a.api != "espn_cdn" for e in a.endpoints if e.scope == "universal" and not e.include_prefixes
+    )
+    assert f"**{universal}** wrappers per league" in body, f"the universal total should read {universal}"
     for prefix, label in (("cfb", "CFB"), ("mbb", "MBB"), ("nfl", "NFL"), ("nba", "NBA"), ("nhl", "NHL")):
         league = next(x for x in cfg.leagues if x.prefix == prefix)
         n = len(generate._espn_league_views(league, apis, cfg.hosts))

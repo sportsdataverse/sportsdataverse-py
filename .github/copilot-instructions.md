@@ -70,7 +70,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
 feat(wbb): add espn_wbb_team_roster() season-level scraper
 fix(cfb): correct kneel-down classification in cfb_pbp parser
 docs(contributing): document uv workflow and skip_if_no_live gate
-chore(deps): bump polars to >=1.0,<2.0 + re-lock
+chore(deps): bump polars to >=2.0,<3 + re-lock
 ```
 
 **Important: Never include AI agents or assistants (e.g., Claude, Copilot,
@@ -82,10 +82,12 @@ is the sole attributable contributor.
 ## Code Style
 
 - Follow PEP 8 with Ruff formatting (line-length 120, configured in
-  `pyproject.toml [tool.ruff]`, with `line-ending = "lf"`). Ruff also handles
-  import sorting, pyupgrade, and unused-import removal — black, pycln and
-  flake8 are NOT used directly, and ruff's `I` rules own import order. The
-  standalone import-sorting hook in `.pre-commit-config.yaml` is inactive.
+  `pyproject.toml [tool.ruff]`, with `line-ending = "lf"`). Ruff runs its
+  default rules plus `BLE001` only, so it removes unused imports but does NOT
+  sort imports or apply pyupgrade (`I` and `UP` are off) — black, pycln and
+  flake8 are NOT used. Import order is not enforced: the standalone isort hook
+  was removed because a re-sort breaks the load-bearing order in
+  `sportsdataverse/__init__.py` (its `# isort: off` block).
 - Lint, format, and type-check before committing:
 
   ```sh
@@ -96,10 +98,10 @@ is the sole attributable contributor.
 
 - New modules: full type hints required (params + returns); legacy modules
   remain un-typed for now. Append the module path to the `[tool.mypy] files`
-  ratchet in `pyproject.toml` (442 entries, `follow_imports = "skip"`). There
+  ratchet in `pyproject.toml` (`follow_imports = "skip"`). There
   are no `[[tool.mypy.overrides]]` blocks — do not add one; a whole-package
   override would make the gate permanently red on the untyped legacy surface.
-- DO use `from __future__ import annotations`: 682 of 729 modules already do,
+- DO use `from __future__ import annotations`: nearly every module already does,
   and it keeps `X | None` working on the 3.10 floor. Modern type syntax
   (`dict[str, X]`, `X | None`, `list[int]`) is allowed everywhere.
 
@@ -206,7 +208,7 @@ See `CLAUDE.md` → "NBA / WNBA — stats.nba.com".
 core (`sportsdataverse/hockeytech/`) + a `LEAGUES` registry mints 13 public
 callables per league via `build_family(league)` — 20 leagues wired (`pwhl`
 flagship top-level; `ahl`, `echl`, `ohl`, `whl`, `qmjhl`, `ushl`, …). Adding a
-league is a registry entry + a 4-line module — never new parser code. Errors
+league is a registry entry + a short `__init__.py` calling `build_family` — never new parser code. Errors
 are HTTP 200 with an error-in-body sentinel; check bodies, not status. See
 `CLAUDE.md` → "Hockey — HockeyTech multi-league".
 
@@ -229,10 +231,10 @@ silently completing the build from the live API.
 
 `sportsdataverse.nfl` is a near drop-in replacement for nflreadpy.
 
-- 25 nflreadpy-style aliases live INSIDE `sportsdataverse.nfl` (e.g.
+- 24 nflreadpy-style aliases live INSIDE `sportsdataverse.nfl` (e.g.
   `load_pbp`, `load_schedules`, `load_nextgen_stats`, `load_pfr_advstats`,
-  `load_ff_rankings`, `clear_cache`, `get_current_season`,
-  `get_current_week`). Do NOT re-export them at the top-level
+  `load_ff_rankings`), plus the date aliases `get_current_season` /
+  `get_current_week`. Do NOT re-export them at the top-level
   `sportsdataverse` namespace — the prefix-based names handle
   cross-sport disambiguation there.
 - Use unified `load_nfl_nextgen_stats(stat_type=...)` and
@@ -386,7 +388,7 @@ Mirror their structure for any new ESPN-endpoint module:
 uv sync --all-extras --dev          # install runtime + extras + dev group
 uv run pytest                       # run gated suite (live tests skip)
 SDV_PY_LIVE_TESTS=1 uv run pytest   # include live API tests
-uv run mypy sportsdataverse/<mod>.py
+uv run mypy                         # scoped by the [tool.mypy] files list; never pass a path
 uv run ruff check sportsdataverse/<mod>.py
 uv build                            # build wheel + sdist
 uv add some-package                 # add runtime dep
@@ -491,8 +493,8 @@ analytics modules: `rolling_windows.py`, `metric_curves.py`,
 ## ESPN Cross-League Architecture
 
 Each `<league>/<prefix>_espn_ext.py` is **codegen output** (~5,700 lines) written by
-`build_live()` from the five ESPN endpoint YAMLs — 126 short names across 30
-league modules, 3,446 wrappers. Never hand-edit one; edit the YAML and regenerate.
+`build_live()` from the five ESPN endpoint YAMLs — 126 short names across 40
+league modules, 4,566 wrappers. Never hand-edit one; edit the YAML and regenerate.
 
 ## Parser Layer
 
