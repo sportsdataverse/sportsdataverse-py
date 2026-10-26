@@ -493,8 +493,8 @@ analytics modules: `rolling_windows.py`, `metric_curves.py`,
 ## ESPN Cross-League Architecture
 
 Each `<league>/<prefix>_espn_ext.py` is **codegen output** (~5,700 lines) written by
-`build_live()` from the five ESPN endpoint YAMLs — 126 short names across 30
-league modules, 3,446 wrappers. Never hand-edit one; edit the YAML and regenerate.
+`build_live()` from the five ESPN endpoint YAMLs — 126 short names across 40
+league modules, 4,566 wrappers. Never hand-edit one; edit the YAML and regenerate.
 
 ## Parser Layer
 
