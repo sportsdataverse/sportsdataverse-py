@@ -21,10 +21,10 @@ soccer:
     url: https://github.com/ML-KULeuven/socceraction
     note: the SPADL and xT reference implementation these ports follow
   - name: sdvplot
-    url: https://github.com/sportsdataverse/sdvplot
+    url: https://sdvplot.sportsdataverse.org/
     note: "`pitch_coords()` puts any provider's events on the 105 x 68 pitch"
   - name: sdvplotR
-    url: https://github.com/sportsdataverse/sdvplotR
+    url: https://sdvplotR.sportsdataverse.org/
     note: the R twin (`sdv_pitch_coords()`)
   - name: itscalledsoccer
     url: https://github.com/American-Soccer-Analysis/itscalledsoccer
@@ -50,60 +50,173 @@ euroleague:
     url: https://hoopR.sportsdataverse.org
     note: the R home of SportsDataverse basketball, where the EuroLeague wrappers land next
   - name: sdvplot
-    url: https://github.com/sportsdataverse/sdvplot
+    url: https://sdvplot.sportsdataverse.org/
     note: draws the FIBA court the shot chart's hoop-origin centimeter coordinates land on
   - name: sdvplotR
-    url: https://github.com/sportsdataverse/sdvplotR
+    url: https://sdvplotR.sportsdataverse.org/
     note: the R twin, same FIBA court
   - name: euroleague-api
     url: https://github.com/giasemidis/euroleague_api
     note: community Python client for the same EuroLeague and EuroCup APIs
 nba:
   - name: sdvplot
-    url: https://github.com/sportsdataverse/sdvplot
+    url: https://sdvplot.sportsdataverse.org/
     note: "`court_coords()` puts stats-API `x_legacy` / `y_legacy` shots on the court `surface(\"nba\")` draws"
   - name: sportypy
     url: https://sportypy.sportsdataverse.org/
     note: the regulation NBA court (and every other surface) sdvplot draws with
 wnba:
   - name: sdvplot
-    url: https://github.com/sportsdataverse/sdvplot
+    url: https://sdvplot.sportsdataverse.org/
     note: "`court_coords()` puts stats-API `x_legacy` / `y_legacy` shots on the court `surface(\"wnba\")` draws"
   - name: sportypy
     url: https://sportypy.sportsdataverse.org/
     note: the regulation WNBA court sdvplot draws with
 nhl:
   - name: sdvplot
-    url: https://github.com/sportsdataverse/sdvplot
-    note: "`surface(\"nhl\")` draws the rink in a team's colors; `team_colors()` takes NHL stats ids"
+    url: https://sdvplot.sportsdataverse.org/
+    note: "`surface(\"nhl\")` draws the rink in a team's colors; `team_colors(id_system=\"nhl_id\")` takes NHL stats ids"
   - name: sportypy
     url: https://sportypy.sportsdataverse.org/
     note: the regulation NHL rink sdvplot draws with
 pwhl:
   - name: sdvplot
-    url: https://github.com/sportsdataverse/sdvplot
+    url: https://sdvplot.sportsdataverse.org/
     note: "`surface(\"pwhl\")` draws the rink in a team's colors"
   - name: sportypy
     url: https://sportypy.sportsdataverse.org/
     note: the rink sdvplot draws with
 mlb:
   - name: sdvplot
-    url: https://github.com/sportsdataverse/sdvplot
+    url: https://sdvplot.sportsdataverse.org/
     note: "`surface(\"mlb\")` draws the field in a team's colors"
   - name: sportypy
     url: https://sportypy.sportsdataverse.org/
     note: the regulation MLB field sdvplot draws with
 nfl:
   - name: sdvplot
-    url: https://github.com/sportsdataverse/sdvplot
+    url: https://sdvplot.sportsdataverse.org/
     note: "`surface(\"nfl\")` draws the field with a team's end zones"
   - name: sportypy
     url: https://sportypy.sportsdataverse.org/
     note: the regulation NFL field sdvplot draws with
 cfb:
   - name: sdvplot
-    url: https://github.com/sportsdataverse/sdvplot
+    url: https://sdvplot.sportsdataverse.org/
     note: "`surface(\"cfb\")` draws the field with a team's end zones"
   - name: sportypy
     url: https://sportypy.sportsdataverse.org/
     note: the regulation college football field sdvplot draws with
+mbb:
+  - name: sdvplot
+    url: https://sdvplot.sportsdataverse.org/
+    note: "`surface(\"mbb\")` draws the NCAA court in a team's colors; `team_colors()` takes ESPN ids and abbreviations"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the regulation NCAA court sdvplot draws with
+wbb:
+  - name: sdvplot
+    url: https://sdvplot.sportsdataverse.org/
+    note: "`surface(\"wbb\")` draws the NCAA court in a team's colors; `team_colors()` takes ESPN ids and abbreviations"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the regulation NCAA court sdvplot draws with
+nbagl:
+  - name: sdvplot
+    url: https://sdvplot.sportsdataverse.org/
+    note: "`surface(\"nbagl\")` draws the G League court in a team's colors"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the G League court sdvplot draws with
+ahl:
+  - name: sdvplot
+    url: https://sdvplot.sportsdataverse.org/
+    note: "`surface(\"ahl\")` draws the rink in a team's colors; `team_colors()` takes HockeyTech team ids"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the rink sdvplot draws with
+echl:
+  - name: sdvplot
+    url: https://sdvplot.sportsdataverse.org/
+    note: "`surface(\"echl\")` draws the rink in a team's colors; `team_colors()` takes HockeyTech team ids"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the rink sdvplot draws with
+ohl:
+  - name: sdvplot
+    url: https://sdvplot.sportsdataverse.org/
+    note: "`surface(\"ohl\")` draws the rink in a team's colors; `team_colors()` takes HockeyTech team ids"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the rink sdvplot draws with
+qmjhl:
+  - name: sdvplot
+    url: https://sdvplot.sportsdataverse.org/
+    note: "`surface(\"qmjhl\")` draws the rink in a team's colors; `team_colors()` takes HockeyTech team ids"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the rink sdvplot draws with
+ushl:
+  - name: sdvplot
+    url: https://sdvplot.sportsdataverse.org/
+    note: "`surface(\"ushl\")` draws the rink in a team's colors; `team_colors()` takes HockeyTech team ids"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the rink sdvplot draws with
+whl:
+  - name: sdvplot
+    url: https://sdvplot.sportsdataverse.org/
+    note: "`surface(\"whl\")` draws the rink in a team's colors; `team_colors()` takes HockeyTech team ids"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the rink sdvplot draws with
+mch:
+  - name: sdvplot
+    url: https://sdvplot.sportsdataverse.org/
+    note: "`surface(\"ncaa_mhockey\")` draws the NCAA rink and `team_colors(\"ncaa_mhockey\", ...)` the school colors"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the regulation NCAA rink sdvplot draws with
+wch:
+  - name: sdvplot
+    url: https://sdvplot.sportsdataverse.org/
+    note: "`surface(\"ncaa_whockey\")` draws the NCAA rink and `team_colors(\"ncaa_whockey\", ...)` the school colors"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the regulation NCAA rink sdvplot draws with
+college_baseball:
+  - name: sdvplot
+    url: https://sdvplot.sportsdataverse.org/
+    note: "`surface(\"ncaa_baseball\")` draws the field and `team_colors(\"ncaa_baseball\", ...)` the school colors"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the college baseball field sdvplot draws with
+college_softball:
+  - name: sdvplot
+    url: https://sdvplot.sportsdataverse.org/
+    note: "`team_colors(\"ncaa_softball\", ...)` gives each school's colors"
+ufl:
+  - name: sdvplot
+    url: https://sdvplot.sportsdataverse.org/
+    note: "`surface(\"ufl\")` draws the field with a team's end zones"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the field sdvplot draws with
+xfl:
+  - name: sdvplot
+    url: https://sdvplot.sportsdataverse.org/
+    note: "`surface(\"xfl\")` draws the field with a team's end zones"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the field sdvplot draws with
+fiba:
+  - name: sdvplot
+    url: https://sdvplot.sportsdataverse.org/
+    note: "`surface(\"fiba\")` draws the FIBA court"
+  - name: sportypy
+    url: https://sportypy.sportsdataverse.org/
+    note: the FIBA court sdvplot draws with
+cricket:
+  - name: sdvplot
+    url: https://sdvplot.sportsdataverse.org/
+    note: "`team_colors(\"cricket\", ...)` gives each national side's colors"
