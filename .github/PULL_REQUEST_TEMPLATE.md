@@ -26,12 +26,14 @@ plain English. Avoid implementation details — those live in the diff.
 
 <!--
 How did you verify this works? Bullet list of commands run / scenarios
-exercised. Live tests should be gated by SDV_PY_LIVE_TESTS=1; offline
+exercised. Live tests should be gated by SDV_PY_LIVE_TESTS=1 (stats.nba.com /
+stats.wnba.com live tests by SDV_PY_NBA_STATS_LIVE=1 instead); offline
 tests should pass without it.
 -->
 
 - [ ] `uv run pytest tests/<scope>/` passes offline
 - [ ] `SDV_PY_LIVE_TESTS=1 uv run pytest tests/<scope>/` passes (if data-touching)
+- [ ] `SDV_PY_NBA_STATS_LIVE=1 uv run pytest tests/<scope>/` passes from a residential IP (if it touches `nba_stats` / `wnba_stats` / `nbagl_stats`)
 - [ ] `uv run mypy` passes (new typed modules appended to the `[tool.mypy] files` ratchet; run it bare, since a path bypasses that list)
 - [ ] `uv run ruff check sportsdataverse/<modules>` passes
 
@@ -47,6 +49,6 @@ tests should pass without it.
 
 ## Checklist
 
-- [ ] My code follows the project's [code standards](../CONTRIBUTING.md#code-standards-for-new-modules).
+- [ ] My code follows the project's [code standards](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/CONTRIBUTING.md#code-standards-for-new-modules).
 - [ ] I have NOT included AI agents (Claude, Copilot, GPT, etc.) as commit co-authors.
 - [ ] I have searched existing PRs to confirm this isn't a duplicate.

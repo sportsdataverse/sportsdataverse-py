@@ -17,9 +17,40 @@ body:
       label: Discrepancy
       description: What does the loader return and what does the upstream source show?
       placeholder: |
-        load_wbb_pbp(2024) returns play_id 401628334101849902 with
+        load_cfb_pbp(2024) returns play_id 401628334101849902 with
         sack_player_name2 = NULL, but ESPN shows the play as a split sack
         between Yasir Abdullah and YaYa Diaby.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Sport / league
+      multiple: true
+      options:
+        - CFB (college football)
+        - NFL
+        - UFL / XFL / CFL
+        - NBA
+        - NBA G League / Summer League
+        - WNBA
+        - MBB (men's college basketball)
+        - WBB (women's college basketball)
+        - International basketball (EuroLeague, FIBA, NBL, other international leagues)
+        - NHL
+        - PWHL
+        - Minor & junior hockey (HockeyTech)
+        - College hockey (M/W)
+        - European hockey (SIHF, DEL, Liiga, SHL, KHL, ...)
+        - MLB
+        - College baseball / softball
+        - Soccer
+        - Cricket
+        - Formula 1
+        - Odds / prediction markets (The Odds API, Kalshi, Polymarket)
+        - Cross-sport providers (CBS, Fox, Yahoo, ESPN content, TheSportsDB)
+        - Other
     validations:
       required: true
 
@@ -29,8 +60,9 @@ body:
       label: Reproducer
       render: python
       placeholder: |
+        import polars as pl
         import sportsdataverse as sdv
-        df = sdv.wbb.load_wbb_pbp([2024]).filter(pl.col("play_id") == 401628334101849902)
+        df = sdv.cfb.load_cfb_pbp([2024]).filter(pl.col("play_id") == 401628334101849902)
     validations:
       required: true
 
@@ -48,6 +80,23 @@ body:
     id: sdv_version
     attributes:
       label: sportsdataverse-py version
+      description: Output of `python -c "import importlib.metadata as m; print(m.version('sportsdataverse'))"`
+    validations:
+      required: true
+
+  - type: input
+    id: python_version
+    attributes:
+      label: Python version
+      description: Output of `python --version`
+    validations:
+      required: true
+
+  - type: input
+    id: polars_version
+    attributes:
+      label: polars version
+      description: Output of `python -c "import polars; print(polars.__version__)"`
     validations:
       required: true
 

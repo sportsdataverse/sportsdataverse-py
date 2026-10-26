@@ -77,12 +77,23 @@ _CLAUDE_STALE = [
     "a 4-line",
     "bump polars to >=1.0,<2.0",
     "add py3.14 to the test matrix",
+    # 0.1.5 was never released: no stamp may present it (or a later 0.1.x) as shipped
+    "Error vocabulary (0.1.5)",
+    "removed in 0.1.5",
+    "deleted in 0.1.6",
+    "0.0.76 BREAKING",
+    "291 generated call sites",
+    "only ships `cfb/models/*` and `nfl/models/*`",
+    "20 HockeyTech league families",
+    "one-page reference",
+    "(C-L3)",
+    "task 5.2",
 ]
 
 _CLAUDE_CURRENT = [
     "45 canonical load_nfl_*",
     "24 nflreadpy-style aliases",
-    "291 generated call sites",
+    "about 300 generated call sites",
     "PWHL + 19",
     "`tests`, `nflpro`, `models`, `pff`, `soccer`, `sdvplot`, `sportypy`, `mcp`, `all`",
     "architecture/codegen.md",
@@ -91,6 +102,10 @@ _CLAUDE_CURRENT = [
     "`polars>=2.0,<3`",
     "polars 1.x is no longer supported",
     "replacements are available now that the floor is 2.0",
+    "| sdvplot | <https://sdvplot.sportsdataverse.org> |",
+    "| sportypy | <https://sportypy.sportsdataverse.org> |",
+    "in four layouts (24 pages in all)",
+    "include allowlist (`sportsdataverse*`, `sdv_docs*`)",
 ]
 
 _CLAUDE_STRUCTURE_DIRS = [
@@ -196,9 +211,9 @@ def test_claude_md_has_a_codegen_section_linking_the_architecture_page():
     assert "docs/docs/architecture/codegen.md" in body
 
 
-def test_claude_md_error_vocabulary_is_0_1_5():
+def test_claude_md_error_vocabulary_is_0_2_0():
     body = text("claude")
-    assert "### Error vocabulary (0.1.5)" in body
+    assert "### Error vocabulary (0.2.0)" in body
     assert "### Error vocabulary (0.1.0)" not in body
     assert "AssetFetchError" in body and "400 / 422" in body
 
@@ -253,6 +268,10 @@ _COPILOT_STALE = [
     "682 of 729",
     "4-line module",
     "bump polars to >=1.0,<2.0",
+    "33 `*_parsers.py` modules",
+    "one-page reference",
+    "removed in 0.1.5",
+    "As of 0.1.5",
 ]
 
 _COPILOT_CURRENT = [
@@ -272,6 +291,9 @@ _COPILOT_CURRENT = [
     "returns the last response",
     "`polars>=2.0,<3`",
     "polars 1.x is not supported",
+    "`nbagl_stats` (94 wrappers",
+    "path_to_json=raw_dir, join_participants=False, odds_override=",
+    "in four layouts (24 pages in all)",
 ]
 
 # Copilot uses Title Case headings; these match the file's own convention.
@@ -284,7 +306,7 @@ _COPILOT_SECTIONS_FROM_CLAUDE = [
     "## Release Utilities",
     "## Rule-Era Models",
     "## ID Column Types",
-    "## Error Vocabulary (0.1.5)",
+    "## Error Vocabulary (0.2.0)",
     "## Codegen",
 ]
 
@@ -326,10 +348,20 @@ _README_STALE = [
     "polars 1.x or 2.x",
     "will become the one-shot",
     "PFF Developer + Premium clients",
+    "6,456 exported names",
+    "Errors (0.1.5)",
+    "Needs 0.1.5 or newer",
+    "(NHL + WHL)",
+    "season = {2021}",
+    "docs/parsers/index",
+    "sdv-internal-refs",
+    "/master/sdv-py-logo.png",
+    "lifecycle-experimental",
+    "img.shields.io/twitter/follow/sportsdataverse?",
 ]
 
 _README_CURRENT = [
-    "6,456 exported names",
+    "about 9,300 public functions",
     "128 NBA",
     "111 WNBA wrappers",
     "sportsdataverse[nflpro]",
@@ -339,9 +371,20 @@ _README_CURRENT = [
     "fox_api",
     "107 multi-sport `yahoo_*`",
     "cbs_napi",
-    "### Errors (0.1.5)",
+    "### Errors",
     "AssetFetchError",
     "polars 2.x (`polars>=2.0,<3`)",
+    "pip install --pre sportsdataverse",
+    "uv sync --all-extras --dev",
+    "`sportsdataverse.nbagl.nbagl_stats`",
+    "`sportsdataverse.basketball.<home>`",
+    "`sportsdataverse.providers.<name>`",
+    "`sportsdataverse.f1`",
+    "Kalshi, Polymarket",
+    "(NHL + PWHL)",
+    "year = {2021}",
+    "lifecycle-beta",
+    "/main/docs/static/img/sdv-py-logo.png",
 ]
 
 _CONTRIBUTING_STALE = [
@@ -356,6 +399,10 @@ _CONTRIBUTING_STALE = [
     "Polars 1.x and 2.x",
     "`polars>=1.0,<3`",
     "the floor stays 1.0",
+    "had not been done since 0.0.75",
+    "With 0.1.5 the newest release",
+    "go under `tests/wbb/` or",
+    "931 of the",
 ]
 
 _CONTRIBUTING_CURRENT = [
@@ -366,8 +413,11 @@ _CONTRIBUTING_CURRENT = [
     "docs-deploy.yml",
     "main (latest)",
     "VERSIONS_TO_KEEP=3",
-    "had not been done since 0.0.75",
     "`removed_in` is a commitment",
+    "tools/release_changelog.py 0.2.0b1",
+    "gh release create v0.2.0b1 --target main --prerelease",
+    "pip install --pre sportsdataverse",
+    "go under `tests/<pkg>/`",
     "architecture/codegen.md",
     "sdv_docs/",
     "`polars>=2.0,<3`",

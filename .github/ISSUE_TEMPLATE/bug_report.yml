@@ -51,7 +51,7 @@ body:
     id: sdv_version
     attributes:
       label: sportsdataverse-py version
-      description: Output of `python -c "import sportsdataverse; print(sportsdataverse.__version__)"`
+      description: Output of `python -c "import importlib.metadata as m; print(m.version('sportsdataverse'))"`
     validations:
       required: true
 
