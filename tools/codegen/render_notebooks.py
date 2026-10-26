@@ -34,6 +34,7 @@ import os
 import re
 import sys
 import tempfile
+import unicodedata
 from pathlib import Path
 from typing import Optional
 
@@ -174,6 +175,56 @@ def _normalize_md(text: str) -> str:
     return "\n".join(ln.rstrip() for ln in text.splitlines()).rstrip() + "\n"
 
 
+_SKIP_MARK = "⏭"  # the notebooks' safe() helper starts its skip line with this
+_SKIP_MAX = 160
+_HTML_BODY = re.compile(r"\s*<(?:!DOCTYPE|html|head|body|title)\b", re.I)
+_REPEATED_CLASS = re.compile(r"\b(\w+(?:Error|Exception|Warning)): \1: ")
+
+
+def _short_skip(line: str) -> str:
+    """One ``safe()`` skip line as one short line: no repeated class prefix, no HTML body, at most _SKIP_MAX chars.
+
+    ``NoDataError``'s message already starts with its class name, so ``f"{type(e).__name__}: {e}"`` printed it
+    twice; a 403 from an HTML site carried the whole error page."""
+    line = _REPEATED_CLASS.sub(r"\1: ", line)
+    line = _HTML_BODY.split(line, maxsplit=1)[0].rstrip(" :")
+    return line if len(line) <= _SKIP_MAX else line[: _SKIP_MAX - 1].rstrip() + "…"
+
+
+def _tidy_skips(text: str) -> str:
+    """Every skip line of a page (or a stdout output) collapsed with _short_skip; other lines unchanged."""
+    return "\n".join(_short_skip(ln) if ln.lstrip().startswith(_SKIP_MARK) else ln for ln in text.split("\n"))
+
+
+_MD_INLINE = re.compile(r"`([^`]*)`|\*\*([^*]+)\*\*|\*([^*\s][^*]*)\*|\[([^\]]+)\]\([^)]*\)")
+
+
+def _plain(md: str) -> str:
+    """Markdown inline text as plain text: code, emphasis and links unwrapped, emoji dropped, whitespace collapsed."""
+    text = _MD_INLINE.sub(lambda m: next(g for g in m.groups() if g is not None), md)
+    text = "".join(ch for ch in text if unicodedata.category(ch) not in ("So", "Cf", "Mn"))
+    return " ".join(text.split())
+
+
+def _description(stem: str, limit: int = 200) -> Optional[str]:
+    """The page's meta description: the first paragraph of the notebook's first markdown cell, as plain text.
+
+    Without it Docusaurus took the notebook-links line, whose underscores it read as emphasis ("04nbaintro.ipynb")."""
+    path = NB_DIR / f"{stem}.ipynb"
+    if not path.exists():
+        return None
+    cells = json.loads(path.read_text(encoding="utf-8"))["cells"]
+    first = next(("".join(c["source"]) for c in cells if c["cell_type"] == "markdown"), "")
+    para = next((b for b in first.split("\n\n") if b.strip() and not b.lstrip().startswith(("#", "|", "```"))), "")
+    text = _plain(para)
+    if len(text) <= limit:  # a lead-in to a table ("...tours four:") becomes a sentence
+        return (text[:-1] + "." if text.endswith(":") else text) or None
+    ends = [m.end() for m in re.finditer(r"[.!?](?=\s)", text[:limit])]
+    if ends and ends[-1] >= 60:
+        return text[: ends[-1]]
+    return text[: limit - 1].rsplit(" ", 1)[0].rstrip(",;:—–- ") + "…"
+
+
 _REPO = "sportsdataverse/sportsdataverse-py"
 _LINKS_PREFIX = "> This page is the executed notebook"
 
@@ -181,8 +232,11 @@ _LINKS_PREFIX = "> This page is the executed notebook"
 def _frontmatter(stem: str, label: str, position: int) -> str:
     # "Edit this page" opens the notebook, the source of this page, not the generated markdown.
     edit = f"https://github.com/{_REPO}/edit/main/examples/notebooks/{stem}.ipynb"
+    desc = _description(stem)
+    # JSON string = a valid double-quoted YAML scalar, so quotes and colons in the text are safe.
+    desc_line = f"description: {json.dumps(desc, ensure_ascii=False)}\n" if desc else ""
     return (
-        f"---\ntitle: {label} tutorial\nsidebar_label: {label}\nsidebar_position: {position}\n"
+        f"---\ntitle: {label} tutorial\n{desc_line}sidebar_label: {label}\nsidebar_position: {position}\n"
         f"custom_edit_url: {edit}\n---\n\n"
     )
 
@@ -206,7 +260,8 @@ def _relink(text: str, stem: str, label: str, position: int, anchor_map: Optiona
     """
     body = text.split("\n---\n", 1)[1].lstrip("\n")
     body = re.sub(rf"^{re.escape(_LINKS_PREFIX)}.*\n\n", "", body, count=1, flags=re.M)
-    return _normalize_md(_frontmatter(stem, label, position) + _with_links(stem, _fix_links(body, anchor_map)))
+    page = _frontmatter(stem, label, position) + _with_links(stem, _fix_links(body, anchor_map))
+    return _normalize_md(_tidy_skips(page))
 
 
 def relinked_pages(anchor_map: dict) -> dict:
@@ -273,7 +328,9 @@ def main() -> int:
             failures.append(stem)
             continue
         (OUT_DIR / f"{stem}.md").write_text(
-            _normalize_md(_frontmatter(stem, label, position) + _with_links(stem, body)), encoding="utf-8", newline="\n"
+            _normalize_md(_tidy_skips(_frontmatter(stem, label, position) + _with_links(stem, body))),
+            encoding="utf-8",
+            newline="\n",
         )
         print(f"  wrote {OUT_DIR / f'{stem}.md'}")
 
