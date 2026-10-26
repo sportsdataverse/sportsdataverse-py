@@ -20,31 +20,20 @@ This namespace is **deprecated**. Every league wrapper now defaults to
 
 The default `sportsdataverse.{league}` modules return a parsed polars
 DataFrame for parser-backed endpoints (0.0.54+); pass `return_parsed=False`
-for the raw `Dict` — so existing callers from 0.0.50 and earlier can opt
-out. **The `sportsdataverse.parsed.{league}` namespace was introduced in
-0.0.51 as an explicit parsed-by-default alias** and remains fully supported:
+for the raw `Dict`. Import from the league module:
 
 ```python
-# Parsed DataFrame by default (0.0.54+, parser-backed wrappers):
 from sportsdataverse.nba import espn_nba_scoreboard
-df = espn_nba_scoreboard()                 # → polars DataFrame
-
-# Recover the raw Dict:
+df  = espn_nba_scoreboard()                     # → polars DataFrame
 raw = espn_nba_scoreboard(return_parsed=False)  # → Dict
-
-# Explicit parsed namespace (unchanged from 0.0.51):
-from sportsdataverse.parsed.nba import espn_nba_scoreboard
-df = espn_nba_scoreboard()                 # → polars DataFrame
-
-# Override either direction:
-df  = espn_nba_scoreboard(return_parsed=True)   # explicit opt-in (same as default)
-raw = espn_nba_scoreboard(return_parsed=False)  # works from parsed module too
+pdf = espn_nba_scoreboard(return_as_pandas=True)  # → pandas DataFrame
 ```
 
-Every league has a parsed variant: `parsed.nba`, `parsed.wnba`,
-`parsed.mbb`, `parsed.wbb`, `parsed.cfb`, `parsed.nfl`, `parsed.mlb`,
-`parsed.nhl`. Wrappers that don't have a registered parser (helpers,
-loaders, etc.) pass through unchanged.
+To migrate, replace `from sportsdataverse.parsed.nba import ...` with
+`from sportsdataverse.nba import ...`; nothing else changes. The old
+`parsed.nba`, `parsed.wnba`, `parsed.mbb`, `parsed.wbb`, `parsed.cfb`,
+`parsed.nfl`, `parsed.mlb` and `parsed.nhl` modules still import, but each
+emits a `DeprecationWarning` and will be removed in a future release.
 
 ## 2. `find_team` / `find_athlete` / `find_event` — name-to-ID resolvers
 

@@ -144,7 +144,7 @@ pip install "sportsdataverse[all]"      # everything below EXCEPT mcp
 pip install "sportsdataverse[models]"   # no-op (kept so sportsdataverse[models] installs keep working)
 pip install "sportsdataverse[tests]"    # adds pytest, mypy, ruff, etc.
 pip install "sportsdataverse[nflpro]"   # NFL Pro (pro.nfl.com) Next Gen Stats
-pip install "sportsdataverse[pff]"      # PFF Developer + Premium clients
+pip install "sportsdataverse[pff]"      # Playwright, for the optional PFF Premium (LEGACY) headless login; the PFF Developer API needs no extra
 pip install "sportsdataverse[mcp]"      # the sdv-docs MCP server (Python >= 3.10)
 pip install "sportsdataverse[soccer]"   # kloppy: soccer event / tracking data (soccer_open_events)
 pip install "sportsdataverse[sdvplot]"  # sdvplot: team logos, colors and chart themes
@@ -181,10 +181,9 @@ uv pip install -e ".[all]"
 pip install -e ".[all]"
 ```
 
-> Note: dev dependencies live in a PEP 735 `[dependency-groups]` block (the
-> repo only ships PEP 621 `[project.optional-dependencies]`),
-> `uv sync --all-extras --all-groups` will become the one-shot dev incantation.
-> Until then, `uv pip install -e ".[all]"` is the equivalent path.
+> Note: dev dependencies (`test`, `lint`, `dev`) live in a PEP 735 `[dependency-groups]` block
+> beside the PEP 621 `[project.optional-dependencies]` extras.
+> `uv sync --all-extras --all-groups` installs both in one step, as CI does.
 
 Run the test suite:
 

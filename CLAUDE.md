@@ -13,7 +13,7 @@
   - [Parser Layer (0.0.51+)](#parser-layer-0051)
     - [`return_parsed` parameter](#return_parsed-parameter)
     - [Summary dispatcher (21 sub-frames)](#summary-dispatcher-21-sub-frames)
-    - [Test fixtures (3,400 fixture files across 147 directories)](#test-fixtures-3400-fixture-files-across-147-directories)
+    - [Test fixtures](#test-fixtures)
     - [Test infrastructure summary](#test-infrastructure-summary)
   - [Key Coding Conventions](#key-coding-conventions)
     - [Module pattern (NEW modules)](#module-pattern-new-modules)
@@ -80,8 +80,8 @@ fix(cfb): correct kneel-down classification in cfb_pbp parser
 docs(contributing): document uv workflow and skip_if_no_live gate
 test(wnba): add live smoke tests for player_stats canonical categories
 refactor(dl_utils): rewrite download() retry as iterative + raise on exhaustion
-chore(deps): bump polars to >=1.0,<2.0 + re-lock
-ci(actions): add py3.14 to the test matrix
+chore(deps): bump polars to >=2.0,<3 + re-lock
+ci(actions): add a floor-import job on the 3.10 floor
 ```
 
 Prefer scoped commit subjects when useful (e.g., `feat(wbb): ...`,
@@ -148,8 +148,8 @@ uv run pytest
 # Run live tests (hits real APIs)
 SDV_PY_LIVE_TESTS=1 uv run pytest
 
-# Type-check the strict-listed modules
-uv run mypy sportsdataverse/<your_module>.py
+# Type-check the ratchet (the [tool.mypy] files list scopes it; passing a path bypasses that list)
+uv run mypy
 
 # Lint
 uv run ruff check sportsdataverse/
@@ -228,7 +228,6 @@ tests/
   conftest.py # skip_if_no_live decorator
   cfb/, mbb/, mlb/, nba/, nfl/, nhl/, wbb/, wnba/  # one subdir per source pkg
 docs/                       # Docusaurus site (don't pollute with internal docs)
-docs_instructions.md        # Reference for the docs build workflow
 dev/                        # Local-only working notes (gitignored)
 recipe/                     # Conda-build recipe (meta.yaml + README)
 pyproject.toml              # PEP 621 metadata + tooling (ruff lint+format, mypy)
@@ -258,8 +257,8 @@ last remnants (`_common_espn.py`, the `extract*.py` bootstraps and the committed
 description of that pattern anywhere, it predates 0.1.x.
 
 Total cross-league surface: **126 short names** (from the five ESPN
-endpoint YAMLs in `generate.ESPN_APIS`) emitted across 30 league modules
-= **3,446 wrappers**. The `espn_cdn` family (`cdn.espn.com/core`, shorts
+endpoint YAMLs in `generate.ESPN_APIS`) emitted across 40 league modules
+= **4,566 wrappers**. The `espn_cdn` family (`cdn.espn.com/core`, shorts
 `cdn_playbyplay` / `cdn_boxscore` / `cdn_schedule` / `cdn_scoreboard` /
 `cdn_rankings`) is the one family whose per-league reach was live-probed:
 each endpoint carries an `include_prefixes` allowlist (league prefixes, so
@@ -270,9 +269,9 @@ argument. The probe matrix lives at the top of `espn_cdn.yaml`.
 ## Parser Layer (0.0.51+)
 
 Wrappers default to `return_parsed=True` and return tidy polars / pandas
-DataFrames. The parser layer turns raw payloads into those frames. There are
-**33 parser modules** (`find sportsdataverse -name '*_parsers.py'`) — one per
-data surface. The six oldest and largest:
+DataFrames. The parser layer turns raw payloads into those frames, with one
+parser module per data surface (`find sportsdataverse -name '*_parsers.py'`
+lists them all). The six oldest and largest:
 
 | Module | Surface | Parsers |
 |---|---|---|
@@ -283,7 +282,7 @@ data surface. The six oldest and largest:
 | `mlb/mlb_api_parsers.py` | `statsapi.mlb.com` Stats API | 5 dedicated + 1 generic |
 | `nfl/nfl_api_parsers.py` | `api.nfl.com` "Shield" data API | 11 dedicated (one per `nfl_api` endpoint) |
 
-The other 27 follow the same contract, one per provider family: `fox/fox_api_parsers.py`,
+The rest follow the same contract, one per provider family, among them `fox/fox_api_parsers.py`,
 `cbs/cbs_napi_parsers.py`, `yahoo/yahoo_shangrila_parsers.py`,
 `nba/nba_stats_parsers.py` + `wnba/wnba_stats_parsers.py`, `cfb/on3_parsers.py` +
 `sports247_parsers.py` + `sports247_site_pages_parsers.py`, `nfl/pff_parsers.py` +
@@ -292,9 +291,10 @@ The other 27 follow the same contract, one per provider family: `fox/fox_api_par
 `mlb/mlb_statcast_parsers.py`, `soccer/` (`soccer_espn`, `asa`, `fotmob`, `uefa`,
 `fifa`, `mls/mls_api`, `nwsl/nwsl_api`), `euroleague/euroleague_parsers.py`,
 `cricket/cricket_espn_parsers.py`, and the NCAA HTML parsers
-`mbb/mbb_ncaa_team_parsers.py` + `wbb/wbb_ncaa_team_parsers.py`.
+`mbb/mbb_ncaa_team_parsers.py` + `wbb/wbb_ncaa_team_parsers.py`, plus the international
+basketball and European hockey families under `basketball/` and `hockey/`.
 
-**Parser contract (universal across all 6 modules):**
+**Parser contract (universal across every parser module):**
 
 - Return `polars.DataFrame` by default; pandas via
   `return_as_pandas=True`.
@@ -369,13 +369,12 @@ Cross-league shape divergences captured by tests:
 - NCAA W basketball `officials` sometimes ships < 3 rows; CFB
   national championship shipped 0 officials.
 
-### Test fixtures (3,400 fixture files across 147 directories)
+### Test fixtures
 
 Captured fixtures live under `tests/fixtures/{espn,mlb_api,nhl_api_web,
-nhl_edge,nhl_stats_rest,nhl_records,kloppy,socceraction}/` (and more; 147 directories
-in all). Each directory has a
-`README.md` documenting provenance (URL + capture date). See
-each fixture directory's own `README.md` for provenance (URL + capture date).
+nhl_edge,nhl_stats_rest,nhl_records,kloppy,socceraction}/` and many more
+directories. Each fixture directory has its own `README.md` documenting
+provenance (URL + capture date).
 
 Adding a new parser → drop a fixture in the right directory + add
 a test in the matching `test_*_parsers.py` file. The parser tests
@@ -386,16 +385,16 @@ and opens a tracking issue labeled `live-tests:drift`.
 
 ### Test infrastructure summary
 
-| Test file | Count | Surface |
-|---|---:|---|
-| `tests/test_espn_universal_parsers.py` | 134 | ESPN cross-league + summary dispatcher |
-| `tests/test_nhl_api_web_parsers.py` | 37 | NHL api-web modern game-feed |
-| `tests/test_nhl_edge_parsers.py` | 32 | NHL EDGE player-tracking |
-| `tests/test_nhl_aux_parsers.py` | 21 | NHL Stats REST + Records |
-| `tests/test_mlb_api_parsers.py` | 17 | MLB Stats API |
-| **Offline parser tests total** | **241** | |
-| `tests/test_espn_live.py` | 80 | Live API integration (gated by `SDV_PY_LIVE_TESTS=1`) |
-| **Whole suite** | **11,446** | `uv run pytest --collect-only -q` |
+| Test file | Surface |
+|---|---|
+| `tests/test_espn_universal_parsers.py` | ESPN cross-league + summary dispatcher (offline) |
+| `tests/test_nhl_api_web_parsers.py` | NHL api-web modern game-feed (offline) |
+| `tests/test_nhl_edge_parsers.py` | NHL EDGE player-tracking (offline) |
+| `tests/test_nhl_aux_parsers.py` | NHL Stats REST + Records (offline) |
+| `tests/test_mlb_api_parsers.py` | MLB Stats API (offline) |
+| `tests/test_espn_live.py` | Live API integration (gated by `SDV_PY_LIVE_TESTS=1`) |
+
+For current counts, run `uv run pytest --collect-only -q` (whole suite) or pass one file.
 
 ## Key Coding Conventions
 
@@ -729,8 +728,8 @@ registry-driven league families**:
   `echl_schedule`, `echl_pbp`, `echl_standings`, `echl_teams`,
   `echl_team_roster`, `echl_player_stats`, `echl_leaders`, `echl_game_summary`,
   `echl_game_shifts`, `echl_player_toi`, `echl_game_corsi`, `echl_season_id`,
-  `most_recent_echl_season`. Adding a league is a `LEAGUES` entry + a 4-line
-  `sportsdataverse/hockey/<lg>/__init__.py` (calls `build_family`) + 3 wiring
+  `most_recent_echl_season`. Adding a league is a `LEAGUES` entry + a short
+  `sportsdataverse/hockey/<lg>/__init__.py` (copy `hockey/echl/__init__.py`: it calls `build_family`) + 3 wiring
   lines (the league in `tools/codegen/generate.py`'s `_HOCKEYTECH_MODULE_LEAGUES`,
   which renders the generated `hockey/__init__.py`; the top-level `__init__.py`
   wildcard; and the `_MOVED` back-compat entry). **No new parser code** — see below.
@@ -1121,8 +1120,10 @@ the nested ESPN schedule columns).
 
 ruff is both linter and formatter. `line-length = 120` and `line-ending = "lf"` in
 `pyproject.toml`; invoke it as `uv run ruff check sportsdataverse/` and
-`uv run ruff format`. The isort hook in the pre-commit config is inactive — ruff's
-`I` rules own import order.
+`uv run ruff format`. Only ruff's default rules plus `BLE001` are enabled (`[tool.ruff.lint]`):
+import order is NOT enforced. The standalone isort hook was removed in 0.0.51 because a re-sort
+breaks the load-bearing import order in `sportsdataverse/__init__.py` (its `# isort: off` block),
+and the `I` rules stay off for the same reason.
 
 ### Module naming
 
