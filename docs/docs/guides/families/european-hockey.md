@@ -2,6 +2,7 @@
 title: European hockey
 sidebar_label: European hockey
 sidebar_position: 2
+description: "The thirteen European hockey leagues under sportsdataverse.hockey (DEL, SHL, Liiga, KHL, SIHF and more) and the conventions they share."
 ---
 
 # European hockey

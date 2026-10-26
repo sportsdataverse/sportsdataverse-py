@@ -2,6 +2,7 @@
 title: The SportsDataverse ecosystem
 sidebar_label: Ecosystem & philosophy
 sidebar_position: 2
+description: "The design philosophy, the function-naming paradigm, the data releases and the R sister packages behind sportsdataverse-py."
 ---
 
 # The SportsDataverse ecosystem & philosophy
@@ -38,7 +39,7 @@ Once you know the prefixes, you can usually guess the function name.
 
 | Pattern | Meaning | Examples |
 |---|---|---|
-| `espn_<league>_<entity>()` | ESPN cross-league wrapper (same shape in all 8 leagues) | `espn_nba_scoreboard`, `espn_wnba_team_roster`, `espn_cfb_player_gamelog` |
+| `espn_<league>_<entity>()` | ESPN cross-league wrapper (same shape in all 40 ESPN leagues) | `espn_nba_scoreboard`, `espn_wnba_team_roster`, `espn_cfb_player_gamelog` |
 | `<league>_<entity>()` / `<api>_<entity>()` | A league's **native** (non-ESPN) API | `nhl_pbp`, `nhl_edge_skater_detail`, `mlb_api_schedule`, `mlb_statcast` |
 | `load_<league>_<dataset>(seasons=...)` | 404-safe loader of a pre-built parquet release | `load_nba_pbp`, `load_wnba_shots`, `load_cfb_betting_lines` |
 | `parse_<...>()` / `parser_for_<api>()` | Raw `Dict` → tidy polars/pandas frame (+ registry lookup) | `parse_mlb_api_person_stats`, `parser_for_nhl_api_web` |
@@ -56,7 +57,7 @@ Two conventions keep the ESPN surface aligned with the R packages:
   alongside the comprehensive `espn_<league>_player_stats_v3()`.
 
 Return types are predictable: **parser-backed wrappers return a polars DataFrame
-by default (0.0.54+)** — pass `return_parsed=False` for the raw `Dict`; wrappers
+by default** — pass `return_parsed=False` for the raw `Dict`; wrappers
 without a parser return the `Dict`. Use `return_as_pandas=True` to get a pandas
 DataFrame. (The old `sportsdataverse.parsed.<league>` mirror is **deprecated**:
 import from `sportsdataverse.<league>` instead.) See [Architecture](architecture/espn-cross-league.md)
@@ -68,22 +69,22 @@ The `load_<league>_*()` functions skip live scraping entirely — they read
 pre-built, season-partitioned parquet that the SportsDataverse data pipelines
 publish on a schedule, and they are **404-safe** (a season with no published
 asset is skipped with a warning rather than raising). The data comes from a small
-set of companion data repositories:
+set of release hosts:
 
 - **[sportsdataverse-data](https://github.com/sportsdataverse/sportsdataverse-data/releases)**
-  — the GitHub Releases host that most ESPN-derived datasets load from (NBA, WNBA,
-  MBB, WBB, NHL, PWHL, …).
-- **[cfbfastR-data](https://github.com/sportsdataverse/cfbfastR-data)** — college
-  football play-by-play, rosters, schedules, and team info.
-- **[fastRhockey-data](https://github.com/sportsdataverse/fastRhockey-data)** —
-  NHL/PWHL play-by-play and box scores.
+  — the GitHub Releases host that almost every `load_*` function reads from (NBA,
+  WNBA, MBB, WBB, CFB, NHL, PWHL, MLB, …).
 - **[nflverse-data](https://github.com/nflverse/nflverse-data)** — NFL data, read
   through the nflreadpy-style [`nfl`](nfl/index.md) module.
 
-These mirror the R packages' own release repos
-([hoopR-data](https://github.com/sportsdataverse/hoopR-data),
-[wehoop-data](https://github.com/sportsdataverse/wehoop-data), …): the same
-release-backed loader idea, and often the very same data.
+The releases are built by per-league producer repositories, for example
+[hoopR-nba-data](https://github.com/sportsdataverse/hoopR-nba-data),
+[wehoop-wnba-data](https://github.com/sportsdataverse/wehoop-wnba-data),
+[cfbfastR-cfb-data](https://github.com/sportsdataverse/cfbfastR-cfb-data),
+[fastRhockey-nhl-data](https://github.com/sportsdataverse/fastRhockey-nhl-data),
+[fastRhockey-pwhl-data](https://github.com/sportsdataverse/fastRhockey-pwhl-data) and
+[baseballr-data](https://github.com/sportsdataverse/baseballr-data). The R packages
+read the same releases, so a loader returns the same data in both languages.
 
 ### Automation status
 
@@ -95,15 +96,15 @@ produces it, so you can see at a glance what's current and where it comes from:
   · [MBB loaders](mbb/reference/loaders.md) · [WBB loaders](wbb/reference/loaders.md)
 - [CFB loaders](cfb/reference/loaders.md) · [NHL loaders](nhl/reference/loaders.md)
   · [PWHL loaders](pwhl/reference/loaders.md)
-
-(The NFL module loads from nflverse releases via nflreadpy, and MLB pairs the
-official Stats API with Baseball Savant, so those two don't use the generated
-release-loader pages above.)
+- [NFL loaders](nfl/reference/loaders.md) (nflverse and SDV-native releases)
+  · [MLB loaders](mlb/reference/loaders.md)
 
 ## Python ↔ R: the sister packages
 
 sdv-py deliberately mirrors the R packages' names, so a call you know in R is the
-call you make in Python. Each sport's R sister:
+call you make in Python. The leagues below have an R sister; the rest of the
+registry (international basketball, European and junior hockey, soccer, cricket,
+the cross-sport providers) is Python-only for now. Each sport's R sister:
 
 | Sport(s) | `sportsdataverse-py` module | R sister package |
 |---|---|---|
@@ -111,7 +112,7 @@ call you make in Python. Each sport's R sister:
 | WNBA, NCAA women's basketball | [`wnba`](wnba/index.md), [`wbb`](wbb/index.md) | [wehoop](https://wehoop.sportsdataverse.org) |
 | College football | [`cfb`](cfb/index.md) | [cfbfastR](https://cfbfastR.sportsdataverse.org) |
 | NFL | [`nfl`](nfl/index.md) | [nflverse](https://nflverse.nflverse.com) (see below) |
-| MLB | [`mlb`](mlb/index.md) | [baseballr](https://billpetti.github.io/baseballr/) |
+| MLB | [`mlb`](mlb/index.md) | [baseballr](https://baseballr.sportsdataverse.org/) |
 | NHL, PWHL | [`nhl`](nhl/index.md), [`pwhl`](pwhl/index.md) | [fastRhockey](https://fastRhockey.sportsdataverse.org) |
 
 For example, today's WNBA scoreboard is the same verb in both languages:
@@ -139,14 +140,14 @@ pattern holds well beyond these rows: ESPN wrappers, native league APIs, and
 | [`espn_nba_scoreboard`](nba/reference/site.md#espn_nba_scoreboard) | [`hoopR::espn_nba_scoreboard`](https://hoopR.sportsdataverse.org/reference/espn_nba_scoreboard.html) | NBA games + scores for a date |
 | [`espn_wnba_scoreboard`](wnba/reference/site.md#espn_wnba_scoreboard) | [`wehoop::espn_wnba_scoreboard`](https://wehoop.sportsdataverse.org/reference/espn_wnba_scoreboard.html) | WNBA games + scores for a date |
 | [`espn_cfb_scoreboard`](cfb/reference/site/other.md#espn_cfb_scoreboard) | [`cfbfastR::espn_cfb_scoreboard`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_scoreboard.html) | CFB games + scores for a week |
-| [`espn_mlb_scoreboard`](mlb/reference/site.md#espn_mlb_scoreboard) | [`baseballr::espn_mlb_scoreboard`](https://billpetti.github.io/baseballr/reference/espn_mlb_scoreboard.html) | MLB games + scores for a date |
+| [`espn_mlb_scoreboard`](mlb/reference/site.md#espn_mlb_scoreboard) | [`baseballr::espn_mlb_scoreboard`](https://baseballr.sportsdataverse.org/reference/espn_mlb_scoreboard.html) | MLB games + scores for a date |
 | [`espn_nba_standings`](nba/reference/site.md#espn_nba_standings) | [`hoopR::espn_nba_standings`](https://hoopR.sportsdataverse.org/reference/espn_nba_standings.html) | League standings table |
 | [`espn_wnba_team_roster`](wnba/reference/additional/espn.md#espn_wnba_team_roster) | [`wehoop::espn_wnba_team_roster`](https://wehoop.sportsdataverse.org/reference/espn_wnba_team_roster.html) | A team's roster |
 | [`nhl_web_pbp`](nhl/reference/nhl_api_web/web.md#nhl_web_pbp) | [`fastRhockey::nhl_game_pbp`](https://fastRhockey.sportsdataverse.org/reference/nhl_game_pbp.html) | NHL play-by-play for a game (api-web) |
 | [`nhl_edge_skater_detail`](nhl/reference/nhl_edge/skater.md#nhl_edge_skater_detail) | [`fastRhockey::nhl_edge_skater_detail`](https://fastRhockey.sportsdataverse.org/reference/nhl_edge_skater_detail.html) | Per-skater EDGE tracking (speed / distance / shots) |
 | [`espn_nhl_teams`](nhl/reference/additional/espn.md#espn_nhl_teams) | [`fastRhockey::espn_nhl_teams`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_teams.html) | All NHL teams (ESPN) |
-| [`mlb_pbp`](mlb/reference/mlb_api/other.md#mlb_pbp) | [`baseballr::mlb_pbp`](https://billpetti.github.io/baseballr/reference/mlb_pbp.html) | MLB play-by-play for a game (Stats API) |
-| [`mlb_draft`](mlb/reference/mlb_api/draft.md#mlb_draft) | [`baseballr::mlb_draft`](https://billpetti.github.io/baseballr/reference/mlb_draft.html) | MLB amateur draft picks for a year |
+| [`mlb_pbp`](mlb/reference/mlb_api/other.md#mlb_pbp) | [`baseballr::mlb_pbp`](https://baseballr.sportsdataverse.org/reference/mlb_pbp.html) | MLB play-by-play for a game (Stats API) |
+| [`mlb_draft`](mlb/reference/mlb_api/draft.md#mlb_draft) | [`baseballr::mlb_draft`](https://baseballr.sportsdataverse.org/reference/mlb_draft.html) | MLB amateur draft picks for a year |
 | [`load_nba_pbp`](nba/reference/loaders/other.md#load_nba_pbp) | [`hoopR::load_nba_pbp`](https://hoopR.sportsdataverse.org/reference/load_nba_pbp.html) | Whole-season NBA pbp from releases |
 | [`load_cfb_pbp`](cfb/reference/loaders/pbp.md#load_cfb_pbp) | [`cfbfastR::load_cfb_pbp`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_pbp.html) | Whole-season CFB pbp from releases |
 | [`load_nhl_pbp`](nhl/reference/loaders/pbp.md#load_nhl_pbp) | [`fastRhockey::load_nhl_pbp`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_pbp.html) | Whole-season NHL pbp from releases |

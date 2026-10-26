@@ -2,21 +2,13 @@
 title: Getting Started
 sidebar_label: Getting Started
 sidebar_position: 1
+description: "Install sportsdataverse-py and pull tidy NBA, NFL, MLB, NHL, college and 100+ more leagues' data as polars DataFrames."
 ---
 
-# sportsdataverse-py <a href='https://py.sportsdataverse.org'><img src='https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/master/sdv-py-logo.png' align="right"  width="20%" min-width="100px" /></a>
-<!-- badges: start -->
+# sportsdataverse-py <a href='https://py.sportsdataverse.org'><img src='https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/main/docs/static/img/sdv-py-logo.png' align="right" width="20%" min-width="100px" alt="sportsdataverse-py logo" /></a>
 
-![Lifecycle:experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg?style=for-the-badge&logo=github)
+![Lifecycle: beta](https://img.shields.io/badge/lifecycle-beta-blue.svg?style=for-the-badge&logo=github)
 [![PyPI](https://img.shields.io/pypi/v/sportsdataverse?label=sportsdataverse&logo=python&style=for-the-badge)](https://pypi.org/project/sportsdataverse/)
-![Contributors](https://img.shields.io/github/contributors/sportsdataverse/sportsdataverse-py?style=for-the-badge)
-[![Twitter
-Follow](https://img.shields.io/twitter/follow/sportsdataverse?color=blue&label=%40sportsdataverse&logo=twitter&style=for-the-badge)](https://twitter.com/sportsdataverse)
-
-<!-- badges: end -->
-
-
-See [CHANGELOG.md](https://py.sportsdataverse.org/CHANGELOG) for details.
 
 [sportsdataverse-py](https://py.sportsdataverse.org) gives the community
 free, tidy, analysis-ready sports data in Python. It is the Python member
@@ -24,7 +16,7 @@ of the **[SportsDataverse](https://www.sportsdataverse.org)** family and
 deliberately mirrors its R sisters — [hoopR](https://hoopR.sportsdataverse.org/)
 (NBA/MBB), [wehoop](https://wehoop.sportsdataverse.org/) (WNBA/WBB),
 [cfbfastR](https://cfbfastR.sportsdataverse.org/) (CFB),
-[baseballr](https://billpetti.github.io/baseballr/) (MLB), and
+[baseballr](https://baseballr.sportsdataverse.org/) (MLB), and
 [fastRhockey](https://fastRhockey.sportsdataverse.org/) (NHL/PWHL) — so the
 function you know in R is the function you call in Python. The NFL module
 mirrors the [nflverse](https://nflverse.nflverse.com)'s
@@ -41,14 +33,11 @@ especially for American football.
 ## Quickstart
 
 ```bash
-pip install sportsdataverse
+pip install --pre sportsdataverse
 ```
 
-:::caution Deprecated
-`sportsdataverse.parsed.*` is deprecated. The league wrappers already default to
-`return_parsed=True`, so call `sportsdataverse.nba` (etc.) directly; the `parsed`
-namespace is a thin alias kept for back-compat.
-:::
+`--pre` installs the 0.2.0 beta, which these docs describe. Without it pip picks the
+last stable release, 0.1.4.
 
 ```python
 # Today's NBA scoreboard: a polars DataFrame by default
@@ -71,9 +60,7 @@ mcdavid = parse_edge_detail(nhl_edge_skater_detail(8478402))
 print(mcdavid.select(["player_first_name_default", "top_shot_speed_metric"]))
 ```
 
-Parser-backed wrappers return a polars DataFrame by default (0.0.54+);
-pass `return_parsed=False` for the raw `Dict`. Compose with the
-matching `parse_*` function for NHL / MLB sibling APIs. See
+Parser-backed wrappers return a polars DataFrame by default; see
 [Polars / pandas parser layer](#polars--pandas-parser-layer) below.
 
 ## Supported leagues and data sources
@@ -188,7 +175,7 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 | [Basketligaen](dbl/) | `sportsdataverse.basketball.dbl` | Basketligaen (Denmark, Sportality) (27) |
 <!-- END generated: leagues-and-sources -->
 
-## Errors (0.1.5)
+## Errors
 
 - `NoDataError` — the fetch SUCCEEDED and there is nothing there (a 404, or ESPN's
   200-with-`code:404` body).
@@ -196,8 +183,8 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
   exhausted retries). Never record this as an empty season.
 - `ValueError` — a 400 / 422: the request itself is wrong, so retrying cannot help.
 
-As of 0.1.5 the hand-written ESPN scrapers and every generated flat-API getter
-raise rather than returning an error body or an empty dict.
+The hand-written ESPN scrapers and every generated flat-API getter raise rather
+than returning an error body or an empty dict.
 
 ## Asking the package about itself
 
@@ -208,18 +195,15 @@ function signatures, provider endpoints and released datasets:
 claude mcp add sdv-docs -- uvx --from 'sportsdataverse[mcp]' sdv-docs
 ```
 
-Needs 0.1.5 or newer and Python >= 3.10.
+It needs the `mcp` extra and Python >= 3.10.
 
 ## Polars / pandas parser layer
 
-Parser-backed wrappers return a polars DataFrame by default (0.0.54+);
-pass `return_parsed=False` for the raw `Dict`. The parser layer in
-[`sportsdataverse._common_espn_parsers`](https://py.sportsdataverse.org/docs/parsers/index)
-(plus matching modules for the MLB and NHL sibling APIs) turns those
-payloads into tidy polars (or pandas) DataFrames.
-
-For ESPN wrappers, `return_parsed=True` is now the default for
-parser-backed endpoints. Pass `return_parsed=False` to recover the
+The parser layer in
+[`sportsdataverse._common_espn_parsers`](parsers/index.md)
+(plus matching modules for the MLB and NHL sibling APIs) turns raw
+payloads into tidy polars (or pandas) DataFrames. ESPN wrappers with a parser
+default to `return_parsed=True`. Pass `return_parsed=False` to recover the
 raw `Dict`, or `return_as_pandas=True` to get a pandas DataFrame:
 
 ```python
@@ -239,25 +223,30 @@ from sportsdataverse.nhl import nhl_web_pbp, parse_nhl_web_pbp
 df = parse_nhl_web_pbp(nhl_web_pbp(2023030417))                 # 331-row polars frame
 ```
 
-See the [Architecture](https://py.sportsdataverse.org/docs/architecture/espn-cross-league)
-and [Parsers](https://py.sportsdataverse.org/docs/parsers/index)
+See the [Architecture](architecture/espn-cross-league.md)
+and [Parsers](parsers/index.md)
 pages for full details.
+
+:::caution[Deprecated]
+`sportsdataverse.parsed.*` is deprecated. The league wrappers already default to
+`return_parsed=True`, so call `sportsdataverse.nba` (etc.) directly; the `parsed`
+namespace is a thin alias kept for back-compat. See
+[Migrating to 0.2.0](guides/migration-0-2-0.md).
+:::
 
 ## Installation
 
-`pip install sportsdataverse` (or `uv add sportsdataverse`). The
+`pip install --pre sportsdataverse` (or `uv add --prerelease allow sportsdataverse`) while
+0.2.0 is in beta. The
 [Install & CLI guide](guides/install-and-cli.md) covers uv, the optional extras, the
 supported Python and polars versions, the `sdv` command line and the `sdv-docs` MCP
 server.
 
-# **Our Authors**
+## Authors
 
--   [Saiem Gilani](https://twitter.com/saiemgilani)
-<a href="https://twitter.com/saiemgilani" target="blank"><img src="https://img.shields.io/twitter/follow/saiemgilani?color=blue&label=%40saiemgilani&logo=twitter&style=for-the-badge" alt="@saiemgilani" /></a>
-<a href="https://github.com/saiemgilani" target="blank"><img src="https://img.shields.io/github/followers/saiemgilani?color=eee&logo=Github&style=for-the-badge" alt="@saiemgilani" /></a>
+- Saiem Gilani ([GitHub](https://github.com/saiemgilani), [X](https://x.com/saiemgilani))
 
-
-## **Citations**
+## Citation
 
 To cite the [**`sportsdataverse-py`**](https://py.sportsdataverse.org) Python package in publications, use:
 
@@ -267,6 +256,6 @@ BibTeX Citation
   author = {Gilani, Saiem},
   title = {sportsdataverse-py: The SportsDataverse's Python Package for Sports Data.},
   url = {https://py.sportsdataverse.org},
-  season = {2021}
+  year = {2021}
 }
 ```

@@ -2,6 +2,7 @@
 title: Model lineage
 sidebar_label: Model lineage
 sidebar_position: 4
+description: "Where every bundled model artifact and fitted constant in sportsdataverse-py comes from, and the script that fitted it."
 ---
 
 # Model lineage

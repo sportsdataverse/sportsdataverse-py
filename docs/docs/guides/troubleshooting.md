@@ -2,6 +2,7 @@
 title: Troubleshooting and FAQ
 sidebar_label: Troubleshooting & FAQ
 sidebar_position: 6
+description: "The errors sportsdataverse-py raises most often, what each one means, and what to do about it."
 ---
 
 # Troubleshooting and FAQ

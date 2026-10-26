@@ -2,25 +2,18 @@
 title: Quality-of-life helpers
 sidebar_label: Quality-of-life
 sidebar_position: 3
+description: "Name-to-ID resolvers (find_team, find_athlete, find_event) and a searchable function index (list_functions, function_count) for sportsdataverse-py."
 ---
 
 # Quality-of-life helpers
 
-Three top-level helpers added in 0.0.51 that make the package
-significantly easier to use day-to-day.
+Three habits and helpers that make the package easier to use day to day.
 
-## 1. `sportsdataverse.parsed.*` — DataFrame by default
+## 1. DataFrames by default
 
-:::caution Deprecated
-This namespace is **deprecated**. Every league wrapper now defaults to
-`return_parsed=True` and hands back a polars DataFrame, so
-`from sportsdataverse.nba import espn_nba_scoreboard` is the current form.
-`sportsdataverse.parsed.*` survives only as a generated back-compat alias layer.
-:::
-
-The default `sportsdataverse.{league}` modules return a parsed polars
-DataFrame for parser-backed endpoints (0.0.54+); pass `return_parsed=False`
-for the raw `Dict`. Import from the league module:
+The `sportsdataverse.{league}` modules return a parsed polars DataFrame for
+parser-backed endpoints; pass `return_parsed=False` for the raw `Dict`. Import
+from the league module:
 
 ```python
 from sportsdataverse.nba import espn_nba_scoreboard
@@ -28,6 +21,11 @@ df  = espn_nba_scoreboard()                     # → polars DataFrame
 raw = espn_nba_scoreboard(return_parsed=False)  # → Dict
 pdf = espn_nba_scoreboard(return_as_pandas=True)  # → pandas DataFrame
 ```
+
+:::caution[Deprecated]
+The old `sportsdataverse.parsed.*` namespace is **deprecated**. It survives only
+as a generated back-compat alias layer over the league modules.
+:::
 
 To migrate, replace `from sportsdataverse.parsed.nba import ...` with
 `from sportsdataverse.nba import ...`; nothing else changes. The old
@@ -71,17 +69,16 @@ mid-season change (trade, expansion, etc.).
 
 ## 3. `list_functions` / `function_count` — searchable function index
 
-The package exposes ~6,170 callables across 30+ league/module families. `dir()`
-produces a flat list that's hard to scan; `list_functions` is the
-searchable index.
+The package exports thousands of functions across more than a hundred
+leagues and providers. `dir()` produces a flat list that's hard to scan;
+`list_functions` is the searchable index.
 
 ```python
 from sportsdataverse import list_functions, function_count
 
-# Per-league counts
-function_count()
-# {'cfb': 149, 'mbb': 146, 'mlb': 196, 'nba': 143, 'nfl': 208,
-#  'nhl': 199, 'wbb': 151, 'wnba': 148}
+# Per-league counts (a dict keyed by league prefix)
+counts = function_count()
+counts["nba"], counts["mlb"]
 
 # Search across leagues — "what wrappers exist for play-by-play?"
 list_functions(search="pbp")
@@ -109,18 +106,18 @@ The three helpers combine cleanly. A two-line end-to-end query:
 
 ```python
 from sportsdataverse import find_event
-from sportsdataverse.parsed.nba import espn_nba_summary
+from sportsdataverse.nba import espn_nba_summary
 
 event = find_event(date="2024-06-17", league="nba", home="Boston")
 out = espn_nba_summary(event_id=event["id"])     # dict of 21 sub-frames
 out["boxscore_player"].head()                    # tidy polars frame
 ```
 
-Before 0.0.51 the equivalent was four steps:
+Without the helpers the equivalent is four steps:
 
 ```python
 # Find scoreboard for the date
-scoreboard = espn_nba_scoreboard(dates=20240617)
+scoreboard = espn_nba_scoreboard(dates=20240617, return_parsed=False)
 
 # Manually filter events for the right home team
 target = next(
@@ -132,7 +129,7 @@ target = next(
 event_id = target["id"]
 
 # Pull summary as raw Dict
-raw = espn_nba_summary(event_id=event_id)
+raw = espn_nba_summary(event_id=event_id, return_parsed=False)
 
 # Manually parse the boxscore section
 from sportsdataverse._common_espn_parsers import parse_summary_boxscore_player
@@ -143,3 +140,4 @@ df = parse_summary_boxscore_player(raw)
 
 - [Architecture overview](./architecture/espn-cross-league)
 - [Parser layer](./parsers/index.md)
+- [Migrating to 0.2.0](./guides/migration-0-2-0.md)

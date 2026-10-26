@@ -90,7 +90,7 @@ const config: Config = {
     faster: true,
   },
   title: 'sdv-py',
-  tagline: "The SportsDataverse's Python Package for Sports Data.",
+  tagline: 'Tidy sports data for Python, from the SportsDataverse.',
   // The site is served from the CNAME host. With the old subdomain here, every
   // canonical, og:url and og:image pointed off-host, so shares canonicalised and
   // previewed against a domain no link ever used.
@@ -152,6 +152,8 @@ const config: Config = {
         'window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()',
     },
     ...fontPreloads,
+    // The favicon set ships apple-touch icons; Docusaurus emits only the favicon link itself.
+    {tagName: 'link', attributes: {rel: 'apple-touch-icon', sizes: '180x180', href: '/img/favicon/apple-touch-icon-180x180.png'}},
   ],
   presets: [
     [
@@ -257,7 +259,15 @@ const config: Config = {
       disableSwitch: false,
       respectPrefersColorScheme: true,
     },
-    image: 'img/Sportsdataverse_gh.png',
+    image: 'img/Sportsdataverse_gh.jpg',
+    // A pre-release notice for the default (main) docs, which describe the 0.2.0 beta.
+    announcementBar: {
+      id: 'beta-0-2-0b1',
+      content:
+        'sportsdataverse-py 0.2.0 is in beta: <code>pip install --pre sportsdataverse</code>. ' +
+        '<a href="/docs/guides/migration-0-2-0">What changed</a>',
+      isCloseable: true,
+    },
     // Social metadata Docusaurus does not emit on its own. og:image alone renders
     // a bare card on several platforms; the type, site name, image dimensions and
     // Twitter attribution are what make the preview complete.
@@ -266,10 +276,10 @@ const config: Config = {
       { property: 'og:site_name', content: 'sdv-py | SportsDataverse' },
       { property: 'og:image:width', content: '1080' },
       { property: 'og:image:height', content: '540' },
-      { property: 'og:image:alt', content: 'SportsDataverse' },
+      { property: 'og:image:alt', content: 'sportsdataverse-py: sports data for Python' },
       { name: 'twitter:site', content: '@sportsdataverse' },
       { name: 'twitter:creator', content: '@saiemgilani' },
-      { name: 'twitter:image:alt', content: 'SportsDataverse' },
+      { name: 'twitter:image:alt', content: 'sportsdataverse-py: sports data for Python' },
     ],
     navbar: {
       hideOnScroll: true,
@@ -288,7 +298,7 @@ const config: Config = {
           label: 'Docs',
         },
         {
-          label: 'News',
+          label: 'Changelog',
           to: 'CHANGELOG',
           position: 'left',
         },
@@ -390,7 +400,7 @@ const config: Config = {
             },
             {
               label: 'baseballr',
-              href: 'https://BillPetti.github.io/baseballr/',
+              href: 'https://baseballr.sportsdataverse.org/',
               target: '_self',
             },
             {

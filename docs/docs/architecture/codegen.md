@@ -117,7 +117,7 @@ runs in three places:
 
 Both hooks' `files:` filters match `tools/codegen/(endpoints|schemas|templates)/**`,
 `tools/codegen/*.py` and `CHANGELOG.md` — so editing `generate.py` or the
-changelog triggers the gate, which it did not before 0.1.5.
+changelog triggers the gate.
 
 Regenerate before pushing. A stale tree is green locally and red in CI.
 

@@ -2,6 +2,7 @@
 title: Metric registry
 sidebar_label: Metric registry
 sidebar_position: 3
+description: "The metric registry: one YAML source for how each published metric is named, defined and rendered across sportsdataverse packages."
 ---
 
 # Metric registry

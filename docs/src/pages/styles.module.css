@@ -40,7 +40,7 @@
 }
 
 .leagues {
-  padding: 2rem 0 3rem;
+  padding: 2rem 0 1rem;
 }
 
 .sport {
@@ -86,4 +86,30 @@
   display: inline-flex;
   align-items: center;
   min-height: 24px;
+}
+
+.quickstart {
+  padding: 2rem 0 0;
+}
+
+.note {
+  font-size: 0.9rem;
+}
+
+/* a registry group (International leagues, Europe, ...) under its sport */
+.group {
+  margin-top: 0.75rem;
+}
+
+.groupTitle {
+  margin: 0 0 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.providers {
+  padding: 0 0 3rem;
 }

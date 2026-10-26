@@ -2,6 +2,7 @@
 title: How-to recipes
 sidebar_label: How-to recipes
 sidebar_position: 4
+description: "Short, complete sportsdataverse-py recipes for common tasks: finding ids, joining sources, loading seasons and more."
 ---
 
 # How-to recipes
