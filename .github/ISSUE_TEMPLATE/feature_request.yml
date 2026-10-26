@@ -47,12 +47,25 @@ body:
       options:
         - CFB (college football)
         - NFL
-        - MLB
+        - UFL / XFL / CFL
         - NBA
-        - NHL
+        - NBA G League / Summer League
+        - WNBA
         - MBB (men's college basketball)
         - WBB (women's college basketball)
-        - WNBA
+        - International basketball (EuroLeague, FIBA, NBL, other international leagues)
+        - NHL
+        - PWHL
+        - Minor & junior hockey (HockeyTech)
+        - College hockey (M/W)
+        - European hockey (SIHF, DEL, Liiga, SHL, KHL, ...)
+        - MLB
+        - College baseball / softball
+        - Soccer
+        - Cricket
+        - Formula 1
+        - Odds / prediction markets (The Odds API, Kalshi, Polymarket)
+        - Cross-sport providers (CBS, Fox, Yahoo, ESPN content, TheSportsDB)
         - Cross-cutting (caching, config, packaging, etc.)
         - Other
     validations:
