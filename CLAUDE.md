@@ -197,27 +197,21 @@ sportsdataverse/
               #   + European leagues (del_, icehl, eihl, metal, elh, liiga, shl, ha, nl, magnus, khl, vhl)
   basketball/ # international basketball families (fiba_hub, genius, atrium, nbl_au, feb, scb, lba, acb, ibba, wjbl, vtb, kbl,
               #   bleague, kzs, lkl, tbf, cebl, aba, easl, bnxt, tpbl, plg, cba, dbl) + the shared basketball_runtime
+              #   + euroleague/ + the ESPN side leagues nbl/, fiba/, olympics_mbk/, olympics_wbk/, nbasl_<city>/ (6)
   baseball/   # College baseball + softball (ESPN + stats.ncaa.org pbp parsers)
   soccer/     # ESPN soccer (league-parameterized wrappers)
   cricket/    # ESPN cricket + bundled win-probability models
   football/   # UFL / XFL / CFL ESPN families
-  nbagl/      # NBA G-League engine helpers
-  cbs/        # CBS Sports NAPI (cbs_napi_* wrappers + parsers)
-  fox/        # Fox Sports API (fox_api_* wrappers + parsers)
-  yahoo/      # Yahoo Sports Shangrila (yahoo_shangrila_* wrappers + parsers)
-  euroleague/ # EuroLeague Competition Engine (0.1.5)
-  espn_content/ # ESPN content API (articles, news)
-  thesportsdb/  # TheSportsDB (multi-sport reference data)
+  nbagl/      # NBA G League: ESPN wrappers, nbagl_stats (stats.nba.com, LeagueID=20) and engine helpers
+  providers/  # cross-sport sources: cbs/ (CBS NAPI), fox/ (Fox Sports API), yahoo/ (Yahoo Shangrila),
+              #   espn_content/ (ESPN news), thesportsdb/ (TheSportsDB)
+  analytics/  # rolling_windows, metric_curves, defense_vs_position, paper_index (Paper Index + deserved wins)
   registry/   # metric registry: resolver + TypeScript render
   validation/ # pbp/box invariant sweeps + per-game gate (validate_game, GameReport)
   wexp/       # win-expectancy engines, baselines, backtests
   scrape/     # capture/persist layers: espn/, ncaa/, stats/
   parsed/     # DEPRECATED per-league alias modules (generated)
   sdv_docs/   # the sdv-docs MCP server (never imports sportsdataverse)
-  rolling_windows.py      # event-count rolling form windows
-  metric_curves.py        # rate curves along a continuous axis
-  defense_vs_position.py  # what each defense allowed, by position
-  paper_index.py          # Paper Index + season deserved wins
   cli.py                  # the `sdv` console script
   release.py  # sportsdataversedata R-package port (release assets + RDS writer)
   dl_utils.py # download() retry + janitor + (under|kebab|camel)ize helpers
@@ -686,10 +680,11 @@ Savant surface** (`baseballsavant.mlb.com`) under the canonical naming
 
 ### NBA / WNBA — stats.nba.com / stats.wnba.com stats API (0.0.72+)
 
-Two codegen-generated flat-API stems wrap the official stats API surface:
+Three codegen-generated flat-API stems wrap the official stats API surface:
 
 - **`nba_stats`** — 128 wrappers at `stats.nba.com`. League is chosen per call via `league_id`: `"00"` → NBA, `"20"` → G-League, `"15"` → Summer League. One stem, one host. Named `nba_stats_<slug>` (e.g. `nba_stats_leaguedashplayerstats`, `nba_stats_playercareerstats`).
 - **`wnba_stats`** — 111 wrappers at `stats.wnba.com` (WNBA `LeagueID=10`). Thin shim re-exporting the NBA-stats runtime with the WNBA host. Named `wnba_stats_<slug>`.
+- **`nbagl_stats`** — 94 wrappers at `stats.nba.com` with `LeagueID=20` by default (`sportsdataverse.nbagl.nbagl_stats`), the endpoints the sweep confirmed live for the G League; six G League-only box-score / pbp v2 routes have no NBA twin. No R package covers the G League, so defaults are hoopR's with the NBA entity ids swapped for G League ones from the capture sweep.
 - **Codegen surface = capture-confirmed `live`, non-deprecated only.** `gen_nba_stats._stats_eps()` keeps an endpoint for a league iff `league_applicability[league_id] == "live"` AND no source marks it deprecated. `untested`/`barren`/`dead` and the 26 deprecated endpoints are dropped. The wrapper counts therefore track the committed capture sweep (`sdv-internal-refs/nba/ENDPOINT_HEALTH.md`); a fresh sweep that resolves more `untested` endpoints raises the counts on the next `gen_nba_stats.py` + re-vendor of `tools/codegen/inputs/nba_canonical_catalog.json`.
 
 **Browser-TLS gotcha (critical):** `stats.nba.com` TLS/JA3-fingerprint-blocks plain `requests` — it produces a silent timeout, NOT an IP block, so `dl_utils.download()` cannot be used for this family. The runtime `_get` uses **`curl_cffi` with `impersonate="chrome"`**. `curl_cffi` is a **lazy optional import** in the `tests` and `all` extras (not a hard runtime dep); missing it surfaces as a clear `ImportError` directing users to `pip install curl_cffi` or `pip install sportsdataverse[all]`. The transport is injectable so wrappers and tests run fully offline. There is **no user-facing `headers=` param** — the "auth" is the TLS impersonation inside the runtime; custom headers still passable via `**kwargs`.
@@ -1417,7 +1412,7 @@ The parts worth repeating here:
 - **Schema sources are four shapes**: `schemas/<name>.yaml`,
   `schemas/<name>/<league>.yaml`, `schemas/native/<stem>/` and
   `schemas/autodoc/<league>/`.
-- **`FLAT_APIS` has 78 families**, not three.
+- **`FLAT_APIS` has 79 families**, not three.
 - **The documented leagues come from `docs/src/data/leagues.json`**, written by
   `render_leagues_json()`; `docs/sidebars.ts` reads that file and hard-codes nothing.
 - **Returns-table descriptions go in `manual_column_descriptions.yaml`**, never in

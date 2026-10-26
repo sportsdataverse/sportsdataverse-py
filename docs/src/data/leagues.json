@@ -14,15 +14,18 @@
         },
         {
           "prefix": "ufl",
-          "label": "UFL"
+          "label": "UFL",
+          "group": "Spring & Canadian"
         },
         {
           "prefix": "xfl",
-          "label": "XFL"
+          "label": "XFL",
+          "group": "Spring & Canadian"
         },
         {
           "prefix": "cfl",
-          "label": "CFL"
+          "label": "CFL",
+          "group": "Spring & Canadian"
         }
       ]
     },
@@ -44,43 +47,53 @@
         },
         {
           "prefix": "nbl",
-          "label": "NBL"
+          "label": "NBL",
+          "group": "International (ESPN)"
         },
         {
           "prefix": "fiba",
-          "label": "FIBA"
+          "label": "FIBA",
+          "group": "International (ESPN)"
         },
         {
           "prefix": "olympics_mbk",
-          "label": "Olympics men's basketball"
+          "label": "Olympics men's basketball",
+          "group": "International (ESPN)"
         },
         {
           "prefix": "olympics_wbk",
-          "label": "Olympics women's basketball"
+          "label": "Olympics women's basketball",
+          "group": "International (ESPN)"
         },
         {
           "prefix": "nbasl_lv",
-          "label": "NBA Summer League (Las Vegas)"
+          "label": "NBA Summer League (Las Vegas)",
+          "group": "NBA Summer League"
         },
         {
           "prefix": "nbasl_ut",
-          "label": "NBA Summer League (Utah)"
+          "label": "NBA Summer League (Utah)",
+          "group": "NBA Summer League"
         },
         {
           "prefix": "nbasl_ca",
-          "label": "NBA Summer League (California)"
+          "label": "NBA Summer League (California)",
+          "group": "NBA Summer League"
         },
         {
           "prefix": "nbasl_sac",
-          "label": "NBA Summer League (Sacramento)"
+          "label": "NBA Summer League (Sacramento)",
+          "group": "NBA Summer League"
         },
         {
           "prefix": "nbasl_orl",
-          "label": "NBA Summer League (Orlando)"
+          "label": "NBA Summer League (Orlando)",
+          "group": "NBA Summer League"
         },
         {
           "prefix": "nbasl_gs",
-          "label": "NBA Summer League (Golden State)"
+          "label": "NBA Summer League (Golden State)",
+          "group": "NBA Summer League"
         },
         {
           "prefix": "mbb",
@@ -92,103 +105,128 @@
         },
         {
           "prefix": "euroleague",
-          "label": "EuroLeague"
+          "label": "EuroLeague",
+          "group": "International leagues"
         },
         {
           "prefix": "fiba_hub",
-          "label": "FIBA (digital API and game pages)"
+          "label": "FIBA (digital API and game pages)",
+          "group": "International leagues"
         },
         {
           "prefix": "genius",
-          "label": "Genius Sports LiveStats"
+          "label": "Genius Sports LiveStats",
+          "group": "International leagues"
         },
         {
           "prefix": "atrium",
-          "label": "Sportradar Atrium"
+          "label": "Sportradar Atrium",
+          "group": "International leagues"
         },
         {
           "prefix": "nbl_au",
-          "label": "NBL Australia (Rosetta)"
+          "label": "NBL Australia (Rosetta)",
+          "group": "International leagues"
         },
         {
           "prefix": "feb",
-          "label": "Spanish FEB"
+          "label": "Spanish FEB",
+          "group": "International leagues"
         },
         {
           "prefix": "scb",
-          "label": "BBL / DBBL (SCB)"
+          "label": "BBL / DBBL (SCB)",
+          "group": "International leagues"
         },
         {
           "prefix": "lba",
-          "label": "Lega Basket Serie A"
+          "label": "Lega Basket Serie A",
+          "group": "International leagues"
         },
         {
           "prefix": "acb",
-          "label": "ACB"
+          "label": "ACB",
+          "group": "International leagues"
         },
         {
           "prefix": "ibba",
-          "label": "Israeli Premier League"
+          "label": "Israeli Premier League",
+          "group": "International leagues"
         },
         {
           "prefix": "wjbl",
-          "label": "W League (Japan)"
+          "label": "W League (Japan)",
+          "group": "International leagues"
         },
         {
           "prefix": "vtb",
-          "label": "VTB"
+          "label": "VTB",
+          "group": "International leagues"
         },
         {
           "prefix": "kbl",
-          "label": "KBL"
+          "label": "KBL",
+          "group": "International leagues"
         },
         {
           "prefix": "bleague",
-          "label": "B.LEAGUE"
+          "label": "B.LEAGUE",
+          "group": "International leagues"
         },
         {
           "prefix": "kzs",
-          "label": "KZS"
+          "label": "KZS",
+          "group": "International leagues"
         },
         {
           "prefix": "lkl",
-          "label": "LKL"
+          "label": "LKL",
+          "group": "International leagues"
         },
         {
           "prefix": "tbf",
-          "label": "TBF"
+          "label": "TBF",
+          "group": "International leagues"
         },
         {
           "prefix": "cebl",
-          "label": "CEBL"
+          "label": "CEBL",
+          "group": "International leagues"
         },
         {
           "prefix": "aba",
-          "label": "ABA League"
+          "label": "ABA League",
+          "group": "International leagues"
         },
         {
           "prefix": "easl",
-          "label": "EASL"
+          "label": "EASL",
+          "group": "International leagues"
         },
         {
           "prefix": "bnxt",
-          "label": "BNXT League"
+          "label": "BNXT League",
+          "group": "International leagues"
         },
         {
           "prefix": "tpbl",
-          "label": "TPBL"
+          "label": "TPBL",
+          "group": "International leagues"
         },
         {
           "prefix": "plg",
-          "label": "P. LEAGUE+"
+          "label": "P. LEAGUE+",
+          "group": "International leagues"
         },
         {
           "prefix": "cba",
-          "label": "CBA"
+          "label": "CBA",
+          "group": "International leagues"
         },
         {
           "prefix": "dbl",
-          "label": "Basketligaen"
+          "label": "Basketligaen",
+          "group": "International leagues"
         }
       ]
     },
@@ -202,11 +240,13 @@
         },
         {
           "prefix": "mch",
-          "label": "MCH"
+          "label": "MCH",
+          "group": "College"
         },
         {
           "prefix": "wch",
-          "label": "WCH"
+          "label": "WCH",
+          "group": "College"
         },
         {
           "prefix": "pwhl",
@@ -214,131 +254,163 @@
         },
         {
           "prefix": "ahl",
-          "label": "AHL"
+          "label": "AHL",
+          "group": "Minor & junior (HockeyTech)"
         },
         {
           "prefix": "ohl",
-          "label": "OHL"
+          "label": "OHL",
+          "group": "Minor & junior (HockeyTech)"
         },
         {
           "prefix": "whl",
-          "label": "WHL"
+          "label": "WHL",
+          "group": "Minor & junior (HockeyTech)"
         },
         {
           "prefix": "qmjhl",
-          "label": "QMJHL"
+          "label": "QMJHL",
+          "group": "Minor & junior (HockeyTech)"
         },
         {
           "prefix": "echl",
-          "label": "ECHL"
+          "label": "ECHL",
+          "group": "Minor & junior (HockeyTech)"
         },
         {
           "prefix": "sphl",
-          "label": "SPHL"
+          "label": "SPHL",
+          "group": "Minor & junior (HockeyTech)"
         },
         {
           "prefix": "chl",
-          "label": "CHL"
+          "label": "CHL",
+          "group": "Minor & junior (HockeyTech)"
         },
         {
           "prefix": "ushl",
-          "label": "USHL"
+          "label": "USHL",
+          "group": "Minor & junior (HockeyTech)"
         },
         {
           "prefix": "bchl",
-          "label": "BCHL"
+          "label": "BCHL",
+          "group": "Minor & junior (HockeyTech)"
         },
         {
           "prefix": "ajhl",
-          "label": "AJHL"
+          "label": "AJHL",
+          "group": "Minor & junior (HockeyTech)"
         },
         {
           "prefix": "sjhl",
-          "label": "SJHL"
+          "label": "SJHL",
+          "group": "Minor & junior (HockeyTech)"
         },
         {
           "prefix": "ojhl",
-          "label": "OJHL"
+          "label": "OJHL",
+          "group": "Minor & junior (HockeyTech)"
         },
         {
           "prefix": "cchl",
-          "label": "CCHL"
+          "label": "CCHL",
+          "group": "Minor & junior (HockeyTech)"
         },
         {
           "prefix": "gojhl",
-          "label": "GOJHL"
+          "label": "GOJHL",
+          "group": "Minor & junior (HockeyTech)"
         },
         {
           "prefix": "mhl",
-          "label": "MHL"
+          "label": "MHL",
+          "group": "Minor & junior (HockeyTech)"
         },
         {
           "prefix": "nojhl",
-          "label": "NOJHL"
+          "label": "NOJHL",
+          "group": "Minor & junior (HockeyTech)"
         },
         {
           "prefix": "vijhl",
-          "label": "VIJHL"
+          "label": "VIJHL",
+          "group": "Minor & junior (HockeyTech)"
         },
         {
           "prefix": "kijhl",
-          "label": "KIJHL"
+          "label": "KIJHL",
+          "group": "Minor & junior (HockeyTech)"
         },
         {
           "prefix": "mjhl",
-          "label": "MJHL"
+          "label": "MJHL",
+          "group": "Minor & junior (HockeyTech)"
         },
         {
           "prefix": "sihf",
-          "label": "SIHF (Swiss hockey)"
+          "label": "SIHF (Swiss hockey)",
+          "group": "Europe"
         },
         {
           "prefix": "del",
-          "label": "DEL"
+          "label": "DEL",
+          "group": "Europe"
         },
         {
           "prefix": "icehl",
-          "label": "ICE Hockey League"
+          "label": "ICE Hockey League",
+          "group": "Europe"
         },
         {
           "prefix": "eihl",
-          "label": "EIHL"
+          "label": "EIHL",
+          "group": "Europe"
         },
         {
           "prefix": "metal",
-          "label": "Metal Ligaen"
+          "label": "Metal Ligaen",
+          "group": "Europe"
         },
         {
           "prefix": "elh",
-          "label": "Czech Extraliga"
+          "label": "Czech Extraliga",
+          "group": "Europe"
         },
         {
           "prefix": "liiga",
-          "label": "Liiga"
+          "label": "Liiga",
+          "group": "Europe"
         },
         {
           "prefix": "shl",
-          "label": "SHL"
+          "label": "SHL",
+          "group": "Europe"
         },
         {
           "prefix": "ha",
-          "label": "HockeyAllsvenskan"
+          "label": "HockeyAllsvenskan",
+          "group": "Europe"
         },
         {
           "prefix": "nl",
-          "label": "National League"
+          "label": "National League",
+          "group": "Europe"
         },
         {
           "prefix": "magnus",
-          "label": "Ligue Magnus"
+          "label": "Ligue Magnus",
+          "group": "Europe"
         },
         {
           "prefix": "khl",
-          "label": "KHL"
+          "label": "KHL",
+          "group": "Europe"
         },
         {
           "prefix": "vhl",
-          "label": "VHL"
+          "label": "VHL",
+          "group": "Europe"
         }
       ]
     },
@@ -352,11 +424,13 @@
         },
         {
           "prefix": "college_baseball",
-          "label": "College baseball"
+          "label": "College baseball",
+          "group": "College"
         },
         {
           "prefix": "college_softball",
-          "label": "College softball"
+          "label": "College softball",
+          "group": "College"
         }
       ]
     },
@@ -370,89 +444,109 @@
         },
         {
           "prefix": "epl",
-          "label": "EPL"
+          "label": "EPL",
+          "group": "Leagues"
         },
         {
           "prefix": "laliga",
-          "label": "LaLiga"
+          "label": "LaLiga",
+          "group": "Leagues"
         },
         {
           "prefix": "bundesliga",
-          "label": "Bundesliga"
+          "label": "Bundesliga",
+          "group": "Leagues"
         },
         {
           "prefix": "seriea",
-          "label": "Serie A"
+          "label": "Serie A",
+          "group": "Leagues"
         },
         {
           "prefix": "ligue1",
-          "label": "Ligue 1"
+          "label": "Ligue 1",
+          "group": "Leagues"
         },
         {
           "prefix": "mls",
-          "label": "MLS"
+          "label": "MLS",
+          "group": "Leagues"
         },
         {
           "prefix": "ligamx",
-          "label": "Liga MX"
+          "label": "Liga MX",
+          "group": "Leagues"
         },
         {
           "prefix": "ucl",
-          "label": "UCL"
+          "label": "UCL",
+          "group": "Leagues"
         },
         {
           "prefix": "uel",
-          "label": "UEL"
+          "label": "UEL",
+          "group": "Leagues"
         },
         {
           "prefix": "nwsl",
-          "label": "NWSL"
+          "label": "NWSL",
+          "group": "Leagues"
         },
         {
           "prefix": "wwc",
-          "label": "WWC"
+          "label": "WWC",
+          "group": "Leagues"
         },
         {
           "prefix": "wc",
-          "label": "WC"
+          "label": "WC",
+          "group": "Leagues"
         }
       ]
     },
     {
       "key": "other",
-      "label": "Other",
+      "label": "More sports & sources",
       "leagues": [
         {
           "prefix": "cricket",
-          "label": "Cricket"
+          "label": "Cricket",
+          "group": "Cricket"
         },
         {
           "prefix": "odds",
-          "label": "Betting odds"
+          "label": "Betting odds",
+          "group": "Betting & prediction markets"
         },
         {
           "prefix": "cbs",
-          "label": "CBS Sports"
+          "label": "CBS Sports",
+          "group": "Cross-sport providers"
         },
         {
           "prefix": "yahoo",
-          "label": "Yahoo Sports"
+          "label": "Yahoo Sports",
+          "group": "Cross-sport providers"
         },
         {
           "prefix": "fox",
-          "label": "Fox Sports"
+          "label": "Fox Sports",
+          "group": "Cross-sport providers"
         },
         {
           "prefix": "f1",
-          "label": "Formula 1"
+          "label": "Formula 1",
+          "group": "Motorsport"
         },
         {
           "prefix": "espn_content",
-          "label": "ESPN content (news)"
+          "label": "ESPN content (news)",
+          "group": "Cross-sport providers"
         },
         {
           "prefix": "thesportsdb",
-          "label": "TheSportsDB"
+          "label": "TheSportsDB",
+          "group": "Cross-sport providers"
         }
       ]
     }

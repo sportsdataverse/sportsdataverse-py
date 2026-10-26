@@ -5704,8 +5704,30 @@ _SPORTS = (
     ("hockey", "Hockey"),
     ("baseball", "Baseball"),
     ("soccer", "Soccer"),
-    ("other", "Other"),
+    ("other", "More sports & sources"),
 )
+
+# The sidebar sub-group of a league inside its sport (docs/sidebars.ts nests them, collapsed, after the
+# headline leagues, which have no group). Built from the home lists, so a new HockeyTech, European or
+# international basketball league lands in its group with no edit here.
+_LEAGUE_GROUPS: dict[str, str] = {
+    **dict.fromkeys(("ufl", "xfl", "cfl"), "Spring & Canadian"),
+    **dict.fromkeys(("nbasl_lv", "nbasl_ut", "nbasl_ca", "nbasl_sac", "nbasl_orl", "nbasl_gs"), "NBA Summer League"),
+    **dict.fromkeys(("nbl", "fiba", "olympics_mbk", "olympics_wbk"), "International (ESPN)"),
+    **dict.fromkeys(("euroleague", *_BASKETBALL_HOMES), "International leagues"),
+    **dict.fromkeys(("mch", "wch"), "College"),
+    **dict.fromkeys(_HOCKEYTECH_MODULE_LEAGUES, "Minor & junior (HockeyTech)"),
+    **dict.fromkeys(("sihf", *_EURO_HOCKEY_HOMES), "Europe"),
+    **dict.fromkeys(("college_baseball", "college_softball"), "College"),
+    **dict.fromkeys(
+        ("epl", "laliga", "bundesliga", "seriea", "ligue1", "mls", "ligamx", "ucl", "uel", "nwsl", "wwc", "wc"),
+        "Leagues",
+    ),
+    "cricket": "Cricket",
+    "f1": "Motorsport",
+    "odds": "Betting & prediction markets",
+    **dict.fromkeys(("cbs", "fox", "yahoo", "espn_content", "thesportsdb"), "Cross-sport providers"),
+}
 # Sport of a documented league that leagues.yaml does not list (releases-only or hand-written modules).
 _EXTRA_LEAGUE_SPORT = {
     "pwhl": "hockey",
@@ -5767,7 +5789,7 @@ _LEAGUE_LABELS = {
 
 
 def render_leagues_json() -> str:
-    """``{"sports": [{key, label, leagues: [{prefix, label}]}]}`` for every documented league, in
+    """``{"sports": [{key, label, leagues: [{prefix, label, group?}]}]}`` for every documented league, in
     :func:`_doc_leagues` order within each sport. A sport leagues.yaml names but :data:`_SPORTS` does not
     (cricket) is "other"; so is a league with no sport at all (odds, cbs, yahoo)."""
     cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
@@ -5776,9 +5798,10 @@ def render_leagues_json() -> str:
     leagues: dict[str, list[dict[str, str]]] = {key: [] for key in keys}
     for prefix in _doc_leagues():
         sport = sport_of.get(prefix, "other")
-        leagues[sport if sport in keys else "other"].append(
-            {"prefix": prefix, "label": _LEAGUE_LABELS.get(prefix, prefix.upper())}
-        )
+        entry = {"prefix": prefix, "label": _LEAGUE_LABELS.get(prefix, prefix.upper())}
+        if prefix in _LEAGUE_GROUPS:
+            entry["group"] = _LEAGUE_GROUPS[prefix]
+        leagues[sport if sport in keys else "other"].append(entry)
     sports = [{"key": key, "label": label, "leagues": leagues[key]} for key, label in _SPORTS if leagues[key]]
     return json.dumps({"sports": sports}, indent=2)
 
