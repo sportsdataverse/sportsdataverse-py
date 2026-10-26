@@ -322,6 +322,7 @@ def test_parse_scoreboard_handles_wnba_payload():
     assert isinstance(df, pl.DataFrame)
     # ids are Int64 at the parser boundary (changelog.d/ids-int64.breaking.md); ESPN ships them as strings
     assert df["game_id"].to_list() == [int(e["id"]) for e in raw["events"]] and df.height == 4
+    assert df.schema["game_id"] == pl.Int64  # values alone would also pass an integral Float64 or Int32
 
 
 def test_parse_standings_handles_wnba_payload():
