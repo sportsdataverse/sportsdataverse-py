@@ -479,15 +479,16 @@ uv add --dev some-package           # add dev-only dep
 
 ## Project Structure
 
-One package per league (`cfb/ mbb/ mlb/ nba/ nfl/ nhl/ wbb/ wnba/ pwhl/ nbagl/
-euroleague/ odds/`), the shared hosts (`cbs/ fox/ yahoo/`), the HockeyTech core
+One package per primary league (`cfb/ mbb/ mlb/ nba/ nfl/ nhl/ wbb/ wnba/ pwhl/ nbagl/ odds/`), the
+cross-sport sources under `providers/` (`cbs/ fox/ yahoo/ espn_content/ thesportsdb/`), the HockeyTech core
 (`hockeytech/`) and its 19 league families under `hockey/`, `baseball/` (college
 baseball + softball), `soccer/` (+ `mls/`, `nwsl/`), `cricket/`, `football/`
 (UFL/XFL/CFL + the `sources/` adapters), `scrape/` (`espn/ ncaa/ stats/`),
 `registry/`, `validation/`, `wexp/`, `parsed/` (DEPRECATED generated aliases) and
-`sdv_docs/` (the MCP server, which must never import `sportsdataverse`). Top-level
-analytics modules: `rolling_windows.py`, `metric_curves.py`,
-`defense_vs_position.py`, `paper_index.py`, plus `release.py`, `dl_utils.py`,
+`sdv_docs/` (the MCP server, which must never import `sportsdataverse`). `basketball/` holds
+EuroLeague, the international families and the ESPN side leagues (`nbl/ fiba/ olympics_*/ nbasl_*/`);
+`analytics/` holds `rolling_windows`, `metric_curves`, `defense_vs_position` and `paper_index`. Top-level
+`release.py`, `dl_utils.py`,
 `errors.py` and `cli.py` (the `sdv` console script).
 
 ## ESPN Cross-League Architecture

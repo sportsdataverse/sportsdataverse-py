@@ -55,7 +55,7 @@ const sports = registry.sports.map((sport) => ({
     type: 'generated-index' as const,
     title: sport.label,
     slug: `/leagues/${sport.key}`,
-    description: `The ${sport.label.toLowerCase()} leagues in sdv-py: each opens its endpoint reference, dataset loaders and R parity table.`,
+    description: `${sport.label} in sdv-py: each league opens its endpoint reference, dataset loaders and R parity table.`,
   },
   items: sportItems(sport.leagues as League[]),
 }));

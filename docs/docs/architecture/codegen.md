@@ -77,9 +77,13 @@ are hand-authored and preserved.
   family slug, and `docs/src/clientModules/anchorForward.ts` forwards a stale deep
   link at runtime.
 - **League registry.** `render_leagues_json()` writes `docs/src/data/leagues.json`
-  — 105 leagues across six sports — which drives the sidebar's
-  `sidebarItemsGenerator`, the home page's league grid and the per-league search
-  contexts in `docusaurus.config.ts`.
+  — 105 leagues across six sports — which `docs/sidebars.ts` imports directly, as do
+  the home page's league grid and the per-league search contexts in
+  `docusaurus.config.ts`. A league may carry a `group` (from `generate._LEAGUE_GROUPS`,
+  built from the home lists): `sportItems()` in `sidebars.ts` lists a sport's ungrouped
+  headline leagues first, then one collapsed sub-category per group (a group of one is
+  listed directly). Group labels are unique across sports, because Docusaurus derives a
+  category's translation key from its label.
 - **Autodoc pages.** The *coverage gap*: in-scope public names not documented by
   any other generated page, rendered from live signatures and docstrings, with the
   returns table read offline from `schemas/autodoc/<scope>/<fn>.yaml`.

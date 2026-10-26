@@ -150,18 +150,22 @@ def _schema(stem: str, slug: str, sets: Dict[str, pl.DataFrame], sibling: Dict[s
         }
         for name, df in sets.items()
     ]
+    rel = capture_path(stem, slug).relative_to(ROOT).as_posix()
     if not any(b["columns"] for b in blocks):
-        rel = capture_path(stem, slug).relative_to(ROOT).as_posix()
-        return {
-            "schema": slug,
-            "kind": "dataframe",
-            "columns": [],
-            "unverified": (
+        body = json.loads(capture_path(stem, slug).read_text(encoding="utf-8"))
+        if isinstance(body, dict) and not ({"resultSets", "resultSet"} & set(body)):
+            reason = (
+                f"the committed capture {rel} is not a resultSets envelope (top-level keys: "
+                f"{', '.join(sorted(body)[:6])}), which parse_nba_stats_result_sets does not read, so the parsed "
+                "output is empty; use return_parsed=False for the raw payload"
+            )
+        else:
+            reason = (
                 f"the committed capture {rel} holds no rows, so parse_nba_stats_result_sets emits no columns; "
                 "a capture with rows needs a residential IP (stats.nba.com / stats.wnba.com hang on datacenter "
                 "IPs) and SDV_PY_NBA_STATS_LIVE=1"
-            ),
-        }
+            )
+        return {"schema": slug, "kind": "dataframe", "columns": [], "unverified": reason}
     if len(blocks) == 1:
         return {"schema": slug, "kind": "dataframe", "columns": blocks[0]["columns"]}
     return {"schema": slug, "kind": "frames", "frames": blocks}
@@ -244,7 +248,14 @@ _SEASON_EXAMPLE = {"nba_stats": "2024-25", "wnba_stats": "2024", "nbagl_stats": 
 # hoopR defaults that fail once a season is sent. Measured 2026-10-05: playerdashptshots with
 # PlayerID 2544, Season 2025-26 and hoopR's TeamID "0" answered HTTP 500 (twice); with the player's
 # own team, the Lakers, 27 rows. ponytail: tied to the default player's team; re-pick if he moves.
-_DEFAULT_OVERRIDES = {("nba_stats", "playerdashptshots", "TeamID"): "1610612747"}
+_DEFAULT_OVERRIDES = {
+    ("nba_stats", "playerdashptshots", "TeamID"): "1610612747",
+    # G League defaults that must agree with each other: cumestatsteam's default GameIDs (2022500137) is OSC vs
+    # CPS, so its TeamID is OSC, not the sweep's Stockton; scoreboardv3's hoopR date (2023-03-26) falls in a G
+    # League off week, so it takes the sweep capture's date (2025-01-15, 2 games, nbagl_stats/scoreboardv3.json).
+    ("nbagl_stats", "cumestatsteam", "TeamID"): "1612709925",
+    ("nbagl_stats", "scoreboardv3", "GameDate"): "2025-01-15",
+}
 _SEASON_DOC = {
     # Never name the date helpers here: generate.py treats a whole-word mention on a reference
     # row as "already documented" and drops the helper's own section from the docs.
@@ -322,6 +333,19 @@ _GLEAGUE_IDS = {
 }
 
 
+def _nba_entity_default(p: dict) -> bool:
+    """hoopR's default for ``p`` is an NBA entity id (a game, player, team or lineup), not a neutral value or a
+    season: the G League must not inherit it."""
+    nba = _league_default(p, "00")
+    return (
+        isinstance(nba, str)
+        and nba not in ("", "0")
+        and not nba.startswith("=")
+        and p["query_key"] not in _SEASON_KEYS
+        and _LEAGUE_SPECIFIC.search(p["query_key"]) is not None
+    )
+
+
 def _league_default(p: dict, league: str) -> Any:
     """This stem's own R default: hoopR's for nba_stats (``"00"``), wehoop's for wnba_stats (``"10"``).
 
@@ -333,14 +357,7 @@ def _league_default(p: dict, league: str) -> Any:
     """
     if league == "20":
         nba = _league_default(p, "00")
-        entity = (
-            isinstance(nba, str)
-            and nba not in ("", "0")
-            and not nba.startswith("=")
-            and p["query_key"] not in _SEASON_KEYS
-            and _LEAGUE_SPECIFIC.search(p["query_key"]) is not None
-        )
-        return _GLEAGUE_IDS.get(p["query_key"]) if entity else nba
+        return _GLEAGUE_IDS.get(p["query_key"]) if _nba_entity_default(p) else nba
     per_league = p.get("league_defaults") or {}
     if league in per_league:
         return per_league[league]
@@ -417,6 +434,11 @@ def _endpoint_entry(
             param["default"] = _DEFAULT_OVERRIDES.get(
                 (stem, ep["slug"], p["query_key"]), _clean_default(p["name"], p["query_key"], default)
             )
+            if default_league == "20" and param["default"] is None and _nba_entity_default(p):
+                # hoopR names an NBA entity here and the sweep has no G League one (GROUP_ID): required, so a
+                # call without it raises TypeError instead of sending no id and getting empty sets back
+                param["required"] = True
+                param["description"] = f"{p['query_key']}: required; there is no G League default for it."
             extra.append(param)
     example_args: Dict[str, Any] = {"league_id": default_league} if has_league else {}
     example_args.update(

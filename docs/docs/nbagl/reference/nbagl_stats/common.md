@@ -27,20 +27,20 @@ GET /stats/commonallplayers
 
 | col_name | type | description |
 |---|---|---|
-| `person_id` | integer | Unique player identifier (V3 endpoints). |
+| `person_id` | integer |  |
 | `display_last_comma_first` | character | Player name formatted as "Last, First". |
 | `display_first_last` | character | Player name formatted as "First Last". |
 | `rosterstatus` | integer | Roster status flag (1 = currently on a roster, 0 = not). |
-| `from_year` | character | First season. |
-| `to_year` | character | Most recent season. |
+| `from_year` | character |  |
+| `to_year` | character |  |
 | `playercode` | character | URL-style player code slug used by the league's legacy stats pages. |
-| `player_slug` | character | URL-safe player identifier. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `player_slug` | character |  |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
+| `team_abbreviation` | character |  |
 | `team_code` | character | Lowercase slug of the player's team used in stats.nba.com URLs (e.g. 'lakers'). |
-| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
+| `team_slug` | character |  |
 | `is_nba_assigned` | integer | Flag indicating whether the player is currently on an NBA roster assignment (two-way and G League assignment tracking). |
 | `nba_assigned_team_id` | integer | Team identifier of the NBA team the player is assigned to, when on assignment. |
 | `games_played_flag` | character | Y/N flag for whether the player has appeared in a league game. |
@@ -84,37 +84,37 @@ GET /stats/commonplayerinfo
 
 | col_name | type | description |
 |---|---|---|
-| `person_id` | integer | Unique player identifier (V3 endpoints). |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
+| `person_id` | integer |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
 | `display_first_last` | character | NBA or WNBA Stats value for display first last in the commonplayerinfo result set. |
 | `display_last_comma_first` | character | NBA or WNBA Stats value for display last comma first in the commonplayerinfo result set. |
 | `display_fi_last` | character | NBA or WNBA Stats value for display fi last in the commonplayerinfo result set. |
-| `player_slug` | character | URL-safe player identifier. |
+| `player_slug` | character |  |
 | `birthdate` | character | Player's date of birth as an ISO timestamp string (e.g. '1984-12-30T00:00:00'). |
-| `school` | character | Player school / pre-draft team. |
-| `country` | character | Venue country. |
+| `school` | character |  |
+| `country` | character |  |
 | `last_affiliation` | character | NBA or WNBA Stats value for last affiliation in the commonplayerinfo result set. |
-| `height` | character | Player height (string e.g. '6-2' or inches). |
-| `weight` | character | Player weight in pounds. |
+| `height` | character |  |
+| `weight` | character |  |
 | `season_exp` | integer | NBA or WNBA Stats value for season exp in the commonplayerinfo result set. |
-| `jersey` | character | Jersey number worn by the player. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
+| `jersey` | character |  |
+| `position` | character |  |
 | `rosterstatus` | character | NBA or WNBA Stats value for rosterstatus in the commonplayerinfo result set. |
 | `games_played_current_season_flag` | character | Flag indicating games played current season flag for the requested NBA or WNBA Stats context. |
-| `team_id` | integer | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_id` | integer |  |
+| `team_name` | character |  |
+| `team_abbreviation` | character |  |
 | `team_code` | character | Lowercase slug of the player's current team used in stats.nba.com URLs (e.g. 'lakers'). |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `team_city` | character |  |
 | `playercode` | character | NBA or WNBA Stats value for playercode in the commonplayerinfo result set. |
-| `from_year` | integer | First season. |
-| `to_year` | integer | Most recent season. |
+| `from_year` | integer |  |
+| `to_year` | integer |  |
 | `dleague_flag` | character | Flag indicating dleague flag for the requested NBA or WNBA Stats context. |
 | `nba_flag` | character | Flag indicating NBA flag for the requested NBA or WNBA Stats context. |
 | `games_played_flag` | character | Flag indicating games played flag for the requested NBA or WNBA Stats context. |
-| `draft_year` | character | Draft year (4-digit). |
-| `draft_round` | character | Round of the draft selection. |
+| `draft_year` | character |  |
+| `draft_round` | character |  |
 | `draft_number` | character | Overall pick the player was selected with, as a string; 'Undrafted' when never drafted. |
 | `greatest_75_flag` | character | Flag indicating greatest 75 flag for the requested NBA or WNBA Stats context. |
 
@@ -122,19 +122,19 @@ GET /stats/commonplayerinfo
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
 | `time_frame` | character |  |
-| `pts` | numeric | Points scored. |
-| `ast` | numeric | Assists. |
-| `reb` | numeric | Rebounds per game. |
-| `pie` | integer | Player Impact Estimate (0-1). |
+| `pts` | numeric |  |
+| `ast` | numeric |  |
+| `reb` | numeric |  |
+| `pie` | integer |  |
 
 **AvailableSeasons**
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | character | Unique season identifier. |
+| `season_id` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -173,9 +173,9 @@ GET /stats/commonplayoffseries
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `visitor_team_id` | integer | Unique identifier for visitor team. |
+| `game_id` | character |  |
+| `home_team_id` | integer |  |
+| `visitor_team_id` | integer |  |
 | `series_id` | character | Playoff series id, the game id stem without the game sequence digit (e.g. '004230010' for the 2023-24 playoffs' first series). |
 | `game_num` | integer | NBA or WNBA Stats value for game number in the commonplayoffseries result set. |
 
@@ -218,32 +218,32 @@ GET /stats/commonteamroster
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | Unique team identifier. |
-| `season` | character | Season year. |
+| `team_id` | integer |  |
+| `season` | character |  |
 | `league_id` | character | League identifier from the stats API ("00" = NBA, "10" = WNBA, "20" = G League). |
-| `player` | character | Player name. |
-| `nickname` | character | Team or athlete nickname. |
-| `player_slug` | character | URL-safe player identifier. |
+| `player` | character |  |
+| `nickname` | character |  |
+| `player_slug` | character |  |
 | `num` | character | Jersey number as printed on the roster (string; may be blank or carry a suffix). |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `height` | character | Player height (string e.g. '6-2' or inches). |
-| `weight` | character | Player weight in pounds. |
-| `birth_date` | character | Date of birth (YYYY-MM-DD). |
-| `age` | numeric | Player age (in years). |
-| `exp` | character | Exp. |
-| `school` | character | Player school / pre-draft team. |
-| `player_id` | integer | Unique player identifier. |
+| `position` | character |  |
+| `height` | character |  |
+| `weight` | character |  |
+| `birth_date` | character |  |
+| `age` | numeric |  |
+| `exp` | character |  |
+| `school` | character |  |
+| `player_id` | integer |  |
 | `how_acquired` | character | How the team acquired the player (e.g. draft, trade, free agency). |
 
 **Coaches**
 
 | col_name | type | description |
 |---|---|---|
-| `coach_id` | integer | ESPN coach id. |
-| `team_id` | integer | Unique team identifier. |
-| `season` | character | Season year. |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
+| `coach_id` | integer |  |
+| `team_id` | integer |  |
+| `season` | character |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
 | `coach_name` | character |  |
 | `is_assistant` | integer |  |
 | `coach_type` | character |  |
@@ -284,11 +284,11 @@ GET /stats/commonteamyears
 
 | col_name | type | description |
 |---|---|---|
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `min_year` | character | Minimum year queried (echoes `min_year`). |
-| `max_year` | character | Maximum year queried (echoes `max_year`). |
-| `abbreviation` | character | Short abbreviation. |
+| `league_id` | character |  |
+| `team_id` | integer |  |
+| `min_year` | character |  |
+| `max_year` | character |  |
+| `abbreviation` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

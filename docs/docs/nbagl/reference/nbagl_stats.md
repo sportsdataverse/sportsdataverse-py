@@ -24,7 +24,7 @@ toc_max_heading_level: 2
 | [nbagl_stats_boxscoreplayertrackv3](nbagl_stats/boxscore.md#nbagl_stats_boxscoreplayertrackv3) | GET /stats/boxscoreplayertrackv3 |
 | [nbagl_stats_boxscorescoringv2](nbagl_stats/boxscore.md#nbagl_stats_boxscorescoringv2) | GET /stats/boxscorescoringv2 |
 | [nbagl_stats_boxscorescoringv3](nbagl_stats/boxscore.md#nbagl_stats_boxscorescoringv3) | GET /stats/boxscorescoringv3 |
-| [nbagl_stats_boxscoresummaryv2](nbagl_stats/boxscore-2.md#nbagl_stats_boxscoresummaryv2) | GET /stats/boxscoresummaryv2 |
+| [nbagl_stats_boxscoresummaryv2](nbagl_stats/boxscore.md#nbagl_stats_boxscoresummaryv2) | GET /stats/boxscoresummaryv2 |
 | [nbagl_stats_boxscoresummaryv3](nbagl_stats/boxscore-2.md#nbagl_stats_boxscoresummaryv3) | GET /stats/boxscoresummaryv3 |
 | [nbagl_stats_boxscoretraditionalv2](nbagl_stats/boxscore-2.md#nbagl_stats_boxscoretraditionalv2) | GET /stats/boxscoretraditionalv2 |
 | [nbagl_stats_boxscoretraditionalv3](nbagl_stats/boxscore-2.md#nbagl_stats_boxscoretraditionalv3) | GET /stats/boxscoretraditionalv3 |
@@ -140,14 +140,14 @@ toc_max_heading_level: 2
 | Function | Summary |
 |---|---|
 | [nbagl_stats_teamdashboardbyclutch](nbagl_stats/teamdash.md#nbagl_stats_teamdashboardbyclutch) | GET /stats/teamdashboardbyclutch |
-| [nbagl_stats_teamdashboardbygamesplits](nbagl_stats/teamdash-2.md#nbagl_stats_teamdashboardbygamesplits) | GET /stats/teamdashboardbygamesplits |
+| [nbagl_stats_teamdashboardbygamesplits](nbagl_stats/teamdash.md#nbagl_stats_teamdashboardbygamesplits) | GET /stats/teamdashboardbygamesplits |
 | [nbagl_stats_teamdashboardbygeneralsplits](nbagl_stats/teamdash-2.md#nbagl_stats_teamdashboardbygeneralsplits) | GET /stats/teamdashboardbygeneralsplits |
-| [nbagl_stats_teamdashboardbylastngames](nbagl_stats/teamdash-3.md#nbagl_stats_teamdashboardbylastngames) | GET /stats/teamdashboardbylastngames |
+| [nbagl_stats_teamdashboardbylastngames](nbagl_stats/teamdash-2.md#nbagl_stats_teamdashboardbylastngames) | GET /stats/teamdashboardbylastngames |
 | [nbagl_stats_teamdashboardbyopponent](nbagl_stats/teamdash-3.md#nbagl_stats_teamdashboardbyopponent) | GET /stats/teamdashboardbyopponent |
-| [nbagl_stats_teamdashboardbyshootingsplits](nbagl_stats/teamdash-4.md#nbagl_stats_teamdashboardbyshootingsplits) | GET /stats/teamdashboardbyshootingsplits |
-| [nbagl_stats_teamdashboardbyteamperformance](nbagl_stats/teamdash-4.md#nbagl_stats_teamdashboardbyteamperformance) | GET /stats/teamdashboardbyteamperformance |
-| [nbagl_stats_teamdashboardbyyearoveryear](nbagl_stats/teamdash-5.md#nbagl_stats_teamdashboardbyyearoveryear) | GET /stats/teamdashboardbyyearoveryear |
-| [nbagl_stats_teamdashlineups](nbagl_stats/teamdash-5.md#nbagl_stats_teamdashlineups) | GET /stats/teamdashlineups |
+| [nbagl_stats_teamdashboardbyshootingsplits](nbagl_stats/teamdash-3.md#nbagl_stats_teamdashboardbyshootingsplits) | GET /stats/teamdashboardbyshootingsplits |
+| [nbagl_stats_teamdashboardbyteamperformance](nbagl_stats/teamdash-3.md#nbagl_stats_teamdashboardbyteamperformance) | GET /stats/teamdashboardbyteamperformance |
+| [nbagl_stats_teamdashboardbyyearoveryear](nbagl_stats/teamdash-4.md#nbagl_stats_teamdashboardbyyearoveryear) | GET /stats/teamdashboardbyyearoveryear |
+| [nbagl_stats_teamdashlineups](nbagl_stats/teamdash-4.md#nbagl_stats_teamdashlineups) | GET /stats/teamdashlineups |
 
 ## Other
 

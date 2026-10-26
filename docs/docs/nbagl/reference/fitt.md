@@ -29,12 +29,12 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | Unique team identifier. |
-| `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_display_name` | character | Full team display name. |
-| `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |
-| `team_nickname` | character | Team nickname. |
+| `team_id` | integer |  |
+| `team_uid` | character |  |
+| `team_abbreviation` | character |  |
+| `team_display_name` | character |  |
+| `team_short_display_name` | character |  |
+| `team_nickname` | character |  |
 | `bpi` | double |  |
 | `bpirank` | double |  |
 | `bpioffense` | double |  |
@@ -50,7 +50,7 @@ ESPN endpoint.
 | `probmakeplayoffs` | double |  |
 | `top6seed` | double |  |
 | `playinchance` | double |  |
-| `playoffseed` | double | Playoffseed. |
+| `playoffseed` | double |  |
 | `projdraftslot` | double |  |
 | `probno1draftpick` | double |  |
 | `playoffbpi_playoffs` | double |  |

@@ -25,10 +25,10 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
-| `display_name` | character | Display name. |
-| `end_date` | character | End date (YYYY-MM-DD). |
-| `start_date` | character | Start date (YYYY-MM-DD). |
-| `year` | integer | 4-digit year. |
+| `display_name` | character |  |
+| `end_date` | character |  |
+| `start_date` | character |  |
+| `year` | integer |  |
 | `athletes_$ref` | character |  |
 | `coaches_$ref` | character |  |
 | `futures_$ref` | character |  |
@@ -36,15 +36,15 @@ ESPN endpoint.
 | `power_indexes_$ref` | character |  |
 | `rankings_$ref` | character |  |
 | `type_$ref` | character |  |
-| `type_abbreviation` | character | Type abbreviation. |
+| `type_abbreviation` | character |  |
 | `type_corrections_$ref` | character |  |
 | `type_end_date` | character |  |
 | `type_groups_$ref` | character |  |
 | `type_has_groups` | logical |  |
 | `type_has_legs` | logical |  |
 | `type_has_standings` | logical |  |
-| `type_id` | integer | Type identifier (numeric). |
-| `type_name` | character | Type name. |
+| `type_id` | integer |  |
+| `type_name` | character |  |
 | `type_slug` | character |  |
 | `type_start_date` | character |  |
 | `type_type` | integer |  |
@@ -92,10 +92,10 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
-| `display_name` | character | Display name. |
-| `end_date` | character | End date (YYYY-MM-DD). |
-| `start_date` | character | Start date (YYYY-MM-DD). |
-| `year` | integer | 4-digit year. |
+| `display_name` | character |  |
+| `end_date` | character |  |
+| `start_date` | character |  |
+| `year` | integer |  |
 | `awards_$ref` | character |  |
 | `futures_$ref` | character |  |
 | `leaders_$ref` | character |  |
@@ -103,16 +103,16 @@ ESPN endpoint.
 | `power_indexes_$ref` | character |  |
 | `rankings_$ref` | character |  |
 | `type_$ref` | character |  |
-| `type_abbreviation` | character | Type abbreviation. |
+| `type_abbreviation` | character |  |
 | `type_corrections_$ref` | character |  |
 | `type_end_date` | character |  |
 | `type_groups_$ref` | character |  |
 | `type_has_groups` | logical |  |
 | `type_has_legs` | logical |  |
 | `type_has_standings` | logical |  |
-| `type_id` | integer | Type identifier (numeric). |
+| `type_id` | integer |  |
 | `type_leaders_$ref` | character |  |
-| `type_name` | character | Type name. |
+| `type_name` | character |  |
 | `type_slug` | character |  |
 | `type_start_date` | character |  |
 | `type_type` | integer |  |
@@ -199,17 +199,17 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
-| `abbreviation` | character | Short abbreviation. |
-| `end_date` | character | End date (YYYY-MM-DD). |
-| `has_groups` | logical | Whether groups exist for this type. |
-| `has_legs` | logical | Whether playoff legs exist. |
-| `has_standings` | logical | Whether standings exist. |
-| `id` | integer | Id. |
-| `name` | character | Display name. |
-| `slug` | character | URL-safe identifier. |
-| `start_date` | character | Start date (YYYY-MM-DD). |
-| `type` | integer | Record type / category. |
-| `year` | integer | 4-digit year. |
+| `abbreviation` | character |  |
+| `end_date` | character |  |
+| `has_groups` | logical |  |
+| `has_legs` | logical |  |
+| `has_standings` | logical |  |
+| `id` | integer |  |
+| `name` | character |  |
+| `slug` | character |  |
+| `start_date` | character |  |
+| `type` | integer |  |
+| `year` | integer |  |
 | `corrections_$ref` | character |  |
 | `groups_$ref` | character |  |
 | `leaders_$ref` | character |  |
@@ -252,14 +252,14 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
-| `id` | integer | Id. |
-| `is_conference` | logical | Whether this group is a conference. |
+| `id` | integer |  |
+| `is_conference` | logical |  |
 | `links` | character |  |
-| `midsize_name` | character | Mid-size display name. |
-| `name` | character | Display name. |
-| `short_name` | character | Short display name. |
-| `slug` | character | URL-safe identifier. |
-| `uid` | character | ESPN UID string. |
+| `midsize_name` | character |  |
+| `name` | character |  |
+| `short_name` | character |  |
+| `slug` | character |  |
+| `uid` | character |  |
 | `children_$ref` | character |  |
 | `parent_$ref` | character |  |
 | `season_$ref` | character |  |
@@ -543,10 +543,10 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
-| `end_date` | character | End date (YYYY-MM-DD). |
-| `number` | integer | Number. |
-| `start_date` | character | Start date (YYYY-MM-DD). |
-| `text` | character | Text description of the play / record. |
+| `end_date` | character |  |
+| `number` | integer |  |
+| `start_date` | character |  |
+| `text` | character |  |
 | `rankings_$ref` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -586,16 +586,16 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | Unique team identifier. |
-| `season` | integer | Season year. |
-| `last_updated` | character | Last-updated timestamp. |
+| `team_id` | integer |  |
+| `season` | integer |  |
+| `last_updated` | character |  |
 | `run_date_time_key` | integer |  |
 | `fpi` | double |  |
 | `fpirank` | double |  |
 | `projectedw` | double |  |
 | `projectedl` | double |  |
 | `projectedt` | double |  |
-| `record` | double | Overall win-loss record. |
+| `record` | double |  |
 | `probwinout` | double |  |
 | `probwinconf` | character |  |
 | `sosremainingrank` | double |  |
@@ -741,21 +741,21 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
-| `abbreviation` | character | Short abbreviation. |
-| `alternate_color` | character | Alternate color (hex without leading '#'). |
-| `color` | character | Primary color (hex without leading '#'). |
-| `display_name` | character | Display name. |
-| `guid` | character | Stable cross-league team GUID. |
-| `id` | integer | Id. |
-| `is_active` | logical | Is active. |
-| `is_all_star` | logical | Is all star. |
+| `abbreviation` | character |  |
+| `alternate_color` | character |  |
+| `color` | character |  |
+| `display_name` | character |  |
+| `guid` | character |  |
+| `id` | integer |  |
+| `is_active` | logical |  |
+| `is_all_star` | logical |  |
 | `links` | character |  |
-| `location` | character | Location. |
-| `logos` | character | Logos. |
-| `name` | character | Display name. |
-| `short_display_name` | character | Short display name. |
-| `slug` | character | URL-safe identifier. |
-| `uid` | character | ESPN UID string. |
+| `location` | character |  |
+| `logos` | character |  |
+| `name` | character |  |
+| `short_display_name` | character |  |
+| `slug` | character |  |
+| `uid` | character |  |
 | `against_the_spread_records_$ref` | character |  |
 | `awards_$ref` | character |  |
 | `coaches_$ref` | character |  |
@@ -771,14 +771,14 @@ ESPN endpoint.
 | `statistics_$ref` | character |  |
 | `transactions_$ref` | character |  |
 | `venue_$ref` | character |  |
-| `venue_address_city` | character | Venue address city. |
-| `venue_address_state` | character | Venue address state / region. |
-| `venue_full_name` | character | Venue full name. |
+| `venue_address_city` | character |  |
+| `venue_address_state` | character |  |
+| `venue_full_name` | character |  |
 | `venue_grass` | logical |  |
 | `venue_guid` | character |  |
-| `venue_id` | integer | Unique venue identifier. |
+| `venue_id` | integer |  |
 | `venue_images` | character |  |
-| `venue_indoor` | logical | TRUE if the venue is indoors. |
+| `venue_indoor` | logical |  |
 | `venue_short_name` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -974,11 +974,11 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
-| `display_name` | character | Display name. |
+| `display_name` | character |  |
 | `futures` | character |  |
-| `id` | integer | Id. |
-| `name` | character | Display name. |
-| `type` | character | Record type / category. |
+| `id` | integer |  |
+| `name` | character |  |
+| `type` | character |  |
 | `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
 | `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
@@ -1051,13 +1051,13 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `last_updated` | character | Last-updated timestamp. |
+| `last_updated` | character |  |
 | `max_game_date` | character |  |
 | `run_cutoff_date` | character |  |
 | `run_date_time_key` | integer |  |
-| `season` | integer | Season year. |
-| `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `stats` | character | Stats. |
+| `season` | integer |  |
+| `season_type` | integer |  |
+| `stats` | character |  |
 | `league_$ref` | character |  |
 | `team_$ref` | character |  |
 | `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
@@ -1097,9 +1097,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `display_name` | character | Display name. |
+| `display_name` | character |  |
 | `leaders` | character |  |
-| `name` | character | Display name. |
+| `name` | character |  |
 | `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
 | `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 

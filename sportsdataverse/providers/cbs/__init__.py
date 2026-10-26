@@ -2,8 +2,8 @@
 
 A cross-sport package rather than a league one: every NAPI path is
 ``{leagueId}``/``{teamId}``/``{playerId}``-parameterized and the API serves 17
-leagues with no sport bias, so it is homed here alongside
-:mod:`sportsdataverse.odds` instead of under any one league.
+leagues with no sport bias, so it lives in :mod:`sportsdataverse.providers` with the other
+cross-sport sources instead of under any one league.
 """
 
 from __future__ import annotations

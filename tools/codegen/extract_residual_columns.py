@@ -192,7 +192,7 @@ _DEFERRED_BUCKETS: dict[str, int | None] = {
     "native/wnba_stats": 269,
     # Measured 2026-10-26 when the G League stem was built from the same parser-on-capture tables
     # (hoopR's column docs fill the rest, as for native/nba_stats).
-    "native/nbagl_stats": 255,
+    "native/nbagl_stats": 4442,  # no R package documents the G League; hoopR's NBA (and wehoop's WNBA) text was wrong on its columns, so blank
     "native/fotmob": 283,
     "native/uefa": 841,
     "native/sleeper": 459,

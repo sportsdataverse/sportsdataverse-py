@@ -701,8 +701,6 @@ _LEAGUE_R_PACKAGE = {
     "nfl": "nflreadr",
     # NCAA hoops loaders (``load_ncaa_*``, men's and women's): hoopR, then its sibling wehoop.
     "ncaa": "hoopR",
-    # No R package wraps the G League; its stats.nba.com and ESPN columns are the NBA ones hoopR documents.
-    "nbagl": "hoopR",
     # Hockey: the HockeyTech league families, PWHL/PHF and the NHL all read fastRhockey.
     **{lg: "fastRhockey" for lg in ("pwhl", "phf", *_HOCKEYTECH_MODULE_LEAGUES)},
 }
@@ -5715,10 +5713,10 @@ _LEAGUE_GROUPS: dict[str, str] = {
     **dict.fromkeys(("nbasl_lv", "nbasl_ut", "nbasl_ca", "nbasl_sac", "nbasl_orl", "nbasl_gs"), "NBA Summer League"),
     **dict.fromkeys(("nbl", "fiba", "olympics_mbk", "olympics_wbk"), "International (ESPN)"),
     **dict.fromkeys(("euroleague", *_BASKETBALL_HOMES), "International leagues"),
-    **dict.fromkeys(("mch", "wch"), "College"),
+    **dict.fromkeys(("mch", "wch"), "College hockey"),
     **dict.fromkeys(_HOCKEYTECH_MODULE_LEAGUES, "Minor & junior (HockeyTech)"),
     **dict.fromkeys(("sihf", *_EURO_HOCKEY_HOMES), "Europe"),
-    **dict.fromkeys(("college_baseball", "college_softball"), "College"),
+    **dict.fromkeys(("college_baseball", "college_softball"), "College baseball & softball"),
     **dict.fromkeys(
         ("epl", "laliga", "bundesliga", "seriea", "ligue1", "mls", "ligamx", "ucl", "uel", "nwsl", "wwc", "wc"),
         "Leagues",

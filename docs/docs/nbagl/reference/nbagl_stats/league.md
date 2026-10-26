@@ -33,35 +33,35 @@ GET /stats/leaguegamelog
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | character | Unique season identifier. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `game_id` | character | Unique game identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `matchup` | character | Matchup. |
-| `wl` | character | Wl. |
-| `min` | integer | Minutes played. |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `season_id` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_name` | character |  |
+| `game_id` | character |  |
+| `game_date` | character |  |
+| `matchup` | character |  |
+| `wl` | character |  |
+| `min` | integer |  |
+| `fgm` | integer |  |
+| `fga` | integer |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | integer | Three-point field goals made. |
 | `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | integer | Free throws made. |
-| `fta` | integer | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | integer | Offensive rebounds. |
-| `dreb` | integer | Defensive rebounds. |
-| `reb` | integer | Rebounds per game. |
-| `ast` | integer | Assists. |
-| `stl` | integer | Steals. |
-| `blk` | integer | Blocks. |
-| `tov` | integer | Turnovers. |
-| `pf` | integer | Personal fouls. |
-| `pts` | integer | Points scored. |
-| `plus_minus` | integer | Plus/minus point differential while on court. |
-| `video_available` | integer | Video available. |
+| `fg3_pct` | numeric |  |
+| `ftm` | integer |  |
+| `fta` | integer |  |
+| `ft_pct` | numeric |  |
+| `oreb` | integer |  |
+| `dreb` | integer |  |
+| `reb` | integer |  |
+| `ast` | integer |  |
+| `stl` | integer |  |
+| `blk` | integer |  |
+| `tov` | integer |  |
+| `pf` | integer |  |
+| `pts` | integer |  |
+| `plus_minus` | integer |  |
+| `video_available` | integer |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -104,31 +104,31 @@ GET /stats/leagueleaders
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
+| `player_id` | integer |  |
 | `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
-| `player` | character | Player name. |
-| `team_id` | integer | Unique team identifier. |
-| `team` | character | Team-side label or team identifier. |
-| `gp` | integer | Games played. |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `player` | character |  |
+| `team_id` | integer |  |
+| `team` | character |  |
+| `gp` | integer |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
-| `tov` | numeric | Turnovers. |
-| `pts` | numeric | Points scored. |
-| `eff` | numeric | Eff. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
+| `tov` | numeric |  |
+| `pts` | numeric |  |
+| `eff` | numeric |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -191,16 +191,16 @@ GET /stats/leaguelineupviz
 
 | col_name | type | description |
 |---|---|---|
-| `group_id` | character | ESPN group id. |
+| `group_id` | character |  |
 | `group_name` | character | The lineup's five players as a ' - ' separated string of abbreviated names. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `min` | numeric | Minutes played. |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `min` | numeric |  |
 | `off_rating` | numeric | Points scored per 100 possessions with the lineup on the floor (offensive rating). |
 | `def_rating` | numeric | Points allowed per 100 possessions with the lineup on the floor (defensive rating). |
-| `net_rating` | numeric | Net rating (off rating - def rating). |
-| `pace` | numeric | Possessions per 48 minutes. |
-| `ts_pct` | numeric | True shooting percentage (0-1). |
+| `net_rating` | numeric |  |
+| `pace` | numeric |  |
+| `ts_pct` | numeric |  |
 | `fta_rate` | numeric | Free throw attempts per field goal attempt for the lineup. |
 | `tm_ast_pct` | numeric | Percentage of the lineup's made field goals that were assisted, as a decimal. |
 | `pct_fga_2_pt` | numeric | Share of field goal attempts taken as two-pointers, as a decimal. |
@@ -273,38 +273,38 @@ GET /stats/leagueplayerondetails
 | col_name | type | description |
 |---|---|---|
 | `group_set` | character | Name of the grouping family used for this dashboard or split row. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_name` | character |  |
 | `vs_player_id` | integer | Stats API identifier for vs player identifier associated with this NBA or WNBA Stats row. |
 | `vs_player_name` | character | Display name for vs player name associated with this NBA or WNBA Stats row. |
 | `court_status` | character | Indicates whether the compared player was on court or off court for the split row. |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `gp` | integer |  |
+| `w` | integer |  |
+| `l` | integer |  |
+| `w_pct` | numeric |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `tov` | numeric | Turnovers. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `tov` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
 | `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
-| `pf` | numeric | Personal fouls. |
+| `pf` | numeric |  |
 | `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
-| `pts` | numeric | Points scored. |
-| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `pts` | numeric |  |
+| `plus_minus` | numeric |  |
 | `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 | `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 | `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
@@ -372,28 +372,28 @@ GET /stats/leaguestandingsv3
 |---|---|---|
 | `league_id` | character | League identifier used in compact NBA Stats schedule and scoreboard result sets. |
 | `season_id` | character | Stats API identifier for seasonid associated with this NBA or WNBA Stats row. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
 | `team_slug` | character | URL slug for teamslug used by NBA or WNBA Stats pages. |
-| `conference` | character | Conference name. |
+| `conference` | character |  |
 | `conference_record` | character | NBA or WNBA Stats value for conferencerecord in the leaguestandingsv3 result set. |
 | `playoff_rank` | integer | NBA or WNBA Stats value for playoffrank in the leaguestandingsv3 result set. |
 | `clinch_indicator` | character | NBA or WNBA Stats value for clinchindicator in the leaguestandingsv3 result set. |
-| `division` | character | Team division. |
+| `division` | character |  |
 | `division_record` | character | NBA or WNBA Stats value for divisionrecord in the leaguestandingsv3 result set. |
 | `division_rank` | integer | NBA or WNBA Stats value for divisionrank in the leaguestandingsv3 result set. |
-| `wins` | integer | Total wins. |
-| `losses` | integer | Total losses. |
+| `wins` | integer |  |
+| `losses` | integer |  |
 | `win_pct` | numeric | Winning percentage for the team or split represented by this row. |
 | `league_rank` | integer | NBA or WNBA Stats value for leaguerank in the leaguestandingsv3 result set. |
-| `record` | character | Overall win-loss record. |
-| `home` | character | Home. |
-| `road` | character | Road. |
-| `l10` | character | Last-ten record. |
+| `record` | character |  |
+| `home` | character |  |
+| `road` | character |  |
+| `l10` | character |  |
 | `last10_home` | character | NBA or WNBA Stats value for last10home in the leaguestandingsv3 result set. |
 | `last10_road` | character | NBA or WNBA Stats value for last10road in the leaguestandingsv3 result set. |
-| `ot` | character | Ot. |
+| `ot` | character |  |
 | `three_pts_or_less` | character | Scoring or score-margin metric for threeptsorless in the requested NBA or WNBA Stats split. |
 | `ten_pts_or_more` | character | Scoring or score-margin metric for tenptsormore in the requested NBA or WNBA Stats split. |
 | `long_home_streak` | integer | NBA or WNBA Stats value for longhomestreak in the leaguestandingsv3 result set. |
@@ -461,7 +461,7 @@ GET /stats/leaguestandingsv3
 | `league_games_back` | numeric | NBA or WNBA Stats value for leaguegamesback in the leaguestandingsv3 result set. |
 | `playoff_seeding` | integer | NBA or WNBA Stats value for playoffseeding in the leaguestandingsv3 result set. |
 | `clinched_post_season` | integer | Flag indicating clinchedpostseason for the requested NBA or WNBA Stats context. |
-| `neutral` | character | Neutral. |
+| `neutral` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

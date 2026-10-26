@@ -51,12 +51,12 @@ GET /stats/playerdashboardbyshootingsplits
 |---|---|---|
 | `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `group_value` | character |  |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fgm` | integer |  |
+| `fga` | integer |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | integer | Three-point field goals made. |
 | `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `fg3_pct` | numeric |  |
 | `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
 | `blka` | integer | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
 | `pct_ast_2_pm` | numeric | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
@@ -86,12 +86,12 @@ GET /stats/playerdashboardbyshootingsplits
 |---|---|---|
 | `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `group_value` | character |  |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fgm` | integer |  |
+| `fga` | integer |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | integer | Three-point field goals made. |
 | `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `fg3_pct` | numeric |  |
 | `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
 | `blka` | integer | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
 | `pct_ast_2_pm` | numeric | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
@@ -121,12 +121,12 @@ GET /stats/playerdashboardbyshootingsplits
 |---|---|---|
 | `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `group_value` | character |  |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fgm` | integer |  |
+| `fga` | integer |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | integer | Three-point field goals made. |
 | `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `fg3_pct` | numeric |  |
 | `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
 | `blka` | integer | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
 | `pct_ast_2_pm` | numeric | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
@@ -156,12 +156,12 @@ GET /stats/playerdashboardbyshootingsplits
 |---|---|---|
 | `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `group_value` | character |  |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fgm` | integer |  |
+| `fga` | integer |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | integer | Three-point field goals made. |
 | `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `fg3_pct` | numeric |  |
 | `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
 | `blka` | integer | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
 | `pct_ast_2_pm` | numeric | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
@@ -191,12 +191,12 @@ GET /stats/playerdashboardbyshootingsplits
 |---|---|---|
 | `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `group_value` | character |  |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fgm` | integer |  |
+| `fga` | integer |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | integer | Three-point field goals made. |
 | `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `fg3_pct` | numeric |  |
 | `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
 | `blka` | integer | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
 | `pct_ast_2_pm` | numeric | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
@@ -226,12 +226,12 @@ GET /stats/playerdashboardbyshootingsplits
 |---|---|---|
 | `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `group_value` | character |  |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fgm` | integer |  |
+| `fga` | integer |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | integer | Three-point field goals made. |
 | `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `fg3_pct` | numeric |  |
 | `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
 | `blka` | integer | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
 | `pct_ast_2_pm` | numeric | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
@@ -247,12 +247,12 @@ GET /stats/playerdashboardbyshootingsplits
 |---|---|---|
 | `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `group_value` | character |  |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fgm` | integer |  |
+| `fga` | integer |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | integer | Three-point field goals made. |
 | `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `fg3_pct` | numeric |  |
 | `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
 | `blka` | integer | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
 | `pct_ast_2_pm` | numeric | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
@@ -281,14 +281,14 @@ GET /stats/playerdashboardbyshootingsplits
 | col_name | type | description |
 |---|---|---|
 | `group_set` | character | Name of the grouping family used for this dashboard or split row. |
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `fgm` | integer |  |
+| `fga` | integer |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | integer | Three-point field goals made. |
 | `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `fg3_pct` | numeric |  |
 | `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
 | `blka` | integer | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
 | `pct_ast_2_pm` | numeric | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
@@ -373,32 +373,32 @@ GET /stats/playerdashboardbyteamperformance
 |---|---|---|
 | `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `group_value` | character | Specific grouping value for this dashboard or split row. |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `gp` | integer |  |
+| `w` | integer |  |
+| `l` | integer |  |
+| `w_pct` | numeric |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `tov` | numeric | Turnovers. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `tov` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
 | `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
-| `pf` | numeric | Personal fouls. |
+| `pf` | numeric |  |
 | `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
-| `pts` | numeric | Points scored. |
-| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `pts` | numeric |  |
+| `plus_minus` | numeric |  |
 | `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
 | `dd2` | integer | Double-doubles for the requested NBA or WNBA Stats split. |
 | `td3` | integer | Triple-doubles for the requested NBA or WNBA Stats split. |
@@ -443,32 +443,32 @@ GET /stats/playerdashboardbyteamperformance
 | `group_value_order` | integer | Sort order assigned to the grouping value in NBA or WNBA Stats dashboards. |
 | `group_value` | character | Specific grouping value for this dashboard or split row. |
 | `group_value_2` | character | Secondary grouping value for dashboards that return paired split dimensions. |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `gp` | integer |  |
+| `w` | integer |  |
+| `l` | integer |  |
+| `w_pct` | numeric |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `tov` | numeric | Turnovers. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `tov` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
 | `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
-| `pf` | numeric | Personal fouls. |
+| `pf` | numeric |  |
 | `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
-| `pts` | numeric | Points scored. |
-| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `pts` | numeric |  |
+| `plus_minus` | numeric |  |
 | `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
 | `dd2` | integer | Double-doubles for the requested NBA or WNBA Stats split. |
 | `td3` | integer | Triple-doubles for the requested NBA or WNBA Stats split. |
@@ -513,32 +513,32 @@ GET /stats/playerdashboardbyteamperformance
 | `group_value_order` | integer | Sort order assigned to the grouping value in NBA or WNBA Stats dashboards. |
 | `group_value` | character | Specific grouping value for this dashboard or split row. |
 | `group_value_2` | character | Secondary grouping value for dashboards that return paired split dimensions. |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `gp` | integer |  |
+| `w` | integer |  |
+| `l` | integer |  |
+| `w_pct` | numeric |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `tov` | numeric | Turnovers. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `tov` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
 | `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
-| `pf` | numeric | Personal fouls. |
+| `pf` | numeric |  |
 | `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
-| `pts` | numeric | Points scored. |
-| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `pts` | numeric |  |
+| `plus_minus` | numeric |  |
 | `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
 | `dd2` | integer | Double-doubles for the requested NBA or WNBA Stats split. |
 | `td3` | integer | Triple-doubles for the requested NBA or WNBA Stats split. |
@@ -583,32 +583,32 @@ GET /stats/playerdashboardbyteamperformance
 | `group_value_order` | integer | Sort order assigned to the grouping value in NBA or WNBA Stats dashboards. |
 | `group_value` | character | Specific grouping value for this dashboard or split row. |
 | `group_value_2` | character | Secondary grouping value for dashboards that return paired split dimensions. |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `gp` | integer |  |
+| `w` | integer |  |
+| `l` | integer |  |
+| `w_pct` | numeric |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `tov` | numeric | Turnovers. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `tov` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
 | `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
-| `pf` | numeric | Personal fouls. |
+| `pf` | numeric |  |
 | `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
-| `pts` | numeric | Points scored. |
-| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `pts` | numeric |  |
+| `plus_minus` | numeric |  |
 | `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
 | `dd2` | integer | Double-doubles for the requested NBA or WNBA Stats split. |
 | `td3` | integer | Triple-doubles for the requested NBA or WNBA Stats split. |

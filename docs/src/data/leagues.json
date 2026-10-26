@@ -241,12 +241,12 @@
         {
           "prefix": "mch",
           "label": "MCH",
-          "group": "College"
+          "group": "College hockey"
         },
         {
           "prefix": "wch",
           "label": "WCH",
-          "group": "College"
+          "group": "College hockey"
         },
         {
           "prefix": "pwhl",
@@ -425,12 +425,12 @@
         {
           "prefix": "college_baseball",
           "label": "College baseball",
-          "group": "College"
+          "group": "College baseball & softball"
         },
         {
           "prefix": "college_softball",
           "label": "College softball",
-          "group": "College"
+          "group": "College baseball & softball"
         }
       ]
     },

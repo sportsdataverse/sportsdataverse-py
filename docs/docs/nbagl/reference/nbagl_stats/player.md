@@ -29,319 +29,319 @@ GET /stats/playercareerstats
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `season_id` | character | Unique season identifier. |
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `player_id` | integer |  |
+| `season_id` | character |  |
+| `league_id` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
 | `player_age` | numeric | NBA or WNBA Stats value for player age in the playercareerstats result set. |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `gp` | integer |  |
+| `gs` | integer |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
-| `tov` | numeric | Turnovers. |
-| `pf` | numeric | Personal fouls. |
-| `pts` | numeric | Points scored. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
+| `tov` | numeric |  |
+| `pf` | numeric |  |
+| `pts` | numeric |  |
 
 **CareerTotalsRegularSeason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `player_id` | integer |  |
+| `league_id` | character |  |
+| `team_id` | integer |  |
+| `gp` | integer |  |
+| `gs` | integer |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
-| `tov` | numeric | Turnovers. |
-| `pf` | numeric | Personal fouls. |
-| `pts` | numeric | Points scored. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
+| `tov` | numeric |  |
+| `pf` | numeric |  |
+| `pts` | numeric |  |
 
 **SeasonTotalsPostSeason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `season_id` | character | Unique season identifier. |
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `player_id` | integer |  |
+| `season_id` | character |  |
+| `league_id` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
 | `player_age` | numeric | NBA or WNBA Stats value for player age in the playercareerstats result set. |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `gp` | integer |  |
+| `gs` | integer |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
-| `tov` | numeric | Turnovers. |
-| `pf` | numeric | Personal fouls. |
-| `pts` | numeric | Points scored. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
+| `tov` | numeric |  |
+| `pf` | numeric |  |
+| `pts` | numeric |  |
 
 **CareerTotalsPostSeason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `player_id` | integer |  |
+| `league_id` | character |  |
+| `team_id` | integer |  |
+| `gp` | integer |  |
+| `gs` | integer |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
-| `tov` | numeric | Turnovers. |
-| `pf` | numeric | Personal fouls. |
-| `pts` | numeric | Points scored. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
+| `tov` | numeric |  |
+| `pf` | numeric |  |
+| `pts` | numeric |  |
 
 **SeasonTotalsAllStarSeason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `season_id` | character | Unique season identifier. |
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `player_id` | integer |  |
+| `season_id` | character |  |
+| `league_id` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
 | `player_age` | numeric | NBA or WNBA Stats value for player age in the playercareerstats result set. |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `gp` | integer |  |
+| `gs` | integer |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
-| `tov` | numeric | Turnovers. |
-| `pf` | numeric | Personal fouls. |
-| `pts` | numeric | Points scored. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
+| `tov` | numeric |  |
+| `pf` | numeric |  |
+| `pts` | numeric |  |
 
 **CareerTotalsAllStarSeason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `player_id` | integer |  |
+| `league_id` | character |  |
+| `team_id` | integer |  |
+| `gp` | integer |  |
+| `gs` | integer |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
-| `tov` | numeric | Turnovers. |
-| `pf` | numeric | Personal fouls. |
-| `pts` | numeric | Points scored. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
+| `tov` | numeric |  |
+| `pf` | numeric |  |
+| `pts` | numeric |  |
 
 **SeasonTotalsCollegeSeason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `season_id` | character | Unique season identifier. |
-| `league_id` | character | League identifier ('10' = WNBA). |
+| `player_id` | character |  |
+| `season_id` | character |  |
+| `league_id` | character |  |
 | `organization_id` | character |  |
 | `school_name` | character | College or school of the season row (SeasonTotalsCollegeSeason set). |
 | `player_age` | character | NBA or WNBA Stats value for player age in the playercareerstats result set. |
-| `gp` | character | Games played. |
-| `gs` | character | Games started. |
-| `min` | character | Minutes played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
-| `fg_pct` | character | Field goal percentage (0-1). |
+| `gp` | character |  |
+| `gs` | character |  |
+| `min` | character |  |
+| `fgm` | character |  |
+| `fga` | character |  |
+| `fg_pct` | character |  |
 | `fg3_m` | character | Three-point field goals made. |
 | `fg3_a` | character | Three-point field goal attempts. |
-| `fg3_pct` | character | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
-| `ft_pct` | character | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Rebounds per game. |
-| `ast` | character | Assists. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `tov` | character | Turnovers. |
-| `pf` | character | Personal fouls. |
-| `pts` | character | Points scored. |
+| `fg3_pct` | character |  |
+| `ftm` | character |  |
+| `fta` | character |  |
+| `ft_pct` | character |  |
+| `oreb` | character |  |
+| `dreb` | character |  |
+| `reb` | character |  |
+| `ast` | character |  |
+| `stl` | character |  |
+| `blk` | character |  |
+| `tov` | character |  |
+| `pf` | character |  |
+| `pts` | character |  |
 
 **CareerTotalsCollegeSeason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `league_id` | character | League identifier ('10' = WNBA). |
+| `player_id` | character |  |
+| `league_id` | character |  |
 | `organization_id` | character |  |
-| `gp` | character | Games played. |
-| `gs` | character | Games started. |
-| `min` | character | Minutes played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
-| `fg_pct` | character | Field goal percentage (0-1). |
+| `gp` | character |  |
+| `gs` | character |  |
+| `min` | character |  |
+| `fgm` | character |  |
+| `fga` | character |  |
+| `fg_pct` | character |  |
 | `fg3_m` | character | Three-point field goals made. |
 | `fg3_a` | character | Three-point field goal attempts. |
-| `fg3_pct` | character | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
-| `ft_pct` | character | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Rebounds per game. |
-| `ast` | character | Assists. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `tov` | character | Turnovers. |
-| `pf` | character | Personal fouls. |
-| `pts` | character | Points scored. |
+| `fg3_pct` | character |  |
+| `ftm` | character |  |
+| `fta` | character |  |
+| `ft_pct` | character |  |
+| `oreb` | character |  |
+| `dreb` | character |  |
+| `reb` | character |  |
+| `ast` | character |  |
+| `stl` | character |  |
+| `blk` | character |  |
+| `tov` | character |  |
+| `pf` | character |  |
+| `pts` | character |  |
 
 **SeasonTotalsShowcaseSeason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `season_id` | character | Unique season identifier. |
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `player_id` | integer |  |
+| `season_id` | character |  |
+| `league_id` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
 | `player_age` | numeric | NBA or WNBA Stats value for player age in the playercareerstats result set. |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `gp` | integer |  |
+| `gs` | integer |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
-| `tov` | numeric | Turnovers. |
-| `pf` | numeric | Personal fouls. |
-| `pts` | numeric | Points scored. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
+| `tov` | numeric |  |
+| `pf` | numeric |  |
+| `pts` | numeric |  |
 
 **CareerTotalsShowcaseSeason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `player_id` | integer |  |
+| `league_id` | character |  |
+| `team_id` | integer |  |
+| `gp` | integer |  |
+| `gs` | integer |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
-| `tov` | numeric | Turnovers. |
-| `pf` | numeric | Personal fouls. |
-| `pts` | numeric | Points scored. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
+| `tov` | numeric |  |
+| `pf` | numeric |  |
+| `pts` | numeric |  |
 
 **SeasonRankingsRegularSeason**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `season_id` | character | Unique season identifier. |
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `player_id` | integer |  |
+| `season_id` | character |  |
+| `league_id` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
 | `player_age` | character | NBA or WNBA Stats value for player age in the playercareerstats result set. |
-| `gp` | character | Games played. |
-| `gs` | character | Games started. |
+| `gp` | character |  |
+| `gs` | character |  |
 | `rank_pg_min` | integer |  |
 | `rank_pg_fgm` | integer |  |
 | `rank_pg_fga` | integer |  |
@@ -366,14 +366,14 @@ GET /stats/playercareerstats
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `season_id` | character | Unique season identifier. |
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `player_id` | integer |  |
+| `season_id` | character |  |
+| `league_id` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
 | `player_age` | character | NBA or WNBA Stats value for player age in the playercareerstats result set. |
-| `gp` | character | Games played. |
-| `gs` | character | Games started. |
+| `gp` | character |  |
+| `gs` | character |  |
 | `rank_pg_min` | integer |  |
 | `rank_pg_fgm` | integer |  |
 | `rank_pg_fga` | integer |  |
@@ -398,13 +398,13 @@ GET /stats/playercareerstats
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
+| `player_id` | integer |  |
+| `game_date` | character |  |
 | `vs_team_id` | integer |  |
 | `vs_team_city` | character |  |
 | `vs_team_name` | character |  |
 | `vs_team_abbreviation` | character |  |
-| `stat` | character | Stat. |
+| `stat` | character |  |
 | `stats_value` | integer |  |
 | `stat_order` | integer |  |
 | `date_est` | character |  |
@@ -413,13 +413,13 @@ GET /stats/playercareerstats
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
+| `player_id` | integer |  |
+| `game_date` | character |  |
 | `vs_team_id` | integer |  |
 | `vs_team_city` | character |  |
 | `vs_team_name` | character |  |
 | `vs_team_abbreviation` | character |  |
-| `stat` | character | Stat. |
+| `stat` | character |  |
 | `stats_value` | integer |  |
 | `stat_order` | integer |  |
 | `date_est` | character |  |
@@ -461,13 +461,13 @@ GET /stats/playerestimatedmetrics
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | numeric | Minutes played. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `gp` | integer |  |
+| `w` | integer |  |
+| `l` | integer |  |
+| `w_pct` | numeric |  |
+| `min` | numeric |  |
 | `e_off_rating` | numeric | Estimated offensive rating for the requested NBA or WNBA Stats split. |
 | `e_def_rating` | numeric | Estimated defensive rating for the requested NBA or WNBA Stats split. |
 | `e_net_rating` | numeric | Estimated net rating for the requested NBA or WNBA Stats split. |
@@ -541,32 +541,32 @@ GET /stats/playerfantasyprofile
 |---|---|---|
 | `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
 | `group_value` | character | Value of the split within the group (e.g. a specific opponent, month, or result). |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `gp` | integer |  |
+| `w` | integer |  |
+| `l` | integer |  |
+| `w_pct` | numeric |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `tov` | numeric | Turnovers. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `tov` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
 | `blka` | numeric | Shot attempts blocked by opponents (blocks against). |
-| `pf` | numeric | Personal fouls. |
+| `pf` | numeric |  |
 | `pfd` | numeric | Personal fouls drawn. |
-| `pts` | numeric | Points scored. |
-| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `pts` | numeric |  |
+| `plus_minus` | numeric |  |
 | `dd2` | integer | Double-doubles recorded over the split. |
 | `td3` | integer | Triple-doubles recorded over the split. |
 | `fan_duel_pts` | numeric | Fantasy points under FanDuel's scoring formula. |
@@ -578,32 +578,32 @@ GET /stats/playerfantasyprofile
 |---|---|---|
 | `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
 | `group_value` | character | Value of the split within the group (e.g. a specific opponent, month, or result). |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `gp` | integer |  |
+| `w` | integer |  |
+| `l` | integer |  |
+| `w_pct` | numeric |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `tov` | numeric | Turnovers. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `tov` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
 | `blka` | numeric | Shot attempts blocked by opponents (blocks against). |
-| `pf` | numeric | Personal fouls. |
+| `pf` | numeric |  |
 | `pfd` | numeric | Personal fouls drawn. |
-| `pts` | numeric | Points scored. |
-| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `pts` | numeric |  |
+| `plus_minus` | numeric |  |
 | `dd2` | integer | Double-doubles recorded over the split. |
 | `td3` | integer | Triple-doubles recorded over the split. |
 | `fan_duel_pts` | numeric | Fantasy points under FanDuel's scoring formula. |
@@ -615,32 +615,32 @@ GET /stats/playerfantasyprofile
 |---|---|---|
 | `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
 | `group_value` | character | Value of the split within the group (e.g. a specific opponent, month, or result). |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `gp` | integer |  |
+| `w` | integer |  |
+| `l` | integer |  |
+| `w_pct` | numeric |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `tov` | numeric | Turnovers. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `tov` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
 | `blka` | numeric | Shot attempts blocked by opponents (blocks against). |
-| `pf` | numeric | Personal fouls. |
+| `pf` | numeric |  |
 | `pfd` | numeric | Personal fouls drawn. |
-| `pts` | numeric | Points scored. |
-| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `pts` | numeric |  |
+| `plus_minus` | numeric |  |
 | `dd2` | integer | Double-doubles recorded over the split. |
 | `td3` | integer | Triple-doubles recorded over the split. |
 | `fan_duel_pts` | numeric | Fantasy points under FanDuel's scoring formula. |
@@ -652,33 +652,33 @@ GET /stats/playerfantasyprofile
 |---|---|---|
 | `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
 | `group_value` | character | Value of the split within the group (e.g. a specific opponent, month, or result). |
-| `season_year` | character | Season year string ('YYYY-YY' format). |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `season_year` | character |  |
+| `gp` | integer |  |
+| `w` | integer |  |
+| `l` | integer |  |
+| `w_pct` | numeric |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `tov` | numeric | Turnovers. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `tov` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
 | `blka` | numeric | Shot attempts blocked by opponents (blocks against). |
-| `pf` | numeric | Personal fouls. |
+| `pf` | numeric |  |
 | `pfd` | numeric | Personal fouls drawn. |
-| `pts` | numeric | Points scored. |
-| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `pts` | numeric |  |
+| `plus_minus` | numeric |  |
 | `dd2` | integer | Double-doubles recorded over the split. |
 | `td3` | integer | Triple-doubles recorded over the split. |
 | `fan_duel_pts` | numeric | Fantasy points under FanDuel's scoring formula. |
@@ -690,32 +690,32 @@ GET /stats/playerfantasyprofile
 |---|---|---|
 | `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
 | `group_value` | character | Value of the split within the group (e.g. a specific opponent, month, or result). |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `gp` | integer |  |
+| `w` | integer |  |
+| `l` | integer |  |
+| `w_pct` | numeric |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `tov` | numeric | Turnovers. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `tov` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
 | `blka` | numeric | Shot attempts blocked by opponents (blocks against). |
-| `pf` | numeric | Personal fouls. |
+| `pf` | numeric |  |
 | `pfd` | numeric | Personal fouls drawn. |
-| `pts` | numeric | Points scored. |
-| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `pts` | numeric |  |
+| `plus_minus` | numeric |  |
 | `dd2` | integer | Double-doubles recorded over the split. |
 | `td3` | integer | Triple-doubles recorded over the split. |
 | `fan_duel_pts` | numeric | Fantasy points under FanDuel's scoring formula. |
@@ -761,41 +761,41 @@ GET /stats/playerfantasyprofilebargraph
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
 | `fan_duel_pts` | numeric | Scoring or score-margin metric for fan duel points in the requested NBA or WNBA Stats split. |
 | `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
-| `pts` | numeric | Points scored. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
+| `pts` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
-| `tov` | numeric | Turnovers. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `ft_pct` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
+| `tov` | numeric |  |
+| `fg_pct` | numeric |  |
 
 **LastFiveGamesAvg**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
 | `fan_duel_pts` | numeric | Scoring or score-margin metric for fan duel points in the requested NBA or WNBA Stats split. |
 | `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
-| `pts` | numeric | Points scored. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
+| `pts` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
-| `tov` | numeric | Turnovers. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `ft_pct` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
+| `tov` | numeric |  |
+| `fg_pct` | numeric |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -837,33 +837,33 @@ GET /stats/playergamelog
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | character | Unique season identifier. |
-| `player_id` | integer | Unique player identifier. |
-| `game_id` | character | Unique game identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `matchup` | character | Matchup. |
-| `wl` | character | Wl. |
-| `min` | integer | Minutes played. |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `season_id` | character |  |
+| `player_id` | integer |  |
+| `game_id` | character |  |
+| `game_date` | character |  |
+| `matchup` | character |  |
+| `wl` | character |  |
+| `min` | integer |  |
+| `fgm` | integer |  |
+| `fga` | integer |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | integer | Three-point field goals made. |
 | `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | integer | Free throws made. |
-| `fta` | integer | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | integer | Offensive rebounds. |
-| `dreb` | integer | Defensive rebounds. |
-| `reb` | integer | Rebounds per game. |
-| `ast` | integer | Assists. |
-| `stl` | integer | Steals. |
-| `blk` | integer | Blocks. |
-| `tov` | integer | Turnovers. |
-| `pf` | integer | Personal fouls. |
-| `pts` | integer | Points scored. |
-| `plus_minus` | integer | Plus/minus point differential while on court. |
-| `video_available` | integer | Video available. |
+| `fg3_pct` | numeric |  |
+| `ftm` | integer |  |
+| `fta` | integer |  |
+| `ft_pct` | numeric |  |
+| `oreb` | integer |  |
+| `dreb` | integer |  |
+| `reb` | integer |  |
+| `ast` | integer |  |
+| `stl` | integer |  |
+| `blk` | integer |  |
+| `tov` | integer |  |
+| `pf` | integer |  |
+| `pts` | integer |  |
+| `plus_minus` | integer |  |
+| `video_available` | integer |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -920,39 +920,39 @@ GET /stats/playergamelogs
 
 | col_name | type | description |
 |---|---|---|
-| `season_year` | character | Season year string ('YYYY-YY' format). |
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `nickname` | character | Team or athlete nickname. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `game_id` | character | Unique game identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `matchup` | character | Matchup. |
-| `wl` | character | Wl. |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `season_year` | character |  |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `nickname` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_name` | character |  |
+| `game_id` | character |  |
+| `game_date` | character |  |
+| `matchup` | character |  |
+| `wl` | character |  |
+| `min` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `tov` | numeric | Turnovers. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `tov` | numeric |  |
+| `stl` | numeric |  |
+| `blk` | numeric |  |
 | `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
-| `pf` | numeric | Personal fouls. |
+| `pf` | numeric |  |
 | `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
-| `pts` | numeric | Points scored. |
-| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `pts` | numeric |  |
+| `plus_minus` | numeric |  |
 | `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
 | `dd2` | integer | Double-doubles for the requested NBA or WNBA Stats split. |
 | `td3` | integer | Triple-doubles for the requested NBA or WNBA Stats split. |
@@ -1038,30 +1038,30 @@ GET /stats/playerindex
 
 | col_name | type | description |
 |---|---|---|
-| `person_id` | integer | Unique player identifier (V3 endpoints). |
+| `person_id` | integer |  |
 | `player_last_name` | character | Player's last name. |
 | `player_first_name` | character | Player's first name. |
-| `player_slug` | character | URL-safe player identifier. |
-| `team_id` | integer | Unique team identifier. |
-| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `jersey_number` | character | Jersey number. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `height` | character | Player height (string e.g. '6-2' or inches). |
-| `weight` | character | Player weight in pounds. |
-| `college` | character | College. |
-| `country` | character | Venue country. |
-| `draft_year` | integer | Draft year (4-digit). |
-| `draft_round` | integer | Round of the draft selection. |
+| `player_slug` | character |  |
+| `team_id` | integer |  |
+| `team_slug` | character |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
+| `team_abbreviation` | character |  |
+| `jersey_number` | character |  |
+| `position` | character |  |
+| `height` | character |  |
+| `weight` | character |  |
+| `college` | character |  |
+| `country` | character |  |
+| `draft_year` | integer |  |
+| `draft_round` | integer |  |
 | `draft_number` | integer | Overall pick the player was selected with, as a string; 'Undrafted' when never drafted. |
 | `roster_status` | numeric | Roster status flag: 1 when the player is on a current roster, 0 otherwise. |
-| `from_year` | character | First season. |
-| `to_year` | character | Most recent season. |
-| `pts` | numeric | Points scored. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
+| `from_year` | character |  |
+| `to_year` | character |  |
+| `pts` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
 | `stats_timeframe` | character | Time value for stats timeframe in the NBA or WNBA Stats result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

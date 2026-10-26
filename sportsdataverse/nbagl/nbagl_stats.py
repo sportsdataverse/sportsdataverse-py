@@ -1590,7 +1590,7 @@ def nbagl_stats_cumestatsteam(
     league_id: Optional[str] = "20",
     season: Optional[str] = None,
     season_type_all_star: Optional[str] = "Regular Season",
-    team_id: Optional[str] = "1612709914",
+    team_id: Optional[str] = "1612709925",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -1599,7 +1599,7 @@ def nbagl_stats_cumestatsteam(
     """GET /stats/cumestatsteam
 
     Endpoint: ``GET https://stats.nba.com/stats/cumestatsteam``
-    Example URL: https://stats.nba.com/stats/cumestatsteam?GameIDs=2022500137&LeagueID=20&Season=2024-25&SeasonType=Regular+Season&TeamID=1612709914
+    Example URL: https://stats.nba.com/stats/cumestatsteam?GameIDs=2022500137&LeagueID=20&Season=2024-25&SeasonType=Regular+Season&TeamID=1612709925
 
     Args:
         game_ids: GameIDs query parameter.
@@ -5564,7 +5564,7 @@ def nbagl_stats_scheduleleaguev2int(
 
 
 def nbagl_stats_scoreboardv3(
-    game_date: Optional[str] = "2023-03-26",
+    game_date: Optional[str] = "2025-01-15",
     league_id: Optional[str] = "20",
     *,
     return_parsed: bool = True,
@@ -5574,7 +5574,7 @@ def nbagl_stats_scoreboardv3(
     """GET /stats/scoreboardv3
 
     Endpoint: ``GET https://stats.nba.com/stats/scoreboardv3``
-    Example URL: https://stats.nba.com/stats/scoreboardv3?GameDate=2023-03-26&LeagueID=20
+    Example URL: https://stats.nba.com/stats/scoreboardv3?GameDate=2025-01-15&LeagueID=20
 
     Args:
         game_date: GameDate query parameter.
@@ -5799,11 +5799,11 @@ def nbagl_stats_shotchartleaguewide(
 
 
 def nbagl_stats_shotchartlineupdetail(
+    group_id: str,
     context_filter_nullable: Optional[str] = "",
     context_measure_detailed: Optional[str] = "FGA",
     date_from_nullable: Optional[str] = "",
     date_to_nullable: Optional[str] = "",
-    group_id: Optional[str] = None,
     game_id_nullable: Optional[str] = "",
     game_segment_nullable: Optional[str] = "",
     last_n_games_nullable: Optional[str] = "0",
@@ -5827,14 +5827,13 @@ def nbagl_stats_shotchartlineupdetail(
     """GET /stats/shotchartlineupdetail
 
     Endpoint: ``GET https://stats.nba.com/stats/shotchartlineupdetail``
-    Example URL: https://stats.nba.com/stats/shotchartlineupdetail?ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&GameID=&GameSegment=&LastNGames=0&LeagueID=20&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         context_filter_nullable: ContextFilter query parameter.
         context_measure_detailed: ContextMeasure query parameter.
         date_from_nullable: DateFrom query parameter.
         date_to_nullable: DateTo query parameter.
-        group_id: GROUP_ID query parameter.
+        group_id: GROUP_ID: required; there is no G League default for it.
         game_id_nullable: GameID query parameter.
         game_segment_nullable: GameSegment query parameter.
         last_n_games_nullable: LastNGames query parameter.

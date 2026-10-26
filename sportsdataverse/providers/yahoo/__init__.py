@@ -2,8 +2,8 @@
 
 A cross-sport package rather than a league one: the Shangrila query graph spans
 NFL, NBA, MLB, NHL, WNBA, college, soccer, golf, tennis, MMA, motorsport and the
-Olympics, so it is homed here alongside :mod:`sportsdataverse.odds` instead of
-under any one league. The older ESPN-style CFB wrappers (``yahoo_cfb_*``) remain
+Olympics, so it lives in :mod:`sportsdataverse.providers` with the other cross-sport sources
+instead of under any one league. The older ESPN-style CFB wrappers (``yahoo_cfb_*``) remain
 in :mod:`sportsdataverse.cfb.cfb_yahoo_ext`.
 """
 

@@ -157,3 +157,16 @@ def test_no_generated_page_or_example_names_a_deprecated_import_path():
     assert hits == [], f"{len(hits)} deprecated paths, e.g. {hits[:5]}"
     for prefix, home in _MOVED.items():
         assert generate._home_module(prefix) == f"sportsdataverse.{home}"
+
+
+def test_sidebar_group_labels_are_unique_across_sports():
+    """Docusaurus derives a sidebar category's translation key from its label, so two "College" groups (hockey and
+    baseball) collide; every sport label and group label must be distinct."""
+    import json
+    from collections import Counter
+
+    data = json.loads(generate.render_leagues_json())
+    labels = [s["label"] for s in data["sports"]]
+    labels += sorted({lg["group"] for s in data["sports"] for lg in s["leagues"] if "group" in lg})
+    dupes = [label for label, n in Counter(labels).items() if n > 1]
+    assert not dupes, dupes

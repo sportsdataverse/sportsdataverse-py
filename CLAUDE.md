@@ -276,14 +276,14 @@ lists them all). The six oldest and largest:
 | `mlb/mlb_api_parsers.py` | `statsapi.mlb.com` Stats API | 5 dedicated + 1 generic |
 | `nfl/nfl_api_parsers.py` | `api.nfl.com` "Shield" data API | 11 dedicated (one per `nfl_api` endpoint) |
 
-The rest follow the same contract, one per provider family, among them `fox/fox_api_parsers.py`,
-`cbs/cbs_napi_parsers.py`, `yahoo/yahoo_shangrila_parsers.py`,
+The rest follow the same contract, one per provider family, among them `providers/fox/fox_api_parsers.py`,
+`providers/cbs/cbs_napi_parsers.py`, `providers/yahoo/yahoo_shangrila_parsers.py`,
 `nba/nba_stats_parsers.py` + `wnba/wnba_stats_parsers.py`, `cfb/on3_parsers.py` +
 `sports247_parsers.py` + `sports247_site_pages_parsers.py`, `nfl/pff_parsers.py` +
 `nflpro_parsers.py` + `sleeper_parsers.py`, `mbb/torvik_parsers.py`,
 `hockeytech/_parsers.py`, `odds/the_odds_api_parsers.py`,
 `mlb/mlb_statcast_parsers.py`, `soccer/` (`soccer_espn`, `asa`, `fotmob`, `uefa`,
-`fifa`, `mls/mls_api`, `nwsl/nwsl_api`), `euroleague/euroleague_parsers.py`,
+`fifa`, `mls/mls_api`, `nwsl/nwsl_api`), `basketball/euroleague/euroleague_parsers.py`,
 `cricket/cricket_espn_parsers.py`, and the NCAA HTML parsers
 `mbb/mbb_ncaa_team_parsers.py` + `wbb/wbb_ncaa_team_parsers.py`, plus the international
 basketball and European hockey families under `basketball/` and `hockey/`.
@@ -1363,7 +1363,7 @@ Providers beyond ESPN and the release loaders: NFL.com Shield (`nfl_api`), NFL P
 (`nflpro`), Sleeper (`sleeper`), PFF Developer (`pff_api`) and PFF Premium
 (LEGACY), MLB Stats API (`mlb_api`) and Baseball Savant (`mlb_statcast`), the four
 NHL APIs (`nhl_api_web`, `nhl_edge`, `nhl_stats_rest`, `nhl_records`), `nba_stats` /
-`wnba_stats`, `kenpom`, `torvik`, `bart_wbb`, Her Hoop Stats, Basketball-Reference,
+`wnba_stats` / `nbagl_stats`, `kenpom`, `torvik`, `bart_wbb`, Her Hoop Stats, Basketball-Reference,
 RealGM, public model datasets (DARKO / EPM / LEBRON), On3 and 247Sports (`on3`,
 `sports247`), `asa`, `mls_api`, `nwsl_api`, `fotmob`, `uefa`, `fifa`, kloppy open
 event data, Football-Data.co.uk (`football_data`), OpenLigaDB (`openligadb`),

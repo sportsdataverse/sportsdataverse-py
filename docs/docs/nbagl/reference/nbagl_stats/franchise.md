@@ -27,17 +27,17 @@ GET /stats/franchisehistory
 
 | col_name | type | description |
 |---|---|---|
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `league_id` | character |  |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
 | `start_year` | character | First season (start year) of the franchise span, as a string (e.g. '1949'). |
 | `end_year` | character | Last season (start year) of the franchise span, as a string; the current season for an active franchise. |
-| `years` | integer | Years. |
-| `games` | integer | Games played. |
-| `wins` | integer | Total wins. |
-| `losses` | integer | Total losses. |
-| `win_pct` | numeric | Win percentage (0-1 decimal). |
+| `years` | integer |  |
+| `games` | integer |  |
+| `wins` | integer |  |
+| `losses` | integer |  |
+| `win_pct` | numeric |  |
 | `po_appearances` | integer | NBA or WNBA Stats value for playoff appearances in the franchisehistory result set. |
 | `div_titles` | integer | NBA or WNBA Stats value for div titles in the franchisehistory result set. |
 | `conf_titles` | integer | NBA or WNBA Stats value for conf titles in the franchisehistory result set. |
@@ -47,17 +47,17 @@ GET /stats/franchisehistory
 
 | col_name | type | description |
 |---|---|---|
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `league_id` | character |  |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
 | `start_year` | character | First season (start year) of the franchise span, as a string (e.g. '1949'). |
 | `end_year` | character | Last season (start year) of the franchise span, as a string; the current season for an active franchise. |
-| `years` | integer | Years. |
-| `games` | integer | Games played. |
-| `wins` | integer | Total wins. |
-| `losses` | integer | Total losses. |
-| `win_pct` | numeric | Win percentage (0-1 decimal). |
+| `years` | integer |  |
+| `games` | integer |  |
+| `wins` | integer |  |
+| `losses` | integer |  |
+| `win_pct` | numeric |  |
 | `po_appearances` | integer | NBA or WNBA Stats value for playoff appearances in the franchisehistory result set. |
 | `div_titles` | integer | NBA or WNBA Stats value for div titles in the franchisehistory result set. |
 | `conf_titles` | integer | NBA or WNBA Stats value for conf titles in the franchisehistory result set. |
@@ -99,20 +99,20 @@ GET /stats/franchiseleaders
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | Unique team identifier. |
-| `pts` | integer | Points scored. |
+| `team_id` | integer |  |
+| `pts` | integer |  |
 | `pts_person_id` | integer | Stats API identifier for points person identifier associated with this NBA or WNBA Stats row. |
 | `pts_player` | character | Scoring or score-margin metric for points player in the requested NBA or WNBA Stats split. |
-| `ast` | integer | Assists. |
+| `ast` | integer |  |
 | `ast_person_id` | integer | Stats API identifier for assists person identifier associated with this NBA or WNBA Stats row. |
 | `ast_player` | character | NBA or WNBA Stats value for assists player in the franchiseleaders result set. |
-| `reb` | integer | Rebounds per game. |
+| `reb` | integer |  |
 | `reb_person_id` | integer | Stats API identifier for rebounds person identifier associated with this NBA or WNBA Stats row. |
 | `reb_player` | character | Rebounding metric for rebounds player in the requested NBA or WNBA Stats split. |
-| `blk` | integer | Blocks. |
+| `blk` | integer |  |
 | `blk_person_id` | integer | Stats API identifier for blocks person identifier associated with this NBA or WNBA Stats row. |
 | `blk_player` | character | NBA or WNBA Stats value for blocks player in the franchiseleaders result set. |
-| `stl` | integer | Steals. |
+| `stl` | integer |  |
 | `stl_person_id` | integer | Stats API identifier for steals person identifier associated with this NBA or WNBA Stats row. |
 | `stl_player` | character | NBA or WNBA Stats value for steals player in the franchiseleaders result set. |
 
@@ -154,33 +154,33 @@ GET /stats/franchiseleaderswrank
 
 | col_name | type | description |
 |---|---|---|
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `team` | character | Team-side label or team identifier. |
-| `person_id` | integer | Unique player identifier (V3 endpoints). |
-| `player` | character | Player name. |
-| `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `league_id` | character |  |
+| `team_id` | integer |  |
+| `team` | character |  |
+| `person_id` | integer |  |
+| `player` | character |  |
+| `season_type` | character |  |
 | `active_with_team` | integer | Flag indicating whether the franchise leader is still active with the team. |
-| `gp` | integer | Games played. |
-| `minutes` | numeric | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `gp` | integer |  |
+| `minutes` | numeric |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `pf` | numeric | Personal fouls. |
-| `stl` | numeric | Steals. |
-| `tov` | numeric | Turnovers. |
-| `blk` | numeric | Blocks. |
-| `pts` | numeric | Points scored. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `pf` | numeric |  |
+| `stl` | numeric |  |
+| `tov` | numeric |  |
+| `blk` | numeric |  |
+| `pts` | numeric |  |
 | `f_rank_gp` | integer | Franchise all-time rank of the player's career games played. |
 | `f_rank_minutes` | integer | Franchise all-time rank of the player's career minutes played. |
 | `f_rank_fgm` | integer | Franchise all-time rank of the player's career field goals made. |
@@ -240,32 +240,32 @@ GET /stats/franchiseplayers
 
 | col_name | type | description |
 |---|---|---|
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `team` | character | Team-side label or team identifier. |
-| `person_id` | integer | Unique player identifier (V3 endpoints). |
-| `player` | character | Player name. |
-| `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `league_id` | character |  |
+| `team_id` | integer |  |
+| `team` | character |  |
+| `person_id` | integer |  |
+| `player` | character |  |
+| `season_type` | character |  |
 | `active_with_team` | integer | Flag indicating whether the player is still active with the franchise. |
-| `gp` | integer | Games played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `gp` | integer |  |
+| `fgm` | numeric |  |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `pf` | numeric | Personal fouls. |
-| `stl` | numeric | Steals. |
-| `tov` | numeric | Turnovers. |
-| `blk` | numeric | Blocks. |
-| `pts` | numeric | Points scored. |
+| `fg3_pct` | numeric |  |
+| `ftm` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
+| `oreb` | numeric |  |
+| `dreb` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `pf` | numeric |  |
+| `stl` | numeric |  |
+| `tov` | numeric |  |
+| `blk` | numeric |  |
+| `pts` | numeric |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

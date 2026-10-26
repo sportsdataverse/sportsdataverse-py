@@ -839,7 +839,7 @@ endpoints:
     name: season_type_all_star
     query_key: SeasonType
     type: str
-  - default: '1612709914'
+  - default: '1612709925'
     name: team_id
     query_key: TeamID
     type: str
@@ -4368,7 +4368,7 @@ endpoints:
 - example_args:
     league_id: '20'
   extra_params:
-  - default: '2023-03-26'
+  - default: '2025-01-15'
     name: game_date
     query_key: GameDate
     type: str
@@ -4580,8 +4580,10 @@ endpoints:
     query_key: DateTo
     type: str
   - default: null
+    description: 'GROUP_ID: required; there is no G League default for it.'
     name: group_id
     query_key: GROUP_ID
+    required: true
     type: str
   - default: ''
     name: game_id_nullable

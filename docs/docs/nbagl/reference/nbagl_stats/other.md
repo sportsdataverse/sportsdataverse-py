@@ -1,7 +1,7 @@
 ---
 title: "NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Other: alltimeleadersgrids–playbyplayv2"
 sidebar_label: "Other: alltimeleadersgrids–playbyplayv2"
-sidebar_position: 24
+sidebar_position: 23
 description: "NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Other: alltimeleadersgrids–playbyplayv2 — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -30,9 +30,9 @@ GET /stats/alltimeleadersgrids
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `gp` | integer | Games played. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `gp` | integer |  |
 | `gp_rank` | integer |  |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
 
@@ -40,9 +40,9 @@ GET /stats/alltimeleadersgrids
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `pts` | numeric | Points scored. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `pts` | numeric |  |
 | `pts_rank` | integer |  |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
 
@@ -50,9 +50,9 @@ GET /stats/alltimeleadersgrids
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `ast` | numeric | Assists. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `ast` | numeric |  |
 | `ast_rank` | integer |  |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
 
@@ -60,9 +60,9 @@ GET /stats/alltimeleadersgrids
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `stl` | numeric | Steals. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `stl` | numeric |  |
 | `stl_rank` | integer |  |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
 
@@ -70,9 +70,9 @@ GET /stats/alltimeleadersgrids
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `oreb` | numeric | Offensive rebounds. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `oreb` | numeric |  |
 | `oreb_rank` | integer |  |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
 
@@ -80,9 +80,9 @@ GET /stats/alltimeleadersgrids
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `dreb` | numeric | Defensive rebounds. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `dreb` | numeric |  |
 | `dreb_rank` | integer |  |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
 
@@ -90,9 +90,9 @@ GET /stats/alltimeleadersgrids
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `reb` | numeric | Rebounds per game. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `reb` | numeric |  |
 | `reb_rank` | integer |  |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
 
@@ -100,9 +100,9 @@ GET /stats/alltimeleadersgrids
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `blk` | numeric | Blocks. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `blk` | numeric |  |
 | `blk_rank` | integer |  |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
 
@@ -110,9 +110,9 @@ GET /stats/alltimeleadersgrids
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `fgm` | numeric | Field goals made. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `fgm` | numeric |  |
 | `fgm_rank` | integer |  |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
 
@@ -120,9 +120,9 @@ GET /stats/alltimeleadersgrids
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `fga` | numeric | Field goal attempts. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `fga` | numeric |  |
 | `fga_rank` | integer |  |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
 
@@ -130,9 +130,9 @@ GET /stats/alltimeleadersgrids
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `fg_pct` | numeric |  |
 | `fg_pct_rank` | integer |  |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
 
@@ -140,9 +140,9 @@ GET /stats/alltimeleadersgrids
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `tov` | numeric | Turnovers. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `tov` | numeric |  |
 | `tov_rank` | integer | All-time league rank of the player's career turnover total on the leaders grid. |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
 
@@ -150,8 +150,8 @@ GET /stats/alltimeleadersgrids
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
 | `fg3_m` | numeric | Three-point field goals made. |
 | `fg3_m_rank` | integer |  |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
@@ -160,8 +160,8 @@ GET /stats/alltimeleadersgrids
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
 | `fg3_a` | numeric | Three-point field goal attempts. |
 | `fg3_a_rank` | integer |  |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
@@ -170,9 +170,9 @@ GET /stats/alltimeleadersgrids
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `fg3_pct` | numeric |  |
 | `fg3_pct_rank` | integer |  |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
 
@@ -180,9 +180,9 @@ GET /stats/alltimeleadersgrids
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `pf` | numeric | Personal fouls. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `pf` | numeric |  |
 | `pf_rank` | integer |  |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
 
@@ -190,9 +190,9 @@ GET /stats/alltimeleadersgrids
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `ftm` | numeric | Free throws made. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `ftm` | numeric |  |
 | `ftm_rank` | integer |  |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
 
@@ -200,9 +200,9 @@ GET /stats/alltimeleadersgrids
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `fta` | numeric | Free throw attempts. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `fta` | numeric |  |
 | `fta_rank` | integer |  |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
 
@@ -210,9 +210,9 @@ GET /stats/alltimeleadersgrids
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `ft_pct` | numeric |  |
 | `ft_pct_rank` | integer |  |
 | `is_active_flag` | character | Flag indicating whether the player is currently active in the league. |
 
@@ -256,14 +256,14 @@ GET /stats/assistleaders
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
-| `player_id` | integer | Unique player identifier. |
-| `player` | character | Player name. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `jersey_num` | character | Jersey number worn by the player. |
+| `player_id` | integer |  |
+| `player` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_name` | character |  |
+| `jersey_num` | character |  |
 | `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
-| `ast` | numeric | Assists. |
+| `ast` | numeric |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -327,7 +327,7 @@ GET /stats/assisttracker
 
 | col_name | type | description |
 |---|---|---|
-| `assists` | numeric | Total assists. |
+| `assists` | numeric |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -352,7 +352,7 @@ GET /stats/cumestatsteam
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/cumestatsteam`
 
-**Valid URL:** [https://stats.nba.com/stats/cumestatsteam?GameIDs=2022500137&LeagueID=20&Season=2024-25&SeasonType=Regular+Season&TeamID=1612709914](https://stats.nba.com/stats/cumestatsteam?GameIDs=2022500137&LeagueID=20&Season=2024-25&SeasonType=Regular+Season&TeamID=1612709914)
+**Valid URL:** [https://stats.nba.com/stats/cumestatsteam?GameIDs=2022500137&LeagueID=20&Season=2024-25&SeasonType=Regular+Season&TeamID=1612709925](https://stats.nba.com/stats/cumestatsteam?GameIDs=2022500137&LeagueID=20&Season=2024-25&SeasonType=Regular+Season&TeamID=1612709925)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -370,33 +370,33 @@ GET /stats/cumestatsteam
 
 | col_name | type | description |
 |---|---|---|
-| `jersey_num` | character | Jersey number worn by the player. |
-| `player` | character | Player name. |
-| `person_id` | character | Unique player identifier (V3 endpoints). |
-| `team_id` | character | Unique team identifier. |
-| `gp` | character | Games played. |
-| `gs` | character | Games started. |
+| `jersey_num` | character |  |
+| `player` | character |  |
+| `person_id` | character |  |
+| `team_id` | character |  |
+| `gp` | character |  |
+| `gs` | character |  |
 | `actual_minutes` | character | Whole minutes of actual playing time accumulated over the aggregated games. |
 | `actual_seconds` | character | Leftover seconds of actual playing time beyond the whole minutes. |
 | `fg` | character | Field goals made over the aggregated games. |
-| `fga` | character | Field goal attempts. |
-| `fg_pct` | character | Field goal percentage (0-1). |
+| `fga` | character |  |
+| `fg_pct` | character |  |
 | `fg3` | character | Three-point field goals made over the aggregated games. |
 | `fg3_a` | character | Three-point field goal attempts. |
-| `fg3_pct` | character | Three-point field goal percentage (0-1). |
+| `fg3_pct` | character |  |
 | `ft` | character | Free throws made over the aggregated games. |
-| `fta` | character | Free throw attempts. |
-| `ft_pct` | character | Free throw percentage (0-1). |
+| `fta` | character |  |
+| `ft_pct` | character |  |
 | `off_reb` | character | Offensive rebounds over the aggregated games. |
 | `def_reb` | character | Defensive rebounds over the aggregated games. |
 | `tot_reb` | character | Total rebounds over the aggregated games. |
-| `ast` | character | Assists. |
-| `pf` | character | Personal fouls. |
+| `ast` | character |  |
+| `pf` | character |  |
 | `dq` | character | Disqualifications (fouled out) over the aggregated games. |
-| `stl` | character | Steals. |
-| `turnovers` | character | Total turnovers. |
-| `blk` | character | Blocks. |
-| `pts` | character | Points scored. |
+| `stl` | character |  |
+| `turnovers` | character |  |
+| `blk` | character |  |
+| `pts` | character |  |
 | `max_actual_minutes` | character | Most whole minutes played in any single aggregated game. |
 | `max_actual_seconds` | character | Seconds component paired with the single-game maximum minutes. |
 | `max_reb` | character | Most rebounds recorded in any single aggregated game. |
@@ -424,39 +424,39 @@ GET /stats/cumestatsteam
 
 | col_name | type | description |
 |---|---|---|
-| `city` | character | Venue city. |
-| `nickname` | character | Team or athlete nickname. |
-| `team_id` | integer | Unique team identifier. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
+| `city` | character |  |
+| `nickname` | character |  |
+| `team_id` | integer |  |
+| `w` | integer |  |
+| `l` | integer |  |
 | `w_home` | integer |  |
 | `l_home` | integer |  |
 | `w_road` | integer |  |
 | `l_road` | integer |  |
-| `team_turnovers` | integer | Team turnovers (turnovers credited to the team rather than a player). |
+| `team_turnovers` | integer |  |
 | `team_rebounds` | integer | Team rebounds (rebounds credited to the team rather than a player). |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
+| `gp` | integer |  |
+| `gs` | integer |  |
 | `actual_minutes` | integer | Whole minutes of actual playing time accumulated over the aggregated games. |
 | `actual_seconds` | integer | Leftover seconds of actual playing time beyond the whole minutes. |
 | `fg` | integer | Field goals made over the aggregated games. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fga` | integer |  |
+| `fg_pct` | numeric |  |
 | `fg3` | integer | Three-point field goals made over the aggregated games. |
 | `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `fg3_pct` | numeric |  |
 | `ft` | integer | Free throws made over the aggregated games. |
-| `fta` | integer | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `fta` | integer |  |
+| `ft_pct` | numeric |  |
 | `off_reb` | integer | Offensive rebounds over the aggregated games. |
 | `def_reb` | integer | Defensive rebounds over the aggregated games. |
 | `tot_reb` | integer | Total rebounds over the aggregated games. |
-| `ast` | integer | Assists. |
-| `pf` | integer | Personal fouls. |
-| `stl` | integer | Steals. |
-| `total_turnovers` | integer | Total turnovers (player + team). |
-| `blk` | integer | Blocks. |
-| `pts` | integer | Points scored. |
+| `ast` | integer |  |
+| `pf` | integer |  |
+| `stl` | integer |  |
+| `total_turnovers` | integer |  |
+| `blk` | integer |  |
+| `pts` | integer |  |
 | `avg_reb` | numeric | Average rebounds per game over the aggregated games. |
 | `avg_pts` | numeric | Average points per game over the aggregated games. |
 | `dq` | integer | Disqualifications (fouled out) over the aggregated games. |
@@ -465,12 +465,12 @@ GET /stats/cumestatsteam
 
 | col_name | type | description |
 |---|---|---|
-| `city` | character | Venue city. |
-| `nickname` | character | Team or athlete nickname. |
-| `team_id` | integer | Unique team identifier. |
+| `city` | character |  |
+| `nickname` | character |  |
+| `team_id` | integer |  |
 | `ft` | integer | Free throws made over the aggregated games. |
-| `fta` | integer | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `fta` | integer |  |
+| `ft_pct` | numeric |  |
 | `ft_1_pt` | numeric |  |
 | `fta_1_pt` | numeric |  |
 | `ft_pct_1_pt` | numeric |  |
@@ -517,17 +517,17 @@ GET /stats/draftcombinestats
 
 | col_name | type | description |
 |---|---|---|
-| `season` | character | Season year. |
-| `player_id` | integer | Unique player identifier. |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
-| `player_name` | character | Player name. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
+| `season` | character |  |
+| `player_id` | integer |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `player_name` | character |  |
+| `position` | character |  |
 | `height_wo_shoes` | numeric | Height measured without shoes, in inches. |
 | `height_wo_shoes_ft_in` | character | Height without shoes formatted as feet and inches. |
 | `height_w_shoes` | character | Height measured with shoes, in inches. |
 | `height_w_shoes_ft_in` | character | Height with shoes formatted as feet and inches. |
-| `weight` | character | Player weight in pounds. |
+| `weight` | character |  |
 | `wingspan` | numeric | Wingspan measured at the combine, in inches. |
 | `wingspan_ft_in` | character | Wingspan formatted as feet and inches. |
 | `standing_reach` | numeric | Standing reach measured at the combine, in inches. |
@@ -618,26 +618,26 @@ GET /stats/fantasywidget
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
 | `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `gp` | integer | Games played. |
-| `min` | numeric | Minutes played. |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `gp` | integer |  |
+| `min` | numeric |  |
 | `fan_duel_pts` | numeric | Fantasy points under FanDuel's scoring formula. |
 | `nba_fantasy_pts` | numeric | Fantasy points under the NBA's fantasy scoring formula. |
-| `pts` | numeric | Points scored. |
-| `reb` | numeric | Rebounds per game. |
-| `ast` | numeric | Assists. |
-| `blk` | numeric | Blocks. |
-| `stl` | numeric | Steals. |
-| `tov` | numeric | Turnovers. |
+| `pts` | numeric |  |
+| `reb` | numeric |  |
+| `ast` | numeric |  |
+| `blk` | numeric |  |
+| `stl` | numeric |  |
+| `tov` | numeric |  |
 | `fg3_m` | numeric | Three-point field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `fga` | numeric |  |
+| `fg_pct` | numeric |  |
+| `fta` | numeric |  |
+| `ft_pct` | numeric |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -677,11 +677,11 @@ GET /stats/gamerotation
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `person_id` | integer | Unique player identifier (V3 endpoints). |
+| `game_id` | character |  |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
+| `person_id` | integer |  |
 | `player_first` | character | NBA or WNBA Stats value for player first in the gamerotation result set. |
 | `player_last` | character | NBA or WNBA Stats value for player last in the gamerotation result set. |
 | `in_time_real` | numeric | Real-time clock value when the player entered the game rotation stint. |
@@ -694,11 +694,11 @@ GET /stats/gamerotation
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `person_id` | integer | Unique player identifier (V3 endpoints). |
+| `game_id` | character |  |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
+| `person_id` | integer |  |
 | `player_first` | character | NBA or WNBA Stats value for player first in the gamerotation result set. |
 | `player_last` | character | NBA or WNBA Stats value for player last in the gamerotation result set. |
 | `in_time_real` | numeric | Real-time clock value when the player entered the game rotation stint. |
@@ -751,112 +751,112 @@ GET /stats/homepagev2
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
-| `player_id` | integer | Unique player identifier. |
-| `player` | character | Player name. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `jersey_num` | character | Jersey number worn by the player. |
+| `player_id` | integer |  |
+| `player` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_name` | character |  |
+| `jersey_num` | character |  |
 | `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
-| `pts` | numeric | Points scored. |
+| `pts` | numeric |  |
 
 **HomePageStat2**
 
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
-| `player_id` | integer | Unique player identifier. |
-| `player` | character | Player name. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `jersey_num` | character | Jersey number worn by the player. |
+| `player_id` | integer |  |
+| `player` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_name` | character |  |
+| `jersey_num` | character |  |
 | `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
-| `reb` | numeric | Rebounds per game. |
+| `reb` | numeric |  |
 
 **HomePageStat3**
 
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
-| `player_id` | integer | Unique player identifier. |
-| `player` | character | Player name. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `jersey_num` | character | Jersey number worn by the player. |
+| `player_id` | integer |  |
+| `player` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_name` | character |  |
+| `jersey_num` | character |  |
 | `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
-| `ast` | numeric | Assists. |
+| `ast` | numeric |  |
 
 **HomePageStat4**
 
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
-| `player_id` | integer | Unique player identifier. |
-| `player` | character | Player name. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `jersey_num` | character | Jersey number worn by the player. |
+| `player_id` | integer |  |
+| `player` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_name` | character |  |
+| `jersey_num` | character |  |
 | `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
-| `stl` | numeric | Steals. |
+| `stl` | numeric |  |
 
 **HomePageStat5**
 
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
-| `player_id` | integer | Unique player identifier. |
-| `player` | character | Player name. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `jersey_num` | character | Jersey number worn by the player. |
+| `player_id` | integer |  |
+| `player` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_name` | character |  |
+| `jersey_num` | character |  |
 | `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg_pct` | numeric |  |
 
 **HomePageStat6**
 
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
-| `player_id` | integer | Unique player identifier. |
-| `player` | character | Player name. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `jersey_num` | character | Jersey number worn by the player. |
+| `player_id` | integer |  |
+| `player` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_name` | character |  |
+| `jersey_num` | character |  |
 | `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `ft_pct` | numeric |  |
 
 **HomePageStat7**
 
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
-| `player_id` | integer | Unique player identifier. |
-| `player` | character | Player name. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `jersey_num` | character | Jersey number worn by the player. |
+| `player_id` | integer |  |
+| `player` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_name` | character |  |
+| `jersey_num` | character |  |
 | `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `fg3_pct` | numeric |  |
 
 **HomePageStat8**
 
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
-| `player_id` | integer | Unique player identifier. |
-| `player` | character | Player name. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `jersey_num` | character | Jersey number worn by the player. |
+| `player_id` | integer |  |
+| `player` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_name` | character |  |
+| `jersey_num` | character |  |
 | `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
-| `blk` | numeric | Blocks. |
+| `blk` | numeric |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -895,29 +895,29 @@ GET /stats/hustlestatsboxscore
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `hustle_status` | integer | Hustle status. |
+| `game_id` | character |  |
+| `hustle_status` | integer |  |
 
 **PlayerStats**
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `team_id` | character | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `player_id` | character | Unique player identifier. |
-| `player_name` | character | Player name. |
+| `game_id` | character |  |
+| `team_id` | character |  |
+| `team_abbreviation` | character |  |
+| `team_city` | character |  |
+| `player_id` | character |  |
+| `player_name` | character |  |
 | `start_position` | character | Position the player started the game at (F, C, or G); empty for reserves. |
-| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
-| `minutes` | integer | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
-| `pts` | integer | Points scored. |
-| `contested_shots` | integer | Defensively contested shots. |
+| `comment` | character |  |
+| `minutes` | integer |  |
+| `pts` | integer |  |
+| `contested_shots` | integer |  |
 | `contested_shots_2_pt` | integer | Opponent two-point attempts contested. |
 | `contested_shots_3_pt` | integer | Opponent three-point attempts contested. |
-| `deflections` | integer | Defensive deflections. |
-| `charges_drawn` | integer | Charges drawn. |
-| `screen_assists` | integer | Screen assists (resulting in a basket). |
+| `deflections` | integer |  |
+| `charges_drawn` | integer |  |
+| `screen_assists` | integer |  |
 | `screen_ast_pts` | integer | Points teammates scored directly off the row's screen assists. |
 | `off_loose_balls_recovered` | integer | Loose balls recovered while on offense. |
 | `def_loose_balls_recovered` | integer | Loose balls recovered while on defense. |
@@ -926,25 +926,25 @@ GET /stats/hustlestatsboxscore
 | `def_boxouts` | integer | Box-outs recorded on the defensive glass. |
 | `box_out_player_team_rebs` | integer | Team rebounds secured following the row's box-outs. |
 | `box_out_player_rebs` | integer | Rebounds the player secured directly off their own box-outs. |
-| `box_outs` | integer | Box-outs executed. |
+| `box_outs` | integer |  |
 
 **TeamStats**
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `team_id` | character | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `minutes` | integer | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
-| `pts` | integer | Points scored. |
-| `contested_shots` | integer | Defensively contested shots. |
+| `game_id` | character |  |
+| `team_id` | character |  |
+| `team_name` | character |  |
+| `team_abbreviation` | character |  |
+| `team_city` | character |  |
+| `minutes` | integer |  |
+| `pts` | integer |  |
+| `contested_shots` | integer |  |
 | `contested_shots_2_pt` | integer | Opponent two-point attempts contested. |
 | `contested_shots_3_pt` | integer | Opponent three-point attempts contested. |
-| `deflections` | integer | Defensive deflections. |
-| `charges_drawn` | integer | Charges drawn. |
-| `screen_assists` | integer | Screen assists (resulting in a basket). |
+| `deflections` | integer |  |
+| `charges_drawn` | integer |  |
+| `screen_assists` | integer |  |
 | `screen_ast_pts` | integer | Points teammates scored directly off the row's screen assists. |
 | `off_loose_balls_recovered` | integer | Loose balls recovered while on offense. |
 | `def_loose_balls_recovered` | integer | Loose balls recovered while on defense. |
@@ -953,7 +953,7 @@ GET /stats/hustlestatsboxscore
 | `def_boxouts` | integer | Box-outs recorded on the defensive glass. |
 | `box_out_player_team_rebs` | integer | Team rebounds secured following the row's box-outs. |
 | `box_out_player_rebs` | integer | Rebounds the player secured directly off their own box-outs. |
-| `box_outs` | integer | Box-outs executed. |
+| `box_outs` | integer |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -990,39 +990,39 @@ GET /stats/infographicfanduelplayer
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `team_id` | integer | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `jersey_num` | character | Jersey number worn by the player. |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `team_id` | integer |  |
+| `team_name` | character |  |
+| `team_abbreviation` | character |  |
+| `jersey_num` | character |  |
 | `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
-| `location` | character | Location. |
+| `location` | character |  |
 | `fan_duel_pts` | numeric | Scoring or score-margin metric for fan duel points in the requested NBA or WNBA Stats split. |
 | `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
 | `usg_pct` | numeric | Percentage or rate for usage percentage in the requested NBA or WNBA Stats split. |
-| `min` | numeric | Minutes played. |
-| `fgm` | integer | Field goals made. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `min` | numeric |  |
+| `fgm` | integer |  |
+| `fga` | integer |  |
+| `fg_pct` | numeric |  |
 | `fg3_m` | integer | Three-point field goals made. |
 | `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | integer | Free throws made. |
-| `fta` | integer | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | integer | Offensive rebounds. |
-| `dreb` | integer | Defensive rebounds. |
-| `reb` | integer | Rebounds per game. |
-| `ast` | integer | Assists. |
-| `tov` | integer | Turnovers. |
-| `stl` | integer | Steals. |
-| `blk` | integer | Blocks. |
+| `fg3_pct` | numeric |  |
+| `ftm` | integer |  |
+| `fta` | integer |  |
+| `ft_pct` | numeric |  |
+| `oreb` | integer |  |
+| `dreb` | integer |  |
+| `reb` | integer |  |
+| `ast` | integer |  |
+| `tov` | integer |  |
+| `stl` | integer |  |
+| `blk` | integer |  |
 | `blka` | integer | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
-| `pf` | integer | Personal fouls. |
+| `pf` | integer |  |
 | `pfd` | integer | Personal fouls drawn for the requested NBA or WNBA Stats split. |
-| `pts` | integer | Points scored. |
-| `plus_minus` | integer | Plus/minus point differential while on court. |
+| `pts` | integer |  |
+| `plus_minus` | integer |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1068,48 +1068,48 @@ GET /stats/leaderstiles
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
-| `player_id` | integer | Unique player identifier. |
-| `player` | character | Player name. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `pts` | numeric | Points scored. |
+| `player_id` | integer |  |
+| `player` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_name` | character |  |
+| `pts` | numeric |  |
 
 **AllTimeSeasonHigh**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `pts` | numeric | Points scored. |
-| `season_year` | character | Season year string ('YYYY-YY' format). |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `pts` | numeric |  |
+| `season_year` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_name` | character |  |
 
 **LastSeasonHigh**
 
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
-| `player_id` | integer | Unique player identifier. |
-| `player` | character | Player name. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `pts` | numeric | Points scored. |
+| `player_id` | integer |  |
+| `player` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_name` | character |  |
+| `pts` | numeric |  |
 
 **LowSeasonHigh**
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `pts` | numeric | Points scored. |
-| `season_year` | character | Season year string ('YYYY-YY' format). |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `pts` | numeric |  |
+| `season_year` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_name` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1150,46 +1150,46 @@ GET /stats/playbyplayv2
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
+| `game_id` | character |  |
 | `eventnum` | integer | Sequential event number within the game's play-by-play feed. |
 | `eventmsgtype` | integer | Numeric event type code (1 = made shot, 2 = missed shot, 3 = free throw, 4 = rebound, 5 = turnover, 6 = foul, ...). |
 | `eventmsgactiontype` | integer | Numeric sub-type code refining eventmsgtype (e.g. the specific shot, foul, or turnover variety). |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `period` | integer |  |
 | `wctimestring` | character | Wall-clock time of day when the event occurred. |
 | `pctimestring` | character | Game clock remaining in the period when the event occurred (MM:SS). |
 | `homedescription` | character | Text description of the event from the home team's perspective; empty when not a home-team action. |
 | `neutraldescription` | character | Neutral text description of the event (e.g. period start/end); empty for team actions. |
 | `visitordescription` | character | Text description of the event from the visiting team's perspective; empty when not a visitor action. |
-| `score` | character | Final score. |
+| `score` | character |  |
 | `scoremargin` | character | Score margin after the event ('TIE' when tied); empty on non-scoring events. |
 | `person1_type` | integer |  |
-| `player1_id` | integer | V2 PBP primary player ID (e.g. shooter / fouler). |
-| `player1_name` | character | V2 PBP primary player name. |
-| `player1_team_id` | integer | Team ID of player1. |
-| `player1_team_city` | character | Player1 team city. |
-| `player1_team_nickname` | character | Player1 team nickname. |
-| `player1_team_abbreviation` | character | Player1 team abbreviation. |
+| `player1_id` | integer |  |
+| `player1_name` | character |  |
+| `player1_team_id` | integer |  |
+| `player1_team_city` | character |  |
+| `player1_team_nickname` | character |  |
+| `player1_team_abbreviation` | character |  |
 | `person2_type` | integer |  |
-| `player2_id` | integer | V2 PBP secondary player ID (e.g. assister / fouled-by). |
-| `player2_name` | character | V2 PBP secondary player name. |
-| `player2_team_id` | integer | Team ID of player2. |
-| `player2_team_city` | character | Player2 team city. |
-| `player2_team_nickname` | character | Player2 team nickname. |
-| `player2_team_abbreviation` | character | Player2 team abbreviation. |
+| `player2_id` | integer |  |
+| `player2_name` | character |  |
+| `player2_team_id` | integer |  |
+| `player2_team_city` | character |  |
+| `player2_team_nickname` | character |  |
+| `player2_team_abbreviation` | character |  |
 | `person3_type` | integer |  |
-| `player3_id` | integer | V2 PBP tertiary player ID (e.g. blocker). |
-| `player3_name` | character | V2 PBP tertiary player name. |
-| `player3_team_id` | integer | Team ID of player3. |
-| `player3_team_city` | character | Player3 team city. |
-| `player3_team_nickname` | character | Player3 team nickname. |
-| `player3_team_abbreviation` | character | Player3 team abbreviation. |
-| `video_available_flag` | integer | Video available flag. |
+| `player3_id` | integer |  |
+| `player3_name` | character |  |
+| `player3_team_id` | integer |  |
+| `player3_team_city` | character |  |
+| `player3_team_nickname` | character |  |
+| `player3_team_abbreviation` | character |  |
+| `video_available_flag` | integer |  |
 
 **AvailableVideo**
 
 | col_name | type | description |
 |---|---|---|
-| `video_available_flag` | integer | Video available flag. |
+| `video_available_flag` | integer |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

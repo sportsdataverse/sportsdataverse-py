@@ -27,20 +27,20 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `athlete_id` | integer | Unique athlete identifier (ESPN). |
-| `athlete_display_name` | character | Athlete display name (full). |
-| `athlete_short_name` | character | Athlete short display name. |
-| `athlete_position` | character | Athlete position. |
-| `athlete_jersey` | character | Athlete jersey number. |
+| `athlete_id` | integer |  |
+| `athlete_display_name` | character |  |
+| `athlete_short_name` | character |  |
+| `athlete_position` | character |  |
+| `athlete_jersey` | character |  |
 | `athlete_team_id` | integer |  |
 | `athlete_team_abbreviation` | character |  |
-| `split_name` | character | Split name (typically "All Splits"). |
+| `split_name` | character |  |
 | `split_category` | character |  |
-| `games_played` | character | Games played. |
+| `games_played` | character |  |
 | `avg_minutes` | character |  |
-| `field_goal_pct` | character | Field goal percentage (0-1). |
+| `field_goal_pct` | character |  |
 | `three_point_pct` | character |  |
-| `free_throw_pct` | character | Free throw percentage (0-1). |
+| `free_throw_pct` | character |  |
 | `avg_rebounds` | character |  |
 | `avg_assists` | character |  |
 | `avg_blocks` | character |  |
@@ -127,14 +127,14 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `season_type_id` | integer | Unique identifier for season type. |
-| `season_type_name` | character | Season type name. |
-| `category` | character | Category label. |
-| `event_id` | integer | Unique event / game identifier (ESPN). |
+| `season_type_id` | integer |  |
+| `season_type_name` | character |  |
+| `category` | character |  |
+| `event_id` | integer |  |
 | `event_date` | character |  |
-| `home_away` | character | Game venue label ('home' or 'away'). |
-| `score` | character | Final score. |
-| `opponent_id` | integer | Unique identifier for opponent. |
+| `home_away` | character |  |
+| `score` | character |  |
+| `opponent_id` | integer |  |
 | `opponent_abbreviation` | character |  |
 | `opponent_display_name` | character |  |
 | `game_result` | character |  |
@@ -190,11 +190,11 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `descriptions` | character |  |
-| `display_name` | character | Display name. |
+| `display_name` | character |  |
 | `display_names` | character |  |
 | `filters` | character |  |
 | `labels` | character |  |
-| `names` | character | Names. |
+| `names` | character |  |
 | `split_categories` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

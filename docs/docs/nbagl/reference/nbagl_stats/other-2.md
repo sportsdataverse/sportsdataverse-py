@@ -1,7 +1,7 @@
 ---
 title: "NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Other: playbyplayv3–scoreboardv3"
 sidebar_label: "Other: playbyplayv3–scoreboardv3"
-sidebar_position: 25
+sidebar_position: 24
 description: "NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Other: playbyplayv3–scoreboardv3 — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -25,7 +25,7 @@ GET /stats/playbyplayv3
 
 **`return_parsed=True`** (default) — the output of `parse_nbagl_stats_result_sets`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 
-No returns table is published for this endpoint: the committed capture tests/fixtures/nbagl_stats/endpoints/playbyplayv3.json holds no rows, so parse_nba_stats_result_sets emits no columns; a capture with rows needs a residential IP (stats.nba.com / stats.wnba.com hang on datacenter IPs) and SDV_PY_NBA_STATS_LIVE=1.
+No returns table is published for this endpoint: the committed capture tests/fixtures/nbagl_stats/endpoints/playbyplayv3.json is not a resultSets envelope (top-level keys: game, meta), which parse_nba_stats_result_sets does not read, so the parsed output is empty; use return_parsed=False for the raw payload.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -50,7 +50,7 @@ GET /stats/scoreboardv3
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/scoreboardv3`
 
-**Valid URL:** [https://stats.nba.com/stats/scoreboardv3?GameDate=2023-03-26&LeagueID=20](https://stats.nba.com/stats/scoreboardv3?GameDate=2023-03-26&LeagueID=20)
+**Valid URL:** [https://stats.nba.com/stats/scoreboardv3?GameDate=2025-01-15&LeagueID=20](https://stats.nba.com/stats/scoreboardv3?GameDate=2025-01-15&LeagueID=20)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -75,7 +75,7 @@ GET /stats/scoreboardv3
 | `awayteam_timeoutsremaining` | integer | Timeouts the away team has remaining. |
 | `awayteam_wins` | integer | Away team's win total entering the game. |
 | `gameclock` | character | Current game clock display for a live game. |
-| `gamecode` | character | Gamecode. |
+| `gamecode` | character |  |
 | `gamedate` | character | Game date the scoreboard was requested for (YYYY-MM-DD). |
 | `gameet` | character | Scheduled game start time in US Eastern time. |
 | `gameid` | character | Unique 10-character game identifier from the league's stats API. |
@@ -118,7 +118,7 @@ GET /stats/scoreboardv3
 | `isneutral` | logical | Whether the game is played at a neutral site. |
 | `leagueid` | character | League identifier from the stats API ("00" = NBA, "10" = WNBA). |
 | `leaguename` | character | Display name of the league. |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `period` | integer |  |
 | `porounddesc` | character | Playoff round description (e.g. Conference Finals). |
 | `regulationperiods` | integer | Number of regulation periods for the game (4). |
 | `seriesconference` | character | Conference of the playoff series the game belongs to. |

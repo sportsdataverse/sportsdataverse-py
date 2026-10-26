@@ -1,11 +1,11 @@
 ---
-title: "NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Box scores: boxscoreadvancedv2–boxscorescoringv3"
-sidebar_label: "Box scores: boxscoreadvancedv2–boxscorescoringv3"
+title: "NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Box scores: boxscoreadvancedv2–boxscoresummaryv2"
+sidebar_label: "Box scores: boxscoreadvancedv2–boxscoresummaryv2"
 sidebar_position: 1
-description: "NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Box scores: boxscoreadvancedv2–boxscorescoringv3 — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Box scores: boxscoreadvancedv2–boxscoresummaryv2 — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Box scores: boxscoreadvancedv2–boxscorescoringv3
+# NBAGL — G League Stats API (stats.nba.com, LeagueID=20) — Box scores: boxscoreadvancedv2–boxscoresummaryv2
 
 ## nbagl_stats_boxscoreadvancedv2
 
@@ -32,23 +32,23 @@ GET /stats/boxscoreadvancedv2
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `nickname` | character | Team or athlete nickname. |
+| `game_id` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_city` | character |  |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `nickname` | character |  |
 | `start_position` | character | Position the player started the game at ('F', 'C', or 'G'); empty for bench players. |
-| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
-| `min` | character | Minutes played. |
+| `comment` | character |  |
+| `min` | character |  |
 | `e_off_rating` | numeric | Estimated offensive rating: points produced per 100 possessions using the stats API's estimated-possession formula. |
 | `off_rating` | numeric | Points scored per 100 possessions while on the floor. |
 | `e_def_rating` | numeric | Estimated defensive rating: points allowed per 100 possessions using the estimated-possession formula. |
 | `def_rating` | numeric | Points allowed per 100 possessions while on the floor. |
 | `e_net_rating` | numeric | Estimated net rating: estimated offensive rating minus estimated defensive rating. |
-| `net_rating` | numeric | Net rating (off rating - def rating). |
-| `ast_pct` | numeric | Assist percentage. |
+| `net_rating` | numeric |  |
+| `ast_pct` | numeric |  |
 | `ast_tov` | numeric | Ratio of assists to turnovers. |
 | `ast_ratio` | numeric | Assists per 100 possessions used. |
 | `oreb_pct` | numeric | Percentage of available offensive rebounds grabbed while on the floor. |
@@ -56,32 +56,32 @@ GET /stats/boxscoreadvancedv2
 | `reb_pct` | numeric | Percentage of all available rebounds grabbed while on the floor. |
 | `tm_tov_pct` | numeric | Turnovers committed per 100 possessions. |
 | `efg_pct` | numeric | Effective field goal percentage: (FGM + 0.5 * FG3M) / FGA. |
-| `ts_pct` | numeric | True shooting percentage (0-1). |
+| `ts_pct` | numeric |  |
 | `usg_pct` | numeric | Percentage of team plays used while on the floor. |
 | `e_usg_pct` | numeric | Estimated usage percentage using the stats API's estimated-possession formula. |
 | `e_pace` | numeric | Estimated pace: team possessions per regulation game, from the estimated-possession formula. |
-| `pace` | numeric | Possessions per 48 minutes. |
-| `pace_per40` | numeric | Pace per40. |
-| `poss` | integer | Poss. |
-| `pie` | numeric | Player Impact Estimate (0-1). |
+| `pace` | numeric |  |
+| `pace_per40` | numeric |  |
+| `poss` | integer |  |
+| `pie` | numeric |  |
 
 **TeamStats**
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `team_id` | integer | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `min` | character | Minutes played. |
+| `game_id` | character |  |
+| `team_id` | integer |  |
+| `team_name` | character |  |
+| `team_abbreviation` | character |  |
+| `team_city` | character |  |
+| `min` | character |  |
 | `e_off_rating` | numeric | Estimated offensive rating: points produced per 100 possessions using the stats API's estimated-possession formula. |
 | `off_rating` | numeric | Points scored per 100 possessions while on the floor. |
 | `e_def_rating` | numeric | Estimated defensive rating: points allowed per 100 possessions using the estimated-possession formula. |
 | `def_rating` | numeric | Points allowed per 100 possessions while on the floor. |
 | `e_net_rating` | numeric | Estimated net rating: estimated offensive rating minus estimated defensive rating. |
-| `net_rating` | numeric | Net rating (off rating - def rating). |
-| `ast_pct` | numeric | Assist percentage. |
+| `net_rating` | numeric |  |
+| `ast_pct` | numeric |  |
 | `ast_tov` | numeric | Ratio of assists to turnovers. |
 | `ast_ratio` | numeric | Assists per 100 possessions used. |
 | `oreb_pct` | numeric | Percentage of available offensive rebounds grabbed while on the floor. |
@@ -90,14 +90,14 @@ GET /stats/boxscoreadvancedv2
 | `e_tm_tov_pct` | numeric |  |
 | `tm_tov_pct` | numeric | Turnovers committed per 100 possessions. |
 | `efg_pct` | numeric | Effective field goal percentage: (FGM + 0.5 * FG3M) / FGA. |
-| `ts_pct` | numeric | True shooting percentage (0-1). |
+| `ts_pct` | numeric |  |
 | `usg_pct` | numeric | Percentage of team plays used while on the floor. |
 | `e_usg_pct` | numeric | Estimated usage percentage using the stats API's estimated-possession formula. |
 | `e_pace` | numeric | Estimated pace: team possessions per regulation game, from the estimated-possession formula. |
-| `pace` | numeric | Possessions per 48 minutes. |
-| `pace_per40` | numeric | Pace per40. |
-| `poss` | integer | Poss. |
-| `pie` | numeric | Player Impact Estimate (0-1). |
+| `pace` | numeric |  |
+| `pace_per40` | numeric |  |
+| `poss` | integer |  |
+| `pie` | numeric |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -142,22 +142,22 @@ GET /stats/boxscoreadvancedv3
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique 10-character game identifier from the league's stats API. |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `away_team_id` | integer |  |
+| `home_team_id` | integer |  |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
 | `team_tricode` | character | Three-letter team abbreviation. |
 | `team_slug` | character | URL-friendly slug for the team name. |
 | `person_id` | integer | Player identifier from the league's stats API. |
-| `first_name` | character | Player's first name. |
+| `first_name` | character |  |
 | `family_name` | character | Player's family (last) name. |
 | `name_i` | character | Abbreviated player name (first initial and last name). |
 | `player_slug` | character | URL-friendly slug for the player's name. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `position` | character |  |
+| `comment` | character |  |
 | `jersey_num` | character | Player's jersey number. |
-| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `minutes` | character |  |
 | `estimated_offensive_rating` | numeric | Estimated offensive rating from the stats API's estimated-metrics family. |
 | `offensive_rating` | numeric | Points scored per 100 possessions while on the floor (offensive rating). |
 | `estimated_defensive_rating` | numeric | Estimated defensive rating from the stats API's estimated-metrics family. |
@@ -176,24 +176,24 @@ GET /stats/boxscoreadvancedv3
 | `usage_percentage` | numeric | Percentage of team plays used by the player while on the floor, as a decimal. |
 | `estimated_usage_percentage` | numeric | Estimated percentage of team plays used by the player while on the floor, as a decimal. |
 | `estimated_pace` | numeric | Estimated pace (possessions per 48 minutes) from the stats API's estimated-metrics family. |
-| `pace` | numeric | Possessions per 48 minutes. |
+| `pace` | numeric |  |
 | `pace_per40` | numeric | Pace normalized to possessions per 40 minutes. |
-| `possessions` | numeric | Possessions used. |
-| `pie` | numeric | Player Impact Estimate (0-1). |
+| `possessions` | numeric |  |
+| `pie` | numeric |  |
 
 **TeamStats**
 
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique 10-character game identifier from the league's stats API. |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `away_team_id` | integer |  |
+| `home_team_id` | integer |  |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
 | `team_tricode` | character | Three-letter team abbreviation. |
 | `team_slug` | character | URL-friendly slug for the team name. |
-| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `minutes` | character |  |
 | `estimated_offensive_rating` | numeric | Estimated offensive rating from the stats API's estimated-metrics family. |
 | `offensive_rating` | numeric | Points scored per 100 possessions while on the floor (offensive rating). |
 | `estimated_defensive_rating` | numeric | Estimated defensive rating from the stats API's estimated-metrics family. |
@@ -206,17 +206,17 @@ GET /stats/boxscoreadvancedv3
 | `offensive_rebound_percentage` | numeric | Percentage of available offensive rebounds secured while on the floor, as a decimal. |
 | `defensive_rebound_percentage` | numeric | Percentage of available defensive rebounds secured while on the floor, as a decimal. |
 | `rebound_percentage` | numeric | Percentage of all available rebounds secured while on the floor, as a decimal. |
-| `estimated_team_turnover_percentage` | numeric | Estimated team turnover percentage (0-1). |
+| `estimated_team_turnover_percentage` | numeric |  |
 | `turnover_ratio` | numeric | Turnovers per 100 possessions used (turnover ratio). |
 | `effective_field_goal_percentage` | numeric | Effective field goal percentage (weights made threes at 1.5), as a decimal. |
 | `true_shooting_percentage` | numeric | True shooting percentage (accounts for threes and free throws), as a decimal. |
 | `usage_percentage` | numeric | Percentage of team plays used by the player while on the floor, as a decimal. |
 | `estimated_usage_percentage` | numeric | Estimated percentage of team plays used by the player while on the floor, as a decimal. |
 | `estimated_pace` | numeric | Estimated pace (possessions per 48 minutes) from the stats API's estimated-metrics family. |
-| `pace` | numeric | Possessions per 48 minutes. |
+| `pace` | numeric |  |
 | `pace_per40` | numeric | Pace normalized to possessions per 40 minutes. |
-| `possessions` | numeric | Possessions used. |
-| `pie` | numeric | Player Impact Estimate (0-1). |
+| `possessions` | numeric |  |
+| `pie` | numeric |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -260,16 +260,16 @@ GET /stats/boxscorefourfactorsv2
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `nickname` | character | Team or athlete nickname. |
+| `game_id` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_city` | character |  |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `nickname` | character |  |
 | `start_position` | character | Position the player started the game at ('F', 'C', or 'G'); empty for bench players. |
-| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
-| `min` | character | Minutes played. |
+| `comment` | character |  |
+| `min` | character |  |
 | `efg_pct` | numeric | Effective field goal percentage: (FGM + 0.5 * FG3M) / FGA. |
 | `fta_rate` | numeric | Free throw attempt rate: free throw attempts per field goal attempt. |
 | `tm_tov_pct` | numeric | Turnovers committed per 100 possessions. |
@@ -283,12 +283,12 @@ GET /stats/boxscorefourfactorsv2
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `team_id` | integer | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `min` | character | Minutes played. |
+| `game_id` | character |  |
+| `team_id` | integer |  |
+| `team_name` | character |  |
+| `team_abbreviation` | character |  |
+| `team_city` | character |  |
+| `min` | character |  |
 | `efg_pct` | numeric | Effective field goal percentage: (FGM + 0.5 * FG3M) / FGA. |
 | `fta_rate` | numeric | Free throw attempt rate: free throw attempts per field goal attempt. |
 | `tm_tov_pct` | numeric | Turnovers committed per 100 possessions. |
@@ -341,22 +341,22 @@ GET /stats/boxscorefourfactorsv3
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique 10-character game identifier from the league's stats API. |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `away_team_id` | integer |  |
+| `home_team_id` | integer |  |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
 | `team_tricode` | character | Three-letter team abbreviation. |
 | `team_slug` | character | URL-friendly slug for the team name. |
 | `person_id` | integer | Player identifier from the league's stats API. |
-| `first_name` | character | Player's first name. |
+| `first_name` | character |  |
 | `family_name` | character | Player's family (last) name. |
 | `name_i` | character | Abbreviated player name (first initial and last name). |
 | `player_slug` | character | URL-friendly slug for the player's name. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `position` | character |  |
+| `comment` | character |  |
 | `jersey_num` | character | Player's jersey number. |
-| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `minutes` | character |  |
 | `effective_field_goal_percentage` | numeric | Effective field goal percentage four-factor, as a decimal. |
 | `free_throw_attempt_rate` | numeric | Free throw attempts per field goal attempt (free throw rate four-factor). |
 | `team_turnover_percentage` | numeric | Turnovers committed per 100 possessions (turnover four-factor). |
@@ -371,14 +371,14 @@ GET /stats/boxscorefourfactorsv3
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique 10-character game identifier from the league's stats API. |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `away_team_id` | integer |  |
+| `home_team_id` | integer |  |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
 | `team_tricode` | character | Three-letter team abbreviation. |
 | `team_slug` | character | URL-friendly slug for the team name. |
-| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `minutes` | character |  |
 | `effective_field_goal_percentage` | numeric | Effective field goal percentage four-factor, as a decimal. |
 | `free_throw_attempt_rate` | numeric | Free throw attempts per field goal attempt (free throw rate four-factor). |
 | `team_turnover_percentage` | numeric | Turnovers committed per 100 possessions (turnover four-factor). |
@@ -426,27 +426,27 @@ GET /stats/boxscorehustlev2
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique 10-character game identifier from the league's stats API. |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `away_team_id` | integer |  |
+| `home_team_id` | integer |  |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
 | `team_tricode` | character | Three-letter team abbreviation. |
 | `team_slug` | character | URL-friendly slug for the team name. |
 | `person_id` | integer | Player identifier from the league's stats API. |
-| `first_name` | character | Player's first name. |
+| `first_name` | character |  |
 | `family_name` | character | Player's family (last) name. |
 | `name_i` | character | Abbreviated player name (first initial and last name). |
 | `player_slug` | character | URL-friendly slug for the player's name. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `position` | character |  |
+| `comment` | character |  |
 | `jersey_num` | character | Player's jersey number. |
-| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
-| `points` | integer | Points scored. |
+| `minutes` | character |  |
+| `points` | integer |  |
 | `contested_shots` | integer | Opponent shot attempts contested in the game. |
 | `contested_shots2pt` | integer | Opponent two-point attempts contested. |
 | `contested_shots3pt` | integer | Opponent three-point attempts contested. |
-| `deflections` | integer | Defensive deflections. |
+| `deflections` | integer |  |
 | `charges_drawn` | integer | Offensive charges drawn. |
 | `screen_assists` | integer | Screens that led directly to a teammate's made field goal (screen assists). |
 | `screen_assist_points` | integer | Points teammates scored directly off the player's screen assists. |
@@ -464,19 +464,19 @@ GET /stats/boxscorehustlev2
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique 10-character game identifier from the league's stats API. |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `away_team_id` | integer |  |
+| `home_team_id` | integer |  |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
 | `team_tricode` | character | Three-letter team abbreviation. |
 | `team_slug` | character | URL-friendly slug for the team name. |
-| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
-| `points` | integer | Points scored. |
+| `minutes` | character |  |
+| `points` | integer |  |
 | `contested_shots` | integer | Opponent shot attempts contested in the game. |
 | `contested_shots2pt` | integer | Opponent two-point attempts contested. |
 | `contested_shots3pt` | integer | Opponent three-point attempts contested. |
-| `deflections` | integer | Defensive deflections. |
+| `deflections` | integer |  |
 | `charges_drawn` | integer | Offensive charges drawn. |
 | `screen_assists` | integer | Screens that led directly to a teammate's made field goal (screen assists). |
 | `screen_assist_points` | integer | Points teammates scored directly off the player's screen assists. |
@@ -527,11 +527,11 @@ GET /stats/boxscorematchupsv3
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique stats.nba.com game identifier in endpoints that use compact schedule field names. |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `away_team_id` | integer |  |
+| `home_team_id` | integer |  |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
 | `team_tricode` | character | Three-letter team code used by NBA or WNBA Stats schedule and scoreboard feeds. |
 | `team_slug` | character | URL slug for teamslug used by NBA or WNBA Stats pages. |
 
@@ -577,16 +577,16 @@ GET /stats/boxscoremiscv2
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `nickname` | character | Team or athlete nickname. |
+| `game_id` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_city` | character |  |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `nickname` | character |  |
 | `start_position` | character | Position the player started the game at ('F', 'C', or 'G'); empty for bench players. |
-| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
-| `min` | character | Minutes played. |
+| `comment` | character |  |
+| `min` | character |  |
 | `pts_off_tov` | integer | Points scored following opponent turnovers. |
 | `pts_2_nd_chance` | integer | Second-chance points scored after offensive rebounds. |
 | `pts_fb` | integer | Fast-break points scored. |
@@ -595,21 +595,21 @@ GET /stats/boxscoremiscv2
 | `opp_pts_2_nd_chance` | numeric | Opponent second-chance points scored while on the floor. |
 | `opp_pts_fb` | numeric | Opponent fast-break points scored while on the floor. |
 | `opp_pts_paint` | numeric | Opponent points in the paint scored while on the floor. |
-| `blk` | integer | Blocks. |
+| `blk` | integer |  |
 | `blka` | integer | Number of own field goal attempts that were blocked by opponents. |
-| `pf` | integer | Personal fouls. |
+| `pf` | integer |  |
 | `pfd` | integer | Personal fouls drawn. |
 
 **sqlTeamsMisc**
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `team_id` | integer | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `min` | character | Minutes played. |
+| `game_id` | character |  |
+| `team_id` | integer |  |
+| `team_name` | character |  |
+| `team_abbreviation` | character |  |
+| `team_city` | character |  |
+| `min` | character |  |
 | `pts_off_tov` | numeric | Points scored following opponent turnovers. |
 | `pts_2_nd_chance` | numeric | Second-chance points scored after offensive rebounds. |
 | `pts_fb` | numeric | Fast-break points scored. |
@@ -618,9 +618,9 @@ GET /stats/boxscoremiscv2
 | `opp_pts_2_nd_chance` | numeric | Opponent second-chance points scored while on the floor. |
 | `opp_pts_fb` | numeric | Opponent fast-break points scored while on the floor. |
 | `opp_pts_paint` | numeric | Opponent points in the paint scored while on the floor. |
-| `blk` | integer | Blocks. |
+| `blk` | integer |  |
 | `blka` | integer | Number of own field goal attempts that were blocked by opponents. |
-| `pf` | integer | Personal fouls. |
+| `pf` | integer |  |
 | `pfd` | integer | Personal fouls drawn. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -666,22 +666,22 @@ GET /stats/boxscoremiscv3
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique 10-character game identifier from the league's stats API. |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `away_team_id` | integer |  |
+| `home_team_id` | integer |  |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
 | `team_tricode` | character | Three-letter team abbreviation. |
 | `team_slug` | character | URL-friendly slug for the team name. |
 | `person_id` | integer | Player identifier from the league's stats API. |
-| `first_name` | character | Player's first name. |
+| `first_name` | character |  |
 | `family_name` | character | Player's family (last) name. |
 | `name_i` | character | Abbreviated player name (first initial and last name). |
 | `player_slug` | character | URL-friendly slug for the player's name. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `position` | character |  |
+| `comment` | character |  |
 | `jersey_num` | character | Player's jersey number. |
-| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `minutes` | character |  |
 | `points_off_turnovers` | integer | Points scored off opponent turnovers. |
 | `points_second_chance` | integer | Second-chance points scored after offensive rebounds. |
 | `points_fast_break` | integer | Fast-break points scored. |
@@ -690,7 +690,7 @@ GET /stats/boxscoremiscv3
 | `opp_points_second_chance` | integer | Opponent second-chance points scored while on the floor. |
 | `opp_points_fast_break` | integer | Opponent fast-break points scored while on the floor. |
 | `opp_points_paint` | integer | Opponent points in the paint scored while on the floor. |
-| `blocks` | integer | Total blocks. |
+| `blocks` | integer |  |
 | `blocks_against` | integer | Player's shot attempts that were blocked by opponents. |
 | `fouls_personal` | integer | Personal fouls committed. |
 | `fouls_drawn` | integer | Personal fouls drawn. |
@@ -700,14 +700,14 @@ GET /stats/boxscoremiscv3
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique 10-character game identifier from the league's stats API. |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `away_team_id` | integer |  |
+| `home_team_id` | integer |  |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
 | `team_tricode` | character | Three-letter team abbreviation. |
 | `team_slug` | character | URL-friendly slug for the team name. |
-| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `minutes` | character |  |
 | `points_off_turnovers` | integer | Points scored off opponent turnovers. |
 | `points_second_chance` | integer | Second-chance points scored after offensive rebounds. |
 | `points_fast_break` | integer | Fast-break points scored. |
@@ -716,7 +716,7 @@ GET /stats/boxscoremiscv3
 | `opp_points_second_chance` | integer | Opponent second-chance points scored while on the floor. |
 | `opp_points_fast_break` | integer | Opponent fast-break points scored while on the floor. |
 | `opp_points_paint` | integer | Opponent points in the paint scored while on the floor. |
-| `blocks` | integer | Total blocks. |
+| `blocks` | integer |  |
 | `blocks_against` | integer | Player's shot attempts that were blocked by opponents. |
 | `fouls_personal` | integer | Personal fouls committed. |
 | `fouls_drawn` | integer | Personal fouls drawn. |
@@ -759,32 +759,32 @@ GET /stats/boxscoreplayertrackv3
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique stats.nba.com game identifier in endpoints that use compact schedule field names. |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `away_team_id` | integer |  |
+| `home_team_id` | integer |  |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
 | `team_tricode` | character | Three-letter team code used by NBA or WNBA Stats schedule and scoreboard feeds. |
 | `team_slug` | character | URL slug for teamslug used by NBA or WNBA Stats pages. |
 | `person_id` | integer | Stats API identifier for personid associated with this NBA or WNBA Stats row. |
-| `first_name` | character | Player's first name. |
+| `first_name` | character |  |
 | `family_name` | character | Display name for familyname associated with this NBA or WNBA Stats row. |
 | `name_i` | character | NBA or WNBA Stats value for namei in the boxscoreplayertrackv3 result set. |
 | `player_slug` | character | URL slug for playerslug used by NBA or WNBA Stats pages. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `position` | character |  |
+| `comment` | character |  |
 | `jersey_num` | character | NBA or WNBA Stats value for jerseynum in the boxscoreplayertrackv3 result set. |
-| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
-| `speed` | numeric | Speed. |
-| `distance` | numeric | Distance value (in feet for shot data; otherwise context-dependent). |
+| `minutes` | character |  |
+| `speed` | numeric |  |
+| `distance` | numeric |  |
 | `rebound_chances_offensive` | integer | Rebounding metric for reboundchancesoffensive in the requested NBA or WNBA Stats split. |
 | `rebound_chances_defensive` | integer | Rebounding metric for reboundchancesdefensive in the requested NBA or WNBA Stats split. |
 | `rebound_chances_total` | integer | Rebounding metric for reboundchancestotal in the requested NBA or WNBA Stats split. |
-| `touches` | integer | Touches. |
+| `touches` | integer |  |
 | `secondary_assists` | integer | Passing or assist metric for secondaryassists in the requested NBA or WNBA Stats split. |
 | `free_throw_assists` | integer | Shooting metric for freethrowassists in the requested NBA or WNBA Stats split. |
-| `passes` | integer | Passes. |
-| `assists` | integer | Total assists. |
+| `passes` | integer |  |
+| `assists` | integer |  |
 | `contested_field_goals_made` | integer | Shooting metric for contestedfieldgoalsmade in the requested NBA or WNBA Stats split. |
 | `contested_field_goals_attempted` | integer | Shooting metric for contestedfieldgoalsattempted in the requested NBA or WNBA Stats split. |
 | `contested_field_goal_percentage` | numeric | Percentage or rate for contestedfieldgoalpercentage in the requested NBA or WNBA Stats split. |
@@ -801,23 +801,23 @@ GET /stats/boxscoreplayertrackv3
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique stats.nba.com game identifier in endpoints that use compact schedule field names. |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `away_team_id` | integer |  |
+| `home_team_id` | integer |  |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
 | `team_tricode` | character | Three-letter team code used by NBA or WNBA Stats schedule and scoreboard feeds. |
 | `team_slug` | character | URL slug for teamslug used by NBA or WNBA Stats pages. |
-| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
-| `distance` | numeric | Distance value (in feet for shot data; otherwise context-dependent). |
+| `minutes` | character |  |
+| `distance` | numeric |  |
 | `rebound_chances_offensive` | integer | Rebounding metric for reboundchancesoffensive in the requested NBA or WNBA Stats split. |
 | `rebound_chances_defensive` | integer | Rebounding metric for reboundchancesdefensive in the requested NBA or WNBA Stats split. |
 | `rebound_chances_total` | integer | Rebounding metric for reboundchancestotal in the requested NBA or WNBA Stats split. |
-| `touches` | integer | Touches. |
+| `touches` | integer |  |
 | `secondary_assists` | integer | Passing or assist metric for secondaryassists in the requested NBA or WNBA Stats split. |
 | `free_throw_assists` | integer | Shooting metric for freethrowassists in the requested NBA or WNBA Stats split. |
-| `passes` | integer | Passes. |
-| `assists` | integer | Total assists. |
+| `passes` | integer |  |
+| `assists` | integer |  |
 | `contested_field_goals_made` | integer | Shooting metric for contestedfieldgoalsmade in the requested NBA or WNBA Stats split. |
 | `contested_field_goals_attempted` | integer | Shooting metric for contestedfieldgoalsattempted in the requested NBA or WNBA Stats split. |
 | `contested_field_goal_percentage` | numeric | Percentage or rate for contestedfieldgoalpercentage in the requested NBA or WNBA Stats split. |
@@ -871,16 +871,16 @@ GET /stats/boxscorescoringv2
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `nickname` | character | Team or athlete nickname. |
+| `game_id` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_city` | character |  |
+| `player_id` | integer |  |
+| `player_name` | character |  |
+| `nickname` | character |  |
 | `start_position` | character | Position the player started the game at ('F', 'C', or 'G'); empty for bench players. |
-| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
-| `min` | character | Minutes played. |
+| `comment` | character |  |
+| `min` | character |  |
 | `pct_fga_2_pt` | numeric | Share of field goal attempts taken as two-pointers. |
 | `pct_fga_3_pt` | numeric | Share of field goal attempts taken as three-pointers. |
 | `pct_pts_2_pt` | numeric | Share of points scored on two-point field goals. |
@@ -901,12 +901,12 @@ GET /stats/boxscorescoringv2
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `team_id` | integer | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `min` | character | Minutes played. |
+| `game_id` | character |  |
+| `team_id` | integer |  |
+| `team_name` | character |  |
+| `team_abbreviation` | character |  |
+| `team_city` | character |  |
+| `min` | character |  |
 | `pct_fga_2_pt` | numeric | Share of field goal attempts taken as two-pointers. |
 | `pct_fga_3_pt` | numeric | Share of field goal attempts taken as three-pointers. |
 | `pct_pts_2_pt` | numeric | Share of points scored on two-point field goals. |
@@ -966,22 +966,22 @@ GET /stats/boxscorescoringv3
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique 10-character game identifier from the league's stats API. |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `away_team_id` | integer |  |
+| `home_team_id` | integer |  |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
 | `team_tricode` | character | Three-letter team abbreviation. |
 | `team_slug` | character | URL-friendly slug for the team name. |
 | `person_id` | integer | Player identifier from the league's stats API. |
-| `first_name` | character | Player's first name. |
+| `first_name` | character |  |
 | `family_name` | character | Player's family (last) name. |
 | `name_i` | character | Abbreviated player name (first initial and last name). |
 | `player_slug` | character | URL-friendly slug for the player's name. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `position` | character |  |
+| `comment` | character |  |
 | `jersey_num` | character | Player's jersey number. |
-| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `minutes` | character |  |
 | `percentage_field_goals_attempted2pt` | numeric | Share of field goal attempts taken as two-pointers, as a decimal. |
 | `percentage_field_goals_attempted3pt` | numeric | Share of field goal attempts taken as three-pointers, as a decimal. |
 | `percentage_points2pt` | numeric | Share of points scored on two-pointers, as a decimal. |
@@ -1003,14 +1003,14 @@ GET /stats/boxscorescoringv3
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique 10-character game identifier from the league's stats API. |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `away_team_id` | integer |  |
+| `home_team_id` | integer |  |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
 | `team_tricode` | character | Three-letter team abbreviation. |
 | `team_slug` | character | URL-friendly slug for the team name. |
-| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `minutes` | character |  |
 | `percentage_field_goals_attempted2pt` | numeric | Share of field goal attempts taken as two-pointers, as a decimal. |
 | `percentage_field_goals_attempted3pt` | numeric | Share of field goal attempts taken as three-pointers, as a decimal. |
 | `percentage_points2pt` | numeric | Share of points scored on two-pointers, as a decimal. |
@@ -1042,4 +1042,175 @@ GET /stats/boxscorescoringv3
 
 ```python
 nbagl_stats_boxscorescoringv3()
+```
+
+## nbagl_stats_boxscoresummaryv2
+
+GET /stats/boxscoresummaryv2
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/boxscoresummaryv2`
+
+**Valid URL:** [https://stats.nba.com/stats/boxscoresummaryv2?GameID=2022500137](https://stats.nba.com/stats/boxscoresummaryv2?GameID=2022500137)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `GameID` | `game_id` |  |  | `Y` |  |
+
+### Returns {#nbagl_stats_boxscoresummaryv2-returns}
+
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameSummary`, `OtherStats`, `Officials`, `InactivePlayers`, `GameInfo`, `LineScore`, `LastMeeting`, `SeasonSeries`, `AvailableVideo`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
+**GameSummary**
+
+| col_name | type | description |
+|---|---|---|
+| `game_date_est` | character |  |
+| `game_sequence` | integer |  |
+| `game_id` | character |  |
+| `game_status_id` | integer |  |
+| `game_status_text` | character |  |
+| `gamecode` | character |  |
+| `home_team_id` | integer |  |
+| `visitor_team_id` | integer |  |
+| `season` | character |  |
+| `live_period` | integer |  |
+| `live_pc_time` | character |  |
+| `natl_tv_broadcaster_abbreviation` | character |  |
+| `live_period_time_bcast` | character |  |
+| `wh_status` | integer |  |
+
+**OtherStats**
+
+| col_name | type | description |
+|---|---|---|
+| `league_id` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_city` | character |  |
+| `pts_paint` | integer | Points scored in the paint. |
+| `pts_2_nd_chance` | integer |  |
+| `pts_fb` | integer |  |
+| `largest_lead` | integer |  |
+| `lead_changes` | integer |  |
+| `times_tied` | integer |  |
+| `team_turnovers` | integer |  |
+| `total_turnovers` | integer |  |
+| `team_rebounds` | integer | Team rebounds (rebounds credited to the team rather than a player). |
+| `pts_off_to` | integer |  |
+
+**Officials**
+
+| col_name | type | description |
+|---|---|---|
+| `official_id` | integer |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `jersey_num` | character |  |
+
+**InactivePlayers**
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `jersey_num` | character |  |
+| `team_id` | integer |  |
+| `team_city` | character |  |
+| `team_name` | character |  |
+| `team_abbreviation` | character |  |
+
+**GameInfo**
+
+| col_name | type | description |
+|---|---|---|
+| `game_date` | character |  |
+| `attendance` | integer |  |
+| `game_time` | character |  |
+
+**LineScore**
+
+| col_name | type | description |
+|---|---|---|
+| `game_date_est` | character |  |
+| `game_sequence` | integer |  |
+| `game_id` | character |  |
+| `team_id` | integer |  |
+| `team_abbreviation` | character |  |
+| `team_city_name` | character |  |
+| `team_nickname` | character |  |
+| `team_wins_losses` | character |  |
+| `pts_qtr1` | integer |  |
+| `pts_qtr2` | integer |  |
+| `pts_qtr3` | integer |  |
+| `pts_qtr4` | integer |  |
+| `pts_ot1` | integer |  |
+| `pts_ot2` | integer | Scoring or score-margin metric for points ot2 in the requested NBA or WNBA Stats split. |
+| `pts_ot3` | integer | Scoring or score-margin metric for points ot3 in the requested NBA or WNBA Stats split. |
+| `pts_ot4` | integer | Scoring or score-margin metric for points ot4 in the requested NBA or WNBA Stats split. |
+| `pts_ot5` | integer | Scoring or score-margin metric for points ot5 in the requested NBA or WNBA Stats split. |
+| `pts_ot6` | integer | Scoring or score-margin metric for points ot6 in the requested NBA or WNBA Stats split. |
+| `pts_ot7` | integer | Scoring or score-margin metric for points ot7 in the requested NBA or WNBA Stats split. |
+| `pts_ot8` | integer | Scoring or score-margin metric for points ot8 in the requested NBA or WNBA Stats split. |
+| `pts_ot9` | integer | Scoring or score-margin metric for points ot9 in the requested NBA or WNBA Stats split. |
+| `pts_ot10` | integer | Scoring or score-margin metric for points ot10 in the requested NBA or WNBA Stats split. |
+| `pts` | integer |  |
+
+**LastMeeting**
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character |  |
+| `last_game_id` | character |  |
+| `last_game_date_est` | character |  |
+| `last_game_home_team_id` | integer |  |
+| `last_game_home_team_city` | character |  |
+| `last_game_home_team_name` | character |  |
+| `last_game_home_team_abbreviation` | character |  |
+| `last_game_home_team_points` | integer |  |
+| `last_game_visitor_team_id` | integer |  |
+| `last_game_visitor_team_city` | character |  |
+| `last_game_visitor_team_name` | character |  |
+| `last_game_visitor_team_city1` | character |  |
+| `last_game_visitor_team_points` | integer |  |
+
+**SeasonSeries**
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character |  |
+| `home_team_id` | integer |  |
+| `visitor_team_id` | integer |  |
+| `game_date_est` | character |  |
+| `home_team_wins` | integer |  |
+| `home_team_losses` | integer |  |
+| `series_leader` | character |  |
+
+**AvailableVideo**
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character |  |
+| `video_available_flag` | integer |  |
+| `pt_available` | integer |  |
+| `pt_xyz_available` | integer |  |
+| `wh_status` | integer |  |
+| `hustle_status` | integer |  |
+| `historical_status` | integer |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nbagl_stats_boxscoresummaryv2-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+| `ImportError` | `curl_cffi` is not installed -- stats.nba.com / stats.wnba.com block plain `requests`, so the transport needs it (`pip install curl_cffi` or `sportsdataverse[all]`). |
+
+### Example {#nbagl_stats_boxscoresummaryv2-example}
+
+```python
+nbagl_stats_boxscoresummaryv2()
 ```
