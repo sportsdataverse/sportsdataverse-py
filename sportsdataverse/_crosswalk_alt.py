@@ -187,7 +187,8 @@ def _yahoo_game(payload: Any, season: int) -> tuple:
 
 def _fox_player_name(link: Mapping[str, Any]) -> Optional[str]:
     alt = _text(link.get("imageAltText"))
-    if alt and alt.lower() != "default headshot":
+    # College rows without a headshot carry the team logo, whose alt text is the team's name.
+    if alt and alt.lower() != "default headshot" and link.get("imageType") != "image-logo":
         return alt
     title = _text(link.get("title"))  # upper case, e.g. "TRACY MCGRADY"
     return title.title() if title else None
