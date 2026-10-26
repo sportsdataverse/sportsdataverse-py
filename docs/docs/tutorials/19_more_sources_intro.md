@@ -46,7 +46,8 @@ pip install "sportsdataverse[sdvplot]"
 import matplotlib.pyplot as plt
 import polars as pl
 
-from sportsdataverse import espn_content, f1, nbagl, thesportsdb
+from sportsdataverse import f1, nbagl
+from sportsdataverse.providers import espn_content, thesportsdb
 
 pl.Config.set_tbl_rows(10)
 pl.Config.set_fmt_str_lengths(60)
@@ -317,17 +318,17 @@ news.select("published", "headline") if news is not None and news.height else "n
 
 
     shape: (5, 2)
-    ┌──────────────────────┬───────────────────────────────────────────────────────────┐
-    │ published            ┆ headline                                                  │
-    │ ---                  ┆ ---                                                       │
-    │ str                  ┆ str                                                       │
-    ╞══════════════════════╪═══════════════════════════════════════════════════════════╡
-    │ 2026-10-26T06:03:48Z ┆ Sacramento faces San Antonio on 3-game slide              │
-    │ 2026-10-26T06:03:46Z ┆ Cleveland and Minnesota meet in non-conference showdown   │
-    │ 2026-10-26T06:03:45Z ┆ Grizzlies play the Jazz, aim for 4th straight win         │
-    │ 2026-10-26T06:02:59Z ┆ Detroit plays New York on 3-game win streak               │
-    │ 2026-10-26T06:02:58Z ┆ Phoenix visits Oklahoma City after Booker's 43-point game │
-    └──────────────────────┴───────────────────────────────────────────────────────────┘
+    ┌──────────────────────┬───────────────────────────────────────────────────────────────┐
+    │ published            ┆ headline                                                      │
+    │ ---                  ┆ ---                                                           │
+    │ str                  ┆ str                                                           │
+    ╞══════════════════════╪═══════════════════════════════════════════════════════════════╡
+    │ 2026-10-26T19:09:01Z ┆ Magic's Jalen Suggs out at least 2 weeks with knee injury     │
+    │ 2026-10-26T18:14:09Z ┆ Dream, Valkyries to play Game 6, WNBA Finals at State Farm a… │
+    │ 2026-10-26T17:38:26Z ┆ Monday's fantasy basketball adds and bets to make in the NBA  │
+    │ 2026-10-26T16:37:08Z ┆ Fantasy risers and fallers: Time to trade away Ty Jerome, dr… │
+    │ 2026-10-26T16:36:05Z ┆ U.S. senators call on NBA to reevaluate Rwanda partnership    │
+    └──────────────────────┴───────────────────────────────────────────────────────────────┘
 
 
 

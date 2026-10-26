@@ -951,16 +951,14 @@ else:
 
 
     ✅ xfl teams
-
-
     ✅ cfl teams
 
 
     ✅ college_baseball teams
     ✅ college_softball teams
+
+
     ✅ mch teams
-
-
     ✅ wch teams
     Total teams across all 7 leagues: 1067
 

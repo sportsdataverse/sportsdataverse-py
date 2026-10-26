@@ -359,7 +359,7 @@ else:
 out
 ```
 
-    ✅ player boxscore release — 995 rows
+    ✅ player boxscore release — 1191 rows
 
 
 
@@ -401,7 +401,7 @@ else:
 out
 ```
 
-    ✅ team boxscore release — 72 rows
+    ✅ team boxscore release — 86 rows
 
 
 
@@ -413,15 +413,15 @@ out
     │ ---               ┆ --- ┆ ---     ┆ ---     ┆ ---  │
     │ str               ┆ u32 ┆ f64     ┆ f64     ┆ f64  │
     ╞═══════════════════╪═════╪═════════╪═════════╪══════╡
-    │ TOR               ┆ 2   ┆ 123.5   ┆ 97.0    ┆ 26.5 │
     │ POR               ┆ 2   ┆ 126.0   ┆ 101.5   ┆ 24.5 │
-    │ MIN               ┆ 2   ┆ 123.0   ┆ 99.5    ┆ 23.5 │
+    │ MIN               ┆ 3   ┆ 121.0   ┆ 97.7    ┆ 23.3 │
     │ ATL               ┆ 3   ┆ 124.7   ┆ 109.0   ┆ 15.7 │
+    │ LAL               ┆ 3   ┆ 128.0   ┆ 115.0   ┆ 13.0 │
     │ …                 ┆ …   ┆ …       ┆ …       ┆ …    │
-    │ OKC               ┆ 2   ┆ 106.0   ┆ 94.0    ┆ 12.0 │
-    │ MEM               ┆ 2   ┆ 117.0   ┆ 105.5   ┆ 11.5 │
+    │ OKC               ┆ 3   ┆ 106.7   ┆ 96.3    ┆ 10.4 │
+    │ TOR               ┆ 3   ┆ 113.7   ┆ 103.7   ┆ 10.0 │
     │ HOU               ┆ 3   ┆ 121.0   ┆ 111.3   ┆ 9.7  │
-    │ LAC               ┆ 2   ┆ 119.0   ┆ 110.5   ┆ 8.5  │
+    │ IND               ┆ 3   ┆ 121.3   ┆ 116.7   ┆ 4.6  │
     └───────────────────┴─────┴─────────┴─────────┴──────┘
 
 
@@ -459,15 +459,15 @@ out
     │ ---               ┆ ---  ┆ --- ┆ ---          │
     │ str               ┆ i32  ┆ i32 ┆ f64          │
     ╞═══════════════════╪══════╪═════╪══════════════╡
-    │ DET               ┆ 33   ┆ 78  ┆ 42.3         │
+    │ MIN               ┆ 50   ┆ 118 ┆ 42.4         │
+    │ LAL               ┆ 45   ┆ 107 ┆ 42.1         │
+    │ DET               ┆ 47   ┆ 112 ┆ 42.0         │
     │ HOU               ┆ 40   ┆ 96  ┆ 41.7         │
-    │ LAL               ┆ 25   ┆ 60  ┆ 41.7         │
-    │ LAC               ┆ 30   ┆ 72  ┆ 41.7         │
     │ …                 ┆ …    ┆ …   ┆ …            │
-    │ BOS               ┆ 32   ┆ 81  ┆ 39.5         │
-    │ MEM               ┆ 28   ┆ 73  ┆ 38.4         │
+    │ MEM               ┆ 43   ┆ 113 ┆ 38.1         │
+    │ BKN               ┆ 45   ┆ 119 ┆ 37.8         │
     │ MIL               ┆ 45   ┆ 121 ┆ 37.2         │
-    │ NY                ┆ 27   ┆ 73  ┆ 37.0         │
+    │ DAL               ┆ 36   ┆ 100 ┆ 36.0         │
     └───────────────────┴──────┴─────┴──────────────┘
 
 
@@ -501,7 +501,7 @@ else:
 out
 ```
 
-    ✅ player boxscore release — 995 rows
+    ✅ player boxscore release — 1191 rows
 
 
 
@@ -513,15 +513,15 @@ out
     │ ---                  ┆ ---               ┆ ---            │
     │ str                  ┆ str               ┆ u32            │
     ╞══════════════════════╪═══════════════════╪════════════════╡
+    │ Karl-Anthony Towns   ┆ NY                ┆ 3              │
+    │ Domantas Sabonis     ┆ SAC               ┆ 3              │
     │ Amen Thompson        ┆ HOU               ┆ 3              │
-    │ Trae Young           ┆ WSH               ┆ 2              │
-    │ Karl-Anthony Towns   ┆ NY                ┆ 2              │
-    │ Domantas Sabonis     ┆ SAC               ┆ 2              │
+    │ Joel Embiid          ┆ PHI               ┆ 2              │
     │ …                    ┆ …                 ┆ …              │
+    │ Keyonte George       ┆ UTAH              ┆ 2              │
     │ Victor Wembanyama    ┆ SA                ┆ 2              │
+    │ Tyrese Haliburton    ┆ IND               ┆ 2              │
     │ Davion Mitchell      ┆ MIA               ┆ 2              │
-    │ Jalen Johnson        ┆ ATL               ┆ 2              │
-    │ Paul Reed            ┆ DET               ┆ 1              │
     └──────────────────────┴───────────────────┴────────────────┘
 
 
@@ -591,7 +591,7 @@ else:
 out
 ```
 
-    ✅ shots release — 8390 rows
+    ✅ shots release — 9978 rows
 
 
 
@@ -689,10 +689,10 @@ out
     ╞═══════════════════════╪════════════════╡
     │ Dallas Mavericks      ┆ 6              │
     │ Golden State Warriors ┆ 6              │
-    │ Oklahoma City Thunder ┆ 6              │
+    │ Indiana Pacers        ┆ 6              │
     │ Philadelphia 76ers    ┆ 6              │
     │ …                     ┆ …              │
-    │ Indiana Pacers        ┆ 4              │
+    │ Oklahoma City Thunder ┆ 4              │
     │ Sacramento Kings      ┆ 4              │
     │ Chicago Bulls         ┆ 3              │
     │ Detroit Pistons       ┆ 3              │
@@ -999,21 +999,21 @@ out
 
 
     shape: (10, 5)
-    ┌───────────────────┬──────────────────────┬───────────────────────┬────────────┬────────────┐
-    │ date              ┆ home_display_name    ┆ away_display_name     ┆ home_score ┆ away_score │
-    │ ---               ┆ ---                  ┆ ---                   ┆ ---        ┆ ---        │
-    │ str               ┆ str                  ┆ str                   ┆ i32        ┆ i32        │
-    ╞═══════════════════╪══════════════════════╪═══════════════════════╪════════════╪════════════╡
-    │ 2026-10-25T01:00Z ┆ Denver Nuggets       ┆ New Orleans Pelicans  ┆ 141        ┆ 135        │
-    │ 2026-10-23T20:00Z ┆ Milwaukee Bucks      ┆ Chicago Bulls         ┆ 125        ┆ 132        │
-    │ 2026-10-21T23:00Z ┆ Orlando Magic        ┆ Atlanta Hawks         ┆ 125        ┆ 132        │
-    │ 2026-10-25T02:00Z ┆ Phoenix Suns         ┆ Golden State Warriors ┆ 131        ┆ 122        │
-    │ …                 ┆ …                    ┆ …                     ┆ …          ┆ …          │
-    │ 2026-10-25T00:00Z ┆ Chicago Bulls        ┆ Washington Wizards    ┆ 120        ┆ 124        │
-    │ 2026-10-21T23:00Z ┆ Washington Wizards   ┆ Milwaukee Bucks       ┆ 128        ┆ 116        │
-    │ 2026-10-24T23:30Z ┆ Philadelphia 76ers   ┆ Milwaukee Bucks       ┆ 127        ┆ 116        │
-    │ 2026-10-22T00:00Z ┆ New Orleans Pelicans ┆ Indiana Pacers        ┆ 120        ┆ 123        │
-    └───────────────────┴──────────────────────┴───────────────────────┴────────────┴────────────┘
+    ┌───────────────────┬─────────────────────┬──────────────────────┬────────────┬────────────┐
+    │ date              ┆ home_display_name   ┆ away_display_name    ┆ home_score ┆ away_score │
+    │ ---               ┆ ---                 ┆ ---                  ┆ ---        ┆ ---        │
+    │ str               ┆ str                 ┆ str                  ┆ i32        ┆ i32        │
+    ╞═══════════════════╪═════════════════════╪══════════════════════╪════════════╪════════════╡
+    │ 2026-10-25T01:00Z ┆ Denver Nuggets      ┆ New Orleans Pelicans ┆ 141        ┆ 135        │
+    │ 2026-10-23T20:00Z ┆ Milwaukee Bucks     ┆ Chicago Bulls        ┆ 125        ┆ 132        │
+    │ 2026-10-21T23:00Z ┆ Orlando Magic       ┆ Atlanta Hawks        ┆ 125        ┆ 132        │
+    │ 2026-10-25T21:00Z ┆ Utah Jazz           ┆ Los Angeles Lakers   ┆ 123        ┆ 132        │
+    │ …                 ┆ …                   ┆ …                    ┆ …          ┆ …          │
+    │ 2026-10-24T23:30Z ┆ Cleveland Cavaliers ┆ Brooklyn Nets        ┆ 125        ┆ 121        │
+    │ 2026-10-25T22:00Z ┆ Brooklyn Nets       ┆ Indiana Pacers       ┆ 109        ┆ 136        │
+    │ 2026-10-25T00:00Z ┆ Chicago Bulls       ┆ Washington Wizards   ┆ 120        ┆ 124        │
+    │ 2026-10-21T23:00Z ┆ Washington Wizards  ┆ Milwaukee Bucks      ┆ 128        ┆ 116        │
+    └───────────────────┴─────────────────────┴──────────────────────┴────────────┴────────────┘
 
 
 

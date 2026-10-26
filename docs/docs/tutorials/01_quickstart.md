@@ -470,12 +470,12 @@ sb = safe("espn_mlb_scoreboard", lambda: sdv.espn_mlb_scoreboard())
     │ game_id   ┆ uid       ┆ date      ┆ name      ┆ … ┆ away_logo ┆ away_scor ┆ away_winn ┆ away_ran │
     │ ---       ┆ ---       ┆ ---       ┆ ---       ┆   ┆ ---       ┆ e         ┆ er        ┆ k        │
     │ i64       ┆ str       ┆ str       ┆ str       ┆   ┆ str       ┆ ---       ┆ ---       ┆ ---      │
-    │           ┆           ┆           ┆           ┆   ┆           ┆ str       ┆ bool      ┆ str      │
+    │           ┆           ┆           ┆           ┆   ┆           ┆ str       ┆ str       ┆ str      │
     ╞═══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪══════════╡
-    │ 401908043 ┆ s:1~l:10~ ┆ 2026-10-2 ┆ Tampa Bay ┆ … ┆ https://a ┆ 4         ┆ false     ┆ null     │
-    │           ┆ e:4019080 ┆ 5T00:00Z  ┆ Rays at   ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 43        ┆           ┆ Milwaukee ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ Br…       ┆   ┆ mlo…      ┆           ┆           ┆          │
+    │ 401908044 ┆ s:1~l:10~ ┆ 2026-10-2 ┆ Milwaukee ┆ … ┆ https://a ┆ 0         ┆ null      ┆ null     │
+    │           ┆ e:4019080 ┆ 7T00:00Z  ┆ Brewers   ┆   ┆ .espncdn. ┆           ┆           ┆          │
+    │           ┆ 44        ┆           ┆ at Tampa  ┆   ┆ com/i/tea ┆           ┆           ┆          │
+    │           ┆           ┆           ┆ Bay…      ┆   ┆ mlo…      ┆           ┆           ┆          │
     └───────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴──────────┘
 
 
@@ -593,8 +593,6 @@ for nm, lg in [("Patriots", "nfl"), ("Yankees", "mlb"), ("Bruins", "nhl"), ("Cri
 
 
     mlb  Yankees        -> New York Yankees (id=10)
-
-
     nhl  Bruins         -> Boston Bruins (id=1)
 
 
@@ -1081,21 +1079,21 @@ out
     │ Eagles       ┆                ┆                ┆            ┆                ┆               │
     │ Philadelphia ┆ Dallas Cowboys ┆ draftkings     ┆ h2h        ┆ Philadelphia   ┆ 180           │
     │ Eagles       ┆                ┆                ┆            ┆ Eagles         ┆               │
-    │ Philadelphia ┆ Dallas Cowboys ┆ betus          ┆ h2h        ┆ Dallas Cowboys ┆ -215          │
+    │ Philadelphia ┆ Dallas Cowboys ┆ betus          ┆ h2h        ┆ Dallas Cowboys ┆ -235          │
     │ Eagles       ┆                ┆                ┆            ┆                ┆               │
-    │ Philadelphia ┆ Dallas Cowboys ┆ betus          ┆ h2h        ┆ Philadelphia   ┆ 183           │
+    │ Philadelphia ┆ Dallas Cowboys ┆ betus          ┆ h2h        ┆ Philadelphia   ┆ 200           │
     │ Eagles       ┆                ┆                ┆            ┆ Eagles         ┆               │
-    │ Philadelphia ┆ Dallas Cowboys ┆ williamhill_us ┆ h2h        ┆ Dallas Cowboys ┆ -230          │
+    │ Philadelphia ┆ Dallas Cowboys ┆ williamhill_us ┆ h2h        ┆ Dallas Cowboys ┆ -218          │
     │ Eagles       ┆                ┆                ┆            ┆                ┆               │
-    │ Philadelphia ┆ Dallas Cowboys ┆ williamhill_us ┆ h2h        ┆ Philadelphia   ┆ 190           │
+    │ Philadelphia ┆ Dallas Cowboys ┆ williamhill_us ┆ h2h        ┆ Philadelphia   ┆ 182           │
     │ Eagles       ┆                ┆                ┆            ┆ Eagles         ┆               │
-    │ Philadelphia ┆ Dallas Cowboys ┆ fanduel        ┆ h2h        ┆ Dallas Cowboys ┆ -220          │
+    │ Philadelphia ┆ Dallas Cowboys ┆ fanduel        ┆ h2h        ┆ Dallas Cowboys ┆ -210          │
     │ Eagles       ┆                ┆                ┆            ┆                ┆               │
-    │ Philadelphia ┆ Dallas Cowboys ┆ fanduel        ┆ h2h        ┆ Philadelphia   ┆ 184           │
+    │ Philadelphia ┆ Dallas Cowboys ┆ fanduel        ┆ h2h        ┆ Philadelphia   ┆ 176           │
     │ Eagles       ┆                ┆                ┆            ┆ Eagles         ┆               │
-    │ Philadelphia ┆ Dallas Cowboys ┆ betonlineag    ┆ h2h        ┆ Dallas Cowboys ┆ -235          │
+    │ Philadelphia ┆ Dallas Cowboys ┆ betonlineag    ┆ h2h        ┆ Dallas Cowboys ┆ -223          │
     │ Eagles       ┆                ┆                ┆            ┆                ┆               │
-    │ Philadelphia ┆ Dallas Cowboys ┆ betonlineag    ┆ h2h        ┆ Philadelphia   ┆ 195           │
+    │ Philadelphia ┆ Dallas Cowboys ┆ betonlineag    ┆ h2h        ┆ Philadelphia   ┆ 188           │
     │ Eagles       ┆                ┆                ┆            ┆ Eagles         ┆               │
     └──────────────┴────────────────┴────────────────┴────────────┴────────────────┴───────────────┘
 
@@ -1181,7 +1179,7 @@ that names and resolves every published metric (`sportsdataverse.registry`).
 
 
 ```python
-from sportsdataverse import metric_curves, rolling_windows
+from sportsdataverse.analytics import metric_curves, rolling_windows
 import sportsdataverse.registry as registry
 
 print("rolling_windows:", [n for n in dir(rolling_windows) if not n.startswith("_")][:6])
@@ -1190,6 +1188,6 @@ print("registry:       ", [n for n in dir(registry) if not n.startswith("_")][:6
 
 ```
 
-    rolling_windows: []
-    metric_curves:   []
+    rolling_windows: ['COUNTED_SEASON_TYPES', 'EVENT_SCHEMA', 'FOOTBALL_PBP_COLUMNS', 'OUTPUT_SCHEMA', 'SHOT_COLUMNS', 'WINDOWS']
+    metric_curves:   ['ATTEMPT_SCHEMA', 'BUCKET_EDGES', 'FOOTBALL_ATTEMPT_COLUMNS', 'ID_SOURCE', 'NFLFASTR_ATTEMPT_COLUMNS', 'OUTPUT_SCHEMA']
     registry:        ['Any', 'FAMILIES', 'FORMATS', 'KEYS', 'Literal', 'PATH']

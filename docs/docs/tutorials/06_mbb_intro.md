@@ -401,8 +401,8 @@ print("player box rows:", pbox.shape)
     │ Tyler Thomas         ┆ Hofstra                 ┆ 33  ┆ 22.5 │
     │ Xavier Johnson       ┆ S Illinois              ┆ 32  ┆ 22.2 │
     │ David Jones          ┆ Memphis                 ┆ 32  ┆ 21.8 │
-    │ Tyson Acuff          ┆ E Michigan              ┆ 27  ┆ 21.7 │
     │ Dalton Knecht        ┆ Tennessee               ┆ 36  ┆ 21.7 │
+    │ Tyson Acuff          ┆ E Michigan              ┆ 27  ┆ 21.7 │
     │ Tucker DeVries       ┆ Drake                   ┆ 34  ┆ 21.6 │
     │ Jordan Sears         ┆ UT Martin               ┆ 32  ┆ 21.6 │
     └──────────────────────┴─────────────────────────┴─────┴──────┘
@@ -504,8 +504,8 @@ print("team box rows:", tbox.shape)
     │ Houston Cougars     ┆ 37  ┆ 73.5 ┆ 57.6    ┆ 15.9       │
     │ Gonzaga Bulldogs    ┆ 35  ┆ 84.5 ┆ 69.1    ┆ 15.4       │
     │ Arizona Wildcats    ┆ 36  ┆ 87.1 ┆ 72.1    ┆ 15.0       │
-    │ Saint Mary's Gaels  ┆ 34  ┆ 74.0 ┆ 59.2    ┆ 14.8       │
     │ Auburn Tigers       ┆ 35  ┆ 83.1 ┆ 68.3    ┆ 14.8       │
+    │ Saint Mary's Gaels  ┆ 34  ┆ 74.0 ┆ 59.2    ┆ 14.8       │
     │ Iowa State Cyclones ┆ 37  ┆ 75.3 ┆ 61.5    ┆ 13.8       │
     │ James Madison Dukes ┆ 36  ┆ 83.2 ┆ 69.6    ┆ 13.6       │
     │ Purdue Boilermakers ┆ 39  ┆ 82.3 ┆ 69.0    ┆ 13.3       │
@@ -551,8 +551,8 @@ Same team-box parquet, different question: sum makes and attempts across the sea
     │ Colorado Buffaloes      ┆ 254.0 ┆ 649.0 ┆ 39.1      │
     │ Northwestern Wildcats   ┆ 278.0 ┆ 713.0 ┆ 39.0      │
     │ Baylor Bears            ┆ 301.0 ┆ 773.0 ┆ 38.9      │
-    │ McNeese Cowboys         ┆ 257.0 ┆ 671.0 ┆ 38.3      │
     │ Wright State Raiders    ┆ 218.0 ┆ 569.0 ┆ 38.3      │
+    │ McNeese Cowboys         ┆ 257.0 ┆ 671.0 ┆ 38.3      │
     └─────────────────────────┴───────┴───────┴───────────┘
 
 
@@ -838,10 +838,10 @@ pbox_pd["is_dd"] = (pbox_pd[["points", "rebounds", "assists"]] >= 10).sum(axis=1
     3              DJ Burns               YSU              22
     4           Oumar Ballo              ARIZ              20
     5         Armando Bacot               UNC              19
-    6          Saint Thomas              UNCO              19
-    7         Fardaws Aimaq               CAL              19
-    8           Riley Minix              MORE              19
-    9       Yaxel Lendeborg               UAB              19
+    6         Fardaws Aimaq               CAL              19
+    7       Yaxel Lendeborg               UAB              19
+    8          Saint Thomas              UNCO              19
+    9           Riley Minix              MORE              19
 
 
 
