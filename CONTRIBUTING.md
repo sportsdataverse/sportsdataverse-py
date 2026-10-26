@@ -5,6 +5,7 @@
 - [Contributing to sportsdataverse-py](#contributing-to-sportsdataverse-py)
   - [Development setup](#development-setup)
     - [Coverage numbers](#coverage-numbers)
+    - [Worktrees](#worktrees)
   - [Python version support](#python-version-support)
   - [Code standards for new modules](#code-standards-for-new-modules)
   - [Deprecating a public API](#deprecating-a-public-api)
@@ -112,6 +113,18 @@ failed: that run still measured coverage, so the badge shows the drop rather tha
 higher number. A badge keeps its last published value only when a run produced no coverage
 report at all (it was cancelled, or failed before the suite ran); it never shows a number
 no run measured.
+
+### Worktrees
+
+Every `git worktree` needs its own venv. Run `uv sync --all-extras --dev` (or
+`uv sync --all-extras --frozen` to keep `uv.lock` untouched) inside the worktree, which creates
+`<worktree>/.venv` with the package installed editable from that worktree.
+
+Never point `UV_PROJECT_ENVIRONMENT` at another checkout's venv. `uv sync` reinstalls the
+editable `sportsdataverse` into whatever environment it is given, so a worktree synced into the
+main checkout's `.venv` repoints that checkout's import at the worktree's source, and every test
+run there silently exercises the wrong code. The same trap applies to a script run with the main
+checkout's interpreter from inside a worktree: check `sportsdataverse.__file__` when in doubt.
 
 ## Python version support
 
