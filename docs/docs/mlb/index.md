@@ -120,6 +120,11 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 - [`most_recent_mlb_season`](reference/additional/dates-and-seasons#most_recent_mlb_season)
 
 
+## See also
+
+- [sdvplot](https://github.com/sportsdataverse/sdvplot) — `surface("mlb")` draws the field in a team's colors
+- [sportypy](https://sportypy.sportsdataverse.org/) — the regulation MLB field sdvplot draws with
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):

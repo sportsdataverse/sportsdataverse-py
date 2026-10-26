@@ -156,6 +156,11 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 - [`check_box_invariants`](reference/additional/validation#check_box_invariants)
 
 
+## See also
+
+- [sdvplot](https://github.com/sportsdataverse/sdvplot) — `surface("cfb")` draws the field with a team's end zones
+- [sportypy](https://sportypy.sportsdataverse.org/) — the regulation college football field sdvplot draws with
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):

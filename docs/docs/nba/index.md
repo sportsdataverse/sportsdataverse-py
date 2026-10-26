@@ -216,6 +216,11 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_team_crosswalk`](reference/additional/ids-and-crosswalks#nba_team_crosswalk)
 
 
+## See also
+
+- [sdvplot](https://github.com/sportsdataverse/sdvplot) — `court_coords()` puts stats-API `x_legacy` / `y_legacy` shots on the court `surface("nba")` draws
+- [sportypy](https://sportypy.sportsdataverse.org/) — the regulation NBA court (and every other surface) sdvplot draws with
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):

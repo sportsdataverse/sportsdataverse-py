@@ -177,6 +177,11 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 - [`nfl_players_crosswalk`](reference/additional/ids-and-crosswalks#nfl_players_crosswalk)
 
 
+## See also
+
+- [sdvplot](https://github.com/sportsdataverse/sdvplot) — `surface("nfl")` draws the field with a team's end zones
+- [sportypy](https://sportypy.sportsdataverse.org/) — the regulation NFL field sdvplot draws with
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):
