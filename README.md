@@ -2,7 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [sportsdataverse-py <a href='https://py.sportsdataverse.org'><img src='https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/master/sdv-py-logo.png' align="right"  width="20%" min-width="100px" /></a>](#sportsdataverse-py-a-hrefhttpspysportsdataverseorgimg-srchttpsrawgithubusercontentcomsportsdataversesportsdataverse-pymastersdv-py-logopng-alignright--width20%25-min-width100px-a)
+- [sportsdataverse-py](#sportsdataverse-py)
   - [Supported leagues and data sources](#supported-leagues-and-data-sources)
   - [Polars / pandas parser layer](#polars--pandas-parser-layer)
   - [Data status](#data-status)
@@ -11,73 +11,89 @@
     - [Modern install (uv — recommended)](#modern-install-uv--recommended)
     - [Development install](#development-install)
     - [Notes](#notes)
-    - [Errors (0.1.5)](#errors-015)
+    - [Errors](#errors)
   - [Examples and tutorials](#examples-and-tutorials)
   - [Using with AI agents](#using-with-ai-agents)
   - [Companion packages](#companion-packages)
   - [Follow the SportsDataverse (@SportsDataverse) on X and star this repo](#follow-the-sportsdataverse-sportsdataverse-on-x-and-star-this-repo)
-- [**Our Authors**](#our-authors)
-  - [**Cheat sheet**](#cheat-sheet)
-  - [**Citations**](#citations)
+  - [Our authors](#our-authors)
+  - [Cheat sheet](#cheat-sheet)
+  - [Citations](#citations)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# sportsdataverse-py <a href='https://py.sportsdataverse.org'><img src='https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/master/sdv-py-logo.png' align="right"  width="20%" min-width="100px" /></a>
+# sportsdataverse-py
+
+<a href='https://py.sportsdataverse.org'><img src='https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/main/docs/static/img/sdv-py-logo.png' align="right" width="20%" min-width="100px" alt="sportsdataverse-py logo" /></a>
 <!-- badges: start -->
 
-![Lifecycle:experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg?style=for-the-badge&logo=github)
-[![PyPI](https://img.shields.io/pypi/v/sportsdataverse?label=sportsdataverse&logo=python&style=for-the-badge)](https://pypi.org/project/sportsdataverse/)<a href='https://pypi.org/project/sportsdataverse/'><img alt="PyPI - Down
-loads" src="https://img.shields.io/pypi/dm/sportsdataverse?style=for-the-badge"></a>
+![Lifecycle: beta](https://img.shields.io/badge/lifecycle-beta-blue.svg?style=for-the-badge&logo=github)
+[![PyPI](https://img.shields.io/pypi/v/sportsdataverse?label=sportsdataverse&logo=python&style=for-the-badge)](https://pypi.org/project/sportsdataverse/)<a href='https://pypi.org/project/sportsdataverse/'><img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dm/sportsdataverse?style=for-the-badge"></a>
 ![Contributors](https://img.shields.io/github/contributors/sportsdataverse/sportsdataverse-py?style=for-the-badge)
 [![tests](https://img.shields.io/github/actions/workflow/status/sportsdataverse/sportsdataverse-py/tests.yml?branch=main&event=push&label=tests&logo=github&style=for-the-badge)](https://github.com/sportsdataverse/sportsdataverse-py/actions/workflows/tests.yml?query=branch%3Amain)
 [![coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/badges/coverage.json&style=for-the-badge)](https://github.com/sportsdataverse/sportsdataverse-py/actions/workflows/quality.yml?query=branch%3Amain)
 [![coverage (all, incl. generated)](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/badges/coverage-all.json&style=for-the-badge)](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/CONTRIBUTING.md#coverage-numbers)
-[![Twitter
-Follow](https://img.shields.io/twitter/follow/sportsdataverse?color=blue&label=%40sportsdataverse&logo=twitter&style=for-the-badge)](https://twitter.com/sportsdataverse)
 
 <!-- badges: end -->
 
+[sportsdataverse-py](https://py.sportsdataverse.org) gives the community
+free, tidy, analysis-ready sports data in Python. It is the Python member
+of the **[SportsDataverse](https://www.sportsdataverse.org)** family and
+deliberately mirrors its R sisters — [hoopR](https://hoopR.sportsdataverse.org/)
+(NBA/MBB), [wehoop](https://wehoop.sportsdataverse.org/) (WNBA/WBB),
+[cfbfastR](https://cfbfastR.sportsdataverse.org/) (CFB),
+[baseballr](https://baseballr.sportsdataverse.org/) (MLB), and
+[fastRhockey](https://fastRhockey.sportsdataverse.org/) (NHL/PWHL) — so the
+function you know in R is the function you call in Python. The NFL module
+mirrors the [nflverse](https://nflverse.nflverse.com)'s
+[nflreadpy](https://github.com/nflverse/nflreadpy), and the package plays
+well with the wider [PySport](https://opensource.pysport.org) ecosystem.
+Beyond aggregation and tidying, the project also exists to make open-source
+expected-points and win-probability models reproducible and benchmarkable,
+especially for American football.
 
-See [CHANGELOG.md](https://py.sportsdataverse.org/CHANGELOG) for details.
-
-The goal of [sportsdataverse-py](https://py.sportsdataverse.org) is to provide the community with a python package for working with sports data as a companion to the [cfbfastR](https://cfbfastR.sportsdataverse.org/), [hoopR](https://hoopR.sportsdataverse.org/), and [wehoop](https://wehoop.sportsdataverse.org/) R packages. Beyond data aggregation and tidying ease, one of the multitude of services that [sportsdataverse-py](https://py.sportsdataverse.org) provides is for benchmarking open-source expected points and win probability metrics for American Football.
+> **0.2.0 is in beta.** This README and the [docs](https://py.sportsdataverse.org) describe 0.2.0, published
+> on PyPI as the pre-release `0.2.0b1`. pip skips pre-releases unless you ask, so install it with
+> `pip install --pre sportsdataverse`. Release notes: [CHANGELOG](https://py.sportsdataverse.org/CHANGELOG).
 
 ## Supported leagues and data sources
 
-| League | Module | Surfaces covered |
-|---|---|---|
-| NBA | `sportsdataverse.nba` | ESPN (Site v2 + Web v3 + Core v2) + **stats.nba.com** (`nba_stats_*`, 128 wrappers; G-League `league_id="20"` / Summer League `"15"`) + Fox Sports (Bifrost) |
-| WNBA | `sportsdataverse.wnba` | ESPN + **stats.wnba.com** (`wnba_stats_*`, 111 wrappers) |
-| MBB (NCAA M) | `sportsdataverse.mbb` | ESPN + NCAA-only (rankings, recruits) + **stats.ncaa.org** (`ncaa_mbb_*` bigballR-parity family + `mbb_ncaa_*` pbp/lineup/stint engine) + Fox Sports (Bifrost) |
-| WBB (NCAA W) | `sportsdataverse.wbb` | ESPN + NCAA-only + **stats.ncaa.org** (`ncaa_wbb_*` family) |
-| CFB | `sportsdataverse.cfb` | ESPN + NCAA + **stats.ncaa.org** (`cfb_ncaa_pbp` + box/drives/officials parsers) + football-only (QBR) + Fox Sports (Bifrost) + Yahoo Sports + **ESPN dataset loaders** (teams / rosters / unified schedules / team info) + **game analytics** (advanced box, drive summary, situational stats) |
-| NFL | `sportsdataverse.nfl` | ESPN + **NFL.com API** (`api.nfl.com` "Shield") + **nflverse loaders** (nflreadpy parity) + football-only (QBR) |
-| MLB | `sportsdataverse.mlb` | ESPN + MLB Stats API (`statsapi.mlb.com`) + Baseball Savant / Statcast (43-endpoint `mlb_statcast_*` surface) + Fox Sports (Bifrost) |
-| NHL | `sportsdataverse.nhl` | `api-web.nhle.com/v1/` (game-feed) + NHL EDGE (player tracking) + Stats REST + Records site + Fox Sports (Bifrost) |
-| PWHL | `sportsdataverse.pwhl` | HockeyTech/LeagueStat (schedule / pbp / shifts / strength-state / xG) |
-| Minor & junior hockey | `sportsdataverse.hockey.<lg>` | HockeyTech — 20 registry-driven league families (`ahl`, `echl`, `ohl`, `whl`, `qmjhl`, `ushl`, `bchl`, …), 13 callables each |
-| College hockey (M/W) | `sportsdataverse.hockey.mch` / `.wch` | ESPN |
-| College baseball & softball | `sportsdataverse.baseball` | ESPN + **stats.ncaa.org** pbp parsers + run-expectancy helpers |
-| Soccer | `sportsdataverse.soccer` | ESPN (league-parameterized wrappers) + **12 per-league families** (`espn_mls_*`, `espn_epl_*`, `espn_ucl_*`, …), 112 wrappers each |
-| Cricket | `sportsdataverse.cricket` | ESPN (league-parameterized) + bundled win-probability models |
-| UFL / XFL / CFL | `sportsdataverse.football` | ESPN |
-| Odds | `sportsdataverse.odds` | Odds & betting-lines wrappers and loaders |
+One row per sport group; each links to that sport's page on the docs site, which lists every league and
+provider. The [Getting Started table](https://py.sportsdataverse.org/docs/intro) maps every module to its sources.
 
-The big-league modules export roughly 240–680 public functions each (ESPN
-wrappers + that league's native-API wrappers + dataset loaders + parsers) —
-about 6,456 exported names package-wide. **Fox Sports** adds `fox_<league>_*`
-Bifrost wrappers (pbp / boxscore / odds / roster / stats / standings / leaders)
-for 8 leagues plus the generated `fox_api` family (33 endpoints); **Yahoo Sports**
-adds 107 multi-sport `yahoo_*` functions from the generated `yahoo_shangrila`
-family, and **CBS Sports** 82 `cbs_napi_*` wrappers; the legacy `yahoo_cfb_*` season-stats /
-scoreboard wrappers for college football. `sportsdataverse.release` ports the
-`sportsdataversedata` R release utilities (GitHub-release asset publish /
-download helpers, including a pure-Python RDS writer).
+| Sport | Leagues | Modules | Sources |
+|---|---|---|---|
+| [Football](https://py.sportsdataverse.org/docs/leagues/football) | CFB, NFL | `sportsdataverse.cfb`, `.nfl` | ESPN, **stats.ncaa.org** (`cfb_ncaa_*`), **NFL.com API** ("Shield"), **nflverse loaders** (nflreadpy parity), NFL Pro, PFF, Sleeper, On3 + 247Sports recruiting, Fox / Yahoo / CBS |
+| | UFL, XFL, CFL | `sportsdataverse.football` | ESPN |
+| [Basketball](https://py.sportsdataverse.org/docs/leagues/basketball) | NBA, WNBA, NBA G League | `sportsdataverse.nba`, `.wnba`, `.nbagl` | ESPN, **stats.nba.com** (`nba_stats_*`; `nbagl_stats_*`, 94 G League wrappers), **stats.wnba.com** (`wnba_stats_*`), Basketball-Reference, RealGM, public model datasets, Fox Sports |
+| | MBB, WBB | `sportsdataverse.mbb`, `.wbb` | ESPN, **stats.ncaa.org** (`ncaa_mbb_*` / `ncaa_wbb_*`, bigballR parity), KenPom, Bart Torvik, Her Hoop Stats, Fox Sports |
+| | NBA Summer League; NBL, FIBA, Olympics (ESPN) | `sportsdataverse.basketball.<home>` (`nbasl_<city>`, `nbl`, `fiba`, `olympics_mbk` / `_wbk`) | ESPN |
+| | EuroLeague and 24 international families (Genius Sports, Sportradar Atrium, NBL Australia, ACB, Lega Basket, B.LEAGUE, KBL, CBA, …) | `sportsdataverse.basketball.<home>` | EuroLeague API and each league's own feed |
+| [Hockey](https://py.sportsdataverse.org/docs/leagues/hockey) | NHL, PWHL | `sportsdataverse.nhl`, `.pwhl` | ESPN, NHL api-web, NHL EDGE, Stats REST, Records, Fox Sports; HockeyTech (PWHL) |
+| | 19 minor & junior leagues (AHL, ECHL, OHL, WHL, QMJHL, USHL, BCHL, …) | `sportsdataverse.hockey.<lg>` | HockeyTech |
+| | College hockey (M/W) | `sportsdataverse.hockey.mch`, `.wch` | ESPN |
+| | SIHF and 12 European leagues (DEL, ICEHL, EIHL, Metal Ligaen, ELH, Liiga, SHL, HockeyAllsvenskan, National League, Ligue Magnus, KHL, VHL) | `sportsdataverse.hockey.<lg>` (DEL is `hockey.del_`) | Each league's own feed |
+| [Baseball](https://py.sportsdataverse.org/docs/leagues/baseball) | MLB; college baseball & softball | `sportsdataverse.mlb`, `.baseball` | ESPN, **MLB Stats API**, **Baseball Savant / Statcast** (`mlb_statcast_*`), stats.ncaa.org, Fox Sports |
+| [Soccer](https://py.sportsdataverse.org/docs/leagues/soccer) | 12 leagues (EPL, LaLiga, Bundesliga, Serie A, Ligue 1, MLS, Liga MX, UCL, UEL, NWSL, WWC, WC) | `sportsdataverse.soccer` | ESPN, ASA, FotMob, UEFA, FIFA, MLS and NWSL APIs, Football-Data.co.uk, OpenLigaDB, kloppy open event data |
+| [More sports & sources](https://py.sportsdataverse.org/docs/leagues/other) | Cricket | `sportsdataverse.cricket` | ESPN + bundled win-probability models |
+| | Formula 1 | `sportsdataverse.f1` | Jolpica |
+| | Odds & prediction markets | `sportsdataverse.odds` | The Odds API, Kalshi, Polymarket |
+| | Cross-sport providers | `sportsdataverse.providers.<name>` (`cbs`, `fox`, `yahoo`, `espn_content`, `thesportsdb`) | CBS Sports, Fox Sports, Yahoo Sports, ESPN content, TheSportsDB |
+
+The big league modules export roughly 270–740 public names each (ESPN wrappers, that league's
+native-API wrappers, dataset loaders and parsers), and the flat `sportsdataverse` namespace holds
+about 9,300 public functions. **Fox Sports** adds `fox_<league>_*` Bifrost wrappers (pbp /
+boxscore / odds / roster / stats / standings / leaders) for 8 leagues plus the generated `fox_api`
+family (33 endpoints). **Yahoo Sports** adds 107 multi-sport `yahoo_*` functions from the generated
+`yahoo_shangrila` family and keeps the legacy `yahoo_cfb_*` season-stats and scoreboard wrappers
+for college football. **CBS Sports** adds 82 `cbs_napi_*` wrappers. `sportsdataverse.release` ports
+the `sportsdataversedata` R release utilities (GitHub-release asset publish / download helpers,
+including a pure-Python RDS writer).
 
 ## Polars / pandas parser layer
 
-Parser-backed wrappers return a tidy polars DataFrame **by default**
-(0.0.54+). Pass `return_parsed=False` for the raw `Dict`, or
+Parser-backed wrappers return a tidy polars DataFrame **by default**.
+Pass `return_parsed=False` for the raw `Dict`, or
 `return_as_pandas=True` for pandas. Wrappers without a registered
 parser return the raw `Dict`.
 
@@ -99,7 +115,7 @@ df = parse_nhl_web_pbp(nhl_web_pbp(2023030417))                 # 331-row polars
 ```
 
 See [py.sportsdataverse.org/docs/architecture/espn-cross-league](https://py.sportsdataverse.org/docs/architecture/espn-cross-league)
-and [py.sportsdataverse.org/docs/parsers/index](https://py.sportsdataverse.org/docs/parsers/index)
+and [py.sportsdataverse.org/docs/parsers](https://py.sportsdataverse.org/docs/parsers/)
 for the full architecture + parser registry.
 
 ## Data status
@@ -128,39 +144,44 @@ The `load_*()` functions read release assets on [sportsdataverse-data](https://g
 ## Installation
 
 The package metadata lives entirely in [`pyproject.toml`](pyproject.toml)
-(PEP 621 `[project]` table). There is no `setup.py` source-of-truth.
+(PEP 621 `[project]` table). There is no `setup.py`. sportsdataverse needs Python 3.10+
+(3.10–3.14 are supported).
 
 ### Standard install (pip)
 
+0.2.0 ships as the PyPI pre-release `0.2.0b1`, so pass `--pre`; without it pip installs the
+previous stable release (0.1.4), which this README does not describe.
+
 ```bash
-pip install sportsdataverse
+pip install --pre sportsdataverse
 ```
 
 With optional extras (defined in `[project.optional-dependencies]` in
 `pyproject.toml`):
 
 ```bash
-pip install "sportsdataverse[all]"      # everything below EXCEPT mcp
-pip install "sportsdataverse[models]"   # no-op (kept so sportsdataverse[models] installs keep working)
-pip install "sportsdataverse[tests]"    # adds pytest, mypy, ruff, etc.
-pip install "sportsdataverse[nflpro]"   # NFL Pro (pro.nfl.com) Next Gen Stats
-pip install "sportsdataverse[pff]"      # Playwright, for the optional PFF Premium (LEGACY) headless login; the PFF Developer API needs no extra
-pip install "sportsdataverse[mcp]"      # the sdv-docs MCP server (Python >= 3.10)
-pip install "sportsdataverse[soccer]"   # kloppy: soccer event / tracking data (soccer_open_events)
-pip install "sportsdataverse[sdvplot]"  # sdvplot: team logos, colors and chart themes
-pip install "sportsdataverse[sportypy]" # sportypy: draw pbp / shot coordinates on rulebook fields, rinks, courts (GPL-3.0)
+pip install --pre "sportsdataverse[all]"      # everything below EXCEPT mcp
+pip install --pre "sportsdataverse[models]"   # no-op (kept so sportsdataverse[models] installs keep working)
+pip install --pre "sportsdataverse[tests]"    # adds pytest, mypy, ruff, etc.
+pip install --pre "sportsdataverse[nflpro]"   # NFL Pro (pro.nfl.com) Next Gen Stats
+pip install --pre "sportsdataverse[pff]"      # Playwright, for the optional PFF Premium (LEGACY) headless login; the PFF Developer API needs no extra
+pip install --pre "sportsdataverse[mcp]"      # the sdv-docs MCP server
+pip install --pre "sportsdataverse[soccer]"   # kloppy: soccer event / tracking data (soccer_open_events)
+pip install --pre "sportsdataverse[sdvplot]"  # sdvplot: team logos, colors and chart themes
+pip install --pre "sportsdataverse[sportypy]" # sportypy: draw pbp / shot coordinates on rulebook fields, rinks, courts (GPL-3.0)
 ```
 
 ### Modern install (uv — recommended)
 
-[uv](https://docs.astral.sh/uv/) is the fast, drop-in package manager we use day to day.
+[uv](https://docs.astral.sh/uv/) is the fast, drop-in package manager we use day to day. A
+version specifier that names a pre-release lets uv pick the beta:
 
 ```bash
 # Add to a uv-managed project:
-uv add sportsdataverse
+uv add "sportsdataverse>=0.2.0b1"
 
 # With extras:
-uv add "sportsdataverse[all]"
+uv add "sportsdataverse[all]>=0.2.0b1"
 
 # Or install the latest dev snapshot from GitHub:
 uv add "sportsdataverse @ git+https://github.com/sportsdataverse/sportsdataverse-py"
@@ -174,16 +195,16 @@ For contributing or running the test suite:
 git clone https://github.com/sportsdataverse/sportsdataverse-py.git
 cd sportsdataverse-py
 
-# uv (recommended) — fully resolved editable install with every extra:
-uv pip install -e ".[all]"
+# uv (recommended): every extra plus the dev dependency groups, editable
+uv sync --all-extras --dev
 
-# Plain pip works too if uv isn't available:
+# Plain pip works too if uv isn't available (every extra except mcp, no dev groups):
 pip install -e ".[all]"
 ```
 
 > Note: dev dependencies (`test`, `lint`, `dev`) live in a PEP 735 `[dependency-groups]` block
 > beside the PEP 621 `[project.optional-dependencies]` extras.
-> `uv sync --all-extras --all-groups` installs both in one step, as CI does.
+> CI runs `uv sync --all-extras --all-groups`, which installs both in one step.
 
 Run the test suite:
 
@@ -197,24 +218,23 @@ For deeper dev-environment detail (lint, mypy, dep-bumping workflow), see
 
 ### Notes
 
-- **Python target:** 3.10–3.14.
 - **DataFrame engine:** polars 2.x (`polars>=2.0,<3`). Most loaders accept `return_as_pandas=True`
   if you prefer pandas.
 - **NFL caching:** loaders cache to memory by default. Set
   `SDV_PY_NFL_CACHE=filesystem` for cross-session reuse, or
   `SDV_PY_NFL_CACHE=off` to disable. See
   `sportsdataverse.nfl.config.update_config()` for runtime control.
-- **stats.nba.com / stats.wnba.com surface (`nba_stats_*` / `wnba_stats_*`):**
-  128 NBA (+ G-League + Summer League via `league_id`) and 111 WNBA wrappers
-  are available — the capture-confirmed **live, non-deprecated** endpoints (the
-  full active/dying/barren/dead matrix lives in
-  `sdv-internal-refs/nba/ENDPOINT_HEALTH.md`). The generic parser also handles the
-  family's non-uniform shapes — the shot-location endpoints' grouped (2-level)
-  headers and the `scoreboardv3` game feed. Live calls to `stats.nba.com` require
-  the `curl_cffi` package (TLS fingerprint protection); install it via
-  `pip install "sportsdataverse[all]"` or `pip install curl_cffi` separately.
+- **stats.nba.com / stats.wnba.com surface (`nba_stats_*` / `wnba_stats_*` / `nbagl_stats_*`):**
+  128 NBA (+ Summer League via `league_id`), 111 WNBA wrappers and 94 G League
+  wrappers (`sportsdataverse.nbagl.nbagl_stats`, `LeagueID=20` by default) are
+  available: the endpoints a capture sweep confirmed **live and not deprecated**.
+  The generic parser also handles the family's non-uniform shapes, such as the
+  shot-location endpoints' grouped (2-level) headers and the `scoreboardv3` game
+  feed. Live calls to `stats.nba.com` require the `curl_cffi` package (TLS
+  fingerprint protection); install it via `pip install --pre "sportsdataverse[all]"`
+  or `pip install curl_cffi` separately.
 
-### Errors (0.1.5)
+### Errors
 
 Three outcomes, never collapsed into one:
 
@@ -224,7 +244,7 @@ Three outcomes, never collapsed into one:
   exhausted retries). Surface it; do not record it as an empty season.
 - `ValueError` — a 400 / 422: the request itself is wrong and retrying cannot help.
 
-As of 0.1.5 the hand-written ESPN scrapers and every generated flat-API getter
+From 0.2.0 the hand-written ESPN scrapers and every generated flat-API getter
 **raise** instead of returning an error body or an empty dict.
 
 ## Examples and tutorials
@@ -251,7 +271,7 @@ under [`examples/notebooks/`](examples/notebooks):
 | `08_wnba_intro.ipynb` | WNBA — PBP, schedule, rosters, player stats |
 | `09_mlb_intro.ipynb` | MLB — Stats API + Statcast search / leaderboards / gamefeed |
 | `10_pwhl_intro.ipynb` | PWHL — HockeyTech schedule, PBP, shifts, xG |
-| `11_junior_hockey_intro.ipynb` | HockeyTech minor/junior leagues — one family shape across 20 leagues |
+| `11_junior_hockey_intro.ipynb` | HockeyTech minor/junior leagues — one family shape across 19 leagues |
 | `12_odds_intro.ipynb` | Odds & betting lines |
 | `13_soccer_intro.ipynb` | ESPN soccer — league-parameterized wrappers |
 | `14_cricket_intro.ipynb` | ESPN cricket + win-probability models |
@@ -268,14 +288,14 @@ under [`examples/notebooks/`](examples/notebooks):
 - **sdv-docs MCP server:** exact answers about returned columns, Python and R functions, provider API endpoints (ESPN, stats.nba.com, NHL, MLB, …) and released datasets.
 
   ```bash
-  claude mcp add sdv-docs -- uvx --from 'sportsdataverse[mcp]' sdv-docs
+  claude mcp add sdv-docs -- uvx --from 'sportsdataverse[mcp]>=0.2.0b1' sdv-docs
   ```
 
-  Needs 0.1.5 or newer (`pip install 'sportsdataverse[mcp]'`, Python >= 3.10). The
+  Needs 0.2.0b1 or newer (`pip install --pre "sportsdataverse[mcp]"`). The
   server ships in the same wheel but never imports `sportsdataverse`, so it starts
   in about 1.5 s instead of the 4-12 s a full league import costs.
 
-  Needs Python 3.10+. The server downloads its index (`sdv_docs_v1.sqlite.gz`, about 10 MB) from the [`docs-index` release](https://github.com/sportsdataverse/sportsdataverse-py/releases/tag/docs-index), checking at most once a day, and sends no queries anywhere. Set `SDV_DOCS_DB=/path/to/sdv_docs_v1.sqlite` to use a local build (`uv run python tools/codegen/build_docs_index.py`). `sdv-docs --version` prints the installed version.
+  The server downloads its index (`sdv_docs_v1.sqlite.gz`, about 10 MB) from the [`docs-index` release](https://github.com/sportsdataverse/sportsdataverse-py/releases/tag/docs-index), checking at most once a day, and sends no queries anywhere. Set `SDV_DOCS_DB=/path/to/sdv_docs_v1.sqlite` to use a local build (`uv run python tools/codegen/build_docs_index.py`). `sdv-docs --version` prints the installed version.
 
 ## Companion packages
 
@@ -287,7 +307,7 @@ sport-specific coverage:
 - [hoopR](https://hoopR.sportsdataverse.org) — men's basketball (NBA + NCAA)
 - [cfbfastR](https://cfbfastR.sportsdataverse.org) — college football
 - [baseballr](https://baseballr.sportsdataverse.org) — baseball (MLB + MiLB + NCAA)
-- [fastRhockey](https://fastRhockey.sportsdataverse.org) — hockey (NHL + WHL)
+- [fastRhockey](https://fastRhockey.sportsdataverse.org) — hockey (NHL + PWHL)
 
 For plots and simulation: [sdvplot](https://sdvplot.sportsdataverse.org) (team logos, wordmarks,
 headshots and colors for Python plots and tables) and its R and JavaScript counterparts
@@ -314,7 +334,7 @@ upstream data source for many of those loaders.
   </picture>
 </a>
 
-# **Our Authors**
+## Our authors
 
 -   [Saiem Gilani](https://twitter.com/saiemgilani)
 <a href="https://twitter.com/saiemgilani" target="blank"><img src="https://img.shields.io/twitter/follow/saiemgilani?color=blue&label=%40saiemgilani&logo=twitter&style=for-the-badge" alt="@saiemgilani" /></a>
@@ -322,7 +342,7 @@ upstream data source for many of those loaders.
 
 
 <!-- cheatsheet-section -->
-## **Cheat sheet**
+## Cheat sheet
 
 A printable six-page reference, in four layouts (24 pages in all), for **sportsdataverse (Python)** — the loaders, the wrapper
 families, and what each one returns.
@@ -332,7 +352,7 @@ families, and what each one returns.
 Browse the other SportsDataverse cheat sheets at
 **[sportsdataverse.org/cheatsheets](https://sportsdataverse.org/cheatsheets)**.
 
-## **Citations**
+## Citations
 
 To cite the [**`sportsdataverse-py`**](https://py.sportsdataverse.org) Python package in publications, use:
 
@@ -343,6 +363,6 @@ BibTeX Citation
   author = {Gilani, Saiem},
   title = {sportsdataverse-py: The SportsDataverse's Python Package for Sports Data.},
   url = {https://py.sportsdataverse.org},
-  season = {2021}
+  year = {2021}
 }
 ```
