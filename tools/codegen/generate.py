@@ -6116,7 +6116,7 @@ def build_docs() -> list[Path]:
 
 
 # Maintainer-only content that must never reach a public page: it reaches the site through docstrings,
-# endpoint-YAML notes and column descriptions, and each pattern below once did. ``dev/<...>.py`` fitting
+# endpoint-YAML notes and column descriptions, and each pattern below once did. ``tools/models/<...>.py`` fitting
 # scripts are NOT listed: model docstrings and the model-lineage page cite them as provenance.
 _INTERNAL_LEAK_PATTERNS: dict[str, re.Pattern[str]] = {
     "agent-persona comment": re.compile(r"\bponytail:"),
