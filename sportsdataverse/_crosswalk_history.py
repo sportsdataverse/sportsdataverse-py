@@ -361,6 +361,13 @@ def _yahoo_games(raw: Any) -> List[Dict[str, Any]]:
     return [g for lg in ((raw or {}).get("data") or {}).get("leagues") or [] for g in lg.get("games") or []]
 
 
+def _yahoo_answers_date(raw: Any, day: date) -> bool:
+    """A ``dates=`` listing is for ``day``: empty (the no-games branch decides) or a game within a day of it."""
+    games = _yahoo_games(raw)
+    days = [_et_date(g.get("startTime")) for g in games]
+    return not games or any(d is not None and abs((d - day).days) <= 1 for d in days)
+
+
 def yahoo_listing(store: Store, pacer: Pacer, league: str, season: int, refresh: bool) -> List[Dict[str, Any]]:
     """Every Yahoo game id of a season from ``leagueGameIdsByDate`` (``season=`` set), by week."""
     from sportsdataverse.providers.yahoo.yahoo_shangrila import yahoo_league_game_ids_by_date
@@ -397,6 +404,11 @@ def yahoo_listing(store: Store, pacer: Pacer, league: str, season: int, refresh:
                 ),
             )
             if status == "fail":
+                continue
+            if by_date and not _yahoo_answers_date(raw, lo):
+                # Yahoo ignored `dates=` (as it ignores ranges for ncaaf): storing this would file the same
+                # season page under every day, so leave the day unlisted and let the next run retry it
+                logger.warning("yahoo %s %s: listing is not for that date; not stored", slug, key)
                 continue
             if len(_yahoo_games(raw)) >= _YAHOO_ROW_CAP and hi > lo:
                 mid = lo + (hi - lo) // 2  # a capped list is truncated: split the range and refetch

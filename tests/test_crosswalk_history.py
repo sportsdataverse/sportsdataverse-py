@@ -117,8 +117,43 @@ def test_yahoo_cfb_lists_one_date_at_a_time(tmp_path: Path, monkeypatch: pytest.
     assert not any("start_range" in c or "end_range" in c for c in calls)
     assert sorted(g["date"] for g in games) == ["2024-11-29", "2024-11-30"]
     assert store.has("game_ids_by_date", 2024, "20241130")
-    # a stored range listing (the old key) is not trusted for a by-date league
-    assert not store.has("game_ids_by_date", 2024, "20241130_20241130")
+
+
+def test_yahoo_cfb_by_date_ignores_a_stored_range_listing(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """A range page stored by the old code is never read for a by-date league: both days are fetched."""
+    import sportsdataverse.providers.yahoo.yahoo_shangrila as shangrila
+
+    calls: List[str] = []
+
+    def fake(**kwargs: Any) -> Dict[str, Any]:
+        calls.append(kwargs["dates"])
+        day = kwargs["dates"]
+        game = {"gameId": f"ncaaf.g.{day.replace('-', '')}01", "startTime": f"{day}T12:00:00-05:00", "status": "FINAL"}
+        return {"data": {"leagues": [{"games": [game]}]}}
+
+    monkeypatch.setattr(shangrila, "yahoo_league_game_ids_by_date", fake)
+    monkeypatch.setattr(xh, "_sweep_dates", lambda window: [date(2024, 11, 29), date(2024, 11, 30)])
+    store = xh.Store(tmp_path, "yahoo", "cfb")
+    stale = {"gameId": "ncaaf.g.2024082401", "startTime": "2024-08-24T12:00:00-05:00", "status": "FINAL"}
+    store.put("game_ids_by_date", 2024, "20241129_20241130", {"data": {"leagues": [{"games": [stale]}]}}, gz=False)
+    xh.yahoo_listing(store, xh.Pacer("yahoo"), "cfb", 2024, refresh=False)
+    assert calls == ["2024-11-29", "2024-11-30"]
+
+
+def test_yahoo_cfb_off_date_listing_is_not_stored(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """If Yahoo ignores ``dates=`` and answers with another day's games, nothing is filed under that day."""
+    import sportsdataverse.providers.yahoo.yahoo_shangrila as shangrila
+
+    def fake(**kwargs: Any) -> Dict[str, Any]:  # always the season opener, whatever date was asked for
+        game = {"gameId": "ncaaf.g.2024082401", "startTime": "2024-08-24T12:00:00-05:00", "status": "FINAL"}
+        return {"data": {"leagues": [{"games": [game]}]}}
+
+    monkeypatch.setattr(shangrila, "yahoo_league_game_ids_by_date", fake)
+    monkeypatch.setattr(xh, "_sweep_dates", lambda window: [date(2024, 11, 30)])
+    store = xh.Store(tmp_path, "yahoo", "cfb")
+    games = xh.yahoo_listing(store, xh.Pacer("yahoo"), "cfb", 2024, refresh=False)
+    assert games == []
+    assert not store.has("game_ids_by_date", 2024, "20241130")
 
 
 def test_cbs_envelope_and_box_players() -> None:
