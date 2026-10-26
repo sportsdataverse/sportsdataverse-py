@@ -195,3 +195,27 @@ def test_fox_box_season_check_and_players() -> None:
     problem = xh._payload_problem("fox", "nba", "event_data", box, "42022", 2019, xh.season_window("nba", 2019))
     assert problem == "season-mismatch:2024-10-15"
     assert xh.box_players("fox", box) == 25
+
+
+def test_yahoo_cfb_season_page_with_the_day_is_still_rejected(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """A season page that also holds the asked-for day's games is not a listing of that day, nor is a capped one."""
+    import sportsdataverse.providers.yahoo.yahoo_shangrila as shangrila
+
+    def season_page(**kwargs: Any) -> Dict[str, Any]:
+        days = ["2024-08-31", "2024-09-07", "2024-09-14"]  # the asked-for day plus later ones
+        games = [
+            {"gameId": f"ncaaf.g.{d.replace('-', '')}01", "startTime": f"{d}T12:00:00-05:00", "status": "FINAL"}
+            for d in days
+        ]
+        return {"data": {"leagues": [{"games": games}]}}
+
+    monkeypatch.setattr(shangrila, "yahoo_league_game_ids_by_date", season_page)
+    monkeypatch.setattr(xh, "_sweep_dates", lambda window: [date(2024, 8, 31)])
+    store = xh.Store(tmp_path, "yahoo", "cfb")
+    assert xh.yahoo_listing(store, xh.Pacer("yahoo"), "cfb", 2024, refresh=False) == []
+    assert not store.has("game_ids_by_date", 2024, "20240831")
+
+    capped = {"gameId": "ncaaf.g.2024083101", "startTime": "2024-08-31T12:00:00-05:00", "status": "FINAL"}
+    assert not xh._yahoo_answers_date(
+        {"data": {"leagues": [{"games": [capped] * xh._YAHOO_ROW_CAP}]}}, date(2024, 8, 31)
+    )

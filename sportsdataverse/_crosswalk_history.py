@@ -362,10 +362,16 @@ def _yahoo_games(raw: Any) -> List[Dict[str, Any]]:
 
 
 def _yahoo_answers_date(raw: Any, day: date) -> bool:
-    """A ``dates=`` listing is for ``day``: empty (the no-games branch decides) or a game within a day of it."""
+    """A ``dates=`` listing is for ``day``: every dated game within a day of it, and under the row cap.
+
+    Empty is left to the no-games branch. One game on the day is not enough: a season page asked for an
+    early-season date holds that day's games too, so any game off the day rejects the whole answer, and a
+    cap-sized answer is truncated (a one-day chunk cannot be split further)."""
     games = _yahoo_games(raw)
-    days = [_et_date(g.get("startTime")) for g in games]
-    return not games or any(d is not None and abs((d - day).days) <= 1 for d in days)
+    if len(games) >= _YAHOO_ROW_CAP:
+        return False
+    days = [d for d in (_et_date(g.get("startTime")) for g in games) if d is not None]
+    return all(abs((d - day).days) <= 1 for d in days)
 
 
 def yahoo_listing(store: Store, pacer: Pacer, league: str, season: int, refresh: bool) -> List[Dict[str, Any]]:
