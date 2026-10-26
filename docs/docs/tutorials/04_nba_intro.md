@@ -69,6 +69,9 @@ SEASON = most_recent_nba_season()
 print('current NBA season:', SEASON)
 ```
 
+    current NBA season: 2027
+
+
 ESPN endpoints are live and seasonal, so we'll route every network call
 through a tiny `safe()` helper. When the feed is up you get the frame; when
 it's mid-offseason or briefly rate-limited you get a friendly one-liner
@@ -102,6 +105,31 @@ teams = safe('teams', sdv.nba.espn_nba_teams)
  if teams is not None else 'teams feed unavailable')
 ```
 
+    ✅ teams — 30 rows
+
+
+
+
+
+    shape: (10, 5)
+    ┌─────────┬───────────────┬───────────┬───────────────────┬────────────┐
+    │ team_id ┆ team_location ┆ team_name ┆ team_abbreviation ┆ team_color │
+    │ ---     ┆ ---           ┆ ---       ┆ ---               ┆ ---        │
+    │ i64     ┆ str           ┆ str       ┆ str               ┆ str        │
+    ╞═════════╪═══════════════╪═══════════╪═══════════════════╪════════════╡
+    │ 1       ┆ Atlanta       ┆ Hawks     ┆ ATL               ┆ c8102e     │
+    │ 2       ┆ Boston        ┆ Celtics   ┆ BOS               ┆ 008348     │
+    │ 17      ┆ Brooklyn      ┆ Nets      ┆ BKN               ┆ 000000     │
+    │ 30      ┆ Charlotte     ┆ Hornets   ┆ CHA               ┆ 008ca8     │
+    │ …       ┆ …             ┆ …         ┆ …                 ┆ …          │
+    │ 6       ┆ Dallas        ┆ Mavericks ┆ DAL               ┆ 0064b1     │
+    │ 7       ┆ Denver        ┆ Nuggets   ┆ DEN               ┆ 0e2240     │
+    │ 8       ┆ Detroit       ┆ Pistons   ┆ DET               ┆ 1d428a     │
+    │ 9       ┆ Golden State  ┆ Warriors  ┆ GS                ┆ fdb927     │
+    └─────────┴───────────────┴───────────┴───────────────────┴────────────┘
+
+
+
 ## 📅 Today on the slate (scoreboard)
 
 [`espn_nba_scoreboard`](../nba/reference/site.md#espn_nba_scoreboard) returns a
@@ -118,6 +146,24 @@ keep = ['game_id', 'short_name', 'home_abbreviation', 'away_abbreviation',
  if sb is not None and sb.height else 'no games on that date')
 ```
 
+    ✅ scoreboard — 1 rows
+
+
+
+
+
+    shape: (1, 7)
+    ┌───────────┬────────────┬───────────────┬───────────────┬────────────┬────────────┬───────────────┐
+    │ game_id   ┆ short_name ┆ home_abbrevia ┆ away_abbrevia ┆ home_score ┆ away_score ┆ status_type_d │
+    │ ---       ┆ ---        ┆ tion          ┆ tion          ┆ ---        ┆ ---        ┆ etail         │
+    │ i64       ┆ str        ┆ ---           ┆ ---           ┆ str        ┆ str        ┆ ---           │
+    │           ┆            ┆ str           ┆ str           ┆            ┆            ┆ str           │
+    ╞═══════════╪════════════╪═══════════════╪═══════════════╪════════════╪════════════╪═══════════════╡
+    │ 401656359 ┆ DAL @ BOS  ┆ BOS           ┆ DAL           ┆ 107        ┆ 89         ┆ Final         │
+    └───────────┴────────────┴───────────────┴───────────────┴────────────┴────────────┴───────────────┘
+
+
+
 ## 🏆 Standings
 
 [`espn_nba_standings`](../nba/reference/site.md#espn_nba_standings) gives one
@@ -133,6 +179,33 @@ cols = ['team_display_name', 'wins', 'losses', 'win_percent', 'games_behind',
           .sort('win_percent', descending=True).head(10)
  if standings is not None and standings.height else 'standings unavailable')
 ```
+
+    ✅ standings — 30 rows
+
+
+
+
+
+    shape: (10, 7)
+    ┌───────────────────────┬──────┬────────┬─────────────┬──────────────┬────────────────────┬────────┐
+    │ team_display_name     ┆ wins ┆ losses ┆ win_percent ┆ games_behind ┆ point_differential ┆ streak │
+    │ ---                   ┆ ---  ┆ ---    ┆ ---         ┆ ---          ┆ ---                ┆ ---    │
+    │ str                   ┆ f64  ┆ f64    ┆ f64         ┆ f64          ┆ f64                ┆ f64    │
+    ╞═══════════════════════╪══════╪════════╪═════════════╪══════════════╪════════════════════╪════════╡
+    │ Detroit Pistons       ┆ 3.0  ┆ 0.0    ┆ 1.0         ┆ 0.0          ┆ 38.0               ┆ 3.0    │
+    │ Portland Trail        ┆ 2.0  ┆ 0.0    ┆ 1.0         ┆ 0.5          ┆ 49.0               ┆ 2.0    │
+    │ Blazers               ┆      ┆        ┆             ┆              ┆                    ┆        │
+    │ Minnesota             ┆ 3.0  ┆ 0.0    ┆ 1.0         ┆ 0.0          ┆ 70.0               ┆ 3.0    │
+    │ Timberwolves          ┆      ┆        ┆             ┆              ┆                    ┆        │
+    │ Oklahoma City Thunder ┆ 3.0  ┆ 0.0    ┆ 1.0         ┆ 0.0          ┆ 31.0               ┆ 3.0    │
+    │ …                     ┆ …    ┆ …      ┆ …           ┆ …            ┆ …                  ┆ …      │
+    │ Houston Rockets       ┆ 3.0  ┆ 0.0    ┆ 1.0         ┆ 0.0          ┆ 29.0               ┆ 3.0    │
+    │ Philadelphia 76ers    ┆ 3.0  ┆ 1.0    ┆ 0.75        ┆ 0.5          ┆ 12.0               ┆ -1.0   │
+    │ Atlanta Hawks         ┆ 2.0  ┆ 1.0    ┆ 0.6666667   ┆ 1.0          ┆ 47.0               ┆ -1.0   │
+    │ Toronto Raptors       ┆ 2.0  ┆ 1.0    ┆ 0.6666667   ┆ 1.0          ┆ 30.0               ┆ -1.0   │
+    └───────────────────────┴──────┴────────┴─────────────┴──────────────┴────────────────────┴────────┘
+
+
 
 ## 🍳 Cookbook: common NBA tasks
 
@@ -159,6 +232,31 @@ cols = ['full_name', 'jersey', 'position_abbreviation', 'height', 'weight', 'age
  if roster is not None and roster.height else 'roster unavailable')
 ```
 
+    ✅ roster 2 — 17 rows
+
+
+
+
+
+    shape: (10, 6)
+    ┌──────────────────┬────────┬───────────────────────┬────────┬────────┬─────┐
+    │ full_name        ┆ jersey ┆ position_abbreviation ┆ height ┆ weight ┆ age │
+    │ ---              ┆ ---    ┆ ---                   ┆ ---    ┆ ---    ┆ --- │
+    │ str              ┆ str    ┆ str                   ┆ f64    ┆ f64    ┆ i64 │
+    ╞══════════════════╪════════╪═══════════════════════╪════════╪════════╪═════╡
+    │ Devin Carter     ┆ 99     ┆ G                     ┆ 74.0   ┆ 188.0  ┆ 24  │
+    │ Chris Cenac Jr.  ┆ 12     ┆ F                     ┆ 83.0   ┆ 240.0  ┆ 19  │
+    │ Mike Conley      ┆ 45     ┆ G                     ┆ 73.0   ┆ 175.0  ┆ 39  │
+    │ Luka Garza       ┆ 52     ┆ C                     ┆ 82.0   ┆ 243.0  ┆ 27  │
+    │ …                ┆ …      ┆ …                     ┆ …      ┆ …      ┆ …   │
+    │ Ron Harper Jr.   ┆ 8      ┆ G                     ┆ 77.0   ┆ 233.0  ┆ 26  │
+    │ Sam Hauser       ┆ 30     ┆ F                     ┆ 80.0   ┆ 221.0  ┆ 28  │
+    │ Dillon Mitchell  ┆ 20     ┆ F                     ┆ 80.0   ┆ 210.0  ┆ 23  │
+    │ Payton Pritchard ┆ 11     ┆ G                     ┆ 74.0   ┆ 211.0  ┆ 28  │
+    └──────────────────┴────────┴───────────────────────┴────────┴────────┴─────┘
+
+
+
 ### Recipe 2 — One team's season schedule 📆
 
 [`espn_nba_team_schedule`](../nba/reference/site.md#espn_nba_team_schedule)
@@ -173,6 +271,27 @@ cols = ['id', 'date', 'name', 'short_name', 'season_year']
 (tsched.select([c for c in cols if c in tsched.columns]).head()
  if tsched is not None and tsched.height else 'team schedule unavailable')
 ```
+
+    ✅ team schedule 2 — 80 rows
+
+
+
+
+
+    shape: (5, 5)
+    ┌───────────┬───────────────────┬─────────────────────────────────┬────────────┬─────────────┐
+    │ id        ┆ date              ┆ name                            ┆ short_name ┆ season_year │
+    │ ---       ┆ ---               ┆ ---                             ┆ ---        ┆ ---         │
+    │ i64       ┆ str               ┆ str                             ┆ str        ┆ i64         │
+    ╞═══════════╪═══════════════════╪═════════════════════════════════╪════════════╪═════════════╡
+    │ 401909088 ┆ 2026-10-20T19:00Z ┆ Boston Celtics at Detroit Pist… ┆ BOS @ DET  ┆ 2027        │
+    │ 401909095 ┆ 2026-10-23T23:00Z ┆ New York Knicks at Boston Celt… ┆ NY @ BOS   ┆ 2027        │
+    │ 401909870 ┆ 2026-10-26T23:30Z ┆ Chicago Bulls at Boston Celtic… ┆ CHI @ BOS  ┆ 2027        │
+    │ 401909877 ┆ 2026-10-27T23:30Z ┆ Brooklyn Nets at Boston Celtic… ┆ BKN @ BOS  ┆ 2027        │
+    │ 401909278 ┆ 2026-10-30T23:30Z ┆ Chicago Bulls at Boston Celtic… ┆ CHI @ BOS  ┆ 2027        │
+    └───────────┴───────────────────┴─────────────────────────────────┴────────────┴─────────────┘
+
+
 
 ### Recipe 3 — A player's game log ⛹️
 
@@ -190,6 +309,27 @@ cols = ['event_date', 'opponent_abbreviation', 'home_away', 'game_result', 'scor
 (gamelog.select([c for c in cols if c in gamelog.columns]).head()
  if gamelog is not None and gamelog.height else 'gamelog unavailable')
 ```
+
+    ✅ LeBron gamelog — 5 rows
+
+
+
+
+
+    shape: (5, 8)
+    ┌────────────┬───────────────────────┬───────────┬─────────────┬───────┬────────┬────────┬────────┐
+    │ event_date ┆ opponent_abbreviation ┆ home_away ┆ game_result ┆ score ┆ stat_0 ┆ stat_1 ┆ stat_2 │
+    │ ---        ┆ ---                   ┆ ---       ┆ ---         ┆ ---   ┆ ---    ┆ ---    ┆ ---    │
+    │ str        ┆ str                   ┆ str       ┆ str         ┆ str   ┆ str    ┆ str    ┆ str    │
+    ╞════════════╪═══════════════════════╪═══════════╪═════════════╪═══════╪════════╪════════╪════════╡
+    │ null       ┆ null                  ┆ null      ┆ null        ┆ null  ┆ 33     ┆ 8-15   ┆ 53.3   │
+    │ null       ┆ null                  ┆ null      ┆ null        ┆ null  ┆ 33     ┆ 5-14   ┆ 35.7   │
+    │ null       ┆ null                  ┆ null      ┆ null        ┆ null  ┆ 34     ┆ 5-13   ┆ 38.5   │
+    │ null       ┆ null                  ┆ null      ┆ null        ┆ null  ┆ 25     ┆ 4-9    ┆ 44.4   │
+    │ null       ┆ null                  ┆ null      ┆ null        ┆ null  ┆ 18     ┆ 1-1    ┆ 100.0  │
+    └────────────┴───────────────────────┴───────────┴─────────────┴───────┴────────┴────────┴────────┘
+
+
 
 ### Recipe 4 — Top scorers from the box-score release 🥇
 
@@ -219,6 +359,22 @@ else:
 out
 ```
 
+    ✅ player boxscore release — 995 rows
+
+
+
+
+
+    shape: (0, 6)
+    ┌──────────────────────┬───────────────────┬─────┬─────┬─────┬─────┐
+    │ athlete_display_name ┆ team_abbreviation ┆ gp  ┆ ppg ┆ rpg ┆ apg │
+    │ ---                  ┆ ---               ┆ --- ┆ --- ┆ --- ┆ --- │
+    │ str                  ┆ str               ┆ u32 ┆ f64 ┆ f64 ┆ f64 │
+    ╞══════════════════════╪═══════════════════╪═════╪═════╪═════╪═════╡
+    └──────────────────────┴───────────────────┴─────┴─────┴─────┴─────┘
+
+
+
 ### Recipe 5 — Offense vs defense, every team 🛡️
 
 The [`load_nba_team_boxscore`](../nba/reference/loaders/team.md#load_nba_team_boxscore)
@@ -245,6 +401,31 @@ else:
 out
 ```
 
+    ✅ team boxscore release — 72 rows
+
+
+
+
+
+    shape: (10, 5)
+    ┌───────────────────┬─────┬─────────┬─────────┬──────┐
+    │ team_abbreviation ┆ gp  ┆ off_ppg ┆ def_ppg ┆ net  │
+    │ ---               ┆ --- ┆ ---     ┆ ---     ┆ ---  │
+    │ str               ┆ u32 ┆ f64     ┆ f64     ┆ f64  │
+    ╞═══════════════════╪═════╪═════════╪═════════╪══════╡
+    │ TOR               ┆ 2   ┆ 123.5   ┆ 97.0    ┆ 26.5 │
+    │ POR               ┆ 2   ┆ 126.0   ┆ 101.5   ┆ 24.5 │
+    │ MIN               ┆ 2   ┆ 123.0   ┆ 99.5    ┆ 23.5 │
+    │ ATL               ┆ 3   ┆ 124.7   ┆ 109.0   ┆ 15.7 │
+    │ …                 ┆ …   ┆ …       ┆ …       ┆ …    │
+    │ OKC               ┆ 2   ┆ 106.0   ┆ 94.0    ┆ 12.0 │
+    │ MEM               ┆ 2   ┆ 117.0   ┆ 105.5   ┆ 11.5 │
+    │ HOU               ┆ 3   ┆ 121.0   ┆ 111.3   ┆ 9.7  │
+    │ LAC               ┆ 2   ┆ 119.0   ┆ 110.5   ┆ 8.5  │
+    └───────────────────┴─────┴─────────┴─────────┴──────┘
+
+
+
 ### Recipe 6 — Who lived behind the arc? 🎯
 
 Sum makes and attempts across the season to get each team's true
@@ -268,6 +449,28 @@ else:
     out = 'team box-score release unavailable'
 out
 ```
+
+
+
+
+    shape: (10, 4)
+    ┌───────────────────┬──────┬─────┬──────────────┐
+    │ team_abbreviation ┆ made ┆ att ┆ three_pt_pct │
+    │ ---               ┆ ---  ┆ --- ┆ ---          │
+    │ str               ┆ i32  ┆ i32 ┆ f64          │
+    ╞═══════════════════╪══════╪═════╪══════════════╡
+    │ DET               ┆ 33   ┆ 78  ┆ 42.3         │
+    │ HOU               ┆ 40   ┆ 96  ┆ 41.7         │
+    │ LAL               ┆ 25   ┆ 60  ┆ 41.7         │
+    │ LAC               ┆ 30   ┆ 72  ┆ 41.7         │
+    │ …                 ┆ …    ┆ …   ┆ …            │
+    │ BOS               ┆ 32   ┆ 81  ┆ 39.5         │
+    │ MEM               ┆ 28   ┆ 73  ┆ 38.4         │
+    │ MIL               ┆ 45   ┆ 121 ┆ 37.2         │
+    │ NY                ┆ 27   ┆ 73  ┆ 37.0         │
+    └───────────────────┴──────┴─────┴──────────────┘
+
+
 
 ### Recipe 7 — Double-double machines 💪
 
@@ -298,6 +501,31 @@ else:
 out
 ```
 
+    ✅ player boxscore release — 995 rows
+
+
+
+
+
+    shape: (10, 3)
+    ┌──────────────────────┬───────────────────┬────────────────┐
+    │ athlete_display_name ┆ team_abbreviation ┆ double_doubles │
+    │ ---                  ┆ ---               ┆ ---            │
+    │ str                  ┆ str               ┆ u32            │
+    ╞══════════════════════╪═══════════════════╪════════════════╡
+    │ Amen Thompson        ┆ HOU               ┆ 3              │
+    │ Trae Young           ┆ WSH               ┆ 2              │
+    │ Karl-Anthony Towns   ┆ NY                ┆ 2              │
+    │ Domantas Sabonis     ┆ SAC               ┆ 2              │
+    │ …                    ┆ …                 ┆ …              │
+    │ Victor Wembanyama    ┆ SA                ┆ 2              │
+    │ Davion Mitchell      ┆ MIA               ┆ 2              │
+    │ Jalen Johnson        ┆ ATL               ┆ 2              │
+    │ Paul Reed            ┆ DET               ┆ 1              │
+    └──────────────────────┴───────────────────┴────────────────┘
+
+
+
 ### Recipe 8 — A tidy standings table 🏆
 
 The [`load_nba_standings`](../nba/reference/loaders/other.md#load_nba_standings)
@@ -322,6 +550,16 @@ else:
     out = 'standings release unavailable'
 out
 ```
+
+    ✅ standings release — 0 rows
+
+
+
+
+
+    'standings release unavailable'
+
+
 
 ### Recipe 9 — Built on threes (shot release + a join) 🧱
 
@@ -353,6 +591,22 @@ else:
 out
 ```
 
+    ✅ shots release — 8390 rows
+
+
+
+
+
+    shape: (0, 3)
+    ┌───────────────────┬─────────────┬────────────────┐
+    │ team_abbreviation ┆ threes_made ┆ pct_pts_from_3 │
+    │ ---               ┆ ---         ┆ ---            │
+    │ str               ┆ u32         ┆ f64            │
+    ╞═══════════════════╪═════════════╪════════════════╡
+    └───────────────────┴─────────────┴────────────────┘
+
+
+
 ### Recipe 10 — Head-to-head, game by game 🤝
 
 Filter the team box-score release to one matchup and you get the full
@@ -376,6 +630,20 @@ else:
     out = 'team box-score release unavailable'
 out
 ```
+
+
+
+
+    shape: (1, 5)
+    ┌────────────┬────────────────┬────────────┬─────────────────────┬─────────────┐
+    │ game_date  ┆ team_home_away ┆ team_score ┆ opponent_team_score ┆ team_winner │
+    │ ---        ┆ ---            ┆ ---        ┆ ---                 ┆ ---         │
+    │ date       ┆ str            ┆ i32        ┆ i32                 ┆ bool        │
+    ╞════════════╪════════════════╪════════════╪═════════════════════╪═════════════╡
+    │ 2026-10-23 ┆ home           ┆ 107        ┆ 103                 ┆ true        │
+    └────────────┴────────────────┴────────────┴─────────────────────┴─────────────┘
+
+
 
 ### Recipe 11 — Who's banged up? 🩹 (pandas interop)
 
@@ -407,6 +675,31 @@ else:
 out
 ```
 
+    ✅ injuries — 27 rows
+
+
+
+
+
+    shape: (12, 2)
+    ┌───────────────────────┬────────────────┐
+    │ display_name          ┆ players_listed │
+    │ ---                   ┆ ---            │
+    │ str                   ┆ i64            │
+    ╞═══════════════════════╪════════════════╡
+    │ Dallas Mavericks      ┆ 6              │
+    │ Golden State Warriors ┆ 6              │
+    │ Oklahoma City Thunder ┆ 6              │
+    │ Philadelphia 76ers    ┆ 6              │
+    │ …                     ┆ …              │
+    │ Indiana Pacers        ┆ 4              │
+    │ Sacramento Kings      ┆ 4              │
+    │ Chicago Bulls         ┆ 3              │
+    │ Detroit Pistons       ┆ 3              │
+    └───────────────────────┴────────────────┘
+
+
+
 ## 🎬 Play-by-play & game rosters
 
 Now for the granular stuff. [`espn_nba_pbp`](../nba/reference/additional.md)
@@ -424,6 +717,23 @@ pbp = safe('pbp payload', lambda: sdv.nba.espn_nba_pbp(game_id=GAME_ID))
 (list(pbp.keys())[:8] if isinstance(pbp, dict) else 'pbp unavailable')
 ```
 
+    ✅ pbp payload — 22 rows
+
+
+
+
+
+    ['gameId',
+     'plays',
+     'winprobability',
+     'boxscore',
+     'header',
+     'format',
+     'broadcasts',
+     'videos']
+
+
+
 
 ```python
 plays = (pl.DataFrame(pbp['plays'], infer_schema_length=None)
@@ -432,6 +742,29 @@ cols = ['period.number', 'clock.displayValue', 'text', 'homeScore', 'awayScore',
 (plays.select([c for c in cols if c in plays.columns]).head()
  if plays is not None and plays.height else 'no plays parsed')
 ```
+
+
+
+
+    shape: (5, 6)
+    ┌───────────────┬────────────────────┬───────────────────────┬───────────┬───────────┬─────────────┐
+    │ period.number ┆ clock.displayValue ┆ text                  ┆ homeScore ┆ awayScore ┆ scoringPlay │
+    │ ---           ┆ ---                ┆ ---                   ┆ ---       ┆ ---       ┆ ---         │
+    │ i64           ┆ str                ┆ str                   ┆ i64       ┆ i64       ┆ bool        │
+    ╞═══════════════╪════════════════════╪═══════════════════════╪═══════════╪═══════════╪═════════════╡
+    │ 1             ┆ 12:00              ┆ Myles Turner vs.      ┆ 0         ┆ 0         ┆ false       │
+    │               ┆                    ┆ Anthony Davis…        ┆           ┆           ┆             │
+    │ 1             ┆ 11:42              ┆ Aaron Nesmith makes   ┆ 0         ┆ 3         ┆ true        │
+    │               ┆                    ┆ 26-foot th…           ┆           ┆           ┆             │
+    │ 1             ┆ 11:17              ┆ Austin Reaves misses  ┆ 0         ┆ 3         ┆ false       │
+    │               ┆                    ┆ driving l…            ┆           ┆           ┆             │
+    │ 1             ┆ 11:14              ┆ Austin Reaves         ┆ 0         ┆ 3         ┆ false       │
+    │               ┆                    ┆ offensive reboun…     ┆           ┆           ┆             │
+    │ 1             ┆ 11:12              ┆ Austin Reaves misses  ┆ 0         ┆ 3         ┆ false       │
+    │               ┆                    ┆ 14-foot t…            ┆           ┆           ┆             │
+    └───────────────┴────────────────────┴───────────────────────┴───────────┴───────────┴─────────────┘
+
+
 
 ### Slice it: every 3-pointer in the game 🎯
 
@@ -453,6 +786,28 @@ else:
 out
 ```
 
+
+
+
+    shape: (10, 5)
+    ┌───────────────┬────────────────────┬─────────────────────────────────┬───────────┬───────────┐
+    │ period.number ┆ clock.displayValue ┆ text                            ┆ homeScore ┆ awayScore │
+    │ ---           ┆ ---                ┆ ---                             ┆ ---       ┆ ---       │
+    │ i64           ┆ str                ┆ str                             ┆ i64       ┆ i64       │
+    ╞═══════════════╪════════════════════╪═════════════════════════════════╪═══════════╪═══════════╡
+    │ 1             ┆ 11:42              ┆ Aaron Nesmith makes 26-foot th… ┆ 0         ┆ 3         │
+    │ 1             ┆ 10:14              ┆ Andrew Nembhard makes 23-foot … ┆ 2         ┆ 6         │
+    │ 1             ┆ 9:58               ┆ LeBron James makes 26-foot thr… ┆ 5         ┆ 6         │
+    │ 1             ┆ 5:44               ┆ Myles Turner makes 25-foot thr… ┆ 15        ┆ 19        │
+    │ …             ┆ …                  ┆ …                               ┆ …         ┆ …         │
+    │ 2             ┆ 10:05              ┆ Max Christie makes 25-foot thr… ┆ 41        ┆ 40        │
+    │ 2             ┆ 9:39               ┆ Obi Toppin makes 27-foot three… ┆ 41        ┆ 43        │
+    │ 2             ┆ 8:44               ┆ Aaron Nesmith makes 26-foot th… ┆ 41        ┆ 49        │
+    │ 2             ┆ 7:02               ┆ Rui Hachimura makes 22-foot th… ┆ 51        ┆ 51        │
+    └───────────────┴────────────────────┴─────────────────────────────────┴───────────┴───────────┘
+
+
+
 ### Who played? Game rosters 📋
 
 [`espn_nba_game_rosters`](../nba/reference/additional.md) returns both teams'
@@ -466,6 +821,31 @@ cols = ['athlete_display_name', 'team_abbreviation', 'starter', 'jersey', 'posit
 (grosters.select([c for c in cols if c in grosters.columns]).head(10)
  if grosters is not None and grosters.height else 'game rosters unavailable')
 ```
+
+    ✅ game rosters — 26 rows
+
+
+
+
+
+    shape: (10, 5)
+    ┌──────────────────────┬───────────────────┬─────────┬────────┬───────────────┐
+    │ athlete_display_name ┆ team_abbreviation ┆ starter ┆ jersey ┆ position_name │
+    │ ---                  ┆ ---               ┆ ---     ┆ ---    ┆ ---           │
+    │ str                  ┆ str               ┆ bool    ┆ str    ┆ str           │
+    ╞══════════════════════╪═══════════════════╪═════════╪════════╪═══════════════╡
+    │ LeBron James         ┆ LAL               ┆ true    ┆ 23     ┆ Forward       │
+    │ Anthony Davis        ┆ LAL               ┆ true    ┆ 23     ┆ Forward       │
+    │ Rui Hachimura        ┆ LAL               ┆ true    ┆ 28     ┆ Forward       │
+    │ Spencer Dinwiddie    ┆ LAL               ┆ true    ┆ 26     ┆ Point Guard   │
+    │ …                    ┆ …                 ┆ …       ┆ …      ┆ …             │
+    │ Cam Reddish          ┆ LAL               ┆ false   ┆ 5      ┆ Small Forward │
+    │ Jaxson Hayes         ┆ LAL               ┆ false   ┆ 11     ┆ Center        │
+    │ Max Christie         ┆ LAL               ┆ false   ┆ 0      ┆ Guard         │
+    │ Harry Giles III      ┆ LAL               ┆ false   ┆ 20     ┆ Power Forward │
+    └──────────────────────┴───────────────────┴─────────┴────────┴───────────────┘
+
+
 
 ## 📦 Bulk season data with the loaders
 
@@ -487,6 +867,31 @@ cols = ['id', 'date', 'home_display_name', 'away_display_name', 'home_score', 'a
  if sched is not None and sched.height else 'schedule release unavailable')
 ```
 
+    ✅ schedule release — 1206 rows
+
+
+
+
+
+    shape: (5, 6)
+    ┌───────────┬───────────────────┬────────────────────┬───────────────────┬────────────┬────────────┐
+    │ id        ┆ date              ┆ home_display_name  ┆ away_display_name ┆ home_score ┆ away_score │
+    │ ---       ┆ ---               ┆ ---                ┆ ---               ┆ ---        ┆ ---        │
+    │ i32       ┆ str               ┆ str                ┆ str               ┆ i32        ┆ i32        │
+    ╞═══════════╪═══════════════════╪════════════════════╪═══════════════════╪════════════╪════════════╡
+    │ 401910945 ┆ 2027-04-12T00:30Z ┆ Dallas Mavericks   ┆ Memphis Grizzlies ┆ 0          ┆ 0          │
+    │ 401910946 ┆ 2027-04-12T00:30Z ┆ Minnesota          ┆ Houston Rockets   ┆ 0          ┆ 0          │
+    │           ┆                   ┆ Timberwolves       ┆                   ┆            ┆            │
+    │ 401910947 ┆ 2027-04-12T00:30Z ┆ San Antonio Spurs  ┆ Portland Trail    ┆ 0          ┆ 0          │
+    │           ┆                   ┆                    ┆ Blazers           ┆            ┆            │
+    │ 401910948 ┆ 2027-04-12T00:30Z ┆ Denver Nuggets     ┆ Oklahoma City     ┆ 0          ┆ 0          │
+    │           ┆                   ┆                    ┆ Thunder           ┆            ┆            │
+    │ 401910949 ┆ 2027-04-12T00:30Z ┆ Golden State       ┆ Utah Jazz         ┆ 0          ┆ 0          │
+    │           ┆                   ┆ Warriors           ┆                   ┆            ┆            │
+    └───────────┴───────────────────┴────────────────────┴───────────────────┴────────────┴────────────┘
+
+
+
 ### Pipeline: the highest-scoring games of the season 🔥
 
 With the schedule release in hand, a combined-points leaderboard is a quick
@@ -494,7 +899,7 @@ polars pipeline — cast the scores, sum them, sort descending.
 
 ## stats.nba.com surface (`nba_stats_*`)
 
-Beyond the ESPN wrappers, `sportsdataverse.nba` also ships **112 wrappers** for the official `stats.nba.com` API — the same source powering [nba_api](https://github.com/swar/nba_api). The module is `nba_stats` and every function is named `nba_stats_<slug>`. These are the **capture-confirmed live, non-deprecated** endpoints; deprecated and never-populated endpoints are excluded (see `ENDPOINT_HEALTH.md` in `sdv-internal-refs` for the full active/dying/barren/dead matrix).
+Beyond the ESPN wrappers, `sportsdataverse.nba` also ships **128 wrappers** for the official `stats.nba.com` API — the same source powering [nba_api](https://github.com/swar/nba_api). The module is `nba_stats` and every function is named `nba_stats_<slug>`. These are the **capture-confirmed live, non-deprecated** endpoints; deprecated and never-populated endpoints are excluded (see `ENDPOINT_HEALTH.md` in `sdv-internal-refs` for the full active/dying/barren/dead matrix).
 
 **League routing** is a single `league_id` parameter: `"00"` → NBA, `"20"` → G-League, `"15"` → Summer League. One stem, one host, league chosen per call.
 
@@ -525,6 +930,51 @@ print('career result sets:', list(career.keys()) if isinstance(career, dict) els
 df
 ```
 
+    ✅ nba_stats_leaguedashplayerstats (NBA) — 582 rows
+
+
+    ✅ nba_stats_leaguedashplayerstats (G-League) — 526 rows
+
+
+    ✅ nba_stats_leaguedashplayerstats (Summer League) — 450 rows
+
+
+    ✅ nba_stats_playercareerstats (LeBron) — 14 rows
+    career result sets: ['SeasonTotalsRegularSeason', 'CareerTotalsRegularSeason', 'SeasonTotalsPostSeason', 'CareerTotalsPostSeason', 'SeasonTotalsAllStarSeason', 'CareerTotalsAllStarSeason', 'SeasonTotalsCollegeSeason', 'CareerTotalsCollegeSeason', 'SeasonTotalsShowcaseSeason', 'CareerTotalsShowcaseSeason', 'SeasonRankingsRegularSeason', 'SeasonRankingsPostSeason', 'SeasonHighs', 'CareerHighs']
+
+
+
+
+
+    shape: (582, 69)
+    ┌───────────┬────────────┬──────────┬───────────┬───┬──────────┬───────────┬───────────┬───────────┐
+    │ player_id ┆ player_nam ┆ nickname ┆ team_id   ┆ … ┆ td3_rank ┆ wnba_fant ┆ fp_high_s ┆ team_coun │
+    │ ---       ┆ e          ┆ ---      ┆ ---       ┆   ┆ ---      ┆ asy_pts_r ┆ core_rank ┆ t         │
+    │ i64       ┆ ---        ┆ str      ┆ i64       ┆   ┆ i64      ┆ ank       ┆ ---       ┆ ---       │
+    │           ┆ str        ┆          ┆           ┆   ┆          ┆ ---       ┆ i64       ┆ i64       │
+    │           ┆            ┆          ┆           ┆   ┆          ┆ i64       ┆           ┆           │
+    ╞═══════════╪════════════╪══════════╪═══════════╪═══╪══════════╪═══════════╪═══════════╪═══════════╡
+    │ 1630639   ┆ A.J.       ┆ A.J.     ┆ 161061276 ┆ … ┆ 38       ┆ 449       ┆ 454       ┆ 1         │
+    │           ┆ Lawson     ┆          ┆ 1         ┆   ┆          ┆           ┆           ┆           │
+    │ 1631260   ┆ AJ Green   ┆ AJ       ┆ 161061274 ┆ … ┆ 38       ┆ 139       ┆ 167       ┆ 1         │
+    │           ┆            ┆          ┆ 9         ┆   ┆          ┆           ┆           ┆           │
+    │ 1642358   ┆ AJ Johnson ┆ AJ       ┆ 161061274 ┆ … ┆ 38       ┆ 413       ┆ 412       ┆ 2         │
+    │           ┆            ┆          ┆ 2         ┆   ┆          ┆           ┆           ┆           │
+    │ 203932    ┆ Aaron      ┆ Aaron    ┆ 161061274 ┆ … ┆ 38       ┆ 241       ┆ 250       ┆ 1         │
+    │           ┆ Gordon     ┆          ┆ 3         ┆   ┆          ┆           ┆           ┆           │
+    │ …         ┆ …          ┆ …        ┆ …         ┆ … ┆ …        ┆ …         ┆ …         ┆ …         │
+    │ 1630192   ┆ Zeke Nnaji ┆ Zeke     ┆ 161061274 ┆ … ┆ 38       ┆ 371       ┆ 373       ┆ 1         │
+    │           ┆            ┆          ┆ 3         ┆   ┆          ┆           ┆           ┆           │
+    │ 1630533   ┆ Ziaire     ┆ Ziaire   ┆ 161061275 ┆ … ┆ 38       ┆ 233       ┆ 244       ┆ 1         │
+    │           ┆ Williams   ┆          ┆ 1         ┆   ┆          ┆           ┆           ┆           │
+    │ 1629627   ┆ Zion       ┆ Zion     ┆ 161061274 ┆ … ┆ 38       ┆ 70        ┆ 65        ┆ 1         │
+    │           ┆ Williamson ┆          ┆ 0         ┆   ┆          ┆           ┆           ┆           │
+    │ 1642389   ┆ Zyon       ┆ Zyon     ┆ 161061275 ┆ … ┆ 38       ┆ 537       ┆ 533       ┆ 1         │
+    │           ┆ Pullin     ┆          ┆ 0         ┆   ┆          ┆           ┆           ┆           │
+    └───────────┴────────────┴──────────┴───────────┴───┴──────────┴───────────┴───────────┴───────────┘
+
+
+
 
 ```python
 if sched is not None and sched.height and {'home_score', 'away_score'}.issubset(sched.columns):
@@ -544,6 +994,28 @@ else:
     out = 'schedule release unavailable'
 out
 ```
+
+
+
+
+    shape: (10, 5)
+    ┌───────────────────┬──────────────────────┬───────────────────────┬────────────┬────────────┐
+    │ date              ┆ home_display_name    ┆ away_display_name     ┆ home_score ┆ away_score │
+    │ ---               ┆ ---                  ┆ ---                   ┆ ---        ┆ ---        │
+    │ str               ┆ str                  ┆ str                   ┆ i32        ┆ i32        │
+    ╞═══════════════════╪══════════════════════╪═══════════════════════╪════════════╪════════════╡
+    │ 2026-10-25T01:00Z ┆ Denver Nuggets       ┆ New Orleans Pelicans  ┆ 141        ┆ 135        │
+    │ 2026-10-23T20:00Z ┆ Milwaukee Bucks      ┆ Chicago Bulls         ┆ 125        ┆ 132        │
+    │ 2026-10-21T23:00Z ┆ Orlando Magic        ┆ Atlanta Hawks         ┆ 125        ┆ 132        │
+    │ 2026-10-25T02:00Z ┆ Phoenix Suns         ┆ Golden State Warriors ┆ 131        ┆ 122        │
+    │ …                 ┆ …                    ┆ …                     ┆ …          ┆ …          │
+    │ 2026-10-25T00:00Z ┆ Chicago Bulls        ┆ Washington Wizards    ┆ 120        ┆ 124        │
+    │ 2026-10-21T23:00Z ┆ Washington Wizards   ┆ Milwaukee Bucks       ┆ 128        ┆ 116        │
+    │ 2026-10-24T23:30Z ┆ Philadelphia 76ers   ┆ Milwaukee Bucks       ┆ 127        ┆ 116        │
+    │ 2026-10-22T00:00Z ┆ New Orleans Pelicans ┆ Indiana Pacers        ┆ 120        ┆ 123        │
+    └───────────────────┴──────────────────────┴───────────────────────┴────────────┴────────────┘
+
+
 
 ## 🎉 Where to next
 
@@ -576,7 +1048,36 @@ NBA's own feeds.
 from sportsdataverse.nba import nba_officiating
 
 print("nba_officiating:", [n for n in dir(nba_officiating) if not n.startswith("_")][:8])
-safe("referee assignments", lambda: nba_officiating.nba_referee_assignments(game_date="2024-04-01"))
-safe("L2M games", lambda: nba_officiating.nba_l2m_games())
+safe("referee assignments", lambda: nba_officiating.nba_referee_assignments("2024-04-01"))
+safe("L2M games", lambda: nba_officiating.nba_l2m_games(2024))
 
 ```
+
+    nba_officiating: ['Any', 'AssetFetchError', 'L2M_CALLS_SCHEMA', 'L2M_GAME_SCHEMA', 'L2M_STATS_SCHEMA', 'Literal', 'NBA_REFEREE_ASSIGN_SCHEMA', 'NBA_REFEREE_REPLAY_SCHEMA']
+
+
+    ✅ referee assignments — 2 rows
+
+
+    ✅ L2M games — 413 rows
+
+
+
+
+
+    shape: (413, 4)
+    ┌────────────┬────────┬─────────────┬─────────────────────────────────┐
+    │ game_id    ┆ season ┆ season_type ┆ label                           │
+    │ ---        ┆ ---    ┆ ---         ┆ ---                             │
+    │ str        ┆ i32    ┆ str         ┆ str                             │
+    ╞════════════╪════════╪═════════════╪═════════════════════════════════╡
+    │ 0042300403 ┆ 2024   ┆ playoffs    ┆ Celtics 106, Mavericks 99       │
+    │ 0042300314 ┆ 2024   ┆ playoffs    ┆ Timberwolves 105, Mavericks 10… │
+    │ 0042300304 ┆ 2024   ┆ playoffs    ┆ Celtics 105, Pacers 102         │
+    │ 0042300303 ┆ 2024   ┆ playoffs    ┆ Celtics 114, Pacers 111         │
+    │ …          ┆ …      ┆ …           ┆ …                               │
+    │ 0022300068 ┆ 2024   ┆ regular     ┆ Heat 103, Pistons 102           │
+    │ 0022300069 ┆ 2024   ┆ regular     ┆ Raptors 97, Timberwolves 94     │
+    │ 0022300073 ┆ 2024   ┆ regular     ┆ Mavericks 126, Spurs 119        │
+    │ 0022300062 ┆ 2024   ┆ regular     ┆ Suns 108, Warriors 104          │
+    └────────────┴────────┴─────────────┴─────────────────────────────────┘
