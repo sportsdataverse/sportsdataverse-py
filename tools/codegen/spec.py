@@ -234,6 +234,9 @@ class Loader:
     # only a maintainer can see does not stop anyone averaging a
     # partly-empty column.
     notes: Optional[str] = None
+    # Companion links rendered as the docstring's ``See Also:`` block, each
+    # ``{name, note, url}`` -- the same shape as an endpoint's ``docstring.see_also``.
+    see_also: List[Dict[str, str]] = field(default_factory=list)
     stub: bool = False
     stub_message: Optional[str] = None
     # Name of the loader that supersedes this one. When set, the generated body is
@@ -533,6 +536,7 @@ def load_releases(path: Path) -> ReleasesConfig:
             example_args=ld.get("example_args", {}) or {},
             automation=ld.get("automation", {}) or {},
             notes=ld.get("notes"),
+            see_also=list(ld.get("see_also", []) or []),
             stub=ld.get("stub", False),
             stub_message=ld.get("stub_message"),
             deprecated_for=ld.get("deprecated_for"),

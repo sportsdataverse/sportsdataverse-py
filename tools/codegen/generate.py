@@ -2077,6 +2077,12 @@ def _build_loader_docstring(ld: spec.Loader) -> str:
     lines.append("    Quick start::")
     lines.append("")
     lines.append(f"        {_loader_example_call(ld)}")
+    if ld.see_also:
+        lines.append("")
+        lines.append("    See Also:")
+        lines += [f"        * `{s['name']}`_ - {s['note']}" for s in ld.see_also]
+        lines.append("")
+        lines += [f"    .. _{s['name']}: {s['url']}" for s in ld.see_also]
     lines.append('"""')
     return "\n".join(("    " + ln) if ln else "" for ln in lines)
 
