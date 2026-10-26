@@ -118,13 +118,15 @@ def test_deprecated_decorator_name_override() -> None:
 
 
 def _release(v: str) -> tuple[int, ...]:
-    return tuple(int(x) for x in v.split("."))
+    """The x.y.z release part: a pre-release such as ``0.2.0b1`` counts as 0.2.0, the release it previews."""
+    return tuple(int(x) for x in re.match(r"\d+(?:\.\d+)*", v).group(0).split("."))
 
 
 def test_no_deprecation_names_a_release_that_has_shipped():
     """A ``removed_in=`` naming the current release or an older one is a lie the warning tells.
 
-    0.1.5 shipped with the generated NBA/WNBA loader shims still saying "removed in 0.1.0".
+    0.1.x shipped with the generated NBA/WNBA loader shims still saying "removed in 0.1.0". A beta
+    counts as its release: ``removed_in="0.2.0"`` is overdue at 0.2.0b1, since the name ships in the beta.
     Every call's ``removed_in`` keyword is read from the source (docstring examples are not calls).
     """
     root = Path(__file__).resolve().parents[1]
