@@ -98,7 +98,7 @@ def test_yahoo_listing_games_and_box_checks() -> None:
 
 
 def test_yahoo_cfb_lists_one_date_at_a_time(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    import sportsdataverse.yahoo.yahoo_shangrila as shangrila
+    import sportsdataverse.providers.yahoo.yahoo_shangrila as shangrila
 
     calls: List[Dict[str, Any]] = []
 
