@@ -56,16 +56,19 @@ def test_validate_reports_wrong_type_without_coercing():
     assert any("plays" in p and "list" in p for p in problems)
 
 
+@pytest.mark.parametrize("key", ["winprobability", "espnWP", "teamInfo"])
 @pytest.mark.parametrize("value", [[], {}])
-def test_union_typed_key_accepts_either_form(value):
-    """winprobability is a list in most payloads and a dict in some. Both are
-    real; a single-type declaration would red the daily job on real data."""
+def test_union_typed_key_accepts_either_form(key, value):
+    """winprobability is a list in most payloads and a dict in some. espnWP is a
+    dict in MBB/WBB but an empty list in every NBA/WNBA capture, and teamInfo is
+    an empty list in WNBA json/raw. All are real; a single-type declaration
+    would red the daily job on real data."""
     payload = {
         "header": {},
         "boxscore": {},
         "plays": [],
         "gameInfo": {},
-        "winprobability": value,
+        key: value,
     }
     assert validate_payload("espn_summary", payload) == []
 
