@@ -5973,7 +5973,7 @@ def __getattr__(name: str):
     import warnings
 
     warnings.warn(
-        f"{__name__}.{name} is deprecated and will be removed in the next release; use {new} "
+        f"{__name__}.{name} is deprecated and will be removed in 0.4.0; use {new} "
         f"({__name__.rsplit('.', 1)[0]}.{name} is a hand-written function, not this wrapper).",
         DeprecationWarning,
         stacklevel=2,
