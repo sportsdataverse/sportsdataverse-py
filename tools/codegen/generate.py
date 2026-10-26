@@ -1981,10 +1981,10 @@ def _loader_schemas() -> dict:
 
 # Release named in every generated loader deprecation. Per sportsdataverse
 # ._deprecation policy a deprecated API survives >= 2 minor releases. It said 0.1.0
-# until 0.1.5 shipped with the shims still in place; re-dated (owner ruling, 2026-10-08)
-# so the warning stops naming a release that has already shipped.
+# while 0.1.x shipped with the shims still in place; 0.2.0 is the release that carries
+# the re-dated warning, so 0.4.0 is the first release that may drop them.
 # tests/test_deprecation.py fails if this falls behind the package version again.
-LOADER_DEPRECATION_REMOVED_IN = "0.2.0"
+LOADER_DEPRECATION_REMOVED_IN = "0.4.0"
 
 
 def _build_loader_docstring(ld: spec.Loader) -> str:

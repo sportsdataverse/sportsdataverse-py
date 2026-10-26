@@ -17,7 +17,7 @@ and the capture league to ``"mbb"``, so it could not be pointed anywhere else.
 Each ``-raw`` repo binds its own league in a thin shim; these configs name the
 per-league facts the engine or a caller may need.
 
-**Deprecated (0.1.6, removed in 0.2.0).** Nothing reads these configs: every engine
+**Deprecated (0.2.0, removed in 0.4.0).** Nothing reads these configs: every engine
 entry point takes the league slug directly, and ``WBB.periods = 4`` was a wrong
 fourth owner of the period fact (women's basketball played halves through 2014-15).
 Pass the league slug yourself, and get the period model from
@@ -67,8 +67,8 @@ def __getattr__(name: str) -> Any:  # PEP 562: warn on access, not on import
         warn_deprecated(
             f"sportsdataverse.scrape.ncaa.league_config.{name}",
             replacement="the league slug directly and sportsdataverse.scrape.ncaa.parse.wbb_period_model(season)",
-            since="0.1.6",
-            removed_in="0.2.0",
+            since="0.2.0",
+            removed_in="0.4.0",
         )
         return _DEPRECATED[name]
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
