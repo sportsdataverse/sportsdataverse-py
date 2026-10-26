@@ -43,3 +43,19 @@ def test_espn_wnba_team_roster_return_as_pandas_returns_pandas():
     df = espn_wnba_team_roster(team_id=3, season=2024, return_as_pandas=True)
     assert isinstance(df, pd.DataFrame)
     assert len(df) > 0
+
+
+def test_return_parsed_false_returns_the_payload_and_is_not_sent_to_download(monkeypatch):
+    """find_athlete asks every roster for ``return_parsed=False``; WNBA/WBB forwarded it to download() (TypeError)."""
+    from sportsdataverse.wbb import wbb_team_roster
+
+    sent: dict = {}
+    payload = {"athletes": [], "team": {"id": "3"}}
+
+    def fake_download_json(transport, url, **kwargs):
+        sent.update(kwargs)
+        return payload
+
+    monkeypatch.setattr(wbb_team_roster, "_download_json", fake_download_json)
+    assert espn_wnba_team_roster(team_id=3, return_parsed=False) is payload
+    assert "return_parsed" not in sent

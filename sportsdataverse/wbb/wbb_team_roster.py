@@ -166,6 +166,7 @@ def _espn_basketball_team_roster(
     *,
     raw: bool = False,
     return_as_pandas: bool = False,
+    return_parsed: bool = True,
     **kwargs: Any,
 ) -> pl.DataFrame | pd.DataFrame | dict[str, Any]:
     """Shared implementation for ``espn_wbb_team_roster`` / ``espn_wnba_team_roster``.
@@ -174,11 +175,15 @@ def _espn_basketball_team_roster(
     downloads, flattens the ``athletes`` array, normalizes the column names to
     snake_case, attaches ``team_id`` / ``season`` as constant columns, and
     returns polars (or pandas).
+
+    ``return_parsed=False`` is the generated wrappers' spelling of ``raw=True``. ``find_athlete`` asks every
+    league's roster for the raw payload that way; before it was accepted here, it fell through ``**kwargs``
+    into ``download()`` and raised ``TypeError`` for every WBB / WNBA lookup.
     """
     url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/{league}/teams/{team_id}/roster"
     summary: dict[str, Any] = _download_json(download, url, **kwargs)
 
-    if raw:
+    if raw or not return_parsed:
         return summary
 
     athletes = _extract_athletes(summary)
