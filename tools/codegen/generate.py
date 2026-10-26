@@ -5968,6 +5968,39 @@ def render_intro_sources_table(autodoc_by_scope: dict[str | None, list[str]]) ->
     return "\n".join(lines)
 
 
+# Relative to docs/docs, like _LEAGUES_JSON_REL: the home page's Data sources strip reads it.
+_PROVIDERS_JSON_REL = "../src/data/providers.json"
+
+
+def render_providers_json(autodoc_by_scope: dict[str | None, list[str]]) -> str:
+    """``{"total": n, "sports": [{label, providers: [{key, label, href, featured?}]}]}``: every provider the
+    intro sources table names, under each Sport it serves there, in ``sources.yaml`` registry order.
+    ``featured`` is the registry flag the home page shows; the rest sit behind its "+N more" link."""
+    from tools.codegen import sources
+
+    entries = {e.key: e for e in sources.providers()}
+    by_sport: dict[str, set[str]] = {}
+    for sport, prefix, _group in _sidebar_order():
+        for r in _league_source_rows(prefix, autodoc_names=autodoc_by_scope.get(prefix) or []):
+            by_sport.setdefault(sport, set()).add(r["key"])
+    seen = set().union(*by_sport.values())
+    missing = sorted(k for k, e in entries.items() if e.featured and k not in seen)
+    if missing:
+        raise SystemExit(f"codegen: featured providers serve no documented league: {missing}")
+    sports = [
+        {
+            "label": sport,
+            "providers": [
+                {"key": e.key, "label": e.label, "href": e.home} | ({"featured": True} if e.featured else {})
+                for e in entries.values()
+                if e.key in keys
+            ],
+        }
+        for sport, keys in by_sport.items()
+    ]
+    return json.dumps({"total": len(seen), "sports": sports}, indent=2)
+
+
 def _render_docs_all() -> dict[str, str]:
     """{relpath: content} for the full generated docs staging tree.
 
@@ -6083,6 +6116,7 @@ def _render_docs_all() -> dict[str, str]:
             *_INTRO_MARKERS,
             render_intro_sources_table(autodoc_by_scope),
         )
+    out[_PROVIDERS_JSON_REL] = render_providers_json(autodoc_by_scope)
     # Normalize every file to exactly one trailing newline so the generic
     # end-of-file-fixer / trailing-whitespace pre-commit hooks are a no-op and
     # never fight this drift gate (template whitespace control leaves some pages
