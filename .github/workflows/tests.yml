@@ -1,4 +1,7 @@
-# Test suite, split into a fast offline job and a slower live-API job.
+# Test suite: the offline job, the whole-game oracles and the 3.10 floor import.
+# The live-API job lives in live-tests.yml (moved 2026-10-25), so this workflow's
+# status, and the README `tests` badge that reads it, means "our code passes";
+# an upstream API change turns live-tests.yml red instead.
 #
 # WHY THE SPLIT (2026-08-27): the single combined job ran 60-100 minutes and was
 # routinely cancelled by the next merge before it finished, so in practice the
@@ -9,9 +12,7 @@
 #
 #   offline  ubuntu, parallel, no live network. Fast enough to run on PRs, which
 #            restores the pre-2026-08-12 merge-time signal.
-#   live     macOS, live APIs. Keeps the platform the narrowing kept -- it is the
-#            only job that exercises the xgboost/libomp import path -- and keeps
-#            the live coverage, off the critical path.
+#   live     moved to live-tests.yml (ubuntu, live APIs, main pushes + dispatch).
 #
 # SCOPE (still narrowed, unchanged by this split): the suite runs on 3.13.2 only and
 # Windows is NOT exercised; the `floor-import` job below imports the package on the
@@ -27,11 +28,6 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
-    inputs:
-      live_tests:
-        description: "Set SDV_PY_LIVE_TESTS=1 to include live API tests"
-        required: false
-        default: "true"
 
 # Cancel superseded runs on the same ref. On main this used to mean each merge
 # killed the previous run mid-flight and the suite never completed on any commit;
@@ -148,34 +144,3 @@ jobs:
       # pandas-2 coverage; they need no network and run in about a minute.
       - name: Parser tests on 3.10 (pandas 2)
         run: uv run --python 3.10 --frozen pytest tests/test_*parsers.py -n auto -q -p no:cacheprovider
-
-  live:
-    name: pytest (live APIs)
-    # Only on main and manual runs: live endpoints are third-party and flaky, and a
-    # PR author cannot act on an upstream outage.
-    if: github.event_name != 'pull_request'
-    # Ubuntu: nothing here is platform-specific, and the macOS runners were the flaky part.
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - name: Install uv
-        uses: astral-sh/setup-uv@v8.1.0
-        with:
-          version: "latest"
-          enable-cache: true
-          cache-dependency-glob: "uv.lock"
-      - name: Set up Python
-        run: uv python install 3.13.2
-      - name: Install project + extras + dep groups
-        run: uv sync --all-extras --all-groups --frozen --python 3.13.2
-      - name: Run tests (live API tests included)
-        env:
-          SDV_PY_LIVE_TESTS: ${{ github.event.inputs.live_tests != 'false' && '1' || '' }}
-          # Bound the retry budget. The library default is 15 retries at a 30s
-          # timeout -- correct for a scraper that must not lose a game, badly wrong
-          # here, where one unreachable host can park a single call for 15 x 30s
-          # plus backoff. A CI failure should surface in seconds, not minutes.
-          SDV_PY_HTTP_RETRIES: "3"
-          SDV_PY_HTTP_TIMEOUT: "15"
-        # -W default: warnings report here rather than fail; the PR jobs enforce pytest.ini's `error`.
-        run: uv run --frozen pytest -n auto --dist loadgroup --maxfail=10 -W default --cov=sportsdataverse --cov-report=term-missing:skip-covered

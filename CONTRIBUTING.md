@@ -4,6 +4,7 @@
 
 - [Contributing to sportsdataverse-py](#contributing-to-sportsdataverse-py)
   - [Development setup](#development-setup)
+    - [Coverage numbers](#coverage-numbers)
   - [Python version support](#python-version-support)
   - [Code standards for new modules](#code-standards-for-new-modules)
   - [Deprecating a public API](#deprecating-a-public-api)
@@ -90,6 +91,28 @@ conda install --use-local sportsdataverse
 See [`recipe/README.md`](recipe/README.md) for the full conda workflow,
 including the conda-forge feedstock submission flow.
 
+### Coverage numbers
+
+The README shows two coverage badges. Both come from the `coverage delta (offline suite)`
+job in `.github/workflows/quality.yml` on the latest push to `main`; its
+`publish coverage badge (main only)` job writes them to the orphan `badges` branch as
+shields.io endpoint JSON. Neither number is measured anywhere else.
+
+- **coverage** is line coverage of hand-written code, `coverage_handwritten_percent` from
+  `tools/quality_scoreboard.py`. Generated modules (`*_espn_ext.py`, `sportsdataverse/parsed/`
+  and any file carrying the codegen marker) are left out. This is the number the scoreboard
+  gates and ratchets against `baseline/coverage-devel.json`, so it is the one to cite.
+- **coverage (all, incl. generated)** is the plain pytest-cov total over the whole package. It
+  is lower because the offline suite skips `tests/codegen`, which together with the codegen
+  drift gate is what covers the generated wrappers. It is published for transparency and
+  is not gated.
+
+The badges follow every finished `main` run, including one whose coverage gate or a test
+failed: that run still measured coverage, so the badge shows the drop rather than an older,
+higher number. A badge keeps its last published value only when a run produced no coverage
+report at all (it was cancelled, or failed before the suite ran); it never shows a number
+no run measured.
+
 ## Python version support
 
 Supported: 3.10, 3.11, 3.12, 3.13, 3.14. The suite runs on **3.13.2 only**; a separate
@@ -141,7 +164,7 @@ standalone import-sorting hook is inactive — plus
 - **Tests for new live-API modules** go under `tests/wbb/` or
   `tests/wnba/` (mirroring the source layout) and use the
   `skip_if_no_live` decorator from `tests/conftest.py`. Live tests are
-  gated by the `SDV_PY_LIVE_TESTS=1` environment variable, which `tests.yml`'s live job
+  gated by the `SDV_PY_LIVE_TESTS=1` environment variable, which `live-tests.yml`
 sets on pushes to main and manual runs (not on PRs; opt out with a `workflow_dispatch`
 `live_tests=false`) and `live-tests-cron.yml` always sets; `nba_stats` / `wnba_stats` live tests use
 the separate `SDV_PY_NBA_STATS_LIVE=1` gate that no workflow sets. Historically so CI and

@@ -112,7 +112,8 @@ def test_parse_schedule_unplayed_games_carry_their_start_time():
     unplayed = df.filter(pl.col("game_status").str.contains(r"^\d{1,2}:\d{2} [ap]m [A-Z]{3}$"))
     assert unplayed["game_id"].to_list() == [1029104, 1029105, 1029107]
     assert unplayed["game_status"].to_list() == ["7:00 pm EDT", "7:00 pm EDT", "7:05 pm EDT"]
-    assert df.filter(~pl.col("game_id").is_in(unplayed["game_id"]))["game_status"].to_list() == ["Final", "Final"]
+    played = df.filter(~pl.col("game_id").is_in(unplayed["game_id"].implode()))
+    assert played["game_status"].to_list() == ["Final", "Final"]
 
 
 def test_parse_schedule_season_id_drops_other_seasons():

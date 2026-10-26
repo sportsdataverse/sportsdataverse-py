@@ -175,7 +175,7 @@ def test_leaders_overview_and_roster_ids_are_one_dtype():
     assert leaders.filter(pl.col("category") == "points")["rank"].max() == 3
     assert leaders["value"].null_count() == 0
     box = P.parse_feb_player_box(_full("BoxScore"))
-    assert leaders["player_id"].is_in(box["player_id"]).all()
+    assert leaders["player_id"].is_in(box["player_id"].implode()).all()
     ov = P.parse_feb_overview(_full("overview"))
     assert (
         ov.schema["game_id"] == pl.Int64

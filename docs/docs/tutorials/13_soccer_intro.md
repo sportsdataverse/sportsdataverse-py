@@ -45,9 +45,9 @@ most commonly used entry points.
 | [`espn_soccer_news`](../soccer/reference/site.md#espn_soccer_news) | Latest news headlines for a league |
 | [`espn_soccer_injuries`](../soccer/reference/site.md#espn_soccer_injuries) | Current injury list |
 | [`espn_soccer_leaders`](../soccer/reference/web.md#espn_soccer_leaders) | Stat leaders by category |
-| [`espn_soccer_player_info`](../soccer/reference/core.md#espn_soccer_player_info) | Player bio & metadata |
-| [`espn_soccer_player_stats`](../soccer/reference/site.md#espn_soccer_player_stats) | Player season statistics |
-| [`espn_soccer_game_probabilities`](../soccer/reference/site.md#espn_soccer_game_probabilities) | In-game win probabilities |
+| [`espn_soccer_player_info`](../soccer/reference/site.md#espn_soccer_player_info) | Player bio & metadata |
+| [`espn_soccer_player_stats`](../soccer/reference/web.md#espn_soccer_player_stats) | Player season statistics |
+| [`espn_soccer_game_probabilities`](../soccer/reference/core/game.md#espn_soccer_game_probabilities) | In-game win probabilities |
 
 ### Parsers (turn raw JSON into polars)
 

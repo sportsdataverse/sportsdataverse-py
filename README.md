@@ -29,6 +29,9 @@
 [![PyPI](https://img.shields.io/pypi/v/sportsdataverse?label=sportsdataverse&logo=python&style=for-the-badge)](https://pypi.org/project/sportsdataverse/)<a href='https://pypi.org/project/sportsdataverse/'><img alt="PyPI - Down
 loads" src="https://img.shields.io/pypi/dm/sportsdataverse?style=for-the-badge"></a>
 ![Contributors](https://img.shields.io/github/contributors/sportsdataverse/sportsdataverse-py?style=for-the-badge)
+[![tests](https://img.shields.io/github/actions/workflow/status/sportsdataverse/sportsdataverse-py/tests.yml?branch=main&event=push&label=tests&logo=github&style=for-the-badge)](https://github.com/sportsdataverse/sportsdataverse-py/actions/workflows/tests.yml?query=branch%3Amain)
+[![coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/badges/coverage.json&style=for-the-badge)](https://github.com/sportsdataverse/sportsdataverse-py/actions/workflows/quality.yml?query=branch%3Amain)
+[![coverage (all, incl. generated)](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/badges/coverage-all.json&style=for-the-badge)](https://github.com/sportsdataverse/sportsdataverse-py/blob/main/CONTRIBUTING.md#coverage-numbers)
 [![Twitter
 Follow](https://img.shields.io/twitter/follow/sportsdataverse?color=blue&label=%40sportsdataverse&logo=twitter&style=for-the-badge)](https://twitter.com/sportsdataverse)
 

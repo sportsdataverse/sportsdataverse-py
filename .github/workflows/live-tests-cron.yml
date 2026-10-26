@@ -1,8 +1,8 @@
 # Weekly drift detector for the live-API tests in tests/test_espn_live.py
 # (and any other test gated by SDV_PY_LIVE_TESTS=1).
 #
-# The main tests.yml already runs the live suite on every PR + push to
-# main + workflow_dispatch. This workflow adds the *schedule* leg so
+# live-tests.yml already runs the live suite on every push to main and
+# on workflow_dispatch (never on PRs). This workflow adds the *schedule* leg so
 # upstream API drift surfaces even when the repo is quiet — e.g. ESPN
 # silently renames a column, NHL EDGE goes 404, MLB Stats API moves an
 # endpoint. On failure, the workflow opens (or updates) a single
@@ -66,7 +66,9 @@ jobs:
         run: |
           set -o pipefail
           # -W default: upstream-data warnings report here; the PR jobs enforce pytest.ini's `error`.
-          uv run --frozen pytest --maxfail=10 -rN -W default 2>&1 | tee pytest-live.log
+          # A command-line -W outranks pytest.ini's filterwarnings, so the two known kloppy notices
+          # (its unclosed spool buffer, see pytest.ini, and its StatsBomb licence notice) are re-ignored after it.
+          uv run --frozen pytest --maxfail=10 -rN -W default -W "ignore:Unclosed file <kloppy.infra.io.buffered_stream.BufferedStream:ResourceWarning" -W "ignore::UserWarning:kloppy._providers.statsbomb" 2>&1 | tee pytest-live.log
       - name: Run example notebooks (nbmake)
         # !cancelled(): run even when the live tests failed, so a drift week still gets the notebook signal.
         if: ${{ !cancelled() }}
@@ -84,7 +86,7 @@ jobs:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
           set -o pipefail
-          uv run --frozen pytest --nbmake examples/notebooks/ -q -rN -W default 2>&1 | tee pytest-notebooks.log
+          uv run --frozen pytest --nbmake examples/notebooks/ -q -rN -W default -W "ignore:Unclosed file <kloppy.infra.io.buffered_stream.BufferedStream:ResourceWarning" -W "ignore::UserWarning:kloppy._providers.statsbomb" 2>&1 | tee pytest-notebooks.log
       - name: Render notebook tutorials
         # Re-execute the example notebooks and render them (with outputs) to
         # docs/docs/tutorials/. Only from main: a dispatch from another branch would

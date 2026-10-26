@@ -102,7 +102,6 @@ const config: Config = {
   // gives a forgiving margin so a single stale cross-link doesn't take the whole
   // site offline; tighten to 'throw' once link coverage is verified clean.
   onBrokenLinks: 'warn',
-  onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'SportsDataverse',
   projectName: 'Sportsdataverse',
@@ -117,6 +116,10 @@ const config: Config = {
   // (`.mdx`) keep the full MDX feature set.
   markdown: {
     format: 'detect',
+    // Docusaurus 3.9 moved this from siteConfig.onBrokenMarkdownLinks.
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
   },
   // Forwards an old #anchor on a split reference page to the family page that now holds it.
   clientModules: [

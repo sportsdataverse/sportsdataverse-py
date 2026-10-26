@@ -60,7 +60,8 @@ def test_every_player_pct_has_a_declared_pos_pct(schemas, loader):
 @pytest.mark.parametrize("loader", _TEAMS)
 def test_every_team_rank_has_a_declared_conf_pct(schemas, loader):
     declared = schemas[loader]
-    ranks = [c for c in declared if c.endswith("_rank")]
+    # The Paper Index luck ranks are national only: the producer publishes no conference percentile for them.
+    ranks = [c for c in declared if c.endswith("_rank") and c not in ("luck_wins_rank", "luck_z_rank")]
     assert len(ranks) == 204
     assert {c: declared.get(c[: -len("_rank")] + "_conf_pct") for c in ranks} == dict.fromkeys(ranks, "Float64")
 

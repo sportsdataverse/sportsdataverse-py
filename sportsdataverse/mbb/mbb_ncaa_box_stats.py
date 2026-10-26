@@ -412,6 +412,15 @@ def _scrape_many(
                 )
                 frames.append(pl.DataFrame({"game_id": [gid], "scrape_status": [f"{kind}: {exc}"]}))
             continue
+        if df.height == 0:
+            # The parser warns and returns zero rows for a page of another type (a wrong tab, a short layout).
+            # That is an unreadable game, not an empty one: without this stub it vanished from a skip-mode season.
+            logger.warning("Error with game id: %s // zero player rows (not an individual_stats page)", gid)
+            removed.append(gid)
+            if errors == "skip":
+                status = "parse_failed: zero player rows (not an individual_stats page)"
+                frames.append(pl.DataFrame({"game_id": [gid], "scrape_status": [status]}))
+            continue
         frames.append(df.with_columns(pl.lit("ok").alias("scrape_status")) if errors == "skip" else df)
     if removed:
         logger.warning("%s removed", ",".join(removed))

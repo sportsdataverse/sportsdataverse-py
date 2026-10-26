@@ -33,6 +33,6 @@ def test_pwhl_pbp_and_corsi_live():
 @skip_if_no_live
 @pytest.mark.parametrize("lg", ["ahl", "ohl", "whl", "qmjhl"])
 def test_junior_schedule_live(lg):
-    mod = __import__(f"sportsdataverse.{lg}", fromlist=["*"])
+    mod = __import__(f"sportsdataverse.hockey.{lg}", fromlist=["*"])
     df = getattr(mod, f"{lg}_schedule")()
     assert isinstance(df, pl.DataFrame)

@@ -106,22 +106,9 @@ def test_every_reference_link_resolves(nb):
     assert not broken, f"{nb.stem} links to pages that do not exist: {sorted(set(broken))}"
 
 
-# Wrong-but-existing pages found when this test landed, outside #801's scope: fixing one flips it to XPASS.
-_PAGE_FORM_OPEN = {
-    "08_wnba_intro": "additional.md#play-by-play-schedule--rosters: that section heading no longer exists",
-    "13_soccer_intro": "espn_soccer_player_info is on site.md, espn_soccer_game_probabilities on core/game.md, "
-    "espn_soccer_player_stats on web.md",
-}
-
-
 @pytest.mark.parametrize(
     "nb",
-    [
-        pytest.param(nb, marks=pytest.mark.xfail(strict=True, raises=AssertionError, reason=_PAGE_FORM_OPEN[nb.stem]))
-        if nb.stem in _PAGE_FORM_OPEN
-        else nb
-        for nb in NOTEBOOKS
-    ],
+    NOTEBOOKS,
     ids=lambda p: p.stem,
 )
 def test_every_page_form_link_names_the_page_that_documents_it(nb):

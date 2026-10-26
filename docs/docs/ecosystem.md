@@ -138,15 +138,15 @@ pattern holds well beyond these rows: ESPN wrappers, native league APIs, and
 |---|---|---|
 | [`espn_nba_scoreboard`](nba/reference/site.md#espn_nba_scoreboard) | [`hoopR::espn_nba_scoreboard`](https://hoopR.sportsdataverse.org/reference/espn_nba_scoreboard.html) | NBA games + scores for a date |
 | [`espn_wnba_scoreboard`](wnba/reference/site.md#espn_wnba_scoreboard) | [`wehoop::espn_wnba_scoreboard`](https://wehoop.sportsdataverse.org/reference/espn_wnba_scoreboard.html) | WNBA games + scores for a date |
-| [`espn_cfb_scoreboard`](cfb/reference/site.md#espn_cfb_scoreboard) | [`cfbfastR::espn_cfb_scoreboard`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_scoreboard.html) | CFB games + scores for a week |
+| [`espn_cfb_scoreboard`](cfb/reference/site/other.md#espn_cfb_scoreboard) | [`cfbfastR::espn_cfb_scoreboard`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_scoreboard.html) | CFB games + scores for a week |
 | [`espn_mlb_scoreboard`](mlb/reference/site.md#espn_mlb_scoreboard) | [`baseballr::espn_mlb_scoreboard`](https://billpetti.github.io/baseballr/reference/espn_mlb_scoreboard.html) | MLB games + scores for a date |
 | [`espn_nba_standings`](nba/reference/site.md#espn_nba_standings) | [`hoopR::espn_nba_standings`](https://hoopR.sportsdataverse.org/reference/espn_nba_standings.html) | League standings table |
 | [`espn_wnba_team_roster`](wnba/reference/additional/espn.md#espn_wnba_team_roster) | [`wehoop::espn_wnba_team_roster`](https://wehoop.sportsdataverse.org/reference/espn_wnba_team_roster.html) | A team's roster |
 | [`nhl_web_pbp`](nhl/reference/nhl_api_web/web.md#nhl_web_pbp) | [`fastRhockey::nhl_game_pbp`](https://fastRhockey.sportsdataverse.org/reference/nhl_game_pbp.html) | NHL play-by-play for a game (api-web) |
 | [`nhl_edge_skater_detail`](nhl/reference/nhl_edge/skater.md#nhl_edge_skater_detail) | [`fastRhockey::nhl_edge_skater_detail`](https://fastRhockey.sportsdataverse.org/reference/nhl_edge_skater_detail.html) | Per-skater EDGE tracking (speed / distance / shots) |
-| [`espn_nhl_teams`](nhl/reference/additional/other.md#espn_nhl_teams) | [`fastRhockey::espn_nhl_teams`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_teams.html) | All NHL teams (ESPN) |
-| [`mlb_api_pbp`](mlb/reference/mlb_api.md#mlb_api_pbp) | [`baseballr::mlb_pbp`](https://billpetti.github.io/baseballr/reference/mlb_pbp.html) | MLB play-by-play for a game (Stats API) |
-| [`mlb_api_draft`](mlb/reference/mlb_api.md#mlb_api_draft) | [`baseballr::mlb_draft`](https://billpetti.github.io/baseballr/reference/mlb_draft.html) | MLB amateur draft picks for a year |
+| [`espn_nhl_teams`](nhl/reference/additional/espn.md#espn_nhl_teams) | [`fastRhockey::espn_nhl_teams`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_teams.html) | All NHL teams (ESPN) |
+| [`mlb_pbp`](mlb/reference/mlb_api/other.md#mlb_pbp) | [`baseballr::mlb_pbp`](https://billpetti.github.io/baseballr/reference/mlb_pbp.html) | MLB play-by-play for a game (Stats API) |
+| [`mlb_draft`](mlb/reference/mlb_api/draft.md#mlb_draft) | [`baseballr::mlb_draft`](https://billpetti.github.io/baseballr/reference/mlb_draft.html) | MLB amateur draft picks for a year |
 | [`load_nba_pbp`](nba/reference/loaders/other.md#load_nba_pbp) | [`hoopR::load_nba_pbp`](https://hoopR.sportsdataverse.org/reference/load_nba_pbp.html) | Whole-season NBA pbp from releases |
 | [`load_cfb_pbp`](cfb/reference/loaders/pbp.md#load_cfb_pbp) | [`cfbfastR::load_cfb_pbp`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_pbp.html) | Whole-season CFB pbp from releases |
 | [`load_nhl_pbp`](nhl/reference/loaders/pbp.md#load_nhl_pbp) | [`fastRhockey::load_nhl_pbp`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_pbp.html) | Whole-season NHL pbp from releases |

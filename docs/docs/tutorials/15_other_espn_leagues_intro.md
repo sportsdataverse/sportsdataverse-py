@@ -954,14 +954,14 @@ for name, mod in [('ufl', ufl), ('xfl', xfl), ('cfl', cfl),
 
 - **Spring / pro football reference docs:**
   [UFL](../ufl/reference/site.md) ·
-  [XFL](../football/reference/xfl.md) ·
-  [CFL](../football/reference/cfl.md)
+  [XFL](../xfl/reference/site.md) ·
+  [CFL](../cfl/reference/site.md)
 - **College baseball / softball reference docs:**
   [College Baseball](../college_baseball/reference/site.md) ·
-  [College Softball](../baseball/reference/college_softball.md)
+  [College Softball](../college_softball/reference/site.md)
 - **NCAA hockey reference docs:**
   [Men's College Hockey](../mch/reference/site.md) ·
-  [Women's College Hockey](../hockey/reference/wch.md)
+  [Women's College Hockey](../wch/reference/site.md)
 - **Cross-league architecture deep-dive:** `docs/docs/architecture/espn-cross-league.md`
 - **Parser layer:** `docs/docs/parsers/`
 - **Companion notebooks:**

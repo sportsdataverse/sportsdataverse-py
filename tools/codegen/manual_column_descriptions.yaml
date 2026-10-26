@@ -11278,6 +11278,7 @@ load_cfb_team_summaries:
   def_strength_faced_rank: 'National rank of def_strength_faced, where 1 = toughest slate (the strongest opposing defenses,
     i.e. the lowest def_strength_faced). Ties share the average rank. Null when def_strength_faced is null: unranked, not
     last.'
+  deserved_wins: 'Sum of the team''s paper_share over the games in the row''s span: the wins the Paper Index says its play earned (sportsdataverse.paper_index.deserved_wins).'
   drive_start_ep_def: Average expected points (EP) at the first snap of a drive, over the drives the side owned, with the
     team on defense (i.e. allowed to opponents).
   drive_start_ep_def_conf_pct: Percentile (0-100) of average expected points (EP) at the first snap of a drive, over the drives
@@ -11790,6 +11791,10 @@ load_cfb_team_summaries:
   line_yards_off_rush_rank: 'National rank of the team''s average line yards credited to the offensive line on rushes on rush
     plays with the team on offense, where 1 is best. Null when the metric is null or the column holds fewer than two distinct
     values: unranked, not last.'
+  luck_wins: wins minus deserved_wins; positive means the team won more games than its play deserved.
+  luck_wins_rank: 'National rank of luck_wins, 1 = the most wins above what its play deserved. Null when luck_wins is null: unranked, not last.'
+  luck_z: 'luck_wins / sqrt(sum(p * (1 - p))) over the team''s game shares p: luck in standard deviations of a sum of independent Bernoulli(p) wins; null when that variance is 0.'
+  luck_z_rank: 'National rank of luck_z, 1 = the luckiest in standard deviations. Null when luck_z is null: unranked, not last.'
   net_adj_epa: 'Net opponent-adjusted EPA per play: adj_off_epa minus adj_def_epa. Higher is better.'
   net_adj_epa_conf_pct: Percentile (0-100) of net_adj_epa among teams in the same conference, where 100 is best. Direction
     is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric
@@ -11951,6 +11956,8 @@ load_cfb_team_summaries:
   opportunity_rate_off_rush_rank: 'National rank of the team''s opportunity rate -- the share of rushes gaining 4 or more
     yards on rush plays with the team on offense, where 1 is best. Null when the metric is null or the column holds fewer
     than two distinct values: unranked, not last.'
+  paper_index_games_n: Games in the row's span that the Paper Index scored for the team (completed, not tied, both sides at least 20 scrimmage snaps); deserved_wins and luck are sums over these games.
+  paper_index_span: 'Where the season sits relative to the Paper Index fit (sportsdataverse.paper_index TRAIN_SEASONS / HOLDOUT_SEASONS): train (in-sample, its games were part of the fit), holdout (scored out of sample) or out_of_span (scored, never seen by the fit).'
   passrate_def: Share of plays that were pass plays, with the team on defense (i.e. allowed to opponents).
   passrate_def_conf_pct: Percentile (0-100) of share of plays that were pass plays with the team on defense (i.e. allowed
     to opponents) among teams in the same conference, where 100 is best. Direction is already encoded in the matching rank,
@@ -13403,6 +13410,7 @@ load_cfb_team_summaries_weekly:
   def_strength_faced_rank: 'National rank of def_strength_faced, where 1 = toughest slate (the strongest opposing defenses,
     i.e. the lowest def_strength_faced). Ties share the average rank. Null when def_strength_faced is null: unranked, not
     last.'
+  deserved_wins: 'Sum of the team''s paper_share over the games in the row''s span: the wins the Paper Index says its play earned (sportsdataverse.paper_index.deserved_wins).'
   drive_start_ep_def: Average expected points (EP) at the first snap of a drive, over the drives the side owned, with the
     team on defense (i.e. allowed to opponents).
   drive_start_ep_def_conf_pct: Percentile (0-100) of average expected points (EP) at the first snap of a drive, over the drives
@@ -13915,6 +13923,10 @@ load_cfb_team_summaries_weekly:
   line_yards_off_rush_rank: 'National rank of the team''s average line yards credited to the offensive line on rushes on rush
     plays with the team on offense, where 1 is best. Null when the metric is null or the column holds fewer than two distinct
     values: unranked, not last.'
+  luck_wins: wins minus deserved_wins; positive means the team won more games than its play deserved.
+  luck_wins_rank: 'National rank of luck_wins, 1 = the most wins above what its play deserved. Null when luck_wins is null: unranked, not last.'
+  luck_z: 'luck_wins / sqrt(sum(p * (1 - p))) over the team''s game shares p: luck in standard deviations of a sum of independent Bernoulli(p) wins; null when that variance is 0.'
+  luck_z_rank: 'National rank of luck_z, 1 = the luckiest in standard deviations. Null when luck_z is null: unranked, not last.'
   net_adj_epa: 'Net opponent-adjusted EPA per play: adj_off_epa minus adj_def_epa. Higher is better.'
   net_adj_epa_conf_pct: Percentile (0-100) of net_adj_epa among teams in the same conference, where 100 is best. Direction
     is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric
@@ -14076,6 +14088,8 @@ load_cfb_team_summaries_weekly:
   opportunity_rate_off_rush_rank: 'National rank of the team''s opportunity rate -- the share of rushes gaining 4 or more
     yards on rush plays with the team on offense, where 1 is best. Null when the metric is null or the column holds fewer
     than two distinct values: unranked, not last.'
+  paper_index_games_n: Games in the row's span that the Paper Index scored for the team (completed, not tied, both sides at least 20 scrimmage snaps); deserved_wins and luck are sums over these games.
+  paper_index_span: 'Where the season sits relative to the Paper Index fit (sportsdataverse.paper_index TRAIN_SEASONS / HOLDOUT_SEASONS): train (in-sample, its games were part of the fit), holdout (scored out of sample) or out_of_span (scored, never seen by the fit).'
   passrate_def: Share of plays that were pass plays, with the team on defense (i.e. allowed to opponents).
   passrate_def_conf_pct: Percentile (0-100) of share of plays that were pass plays with the team on defense (i.e. allowed
     to opponents) among teams in the same conference, where 100 is best. Direction is already encoded in the matching rank,
