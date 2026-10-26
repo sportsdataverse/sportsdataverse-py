@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "sportsdataverse"
 version = "0.1.5"
-description = "Retrieve Sports data in Python"
+description = "Tidy sports data in Python: play-by-play, box scores, schedules, rosters and models across 100+ leagues"
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE", "NOTICE"]
@@ -20,6 +20,11 @@ keywords = [
     "ncaa basketball",
     "mlb",
     "nhl",
+    "pwhl",
+    "hockey",
+    "soccer",
+    "cricket",
+    "international basketball",
     # Data sources
     "espn",
     "mlb stats api",
@@ -44,7 +49,7 @@ maintainers = [
     { name = "Saiem Gilani", email = "saiem.gilani@gmail.com" },
 ]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Libraries",
     "Programming Language :: Python :: 3",
