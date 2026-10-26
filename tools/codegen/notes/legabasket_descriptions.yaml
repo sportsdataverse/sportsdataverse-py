@@ -332,8 +332,7 @@ lba_pbp:
 lba_pbp_legend:
   code: Qualifier code, the value of action_1_qualifier_code / action_2_qualifier_code
     on the actions.
-  label: Italian label of the qualifier code, as sent (translated in sdv-internal-refs
-    legabasket-returns.md).
+  label: Italian label of the qualifier code, as sent.
 lba_player:
   birth_date: Birth date, Date `YYYY-MM-DD`.
   code: Player code `SURNAME3-NAME3-YY`.

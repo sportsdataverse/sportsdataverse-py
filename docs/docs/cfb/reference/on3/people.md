@@ -1,15 +1,15 @@
 ---
-title: "CFB — On3 Recruit Database (api.on3.com) — People"
+title: "College football — On3 Recruit Database (api.on3.com) — People"
 sidebar_label: "People"
 sidebar_position: 6
-description: "CFB — On3 Recruit Database (api.on3.com) — People — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — On3 Recruit Database (api.on3.com) — People — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# CFB — On3 Recruit Database (api.on3.com) — People
+# College football — On3 Recruit Database (api.on3.com) — People
 
 ## on3_people_combine_measurements
 
-GET /rdb/v1/people/{personKey}/combine-measurements
+People combine measurements.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/people/{person_key}/combine-measurements`
 
@@ -43,7 +43,7 @@ on3_people_combine_measurements(person_key=89617)
 
 ## on3_people_latest_valuation
 
-GET /rdb/v1/people/{personKey}/latest-valuation
+People latest valuation.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/people/{person_key}/latest-valuation`
 
@@ -59,20 +59,20 @@ GET /rdb/v1/people/{personKey}/latest-valuation
 
 | col_name | type | description |
 |---|---|---|
-| `nil_status` | character | Status of the athlete's On3 NIL valuation (e.g. active, inactive). |
-| `valuation` | integer | Athlete's latest On3 NIL valuation in dollars. |
-| `valuation_change` | integer | Change in the NIL valuation since the previous update, in dollars. |
-| `followers` | integer | Total social-media followers counted toward the valuation. |
-| `rank` | integer | Overall rank of the player's NIL valuation across On3's NIL 100. |
-| `last_updated` | integer | Unix timestamp (seconds) of the last update to the NIL valuation. |
-| `whisper` | numeric | On3 whisper valuation (reported deal value) behind the NIL valuation, in US dollars. |
-| `whisper_change` | numeric | Change in the whisper valuation since the previous update, in US dollars. |
-| `social_valuations` | character | Per-platform breakdown of the social components of the valuation (stringified list). |
-| `group_rank` | integer | Rank of the NIL valuation within its group (sport or position). |
-| `group_name` | character | Name of the group the NIL valuation is ranked within (usually null). |
-| `tags` | character | JSON-encoded list of NIL tags on the valuation (e.g. Influencer). |
-| `roster_value` | character | Nested roster-value object of the NIL valuation (usually null). |
-| `nil_value` | character | On3 NIL valuation in US dollars. |
+| `nil_status` | String | Status of the athlete's On3 NIL valuation (e.g. active, inactive). |
+| `valuation` | Int64 | Athlete's latest On3 NIL valuation in dollars. |
+| `valuation_change` | Int64 | Change in the NIL valuation since the previous update, in dollars. |
+| `followers` | Int64 | Total social-media followers counted toward the valuation. |
+| `rank` | Int64 | Overall rank of the player's NIL valuation across On3's NIL 100. |
+| `last_updated` | Int64 | Unix timestamp (seconds) of the last update to the NIL valuation. |
+| `whisper` | Float64 | On3 whisper valuation (reported deal value) behind the NIL valuation, in US dollars. |
+| `whisper_change` | Float64 | Change in the whisper valuation since the previous update, in US dollars. |
+| `social_valuations` | String | Per-platform breakdown of the social components of the valuation (stringified list). |
+| `group_rank` | Int64 | Rank of the NIL valuation within its group (sport or position). |
+| `group_name` | String | Name of the group the NIL valuation is ranked within (usually null). |
+| `tags` | String | JSON-encoded list of NIL tags on the valuation (e.g. Influencer). |
+| `roster_value` | String | Nested roster-value object of the NIL valuation (usually null). |
+| `nil_value` | String | On3 NIL valuation in US dollars. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -92,7 +92,7 @@ on3_people_latest_valuation(person_key=89617)
 
 ## on3_people_measurements
 
-GET /rdb/v1/people/{personKey}/measurements
+People measurements.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/people/{person_key}/measurements`
 
@@ -108,7 +108,7 @@ GET /rdb/v1/people/{personKey}/measurements
 
 | col_name | type | description |
 |---|---|---|
-| `player_measurements` | character | JSON-encoded list of the player's measurement records (type, value, verification). |
+| `player_measurements` | String | JSON-encoded list of the player's measurement records (type, value, verification). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -128,7 +128,7 @@ on3_people_measurements(person_key=89617)
 
 ## on3_people_measurements_averages
 
-GET /rdb/v1/people/{personKey}/measurements/averages
+People measurements averages.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/people/{person_key}/measurements/averages`
 
@@ -146,16 +146,16 @@ GET /rdb/v1/people/{personKey}/measurements/averages
 
 | col_name | type | description |
 |---|---|---|
-| `measurement_key` | integer | On3 key for the measurement category being averaged. |
-| `measurement_name` | character | Name of the measurement category (e.g. height, 40-yard dash). |
-| `current_person_measurement` | numeric | Athlete's current value for the measurement. |
-| `current_measurement_verified` | character | Whether the athlete's current measurement is verified by On3. |
-| `top300_difference` | numeric | Difference between the athlete's value and the On3 Top300 average. |
-| `top300_average` | numeric | Average value of the measurement among On3 Top300-ranked players. |
-| `combine_drafted_average` | numeric | Average combine value of the measurement among drafted players. |
-| `combine_drafted_difference` | numeric | Difference between the athlete's value and the drafted-player combine average. |
-| `sort` | character | Display sort order of the measurement row on the On3 profile. |
-| `measurement_record` | character | Nested On3 record for the athlete's underlying measurement (stringified). |
+| `measurement_key` | Int64 | On3 key for the measurement category being averaged. |
+| `measurement_name` | String | Name of the measurement category (e.g. height, 40-yard dash). |
+| `current_person_measurement` | Float64 | Athlete's current value for the measurement. |
+| `current_measurement_verified` | String | Whether the athlete's current measurement is verified by On3. |
+| `top300_difference` | Float64 | Difference between the athlete's value and the On3 Top300 average. |
+| `top300_average` | Float64 | Average value of the measurement among On3 Top300-ranked players. |
+| `combine_drafted_average` | Float64 | Average combine value of the measurement among drafted players. |
+| `combine_drafted_difference` | Float64 | Difference between the athlete's value and the drafted-player combine average. |
+| `sort` | String | Display sort order of the measurement row on the On3 profile. |
+| `measurement_record` | String | Nested On3 record for the athlete's underlying measurement (stringified). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -175,7 +175,7 @@ on3_people_measurements_averages(person_key=89617)
 
 ## on3_people_person_connections
 
-GET /rdb/v1/people/{personKey}/person-connections
+People person connections.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/people/{person_key}/person-connections`
 
@@ -211,7 +211,7 @@ on3_people_person_connections(person_key=89617)
 
 ## on3_people_social
 
-GET /rdb/v1/people/{personKey}/social
+People social.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/people/{person_key}/social`
 
@@ -227,9 +227,9 @@ GET /rdb/v1/people/{personKey}/social
 
 | col_name | type | description |
 |---|---|---|
-| `type` | character | Type label of the row (vocabulary depends on the endpoint). |
-| `handle` | character | Athlete's account handle on the social platform. |
-| `handshake` | logical | On3 RDB handshake field on the social-account record (platform link/verification metadata). |
+| `type` | String | Type label of the row (vocabulary depends on the endpoint). |
+| `handle` | String | Athlete's account handle on the social platform. |
+| `handshake` | Boolean | On3 RDB handshake field on the social-account record (platform link/verification metadata). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -249,7 +249,7 @@ on3_people_social(person_key=89617)
 
 ## on3_people_social_post_summary
 
-GET /rdb/v1/people/{personKey}/social-post-summary
+People social post summary.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/people/{person_key}/social-post-summary`
 
@@ -265,9 +265,9 @@ GET /rdb/v1/people/{personKey}/social-post-summary
 
 | col_name | type | description |
 |---|---|---|
-| `social_type` | character | Social platform the post summary covers (e.g. Twitter/X, Instagram). |
-| `type` | character | Type label of the row (vocabulary depends on the endpoint). |
-| `followers` | integer | Athlete's follower count on the platform. |
+| `social_type` | String | Social platform the post summary covers (e.g. Twitter/X, Instagram). |
+| `type` | String | Type label of the row (vocabulary depends on the endpoint). |
+| `followers` | Int64 | Athlete's follower count on the platform. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -287,7 +287,7 @@ on3_people_social_post_summary(person_key=89617)
 
 ## on3_people_track_and_field_measurements
 
-GET /rdb/v1/people/{personKey}/track-and-field-measurements
+People track and field measurements.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/people/{person_key}/track-and-field-measurements`
 
@@ -321,7 +321,7 @@ on3_people_track_and_field_measurements(person_key=89617)
 
 ## on3_people_valuation_growth
 
-GET /rdb/v1/people/{personKey}/valuation-growth
+People valuation growth.
 
 **Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/people/{person_key}/valuation-growth`
 
@@ -337,11 +337,11 @@ GET /rdb/v1/people/{personKey}/valuation-growth
 
 | col_name | type | description |
 |---|---|---|
-| `nil_status` | character | Status of the athlete's On3 NIL valuation at the snapshot (e.g. active, inactive). |
-| `valuation` | integer | Athlete's On3 NIL valuation in dollars at the snapshot. |
-| `valuation_change` | numeric | Change in the NIL valuation versus the previous snapshot, in dollars. |
-| `date` | character | Date of the On3 NIL valuation snapshot. |
-| `date_unix` | integer | Unix timestamp of the valuation snapshot. |
+| `nil_status` | String | Status of the athlete's On3 NIL valuation at the snapshot (e.g. active, inactive). |
+| `valuation` | Int64 | Athlete's On3 NIL valuation in dollars at the snapshot. |
+| `valuation_change` | Float64 | Change in the NIL valuation versus the previous snapshot, in dollars. |
+| `date` | String | Date of the On3 NIL valuation snapshot. |
+| `date_unix` | Int64 | Unix timestamp of the valuation snapshot. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

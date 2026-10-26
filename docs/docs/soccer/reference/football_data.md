@@ -1,11 +1,11 @@
 ---
-title: SOCCER — Football-Data.co.uk CSV archive (football-data.co.uk)
+title: Soccer (all) — Football-Data.co.uk CSV archive (football-data.co.uk)
 sidebar_label: Football-Data.co.uk CSV archive (football-data.co.uk)
-description: "SOCCER — Football-Data.co.uk CSV archive (football-data.co.uk) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "Soccer (all) — Football-Data.co.uk CSV archive (football-data.co.uk) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 14
 toc_max_heading_level: 2
 ---
-# SOCCER — Football-Data.co.uk CSV archive (football-data.co.uk)
+# Soccer (all) — Football-Data.co.uk CSV archive (football-data.co.uk)
 
 `sportsdataverse.soccer` — 3 endpoints.
 
@@ -27,31 +27,31 @@ All seasons of one 'extra' league (BRA, ARG, USA, ...).
 
 | col_name | type | description |
 |---|---|---|
-| `country` | character |  |
-| `league` | character |  |
-| `season` | integer |  |
-| `date` | character | Match Date (dd/mm/yy) |
-| `time` | character | Time of match kick off (from 2019-20) |
-| `home` | character |  |
-| `away` | character |  |
-| `hg` | integer | Full Time Home Team Goals |
-| `ag` | integer | Full Time Away Team Goals |
-| `res` | character | Full Time Result (H=Home Win, D=Draw, A=Away Win) |
-| `psch` | numeric | Closing Pinnacle home win odds (closing odds, from 2012-13) |
-| `pscd` | numeric | Closing Pinnacle draw odds (closing odds, from 2012-13) |
-| `psca` | numeric | Closing Pinnacle away win odds (closing odds, from 2012-13) |
-| `max_ch` | numeric | Closing Market maximum home win odds (closing odds, from 2019-20) |
-| `max_cd` | numeric | Closing Market maximum draw win odds (closing odds, from 2019-20) |
-| `max_ca` | numeric | Closing Market maximum away win odds (closing odds, from 2019-20) |
-| `avg_ch` | numeric | Closing Market average home win odds (closing odds, from 2019-20) |
-| `avg_cd` | numeric | Closing Market average draw win odds (closing odds, from 2019-20) |
-| `avg_ca` | numeric | Closing Market average away win odds (closing odds, from 2019-20) |
-| `bfech` | character | Closing Betfair Exchange home win odds (closing odds, from 2019-20) |
-| `bfecd` | character | Closing Betfair Exchange draw odds (closing odds, from 2019-20) |
-| `bfeca` | character | Closing Betfair Exchange away win odds (closing odds, from 2019-20) |
-| `b365_ch` | character | Closing Bet365 home win odds (closing odds, from 2019-20) |
-| `b365_cd` | character | Closing Bet365 draw odds (closing odds, from 2019-20) |
-| `b365_ca` | character | Closing Bet365 away win odds (closing odds, from 2019-20) |
+| `country` | String |  |
+| `league` | String |  |
+| `season` | Int64 |  |
+| `date` | String | Match Date (dd/mm/yy) |
+| `time` | String | Time of match kick off (from 2019-20) |
+| `home` | String |  |
+| `away` | String |  |
+| `hg` | Int64 | Full Time Home Team Goals |
+| `ag` | Int64 | Full Time Away Team Goals |
+| `res` | String | Full Time Result (H=Home Win, D=Draw, A=Away Win) |
+| `psch` | Float64 | Closing Pinnacle home win odds (closing odds, from 2012-13) |
+| `pscd` | Float64 | Closing Pinnacle draw odds (closing odds, from 2012-13) |
+| `psca` | Float64 | Closing Pinnacle away win odds (closing odds, from 2012-13) |
+| `max_ch` | Float64 | Closing Market maximum home win odds (closing odds, from 2019-20) |
+| `max_cd` | Float64 | Closing Market maximum draw win odds (closing odds, from 2019-20) |
+| `max_ca` | Float64 | Closing Market maximum away win odds (closing odds, from 2019-20) |
+| `avg_ch` | Float64 | Closing Market average home win odds (closing odds, from 2019-20) |
+| `avg_cd` | Float64 | Closing Market average draw win odds (closing odds, from 2019-20) |
+| `avg_ca` | Float64 | Closing Market average away win odds (closing odds, from 2019-20) |
+| `bfech` | String | Closing Betfair Exchange home win odds (closing odds, from 2019-20) |
+| `bfecd` | String | Closing Betfair Exchange draw odds (closing odds, from 2019-20) |
+| `bfeca` | String | Closing Betfair Exchange away win odds (closing odds, from 2019-20) |
+| `b365_ch` | String | Closing Bet365 home win odds (closing odds, from 2019-20) |
+| `b365_cd` | String | Closing Bet365 draw odds (closing odds, from 2019-20) |
+| `b365_ca` | String | Closing Bet365 away win odds (closing odds, from 2019-20) |
 
 **`return_parsed=False`** — the raw CSV response body (`str`).
 
@@ -86,100 +86,100 @@ Upcoming fixtures with odds.
 
 | col_name | type | description |
 |---|---|---|
-| `div` | character | League Division |
-| `date` | character | Match Date (dd/mm/yy) |
-| `time` | character | Time of match kick off (from 2019-20) |
-| `home_team` | character | Home Team |
-| `away_team` | character | Away Team |
-| `referee` | character | Match Referee (from 2000-01, results-only files before) |
-| `b365_h` | numeric | Bet365 home win odds (from 2002-03) |
-| `b365_d` | numeric | Bet365 draw odds (from 2002-03) |
-| `b365_a` | numeric | Bet365 away win odds (from 2002-03) |
-| `bfdh` | numeric | Betfred home win odds (from 2025-26) |
-| `bfdd` | numeric | Betfred draw odds (from 2025-26) |
-| `bfda` | numeric | Betfred away win odds (from 2025-26) |
-| `bvh` | numeric | Betvictor home win odds |
-| `bvd` | numeric | Betvictor draw odds |
-| `bva` | numeric | Betvictor away win odds |
-| `bwh` | numeric | Bet&Win home win odds |
-| `bwd` | numeric | Bet&Win draw odds |
-| `bwa` | numeric | Bet&Win away win odds |
-| `pph` | numeric | Paddy Power home win odds |
-| `ppd` | numeric | Paddy Power draw odds |
-| `ppa` | numeric | Paddy Power away win odds |
-| `skbh` | numeric |  |
-| `skbd` | numeric |  |
-| `skba` | numeric |  |
-| `max_h` | numeric | Market maximum home win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `max_d` | numeric | Market maximum draw win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `max_a` | numeric | Market maximum away win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `avg_h` | numeric | Market average home win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `avg_d` | numeric | Market average draw win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `avg_a` | numeric | Market average away win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `bfeh` | numeric | Betfair Exchange home win odds (from 2024-25) |
-| `bfed` | numeric | Betfair Exchange draw odds (from 2024-25) |
-| `bfea` | numeric | Betfair Exchange away win odds (from 2024-25) |
-| `b365>2.5` | numeric | Bet365 over 2.5 goals (from 2002-03) |
-| `b365<2.5` | numeric | Bet365 under 2.5 goals (from 2002-03) |
-| `max>2.5` | numeric | Market maximum over 2.5 goals (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `max<2.5` | numeric | Market maximum under 2.5 goals (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `avg>2.5` | numeric | Market average over 2.5 goals (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `avg<2.5` | numeric | Market average under 2.5 goals (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `bfe>2.5` | numeric |  |
-| `bfe<2.5` | numeric |  |
-| `a_hh` | numeric | Market size of handicap (home team) (since 2019/2020) |
-| `b365_ahh` | numeric | Bet365 Asian handicap home team odds (from 2002-03) |
-| `b365_aha` | numeric | Bet365 Asian handicap away team odds (from 2002-03) |
-| `max_ahh` | numeric | Market maximum Asian handicap home team odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `max_aha` | numeric | Market maximum Asian handicap away team odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `avg_ahh` | numeric | Market average Asian handicap home team odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `avg_aha` | numeric | Market average Asian handicap away team odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `bfeahh` | numeric |  |
-| `bfeaha` | numeric |  |
-| `b365_ch` | character | Closing Bet365 home win odds (closing odds, from 2019-20) |
-| `b365_cd` | character | Closing Bet365 draw odds (closing odds, from 2019-20) |
-| `b365_ca` | character | Closing Bet365 away win odds (closing odds, from 2019-20) |
-| `bfdch` | character | Closing Betfred home win odds (closing odds, from 2019-20) |
-| `bfdcd` | character | Closing Betfred draw odds (closing odds, from 2019-20) |
-| `bfdca` | character | Closing Betfred away win odds (closing odds, from 2019-20) |
-| `bvch` | character | Closing Betvictor home win odds (closing odds, from 2019-20) |
-| `bvcd` | character | Closing Betvictor draw odds (closing odds, from 2019-20) |
-| `bvca` | character | Closing Betvictor away win odds (closing odds, from 2019-20) |
-| `bwch` | character | Closing Bet&Win home win odds (closing odds, from 2019-20) |
-| `bwcd` | character | Closing Bet&Win draw odds (closing odds, from 2019-20) |
-| `bwca` | character | Closing Bet&Win away win odds (closing odds, from 2019-20) |
-| `ppch` | character | Closing Paddy Power home win odds |
-| `ppcd` | character | Closing Paddy Power draw odds |
-| `ppca` | character | Closing Paddy Power away win odds |
-| `skbch` | character |  |
-| `skbcd` | character |  |
-| `skbca` | character |  |
-| `max_ch` | character | Closing Market maximum home win odds (closing odds, from 2019-20) |
-| `max_cd` | character | Closing Market maximum draw win odds (closing odds, from 2019-20) |
-| `max_ca` | character | Closing Market maximum away win odds (closing odds, from 2019-20) |
-| `avg_ch` | character | Closing Market average home win odds (closing odds, from 2019-20) |
-| `avg_cd` | character | Closing Market average draw win odds (closing odds, from 2019-20) |
-| `avg_ca` | character | Closing Market average away win odds (closing odds, from 2019-20) |
-| `bfech` | character | Closing Betfair Exchange home win odds (closing odds, from 2019-20) |
-| `bfecd` | character | Closing Betfair Exchange draw odds (closing odds, from 2019-20) |
-| `bfeca` | character | Closing Betfair Exchange away win odds (closing odds, from 2019-20) |
-| `b365_c>2.5` | character | Closing Bet365 over 2.5 goals (closing odds, from 2019-20) |
-| `b365_c<2.5` | character | Closing Bet365 under 2.5 goals (closing odds, from 2019-20) |
-| `max_c>2.5` | character | Closing Market maximum over 2.5 goals (closing odds, from 2019-20) |
-| `max_c<2.5` | character | Closing Market maximum under 2.5 goals (closing odds, from 2019-20) |
-| `avg_c>2.5` | character | Closing Market average over 2.5 goals (closing odds, from 2019-20) |
-| `avg_c<2.5` | character | Closing Market average under 2.5 goals (closing odds, from 2019-20) |
-| `bfec>2.5` | character |  |
-| `bfec<2.5` | character |  |
-| `ah_ch` | character | Closing Market size of handicap (home team) (since 2019/2020) |
-| `b365_cahh` | character | Closing Bet365 Asian handicap home team odds (closing odds, from 2019-20) |
-| `b365_caha` | character | Closing Bet365 Asian handicap away team odds (closing odds, from 2019-20) |
-| `max_cahh` | character | Closing Market maximum Asian handicap home team odds (closing odds, from 2019-20) |
-| `max_caha` | character | Closing Market maximum Asian handicap away team odds (closing odds, from 2019-20) |
-| `avg_cahh` | character | Closing Market average Asian handicap home team odds (closing odds, from 2019-20) |
-| `avg_caha` | character | Closing Market average Asian handicap away team odds (closing odds, from 2019-20) |
-| `bfecahh` | character |  |
-| `bfecaha` | character |  |
+| `div` | String | League Division |
+| `date` | String | Match Date (dd/mm/yy) |
+| `time` | String | Time of match kick off (from 2019-20) |
+| `home_team` | String | Home Team |
+| `away_team` | String | Away Team |
+| `referee` | String | Match Referee (from 2000-01, results-only files before) |
+| `b365_h` | Float64 | Bet365 home win odds (from 2002-03) |
+| `b365_d` | Float64 | Bet365 draw odds (from 2002-03) |
+| `b365_a` | Float64 | Bet365 away win odds (from 2002-03) |
+| `bfdh` | Float64 | Betfred home win odds (from 2025-26) |
+| `bfdd` | Float64 | Betfred draw odds (from 2025-26) |
+| `bfda` | Float64 | Betfred away win odds (from 2025-26) |
+| `bvh` | Float64 | Betvictor home win odds |
+| `bvd` | Float64 | Betvictor draw odds |
+| `bva` | Float64 | Betvictor away win odds |
+| `bwh` | Float64 | Bet&Win home win odds |
+| `bwd` | Float64 | Bet&Win draw odds |
+| `bwa` | Float64 | Bet&Win away win odds |
+| `pph` | Float64 | Paddy Power home win odds |
+| `ppd` | Float64 | Paddy Power draw odds |
+| `ppa` | Float64 | Paddy Power away win odds |
+| `skbh` | Float64 |  |
+| `skbd` | Float64 |  |
+| `skba` | Float64 |  |
+| `max_h` | Float64 | Market maximum home win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `max_d` | Float64 | Market maximum draw win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `max_a` | Float64 | Market maximum away win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `avg_h` | Float64 | Market average home win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `avg_d` | Float64 | Market average draw win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `avg_a` | Float64 | Market average away win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `bfeh` | Float64 | Betfair Exchange home win odds (from 2024-25) |
+| `bfed` | Float64 | Betfair Exchange draw odds (from 2024-25) |
+| `bfea` | Float64 | Betfair Exchange away win odds (from 2024-25) |
+| `b365>2.5` | Float64 | Bet365 over 2.5 goals (from 2002-03) |
+| `b365<2.5` | Float64 | Bet365 under 2.5 goals (from 2002-03) |
+| `max>2.5` | Float64 | Market maximum over 2.5 goals (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `max<2.5` | Float64 | Market maximum under 2.5 goals (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `avg>2.5` | Float64 | Market average over 2.5 goals (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `avg<2.5` | Float64 | Market average under 2.5 goals (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `bfe>2.5` | Float64 |  |
+| `bfe<2.5` | Float64 |  |
+| `a_hh` | Float64 | Market size of handicap (home team) (since 2019/2020) |
+| `b365_ahh` | Float64 | Bet365 Asian handicap home team odds (from 2002-03) |
+| `b365_aha` | Float64 | Bet365 Asian handicap away team odds (from 2002-03) |
+| `max_ahh` | Float64 | Market maximum Asian handicap home team odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `max_aha` | Float64 | Market maximum Asian handicap away team odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `avg_ahh` | Float64 | Market average Asian handicap home team odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `avg_aha` | Float64 | Market average Asian handicap away team odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `bfeahh` | Float64 |  |
+| `bfeaha` | Float64 |  |
+| `b365_ch` | String | Closing Bet365 home win odds (closing odds, from 2019-20) |
+| `b365_cd` | String | Closing Bet365 draw odds (closing odds, from 2019-20) |
+| `b365_ca` | String | Closing Bet365 away win odds (closing odds, from 2019-20) |
+| `bfdch` | String | Closing Betfred home win odds (closing odds, from 2019-20) |
+| `bfdcd` | String | Closing Betfred draw odds (closing odds, from 2019-20) |
+| `bfdca` | String | Closing Betfred away win odds (closing odds, from 2019-20) |
+| `bvch` | String | Closing Betvictor home win odds (closing odds, from 2019-20) |
+| `bvcd` | String | Closing Betvictor draw odds (closing odds, from 2019-20) |
+| `bvca` | String | Closing Betvictor away win odds (closing odds, from 2019-20) |
+| `bwch` | String | Closing Bet&Win home win odds (closing odds, from 2019-20) |
+| `bwcd` | String | Closing Bet&Win draw odds (closing odds, from 2019-20) |
+| `bwca` | String | Closing Bet&Win away win odds (closing odds, from 2019-20) |
+| `ppch` | String | Closing Paddy Power home win odds |
+| `ppcd` | String | Closing Paddy Power draw odds |
+| `ppca` | String | Closing Paddy Power away win odds |
+| `skbch` | String |  |
+| `skbcd` | String |  |
+| `skbca` | String |  |
+| `max_ch` | String | Closing Market maximum home win odds (closing odds, from 2019-20) |
+| `max_cd` | String | Closing Market maximum draw win odds (closing odds, from 2019-20) |
+| `max_ca` | String | Closing Market maximum away win odds (closing odds, from 2019-20) |
+| `avg_ch` | String | Closing Market average home win odds (closing odds, from 2019-20) |
+| `avg_cd` | String | Closing Market average draw win odds (closing odds, from 2019-20) |
+| `avg_ca` | String | Closing Market average away win odds (closing odds, from 2019-20) |
+| `bfech` | String | Closing Betfair Exchange home win odds (closing odds, from 2019-20) |
+| `bfecd` | String | Closing Betfair Exchange draw odds (closing odds, from 2019-20) |
+| `bfeca` | String | Closing Betfair Exchange away win odds (closing odds, from 2019-20) |
+| `b365_c>2.5` | String | Closing Bet365 over 2.5 goals (closing odds, from 2019-20) |
+| `b365_c<2.5` | String | Closing Bet365 under 2.5 goals (closing odds, from 2019-20) |
+| `max_c>2.5` | String | Closing Market maximum over 2.5 goals (closing odds, from 2019-20) |
+| `max_c<2.5` | String | Closing Market maximum under 2.5 goals (closing odds, from 2019-20) |
+| `avg_c>2.5` | String | Closing Market average over 2.5 goals (closing odds, from 2019-20) |
+| `avg_c<2.5` | String | Closing Market average under 2.5 goals (closing odds, from 2019-20) |
+| `bfec>2.5` | String |  |
+| `bfec<2.5` | String |  |
+| `ah_ch` | String | Closing Market size of handicap (home team) (since 2019/2020) |
+| `b365_cahh` | String | Closing Bet365 Asian handicap home team odds (closing odds, from 2019-20) |
+| `b365_caha` | String | Closing Bet365 Asian handicap away team odds (closing odds, from 2019-20) |
+| `max_cahh` | String | Closing Market maximum Asian handicap home team odds (closing odds, from 2019-20) |
+| `max_caha` | String | Closing Market maximum Asian handicap away team odds (closing odds, from 2019-20) |
+| `avg_cahh` | String | Closing Market average Asian handicap home team odds (closing odds, from 2019-20) |
+| `avg_caha` | String | Closing Market average Asian handicap away team odds (closing odds, from 2019-20) |
+| `bfecahh` | String |  |
+| `bfecaha` | String |  |
 
 **`return_parsed=False`** — the raw CSV response body (`str`).
 
@@ -216,138 +216,138 @@ One league-season of results + closing odds (main leagues).
 
 | col_name | type | description |
 |---|---|---|
-| `div` | character | League Division |
-| `date` | character | Match Date (dd/mm/yy) |
-| `time` | character | Time of match kick off (from 2019-20) |
-| `home_team` | character | Home Team |
-| `away_team` | character | Away Team |
-| `fthg` | integer | Full Time Home Team Goals |
-| `ftag` | integer | Full Time Away Team Goals |
-| `ftr` | character | Full Time Result (H=Home Win, D=Draw, A=Away Win) |
-| `hthg` | integer | Half Time Home Team Goals |
-| `htag` | integer | Half Time Away Team Goals |
-| `htr` | character | Half Time Result (H=Home Win, D=Draw, A=Away Win) |
-| `referee` | character | Match Referee (from 2000-01, results-only files before) |
-| `hs` | integer | Home Team Shots (from 2000-01, results-only files before) |
-| `as` | integer | Away Team Shots (from 2000-01, results-only files before) |
-| `hst` | integer | Home Team Shots on Target (from 2000-01, results-only files before) |
-| `ast` | integer | Away Team Shots on Target (from 2000-01, results-only files before) |
-| `hf` | integer | Home Team Fouls Committed (from 2000-01, results-only files before) |
-| `af` | integer | Away Team Fouls Committed (from 2000-01, results-only files before) |
-| `hc` | integer | Home Team Corners (from 2000-01, results-only files before) |
-| `ac` | integer | Away Team Corners (from 2000-01, results-only files before) |
-| `hy` | integer | Home Team Yellow Cards (from 2000-01, results-only files before) |
-| `ay` | integer | Away Team Yellow Cards (from 2000-01, results-only files before) |
-| `hr` | integer | Home Team Red Cards (from 2000-01, results-only files before) |
-| `ar` | integer | Away Team Red Cards (from 2000-01, results-only files before) |
-| `b365_h` | numeric | Bet365 home win odds (from 2002-03) |
-| `b365_d` | numeric | Bet365 draw odds (from 2002-03) |
-| `b365_a` | numeric | Bet365 away win odds (from 2002-03) |
-| `bfdh` | numeric | Betfred home win odds (from 2025-26) |
-| `bfdd` | numeric | Betfred draw odds (from 2025-26) |
-| `bfda` | numeric | Betfred away win odds (from 2025-26) |
-| `bmgmh` | numeric | BetMGM home win odds |
-| `bmgmd` | numeric | BetMGM draw odds |
-| `bmgma` | numeric | BetMGM away win odds |
-| `bvh` | numeric | Betvictor home win odds |
-| `bvd` | numeric | Betvictor draw odds |
-| `bva` | numeric | Betvictor away win odds |
-| `bwh` | numeric | Bet&Win home win odds |
-| `bwd` | numeric | Bet&Win draw odds |
-| `bwa` | numeric | Bet&Win away win odds |
-| `clh` | numeric | Coral home win odds |
-| `cld` | numeric | Coral draw odds |
-| `cla` | numeric | Coral away win odds |
-| `lbh` | numeric | Ladbrokes home win odds |
-| `lbd` | numeric | Ladbrokes draw odds |
-| `lba` | numeric | Ladbrokes away win odds |
-| `psh` | numeric | Pinnacle home win odds (from 2012-13) |
-| `psd` | numeric | Pinnacle draw odds (from 2012-13) |
-| `psa` | numeric | Pinnacle away win odds (from 2012-13) |
-| `max_h` | numeric | Market maximum home win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `max_d` | numeric | Market maximum draw win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `max_a` | numeric | Market maximum away win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `avg_h` | numeric | Market average home win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `avg_d` | numeric | Market average draw win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `avg_a` | numeric | Market average away win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `bfeh` | numeric | Betfair Exchange home win odds (from 2024-25) |
-| `bfed` | numeric | Betfair Exchange draw odds (from 2024-25) |
-| `bfea` | numeric | Betfair Exchange away win odds (from 2024-25) |
-| `b365>2.5` | numeric | Bet365 over 2.5 goals (from 2002-03) |
-| `b365<2.5` | numeric | Bet365 under 2.5 goals (from 2002-03) |
-| `p>2.5` | numeric | Pinnacle over 2.5 goals (from 2012-13) |
-| `p<2.5` | numeric | Pinnacle under 2.5 goals (from 2012-13) |
-| `max>2.5` | numeric | Market maximum over 2.5 goals (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `max<2.5` | numeric | Market maximum under 2.5 goals (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `avg>2.5` | numeric | Market average over 2.5 goals (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `avg<2.5` | numeric | Market average under 2.5 goals (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `bfe>2.5` | numeric |  |
-| `bfe<2.5` | numeric |  |
-| `a_hh` | numeric | Market size of handicap (home team) (since 2019/2020) |
-| `b365_ahh` | numeric | Bet365 Asian handicap home team odds (from 2002-03) |
-| `b365_aha` | numeric | Bet365 Asian handicap away team odds (from 2002-03) |
-| `pahh` | numeric | Pinnacle Asian handicap home team odds (from 2012-13) |
-| `paha` | numeric | Pinnacle Asian handicap away team odds (from 2012-13) |
-| `max_ahh` | numeric | Market maximum Asian handicap home team odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `max_aha` | numeric | Market maximum Asian handicap away team odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `avg_ahh` | numeric | Market average Asian handicap home team odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `avg_aha` | numeric | Market average Asian handicap away team odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
-| `bfeahh` | numeric |  |
-| `bfeaha` | numeric |  |
-| `b365_ch` | numeric | Closing Bet365 home win odds (closing odds, from 2019-20) |
-| `b365_cd` | numeric | Closing Bet365 draw odds (closing odds, from 2019-20) |
-| `b365_ca` | numeric | Closing Bet365 away win odds (closing odds, from 2019-20) |
-| `bfdch` | numeric | Closing Betfred home win odds (closing odds, from 2019-20) |
-| `bfdcd` | numeric | Closing Betfred draw odds (closing odds, from 2019-20) |
-| `bfdca` | numeric | Closing Betfred away win odds (closing odds, from 2019-20) |
-| `bmgmch` | numeric | Closing BetMGM home win odds (closing odds, from 2019-20) |
-| `bmgmcd` | numeric | Closing BetMGM draw odds (closing odds, from 2019-20) |
-| `bmgmca` | numeric | Closing BetMGM away win odds (closing odds, from 2019-20) |
-| `bvch` | numeric | Closing Betvictor home win odds (closing odds, from 2019-20) |
-| `bvcd` | numeric | Closing Betvictor draw odds (closing odds, from 2019-20) |
-| `bvca` | numeric | Closing Betvictor away win odds (closing odds, from 2019-20) |
-| `bwch` | numeric | Closing Bet&Win home win odds (closing odds, from 2019-20) |
-| `bwcd` | numeric | Closing Bet&Win draw odds (closing odds, from 2019-20) |
-| `bwca` | numeric | Closing Bet&Win away win odds (closing odds, from 2019-20) |
-| `clch` | numeric | Closing Coral home win odds (closing odds, from 2019-20) |
-| `clcd` | numeric | Closing Coral draw odds (closing odds, from 2019-20) |
-| `clca` | numeric | Closing Coral away win odds (closing odds, from 2019-20) |
-| `lbch` | numeric | Closing Ladbrokes home win odds (closing odds, from 2019-20) |
-| `lbcd` | numeric | Closing Ladbrokes draw odds (closing odds, from 2019-20) |
-| `lbca` | numeric | Closing Ladbrokes away win odds (closing odds, from 2019-20) |
-| `psch` | numeric | Closing Pinnacle home win odds (closing odds, from 2012-13) |
-| `pscd` | numeric | Closing Pinnacle draw odds (closing odds, from 2012-13) |
-| `psca` | numeric | Closing Pinnacle away win odds (closing odds, from 2012-13) |
-| `max_ch` | numeric | Closing Market maximum home win odds (closing odds, from 2019-20) |
-| `max_cd` | numeric | Closing Market maximum draw win odds (closing odds, from 2019-20) |
-| `max_ca` | numeric | Closing Market maximum away win odds (closing odds, from 2019-20) |
-| `avg_ch` | numeric | Closing Market average home win odds (closing odds, from 2019-20) |
-| `avg_cd` | numeric | Closing Market average draw win odds (closing odds, from 2019-20) |
-| `avg_ca` | numeric | Closing Market average away win odds (closing odds, from 2019-20) |
-| `bfech` | numeric | Closing Betfair Exchange home win odds (closing odds, from 2019-20) |
-| `bfecd` | numeric | Closing Betfair Exchange draw odds (closing odds, from 2019-20) |
-| `bfeca` | numeric | Closing Betfair Exchange away win odds (closing odds, from 2019-20) |
-| `b365_c>2.5` | numeric | Closing Bet365 over 2.5 goals (closing odds, from 2019-20) |
-| `b365_c<2.5` | numeric | Closing Bet365 under 2.5 goals (closing odds, from 2019-20) |
-| `pc>2.5` | numeric | Closing Pinnacle over 2.5 goals (closing odds, from 2019-20) |
-| `pc<2.5` | numeric | Closing Pinnacle under 2.5 goals (closing odds, from 2019-20) |
-| `max_c>2.5` | numeric | Closing Market maximum over 2.5 goals (closing odds, from 2019-20) |
-| `max_c<2.5` | numeric | Closing Market maximum under 2.5 goals (closing odds, from 2019-20) |
-| `avg_c>2.5` | numeric | Closing Market average over 2.5 goals (closing odds, from 2019-20) |
-| `avg_c<2.5` | numeric | Closing Market average under 2.5 goals (closing odds, from 2019-20) |
-| `bfec>2.5` | numeric |  |
-| `bfec<2.5` | numeric |  |
-| `ah_ch` | numeric | Closing Market size of handicap (home team) (since 2019/2020) |
-| `b365_cahh` | numeric | Closing Bet365 Asian handicap home team odds (closing odds, from 2019-20) |
-| `b365_caha` | numeric | Closing Bet365 Asian handicap away team odds (closing odds, from 2019-20) |
-| `pcahh` | numeric | Closing Pinnacle Asian handicap home team odds (closing odds, from 2019-20) |
-| `pcaha` | numeric | Closing Pinnacle Asian handicap away team odds (closing odds, from 2019-20) |
-| `max_cahh` | numeric | Closing Market maximum Asian handicap home team odds (closing odds, from 2019-20) |
-| `max_caha` | numeric | Closing Market maximum Asian handicap away team odds (closing odds, from 2019-20) |
-| `avg_cahh` | numeric | Closing Market average Asian handicap home team odds (closing odds, from 2019-20) |
-| `avg_caha` | numeric | Closing Market average Asian handicap away team odds (closing odds, from 2019-20) |
-| `bfecahh` | numeric |  |
-| `bfecaha` | numeric |  |
+| `div` | String | League Division |
+| `date` | String | Match Date (dd/mm/yy) |
+| `time` | String | Time of match kick off (from 2019-20) |
+| `home_team` | String | Home Team |
+| `away_team` | String | Away Team |
+| `fthg` | Int64 | Full Time Home Team Goals |
+| `ftag` | Int64 | Full Time Away Team Goals |
+| `ftr` | String | Full Time Result (H=Home Win, D=Draw, A=Away Win) |
+| `hthg` | Int64 | Half Time Home Team Goals |
+| `htag` | Int64 | Half Time Away Team Goals |
+| `htr` | String | Half Time Result (H=Home Win, D=Draw, A=Away Win) |
+| `referee` | String | Match Referee (from 2000-01, results-only files before) |
+| `hs` | Int64 | Home Team Shots (from 2000-01, results-only files before) |
+| `as` | Int64 | Away Team Shots (from 2000-01, results-only files before) |
+| `hst` | Int64 | Home Team Shots on Target (from 2000-01, results-only files before) |
+| `ast` | Int64 | Away Team Shots on Target (from 2000-01, results-only files before) |
+| `hf` | Int64 | Home Team Fouls Committed (from 2000-01, results-only files before) |
+| `af` | Int64 | Away Team Fouls Committed (from 2000-01, results-only files before) |
+| `hc` | Int64 | Home Team Corners (from 2000-01, results-only files before) |
+| `ac` | Int64 | Away Team Corners (from 2000-01, results-only files before) |
+| `hy` | Int64 | Home Team Yellow Cards (from 2000-01, results-only files before) |
+| `ay` | Int64 | Away Team Yellow Cards (from 2000-01, results-only files before) |
+| `hr` | Int64 | Home Team Red Cards (from 2000-01, results-only files before) |
+| `ar` | Int64 | Away Team Red Cards (from 2000-01, results-only files before) |
+| `b365_h` | Float64 | Bet365 home win odds (from 2002-03) |
+| `b365_d` | Float64 | Bet365 draw odds (from 2002-03) |
+| `b365_a` | Float64 | Bet365 away win odds (from 2002-03) |
+| `bfdh` | Float64 | Betfred home win odds (from 2025-26) |
+| `bfdd` | Float64 | Betfred draw odds (from 2025-26) |
+| `bfda` | Float64 | Betfred away win odds (from 2025-26) |
+| `bmgmh` | Float64 | BetMGM home win odds |
+| `bmgmd` | Float64 | BetMGM draw odds |
+| `bmgma` | Float64 | BetMGM away win odds |
+| `bvh` | Float64 | Betvictor home win odds |
+| `bvd` | Float64 | Betvictor draw odds |
+| `bva` | Float64 | Betvictor away win odds |
+| `bwh` | Float64 | Bet&Win home win odds |
+| `bwd` | Float64 | Bet&Win draw odds |
+| `bwa` | Float64 | Bet&Win away win odds |
+| `clh` | Float64 | Coral home win odds |
+| `cld` | Float64 | Coral draw odds |
+| `cla` | Float64 | Coral away win odds |
+| `lbh` | Float64 | Ladbrokes home win odds |
+| `lbd` | Float64 | Ladbrokes draw odds |
+| `lba` | Float64 | Ladbrokes away win odds |
+| `psh` | Float64 | Pinnacle home win odds (from 2012-13) |
+| `psd` | Float64 | Pinnacle draw odds (from 2012-13) |
+| `psa` | Float64 | Pinnacle away win odds (from 2012-13) |
+| `max_h` | Float64 | Market maximum home win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `max_d` | Float64 | Market maximum draw win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `max_a` | Float64 | Market maximum away win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `avg_h` | Float64 | Market average home win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `avg_d` | Float64 | Market average draw win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `avg_a` | Float64 | Market average away win odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `bfeh` | Float64 | Betfair Exchange home win odds (from 2024-25) |
+| `bfed` | Float64 | Betfair Exchange draw odds (from 2024-25) |
+| `bfea` | Float64 | Betfair Exchange away win odds (from 2024-25) |
+| `b365>2.5` | Float64 | Bet365 over 2.5 goals (from 2002-03) |
+| `b365<2.5` | Float64 | Bet365 under 2.5 goals (from 2002-03) |
+| `p>2.5` | Float64 | Pinnacle over 2.5 goals (from 2012-13) |
+| `p<2.5` | Float64 | Pinnacle under 2.5 goals (from 2012-13) |
+| `max>2.5` | Float64 | Market maximum over 2.5 goals (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `max<2.5` | Float64 | Market maximum under 2.5 goals (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `avg>2.5` | Float64 | Market average over 2.5 goals (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `avg<2.5` | Float64 | Market average under 2.5 goals (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `bfe>2.5` | Float64 |  |
+| `bfe<2.5` | Float64 |  |
+| `a_hh` | Float64 | Market size of handicap (home team) (since 2019/2020) |
+| `b365_ahh` | Float64 | Bet365 Asian handicap home team odds (from 2002-03) |
+| `b365_aha` | Float64 | Bet365 Asian handicap away team odds (from 2002-03) |
+| `pahh` | Float64 | Pinnacle Asian handicap home team odds (from 2012-13) |
+| `paha` | Float64 | Pinnacle Asian handicap away team odds (from 2012-13) |
+| `max_ahh` | Float64 | Market maximum Asian handicap home team odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `max_aha` | Float64 | Market maximum Asian handicap away team odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `avg_ahh` | Float64 | Market average Asian handicap home team odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `avg_aha` | Float64 | Market average Asian handicap away team odds (from 2005-06, as Betbrain Bb* averages until 2018-19 and under the Max/Avg names from 2019-20) |
+| `bfeahh` | Float64 |  |
+| `bfeaha` | Float64 |  |
+| `b365_ch` | Float64 | Closing Bet365 home win odds (closing odds, from 2019-20) |
+| `b365_cd` | Float64 | Closing Bet365 draw odds (closing odds, from 2019-20) |
+| `b365_ca` | Float64 | Closing Bet365 away win odds (closing odds, from 2019-20) |
+| `bfdch` | Float64 | Closing Betfred home win odds (closing odds, from 2019-20) |
+| `bfdcd` | Float64 | Closing Betfred draw odds (closing odds, from 2019-20) |
+| `bfdca` | Float64 | Closing Betfred away win odds (closing odds, from 2019-20) |
+| `bmgmch` | Float64 | Closing BetMGM home win odds (closing odds, from 2019-20) |
+| `bmgmcd` | Float64 | Closing BetMGM draw odds (closing odds, from 2019-20) |
+| `bmgmca` | Float64 | Closing BetMGM away win odds (closing odds, from 2019-20) |
+| `bvch` | Float64 | Closing Betvictor home win odds (closing odds, from 2019-20) |
+| `bvcd` | Float64 | Closing Betvictor draw odds (closing odds, from 2019-20) |
+| `bvca` | Float64 | Closing Betvictor away win odds (closing odds, from 2019-20) |
+| `bwch` | Float64 | Closing Bet&Win home win odds (closing odds, from 2019-20) |
+| `bwcd` | Float64 | Closing Bet&Win draw odds (closing odds, from 2019-20) |
+| `bwca` | Float64 | Closing Bet&Win away win odds (closing odds, from 2019-20) |
+| `clch` | Float64 | Closing Coral home win odds (closing odds, from 2019-20) |
+| `clcd` | Float64 | Closing Coral draw odds (closing odds, from 2019-20) |
+| `clca` | Float64 | Closing Coral away win odds (closing odds, from 2019-20) |
+| `lbch` | Float64 | Closing Ladbrokes home win odds (closing odds, from 2019-20) |
+| `lbcd` | Float64 | Closing Ladbrokes draw odds (closing odds, from 2019-20) |
+| `lbca` | Float64 | Closing Ladbrokes away win odds (closing odds, from 2019-20) |
+| `psch` | Float64 | Closing Pinnacle home win odds (closing odds, from 2012-13) |
+| `pscd` | Float64 | Closing Pinnacle draw odds (closing odds, from 2012-13) |
+| `psca` | Float64 | Closing Pinnacle away win odds (closing odds, from 2012-13) |
+| `max_ch` | Float64 | Closing Market maximum home win odds (closing odds, from 2019-20) |
+| `max_cd` | Float64 | Closing Market maximum draw win odds (closing odds, from 2019-20) |
+| `max_ca` | Float64 | Closing Market maximum away win odds (closing odds, from 2019-20) |
+| `avg_ch` | Float64 | Closing Market average home win odds (closing odds, from 2019-20) |
+| `avg_cd` | Float64 | Closing Market average draw win odds (closing odds, from 2019-20) |
+| `avg_ca` | Float64 | Closing Market average away win odds (closing odds, from 2019-20) |
+| `bfech` | Float64 | Closing Betfair Exchange home win odds (closing odds, from 2019-20) |
+| `bfecd` | Float64 | Closing Betfair Exchange draw odds (closing odds, from 2019-20) |
+| `bfeca` | Float64 | Closing Betfair Exchange away win odds (closing odds, from 2019-20) |
+| `b365_c>2.5` | Float64 | Closing Bet365 over 2.5 goals (closing odds, from 2019-20) |
+| `b365_c<2.5` | Float64 | Closing Bet365 under 2.5 goals (closing odds, from 2019-20) |
+| `pc>2.5` | Float64 | Closing Pinnacle over 2.5 goals (closing odds, from 2019-20) |
+| `pc<2.5` | Float64 | Closing Pinnacle under 2.5 goals (closing odds, from 2019-20) |
+| `max_c>2.5` | Float64 | Closing Market maximum over 2.5 goals (closing odds, from 2019-20) |
+| `max_c<2.5` | Float64 | Closing Market maximum under 2.5 goals (closing odds, from 2019-20) |
+| `avg_c>2.5` | Float64 | Closing Market average over 2.5 goals (closing odds, from 2019-20) |
+| `avg_c<2.5` | Float64 | Closing Market average under 2.5 goals (closing odds, from 2019-20) |
+| `bfec>2.5` | Float64 |  |
+| `bfec<2.5` | Float64 |  |
+| `ah_ch` | Float64 | Closing Market size of handicap (home team) (since 2019/2020) |
+| `b365_cahh` | Float64 | Closing Bet365 Asian handicap home team odds (closing odds, from 2019-20) |
+| `b365_caha` | Float64 | Closing Bet365 Asian handicap away team odds (closing odds, from 2019-20) |
+| `pcahh` | Float64 | Closing Pinnacle Asian handicap home team odds (closing odds, from 2019-20) |
+| `pcaha` | Float64 | Closing Pinnacle Asian handicap away team odds (closing odds, from 2019-20) |
+| `max_cahh` | Float64 | Closing Market maximum Asian handicap home team odds (closing odds, from 2019-20) |
+| `max_caha` | Float64 | Closing Market maximum Asian handicap away team odds (closing odds, from 2019-20) |
+| `avg_cahh` | Float64 | Closing Market average Asian handicap home team odds (closing odds, from 2019-20) |
+| `avg_caha` | Float64 | Closing Market average Asian handicap away team odds (closing odds, from 2019-20) |
+| `bfecahh` | Float64 |  |
+| `bfecaha` | Float64 |  |
 
 **`return_parsed=False`** — the raw CSV response body (`str`).
 

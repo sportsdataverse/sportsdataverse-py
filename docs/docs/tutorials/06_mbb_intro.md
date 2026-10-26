@@ -1,5 +1,6 @@
 ---
 title: MBB tutorial
+description: "Welcome to Selection-Sunday-grade hoops data! In a handful of lines of Python you're about to pull NCAA Division I men's basketball — full schedules, play-by-play, standings, rosters, statistical…"
 sidebar_label: MBB
 sidebar_position: 4
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/06_mbb_intro.ipynb
@@ -1083,5 +1084,5 @@ else:
 
 ```
 
-    ⏭️  torvik ratings: AssetFetchError: barttorvik.com/2025_team_results.csv answered HTTP 403: <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> <HTML><HEAD><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1"> <TITLE>ERROR
+    ⏭️  torvik ratings: AssetFetchError: barttorvik.com/2025_team_results.csv answered HTTP 403
     no KenPom credentials - skipping kenpom_* (set KENPOM_EMAIL / KENPOM_PASSWORD)

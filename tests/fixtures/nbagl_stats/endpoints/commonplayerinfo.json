@@ -1,0 +1,134 @@
+{
+ "resource": "commonplayerinfo",
+ "parameters": [
+  {
+   "PlayerID": 1642443
+  },
+  {
+   "LeagueID": "20"
+  }
+ ],
+ "resultSets": [
+  {
+   "name": "CommonPlayerInfo",
+   "headers": [
+    "PERSON_ID",
+    "FIRST_NAME",
+    "LAST_NAME",
+    "DISPLAY_FIRST_LAST",
+    "DISPLAY_LAST_COMMA_FIRST",
+    "DISPLAY_FI_LAST",
+    "PLAYER_SLUG",
+    "BIRTHDATE",
+    "SCHOOL",
+    "COUNTRY",
+    "LAST_AFFILIATION",
+    "HEIGHT",
+    "WEIGHT",
+    "SEASON_EXP",
+    "JERSEY",
+    "POSITION",
+    "ROSTERSTATUS",
+    "GAMES_PLAYED_CURRENT_SEASON_FLAG",
+    "TEAM_ID",
+    "TEAM_NAME",
+    "TEAM_ABBREVIATION",
+    "TEAM_CODE",
+    "TEAM_CITY",
+    "PLAYERCODE",
+    "FROM_YEAR",
+    "TO_YEAR",
+    "DLEAGUE_FLAG",
+    "NBA_FLAG",
+    "GAMES_PLAYED_FLAG",
+    "DRAFT_YEAR",
+    "DRAFT_ROUND",
+    "DRAFT_NUMBER",
+    "GREATEST_75_FLAG"
+   ],
+   "rowSet": [
+    [
+     1642443,
+     "Jahmir",
+     "Young",
+     "Jahmir Young",
+     "Young, Jahmir",
+     "J. Young",
+     "jahmir-young",
+     "2000-10-07T00:00:00",
+     "Maryland",
+     "USA",
+     "Maryland/USA",
+     "6-0",
+     "185",
+     1,
+     "17",
+     "Guard",
+     "Active",
+     "Y",
+     1612709904,
+     "Skyforce",
+     "SXF",
+     "skyforce",
+     "Sioux Falls",
+     "jahmir_young",
+     2024,
+     2025,
+     "Y",
+     "Y",
+     "Y",
+     "Undrafted",
+     "Undrafted",
+     "Undrafted",
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "PlayerHeadlineStats",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "TimeFrame",
+    "PTS",
+    "AST",
+    "REB",
+    "PIE"
+   ],
+   "rowSet": [
+    [
+     1642443,
+     "Jahmir Young",
+     "2025-26",
+     26.0,
+     8.9,
+     4.6,
+     0
+    ],
+    [
+     1642443,
+     "Jahmir Young",
+     "2025-26",
+     25.5,
+     6.8,
+     6.0,
+     0
+    ]
+   ]
+  },
+  {
+   "name": "AvailableSeasons",
+   "headers": [
+    "SEASON_ID"
+   ],
+   "rowSet": [
+    [
+     "22024"
+    ],
+    [
+     "52024"
+    ]
+   ]
+  }
+ ]
+}

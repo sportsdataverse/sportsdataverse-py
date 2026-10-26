@@ -2,6 +2,7 @@
 title: How-to recipes
 sidebar_label: How-to recipes
 sidebar_position: 4
+description: "Short, complete sportsdataverse-py recipes for common tasks: finding ids, joining sources, loading seasons and more."
 ---
 
 # How-to recipes
@@ -153,8 +154,8 @@ print(plays.select("game_play_number", "pos_team", "EPA", "home_wp_before").tail
 ## Draw a win-probability chart
 
 ESPN-processed games carry `home_wp_before`, the home side's win probability before
-each play. You need matplotlib (`pip install matplotlib`; the `sportypy` extra and
-`sdvplot[mpl]` also pull it).
+each play. You need matplotlib (`pip install matplotlib`; the `sdvplot` and `sportypy` extras
+also install it).
 
 ```python
 import matplotlib.pyplot as plt
@@ -174,8 +175,8 @@ ax.set_title(f"{away} at {home}")
 fig.savefig("wp.png", dpi=120, bbox_inches="tight")
 ```
 
-With [sdvplot](https://github.com/sportsdataverse/sdvplot)
-(`pip install "sportsdataverse[sdvplot]"`), the same chart takes each side's team
+With [sdvplot](https://sdvplot.sportsdataverse.org/)
+(`pip install --pre "sportsdataverse[sdvplot]"`), the same chart takes each side's team
 color. `sdvplot.team_colors` resolves abbreviations, ESPN ids or names to hex colors.
 
 ```python

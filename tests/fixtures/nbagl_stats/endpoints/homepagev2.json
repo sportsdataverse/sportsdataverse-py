@@ -1,0 +1,318 @@
+{
+ "resource": "homepagev2",
+ "parameters": {
+  "LeagueID": "20",
+  "Season": "2023-24",
+  "SeasonType": "Regular Season",
+  "GameScope": null,
+  "PlayerScope": "All Players",
+  "PlayerOrTeam": "Player",
+  "StatType": "Traditional"
+ },
+ "resultSets": [
+  {
+   "name": "HomePageStat1",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "JERSEY_NUM",
+    "PLAYER_POSITION",
+    "PTS"
+   ],
+   "rowSet": [
+    [
+     1,
+     1630527,
+     "Brandon Boston",
+     1612709924,
+     "ONT",
+     "Ontario Clippers",
+     "4",
+     "G",
+     34.0
+    ],
+    [
+     2,
+     202738,
+     "Isaiah Thomas",
+     1612709903,
+     "SLC",
+     "Salt Lake City Stars",
+     "11",
+     "G",
+     32.5
+    ]
+   ]
+  },
+  {
+   "name": "HomePageStat2",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "JERSEY_NUM",
+    "PLAYER_POSITION",
+    "REB"
+   ],
+   "rowSet": [
+    [
+     1,
+     1631131,
+     "Oscar Tshiebwe",
+     1612709910,
+     "IMA",
+     "Indiana Mad Ants",
+     "44",
+     "F-C",
+     16.1
+    ],
+    [
+     2,
+     1630846,
+     "Olivier Sarr",
+     1612709889,
+     "OKL",
+     "Oklahoma City Blue",
+     "30",
+     "C",
+     13.3
+    ]
+   ]
+  },
+  {
+   "name": "HomePageStat3",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "JERSEY_NUM",
+    "PLAYER_POSITION",
+    "AST"
+   ],
+   "rowSet": [
+    [
+     1,
+     1631221,
+     "Collin Gillespie",
+     1612709917,
+     "GRG",
+     "Grand Rapids Gold",
+     "21",
+     "G",
+     10.5
+    ],
+    [
+     2,
+     1630235,
+     "Trent Forrest",
+     1612709929,
+     "CPS",
+     "College Park Skyhawks",
+     "2",
+     "G",
+     10.0
+    ]
+   ]
+  },
+  {
+   "name": "HomePageStat4",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "JERSEY_NUM",
+    "PLAYER_POSITION",
+    "STL"
+   ],
+   "rowSet": [
+    [
+     1,
+     1630700,
+     "Dyson Daniels",
+     1612709913,
+     "BHM",
+     "Birmingham Squadron",
+     "3",
+     "G",
+     6.0
+    ],
+    [
+     1,
+     1630235,
+     "Trent Forrest",
+     1612709929,
+     "CPS",
+     "College Park Skyhawks",
+     "2",
+     "G",
+     6.0
+    ]
+   ]
+  },
+  {
+   "name": "HomePageStat5",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "JERSEY_NUM",
+    "PLAYER_POSITION",
+    "FG_PCT"
+   ],
+   "rowSet": [
+    [
+     1,
+     1630831,
+     "Nate Bradley",
+     1612709913,
+     "BHM",
+     "Birmingham Squadron",
+     "22",
+     "G",
+     1.0
+    ],
+    [
+     1,
+     1642115,
+     "Kong Kong",
+     1612709889,
+     "OKL",
+     "Oklahoma City Blue",
+     "9",
+     "F",
+     1.0
+    ]
+   ]
+  },
+  {
+   "name": "HomePageStat6",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "JERSEY_NUM",
+    "PLAYER_POSITION",
+    "FT_PCT"
+   ],
+   "rowSet": [
+    [
+     1,
+     1642249,
+     "Joey Baker",
+     1612709917,
+     "GRG",
+     "Grand Rapids Gold",
+     "45",
+     "F",
+     1.0
+    ],
+    [
+     1,
+     1630844,
+     "Troy Baxter Jr.",
+     1612709919,
+     "WES",
+     "Westchester Knicks",
+     "14",
+     "F",
+     1.0
+    ]
+   ]
+  },
+  {
+   "name": "HomePageStat7",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "JERSEY_NUM",
+    "PLAYER_POSITION",
+    "FG3_PCT"
+   ],
+   "rowSet": [
+    [
+     1,
+     1630831,
+     "Nate Bradley",
+     1612709913,
+     "BHM",
+     "Birmingham Squadron",
+     "22",
+     "G",
+     1.0
+    ],
+    [
+     1,
+     1630658,
+     "Colin Castleton",
+     1612709905,
+     "SBL",
+     "South Bay Lakers",
+     "14",
+     "C",
+     1.0
+    ]
+   ]
+  },
+  {
+   "name": "HomePageStat8",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "JERSEY_NUM",
+    "PLAYER_POSITION",
+    "BLK"
+   ],
+   "rowSet": [
+    [
+     1,
+     1630643,
+     "Jay Huff",
+     1612709917,
+     "GRG",
+     "Grand Rapids Gold",
+     "30",
+     "C",
+     4.0
+    ],
+    [
+     2,
+     1630641,
+     "Ibou Badji",
+     1612709933,
+     "RCR",
+     "Rip City Remix",
+     "41",
+     "C",
+     3.0
+    ]
+   ]
+  }
+ ]
+}

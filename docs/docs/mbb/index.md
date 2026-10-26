@@ -1,9 +1,9 @@
 ---
-title: MBB
-sidebar_label: MBB
-description: "sdv-py MBB: endpoint references, dataset loaders and parsers for MBB in the SportsDataverse Python package."
+title: Men's college basketball
+sidebar_label: Men's college basketball
+description: "sdv-py Men's college basketball: endpoint references, dataset loaders and parsers for Men's college basketball in the SportsDataverse Python package."
 ---
-# MBB (`sportsdataverse.mbb`)
+# Men's college basketball (`sportsdataverse.mbb`)
 
 ## Data sources
 
@@ -125,7 +125,7 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 - [`build_net_points`](reference/additional/models-and-calculators#build_net_points)
 - [`build_o_rtg`](reference/additional/models-and-calculators#build_o_rtg)
 - [`build_player_context`](reference/additional/models-and-calculators#build_player_context)
-- [`build_priors`](reference/additional/models-and-calculators-2#build_priors)
+- [`build_priors`](reference/additional/models-and-calculators#build_priors)
 - [`build_productivity`](reference/additional/models-and-calculators-2#build_productivity)
 - [`build_weak_prior_from_rapm`](reference/additional/models-and-calculators-2#build_weak_prior_from_rapm)
 - [`calc_collinearity_diag`](reference/additional/models-and-calculators-2#calc_collinearity_diag)
@@ -168,9 +168,9 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 - [`raw_game_efficiency`](reference/additional/models-and-calculators-2#raw_game_efficiency)
 - [`ridge_cv_lambda`](reference/additional/models-and-calculators-2#ridge_cv_lambda)
 - [`ridge_fit`](reference/additional/models-and-calculators-2#ridge_fit)
-- [`roc_auc`](reference/additional/models-and-calculators-3#roc_auc)
-- [`save_artifact`](reference/additional/models-and-calculators-3#save_artifact)
-- [`score_to_tuple`](reference/additional/models-and-calculators-3#score_to_tuple)
+- [`roc_auc`](reference/additional/models-and-calculators-2#roc_auc)
+- [`save_artifact`](reference/additional/models-and-calculators-2#save_artifact)
+- [`score_to_tuple`](reference/additional/models-and-calculators-2#score_to_tuple)
 - [`simulate_game`](reference/additional/models-and-calculators-3#simulate_game)
 - [`slow_regression`](reference/additional/models-and-calculators-3#slow_regression)
 - [`spearman_corr`](reference/additional/models-and-calculators-3#spearman_corr)
@@ -254,6 +254,11 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 - [`resolve_ncaa_team_id`](reference/additional/ids-and-crosswalks#resolve_ncaa_team_id)
 - [`tidy_player`](reference/additional/ids-and-crosswalks#tidy_player)
 
+
+## See also
+
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("mbb")` draws the NCAA court in a team's colors; `team_colors()` takes ESPN ids and abbreviations
+- [sportypy](https://sportypy.sportsdataverse.org/) — the regulation NCAA court sdvplot draws with
 
 ## Examples
 

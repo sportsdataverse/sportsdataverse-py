@@ -1,0 +1,75 @@
+{
+ "resource": "fantasywidget",
+ "parameters": {
+  "LeagueID": "20",
+  "Season": "2024-25",
+  "SeasonType": "Regular Season",
+  "TodaysPlayers": "N",
+  "ActivePlayers": "Y",
+  "LastNGames": 0,
+  "TeamID": 0,
+  "PlayerID": 1642443,
+  "Location": null,
+  "Month": 0,
+  "SeasonSegment": null,
+  "DateFrom": "",
+  "DateTo": "",
+  "OpponentTeamID": 0,
+  "VsConference": null,
+  "VsDivision": null,
+  "Position": null,
+  "TodaysOpponent": 0,
+  "PORound": 0
+ },
+ "resultSets": [
+  {
+   "name": "FantasyWidgetResult",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "PLAYER_POSITION",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "GP",
+    "MIN",
+    "FAN_DUEL_PTS",
+    "NBA_FANTASY_PTS",
+    "PTS",
+    "REB",
+    "AST",
+    "BLK",
+    "STL",
+    "TOV",
+    "FG3M",
+    "FGA",
+    "FG_PCT",
+    "FTA",
+    "FT_PCT"
+   ],
+   "rowSet": [
+    [
+     1642443,
+     "Jahmir Young",
+     "G",
+     1612709923,
+     "WCB",
+     30,
+     34.5,
+     38.4,
+     41.9,
+     21.5,
+     4.9,
+     7.1,
+     0.3,
+     2.0,
+     3.0,
+     1.3,
+     18.2,
+     0.457,
+     2.6,
+     0.861
+    ]
+   ]
+  }
+ ]
+}

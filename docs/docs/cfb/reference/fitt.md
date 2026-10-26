@@ -1,11 +1,11 @@
 ---
-title: CFB — ESPN FPI API (fitt v3)
+title: College football — ESPN FPI API (fitt v3)
 sidebar_label: ESPN FPI API (fitt v3)
-description: "CFB — ESPN FPI API (fitt v3) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "College football — ESPN FPI API (fitt v3) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 23
 toc_max_heading_level: 2
 ---
-# CFB — ESPN FPI API (fitt v3)
+# College football — ESPN FPI API (fitt v3)
 
 `sportsdataverse.cfb` — 1 endpoint.
 
@@ -29,47 +29,47 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | ESPN team id. |
-| `team_uid` | character |  |
-| `team_abbreviation` | character | Team abbreviation. |
-| `team_display_name` | character | Full team display name. |
-| `team_short_display_name` | character | Short team display name. |
-| `team_nickname` | character | Team nickname label. |
-| `bpi` | double |  |
-| `bpirank` | double |  |
-| `bpioffense` | double |  |
-| `bpidefense` | double |  |
-| `playoffbpi` | double |  |
-| `offtalent` | character |  |
-| `deftalent` | character |  |
-| `numwins` | double |  |
-| `numlosses` | double |  |
-| `projectedw` | double |  |
-| `projectedl` | double |  |
-| `probwindiv` | double |  |
-| `probmakeplayoffs` | double |  |
-| `top6seed` | double |  |
-| `playinchance` | double |  |
-| `playoffseed` | double |  |
-| `projdraftslot` | double |  |
-| `probno1draftpick` | double |  |
-| `playoffbpi_playoffs` | double |  |
-| `playoffoff` | double |  |
-| `playoffdef` | double |  |
-| `probmakeplayoffs_playoffs` | double |  |
-| `probmakeconfsemi` | double |  |
-| `probmakeconfchamp` | double |  |
-| `probmaketitlegame` | double |  |
-| `probwintitle` | double |  |
-| `season.displayName` | character |  |
-| `season.endDate` | character |  |
-| `season.startDate` | character |  |
-| `season.type.endDate` | character |  |
-| `season.type.id` | character |  |
-| `season.type.name` | character |  |
-| `season.type.startDate` | character |  |
-| `season.type.type` | integer |  |
-| `season.year` | integer |  |
+| `team_id` | Int64 | ESPN team id. |
+| `team_uid` | String |  |
+| `team_abbreviation` | String | Team abbreviation. |
+| `team_display_name` | String | Full team display name. |
+| `team_short_display_name` | String | Short team display name. |
+| `team_nickname` | String | Team nickname label. |
+| `bpi` | Float64 |  |
+| `bpirank` | Float64 |  |
+| `bpioffense` | Float64 |  |
+| `bpidefense` | Float64 |  |
+| `playoffbpi` | Float64 |  |
+| `offtalent` | String |  |
+| `deftalent` | String |  |
+| `numwins` | Float64 |  |
+| `numlosses` | Float64 |  |
+| `projectedw` | Float64 |  |
+| `projectedl` | Float64 |  |
+| `probwindiv` | Float64 |  |
+| `probmakeplayoffs` | Float64 |  |
+| `top6seed` | Float64 |  |
+| `playinchance` | Float64 |  |
+| `playoffseed` | Float64 |  |
+| `projdraftslot` | Float64 |  |
+| `probno1draftpick` | Float64 |  |
+| `playoffbpi_playoffs` | Float64 |  |
+| `playoffoff` | Float64 |  |
+| `playoffdef` | Float64 |  |
+| `probmakeplayoffs_playoffs` | Float64 |  |
+| `probmakeconfsemi` | Float64 |  |
+| `probmakeconfchamp` | Float64 |  |
+| `probmaketitlegame` | Float64 |  |
+| `probwintitle` | Float64 |  |
+| `season.displayName` | String |  |
+| `season.endDate` | String |  |
+| `season.startDate` | String |  |
+| `season.type.endDate` | String |  |
+| `season.type.id` | String |  |
+| `season.type.name` | String |  |
+| `season.type.startDate` | String |  |
+| `season.type.type` | Int64 |  |
+| `season.year` | Int64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

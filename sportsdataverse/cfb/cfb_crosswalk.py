@@ -64,7 +64,7 @@ from sportsdataverse.cfb.cfb_fox_ext import fox_cfb_schedule, fox_cfb_team_roste
 from sportsdataverse.cfb.cfb_schedule import espn_cfb_calendar, espn_cfb_schedule, most_recent_cfb_season
 from sportsdataverse.cfb.cfb_teams import espn_cfb_teams
 from sportsdataverse.cfb.cfb_yahoo_ext import yahoo_cfb_scoreboard, yahoo_cfb_teams
-from sportsdataverse.yahoo.yahoo_shangrila import yahoo_team_roster
+from sportsdataverse.providers.yahoo.yahoo_shangrila import yahoo_team_roster
 
 __all__ = [
     "cfb_teams_crosswalk",
@@ -1206,7 +1206,7 @@ def cfb_rosters_crosswalk(
 
     The default is ``("espn", "fox")``. **Yahoo is opt-in** (pass
     ``providers=("espn", "fox", "yahoo")``): its leg is Yahoo's current roster
-    (:func:`sportsdataverse.yahoo.yahoo_team_roster`, active players only), and
+    (:func:`sportsdataverse.providers.yahoo.yahoo_team_roster`, active players only), and
     each Yahoo player attaches to the ESPN/Fox player with the same name and
     jersey, else the same name when that name is unique on the team. Pass
     ``yahoo_team_id`` (``yahoo_team_id`` of :func:`cfb_teams_crosswalk`) to skip

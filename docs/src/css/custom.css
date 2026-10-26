@@ -22,3 +22,12 @@ html[data-theme='dark']:not([data-hydrated]) .theme-code-block {
   visibility: hidden;
   animation: sdv-show-after-hydration 0s 6s forwards;
 }
+
+/* The 0.2.0 beta announcement bar: Docusaurus writes its colors inline (white on black by default), so
+   following the color mode needs !important here. Kept small so it reads as a notice, not a banner ad. */
+.theme-announcement-bar {
+  background-color: var(--ifm-color-emphasis-100) !important;
+  color: var(--ifm-font-color-base) !important;
+  border-bottom: 1px solid var(--ifm-toc-border-color);
+  font-size: 0.875rem;
+}

@@ -25,13 +25,13 @@ Every competition edition (season) the API knows, one row per edition.
 
 | col_name | type | description |
 |---|---|---|
-| `competition_id` | integer | Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa, 10 Minicopa Endesa. |
-| `competition_name` | character | The API's competition name ('Liga Nacional' for the Liga). |
-| `edition_id` | integer | Season id (START year - 1935). |
-| `season_start_year` | integer | Calendar year the season starts (2026 for 2026-27). |
-| `season` | integer | Season END year (2027 for 2026-27) = seasonEndYear. |
-| `n_rounds` | integer | Rounds the edition lists. |
-| `n_weeks` | integer | Weeks the edition lists. |
+| `competition_id` | Int64 | Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa, 10 Minicopa Endesa. |
+| `competition_name` | String | The API's competition name ('Liga Nacional' for the Liga). |
+| `edition_id` | Int64 | Season id (START year - 1935). |
+| `season_start_year` | Int64 | Calendar year the season starts (2026 for 2026-27). |
+| `season` | Int64 | Season END year (2027 for 2026-27) = seasonEndYear. |
+| `n_rounds` | Int64 | Rounds the edition lists. |
+| `n_weeks` | Int64 | Weeks the edition lists. |
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
 
@@ -67,13 +67,13 @@ The rounds of every competition edition: the round ids to crawl.
 
 | col_name | type | description |
 |---|---|---|
-| `competition_id` | integer | Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa, 10 Minicopa Endesa. |
-| `edition_id` | integer | Season id the round belongs to (START year - 1935). |
-| `season` | integer | Season END year (2027 = 2026-27) = edition_id + 1936: the key the wrappers take. |
-| `round_id` | integer | Round id: global across seasons, not the round number (6017 = Liga 2026-27 round 3; 2600 = 2016-17 round 1) |
-| `round_number` | integer | Round number within the phase |
-| `subphase_id` | integer | Sub-phase id inside a phase (a playoff round or a cup round, e.g. 291, 292, 293); null in the regular season |
-| `subphase_number` | integer | Sub-phase number; null in the regular season |
+| `competition_id` | Int64 | Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa, 10 Minicopa Endesa. |
+| `edition_id` | Int64 | Season id the round belongs to (START year - 1935). |
+| `season` | Int64 | Season END year (2027 = 2026-27) = edition_id + 1936: the key the wrappers take. |
+| `round_id` | Int64 | Round id: global across seasons, not the round number (6017 = Liga 2026-27 round 3; 2600 = 2016-17 round 1) |
+| `round_number` | Int64 | Round number within the phase |
+| `subphase_id` | Int64 | Sub-phase id inside a phase (a playoff round or a cup round, e.g. 291, 292, 293); null in the regular season |
+| `subphase_number` | Int64 | Sub-phase number; null in the regular season |
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
 
@@ -109,12 +109,12 @@ The weeks of every competition edition: the week ids to crawl.
 
 | col_name | type | description |
 |---|---|---|
-| `competition_id` | integer | Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa, 10 Minicopa Endesa. |
-| `edition_id` | integer | Season id the week belongs to (START year - 1935). |
-| `season` | integer | Season END year (2027 = 2026-27) = edition_id + 1936: the key the wrappers take. |
-| `week_id` | integer | Week id: global across seasons (2989 = the week of 2026-10-10) |
-| `description` | character | Spanish week label ('Semana 1'). |
-| `start_date` | character | Monday the week starts (UTC midnight). |
+| `competition_id` | Int64 | Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa, 10 Minicopa Endesa. |
+| `edition_id` | Int64 | Season id the week belongs to (START year - 1935). |
+| `season` | Int64 | Season END year (2027 = 2026-27) = edition_id + 1936: the key the wrappers take. |
+| `week_id` | Int64 | Week id: global across seasons (2989 = the week of 2026-10-10) |
+| `description` | String | Spanish week label ('Semana 1'). |
+| `start_date` | String | Monday the week starts (UTC midnight). |
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
 
@@ -150,23 +150,23 @@ The API's current pointers: competition, edition, week, round and match.
 
 | col_name | type | description |
 |---|---|---|
-| `competition_id` | integer | Competition the site opens by default. |
-| `edition_id` | integer | Edition (season) the site opens by default. |
-| `season` | integer | Season END year (2027 = 2026-27) = edition_id + 1936: the key the wrappers take. |
-| `week_id` | integer | Week the site opens by default. |
-| `round_id` | integer | Round the site opens by default. |
-| `match_grouping` | character | round or week (current pointers) |
-| `match_id` | integer | The current match (the featured game). |
-| `status` | character | State of the current match. |
-| `start` | character | Tip-off instant (UTC) of the current match. |
-| `home_team_id` | integer | Home season-team entry id of the current match. |
-| `home_club_id` | integer | Home stable club id of the current match. |
-| `home_team` | character | Home team name of the current match. |
-| `home_team_abbr` | character | Home team abbreviation of the current match. |
-| `away_team_id` | integer | Away season-team entry id of the current match. |
-| `away_club_id` | integer | Away stable club id of the current match. |
-| `away_team` | character | Away team name of the current match. |
-| `away_team_abbr` | character | Away team abbreviation of the current match. |
+| `competition_id` | Int64 | Competition the site opens by default. |
+| `edition_id` | Int64 | Edition (season) the site opens by default. |
+| `season` | Int64 | Season END year (2027 = 2026-27) = edition_id + 1936: the key the wrappers take. |
+| `week_id` | Int64 | Week the site opens by default. |
+| `round_id` | Int64 | Round the site opens by default. |
+| `match_grouping` | String | round or week (current pointers) |
+| `match_id` | Int64 | The current match (the featured game). |
+| `status` | String | State of the current match. |
+| `start` | String | Tip-off instant (UTC) of the current match. |
+| `home_team_id` | Int64 | Home season-team entry id of the current match. |
+| `home_club_id` | Int64 | Home stable club id of the current match. |
+| `home_team` | String | Home team name of the current match. |
+| `home_team_abbr` | String | Home team abbreviation of the current match. |
+| `away_team_id` | Int64 | Away season-team entry id of the current match. |
+| `away_club_id` | Int64 | Away stable club id of the current match. |
+| `away_team` | String | Away team name of the current match. |
+| `away_team_abbr` | String | Away team abbreviation of the current match. |
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
 

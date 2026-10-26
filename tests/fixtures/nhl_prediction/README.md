@@ -12,8 +12,8 @@
 
 # NHL/PWHL prediction-spine oracle corpus (2022-23 / "season 2023")
 
-Captured 2026-07-08 via `dev/nhl_prediction/capture_oracle.py`
-(`SDV_PY_LIVE_TESTS=1 uv run python dev/nhl_prediction/capture_oracle.py`).
+Captured 2026-07-08 via `tools/models/nhl_prediction/capture_oracle.py`
+(`SDV_PY_LIVE_TESTS=1 uv run python tools/models/nhl_prediction/capture_oracle.py`).
 Validation season: **2023** (sdv-py / MoneyPuck convention for the 2022-23
 NHL regular season). All fixtures are regular-season only (`game_type == "R"`)
 to stay comparable with MoneyPuck's `regular` folder.
@@ -40,7 +40,7 @@ to stay comparable with MoneyPuck's `regular` folder.
 - **`pbp_2023.parquet` (full season, ~1.1M rows / 93 cols)** -- re-downloaded
   on demand from the `nhl_pbp_full` sportsdataverse-data release (no gate
   required, not an API call) rather than committed, to keep the repo lean.
-  `dev/nhl_prediction/build_team_xg_fixture.py` and
+  `tools/models/nhl_prediction/build_team_xg_fixture.py` and
   `build_in_game_wp_calibration_fixture.py` both re-download it to produce
   the small, committed aggregated fixtures above.
 
@@ -58,7 +58,7 @@ to stay comparable with MoneyPuck's `regular` folder.
 3. **`load_nhl_skater_boxscores` only supports seasons >= 2024** -- the
    2023 skater-boxscore realized-stats backtest for Phase 4 is not possible
    against this fixture corpus; Phase 4's fit/backtest uses **season 2024**
-   for skater boxscores (documented in `dev/nhl_prediction/fit_props.py` and
+   for skater boxscores (documented in `tools/models/nhl_prediction/fit_props.py` and
    the Phase-4 tests) instead of 2023, while ratings/market (Phases 1-3)
    stay on the 2023 corpus above.
 4. **`load_nhl_schedule(s)`'s `home_score`/`away_score` are a placeholder
@@ -99,7 +99,7 @@ to stay comparable with MoneyPuck's `regular` folder.
 7. **Player props use season 2024, not 2023.** `load_nhl_skater_boxscores`
    only publishes seasons >= 2024 (season 2024 == the 2023-24 season, per
    sdv-py's convention -- confirmed the source `season` column reports
-   `20232024`), so Phase 4's fit (`dev/nhl_prediction/fit_props.py`) and
+   `20232024`), so Phase 4's fit (`tools/models/nhl_prediction/fit_props.py`) and
    backtest use 2024 while ratings/market (Phases 1-3) stay on the 2023
    corpus. `nhl_player_props` itself is season-parameterized, so this is a
    validation-corpus choice, not a code limitation.

@@ -71,7 +71,7 @@ endpoints:
 host: https://content.core.api.espn.com/v1
 module: espn_content
 name_pattern: espn_content_{short}
-parser_module: espn_content.espn_content_parsers
+parser_module: providers.espn_content.espn_content_parsers
 passthrough_query: false
 qualifier: ''
 runtime_imports:

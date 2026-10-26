@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — KenPom"
+title: "Men's college basketball — additional Python functions — KenPom"
 sidebar_label: "KenPom"
 sidebar_position: 7
-description: "MBB — additional Python functions — KenPom — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — KenPom — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — KenPom
+# Men's college basketball — additional Python functions — KenPom
 
 ### has_kenpom_login {#has_kenpom_login}
 

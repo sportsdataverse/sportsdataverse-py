@@ -53,7 +53,7 @@ def _score(feats: pl.DataFrame, art: dict) -> pl.DataFrame:
     """Apply the bundled draft-slot artifact to a pre-built feature frame (no network).
 
     Factored out of :func:`wnba_draft_model` so offline fit/backtest scripts
-    (``dev/wnba_draft/fit_rookie_residual.py``, ``tests/wnba/test_wnba_draft_backtest.py``)
+    (``tools/models/wnba_draft/fit_rookie_residual.py``, ``tests/wnba/test_wnba_draft_backtest.py``)
     can score a committed fixture through the exact same math the runtime uses, without
     re-fetching ``wnba_stats_drafthistory`` over the network.
 

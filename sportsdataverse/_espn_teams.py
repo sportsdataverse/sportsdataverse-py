@@ -90,7 +90,7 @@ def cache_clear_shim(fn: _F) -> _F:
     def cache_clear() -> None:
         warn_deprecated(
             f"{fn.__name__}.cache_clear",
-            removed_in="0.2.0",
+            removed_in="0.4.0",
             extra=f"{fn.__name__} no longer caches: every call fetches. "
             "For a TTL cache turn on the package response cache (sportsdataverse.cache).",
         )

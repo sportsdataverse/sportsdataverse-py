@@ -1,9 +1,9 @@
 ---
-title: COLLEGE_SOFTBALL
-sidebar_label: COLLEGE_SOFTBALL
-description: "sdv-py COLLEGE_SOFTBALL: endpoint references, dataset loaders and parsers for COLLEGE_SOFTBALL in the SportsDataverse Python package."
+title: College softball
+sidebar_label: College softball
+description: "sdv-py College softball: endpoint references, dataset loaders and parsers for College softball in the SportsDataverse Python package."
 ---
-# COLLEGE_SOFTBALL (`sportsdataverse.baseball.college_softball`)
+# College softball (`sportsdataverse.baseball.college_softball`)
 
 ## Data sources
 
@@ -20,6 +20,10 @@ description: "sdv-py COLLEGE_SOFTBALL: endpoint references, dataset loaders and 
 | [ESPN core API (v2)](reference/core) | 87 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
 | [ESPN CDN API (cdn.espn.com)](reference/cdn) | 3 |
+
+## See also
+
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `team_colors("ncaa_softball", ...)` gives each school's colors
 
 ## Examples
 

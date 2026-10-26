@@ -7,7 +7,7 @@ Oracle gates in this file (never lowered to make a test pass):
   transition play-type frequency runs ~0.15-0.16 league-wide. At the calibrated
   ``DEFAULT_TRANSITION_SECONDS = 6.0`` the three committed engine fixtures produce
   a mean of **0.163** (per game 0.155 / 0.163 / 0.171); the gate is [0.12, 0.21].
-  Fitting run: ``dev/ctg_transition_calibration.py``.
+  Fitting run: ``tools/models/ctg_transition_calibration.py``.
 * **Start-type totality** — every possession gets a start type and a CTG bucket;
   the buckets are exactly CTG's five.
 * **Putback** — asserted against a hand-verified real play (game 0022200001,
@@ -43,7 +43,7 @@ from sportsdataverse.nba.nba_possessions import build_possessions
 FXROOT = pathlib.Path("tests/fixtures/nba_engine")
 GAMES = ["0022200001", "0022300001", "0022100001"]
 
-# Observed on the fixtures at transition_seconds=6.0 (dev/ctg_transition_calibration.py).
+# Observed on the fixtures at transition_seconds=6.0 (tools/models/ctg_transition_calibration.py).
 OBSERVED_TRANSITION_FREQ_MEAN = 0.163
 TRANSITION_FREQ_GATE = (0.12, 0.21)
 

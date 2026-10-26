@@ -67,13 +67,13 @@ def timer(number=10):
 # C-L46: no caller in the package or the workspace; deprecated, not deleted.
 @deprecated(
     replacement="tracemalloc or psutil.Process().memory_info() directly",
-    since="0.1.6",
-    removed_in="0.2.0",
+    since="0.2.0",
+    removed_in="0.4.0",
 )
 def record_mem_usage(func):
     """Decorator that prints RSS memory delta around a call.
 
-    Deprecated since 0.1.6, removed in 0.2.0: applying it warns ``DeprecationWarning``.
+    Deprecated since 0.2.0, removed in 0.4.0: applying it warns ``DeprecationWarning``.
 
     Snapshots ``psutil.Process(os.getpid()).memory_info()[0]`` (resident
     set size) before and after the wrapped call and prints the
@@ -117,11 +117,11 @@ def record_mem_usage(func):
     return wrapper
 
 
-@deprecated(replacement="sportsdataverse.decorators.timer(number=1)", since="0.1.6", removed_in="0.2.0")
+@deprecated(replacement="sportsdataverse.decorators.timer(number=1)", since="0.2.0", removed_in="0.4.0")
 def record_time_usage(func):
     """Decorator that prints wall-clock time for a single call.
 
-    Deprecated since 0.1.6, removed in 0.2.0: applying it warns ``DeprecationWarning``.
+    Deprecated since 0.2.0, removed in 0.4.0: applying it warns ``DeprecationWarning``.
 
     Lightweight counterpart to :func:`timer` -- records exactly one
     invocation rather than averaging across repeated executions. Useful

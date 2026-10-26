@@ -1,4 +1,4 @@
-"""The narrative docs describe the package as it is in 0.1.5.
+"""The narrative docs describe the package as it is in 0.2.0.
 
 Every number asserted here was measured against this tree, not copied from the prose it
 replaces -- that is how the old counts (29 leagues, 3,334 wrappers, six parser modules,
@@ -77,12 +77,23 @@ _CLAUDE_STALE = [
     "a 4-line",
     "bump polars to >=1.0,<2.0",
     "add py3.14 to the test matrix",
+    # 0.1.5 was never released: no stamp may present it (or a later 0.1.x) as shipped
+    "Error vocabulary (0.1.5)",
+    "removed in 0.1.5",
+    "deleted in 0.1.6",
+    "0.0.76 BREAKING",
+    "291 generated call sites",
+    "only ships `cfb/models/*` and `nfl/models/*`",
+    "20 HockeyTech league families",
+    "one-page reference",
+    "(C-L3)",
+    "task 5.2",
 ]
 
 _CLAUDE_CURRENT = [
     "45 canonical load_nfl_*",
     "24 nflreadpy-style aliases",
-    "291 generated call sites",
+    "about 300 generated call sites",
     "PWHL + 19",
     "`tests`, `nflpro`, `models`, `pff`, `soccer`, `sdvplot`, `sportypy`, `mcp`, `all`",
     "architecture/codegen.md",
@@ -91,6 +102,10 @@ _CLAUDE_CURRENT = [
     "`polars>=2.0,<3`",
     "polars 1.x is no longer supported",
     "replacements are available now that the floor is 2.0",
+    "| sdvplot | <https://sdvplot.sportsdataverse.org> |",
+    "| sportypy | <https://sportypy.sportsdataverse.org> |",
+    "in four layouts (24 pages in all)",
+    "include allowlist (`sportsdataverse*`, `sdv_docs*`)",
 ]
 
 _CLAUDE_STRUCTURE_DIRS = [
@@ -196,9 +211,9 @@ def test_claude_md_has_a_codegen_section_linking_the_architecture_page():
     assert "docs/docs/architecture/codegen.md" in body
 
 
-def test_claude_md_error_vocabulary_is_0_1_5():
+def test_claude_md_error_vocabulary_is_0_2_0():
     body = text("claude")
-    assert "### Error vocabulary (0.1.5)" in body
+    assert "### Error vocabulary (0.2.0)" in body
     assert "### Error vocabulary (0.1.0)" not in body
     assert "AssetFetchError" in body and "400 / 422" in body
 
@@ -253,6 +268,10 @@ _COPILOT_STALE = [
     "682 of 729",
     "4-line module",
     "bump polars to >=1.0,<2.0",
+    "33 `*_parsers.py` modules",
+    "one-page reference",
+    "removed in 0.1.5",
+    "As of 0.1.5",
 ]
 
 _COPILOT_CURRENT = [
@@ -272,6 +291,9 @@ _COPILOT_CURRENT = [
     "returns the last response",
     "`polars>=2.0,<3`",
     "polars 1.x is not supported",
+    "`nbagl_stats` (94 wrappers",
+    "path_to_json=raw_dir, join_participants=False, odds_override=",
+    "in four layouts (24 pages in all)",
 ]
 
 # Copilot uses Title Case headings; these match the file's own convention.
@@ -284,7 +306,7 @@ _COPILOT_SECTIONS_FROM_CLAUDE = [
     "## Release Utilities",
     "## Rule-Era Models",
     "## ID Column Types",
-    "## Error Vocabulary (0.1.5)",
+    "## Error Vocabulary (0.2.0)",
     "## Codegen",
 ]
 
@@ -326,10 +348,20 @@ _README_STALE = [
     "polars 1.x or 2.x",
     "will become the one-shot",
     "PFF Developer + Premium clients",
+    "6,456 exported names",
+    "Errors (0.1.5)",
+    "Needs 0.1.5 or newer",
+    "(NHL + WHL)",
+    "season = {2021}",
+    "docs/parsers/index",
+    "sdv-internal-refs",
+    "/master/sdv-py-logo.png",
+    "lifecycle-experimental",
+    "img.shields.io/twitter/follow/sportsdataverse?",
 ]
 
 _README_CURRENT = [
-    "6,456 exported names",
+    "about 9,300 public functions",
     "128 NBA",
     "111 WNBA wrappers",
     "sportsdataverse[nflpro]",
@@ -339,9 +371,20 @@ _README_CURRENT = [
     "fox_api",
     "107 multi-sport `yahoo_*`",
     "cbs_napi",
-    "### Errors (0.1.5)",
+    "### Errors",
     "AssetFetchError",
     "polars 2.x (`polars>=2.0,<3`)",
+    "pip install --pre sportsdataverse",
+    "uv sync --all-extras --dev",
+    "`sportsdataverse.nbagl.nbagl_stats`",
+    "`sportsdataverse.basketball.<home>`",
+    "`sportsdataverse.providers.<name>`",
+    "`sportsdataverse.f1`",
+    "Kalshi, Polymarket",
+    "(NHL + PWHL)",
+    "year = {2021}",
+    "lifecycle-beta",
+    "/main/docs/static/img/sdv-py-logo.png",
 ]
 
 _CONTRIBUTING_STALE = [
@@ -356,6 +399,10 @@ _CONTRIBUTING_STALE = [
     "Polars 1.x and 2.x",
     "`polars>=1.0,<3`",
     "the floor stays 1.0",
+    "had not been done since 0.0.75",
+    "With 0.1.5 the newest release",
+    "go under `tests/wbb/` or",
+    "931 of the",
 ]
 
 _CONTRIBUTING_CURRENT = [
@@ -366,8 +413,11 @@ _CONTRIBUTING_CURRENT = [
     "docs-deploy.yml",
     "main (latest)",
     "VERSIONS_TO_KEEP=3",
-    "had not been done since 0.0.75",
     "`removed_in` is a commitment",
+    "tools/release_changelog.py 0.2.0b1",
+    "gh release create v0.2.0b1 --target main --prerelease",
+    "pip install --pre sportsdataverse",
+    "go under `tests/<pkg>/`",
     "architecture/codegen.md",
     "sdv_docs/",
     "`polars>=2.0,<3`",
@@ -404,8 +454,27 @@ def test_docs_state_the_polars_floor_pyproject_declares():
 # --- the docs-site conceptual pages ---------------------------------------
 
 _SITE_STALE = {
-    "intro": ["PWHL + 20", "import mlb_api_person_stats", "from sportsdataverse.parsed", '"event_id", "home_name"'],
-    "qol": ["~4,400 callables", "remains fully supported", "Explicit parsed namespace (unchanged"],
+    "intro": [
+        "PWHL + 20",
+        "import mlb_api_person_stats",
+        "from sportsdataverse.parsed",
+        '"event_id", "home_name"',
+        # 0.1.5 was never released; headings carry no version stamps (#1021).
+        "(0.1.5)",
+        "0.1.5 or newer",
+        "(0.0.54+)",
+        "Lifecycle:experimental",
+        "/docs/parsers/index",
+        "season = {2021}",
+        "# **Our Authors**",
+    ],
+    "qol": [
+        "~4,400 callables",
+        "remains fully supported",
+        "Explicit parsed namespace (unchanged",
+        "~6,170 callables",
+        "from sportsdataverse.parsed.nba import espn_nba_summary",
+    ],
     "espn": ["800+", "| NBA | 113 |", "**84** wrappers per league", "plain partial", "30 documented leagues"],
     "parsers": [
         "All 121 wrapper short names",
@@ -414,16 +483,24 @@ _SITE_STALE = {
         "33 parser modules",
         "18 sub-frames",
         "20 sub-frames",
+        "Errors (0.1.5)",
+        "(0.0.54+)",
     ],
-    "ecosystem": ["ten executed", "explicit parsed-by-default namespace"],
+    "ecosystem": [
+        "ten executed",
+        "explicit parsed-by-default namespace",
+        "same shape in all 8 leagues",
+        "don't use the generated release-loader pages",
+        "fastRhockey-data",
+    ],
 }
 
 _SITE_CURRENT = {
-    "intro": ["## Errors (0.1.5)", "AssetFetchError", "sdv-docs", "is deprecated"],
-    "qol": ["~6,170 callables", "**deprecated**"],
+    "intro": ["## Errors", "AssetFetchError", "sdv-docs", "is deprecated", "pip install --pre sportsdataverse"],
+    "qol": ["from sportsdataverse.nba import espn_nba_summary", "**deprecated**"],
     "espn": ["| CFB | 125 |", "default to `return_parsed=True`"],
-    "parsers": ["21-section", "Errors (0.1.5)", "21 sub-frames"],
-    "ecosystem": ["nineteen executed"],
+    "parsers": ["21-section", "**Errors.**", "21 sub-frames"],
+    "ecosystem": ["nineteen executed", "cfbfastR-cfb-data", "nfl/reference/loaders.md"],
 }
 
 
@@ -441,6 +518,27 @@ def test_site_page_drops_the_stale_claim(key, stale):
 )
 def test_site_page_states_the_current_fact(key, current):
     assert current in flat(key)
+
+
+# The hand-written pages (everything else under docs/docs is generated by codegen or from notebooks).
+_SITE_PAGES = sorted(
+    p
+    for p in (ROOT / "docs" / "docs").rglob("*.md")
+    if p.relative_to(ROOT / "docs" / "docs").parts[0]
+    in {"intro.md", "ecosystem.md", "quality-of-life.md", "guides", "architecture", "parsers"}
+)
+
+
+@pytest.mark.parametrize("page", _SITE_PAGES, ids=lambda p: p.relative_to(ROOT / "docs" / "docs").as_posix())
+def test_site_page_has_a_description_and_bracketed_admonitions(page):
+    """Docusaurus 3 renders ``:::caution Title`` as literal text: the title goes in brackets. And a page
+    without ``description:`` front matter gets its first paragraph (once, a badge's alt text) as its
+    search snippet."""
+    body = page.read_text(encoding="utf-8")
+    front = body.split("---", 2)[1] if body.startswith("---") else ""
+    assert "\ndescription:" in front, f"{page.name} has no description: front matter"
+    bad = [ln for ln in body.splitlines() if ln.startswith(":::") and len(ln.split(None, 1)) > 1]
+    assert not bad, f"{page.name} uses the old admonition title form: {bad}"
 
 
 def test_parsers_page_registry_counts_match_the_code():

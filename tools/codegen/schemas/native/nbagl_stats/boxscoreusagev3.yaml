@@ -1,0 +1,193 @@
+frames:
+- columns:
+  - description: ''
+    name: game_id
+    type: character
+  - description: ''
+    name: away_team_id
+    type: integer
+  - description: ''
+    name: home_team_id
+    type: integer
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_city
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: team_tricode
+    type: character
+  - description: ''
+    name: team_slug
+    type: character
+  - description: ''
+    name: person_id
+    type: integer
+  - description: ''
+    name: first_name
+    type: character
+  - description: ''
+    name: family_name
+    type: character
+  - description: ''
+    name: name_i
+    type: character
+  - description: ''
+    name: player_slug
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: comment
+    type: character
+  - description: ''
+    name: jersey_num
+    type: character
+  - description: ''
+    name: minutes
+    type: character
+  - description: ''
+    name: usage_percentage
+    type: numeric
+  - description: ''
+    name: percentage_field_goals_made
+    type: numeric
+  - description: ''
+    name: percentage_field_goals_attempted
+    type: numeric
+  - description: ''
+    name: percentage_three_pointers_made
+    type: numeric
+  - description: ''
+    name: percentage_three_pointers_attempted
+    type: numeric
+  - description: ''
+    name: percentage_free_throws_made
+    type: numeric
+  - description: ''
+    name: percentage_free_throws_attempted
+    type: numeric
+  - description: ''
+    name: percentage_rebounds_offensive
+    type: numeric
+  - description: ''
+    name: percentage_rebounds_defensive
+    type: numeric
+  - description: ''
+    name: percentage_rebounds_total
+    type: numeric
+  - description: ''
+    name: percentage_assists
+    type: numeric
+  - description: ''
+    name: percentage_turnovers
+    type: numeric
+  - description: ''
+    name: percentage_steals
+    type: numeric
+  - description: ''
+    name: percentage_blocks
+    type: numeric
+  - description: ''
+    name: percentage_blocks_allowed
+    type: numeric
+  - description: ''
+    name: percentage_personal_fouls
+    type: numeric
+  - description: ''
+    name: percentage_personal_fouls_drawn
+    type: numeric
+  - description: ''
+    name: percentage_points
+    type: numeric
+  section: PlayerStats
+- columns:
+  - description: ''
+    name: game_id
+    type: character
+  - description: ''
+    name: away_team_id
+    type: integer
+  - description: ''
+    name: home_team_id
+    type: integer
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_city
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: team_tricode
+    type: character
+  - description: ''
+    name: team_slug
+    type: character
+  - description: ''
+    name: minutes
+    type: character
+  - description: ''
+    name: usage_percentage
+    type: numeric
+  - description: ''
+    name: percentage_field_goals_made
+    type: numeric
+  - description: ''
+    name: percentage_field_goals_attempted
+    type: numeric
+  - description: ''
+    name: percentage_three_pointers_made
+    type: numeric
+  - description: ''
+    name: percentage_three_pointers_attempted
+    type: numeric
+  - description: ''
+    name: percentage_free_throws_made
+    type: numeric
+  - description: ''
+    name: percentage_free_throws_attempted
+    type: numeric
+  - description: ''
+    name: percentage_rebounds_offensive
+    type: numeric
+  - description: ''
+    name: percentage_rebounds_defensive
+    type: numeric
+  - description: ''
+    name: percentage_rebounds_total
+    type: numeric
+  - description: ''
+    name: percentage_assists
+    type: numeric
+  - description: ''
+    name: percentage_turnovers
+    type: numeric
+  - description: ''
+    name: percentage_steals
+    type: numeric
+  - description: ''
+    name: percentage_blocks
+    type: numeric
+  - description: ''
+    name: percentage_blocks_allowed
+    type: numeric
+  - description: ''
+    name: percentage_personal_fouls
+    type: numeric
+  - description: ''
+    name: percentage_personal_fouls_drawn
+    type: numeric
+  - description: ''
+    name: percentage_points
+    type: numeric
+  section: TeamStats
+kind: frames
+schema: boxscoreusagev3

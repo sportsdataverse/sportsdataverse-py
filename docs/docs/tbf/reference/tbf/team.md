@@ -25,39 +25,39 @@ Team totals of a finished game with the team-credited rebounds, turnovers and fo
 
 | col_name | type | description |
 |---|---|---|
-| `match_id` | integer | TBF game id (key space: TBF games, ONE global sequence across leagues and seasons: 62552 in 2006-07, 346279 in 2026-27). The match_id argument of every game wrapper; the routes echo it as a string or null, the runtime stamps the integer asked for. |
-| `side` | character | Side of the game the row belongs to: home or away (from the route's isHome flag or home / away block). |
-| `team_process_id` | integer | Team-season id of the side (from the game header; key space: TBF team registrations). |
-| `seconds_played` | integer | Time on court in seconds, parsed from the 'mm:ss' or 'hh:mm:ss' text the API sends (team totals sum their players, so 200:00 = 12000). |
-| `points` | integer | Points scored in the game (or season) the row covers. |
-| `fg_made` | integer | Team field goals made, 2PT + 3PT. |
-| `fg_attempted` | integer | Team field goals attempted, 2PT + 3PT. |
-| `fg_pct` | integer | Team field-goal percentage 0-100, rounded to an integer by the API. |
-| `fg2_made` | integer | Team two-point field goals MADE (the API calls it twoPointShots). |
-| `fg2_attempted` | integer | Team two-point field goals attempted. |
-| `fg2_pct` | integer | Team two-point percentage 0-100, an integer. |
-| `fg3_made` | integer | Team three-point field goals MADE (the API calls it threePointShots). |
-| `fg3_attempted` | integer | Team three-point field goals attempted. |
-| `fg3_pct` | integer | Team three-point percentage 0-100, an integer. |
-| `ft_made` | integer | Team free throws MADE. |
-| `ft_attempted` | integer | Team free throws attempted. |
-| `ft_pct` | integer | Team free-throw percentage 0-100, an integer. |
-| `off_rebounds` | integer | Offensive rebounds (hücum ribaundu). |
-| `def_rebounds` | integer | Defensive rebounds (savunma ribaundu). |
-| `rebounds` | integer | Total rebounds (toplam ribaund). |
-| `assists` | integer | Assists in this game (asist). |
-| `steals` | integer | Steals in this game (top çalma). |
-| `blocks` | integer | Shots this player blocked in this game (blok). |
-| `turnovers` | integer | Turnovers committed in this game (top kaybı). |
-| `fouls` | integer | Personal fouls committed (faul). |
-| `fouls_drawn` | integer | Fouls drawn by the team (rivalFoul). |
-| `blocks_received` | integer | Team shots blocked by the opponent. |
-| `efficiency` | integer | Team efficiency rating (verimlilik puani): the players' ratings summed; a number on team rows. |
-| `team_off_rebounds` | integer | Team offensive rebounds not credited to a player (homeTeamStats). |
-| `team_def_rebounds` | integer | Team defensive rebounds not credited to a player. |
-| `team_rebounds` | integer | Team rebounds not credited to a player (offensive + defensive). |
-| `team_turnovers` | integer | Team turnovers not credited to a player. |
-| `team_fouls` | integer | Team fouls not credited to a player (bench / coach technicals); 0 in the samples. |
+| `match_id` | Int64 | TBF game id (key space: TBF games, ONE global sequence across leagues and seasons: 62552 in 2006-07, 346279 in 2026-27). The match_id argument of every game wrapper; the routes echo it as a string or null, the runtime stamps the integer asked for. |
+| `side` | String | Side of the game the row belongs to: home or away (from the route's isHome flag or home / away block). |
+| `team_process_id` | Int64 | Team-season id of the side (from the game header; key space: TBF team registrations). |
+| `seconds_played` | Int64 | Time on court in seconds, parsed from the 'mm:ss' or 'hh:mm:ss' text the API sends (team totals sum their players, so 200:00 = 12000). |
+| `points` | Int64 | Points scored in the game (or season) the row covers. |
+| `fg_made` | Int64 | Team field goals made, 2PT + 3PT. |
+| `fg_attempted` | Int64 | Team field goals attempted, 2PT + 3PT. |
+| `fg_pct` | Int64 | Team field-goal percentage 0-100, rounded to an integer by the API. |
+| `fg2_made` | Int64 | Team two-point field goals MADE (the API calls it twoPointShots). |
+| `fg2_attempted` | Int64 | Team two-point field goals attempted. |
+| `fg2_pct` | Int64 | Team two-point percentage 0-100, an integer. |
+| `fg3_made` | Int64 | Team three-point field goals MADE (the API calls it threePointShots). |
+| `fg3_attempted` | Int64 | Team three-point field goals attempted. |
+| `fg3_pct` | Int64 | Team three-point percentage 0-100, an integer. |
+| `ft_made` | Int64 | Team free throws MADE. |
+| `ft_attempted` | Int64 | Team free throws attempted. |
+| `ft_pct` | Int64 | Team free-throw percentage 0-100, an integer. |
+| `off_rebounds` | Int64 | Offensive rebounds (hücum ribaundu). |
+| `def_rebounds` | Int64 | Defensive rebounds (savunma ribaundu). |
+| `rebounds` | Int64 | Total rebounds (toplam ribaund). |
+| `assists` | Int64 | Assists in this game (asist). |
+| `steals` | Int64 | Steals in this game (top çalma). |
+| `blocks` | Int64 | Shots this player blocked in this game (blok). |
+| `turnovers` | Int64 | Turnovers committed in this game (top kaybı). |
+| `fouls` | Int64 | Personal fouls committed (faul). |
+| `fouls_drawn` | Int64 | Fouls drawn by the team (rivalFoul). |
+| `blocks_received` | Int64 | Team shots blocked by the opponent. |
+| `efficiency` | Int64 | Team efficiency rating (verimlilik puani): the players' ratings summed; a number on team rows. |
+| `team_off_rebounds` | Int64 | Team offensive rebounds not credited to a player (homeTeamStats). |
+| `team_def_rebounds` | Int64 | Team defensive rebounds not credited to a player. |
+| `team_rebounds` | Int64 | Team rebounds not credited to a player (offensive + defensive). |
+| `team_turnovers` | Int64 | Team turnovers not credited to a player. |
+| `team_fouls` | Int64 | Team fouls not credited to a player (bench / coach technicals); 0 in the samples. |
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
 
@@ -94,15 +94,15 @@ Every team registered in one league-season with its team-season id (team_process
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
-| `competition` | character | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
-| `team_process_id` | integer | Team-season id (teamProcessId = takimIslemId, a team REGISTRATION; key space: TBF team registrations, a NEW id per club per league-season: Tofas = 265995 in BSL 2026-27). The team_process_id argument of the team wrappers; not the stable club_id. |
-| `club_id` | integer | Stable club id (takimID / teamId of the team lists; key space: TBF clubs, the same across seasons and leagues: Tofas = 13). Not the team-season id (team_process_id). |
-| `team_name` | character | Team name as registered for that season, uppercase with Turkish letters. |
-| `city` | character | Home city (teamCityName), uppercase Turkish. |
-| `code` | character | Team short code (teamCode). |
-| `season_id` | integer | Internal TBF season id (key space: TBF seasons, global across leagues: 174 = 2026-2027, 172 = 2025-2026; the odd ids are international UA- seasons). Never an sdv key: use season (END year). |
-| `season_label` | character | Season label 'YYYY-YYYY' of the league-season. |
+| `season` | Int64 | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
+| `competition` | String | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
+| `team_process_id` | Int64 | Team-season id (teamProcessId = takimIslemId, a team REGISTRATION; key space: TBF team registrations, a NEW id per club per league-season: Tofas = 265995 in BSL 2026-27). The team_process_id argument of the team wrappers; not the stable club_id. |
+| `club_id` | Int64 | Stable club id (takimID / teamId of the team lists; key space: TBF clubs, the same across seasons and leagues: Tofas = 13). Not the team-season id (team_process_id). |
+| `team_name` | String | Team name as registered for that season, uppercase with Turkish letters. |
+| `city` | String | Home city (teamCityName), uppercase Turkish. |
+| `code` | String | Team short code (teamCode). |
+| `season_id` | Int64 | Internal TBF season id (key space: TBF seasons, global across leagues: 174 = 2026-2027, 172 = 2025-2026; the odd ids are international UA- seasons). Never an sdv key: use season (END year). |
+| `season_label` | String | Season label 'YYYY-YYYY' of the league-season. |
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
 
@@ -140,46 +140,46 @@ Season player statistics of one team-season: totals, percentages and per-game av
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
-| `competition` | character | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
-| `team_process_id` | integer | Team-season id of the request (key space: TBF team registrations). |
-| `person_id` | integer | TBF person id (code; key space: TBF persons, stable across seasons and clubs). |
-| `jersey_number` | character | Shirt number (oyuncuNo) as a string. |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
-| `games` | integer | Games played (macSayisi). |
-| `seconds_played` | integer | Season total time on court in seconds (sureToplam 'hh:mm:ss'). |
-| `points` | integer | Season total points (sayiToplam; the API sends it as a string). |
-| `fg_made` | integer | Season field goals made (agBasarili; sent as a string). |
-| `fg_attempted` | integer | Season field goals attempted (agDeneme). |
-| `fg2_made` | integer | Season two-point field goals made (puan20Toplam). |
-| `fg2_attempted` | integer | Season two-point field goals attempted (puan21Toplam). |
-| `fg3_made` | integer | Season three-point field goals made (puan30Toplam). |
-| `fg3_attempted` | integer | Season three-point field goals attempted (puan31Toplam). |
-| `ft_made` | integer | Season free throws made (sA0Toplam). |
-| `ft_attempted` | integer | Season free throws attempted (sA1Toplam). |
-| `def_rebounds` | integer | Season defensive rebounds (drToplam). |
-| `off_rebounds` | integer | Season offensive rebounds (hrToplam). |
-| `rebounds` | integer | Season total rebounds (trToplam). |
-| `assists` | integer | Season assists (asistToplam). |
-| `blocks` | integer | Season blocks (blokToplam). |
-| `steals` | integer | Season steals (topCalmaToplam). |
-| `turnovers` | integer | Season turnovers (topKaybiToplam). |
-| `fouls` | integer | Season personal fouls (faulToplam). |
-| `plus_minus` | numeric | Season plus/minus contribution (oyunaKatki = contribution to the game), a decimal string. |
-| `efficiency` | integer | Season efficiency rating total (vpToplam, verimlilik puani). |
-| `fg_pct` | numeric | Field-goal percentage 0-100 with two decimals (agYuzdesi). |
-| `fg2_pct` | numeric | Two-point percentage 0-100 with two decimals (ikilikYuzdesi). |
-| `fg3_pct` | numeric | Three-point percentage 0-100 with two decimals (uclukYuzdesi). |
-| `ft_pct` | numeric | Free-throw percentage 0-100 with two decimals (serbestAtisYuzdesi). |
-| `seconds_per_game` | integer | Average time on court per game in seconds (sureOrtalama 'hh:mm:ss'). |
-| `points_per_game` | numeric | Points per game (sayiOrtalama). |
-| `rebounds_per_game` | numeric | Rebounds per game (trOrtalama). |
-| `assists_per_game` | numeric | Assists per game (asistOrtalama). |
-| `steals_per_game` | numeric | Steals per game (topCalmaOrtalama). |
-| `blocks_per_game` | numeric | Blocks per game (blokOrtalama). |
-| `turnovers_per_game` | numeric | Turnovers per game (topKaybiOrtalama). |
-| `efficiency_per_game` | numeric | Efficiency rating per game (vpOrtalama). |
+| `season` | Int64 | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
+| `competition` | String | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
+| `team_process_id` | Int64 | Team-season id of the request (key space: TBF team registrations). |
+| `person_id` | Int64 | TBF person id (code; key space: TBF persons, stable across seasons and clubs). |
+| `jersey_number` | String | Shirt number (oyuncuNo) as a string. |
+| `first_name` | String | Player's first name. |
+| `last_name` | String | Player's last name. |
+| `games` | Int64 | Games played (macSayisi). |
+| `seconds_played` | Int64 | Season total time on court in seconds (sureToplam 'hh:mm:ss'). |
+| `points` | Int64 | Season total points (sayiToplam; the API sends it as a string). |
+| `fg_made` | Int64 | Season field goals made (agBasarili; sent as a string). |
+| `fg_attempted` | Int64 | Season field goals attempted (agDeneme). |
+| `fg2_made` | Int64 | Season two-point field goals made (puan20Toplam). |
+| `fg2_attempted` | Int64 | Season two-point field goals attempted (puan21Toplam). |
+| `fg3_made` | Int64 | Season three-point field goals made (puan30Toplam). |
+| `fg3_attempted` | Int64 | Season three-point field goals attempted (puan31Toplam). |
+| `ft_made` | Int64 | Season free throws made (sA0Toplam). |
+| `ft_attempted` | Int64 | Season free throws attempted (sA1Toplam). |
+| `def_rebounds` | Int64 | Season defensive rebounds (drToplam). |
+| `off_rebounds` | Int64 | Season offensive rebounds (hrToplam). |
+| `rebounds` | Int64 | Season total rebounds (trToplam). |
+| `assists` | Int64 | Season assists (asistToplam). |
+| `blocks` | Int64 | Season blocks (blokToplam). |
+| `steals` | Int64 | Season steals (topCalmaToplam). |
+| `turnovers` | Int64 | Season turnovers (topKaybiToplam). |
+| `fouls` | Int64 | Season personal fouls (faulToplam). |
+| `plus_minus` | Float64 | Season plus/minus contribution (oyunaKatki = contribution to the game), a decimal string. |
+| `efficiency` | Int64 | Season efficiency rating total (vpToplam, verimlilik puani). |
+| `fg_pct` | Float64 | Field-goal percentage 0-100 with two decimals (agYuzdesi). |
+| `fg2_pct` | Float64 | Two-point percentage 0-100 with two decimals (ikilikYuzdesi). |
+| `fg3_pct` | Float64 | Three-point percentage 0-100 with two decimals (uclukYuzdesi). |
+| `ft_pct` | Float64 | Free-throw percentage 0-100 with two decimals (serbestAtisYuzdesi). |
+| `seconds_per_game` | Int64 | Average time on court per game in seconds (sureOrtalama 'hh:mm:ss'). |
+| `points_per_game` | Float64 | Points per game (sayiOrtalama). |
+| `rebounds_per_game` | Float64 | Rebounds per game (trOrtalama). |
+| `assists_per_game` | Float64 | Assists per game (asistOrtalama). |
+| `steals_per_game` | Float64 | Steals per game (topCalmaOrtalama). |
+| `blocks_per_game` | Float64 | Blocks per game (blokOrtalama). |
+| `turnovers_per_game` | Float64 | Turnovers per game (topKaybiOrtalama). |
+| `efficiency_per_game` | Float64 | Efficiency rating per game (vpOrtalama). |
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
 
@@ -217,27 +217,27 @@ Games and results of one team-season, scheduled games included.
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
-| `competition` | character | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
-| `team_process_id` | integer | Team-season id of the request (key space: TBF team registrations). |
-| `match_id` | integer | TBF game id (key space: TBF games, one global sequence). |
-| `match_code` | character | TBF short game code. |
-| `tipoff` | character | Tip-off as a naive timestamp in Turkey local time (tarih). |
-| `week` | character | Week label (formattedWeek), e.g. '1. Hafta'. |
-| `city` | character | City of the venue (sehir), uppercase Turkish. |
-| `venue` | character | Venue name (salon). |
-| `home_team_process_id` | integer | Home team-season id (takimAId; key space: TBF team registrations). |
-| `home_team` | character | Home team name (takimA). |
-| `home_score` | integer | Home points (skorA); null before the game. |
-| `away_team_process_id` | integer | Away team-season id (takimBId). |
-| `away_team` | character | Away team name (takimB). |
-| `away_score` | integer | Away points (skorB); null before the game. |
-| `team_is_home` | logical | True when the asked team was the home side (isHome). |
-| `team_won` | logical | True when the asked team won (isWin); false for a loss or an unplayed game. |
-| `is_played` | logical | True once the game has been played (isPlayed). |
-| `status` | character | Game status text in Turkish: Oynandi = played, Oynanmadi = not played (durum). |
-| `status_id` | integer | Game status code (durumId): 1 = played, 4 = not played. |
-| `has_overtime` | logical | Overtime flag (uzatma = overtime). Reliability unverified: false on every one of 64 BSL 2025-26 games checked. |
+| `season` | Int64 | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
+| `competition` | String | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
+| `team_process_id` | Int64 | Team-season id of the request (key space: TBF team registrations). |
+| `match_id` | Int64 | TBF game id (key space: TBF games, one global sequence). |
+| `match_code` | String | TBF short game code. |
+| `tipoff` | String | Tip-off as a naive timestamp in Turkey local time (tarih). |
+| `week` | String | Week label (formattedWeek), e.g. '1. Hafta'. |
+| `city` | String | City of the venue (sehir), uppercase Turkish. |
+| `venue` | String | Venue name (salon). |
+| `home_team_process_id` | Int64 | Home team-season id (takimAId; key space: TBF team registrations). |
+| `home_team` | String | Home team name (takimA). |
+| `home_score` | Int64 | Home points (skorA); null before the game. |
+| `away_team_process_id` | Int64 | Away team-season id (takimBId). |
+| `away_team` | String | Away team name (takimB). |
+| `away_score` | Int64 | Away points (skorB); null before the game. |
+| `team_is_home` | Boolean | True when the asked team was the home side (isHome). |
+| `team_won` | Boolean | True when the asked team won (isWin); false for a loss or an unplayed game. |
+| `is_played` | Boolean | True once the game has been played (isPlayed). |
+| `status` | String | Game status text in Turkish: Oynandi = played, Oynanmadi = not played (durum). |
+| `status_id` | Int64 | Game status code (durumId): 1 = played, 4 = not played. |
+| `has_overtime` | Boolean | Overtime flag (uzatma = overtime). Reliability unverified: false on every one of 64 BSL 2025-26 games checked. |
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
 
@@ -275,19 +275,19 @@ Roster of one team-season with games, minutes and per-game points and efficiency
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
-| `competition` | character | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
-| `team_process_id` | integer | Team-season id of the request (key space: TBF team registrations). |
-| `person_id` | integer | TBF person id (personId; key space: TBF persons). |
-| `first_name` | character | Given name as registered with TBF, mixed case ('Yiğitcan'). |
-| `last_name` | character | Family name as registered with TBF, mixed case ('Saybir'). |
-| `nationality` | character | Nationality as a TURKISH country name (country); there is no code on this route. |
-| `height_cm` | integer | Height in centimetres; null when TBF has none. |
-| `jersey_number` | character | Shirt number as a string, so '0' and '00' stay distinct. |
-| `games` | integer | Games played (macSayisi = game count). |
-| `seconds_played` | integer | Season time on court in seconds (sure 'hh:mm:ss'). |
-| `points_per_game` | numeric | Points per game (sayi). |
-| `efficiency_per_game` | numeric | Efficiency rating per game (verimlilikPuani). |
+| `season` | Int64 | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
+| `competition` | String | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
+| `team_process_id` | Int64 | Team-season id of the request (key space: TBF team registrations). |
+| `person_id` | Int64 | TBF person id (personId; key space: TBF persons). |
+| `first_name` | String | Given name as registered with TBF, mixed case ('Yiğitcan'). |
+| `last_name` | String | Family name as registered with TBF, mixed case ('Saybir'). |
+| `nationality` | String | Nationality as a TURKISH country name (country); there is no code on this route. |
+| `height_cm` | Int64 | Height in centimetres; null when TBF has none. |
+| `jersey_number` | String | Shirt number as a string, so '0' and '00' stay distinct. |
+| `games` | Int64 | Games played (macSayisi = game count). |
+| `seconds_played` | Int64 | Season time on court in seconds (sure 'hh:mm:ss'). |
+| `points_per_game` | Float64 | Points per game (sayi). |
+| `efficiency_per_game` | Float64 | Efficiency rating per game (verimlilikPuani). |
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
 
@@ -325,14 +325,14 @@ Coaching and club staff of one team-season.
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
-| `competition` | character | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
-| `team_process_id` | integer | Team-season id of the request (key space: TBF team registrations). |
-| `person_id` | integer | TBF person id of the staff member (code; staff are TBF persons too). |
-| `first_name` | character | Given name(s) as registered with TBF, uppercase ('MEVLÜT TULGA'). |
-| `last_name` | character | Family name as registered with TBF, uppercase ('ÖNGÖREN'). |
-| `role` | character | Staff role in Turkish as sent (job), e.g. Antrenor = head coach. |
-| `role_code` | integer | Staff sub-role code (subRolesCode). |
+| `season` | Int64 | Season END year (2027 = the 2026-2027 season), read from the 'YYYY-YYYY' label or the request; the sdv season key. Not the internal TBF season id (season_id). |
+| `competition` | String | TBF league the row belongs to: bsl, tbl or kbsl (the request's competition, or the league prefix the API reports). |
+| `team_process_id` | Int64 | Team-season id of the request (key space: TBF team registrations). |
+| `person_id` | Int64 | TBF person id of the staff member (code; staff are TBF persons too). |
+| `first_name` | String | Given name(s) as registered with TBF, uppercase ('MEVLÜT TULGA'). |
+| `last_name` | String | Family name as registered with TBF, uppercase ('ÖNGÖREN'). |
+| `role` | String | Staff role in Turkish as sent (job), e.g. Antrenor = head coach. |
+| `role_code` | Int64 | Staff sub-role code (subRolesCode). |
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
 

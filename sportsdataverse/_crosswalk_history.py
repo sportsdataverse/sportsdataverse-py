@@ -325,7 +325,7 @@ def _fox_segments(league: str, season: int) -> List[str]:
 
 def fox_listing(store: Store, pacer: Pacer, league: str, season: int, refresh: bool) -> List[Dict[str, Any]]:
     """Every Fox game of a season from ``league/scores-segment`` (weeks or ET dates)."""
-    from sportsdataverse.fox.fox_api import fox_api_league_scores_segment
+    from sportsdataverse.providers.fox.fox_api import fox_api_league_scores_segment
 
     sport, group, window = _FOX_SPORT[league], _FOX_GROUP.get(league), season_window(league, season)
     games: Dict[str, Dict[str, Any]] = {}
@@ -363,7 +363,7 @@ def _yahoo_games(raw: Any) -> List[Dict[str, Any]]:
 
 def yahoo_listing(store: Store, pacer: Pacer, league: str, season: int, refresh: bool) -> List[Dict[str, Any]]:
     """Every Yahoo game id of a season from ``leagueGameIdsByDate`` (``season=`` set), by week."""
-    from sportsdataverse.yahoo.yahoo_shangrila import yahoo_league_game_ids_by_date
+    from sportsdataverse.providers.yahoo.yahoo_shangrila import yahoo_league_game_ids_by_date
 
     slug, window = _YAHOO_LEAGUE[league], season_window(league, season)
     by_date = league in _YAHOO_BY_DATE
@@ -595,15 +595,15 @@ def _fetch_games(
 
 def _getter(provider: str, league: str, endpoint: str, gid: str) -> Callable[[], Any]:
     if provider == "fox":
-        from sportsdataverse.fox.fox_api import fox_api_event_data
+        from sportsdataverse.providers.fox.fox_api import fox_api_event_data
 
         return lambda: fox_api_event_data(_FOX_SPORT[league], gid, return_parsed=False, **_FETCH_KW)
     if provider == "yahoo":
-        from sportsdataverse.yahoo.yahoo_shangrila import yahoo_playbook_boxscore
+        from sportsdataverse.providers.yahoo.yahoo_shangrila import yahoo_playbook_boxscore
 
         flag = {_YAHOO_FLAG[league]: "true"}
         return lambda: yahoo_playbook_boxscore(game_id=gid, return_parsed=False, **flag, **_FETCH_KW)
-    from sportsdataverse.cbs.cbs_napi import cbs_game_boxscore, cbs_game_scoring_plays
+    from sportsdataverse.providers.cbs.cbs_napi import cbs_game_boxscore, cbs_game_scoring_plays
 
     fn = cbs_game_boxscore if endpoint == "game_boxscore" else cbs_game_scoring_plays
     return lambda: fn(gid, return_parsed=False, **_FETCH_KW)

@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: game_id
+  type: character
+- description: ''
+  name: home_team_id
+  type: integer
+- description: ''
+  name: visitor_team_id
+  type: integer
+- description: ''
+  name: series_id
+  type: character
+- description: ''
+  name: game_num
+  type: integer
+kind: dataframe
+schema: commonplayoffseries

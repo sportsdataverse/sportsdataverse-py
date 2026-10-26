@@ -1,10 +1,10 @@
 ---
-title: "WBB — additional Python functions — Dates and seasons"
+title: "Women's college basketball — additional Python functions — Dates and seasons"
 sidebar_label: "Dates and seasons"
 sidebar_position: 12
-description: "WBB — additional Python functions — Dates and seasons — function reference in sdv-py, the SportsDataverse Python package."
+description: "Women's college basketball — additional Python functions — Dates and seasons — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — Dates and seasons
+# Women's college basketball — additional Python functions — Dates and seasons
 
 ### most_recent_wbb_season {#most_recent_wbb_season}
 

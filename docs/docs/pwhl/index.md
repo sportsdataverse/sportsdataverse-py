@@ -53,7 +53,7 @@ description: "sdv-py PWHL: endpoint references, dataset loaders and parsers for 
 
 ## See also
 
-- [sdvplot](https://github.com/sportsdataverse/sdvplot) — `surface("pwhl")` draws the rink in a team's colors
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("pwhl")` draws the rink in a team's colors
 - [sportypy](https://sportypy.sportsdataverse.org/) — the rink sdvplot draws with
 
 ## Examples
@@ -112,6 +112,6 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`fa
 | [`pwhl_standings`](reference/additional/hockeytech-leaguestat#pwhl_standings) | [`pwhl_standings`](https://fastRhockey.sportsdataverse.org/reference/pwhl_standings.html) |
 | [`pwhl_stats`](reference/additional/hockeytech-leaguestat#pwhl_stats) | [`pwhl_stats`](https://fastRhockey.sportsdataverse.org/reference/pwhl_stats.html) |
 | [`pwhl_streaks`](reference/additional/hockeytech-leaguestat#pwhl_streaks) | [`pwhl_streaks`](https://fastRhockey.sportsdataverse.org/reference/pwhl_streaks.html) |
-| [`pwhl_team_roster`](reference/additional/hockeytech-leaguestat-2#pwhl_team_roster) | [`pwhl_team_roster`](https://fastRhockey.sportsdataverse.org/reference/pwhl_team_roster.html) |
+| [`pwhl_team_roster`](reference/additional/hockeytech-leaguestat#pwhl_team_roster) | [`pwhl_team_roster`](https://fastRhockey.sportsdataverse.org/reference/pwhl_team_roster.html) |
 | [`pwhl_teams`](reference/additional/hockeytech-leaguestat-2#pwhl_teams) | [`pwhl_teams`](https://fastRhockey.sportsdataverse.org/reference/pwhl_teams.html) |
 | [`pwhl_transactions`](reference/additional/hockeytech-leaguestat-2#pwhl_transactions) | [`pwhl_transactions`](https://fastRhockey.sportsdataverse.org/reference/pwhl_transactions.html) |

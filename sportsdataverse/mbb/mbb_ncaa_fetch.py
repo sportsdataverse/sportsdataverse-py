@@ -47,7 +47,7 @@ the play-by-play/box-score shapes named directly in the Phase 5f plan's
 Task 5f.2 live-proof probe list. The roster/schedule shapes below follow the
 same modern/legacy convention by analogy but are **not yet independently
 confirmed live** (stats.ncaa.org's exact roster path was not in any indexed
-source) -- Task 5f.2's live proof should confirm or correct them; this is
+source) -- the live proof should confirm or correct them; this is
 fetch-layer plumbing, not a parser, so a wrong path is a one-line fix later.
 
 **Two transports, by page class (proven live 2026-07-07, Task 5f.2/5f.3).**
@@ -1310,9 +1310,9 @@ class NcaaFetcher:
         .get_box_lineup` parses on current markup (``format_version=1``): two
         ``table.dataTable.small_font#competitor_*`` per-team player tables.
         The server ignores ``?period_no`` here (returns the full-game box), so
-        no period arg -- see ``dev/phase5f-live-proof.md``.
+        there is no period argument.
 
-        ponytail: the modern box split out of ``box_score`` into this tab; the
+        The modern box split out of ``box_score`` into this tab; the
         legacy (pre-2018) layout has no separate individual-stats page, so
         ``legacy=True`` falls back to the legacy ``box_score`` path.
         """
@@ -1322,9 +1322,8 @@ class NcaaFetcher:
     def fetch_team_roster(self, team_id: object, year_id: object, *, legacy: bool = False, force: bool = False) -> str:
         """Fetch a team's roster page for *year_id*.
 
-        ponytail: URL shape by analogy to the confirmed team-id scheme, not
-        independently live-confirmed -- see module docstring; fix in Task
-        5f.2 if the real path differs.
+        The URL shape follows the confirmed team-id scheme by analogy; it has
+        not been confirmed live on its own (see the module docstring).
         """
         path = f"team/{team_id}/{year_id}/roster" if legacy else f"teams/{team_id}/roster/{year_id}"
         return self.fetch_html(path, force=force)
@@ -1332,8 +1331,8 @@ class NcaaFetcher:
     def fetch_team_schedule(self, team_id: object, *, legacy: bool = False, force: bool = False) -> str:
         """Fetch a team's game-by-game schedule page.
 
-        Modern shape (``teams/{id}/game_by_game``) is confirmed by
-        ``dev/phase5-ncaa-proxy-proof.md``; the legacy shape is by analogy
+        The modern shape (``teams/{id}/game_by_game``) is confirmed live; the
+        legacy shape is by analogy
         (see :meth:`fetch_team_roster`'s note).
         """
         path = f"team/{team_id}" if legacy else f"teams/{team_id}/game_by_game"

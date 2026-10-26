@@ -1,9 +1,9 @@
 ---
-title: NBASL_ORL
-sidebar_label: NBASL_ORL
-description: "sdv-py NBASL_ORL: endpoint references, dataset loaders and parsers for NBASL_ORL in the SportsDataverse Python package."
+title: NBA Summer League (Orlando)
+sidebar_label: NBA Summer League (Orlando)
+description: "sdv-py NBA Summer League (Orlando): endpoint references, dataset loaders and parsers for NBA Summer League (Orlando) in the SportsDataverse Python package."
 ---
-# NBASL_ORL (`sportsdataverse.nbasl_orl`)
+# NBA Summer League (Orlando) (`sportsdataverse.basketball.nbasl_orl`)
 
 ## Data sources
 

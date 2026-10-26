@@ -16,7 +16,7 @@ def load(name):
 
 
 def test_headlines_become_rows():
-    from sportsdataverse.espn_content.espn_content_parsers import parse_espn_content
+    from sportsdataverse.providers.espn_content.espn_content_parsers import parse_espn_content
 
     df = parse_espn_content(load("news"))
     assert isinstance(df, pl.DataFrame)
@@ -25,13 +25,13 @@ def test_headlines_become_rows():
 
 
 def test_one_story_is_one_row():
-    from sportsdataverse.espn_content.espn_content_parsers import parse_espn_content
+    from sportsdataverse.providers.espn_content.espn_content_parsers import parse_espn_content
 
     assert parse_espn_content(load("story")).height == 1
 
 
 def test_empty_payload_is_zero_rows():
-    from sportsdataverse.espn_content.espn_content_parsers import parse_espn_content
+    from sportsdataverse.providers.espn_content.espn_content_parsers import parse_espn_content
 
     for payload in (None, {}, [], {"headlines": []}, 7):
         df = parse_espn_content(payload)
@@ -40,14 +40,14 @@ def test_empty_payload_is_zero_rows():
 
 
 def test_pandas_round_trip():
-    from sportsdataverse.espn_content.espn_content_parsers import parse_espn_content
+    from sportsdataverse.providers.espn_content.espn_content_parsers import parse_espn_content
 
     assert isinstance(parse_espn_content(load("news"), return_as_pandas=True), pd.DataFrame)
 
 
 def test_id_columns_are_int64():
     """B-GB-10 (task 5.2): story ids join the Int64 contract; ESPN's text content id ``now_id`` stays String."""
-    from sportsdataverse.espn_content.espn_content_parsers import parse_espn_content
+    from sportsdataverse.providers.espn_content.espn_content_parsers import parse_espn_content
 
     raw = load("news")
     df = parse_espn_content(raw)
@@ -82,7 +82,7 @@ def test_paging_params_are_caller_supplied():
 
 def test_pandas_ids_are_nullable_int64():
     """R981-8: the pandas frame carries the story ids as pandas' nullable ``Int64``, as the polars one does."""
-    from sportsdataverse.espn_content.espn_content_parsers import parse_espn_content
+    from sportsdataverse.providers.espn_content.espn_content_parsers import parse_espn_content
 
     raw = load("news")
     pdf = parse_espn_content(raw, return_as_pandas=True)

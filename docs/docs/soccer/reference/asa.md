@@ -1,11 +1,11 @@
 ---
-title: SOCCER — American Soccer Analysis (app.americansocceranalysis.com)
+title: Soccer (all) — American Soccer Analysis (app.americansocceranalysis.com)
 sidebar_label: American Soccer Analysis (app.americansocceranalysis.com)
-description: "SOCCER — American Soccer Analysis (app.americansocceranalysis.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "Soccer (all) — American Soccer Analysis (app.americansocceranalysis.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
 ---
-# SOCCER — American Soccer Analysis (app.americansocceranalysis.com)
+# Soccer (all) — American Soccer Analysis (app.americansocceranalysis.com)
 
 `sportsdataverse.soccer` — 16 endpoints.
 
@@ -27,23 +27,23 @@ Games/fixtures with final scores, venue/official/manager FKs.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | ASA game id (base62 string; Utf8 join key). |
-| `date_time_utc` | character | Kickoff timestamp (UTC, ISO 8601). |
-| `home_score` | integer | Home goals (regulation + extra time). |
-| `away_score` | integer | Away goals (regulation + extra time). |
-| `home_team_id` | character | FK -> Team (home side). |
-| `away_team_id` | character | FK -> Team (away side). |
-| `referee_id` | character | ASA referee id (base62 string; Utf8 join key). |
-| `stadium_id` | character | ASA stadium id (base62 string; Utf8 join key). |
-| `home_manager_id` | character | FK -> Manager (home side; nullable). |
-| `away_manager_id` | character | FK -> Manager (away side; nullable). |
-| `expanded_minutes` | integer | Total match minutes incl. stoppage (data coverage window). |
-| `season_name` | character | Season(s) the player appears in; may serialize as a scalar, a list, or an object across the leagues. |
-| `matchday` | integer | Round/matchday number. |
-| `knockout_game` | logical | True if a knockout/playoff fixture. |
-| `status` | character | Game status (e.g. `final`). |
-| `last_updated_utc` | character | Last-updated timestamp (UTC, ISO 8601). |
-| `attendance` | integer | Reported attendance (nullable). |
+| `game_id` | String | ASA game id (base62 string; Utf8 join key). |
+| `date_time_utc` | String | Kickoff timestamp (UTC, ISO 8601). |
+| `home_score` | Int64 | Home goals (regulation + extra time). |
+| `away_score` | Int64 | Away goals (regulation + extra time). |
+| `home_team_id` | String | FK -> Team (home side). |
+| `away_team_id` | String | FK -> Team (away side). |
+| `referee_id` | String | ASA referee id (base62 string; Utf8 join key). |
+| `stadium_id` | String | ASA stadium id (base62 string; Utf8 join key). |
+| `home_manager_id` | String | FK -> Manager (home side; nullable). |
+| `away_manager_id` | String | FK -> Manager (away side; nullable). |
+| `expanded_minutes` | Int64 | Total match minutes incl. stoppage (data coverage window). |
+| `season_name` | String | Season(s) the player appears in; may serialize as a scalar, a list, or an object across the leagues. |
+| `matchday` | Int64 | Round/matchday number. |
+| `knockout_game` | Boolean | True if a knockout/playoff fixture. |
+| `status` | String | Game status (e.g. `final`). |
+| `last_updated_utc` | String | Last-updated timestamp (UTC, ISO 8601). |
+| `attendance` | Int64 | Reported attendance (nullable). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -88,22 +88,22 @@ Per-game expected-goals + expected points for both sides.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | ASA game id (base62 string; Utf8 join key). |
-| `date_time_utc` | character | Kickoff timestamp (UTC, ISO 8601). |
-| `home_team_id` | character | FK -> Team (home side). |
-| `home_goals` | integer | Home goals scored. |
-| `home_team_xgoals` | numeric | Home expected goals (team model). |
-| `home_player_xgoals` | numeric | Home expected goals (player-shot model). |
-| `away_team_id` | character | FK -> Team (away side). |
-| `away_goals` | integer | Away goals scored. |
-| `away_team_xgoals` | numeric | Away expected goals (team model). |
-| `away_player_xgoals` | numeric | Away expected goals (player-shot model). |
-| `goal_difference` | integer | goals_for - goals_against. |
-| `team_xgoal_difference` | numeric | Home minus away team xGoals. |
-| `player_xgoal_difference` | numeric | Home minus away player xGoals. |
-| `final_score_difference` | integer | Final goal margin (home perspective). |
-| `home_xpoints` | numeric | Home expected points from the match. |
-| `away_xpoints` | numeric | Away expected points from the match. |
+| `game_id` | String | ASA game id (base62 string; Utf8 join key). |
+| `date_time_utc` | String | Kickoff timestamp (UTC, ISO 8601). |
+| `home_team_id` | String | FK -> Team (home side). |
+| `home_goals` | Int64 | Home goals scored. |
+| `home_team_xgoals` | Float64 | Home expected goals (team model). |
+| `home_player_xgoals` | Float64 | Home expected goals (player-shot model). |
+| `away_team_id` | String | FK -> Team (away side). |
+| `away_goals` | Int64 | Away goals scored. |
+| `away_team_xgoals` | Float64 | Away expected goals (team model). |
+| `away_player_xgoals` | Float64 | Away expected goals (player-shot model). |
+| `goal_difference` | Int64 | goals_for - goals_against. |
+| `team_xgoal_difference` | Float64 | Home minus away team xGoals. |
+| `player_xgoal_difference` | Float64 | Home minus away player xGoals. |
+| `final_score_difference` | Int64 | Final goal margin (home perspective). |
+| `home_xpoints` | Float64 | Home expected points from the match. |
+| `away_xpoints` | Float64 | Away expected points from the match. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -148,9 +148,9 @@ Per-goalkeeper Goals Added with a per-action-type data[] breakdown.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | ASA player id (base62 string; Utf8 join key). |
-| `team_id` | character | ASA team id (base62 string; Utf8 join key, never numeric). |
-| `minutes_played` | integer | Minutes played in the filtered window. |
+| `player_id` | String | ASA player id (base62 string; Utf8 join key). |
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `minutes_played` | Int64 | Minutes played in the filtered window. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -195,16 +195,16 @@ Per-goalkeeper shot-stopping vs post-shot expected goals.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | ASA player id (base62 string; Utf8 join key). |
-| `team_id` | character | ASA team id (base62 string; Utf8 join key, never numeric). |
-| `minutes_played` | integer | Minutes played in the filtered window. |
-| `shots_faced` | integer | Shots faced. |
-| `goals_conceded` | integer | Goals conceded. |
-| `saves` | integer | Saves made. |
-| `share_headed_shots` | numeric | Share of faced shots that were headers. |
-| `xgoals_gk_faced` | numeric | Post-shot expected goals faced. |
-| `goals_minus_xgoals_gk` | numeric | Goals conceded minus post-shot xG (negative = shots saved above expectation). |
-| `goals_divided_by_xgoals_gk` | numeric | Goals conceded / post-shot xG faced. |
+| `player_id` | String | ASA player id (base62 string; Utf8 join key). |
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `minutes_played` | Int64 | Minutes played in the filtered window. |
+| `shots_faced` | Int64 | Shots faced. |
+| `goals_conceded` | Int64 | Goals conceded. |
+| `saves` | Int64 | Saves made. |
+| `share_headed_shots` | Float64 | Share of faced shots that were headers. |
+| `xgoals_gk_faced` | Float64 | Post-shot expected goals faced. |
+| `goals_minus_xgoals_gk` | Float64 | Goals conceded minus post-shot xG (negative = shots saved above expectation). |
+| `goals_divided_by_xgoals_gk` | Float64 | Goals conceded / post-shot xG faced. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -240,9 +240,9 @@ Managers/head coaches.
 
 | col_name | type | description |
 |---|---|---|
-| `manager_id` | character | ASA manager id (base62 string; Utf8 join key). |
-| `manager_name` | character | Manager display name. |
-| `nationality` | character | Player nationality (country name). |
+| `manager_id` | String | ASA manager id (base62 string; Utf8 join key). |
+| `manager_name` | String | Manager display name. |
+| `nationality` | String | Player nationality (country name). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -278,17 +278,17 @@ Players in the league (identity + biometrics + positions).
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | ASA player id (base62 string; Utf8 join key). |
-| `player_name` | character | Player display name. |
-| `birth_date` | character | Date of birth (`YYYY-MM-DD`; may be null). |
-| `height_ft` | integer | Listed height, feet component. |
-| `height_in` | integer | Listed height, inches component. |
-| `weight_lb` | integer | Listed weight in pounds. |
-| `nationality` | character | Player nationality (country name). |
-| `primary_broad_position` | character | Broad position bucket (Goalkeeper/Defender/Midfielder/Forward). |
-| `primary_general_position` | character | General position code (GK/CB/FB/DM/CM/AM/W/ST). |
-| `season_name` | character | Season(s) the player appears in; may serialize as a scalar, a list, or an object across the leagues. |
-| `secondary_general_position` | character | Secondary general position code (nullable). |
+| `player_id` | String | ASA player id (base62 string; Utf8 join key). |
+| `player_name` | String | Player display name. |
+| `birth_date` | String | Date of birth (`YYYY-MM-DD`; may be null). |
+| `height_ft` | Int64 | Listed height, feet component. |
+| `height_in` | Int64 | Listed height, inches component. |
+| `weight_lb` | Int64 | Listed weight in pounds. |
+| `nationality` | String | Player nationality (country name). |
+| `primary_broad_position` | String | Broad position bucket (Goalkeeper/Defender/Midfielder/Forward). |
+| `primary_general_position` | String | General position code (GK/CB/FB/DM/CM/AM/W/ST). |
+| `season_name` | String | Season(s) the player appears in; may serialize as a scalar, a list, or an object across the leagues. |
+| `secondary_general_position` | String | Secondary general position code (nullable). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -333,10 +333,10 @@ Per-player Goals Added (g+) with a per-action-type data[] breakdown.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | ASA player id (base62 string; Utf8 join key). |
-| `team_id` | character | ASA team id (base62 string; Utf8 join key, never numeric). |
-| `general_position` | character | General position code (GK/CB/FB/DM/CM/AM/W/ST). |
-| `minutes_played` | integer | Minutes played in the filtered window. |
+| `player_id` | String | ASA player id (base62 string; Utf8 join key). |
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `general_position` | String | General position code (GK/CB/FB/DM/CM/AM/W/ST). |
+| `minutes_played` | Int64 | Minutes played in the filtered window. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -381,13 +381,13 @@ Player salaries (MLS only; server caps the response at 10000 rows).
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | ASA player id (base62 string; Utf8 join key). |
-| `team_id` | character | ASA team id (base62 string; Utf8 join key, never numeric). |
-| `season_name` | integer | Season(s) the player appears in; may serialize as a scalar, a list, or an object across the leagues. |
-| `position` | character | Roster position designation (string; distinct from `general_position`). |
-| `base_salary` | integer | Base salary (USD). |
-| `guaranteed_compensation` | integer | Guaranteed compensation (USD). |
-| `mlspa_release` | character | MLSPA salary-release label/date the row is sourced from. |
+| `player_id` | String | ASA player id (base62 string; Utf8 join key). |
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `season_name` | Int64 | Season(s) the player appears in; may serialize as a scalar, a list, or an object across the leagues. |
+| `position` | String | Roster position designation (string; distinct from `general_position`). |
+| `base_salary` | Int64 | Base salary (USD). |
+| `guaranteed_compensation` | Int64 | Guaranteed compensation (USD). |
+| `mlspa_release` | String | MLSPA salary-release label/date the row is sourced from. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -432,24 +432,24 @@ Per-player expected-goals + attacking production.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | ASA player id (base62 string; Utf8 join key). |
-| `team_id` | character | ASA team id (base62 string; Utf8 join key, never numeric). |
-| `general_position` | character | General position code (GK/CB/FB/DM/CM/AM/W/ST). |
-| `minutes_played` | integer | Minutes played in the filtered window. |
-| `shots` | integer | Shots taken. |
-| `shots_on_target` | integer | Shots on target. |
-| `goals` | integer | Goals scored. |
-| `xgoals` | numeric | Expected goals (pre-shot xG). |
-| `xplace` | numeric | Expected goals added by shot placement (post-shot minus pre-shot). |
-| `goals_minus_xgoals` | numeric | Finishing over expectation (goals - xG). |
-| `key_passes` | integer | Passes that led to a shot. |
-| `primary_assists` | integer | Primary assists. |
-| `xassists` | numeric | Expected assists. |
-| `primary_assists_minus_xassists` | numeric | Assists over expectation. |
-| `goals_plus_primary_assists` | integer | Goals + primary assists (G+A). |
-| `xgoals_plus_xassists` | numeric | xGoals + xAssists (xG+xA). |
-| `points_added` | numeric | Team points added by the player's attacking output. |
-| `xpoints_added` | numeric | Expected team points added. |
+| `player_id` | String | ASA player id (base62 string; Utf8 join key). |
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `general_position` | String | General position code (GK/CB/FB/DM/CM/AM/W/ST). |
+| `minutes_played` | Int64 | Minutes played in the filtered window. |
+| `shots` | Int64 | Shots taken. |
+| `shots_on_target` | Int64 | Shots on target. |
+| `goals` | Int64 | Goals scored. |
+| `xgoals` | Float64 | Expected goals (pre-shot xG). |
+| `xplace` | Float64 | Expected goals added by shot placement (post-shot minus pre-shot). |
+| `goals_minus_xgoals` | Float64 | Finishing over expectation (goals - xG). |
+| `key_passes` | Int64 | Passes that led to a shot. |
+| `primary_assists` | Int64 | Primary assists. |
+| `xassists` | Float64 | Expected assists. |
+| `primary_assists_minus_xassists` | Float64 | Assists over expectation. |
+| `goals_plus_primary_assists` | Int64 | Goals + primary assists (G+A). |
+| `xgoals_plus_xassists` | Float64 | xGoals + xAssists (xG+xA). |
+| `points_added` | Float64 | Team points added by the player's attacking output. |
+| `xpoints_added` | Float64 | Expected team points added. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -494,19 +494,19 @@ Per-player expected-passing (completion over expected, distance, share of team t
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | ASA player id (base62 string; Utf8 join key). |
-| `team_id` | character | ASA team id (base62 string; Utf8 join key, never numeric). |
-| `general_position` | character | General position code (GK/CB/FB/DM/CM/AM/W/ST). |
-| `minutes_played` | integer | Minutes played in the filtered window. |
-| `attempted_passes` | integer | Passes attempted. |
-| `pass_completion_percentage` | numeric | Actual pass completion (0-1). |
-| `xpass_completion_percentage` | numeric | Expected pass completion (0-1). |
-| `passes_completed_over_expected` | numeric | Passes completed over expected. |
-| `passes_completed_over_expected_p100` | numeric | Passes completed over expected per 100 passes. |
-| `avg_distance_yds` | numeric | Average pass distance in yards. |
-| `avg_vertical_distance_yds` | numeric | Average vertical (goalward) pass distance in yards. |
-| `share_team_touches` | numeric | Share of the team's touches (0-1). |
-| `count_games` | integer | Games included in the window. |
+| `player_id` | String | ASA player id (base62 string; Utf8 join key). |
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `general_position` | String | General position code (GK/CB/FB/DM/CM/AM/W/ST). |
+| `minutes_played` | Int64 | Minutes played in the filtered window. |
+| `attempted_passes` | Int64 | Passes attempted. |
+| `pass_completion_percentage` | Float64 | Actual pass completion (0-1). |
+| `xpass_completion_percentage` | Float64 | Expected pass completion (0-1). |
+| `passes_completed_over_expected` | Float64 | Passes completed over expected. |
+| `passes_completed_over_expected_p100` | Float64 | Passes completed over expected per 100 passes. |
+| `avg_distance_yds` | Float64 | Average pass distance in yards. |
+| `avg_vertical_distance_yds` | Float64 | Average vertical (goalward) pass distance in yards. |
+| `share_team_touches` | Float64 | Share of the team's touches (0-1). |
+| `count_games` | Int64 | Games included in the window. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -542,10 +542,10 @@ Match referees.
 
 | col_name | type | description |
 |---|---|---|
-| `referee_id` | character | ASA referee id (base62 string; Utf8 join key). |
-| `referee_name` | character | Referee display name. |
-| `birth_date` | character | Date of birth (`YYYY-MM-DD`; may be null). |
-| `nationality` | character | Player nationality (country name). |
+| `referee_id` | String | ASA referee id (base62 string; Utf8 join key). |
+| `referee_name` | String | Referee display name. |
+| `birth_date` | String | Date of birth (`YYYY-MM-DD`; may be null). |
+| `nationality` | String | Player nationality (country name). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -581,21 +581,21 @@ Stadia (venue metadata incl. coordinates + pitch dimensions).
 
 | col_name | type | description |
 |---|---|---|
-| `stadium_id` | character | ASA stadium id (base62 string; Utf8 join key). |
-| `stadium_name` | character | Venue name. |
-| `capacity` | integer | Seating capacity. |
-| `year_built` | integer | Year the venue opened. |
-| `roof` | logical | Whether the venue has a roof. |
-| `turf` | logical | Whether the playing surface is artificial turf. |
-| `street` | character | Street address. |
-| `city` | character | City. |
-| `province` | character | State/province. |
-| `country` | character | Country. |
-| `postal_code` | character | Postal/ZIP code. |
-| `latitude` | numeric | Latitude (decimal degrees). |
-| `longitude` | numeric | Longitude (decimal degrees). |
-| `field_x` | integer | Pitch length (venue-reported field dimension). |
-| `field_y` | integer | Pitch width (venue-reported field dimension). |
+| `stadium_id` | String | ASA stadium id (base62 string; Utf8 join key). |
+| `stadium_name` | String | Venue name. |
+| `capacity` | Int64 | Seating capacity. |
+| `year_built` | Int64 | Year the venue opened. |
+| `roof` | Boolean | Whether the venue has a roof. |
+| `turf` | Boolean | Whether the playing surface is artificial turf. |
+| `street` | String | Street address. |
+| `city` | String | City. |
+| `province` | String | State/province. |
+| `country` | String | Country. |
+| `postal_code` | String | Postal/ZIP code. |
+| `latitude` | Float64 | Latitude (decimal degrees). |
+| `longitude` | Float64 | Longitude (decimal degrees). |
+| `field_x` | Int64 | Pitch length (venue-reported field dimension). |
+| `field_y` | Int64 | Pitch width (venue-reported field dimension). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -631,10 +631,10 @@ Teams in the league (full table, no filter params).
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | ASA team id (base62 string; Utf8 join key, never numeric). |
-| `team_name` | character | Full club name. |
-| `team_short_name` | character | Short club name. |
-| `team_abbreviation` | character | Short (2-4 char) club abbreviation. |
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `team_name` | String | Full club name. |
+| `team_short_name` | String | Short club name. |
+| `team_abbreviation` | String | Short (2-4 char) club abbreviation. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -679,8 +679,8 @@ Per-team Goals Added for/against with a per-action-type data[] breakdown.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | ASA team id (base62 string; Utf8 join key, never numeric). |
-| `minutes` | integer | Team minutes in the window. |
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `minutes` | Int64 | Team minutes in the window. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -725,19 +725,19 @@ Per-team expected-goals for/against + expected points.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | ASA team id (base62 string; Utf8 join key, never numeric). |
-| `count_games` | integer | Games included in the window. |
-| `shots_for` | integer | Shots taken. |
-| `shots_against` | integer | Shots faced. |
-| `goals_for` | integer | Goals scored. |
-| `goals_against` | integer | Goals conceded. |
-| `goal_difference` | integer | goals_for - goals_against. |
-| `xgoals_for` | numeric | Expected goals created. |
-| `xgoals_against` | numeric | Expected goals conceded. |
-| `xgoal_difference` | numeric | xgoals_for - xgoals_against. |
-| `goal_difference_minus_xgoal_difference` | numeric | Finishing/keeping over expectation. |
-| `points` | integer | Actual league points earned. |
-| `xpoints` | numeric | Expected league points. |
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `count_games` | Int64 | Games included in the window. |
+| `shots_for` | Int64 | Shots taken. |
+| `shots_against` | Int64 | Shots faced. |
+| `goals_for` | Int64 | Goals scored. |
+| `goals_against` | Int64 | Goals conceded. |
+| `goal_difference` | Int64 | goals_for - goals_against. |
+| `xgoals_for` | Float64 | Expected goals created. |
+| `xgoals_against` | Float64 | Expected goals conceded. |
+| `xgoal_difference` | Float64 | xgoals_for - xgoals_against. |
+| `goal_difference_minus_xgoal_difference` | Float64 | Finishing/keeping over expectation. |
+| `points` | Int64 | Actual league points earned. |
+| `xpoints` | Float64 | Expected league points. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -782,22 +782,22 @@ Per-team expected-passing (completion over expected, vertical distance).
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | ASA team id (base62 string; Utf8 join key, never numeric). |
-| `count_games` | integer | Games included in the window. |
-| `attempted_passes_for` | integer | Passes attempted by the team. |
-| `pass_completion_percentage_for` | numeric | Actual pass completion % (for). |
-| `xpass_completion_percentage_for` | numeric | Expected pass completion % (for). |
-| `passes_completed_over_expected_for` | numeric | Passes completed over expected (for). |
-| `passes_completed_over_expected_p100_for` | numeric | Passes completed over expected per 100 passes (for). |
-| `avg_vertical_distance_for` | numeric | Average vertical (goalward) pass distance (for). |
-| `attempted_passes_against` | integer | Passes attempted by opponents. |
-| `pass_completion_percentage_against` | numeric | Actual pass completion % (against). |
-| `xpass_completion_percentage_against` | numeric | Expected pass completion % (against). |
-| `passes_completed_over_expected_against` | numeric | Passes completed over expected (against). |
-| `passes_completed_over_expected_p100_against` | numeric | Passes completed over expected per 100 passes (against). |
-| `avg_vertical_distance_against` | numeric | Average vertical pass distance (against). |
-| `passes_completed_over_expected_difference` | numeric | For minus against (passes over expected). |
-| `avg_vertical_distance_difference` | numeric | For minus against (vertical distance). |
+| `team_id` | String | ASA team id (base62 string; Utf8 join key, never numeric). |
+| `count_games` | Int64 | Games included in the window. |
+| `attempted_passes_for` | Int64 | Passes attempted by the team. |
+| `pass_completion_percentage_for` | Float64 | Actual pass completion % (for). |
+| `xpass_completion_percentage_for` | Float64 | Expected pass completion % (for). |
+| `passes_completed_over_expected_for` | Float64 | Passes completed over expected (for). |
+| `passes_completed_over_expected_p100_for` | Float64 | Passes completed over expected per 100 passes (for). |
+| `avg_vertical_distance_for` | Float64 | Average vertical (goalward) pass distance (for). |
+| `attempted_passes_against` | Int64 | Passes attempted by opponents. |
+| `pass_completion_percentage_against` | Float64 | Actual pass completion % (against). |
+| `xpass_completion_percentage_against` | Float64 | Expected pass completion % (against). |
+| `passes_completed_over_expected_against` | Float64 | Passes completed over expected (against). |
+| `passes_completed_over_expected_p100_against` | Float64 | Passes completed over expected per 100 passes (against). |
+| `avg_vertical_distance_against` | Float64 | Average vertical pass distance (against). |
+| `passes_completed_over_expected_difference` | Float64 | For minus against (passes over expected). |
+| `avg_vertical_distance_difference` | Float64 | For minus against (vertical distance). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

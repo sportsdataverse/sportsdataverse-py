@@ -102,21 +102,21 @@ One row per ranked skater (points and goals leaders): `rank` (Int64), `player_id
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Rank of the streak. |
-| `player_id` | integer | Unique player identifier. |
-| `jersey_number` | character | Jersey number. |
-| `name` | character | Team mascot name. |
-| `team_id` | integer | Unique team identifier. |
-| `team_name` | character | Team name. |
-| `team_code` | character | Team abbreviation. |
-| `team_logo` | character | URL to the team logo image. |
-| `team_logo_small` | character | URL of the small-format team logo image for the player's QMJHL club. |
-| `stat_formatted` | character | The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet. |
-| `type_formatted` | character | Human-readable label describing the statistical category for which the player appears on the leaders list (e.g., 'Points', 'Goals', 'Save Percentage'). |
-| `photo` | character | URL to the player photo. |
-| `photo_small` | character | URL of a small-format headshot image of the player from the QMJHL HockeyTech feed. |
-| `position` | character | Player position. |
-| `division` | character | Division identifier. |
+| `rank` | Int64 | Rank of the streak. |
+| `player_id` | Int64 | Unique player identifier. |
+| `jersey_number` | String | Jersey number. |
+| `name` | String | Team mascot name. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_name` | String | Team name. |
+| `team_code` | String | Team abbreviation. |
+| `team_logo` | String | URL to the team logo image. |
+| `team_logo_small` | String | URL of the small-format team logo image for the player's QMJHL club. |
+| `stat_formatted` | String | The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet. |
+| `type_formatted` | String | Human-readable label describing the statistical category for which the player appears on the leaders list (e.g., 'Points', 'Goals', 'Save Percentage'). |
+| `photo` | String | URL to the player photo. |
+| `photo_small` | String | URL of a small-format headshot image of the player from the QMJHL HockeyTech feed. |
+| `position` | String | Player position. |
+| `division` | String | Division identifier. |
 
 **Raises**
 
@@ -168,58 +168,58 @@ One row per season (and team) the player played: `season_id`, `season_name`, `pl
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | integer | Season identifier. |
-| `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
-| `shortname` | character | Player short name. |
-| `playoff` | character | Whether the row is playoff statistics. |
-| `career` | character | Whether this is a career-stats season. |
-| `sopt_track_faceoffs` | character | Flag or value indicating whether faceoff tracking is enabled for this player's statistical record in the QMJHL HockeyTech system. |
-| `max_start_date` | character | Latest game start date for the season. |
-| `veteran_status` | character | Player veteran status. |
-| `veteran` | character | Whether the player is a veteran. |
-| `jersey_number` | character | Jersey number. |
-| `goals` | character | Goals scored. |
-| `games_played` | character | Games played. |
-| `assists` | character | Assists. |
-| `points` | character | Total points (goals + assists). |
-| `plus_minus` | character | Plus/minus rating. |
-| `penalty_minutes` | character | Penalty minutes. |
-| `power_play_goals` | character | Power-play goals. |
-| `power_play_assists` | character | Power-play assists. |
-| `shots` | character | Shots on goal. |
-| `shootout_attempts` | character | Shootout attempts. |
-| `shootout_goals` | character | Shootout goals. |
-| `shootout_percentage` | character | Shootout scoring percentage. |
-| `shooting_percentage` | character | Shooting percentage. |
-| `shootout_winning_goals` | character | Shootout game-winning goals. |
-| `points_per_game` | character | Points per game. |
-| `short_handed_goals` | character | Short-handed goals. |
-| `short_handed_assists` | character | Short-handed assists. |
-| `game_winning_goals` | character | Game-winning goals. |
-| `game_tieing_goals` | character | Game-tying goals. |
-| `faceoff_wins` | character | Faceoff wins. |
-| `faceoff_attempts` | character | Faceoff attempts. |
-| `faceoff_pct` | character | Faceoff win percentage. |
-| `hits` | character | Hits. |
-| `shots_on` | character | Shots on goal count. |
-| `shots_wide` | character | Number of shots the player directed wide of the net during the season, as tracked in the QMJHL HockeyTech feed. |
-| `team_name` | character | Team name. |
-| `team_code` | character | Team abbreviation. |
-| `team_city` | character | Team city. |
-| `team_nickname` | character | Team nickname. |
-| `team_id` | integer | Unique team identifier. |
-| `active` | character | Whether athlete is currently active. |
-| `first_goals` | character | First goals of a game. |
-| `insurance_goals` | character | Insurance goals. |
-| `overtime_goals` | character | Overtime goals. |
-| `unassisted_goals` | character | Unassisted goals. |
-| `empty_net_goals` | character | Empty-net goals. |
-| `penalty_minutes_per_game` | character | Penalty minutes per game. |
-| `division` | character | Division identifier. |
-| `ice_time` | character | Total ice time. |
-| `ice_time_minutes_seconds` | character | Ice time in minutes and seconds. |
-| `shots_blocked_by_player` | character | Shots blocked by the player. |
-| `stat_type` | character | Statistic type ("regular"/"playoff"). |
+| `season_id` | Int64 | Season identifier. |
+| `season_name` | String | Full season name (e.g., "2024-25 Regular Season"). |
+| `shortname` | String | Player short name. |
+| `playoff` | String | Whether the row is playoff statistics. |
+| `career` | String | Whether this is a career-stats season. |
+| `sopt_track_faceoffs` | String | Flag or value indicating whether faceoff tracking is enabled for this player's statistical record in the QMJHL HockeyTech system. |
+| `max_start_date` | String | Latest game start date for the season. |
+| `veteran_status` | String | Player veteran status. |
+| `veteran` | String | Whether the player is a veteran. |
+| `jersey_number` | String | Jersey number. |
+| `goals` | String | Goals scored. |
+| `games_played` | String | Games played. |
+| `assists` | String | Assists. |
+| `points` | String | Total points (goals + assists). |
+| `plus_minus` | String | Plus/minus rating. |
+| `penalty_minutes` | String | Penalty minutes. |
+| `power_play_goals` | String | Power-play goals. |
+| `power_play_assists` | String | Power-play assists. |
+| `shots` | String | Shots on goal. |
+| `shootout_attempts` | String | Shootout attempts. |
+| `shootout_goals` | String | Shootout goals. |
+| `shootout_percentage` | String | Shootout scoring percentage. |
+| `shooting_percentage` | String | Shooting percentage. |
+| `shootout_winning_goals` | String | Shootout game-winning goals. |
+| `points_per_game` | String | Points per game. |
+| `short_handed_goals` | String | Short-handed goals. |
+| `short_handed_assists` | String | Short-handed assists. |
+| `game_winning_goals` | String | Game-winning goals. |
+| `game_tieing_goals` | String | Game-tying goals. |
+| `faceoff_wins` | String | Faceoff wins. |
+| `faceoff_attempts` | String | Faceoff attempts. |
+| `faceoff_pct` | String | Faceoff win percentage. |
+| `hits` | String | Hits. |
+| `shots_on` | String | Shots on goal count. |
+| `shots_wide` | String | Number of shots the player directed wide of the net during the season, as tracked in the QMJHL HockeyTech feed. |
+| `team_name` | String | Team name. |
+| `team_code` | String | Team abbreviation. |
+| `team_city` | String | Team city. |
+| `team_nickname` | String | Team nickname. |
+| `team_id` | Int64 | Unique team identifier. |
+| `active` | String | Whether athlete is currently active. |
+| `first_goals` | String | First goals of a game. |
+| `insurance_goals` | String | Insurance goals. |
+| `overtime_goals` | String | Overtime goals. |
+| `unassisted_goals` | String | Unassisted goals. |
+| `empty_net_goals` | String | Empty-net goals. |
+| `penalty_minutes_per_game` | String | Penalty minutes per game. |
+| `division` | String | Division identifier. |
+| `ice_time` | String | Total ice time. |
+| `ice_time_minutes_seconds` | String | Ice time in minutes and seconds. |
+| `shots_blocked_by_player` | String | Shots blocked by the player. |
+| `stat_type` | String | Statistic type ("regular"/"playoff"). |
 
 **Raises**
 
@@ -272,18 +272,18 @@ One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_tea
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | Unique game identifier. |
-| `game_date` | character | Game date. |
-| `game_status` | character | Game status text. |
-| `home_team` | character | Home team name. |
-| `home_team_id` | integer | Home team identifier. |
-| `home_score` | character | Home team final score. |
-| `away_team` | character | Away team name. |
-| `away_team_id` | integer | Away team identifier. |
-| `away_score` | character | Away team final score. |
-| `venue` | character | Venue where the game was played. |
-| `season_id` | integer | Season identifier. |
-| `game_type` | character | Game type the row belongs to. |
+| `game_id` | Int64 | Unique game identifier. |
+| `game_date` | String | Game date. |
+| `game_status` | String | Game status text. |
+| `home_team` | String | Home team name. |
+| `home_team_id` | Int64 | Home team identifier. |
+| `home_score` | String | Home team final score. |
+| `away_team` | String | Away team name. |
+| `away_team_id` | Int64 | Away team identifier. |
+| `away_score` | String | Away team final score. |
+| `venue` | String | Venue where the game was played. |
+| `season_id` | Int64 | Season identifier. |
+| `game_type` | String | Game type the row belongs to. |
 
 **Raises**
 
@@ -313,26 +313,26 @@ One row per team: `team`, `team_code`, `team_rank` and `wins` (Int64), and `game
 
 | col_name | type | description |
 |---|---|---|
-| `team_code` | character | Team abbreviation. |
-| `wins` | character | Wins. |
-| `losses` | character | Losses. |
-| `ot_losses` | character | Overtime losses. |
-| `ot_wins` | character | Overtime wins. |
-| `shootout_wins` | character | Shootout wins. |
-| `shootout_losses` | character | Shootout losses. |
-| `row` | character |  |
-| `points` | integer | Total points (goals + assists). |
-| `penalty_minutes` | character | Penalty minutes. |
-| `streak` | character | Current streak value. |
-| `goals_for` | character | Goals for. |
-| `goals_against` | character | Goals against. |
-| `goals_diff` | character | Goals-for minus goals-against differential for the team through the current point in the QMJHL season. |
-| `percentage` | character | Points percentage representing the fraction of available points earned by the team in the QMJHL standings. |
-| `overall_rank` | character |  |
-| `games_played` | character | Games played. |
-| `team_rank` | integer | Team rank in the standings. |
-| `past_10` | character | Win-loss-overtime record string for the team over its most recent ten games (e.g., "7-2-1"). |
-| `team` | character | Team name. |
+| `team_code` | String | Team abbreviation. |
+| `wins` | String | Wins. |
+| `losses` | String | Losses. |
+| `ot_losses` | String | Overtime losses. |
+| `ot_wins` | String | Overtime wins. |
+| `shootout_wins` | String | Shootout wins. |
+| `shootout_losses` | String | Shootout losses. |
+| `row` | String |  |
+| `points` | Int64 | Total points (goals + assists). |
+| `penalty_minutes` | String | Penalty minutes. |
+| `streak` | String | Current streak value. |
+| `goals_for` | String | Goals for. |
+| `goals_against` | String | Goals against. |
+| `goals_diff` | String | Goals-for minus goals-against differential for the team through the current point in the QMJHL season. |
+| `percentage` | String | Points percentage representing the fraction of available points earned by the team in the QMJHL standings. |
+| `overall_rank` | String |  |
+| `games_played` | String | Games played. |
+| `team_rank` | Int64 | Team rank in the standings. |
+| `past_10` | String | Win-loss-overtime record string for the team over its most recent ten games (e.g., "7-2-1"). |
+| `team` | String | Team name. |
 
 **Raises**
 
@@ -362,51 +362,51 @@ One row per rostered player: `player_id`, `person_id`, names (`first_name`, `las
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `person_id` | integer | Unique person identifier. |
-| `active` | character | Whether athlete is currently active. |
-| `first_name` | character | Player first name. |
-| `last_name` | character | Player last name. |
-| `phonetic_name` | character | Phonetic spelling of the player name. |
-| `display_name` | character | Player display name. |
-| `shoots` | character | Shooting hand. |
-| `hometown` | character | Prospect hometown. |
-| `homeprov` | character | Player home province/state. |
-| `homecntry` | character | Player home country. |
-| `homeplace` | character | Player home place description. |
-| `birthtown` | character | Player birth town. |
-| `birthprov` | character | Player birth province/state. |
-| `birthcntry` | character | Player birth country. |
-| `birthplace` | character | Combined birthplace string (typically city and country) for the player as stored in the HockeyTech roster feed. |
-| `height` | character | Player height in inches. |
-| `weight` | character | Player weight in pounds. |
-| `height_hyphenated` | character | Player height formatted as a hyphenated feet-inches string (e.g., "6-1") as returned by the HockeyTech feed. |
-| `hidden` | character | Flag indicating whether this roster entry is suppressed from public-facing displays in the HockeyTech system. |
-| `current_team` | character | Name or identifier of the team to which the player is currently assigned within the HockeyTech system. |
-| `player_id` | integer | Unique player identifier. |
-| `status` | character | Status string (e.g. captain markers). |
-| `birthdate` | character | Date of birth. |
-| `birthdate_year` | character | Player birth year. |
-| `rawbirthdate` | character | Player's date of birth as a raw string in the format returned by the HockeyTech feed (e.g., "YYYY-MM-DD"). |
-| `latest_team_id` | integer | Most recent team identifier. |
-| `veteran_status` | character | Player veteran status. |
-| `veteran_description` | character | Text label describing the player's veteran status or classification under QMJHL roster rules. |
-| `team_id` | integer | Unique team identifier. |
-| `team_name` | character | Team name. |
-| `division` | character | Division identifier. |
-| `tp_jersey_number` | character | Jersey number assigned to the player on the QMJHL team's official roster (may differ from current game-night number). |
-| `rookie` | character | Whether the player is a rookie. |
-| `position_id` | integer | Official position identifier. |
-| `position` | character | Player position. |
-| `nhlteam` | character | Name or abbreviation of the NHL team that holds the player's NHL rights, if applicable. |
-| `player_id_1` | character | Primary alternate player identifier used by the HockeyTech system to cross-reference player records. |
-| `is_rookie` | character | Whether the player is a rookie. |
-| `h` | character |  |
-| `w` | character |  |
-| `draft_status` | character | Description of the player's NHL or league draft eligibility or draft history (e.g., "Drafted", "Eligible"). |
-| `name` | character | Team mascot name. |
-| `player_image` | character | URL of the player's headshot or profile image as stored in the HockeyTech roster feed. |
-| `catches` | character | Catching hand (goalies). |
+| `id` | Int64 | Unique player identifier. |
+| `person_id` | Int64 | Unique person identifier. |
+| `active` | String | Whether athlete is currently active. |
+| `first_name` | String | Player first name. |
+| `last_name` | String | Player last name. |
+| `phonetic_name` | String | Phonetic spelling of the player name. |
+| `display_name` | String | Player display name. |
+| `shoots` | String | Shooting hand. |
+| `hometown` | String | Prospect hometown. |
+| `homeprov` | String | Player home province/state. |
+| `homecntry` | String | Player home country. |
+| `homeplace` | String | Player home place description. |
+| `birthtown` | String | Player birth town. |
+| `birthprov` | String | Player birth province/state. |
+| `birthcntry` | String | Player birth country. |
+| `birthplace` | String | Combined birthplace string (typically city and country) for the player as stored in the HockeyTech roster feed. |
+| `height` | String | Player height in inches. |
+| `weight` | String | Player weight in pounds. |
+| `height_hyphenated` | String | Player height formatted as a hyphenated feet-inches string (e.g., "6-1") as returned by the HockeyTech feed. |
+| `hidden` | String | Flag indicating whether this roster entry is suppressed from public-facing displays in the HockeyTech system. |
+| `current_team` | String | Name or identifier of the team to which the player is currently assigned within the HockeyTech system. |
+| `player_id` | Int64 | Unique player identifier. |
+| `status` | String | Status string (e.g. captain markers). |
+| `birthdate` | String | Date of birth. |
+| `birthdate_year` | String | Player birth year. |
+| `rawbirthdate` | String | Player's date of birth as a raw string in the format returned by the HockeyTech feed (e.g., "YYYY-MM-DD"). |
+| `latest_team_id` | Int64 | Most recent team identifier. |
+| `veteran_status` | String | Player veteran status. |
+| `veteran_description` | String | Text label describing the player's veteran status or classification under QMJHL roster rules. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_name` | String | Team name. |
+| `division` | String | Division identifier. |
+| `tp_jersey_number` | String | Jersey number assigned to the player on the QMJHL team's official roster (may differ from current game-night number). |
+| `rookie` | String | Whether the player is a rookie. |
+| `position_id` | Int64 | Official position identifier. |
+| `position` | String | Player position. |
+| `nhlteam` | String | Name or abbreviation of the NHL team that holds the player's NHL rights, if applicable. |
+| `player_id_1` | String | Primary alternate player identifier used by the HockeyTech system to cross-reference player records. |
+| `is_rookie` | String | Whether the player is a rookie. |
+| `h` | String |  |
+| `w` | String |  |
+| `draft_status` | String | Description of the player's NHL or league draft eligibility or draft history (e.g., "Drafted", "Eligible"). |
+| `name` | String | Team mascot name. |
+| `player_image` | String | URL of the player's headshot or profile image as stored in the HockeyTech roster feed. |
+| `catches` | String | Catching hand (goalies). |
 
 **Raises**
 
@@ -435,13 +435,13 @@ One row per team: `team_id`, `team_name`, `team_code`, `team_nickname`, `team_la
 
 | col_name | type | description |
 |---|---|---|
-| `team_name` | character | Team name. |
-| `team_id` | integer | Unique team identifier. |
-| `team_code` | character | Team abbreviation. |
-| `team_nickname` | character | Team nickname. |
-| `team_label` | character | Short city label. |
-| `division` | character | Division identifier. |
-| `team_logo` | character | URL to the team logo image. |
+| `team_name` | String | Team name. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_code` | String | Team abbreviation. |
+| `team_nickname` | String | Team nickname. |
+| `team_label` | String | Short city label. |
+| `division` | String | Division identifier. |
+| `team_logo` | String | URL to the team logo image. |
 
 **Raises**
 
@@ -487,15 +487,15 @@ One row per season: `season_id` (Int64), `season_name`, `season_short`, `career`
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | integer | Season identifier. |
-| `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
-| `season_short` | character | Short season name. |
-| `career` | character | Whether this is a career-stats season. |
-| `playoff` | character | Whether the row is playoff statistics. |
-| `start_date` | character | Season start date. |
-| `end_date` | character | Season end date. |
-| `season_yr` | integer | End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026, "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the next season ("2026 Pre-season" is 2027). Null when the name holds no year. |
-| `game_type_label` | character | Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs" (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season resolution skips them. |
+| `season_id` | Int64 | Season identifier. |
+| `season_name` | String | Full season name (e.g., "2024-25 Regular Season"). |
+| `season_short` | String | Short season name. |
+| `career` | String | Whether this is a career-stats season. |
+| `playoff` | String | Whether the row is playoff statistics. |
+| `start_date` | String | Season start date. |
+| `end_date` | String | Season end date. |
+| `season_yr` | Int64 | End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026, "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the next season ("2026 Pre-season" is 2027). Null when the name holds no year. |
+| `game_type_label` | String | Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs" (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season resolution skips them. |
 
 **Raises**
 

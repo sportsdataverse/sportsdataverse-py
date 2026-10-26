@@ -24,16 +24,16 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 | col_name | type | description |
 |---|---|---|
-| `abbreviation` | character | League abbreviation as the source lists it (e.g. NFL). |
-| `default_season` | numeric | Season the source API currently treats as the default for this league. |
-| `default_week` | numeric | Week number the source API currently treats as the default for this league. |
-| `default_week_group` | character | Identifier of the week grouping (e.g., regular season or postseason phase) currently set as the league default. |
-| `id` | numeric | Numeric league id from the source API (PFF: 1 = NFL). |
-| `name` | character | League display name as the source lists it (PFF: 'Pro Football'). |
-| `seasons` | list | Nested list (stringified) of the seasons the source publishes for the league. |
-| `slug` | character | URL slug of the league on premium.pff.com (e.g. nfl). |
-| `week_groups` | list | Nested list of week-group objects (phase label and week span) defined for the league. |
-| `weeks` | list | Nested list of week objects available for the league. |
+| `abbreviation` | String | League abbreviation as the source lists it (e.g. NFL). |
+| `default_season` | Float64 | Season the source API currently treats as the default for this league. |
+| `default_week` | Float64 | Week number the source API currently treats as the default for this league. |
+| `default_week_group` | String | Identifier of the week grouping (e.g., regular season or postseason phase) currently set as the league default. |
+| `id` | Float64 | Numeric league id from the source API (PFF: 1 = NFL). |
+| `name` | String | League display name as the source lists it (PFF: 'Pro Football'). |
+| `seasons` | List | Nested list (stringified) of the seasons the source publishes for the league. |
+| `slug` | String | URL slug of the league on premium.pff.com (e.g. nfl). |
+| `week_groups` | List | Nested list of week-group objects (phase label and week span) defined for the league. |
+| `weeks` | List | Nested list of week objects available for the league. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -70,10 +70,10 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 | col_name | type | description |
 |---|---|---|
-| `heirarchy` | list | Nested hierarchy of franchise groupings as returned by the PFF API; the field name's spelling follows the source. |
-| `id` | numeric | PFF id of the conference, division or tier group (e.g. 1 = AFC, 2 = AFC East). |
-| `name` | character | Group name (e.g. "AFC", "AFC East"; NCAA groups such as "FBS" or "The American"). |
-| `slug` | character | URL-style slug of the group (e.g. "afc-east"). |
+| `heirarchy` | List | Nested hierarchy of franchise groupings as returned by the PFF API; the field name's spelling follows the source. |
+| `id` | Float64 | PFF id of the conference, division or tier group (e.g. 1 = AFC, 2 = AFC East). |
+| `name` | String | Group name (e.g. "AFC", "AFC East"; NCAA groups such as "FBS" or "The American"). |
+| `slug` | String | URL-style slug of the group (e.g. "afc-east"). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -111,27 +111,27 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 | col_name | type | description |
 |---|---|---|
-| `abbreviation` | character | Team abbreviation. |
-| `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
-| `grades_coverage_defense` | numeric | PFF team coverage grade (0-100). |
-| `grades_defense` | numeric | PFF team defense grade (0-100). |
-| `grades_misc_st` | numeric | Team-level PFF miscellaneous special-teams grade, 0-100. |
-| `grades_offense` | numeric | PFF team offense grade (0-100). |
-| `grades_overall` | numeric | Team-level PFF overall grade, 0-100. |
-| `grades_pass` | numeric | Team-level PFF passing grade, 0-100. |
-| `grades_pass_block` | numeric | Team-level PFF pass-blocking grade, 0-100. |
-| `grades_pass_route` | numeric | Team-level PFF receiving (route-running) grade, 0-100. |
-| `grades_pass_rush_defense` | numeric | Team-level PFF pass-rush grade, 0-100. |
-| `grades_run` | numeric | Team-level PFF rushing grade, 0-100. |
-| `grades_run_block` | numeric | Team-level PFF run-blocking grade, 0-100. |
-| `grades_run_defense` | numeric | Team-level PFF run-defense grade, 0-100. |
-| `grades_tackle` | numeric | Team-level PFF tackling grade, 0-100. |
-| `losses` | numeric | Games the team lost over the covered span. |
-| `name` | character | Full team name (e.g. "Arizona Cardinals"). |
-| `points_allowed` | numeric | Total points allowed by the team over the covered span. |
-| `points_scored` | numeric | Total points scored by the team over the covered span. |
-| `ties` | numeric | Games the team tied over the covered span. |
-| `wins` | numeric | Games the team won over the covered span. |
+| `abbreviation` | String | Team abbreviation. |
+| `franchise_id` | Float64 | PFF franchise (team) id (integer join key). |
+| `grades_coverage_defense` | Float64 | PFF team coverage grade (0-100). |
+| `grades_defense` | Float64 | PFF team defense grade (0-100). |
+| `grades_misc_st` | Float64 | Team-level PFF miscellaneous special-teams grade, 0-100. |
+| `grades_offense` | Float64 | PFF team offense grade (0-100). |
+| `grades_overall` | Float64 | Team-level PFF overall grade, 0-100. |
+| `grades_pass` | Float64 | Team-level PFF passing grade, 0-100. |
+| `grades_pass_block` | Float64 | Team-level PFF pass-blocking grade, 0-100. |
+| `grades_pass_route` | Float64 | Team-level PFF receiving (route-running) grade, 0-100. |
+| `grades_pass_rush_defense` | Float64 | Team-level PFF pass-rush grade, 0-100. |
+| `grades_run` | Float64 | Team-level PFF rushing grade, 0-100. |
+| `grades_run_block` | Float64 | Team-level PFF run-blocking grade, 0-100. |
+| `grades_run_defense` | Float64 | Team-level PFF run-defense grade, 0-100. |
+| `grades_tackle` | Float64 | Team-level PFF tackling grade, 0-100. |
+| `losses` | Float64 | Games the team lost over the covered span. |
+| `name` | String | Full team name (e.g. "Arizona Cardinals"). |
+| `points_allowed` | Float64 | Total points allowed by the team over the covered span. |
+| `points_scored` | Float64 | Total points scored by the team over the covered span. |
+| `ties` | Float64 | Games the team tied over the covered span. |
+| `wins` | Float64 | Games the team won over the covered span. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -169,20 +169,20 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 | col_name | type | description |
 |---|---|---|
-| `away_franchise_id` | numeric | PFF franchise id of the away team. |
-| `away_team` | list | Away team object (JSON-stringified in the tidy frame). |
-| `has_stats` | logical | Whether PFF has published stats for the game. |
-| `home_franchise_id` | numeric | PFF franchise id of the home team. |
-| `home_team` | list | Home team object (JSON-stringified in the tidy frame). |
-| `id` | numeric | PFF game id (integer join key). |
-| `league` | list | Nested league object of the game (stringified) with the PFF league id, name and abbreviation (e.g. NFL). |
-| `league_id` | numeric | PFF league id (integer). |
-| `lock_status` | character | Data lock/publish status for the game. |
-| `score` | list | Nested final-score object of the game (stringified) with away_team and home_team points. |
-| `season` | numeric | Season (starting year) of the game. |
-| `stadium_id` | numeric | PFF stadium identifier for the game venue. |
-| `start` | character | Kickoff timestamp (ISO 8601 string). |
-| `week` | numeric | Week number of the game. |
+| `away_franchise_id` | Float64 | PFF franchise id of the away team. |
+| `away_team` | List | Away team object (JSON-stringified in the tidy frame). |
+| `has_stats` | Boolean | Whether PFF has published stats for the game. |
+| `home_franchise_id` | Float64 | PFF franchise id of the home team. |
+| `home_team` | List | Home team object (JSON-stringified in the tidy frame). |
+| `id` | Float64 | PFF game id (integer join key). |
+| `league` | List | Nested league object of the game (stringified) with the PFF league id, name and abbreviation (e.g. NFL). |
+| `league_id` | Float64 | PFF league id (integer). |
+| `lock_status` | String | Data lock/publish status for the game. |
+| `score` | List | Nested final-score object of the game (stringified) with away_team and home_team points. |
+| `season` | Float64 | Season (starting year) of the game. |
+| `stadium_id` | Float64 | PFF stadium identifier for the game venue. |
+| `start` | String | Kickoff timestamp (ISO 8601 string). |
+| `week` | Float64 | Week number of the game. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

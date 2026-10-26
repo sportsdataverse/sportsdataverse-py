@@ -2,6 +2,7 @@
 title: IDs and joins
 sidebar_label: IDs and joins
 sidebar_position: 3
+description: "How player, team and game ids are typed in sportsdataverse-py and how to join frames from different sources safely."
 ---
 
 # IDs and joins

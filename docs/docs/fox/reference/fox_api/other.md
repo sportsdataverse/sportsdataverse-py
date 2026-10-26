@@ -1,11 +1,11 @@
 ---
-title: "FOX — Fox Sports API (api.foxsports.com) — Other"
+title: "Fox Sports — Fox Sports API (api.foxsports.com) — Other"
 sidebar_label: "Other"
 sidebar_position: 4
-description: "FOX — Fox Sports API (api.foxsports.com) — Other — function reference in sdv-py, the SportsDataverse Python package."
+description: "Fox Sports — Fox Sports API (api.foxsports.com) — Other — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# FOX — Fox Sports API (api.foxsports.com) — Other
+# Fox Sports — Fox Sports API (api.foxsports.com) — Other
 
 ## fox_api_scoreboard
 
@@ -28,13 +28,13 @@ GET /bifrost/v1/{sport}/scoreboard/main -- Fox Sports API scoreboard.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character |  |
-| `parameters_season_type` | character |  |
-| `parameters_week` | character |  |
-| `subtitle` | character |  |
-| `title` | character |  |
-| `uri` | character |  |
-| `web_url` | character |  |
+| `id` | String |  |
+| `parameters_season_type` | String |  |
+| `parameters_week` | String |  |
+| `subtitle` | String |  |
+| `title` | String |  |
+| `uri` | String |  |
+| `web_url` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -72,59 +72,59 @@ GET /bifrost/v1/{sport}/scorechip/{chip_id} -- one game's score chip (this route
 
 | col_name | type | description |
 |---|---|---|
-| `alt_sort_key` | character |  |
-| `content_type` | character |  |
-| `content_uri` | character |  |
-| `entity_link_analytics_sport` | character |  |
-| `entity_link_content_type` | character |  |
-| `entity_link_content_uri` | character |  |
-| `entity_link_layout_path` | character |  |
-| `entity_link_layout_tokens_away_uri` | character |  |
-| `entity_link_layout_tokens_event_uri` | character |  |
-| `entity_link_layout_tokens_home_uri` | character |  |
-| `entity_link_layout_tokens_id` | character |  |
-| `entity_link_type` | character |  |
-| `entity_link_web_url` | character |  |
-| `event_headline` | character |  |
-| `event_status` | integer |  |
-| `event_time` | character |  |
-| `favorite_entities` | character |  |
-| `id` | character |  |
-| `importance` | integer |  |
-| `is_tba` | logical |  |
-| `league` | character |  |
-| `lower_team_alternate_logo_url` | character |  |
-| `lower_team_has_possession` | logical |  |
-| `lower_team_image_alt_text` | character |  |
-| `lower_team_image_type` | character |  |
-| `lower_team_is_loser` | logical |  |
-| `lower_team_logo_url` | character |  |
-| `lower_team_long_name` | character |  |
-| `lower_team_name` | character |  |
-| `lower_team_record` | character |  |
-| `lower_team_score` | integer |  |
-| `lower_team_stacked_name_bottom` | character |  |
-| `lower_team_stacked_name_top` | character |  |
-| `lower_team_uri` | character |  |
-| `odds_line` | character |  |
-| `over_under_line` | character |  |
-| `sort_key` | character |  |
-| `status_line` | character |  |
-| `template` | character |  |
-| `upper_team_alternate_logo_url` | character |  |
-| `upper_team_has_possession` | logical |  |
-| `upper_team_image_alt_text` | character |  |
-| `upper_team_image_type` | character |  |
-| `upper_team_is_loser` | logical |  |
-| `upper_team_logo_url` | character |  |
-| `upper_team_long_name` | character |  |
-| `upper_team_name` | character |  |
-| `upper_team_record` | character |  |
-| `upper_team_score` | integer |  |
-| `upper_team_stacked_name_bottom` | character |  |
-| `upper_team_stacked_name_top` | character |  |
-| `upper_team_uri` | character |  |
-| `uri` | character |  |
+| `alt_sort_key` | String |  |
+| `content_type` | String |  |
+| `content_uri` | String |  |
+| `entity_link_analytics_sport` | String |  |
+| `entity_link_content_type` | String |  |
+| `entity_link_content_uri` | String |  |
+| `entity_link_layout_path` | String |  |
+| `entity_link_layout_tokens_away_uri` | String |  |
+| `entity_link_layout_tokens_event_uri` | String |  |
+| `entity_link_layout_tokens_home_uri` | String |  |
+| `entity_link_layout_tokens_id` | String |  |
+| `entity_link_type` | String |  |
+| `entity_link_web_url` | String |  |
+| `event_headline` | String |  |
+| `event_status` | Int64 |  |
+| `event_time` | String |  |
+| `favorite_entities` | String |  |
+| `id` | String |  |
+| `importance` | Int64 |  |
+| `is_tba` | Boolean |  |
+| `league` | String |  |
+| `lower_team_alternate_logo_url` | String |  |
+| `lower_team_has_possession` | Boolean |  |
+| `lower_team_image_alt_text` | String |  |
+| `lower_team_image_type` | String |  |
+| `lower_team_is_loser` | Boolean |  |
+| `lower_team_logo_url` | String |  |
+| `lower_team_long_name` | String |  |
+| `lower_team_name` | String |  |
+| `lower_team_record` | String |  |
+| `lower_team_score` | Int64 |  |
+| `lower_team_stacked_name_bottom` | String |  |
+| `lower_team_stacked_name_top` | String |  |
+| `lower_team_uri` | String |  |
+| `odds_line` | String |  |
+| `over_under_line` | String |  |
+| `sort_key` | String |  |
+| `status_line` | String |  |
+| `template` | String |  |
+| `upper_team_alternate_logo_url` | String |  |
+| `upper_team_has_possession` | Boolean |  |
+| `upper_team_image_alt_text` | String |  |
+| `upper_team_image_type` | String |  |
+| `upper_team_is_loser` | Boolean |  |
+| `upper_team_logo_url` | String |  |
+| `upper_team_long_name` | String |  |
+| `upper_team_name` | String |  |
+| `upper_team_record` | String |  |
+| `upper_team_score` | Int64 |  |
+| `upper_team_stacked_name_bottom` | String |  |
+| `upper_team_stacked_name_top` | String |  |
+| `upper_team_uri` | String |  |
+| `uri` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -162,27 +162,27 @@ GET /bifrost/v1/topevents/scoreboard/segment/{segment} -- Fox Sports API topeven
 
 | col_name | type | description |
 |---|---|---|
-| `segment_id` | character |  |
-| `section_id` | character |  |
-| `section_title` | character |  |
-| `game_id` | character |  |
-| `chip_id` | character |  |
-| `league` | character |  |
-| `date` | character |  |
-| `event_status` | integer |  |
-| `status` | character |  |
-| `tv_station` | character |  |
-| `headline` | character |  |
-| `odds_line` | character |  |
-| `over_under_line` | character |  |
-| `home_team` | character |  |
-| `home_team_id` | character |  |
-| `home_score` | integer |  |
-| `home_record` | character |  |
-| `away_team` | character |  |
-| `away_team_id` | character |  |
-| `away_score` | integer |  |
-| `away_record` | character |  |
+| `segment_id` | String |  |
+| `section_id` | String |  |
+| `section_title` | String |  |
+| `game_id` | String |  |
+| `chip_id` | String |  |
+| `league` | String |  |
+| `date` | String |  |
+| `event_status` | Int64 |  |
+| `status` | String |  |
+| `tv_station` | String |  |
+| `headline` | String |  |
+| `odds_line` | String |  |
+| `over_under_line` | String |  |
+| `home_team` | String |  |
+| `home_team_id` | String |  |
+| `home_score` | Int64 |  |
+| `home_record` | String |  |
+| `away_team` | String |  |
+| `away_team_id` | String |  |
+| `away_score` | Int64 |  |
+| `away_record` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -220,15 +220,15 @@ GET /bifrost/v1/explore/browse/{section}/main -- Fox Sports API explore browse.
 
 | col_name | type | description |
 |---|---|---|
-| `group` | character |  |
-| `fox_id` | character |  |
-| `abbreviation` | character |  |
-| `name` | character |  |
-| `content_uri` | character |  |
-| `content_type` | character |  |
-| `web_url` | character |  |
-| `color` | character |  |
-| `logo_url` | character |  |
+| `group` | String |  |
+| `fox_id` | String |  |
+| `abbreviation` | String |  |
+| `name` | String |  |
+| `content_uri` | String |  |
+| `content_type` | String |  |
+| `web_url` | String |  |
+| `color` | String |  |
+| `logo_url` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -265,17 +265,17 @@ GET /bifrost/v1/explore/odds/main -- Fox Sports API explore odds.
 
 | col_name | type | description |
 |---|---|---|
-| `external_id` | character | Provider-side identifier for the media item, matching the play id it accompanies. |
-| `external_uri` | character |  |
-| `isa_value` | character |  |
-| `path` | character |  |
-| `short_title` | character |  |
-| `slug` | character |  |
-| `spark_id` | character |  |
-| `tag_type` | character |  |
-| `title` | character |  |
-| `type` | character |  |
-| `uuidv5` | character |  |
+| `external_id` | String | Provider-side identifier for the media item, matching the play id it accompanies. |
+| `external_uri` | String |  |
+| `isa_value` | String |  |
+| `path` | String |  |
+| `short_title` | String |  |
+| `slug` | String |  |
+| `spark_id` | String |  |
+| `tag_type` | String |  |
+| `title` | String |  |
+| `type` | String |  |
+| `uuidv5` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -313,16 +313,16 @@ GET /bifrost/v1/search/content -- Fox Sports API search content.
 
 | col_name | type | description |
 |---|---|---|
-| `group` | character |  |
-| `type` | character |  |
-| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `title` | character |  |
-| `subtitle` | character |  |
-| `content_type` | character |  |
-| `content_uri` | character |  |
-| `web_url` | character |  |
-| `analytics_name` | character |  |
-| `image_url` | character |  |
+| `group` | String |  |
+| `type` | String |  |
+| `entity_id` | String | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `title` | String |  |
+| `subtitle` | String |  |
+| `content_type` | String |  |
+| `content_uri` | String |  |
+| `web_url` | String |  |
+| `analytics_name` | String |  |
+| `image_url` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -360,16 +360,16 @@ GET /bifrost/v1/search/entities -- Fox Sports API search entities.
 
 | col_name | type | description |
 |---|---|---|
-| `group` | character |  |
-| `type` | character |  |
-| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `title` | character |  |
-| `subtitle` | character |  |
-| `content_type` | character |  |
-| `content_uri` | character |  |
-| `web_url` | character |  |
-| `analytics_name` | character |  |
-| `image_url` | character |  |
+| `group` | String |  |
+| `type` | String |  |
+| `entity_id` | String | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `title` | String |  |
+| `subtitle` | String |  |
+| `content_type` | String |  |
+| `content_uri` | String |  |
+| `web_url` | String |  |
+| `analytics_name` | String |  |
+| `image_url` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -406,16 +406,16 @@ GET /bifrost/v1/search/popular -- Fox Sports API search popular.
 
 | col_name | type | description |
 |---|---|---|
-| `group` | character |  |
-| `type` | character |  |
-| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `title` | character |  |
-| `subtitle` | character |  |
-| `content_type` | character |  |
-| `content_uri` | character |  |
-| `web_url` | character |  |
-| `analytics_name` | character |  |
-| `image_url` | character |  |
+| `group` | String |  |
+| `type` | String |  |
+| `entity_id` | String | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `title` | String |  |
+| `subtitle` | String |  |
+| `content_type` | String |  |
+| `content_uri` | String |  |
+| `web_url` | String |  |
+| `analytics_name` | String |  |
+| `image_url` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -454,17 +454,17 @@ GET /bifrost/v1/general/trending/articles -- Fox Sports API trending articles.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character |  |
-| `spark_id` | character |  |
-| `title` | character |  |
-| `description` | character |  |
-| `content_type` | character |  |
-| `component_type` | character |  |
-| `publication_date` | character |  |
-| `last_published_date` | character |  |
-| `canonical_url` | character |  |
-| `thumbnail_url` | character |  |
-| `playback_url` | character |  |
+| `id` | String |  |
+| `spark_id` | String |  |
+| `title` | String |  |
+| `description` | String |  |
+| `content_type` | String |  |
+| `component_type` | String |  |
+| `publication_date` | String |  |
+| `last_published_date` | String |  |
+| `canonical_url` | String |  |
+| `thumbnail_url` | String |  |
+| `playback_url` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -503,17 +503,17 @@ GET /bifrost/v1/general/trending/videos -- Fox Sports API trending videos.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character |  |
-| `spark_id` | character |  |
-| `title` | character |  |
-| `description` | character |  |
-| `content_type` | character |  |
-| `component_type` | character |  |
-| `publication_date` | character |  |
-| `last_published_date` | character |  |
-| `canonical_url` | character |  |
-| `thumbnail_url` | character |  |
-| `playback_url` | character |  |
+| `id` | String |  |
+| `spark_id` | String |  |
+| `title` | String |  |
+| `description` | String |  |
+| `content_type` | String |  |
+| `component_type` | String |  |
+| `publication_date` | String |  |
+| `last_published_date` | String |  |
+| `canonical_url` | String |  |
+| `thumbnail_url` | String |  |
+| `playback_url` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -551,34 +551,34 @@ GET /foxpolls/v1/polls -- Fox Sports API foxpolls.
 
 | col_name | type | description |
 |---|---|---|
-| `poll_id` | integer |  |
-| `uri` | character |  |
-| `title` | character |  |
-| `type` | character |  |
-| `background_image_url` | character |  |
-| `background_image_version` | integer |  |
-| `background_image_type` | character |  |
-| `background_image_alt_text` | character |  |
-| `background_image_additional_urls` | character |  |
-| `min_submissions_needed` | integer |  |
-| `max_submissions_allowed` | integer |  |
-| `max_votes_per_user` | integer |  |
-| `cta_text` | character |  |
-| `cta_url` | character |  |
-| `results_display_type` | character |  |
-| `results_display_text` | character |  |
-| `results_commentary` | character |  |
-| `results_displayed_at` | character |  |
-| `authorization_type` | character |  |
-| `starts_at` | character |  |
-| `ends_at` | character |  |
-| `locks_at` | character |  |
-| `answers` | character |  |
-| `votes` | integer |  |
-| `min_votes_to_display_post_lock` | integer |  |
-| `ads_enabled` | logical |  |
-| `background_image_additional_urls_resized_url` | character |  |
-| `background_image` | character |  |
+| `poll_id` | Int64 |  |
+| `uri` | String |  |
+| `title` | String |  |
+| `type` | String |  |
+| `background_image_url` | String |  |
+| `background_image_version` | Int64 |  |
+| `background_image_type` | String |  |
+| `background_image_alt_text` | String |  |
+| `background_image_additional_urls` | String |  |
+| `min_submissions_needed` | Int64 |  |
+| `max_submissions_allowed` | Int64 |  |
+| `max_votes_per_user` | Int64 |  |
+| `cta_text` | String |  |
+| `cta_url` | String |  |
+| `results_display_type` | String |  |
+| `results_display_text` | String |  |
+| `results_commentary` | String |  |
+| `results_displayed_at` | String |  |
+| `authorization_type` | String |  |
+| `starts_at` | String |  |
+| `ends_at` | String |  |
+| `locks_at` | String |  |
+| `answers` | String |  |
+| `votes` | Int64 |  |
+| `min_votes_to_display_post_lock` | Int64 |  |
+| `ads_enabled` | Boolean |  |
+| `background_image_additional_urls_resized_url` | String |  |
+| `background_image` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

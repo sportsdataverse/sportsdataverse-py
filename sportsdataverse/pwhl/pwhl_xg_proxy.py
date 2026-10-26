@@ -795,7 +795,7 @@ def pwhl_team_game_xg_rates(
     Args:
         pbp: A frame shaped like ``load_pwhl_pbp(season)`` output for ONE
             season (seasons carry different column counts upstream -- see
-            ``dev/pwhl_prediction/build_pwhl_xg_fixture.py`` -- so this
+            ``tools/models/pwhl_prediction/build_pwhl_xg_fixture.py`` -- so this
             function is single-season; callers loop + concat the output).
         schedule: ``load_pwhl_schedules(season)`` output for the SAME season.
         game_info: Optional ``load_pwhl_game_info(season)`` output, used only

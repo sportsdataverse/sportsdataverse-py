@@ -1,9 +1,9 @@
 ---
-title: COLLEGE_BASEBALL
-sidebar_label: COLLEGE_BASEBALL
-description: "sdv-py COLLEGE_BASEBALL: endpoint references, dataset loaders and parsers for COLLEGE_BASEBALL in the SportsDataverse Python package."
+title: College baseball
+sidebar_label: College baseball
+description: "sdv-py College baseball: endpoint references, dataset loaders and parsers for College baseball in the SportsDataverse Python package."
 ---
-# COLLEGE_BASEBALL (`sportsdataverse.baseball.college_baseball`)
+# College baseball (`sportsdataverse.baseball.college_baseball`)
 
 ## Data sources
 
@@ -34,6 +34,11 @@ description: "sdv-py COLLEGE_BASEBALL: endpoint references, dataset loaders and 
 
 - [`decompose_college_baseball_plays`](reference/additional#decompose_college_baseball_plays)
 
+
+## See also
+
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("ncaa_baseball")` draws the field and `team_colors("ncaa_baseball", ...)` the school colors
+- [sportypy](https://sportypy.sportsdataverse.org/) — the college baseball field sdvplot draws with
 
 ## Examples
 

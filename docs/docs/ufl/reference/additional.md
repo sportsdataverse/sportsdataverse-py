@@ -41,30 +41,30 @@ One row per play with `ep`/`epa`/`wp`/`wpa`/`cp`/`cpoe` and the other `enrich_nf
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character |  |
-| `play_id` | character |  |
-| `season` | integer |  |
-| `game_half` | character |  |
-| `posteam` | character |  |
-| `defteam` | character |  |
-| `home_team` | character |  |
-| `half_seconds_remaining` | double |  |
-| `yardline_100` | integer |  |
-| `ydstogo` | integer |  |
-| `down` | integer |  |
-| `posteam_timeouts_remaining` | integer |  |
-| `defteam_timeouts_remaining` | integer |  |
-| `home` | integer |  |
-| `retractable` | integer |  |
-| `dome` | integer |  |
-| `outdoors` | integer |  |
-| `score_differential` | integer |  |
-| `game_seconds_remaining` | double |  |
-| `spread_line` | double |  |
-| `receive_2h_ko` | integer |  |
-| `posteam_score` | integer |  |
-| `defteam_score` | integer |  |
-| `roof` | character |  |
+| `game_id` | String |  |
+| `play_id` | String |  |
+| `season` | Int64 |  |
+| `game_half` | String |  |
+| `posteam` | String |  |
+| `defteam` | String |  |
+| `home_team` | String |  |
+| `half_seconds_remaining` | Float64 |  |
+| `yardline_100` | Int64 |  |
+| `ydstogo` | Int64 |  |
+| `down` | Int64 |  |
+| `posteam_timeouts_remaining` | Int64 |  |
+| `defteam_timeouts_remaining` | Int64 |  |
+| `home` | Int64 |  |
+| `retractable` | Int64 |  |
+| `dome` | Int64 |  |
+| `outdoors` | Int64 |  |
+| `score_differential` | Int64 |  |
+| `game_seconds_remaining` | Float64 |  |
+| `spread_line` | Float64 |  |
+| `receive_2h_ko` | Int64 |  |
+| `posteam_score` | Int64 |  |
+| `defteam_score` | Int64 |  |
+| `roof` | String |  |
 
 **Example**
 

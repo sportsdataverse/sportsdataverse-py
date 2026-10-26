@@ -14,7 +14,7 @@ def test_family_is_the_registry_label():
         generate._autodoc_family("load_nfl_pbp", module="sportsdataverse.nfl.nfl_loaders") == "nflverse data releases"
     )
     assert generate._autodoc_family("kenpom_ratings", module="sportsdataverse.mbb.kenpom") == "KenPom"
-    assert generate._autodoc_family("rolling_mean", module="sportsdataverse.rolling_windows") == "Analytics"
+    assert generate._autodoc_family("rolling_mean", module="sportsdataverse.analytics.rolling_windows") == "Analytics"
 
 
 def test_highlights_still_wins():

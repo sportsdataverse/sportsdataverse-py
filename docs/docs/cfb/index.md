@@ -1,9 +1,9 @@
 ---
-title: CFB
-sidebar_label: CFB
-description: "sdv-py CFB: endpoint references, dataset loaders and parsers for CFB in the SportsDataverse Python package."
+title: College football
+sidebar_label: College football
+description: "sdv-py College football: endpoint references, dataset loaders and parsers for College football in the SportsDataverse Python package."
 ---
-# CFB (`sportsdataverse.cfb`)
+# College football (`sportsdataverse.cfb`)
 
 ## Data sources
 
@@ -90,7 +90,7 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 - [`calculate_win_probability`](reference/additional/models-and-calculators#calculate_win_probability)
 - [`calculate_wpa`](reference/additional/models-and-calculators#calculate_wpa)
 - [`calculate_xpass`](reference/additional/models-and-calculators#calculate_xpass)
-- [`cfb_adjusted_epa`](reference/additional/models-and-calculators-2#cfb_adjusted_epa)
+- [`cfb_adjusted_epa`](reference/additional/models-and-calculators#cfb_adjusted_epa)
 - [`cfb_adjusted_epa_by_game`](reference/additional/models-and-calculators-2#cfb_adjusted_epa_by_game)
 - [`cfb_compute_results`](reference/additional/models-and-calculators-2#cfb_compute_results)
 - [`cfb_draft_projection`](reference/additional/models-and-calculators-2#cfb_draft_projection)
@@ -158,7 +158,7 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 
 ## See also
 
-- [sdvplot](https://github.com/sportsdataverse/sdvplot) — `surface("cfb")` draws the field with a team's end zones
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("cfb")` draws the field with a team's end zones
 - [sportypy](https://sportypy.sportsdataverse.org/) — the regulation college football field sdvplot draws with
 
 ## Examples

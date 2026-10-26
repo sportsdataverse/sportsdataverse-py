@@ -91,7 +91,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [load_pfr_advstats](additional/nflverse-data-releases-4.md#load_pfr_advstats) | Load Pro-Football Reference advanced statistics going back to 2018. |
 | [load_player_stats](additional/nflverse-data-releases-4.md#load_player_stats) | Load NFL player stats data |
 | [load_players](additional/nflverse-data-releases-4.md#load_players) | Load the nflverse NFL player-identity master. |
-| [load_rosters](additional/nflverse-data-releases-5.md#load_rosters) | Load NFL season roster data for the requested seasons. |
+| [load_rosters](additional/nflverse-data-releases-4.md#load_rosters) | Load NFL season roster data for the requested seasons. |
 | [load_rosters_weekly](additional/nflverse-data-releases-5.md#load_rosters_weekly) | Load NFL weekly roster data for the requested seasons. |
 | [load_schedules](additional/nflverse-data-releases-5.md#load_schedules) | Load NFL schedule data |
 | [load_snap_counts](additional/nflverse-data-releases-5.md#load_snap_counts) | Load NFL snap counts data for selected seasons |

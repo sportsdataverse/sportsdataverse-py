@@ -93,7 +93,7 @@ PLAY_CONTEXTS: Final[list[str]] = ["transition", "putback", "halfcourt", "misc"]
 #: ending once the defense is set" -- it publishes NO seconds value, so this is a
 #: calibrated knob, not a quoted constant.
 #:
-#: **Calibrated to 6.0s for the NBA** (fitting scan: ``dev/ctg_transition_calibration.py``).
+#: **Calibrated to 6.0s for the NBA** (fitting scan: ``tools/models/ctg_transition_calibration.py``).
 #: Observed league-mean transition frequency on the three committed engine fixtures:
 #:
 #: ===========  ==========================

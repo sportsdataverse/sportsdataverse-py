@@ -2,11 +2,13 @@
 title: Migrating to 0.2.0
 sidebar_label: Migrating to 0.2.0
 sidebar_position: 2
+description: "Every breaking change in sportsdataverse-py 0.2.0, with before and after code and how to migrate."
 ---
 
 # Migrating to 0.2.0
 
-0.2.0 is the release after 0.1.5. It carries fifteen breaking changes, each recorded
+0.2.0 is the release after 0.1.4 (0.1.5 was never published; its changes ship in 0.2.0); it ships first as the
+`0.2.0b1` pre-release (`pip install --pre sportsdataverse`). It carries sixteen breaking changes, each recorded
 as a `changelog.d/*.breaking.md` fragment; the changes are on `main` already. This
 page takes them one at a time: what changed, who is affected, a before/after
 snippet and how to migrate. The fragments are the source of record, and the
@@ -150,6 +152,27 @@ columns directly if you were converting to the hoopR frame yourself. ESPN's
 missing-location sentinel reads about ±2.1e8 after the transform; filter on
 `coordinate_x_raw > nba_game_page.COORD_SENTINEL` (the snake-cased name in the
 processed frames).
+
+## ESPN leaders return one row per athlete
+
+**What changed.** `espn_<league>_leaders()` returns one row per athlete and stat
+category (#1018). It used to return a single envelope row whose `pagination_*`,
+`league_*` and `current_season_*` columns described the request, with the
+athletes packed into one cell. Leagues without a leaderboard return zero rows.
+
+**Who is affected.** Callers that read the envelope columns, or that unpacked the
+`athletes` / `categories` cells themselves.
+
+```python
+# 0.2.0
+from sportsdataverse.nba import espn_nba_leaders
+
+leaders = espn_nba_leaders()                     # one row per athlete
+raw = espn_nba_leaders(return_parsed=False)      # pagination and per-stat ranks
+```
+
+**How to migrate.** Drop the unpacking step. Read page counts and ESPN's
+per-stat ranks from `return_parsed=False`.
 
 ## ESPN game rosters honour `raw=True`
 
@@ -442,3 +465,21 @@ cfl = get_sf_constants("cfl")    # the rule constants still work
 
 **How to migrate.** Drop CFL from spring-football EP/WP runs. The UFL and XFL are
 unchanged.
+
+## Deprecations are removed in 0.4.0
+
+Nothing deprecated in 0.2.0 breaks yet. Each name below still works, warns
+`DeprecationWarning` naming its replacement, and is removed in 0.4.0, two minor releases on:
+
+- the old package paths moved under `sportsdataverse.basketball`, `sportsdataverse.providers` and
+  `sportsdataverse.analytics`;
+- the 12 old `*_espn_ext` names of the wrappers renamed to `*_site`;
+- 29 unread `sportsdataverse.config` release URLs;
+- `dl_utils.ESPNHTTP` / `ESPNResponse`, the `df.janitor` case methods and
+  `decorators.record_mem_usage` / `record_time_usage`;
+- `espn_<lg>_teams.cache_clear()` and `sportsdataverse.scrape.ncaa.league_config`;
+- `pwhl_team_ratings(league=...)`;
+- the `load_nba_stats_*_v3` and four `load_wnba_stats_*` loader shims.
+
+**How to migrate.** Run your code with `python -W error::DeprecationWarning` (or
+`pytest -W error::DeprecationWarning`) and follow each message.

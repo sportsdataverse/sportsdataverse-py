@@ -21,7 +21,7 @@ providers:
     home: https://www.espn.com
     auth: none
     espn_apis: [espn_site_v2, espn_web_v3, espn_core_v2, espn_fitt_v3, espn_cdn]
-    flat_apis: [espn_content]  # content.core.api.espn.com/v1 news (sportsdataverse.espn_content)
+    flat_apis: [espn_content]  # content.core.api.espn.com/v1 news (sportsdataverse.providers.espn_content)
     modules:
       - sportsdataverse._common_espn_player_stats
       - sportsdataverse._espn_basketball_pbp
@@ -539,13 +539,21 @@ providers:
       - sportsdataverse.wnba.wnba_stats_runtime
       - sportsdataverse.wnba.wnba_live
 
+  nbagl_stats:
+    label: G League Stats API
+    home: https://stats.nba.com
+    auth: none (curl_cffi chrome TLS impersonation)
+    flat_apis: [nbagl_stats]
+    modules:
+      - sportsdataverse.nbagl.nbagl_stats_runtime
+
   euroleague:
     label: EuroLeague Competition Engine
     home: https://api-live.euroleague.net
     auth: none
     flat_apis: [euroleague]
     modules:
-      - sportsdataverse.euroleague.euroleague_runtime
+      - sportsdataverse.basketball.euroleague.euroleague_runtime
 
   jolpica:
     label: Jolpica F1 API (Ergast-compatible)
@@ -719,7 +727,7 @@ providers:
     auth: none (free test key by default; THESPORTSDB_API_KEY for your own)
     flat_apis: [thesportsdb]
     modules:
-      - sportsdataverse.thesportsdb.thesportsdb_runtime
+      - sportsdataverse.providers.thesportsdb.thesportsdb_runtime
 
 categories:
   processing:
@@ -760,7 +768,7 @@ categories:
     label: Models and calculators
     modules:
       - sportsdataverse._xgb
-      - sportsdataverse.paper_index
+      - sportsdataverse.analytics.paper_index
       - sportsdataverse.wexp.*
       - sportsdataverse.cricket.cricket_win_prob
       - sportsdataverse.cricket.cricket_wpa
@@ -864,9 +872,9 @@ categories:
   analytics:
     label: Analytics
     modules:
-      - sportsdataverse.rolling_windows
-      - sportsdataverse.metric_curves
-      - sportsdataverse.defense_vs_position
+      - sportsdataverse.analytics.rolling_windows
+      - sportsdataverse.analytics.metric_curves
+      - sportsdataverse.analytics.defense_vs_position
       - sportsdataverse.football.tendencies
       - sportsdataverse.football.usage_box
       - sportsdataverse.registry

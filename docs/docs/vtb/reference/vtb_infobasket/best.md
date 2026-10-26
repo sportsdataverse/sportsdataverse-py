@@ -28,33 +28,33 @@ Player leaders of a season for the first `count` leader categories.
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season END year (2026 = 2025-26): the season the request asked for, stamped by the runtime. |
-| `param_id` | integer | Leader-category id (the `param` of the parameter lists). |
-| `param_name` | character | Leader category name (ParamName), e.g. 'Points'. |
-| `param_short_name` | character | Leader category short label, e.g. 'Points in a game'. |
-| `param_label` | character | Leader category label in the requested language (lang). |
-| `param_group` | integer | Category group; 0 in the samples. |
-| `rank` | integer | Rank in the leader list. |
-| `team_id` | integer | Infobasket TeamID (2650 = Lokomotiv Kuban); the v2 teamId. Not a club-record id and not a registration id. |
-| `team_short_name_ru` | character | The the team's short name in Russian (as the competition names it). |
-| `team_short_name_en` | character | The the team's short name in English (as the competition names it). |
-| `team_name_ru` | character | The the team's name in Russian (as the competition names it). |
-| `team_name_en` | character | The the team's name in English (as the competition names it). |
-| `team_region_name_ru` | character | The the team's region or city in Russian (as the competition names it). |
-| `team_region_name_en` | character | The the team's region or city in English (as the competition names it). |
-| `person_id` | integer | Infobasket person id (PersonID): one person (player, coach or official) across clubs and seasons. Joins to /Widget/PlayerPage/{personId} (players) and /Widget/CoachPage/{personId} (coaches). |
-| `person_last_name_ru` | character | Last name, Russian. |
-| `person_last_name_en` | character | Last name, English. |
-| `person_first_name_ru` | character | First name, Russian. |
-| `person_first_name_en` | character | First name, English. |
-| `person_full_name_ru` | character | Full name, 'Last First', Russian. |
-| `person_full_name_en` | character | Full name, 'Last First', English. |
-| `person_gender` | integer | Person gender: 1 on every sampled (male) person. |
-| `game_id` | integer | Infobasket GameID of the game (the v2 matches' match_id); global across seasons. |
-| `game_count` | integer | Games the value is averaged over. |
-| `res` | numeric | The leader's value (a per-game average for 'in a game' categories). |
-| `pre_res` | character | The value as displayed, a string (e.g. '1070' for 10.70 without separator; format unverified). |
-| `is_same` | logical | True when the row ties the previous one. |
+| `season` | Int64 | Season END year (2026 = 2025-26): the season the request asked for, stamped by the runtime. |
+| `param_id` | Int64 | Leader-category id (the `param` of the parameter lists). |
+| `param_name` | String | Leader category name (ParamName), e.g. 'Points'. |
+| `param_short_name` | String | Leader category short label, e.g. 'Points in a game'. |
+| `param_label` | String | Leader category label in the requested language (lang). |
+| `param_group` | Int64 | Category group; 0 in the samples. |
+| `rank` | Int64 | Rank in the leader list. |
+| `team_id` | Int64 | Infobasket TeamID (2650 = Lokomotiv Kuban); the v2 teamId. Not a club-record id and not a registration id. |
+| `team_short_name_ru` | String | The the team's short name in Russian (as the competition names it). |
+| `team_short_name_en` | String | The the team's short name in English (as the competition names it). |
+| `team_name_ru` | String | The the team's name in Russian (as the competition names it). |
+| `team_name_en` | String | The the team's name in English (as the competition names it). |
+| `team_region_name_ru` | String | The the team's region or city in Russian (as the competition names it). |
+| `team_region_name_en` | String | The the team's region or city in English (as the competition names it). |
+| `person_id` | Int64 | Infobasket person id (PersonID): one person (player, coach or official) across clubs and seasons. Joins to /Widget/PlayerPage/{personId} (players) and /Widget/CoachPage/{personId} (coaches). |
+| `person_last_name_ru` | String | Last name, Russian. |
+| `person_last_name_en` | String | Last name, English. |
+| `person_first_name_ru` | String | First name, Russian. |
+| `person_first_name_en` | String | First name, English. |
+| `person_full_name_ru` | String | Full name, 'Last First', Russian. |
+| `person_full_name_en` | String | Full name, 'Last First', English. |
+| `person_gender` | Int64 | Person gender: 1 on every sampled (male) person. |
+| `game_id` | Int64 | Infobasket GameID of the game (the v2 matches' match_id); global across seasons. |
+| `game_count` | Int64 | Games the value is averaged over. |
+| `res` | Float64 | The leader's value (a per-game average for 'in a game' categories). |
+| `pre_res` | String | The value as displayed, a string (e.g. '1070' for 10.70 without separator; format unverified). |
+| `is_same` | Boolean | True when the row ties the previous one. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -93,25 +93,25 @@ Team leaders of a season for the first `count` leader categories.
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season END year (2026 = 2025-26): the season the request asked for, stamped by the runtime. |
-| `param_id` | integer | Leader-category id (the `param` of the parameter lists). |
-| `param_name` | character | Leader category name (ParamName), e.g. 'Points'. |
-| `param_short_name` | character | Leader category short label, e.g. 'Points in a game'. |
-| `param_label` | character | Leader category label in the requested language (lang). |
-| `param_group` | integer | Category group; 0 in the samples. |
-| `rank` | integer | Rank in the leader list. |
-| `team_id` | integer | Infobasket TeamID (2650 = Lokomotiv Kuban); the v2 teamId. Not a club-record id and not a registration id. |
-| `team_short_name_ru` | character | The the team's short name in Russian (as the competition names it). |
-| `team_short_name_en` | character | The the team's short name in English (as the competition names it). |
-| `team_name_ru` | character | The the team's name in Russian (as the competition names it). |
-| `team_name_en` | character | The the team's name in English (as the competition names it). |
-| `team_region_name_ru` | character | The the team's region or city in Russian (as the competition names it). |
-| `team_region_name_en` | character | The the team's region or city in English (as the competition names it). |
-| `game_id` | integer | Infobasket GameID of the game (the v2 matches' match_id); global across seasons. |
-| `game_count` | integer | Games the value is averaged over. |
-| `res` | numeric | The leader's value (a per-game average for 'in a game' categories). |
-| `pre_res` | character | The value as displayed, a string (e.g. '1070' for 10.70 without separator; format unverified). |
-| `is_same` | logical | True when the row ties the previous one. |
+| `season` | Int64 | Season END year (2026 = 2025-26): the season the request asked for, stamped by the runtime. |
+| `param_id` | Int64 | Leader-category id (the `param` of the parameter lists). |
+| `param_name` | String | Leader category name (ParamName), e.g. 'Points'. |
+| `param_short_name` | String | Leader category short label, e.g. 'Points in a game'. |
+| `param_label` | String | Leader category label in the requested language (lang). |
+| `param_group` | Int64 | Category group; 0 in the samples. |
+| `rank` | Int64 | Rank in the leader list. |
+| `team_id` | Int64 | Infobasket TeamID (2650 = Lokomotiv Kuban); the v2 teamId. Not a club-record id and not a registration id. |
+| `team_short_name_ru` | String | The the team's short name in Russian (as the competition names it). |
+| `team_short_name_en` | String | The the team's short name in English (as the competition names it). |
+| `team_name_ru` | String | The the team's name in Russian (as the competition names it). |
+| `team_name_en` | String | The the team's name in English (as the competition names it). |
+| `team_region_name_ru` | String | The the team's region or city in Russian (as the competition names it). |
+| `team_region_name_en` | String | The the team's region or city in English (as the competition names it). |
+| `game_id` | Int64 | Infobasket GameID of the game (the v2 matches' match_id); global across seasons. |
+| `game_count` | Int64 | Games the value is averaged over. |
+| `res` | Float64 | The leader's value (a per-game average for 'in a game' categories). |
+| `pre_res` | String | The value as displayed, a string (e.g. '1070' for 10.70 without separator; format unverified). |
+| `is_same` | Boolean | True when the row ties the previous one. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -147,8 +147,8 @@ Player leader categories (a code table).
 
 | col_name | type | description |
 |---|---|---|
-| `param` | integer | Leader-category id; pass it as `param` to /Widget/BestPlayers or /Widget/BestTeams. |
-| `name` | character | Leader-category name, English (double spaces as sent). |
+| `param` | Int64 | Leader-category id; pass it as `param` to /Widget/BestPlayers or /Widget/BestTeams. |
+| `name` | String | Leader-category name, English (double spaces as sent). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -184,8 +184,8 @@ Team leader categories (a code table).
 
 | col_name | type | description |
 |---|---|---|
-| `param` | integer | Leader-category id; pass it as `param` to /Widget/BestPlayers or /Widget/BestTeams. |
-| `name` | character | Leader-category name, English (double spaces as sent). |
+| `param` | Int64 | Leader-category id; pass it as `param` to /Widget/BestPlayers or /Widget/BestTeams. |
+| `name` | String | Leader-category name, English (double spaces as sent). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

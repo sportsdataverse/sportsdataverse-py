@@ -25,6 +25,11 @@ description: "sdv-py ECHL: endpoint references, dataset loaders and parsers for 
 - [`most_recent_echl_season`](reference/additional#most_recent_echl_season)
 
 
+## See also
+
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("echl")` draws the rink in a team's colors; `team_colors()` takes HockeyTech team ids
+- [sportypy](https://sportypy.sportsdataverse.org/) — the rink sdvplot draws with
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):

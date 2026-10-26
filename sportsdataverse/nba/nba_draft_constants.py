@@ -9,7 +9,7 @@ One home for every algorithm shared across the four draft/projection models
 - The as-of-class leakage boundary (``as_of_class_split``).
 - The all-era, box-score-derived **career-value** common currency
   (``box_value_per100`` / ``career_value_from_seasons``), scale-anchored to the
-  shipped ``nba_bpm`` on the 2016+ overlap era (see ``dev/nba_draft/fit_box_value.py``).
+  shipped ``nba_bpm`` on the 2016+ overlap era (see ``tools/models/nba_draft/fit_box_value.py``).
 - The combine-feature builder (``build_combine_features``).
 - Per-league fitted constants (``LEAGUE_CONSTANTS`` / ``get_constants``).
 
@@ -188,10 +188,10 @@ class LeagueConstants:
     Attributes:
         replacement: Replacement-level ``box_value_per100`` (VORP convention).
         box_value_coef: ``[intercept, *BOX_VALUE_FEATURES coefficients]`` (9 floats),
-            fit vs the shipped ``nba_bpm`` (see ``dev/nba_draft/fit_box_value.py``).
+            fit vs the shipped ``nba_bpm`` (see ``tools/models/nba_draft/fit_box_value.py``).
         peak_age: Aging-curve peak age for this league. Mirrors the fitted
             ``{prefix}_aging_curve.json`` artifact's ``peak_age`` (nba/wnba
-            = 29, from ``dev/nba_draft/fit_aging_curve.py``); gleague has no
+            = 29, from ``tools/models/nba_draft/fit_aging_curve.py``); gleague has no
             fitted curve yet so its value is a seeded placeholder. Informational
             only -- the runtime reads ``peak_age`` from the loaded artifact,
             not this field.
@@ -208,7 +208,7 @@ class LeagueConstants:
     artifact_prefix: str = "nba"
 
 
-# NBA box_value_coef/replacement are fit in dev/nba_draft/fit_box_value.py
+# NBA box_value_coef/replacement are fit in tools/models/nba_draft/fit_box_value.py
 # against the shipped nba_bpm (2016-17..2019-20 overlap, combine-class
 # players) -- see that script's printed diagnostics for provenance.
 #
@@ -219,7 +219,7 @@ class LeagueConstants:
 # NBA-fit values by deliberate, documented choice -- there is no wnba_bpm (or
 # any other independent advanced-metric anchor) to ridge-regress WNBA box
 # rates against, so re-fitting those two numbers specifically is not
-# achievable with data available today (see dev/wnba_draft/fit_box_value.py's
+# achievable with data available today (see tools/models/wnba_draft/fit_box_value.py's
 # module docstring). This is a permanent caveat, not a "pending" TODO.
 #
 # G-League still seeds from the NBA fit outright (no re-fit attempted yet)
@@ -344,7 +344,7 @@ def career_value_from_seasons(season_stats: pl.DataFrame, *, league: str = "nba"
     ``season_vorp = (box_value_per100 - replacement) * minutes / 1000``;
     ``career_value = sum(season_vorp)`` over all rows for a player. This is
     the common-currency label consumed by the draft (①) and rookie/soph (④)
-    models, fit and cited in ``dev/nba_draft/fit_box_value.py``.
+    models, fit and cited in ``tools/models/nba_draft/fit_box_value.py``.
 
     Args:
         season_stats: Per-``(player_id, season)`` rows carrying

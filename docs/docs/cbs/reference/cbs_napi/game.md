@@ -1,11 +1,11 @@
 ---
-title: "CBS — CBS Sports NAPI (api.cbssports.com/napi) — Game"
+title: "CBS Sports — CBS Sports NAPI (api.cbssports.com/napi) — Game"
 sidebar_label: "Game"
 sidebar_position: 1
-description: "CBS — CBS Sports NAPI (api.cbssports.com/napi) — Game — function reference in sdv-py, the SportsDataverse Python package."
+description: "CBS Sports — CBS Sports NAPI (api.cbssports.com/napi) — Game — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# CBS — CBS Sports NAPI (api.cbssports.com/napi) — Game
+# CBS Sports — CBS Sports NAPI (api.cbssports.com/napi) — Game
 
 ## cbs_game_betting_splits
 
@@ -472,24 +472,24 @@ Get a drives resource for a particular game.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | CBS drive number within the game; joins drive_id of the scoring-plays frame. |
-| `team_id` | integer | CBS team id of the offense on the drive. |
-| `quarter` | integer | Period in which the drive started. |
-| `starting_time` | character | Game clock (m:ss) at the drive's first snap. |
-| `ending_time` | character | Game clock (m:ss) at the drive's last play. |
-| `time_of_possession` | character | Drive duration as m:ss. |
-| `starting_yardline` | character | Field position where the drive started, team abbreviation plus yard line (e.g. TEXAS 22). |
-| `ending_yardline` | character | Field position where the drive ended, team abbreviation plus yard line (e.g. TEXAS 18). |
-| `starting_play_id` | integer | CBS play id of the drive's first play; joins id of the scoring-plays frame. |
-| `ending_play_id` | integer | CBS play id of the drive's last play; joins id of the scoring-plays frame. |
-| `drive_plays` | integer | Number of plays CBS counts in the drive. |
-| `yards_on_drive` | integer | Net yards gained on the drive. |
-| `drive_yards_total` | integer | Total drive yardage as CBS reports it, penalties included. |
-| `penalty_yards` | integer | Penalty yards assessed on the drive. |
-| `first_downs_on_drive` | integer | First downs gained on the drive. |
-| `inside_the_20` | logical | True when the drive reached the opponent's 20-yard line (CBS "Yes"/"No" flag). |
-| `score_on_drive` | logical | True when the drive produced a score (CBS "Yes"/"No" flag). |
-| `result` | character | Drive outcome label from CBS (Punt, Touchdown, Field Goal, Downs, Fumble, End of Half, ...). |
+| `id` | Int64 | CBS drive number within the game; joins drive_id of the scoring-plays frame. |
+| `team_id` | Int64 | CBS team id of the offense on the drive. |
+| `quarter` | Int64 | Period in which the drive started. |
+| `starting_time` | String | Game clock (m:ss) at the drive's first snap. |
+| `ending_time` | String | Game clock (m:ss) at the drive's last play. |
+| `time_of_possession` | String | Drive duration as m:ss. |
+| `starting_yardline` | String | Field position where the drive started, team abbreviation plus yard line (e.g. TEXAS 22). |
+| `ending_yardline` | String | Field position where the drive ended, team abbreviation plus yard line (e.g. TEXAS 18). |
+| `starting_play_id` | Int64 | CBS play id of the drive's first play; joins id of the scoring-plays frame. |
+| `ending_play_id` | Int64 | CBS play id of the drive's last play; joins id of the scoring-plays frame. |
+| `drive_plays` | Int64 | Number of plays CBS counts in the drive. |
+| `yards_on_drive` | Int64 | Net yards gained on the drive. |
+| `drive_yards_total` | Int64 | Total drive yardage as CBS reports it, penalties included. |
+| `penalty_yards` | Int64 | Penalty yards assessed on the drive. |
+| `first_downs_on_drive` | Int64 | First downs gained on the drive. |
+| `inside_the_20` | Boolean | True when the drive reached the opponent's 20-yard line (CBS "Yes"/"No" flag). |
+| `score_on_drive` | Boolean | True when the drive produced a score (CBS "Yes"/"No" flag). |
+| `result` | String | Drive outcome label from CBS (Punt, Touchdown, Field Goal, Downs, Fumble, End of Half, ...). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -581,27 +581,27 @@ Get an scoring plays resource for a particular game.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | CBS play id; the GSIS play id for NFL games, an epoch-style stamp for NCAAF games. |
-| `game_id` | integer | CBS game id (null for older games, which lack it). |
-| `drive_id` | integer | CBS drive number within the game; joins id of the scoring-drives frame. |
-| `quarter` | integer | Period of the snap. |
-| `time_remaining` | character | Game clock (m:ss) at the snap. |
-| `down` | integer | Down at the snap; 0 on kickoffs and tries. |
-| `distance` | character | Yards to go for a first down, or the literal "Goal" on goal-to-go downs. |
-| `side` | character | Team abbreviation naming the half of the field that yardline refers to. |
-| `yardline` | integer | Yard line of the ball on the side team's half of the field. |
-| `team_in_possession` | integer | CBS team id with the ball at the snap. |
-| `description` | character | Full CBS play text, including tacklers and spots. |
-| `medium` | character | Medium-length play summary (e.g. "J. Sayin pass to M. Williams for 6 yds"). |
-| `short` | character | Short play summary (e.g. "6 yd pass"). |
-| `score_on_play` | logical | True when the play scored (CBS "Yes"/"No" flag). |
-| `score_type` | character | Scoring type for a scoring play (Touchdown, FieldGoal, ...); null otherwise. |
-| `short_score` | character | Short scoring summary; empty string when the play did not score. |
-| `under_review` | logical | True when the play was under replay review (CBS "Yes"/"No" flag). |
-| `home_timeouts_remaining` | integer | Home team's timeouts left after the play (null for older games, which lack it). |
-| `away_timeouts_remaining` | integer | Away team's timeouts left after the play (null for older games, which lack it). |
-| `real_clock` | character | UTC wall-clock timestamp of the play in ISO 8601 (null for older games, which lack it). |
-| `subplays` | character | Sub-events of the play as a list of structs: type, order, and the event fields (player ids and names, yards_on_play, yards_to_endzone, team_in_possession). |
+| `id` | Int64 | CBS play id; the GSIS play id for NFL games, an epoch-style stamp for NCAAF games. |
+| `game_id` | Int64 | CBS game id (null for older games, which lack it). |
+| `drive_id` | Int64 | CBS drive number within the game; joins id of the scoring-drives frame. |
+| `quarter` | Int64 | Period of the snap. |
+| `time_remaining` | String | Game clock (m:ss) at the snap. |
+| `down` | Int64 | Down at the snap; 0 on kickoffs and tries. |
+| `distance` | String | Yards to go for a first down, or the literal "Goal" on goal-to-go downs. |
+| `side` | String | Team abbreviation naming the half of the field that yardline refers to. |
+| `yardline` | Int64 | Yard line of the ball on the side team's half of the field. |
+| `team_in_possession` | Int64 | CBS team id with the ball at the snap. |
+| `description` | String | Full CBS play text, including tacklers and spots. |
+| `medium` | String | Medium-length play summary (e.g. "J. Sayin pass to M. Williams for 6 yds"). |
+| `short` | String | Short play summary (e.g. "6 yd pass"). |
+| `score_on_play` | Boolean | True when the play scored (CBS "Yes"/"No" flag). |
+| `score_type` | String | Scoring type for a scoring play (Touchdown, FieldGoal, ...); null otherwise. |
+| `short_score` | String | Short scoring summary; empty string when the play did not score. |
+| `under_review` | Boolean | True when the play was under replay review (CBS "Yes"/"No" flag). |
+| `home_timeouts_remaining` | Int64 | Home team's timeouts left after the play (null for older games, which lack it). |
+| `away_timeouts_remaining` | Int64 | Away team's timeouts left after the play (null for older games, which lack it). |
+| `real_clock` | String | UTC wall-clock timestamp of the play in ISO 8601 (null for older games, which lack it). |
+| `subplays` | String | Sub-events of the play as a list of structs: type, order, and the event fields (player ids and names, yards_on_play, yards_to_endzone, team_in_possession). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

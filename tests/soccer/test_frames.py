@@ -15,7 +15,7 @@ from typing import Any, Callable, List, Tuple
 import polars as pl
 import pytest
 
-from sportsdataverse.euroleague.euroleague_parsers import (
+from sportsdataverse.basketball.euroleague.euroleague_parsers import (
     parse_euroleague,
     parse_euroleague_boxscore,
     parse_euroleague_header,

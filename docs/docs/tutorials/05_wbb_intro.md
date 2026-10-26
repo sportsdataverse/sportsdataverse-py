@@ -1,5 +1,6 @@
 ---
 title: WBB tutorial
+description: "Welcome to the women's college hoops corner of the SportsDataverse!"
 sidebar_label: WBB
 sidebar_position: 5
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/05_wbb_intro.ipynb
@@ -1201,4 +1202,4 @@ safe("bart_wbb ratings", lambda: bart_wbb_ratings(year=2025))
 
 ```
 
-    ⏭️  bart_wbb ratings: AssetFetchError: barttorvik.com/ncaaw/2025_team_results.csv answered HTTP 403: <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> <HTML><HEAD><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1"> <TITLE>ERROR
+    ⏭️  bart_wbb ratings: AssetFetchError: barttorvik.com/ncaaw/2025_team_results.csv answered HTTP 403

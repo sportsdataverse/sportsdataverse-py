@@ -1,0 +1,120 @@
+{
+ "resource": "franchisehistory",
+ "parameters": {
+  "LeagueID": "20"
+ },
+ "resultSets": [
+  {
+   "name": "FranchiseHistory",
+   "headers": [
+    "LEAGUE_ID",
+    "TEAM_ID",
+    "TEAM_CITY",
+    "TEAM_NAME",
+    "START_YEAR",
+    "END_YEAR",
+    "YEARS",
+    "GAMES",
+    "WINS",
+    "LOSSES",
+    "WIN_PCT",
+    "PO_APPEARANCES",
+    "DIV_TITLES",
+    "CONF_TITLES",
+    "LEAGUE_TITLES"
+   ],
+   "rowSet": [
+    [
+     "20",
+     1612709890,
+     "Austin",
+     "Spurs",
+     "2004",
+     "2025",
+     22,
+     971,
+     529,
+     442,
+     0.545,
+     11,
+     4,
+     3,
+     2
+    ],
+    [
+     "20",
+     1612709890,
+     "Austin",
+     "Spurs",
+     "2014",
+     "2025",
+     12,
+     475,
+     259,
+     216,
+     0.545,
+     6,
+     3,
+     1,
+     1
+    ]
+   ]
+  },
+  {
+   "name": "DefunctTeams",
+   "headers": [
+    "LEAGUE_ID",
+    "TEAM_ID",
+    "TEAM_CITY",
+    "TEAM_NAME",
+    "START_YEAR",
+    "END_YEAR",
+    "YEARS",
+    "GAMES",
+    "WINS",
+    "LOSSES",
+    "WIN_PCT",
+    "PO_APPEARANCES",
+    "DIV_TITLES",
+    "CONF_TITLES",
+    "LEAGUE_TITLES"
+   ],
+   "rowSet": [
+    [
+     "20",
+     1612709891,
+     "Fayetteville",
+     "Patriots",
+     "2004",
+     "2005",
+     2,
+     96,
+     33,
+     63,
+     0.344,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     "20",
+     1612709895,
+     "Florida",
+     "Flame",
+     "2005",
+     "2005",
+     1,
+     48,
+     25,
+     23,
+     0.521,
+     1,
+     0,
+     0,
+     0
+    ]
+   ]
+  }
+ ]
+}

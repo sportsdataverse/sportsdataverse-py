@@ -36,7 +36,7 @@ class GridConfig:
     """EV x LA x spray binning configuration for the hitting-spine grids.
 
     ``ev_width=6.0``, ``la_width=5.0``, ``min_n=10`` are FITTED, not seeded --
-    ``dev/mlb_hitting/fit_grid.py`` swept EV width in {2,3,4,5,6,7,8},
+    ``tools/models/mlb_hitting/fit_grid.py`` swept EV width in {2,3,4,5,6,7,8},
     LA width in {2,3,4,5,6,7}, and ``min_n`` in {5,8,10,12,15,20,25} against
     the per-batted-ball Savant concurrent-validity oracle
     (``estimated_woba_using_speedangle`` / ``estimated_ba_using_speedangle``)

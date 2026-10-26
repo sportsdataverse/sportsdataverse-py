@@ -14,10 +14,10 @@ stack (Phase 0, Task 0.1). Captured **2026-07-08** for validation season
 **2023-24** (int `2024`; stats.nba.com season string `"2023-24"`), plus
 prior season **2022-23** (int `2023`; `"2022-23"`) for the Phase-4
 out-of-sample clutch gate. Regenerate with
-`SDV_PY_NBA_STATS_LIVE=1 SDV_PY_LIVE_TESTS=1 uv run python dev/nba_prediction/capture_oracle.py`
+`SDV_PY_NBA_STATS_LIVE=1 SDV_PY_LIVE_TESTS=1 uv run python tools/models/nba_prediction/capture_oracle.py`
 (script is gitignored under `dev/`, per repo `CLAUDE.md` -- `dev/` is
 working notes, not tracked; this deviates from the plan's literal
-"create committed: dev/nba_prediction/capture_oracle.py" wording, but
+"create committed: tools/models/nba_prediction/capture_oracle.py" wording, but
 matches both `CLAUDE.md` and the actual MBB-spine precedent, whose own
 fixture README says the same).
 

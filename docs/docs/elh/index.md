@@ -1,9 +1,9 @@
 ---
-title: ELH
-sidebar_label: ELH
-description: "sdv-py ELH: endpoint references, dataset loaders and parsers for ELH in the SportsDataverse Python package."
+title: Czech Extraliga
+sidebar_label: Czech Extraliga
+description: "sdv-py Czech Extraliga: endpoint references, dataset loaders and parsers for Czech Extraliga in the SportsDataverse Python package."
 ---
-# ELH (`sportsdataverse.hockey.elh`)
+# Czech Extraliga (`sportsdataverse.hockey.elh`)
 
 ## Data sources
 

@@ -155,8 +155,8 @@ def soccer_events_to_frame(dataset: Any, *, return_as_pandas: bool = False) -> U
         * `sdvplotR sdv_pitch_coords`_ -- the R twin
 
     .. _kloppy: https://kloppy.pysport.org
-    .. _sdvplot pitch_coords: https://github.com/sportsdataverse/sdvplot
-    .. _sdvplotR sdv_pitch_coords: https://github.com/sportsdataverse/sdvplotR
+    .. _sdvplot pitch_coords: https://sdvplot.sportsdataverse.org/
+    .. _sdvplotR sdv_pitch_coords: https://sdvplotR.sportsdataverse.org/
     """
     df = dataset.to_df(engine="polars")
     renames = {c: underscore(c) for c in df.columns if underscore(c) != c}
@@ -272,8 +272,8 @@ def soccer_open_events(
         * `sdvplotR sdv_pitch_coords`_ -- the R twin
 
     .. _kloppy: https://kloppy.pysport.org
-    .. _sdvplot pitch_coords: https://github.com/sportsdataverse/sdvplot
-    .. _sdvplotR sdv_pitch_coords: https://github.com/sportsdataverse/sdvplotR
+    .. _sdvplot pitch_coords: https://sdvplot.sportsdataverse.org/
+    .. _sdvplotR sdv_pitch_coords: https://sdvplotR.sportsdataverse.org/
     """
     dataset = soccer_open_dataset(provider, match_id, **kwargs)
     return soccer_events_to_frame(dataset, return_as_pandas=return_as_pandas)

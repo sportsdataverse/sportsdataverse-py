@@ -81,12 +81,12 @@ def returning_fit():
     combiner (``_combine_units``) cannot drift apart. Missing fixtures FAIL: the
     shipped weights depend on them, and a skip would let them ship ungated.
     Every number quoted below is printed by
-    ``python dev/cfb_projection/fit_returning_weights.py``.
+    ``python tools/models/cfb_projection/fit_returning_weights.py``.
     """
     missing = [f.name for f in (_RETURNING_2025, _RESULTS_2025) if not f.exists()]
     if missing:
         pytest.fail(f"returning-production gate fixtures missing: {missing}")
-    path = _FIX.parents[2] / "dev" / "cfb_projection" / "fit_returning_weights.py"
+    path = _FIX.parents[2] / "tools" / "models" / "cfb_projection" / "fit_returning_weights.py"
     spec = importlib.util.spec_from_file_location("fit_returning_weights", path)
     fit = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(fit)

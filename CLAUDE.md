@@ -31,7 +31,7 @@
     - [sdv-docs MCP server (`sdv_docs/`)](#sdv-docs-mcp-server-sdv_docs)
     - [PFF — Developer API (`api.pff.com`, current) vs Premium (`premium.pff.com`, LEGACY)](#pff--developer-api-apipffcom-current-vs-premium-premiumpffcom-legacy)
     - [HTTP / retry layer](#http--retry-layer)
-    - [Error vocabulary (0.1.5)](#error-vocabulary-015)
+    - [Error vocabulary (0.2.0)](#error-vocabulary-020)
     - [Polars version](#polars-version)
     - [Type hints](#type-hints)
     - [Test gating](#test-gating)
@@ -58,7 +58,10 @@
 to play-by-play, box score, schedule, roster, and other sports data across
 multiple leagues (NBA + G-League, WNBA, NFL, MLB, NHL, MBB, WBB, CFB, PWHL +
 19 HockeyTech minor/junior leagues, college hockey M/W, college baseball +
-softball, soccer, cricket, UFL/XFL/CFL, plus odds).
+softball, soccer, cricket, UFL/XFL/CFL, plus odds), plus international
+basketball (EuroLeague and 24 provider families), European hockey (SIHF and 12
+leagues), Formula 1, the Kalshi and Polymarket prediction markets, and the
+cross-sport providers (CBS, Fox, Yahoo, ESPN content, TheSportsDB).
 
 When this guide differs from current repository docs, treat
 `CONTRIBUTING.md` and the current test suite under `tests/` as authoritative.
@@ -121,10 +124,11 @@ setuptools is the build backend (`build-system.build-backend =
 extras under `[project.optional-dependencies]` (`tests`, `nflpro`, `models`, `pff`,
 `soccer`, `sdvplot`, `sportypy`, `mcp`, `all`) -- `soccer` is kloppy for `soccer_open_events`, `sdvplot` the team
 logo/color/theme companion (>=0.1.1, its first polars-2 release), `sportypy` the GPL-3.0 surface-drawing companion; note `[all]`
-includes every extra EXCEPT `mcp`, which is the sdv-docs server's extra. Package data ships via `[tool.setuptools.package-data]` (currently
-`cfb/models/*`, `nfl/models/*`, and `py.typed`). The `[tool.setuptools.packages.find]`
-block excludes `tests*`, `Sphinx-docs*`, `docs*`, `examples*`, `archive*`,
-`recipe*`, `dev*` from the wheel.
+includes every extra EXCEPT `mcp`, which is the sdv-docs server's extra. `[tool.setuptools.packages.find]`
+is an include allowlist (`sportsdataverse*`, `sdv_docs*`), so a new top-level directory never leaks into the
+wheel. Package data ships the bundled model and data directories listed in `[tool.setuptools.package-data]`
+(the per-sport `models/*` and `data/*` dirs, `registry/*.yaml`, `schemas/raw/*.yaml`, `validation/*.yaml`) plus
+`py.typed`.
 
 `recipe/meta.yaml` provides a `noarch: python` conda-build recipe that
 mirrors `[project.dependencies]`. Local `conda build recipe/` works today;
@@ -176,7 +180,7 @@ sportsdataverse/
   mlb/        # MLB (Statcast / Baseball Savant + stats API)
   nba/        # NBA
   nfl/        # NFL — nflreadpy-parity surface
-    nfl_loaders.py    # 45 canonical load_nfl_* (the 11 per-type aliases were removed in 0.1.5)
+    nfl_loaders.py    # 45 canonical load_nfl_* (the 11 per-type aliases are removed in 0.2.0)
     nfl_pbp.py, nfl_schedule.py, nfl_teams.py, nfl_games.py, nfl_game_rosters.py
     cache.py          # @cached_loader, memory/filesystem/off, clear_cache()
     config.py         # NflConfig dataclass + get_config / update_config / reset_config
@@ -193,37 +197,34 @@ sportsdataverse/
   odds/       # Odds & betting lines
   pwhl/       # PWHL (HockeyTech flagship — richer surface, top-level)
   hockeytech/ # HockeyTech core (_client/_leagues/_family/_parsers/_analytics)
-  hockey/     # 20 HockeyTech league families + college hockey (mch/wch, ESPN) + SIHF (sihf, Swiss)
+  hockey/     # 19 HockeyTech league families (PWHL is top-level) + college hockey (mch/wch, ESPN) + SIHF (sihf, Swiss)
               #   + European leagues (del_, icehl, eihl, metal, elh, liiga, shl, ha, nl, magnus, khl, vhl)
   basketball/ # international basketball families (fiba_hub, genius, atrium, nbl_au, feb, scb, lba, acb, ibba, wjbl, vtb, kbl,
               #   bleague, kzs, lkl, tbf, cebl, aba, easl, bnxt, tpbl, plg, cba, dbl) + the shared basketball_runtime
+              #   + euroleague/ + the ESPN side leagues nbl/, fiba/, olympics_mbk/, olympics_wbk/, nbasl_<city>/ (6)
   baseball/   # College baseball + softball (ESPN + stats.ncaa.org pbp parsers)
   soccer/     # ESPN soccer (league-parameterized wrappers)
   cricket/    # ESPN cricket + bundled win-probability models
   football/   # UFL / XFL / CFL ESPN families
-  nbagl/      # NBA G-League engine helpers
-  cbs/        # CBS Sports NAPI (cbs_napi_* wrappers + parsers)
-  fox/        # Fox Sports API (fox_api_* wrappers + parsers)
-  yahoo/      # Yahoo Sports Shangrila (yahoo_shangrila_* wrappers + parsers)
-  euroleague/ # EuroLeague Competition Engine (0.1.5)
-  espn_content/ # ESPN content API (articles, news)
-  thesportsdb/  # TheSportsDB (multi-sport reference data)
+  nbagl/      # NBA G League: ESPN wrappers, nbagl_stats (stats.nba.com, LeagueID=20) and engine helpers
+  providers/  # cross-sport sources: cbs/ (CBS NAPI), fox/ (Fox Sports API), yahoo/ (Yahoo Shangrila),
+              #   espn_content/ (ESPN news), thesportsdb/ (TheSportsDB)
+  analytics/  # rolling_windows, metric_curves, defense_vs_position, paper_index (Paper Index + deserved wins)
   registry/   # metric registry: resolver + TypeScript render
   validation/ # pbp/box invariant sweeps + per-game gate (validate_game, GameReport)
   wexp/       # win-expectancy engines, baselines, backtests
   scrape/     # capture/persist layers: espn/, ncaa/, stats/
   parsed/     # DEPRECATED per-league alias modules (generated)
-  sdv_docs/   # the sdv-docs MCP server (never imports sportsdataverse)
-  rolling_windows.py      # event-count rolling form windows
-  metric_curves.py        # rate curves along a continuous axis
-  defense_vs_position.py  # what each defense allowed, by position
-  paper_index.py          # Paper Index + season deserved wins
+  f1/         # Formula 1 (Jolpica)
+  _common/    # shared metric + rating helpers
+  schemas/    # bundled raw-payload schemas (schemas/raw/*.yaml)
   cli.py                  # the `sdv` console script
   release.py  # sportsdataversedata R-package port (release assets + RDS writer)
   dl_utils.py # download() retry + janitor + (under|kebab|camel)ize helpers
   errors.py   # NoDataError (alias NoESPNDataError), AssetFetchError, SeasonNotFoundError
   config.py   # Per-sport URL constants pointing at sportsdataverse-data releases
   __init__.py
+sdv_docs/     # the sdv-docs MCP server, a top-level package (never imports sportsdataverse)
 tests/
   conftest.py # skip_if_no_live decorator
   cfb/, mbb/, mlb/, nba/, nfl/, nhl/, wbb/, wnba/  # one subdir per source pkg
@@ -253,7 +254,7 @@ The cross-league ESPN wrapper surface is **codegen output**, not a runtime facto
 The old runtime wrapper factory — one core module of partials bound into tiny
 per-league ext modules at import time — was retired when codegen took over, and its
 last remnants (`_common_espn.py`, the `extract*.py` bootstraps and the committed
-`tools/codegen/_generated/` staging copies) were deleted in 0.1.6. If you find a
+`tools/codegen/_generated/` staging copies) are deleted on main and ship in 0.2.0. If you find a
 description of that pattern anywhere, it predates 0.1.x.
 
 Total cross-league surface: **126 short names** (from the five ESPN
@@ -282,14 +283,14 @@ lists them all). The six oldest and largest:
 | `mlb/mlb_api_parsers.py` | `statsapi.mlb.com` Stats API | 5 dedicated + 1 generic |
 | `nfl/nfl_api_parsers.py` | `api.nfl.com` "Shield" data API | 11 dedicated (one per `nfl_api` endpoint) |
 
-The rest follow the same contract, one per provider family, among them `fox/fox_api_parsers.py`,
-`cbs/cbs_napi_parsers.py`, `yahoo/yahoo_shangrila_parsers.py`,
+The rest follow the same contract, one per provider family, among them `providers/fox/fox_api_parsers.py`,
+`providers/cbs/cbs_napi_parsers.py`, `providers/yahoo/yahoo_shangrila_parsers.py`,
 `nba/nba_stats_parsers.py` + `wnba/wnba_stats_parsers.py`, `cfb/on3_parsers.py` +
 `sports247_parsers.py` + `sports247_site_pages_parsers.py`, `nfl/pff_parsers.py` +
 `nflpro_parsers.py` + `sleeper_parsers.py`, `mbb/torvik_parsers.py`,
 `hockeytech/_parsers.py`, `odds/the_odds_api_parsers.py`,
 `mlb/mlb_statcast_parsers.py`, `soccer/` (`soccer_espn`, `asa`, `fotmob`, `uefa`,
-`fifa`, `mls/mls_api`, `nwsl/nwsl_api`), `euroleague/euroleague_parsers.py`,
+`fifa`, `mls/mls_api`, `nwsl/nwsl_api`), `basketball/euroleague/euroleague_parsers.py`,
 `cricket/cricket_espn_parsers.py`, and the NCAA HTML parsers
 `mbb/mbb_ncaa_team_parsers.py` + `wbb/wbb_ncaa_team_parsers.py`, plus the international
 basketball and European hockey families under `basketball/` and `hockey/`.
@@ -451,9 +452,9 @@ loaders should follow that same scoping rule.
 per-type variants (`load_nfl_ngs_passing` / `_rushing` / `_receiving`) and
 `load_nfl_pfr_advstats(stat_type=, summary_level=)` replaces eight
 per-type/per-summary variants. Those 11 per-type shims warned from 0.0.68 and
-were removed in 0.1.5. Don't add new per-type wrappers; extend the unified function.
+are removed in 0.2.0. Don't add new per-type wrappers; extend the unified function.
 
-**`load_nfl_ngs(seasons, dataset=)`** (0.1.5) is a DIFFERENT source from
+**`load_nfl_ngs(seasons, dataset=)`** (0.2.0) is a DIFFERENT source from
 `load_nfl_nextgen_stats`: it reads the SDV-native `nfl_ngs_*` releases built by
 `nfl-ngs-data` from the public NGS API (12 datasets: `schedules`, `teams`,
 the three statboards `passing`/`rushing`/`receiving`, `statboard_leaders`, the
@@ -505,9 +506,7 @@ clear_cache()  # also wipes both memory + filesystem
 three module-level dicts: `team_abbr_mapping` (relocations folded;
 `OAK -> LV`, `SD -> LAC`, `STL -> LA`), `team_abbr_mapping_norelocate`
 (historical identity preserved), and `player_name_mapping`. They're
-inline-bundled (not separate JSON files) because the
-`[tool.setuptools.package-data]` block in `pyproject.toml` only ships
-`cfb/models/*` and `nfl/models/*`. Refresh procedure is documented in the
+inline-bundled (not separate JSON files) for historical reasons. Refresh procedure is documented in the
 `datasets.py` module docstring.
 
 **Date helpers** — `utils_date.get_current_nfl_season()` and
@@ -640,7 +639,7 @@ pipeline relies on. Three additive pieces:
   guess: external producers that fill 55.5 themselves must send it, so persist all five keys.
 
 Offline-rebuild pattern: `CFBPlayProcess(gameId, path_to_json=raw_dir, join_participants=False, odds_override=<persisted>).cfb_pbp_disk()`
-then `.run_processing_pipeline()`. `cfb_pbp_disk()` alone does not make the run offline (C-L3): without
+then `.run_processing_pipeline()`. `cfb_pbp_disk()` alone does not make the run offline: without
 `join_participants=False` the pipeline requests participants for every play, and without `odds_override` a summary
 with fewer than two pickcenter providers requests the odds endpoint. `espn_cfb_pbp(summary=...)` sets both.
 
@@ -686,10 +685,11 @@ Savant surface** (`baseballsavant.mlb.com`) under the canonical naming
 
 ### NBA / WNBA — stats.nba.com / stats.wnba.com stats API (0.0.72+)
 
-Two codegen-generated flat-API stems wrap the official stats API surface:
+Three codegen-generated flat-API stems wrap the official stats API surface:
 
 - **`nba_stats`** — 128 wrappers at `stats.nba.com`. League is chosen per call via `league_id`: `"00"` → NBA, `"20"` → G-League, `"15"` → Summer League. One stem, one host. Named `nba_stats_<slug>` (e.g. `nba_stats_leaguedashplayerstats`, `nba_stats_playercareerstats`).
 - **`wnba_stats`** — 111 wrappers at `stats.wnba.com` (WNBA `LeagueID=10`). Thin shim re-exporting the NBA-stats runtime with the WNBA host. Named `wnba_stats_<slug>`.
+- **`nbagl_stats`** — 94 wrappers at `stats.nba.com` with `LeagueID=20` by default (`sportsdataverse.nbagl.nbagl_stats`), the endpoints the sweep confirmed live for the G League; six G League-only box-score / pbp v2 routes have no NBA twin. No R package covers the G League, so defaults are hoopR's with the NBA entity ids swapped for G League ones from the capture sweep.
 - **Codegen surface = capture-confirmed `live`, non-deprecated only.** `gen_nba_stats._stats_eps()` keeps an endpoint for a league iff `league_applicability[league_id] == "live"` AND no source marks it deprecated. `untested`/`barren`/`dead` and the 26 deprecated endpoints are dropped. The wrapper counts therefore track the committed capture sweep (`sdv-internal-refs/nba/ENDPOINT_HEALTH.md`); a fresh sweep that resolves more `untested` endpoints raises the counts on the next `gen_nba_stats.py` + re-vendor of `tools/codegen/inputs/nba_canonical_catalog.json`.
 
 **Browser-TLS gotcha (critical):** `stats.nba.com` TLS/JA3-fingerprint-blocks plain `requests` — it produces a silent timeout, NOT an IP block, so `dl_utils.download()` cannot be used for this family. The runtime `_get` uses **`curl_cffi` with `impersonate="chrome"`**. `curl_cffi` is a **lazy optional import** in the `tests` and `all` extras (not a hard runtime dep); missing it surfaces as a clear `ImportError` directing users to `pip install curl_cffi` or `pip install sportsdataverse[all]`. The transport is injectable so wrappers and tests run fully offline. There is **no user-facing `headers=` param** — the "auth" is the TLS impersonation inside the runtime; custom headers still passable via `**kwargs`.
@@ -830,7 +830,7 @@ same store.
   `SDV_PY_NBA_RAW_JSON_DIR_{ENDPOINT}` (upper-cased slug, beats the generic);
   `SDV_PY_NBA_RAW_JSON_READONLY=1` for read-only. Explicit
   `raw_store_dir` / `raw_store_readonly` args beat env; `""` force-disables.
-- **`readonly` means OFFLINE — no writes AND no fetches** (0.0.76 BREAKING).
+- **`readonly` means OFFLINE — no writes AND no fetches** (0.1.1 BREAKING).
   A hit is served from the store; a miss raises `errors.RawStoreMissError`
   naming the endpoint + game id. It used to suppress only the persist, so a
   partially-captured store completed itself over the network and an "offline"
@@ -924,9 +924,9 @@ result directly. Read JSON through `_codegen_runtime._download_json(download, ur
 `_release_bytes` reads the whole body with `urllib` (timeout `SDV_PY_HTTP_TIMEOUT`,
 default 30 s) into a `BytesIO`, and pyarrow parses that buffer. Two variants share that one implementation:
 `_fetch_release_parquet` **raises** `NoDataError` when an asset is absent (used by
-the hand-written `nfl_loaders.py` and `cfb_loaders_extra.py`, where a missing
-season is an error), and `_read_release_parquet` returns **`None`** instead (used
-by the 291 generated call sites, where a season gap is routine). Only "absent"
+the hand-written `nfl_loaders.py`, `cfb_loaders_extra.py` and `_crosswalk_basketball_sources.py`,
+where a missing season is an error), and `_read_release_parquet` returns **`None`** instead (used
+by about 300 generated call sites, where a season gap is routine). Only "absent"
 differs — a failed fetch raises `AssetFetchError` from both, so the wrapper can
 never soften a rate limit into an empty frame. This is
 deliberate and measured, not an oversight: it is the read polars' own URL path makes
@@ -942,7 +942,7 @@ season that is EMPTY. Don't "fix" this to route the bytes through `download()`;
 `tests/codegen/test_runtime_release.py::test_success_path_never_calls_the_transport`
 guards it. See issue #397.
 
-### Error vocabulary (0.1.5)
+### Error vocabulary (0.2.0)
 
 `NoDataError` means the fetch **succeeded** and the answer is "nothing here" — a
 404 from any host, or ESPN's 200-with-`code:404` body. `AssetFetchError` means the
@@ -1092,7 +1092,7 @@ across the whole pipeline:
   case rather than require an exact match. For polars/Rust regex use the inline
   case toggle `(?i)...` (lookaround is unsupported — see "Polars version" above).
 
-**The rule that shipped (task 5.2).** The ESPN, NHL and HockeyTech parsers emit every `id` / `*_id`
+**The rule that shipped.** The ESPN, NHL and HockeyTech parsers emit every `id` / `*_id`
 column as `Int64` at the parser boundary; `*_ids` list columns are not ids. All three go through
 `_codegen_runtime._cast_ids_int64`, by family:
 
@@ -1163,8 +1163,8 @@ code at the source; never blanket-ignore a category.
   generated reference subtree under `docs/docs/` is stale until you run
   `uv run python tools/codegen/generate.py`. The `--check` drift gate runs in CI
   and the `sdv-codegen` pre-commit hook, so an un-regenerated tree turns a
-  green-locally change red in CI. Fold regeneration into the pre-push checklist
-  (the `/ship` skill does this as step 1). Related: do NOT clean up / delete a
+  green-locally change red in CI. Fold regeneration into the pre-push checklist.
+  Related: do NOT clean up / delete a
   branch until the PR `state` is `MERGED` — a premature cleanup stranded work in
   a past session.
 
@@ -1206,7 +1206,7 @@ code at the source; never blanket-ignore a category.
   `clear_cache()` between runs to avoid debugging phantom data.
 - **Don't add new per-type NFL loaders.** The 11 per-type wrappers
   (`load_nfl_ngs_passing` / `_rushing` / `_receiving` and the eight
-  per-type/per-summary `load_nfl_pfr_*`) were removed in 0.1.5. Extend the
+  per-type/per-summary `load_nfl_pfr_*`) are removed in 0.2.0. Extend the
   unified `load_nfl_nextgen_stats(stat_type=)` /
   `load_nfl_pfr_advstats(stat_type=, summary_level=)` functions instead.
 - **`load_nfl_ff_rankings`: `kind=` vs `type=`.** Both work and resolve
@@ -1347,6 +1347,8 @@ Companion-package cross-link URLs:
 | nba_api | <https://github.com/swar/nba_api> | NBA/WNBA (Python) |
 | nhl-api-py | <https://github.com/coreyjs/nhl-api-py> | NHL (Python) |
 | recruitR | <https://github.com/sportsdataverse/recruitR> | CFB recruiting (R) |
+| sdvplot | <https://sdvplot.sportsdataverse.org> | Team logos, colors, themes and surfaces (Python) |
+| sportypy | <https://sportypy.sportsdataverse.org> | Playing surfaces: fields, rinks, courts (Python, GPL-3.0) |
 
 ## Example notebooks
 
@@ -1368,7 +1370,7 @@ Providers beyond ESPN and the release loaders: NFL.com Shield (`nfl_api`), NFL P
 (`nflpro`), Sleeper (`sleeper`), PFF Developer (`pff_api`) and PFF Premium
 (LEGACY), MLB Stats API (`mlb_api`) and Baseball Savant (`mlb_statcast`), the four
 NHL APIs (`nhl_api_web`, `nhl_edge`, `nhl_stats_rest`, `nhl_records`), `nba_stats` /
-`wnba_stats`, `kenpom`, `torvik`, `bart_wbb`, Her Hoop Stats, Basketball-Reference,
+`wnba_stats` / `nbagl_stats`, `kenpom`, `torvik`, `bart_wbb`, Her Hoop Stats, Basketball-Reference,
 RealGM, public model datasets (DARKO / EPM / LEBRON), On3 and 247Sports (`on3`,
 `sports247`), `asa`, `mls_api`, `nwsl_api`, `fotmob`, `uefa`, `fifa`, kloppy open
 event data, Football-Data.co.uk (`football_data`), OpenLigaDB (`openligadb`),
@@ -1408,7 +1410,7 @@ The parts worth repeating here:
   `templates/**`, `tools/codegen/*.py`, a public docstring, an `__all__`, or
   `CHANGELOG.md`. `uv run python tools/codegen/generate.py` then `--check`. Both
   the `sdv-codegen` pre-commit hook and `codegen-drift-prepush` now watch
-  `tools/codegen/*.py` and `CHANGELOG.md` as well, which they did not before 0.1.5.
+  `tools/codegen/*.py` and `CHANGELOG.md` as well, which they did not before 0.2.0.
 - **A changelog entry is a fragment, `changelog.d/<slug>.<group>.md`** (one bullet per
   change; groups `breaking`/`added`/`changed`/`deprecated`/`removed`/`fixed`/`security`/`data`).
   Never add an `## Unreleased` section to `CHANGELOG.md`: it holds released sections only, and
@@ -1417,7 +1419,7 @@ The parts worth repeating here:
 - **Schema sources are four shapes**: `schemas/<name>.yaml`,
   `schemas/<name>/<league>.yaml`, `schemas/native/<stem>/` and
   `schemas/autodoc/<league>/`.
-- **`FLAT_APIS` has 78 families**, not three.
+- **`FLAT_APIS` has 79 families**, not three.
 - **The documented leagues come from `docs/src/data/leagues.json`**, written by
   `render_leagues_json()`; `docs/sidebars.ts` reads that file and hard-codes nothing.
 - **Returns-table descriptions go in `manual_column_descriptions.yaml`**, never in
@@ -1431,7 +1433,7 @@ The parts worth repeating here:
 
 ## Cheat sheet
 
-There is a printable one-page reference for this package at
+There is a printable six-page reference for this package, in four layouts (24 pages in all), at
 <https://sportsdataverse.org/cheatsheets/sportsdataverse-py.pdf>, one of [a set covering every SportsDataverse package](https://sportsdataverse.org/cheatsheets).
 Keep it in mind when adding or renaming an exported function: the sheet is a
 hand-built canvas, so a surface change means the sheet needs a revision too.

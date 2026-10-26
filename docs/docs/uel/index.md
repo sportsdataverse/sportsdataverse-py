@@ -1,9 +1,9 @@
 ---
-title: UEL
-sidebar_label: UEL
-description: "sdv-py UEL: endpoint references, dataset loaders and parsers for UEL in the SportsDataverse Python package."
+title: UEFA Europa League
+sidebar_label: UEFA Europa League
+description: "sdv-py UEFA Europa League: endpoint references, dataset loaders and parsers for UEFA Europa League in the SportsDataverse Python package."
 ---
-# UEL (`sportsdataverse.soccer.uel`)
+# UEFA Europa League (`sportsdataverse.soccer.uel`)
 
 ## Data sources
 

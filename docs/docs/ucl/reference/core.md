@@ -1,11 +1,11 @@
 ---
-title: UCL — ESPN core API (v2)
+title: UEFA Champions League — ESPN core API (v2)
 sidebar_label: ESPN core API (v2)
-description: "UCL — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "UEFA Champions League — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 22
 toc_max_heading_level: 2
 ---
-# UCL — ESPN core API (v2)
+# UEFA Champions League — ESPN core API (v2)
 
 `sportsdataverse.soccer.ucl` — 82 endpoints.
 

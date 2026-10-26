@@ -1,10 +1,10 @@
 ---
-title: "WBB — additional Python functions — Analytics: wbb_bracketology–weighted_avg"
+title: "Women's college basketball — additional Python functions — Analytics: wbb_bracketology–weighted_avg"
 sidebar_label: "Analytics: wbb_bracketology–weighted_avg"
 sidebar_position: 11
-description: "WBB — additional Python functions — Analytics: wbb_bracketology–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
+description: "Women's college basketball — additional Python functions — Analytics: wbb_bracketology–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — Analytics: wbb_bracketology–weighted_avg
+# Women's college basketball — additional Python functions — Analytics: wbb_bracketology–weighted_avg
 
 ### wbb_bracketology {#wbb_bracketology}
 

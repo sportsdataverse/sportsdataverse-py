@@ -23,7 +23,7 @@ original T5.3 categorical `shot_quality` -> empirical-goal-rate proxy
 `tests/pwhl/test_pwhl_xg_proxy_oracle.py`. No network access required to run
 the oracle suite once these files exist.
 
-Regenerate: `uv run python dev/pwhl_prediction/build_pwhl_xg_fixture.py`.
+Regenerate: `uv run python tools/models/pwhl_prediction/build_pwhl_xg_fixture.py`.
 
 ## Held-out design (why these files split the way they do)
 
@@ -89,7 +89,7 @@ every season's as-of walk. The de-leaked split:
 ## `backtest_heldout_2026.parquet`
 
 - **Source:** the held-out 2026 as-of-date walk-forward, built by
-  `dev/pwhl_prediction/build_pwhl_xg_fixture.py`, run for BOTH methods over
+  `tools/models/pwhl_prediction/build_pwhl_xg_fixture.py`, run for BOTH methods over
   the identical walk: for each 2026 game-date beyond a 10-date burn-in,
   `adjust_rate_opponent` (the SAME function the NHL spine uses)
   opponent-adjusts + shrinks the as-of-date-filtered `game_rates`,

@@ -1,9 +1,9 @@
 ---
-title: ODDS
-sidebar_label: ODDS
-description: "sdv-py ODDS: endpoint references, dataset loaders and parsers for ODDS in the SportsDataverse Python package."
+title: Betting odds
+sidebar_label: Betting odds
+description: "sdv-py Betting odds: endpoint references, dataset loaders and parsers for Betting odds in the SportsDataverse Python package."
 ---
-# ODDS (`sportsdataverse.odds`)
+# Betting odds (`sportsdataverse.odds`)
 
 ## Data sources
 

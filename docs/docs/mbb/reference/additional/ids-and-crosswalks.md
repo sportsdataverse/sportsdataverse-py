@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — IDs and crosswalks"
+title: "Men's college basketball — additional Python functions — IDs and crosswalks"
 sidebar_label: "IDs and crosswalks"
 sidebar_position: 15
-description: "MBB — additional Python functions — IDs and crosswalks — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — IDs and crosswalks — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — IDs and crosswalks
+# Men's college basketball — additional Python functions — IDs and crosswalks
 
 ### FuzzyMatchError {#FuzzyMatchError}
 
@@ -29,7 +29,7 @@ convention already used in this port).
 
 No candidate surname fragment scored well enough
 
-(`NameFixer.NoSurnameMatch`, `:638-643`).
+(`NameFixer.NoSurnameMatch`).
 
 **Parameters**
 
@@ -46,7 +46,7 @@ No candidate surname fragment scored well enough
 
 A surname fragment matched and the whole-name score cleared
 
-`MIN_OVERALL_SCORE` (`NameFixer.StrongSurnameMatch`, `:646-647`).
+`MIN_OVERALL_SCORE` (`NameFixer.StrongSurnameMatch`).
 
 **Parameters**
 
@@ -61,8 +61,7 @@ A surname fragment matched and the whole-name score cleared
 
 Precomputed box-score lookup tables + resolution cache for
 
-`tidy_player` (`LineupErrorAnalysisUtils.TidyPlayerContext`,
-`:31-36`).
+`tidy_player` (`LineupErrorAnalysisUtils.TidyPlayerContext`).
 
 **Parameters**
 
@@ -79,7 +78,7 @@ Precomputed box-score lookup tables + resolution cache for
 
 A surname fragment matched, but the whole-name score fell short of
 
-`MIN_OVERALL_SCORE` (`NameFixer.WeakSurnameMatch`, `:644-645`).
+`MIN_OVERALL_SCORE` (`NameFixer.WeakSurnameMatch`).
 
 **Parameters**
 
@@ -95,7 +94,7 @@ A surname fragment matched, but the whole-name score fell short of
 
 Score how well a single play-by-play candidate name fits a single
 
-box-score name (`NameFixer.box_aware_compare`, `:658-766`).
+box-score name (`NameFixer.box_aware_compare`).
 
 **Parameters**
 
@@ -122,7 +121,7 @@ box_aware_compare("Tuitele, Peanut", "Tuitele, Peanut")
 
 Build the alternative player-code lookup maps for a box-score lineup
 
-(`LineupErrorAnalysisUtils.build_tidy_player_context`, `:59-73`).
+(`LineupErrorAnalysisUtils.build_tidy_player_context`).
 
 Sometimes the play-by-play uses `SURNAME,INITIAL` instead of
 `SURNAME,NAME`, or `SURNAME,NAME1` instead of `SURNAME,NAME1
@@ -201,7 +200,7 @@ code_from_box("Morris, Markieff", box_lineup, team).code  # "MarkieffMorris"
 
 Resolve a jersey-number-only name to its box-score player
 
-(`LineupErrorAnalysisUtils.convert_from_digits`, `:166-175`).
+(`LineupErrorAnalysisUtils.convert_from_digits`).
 
 **Parameters**
 
@@ -230,7 +229,7 @@ convert_from_digits("1000", codes)  # "name1"
 Resolve a 2-initial name (`"A B"` / `"B, A"`) to the single
 
 box-score player whose code starts with those initials
-(`LineupErrorAnalysisUtils.convert_from_initials`, `:147-164`).
+(`LineupErrorAnalysisUtils.convert_from_initials`).
 
 **Parameters**
 
@@ -287,7 +286,7 @@ display_name_to_roster_key('"TJ" Madlock, Antonio')   # "ANTONIO.MADLOCK"
 
 Pick the single unassigned box-score name a mis-spelled play-by-play
 
-name most likely refers to (`NameFixer.fuzzy_box_match`, `:774-905`).
+name most likely refers to (`NameFixer.fuzzy_box_match`).
 
 Resolution order: a single strong match wins outright; multiple strong
 matches only resolve if there's a clear (>10-point) winner; failing
@@ -347,23 +346,23 @@ neither is KenPom: the published `mbb_player_crosswalk` asset
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season year. |
-| `espn_team_id` | integer | ESPN team id (canonical key). |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `player_name` | character | Player name. |
-| `espn_athlete_id` | character | ESPN athlete id. |
-| `espn_full_name` | character | ESPN full name. |
-| `espn_jersey` | character | ESPN jersey number. |
-| `espn_position` | character | ESPN position abbreviation. |
-| `fox_athlete_id` | character | Fox athlete id (NA if unmatched). |
-| `fox_player` | character | Fox player name (NA if unmatched). |
-| `fox_jersey` | character | Fox jersey number (NA if unmatched). |
-| `fox_position_group` | character | Fox position group label (NA if unmatched). |
-| `yahoo_player_id` | character | Yahoo player id (NA placeholder). |
-| `yahoo_player_name` | character | Yahoo player name (NA placeholder). |
-| `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
-| `match_confidence` | double | Jaro-Winkler score or 1 for exact (NA if none). |
-| `match_keys` | character | NA (reserved for future use). |
+| `season` | Int64 | Season year. |
+| `espn_team_id` | Int64 | ESPN team id (canonical key). |
+| `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
+| `player_name` | String | Player name. |
+| `espn_athlete_id` | String | ESPN athlete id. |
+| `espn_full_name` | String | ESPN full name. |
+| `espn_jersey` | String | ESPN jersey number. |
+| `espn_position` | String | ESPN position abbreviation. |
+| `fox_athlete_id` | String | Fox athlete id (NA if unmatched). |
+| `fox_player` | String | Fox player name (NA if unmatched). |
+| `fox_jersey` | String | Fox jersey number (NA if unmatched). |
+| `fox_position_group` | String | Fox position group label (NA if unmatched). |
+| `yahoo_player_id` | String | Yahoo player id (NA placeholder). |
+| `yahoo_player_name` | String | Yahoo player name (NA placeholder). |
+| `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
+| `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |
+| `match_keys` | String | NA (reserved for future use). |
 
 **Raises**
 
@@ -463,27 +462,27 @@ each join on the normalized school name after `BART_ALIAS` /
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season year. |
-| `espn_team_id` | integer | ESPN team id (canonical key). |
-| `espn_abbreviation` | character | ESPN abbreviation. |
-| `espn_display_name` | character | ESPN display name (school + mascot). |
-| `espn_short_name` | character | ESPN short name. |
-| `espn_location` | character | ESPN school/location only. |
-| `espn_mascot` | character | ESPN mascot/nickname. |
-| `espn_conference` | character | ESPN conference name. |
-| `fox_team_id` | character | Fox Bifrost team id (NA if unmatched). |
-| `fox_team_name` | character | Fox team name (NA if unmatched). |
-| `fox_section` | character | Fox conference/section label (NA if unmatched). |
-| `bart_team` | character | Torvik team name (NA if unmatched). |
-| `bart_conf` | character | Torvik conference abbreviation (NA if unmatched). |
-| `kp_team` | character | KenPom team name (NA if unmatched). |
-| `kp_conf` | character | KenPom conference abbreviation (NA if unmatched). |
-| `yahoo_team_id` | character | Dotted Yahoo Sports team id (e.g. 'ncaab.t.173'), filled when built with yahoo=True from Yahoo's team listing joined on full name, short name, then nickname; null otherwise and where no Yahoo team matched. |
-| `yahoo_team_name` | character | Yahoo Sports full team name for yahoo_team_id; null when yahoo_team_id is. |
-| `fox_match_confidence` | double | 1 for matched, NA for unmatched. |
-| `bart_match_confidence` | double | 1 for matched, NA for unmatched. |
-| `kp_match_confidence` | double | 1 for matched, NA for unmatched. |
-| `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
+| `season` | Int64 | Season year. |
+| `espn_team_id` | Int64 | ESPN team id (canonical key). |
+| `espn_abbreviation` | String | ESPN abbreviation. |
+| `espn_display_name` | String | ESPN display name (school + mascot). |
+| `espn_short_name` | String | ESPN short name. |
+| `espn_location` | String | ESPN school/location only. |
+| `espn_mascot` | String | ESPN mascot/nickname. |
+| `espn_conference` | String | ESPN conference name. |
+| `fox_team_id` | String | Fox Bifrost team id (NA if unmatched). |
+| `fox_team_name` | String | Fox team name (NA if unmatched). |
+| `fox_section` | String | Fox conference/section label (NA if unmatched). |
+| `bart_team` | String | Torvik team name (NA if unmatched). |
+| `bart_conf` | String | Torvik conference abbreviation (NA if unmatched). |
+| `kp_team` | String | KenPom team name (NA if unmatched). |
+| `kp_conf` | String | KenPom conference abbreviation (NA if unmatched). |
+| `yahoo_team_id` | String | Dotted Yahoo Sports team id (e.g. 'ncaab.t.173'), filled when built with yahoo=True from Yahoo's team listing joined on full name, short name, then nickname; null otherwise and where no Yahoo team matched. |
+| `yahoo_team_name` | String | Yahoo Sports full team name for yahoo_team_id; null when yahoo_team_id is. |
+| `fox_match_confidence` | Float64 | 1 for matched, NA for unmatched. |
+| `bart_match_confidence` | Float64 | 1 for matched, NA for unmatched. |
+| `kp_match_confidence` | Float64 | 1 for matched, NA for unmatched. |
+| `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 
 **Raises**
 
@@ -514,10 +513,10 @@ df.filter(pl.col("match_method") == "espn_only").select("espn_display_name").hea
 
 Detect a 2-initial name shorthand, e.g. `"A B"` or `"B, A"`
 
-(`ExtractorUtils.name_is_initials`, `ExtractorUtils.scala:94-102`).
+(`ExtractorUtils.name_is_initials`).
 Ported here (rather than into `mbb_ncaa_stints.py`) since
 `convert_from_initials` was this module's original consumer;
-promoted from private to public in Task 5e.1 for
+promoted from private to public for
 `mbb_ncaa_roster_parser.py`'s `parse_roster` (a second consumer,
 which only needs `.nonEmpty` -- whether a match exists at all -- to
 reject initials-only roster rows).
@@ -557,19 +556,19 @@ DataFrame with columns `season` (str, `"YYYY-YY"`), `ncaa_team_id` (Int64 -- the
 
 | col_name | type | description |
 |---|---|---|
-| `season` | character | Season year. |
-| `ncaa_team_id` | integer | stats.ncaa.org team id (Int64) for that season; stats.ncaa.org issues a new id every season, so the same school has a different id on each season row. |
-| `ncaa_team` | character | School name as stats.ncaa.org writes it, in AP-style abbreviations (e.g. 'Alabama St.', 'A&M-Corpus Christi'). |
-| `ncaa_conference` | character | stats.ncaa.org label of the team's conference that season (e.g. 'SEC', 'MWC'), taken from the groups tables' NCAA aliases for the season's conference_id. A conference with no NCAA alias gets its SDV abbreviation (men's Great West -> 'GWC'); a team the groups table has no row for keeps the bundled stats.ncaa.org team-list label. The label style can differ by league ('MWC' in men's, 'Mountain West' in women's through 2022-23). |
-| `espn_team_id` | integer | ESPN team id (canonical key). |
-| `espn_display_name` | character | ESPN display name (school + mascot). |
-| `espn_location` | character | ESPN school/location only. |
-| `espn_mascot` | character | ESPN mascot/nickname. |
-| `espn_abbreviation` | character | ESPN abbreviation. |
-| `espn_conference_name` | character | Conference name for that season as the {mbb,wbb}_group_seasons table records it (e.g. 'Colonial Athletic Association' through 2022-23, 'Coastal Athletic Association' after). Null on the same rows as conference_id. |
-| `espn_conference_id` | integer | ESPN conference (group) id for that season, Int64 (e.g. 23 for the Southeastern Conference). ESPN group ids are sport-scoped (Summit League is 49 in men's, 47 in women's) and can change (men's Summit League was 15 before 2008). Null on the same rows as conference_id. |
-| `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
-| `conference_id` | character | SportsDataverse conference (group) id for that season, prefixed by the league (e.g. 'mbb:big-ten'), from the {mbb,wbb}_team_group_seasons release table joined on espn_team_id and the season's ending year. Stable across renames and shared with the {mbb,wbb}_groups tables; null only when that table has no row for the team that season. |
+| `season` | String | Season year. |
+| `ncaa_team_id` | Int64 | stats.ncaa.org team id (Int64) for that season; stats.ncaa.org issues a new id every season, so the same school has a different id on each season row. |
+| `ncaa_team` | String | School name as stats.ncaa.org writes it, in AP-style abbreviations (e.g. 'Alabama St.', 'A&M-Corpus Christi'). |
+| `ncaa_conference` | String | stats.ncaa.org label of the team's conference that season (e.g. 'SEC', 'MWC'), taken from the groups tables' NCAA aliases for the season's conference_id. A conference with no NCAA alias gets its SDV abbreviation (men's Great West -> 'GWC'); a team the groups table has no row for keeps the bundled stats.ncaa.org team-list label. The label style can differ by league ('MWC' in men's, 'Mountain West' in women's through 2022-23). |
+| `espn_team_id` | Int64 | ESPN team id (canonical key). |
+| `espn_display_name` | String | ESPN display name (school + mascot). |
+| `espn_location` | String | ESPN school/location only. |
+| `espn_mascot` | String | ESPN mascot/nickname. |
+| `espn_abbreviation` | String | ESPN abbreviation. |
+| `espn_conference_name` | String | Conference name for that season as the {mbb,wbb}_group_seasons table records it (e.g. 'Colonial Athletic Association' through 2022-23, 'Coastal Athletic Association' after). Null on the same rows as conference_id. |
+| `espn_conference_id` | Int64 | ESPN conference (group) id for that season, Int64 (e.g. 23 for the Southeastern Conference). ESPN group ids are sport-scoped (Summit League is 49 in men's, 47 in women's) and can change (men's Summit League was 15 before 2008). Null on the same rows as conference_id. |
+| `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
+| `conference_id` | String | SportsDataverse conference (group) id for that season, prefixed by the league (e.g. 'mbb:big-ten'), from the {mbb,wbb}_team_group_seasons release table joined on espn_team_id and the season's ending year. Stable across renames and shared with the {mbb,wbb}_groups tables; null only when that table has no row for the team that season. |
 
 **Raises**
 
@@ -614,10 +613,10 @@ DataFrame with columns `team` (str), `conference` (str), `id` (Int64 -- the seas
 
 | col_name | type | description |
 |---|---|---|
-| `team` | character | Team-side label or team identifier. |
-| `conference` | character | Conference name. |
-| `id` | integer | Id. |
-| `season` | character | Season year. |
+| `team` | String | Team-side label or team identifier. |
+| `conference` | String | Conference name. |
+| `id` | Int64 | Id. |
+| `season` | String | Season year. |
 
 **Example**
 
@@ -716,8 +715,7 @@ resolve_ncaa_team_id("South Carolina", "2024-25", league="wbb")
 
 Resolve a raw play-by-play name to its box-score full name, via an
 
-ordered fallback chain (`LineupErrorAnalysisUtils.tidy_player`,
-`:76-144`). Order is semantic -- ported as ordered first-non-`None`:
+ordered fallback chain (`LineupErrorAnalysisUtils.tidy_player`). Order is semantic -- ported as ordered first-non-`None`:
 
 1. Cache hit (see the module docstring's asymmetric-cache note).
 2. Exact box-score code match.

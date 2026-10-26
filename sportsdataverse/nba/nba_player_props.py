@@ -14,7 +14,7 @@ factor captures the pace linkage without a per-game team-possession join.`
 
 Fitted-constant note: the Normal points SD and the count-dispersion are seeded
 (``_PTS_SD_A/_B``, ``_COUNT_DISPERSION``) from the box-log residuals in
-``dev/nba_prediction/fit_player_props.py``; refit there if the Phase-5 gate
+``tools/models/nba_prediction/fit_player_props.py``; refit there if the Phase-5 gate
 floors move.
 """
 
@@ -45,7 +45,7 @@ __all__ = [
 ]
 
 _COUNT_STATS = ("reb", "ast", "fg3m")
-# points SD law sd = a + b*sqrt(mu), FITTED (dev/nba_prediction/fit_player_props.py,
+# points SD law sd = a + b*sqrt(mu), FITTED (tools/models/nba_prediction/fit_player_props.py,
 # 2026-07-08: least squares of per-player realized pts-SD on sqrt(mean) over 320
 # rotation players).
 _PTS_SD_A = 1.406

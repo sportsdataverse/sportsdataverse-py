@@ -27,7 +27,7 @@ so the bridge keys on `school + " " + mascot`). **132 FBS teams match** — the
 `pff_team_grades_2023.parquet` row count and the number the oracle test pins.
 
 **Reproduce from tracked inputs** (no network, no PFF session needed — the raw
-payload is committed): `uv run python dev/pff_oracle/build_fixture.py`. The
+payload is committed): `uv run python tools/models/pff_oracle/build_fixture.py`. The
 separate `tests/fixtures/pff/ncaa_teams_overview.json` (12 teams) and
 `ncaa_facet_passing_summary.json` (15 players) are trimmed *parser* fixtures for
 `test_pff_parsers.py`, not the oracle rebuild source.

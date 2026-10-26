@@ -1,9 +1,9 @@
 ---
-title: EUROLEAGUE
-sidebar_label: EUROLEAGUE
-description: "sdv-py EUROLEAGUE: endpoint references, dataset loaders and parsers for EUROLEAGUE in the SportsDataverse Python package."
+title: EuroLeague
+sidebar_label: EuroLeague
+description: "sdv-py EuroLeague: endpoint references, dataset loaders and parsers for EuroLeague in the SportsDataverse Python package."
 ---
-# EUROLEAGUE (`sportsdataverse.euroleague`)
+# EuroLeague (`sportsdataverse.basketball.euroleague`)
 
 ## Data sources
 
@@ -20,8 +20,8 @@ description: "sdv-py EUROLEAGUE: endpoint references, dataset loaders and parser
 ## See also
 
 - [hoopR](https://hoopR.sportsdataverse.org) — the R home of SportsDataverse basketball, where the EuroLeague wrappers land next
-- [sdvplot](https://github.com/sportsdataverse/sdvplot) — draws the FIBA court the shot chart's hoop-origin centimeter coordinates land on
-- [sdvplotR](https://github.com/sportsdataverse/sdvplotR) — the R twin, same FIBA court
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — draws the FIBA court the shot chart's hoop-origin centimeter coordinates land on
+- [sdvplotR](https://sdvplotR.sportsdataverse.org/) — the R twin, same FIBA court
 - [euroleague-api](https://github.com/giasemidis/euroleague_api) — community Python client for the same EuroLeague and EuroCup APIs
 
 ## Examples

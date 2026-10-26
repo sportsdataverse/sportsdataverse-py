@@ -1598,7 +1598,7 @@ def load_nba_stats_lineups_v3(seasons, return_as_pandas: bool = False):
 
     Forwards to :func:`load_nba_stats_game_lineups`, which reads the ``nba_stats_game_lineups``
     release -- a superset of the retired tag this loader used to read.
-    Will be removed in 0.2.0; migrate callers to
+    Will be removed in 0.4.0; migrate callers to
     ``load_nba_stats_game_lineups``. The ``seasons`` argument is unchanged.
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_game_lineups
@@ -1652,7 +1652,7 @@ def load_nba_stats_lineups_v3(seasons, return_as_pandas: bool = False):
     warn_deprecated(
         "load_nba_stats_lineups_v3",
         replacement="load_nba_stats_game_lineups",
-        removed_in="0.2.0",
+        removed_in="0.4.0",
     )
     # Pure pass-through: both loaders take the season's START year, so no offset
     # is applied here. The START -> END year translation lives in the target's
@@ -2123,7 +2123,7 @@ def load_nba_stats_pbp_v3(seasons, return_as_pandas: bool = False):
 
     Forwards to :func:`load_nba_stats_pbp`, which reads the ``nba_stats_pbp``
     release -- a superset of the retired tag this loader used to read.
-    Will be removed in 0.2.0; migrate callers to
+    Will be removed in 0.4.0; migrate callers to
     ``load_nba_stats_pbp``. The ``seasons`` argument is unchanged.
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbp
@@ -2212,7 +2212,7 @@ def load_nba_stats_pbp_v3(seasons, return_as_pandas: bool = False):
     warn_deprecated(
         "load_nba_stats_pbp_v3",
         replacement="load_nba_stats_pbp",
-        removed_in="0.2.0",
+        removed_in="0.4.0",
     )
     # Pure pass-through: both loaders take the season's START year, so no offset
     # is applied here. The START -> END year translation lives in the target's
@@ -2688,7 +2688,7 @@ def load_nba_stats_possessions_v3(seasons, return_as_pandas: bool = False):
 
     Forwards to :func:`load_nba_stats_possessions`, which reads the ``nba_stats_possessions``
     release -- a superset of the retired tag this loader used to read.
-    Will be removed in 0.2.0; migrate callers to
+    Will be removed in 0.4.0; migrate callers to
     ``load_nba_stats_possessions``. The ``seasons`` argument is unchanged.
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_possessions
@@ -2763,7 +2763,7 @@ def load_nba_stats_possessions_v3(seasons, return_as_pandas: bool = False):
     warn_deprecated(
         "load_nba_stats_possessions_v3",
         replacement="load_nba_stats_possessions",
-        removed_in="0.2.0",
+        removed_in="0.4.0",
     )
     # Pure pass-through: both loaders take the season's START year, so no offset
     # is applied here. The START -> END year translation lives in the target's

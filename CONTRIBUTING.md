@@ -136,9 +136,9 @@ checkout's interpreter from inside a worktree: check `sportsdataverse.__file__` 
 Supported: 3.10, 3.11, 3.12, 3.13, 3.14. The suite runs on **3.13.2 only**; a separate
 job installs every extra and imports every module on the **3.10 floor** (`tests.yml`
 `floor-import`). No other version runs the full suite. New modules use modern type syntax
-(`dict[str, X]`, `X | None`). DO add `from __future__ import annotations` — 931 of the
-991 `.py` files under `sportsdataverse/` already do (October 2026), and it keeps `X | None`
-valid on the 3.10 floor.
+(`dict[str, X]`, `X | None`). DO add `from __future__ import annotations` — nearly every
+`.py` file under `sportsdataverse/` already does, and it keeps `X | None` valid on the 3.10
+floor.
 
 ## Code standards for new modules
 
@@ -203,14 +203,15 @@ are intentionally migrating).
   varargs `pl.struct(*cols)`, etc.). The 0.18 → 1.x migration of the
   legacy `*_pbp.py` modules landed in May 2026; if you see lingering
   0.18-style call sites, treat them as bugs.
-- **Tests for new live-API modules** go under `tests/wbb/` or
-  `tests/wnba/` (mirroring the source layout) and use the
-  `skip_if_no_live` decorator from `tests/conftest.py`. Live tests are
-  gated by the `SDV_PY_LIVE_TESTS=1` environment variable, which `live-tests.yml`
-sets on pushes to main and manual runs (not on PRs; opt out with a `workflow_dispatch`
-`live_tests=false`) and `live-tests-cron.yml` always sets; `nba_stats` / `wnba_stats` live tests use
-the separate `SDV_PY_NBA_STATS_LIVE=1` gate that no workflow sets. The gates keep PR CI and
-  routine local runs off upstream APIs.
+- **Tests for new live-API modules** go under `tests/<pkg>/` (mirroring the
+  source layout) and use the `skip_if_no_live` decorator from
+  `tests/conftest.py`. Live tests are gated by the `SDV_PY_LIVE_TESTS=1`
+  environment variable, which `live-tests.yml` sets on pushes to main and
+  manual runs (not on PRs; opt out with a `workflow_dispatch`
+  `live_tests=false`) and `live-tests-cron.yml` always sets; `nba_stats` /
+  `wnba_stats` / `nbagl_stats` live tests use the separate
+  `SDV_PY_NBA_STATS_LIVE=1` gate that no workflow sets. The gates keep PR CI
+  and routine local runs off upstream APIs.
 - **Warnings are errors** (`pytest.ini`). A test that exercises a warning path asserts
   it with `pytest.warns(..., match=...)`; one that trips a warning incidentally filters
   exactly that message, with a comment naming the test that asserts it. Fix a warning
@@ -347,25 +348,25 @@ message format and `stacklevel` stay consistent package-wide.
 - **`removed_in` is a commitment, not a hint.** An alias whose `removed_in`
   version has shipped must be REMOVED in that release, not carried forward. The
   eleven NFL per-type loader aliases marked `removed_in="0.1.0"` were carried
-  through 0.1.0-0.1.4 and are removed in 0.1.5; do not let that happen again.
+  through 0.1.0-0.1.4 and are removed in 0.2.0; do not let that happen again.
 - **Emit via the helper, never hand-rolled `warnings.warn`:**
 
   ```python
   # In-body — when the function preserves custom legacy behavior:
   from sportsdataverse._deprecation import warn_deprecated
 
-  def load_nfl_ngs_passing(...):
+  def old_loader(...):
       warn_deprecated(
-          "load_nfl_ngs_passing",
-          replacement="load_nfl_nextgen_stats(stat_type='passing')",
-          removed_in="0.1.0",
+          "old_loader",
+          replacement="new_loader(kind='passing')",
+          removed_in="0.4.0",
       )
       ...
 
   # Decorator — for a plain forwarding alias:
   from sportsdataverse._deprecation import deprecated
 
-  @deprecated(replacement="new_fn", removed_in="0.1.0")
+  @deprecated(replacement="new_fn", removed_in="0.4.0")
   def old_fn(*args, **kwargs):
       return new_fn(*args, **kwargs)
   ```
@@ -503,8 +504,9 @@ snapshot, followed by a GitHub Release once it has merged to `main`.
 
 **1. Pick the version.** Pending `changelog.d/*.breaking.md` fragments force a minor (or major)
 bump: `tools/release_changelog.py` refuses to release them as a patch of the newest
-`## x.y.z Release` heading. With 0.1.5 the newest release and breaking fragments pending, the
-next release is **0.2.0**, not 0.1.6.
+`## x.y.z Release` heading. 0.1.4 is the newest version on PyPI and breaking fragments are
+pending, so the next release is **0.2.0**. It ships first as the PyPI pre-release **`0.2.0b1`**
+(a PEP 440 beta; see "Pre-releases" below), and the final `0.2.0` follows it.
 
 **2. Bump the version** in `pyproject.toml` (`[project] version`) and in `recipe/meta.yaml`
 (`{% set version = "..." %}`; `tools/check_recipe_mirror.py` asserts the two match), then re-lock
@@ -530,8 +532,7 @@ uv run python tools/codegen/generate.py && uv run python tools/codegen/generate.
 ```
 
 **4. Snapshot the docs.** Freeze a permanent snapshot of the docs for that release, and keep going.
-**This had not been done since 0.0.75** — 0.1.0 through 0.1.4 have no snapshot,
-which 0.1.5 fixes. Only the three newest snapshots are built
+Only the three newest snapshots are built
 (`VERSIONS_TO_KEEP=3` in `docusaurus.config.ts`), so `/docs/0.0.50/` is no longer
 served:
 
@@ -558,3 +559,22 @@ gh release create v<x.y.z> --target main --title "sportsdataverse-py <x.y.z>" --
 wheel with `uv build` and uploads them to PyPI through Trusted Publishing (the `pypi`
 environment; no token). A manual `workflow_dispatch` only builds and uploads the artifacts, as
 a dry run, and never publishes; the rolling `docs-index` release is skipped.
+
+**Pre-releases (`0.2.0b1`).** A beta follows the same five steps with a PEP 440 pre-release
+version, with three differences:
+
+- Steps 2-3 use the pre-release version: `version = "0.2.0b1"` in `pyproject.toml` and
+  `recipe/meta.yaml`, and `uv run python tools/release_changelog.py 0.2.0b1`, which writes a
+  `## 0.2.0b1 Release` heading (the minor-bump check reads its release part, `0.2.0`).
+- Skip step 4: a beta is served by **main (latest)**; snapshot the docs at the final release.
+- Step 5 marks the GitHub Release as a pre-release, tagged `v0.2.0b1`:
+
+  ```sh
+  gh release create v0.2.0b1 --target main --prerelease --title "sportsdataverse-py 0.2.0b1" --notes "<the Highlights paragraph>"
+  ```
+
+  `release: published` fires for a pre-release too, so `python-publish.yml` uploads it to PyPI,
+  which marks it as a pre-release. `pip install sportsdataverse` keeps resolving the newest
+  stable version, so tell users to install the beta with `pip install --pre sportsdataverse`
+  (or `pip install --pre "sportsdataverse[extra]"`); uv takes it from a specifier that names a
+  pre-release, such as `uv add "sportsdataverse>=0.2.0b1"`.

@@ -1,10 +1,10 @@
 ---
-title: F1 — additional Python functions
+title: Formula 1 — additional Python functions
 sidebar_label: Additional functions
-description: "F1 — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
+description: "Formula 1 — additional Python functions — additional functions in sdv-py, the SportsDataverse Python package."
 sidebar_position: 50
 ---
-# F1 — additional Python functions
+# Formula 1 — additional Python functions
 
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.f1` that are not
 generated API-endpoint wrappers (those have their own reference pages).
@@ -35,23 +35,23 @@ A polars/pandas DataFrame with the `laps_page` columns (`season`, `round`, `race
 
 | col_name | type | description |
 |---|---|---|
-| `round` | integer |  |
-| `season` | integer |  |
-| `race_circuit_location_country` | character |  |
-| `race_circuit_location_lat` | double |  |
-| `race_circuit_location_locality` | character |  |
-| `race_circuit_location_long` | double |  |
-| `race_circuit_id` | character |  |
-| `race_circuit_name` | character |  |
-| `race_circuit_url` | character |  |
-| `race_date` | character |  |
-| `race_name` | character |  |
-| `race_time` | character |  |
-| `race_url` | character |  |
-| `lap_number` | integer |  |
-| `driver_id` | character |  |
-| `position` | integer |  |
-| `time` | character |  |
+| `round` | Int64 |  |
+| `season` | Int64 |  |
+| `race_circuit_location_country` | String |  |
+| `race_circuit_location_lat` | Float64 |  |
+| `race_circuit_location_locality` | String |  |
+| `race_circuit_location_long` | Float64 |  |
+| `race_circuit_id` | String |  |
+| `race_circuit_name` | String |  |
+| `race_circuit_url` | String |  |
+| `race_date` | String |  |
+| `race_name` | String |  |
+| `race_time` | String |  |
+| `race_url` | String |  |
+| `lap_number` | Int64 |  |
+| `driver_id` | String |  |
+| `position` | Int64 |  |
+| `time` | String |  |
 
 **Raises**
 

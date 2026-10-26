@@ -141,8 +141,8 @@ def __getattr__(name: str) -> Any:  # PEP 562: warn on access, not on import
         warn_deprecated(
             f"sportsdataverse.config.{name}",
             replacement="the league's generated load_<league>_* loader",
-            since="0.1.6",
-            removed_in="0.2.0",
+            since="0.2.0",
+            removed_in="0.4.0",
         )
         return _DEPRECATED[name]
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

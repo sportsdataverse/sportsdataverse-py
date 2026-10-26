@@ -1,9 +1,9 @@
 ---
-title: F1
-sidebar_label: F1
-description: "sdv-py F1: endpoint references, dataset loaders and parsers for F1 in the SportsDataverse Python package."
+title: Formula 1
+sidebar_label: Formula 1
+description: "sdv-py Formula 1: endpoint references, dataset loaders and parsers for Formula 1 in the SportsDataverse Python package."
 ---
-# F1 (`sportsdataverse.f1`)
+# Formula 1 (`sportsdataverse.f1`)
 
 ## Data sources
 

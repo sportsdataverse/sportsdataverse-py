@@ -179,7 +179,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 
 ## See also
 
-- [sdvplot](https://github.com/sportsdataverse/sdvplot) — `surface("nfl")` draws the field with a team's end zones
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("nfl")` draws the field with a team's end zones
 - [sportypy](https://sportypy.sportsdataverse.org/) — the regulation NFL field sdvplot draws with
 
 ## Examples
@@ -239,7 +239,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`nf
 | [`load_pfr_advstats`](reference/additional/nflverse-data-releases-4#load_pfr_advstats) | [`load_pfr_advstats`](https://nflreadr.nflverse.com/reference/load_pfr_advstats.html) |
 | [`load_player_stats`](reference/additional/nflverse-data-releases-4#load_player_stats) | [`load_player_stats`](https://nflreadr.nflverse.com/reference/load_player_stats.html) |
 | [`load_players`](reference/additional/nflverse-data-releases-4#load_players) | [`load_players`](https://nflreadr.nflverse.com/reference/load_players.html) |
-| [`load_rosters`](reference/additional/nflverse-data-releases-5#load_rosters) | [`load_rosters`](https://nflreadr.nflverse.com/reference/load_rosters.html) |
+| [`load_rosters`](reference/additional/nflverse-data-releases-4#load_rosters) | [`load_rosters`](https://nflreadr.nflverse.com/reference/load_rosters.html) |
 | [`load_rosters_weekly`](reference/additional/nflverse-data-releases-5#load_rosters_weekly) | [`load_rosters_weekly`](https://nflreadr.nflverse.com/reference/load_rosters_weekly.html) |
 | [`load_schedules`](reference/additional/nflverse-data-releases-5#load_schedules) | [`load_schedules`](https://nflreadr.nflverse.com/reference/load_schedules.html) |
 | [`load_snap_counts`](reference/additional/nflverse-data-releases-5#load_snap_counts) | [`load_snap_counts`](https://nflreadr.nflverse.com/reference/load_snap_counts.html) |

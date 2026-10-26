@@ -40,7 +40,7 @@ def pwhl_team_ratings(seasons: Any, *, league: Any = None, **kwargs: Any) -> Any
 
     Args:
         seasons: an int or iterable of PWHL season end-years (``>= 2024``).
-        league: deprecated and ignored (the ratings are always PWHL); passing it warns.
+        league: deprecated and ignored (the ratings are always PWHL); passing it warns. Removed in 0.4.0.
         **kwargs: forwarded to :func:`pwhl_ratings_from_proxy` (``as_of_date``,
             ``xg_model``, ``xg_method``, ``return_as_pandas``).
 
@@ -62,7 +62,7 @@ def pwhl_team_ratings(seasons: Any, *, league: Any = None, **kwargs: Any) -> Any
     """
     if league is not None:
         warnings.warn(
-            "pwhl_team_ratings(league=...) is deprecated and ignored: the ratings are always PWHL",
+            "pwhl_team_ratings(league=...) is deprecated and ignored (the ratings are always PWHL); it is removed in 0.4.0",
             DeprecationWarning,
             stacklevel=2,
         )

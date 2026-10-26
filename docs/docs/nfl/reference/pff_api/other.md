@@ -24,16 +24,16 @@ List the leagues you can read, with their seasons and weeks
 
 | col_name | type | description |
 |---|---|---|
-| `abbreviation` | character | League abbreviation as the source lists it (e.g. NFL). |
-| `default_season` | numeric | Season the source API currently treats as the default for this league. |
-| `default_week` | numeric | Week number the source API currently treats as the default for this league. |
-| `default_week_group` | character | Identifier of the week grouping (e.g., regular season or postseason phase) currently set as the league default. |
-| `id` | numeric | Numeric league id from the source API (PFF: 1 = NFL). |
-| `name` | character | League display name as the source lists it (PFF: 'Pro Football'). |
-| `seasons` | list | Nested list (stringified) of the seasons the source publishes for the league. |
-| `slug` | character | URL slug of the league on premium.pff.com (e.g. nfl). |
-| `week_groups` | list | Nested list of week-group objects (phase label and week span) defined for the league. |
-| `weeks` | list | Nested list of week objects available for the league. |
+| `abbreviation` | String | League abbreviation as the source lists it (e.g. NFL). |
+| `default_season` | Float64 | Season the source API currently treats as the default for this league. |
+| `default_week` | Float64 | Week number the source API currently treats as the default for this league. |
+| `default_week_group` | String | Identifier of the week grouping (e.g., regular season or postseason phase) currently set as the league default. |
+| `id` | Float64 | Numeric league id from the source API (PFF: 1 = NFL). |
+| `name` | String | League display name as the source lists it (PFF: 'Pro Football'). |
+| `seasons` | List | Nested list (stringified) of the seasons the source publishes for the league. |
+| `slug` | String | URL slug of the league on premium.pff.com (e.g. nfl). |
+| `week_groups` | List | Nested list of week-group objects (phase label and week span) defined for the league. |
+| `weeks` | List | Nested list of week objects available for the league. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
@@ -73,20 +73,20 @@ List game results for a league, season and week
 
 | col_name | type | description |
 |---|---|---|
-| `away_franchise_id` | numeric | PFF franchise id of the away team. |
-| `away_team` | list | Away team object (JSON-stringified in the tidy frame). |
-| `has_stats` | logical | Whether PFF has published stats for the game. |
-| `home_franchise_id` | numeric | PFF franchise id of the home team. |
-| `home_team` | list | Home team object (JSON-stringified in the tidy frame). |
-| `id` | numeric | PFF game id (integer join key). |
-| `league` | list | Nested league object of the game (stringified) with the PFF league id, name and abbreviation (e.g. NFL). |
-| `league_id` | numeric | PFF league id (integer). |
-| `lock_status` | character | Data lock/publish status for the game. |
-| `score` | list | Nested final-score object of the game (stringified) with away_team and home_team points. |
-| `season` | numeric | Season (starting year) of the game. |
-| `stadium_id` | numeric | PFF stadium identifier for the game venue. |
-| `start` | character | Kickoff timestamp (ISO 8601 string). |
-| `week` | numeric | Week number of the game. |
+| `away_franchise_id` | Float64 | PFF franchise id of the away team. |
+| `away_team` | List | Away team object (JSON-stringified in the tidy frame). |
+| `has_stats` | Boolean | Whether PFF has published stats for the game. |
+| `home_franchise_id` | Float64 | PFF franchise id of the home team. |
+| `home_team` | List | Home team object (JSON-stringified in the tidy frame). |
+| `id` | Float64 | PFF game id (integer join key). |
+| `league` | List | Nested league object of the game (stringified) with the PFF league id, name and abbreviation (e.g. NFL). |
+| `league_id` | Float64 | PFF league id (integer). |
+| `lock_status` | String | Data lock/publish status for the game. |
+| `score` | List | Nested final-score object of the game (stringified) with away_team and home_team points. |
+| `season` | Float64 | Season (starting year) of the game. |
+| `stadium_id` | Float64 | PFF stadium identifier for the game venue. |
+| `start` | String | Kickoff timestamp (ISO 8601 string). |
+| `week` | Float64 | Week number of the game. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
@@ -125,20 +125,20 @@ Search the player directory by name or id
 
 | col_name | type | description |
 |---|---|---|
-| `college` | character | College the player attended, as the source lists it. |
-| `current_class` | character | Player's current college class designation (e.g., Freshman, Senior), per PFF. |
-| `current_eligible_year` | numeric | Year the player is or was first draft-eligible, per PFF. |
-| `dob` | character | Player's date of birth (YYYY-MM-DD). |
-| `draft` | list | Nested draft-selection details for the player (year, round, pick, and franchise) as returned by the source API. |
-| `first_name` | character | Player's first name as the source lists it. |
-| `height` | numeric | Player's height as the source encodes it (PFF uses feet and inches without a separator, 602 = 6'02"; others use inches or centimetres). |
-| `id` | numeric | PFF numeric player id, the key of the player-scoped endpoints. |
-| `jersey_number` | character | Jersey number as a string. |
-| `last_name` | character | Player's last name as the source lists it. |
-| `position` | character | Position abbreviation as the source lists it (e.g. QB, WR). |
-| `speed` | numeric | 40-yard-dash time in seconds as recorded by PFF. |
-| `team` | list | Current team of the player as the source ships it (a nested team object, stringified, or a team code). |
-| `weight` | numeric | Player's weight as the source lists it (pounds for US sources). |
+| `college` | String | College the player attended, as the source lists it. |
+| `current_class` | String | Player's current college class designation (e.g., Freshman, Senior), per PFF. |
+| `current_eligible_year` | Float64 | Year the player is or was first draft-eligible, per PFF. |
+| `dob` | String | Player's date of birth (YYYY-MM-DD). |
+| `draft` | List | Nested draft-selection details for the player (year, round, pick, and franchise) as returned by the source API. |
+| `first_name` | String | Player's first name as the source lists it. |
+| `height` | Float64 | Player's height as the source encodes it (PFF uses feet and inches without a separator, 602 = 6'02"; others use inches or centimetres). |
+| `id` | Float64 | PFF numeric player id, the key of the player-scoped endpoints. |
+| `jersey_number` | String | Jersey number as a string. |
+| `last_name` | String | Player's last name as the source lists it. |
+| `position` | String | Position abbreviation as the source lists it (e.g. QB, WR). |
+| `speed` | Float64 | 40-yard-dash time in seconds as recorded by PFF. |
+| `team` | List | Current team of the player as the source ships it (a nested team object, stringified, or a team code). |
+| `weight` | Float64 | Player's weight as the source lists it (pounds for US sources). |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 

@@ -6,7 +6,7 @@ docstring:
     Referer); the session cookie jar and sessid are kept in-process, so nothing needs
     reusing across calls.
   notes:
-  - 'Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform
+  - 'Owner flag: the KHL and its webcaster platform
     are run by Russian operators, some clubs by sanctioned state companies. Fetching
     on your own machine is fine; any published data release, hosted mirror or redistribution
     needs owner (sanctions / legal) sign-off first.'

@@ -42,7 +42,7 @@ SPEC = "vhl.openapi.yaml"
 SNIPPET = ROOT / "tools" / "codegen" / "vhl_column_descriptions.snippet.yaml"
 #: Owner flag (sdv-internal-refs/vhl/README.md), rendered as a Notes item on every wrapper.
 SANCTIONS = (
-    "Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league operators, and "
+    "Owner flag: the VHL is run by Russian league operators, and "
     "several clubs are owned or sponsored by sanctioned state companies. Fetching on your own machine "
     "is fine; a published data release or a hosted mirror needs the owner's sanctions / legal sign-off first."
 )
@@ -398,7 +398,7 @@ def main() -> None:
         "runtime_imports": ["_get"],
         "docstring": {
             "example_import": True,
-            "raw_doc": "the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus "
+            "raw_doc": "the page's parsed record (``dict``), plus "
             "``_request`` (season, stage, tn and the ids asked for)",
             "raises": [
                 "sportsdataverse.errors.NoDataError: the VHL has nothing for the request (a season without "

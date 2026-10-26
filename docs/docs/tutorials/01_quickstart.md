@@ -1,5 +1,6 @@
 ---
 title: Quickstart tutorial
+description: "One pip install, every major league. sportsdataverse is a single Python package that speaks to the official, premium native data feeds across the sporting world — the same endpoints the leagues use…"
 sidebar_label: Quickstart
 sidebar_position: 1
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/01_quickstart.ipynb
@@ -892,7 +893,7 @@ edge = safe("nhl_edge_skater_speed_top_10",
  else "NHL EDGE leaderboard unavailable right now")
 ```
 
-    ⏭️  nhl_edge_skater_speed_top_10: NoDataError: NoDataError: No data found for https://api-web.nhle.com/v1/edge/skater-speed-top-10/forwards/maxskatingspeed/20262027/2
+    ⏭️  nhl_edge_skater_speed_top_10: NoDataError: No data found for https://api-web.nhle.com/v1/edge/skater-speed-top-10/forwards/maxskatingspeed/20262027/2
 
 
 

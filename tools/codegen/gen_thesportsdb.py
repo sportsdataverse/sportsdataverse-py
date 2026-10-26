@@ -3,7 +3,7 @@ TheSportsDB API v1 OpenAPI spec (``thesportsdb.com/api/v1/json/{key}``, read-onl
 
 The API key is a **path segment**, not a query parameter, so the emitted ``host``
 keeps the literal ``{key}`` placeholder and the YAML points ``getter_module`` at
-``sportsdataverse.thesportsdb.thesportsdb_runtime``, which substitutes the
+``sportsdataverse.providers.thesportsdb.thesportsdb_runtime``, which substitutes the
 caller's key (``$THESPORTSDB_API_KEY``, else the free test key ``123``) at call time.
 
 Idempotent: same spec + same captures -> byte-identical output. Modeled on
@@ -39,7 +39,7 @@ from gen_soccer_common import (
 )
 
 from sportsdataverse.dl_utils import underscore
-from sportsdataverse.thesportsdb.thesportsdb_parsers import parse_thesportsdb
+from sportsdataverse.providers.thesportsdb.thesportsdb_parsers import parse_thesportsdb
 
 # The free test key goes in the host rather than a ``{key}`` placeholder: the host is what the
 # reference page prints as its base URL and bakes into every "Valid URL" example, and a
@@ -156,8 +156,8 @@ def main() -> None:
         "host": HOST,
         "name_pattern": "thesportsdb_{short}",
         "module": STEM,
-        "parser_module": "thesportsdb.thesportsdb_parsers",
-        "getter_module": "sportsdataverse.thesportsdb.thesportsdb_runtime",
+        "parser_module": "providers.thesportsdb.thesportsdb_parsers",
+        "getter_module": "sportsdataverse.providers.thesportsdb.thesportsdb_runtime",
         "qualifier": "",
         "passthrough_query": False,
         "docstring": {

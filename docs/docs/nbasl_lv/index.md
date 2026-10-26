@@ -1,9 +1,9 @@
 ---
-title: NBASL_LV
-sidebar_label: NBASL_LV
-description: "sdv-py NBASL_LV: endpoint references, dataset loaders and parsers for NBASL_LV in the SportsDataverse Python package."
+title: NBA Summer League (Las Vegas)
+sidebar_label: NBA Summer League (Las Vegas)
+description: "sdv-py NBA Summer League (Las Vegas): endpoint references, dataset loaders and parsers for NBA Summer League (Las Vegas) in the SportsDataverse Python package."
 ---
-# NBASL_LV (`sportsdataverse.nbasl_lv`)
+# NBA Summer League (Las Vegas) (`sportsdataverse.basketball.nbasl_lv`)
 
 ## Data sources
 

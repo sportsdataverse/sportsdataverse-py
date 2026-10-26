@@ -1,11 +1,11 @@
 ---
-title: "CBS — CBS Sports NAPI (api.cbssports.com/napi) — Player"
+title: "CBS Sports — CBS Sports NAPI (api.cbssports.com/napi) — Player"
 sidebar_label: "Player"
 sidebar_position: 2
-description: "CBS — CBS Sports NAPI (api.cbssports.com/napi) — Player — function reference in sdv-py, the SportsDataverse Python package."
+description: "CBS Sports — CBS Sports NAPI (api.cbssports.com/napi) — Player — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# CBS — CBS Sports NAPI (api.cbssports.com/napi) — Player
+# CBS Sports — CBS Sports NAPI (api.cbssports.com/napi) — Player
 
 ## cbs_player
 

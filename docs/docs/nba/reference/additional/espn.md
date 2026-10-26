@@ -26,14 +26,14 @@ Polars dataframe containing calendar dates for the requested season.
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season year. |
-| `datetime` | character | The calendar day as ESPN sends it, an ISO 8601 UTC timestamp string. |
-| `date` | character | Date in YYYY-MM-DD format. |
-| `year` | character | 4-digit year. |
-| `month` | character | Month of the calendar day as a two-digit string. |
-| `day` | character | Day number within the month. |
-| `dateURL` | character | The calendar day as YYYYMMDD, the dates= value of that day's scoreboard request. |
-| `url` | character | RotoWire player page URL. |
+| `season` | Int64 | Season year. |
+| `datetime` | String | The calendar day as ESPN sends it, an ISO 8601 UTC timestamp string. |
+| `date` | String | Date in YYYY-MM-DD format. |
+| `year` | String | 4-digit year. |
+| `month` | String | Month of the calendar day as a two-digit string. |
+| `day` | String | Day number within the month. |
+| `dateURL` | String | The calendar day as YYYYMMDD, the dates= value of that day's scoreboard request. |
+| `url` | String | RotoWire player page URL. |
 
 **Raises**
 
@@ -78,103 +78,103 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 
 | col_name | type | description |
 |---|---|---|
-| `athlete_id` | integer | Unique athlete identifier (ESPN). |
-| `athlete_uid` | character | ESPN athlete UID (universal identifier). |
-| `athlete_guid` | character | ESPN athlete GUID. |
-| `athlete_type` | character | Athlete type / class. |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
-| `full_name` | character | Player's full name. |
-| `athlete_display_name` | character | Athlete display name (full). |
-| `short_name` | character | Short display name. |
-| `weight` | double | Player weight in pounds. |
-| `display_weight` | character | Player weight in display format (e.g. '180 lbs'). |
-| `height` | double | Player height (string e.g. '6-2' or inches). |
-| `display_height` | character | Player height in display format (e.g. '6-2'). |
-| `age` | integer | Player age (in years). |
-| `date_of_birth` | character | Date of birth (YYYY-MM-DD). |
-| `debut_year` | integer | Year of professional debut. |
-| `citizenship` | character | Citizenship. |
-| `slug` | character | URL-safe identifier. |
-| `jersey` | character | Jersey number worn by the player. |
-| `linked` | logical | TRUE if the record is linked to a related entity. |
-| `active` | logical | TRUE if the row represents an active record (player / team / season). |
-| `alternate_ids_sdr` | character |  |
-| `birth_place_city` | character | Birth place city. |
-| `birth_place_country` | character | Birth place country. |
-| `headshot_href` | character | Headshot image URL. |
-| `headshot_alt` | character | Alternative-text label for the headshot. |
-| `contracts_href` | character |  |
-| `experience_years` | integer | Experience years. |
-| `contract_href` | character |  |
-| `contract_bird_status` | integer | Contract bird status. |
-| `contract_base_year_compensation_active` | logical | Contract base year compensation active. |
-| `contract_poison_pill_provision_active` | logical |  |
-| `contract_incoming_trade_value` | integer | Contract incoming trade value. |
-| `contract_outgoing_trade_value` | integer | Contract outgoing trade value. |
-| `contract_minimum_salary_exception` | logical | Contract minimum salary exception. |
-| `contract_option_type` | integer | Contract option type. |
-| `contract_salary` | integer | Contract salary. |
-| `contract_salary_remaining` | integer | Contract salary remaining. |
-| `contract_years_remaining` | integer | Contract years remaining. |
-| `contract_season_href` | character |  |
-| `contract_team_href` | character |  |
-| `contract_trade_kicker_active` | logical | Contract trade kicker active. |
-| `contract_trade_kicker_percentage` | double | Contract trade kicker percentage (0-1 decimal). |
-| `contract_trade_kicker_value` | integer | Contract trade kicker value. |
-| `contract_trade_kicker_trade_value` | integer | Contract trade kicker trade value. |
-| `contract_trade_restriction` | logical | Contract trade restriction. |
-| `contract_unsigned_foreign_pick` | logical | Contract unsigned foreign pick. |
-| `contract_active` | logical | Contract active. |
-| `draft_display_text` | character | Draft display text. |
-| `draft_round` | integer | Round of the draft selection. |
-| `draft_year` | integer | Draft year (4-digit). |
-| `draft_selection` | integer | Draft selection. |
-| `draft_team_href` | character |  |
-| `draft_pick_href` | character |  |
-| `status_id` | integer | Status identifier. |
-| `status_name` | character | Status label. |
-| `status_type` | character | Status type. |
-| `status_abbreviation` | character | Status abbreviation. |
-| `position_id` | integer | ESPN's numeric identifier of the athlete's listed position (the Core v2 position resource id). |
-| `position_name` | character | Name of the athlete's listed position from ESPN's position resource, e.g. Guard or Forward. |
-| `position_display_name` | character | Display form of the athlete's listed position as ESPN renders it; usually equal to position_name. |
-| `position_abbreviation` | character | Short code of the athlete's listed position (e.g. G, F, RW, OL), from ESPN's position resource. |
-| `position_leaf` | logical | Whether the position is a leaf of ESPN's position tree; False marks a grouping, not a specific role. |
-| `birth_place_state` | character | Birth place state. |
-| `college_athlete_href` | character |  |
-| `hand_type` | character | Hand type. |
-| `hand_abbreviation` | character | Hand abbreviation. |
-| `hand_display_value` | character | Hand display value. |
-| `starter` | logical | TRUE if the player was in the starting lineup; FALSE otherwise. |
-| `jersey_right` | character |  |
-| `valid` | logical | Valid. |
-| `did_not_play` | logical | TRUE if the player did not appear in the game. |
-| `display_name` | character | Display name. |
-| `reason` | character | Reason. |
-| `ejected` | logical | TRUE if the player was ejected from the game. |
-| `athlete_href` | character |  |
-| `position_href` | character |  |
-| `statistics_href` | character |  |
-| `team_id` | integer | Unique team identifier. |
-| `order` | integer | Display order within the result set. |
-| `home_away` | character | Game venue label ('home' or 'away'). |
-| `winner` | logical | Winner. |
-| `team_guid` | character | ESPN team GUID. |
-| `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
-| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
-| `team_location` | character | Team city or location string. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_display_name` | character | Full team display name. |
-| `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |
-| `team_color` | character | Team primary color (hex without leading '#'). |
-| `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
-| `is_active` | logical | Is active. |
-| `is_all_star` | logical | Is all star. |
-| `logo_href` | character | Team or league logo URL. |
-| `logo_dark_href` | character | Logo URL for dark backgrounds. |
-| `game_id` | integer | Unique game identifier. |
+| `athlete_id` | Int64 | Unique athlete identifier (ESPN). |
+| `athlete_uid` | String | ESPN athlete UID (universal identifier). |
+| `athlete_guid` | String | ESPN athlete GUID. |
+| `athlete_type` | String | Athlete type / class. |
+| `first_name` | String | Player's first name. |
+| `last_name` | String | Player's last name. |
+| `full_name` | String | Player's full name. |
+| `athlete_display_name` | String | Athlete display name (full). |
+| `short_name` | String | Short display name. |
+| `weight` | Float64 | Player weight in pounds. |
+| `display_weight` | String | Player weight in display format (e.g. '180 lbs'). |
+| `height` | Float64 | Player height (string e.g. '6-2' or inches). |
+| `display_height` | String | Player height in display format (e.g. '6-2'). |
+| `age` | Int64 | Player age (in years). |
+| `date_of_birth` | String | Date of birth (YYYY-MM-DD). |
+| `debut_year` | Int64 | Year of professional debut. |
+| `citizenship` | String | Citizenship. |
+| `slug` | String | URL-safe identifier. |
+| `jersey` | String | Jersey number worn by the player. |
+| `linked` | Boolean | TRUE if the record is linked to a related entity. |
+| `active` | Boolean | TRUE if the row represents an active record (player / team / season). |
+| `alternate_ids_sdr` | String |  |
+| `birth_place_city` | String | Birth place city. |
+| `birth_place_country` | String | Birth place country. |
+| `headshot_href` | String | Headshot image URL. |
+| `headshot_alt` | String | Alternative-text label for the headshot. |
+| `contracts_href` | String |  |
+| `experience_years` | Int64 | Experience years. |
+| `contract_href` | String |  |
+| `contract_bird_status` | Int64 | Contract bird status. |
+| `contract_base_year_compensation_active` | Boolean | Contract base year compensation active. |
+| `contract_poison_pill_provision_active` | Boolean |  |
+| `contract_incoming_trade_value` | Int64 | Contract incoming trade value. |
+| `contract_outgoing_trade_value` | Int64 | Contract outgoing trade value. |
+| `contract_minimum_salary_exception` | Boolean | Contract minimum salary exception. |
+| `contract_option_type` | Int64 | Contract option type. |
+| `contract_salary` | Int64 | Contract salary. |
+| `contract_salary_remaining` | Int64 | Contract salary remaining. |
+| `contract_years_remaining` | Int64 | Contract years remaining. |
+| `contract_season_href` | String |  |
+| `contract_team_href` | String |  |
+| `contract_trade_kicker_active` | Boolean | Contract trade kicker active. |
+| `contract_trade_kicker_percentage` | Float64 | Contract trade kicker percentage (0-1 decimal). |
+| `contract_trade_kicker_value` | Int64 | Contract trade kicker value. |
+| `contract_trade_kicker_trade_value` | Int64 | Contract trade kicker trade value. |
+| `contract_trade_restriction` | Boolean | Contract trade restriction. |
+| `contract_unsigned_foreign_pick` | Boolean | Contract unsigned foreign pick. |
+| `contract_active` | Boolean | Contract active. |
+| `draft_display_text` | String | Draft display text. |
+| `draft_round` | Int64 | Round of the draft selection. |
+| `draft_year` | Int64 | Draft year (4-digit). |
+| `draft_selection` | Int64 | Draft selection. |
+| `draft_team_href` | String |  |
+| `draft_pick_href` | String |  |
+| `status_id` | Int64 | Status identifier. |
+| `status_name` | String | Status label. |
+| `status_type` | String | Status type. |
+| `status_abbreviation` | String | Status abbreviation. |
+| `position_id` | Int64 | ESPN's numeric identifier of the athlete's listed position (the Core v2 position resource id). |
+| `position_name` | String | Name of the athlete's listed position from ESPN's position resource, e.g. Guard or Forward. |
+| `position_display_name` | String | Display form of the athlete's listed position as ESPN renders it; usually equal to position_name. |
+| `position_abbreviation` | String | Short code of the athlete's listed position (e.g. G, F, RW, OL), from ESPN's position resource. |
+| `position_leaf` | Boolean | Whether the position is a leaf of ESPN's position tree; False marks a grouping, not a specific role. |
+| `birth_place_state` | String | Birth place state. |
+| `college_athlete_href` | String |  |
+| `hand_type` | String | Hand type. |
+| `hand_abbreviation` | String | Hand abbreviation. |
+| `hand_display_value` | String | Hand display value. |
+| `starter` | Boolean | TRUE if the player was in the starting lineup; FALSE otherwise. |
+| `jersey_right` | String |  |
+| `valid` | Boolean | Valid. |
+| `did_not_play` | Boolean | TRUE if the player did not appear in the game. |
+| `display_name` | String | Display name. |
+| `reason` | String | Reason. |
+| `ejected` | Boolean | TRUE if the player was ejected from the game. |
+| `athlete_href` | String |  |
+| `position_href` | String |  |
+| `statistics_href` | String |  |
+| `team_id` | Int64 | Unique team identifier. |
+| `order` | Int64 | Display order within the result set. |
+| `home_away` | String | Game venue label ('home' or 'away'). |
+| `winner` | Boolean | Winner. |
+| `team_guid` | String | ESPN team GUID. |
+| `team_uid` | String | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
+| `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
+| `team_location` | String | Team city or location string. |
+| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
+| `team_display_name` | String | Full team display name. |
+| `team_short_display_name` | String | Short team display name (e.g. 'Aces'). |
+| `team_color` | String | Team primary color (hex without leading '#'). |
+| `team_alternate_color` | String | Team alternate color (hex without leading '#'). |
+| `is_active` | Boolean | Is active. |
+| `is_all_star` | Boolean | Is all star. |
+| `logo_href` | String | Team or league logo URL. |
+| `logo_dark_href` | String | Logo URL for dark backgrounds. |
+| `game_id` | Int64 | Unique game identifier. |
 
 **Raises**
 

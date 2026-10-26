@@ -135,7 +135,7 @@ def test_ryoe_shrink_pulls_inward_and_reliability_identified():
         "(shrunk->raw 0.0045). The estimator is validated elsewhere: across the "
         "four transitions 2019->20/20->21/21->22/22->23 the shrunk-minus-raw "
         "deltas are +0.0804/+0.0165/+0.0268/-0.0403 (mean +0.021, live NGS data, "
-        "dev/nfl_ngs/stability_transitions.py), and the receiving gate passes on "
+        "tools/models/nfl_ngs/stability_transitions.py), and the receiving gate passes on "
         "this same fixture pair. Escalation: extend the fixture to 3+ seasons to "
         "power this gate; do NOT delete the test or lower the comparison."
     ),
@@ -198,7 +198,7 @@ def test_sep_cushion_coefficient_positive():
         "raw->raw 0.3191 (delta -0.0038, n=83 -- within noise). The shipped config "
         "was validated on held-out transitions only (2019->20/20->21/21->22 deltas "
         "+0.0068/+0.0351/+0.0036, all positive, mean +0.0152; "
-        "dev/nfl_ngs/stability_transitions.py) and lam/min_targets have <1e-4 "
+        "tools/models/nfl_ngs/stability_transitions.py) and lam/min_targets have <1e-4 "
         "leverage on the delta, so there is nothing left to tune without touching "
         "the evaluation fold. Escalation: extend the fixture to 3+ seasons to power "
         "this gate; do NOT delete the test or lower the comparison."

@@ -56,7 +56,7 @@ _BANNED = re.compile(r"^(the\s+)?\w+(\s+\w+)?\s+(column|field|value|id|name)\.?$
 GAME_ID_FIXTURE = 2535725
 
 LEGAL = (
-    "Legal notice (sdv-internal-refs/feb/README.md): the FEB's aviso legal asserts intellectual-property rights over "
+    "Legal notice: the FEB's aviso legal asserts intellectual-property rights over "
     "the site's content and databases (the EU database right). It has no explicit scraping clause and robots.txt "
     "returns 404 on both hosts, but SportsDataverse has not ruled on it: fetching on your own machine is fine; a published "
     "data release or a hosted mirror needs a legal sign-off first."

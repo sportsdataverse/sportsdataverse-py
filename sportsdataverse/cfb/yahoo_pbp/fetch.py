@@ -8,7 +8,7 @@ adapter exists for:
   (157/157 verified 2014-2026, 934/934 against the stored 2025 crosswalk). The stored id map
   is still preferred when it has one -- it is a fact, not a formula -- and the published
   ``cfb_crosswalk`` release asset is the last resort for a game the id map never saw.
-* **Fetching.** Through :func:`sportsdataverse.yahoo.yahoo_shangrila.yahoo_playbook_boxscore`
+* **Fetching.** Through :func:`sportsdataverse.providers.yahoo.yahoo_shangrila.yahoo_playbook_boxscore`
   (``playbookBoxscorePoll`` while a game is live), so retry/backoff/caching stay in
   ``dl_utils.download``. Yahoo's edge answers a rate limit with a **23-byte ``text/html``
   body**, not JSON: ``download`` already retries 429, and anything that still comes back

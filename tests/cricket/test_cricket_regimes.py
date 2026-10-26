@@ -5,7 +5,7 @@ sdv-internal-refs rules/cricket.yaml: ``cricket-2005-odi-powerplays``,
 ``cricket-2015-odi-batting-powerplay-removed``.
 
 The bundled surface and ``REGIME_CONSTANTS`` are the Cricsheet refit
-(``dev/league_ports/fit_cricket_resource_surface.py``, male ODIs 2002-2026). A regime is
+(``tools/models/league_ports/fit_cricket_resource_surface.py``, male ODIs 2002-2026). A regime is
 applied whole -- its own grid AND its fitted constants -- or not at all: the 13-month
 ``odi_2011`` window has a thick enough grid but fewer than 100 matches, so the fit emits no
 constants for it and every 2011-12 ODI falls back to the pooled surface and constants.

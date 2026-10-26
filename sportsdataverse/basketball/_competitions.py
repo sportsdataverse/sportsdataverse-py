@@ -89,7 +89,7 @@ class _BoundDoc(str):
 
 _GENIUS_RAW = (
     "the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` "
-    "(the match id asked for), or the sdv-internal-refs capture shape of a page"
+    "(the match id asked for), or the parsed record of a page"
 )
 
 
@@ -459,7 +459,7 @@ def mint_genius(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
             f"Every competition of the {org} Genius org, with its END-year season.",
             _FLAGS + _PANDAS + _KW,
             f"from sportsdataverse.basketball.genius import {p}_competitions\n{p}_competitions()\n",
-            returns_raw="the chooser page record (``dict``): the sdv-internal-refs capture shape plus ``_request`` (the org asked for)",
+            returns_raw="the chooser page record (``dict``) plus ``_request`` (the org asked for)",
         ),
     )
 
@@ -496,7 +496,7 @@ def mint_genius(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
             "ValueError: The season matches several competitions (pass ``comp_id``).\nNoDataError: The org lists no matching competition.\n",
             f"The competition is picked from {org}'s chooser by the label rule include={entry['label_include']!r} "
             f"exclude={entry['label_exclude']!r}; cups and play-offs have their own comp_id.\n",
-            returns_raw="the schedule page record (``dict``): the sdv-internal-refs capture shape of the page",
+            returns_raw="the schedule page record (``dict``)",
         ),
     )
 

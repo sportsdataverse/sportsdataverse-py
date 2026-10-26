@@ -2,6 +2,7 @@
 title: HockeyTech leagues
 sidebar_label: HockeyTech leagues
 sidebar_position: 1
+description: "The PWHL and nineteen North American minor and junior hockey leagues on the HockeyTech feed: one function family per league."
 ---
 
 # HockeyTech leagues

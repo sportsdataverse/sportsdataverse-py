@@ -1,9 +1,9 @@
 ---
-title: NBASL_CA
-sidebar_label: NBASL_CA
-description: "sdv-py NBASL_CA: endpoint references, dataset loaders and parsers for NBASL_CA in the SportsDataverse Python package."
+title: NBA Summer League (California)
+sidebar_label: NBA Summer League (California)
+description: "sdv-py NBA Summer League (California): endpoint references, dataset loaders and parsers for NBA Summer League (California) in the SportsDataverse Python package."
 ---
-# NBASL_CA (`sportsdataverse.nbasl_ca`)
+# NBA Summer League (California) (`sportsdataverse.basketball.nbasl_ca`)
 
 ## Data sources
 

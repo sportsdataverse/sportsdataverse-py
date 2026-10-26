@@ -1,0 +1,31 @@
+frames:
+- columns: []
+  section: PlayerStats
+- columns:
+  - description: ''
+    name: game_id
+    type: character
+  - description: ''
+    name: away_team_id
+    type: integer
+  - description: ''
+    name: home_team_id
+    type: integer
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_city
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: team_tricode
+    type: character
+  - description: ''
+    name: team_slug
+    type: character
+  section: TeamStats
+kind: frames
+schema: boxscorematchupsv3

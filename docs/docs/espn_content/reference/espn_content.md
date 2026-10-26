@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # ESPN content (news) — ESPN content API (content.core.api.espn.com/v1, news)
 
-`sportsdataverse.espn_content` — 3 endpoints.
+`sportsdataverse.providers.espn_content` — 3 endpoints.
 
 ## espn_content_league_news
 
@@ -30,42 +30,42 @@ Headlines for one league (limit, offset).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer |  |
-| `now_id` | character |  |
-| `content_key` | character |  |
-| `data_source_identifier` | character |  |
-| `publishedkey` | character |  |
-| `type` | character |  |
-| `feed_display_type` | character |  |
-| `headline` | character |  |
-| `description` | character |  |
-| `title` | character |  |
-| `link_text` | character |  |
-| `categorized` | character |  |
-| `originally_posted` | character |  |
-| `last_modified` | character |  |
-| `published` | character |  |
-| `root` | character |  |
-| `section` | character |  |
-| `images` | character |  |
-| `related` | character |  |
-| `categories` | character |  |
-| `keywords` | character |  |
-| `story` | character |  |
-| `allow_amp` | logical |  |
-| `allow_ads` | logical |  |
-| `allow_comments` | logical |  |
-| `allow_commerce` | logical |  |
-| `allow_content_reactions` | logical |  |
-| `allow_search` | logical |  |
-| `byline` | character |  |
-| `is_live_blog` | logical |  |
-| `premium` | logical |  |
-| `links_api_self_href` | character |  |
-| `links_app_sportscenter_href` | character |  |
-| `links_mobile_href` | character |  |
-| `links_web_href` | character |  |
-| `video` | character |  |
+| `id` | Int64 |  |
+| `now_id` | String |  |
+| `content_key` | String |  |
+| `data_source_identifier` | String |  |
+| `publishedkey` | String |  |
+| `type` | String |  |
+| `feed_display_type` | String |  |
+| `headline` | String |  |
+| `description` | String |  |
+| `title` | String |  |
+| `link_text` | String |  |
+| `categorized` | String |  |
+| `originally_posted` | String |  |
+| `last_modified` | String |  |
+| `published` | String |  |
+| `root` | String |  |
+| `section` | String |  |
+| `images` | String |  |
+| `related` | String |  |
+| `categories` | String |  |
+| `keywords` | String |  |
+| `story` | String |  |
+| `allow_amp` | Boolean |  |
+| `allow_ads` | Boolean |  |
+| `allow_comments` | Boolean |  |
+| `allow_commerce` | Boolean |  |
+| `allow_content_reactions` | Boolean |  |
+| `allow_search` | Boolean |  |
+| `byline` | String |  |
+| `is_live_blog` | Boolean |  |
+| `premium` | Boolean |  |
+| `links_api_self_href` | String |  |
+| `links_app_sportscenter_href` | String |  |
+| `links_mobile_href` | String |  |
+| `links_web_href` | String |  |
+| `video` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -102,41 +102,41 @@ Cross-sport headlines (limit, offset).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | ESPN numeric identifier for the article. |
-| `now_id` | character | ESPN 'now' feed id. |
-| `content_key` | character | Internal content key. |
-| `data_source_identifier` | character | Source-system identifier. |
-| `publishedkey` | character |  |
-| `type` | character | Article type (Story, Media, HeadlineNews, etc.). |
-| `feed_display_type` | character |  |
-| `headline` | character | Article headline. |
-| `description` | character | Article summary/description. |
-| `title` | character |  |
-| `link_text` | character |  |
-| `categorized` | character |  |
-| `originally_posted` | character |  |
-| `last_modified` | character | Last-modified timestamp (ISO 8601). |
-| `published` | character | Publish timestamp (ISO 8601). |
-| `root` | character |  |
-| `section` | character |  |
-| `images` | character | Article images (list, stringified). |
-| `categories` | character | Article categories (list, stringified). |
-| `keywords` | character |  |
-| `story` | character |  |
-| `allow_amp` | logical |  |
-| `allow_ads` | logical |  |
-| `allow_comments` | logical |  |
-| `allow_commerce` | logical |  |
-| `allow_content_reactions` | logical |  |
-| `allow_search` | logical |  |
-| `byline` | character | Author byline string as published by ESPN. |
-| `is_live_blog` | logical |  |
-| `premium` | logical | Whether the article is premium/paywalled. |
-| `links_api_self_href` | character | ESPN API canonical self-link for the article resource. |
-| `links_app_sportscenter_href` | character | SportsCenter app deep link. |
-| `links_mobile_href` | character | Mobile article URL. |
-| `links_web_href` | character | Web article URL. |
-| `video` | character |  |
+| `id` | Int64 | ESPN numeric identifier for the article. |
+| `now_id` | String | ESPN 'now' feed id. |
+| `content_key` | String | Internal content key. |
+| `data_source_identifier` | String | Source-system identifier. |
+| `publishedkey` | String |  |
+| `type` | String | Article type (Story, Media, HeadlineNews, etc.). |
+| `feed_display_type` | String |  |
+| `headline` | String | Article headline. |
+| `description` | String | Article summary/description. |
+| `title` | String |  |
+| `link_text` | String |  |
+| `categorized` | String |  |
+| `originally_posted` | String |  |
+| `last_modified` | String | Last-modified timestamp (ISO 8601). |
+| `published` | String | Publish timestamp (ISO 8601). |
+| `root` | String |  |
+| `section` | String |  |
+| `images` | String | Article images (list, stringified). |
+| `categories` | String | Article categories (list, stringified). |
+| `keywords` | String |  |
+| `story` | String |  |
+| `allow_amp` | Boolean |  |
+| `allow_ads` | Boolean |  |
+| `allow_comments` | Boolean |  |
+| `allow_commerce` | Boolean |  |
+| `allow_content_reactions` | Boolean |  |
+| `allow_search` | Boolean |  |
+| `byline` | String | Author byline string as published by ESPN. |
+| `is_live_blog` | Boolean |  |
+| `premium` | Boolean | Whether the article is premium/paywalled. |
+| `links_api_self_href` | String | ESPN API canonical self-link for the article resource. |
+| `links_app_sportscenter_href` | String | SportsCenter app deep link. |
+| `links_mobile_href` | String | Mobile article URL. |
+| `links_web_href` | String | Web article URL. |
+| `video` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -172,40 +172,40 @@ One story (same envelope, one headline).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer |  |
-| `now_id` | character |  |
-| `content_key` | character |  |
-| `data_source_identifier` | character |  |
-| `publishedkey` | character |  |
-| `type` | character |  |
-| `feed_display_type` | character |  |
-| `headline` | character |  |
-| `description` | character |  |
-| `title` | character |  |
-| `link_text` | character |  |
-| `categorized` | character |  |
-| `originally_posted` | character |  |
-| `last_modified` | character |  |
-| `published` | character |  |
-| `root` | character |  |
-| `section` | character |  |
-| `images` | character |  |
-| `categories` | character |  |
-| `keywords` | character |  |
-| `story` | character |  |
-| `allow_amp` | logical |  |
-| `allow_ads` | logical |  |
-| `allow_comments` | logical |  |
-| `allow_commerce` | logical |  |
-| `allow_content_reactions` | logical |  |
-| `allow_search` | logical |  |
-| `byline` | character |  |
-| `is_live_blog` | logical |  |
-| `premium` | logical |  |
-| `links_api_self_href` | character |  |
-| `links_app_sportscenter_href` | character |  |
-| `links_mobile_href` | character |  |
-| `links_web_href` | character |  |
+| `id` | Int64 |  |
+| `now_id` | String |  |
+| `content_key` | String |  |
+| `data_source_identifier` | String |  |
+| `publishedkey` | String |  |
+| `type` | String |  |
+| `feed_display_type` | String |  |
+| `headline` | String |  |
+| `description` | String |  |
+| `title` | String |  |
+| `link_text` | String |  |
+| `categorized` | String |  |
+| `originally_posted` | String |  |
+| `last_modified` | String |  |
+| `published` | String |  |
+| `root` | String |  |
+| `section` | String |  |
+| `images` | String |  |
+| `categories` | String |  |
+| `keywords` | String |  |
+| `story` | String |  |
+| `allow_amp` | Boolean |  |
+| `allow_ads` | Boolean |  |
+| `allow_comments` | Boolean |  |
+| `allow_commerce` | Boolean |  |
+| `allow_content_reactions` | Boolean |  |
+| `allow_search` | Boolean |  |
+| `byline` | String |  |
+| `is_live_blog` | Boolean |  |
+| `premium` | Boolean |  |
+| `links_api_self_href` | String |  |
+| `links_app_sportscenter_href` | String |  |
+| `links_mobile_href` | String |  |
+| `links_web_href` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

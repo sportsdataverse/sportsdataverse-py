@@ -219,18 +219,18 @@ One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_tea
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | Unique game identifier. |
-| `game_date` | character | Game date. |
-| `game_status` | character | Game status text. |
-| `home_team` | character | Home team name. |
-| `home_team_id` | integer | Home team identifier. |
-| `home_score` | character | Home team final score. |
-| `away_team` | character | Away team name. |
-| `away_team_id` | integer | Away team identifier. |
-| `away_score` | character | Away team final score. |
-| `venue` | character | Venue where the game was played. |
-| `season_id` | integer | Season identifier. |
-| `game_type` | character | Game type the row belongs to. |
+| `game_id` | Int64 | Unique game identifier. |
+| `game_date` | String | Game date. |
+| `game_status` | String | Game status text. |
+| `home_team` | String | Home team name. |
+| `home_team_id` | Int64 | Home team identifier. |
+| `home_score` | String | Home team final score. |
+| `away_team` | String | Away team name. |
+| `away_team_id` | Int64 | Away team identifier. |
+| `away_score` | String | Away team final score. |
+| `venue` | String | Venue where the game was played. |
+| `season_id` | Int64 | Season identifier. |
+| `game_type` | String | Game type the row belongs to. |
 
 **Raises**
 
@@ -336,15 +336,15 @@ One row per season: `season_id` (Int64), `season_name`, `season_short`, `career`
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | integer | Season identifier. |
-| `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
-| `season_short` | character | Short season name. |
-| `career` | character | Whether this is a career-stats season. |
-| `playoff` | character | Whether the row is playoff statistics. |
-| `start_date` | character | Season start date. |
-| `end_date` | character | Season end date. |
-| `season_yr` | integer | End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026, "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the next season ("2026 Pre-season" is 2027). Null when the name holds no year. |
-| `game_type_label` | character | Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs" (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season resolution skips them. |
+| `season_id` | Int64 | Season identifier. |
+| `season_name` | String | Full season name (e.g., "2024-25 Regular Season"). |
+| `season_short` | String | Short season name. |
+| `career` | String | Whether this is a career-stats season. |
+| `playoff` | String | Whether the row is playoff statistics. |
+| `start_date` | String | Season start date. |
+| `end_date` | String | Season end date. |
+| `season_yr` | Int64 | End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026, "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the next season ("2026 Pre-season" is 2027). Null when the name holds no year. |
+| `game_type_label` | String | Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs" (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season resolution skips them. |
 
 **Raises**
 

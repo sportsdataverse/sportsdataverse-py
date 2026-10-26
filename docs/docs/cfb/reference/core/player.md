@@ -1,11 +1,11 @@
 ---
-title: "CFB — ESPN core API (v2) — Player"
+title: "College football — ESPN core API (v2) — Player"
 sidebar_label: "Player"
 sidebar_position: 2
-description: "CFB — ESPN core API (v2) — Player — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — ESPN core API (v2) — Player — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# CFB — ESPN core API (v2) — Player
+# College football — ESPN core API (v2) — Player
 
 ## espn_cfb_players_index
 
@@ -27,9 +27,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -65,60 +65,60 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `active` | logical | `TRUE` if the player was active for the game. |
-| `age` | integer |  |
-| `date_of_birth` | character | Player date of birth (if published). |
-| `debut_year` | integer |  |
-| `display_height` | character | Human-readable height (e.g. `6' 1"`). |
-| `display_name` | character | Human-readable metric name. |
-| `display_weight` | character | Human-readable weight (e.g. `205 lbs`). |
-| `first_name` | character | Athlete first name. |
-| `full_name` | character | Venue full name (e.g. `Tenney Stadium`). |
-| `guid` | character | ESPN athlete GUID. |
-| `height` | double | Listed height (inches). |
-| `id` | integer | 247Sports referencing id for the recruit. |
-| `jersey` | character | Jersey number. |
-| `last_name` | character | Athlete last name. |
-| `linked` | logical |  |
-| `links` | character |  |
-| `short_name` | character | Ranking source short name (e.g. `AP Poll`). |
-| `slug` | character | URL slug for the team. |
-| `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
-| `uid` | character | ESPN global unique identifier. |
-| `weight` | double | Listed weight (lbs). |
-| `alternate_ids_sdr` | character |  |
-| `birth_place_city` | character |  |
-| `birth_place_state` | character |  |
-| `college_$ref` | character |  |
-| `college_athlete_$ref` | character |  |
-| `contracts_$ref` | character |  |
-| `draft_display_text` | character |  |
-| `draft_pick_$ref` | character |  |
-| `draft_round` | integer |  |
-| `draft_selection` | integer |  |
-| `draft_team_$ref` | character |  |
-| `draft_year` | integer |  |
-| `experience_years` | integer | Years of experience. |
-| `hand_abbreviation` | character |  |
-| `hand_display_value` | character |  |
-| `hand_type` | character |  |
-| `headshot_alt` | character |  |
-| `headshot_href` | character | URL of the athlete headshot image. |
-| `position_$ref` | character |  |
-| `position_abbreviation` | character | Position abbreviation (e.g. `QB`). |
-| `position_display_name` | character | Human-readable position name. |
-| `position_id` | integer | ESPN position id. |
-| `position_leaf` | logical | `TRUE` for a most-specific (leaf) position. |
-| `position_name` | character | Position name (e.g. `Quarterback`). |
-| `seasons_$ref` | character |  |
-| `statistics_$ref` | character |  |
-| `statisticslog_$ref` | character |  |
-| `status_abbreviation` | character |  |
-| `status_id` | integer | ESPN commitment status id. |
-| `status_name` | character | Status-type key (e.g. `STATUS_FINAL`). |
-| `status_type` | character | Status type. |
-| `team_$ref` | character |  |
+| `$ref` | String |  |
+| `active` | Boolean | `TRUE` if the player was active for the game. |
+| `age` | Int64 |  |
+| `date_of_birth` | String | Player date of birth (if published). |
+| `debut_year` | Int64 |  |
+| `display_height` | String | Human-readable height (e.g. `6' 1"`). |
+| `display_name` | String | Human-readable metric name. |
+| `display_weight` | String | Human-readable weight (e.g. `205 lbs`). |
+| `first_name` | String | Athlete first name. |
+| `full_name` | String | Venue full name (e.g. `Tenney Stadium`). |
+| `guid` | String | ESPN athlete GUID. |
+| `height` | Float64 | Listed height (inches). |
+| `id` | Int64 | 247Sports referencing id for the recruit. |
+| `jersey` | String | Jersey number. |
+| `last_name` | String | Athlete last name. |
+| `linked` | Boolean |  |
+| `links` | String |  |
+| `short_name` | String | Ranking source short name (e.g. `AP Poll`). |
+| `slug` | String | URL slug for the team. |
+| `type` | String | Record-type category (e.g. `total`, `home`, `road`). |
+| `uid` | String | ESPN global unique identifier. |
+| `weight` | Float64 | Listed weight (lbs). |
+| `alternate_ids_sdr` | String |  |
+| `birth_place_city` | String |  |
+| `birth_place_state` | String |  |
+| `college_$ref` | String |  |
+| `college_athlete_$ref` | String |  |
+| `contracts_$ref` | String |  |
+| `draft_display_text` | String |  |
+| `draft_pick_$ref` | String |  |
+| `draft_round` | Int64 |  |
+| `draft_selection` | Int64 |  |
+| `draft_team_$ref` | String |  |
+| `draft_year` | Int64 |  |
+| `experience_years` | Int64 | Years of experience. |
+| `hand_abbreviation` | String |  |
+| `hand_display_value` | String |  |
+| `hand_type` | String |  |
+| `headshot_alt` | String |  |
+| `headshot_href` | String | URL of the athlete headshot image. |
+| `position_$ref` | String |  |
+| `position_abbreviation` | String | Position abbreviation (e.g. `QB`). |
+| `position_display_name` | String | Human-readable position name. |
+| `position_id` | Int64 | ESPN position id. |
+| `position_leaf` | Boolean | `TRUE` for a most-specific (leaf) position. |
+| `position_name` | String | Position name (e.g. `Quarterback`). |
+| `seasons_$ref` | String |  |
+| `statistics_$ref` | String |  |
+| `statisticslog_$ref` | String |  |
+| `status_abbreviation` | String |  |
+| `status_id` | Int64 | ESPN commitment status id. |
+| `status_name` | String | Status-type key (e.g. `STATUS_FINAL`). |
+| `status_type` | String | Status type. |
+| `team_$ref` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -189,10 +189,10 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `statistics` | character |  |
-| `season_$ref` | character |  |
-| `count` | integer | Always null, since the statisticslog payload ships its rows under entries with no page envelope. |
-| `page_count` | integer | Always null, since the statisticslog payload ships its rows under entries with no page envelope. |
+| `statistics` | String |  |
+| `season_$ref` | String |  |
+| `count` | Int64 | Always null, since the statisticslog payload ships its rows under entries with no page envelope. |
+| `page_count` | Int64 | Always null, since the statisticslog payload ships its rows under entries with no page envelope. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -262,9 +262,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -334,9 +334,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `$ref` | character |  |
-| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
-| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+| `$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -406,9 +406,9 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | ESPN numeric identifier for the athlete. |
-| `display_name` | character | Athlete's full display name as shown on ESPN. |
-| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+| `id` | Int64 | ESPN numeric identifier for the athlete. |
+| `display_name` | String | Athlete's full display name as shown on ESPN. |
+| `injuries` | String | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

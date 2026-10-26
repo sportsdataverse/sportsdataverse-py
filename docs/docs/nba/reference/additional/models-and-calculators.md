@@ -155,7 +155,7 @@ Per-`league_id` fitted constants for the NBA prediction & market stack.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `hfa` | `float` |  | Home-court advantage in points (fitted on the as-of-date backtest for the league; see `dev/nba_prediction/fit_pregame.py`). |
+| `hfa` | `float` |  | Home-court advantage in points (fitted on the as-of-date backtest for the league; see `tools/models/nba_prediction/fit_pregame.py`). |
 | `margin_sd` | `float` |  | Std. dev. of the game-margin residual (fitted jointly with `hfa`; the Brier-minimizing sigma agrees to within a documented tolerance). |
 | `avg_pace` | `float` |  | League baseline possessions per team per game (adjusted- pace anchor for `~sportsdataverse.nba.nba_team_ratings.adjust_pace`). |
 | `avg_off_rtg` | `float` |  | League baseline points per 100 possessions. |
@@ -433,14 +433,14 @@ One row per (season, team_id): `season, team_id, adj_off_rtg, adj_def_rtg, adj_n
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season year. |
-| `team_id` | character | Unique team identifier. |
-| `adj_off_rtg` | double |  |
-| `adj_def_rtg` | double |  |
-| `adj_net_rtg` | double |  |
-| `raw_off_rtg` | double |  |
-| `raw_def_rtg` | double |  |
-| `games` | integer | Games played. |
+| `season` | Int64 | Season year. |
+| `team_id` | String | Unique team identifier. |
+| `adj_off_rtg` | Float64 |  |
+| `adj_def_rtg` | Float64 |  |
+| `adj_net_rtg` | Float64 |  |
+| `raw_off_rtg` | Float64 |  |
+| `raw_def_rtg` | Float64 |  |
+| `games` | Int64 | Games played. |
 
 **Example**
 
@@ -476,10 +476,10 @@ One row per (season, team_id): `season, team_id, adj_pace, raw_pace`. Empty inpu
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season year. |
-| `team_id` | character | Unique team identifier. |
-| `adj_pace` | double |  |
-| `raw_pace` | double |  |
+| `season` | Int64 | Season year. |
+| `team_id` | String | Unique team identifier. |
+| `adj_pace` | Float64 |  |
+| `raw_pace` | Float64 |  |
 
 **Example**
 
@@ -507,16 +507,16 @@ A `polars.DataFrame` containing only rows with `date < cutoff_date`.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `season` | integer | Season year. |
-| `date` | character | Date in YYYY-MM-DD format. |
-| `team_id` | character | Unique team identifier. |
-| `opp_team_id` | character |  |
-| `is_home` | logical | Whether the team was home. |
-| `neutral_site` | logical | Neutral site. |
-| `poss` | double | Poss. |
-| `off_rtg` | double |  |
-| `def_rtg` | double |  |
+| `game_id` | String | Unique game identifier. |
+| `season` | Int64 | Season year. |
+| `date` | String | Date in YYYY-MM-DD format. |
+| `team_id` | String | Unique team identifier. |
+| `opp_team_id` | String |  |
+| `is_home` | Boolean | Whether the team was home. |
+| `neutral_site` | Boolean | Neutral site. |
+| `poss` | Float64 | Poss. |
+| `off_rtg` | Float64 |  |
+| `def_rtg` | Float64 |  |
 
 **Example**
 
@@ -1102,11 +1102,11 @@ One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- 
 
 | col_name | type | description |
 |---|---|---|
-| `score_diff` | double |  |
-| `sec_left` | double |  |
-| `sqrt_sec_left` | double |  |
-| `pregame_logit` | double |  |
-| `home_has_ball` | integer |  |
+| `score_diff` | Float64 |  |
+| `sec_left` | Float64 |  |
+| `sqrt_sec_left` | Float64 |  |
+| `pregame_logit` | Float64 |  |
+| `home_has_ball` | Int64 |  |
 
 **Example**
 
@@ -1194,41 +1194,41 @@ tech FT).
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `possession_number` | integer | Possession number. |
-| `offense_team_id` | integer | Unique identifier for offense team. |
-| `defense_team_id` | integer |  |
-| `start_order_index` | integer |  |
-| `end_order_index` | integer |  |
-| `start_seconds_remaining` | double |  |
-| `end_seconds_remaining` | double |  |
-| `points` | integer | Points scored. |
-| `is_second_chance` | logical |  |
-| `number_in_period` | integer |  |
-| `possession_start_type` | character |  |
-| `count_as_possession` | logical |  |
-| `fg2a` | integer |  |
-| `fg2m` | integer |  |
-| `fg3a` | integer | Three-point field goal attempts. |
-| `fg3m` | integer | Three-point field goals made. |
-| `fta` | integer | Free throw attempts. |
-| `ftm` | integer | Free throws made. |
-| `oreb` | integer | Offensive rebounds. |
-| `dreb` | integer | Defensive rebounds. |
-| `tov` | integer | Turnovers. |
-| `off_player_1` | integer |  |
-| `off_player_2` | integer |  |
-| `off_player_3` | integer |  |
-| `off_player_4` | integer |  |
-| `off_player_5` | integer |  |
-| `def_player_1` | integer |  |
-| `def_player_2` | integer |  |
-| `def_player_3` | integer |  |
-| `def_player_4` | integer |  |
-| `def_player_5` | integer |  |
-| `lineup_source` | character |  |
-| `la_points` | double |  |
+| `game_id` | String | Unique game identifier. |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `possession_number` | Int64 | Possession number. |
+| `offense_team_id` | Int64 | Unique identifier for offense team. |
+| `defense_team_id` | Int64 |  |
+| `start_order_index` | Int64 |  |
+| `end_order_index` | Int64 |  |
+| `start_seconds_remaining` | Float64 |  |
+| `end_seconds_remaining` | Float64 |  |
+| `points` | Int64 | Points scored. |
+| `is_second_chance` | Boolean |  |
+| `number_in_period` | Int64 |  |
+| `possession_start_type` | String |  |
+| `count_as_possession` | Boolean |  |
+| `fg2a` | Int64 |  |
+| `fg2m` | Int64 |  |
+| `fg3a` | Int64 | Three-point field goal attempts. |
+| `fg3m` | Int64 | Three-point field goals made. |
+| `fta` | Int64 | Free throw attempts. |
+| `ftm` | Int64 | Free throws made. |
+| `oreb` | Int64 | Offensive rebounds. |
+| `dreb` | Int64 | Defensive rebounds. |
+| `tov` | Int64 | Turnovers. |
+| `off_player_1` | Int64 |  |
+| `off_player_2` | Int64 |  |
+| `off_player_3` | Int64 |  |
+| `off_player_4` | Int64 |  |
+| `off_player_5` | Int64 |  |
+| `def_player_1` | Int64 |  |
+| `def_player_2` | Int64 |  |
+| `def_player_3` | Int64 |  |
+| `def_player_4` | Int64 |  |
+| `def_player_5` | Int64 |  |
+| `lineup_source` | String |  |
+| `la_points` | Float64 |  |
 
 **Example**
 
@@ -1278,12 +1278,12 @@ Frame with columns `player_id` (Int64), `o_adj_rapm` (Float64), `d_adj_rapm` (Fl
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `o_adj_rapm` | double |  |
-| `d_adj_rapm` | double |  |
-| `adj_rapm` | double |  |
-| `off_poss` | integer |  |
-| `def_poss` | integer |  |
+| `player_id` | Int64 | Unique player identifier. |
+| `o_adj_rapm` | Float64 |  |
+| `d_adj_rapm` | Float64 |  |
+| `adj_rapm` | Float64 |  |
+| `off_poss` | Int64 |  |
+| `def_poss` | Int64 |  |
 
 **Example**
 
@@ -1312,9 +1312,9 @@ Frame `age:Int64, rel_value:Float64, peak_age:Float64` (`peak_age` repeated on e
 
 | col_name | type | description |
 |---|---|---|
-| `age` | integer | Player age (in years). |
-| `rel_value` | double | Value multiplier for this age relative to the peak age: a delta-method curve chaining minutes-weighted within-player consecutive-age changes in per-100-possession box-score value, quadratic-smoothed and min-max scaled to [0.4, 1.0], so the peak age is exactly 1.0 and the lowest-valued age 0.4. |
-| `peak_age` | double | Age at which rel_value reaches its maximum of 1.0, repeated on every row for filtering and joining (29.0 in the bundled curve). |
+| `age` | Int64 | Player age (in years). |
+| `rel_value` | Float64 | Value multiplier for this age relative to the peak age: a delta-method curve chaining minutes-weighted within-player consecutive-age changes in per-100-possession box-score value, quadratic-smoothed and min-max scaled to [0.4, 1.0], so the peak age is exactly 1.0 and the lowest-valued age 0.4. |
+| `peak_age` | Float64 | Age at which rel_value reaches its maximum of 1.0, repeated on every row for filtering and joining (29.0 in the bundled curve). |
 
 **Example**
 
@@ -1472,12 +1472,12 @@ Frame with `DECAY_RAPM_SCHEMA`. Empty input, or an `asof` that drops every posse
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `o_decay_rapm` | double |  |
-| `d_decay_rapm` | double |  |
-| `decay_rapm` | double |  |
-| `off_poss` | integer |  |
-| `def_poss` | integer |  |
+| `player_id` | Int64 | Unique player identifier. |
+| `o_decay_rapm` | Float64 |  |
+| `d_decay_rapm` | Float64 |  |
+| `decay_rapm` | Float64 |  |
+| `off_poss` | Int64 |  |
+| `def_poss` | Int64 |  |
 
 **Raises**
 
@@ -1509,7 +1509,7 @@ Loads the draft-combine wrappers for `draft_year` (or each year in the
 list), builds the shared combine-feature vector
 (`sportsdataverse.nba.nba_draft_constants.build_combine_features`),
 and applies the bundled ridge (`proj_career_value`) / logistic
-(`draft_prob`) heads fit in `dev/nba_draft/fit_draft_model.py`.
+(`draft_prob`) heads fit in `tools/models/nba_draft/fit_draft_model.py`.
 
 **Parameters**
 

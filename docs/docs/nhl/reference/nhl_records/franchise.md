@@ -24,14 +24,14 @@ List all NHL franchises (historical and active).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `first_season_id` | integer | Season identifier of the first season. |
-| `full_name` | character | Player full name. |
-| `last_season_id` | integer | Season ID of the franchise's last season. |
-| `most_recent_team_id` | integer | Most recent team identifier. |
-| `team_abbrev` | character | Team abbreviation. |
-| `team_common_name` | character | Team common (nickname) name. |
-| `team_place_name` | character | Team place (city/location) name. |
+| `id` | Int64 | Unique player identifier. |
+| `first_season_id` | Int64 | Season identifier of the first season. |
+| `full_name` | String | Player full name. |
+| `last_season_id` | Int64 | Season ID of the franchise's last season. |
+| `most_recent_team_id` | Int64 | Most recent team identifier. |
+| `team_abbrev` | String | Team abbreviation. |
+| `team_common_name` | String | Team common (nickname) name. |
+| `team_place_name` | String | Team place (city/location) name. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -66,19 +66,19 @@ Franchise detail records (extended metadata per franchise).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `active` | logical | Whether athlete is currently active. |
-| `captain_history` | character | Franchise captain history text. |
-| `coaching_history` | character | Franchise coaching history text. |
-| `date_awarded` | character | Date the franchise was awarded. |
-| `directory_url` | character | Franchise directory URL. |
-| `first_season_id` | integer | Season identifier of the first season. |
-| `general_manager_history` | character | Franchise general manager history text. |
-| `hero_image_url` | character | Franchise hero image URL. |
-| `most_recent_team_id` | integer | Most recent team identifier. |
-| `retired_numbers_summary` | character | Summary of retired jersey numbers. |
-| `team_abbrev` | character | Team abbreviation. |
-| `team_full_name` | character | Full team name. |
+| `id` | Int64 | Unique player identifier. |
+| `active` | Boolean | Whether athlete is currently active. |
+| `captain_history` | String | Franchise captain history text. |
+| `coaching_history` | String | Franchise coaching history text. |
+| `date_awarded` | String | Date the franchise was awarded. |
+| `directory_url` | String | Franchise directory URL. |
+| `first_season_id` | Int64 | Season identifier of the first season. |
+| `general_manager_history` | String | Franchise general manager history text. |
+| `hero_image_url` | String | Franchise hero image URL. |
+| `most_recent_team_id` | Int64 | Most recent team identifier. |
+| `retired_numbers_summary` | String | Summary of retired jersey numbers. |
+| `team_abbrev` | String | Team abbreviation. |
+| `team_full_name` | String | Full team name. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -113,44 +113,44 @@ All-time team totals per franchise (regular season).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `active_franchise` | integer | Indicator of whether the franchise is active. |
-| `active_team` | logical | Indicator of whether the team is active. |
-| `cups` | integer | Number of Stanley Cup championships. |
-| `first_season_id` | integer | Season identifier of the first season. |
-| `franchise_id` | integer | Unique franchise identifier. |
-| `game_type_id` | integer | Game type identifier (regular/playoffs). |
-| `game_win_pctg` | double | Game-winning percentage. |
-| `games_played` | double | Games played. |
-| `goals_against` | double | Goals against. |
-| `goals_for` | double | Goals for. |
-| `home_losses` | double | Losses at home. |
-| `home_overtime_losses` | double | Overtime losses at home. |
-| `home_ties` | double | Ties at home. |
-| `home_wins` | double | Wins at home. |
-| `last_season_id` | integer | Season ID of the franchise's last season. |
-| `losses` | double | Losses. |
-| `overtime_losses` | double | Total overtime losses. |
-| `penalty_minutes` | double | Penalty minutes. |
-| `playoff_seasons` | double | Number of playoff seasons. |
-| `point_pctg` | double | Points percentage. |
-| `points` | double | Total points (goals + assists). |
-| `road_losses` | double | Losses on the road. |
-| `road_overtime_losses` | double | Overtime losses on the road. |
-| `road_ties` | double | Ties on the road. |
-| `road_wins` | double | Wins on the road. |
-| `series_losses` | integer | Playoff series losses. |
-| `series_played` | double | Playoff series played. |
-| `series_win_pctg` | double | Playoff series win percentage. |
-| `series_wins` | integer | Playoff series wins. |
-| `shootout_losses` | double | Shootout losses. |
-| `shootout_wins` | double | Shootout wins. |
-| `shutouts` | double | Shutouts recorded. |
-| `team_id` | integer | Unique team identifier. |
-| `team_name` | character | Team name. |
-| `ties` | double | Total ties. |
-| `tri_code` | character | Team three-letter code. |
-| `wins` | double | Wins. |
+| `id` | Int64 | Unique player identifier. |
+| `active_franchise` | Int64 | Indicator of whether the franchise is active. |
+| `active_team` | Boolean | Indicator of whether the team is active. |
+| `cups` | Int64 | Number of Stanley Cup championships. |
+| `first_season_id` | Int64 | Season identifier of the first season. |
+| `franchise_id` | Int64 | Unique franchise identifier. |
+| `game_type_id` | Int64 | Game type identifier (regular/playoffs). |
+| `game_win_pctg` | Float64 | Game-winning percentage. |
+| `games_played` | Float64 | Games played. |
+| `goals_against` | Float64 | Goals against. |
+| `goals_for` | Float64 | Goals for. |
+| `home_losses` | Float64 | Losses at home. |
+| `home_overtime_losses` | Float64 | Overtime losses at home. |
+| `home_ties` | Float64 | Ties at home. |
+| `home_wins` | Float64 | Wins at home. |
+| `last_season_id` | Int64 | Season ID of the franchise's last season. |
+| `losses` | Float64 | Losses. |
+| `overtime_losses` | Float64 | Total overtime losses. |
+| `penalty_minutes` | Float64 | Penalty minutes. |
+| `playoff_seasons` | Float64 | Number of playoff seasons. |
+| `point_pctg` | Float64 | Points percentage. |
+| `points` | Float64 | Total points (goals + assists). |
+| `road_losses` | Float64 | Losses on the road. |
+| `road_overtime_losses` | Float64 | Overtime losses on the road. |
+| `road_ties` | Float64 | Ties on the road. |
+| `road_wins` | Float64 | Wins on the road. |
+| `series_losses` | Int64 | Playoff series losses. |
+| `series_played` | Float64 | Playoff series played. |
+| `series_win_pctg` | Float64 | Playoff series win percentage. |
+| `series_wins` | Int64 | Playoff series wins. |
+| `shootout_losses` | Float64 | Shootout losses. |
+| `shootout_wins` | Float64 | Shootout wins. |
+| `shutouts` | Float64 | Shutouts recorded. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_name` | String | Team name. |
+| `ties` | Float64 | Total ties. |
+| `tri_code` | String | Team three-letter code. |
+| `wins` | Float64 | Wins. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -185,44 +185,44 @@ Season-by-season results for each franchise.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `conference_abbrev` | character | Conference abbreviation. |
-| `conference_name` | character | Conference name. |
-| `conference_sequence` | integer | Team's seeding position within the conference. |
-| `decision` | character | Goalie decision (W/L/O). |
-| `division_abbrev` | character | Division abbreviation. |
-| `division_name` | character | Division name. |
-| `division_sequence` | integer | Team's seeding position within the division. |
-| `final_playoff_round` | integer | Final playoff round reached. |
-| `franchise_id` | integer | Unique franchise identifier. |
-| `game_type_id` | integer | Game type identifier (regular/playoffs). |
-| `games_played` | integer | Games played. |
-| `goals` | integer | Goals scored. |
-| `goals_against` | integer | Goals against. |
-| `home_losses` | integer | Losses at home. |
-| `home_overtime_losses` | character | Overtime losses at home. |
-| `home_ties` | integer | Ties at home. |
-| `home_wins` | integer | Wins at home. |
-| `in_playoffs` | logical | Whether the season reached the playoffs. |
-| `league_sequence` | integer | Team's seeding position within the league. |
-| `losses` | integer | Losses. |
-| `overtime_losses` | character | Total overtime losses. |
-| `penalty_minutes` | integer | Penalty minutes. |
-| `playoff_round` | double | Playoff round identifier. |
-| `points` | integer | Total points (goals + assists). |
-| `road_losses` | integer | Losses on the road. |
-| `road_overtime_losses` | character | Overtime losses on the road. |
-| `road_ties` | integer | Ties on the road. |
-| `road_wins` | integer | Wins on the road. |
-| `season_id` | integer | Season identifier. |
-| `series_abbrev` | character | Playoff series abbreviation. |
-| `series_title` | character | Playoff series title. |
-| `shutouts` | integer | Shutouts recorded. |
-| `team_id` | integer | Unique team identifier. |
-| `team_name` | character | Team name. |
-| `ties` | integer | Total ties. |
-| `tri_code` | character | Team three-letter code. |
-| `wins` | integer | Wins. |
+| `id` | Int64 | Unique player identifier. |
+| `conference_abbrev` | String | Conference abbreviation. |
+| `conference_name` | String | Conference name. |
+| `conference_sequence` | Int64 | Team's seeding position within the conference. |
+| `decision` | String | Goalie decision (W/L/O). |
+| `division_abbrev` | String | Division abbreviation. |
+| `division_name` | String | Division name. |
+| `division_sequence` | Int64 | Team's seeding position within the division. |
+| `final_playoff_round` | Int64 | Final playoff round reached. |
+| `franchise_id` | Int64 | Unique franchise identifier. |
+| `game_type_id` | Int64 | Game type identifier (regular/playoffs). |
+| `games_played` | Int64 | Games played. |
+| `goals` | Int64 | Goals scored. |
+| `goals_against` | Int64 | Goals against. |
+| `home_losses` | Int64 | Losses at home. |
+| `home_overtime_losses` | String | Overtime losses at home. |
+| `home_ties` | Int64 | Ties at home. |
+| `home_wins` | Int64 | Wins at home. |
+| `in_playoffs` | Boolean | Whether the season reached the playoffs. |
+| `league_sequence` | Int64 | Team's seeding position within the league. |
+| `losses` | Int64 | Losses. |
+| `overtime_losses` | String | Total overtime losses. |
+| `penalty_minutes` | Int64 | Penalty minutes. |
+| `playoff_round` | Float64 | Playoff round identifier. |
+| `points` | Int64 | Total points (goals + assists). |
+| `road_losses` | Int64 | Losses on the road. |
+| `road_overtime_losses` | String | Overtime losses on the road. |
+| `road_ties` | Int64 | Ties on the road. |
+| `road_wins` | Int64 | Wins on the road. |
+| `season_id` | Int64 | Season identifier. |
+| `series_abbrev` | String | Playoff series abbreviation. |
+| `series_title` | String | Playoff series title. |
+| `shutouts` | Int64 | Shutouts recorded. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_name` | String | Team name. |
+| `ties` | Int64 | Total ties. |
+| `tri_code` | String | Team three-letter code. |
+| `wins` | Int64 | Wins. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -257,14 +257,14 @@ Franchise playoff appearance counts and streak information.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `first_season_id` | integer | Season identifier of the first season. |
-| `franchise_id` | integer | Unique franchise identifier. |
-| `franchise_name` | character | Franchise name. |
-| `playoff_seasons` | integer | Number of playoff seasons. |
-| `stanley_cup_appearances` | integer | Number of Stanley Cup Final appearances. |
-| `stanley_cup_wins` | integer | Number of Stanley Cup championships. |
-| `years` | integer | Number of years the franchise existed. |
+| `id` | Int64 | Unique player identifier. |
+| `first_season_id` | Int64 | Season identifier of the first season. |
+| `franchise_id` | Int64 | Unique franchise identifier. |
+| `franchise_name` | String | Franchise name. |
+| `playoff_seasons` | Int64 | Number of playoff seasons. |
+| `stanley_cup_appearances` | Int64 | Number of Stanley Cup Final appearances. |
+| `stanley_cup_wins` | Int64 | Number of Stanley Cup championships. |
+| `years` | Int64 | Number of years the franchise existed. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -299,43 +299,43 @@ League-wide franchise totals (all-time aggregate per franchise).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Unique player identifier. |
-| `active_franchise` | integer | Indicator of whether the franchise is active. |
-| `cups` | integer | Number of Stanley Cup championships. |
-| `first_season_id` | integer | Season identifier of the first season. |
-| `franchise_id` | integer | Unique franchise identifier. |
-| `game_type_id` | integer | Game type identifier (regular/playoffs). |
-| `game_win_pctg` | double | Game-winning percentage. |
-| `games_played` | integer | Games played. |
-| `goals_against` | integer | Goals against. |
-| `goals_for` | integer | Goals for. |
-| `home_losses` | integer | Losses at home. |
-| `home_overtime_losses` | double | Overtime losses at home. |
-| `home_ties` | double | Ties at home. |
-| `home_wins` | integer | Wins at home. |
-| `last_season_id` | integer | Season ID of the franchise's last season. |
-| `losses` | integer | Losses. |
-| `overtime_losses` | double | Total overtime losses. |
-| `penalty_minutes` | integer | Penalty minutes. |
-| `playoff_seasons` | double | Number of playoff seasons. |
-| `point_pctg` | double | Points percentage. |
-| `points` | integer | Total points (goals + assists). |
-| `road_losses` | integer | Losses on the road. |
-| `road_overtime_losses` | double | Overtime losses on the road. |
-| `road_ties` | double | Ties on the road. |
-| `road_wins` | integer | Wins on the road. |
-| `series_losses` | double | Playoff series losses. |
-| `series_played` | double | Playoff series played. |
-| `series_win_pctg` | double | Playoff series win percentage. |
-| `series_wins` | double | Playoff series wins. |
-| `shootout_losses` | integer | Shootout losses. |
-| `shootout_wins` | integer | Shootout wins. |
-| `shutouts` | integer | Shutouts recorded. |
-| `team_abbrev` | character | Team abbreviation. |
-| `team_id` | integer | Unique team identifier. |
-| `team_name` | character | Team name. |
-| `ties` | double | Total ties. |
-| `wins` | integer | Wins. |
+| `id` | Int64 | Unique player identifier. |
+| `active_franchise` | Int64 | Indicator of whether the franchise is active. |
+| `cups` | Int64 | Number of Stanley Cup championships. |
+| `first_season_id` | Int64 | Season identifier of the first season. |
+| `franchise_id` | Int64 | Unique franchise identifier. |
+| `game_type_id` | Int64 | Game type identifier (regular/playoffs). |
+| `game_win_pctg` | Float64 | Game-winning percentage. |
+| `games_played` | Int64 | Games played. |
+| `goals_against` | Int64 | Goals against. |
+| `goals_for` | Int64 | Goals for. |
+| `home_losses` | Int64 | Losses at home. |
+| `home_overtime_losses` | Float64 | Overtime losses at home. |
+| `home_ties` | Float64 | Ties at home. |
+| `home_wins` | Int64 | Wins at home. |
+| `last_season_id` | Int64 | Season ID of the franchise's last season. |
+| `losses` | Int64 | Losses. |
+| `overtime_losses` | Float64 | Total overtime losses. |
+| `penalty_minutes` | Int64 | Penalty minutes. |
+| `playoff_seasons` | Float64 | Number of playoff seasons. |
+| `point_pctg` | Float64 | Points percentage. |
+| `points` | Int64 | Total points (goals + assists). |
+| `road_losses` | Int64 | Losses on the road. |
+| `road_overtime_losses` | Float64 | Overtime losses on the road. |
+| `road_ties` | Float64 | Ties on the road. |
+| `road_wins` | Int64 | Wins on the road. |
+| `series_losses` | Float64 | Playoff series losses. |
+| `series_played` | Float64 | Playoff series played. |
+| `series_win_pctg` | Float64 | Playoff series win percentage. |
+| `series_wins` | Float64 | Playoff series wins. |
+| `shootout_losses` | Int64 | Shootout losses. |
+| `shootout_wins` | Int64 | Shootout wins. |
+| `shutouts` | Int64 | Shutouts recorded. |
+| `team_abbrev` | String | Team abbreviation. |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_name` | String | Team name. |
+| `ties` | Float64 | Total ties. |
+| `wins` | Int64 | Wins. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

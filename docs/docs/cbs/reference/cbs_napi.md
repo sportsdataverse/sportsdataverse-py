@@ -1,13 +1,13 @@
 ---
-title: CBS — CBS Sports NAPI (api.cbssports.com/napi)
+title: CBS Sports — CBS Sports NAPI (api.cbssports.com/napi)
 sidebar_label: CBS Sports NAPI (api.cbssports.com/napi)
-description: "CBS — CBS Sports NAPI (api.cbssports.com/napi) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "CBS Sports — CBS Sports NAPI (api.cbssports.com/napi) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
 ---
-# CBS — CBS Sports NAPI (api.cbssports.com/napi)
+# CBS Sports — CBS Sports NAPI (api.cbssports.com/napi)
 
-`sportsdataverse.cbs` — 82 endpoints.
+`sportsdataverse.providers.cbs` — 82 endpoints.
 
 ## Game
 

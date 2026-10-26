@@ -27,35 +27,35 @@ A draft.
 
 | col_name | type | description |
 |---|---|---|
-| `created` | integer |  |
-| `creators` | character |  |
-| `draft_id` | character | Sleeper draft id, as a string. |
-| `draft_order` | character |  |
-| `last_message_id` | character |  |
-| `last_message_time` | integer |  |
-| `last_picked` | integer |  |
-| `league_id` | character | Sleeper league id the draft belongs to, as a string. |
-| `season` | character | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `slot_to_roster_id` | character |  |
-| `sport` | character |  |
-| `start_time` | integer | Kickoff time in eastern time zone. |
-| `status` | character | Draft status (e.g. 'pre_draft', 'drafting', 'complete'). |
-| `type` | character | Draft type (e.g. 'snake', 'linear', 'auction'). |
-| `metadata_description` | character |  |
-| `metadata_name` | character |  |
-| `metadata_scoring_type` | character |  |
-| `settings_pick_timer` | integer |  |
-| `settings_rounds` | integer |  |
-| `settings_slots_bn` | integer |  |
-| `settings_slots_def` | integer |  |
-| `settings_slots_flex` | integer |  |
-| `settings_slots_k` | integer |  |
-| `settings_slots_qb` | integer |  |
-| `settings_slots_rb` | integer |  |
-| `settings_slots_te` | integer |  |
-| `settings_slots_wr` | integer |  |
-| `settings_teams` | integer |  |
+| `created` | Int64 |  |
+| `creators` | String |  |
+| `draft_id` | String | Sleeper draft id, as a string. |
+| `draft_order` | String |  |
+| `last_message_id` | String |  |
+| `last_message_time` | Int64 |  |
+| `last_picked` | Int64 |  |
+| `league_id` | String | Sleeper league id the draft belongs to, as a string. |
+| `season` | String | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `season_type` | String | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `slot_to_roster_id` | String |  |
+| `sport` | String |  |
+| `start_time` | Int64 | Kickoff time in eastern time zone. |
+| `status` | String | Draft status (e.g. 'pre_draft', 'drafting', 'complete'). |
+| `type` | String | Draft type (e.g. 'snake', 'linear', 'auction'). |
+| `metadata_description` | String |  |
+| `metadata_name` | String |  |
+| `metadata_scoring_type` | String |  |
+| `settings_pick_timer` | Int64 |  |
+| `settings_rounds` | Int64 |  |
+| `settings_slots_bn` | Int64 |  |
+| `settings_slots_def` | Int64 |  |
+| `settings_slots_flex` | Int64 |  |
+| `settings_slots_k` | Int64 |  |
+| `settings_slots_qb` | Int64 |  |
+| `settings_slots_rb` | Int64 |  |
+| `settings_slots_te` | Int64 |  |
+| `settings_slots_wr` | Int64 |  |
+| `settings_teams` | Int64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -91,25 +91,25 @@ Picks of a draft.
 
 | col_name | type | description |
 |---|---|---|
-| `draft_id` | character | Sleeper draft id the pick belongs to, as a string. |
-| `draft_slot` | integer |  |
-| `is_keeper` | character |  |
-| `pick_no` | integer |  |
-| `picked_by` | character |  |
-| `player_id` | character | Sleeper player id of the drafted player, as a string. |
-| `reactions` | character |  |
-| `roster_id` | character |  |
-| `round` | integer | Draft round the pick was made in (1 = first round). |
-| `metadata_first_name` | character |  |
-| `metadata_injury_status` | character |  |
-| `metadata_last_name` | character |  |
-| `metadata_news_updated` | character |  |
-| `metadata_number` | character |  |
-| `metadata_player_id` | character |  |
-| `metadata_position` | character |  |
-| `metadata_sport` | character |  |
-| `metadata_status` | character |  |
-| `metadata_team` | character |  |
+| `draft_id` | String | Sleeper draft id the pick belongs to, as a string. |
+| `draft_slot` | Int64 |  |
+| `is_keeper` | String |  |
+| `pick_no` | Int64 |  |
+| `picked_by` | String |  |
+| `player_id` | String | Sleeper player id of the drafted player, as a string. |
+| `reactions` | String |  |
+| `roster_id` | String |  |
+| `round` | Int64 | Draft round the pick was made in (1 = first round). |
+| `metadata_first_name` | String |  |
+| `metadata_injury_status` | String |  |
+| `metadata_last_name` | String |  |
+| `metadata_news_updated` | String |  |
+| `metadata_number` | String |  |
+| `metadata_player_id` | String |  |
+| `metadata_position` | String |  |
+| `metadata_sport` | String |  |
+| `metadata_status` | String |  |
+| `metadata_team` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -145,35 +145,35 @@ Drafts of a league.
 
 | col_name | type | description |
 |---|---|---|
-| `created` | integer |  |
-| `creators` | character |  |
-| `draft_id` | character | Sleeper draft id, as a string. |
-| `draft_order` | character |  |
-| `last_message_id` | character |  |
-| `last_message_time` | integer |  |
-| `last_picked` | integer |  |
-| `league_id` | character | Sleeper league id the draft belongs to, as a string. |
-| `season` | character | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `sport` | character |  |
-| `start_time` | integer | Kickoff time in eastern time zone. |
-| `status` | character | Draft status (e.g. 'pre_draft', 'drafting', 'complete'). |
-| `type` | character | Draft type (e.g. 'snake', 'linear', 'auction'). |
-| `metadata_description` | character |  |
-| `metadata_name` | character |  |
-| `metadata_scoring_type` | character |  |
-| `settings_cpu_autopick` | integer |  |
-| `settings_pick_timer` | integer |  |
-| `settings_player_type` | integer |  |
-| `settings_rounds` | integer |  |
-| `settings_slots_bn` | integer |  |
-| `settings_slots_def` | integer |  |
-| `settings_slots_flex` | integer |  |
-| `settings_slots_qb` | integer |  |
-| `settings_slots_rb` | integer |  |
-| `settings_slots_te` | integer |  |
-| `settings_slots_wr` | integer |  |
-| `settings_teams` | integer |  |
+| `created` | Int64 |  |
+| `creators` | String |  |
+| `draft_id` | String | Sleeper draft id, as a string. |
+| `draft_order` | String |  |
+| `last_message_id` | String |  |
+| `last_message_time` | Int64 |  |
+| `last_picked` | Int64 |  |
+| `league_id` | String | Sleeper league id the draft belongs to, as a string. |
+| `season` | String | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `season_type` | String | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `sport` | String |  |
+| `start_time` | Int64 | Kickoff time in eastern time zone. |
+| `status` | String | Draft status (e.g. 'pre_draft', 'drafting', 'complete'). |
+| `type` | String | Draft type (e.g. 'snake', 'linear', 'auction'). |
+| `metadata_description` | String |  |
+| `metadata_name` | String |  |
+| `metadata_scoring_type` | String |  |
+| `settings_cpu_autopick` | Int64 |  |
+| `settings_pick_timer` | Int64 |  |
+| `settings_player_type` | Int64 |  |
+| `settings_rounds` | Int64 |  |
+| `settings_slots_bn` | Int64 |  |
+| `settings_slots_def` | Int64 |  |
+| `settings_slots_flex` | Int64 |  |
+| `settings_slots_qb` | Int64 |  |
+| `settings_slots_rb` | Int64 |  |
+| `settings_slots_te` | Int64 |  |
+| `settings_slots_wr` | Int64 |  |
+| `settings_teams` | Int64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -209,153 +209,153 @@ A league.
 
 | col_name | type | description |
 |---|---|---|
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `status` | character | League status (e.g. 'pre_draft', 'drafting', 'in_season', 'complete'). |
-| `avatar` | character |  |
-| `company_id` | character |  |
-| `shard` | integer |  |
-| `season` | character | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `sport` | character |  |
-| `last_message_id` | character |  |
-| `last_author_avatar` | character |  |
-| `last_author_display_name` | character |  |
-| `last_author_id` | character |  |
-| `last_author_is_bot` | character |  |
-| `last_message_attachment` | character |  |
-| `last_message_text_map` | character |  |
-| `last_message_time` | integer |  |
-| `last_pinned_message_id` | character |  |
-| `last_read_id` | character |  |
-| `draft_id` | character | Sleeper draft id of the league's draft, as a string. |
-| `league_id` | character | Sleeper league id, as a string. |
-| `previous_league_id` | character |  |
-| `bracket_id` | character |  |
-| `roster_positions` | character |  |
-| `bracket_overrides_id` | character |  |
-| `group_id` | character | Sleeper league-group id when the league belongs to a group; null otherwise. |
-| `loser_bracket_id` | character |  |
-| `loser_bracket_overrides_id` | character |  |
-| `total_rosters` | integer |  |
-| `metadata_trophy_loser` | character |  |
-| `metadata_trophy_loser_background` | character |  |
-| `metadata_trophy_loser_banner_text` | character |  |
-| `metadata_trophy_winner` | character |  |
-| `metadata_trophy_winner_background` | character |  |
-| `metadata_trophy_winner_banner_text` | character |  |
-| `settings_bench_lock` | integer |  |
-| `settings_daily_waivers` | integer |  |
-| `settings_daily_waivers_hour` | integer |  |
-| `settings_draft_rounds` | integer |  |
-| `settings_last_report` | integer |  |
-| `settings_last_scored_leg` | integer |  |
-| `settings_league_average_match` | integer |  |
-| `settings_leg` | integer |  |
-| `settings_max_keepers` | integer |  |
-| `settings_num_teams` | integer |  |
-| `settings_offseason_adds` | integer |  |
-| `settings_pick_trading` | integer |  |
-| `settings_playoff_teams` | integer |  |
-| `settings_playoff_type` | integer |  |
-| `settings_playoff_week_start` | integer |  |
-| `settings_reserve_allow_doubtful` | integer |  |
-| `settings_reserve_allow_out` | integer |  |
-| `settings_reserve_allow_sus` | integer |  |
-| `settings_reserve_slots` | integer |  |
-| `settings_start_week` | integer |  |
-| `settings_taxi_allow_vets` | integer |  |
-| `settings_taxi_deadline` | integer |  |
-| `settings_taxi_slots` | integer |  |
-| `settings_taxi_years` | integer |  |
-| `settings_trade_deadline` | integer |  |
-| `settings_trade_review_days` | integer |  |
-| `settings_type` | integer |  |
-| `settings_waiver_budget` | integer |  |
-| `settings_waiver_clear_days` | integer |  |
-| `settings_waiver_day_of_week` | integer |  |
-| `settings_waiver_type` | integer |  |
-| `settings_was_auto_archived` | integer |  |
-| `scoring_settings_sack` | numeric |  |
-| `scoring_settings_qb_hit` | numeric |  |
-| `scoring_settings_fgm_40_49` | numeric |  |
-| `scoring_settings_bonus_rec_yd_100` | numeric |  |
-| `scoring_settings_bonus_rush_yd_100` | numeric |  |
-| `scoring_settings_pass_int` | numeric |  |
-| `scoring_settings_pts_allow_0` | numeric |  |
-| `scoring_settings_bonus_pass_yd_400` | numeric |  |
-| `scoring_settings_pass_2pt` | numeric |  |
-| `scoring_settings_blk_kick_ret_yd` | numeric |  |
-| `scoring_settings_st_td` | numeric |  |
-| `scoring_settings_sack_yd` | numeric |  |
-| `scoring_settings_pr_td` | numeric |  |
-| `scoring_settings_rec_td` | numeric |  |
-| `scoring_settings_tkl_ast` | numeric |  |
-| `scoring_settings_fgm_30_39` | numeric |  |
-| `scoring_settings_kr_td` | numeric |  |
-| `scoring_settings_xpmiss` | numeric |  |
-| `scoring_settings_rush_td` | numeric |  |
-| `scoring_settings_fg_ret_yd` | numeric |  |
-| `scoring_settings_idp_tkl` | numeric |  |
-| `scoring_settings_fgm` | numeric |  |
-| `scoring_settings_idp_blk` | numeric |  |
-| `scoring_settings_rec_2pt` | numeric |  |
-| `scoring_settings_int_ret_yd` | numeric |  |
-| `scoring_settings_idp_tkl_solo` | numeric |  |
-| `scoring_settings_pass_att` | numeric |  |
-| `scoring_settings_st_fum_rec` | numeric |  |
-| `scoring_settings_ff` | numeric |  |
-| `scoring_settings_idp_int` | numeric |  |
-| `scoring_settings_fgmiss_30_39` | numeric |  |
-| `scoring_settings_rec` | numeric |  |
-| `scoring_settings_idp_safe` | numeric |  |
-| `scoring_settings_pts_allow_14_20` | numeric |  |
-| `scoring_settings_def_2pt` | numeric |  |
-| `scoring_settings_fgm_0_19` | numeric |  |
-| `scoring_settings_int` | numeric |  |
-| `scoring_settings_def_st_fum_rec` | numeric |  |
-| `scoring_settings_fum_lost` | numeric |  |
-| `scoring_settings_pts_allow_1_6` | numeric |  |
-| `scoring_settings_kr_yd` | numeric |  |
-| `scoring_settings_fgmiss_20_29` | numeric |  |
-| `scoring_settings_rush_att` | numeric |  |
-| `scoring_settings_st_tkl_solo` | numeric |  |
-| `scoring_settings_idp_sack` | numeric |  |
-| `scoring_settings_fgm_20_29` | numeric |  |
-| `scoring_settings_pts_allow_21_27` | numeric |  |
-| `scoring_settings_bonus_pass_yd_300` | numeric |  |
-| `scoring_settings_xpm` | numeric |  |
-| `scoring_settings_pass_sack` | numeric |  |
-| `scoring_settings_fgmiss_0_19` | numeric |  |
-| `scoring_settings_pass_cmp` | numeric |  |
-| `scoring_settings_tkl_loss` | numeric |  |
-| `scoring_settings_rush_2pt` | numeric |  |
-| `scoring_settings_def_pass_def` | numeric |  |
-| `scoring_settings_fum_rec` | numeric |  |
-| `scoring_settings_idp_pass_def` | numeric |  |
-| `scoring_settings_bonus_rec_yd_200` | numeric |  |
-| `scoring_settings_def_st_td` | numeric |  |
-| `scoring_settings_tkl` | numeric |  |
-| `scoring_settings_fgm_50p` | numeric |  |
-| `scoring_settings_def_td` | numeric |  |
-| `scoring_settings_idp_fum_rec` | numeric |  |
-| `scoring_settings_bonus_rush_yd_200` | numeric |  |
-| `scoring_settings_safe` | numeric |  |
-| `scoring_settings_pass_yd` | numeric |  |
-| `scoring_settings_blk_kick` | numeric |  |
-| `scoring_settings_pass_td` | numeric |  |
-| `scoring_settings_tkl_solo` | numeric |  |
-| `scoring_settings_rush_yd` | numeric |  |
-| `scoring_settings_pr_yd` | numeric |  |
-| `scoring_settings_fum` | numeric |  |
-| `scoring_settings_pts_allow_28_34` | numeric |  |
-| `scoring_settings_pts_allow_35p` | numeric |  |
-| `scoring_settings_rec_yd` | numeric |  |
-| `scoring_settings_fum_ret_yd` | numeric |  |
-| `scoring_settings_def_st_ff` | numeric |  |
-| `scoring_settings_pts_allow_7_13` | numeric |  |
-| `scoring_settings_idp_ff` | numeric |  |
-| `scoring_settings_st_ff` | numeric |  |
-| `scoring_settings_idp_tkl_ast` | numeric |  |
+| `name` | String | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
+| `status` | String | League status (e.g. 'pre_draft', 'drafting', 'in_season', 'complete'). |
+| `avatar` | String |  |
+| `company_id` | String |  |
+| `shard` | Int64 |  |
+| `season` | String | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `season_type` | String | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `sport` | String |  |
+| `last_message_id` | String |  |
+| `last_author_avatar` | String |  |
+| `last_author_display_name` | String |  |
+| `last_author_id` | String |  |
+| `last_author_is_bot` | String |  |
+| `last_message_attachment` | String |  |
+| `last_message_text_map` | String |  |
+| `last_message_time` | Int64 |  |
+| `last_pinned_message_id` | String |  |
+| `last_read_id` | String |  |
+| `draft_id` | String | Sleeper draft id of the league's draft, as a string. |
+| `league_id` | String | Sleeper league id, as a string. |
+| `previous_league_id` | String |  |
+| `bracket_id` | String |  |
+| `roster_positions` | String |  |
+| `bracket_overrides_id` | String |  |
+| `group_id` | String | Sleeper league-group id when the league belongs to a group; null otherwise. |
+| `loser_bracket_id` | String |  |
+| `loser_bracket_overrides_id` | String |  |
+| `total_rosters` | Int64 |  |
+| `metadata_trophy_loser` | String |  |
+| `metadata_trophy_loser_background` | String |  |
+| `metadata_trophy_loser_banner_text` | String |  |
+| `metadata_trophy_winner` | String |  |
+| `metadata_trophy_winner_background` | String |  |
+| `metadata_trophy_winner_banner_text` | String |  |
+| `settings_bench_lock` | Int64 |  |
+| `settings_daily_waivers` | Int64 |  |
+| `settings_daily_waivers_hour` | Int64 |  |
+| `settings_draft_rounds` | Int64 |  |
+| `settings_last_report` | Int64 |  |
+| `settings_last_scored_leg` | Int64 |  |
+| `settings_league_average_match` | Int64 |  |
+| `settings_leg` | Int64 |  |
+| `settings_max_keepers` | Int64 |  |
+| `settings_num_teams` | Int64 |  |
+| `settings_offseason_adds` | Int64 |  |
+| `settings_pick_trading` | Int64 |  |
+| `settings_playoff_teams` | Int64 |  |
+| `settings_playoff_type` | Int64 |  |
+| `settings_playoff_week_start` | Int64 |  |
+| `settings_reserve_allow_doubtful` | Int64 |  |
+| `settings_reserve_allow_out` | Int64 |  |
+| `settings_reserve_allow_sus` | Int64 |  |
+| `settings_reserve_slots` | Int64 |  |
+| `settings_start_week` | Int64 |  |
+| `settings_taxi_allow_vets` | Int64 |  |
+| `settings_taxi_deadline` | Int64 |  |
+| `settings_taxi_slots` | Int64 |  |
+| `settings_taxi_years` | Int64 |  |
+| `settings_trade_deadline` | Int64 |  |
+| `settings_trade_review_days` | Int64 |  |
+| `settings_type` | Int64 |  |
+| `settings_waiver_budget` | Int64 |  |
+| `settings_waiver_clear_days` | Int64 |  |
+| `settings_waiver_day_of_week` | Int64 |  |
+| `settings_waiver_type` | Int64 |  |
+| `settings_was_auto_archived` | Int64 |  |
+| `scoring_settings_sack` | Float64 |  |
+| `scoring_settings_qb_hit` | Float64 |  |
+| `scoring_settings_fgm_40_49` | Float64 |  |
+| `scoring_settings_bonus_rec_yd_100` | Float64 |  |
+| `scoring_settings_bonus_rush_yd_100` | Float64 |  |
+| `scoring_settings_pass_int` | Float64 |  |
+| `scoring_settings_pts_allow_0` | Float64 |  |
+| `scoring_settings_bonus_pass_yd_400` | Float64 |  |
+| `scoring_settings_pass_2pt` | Float64 |  |
+| `scoring_settings_blk_kick_ret_yd` | Float64 |  |
+| `scoring_settings_st_td` | Float64 |  |
+| `scoring_settings_sack_yd` | Float64 |  |
+| `scoring_settings_pr_td` | Float64 |  |
+| `scoring_settings_rec_td` | Float64 |  |
+| `scoring_settings_tkl_ast` | Float64 |  |
+| `scoring_settings_fgm_30_39` | Float64 |  |
+| `scoring_settings_kr_td` | Float64 |  |
+| `scoring_settings_xpmiss` | Float64 |  |
+| `scoring_settings_rush_td` | Float64 |  |
+| `scoring_settings_fg_ret_yd` | Float64 |  |
+| `scoring_settings_idp_tkl` | Float64 |  |
+| `scoring_settings_fgm` | Float64 |  |
+| `scoring_settings_idp_blk` | Float64 |  |
+| `scoring_settings_rec_2pt` | Float64 |  |
+| `scoring_settings_int_ret_yd` | Float64 |  |
+| `scoring_settings_idp_tkl_solo` | Float64 |  |
+| `scoring_settings_pass_att` | Float64 |  |
+| `scoring_settings_st_fum_rec` | Float64 |  |
+| `scoring_settings_ff` | Float64 |  |
+| `scoring_settings_idp_int` | Float64 |  |
+| `scoring_settings_fgmiss_30_39` | Float64 |  |
+| `scoring_settings_rec` | Float64 |  |
+| `scoring_settings_idp_safe` | Float64 |  |
+| `scoring_settings_pts_allow_14_20` | Float64 |  |
+| `scoring_settings_def_2pt` | Float64 |  |
+| `scoring_settings_fgm_0_19` | Float64 |  |
+| `scoring_settings_int` | Float64 |  |
+| `scoring_settings_def_st_fum_rec` | Float64 |  |
+| `scoring_settings_fum_lost` | Float64 |  |
+| `scoring_settings_pts_allow_1_6` | Float64 |  |
+| `scoring_settings_kr_yd` | Float64 |  |
+| `scoring_settings_fgmiss_20_29` | Float64 |  |
+| `scoring_settings_rush_att` | Float64 |  |
+| `scoring_settings_st_tkl_solo` | Float64 |  |
+| `scoring_settings_idp_sack` | Float64 |  |
+| `scoring_settings_fgm_20_29` | Float64 |  |
+| `scoring_settings_pts_allow_21_27` | Float64 |  |
+| `scoring_settings_bonus_pass_yd_300` | Float64 |  |
+| `scoring_settings_xpm` | Float64 |  |
+| `scoring_settings_pass_sack` | Float64 |  |
+| `scoring_settings_fgmiss_0_19` | Float64 |  |
+| `scoring_settings_pass_cmp` | Float64 |  |
+| `scoring_settings_tkl_loss` | Float64 |  |
+| `scoring_settings_rush_2pt` | Float64 |  |
+| `scoring_settings_def_pass_def` | Float64 |  |
+| `scoring_settings_fum_rec` | Float64 |  |
+| `scoring_settings_idp_pass_def` | Float64 |  |
+| `scoring_settings_bonus_rec_yd_200` | Float64 |  |
+| `scoring_settings_def_st_td` | Float64 |  |
+| `scoring_settings_tkl` | Float64 |  |
+| `scoring_settings_fgm_50p` | Float64 |  |
+| `scoring_settings_def_td` | Float64 |  |
+| `scoring_settings_idp_fum_rec` | Float64 |  |
+| `scoring_settings_bonus_rush_yd_200` | Float64 |  |
+| `scoring_settings_safe` | Float64 |  |
+| `scoring_settings_pass_yd` | Float64 |  |
+| `scoring_settings_blk_kick` | Float64 |  |
+| `scoring_settings_pass_td` | Float64 |  |
+| `scoring_settings_tkl_solo` | Float64 |  |
+| `scoring_settings_rush_yd` | Float64 |  |
+| `scoring_settings_pr_yd` | Float64 |  |
+| `scoring_settings_fum` | Float64 |  |
+| `scoring_settings_pts_allow_28_34` | Float64 |  |
+| `scoring_settings_pts_allow_35p` | Float64 |  |
+| `scoring_settings_rec_yd` | Float64 |  |
+| `scoring_settings_fum_ret_yd` | Float64 |  |
+| `scoring_settings_def_st_ff` | Float64 |  |
+| `scoring_settings_pts_allow_7_13` | Float64 |  |
+| `scoring_settings_idp_ff` | Float64 |  |
+| `scoring_settings_st_ff` | Float64 |  |
+| `scoring_settings_idp_tkl_ast` | Float64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -392,14 +392,14 @@ Matchups for a week.
 
 | col_name | type | description |
 |---|---|---|
-| `points` | numeric | Fantasy points the roster scored in the week under the league's scoring settings. |
-| `players` | character | Stringified list of Sleeper player ids on the roster for the week (starters and bench). |
-| `roster_id` | character |  |
-| `custom_points` | character |  |
-| `matchup_id` | character |  |
-| `starters` | character |  |
-| `starters_points` | character |  |
-| `players_points` | character |  |
+| `points` | Float64 | Fantasy points the roster scored in the week under the league's scoring settings. |
+| `players` | String | Stringified list of Sleeper player ids on the roster for the week (starters and bench). |
+| `roster_id` | String |  |
+| `custom_points` | String |  |
+| `matchup_id` | String |  |
+| `starters` | String |  |
+| `starters_points` | String |  |
+| `players_points` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -434,59 +434,59 @@ All NFL players (large; fetch at most once per day).
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Player id in the source's own namespace, as a string. |
-| `weight` | character | Player's weight as the source lists it (pounds for US sources). |
-| `birth_state` | character | State or region of birth, where the source lists it. |
-| `birth_country` | character | Country of birth, where the source lists it. |
-| `team_abbr` | character | Abbreviation of the player's current team; null for a free agent or retired player. |
-| `rotoworld_id` | character | Rotoworld player id, as a string. |
-| `news_updated` | character |  |
-| `sportradar_id` | character | Sportradar player id (a UUID). |
-| `team_changed_at` | character |  |
-| `team` | character | Current team of the player as the source ships it (a nested team object, stringified, or a team code). |
-| `depth_chart_position` | character | Position slot on the team depth chart, where the source lists it. |
-| `swish_id` | character | Swish Analytics player id, as a string. |
-| `active` | logical | Whether the player record is active with the source (e.g. on a current roster). |
-| `last_name` | character | Player's last name as the source lists it. |
-| `injury_body_part` | character |  |
-| `practice_participation` | character |  |
-| `injury_status` | character | Current injury designation (e.g. 'Questionable', 'Out'); null when healthy or unknown. |
-| `college` | character | College the player attended, as the source lists it. |
-| `search_first_name` | character |  |
-| `rotowire_id` | character | RotoWire player id, as a string. |
-| `injury_notes` | character |  |
-| `search_full_name` | character |  |
-| `gsis_id` | character | NFL GSIS player id (e.g. '00-0033873'), the nflverse play-by-play key. |
-| `years_exp` | integer | Years of professional experience. |
-| `status` | character | Player status as the source lists it (e.g. 'Active', 'Inactive'). |
-| `pandascore_id` | character |  |
-| `number` | integer | Jersey number as the source lists it. |
-| `injury_start_date` | character |  |
-| `metadata` | character |  |
-| `height` | character | Player's height as the source encodes it (PFF uses feet and inches without a separator, 602 = 6'02"; others use inches or centimetres). |
-| `search_rank` | integer |  |
-| `fantasy_data_id` | character | FantasyData player id, as a string. |
-| `espn_id` | character | ESPN athlete id, as a string. |
-| `sport` | character |  |
-| `search_last_name` | character |  |
-| `competitions` | character |  |
-| `hashtag` | character |  |
-| `stats_id` | character | STATS (Stats Perform) player id, as a string. |
-| `practice_description` | character |  |
-| `oddsjam_id` | character |  |
-| `full_name` | character | Player's full name as the source lists it. |
-| `fantasy_positions` | character |  |
-| `age` | integer | Player's age in years at capture (string), where the source lists it. |
-| `first_name` | character | Player's first name as the source lists it. |
-| `player_shard` | character |  |
-| `position` | character | Position abbreviation as the source lists it (e.g. QB, WR). |
-| `high_school` | character | High school the player attended, with its state in parentheses where the source lists it (e.g. 'Killian (FL)'). |
-| `birth_city` | character | City of birth, where the source lists it. |
-| `yahoo_id` | character | Yahoo player id, as a string. |
-| `depth_chart_order` | character |  |
-| `birth_date` | character | Player's date of birth (YYYY-MM-DD), where the source lists it. |
-| `kalshi_id` | character |  |
-| `opta_id` | character |  |
+| `player_id` | String | Player id in the source's own namespace, as a string. |
+| `weight` | String | Player's weight as the source lists it (pounds for US sources). |
+| `birth_state` | String | State or region of birth, where the source lists it. |
+| `birth_country` | String | Country of birth, where the source lists it. |
+| `team_abbr` | String | Abbreviation of the player's current team; null for a free agent or retired player. |
+| `rotoworld_id` | String | Rotoworld player id, as a string. |
+| `news_updated` | String |  |
+| `sportradar_id` | String | Sportradar player id (a UUID). |
+| `team_changed_at` | String |  |
+| `team` | String | Current team of the player as the source ships it (a nested team object, stringified, or a team code). |
+| `depth_chart_position` | String | Position slot on the team depth chart, where the source lists it. |
+| `swish_id` | String | Swish Analytics player id, as a string. |
+| `active` | Boolean | Whether the player record is active with the source (e.g. on a current roster). |
+| `last_name` | String | Player's last name as the source lists it. |
+| `injury_body_part` | String |  |
+| `practice_participation` | String |  |
+| `injury_status` | String | Current injury designation (e.g. 'Questionable', 'Out'); null when healthy or unknown. |
+| `college` | String | College the player attended, as the source lists it. |
+| `search_first_name` | String |  |
+| `rotowire_id` | String | RotoWire player id, as a string. |
+| `injury_notes` | String |  |
+| `search_full_name` | String |  |
+| `gsis_id` | String | NFL GSIS player id (e.g. '00-0033873'), the nflverse play-by-play key. |
+| `years_exp` | Int64 | Years of professional experience. |
+| `status` | String | Player status as the source lists it (e.g. 'Active', 'Inactive'). |
+| `pandascore_id` | String |  |
+| `number` | Int64 | Jersey number as the source lists it. |
+| `injury_start_date` | String |  |
+| `metadata` | String |  |
+| `height` | String | Player's height as the source encodes it (PFF uses feet and inches without a separator, 602 = 6'02"; others use inches or centimetres). |
+| `search_rank` | Int64 |  |
+| `fantasy_data_id` | String | FantasyData player id, as a string. |
+| `espn_id` | String | ESPN athlete id, as a string. |
+| `sport` | String |  |
+| `search_last_name` | String |  |
+| `competitions` | String |  |
+| `hashtag` | String |  |
+| `stats_id` | String | STATS (Stats Perform) player id, as a string. |
+| `practice_description` | String |  |
+| `oddsjam_id` | String |  |
+| `full_name` | String | Player's full name as the source lists it. |
+| `fantasy_positions` | String |  |
+| `age` | Int64 | Player's age in years at capture (string), where the source lists it. |
+| `first_name` | String | Player's first name as the source lists it. |
+| `player_shard` | String |  |
+| `position` | String | Position abbreviation as the source lists it (e.g. QB, WR). |
+| `high_school` | String | High school the player attended, with its state in parentheses where the source lists it (e.g. 'Killian (FL)'). |
+| `birth_city` | String | City of birth, where the source lists it. |
+| `yahoo_id` | String | Yahoo player id, as a string. |
+| `depth_chart_order` | String |  |
+| `birth_date` | String | Player's date of birth (YYYY-MM-DD), where the source lists it. |
+| `kalshi_id` | String |  |
+| `opta_id` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -522,29 +522,29 @@ Rosters in a league.
 
 | col_name | type | description |
 |---|---|---|
-| `co_owners` | character |  |
-| `keepers` | character |  |
-| `league_id` | character | Sleeper league id the roster belongs to, as a string. |
-| `metadata` | character |  |
-| `owner_id` | character |  |
-| `player_map` | character |  |
-| `players` | character | Stringified list of Sleeper player ids on the roster (starters, bench and reserve). |
-| `reserve` | character |  |
-| `roster_id` | character |  |
-| `starters` | character |  |
-| `taxi` | character |  |
-| `settings_fpts` | integer |  |
-| `settings_fpts_against` | integer |  |
-| `settings_fpts_against_decimal` | integer |  |
-| `settings_fpts_decimal` | integer |  |
-| `settings_losses` | integer |  |
-| `settings_ppts` | integer |  |
-| `settings_ppts_decimal` | integer |  |
-| `settings_ties` | integer |  |
-| `settings_total_moves` | integer |  |
-| `settings_waiver_budget_used` | integer |  |
-| `settings_waiver_position` | integer |  |
-| `settings_wins` | integer |  |
+| `co_owners` | String |  |
+| `keepers` | String |  |
+| `league_id` | String | Sleeper league id the roster belongs to, as a string. |
+| `metadata` | String |  |
+| `owner_id` | String |  |
+| `player_map` | String |  |
+| `players` | String | Stringified list of Sleeper player ids on the roster (starters, bench and reserve). |
+| `reserve` | String |  |
+| `roster_id` | String |  |
+| `starters` | String |  |
+| `taxi` | String |  |
+| `settings_fpts` | Int64 |  |
+| `settings_fpts_against` | Int64 |  |
+| `settings_fpts_against_decimal` | Int64 |  |
+| `settings_fpts_decimal` | Int64 |  |
+| `settings_losses` | Int64 |  |
+| `settings_ppts` | Int64 |  |
+| `settings_ppts_decimal` | Int64 |  |
+| `settings_ties` | Int64 |  |
+| `settings_total_moves` | Int64 |  |
+| `settings_waiver_budget_used` | Int64 |  |
+| `settings_waiver_position` | Int64 |  |
+| `settings_wins` | Int64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -579,16 +579,16 @@ Current NFL week and season state.
 
 | col_name | type | description |
 |---|---|---|
-| `week` | integer | Season week. |
-| `leg` | integer |  |
-| `season` | character | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `league_season` | character | Season the Sleeper league year currently points at, as a string (e.g. '2026'). |
-| `previous_season` | character |  |
-| `season_start_date` | character | First day of the current Sleeper season (YYYY-MM-DD). |
-| `display_week` | integer |  |
-| `league_create_season` | character |  |
-| `season_has_scores` | logical |  |
+| `week` | Int64 | Season week. |
+| `leg` | Int64 |  |
+| `season` | String | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `season_type` | String | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `league_season` | String | Season the Sleeper league year currently points at, as a string (e.g. '2026'). |
+| `previous_season` | String |  |
+| `season_start_date` | String | First day of the current Sleeper season (YYYY-MM-DD). |
+| `display_week` | Int64 |  |
+| `league_create_season` | String |  |
+| `season_has_scores` | Boolean |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -624,11 +624,11 @@ Traded draft picks.
 
 | col_name | type | description |
 |---|---|---|
-| `round` | integer | Draft round |
-| `season` | character | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `roster_id` | character |  |
-| `owner_id` | character |  |
-| `previous_owner_id` | character |  |
+| `round` | Int64 | Draft round |
+| `season` | String | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `roster_id` | String |  |
+| `owner_id` | String |  |
+| `previous_owner_id` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -665,22 +665,22 @@ Transactions for a week.
 
 | col_name | type | description |
 |---|---|---|
-| `status` | character | Transaction status (e.g. 'complete', 'failed'). |
-| `type` | character | Transaction type (e.g. 'waiver', 'free_agent', 'trade'). |
-| `created` | integer |  |
-| `leg` | integer |  |
-| `draft_picks` | character |  |
-| `creator` | character |  |
-| `transaction_id` | character | Sleeper transaction id, as a string. |
-| `adds` | character |  |
-| `consenter_ids` | character |  |
-| `drops` | character | Throws dropped |
-| `roster_ids` | character |  |
-| `status_updated` | integer |  |
-| `waiver_budget` | character |  |
-| `metadata_notes` | character |  |
-| `settings_waiver_bid` | integer |  |
-| `settings_priority` | numeric |  |
+| `status` | String | Transaction status (e.g. 'complete', 'failed'). |
+| `type` | String | Transaction type (e.g. 'waiver', 'free_agent', 'trade'). |
+| `created` | Int64 |  |
+| `leg` | Int64 |  |
+| `draft_picks` | String |  |
+| `creator` | String |  |
+| `transaction_id` | String | Sleeper transaction id, as a string. |
+| `adds` | String |  |
+| `consenter_ids` | String |  |
+| `drops` | String | Throws dropped |
+| `roster_ids` | String |  |
+| `status_updated` | Int64 |  |
+| `waiver_budget` | String |  |
+| `metadata_notes` | String |  |
+| `settings_waiver_bid` | Int64 |  |
+| `settings_priority` | Float64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -717,8 +717,8 @@ Trending adds (lookback_hours, limit).
 
 | col_name | type | description |
 |---|---|---|
-| `count` | integer | Number of Sleeper leagues that added the player over the lookback window. |
-| `player_id` | character | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
+| `count` | Int64 | Number of Sleeper leagues that added the player over the lookback window. |
+| `player_id` | String | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -754,27 +754,27 @@ Look up a user by username or id.
 
 | col_name | type | description |
 |---|---|---|
-| `avatar` | character |  |
-| `cookies` | character |  |
-| `created` | character |  |
-| `currencies` | character |  |
-| `data_updated` | character |  |
-| `deleted` | character |  |
-| `display_name` | character | Full name of player |
-| `email` | character |  |
-| `is_bot` | character |  |
-| `metadata` | character |  |
-| `notifications` | character |  |
-| `pending` | character |  |
-| `phone` | character |  |
-| `real_name` | character |  |
-| `solicitable` | character |  |
-| `summoner_name` | character |  |
-| `summoner_region` | character |  |
-| `token` | character |  |
-| `user_id` | character |  |
-| `username` | character |  |
-| `verification` | character |  |
+| `avatar` | String |  |
+| `cookies` | String |  |
+| `created` | String |  |
+| `currencies` | String |  |
+| `data_updated` | String |  |
+| `deleted` | String |  |
+| `display_name` | String | Full name of player |
+| `email` | String |  |
+| `is_bot` | String |  |
+| `metadata` | String |  |
+| `notifications` | String |  |
+| `pending` | String |  |
+| `phone` | String |  |
+| `real_name` | String |  |
+| `solicitable` | String |  |
+| `summoner_name` | String |  |
+| `summoner_region` | String |  |
+| `token` | String |  |
+| `user_id` | String |  |
+| `username` | String |  |
+| `verification` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -811,164 +811,164 @@ Leagues a user is in for a season.
 
 | col_name | type | description |
 |---|---|---|
-| `last_pinned_message_id` | character |  |
-| `season` | character | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `group_id` | character | Sleeper league-group id when the league belongs to a group; null otherwise. |
-| `loser_bracket_id` | character |  |
-| `last_author_display_name` | character |  |
-| `total_rosters` | integer |  |
-| `last_message_id` | character |  |
-| `draft_id` | character | Sleeper draft id of the league's draft, as a string. |
-| `previous_league_id` | character |  |
-| `sport` | character |  |
-| `bracket_id` | character |  |
-| `bracket_overrides_id` | character |  |
-| `last_message_text_map` | character |  |
-| `status` | character | League status (e.g. 'pre_draft', 'drafting', 'in_season', 'complete'). |
-| `last_message_attachment` | character |  |
-| `display_order` | integer | Position of the bracket slot within its round, controlling top-to-bottom rendering. |
-| `league_id` | character | Sleeper league id, as a string. |
-| `last_author_is_bot` | character |  |
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `company_id` | character |  |
-| `last_author_id` | character |  |
-| `roster_positions` | character |  |
-| `last_message_time` | integer |  |
-| `last_read_id` | character |  |
-| `loser_bracket_overrides_id` | character |  |
-| `last_author_avatar` | character |  |
-| `last_transaction_id` | character |  |
-| `shard` | integer |  |
-| `avatar` | character |  |
-| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `metadata_trophy_winner` | character |  |
-| `metadata_trophy_winner_background` | character |  |
-| `metadata_trophy_winner_banner_text` | character |  |
-| `settings_bench_lock` | integer |  |
-| `settings_daily_waivers` | integer |  |
-| `settings_daily_waivers_hour` | integer |  |
-| `settings_draft_rounds` | integer |  |
-| `settings_last_report` | integer |  |
-| `settings_last_scored_leg` | integer |  |
-| `settings_league_average_match` | integer |  |
-| `settings_leg` | integer |  |
-| `settings_max_keepers` | integer |  |
-| `settings_num_teams` | integer |  |
-| `settings_offseason_adds` | integer |  |
-| `settings_pick_trading` | integer |  |
-| `settings_playoff_teams` | integer |  |
-| `settings_playoff_week_start` | integer |  |
-| `settings_reserve_allow_doubtful` | integer |  |
-| `settings_reserve_allow_out` | integer |  |
-| `settings_reserve_allow_sus` | integer |  |
-| `settings_reserve_slots` | integer |  |
-| `settings_start_week` | integer |  |
-| `settings_taxi_allow_vets` | integer |  |
-| `settings_taxi_deadline` | integer |  |
-| `settings_taxi_slots` | integer |  |
-| `settings_taxi_years` | integer |  |
-| `settings_trade_deadline` | integer |  |
-| `settings_trade_review_days` | integer |  |
-| `settings_type` | integer |  |
-| `settings_waiver_budget` | integer |  |
-| `settings_waiver_clear_days` | integer |  |
-| `settings_waiver_day_of_week` | integer |  |
-| `settings_waiver_type` | integer |  |
-| `settings_was_auto_archived` | integer |  |
-| `scoring_settings_sack` | numeric |  |
-| `scoring_settings_fgm_40_49` | numeric |  |
-| `scoring_settings_bonus_rec_te` | numeric |  |
-| `scoring_settings_fgm_yds` | numeric |  |
-| `scoring_settings_pass_int` | numeric |  |
-| `scoring_settings_pts_allow_0` | numeric |  |
-| `scoring_settings_pass_2pt` | numeric |  |
-| `scoring_settings_st_td` | numeric |  |
-| `scoring_settings_fgm_yds_over_30` | numeric |  |
-| `scoring_settings_rec_td` | numeric |  |
-| `scoring_settings_fgm_30_39` | numeric |  |
-| `scoring_settings_xpmiss` | numeric |  |
-| `scoring_settings_rush_td` | numeric |  |
-| `scoring_settings_fgm` | numeric |  |
-| `scoring_settings_rec_2pt` | numeric |  |
-| `scoring_settings_rush_fd` | numeric |  |
-| `scoring_settings_st_fum_rec` | numeric |  |
-| `scoring_settings_fgmiss` | numeric |  |
-| `scoring_settings_ff` | numeric |  |
-| `scoring_settings_fgmiss_30_39` | numeric |  |
-| `scoring_settings_rec` | numeric |  |
-| `scoring_settings_pts_allow_14_20` | numeric |  |
-| `scoring_settings_fgm_0_19` | numeric |  |
-| `scoring_settings_int` | numeric |  |
-| `scoring_settings_def_st_fum_rec` | numeric |  |
-| `scoring_settings_fum_lost` | numeric |  |
-| `scoring_settings_pts_allow_1_6` | numeric |  |
-| `scoring_settings_rec_fd` | numeric |  |
-| `scoring_settings_fgmiss_20_29` | numeric |  |
-| `scoring_settings_fgm_20_29` | numeric |  |
-| `scoring_settings_pts_allow_21_27` | numeric |  |
-| `scoring_settings_bonus_rec_wr` | numeric |  |
-| `scoring_settings_xpm` | numeric |  |
-| `scoring_settings_fgmiss_0_19` | numeric |  |
-| `scoring_settings_rush_2pt` | numeric |  |
-| `scoring_settings_fum_rec` | numeric |  |
-| `scoring_settings_def_st_td` | numeric |  |
-| `scoring_settings_fgm_50p` | numeric |  |
-| `scoring_settings_def_td` | numeric |  |
-| `scoring_settings_safe` | numeric |  |
-| `scoring_settings_pass_yd` | numeric |  |
-| `scoring_settings_fgmiss_40_49` | numeric |  |
-| `scoring_settings_blk_kick` | numeric |  |
-| `scoring_settings_pass_td` | numeric |  |
-| `scoring_settings_rush_yd` | numeric |  |
-| `scoring_settings_fum` | numeric |  |
-| `scoring_settings_pts_allow_28_34` | numeric |  |
-| `scoring_settings_pts_allow_35p` | numeric |  |
-| `scoring_settings_rec_yd` | numeric |  |
-| `scoring_settings_def_st_ff` | numeric |  |
-| `scoring_settings_pts_allow_7_13` | numeric |  |
-| `scoring_settings_st_ff` | numeric |  |
-| `metadata_trophy_loser` | character |  |
-| `metadata_trophy_loser_background` | character |  |
-| `metadata_trophy_loser_banner_text` | character |  |
-| `settings_playoff_type` | numeric |  |
-| `scoring_settings_qb_hit` | numeric |  |
-| `scoring_settings_bonus_rec_yd_100` | numeric |  |
-| `scoring_settings_bonus_rush_yd_100` | numeric |  |
-| `scoring_settings_bonus_pass_yd_400` | numeric |  |
-| `scoring_settings_blk_kick_ret_yd` | numeric |  |
-| `scoring_settings_sack_yd` | numeric |  |
-| `scoring_settings_pr_td` | numeric |  |
-| `scoring_settings_tkl_ast` | numeric |  |
-| `scoring_settings_kr_td` | numeric |  |
-| `scoring_settings_fg_ret_yd` | numeric |  |
-| `scoring_settings_idp_tkl` | numeric |  |
-| `scoring_settings_idp_blk` | numeric |  |
-| `scoring_settings_int_ret_yd` | numeric |  |
-| `scoring_settings_idp_tkl_solo` | numeric |  |
-| `scoring_settings_pass_att` | numeric |  |
-| `scoring_settings_idp_int` | numeric |  |
-| `scoring_settings_idp_safe` | numeric |  |
-| `scoring_settings_def_2pt` | numeric |  |
-| `scoring_settings_kr_yd` | numeric |  |
-| `scoring_settings_rush_att` | numeric |  |
-| `scoring_settings_st_tkl_solo` | numeric |  |
-| `scoring_settings_idp_sack` | numeric |  |
-| `scoring_settings_bonus_pass_yd_300` | numeric |  |
-| `scoring_settings_pass_sack` | numeric |  |
-| `scoring_settings_pass_cmp` | numeric |  |
-| `scoring_settings_tkl_loss` | numeric |  |
-| `scoring_settings_def_pass_def` | numeric |  |
-| `scoring_settings_idp_pass_def` | numeric |  |
-| `scoring_settings_bonus_rec_yd_200` | numeric |  |
-| `scoring_settings_tkl` | numeric |  |
-| `scoring_settings_idp_fum_rec` | numeric |  |
-| `scoring_settings_bonus_rush_yd_200` | numeric |  |
-| `scoring_settings_tkl_solo` | numeric |  |
-| `scoring_settings_pr_yd` | numeric |  |
-| `scoring_settings_fum_ret_yd` | numeric |  |
-| `scoring_settings_idp_ff` | numeric |  |
-| `scoring_settings_idp_tkl_ast` | numeric |  |
-| `metadata` | numeric |  |
+| `last_pinned_message_id` | String |  |
+| `season` | String | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `group_id` | String | Sleeper league-group id when the league belongs to a group; null otherwise. |
+| `loser_bracket_id` | String |  |
+| `last_author_display_name` | String |  |
+| `total_rosters` | Int64 |  |
+| `last_message_id` | String |  |
+| `draft_id` | String | Sleeper draft id of the league's draft, as a string. |
+| `previous_league_id` | String |  |
+| `sport` | String |  |
+| `bracket_id` | String |  |
+| `bracket_overrides_id` | String |  |
+| `last_message_text_map` | String |  |
+| `status` | String | League status (e.g. 'pre_draft', 'drafting', 'in_season', 'complete'). |
+| `last_message_attachment` | String |  |
+| `display_order` | Int64 | Position of the bracket slot within its round, controlling top-to-bottom rendering. |
+| `league_id` | String | Sleeper league id, as a string. |
+| `last_author_is_bot` | String |  |
+| `name` | String | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
+| `company_id` | String |  |
+| `last_author_id` | String |  |
+| `roster_positions` | String |  |
+| `last_message_time` | Int64 |  |
+| `last_read_id` | String |  |
+| `loser_bracket_overrides_id` | String |  |
+| `last_author_avatar` | String |  |
+| `last_transaction_id` | String |  |
+| `shard` | Int64 |  |
+| `avatar` | String |  |
+| `season_type` | String | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `metadata_trophy_winner` | String |  |
+| `metadata_trophy_winner_background` | String |  |
+| `metadata_trophy_winner_banner_text` | String |  |
+| `settings_bench_lock` | Int64 |  |
+| `settings_daily_waivers` | Int64 |  |
+| `settings_daily_waivers_hour` | Int64 |  |
+| `settings_draft_rounds` | Int64 |  |
+| `settings_last_report` | Int64 |  |
+| `settings_last_scored_leg` | Int64 |  |
+| `settings_league_average_match` | Int64 |  |
+| `settings_leg` | Int64 |  |
+| `settings_max_keepers` | Int64 |  |
+| `settings_num_teams` | Int64 |  |
+| `settings_offseason_adds` | Int64 |  |
+| `settings_pick_trading` | Int64 |  |
+| `settings_playoff_teams` | Int64 |  |
+| `settings_playoff_week_start` | Int64 |  |
+| `settings_reserve_allow_doubtful` | Int64 |  |
+| `settings_reserve_allow_out` | Int64 |  |
+| `settings_reserve_allow_sus` | Int64 |  |
+| `settings_reserve_slots` | Int64 |  |
+| `settings_start_week` | Int64 |  |
+| `settings_taxi_allow_vets` | Int64 |  |
+| `settings_taxi_deadline` | Int64 |  |
+| `settings_taxi_slots` | Int64 |  |
+| `settings_taxi_years` | Int64 |  |
+| `settings_trade_deadline` | Int64 |  |
+| `settings_trade_review_days` | Int64 |  |
+| `settings_type` | Int64 |  |
+| `settings_waiver_budget` | Int64 |  |
+| `settings_waiver_clear_days` | Int64 |  |
+| `settings_waiver_day_of_week` | Int64 |  |
+| `settings_waiver_type` | Int64 |  |
+| `settings_was_auto_archived` | Int64 |  |
+| `scoring_settings_sack` | Float64 |  |
+| `scoring_settings_fgm_40_49` | Float64 |  |
+| `scoring_settings_bonus_rec_te` | Float64 |  |
+| `scoring_settings_fgm_yds` | Float64 |  |
+| `scoring_settings_pass_int` | Float64 |  |
+| `scoring_settings_pts_allow_0` | Float64 |  |
+| `scoring_settings_pass_2pt` | Float64 |  |
+| `scoring_settings_st_td` | Float64 |  |
+| `scoring_settings_fgm_yds_over_30` | Float64 |  |
+| `scoring_settings_rec_td` | Float64 |  |
+| `scoring_settings_fgm_30_39` | Float64 |  |
+| `scoring_settings_xpmiss` | Float64 |  |
+| `scoring_settings_rush_td` | Float64 |  |
+| `scoring_settings_fgm` | Float64 |  |
+| `scoring_settings_rec_2pt` | Float64 |  |
+| `scoring_settings_rush_fd` | Float64 |  |
+| `scoring_settings_st_fum_rec` | Float64 |  |
+| `scoring_settings_fgmiss` | Float64 |  |
+| `scoring_settings_ff` | Float64 |  |
+| `scoring_settings_fgmiss_30_39` | Float64 |  |
+| `scoring_settings_rec` | Float64 |  |
+| `scoring_settings_pts_allow_14_20` | Float64 |  |
+| `scoring_settings_fgm_0_19` | Float64 |  |
+| `scoring_settings_int` | Float64 |  |
+| `scoring_settings_def_st_fum_rec` | Float64 |  |
+| `scoring_settings_fum_lost` | Float64 |  |
+| `scoring_settings_pts_allow_1_6` | Float64 |  |
+| `scoring_settings_rec_fd` | Float64 |  |
+| `scoring_settings_fgmiss_20_29` | Float64 |  |
+| `scoring_settings_fgm_20_29` | Float64 |  |
+| `scoring_settings_pts_allow_21_27` | Float64 |  |
+| `scoring_settings_bonus_rec_wr` | Float64 |  |
+| `scoring_settings_xpm` | Float64 |  |
+| `scoring_settings_fgmiss_0_19` | Float64 |  |
+| `scoring_settings_rush_2pt` | Float64 |  |
+| `scoring_settings_fum_rec` | Float64 |  |
+| `scoring_settings_def_st_td` | Float64 |  |
+| `scoring_settings_fgm_50p` | Float64 |  |
+| `scoring_settings_def_td` | Float64 |  |
+| `scoring_settings_safe` | Float64 |  |
+| `scoring_settings_pass_yd` | Float64 |  |
+| `scoring_settings_fgmiss_40_49` | Float64 |  |
+| `scoring_settings_blk_kick` | Float64 |  |
+| `scoring_settings_pass_td` | Float64 |  |
+| `scoring_settings_rush_yd` | Float64 |  |
+| `scoring_settings_fum` | Float64 |  |
+| `scoring_settings_pts_allow_28_34` | Float64 |  |
+| `scoring_settings_pts_allow_35p` | Float64 |  |
+| `scoring_settings_rec_yd` | Float64 |  |
+| `scoring_settings_def_st_ff` | Float64 |  |
+| `scoring_settings_pts_allow_7_13` | Float64 |  |
+| `scoring_settings_st_ff` | Float64 |  |
+| `metadata_trophy_loser` | String |  |
+| `metadata_trophy_loser_background` | String |  |
+| `metadata_trophy_loser_banner_text` | String |  |
+| `settings_playoff_type` | Float64 |  |
+| `scoring_settings_qb_hit` | Float64 |  |
+| `scoring_settings_bonus_rec_yd_100` | Float64 |  |
+| `scoring_settings_bonus_rush_yd_100` | Float64 |  |
+| `scoring_settings_bonus_pass_yd_400` | Float64 |  |
+| `scoring_settings_blk_kick_ret_yd` | Float64 |  |
+| `scoring_settings_sack_yd` | Float64 |  |
+| `scoring_settings_pr_td` | Float64 |  |
+| `scoring_settings_tkl_ast` | Float64 |  |
+| `scoring_settings_kr_td` | Float64 |  |
+| `scoring_settings_fg_ret_yd` | Float64 |  |
+| `scoring_settings_idp_tkl` | Float64 |  |
+| `scoring_settings_idp_blk` | Float64 |  |
+| `scoring_settings_int_ret_yd` | Float64 |  |
+| `scoring_settings_idp_tkl_solo` | Float64 |  |
+| `scoring_settings_pass_att` | Float64 |  |
+| `scoring_settings_idp_int` | Float64 |  |
+| `scoring_settings_idp_safe` | Float64 |  |
+| `scoring_settings_def_2pt` | Float64 |  |
+| `scoring_settings_kr_yd` | Float64 |  |
+| `scoring_settings_rush_att` | Float64 |  |
+| `scoring_settings_st_tkl_solo` | Float64 |  |
+| `scoring_settings_idp_sack` | Float64 |  |
+| `scoring_settings_bonus_pass_yd_300` | Float64 |  |
+| `scoring_settings_pass_sack` | Float64 |  |
+| `scoring_settings_pass_cmp` | Float64 |  |
+| `scoring_settings_tkl_loss` | Float64 |  |
+| `scoring_settings_def_pass_def` | Float64 |  |
+| `scoring_settings_idp_pass_def` | Float64 |  |
+| `scoring_settings_bonus_rec_yd_200` | Float64 |  |
+| `scoring_settings_tkl` | Float64 |  |
+| `scoring_settings_idp_fum_rec` | Float64 |  |
+| `scoring_settings_bonus_rush_yd_200` | Float64 |  |
+| `scoring_settings_tkl_solo` | Float64 |  |
+| `scoring_settings_pr_yd` | Float64 |  |
+| `scoring_settings_fum_ret_yd` | Float64 |  |
+| `scoring_settings_idp_ff` | Float64 |  |
+| `scoring_settings_idp_tkl_ast` | Float64 |  |
+| `metadata` | Float64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1004,25 +1004,25 @@ Users in a league.
 
 | col_name | type | description |
 |---|---|---|
-| `avatar` | character |  |
-| `display_name` | character | Full name of player |
-| `is_bot` | character |  |
-| `is_owner` | logical |  |
-| `league_id` | character | Sleeper league id the user belongs to, as a string. |
-| `settings` | character |  |
-| `user_id` | character |  |
-| `metadata_allow_pn` | character |  |
-| `metadata_mascot_item_type_id_leg_16` | character |  |
-| `metadata_mascot_item_type_id_leg_17` | character |  |
-| `metadata_mention_pn` | character |  |
-| `metadata_player_nickname_update` | character |  |
-| `metadata_team_name` | character |  |
-| `metadata_team_name_update` | character |  |
-| `metadata_transaction_commissioner` | character |  |
-| `metadata_transaction_free_agent` | character |  |
-| `metadata_transaction_trade` | character |  |
-| `metadata_transaction_waiver` | character |  |
-| `metadata_user_message_pn` | character |  |
+| `avatar` | String |  |
+| `display_name` | String | Full name of player |
+| `is_bot` | String |  |
+| `is_owner` | Boolean |  |
+| `league_id` | String | Sleeper league id the user belongs to, as a string. |
+| `settings` | String |  |
+| `user_id` | String |  |
+| `metadata_allow_pn` | String |  |
+| `metadata_mascot_item_type_id_leg_16` | String |  |
+| `metadata_mascot_item_type_id_leg_17` | String |  |
+| `metadata_mention_pn` | String |  |
+| `metadata_player_nickname_update` | String |  |
+| `metadata_team_name` | String |  |
+| `metadata_team_name_update` | String |  |
+| `metadata_transaction_commissioner` | String |  |
+| `metadata_transaction_free_agent` | String |  |
+| `metadata_transaction_trade` | String |  |
+| `metadata_transaction_waiver` | String |  |
+| `metadata_user_message_pn` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1058,13 +1058,13 @@ Playoff bracket.
 
 | col_name | type | description |
 |---|---|---|
-| `m` | integer | Matchup id within the bracket round. |
-| `r` | integer | Playoff round number of the bracket matchup (1 = first round). |
-| `l` | integer | Roster id of the matchup loser; null until played. |
-| `w` | integer | Roster id of the matchup winner; null until played. |
-| `t1` | integer |  |
-| `t2` | integer |  |
-| `t2_from_w` | numeric |  |
+| `m` | Int64 | Matchup id within the bracket round. |
+| `r` | Int64 | Playoff round number of the bracket matchup (1 = first round). |
+| `l` | Int64 | Roster id of the matchup loser; null until played. |
+| `w` | Int64 | Roster id of the matchup winner; null until played. |
+| `t1` | Int64 |  |
+| `t2` | Int64 |  |
+| `t2_from_w` | Float64 |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

@@ -1,11 +1,11 @@
 ---
-title: LIGUE1 — ESPN core API (v2)
+title: Ligue 1 — ESPN core API (v2)
 sidebar_label: ESPN core API (v2)
-description: "LIGUE1 — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "Ligue 1 — ESPN core API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 22
 toc_max_heading_level: 2
 ---
-# LIGUE1 — ESPN core API (v2)
+# Ligue 1 — ESPN core API (v2)
 
 `sportsdataverse.soccer.ligue1` — 82 endpoints.
 

@@ -85,16 +85,16 @@ from sportsdataverse.pwhl import *
 from sportsdataverse.wbb import *
 from sportsdataverse.wnba import *
 from sportsdataverse.nbagl import *  # noqa: F401,F403,E402
-from sportsdataverse.nbl import *  # noqa: F401,F403,E402
-from sportsdataverse.fiba import *  # noqa: F401,F403,E402
-from sportsdataverse.olympics_mbk import *  # noqa: F401,F403,E402
-from sportsdataverse.olympics_wbk import *  # noqa: F401,F403,E402
-from sportsdataverse.nbasl_lv import *  # noqa: F401,F403,E402
-from sportsdataverse.nbasl_ut import *  # noqa: F401,F403,E402
-from sportsdataverse.nbasl_ca import *  # noqa: F401,F403,E402
-from sportsdataverse.nbasl_sac import *  # noqa: F401,F403,E402
-from sportsdataverse.nbasl_orl import *  # noqa: F401,F403,E402
-from sportsdataverse.nbasl_gs import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.nbl import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.fiba import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.olympics_mbk import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.olympics_wbk import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.nbasl_lv import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.nbasl_ut import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.nbasl_ca import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.nbasl_sac import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.nbasl_orl import *  # noqa: F401,F403,E402
+from sportsdataverse.basketball.nbasl_gs import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.ahl import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.ohl import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.qmjhl import *  # noqa: F401,F403,E402
@@ -105,9 +105,9 @@ from sportsdataverse.f1 import *  # noqa: F401,F403,E402
 # --- ESPN additional leagues — sport param-families stay top-level; minor/alias
 #     leagues are nested under sport-group packages (0.0.65+). ---
 from sportsdataverse.soccer import *  # noqa: F401,F403,E402
-from sportsdataverse.cbs import *  # noqa: F401,F403,E402
-from sportsdataverse.yahoo import *  # noqa: F401,F403,E402
-from sportsdataverse.fox import *  # noqa: F401,F403,E402
+from sportsdataverse.providers.cbs import *  # noqa: F401,F403,E402
+from sportsdataverse.providers.yahoo import *  # noqa: F401,F403,E402
+from sportsdataverse.providers.fox import *  # noqa: F401,F403,E402
 from sportsdataverse.pff import *  # noqa: F401,F403,E402
 from sportsdataverse.cricket import *  # noqa: F401,F403,E402
 from sportsdataverse.football.ufl import *  # noqa: F401,F403,E402
@@ -206,21 +206,21 @@ from sportsdataverse.discover import function_count, list_functions
 from sportsdataverse.validation import validate_game
 
 # Rolling event-count windows (F3): one pure function every producer calls.
-# Note: sportsdataverse.rolling_windows is this FUNCTION (it shadows the submodule
-# name at package level) -- import module constants with
-# `from sportsdataverse.rolling_windows import WINDOWS`, not an attribute path.
-from sportsdataverse.rolling_windows import football_events, rolling_windows, shot_events
+# Note: top-level sportsdataverse.rolling_windows is this FUNCTION (it shadows the old module
+# alias); the module is sportsdataverse.analytics.rolling_windows -- import its constants with
+# `from sportsdataverse.analytics.rolling_windows import WINDOWS`.
+from sportsdataverse.analytics.rolling_windows import football_events, rolling_windows, shot_events
 
-# Metric-by-continuous-axis curves (F4): same pattern -- sportsdataverse.metric_curves
-# is the FUNCTION; import BUCKET_EDGES etc. from the submodule path.
-from sportsdataverse.metric_curves import football_attempts, metric_curves, nflfastr_attempts, shot_attempts
+# Metric-by-continuous-axis curves (F4): same pattern -- top-level sportsdataverse.metric_curves
+# is the FUNCTION; import BUCKET_EDGES etc. from sportsdataverse.analytics.metric_curves.
+from sportsdataverse.analytics.metric_curves import football_attempts, metric_curves, nflfastr_attempts, shot_attempts
 
-# Defense vs position (TFD-2d): same pattern -- sportsdataverse.defense_vs_position
-# is the FUNCTION; import PBP_COLUMNS etc. from the submodule path.
-from sportsdataverse.defense_vs_position import defense_vs_position
+# Defense vs position (TFD-2d): same pattern -- top-level sportsdataverse.defense_vs_position
+# is the FUNCTION; import PBP_COLUMNS etc. from sportsdataverse.analytics.defense_vs_position.
+from sportsdataverse.analytics.defense_vs_position import defense_vs_position
 
 # Paper Index deserved-win shares + season luck (CFBE-5d): ported from Game on Paper.
-from sportsdataverse.paper_index import deserved_wins, paper_index_game, paper_index_games
+from sportsdataverse.analytics.paper_index import deserved_wins, paper_index_game, paper_index_games
 from sportsdataverse.find import (
     clear_team_cache,
     find_athlete,
@@ -248,6 +248,7 @@ import importlib as _importlib  # noqa: E402
 import importlib.abc as _ilabc  # noqa: E402
 import importlib.util as _ilutil  # noqa: E402
 import sys as _sys  # noqa: E402
+import types as _types  # noqa: E402
 import warnings as _warnings  # noqa: E402
 
 _MOVED = {
@@ -289,48 +290,108 @@ _MOVED = {
     "cfl": "football.cfl",
     "college_baseball": "baseball.college_baseball",
     "college_softball": "baseball.college_softball",
+    "nbl": "basketball.nbl",
+    "fiba": "basketball.fiba",
+    "olympics_mbk": "basketball.olympics_mbk",
+    "olympics_wbk": "basketball.olympics_wbk",
+    "nbasl_lv": "basketball.nbasl_lv",
+    "nbasl_ut": "basketball.nbasl_ut",
+    "nbasl_ca": "basketball.nbasl_ca",
+    "nbasl_sac": "basketball.nbasl_sac",
+    "nbasl_orl": "basketball.nbasl_orl",
+    "nbasl_gs": "basketball.nbasl_gs",
+    "euroleague": "basketball.euroleague",
+    "cbs": "providers.cbs",
+    "fox": "providers.fox",
+    "yahoo": "providers.yahoo",
+    "espn_content": "providers.espn_content",
+    "thesportsdb": "providers.thesportsdb",
+    "rolling_windows": "analytics.rolling_windows",
+    "metric_curves": "analytics.metric_curves",
+    "defense_vs_position": "analytics.defense_vs_position",
+    "paper_index": "analytics.paper_index",
 }
+
+
+#: The release the ``_MOVED`` aliases are removed in (CONTRIBUTING: every deprecation names one).
+_MOVED_REMOVED_IN = "0.4.0"
+
+
+def _warn_moved(old: str, new: str, stacklevel: int) -> None:
+    from sportsdataverse._deprecation import warn_deprecated
+
+    warn_deprecated(
+        f"sportsdataverse.{old}",
+        replacement=f"sportsdataverse.{new}",
+        removed_in=_MOVED_REMOVED_IN,
+        stacklevel=stacklevel,
+    )
 
 
 def __getattr__(name):  # PEP 562 module-level __getattr__
     target = _MOVED.get(name)
     if target is None:
         raise AttributeError(f"module 'sportsdataverse' has no attribute {name!r}")
-    _warnings.warn(
-        f"sportsdataverse.{name} moved to sportsdataverse.{target}; "
-        f"import it from there — this top-level alias is deprecated.",
-        DeprecationWarning,
-        stacklevel=2,
-    )
+    _warn_moved(name, target, stacklevel=2)
     mod = _importlib.import_module(f"sportsdataverse.{target}")
     globals()[name] = mod  # cache; __getattr__ won't fire for this name again
     return mod
 
 
+def _moved_target(fullname: str):
+    """``sportsdataverse.<moved>[.<rest>]`` -> ``(old, new)`` dotted names under ``sportsdataverse``, else None."""
+    if not fullname.startswith("sportsdataverse."):
+        return None
+    leaf, _, rest = fullname[len("sportsdataverse.") :].partition(".")
+    if leaf not in _MOVED:
+        return None
+    old = f"{leaf}.{rest}" if rest else leaf
+    return old, f"{_MOVED[leaf]}.{rest}" if rest else _MOVED[leaf]
+
+
 class _MovedLeagueFinder(_ilabc.MetaPathFinder, _ilabc.Loader):
-    """Make the statement ``import sportsdataverse.<leaf>`` resolve a moved league."""
+    """Make ``import sportsdataverse.<moved>`` AND ``import sportsdataverse.<moved>.<sub>`` resolve to the home.
+
+    The old name is bound to the SAME module object as the new one, so a deep import never executes a
+    module a second time (a monkeypatch on one copy would miss the other). The finder sits first on
+    ``sys.meta_path``: the default path finder would otherwise resolve a deep name through the aliased
+    package's ``__path__`` and load that second copy itself."""
 
     def find_spec(self, fullname, path=None, target=None):
-        if not fullname.startswith("sportsdataverse."):
-            return None
-        leaf = fullname[len("sportsdataverse.") :]
-        if "." in leaf or leaf not in _MOVED:
-            return None
-        return _ilutil.spec_from_loader(fullname, self)
+        return _ilutil.spec_from_loader(fullname, self) if _moved_target(fullname) else None
 
     def create_module(self, spec):
-        leaf = spec.name[len("sportsdataverse.") :]
-        tgt = _MOVED[leaf]
-        _warnings.warn(
-            f"import sportsdataverse.{leaf} is deprecated; it moved to sportsdataverse.{tgt}.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return _importlib.import_module(f"sportsdataverse.{tgt}")
+        old, new = _moved_target(spec.name)
+        _warn_moved(old, new, stacklevel=2)
+        return _importlib.import_module(f"sportsdataverse.{new}")
 
     def exec_module(self, module):  # module already fully initialised
         pass
 
 
+class _MovedModule(_types.ModuleType):
+    """A pre-registered stand-in for an old module path whose top-level NAME is now a function.
+
+    ``sportsdataverse.rolling_windows`` (and ``metric_curves`` / ``defense_vs_position``) is the function the
+    package re-exports. Importing the old module path for the first time would make Python bind the loaded
+    module onto the package under that name, replacing the function (``sdv.rolling_windows(...)`` then
+    raises ``TypeError: 'module' object is not callable``). Registered in ``sys.modules`` up front, the old
+    path is already "loaded", so nothing is rebound; attribute reads warn and forward to the home."""
+
+    def __init__(self, old: str, new: str) -> None:
+        super().__init__(f"sportsdataverse.{old}")
+        self.__dict__["_sdv_moved"] = (old, new)
+
+    def __getattr__(self, name):
+        old, new = self.__dict__["_sdv_moved"]
+        if name.startswith("__") and name.endswith("__") and name != "__all__":
+            raise AttributeError(name)
+        _warn_moved(old, new, stacklevel=2)
+        return getattr(_importlib.import_module(f"sportsdataverse.{new}"), name)
+
+
+for _leaf in ("rolling_windows", "metric_curves", "defense_vs_position"):
+    _sys.modules.setdefault(f"sportsdataverse.{_leaf}", _MovedModule(_leaf, _MOVED[_leaf]))
+
 if not any(isinstance(f, _MovedLeagueFinder) for f in _sys.meta_path):
-    _sys.meta_path.append(_MovedLeagueFinder())
+    _sys.meta_path.insert(0, _MovedLeagueFinder())

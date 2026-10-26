@@ -1,9 +1,9 @@
 ---
-title: ICEHL
-sidebar_label: ICEHL
-description: "sdv-py ICEHL: endpoint references, dataset loaders and parsers for ICEHL in the SportsDataverse Python package."
+title: ICE Hockey League
+sidebar_label: ICE Hockey League
+description: "sdv-py ICE Hockey League: endpoint references, dataset loaders and parsers for ICE Hockey League in the SportsDataverse Python package."
 ---
-# ICEHL (`sportsdataverse.hockey.icehl`)
+# ICE Hockey League (`sportsdataverse.hockey.icehl`)
 
 ## Data sources
 

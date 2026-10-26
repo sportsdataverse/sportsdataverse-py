@@ -23,7 +23,7 @@ import urllib3.util.connection
 from sportsdataverse import cache as _cache
 from sportsdataverse import dl_utils
 from sportsdataverse.errors import AssetFetchError, NoDataError, _redact_secrets
-from sportsdataverse.fox import fox_api
+from sportsdataverse.providers.fox import fox_api
 from sportsdataverse.odds import the_odds_api as toa
 
 SECRET = "zzSynthKey0123456789abcdef"  # synthetic; never a real key

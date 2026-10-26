@@ -72,8 +72,12 @@ def test_the_reason_says_why_not_just_that_it_is_unverified(path):
     assert len(reason) > 30, f"{path.name}: the reason is too short to be actionable"
 
 
-def test_the_playbyplayv3_reason_names_the_datacenter_ip_cause():
-    for family in ("nba_stats", "wnba_stats"):
+def test_the_playbyplayv3_reason_names_the_real_cause():
+    """playbyplayv3 answers ``{meta, game: {actions}}``, not a resultSets envelope: its schema is empty because the
+    generic parser does not read that shape, not because the capture is empty or was taken from a datacenter IP
+    (the old reason, which promised a residential re-capture would fix it)."""
+    for family in ("nba_stats", "wnba_stats", "nbagl_stats"):
         doc = yaml.safe_load((SCHEMAS / "native" / family / "playbyplayv3.yaml").read_text(encoding="utf-8"))
-        assert "datacenter" in str(doc["unverified"]).lower()
-        assert "SDV_PY_NBA_STATS_LIVE" in str(doc["unverified"])
+        reason = str(doc["unverified"])
+        assert "not a resultSets envelope" in reason and "return_parsed=False" in reason
+        assert "datacenter" not in reason.lower()

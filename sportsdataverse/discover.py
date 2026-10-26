@@ -1,10 +1,8 @@
 """sportsdataverse.discover — searchable function index.
 
-The package exposes 2,000+ wrappers across 17 leagues + 5 sibling APIs
-(MLB Stats API, Baseball Savant, NHL api-web, NHL EDGE, NHL Stats REST,
-NHL Records). ``dir(sportsdataverse.nba)`` produces a 100+ item flat
-list that's hard to scan. This module gives users a grouped + filterable
-view.
+The package exposes thousands of wrappers across every league the docs site
+lists. ``dir(sportsdataverse.nba)`` produces a several-hundred-item flat list
+that's hard to scan. This module gives users a grouped + filterable view.
 
 ::
 
@@ -35,78 +33,141 @@ view.
 from __future__ import annotations
 
 import importlib
+from types import ModuleType
 from typing import Dict, List, Optional, Union
 
-# All league sub-modules under sportsdataverse.{league}.
-# Dotted entries (e.g. "football.ufl") are the import paths used by importlib;
-# the public API (dict keys, ``league=`` filter) uses the flat leaf ("ufl").
-_LEAGUES = (
-    "cfb",
-    "mbb",
-    "mlb",
-    "nba",
-    "nfl",
-    "nhl",
-    "wbb",
-    "wnba",
-    "nbagl",
-    "nbl",
-    "fiba",
-    "olympics_mbk",
-    "olympics_wbk",
-    "nbasl_lv",
-    "nbasl_ut",
-    "nbasl_ca",
-    "nbasl_sac",
-    "nbasl_orl",
-    "nbasl_gs",
-    "pwhl",
-    # minor / additional leagues, nested under sport-group packages (0.0.65+)
-    "hockey.ahl",
-    "hockey.ohl",
-    "hockey.qmjhl",
-    "hockey.whl",
-    "soccer",
-    "cricket",
-    "soccer.epl",
-    "soccer.laliga",
-    "soccer.bundesliga",
-    "soccer.seriea",
-    "soccer.ligue1",
-    "soccer.mls",
-    "soccer.ligamx",
-    "soccer.ucl",
-    "soccer.uel",
-    "soccer.nwsl",
-    "soccer.wwc",
-    "soccer.wc",
-    "hockey.mch",
-    "hockey.wch",
-    "football.ufl",
-    "football.xfl",
-    "football.cfl",
-    "baseball.college_baseball",
-    "baseball.college_softball",
-)
+# Every documented league: its prefix (the dict key and the ``league=`` value) -> its module under
+# ``sportsdataverse``. Written by tools/codegen/generate.py from the league registry the docs site reads
+# (docs/src/data/leagues.json); edit the registry, never this table.
+# BEGIN generated: league homes
+_LEAGUES: Dict[str, str] = {
+    "cfb": "cfb",
+    "nfl": "nfl",
+    "ufl": "football.ufl",
+    "xfl": "football.xfl",
+    "cfl": "football.cfl",
+    "nba": "nba",
+    "wnba": "wnba",
+    "nbagl": "nbagl",
+    "nbl": "basketball.nbl",
+    "fiba": "basketball.fiba",
+    "olympics_mbk": "basketball.olympics_mbk",
+    "olympics_wbk": "basketball.olympics_wbk",
+    "nbasl_lv": "basketball.nbasl_lv",
+    "nbasl_ut": "basketball.nbasl_ut",
+    "nbasl_ca": "basketball.nbasl_ca",
+    "nbasl_sac": "basketball.nbasl_sac",
+    "nbasl_orl": "basketball.nbasl_orl",
+    "nbasl_gs": "basketball.nbasl_gs",
+    "mbb": "mbb",
+    "wbb": "wbb",
+    "euroleague": "basketball.euroleague",
+    "fiba_hub": "basketball.fiba_hub",
+    "genius": "basketball.genius",
+    "atrium": "basketball.atrium",
+    "nbl_au": "basketball.nbl_au",
+    "feb": "basketball.feb",
+    "scb": "basketball.scb",
+    "lba": "basketball.lba",
+    "acb": "basketball.acb",
+    "ibba": "basketball.ibba",
+    "wjbl": "basketball.wjbl",
+    "vtb": "basketball.vtb",
+    "kbl": "basketball.kbl",
+    "bleague": "basketball.bleague",
+    "kzs": "basketball.kzs",
+    "lkl": "basketball.lkl",
+    "tbf": "basketball.tbf",
+    "cebl": "basketball.cebl",
+    "aba": "basketball.aba",
+    "easl": "basketball.easl",
+    "bnxt": "basketball.bnxt",
+    "tpbl": "basketball.tpbl",
+    "plg": "basketball.plg",
+    "cba": "basketball.cba",
+    "dbl": "basketball.dbl",
+    "nhl": "nhl",
+    "mch": "hockey.mch",
+    "wch": "hockey.wch",
+    "pwhl": "pwhl",
+    "ahl": "hockey.ahl",
+    "ohl": "hockey.ohl",
+    "whl": "hockey.whl",
+    "qmjhl": "hockey.qmjhl",
+    "echl": "hockey.echl",
+    "sphl": "hockey.sphl",
+    "chl": "hockey.chl",
+    "ushl": "hockey.ushl",
+    "bchl": "hockey.bchl",
+    "ajhl": "hockey.ajhl",
+    "sjhl": "hockey.sjhl",
+    "ojhl": "hockey.ojhl",
+    "cchl": "hockey.cchl",
+    "gojhl": "hockey.gojhl",
+    "mhl": "hockey.mhl",
+    "nojhl": "hockey.nojhl",
+    "vijhl": "hockey.vijhl",
+    "kijhl": "hockey.kijhl",
+    "mjhl": "hockey.mjhl",
+    "sihf": "hockey.sihf",
+    "del": "hockey.del_",
+    "icehl": "hockey.icehl",
+    "eihl": "hockey.eihl",
+    "metal": "hockey.metal",
+    "elh": "hockey.elh",
+    "liiga": "hockey.liiga",
+    "shl": "hockey.shl",
+    "ha": "hockey.ha",
+    "nl": "hockey.nl",
+    "magnus": "hockey.magnus",
+    "khl": "hockey.khl",
+    "vhl": "hockey.vhl",
+    "mlb": "mlb",
+    "college_baseball": "baseball.college_baseball",
+    "college_softball": "baseball.college_softball",
+    "soccer": "soccer",
+    "epl": "soccer.epl",
+    "laliga": "soccer.laliga",
+    "bundesliga": "soccer.bundesliga",
+    "seriea": "soccer.seriea",
+    "ligue1": "soccer.ligue1",
+    "mls": "soccer.mls",
+    "ligamx": "soccer.ligamx",
+    "ucl": "soccer.ucl",
+    "uel": "soccer.uel",
+    "nwsl": "soccer.nwsl",
+    "wwc": "soccer.wwc",
+    "wc": "soccer.wc",
+    "cricket": "cricket",
+    "odds": "odds",
+    "cbs": "providers.cbs",
+    "yahoo": "providers.yahoo",
+    "fox": "providers.fox",
+    "f1": "f1",
+    "espn_content": "providers.espn_content",
+    "thesportsdb": "providers.thesportsdb",
+}
+# END generated: league homes
 
-# Flat-leaf → dotted import path.  Used to key output dicts and resolve
-# ``league=<flat_leaf>`` arguments while keeping importlib happy.
-# "cfb" → "cfb", "football.ufl" → "ufl" (leaf), etc.
-_LEAF_TO_DOTTED: Dict[str, str] = {lg.rsplit(".", 1)[-1]: lg for lg in _LEAGUES}
+# Kept for callers that read the old name: flat leaf -> dotted import path.
+_LEAF_TO_DOTTED: Dict[str, str] = _LEAGUES
 
 
-def _list_module(mod, prefix: Optional[str] = None) -> List[str]:
-    """Return callable names in a module, optionally filtered by prefix."""
-    out = []
+def _list_module(mod, leaf: Optional[str] = None) -> List[str]:
+    """Return the public callable names of a league module.
+
+    A stats.nba.com family (``nba_stats``, ``wnba_stats``, ``nbagl_stats``) is a submodule its league
+    package imports but does not star-export, so its ``__all__`` is added here: it is part of the league.
+    """
+    out = set()
     for name in dir(mod):
         if name.startswith("_"):
             continue
-        attr = getattr(mod, name)
-        if not callable(attr):
-            continue
-        if prefix and not name.startswith(prefix):
-            continue
-        out.append(name)
+        if callable(getattr(mod, name)):
+            out.add(name)
+    stats = getattr(mod, f"{leaf}_stats", None) if leaf else None
+    if isinstance(stats, ModuleType):
+        out.update(n for n in getattr(stats, "__all__", ()) if callable(getattr(stats, n, None)))
     return sorted(out)
 
 
@@ -120,8 +181,8 @@ def list_functions(
     """Return an index of callable functions exposed by the package.
 
     Args:
-        league: League slug (``"nba"`` / ``"wnba"`` / ``"mbb"`` / ``"wbb"``
-            / ``"cfb"`` / ``"nfl"`` / ``"mlb"`` / ``"nhl"``). When given,
+        league: League prefix, as the docs site names it (``"nba"``, ``"ufl"``,
+            ``"epl"``, ``"liiga"``, ``"euroleague"``, ...). When given,
             returns a flat list of function names for that league.
             With no league, returns a dict keyed by league.
         search: Case-insensitive substring to filter function names.
@@ -172,13 +233,13 @@ def list_functions(
             )
         dotted = _LEAF_TO_DOTTED[leaf]
         mod = importlib.import_module(f"sportsdataverse.{dotted}")
-        return _filter(_list_module(mod))
+        return _filter(_list_module(mod, leaf))
 
     # Whole-package view, grouped by flat leaf (back-compat: keys never include dots)
     out: Dict[str, List[str]] = {}
     for leaf, dotted in _LEAF_TO_DOTTED.items():
         mod = importlib.import_module(f"sportsdataverse.{dotted}")
-        names = _filter(_list_module(mod))
+        names = _filter(_list_module(mod, leaf))
         if names:
             out[leaf] = names
     return out
@@ -192,11 +253,10 @@ def function_count(league: Optional[str] = None) -> Union[Dict[str, int], int]:
 
     Examples::
 
-        function_count()
-        {'cfb': 145, 'mbb': 148, ..., 'nhl': 220}
+        counts = function_count()
+        sorted(counts, key=counts.get, reverse=True)[:3]  # the three largest leagues
 
-        function_count(league="mlb")
-        178
+        function_count(league="nbagl")  # ESPN wrappers + engine helpers + nbagl_stats
 
     Args:
         league: A league prefix (``"mlb"``); ``None`` counts every league.

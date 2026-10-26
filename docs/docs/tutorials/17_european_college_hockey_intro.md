@@ -1,5 +1,6 @@
 ---
 title: European & college hockey tutorial
+description: "North America's minor and junior leagues have their own notebook (11_junior_hockey_intro). This one crosses the Atlantic and drops into the NCAA."
 sidebar_label: European & college hockey
 sidebar_position: 17
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/17_european_college_hockey_intro.ipynb

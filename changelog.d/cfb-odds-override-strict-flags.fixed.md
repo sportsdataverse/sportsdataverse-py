@@ -1,1 +1,0 @@
-- **CFB:** `CFBPlayProcess(odds_override=...)` reads `homeFavorite` and `gameSpreadAvailable` strictly, as `overUnderAvailable` already was: `"False"`/`"0"` are False (`bool("False")` read them as True), and a value that is not True/False, 1/0 or `"true"`/`"false"`/`"1"`/`"0"`, None included, raises `ValueError`. (#946)

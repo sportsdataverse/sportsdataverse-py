@@ -1,9 +1,9 @@
 ---
-title: PLG
-sidebar_label: PLG
-description: "sdv-py PLG: endpoint references, dataset loaders and parsers for PLG in the SportsDataverse Python package."
+title: P. LEAGUE+
+sidebar_label: P. LEAGUE+
+description: "sdv-py P. LEAGUE+: endpoint references, dataset loaders and parsers for P. LEAGUE+ in the SportsDataverse Python package."
 ---
-# PLG (`sportsdataverse.basketball.plg`)
+# P. LEAGUE+ (`sportsdataverse.basketball.plg`)
 
 ## Data sources
 

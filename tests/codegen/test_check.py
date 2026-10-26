@@ -163,6 +163,7 @@ _CLEAN = {
     "_coverage_gaps": [],
     "_source_gaps": [],
     "_returns_gaps": [],
+    "_internal_leaks": [],
 }
 _RED = {
     "_live_stale": (["sportsdataverse/x/x_espn_ext.py"], "stale live files: sportsdataverse/x/x_espn_ext.py"),
@@ -173,6 +174,7 @@ _RED = {
     "_coverage_gaps": ([("x", ["fn_a"])], "undocumented user-facing functions: fn_a"),
     "_source_gaps": ([("x", "fn_b", "why")], "public functions with no single source: x.fn_b: why"),
     "_returns_gaps": ([("x", "fn_c")], "public functions with no documented return: x.fn_c"),
+    "_internal_leaks": (["x.md:2: private repository: see sdv-internal-refs"], "maintainer-only references"),
 }
 
 
@@ -252,7 +254,7 @@ def test_red_path_stale_gate_reports_an_orphaned_generated_module(in_tree, gate)
     reason="A-N6: _euroleague_schemas.py (gen_euroleague.py) is owned by no --check gate; task 3.9",
 )
 def test_red_path_flat_stale_owns_euroleague_schemas(in_tree):
-    with _restored(in_tree / "sportsdataverse/euroleague/_euroleague_schemas.py") as f:
+    with _restored(in_tree / "sportsdataverse/basketball/euroleague/_euroleague_schemas.py") as f:
         f.write_text(f.read_text(encoding="utf-8") + "\nX = 1\n", encoding="utf-8", newline="\n")
         assert generate._flat_stale()
 

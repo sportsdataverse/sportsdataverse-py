@@ -94,7 +94,7 @@ toc_max_heading_level: 2
 | [mlb_leagues](mlb_api/other.md#mlb_leagues) | GET /api/v1/leagues — list leagues. |
 | [mlb_season](mlb_api/other.md#mlb_season) | GET /api/v1/seasons/{seasonId} — single season detail. |
 | [mlb_venues](mlb_api/other.md#mlb_venues) | GET /api/v1/venues — list venues. |
-| [mlb_venue](mlb_api/other-2.md#mlb_venue) | GET /api/v1/venues/{venueId} — single venue detail. |
+| [mlb_venue](mlb_api/other.md#mlb_venue) | GET /api/v1/venues/{venueId} — single venue detail. |
 | [mlb_meta](mlb_api/other-2.md#mlb_meta) | GET /api/v1/{metaType} — enum lookup (the API's self-describing surface). |
 | [mlb_awards](mlb_api/other-2.md#mlb_awards) | GET /api/v1/awards — list award IDs (call with no params to enumerate). |
 | [mlb_award_recipients](mlb_api/other-2.md#mlb_award_recipients) | GET /api/v1/awards/{awardId}/recipients — historical winners of one award. |

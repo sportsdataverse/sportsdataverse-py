@@ -1,0 +1,178 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/games/2022500137/boxscorescoring?Format=json",
+  "time": "2026-06-29T01:49:05.495Z"
+ },
+ "boxScoreScoring": {
+  "gameId": "2022500137",
+  "awayTeamId": 1612709925,
+  "homeTeamId": 1612709929,
+  "homeTeam": {
+   "teamId": 1612709929,
+   "teamCity": "College Park",
+   "teamName": "Skyhawks",
+   "teamTricode": "CPS",
+   "teamSlug": "skyhawks",
+   "players": [
+    {
+     "personId": 1641881,
+     "firstName": "Javan",
+     "familyName": "Johnson",
+     "nameI": "J. Johnson",
+     "playerSlug": "javan-johnson",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "27:24",
+      "percentageFieldGoalsAttempted2pt": 0.5,
+      "percentageFieldGoalsAttempted3pt": 0.5,
+      "percentagePoints2pt": 0.5,
+      "percentagePointsMidrange2pt": 0.0,
+      "percentagePoints3pt": 0.5,
+      "percentagePointsFastBreak": 0.167,
+      "percentagePointsFreeThrow": 0.0,
+      "percentagePointsOffTurnovers": 0.0,
+      "percentagePointsPaint": 0.5,
+      "percentageAssisted2pt": 0.667,
+      "percentageUnassisted2pt": 0.333,
+      "percentageAssisted3pt": 1.0,
+      "percentageUnassisted3pt": 0.0,
+      "percentageAssistedFGM": 0.8,
+      "percentageUnassistedFGM": 0.2
+     }
+    },
+    {
+     "personId": 1631216,
+     "firstName": "Caleb",
+     "familyName": "Houstan",
+     "nameI": "C. Houstan",
+     "playerSlug": "caleb-houstan",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "29:38",
+      "percentageFieldGoalsAttempted2pt": 0.417,
+      "percentageFieldGoalsAttempted3pt": 0.583,
+      "percentagePoints2pt": 0.471,
+      "percentagePointsMidrange2pt": 0.235,
+      "percentagePoints3pt": 0.529,
+      "percentagePointsFastBreak": 0.0,
+      "percentagePointsFreeThrow": 0.0,
+      "percentagePointsOffTurnovers": 0.294,
+      "percentagePointsPaint": 0.235,
+      "percentageAssisted2pt": 1.0,
+      "percentageUnassisted2pt": 0.0,
+      "percentageAssisted3pt": 1.0,
+      "percentageUnassisted3pt": 0.0,
+      "percentageAssistedFGM": 1.0,
+      "percentageUnassistedFGM": 0.0
+     }
+    }
+   ],
+   "statistics": {
+    "minutes": "240:00",
+    "percentageFieldGoalsAttempted2pt": 0.57,
+    "percentageFieldGoalsAttempted3pt": 0.43,
+    "percentagePoints2pt": 0.477,
+    "percentagePointsMidrange2pt": 0.055,
+    "percentagePoints3pt": 0.358,
+    "percentagePointsFastBreak": 0.128,
+    "percentagePointsFreeThrow": 0.083,
+    "percentagePointsOffTurnovers": 0.119,
+    "percentagePointsPaint": 0.422,
+    "percentageAssisted2pt": 0.731,
+    "percentageUnassisted2pt": 0.269,
+    "percentageAssisted3pt": 1.0,
+    "percentageUnassisted3pt": 0.0,
+    "percentageAssistedFGM": 0.821,
+    "percentageUnassistedFGM": 0.179
+   }
+  },
+  "awayTeam": {
+   "teamId": 1612709925,
+   "teamCity": "Osceola",
+   "teamName": "Magic",
+   "teamTricode": "OSC",
+   "teamSlug": "magic",
+   "players": [
+    {
+     "personId": 1631457,
+     "firstName": "Alex",
+     "familyName": "Morales",
+     "nameI": "A. Morales",
+     "playerSlug": "alex-morales",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "32:00",
+      "percentageFieldGoalsAttempted2pt": 0.667,
+      "percentageFieldGoalsAttempted3pt": 0.333,
+      "percentagePoints2pt": 0.417,
+      "percentagePointsMidrange2pt": 0.0,
+      "percentagePoints3pt": 0.25,
+      "percentagePointsFastBreak": 0.0,
+      "percentagePointsFreeThrow": 0.167,
+      "percentagePointsOffTurnovers": 0.0,
+      "percentagePointsPaint": 0.417,
+      "percentageAssisted2pt": 0.0,
+      "percentageUnassisted2pt": 1.0,
+      "percentageAssisted3pt": 1.0,
+      "percentageUnassisted3pt": 0.0,
+      "percentageAssistedFGM": 0.286,
+      "percentageUnassistedFGM": 0.714
+     }
+    },
+    {
+     "personId": 1631303,
+     "firstName": "Justin",
+     "familyName": "Minaya",
+     "nameI": "J. Minaya",
+     "playerSlug": "justin-minaya",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "30:32",
+      "percentageFieldGoalsAttempted2pt": 0.429,
+      "percentageFieldGoalsAttempted3pt": 0.571,
+      "percentagePoints2pt": 0.444,
+      "percentagePointsMidrange2pt": 0.0,
+      "percentagePoints3pt": 0.333,
+      "percentagePointsFastBreak": 0.444,
+      "percentagePointsFreeThrow": 0.111,
+      "percentagePointsOffTurnovers": 0.0,
+      "percentagePointsPaint": 0.444,
+      "percentageAssisted2pt": 0.5,
+      "percentageUnassisted2pt": 0.5,
+      "percentageAssisted3pt": 1.0,
+      "percentageUnassisted3pt": 0.0,
+      "percentageAssistedFGM": 0.667,
+      "percentageUnassistedFGM": 0.333
+     }
+    }
+   ],
+   "statistics": {
+    "minutes": "240:00",
+    "percentageFieldGoalsAttempted2pt": 0.615,
+    "percentageFieldGoalsAttempted3pt": 0.385,
+    "percentagePoints2pt": 0.462,
+    "percentagePointsMidrange2pt": 0.0,
+    "percentagePoints3pt": 0.369,
+    "percentagePointsFastBreak": 0.154,
+    "percentagePointsFreeThrow": 0.085,
+    "percentagePointsOffTurnovers": 0.154,
+    "percentagePointsPaint": 0.462,
+    "percentageAssisted2pt": 0.333,
+    "percentageUnassisted2pt": 0.667,
+    "percentageAssisted3pt": 0.75,
+    "percentageUnassisted3pt": 0.25,
+    "percentageAssistedFGM": 0.478,
+    "percentageUnassistedFGM": 0.522
+   }
+  }
+ }
+}

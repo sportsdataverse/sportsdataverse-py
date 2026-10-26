@@ -510,7 +510,7 @@ def khl_schedule(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
         * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
@@ -579,7 +579,7 @@ def khl_roster(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
         * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -649,7 +649,7 @@ def khl_stat_filters(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
         * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
@@ -724,7 +724,7 @@ def khl_game_header(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
         * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
@@ -801,7 +801,7 @@ def khl_game_protocol(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
         * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
@@ -877,7 +877,7 @@ def khl_game_info(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
         * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
@@ -953,7 +953,7 @@ def khl_player_box(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
         * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
@@ -1029,7 +1029,7 @@ def khl_pbp(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
         * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
@@ -1105,7 +1105,7 @@ def khl_shots(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
         * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
@@ -1175,7 +1175,7 @@ def khl_player_profile(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
         * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -1242,7 +1242,7 @@ def khl_player_career(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
         * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -1309,7 +1309,7 @@ def khl_playoff_bracket(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
         * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -1381,7 +1381,7 @@ def khl_standings(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
         * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -1460,7 +1460,7 @@ def khl_player_stats(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
 
     Notes:
-        * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * Owner flag: the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
         * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):

@@ -579,7 +579,7 @@ def test_a_404_scoreboard_page_is_remembered_for_the_process(monkeypatch):
 
 
 def test_a_failed_optional_resource_raises_instead_of_reading_as_absent(monkeypatch):
-    import sportsdataverse.cbs.cbs_napi as napi
+    import sportsdataverse.providers.cbs.cbs_napi as napi
     from sportsdataverse.errors import AssetFetchError, NoDataError
     from sportsdataverse.football.cbs_common import _fetch_cbs_game
 

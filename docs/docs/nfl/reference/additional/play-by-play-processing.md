@@ -293,59 +293,59 @@ A polars (or pandas) DataFrame in the published `load_nfl_player_stats` schema. 
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player_name` | character | Full name of player |
-| `player_display_name` | character | Full name of the player |
-| `position` | character | Primary position as reported by NFL.com |
-| `position_group` | character | Postion group of player as listed by NFL |
-| `headshot_url` | character | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
-| `recent_team` | character | Most recent team player appears in `pbp` with. |
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `week` | integer | Season week. |
-| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `opponent_team` | character |  |
-| `completions` | integer | The number of completed passes. |
-| `attempts` | integer | The number of pass attempts as defined by the NFL. |
-| `passing_yards` | double | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
-| `passing_tds` | integer | The number of passing touchdowns. |
-| `interceptions` | integer | The number of interceptions thrown. |
-| `sacks` | integer | The Number of times sacked. |
-| `sack_yards` | double | Yards lost on sack plays. |
-| `sack_fumbles` | integer | The number of sacks with a fumble. |
-| `sack_fumbles_lost` | integer | The number of sacks with a lost fumble. |
-| `passing_air_yards` | double | Passing air yards (includes incomplete passes). |
-| `passing_yards_after_catch` | double | Yards after the catch gained on plays in which player was the passer (this is an unofficial stat and may differ slightly between different sources). |
-| `passing_first_downs` | integer | First downs on pass attempts. |
-| `passing_epa` | double | Total expected points added on pass attempts and sacks. NOTE: this uses the variable `qb_epa`, which gives QB credit for EPA for up to the point where a receiver lost a fumble after a completed catch and makes EPA work more like passing yards on plays with fumbles. |
-| `passing_2pt_conversions` | integer | Two-point conversion passes. |
-| `pacr` | double | Passing (yards) Air (yards) Conversion Ratio - the number of passing yards per air yards thrown per game |
-| `dakota` | double | Adjusted EPA + CPOE composite based on coefficients which best predict adjusted EPA/play in the following year. |
-| `carries` | integer | The number of official rush attempts (incl. scrambles and kneel downs). Rushes after a lateral reception don't count as carry. |
-| `rushing_yards` | double | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
-| `rushing_tds` | integer | The number of rushing touchdowns (incl. scrambles). Also includes touchdowns after obtaining a lateral on a play that started with a rushing attempt. |
-| `rushing_fumbles` | integer | The number of rushes with a fumble. |
-| `rushing_fumbles_lost` | integer | The number of rushes with a lost fumble. |
-| `rushing_first_downs` | integer | First downs on rush attempts (incl. scrambles). |
-| `rushing_epa` | double | Expected points added on rush attempts (incl. scrambles and kneel downs). |
-| `rushing_2pt_conversions` | integer | Two-point conversion rushes |
-| `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
-| `targets` | integer | The number of pass plays where the player was the targeted receiver. |
-| `receiving_yards` | double | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
-| `receiving_tds` | integer | The number of touchdowns following a pass reception. Also includes touchdowns after receiving a lateral on a play that started as a pass play. |
-| `receiving_fumbles` | integer | The number of fumbles after a pass reception. |
-| `receiving_fumbles_lost` | integer | The number of fumbles lost after a pass reception. |
-| `receiving_air_yards` | double | Receiving air yards (incl. incomplete passes). |
-| `receiving_yards_after_catch` | double | Yards after the catch gained on plays in which player was receiver (this is an unofficial stat and may differ slightly between different sources). |
-| `receiving_first_downs` | integer | Total number of first downs gained on receptions |
-| `receiving_epa` | double | Total EPA on plays where this receiver was targeted |
-| `receiving_2pt_conversions` | integer | Two-point conversion receptions |
-| `racr` | double | Receiving (yards) Air (yards) Conversion Ratio - the number of receiving yards per air yards targeted per game |
-| `target_share` | double | "Player's share of team receiving targets in this game" |
-| `air_yards_share` | double | Player's share of the team's air yards in this game |
-| `wopr` | double | Weighted OPportunity Rating - 1.5 x target_share + 0.7 x air_yards_share - a weighted average that contextualizes total fantasy usage. |
-| `special_teams_tds` | integer | Total number of kick/punt return touchdowns |
-| `fantasy_points` | double | Standard fantasy points. |
-| `fantasy_points_ppr` | double | PPR fantasy points. |
+| `player_id` | String | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
+| `player_name` | String | Full name of player |
+| `player_display_name` | String | Full name of the player |
+| `position` | String | Primary position as reported by NFL.com |
+| `position_group` | String | Postion group of player as listed by NFL |
+| `headshot_url` | String | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
+| `recent_team` | String | Most recent team player appears in `pbp` with. |
+| `season` | Int64 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `week` | Int64 | Season week. |
+| `season_type` | String | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `opponent_team` | String |  |
+| `completions` | Int64 | The number of completed passes. |
+| `attempts` | Int64 | The number of pass attempts as defined by the NFL. |
+| `passing_yards` | Float64 | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
+| `passing_tds` | Int64 | The number of passing touchdowns. |
+| `interceptions` | Int64 | The number of interceptions thrown. |
+| `sacks` | Int64 | The Number of times sacked. |
+| `sack_yards` | Float64 | Yards lost on sack plays. |
+| `sack_fumbles` | Int64 | The number of sacks with a fumble. |
+| `sack_fumbles_lost` | Int64 | The number of sacks with a lost fumble. |
+| `passing_air_yards` | Float64 | Passing air yards (includes incomplete passes). |
+| `passing_yards_after_catch` | Float64 | Yards after the catch gained on plays in which player was the passer (this is an unofficial stat and may differ slightly between different sources). |
+| `passing_first_downs` | Int64 | First downs on pass attempts. |
+| `passing_epa` | Float64 | Total expected points added on pass attempts and sacks. NOTE: this uses the variable `qb_epa`, which gives QB credit for EPA for up to the point where a receiver lost a fumble after a completed catch and makes EPA work more like passing yards on plays with fumbles. |
+| `passing_2pt_conversions` | Int64 | Two-point conversion passes. |
+| `pacr` | Float64 | Passing (yards) Air (yards) Conversion Ratio - the number of passing yards per air yards thrown per game |
+| `dakota` | Float64 | Adjusted EPA + CPOE composite based on coefficients which best predict adjusted EPA/play in the following year. |
+| `carries` | Int64 | The number of official rush attempts (incl. scrambles and kneel downs). Rushes after a lateral reception don't count as carry. |
+| `rushing_yards` | Float64 | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
+| `rushing_tds` | Int64 | The number of rushing touchdowns (incl. scrambles). Also includes touchdowns after obtaining a lateral on a play that started with a rushing attempt. |
+| `rushing_fumbles` | Int64 | The number of rushes with a fumble. |
+| `rushing_fumbles_lost` | Int64 | The number of rushes with a lost fumble. |
+| `rushing_first_downs` | Int64 | First downs on rush attempts (incl. scrambles). |
+| `rushing_epa` | Float64 | Expected points added on rush attempts (incl. scrambles and kneel downs). |
+| `rushing_2pt_conversions` | Int64 | Two-point conversion rushes |
+| `receptions` | Int64 | The number of pass receptions. Lateral receptions officially don't count as reception. |
+| `targets` | Int64 | The number of pass plays where the player was the targeted receiver. |
+| `receiving_yards` | Float64 | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
+| `receiving_tds` | Int64 | The number of touchdowns following a pass reception. Also includes touchdowns after receiving a lateral on a play that started as a pass play. |
+| `receiving_fumbles` | Int64 | The number of fumbles after a pass reception. |
+| `receiving_fumbles_lost` | Int64 | The number of fumbles lost after a pass reception. |
+| `receiving_air_yards` | Float64 | Receiving air yards (incl. incomplete passes). |
+| `receiving_yards_after_catch` | Float64 | Yards after the catch gained on plays in which player was receiver (this is an unofficial stat and may differ slightly between different sources). |
+| `receiving_first_downs` | Int64 | Total number of first downs gained on receptions |
+| `receiving_epa` | Float64 | Total EPA on plays where this receiver was targeted |
+| `receiving_2pt_conversions` | Int64 | Two-point conversion receptions |
+| `racr` | Float64 | Receiving (yards) Air (yards) Conversion Ratio - the number of receiving yards per air yards targeted per game |
+| `target_share` | Float64 | "Player's share of team receiving targets in this game" |
+| `air_yards_share` | Float64 | Player's share of the team's air yards in this game |
+| `wopr` | Float64 | Weighted OPportunity Rating - 1.5 x target_share + 0.7 x air_yards_share - a weighted average that contextualizes total fantasy usage. |
+| `special_teams_tds` | Int64 | Total number of kick/punt return touchdowns |
+| `fantasy_points` | Float64 | Standard fantasy points. |
+| `fantasy_points_ppr` | Float64 | PPR fantasy points. |
 
 **Raises**
 
@@ -402,36 +402,36 @@ A polars (or pandas) DataFrame with the `def_*` column set documented in the nfl
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `player_name` | character | Full name of player |
-| `player_display_name` | character | Full name of the player |
-| `games` | integer | Games played in career |
-| `position` | character | Primary position as reported by NFL.com |
-| `position_group` | character | Postion group of player as listed by NFL |
-| `headshot_url` | character | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `def_tackles` | double | Total number of tackles for this player |
-| `def_tackles_solo` | double | Total number of solo tackles for this player |
-| `def_tackles_with_assist` | double | Number of tackles this player had with an assisted tackle |
-| `def_tackle_assists` | double | Number of assisted tackles for this player |
-| `def_tackles_for_loss` | double | Number of tackles for loss (TFL) for this player |
-| `def_tackles_for_loss_yards` | double | Yards lost from TFLs involving this player |
-| `def_fumbles_forced` | double | Number of times a fumble was forced from this player |
-| `def_sacks` | double | Number of sacks form this player |
-| `def_sack_yards` | double | Yards lost from sacks forced by this player |
-| `def_qb_hits` | double | Number of QB hits from this player (should not include plays where the QB was sacked) |
-| `def_interceptions` | double | Number of interceptions forced by this player |
-| `def_interception_yards` | double | yards gained/lost by interception returns from this player |
-| `def_pass_defended` | double | Number of passes defended/broken up by this player |
-| `def_tds` | double | Number of defensive touchdowns scored by this player |
-| `def_fumbles` | double | Number of fumbles by this player |
-| `def_fumble_recovery_own` | double | Number of times a player's team fumbled the ball and this player recovered |
-| `def_fumble_recovery_yards_own` | double | Number of yards gained/lost from fumble recoveries that happened because the player's team fumbled the ball and this player recovered the fumble on that same play |
-| `def_fumble_recovery_opp` | double | Number of times a player's opponent fumbled the ball and this player recovered |
-| `def_fumble_recovery_yards_opp` | double | Number of yards gained/lost from fumble recoveries that happened because the player's opponent fumbled the ball and this player recovered the fumble on that same play |
-| `def_safety` | double | Number of times this player forced a defensive safety |
-| `def_penalty` | double | Number of times this player was penalized defensively |
-| `def_penalty_yards` | double | Number of penalty yards for this player defensively |
+| `player_id` | String | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
+| `player_name` | String | Full name of player |
+| `player_display_name` | String | Full name of the player |
+| `games` | Int64 | Games played in career |
+| `position` | String | Primary position as reported by NFL.com |
+| `position_group` | String | Postion group of player as listed by NFL |
+| `headshot_url` | String | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
+| `team` | String | NFL team. Uses official abbreviations as per NFL.com |
+| `def_tackles` | Float64 | Total number of tackles for this player |
+| `def_tackles_solo` | Float64 | Total number of solo tackles for this player |
+| `def_tackles_with_assist` | Float64 | Number of tackles this player had with an assisted tackle |
+| `def_tackle_assists` | Float64 | Number of assisted tackles for this player |
+| `def_tackles_for_loss` | Float64 | Number of tackles for loss (TFL) for this player |
+| `def_tackles_for_loss_yards` | Float64 | Yards lost from TFLs involving this player |
+| `def_fumbles_forced` | Float64 | Number of times a fumble was forced from this player |
+| `def_sacks` | Float64 | Number of sacks form this player |
+| `def_sack_yards` | Float64 | Yards lost from sacks forced by this player |
+| `def_qb_hits` | Float64 | Number of QB hits from this player (should not include plays where the QB was sacked) |
+| `def_interceptions` | Float64 | Number of interceptions forced by this player |
+| `def_interception_yards` | Float64 | yards gained/lost by interception returns from this player |
+| `def_pass_defended` | Float64 | Number of passes defended/broken up by this player |
+| `def_tds` | Float64 | Number of defensive touchdowns scored by this player |
+| `def_fumbles` | Float64 | Number of fumbles by this player |
+| `def_fumble_recovery_own` | Float64 | Number of times a player's team fumbled the ball and this player recovered |
+| `def_fumble_recovery_yards_own` | Float64 | Number of yards gained/lost from fumble recoveries that happened because the player's team fumbled the ball and this player recovered the fumble on that same play |
+| `def_fumble_recovery_opp` | Float64 | Number of times a player's opponent fumbled the ball and this player recovered |
+| `def_fumble_recovery_yards_opp` | Float64 | Number of yards gained/lost from fumble recoveries that happened because the player's opponent fumbled the ball and this player recovered the fumble on that same play |
+| `def_safety` | Float64 | Number of times this player forced a defensive safety |
+| `def_penalty` | Float64 | Number of times this player was penalized defensively |
+| `def_penalty_yards` | Float64 | Number of penalty yards for this player defensively |
 
 **Example**
 
@@ -482,48 +482,48 @@ A polars (or pandas) DataFrame with the `fg_*`/`pat_*`/`gwfg_*` column set docum
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `player_name` | character | Full name of player |
-| `player_display_name` | character | Full name of the player |
-| `games` | integer | Games played in career |
-| `position` | character | Primary position as reported by NFL.com |
-| `position_group` | character | Postion group of player as listed by NFL |
-| `headshot_url` | character | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
-| `fg_made` | integer |  |
-| `fg_att` | integer |  |
-| `fg_missed` | integer |  |
-| `fg_blocked` | integer |  |
-| `fg_long` | double |  |
-| `fg_pct` | double |  |
-| `fg_made_0_19` | integer |  |
-| `fg_made_20_29` | integer |  |
-| `fg_made_30_39` | integer |  |
-| `fg_made_40_49` | integer |  |
-| `fg_made_50_59` | integer |  |
-| `fg_made_60_` | integer |  |
-| `fg_missed_0_19` | integer |  |
-| `fg_missed_20_29` | integer |  |
-| `fg_missed_30_39` | integer |  |
-| `fg_missed_40_49` | integer |  |
-| `fg_missed_50_59` | integer |  |
-| `fg_missed_60_` | integer |  |
-| `fg_made_list` | character |  |
-| `fg_missed_list` | character |  |
-| `fg_blocked_list` | character |  |
-| `fg_made_distance` | integer |  |
-| `fg_missed_distance` | integer |  |
-| `fg_blocked_distance` | integer |  |
-| `pat_made` | integer |  |
-| `pat_att` | integer |  |
-| `pat_missed` | integer |  |
-| `pat_blocked` | integer |  |
-| `pat_pct` | double |  |
-| `gwfg_att` | integer |  |
-| `gwfg_distance_list` | character |  |
-| `gwfg_made` | integer |  |
-| `gwfg_missed` | integer |  |
-| `gwfg_blocked` | integer |  |
+| `player_id` | String | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
+| `team` | String | NFL team. Uses official abbreviations as per NFL.com |
+| `player_name` | String | Full name of player |
+| `player_display_name` | String | Full name of the player |
+| `games` | Int64 | Games played in career |
+| `position` | String | Primary position as reported by NFL.com |
+| `position_group` | String | Postion group of player as listed by NFL |
+| `headshot_url` | String | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
+| `fg_made` | Int64 |  |
+| `fg_att` | Int64 |  |
+| `fg_missed` | Int64 |  |
+| `fg_blocked` | Int64 |  |
+| `fg_long` | Float64 |  |
+| `fg_pct` | Float64 |  |
+| `fg_made_0_19` | Int64 |  |
+| `fg_made_20_29` | Int64 |  |
+| `fg_made_30_39` | Int64 |  |
+| `fg_made_40_49` | Int64 |  |
+| `fg_made_50_59` | Int64 |  |
+| `fg_made_60_` | Int64 |  |
+| `fg_missed_0_19` | Int64 |  |
+| `fg_missed_20_29` | Int64 |  |
+| `fg_missed_30_39` | Int64 |  |
+| `fg_missed_40_49` | Int64 |  |
+| `fg_missed_50_59` | Int64 |  |
+| `fg_missed_60_` | Int64 |  |
+| `fg_made_list` | String |  |
+| `fg_missed_list` | String |  |
+| `fg_blocked_list` | String |  |
+| `fg_made_distance` | Int64 |  |
+| `fg_missed_distance` | Int64 |  |
+| `fg_blocked_distance` | Int64 |  |
+| `pat_made` | Int64 |  |
+| `pat_att` | Int64 |  |
+| `pat_missed` | Int64 |  |
+| `pat_blocked` | Int64 |  |
+| `pat_pct` | Float64 |  |
+| `gwfg_att` | Int64 |  |
+| `gwfg_distance_list` | String |  |
+| `gwfg_made` | Int64 |  |
+| `gwfg_missed` | Int64 |  |
+| `gwfg_blocked` | Int64 |  |
 
 **Example**
 
@@ -580,36 +580,36 @@ A one-row-per-player season-roster `DataFrame` with the documented schema. An em
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `position` | character | Primary position as reported by NFL.com |
-| `depth_chart_position` | character | Position assigned on depth chart. Not always accurate! |
-| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `status` | character |  |
-| `full_name` | character | Full name as per NFL.com |
-| `first_name` | character | First name of player |
-| `last_name` | character | Last name of player |
-| `birth_date` | character | Player birth date (sourced from NFL. Other sources may differ) |
-| `height` | double | Official height, in inches |
-| `weight` | integer | Official weight, in pounds |
-| `college` | character | Official college (usually the last one attended) |
-| `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
-| `espn_id` | character | ESPN ID - usual format is an integer with ~5 digits |
-| `sportradar_id` | character | SportRadar ID - often also called sportsdata_id by other services. A UUID. |
-| `yahoo_id` | character | Yahoo ID - usual format is an integer with ~5 digits |
-| `rotowire_id` | character | Rotowire ID - usual format is an integer with ~four digits. Not to be confused with rotowire_id. |
-| `pff_id` | character | Pro Football Focus ID - usually an integer with between 3 and 6 digits. |
-| `pfr_id` | character | Pro-Football-Reference ID for player |
-| `fantasy_data_id` | character | FantasyData ID - usual format five digit integer |
-| `sleeper_id` | character | Sleeper ID - usually an integer with ~4 digits. |
-| `years_exp` | integer | Years played in league |
-| `headshot_url` | character | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
-| `esb_id` | character | Player ID for Elias Sports Bureau |
-| `smart_id` | character | SMART ID for player (that's in raw pbp. It includes a hashed ESB_ID) |
-| `football_name` | character | Common player name (i.e. in most cases common_first_name last_name) |
-| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
-| `entry_year` | integer | The year a player first became eligible to play in the NFL. |
-| `rookie_year` | integer | The year a player lost their rookie eligibility. |
+| `season` | Int64 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `team` | String | NFL team. Uses official abbreviations as per NFL.com |
+| `position` | String | Primary position as reported by NFL.com |
+| `depth_chart_position` | String | Position assigned on depth chart. Not always accurate! |
+| `jersey_number` | Int64 | Jersey number. Often useful for joins by name/team/jersey. |
+| `status` | String |  |
+| `full_name` | String | Full name as per NFL.com |
+| `first_name` | String | First name of player |
+| `last_name` | String | Last name of player |
+| `birth_date` | String | Player birth date (sourced from NFL. Other sources may differ) |
+| `height` | Float64 | Official height, in inches |
+| `weight` | Int64 | Official weight, in pounds |
+| `college` | String | Official college (usually the last one attended) |
+| `gsis_id` | String | Game Stats and Info Service ID: the primary ID for play-by-play data. |
+| `espn_id` | String | ESPN ID - usual format is an integer with ~5 digits |
+| `sportradar_id` | String | SportRadar ID - often also called sportsdata_id by other services. A UUID. |
+| `yahoo_id` | String | Yahoo ID - usual format is an integer with ~5 digits |
+| `rotowire_id` | String | Rotowire ID - usual format is an integer with ~four digits. Not to be confused with rotowire_id. |
+| `pff_id` | String | Pro Football Focus ID - usually an integer with between 3 and 6 digits. |
+| `pfr_id` | String | Pro-Football-Reference ID for player |
+| `fantasy_data_id` | String | FantasyData ID - usual format five digit integer |
+| `sleeper_id` | String | Sleeper ID - usually an integer with ~4 digits. |
+| `years_exp` | Int64 | Years played in league |
+| `headshot_url` | String | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
+| `esb_id` | String | Player ID for Elias Sports Bureau |
+| `smart_id` | String | SMART ID for player (that's in raw pbp. It includes a hashed ESB_ID) |
+| `football_name` | String | Common player name (i.e. in most cases common_first_name last_name) |
+| `ngs_position` | String | Primary position as reported by the NextGen stats API. |
+| `entry_year` | Int64 | The year a player first became eligible to play in the NFL. |
+| `rookie_year` | Int64 | The year a player lost their rookie eligibility. |
 
 **Raises**
 

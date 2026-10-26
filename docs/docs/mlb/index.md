@@ -122,7 +122,7 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 
 ## See also
 
-- [sdvplot](https://github.com/sportsdataverse/sdvplot) — `surface("mlb")` draws the field in a team's colors
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("mlb")` draws the field in a team's colors
 - [sportypy](https://sportypy.sportsdataverse.org/) — the regulation MLB field sdvplot draws with
 
 ## Examples

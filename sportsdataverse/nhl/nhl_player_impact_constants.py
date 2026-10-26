@@ -53,8 +53,8 @@ class ImpactConfig:
     """League-specific constants consumed by every player-impact engine function.
 
     Attributes:
-        goals_per_win: goals-per-win denominator for GAR->WAR (Task 6.2 fits the NHL
-            value from team wins vs goal differential; seeded here until fit).
+        goals_per_win: goals-per-win denominator for GAR->WAR (a seeded value until it is
+            fitted from NHL team wins vs goal differential).
         replacement_ev_off: EV offense replacement-level rate (xG/60), subtracted before
             summing GAR.
         replacement_ev_def: EV defense replacement-level rate (xGA/60 suppressed).
@@ -89,7 +89,7 @@ class ImpactConfig:
 
 
 # `goals_per_win` for the NHL is the fitted output of
-# `dev/nhl_player_impact/fit_goals_per_win.py` (Task 6.2): OLS `wins = a + b*goal_diff`
+# `dev/nhl_player_impact/fit_goals_per_win.py`: OLS `wins = a + b*goal_diff`
 # over every team's full 2024-25 regular season, `goals_per_win = 1/b = 6.596` -- run
 # 2026-07-08, consistent with the widely-published NHL rule-of-thumb range (~6-6.5,
 # Perry/EvolvingHockey, MoneyPuck). NOTE: the fit groups by `load_nhl_schedule`'s

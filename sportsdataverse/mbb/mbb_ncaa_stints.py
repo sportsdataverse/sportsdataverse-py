@@ -7,37 +7,33 @@ stint builder itself from ``ExtractorUtils.scala`` in Alex-At-Home/cbb-explorer
 
 Ported functions/types (Scala anchors in each docstring):
 
-* :func:`remove_diacritics` -- NFD-normalize + strip combining marks
-  (``ExtractorUtils.scala:38-43``).
+* :func:`remove_diacritics` -- NFD-normalize + strip combining marks.
 * :func:`remove_html_encoding` -- undo ``&#39;``/``&quot;``/``&amp;`` literal
-  escapes (``ExtractorUtils.scala:25-33``), added in Task 5e.5 for
+  escapes, added for
   ``mbb_ncaa_shot_parser.py``'s SVG-title name extraction.
 * :func:`build_player_code` -- turn a box-score / play-by-play player name
-  into a short unique-within-team code (``ExtractorUtils.scala:290-391``).
-* :func:`name_in_v0_box_format` -- flip a v1-box-format name to v0-box format
-  (``ExtractorUtils.scala:59-81``), added in Task 5e.1 for
+  into a short unique-within-team code.
+* :func:`name_in_v0_box_format` -- flip a v1-box-format name to v0-box format, added for
   ``mbb_ncaa_roster_parser.py``'s v1 ``name_finder``.
 * :func:`parse_team_name` -- match the two team-title strings against the
-  target team (``ExtractorUtils.scala:240-267``).
+  target team.
 * :data:`SUB_SAFETY_DELTA_MINS` + :class:`SubInEvent` / :class:`SubOutEvent`
   / :class:`OtherTeamEvent` / :class:`OtherOpponentEvent` /
   :class:`GameBreakEvent` / :class:`GameEndEvent` -- the ``PlayByPlayEvent``
-  ADT (``ExtractorUtils.scala:822-882``, nested inside ``object Model``).
+  ADT (nested inside ``object Model``).
 * :class:`LineupBuildingState` -- the substitution-tracking fold state
-  (``ExtractorUtils.scala:735-819``, also nested inside ``object Model``).
+  (also nested inside ``object Model``).
 * :func:`reorder_and_reverse` -- reorders a same-minute block of events so
-  subs never enclose the plays they logically precede/follow
-  (``ExtractorUtils.scala:435-599``).
+  subs never enclose the plays they logically precede/follow.
 * :func:`build_partial_lineup_list` -- the top-level foldLeft that turns a
-  play-by-play event stream into a chronological list of lineup stints
-  (``ExtractorUtils.scala:118-227``).
+  play-by-play event stream into a chronological list of lineup stints.
 * :func:`build_new_player_list` -- 3-candidate prefer-size-5 reconciliation
-  of the on-floor roster from a lineup's subs (``ExtractorUtils.scala:654-693``).
+  of the on-floor roster from a lineup's subs.
 * :func:`build_lineup_id` -- sorted-code join identifying a set of players
-  on the floor (``ExtractorUtils.scala:602-606``).
+  on the floor.
 * :func:`start_time_from_period` / :func:`duration_from_period` -- period
   clock-time helpers (women's quarters vs. men's halves, then 5-minute OTs;
-  ``ExtractorUtils.scala:272-287``).
+  ``ExtractorUtils.scala``).
 
 **Deferred (call-time) import for ``build_tidy_player_context`` /
 ``tidy_player``.** ``mbb_ncaa_names.py`` imports :func:`build_player_code`
@@ -57,8 +53,7 @@ intermediate ``duration_mins * 60000.0``, so the truncated millisecond count
 is bit-for-bit identical between the two ports (verified against the
 oracle's ``now.plusMillis(6000)`` for a ``duration_mins=0.1`` stint).
 
-**``ExtractorUtils.v0_box_name_to_first_last`` is NOT ported (Task 5e.1
-scope decision).** ``RosterParser.parse_roster``'s ``include_coach`` branch
+**``ExtractorUtils.v0_box_name_to_first_last`` is NOT ported (scope decision).** ``RosterParser.parse_roster``'s ``include_coach`` branch
 uses it only inside a ``println``-based maintainer diagnostic (the
 "TOFIX1"/"TOFIX2" suggested ``fix_combos(...)`` calls for the duplicate-name
 table) that has **no effect on the function's return value** either way --
@@ -211,15 +206,15 @@ __all__ = [
     "sides_from_box",
 ]
 
-#: Max total length of a player code (``ExtractorUtils.scala:12``).
+#: Max total length of a player code.
 PLAYER_CODE_MAX_LENGTH = 16
 
 #: Max length of any one name fragment, e.g. ``"MAMUKELASHVILI"`` is
-#: truncated to ``"MAMUKELASH"`` (``ExtractorUtils.scala:17``).
+#: truncated to ``"MAMUKELASH"``.
 PLAYER_CODE_MAX_FRAGMENT_LENGTH = 10
 
 #: Team-title matcher: optional ``#N `` seed prefix, the team name, optional
-#: trailing `` (W-L)`` record (``ExtractorUtils.scala:234``). Scala's
+#: trailing `` (W-L)`` record. Scala's
 #: ``Regex.unapplySeq`` requires a FULL match -> ``re.fullmatch``.
 _EXTRACT_TEAM_REGEX = re.compile(r"([#][0-9]+ +)?([^ ].*?)( *[(][0-9]+-[0-9]+[)])?")
 
@@ -229,7 +224,7 @@ _WHITESPACE_RE = re.compile(r"\s+")
 
 def remove_diacritics(fragment: str) -> str:
     """Strip diacritical marks, e.g. ``"Juhász"`` -> ``"Juhasz"``
-    (``ExtractorUtils.scala:38-43``: NFD normalization then removal of the
+    (NFD normalization then removal of the
     combining-diacritical-marks block).
 
     Args:
@@ -249,8 +244,8 @@ def remove_diacritics(fragment: str) -> str:
 
 def remove_html_encoding(html_str: str) -> str:
     """Undo a handful of literal HTML entity escapes (``ExtractorUtils
-    .remove_html_encoding``, ``ExtractorUtils.scala:25-33``). **Scope
-    addition, Task 5e.5** -- the first consumer is
+    .remove_html_encoding``). **Scope
+    addition** -- the first consumer is
     ``mbb_ncaa_shot_parser.parse_shot_html`` (the ``player`` name / shooting
     team name extracted from an SVG shot's ``<title>`` text).
 
@@ -282,7 +277,7 @@ def remove_html_encoding(html_str: str) -> str:
 
 
 def _first_last(fragment: str) -> str:
-    """First char upper + last char lower (``ExtractorUtils.scala:299-305``)."""
+    """First char upper + last char lower."""
     if not fragment:
         return ""
     return f"{fragment[0].upper()}{fragment[-1].lower()}"
@@ -290,7 +285,7 @@ def _first_last(fragment: str) -> str:
 
 def _transform(fragment: str, max_len: int) -> str:
     """Capitalize the first char, lowercase the rest, capped at ``max_len``
-    (``ExtractorUtils.scala:306-312``: ``fragment(0).toUpper +
+    (``fragment(0).toUpper +
     fragment.take(max_len).tail.toLowerCase``)."""
     if not fragment:
         return ""
@@ -298,8 +293,7 @@ def _transform(fragment: str, max_len: int) -> str:
 
 
 def _transform_first_name(fragment: str, full_name_lower: str) -> str:
-    """First-name fragment transform with duplicate-name special-casing
-    (``ExtractorUtils.scala:313-321``). Scala's ``Map.get`` yields
+    """First-name fragment transform with duplicate-name special-casing. Scala's ``Map.get`` yields
     ``Option[Option[String]]`` -- the 3-way absent / present-with-``None`` /
     present-with-code split needs ``key in table`` in Python, NOT ``.get``.
     """
@@ -312,7 +306,7 @@ def _transform_first_name(fragment: str, full_name_lower: str) -> str:
 
 
 def _name_filter(candidate: str) -> bool:
-    """True if a fragment is junk to drop (``ExtractorUtils.scala:344-351``):
+    """True if a fragment is junk to drop:
     empty, digit-leading, an ordinal word, or a jr/sr/roman-numeral suffix."""
     return (
         not candidate
@@ -330,8 +324,7 @@ def _name_filter(candidate: str) -> bool:
 
 
 def build_player_code(in_name: str, team: Optional[TeamId]) -> PlayerCodeId:
-    """Build a short player code from a name, in any of the NCAA formats
-    (``ExtractorUtils.scala:290-391``).
+    """Build a short player code from a name, in any of the NCAA formats.
 
     The code is a compact ``FirstInitials + [Middle] + Lastname`` string
     (e.g. ``"Mitchell, Makhi"`` -> ``"MiMitchell"``) unique within a team +
@@ -427,7 +420,7 @@ def build_player_code(in_name: str, team: Optional[TeamId]) -> PlayerCodeId:
 
 
 #: Nickname-parenthetical matcher used by :func:`name_in_v0_box_format`
-#: (``ExtractorUtils.complex_v0_case_regex``, ``ExtractorUtils.scala:45``).
+#: (``ExtractorUtils.complex_v0_case_regex``).
 #: Scala's ``last match { case complex_v0_case_regex(nickname, last_name) => ... }``
 #: pattern match requires a FULL match -> :func:`re.fullmatch`.
 _COMPLEX_V0_CASE_RE = re.compile(r"([(].*[)])(.*)")
@@ -435,7 +428,7 @@ _COMPLEX_V0_CASE_RE = re.compile(r"([(].*[)])(.*)")
 
 def name_in_v0_box_format(v1_name: str) -> str:
     """Switch a v1-box-format name (``"first_name names"``) to v0-box format
-    (``"names, first_name"``) (``ExtractorUtils.scala:59-81``).
+    (``"names, first_name"``).
 
     Handles a v0-PbP-style all-caps input (``"SURNAME,NAME"``, still seen in
     older files even in v1-format seasons) by first flipping it to guaranteed
@@ -534,8 +527,7 @@ def parse_team_name(
     home_team: Optional[str] = None,
     away_team: Optional[str] = None,
 ) -> Union[tuple[str, str, bool], ParseError]:
-    """Match the two team-title strings against the target team
-    (``ExtractorUtils.scala:240-267``).
+    """Match the two team-title strings against the target team.
 
     Strips an optional ``#N `` seed prefix and trailing `` (W-L)`` record
     from each title (e.g. ``"#10 Iowa (3-3)"`` -> ``"Iowa"``), applies the
@@ -616,13 +608,13 @@ def parse_team_name(
 
 #: Minimum inactivity window (4 seconds, expressed in game-clock minutes)
 #: -- see :meth:`LineupBuildingState.is_active`
-#: (``Model.SUB_SAFETY_DELTA_MINS``, ``ExtractorUtils.scala:732``).
+#: (``Model.SUB_SAFETY_DELTA_MINS``).
 SUB_SAFETY_DELTA_MINS = 4.0 / 60
 
 
 @dataclass
 class SubInEvent:
-    """A player subs into the game (``Model.SubInEvent``, ``ExtractorUtils.scala:850-853``).
+    """A player subs into the game (``Model.SubInEvent``).
 
     Args:
         min: The ascending game-clock minute of the event.
@@ -635,13 +627,13 @@ class SubInEvent:
     player_name: str
 
     def with_min(self, new_min: float) -> "SubInEvent":
-        """Return a copy with :attr:`min` replaced (``:852``)."""
+        """Return a copy with :attr:`min` replaced."""
         return replace(self, min=new_min)
 
 
 @dataclass
 class SubOutEvent:
-    """A player subs out of the game (``Model.SubOutEvent``, ``ExtractorUtils.scala:854-857``).
+    """A player subs out of the game (``Model.SubOutEvent``).
 
     Args:
         min: The ascending game-clock minute of the event.
@@ -654,14 +646,14 @@ class SubOutEvent:
     player_name: str
 
     def with_min(self, new_min: float) -> "SubOutEvent":
-        """Return a copy with :attr:`min` replaced (``:856``)."""
+        """Return a copy with :attr:`min` replaced."""
         return replace(self, min=new_min)
 
 
 @dataclass
 class OtherTeamEvent:
     """A non-sub event belonging to the team under analysis
-    (``Model.OtherTeamEvent``, ``ExtractorUtils.scala:858-865``).
+    (``Model.OtherTeamEvent``).
 
     Args:
         min: The ascending game-clock minute of the event.
@@ -676,18 +668,17 @@ class OtherTeamEvent:
     @property
     def is_team_dir(self) -> bool:
         """Always ``True`` -- a fixed literal in the Scala, not a
-        constructor field (``:864``)."""
+        constructor field."""
         return True
 
     def with_min(self, new_min: float) -> "OtherTeamEvent":
-        """Return a copy with :attr:`min` replaced (``:863``)."""
+        """Return a copy with :attr:`min` replaced."""
         return replace(self, min=new_min)
 
 
 @dataclass
 class OtherOpponentEvent:
-    """A non-sub event belonging to the opponent (``Model.OtherOpponentEvent``,
-    ``ExtractorUtils.scala:866-873``).
+    """A non-sub event belonging to the opponent (``Model.OtherOpponentEvent``).
 
     Args:
         min: The ascending game-clock minute of the event.
@@ -702,18 +693,18 @@ class OtherOpponentEvent:
     @property
     def is_team_dir(self) -> bool:
         """Always ``False`` -- a fixed literal in the Scala, not a
-        constructor field (``:872``)."""
+        constructor field."""
         return False
 
     def with_min(self, new_min: float) -> "OtherOpponentEvent":
-        """Return a copy with :attr:`min` replaced (``:871``)."""
+        """Return a copy with :attr:`min` replaced."""
         return replace(self, min=new_min)
 
 
 @dataclass
 class GameBreakEvent:
     """A break in play (timeout, end of period, etc.) short of the end of
-    the game (``Model.GameBreakEvent``, ``ExtractorUtils.scala:874-877``).
+    the game (``Model.GameBreakEvent``).
 
     Args:
         min: The ascending game-clock minute of the event.
@@ -724,13 +715,13 @@ class GameBreakEvent:
     score: Score
 
     def with_min(self, new_min: float) -> "GameBreakEvent":
-        """Return a copy with :attr:`min` replaced (``:876``)."""
+        """Return a copy with :attr:`min` replaced."""
         return replace(self, min=new_min)
 
 
 @dataclass
 class GameEndEvent:
-    """The end of the game (``Model.GameEndEvent``, ``ExtractorUtils.scala:878-881``).
+    """The end of the game (``Model.GameEndEvent``).
 
     Args:
         min: The ascending game-clock minute of the event.
@@ -741,30 +732,30 @@ class GameEndEvent:
     score: Score
 
     def with_min(self, new_min: float) -> "GameEndEvent":
-        """Return a copy with :attr:`min` replaced (``:880``)."""
+        """Return a copy with :attr:`min` replaced."""
         return replace(self, min=new_min)
 
 
 #: Events referencing a substituting player (``Model.SubEvent``,
-#: ``ExtractorUtils.scala:843-847``).
+#: ``ExtractorUtils.scala``).
 SubEvent = Union[SubInEvent, SubOutEvent]
 
 #: Events carrying a raw event string + team/opponent direction
-#: (``Model.MiscGameEvent``, ``ExtractorUtils.scala:835-842``).
+#: (``Model.MiscGameEvent``).
 MiscGameEvent = Union[OtherTeamEvent, OtherOpponentEvent]
 
-#: Game-break events (``Model.MiscGameBreak``, ``ExtractorUtils.scala:848``).
+#: Game-break events (``Model.MiscGameBreak``).
 MiscGameBreak = Union[GameBreakEvent, GameEndEvent]
 
 #: The full play-by-play event ADT (``Model.PlayByPlayEvent``,
-#: ``ExtractorUtils.scala:822-833``).
+#: ``ExtractorUtils.scala``).
 PlayByPlayEvent = Union[SubInEvent, SubOutEvent, OtherTeamEvent, OtherOpponentEvent, GameBreakEvent, GameEndEvent]
 
 
 @dataclass
 class LineupBuildingState:
     """State for building raw lineup data across a fold over play-by-play
-    events (``Model.LineupBuildingState``, ``ExtractorUtils.scala:735-819``).
+    events (``Model.LineupBuildingState``).
 
     See the module docstring's "``with_*`` methods return NEW instances"
     note -- every mutator below returns a fresh :class:`LineupBuildingState`
@@ -789,13 +780,11 @@ class LineupBuildingState:
     old_format: Optional[bool] = None
 
     def build(self) -> list[LineupEvent]:
-        """The full chronological lineup-event list (``:742-744``:
-        ``(curr :: prev).reverse``)."""
+        """The full chronological lineup-event list (``(curr :: prev).reverse``)."""
         return list(reversed(self.prev)) + [self.curr]
 
     def is_sub(self, raw: RawGameEvent) -> bool:
-        """Whether ``raw`` is an *opponent*-side substitution line
-        (``:749-758``).
+        """Whether ``raw`` is an *opponent*-side substitution line.
 
         Only :attr:`~sportsdataverse.mbb.mbb_ncaa_models.RawGameEvent.opponent`
         is inspected -- per the Scala scaladoc, "opposition subs are
@@ -825,7 +814,7 @@ class LineupBuildingState:
 
     def is_active(self, min: float) -> bool:
         """Whether the current lineup has non-sub activity, or has simply
-        been on the floor long enough to trust (``:760-766``).
+        been on the floor long enough to trust.
 
         Args:
             min: The ascending game-clock minute to check against.
@@ -840,7 +829,7 @@ class LineupBuildingState:
         )
 
     def with_player_in(self, player_name: str) -> "LineupBuildingState":
-        """Prepend a new "subbed in" player code onto :attr:`curr` (``:770-778``)."""
+        """Prepend a new "subbed in" player code onto :attr:`curr`."""
         return replace(
             self,
             curr=replace(
@@ -850,7 +839,7 @@ class LineupBuildingState:
         )
 
     def with_player_out(self, player_name: str) -> "LineupBuildingState":
-        """Prepend a new "subbed out" player code onto :attr:`curr` (``:779-787``)."""
+        """Prepend a new "subbed out" player code onto :attr:`curr`."""
         return replace(
             self,
             curr=replace(
@@ -860,14 +849,14 @@ class LineupBuildingState:
         )
 
     def with_latest_score(self, score: Score) -> "LineupBuildingState":
-        """Update :attr:`curr`'s running end-of-event score (``:788-796``)."""
+        """Update :attr:`curr`'s running end-of-event score."""
         return replace(
             self,
             curr=replace(self.curr, score_info=replace(self.curr.score_info, end=score)),
         )
 
     def with_team_event(self, min: float, event_string: str) -> "LineupBuildingState":
-        """Append a team-side raw event and bump ``end_min`` (``:797-807``)."""
+        """Append a team-side raw event and bump ``end_min``."""
         return replace(
             self,
             curr=replace(
@@ -878,7 +867,7 @@ class LineupBuildingState:
         )
 
     def with_opponent_event(self, min: float, event_string: str) -> "LineupBuildingState":
-        """Append an opponent-side raw event and bump ``end_min`` (``:808-818``)."""
+        """Append an opponent-side raw event and bump ``end_min``."""
         return replace(
             self,
             curr=replace(
@@ -891,7 +880,7 @@ class LineupBuildingState:
 
 def reorder_and_reverse(reversed_partial_events: Iterable[PlayByPlayEvent]) -> list[PlayByPlayEvent]:
     """Orders same-minute play-by-play events so subs never enclose the plays
-    they logically precede/follow (``ExtractorUtils.scala:435-599``).
+    they logically precede/follow.
 
     Groups consecutive events sharing the same :attr:`min` into a block (the
     input arrives in descending/reverse-chronological order, so blocks are
@@ -935,16 +924,15 @@ def reorder_and_reverse(reversed_partial_events: Iterable[PlayByPlayEvent]) -> l
 
     def event_refs_player(ev: MiscGameEvent, in_or_out: Sequence[SubEvent]) -> bool:
         """Does ``ev``'s raw string mention one of ``in_or_out``'s player
-        names? (``:484-492``)."""
+        names?."""
         return any(candidate.player_name in ev.event_string for candidate in in_or_out)
 
     def score_gt(s1: Score, s2: Score) -> bool:
-        """Lexicographic ``(scored, allowed)`` comparison (``:499-502``)."""
+        """Lexicographic ``(scored, allowed)`` comparison."""
         return (s1.scored, s1.allowed) > (s2.scored, s2.allowed)
 
     def inner_sort(pre_ordered_block: list[PlayByPlayEvent]) -> list[PlayByPlayEvent]:
-        """Ensures subs don't enclose plays within one same-minute block
-        (``:440-574``)."""
+        """Ensures subs don't enclose plays within one same-minute block."""
 
         def sort_key(ev: PlayByPlayEvent) -> tuple[int, int, int]:
             # (rank scoring shots earliest, subs latest, everything else in
@@ -980,8 +968,7 @@ def reorder_and_reverse(reversed_partial_events: Iterable[PlayByPlayEvent]) -> l
                 return list(reversed(self.group_1)) + subs + list(reversed(self.group_2))
 
         def add_to_state(state: _State, ev: PlayByPlayEvent) -> _State:
-            """Adds ``ev`` to the pre- or post-sub group based on ``state``
-            (``:498-534``)."""
+            """Adds ``ev`` to the pre- or post-sub group based on ``state``."""
             if state.sub_score is not None and score_gt(ev.score, state.sub_score):
                 return replace(state, group_2=[ev] + state.group_2)
 
@@ -1057,8 +1044,7 @@ def reorder_and_reverse(reversed_partial_events: Iterable[PlayByPlayEvent]) -> l
 
 
 def start_time_from_period(period: int, is_women_game: bool) -> float:
-    """The game-clock time (minutes elapsed) a period starts at
-    (``ExtractorUtils.scala:272-281``).
+    """The game-clock time (minutes elapsed) a period starts at.
 
     Women's games play four 10-minute quarters then 5-minute overtimes; men's
     games play two 20-minute halves then 5-minute overtimes.
@@ -1092,7 +1078,7 @@ def start_time_from_period(period: int, is_women_game: bool) -> float:
 
 def duration_from_period(period: int, is_women_game: bool) -> float:
     """The game duration (minutes elapsed) once ``period`` has completed
-    (``ExtractorUtils.scala:286-287``: ``start_time_from_period(period + 1,
+    (``start_time_from_period(period + 1,
     ...)``).
 
     Args:
@@ -1113,7 +1099,7 @@ def duration_from_period(period: int, is_women_game: bool) -> float:
 
 
 def build_lineup_id(players: list[PlayerCodeId]) -> LineupId:
-    """Builds a lineup id from a list of players (``ExtractorUtils.scala:602-606``):
+    """Builds a lineup id from a list of players:
     every player's ``code``, sorted, joined with ``"_"``.
 
     Args:
@@ -1135,7 +1121,7 @@ def build_lineup_id(players: list[PlayerCodeId]) -> LineupId:
 
 def build_new_player_list(curr: LineupEvent, prev: LineupEvent) -> list[PlayerCodeId]:
     """Builds a player list from the previous (or current, if pre-initialized)
-    lineup and the current lineup's in/out subs (``ExtractorUtils.scala:654-693``).
+    lineup and the current lineup's in/out subs.
 
     Three candidate reconciliations are computed --
 
@@ -1223,7 +1209,7 @@ def _new_lineup_event(
     out_name: Optional[str] = None,
     box_lineup: Optional[LineupEvent] = None,
 ) -> LineupEvent:
-    """Creates an "empty" new lineup following ``prev`` (``ExtractorUtils.scala:611-649``).
+    """Creates an "empty" new lineup following ``prev``.
     ``prev`` is expected to have already been through :func:`_complete_lineup`.
 
     Args:
@@ -1264,8 +1250,7 @@ def _new_lineup_event(
 
 
 def _complete_lineup(curr: LineupEvent, prevs: list[LineupEvent], min: float) -> LineupEvent:
-    """Fills in/tidies up a partial lineup event following its completion
-    (``ExtractorUtils.scala:696-727``).
+    """Fills in/tidies up a partial lineup event following its completion.
 
     Args:
         curr: The lineup event being completed.
@@ -1315,7 +1300,7 @@ def build_partial_lineup_list(
     reversed_partial_events: Iterable[PlayByPlayEvent], box_lineup: LineupEvent
 ) -> list[LineupEvent]:
     """Converts a stream of partially parsed events into a list of lineup
-    events (``ExtractorUtils.scala:118-227``).
+    events.
 
     ``box_lineup`` is expected to carry every player on the team's roster,
     with the top 5 (by whatever order the caller supplies) being the
@@ -1379,8 +1364,7 @@ def build_partial_lineup_list(
     partial_events = reorder_and_reverse(reversed_partial_events)
 
     def _is_old_format(p: str, s: LineupBuildingState) -> Optional[bool]:
-        """Latches on the FIRST sub name seen -- all-caps means old format
-        (``:138-144``)."""
+        """Latches on the FIRST sub name seen -- all-caps means old format."""
         if s.old_format is None:
             return not any(ch.islower() for ch in p)
         return s.old_format

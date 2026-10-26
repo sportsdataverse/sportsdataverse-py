@@ -1,9 +1,9 @@
 ---
-title: WCH
-sidebar_label: WCH
-description: "sdv-py WCH: endpoint references, dataset loaders and parsers for WCH in the SportsDataverse Python package."
+title: Women's college hockey
+sidebar_label: Women's college hockey
+description: "sdv-py Women's college hockey: endpoint references, dataset loaders and parsers for Women's college hockey in the SportsDataverse Python package."
 ---
-# WCH (`sportsdataverse.hockey.wch`)
+# Women's college hockey (`sportsdataverse.hockey.wch`)
 
 ## Data sources
 
@@ -19,6 +19,11 @@ description: "sdv-py WCH: endpoint references, dataset loaders and parsers for W
 | [ESPN web API (v3)](reference/web) | 5 |
 | [ESPN core API (v2)](reference/core) | 87 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
+
+## See also
+
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("ncaa_whockey")` draws the NCAA rink and `team_colors("ncaa_whockey", ...)` the school colors
+- [sportypy](https://sportypy.sportsdataverse.org/) — the regulation NCAA rink sdvplot draws with
 
 ## Examples
 

@@ -500,11 +500,11 @@ endpoints:
   short: team_stats
   summary: Season team stats, traditional (box-score totals or per-game averages)
     or advanced (eFG%, TS%, four-factor style rates), one row per team.
-getter_module: sportsdataverse.euroleague.euroleague_runtime
+getter_module: sportsdataverse.basketball.euroleague.euroleague_runtime
 host: https://api-live.euroleague.net/v2
 module: euroleague
 name_pattern: euroleague_{short}
-parser_module: euroleague.euroleague_parsers
+parser_module: basketball.euroleague.euroleague_parsers
 passthrough_query: false
 qualifier: ''
 runtime_imports:

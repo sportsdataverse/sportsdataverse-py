@@ -9,7 +9,7 @@ toc_max_heading_level: 2
 
 ## nba_stats_shotchartdetail
 
-GET /stats/shotchartdetail
+Shot chart detail.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/shotchartdetail`
 
@@ -57,42 +57,42 @@ GET /stats/shotchartdetail
 
 | col_name | type | description |
 |---|---|---|
-| `grid_type` | character | Shot chart grid type label returned by the stats API (e.g. "Shot Chart Detail"). |
-| `game_id` | character | Unique game identifier. |
-| `game_event_id` | character | Unique identifier for game event. |
-| `player_id` | character | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `team_id` | character | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `period` | character | Period of the game (1-4 quarters; 5+ for OT). |
-| `minutes_remaining` | character | Minutes remaining. |
-| `seconds_remaining` | character | Seconds remaining in the period. |
-| `event_type` | character | Event / play type code (V2 PBP). |
-| `action_type` | character | Action type label (e.g. 'Made Shot', 'Substitution'). |
-| `shot_type` | character | Shot type label (e.g. 'Jump Shot', 'Layup'). |
-| `shot_zone_basic` | character | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
-| `shot_zone_area` | character | Shot zone area ('Left Side', 'Right Side', 'Center'). |
-| `shot_zone_range` | character | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
-| `shot_distance` | character | Shot distance from the basket, in feet. |
-| `loc_x` | character | X coordinate on the court (units of inches; 0 = basket center). |
-| `loc_y` | character | Y coordinate on the court (units of inches; baseline at 0). |
-| `shot_attempted_flag` | character | 1 if a shot was attempted on this event. |
-| `shot_made_flag` | character | 1 if the shot was made; 0 if missed. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `htm` | character | Home team abbreviation for the game. |
-| `vtm` | character | Visiting team abbreviation for the game. |
+| `grid_type` | String | Shot chart grid type label returned by the stats API (e.g. "Shot Chart Detail"). |
+| `game_id` | String | Unique game identifier. |
+| `game_event_id` | String | Unique identifier for game event. |
+| `player_id` | String | Unique player identifier. |
+| `player_name` | String | Player name. |
+| `team_id` | String | Unique team identifier. |
+| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
+| `period` | String | Period of the game (1-4 quarters; 5+ for OT). |
+| `minutes_remaining` | String | Minutes remaining. |
+| `seconds_remaining` | String | Seconds remaining in the period. |
+| `event_type` | String | Event / play type code (V2 PBP). |
+| `action_type` | String | Action type label (e.g. 'Made Shot', 'Substitution'). |
+| `shot_type` | String | Shot type label (e.g. 'Jump Shot', 'Layup'). |
+| `shot_zone_basic` | String | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
+| `shot_zone_area` | String | Shot zone area ('Left Side', 'Right Side', 'Center'). |
+| `shot_zone_range` | String | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
+| `shot_distance` | String | Shot distance from the basket, in feet. |
+| `loc_x` | String | X coordinate on the court (units of inches; 0 = basket center). |
+| `loc_y` | String | Y coordinate on the court (units of inches; baseline at 0). |
+| `shot_attempted_flag` | String | 1 if a shot was attempted on this event. |
+| `shot_made_flag` | String | 1 if the shot was made; 0 if missed. |
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `htm` | String | Home team abbreviation for the game. |
+| `vtm` | String | Visiting team abbreviation for the game. |
 
 **LeagueAverages**
 
 | col_name | type | description |
 |---|---|---|
-| `grid_type` | character | Shot chart grid type label returned by the stats API (e.g. "Shot Chart Detail"). |
-| `shot_zone_basic` | character | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
-| `shot_zone_area` | character | Shot zone area ('Left Side', 'Right Side', 'Center'). |
-| `shot_zone_range` | character | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
-| `fga` | integer | Field goal attempts. |
-| `fgm` | integer | Field goals made. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `grid_type` | String | Shot chart grid type label returned by the stats API (e.g. "Shot Chart Detail"). |
+| `shot_zone_basic` | String | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
+| `shot_zone_area` | String | Shot zone area ('Left Side', 'Right Side', 'Center'). |
+| `shot_zone_range` | String | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
+| `fga` | Int64 | Field goal attempts. |
+| `fgm` | Int64 | Field goals made. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -113,7 +113,7 @@ nba_stats_shotchartdetail(league_id='00', season_nullable='2024-25')
 
 ## nba_stats_shotchartleaguewide
 
-GET /stats/shotchartleaguewide
+Shot chart league wide.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/shotchartleaguewide`
 
@@ -130,13 +130,13 @@ GET /stats/shotchartleaguewide
 
 | col_name | type | description |
 |---|---|---|
-| `grid_type` | character | NBA or WNBA Stats value for grid type in the shotchartleaguewide result set. |
-| `shot_zone_basic` | character | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
-| `shot_zone_area` | character | Shot zone area ('Left Side', 'Right Side', 'Center'). |
-| `shot_zone_range` | character | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
-| `fga` | integer | Field goal attempts. |
-| `fgm` | integer | Field goals made. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `grid_type` | String | NBA or WNBA Stats value for grid type in the shotchartleaguewide result set. |
+| `shot_zone_basic` | String | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
+| `shot_zone_area` | String | Shot zone area ('Left Side', 'Right Side', 'Center'). |
+| `shot_zone_range` | String | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
+| `fga` | Int64 | Field goal attempts. |
+| `fgm` | Int64 | Field goals made. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -157,7 +157,7 @@ nba_stats_shotchartleaguewide(league_id='00', season='2024-25')
 
 ## nba_stats_shotchartlineupdetail
 
-GET /stats/shotchartlineupdetail
+Shot chart lineup detail.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/shotchartlineupdetail`
 
@@ -194,44 +194,44 @@ GET /stats/shotchartlineupdetail
 
 | col_name | type | description |
 |---|---|---|
-| `grid_type` | character | Shot chart grid type label returned by the stats API (e.g. "Shot Chart Detail"). |
-| `game_id` | character | Unique game identifier. |
-| `game_event_id` | character | Unique identifier for game event. |
-| `group_id` | character | ESPN group id. |
-| `group_name` | character | The lineup's five players as a ' - ' separated string of abbreviated names. |
-| `player_id` | character | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `team_id` | character | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `period` | character | Period of the game (1-4 quarters; 5+ for OT). |
-| `minutes_remaining` | character | Minutes remaining. |
-| `seconds_remaining` | character | Seconds remaining in the period. |
-| `event_type` | character | Event / play type code (V2 PBP). |
-| `action_type` | character | Action type label (e.g. 'Made Shot', 'Substitution'). |
-| `shot_type` | character | Shot type label (e.g. 'Jump Shot', 'Layup'). |
-| `shot_zone_basic` | character | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
-| `shot_zone_area` | character | Shot zone area ('Left Side', 'Right Side', 'Center'). |
-| `shot_zone_range` | character | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
-| `shot_distance` | character | Shot distance from the basket, in feet. |
-| `loc_x` | character | X coordinate on the court (units of inches; 0 = basket center). |
-| `loc_y` | character | Y coordinate on the court (units of inches; baseline at 0). |
-| `shot_attempted_flag` | character | 1 if a shot was attempted on this event. |
-| `shot_made_flag` | character | 1 if the shot was made; 0 if missed. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `htm` | character | Home team abbreviation for the game. |
-| `vtm` | character | Visiting team abbreviation for the game. |
+| `grid_type` | String | Shot chart grid type label returned by the stats API (e.g. "Shot Chart Detail"). |
+| `game_id` | String | Unique game identifier. |
+| `game_event_id` | String | Unique identifier for game event. |
+| `group_id` | String | ESPN group id. |
+| `group_name` | String | The lineup's five players as a ' - ' separated string of abbreviated names. |
+| `player_id` | String | Unique player identifier. |
+| `player_name` | String | Player name. |
+| `team_id` | String | Unique team identifier. |
+| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
+| `period` | String | Period of the game (1-4 quarters; 5+ for OT). |
+| `minutes_remaining` | String | Minutes remaining. |
+| `seconds_remaining` | String | Seconds remaining in the period. |
+| `event_type` | String | Event / play type code (V2 PBP). |
+| `action_type` | String | Action type label (e.g. 'Made Shot', 'Substitution'). |
+| `shot_type` | String | Shot type label (e.g. 'Jump Shot', 'Layup'). |
+| `shot_zone_basic` | String | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
+| `shot_zone_area` | String | Shot zone area ('Left Side', 'Right Side', 'Center'). |
+| `shot_zone_range` | String | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
+| `shot_distance` | String | Shot distance from the basket, in feet. |
+| `loc_x` | String | X coordinate on the court (units of inches; 0 = basket center). |
+| `loc_y` | String | Y coordinate on the court (units of inches; baseline at 0). |
+| `shot_attempted_flag` | String | 1 if a shot was attempted on this event. |
+| `shot_made_flag` | String | 1 if the shot was made; 0 if missed. |
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `htm` | String | Home team abbreviation for the game. |
+| `vtm` | String | Visiting team abbreviation for the game. |
 
 **ShotChartLineupLeagueAverage**
 
 | col_name | type | description |
 |---|---|---|
-| `grid_type` | character | Shot chart grid type label returned by the stats API (e.g. "Shot Chart Detail"). |
-| `shot_zone_basic` | character | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
-| `shot_zone_area` | character | Shot zone area ('Left Side', 'Right Side', 'Center'). |
-| `shot_zone_range` | character | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
-| `fga` | integer | Field goal attempts. |
-| `fgm` | integer | Field goals made. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `grid_type` | String | Shot chart grid type label returned by the stats API (e.g. "Shot Chart Detail"). |
+| `shot_zone_basic` | String | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
+| `shot_zone_area` | String | Shot zone area ('Left Side', 'Right Side', 'Center'). |
+| `shot_zone_range` | String | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
+| `fga` | Int64 | Field goal attempts. |
+| `fgm` | Int64 | Field goals made. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

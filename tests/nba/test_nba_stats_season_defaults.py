@@ -19,6 +19,7 @@ from sportsdataverse.nba.nba_schedule import year_to_season
 from sportsdataverse.nba.nba_stats_runtime import _latest_season
 from sportsdataverse.nba.nba_stats_runtime import season_latest_with_data as nba_season
 from sportsdataverse.wnba import wnba_stats
+from sportsdataverse.nbagl import nbagl_stats
 from sportsdataverse.wnba.wnba_stats_runtime import season_latest_with_data as wnba_season
 from tests.conftest import skip_if_no_nba_stats_live
 from tools.codegen import spec
@@ -210,7 +211,7 @@ def test_explicit_season_wins(monkeypatch):
 
 
 def _season_wrappers():
-    for mod, stem in ((nba_stats, "nba_stats"), (wnba_stats, "wnba_stats")):
+    for mod, stem in ((nba_stats, "nba_stats"), (wnba_stats, "wnba_stats"), (nbagl_stats, "nbagl_stats")):
         doc = yaml.safe_load((_ENDPOINTS / f"{stem}.yaml").read_text(encoding="utf-8"))
         for ep in doc["endpoints"]:
             keys = sorted({p["query_key"] for p in ep["extra_params"]} & {"Season", "SeasonYear"})
@@ -224,7 +225,15 @@ def test_every_season_endpoint_sends_a_season(fn, keys):
     # leaguestandings' second key, SeasonYear, defaults to "" in hoopR and stays so). Without one
     # stats.nba.com answers an empty HTTP 500 or every season summed (leaguedashteamstats:
     # SuperSonics and Bullets rows, GP up to 2,395).
-    sent = _sent(fn)
+    import inspect
+
+    # a required argument (nbagl shotchartlineupdetail's group_id: no G League default exists) gets a placeholder
+    required = {
+        n: "0"
+        for n, p in inspect.signature(fn).parameters.items()
+        if p.default is p.empty and p.kind in (p.POSITIONAL_OR_KEYWORD, p.KEYWORD_ONLY)
+    }
+    sent = _sent(fn, **required)
     assert any(sent.get(k) for k in keys.split("/")), f"{fn.__name__} sends no {keys}"
 
 
@@ -278,7 +287,7 @@ def test_season_type_is_documented_as_a_label_not_an_espn_code():
     registry = spec.load_parameters(_ENDPOINTS / "parameters.yaml")
     leaked = [
         f"{stem}.{ep.short}"
-        for stem in ("nba_stats", "wnba_stats")
+        for stem in ("nba_stats", "wnba_stats", "nbagl_stats")
         for ep in spec.load_flat_api(_ENDPOINTS / f"{stem}.yaml", registry).endpoints
         for p in ep.query_params
         if p.api == "SeasonType" and ("3=postseason" in p.description or "Playoffs" not in p.description)

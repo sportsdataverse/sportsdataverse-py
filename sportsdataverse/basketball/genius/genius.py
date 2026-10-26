@@ -333,12 +333,12 @@ def genius_game(
 
     Args:
         match_id: Genius match id (match_id in genius_schedule, genius_widget_games or genius_competition_games), e.g. 2902690.
-        return_parsed: parse the payload through parse_genius_game -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page.
+        return_parsed: parse the payload through parse_genius_game -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
@@ -361,7 +361,7 @@ def genius_game(
         .. _wehoop: https://wehoop.sportsdataverse.org
 
     Notes:
-        * Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
+        * Access: the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
         * Org and season. Every competition is an ORG code plus a competition id (``comp_id``): ``genius_competitions`` lists an org's competitions with the sdv END-year ``season`` (a START-year org lists 2025-26 as season 2026), ``genius_match_competition`` maps a game to its competition, and ``data.json`` itself names no date, competition or season. The hosted ORG can differ from the LiveStats ORG of ``/u/`` (NZNBL vs NZN). Match ids are one global sequence across every Genius customer.
         * ``data.json`` carries no global team or player id: ``tno`` (1 or 2) and ``pno`` are in-game numbers. Join players across games on name, team code and shirt number; global team ids come from the hosted schedule, the widget or ``genius_competition_games``. Only finished games are read.
     """
@@ -392,12 +392,12 @@ def genius_team_box(
 
     Args:
         match_id: Genius match id (match_id in genius_schedule, genius_widget_games or genius_competition_games), e.g. 2902690.
-        return_parsed: parse the payload through parse_genius_team_box -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page.
+        return_parsed: parse the payload through parse_genius_team_box -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
@@ -420,7 +420,7 @@ def genius_team_box(
         .. _wehoop: https://wehoop.sportsdataverse.org
 
     Notes:
-        * Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
+        * Access: the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
         * Org and season. Every competition is an ORG code plus a competition id (``comp_id``): ``genius_competitions`` lists an org's competitions with the sdv END-year ``season`` (a START-year org lists 2025-26 as season 2026), ``genius_match_competition`` maps a game to its competition, and ``data.json`` itself names no date, competition or season. The hosted ORG can differ from the LiveStats ORG of ``/u/`` (NZNBL vs NZN). Match ids are one global sequence across every Genius customer.
         * ``data.json`` carries no global team or player id: ``tno`` (1 or 2) and ``pno`` are in-game numbers. Join players across games on name, team code and shirt number; global team ids come from the hosted schedule, the widget or ``genius_competition_games``. Only finished games are read.
     """
@@ -451,12 +451,12 @@ def genius_player_box(
 
     Args:
         match_id: Genius match id (match_id in genius_schedule, genius_widget_games or genius_competition_games), e.g. 2902690.
-        return_parsed: parse the payload through parse_genius_player_box -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page.
+        return_parsed: parse the payload through parse_genius_player_box -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
@@ -479,7 +479,7 @@ def genius_player_box(
         .. _wehoop: https://wehoop.sportsdataverse.org
 
     Notes:
-        * Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
+        * Access: the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
         * Org and season. Every competition is an ORG code plus a competition id (``comp_id``): ``genius_competitions`` lists an org's competitions with the sdv END-year ``season`` (a START-year org lists 2025-26 as season 2026), ``genius_match_competition`` maps a game to its competition, and ``data.json`` itself names no date, competition or season. The hosted ORG can differ from the LiveStats ORG of ``/u/`` (NZNBL vs NZN). Match ids are one global sequence across every Genius customer.
         * ``data.json`` carries no global team or player id: ``tno`` (1 or 2) and ``pno`` are in-game numbers. Join players across games on name, team code and shirt number; global team ids come from the hosted schedule, the widget or ``genius_competition_games``. Only finished games are read.
     """
@@ -510,12 +510,12 @@ def genius_pbp(
 
     Args:
         match_id: Genius match id (match_id in genius_schedule, genius_widget_games or genius_competition_games), e.g. 2902690.
-        return_parsed: parse the payload through parse_genius_pbp -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page.
+        return_parsed: parse the payload through parse_genius_pbp -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
@@ -538,7 +538,7 @@ def genius_pbp(
         .. _wehoop: https://wehoop.sportsdataverse.org
 
     Notes:
-        * Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
+        * Access: the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
         * Org and season. Every competition is an ORG code plus a competition id (``comp_id``): ``genius_competitions`` lists an org's competitions with the sdv END-year ``season`` (a START-year org lists 2025-26 as season 2026), ``genius_match_competition`` maps a game to its competition, and ``data.json`` itself names no date, competition or season. The hosted ORG can differ from the LiveStats ORG of ``/u/`` (NZNBL vs NZN). Match ids are one global sequence across every Genius customer.
         * ``data.json`` carries no global team or player id: ``tno`` (1 or 2) and ``pno`` are in-game numbers. Join players across games on name, team code and shirt number; global team ids come from the hosted schedule, the widget or ``genius_competition_games``. Only finished games are read.
     """
@@ -569,12 +569,12 @@ def genius_shots(
 
     Args:
         match_id: Genius match id (match_id in genius_schedule, genius_widget_games or genius_competition_games), e.g. 2902690.
-        return_parsed: parse the payload through parse_genius_shots -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page.
+        return_parsed: parse the payload through parse_genius_shots -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
@@ -597,7 +597,7 @@ def genius_shots(
         .. _wehoop: https://wehoop.sportsdataverse.org
 
     Notes:
-        * Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
+        * Access: the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
         * Org and season. Every competition is an ORG code plus a competition id (``comp_id``): ``genius_competitions`` lists an org's competitions with the sdv END-year ``season`` (a START-year org lists 2025-26 as season 2026), ``genius_match_competition`` maps a game to its competition, and ``data.json`` itself names no date, competition or season. The hosted ORG can differ from the LiveStats ORG of ``/u/`` (NZNBL vs NZN). Match ids are one global sequence across every Genius customer.
         * ``data.json`` carries no global team or player id: ``tno`` (1 or 2) and ``pno`` are in-game numbers. Join players across games on name, team code and shirt number; global team ids come from the hosted schedule, the widget or ``genius_competition_games``. Only finished games are read.
     """
@@ -628,12 +628,12 @@ def genius_competition_games(
 
     Args:
         comp_id: Genius competition id: one per org competition-season (comp_id in genius_competitions), e.g. 49915.
-        return_parsed: parse the payload through parse_genius_competition_games -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page.
+        return_parsed: parse the payload through parse_genius_competition_games -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
@@ -656,7 +656,7 @@ def genius_competition_games(
         .. _wehoop: https://wehoop.sportsdataverse.org
 
     Notes:
-        * Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
+        * Access: the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
         * Org and season. Every competition is an ORG code plus a competition id (``comp_id``): ``genius_competitions`` lists an org's competitions with the sdv END-year ``season`` (a START-year org lists 2025-26 as season 2026), ``genius_match_competition`` maps a game to its competition, and ``data.json`` itself names no date, competition or season. The hosted ORG can differ from the LiveStats ORG of ``/u/`` (NZNBL vs NZN). Match ids are one global sequence across every Genius customer.
         * ``data.json`` carries no global team or player id: ``tno`` (1 or 2) and ``pno`` are in-game numbers. Join players across games on name, team code and shirt number; global team ids come from the hosted schedule, the widget or ``genius_competition_games``. Only finished games are read.
     """
@@ -691,12 +691,12 @@ def genius_match_competition(
     Args:
         org: LiveStats ORG of the game's shell (can differ from the hosted ORG: NZN vs NZNBL).
         match_id: Genius match id (match_id in genius_schedule, genius_widget_games or genius_competition_games), e.g. 2902690.
-        return_parsed: parse the payload through parse_genius_match_competition -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page.
+        return_parsed: parse the payload through parse_genius_match_competition -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
@@ -719,7 +719,7 @@ def genius_match_competition(
         .. _wehoop: https://wehoop.sportsdataverse.org
 
     Notes:
-        * Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
+        * Access: the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
         * Org and season. Every competition is an ORG code plus a competition id (``comp_id``): ``genius_competitions`` lists an org's competitions with the sdv END-year ``season`` (a START-year org lists 2025-26 as season 2026), ``genius_match_competition`` maps a game to its competition, and ``data.json`` itself names no date, competition or season. The hosted ORG can differ from the LiveStats ORG of ``/u/`` (NZNBL vs NZN). Match ids are one global sequence across every Genius customer.
         * ``data.json`` carries no global team or player id: ``tno`` (1 or 2) and ``pno`` are in-game numbers. Join players across games on name, team code and shirt number; global team ids come from the hosted schedule, the widget or ``genius_competition_games``. Only finished games are read.
     """
@@ -752,12 +752,12 @@ def genius_competitions(
 
     Args:
         org: Genius ORG code of the league (ESAKE, CEBL, BNXT, WBBL, ...); see genius_competitions.
-        return_parsed: parse the payload through parse_genius_competitions -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page.
+        return_parsed: parse the payload through parse_genius_competitions -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
@@ -780,7 +780,7 @@ def genius_competitions(
         .. _wehoop: https://wehoop.sportsdataverse.org
 
     Notes:
-        * Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
+        * Access: the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
         * Org and season. Every competition is an ORG code plus a competition id (``comp_id``): ``genius_competitions`` lists an org's competitions with the sdv END-year ``season`` (a START-year org lists 2025-26 as season 2026), ``genius_match_competition`` maps a game to its competition, and ``data.json`` itself names no date, competition or season. The hosted ORG can differ from the LiveStats ORG of ``/u/`` (NZNBL vs NZN). Match ids are one global sequence across every Genius customer.
         * ``data.json`` carries no global team or player id: ``tno`` (1 or 2) and ``pno`` are in-game numbers. Join players across games on name, team code and shirt number; global team ids come from the hosted schedule, the widget or ``genius_competition_games``. Only finished games are read.
     """
@@ -817,12 +817,12 @@ def genius_schedule(
         org: Genius ORG code of the league (ESAKE, CEBL, BNXT, WBBL, ...); see genius_competitions.
         comp_id: Genius competition id: one per org competition-season (comp_id in genius_competitions), e.g. 49915.
         round_number: Round to list; -1 (default) lists every round of the competition.
-        return_parsed: parse the payload through parse_genius_schedule -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page.
+        return_parsed: parse the payload through parse_genius_schedule -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
@@ -845,7 +845,7 @@ def genius_schedule(
         .. _wehoop: https://wehoop.sportsdataverse.org
 
     Notes:
-        * Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
+        * Access: the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
         * Org and season. Every competition is an ORG code plus a competition id (``comp_id``): ``genius_competitions`` lists an org's competitions with the sdv END-year ``season`` (a START-year org lists 2025-26 as season 2026), ``genius_match_competition`` maps a game to its competition, and ``data.json`` itself names no date, competition or season. The hosted ORG can differ from the LiveStats ORG of ``/u/`` (NZNBL vs NZN). Match ids are one global sequence across every Genius customer.
         * ``data.json`` carries no global team or player id: ``tno`` (1 or 2) and ``pno`` are in-game numbers. Join players across games on name, team code and shirt number; global team ids come from the hosted schedule, the widget or ``genius_competition_games``. Only finished games are read.
     """
@@ -882,12 +882,12 @@ def genius_schedule_embed(
         org: Genius ORG code of the league (ESAKE, CEBL, BNXT, WBBL, ...); see genius_competitions.
         comp_id: Genius competition id: one per org competition-season (comp_id in genius_competitions), e.g. 49915.
         round_number: Round to list; -1 (default) lists every round of the competition.
-        return_parsed: parse the payload through parse_genius_schedule -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page.
+        return_parsed: parse the payload through parse_genius_schedule -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
@@ -910,7 +910,7 @@ def genius_schedule_embed(
         .. _wehoop: https://wehoop.sportsdataverse.org
 
     Notes:
-        * Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
+        * Access: the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
         * Org and season. Every competition is an ORG code plus a competition id (``comp_id``): ``genius_competitions`` lists an org's competitions with the sdv END-year ``season`` (a START-year org lists 2025-26 as season 2026), ``genius_match_competition`` maps a game to its competition, and ``data.json`` itself names no date, competition or season. The hosted ORG can differ from the LiveStats ORG of ``/u/`` (NZNBL vs NZN). Match ids are one global sequence across every Genius customer.
         * ``data.json`` carries no global team or player id: ``tno`` (1 or 2) and ``pno`` are in-game numbers. Join players across games on name, team code and shirt number; global team ids come from the hosted schedule, the widget or ``genius_competition_games``. Only finished games are read.
     """
@@ -943,12 +943,12 @@ def genius_widget_games(
 
     Args:
         widget_key: The league site's public widget key (the bare query string of widget.wh.geniussports.com/widget/).
-        return_parsed: parse the payload through parse_genius_widget_games -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page.
+        return_parsed: parse the payload through parse_genius_widget_games -> polars DataFrame (default True). Pass return_parsed=False for the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the parsed record of a page when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
@@ -971,7 +971,7 @@ def genius_widget_games(
         .. _wehoop: https://wehoop.sportsdataverse.org
 
     Notes:
-        * Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
+        * Access: the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional ``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
         * Org and season. Every competition is an ORG code plus a competition id (``comp_id``): ``genius_competitions`` lists an org's competitions with the sdv END-year ``season`` (a START-year org lists 2025-26 as season 2026), ``genius_match_competition`` maps a game to its competition, and ``data.json`` itself names no date, competition or season. The hosted ORG can differ from the LiveStats ORG of ``/u/`` (NZNBL vs NZN). Match ids are one global sequence across every Genius customer.
         * ``data.json`` carries no global team or player id: ``tno`` (1 or 2) and ``pno`` are in-game numbers. Join players across games on name, team code and shirt number; global team ids come from the hosted schedule, the widget or ``genius_competition_games``. Only finished games are read.
     """

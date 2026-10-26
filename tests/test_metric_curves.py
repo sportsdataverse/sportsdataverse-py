@@ -9,7 +9,7 @@ import pytest
 
 from polars.testing import assert_frame_equal
 
-from sportsdataverse.metric_curves import (
+from sportsdataverse.analytics.metric_curves import (
     ATTEMPT_SCHEMA,
     BUCKET_EDGES,
     FOOTBALL_ATTEMPT_COLUMNS,

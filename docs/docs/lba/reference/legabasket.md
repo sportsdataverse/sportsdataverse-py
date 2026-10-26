@@ -1,11 +1,11 @@
 ---
-title: LBA — Lega Basket Serie A site API (www.legabasket.it/api, Italy)
+title: Lega Basket Serie A — Lega Basket Serie A site API (www.legabasket.it/api, Italy)
 sidebar_label: Lega Basket Serie A site API (www.legabasket.it/api, Italy)
-description: "LBA — Lega Basket Serie A site API (www.legabasket.it/api, Italy) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "Lega Basket Serie A — Lega Basket Serie A site API (www.legabasket.it/api, Italy) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
 ---
-# LBA — Lega Basket Serie A site API (www.legabasket.it/api, Italy)
+# Lega Basket Serie A — Lega Basket Serie A site API (www.legabasket.it/api, Italy)
 
 `sportsdataverse.basketball.lba` — 19 endpoints.
 

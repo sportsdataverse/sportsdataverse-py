@@ -28,6 +28,7 @@ Design notes
 from __future__ import annotations
 
 import importlib
+import sportsdataverse
 import json
 import urllib.request
 from pathlib import Path
@@ -133,7 +134,7 @@ def main() -> None:
     failed: list[str] = []
 
     for league in LEAGUES:
-        mod = importlib.import_module(f"sportsdataverse.{league}")
+        mod = importlib.import_module(f"sportsdataverse.{sportsdataverse._MOVED.get(league, league)}")
         for stem, short, kwargs_map in ENDPOINTS:
             fn_name = f"espn_{league}_{short}"
 

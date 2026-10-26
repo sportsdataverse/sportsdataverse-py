@@ -43,7 +43,7 @@ FIXTURES = ROOT / "tests" / "fixtures" / "genius"
 ROUTES_SNAPSHOT = FIXTURES / "spec_routes.json"
 
 NOTES = [
-    "Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. "
+    "Access: the Genius hosts publish no robots.txt and no terms. "
     "CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional "
     "``GENIUS_PROXY`` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers "
     "space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. "
@@ -553,7 +553,7 @@ def main() -> None:
         "docstring": {
             "example_import": True,
             "raw_doc": "the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` "
-            "(the match id asked for), or the sdv-internal-refs capture shape of a page",
+            "(the match id asked for), or the parsed record of a page",
             "raises": [
                 "sportsdataverse.errors.NoDataError: Genius has nothing for the request (an unknown match id or ORG, "
                 "an org without hosted pages, a competition with no games).",

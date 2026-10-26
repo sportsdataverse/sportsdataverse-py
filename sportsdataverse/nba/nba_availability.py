@@ -4,7 +4,7 @@ Projects ``avail_pct``, a strictly separate availability channel: it is
 never folded into a value/skill projection. Consumes prior-season GP%, career
 GP% history, and age from the bulk ``nba_stats_leaguedashplayerstats`` (GP +
 age per player-season), and applies a bundled logistic artifact fit offline
-in ``dev/nba_draft/fit_availability.py``.
+in ``tools/models/nba_draft/fit_availability.py``.
 """
 
 from __future__ import annotations

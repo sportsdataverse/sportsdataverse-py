@@ -21,7 +21,7 @@ from sportsdataverse._common.metrics import (
 RECEIVER_POSITIONS: Tuple[str, ...] = ("WR", "TE", "RB", "FB")
 # Separation-OE ridge penalty. A sweep over lambda {0.1, 1, 10} x min_targets
 # {10, 20, 30} on held-out 2019-2022 season transitions moved the stability
-# deltas by < 1e-4 (dev/nfl_ngs/stability_transitions.py) -- the surface is flat,
+# deltas by < 1e-4 (tools/models/nfl_ngs/stability_transitions.py) -- the surface is flat,
 # so 1.0 is a neutral, non-tuned default (never fit on the evaluation fold).
 SEP_RIDGE_LAMBDA: float = 1.0
 # Per-player volume floors mirroring the NGS qualification convention (enough

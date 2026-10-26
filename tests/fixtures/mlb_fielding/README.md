@@ -9,8 +9,8 @@
 
 # MLB fielding/catching/baserunning oracle corpus (T6.3)
 
-Captured 2026-07-10 via `dev/mlb_fielding/capture_oracle.py`
-(`SDV_PY_LIVE_TESTS=1 uv run python dev/mlb_fielding/capture_oracle.py`).
+Captured 2026-07-10 via `tools/models/mlb_fielding/capture_oracle.py`
+(`SDV_PY_LIVE_TESTS=1 uv run python tools/models/mlb_fielding/capture_oracle.py`).
 All leaderboard id columns (`player_id`, `entity_id`) are cast `Utf8` from
 the raw integer (never a float) at capture time.
 

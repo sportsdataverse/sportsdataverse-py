@@ -12,7 +12,7 @@ import pytest
 
 from polars.testing import assert_frame_equal
 
-from sportsdataverse.defense_vs_position import (
+from sportsdataverse.analytics.defense_vs_position import (
     MIN_GAMES,
     OUTPUT_SCHEMA,
     PBP_COLUMNS,

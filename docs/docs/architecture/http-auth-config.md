@@ -2,6 +2,7 @@
 title: HTTP, auth & proxy configuration
 sidebar_label: HTTP, auth & proxy config
 sidebar_position: 2
+description: "Every HTTP, retry, authentication, proxy and environment-variable setting in sportsdataverse-py, organised by mechanism."
 ---
 
 # HTTP, auth & proxy configuration

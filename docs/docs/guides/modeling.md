@@ -2,6 +2,7 @@
 title: Models, validation and analytics
 sidebar_label: Modeling guide
 sidebar_position: 5
+description: "The expected-points, win-probability and fourth-down models in sportsdataverse-py, plus the validation and analytics helpers."
 ---
 
 # Models, validation and analytics
@@ -146,7 +147,7 @@ WNBA stats shots.
 
 ```python
 from sportsdataverse.cfb import load_cfb_pbp, load_cfb_rosters
-from sportsdataverse.paper_index import PBP_COLUMNS, deserved_wins, paper_index_games
+from sportsdataverse.analytics.paper_index import PBP_COLUMNS, deserved_wins, paper_index_games
 
 cfb_pbp = load_cfb_pbp(2024)
 games = paper_index_games(cfb_pbp.select(PBP_COLUMNS), "cfb")
@@ -155,7 +156,7 @@ print(luck.head(3))
 ```
 
 ```python
-from sportsdataverse.metric_curves import FOOTBALL_ATTEMPT_COLUMNS, football_attempts, metric_curves
+from sportsdataverse.analytics.metric_curves import FOOTBALL_ATTEMPT_COLUMNS, football_attempts, metric_curves
 
 curves = metric_curves(football_attempts(cfb_pbp.select(FOOTBALL_ATTEMPT_COLUMNS)), "cfb")
 print(
@@ -166,8 +167,8 @@ print(
 ```
 
 ```python
-from sportsdataverse.defense_vs_position import PBP_COLUMNS as DVP_COLUMNS
-from sportsdataverse.defense_vs_position import defense_vs_position
+from sportsdataverse.analytics.defense_vs_position import PBP_COLUMNS as DVP_COLUMNS
+from sportsdataverse.analytics.defense_vs_position import defense_vs_position
 
 dvp = defense_vs_position(cfb_pbp.select(DVP_COLUMNS["cfb"]), load_cfb_rosters(2024), "cfb")
 print(
@@ -178,7 +179,7 @@ print(
 )
 ```
 
-Import from the modules themselves (`from sportsdataverse.paper_index import ...`):
+Import from the modules themselves (`from sportsdataverse.analytics.paper_index import ...`):
 the top-level `sportsdataverse` namespace binds `rolling_windows`,
 `metric_curves` and `defense_vs_position` to the functions of the same name, not the
 modules.

@@ -48,17 +48,17 @@ The subset of `df` with `df[date_col] < cutoff_date`.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `season` | integer | Season year (echoed from arg). |
-| `date` | character | Game date (ISO 8601 datetime string). |
-| `team` | character | Team name. |
-| `opp_team` | character |  |
-| `is_home` | logical | Home-team flag. |
-| `neutral_site` | logical | Whether the game is at a neutral site. |
-| `xgf` | double |  |
-| `xga` | double |  |
-| `gf` | integer |  |
-| `ga` | integer | Goals against (goalies). |
+| `game_id` | String | Unique game identifier. |
+| `season` | Int64 | Season year (echoed from arg). |
+| `date` | String | Game date (ISO 8601 datetime string). |
+| `team` | String | Team name. |
+| `opp_team` | String |  |
+| `is_home` | Boolean | Home-team flag. |
+| `neutral_site` | Boolean | Whether the game is at a neutral site. |
+| `xgf` | Float64 |  |
+| `xga` | Float64 |  |
+| `gf` | Int64 |  |
+| `ga` | Int64 | Goals against (goalies). |
 
 **Example**
 
@@ -115,10 +115,10 @@ A `polars.DataFrame` with columns `bin_mid`, `mean_pred`, `mean_actual`, `n` (on
 
 | col_name | type | description |
 |---|---|---|
-| `bin_mid` | double |  |
-| `mean_pred` | double |  |
-| `mean_actual` | double |  |
-| `n` | integer |  |
+| `bin_mid` | Float64 |  |
+| `mean_pred` | Float64 |  |
+| `mean_actual` | Float64 |  |
+| `n` | Int64 |  |
 
 **Example**
 
@@ -193,7 +193,7 @@ which loads PWHL pbp, schedules and game info only.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `seasons` | `Any` |  | an int or iterable of PWHL season end-years (`>= 2024`). |
-| `league` | `Any` | `None` | deprecated and ignored (the ratings are always PWHL); passing it warns. |
+| `league` | `Any` | `None` | deprecated and ignored (the ratings are always PWHL); passing it warns. Removed in 0.4.0. |
 
 **Returns**
 

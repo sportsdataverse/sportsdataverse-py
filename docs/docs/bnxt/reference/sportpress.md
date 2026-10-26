@@ -1,11 +1,11 @@
 ---
-title: BNXT — BNXT League Sportpress API (bnxt.sportpress.info, Belgium and the Netherlands)
+title: BNXT League — BNXT League Sportpress API (bnxt.sportpress.info, Belgium and the Netherlands)
 sidebar_label: BNXT League Sportpress API (bnxt.sportpress.info, Belgium and the Netherlands)
-description: "BNXT — BNXT League Sportpress API (bnxt.sportpress.info, Belgium and the Netherlands) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "BNXT League — BNXT League Sportpress API (bnxt.sportpress.info, Belgium and the Netherlands) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
 ---
-# BNXT — BNXT League Sportpress API (bnxt.sportpress.info, Belgium and the Netherlands)
+# BNXT League — BNXT League Sportpress API (bnxt.sportpress.info, Belgium and the Netherlands)
 
 `sportsdataverse.basketball.bnxt` — 28 endpoints.
 

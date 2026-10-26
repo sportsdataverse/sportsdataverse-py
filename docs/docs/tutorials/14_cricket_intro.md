@@ -1,5 +1,6 @@
 ---
 title: Cricket tutorial
+description: "ESPN carries live scorecards, standings, and full match summaries for the world's most widely-played bat-and-ball game."
 sidebar_label: Cricket
 sidebar_position: 13
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/14_cricket_intro.ipynb
@@ -579,7 +580,7 @@ else:
     print("calendar unavailable right now")
 ```
 
-    ⏭️  IPL calendar: NoDataError: NoDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/cricket/8048/calendar
+    ⏭️  IPL calendar: NoDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/cricket/8048/calendar
     calendar unavailable right now
 
 

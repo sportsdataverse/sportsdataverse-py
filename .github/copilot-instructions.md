@@ -27,7 +27,7 @@
   - [Release Utilities](#release-utilities)
   - [Rule-Era Models](#rule-era-models)
   - [ID Column Types](#id-column-types)
-  - [Error Vocabulary (0.1.5)](#error-vocabulary-015)
+  - [Error Vocabulary (0.2.0)](#error-vocabulary-020)
   - [Codegen](#codegen)
   - [Cheat sheet](#cheat-sheet)
 
@@ -43,7 +43,10 @@ box score, schedule, roster, and other sports data across the NBA (+ G-League),
 WNBA, NFL, MLB, NHL, MBB (men's college basketball), WBB (women's college
 basketball), CFB (college football), PWHL + 19 HockeyTech minor/junior hockey
 leagues, college hockey (M/W), college baseball + softball, soccer, cricket,
-UFL/XFL/CFL, and odds endpoints.
+UFL/XFL/CFL, and odds endpoints, plus international basketball (EuroLeague and
+24 provider families), European hockey (SIHF and 12 leagues), Formula 1, the
+Kalshi and Polymarket prediction markets, and the cross-sport providers (CBS,
+Fox, Yahoo, ESPN content, TheSportsDB).
 
 When there is any conflict between this file and repository contributor
 docs, follow `CONTRIBUTING.md`, `CLAUDE.md`, and the current test suite
@@ -140,14 +143,14 @@ result directly. Read JSON through `_codegen_runtime._download_json(download, ur
 or `_get`, which apply the error vocabulary below; HTML/text sites use
 `_text_body` / `_check_response`.
 
-**Error vocabulary (0.1.5).** `NoDataError` means the fetch SUCCEEDED and the
+**Error vocabulary (0.2.0).** `NoDataError` means the fetch SUCCEEDED and the
 answer is "nothing here" — a 404 from any host, or ESPN's 200-with-`code:404`
 body. `AssetFetchError` means the fetch FAILED and the answer is UNKNOWN — a 403,
 a rate limit, an exhausted retry budget. Never collapse the two: a failed fetch
 recorded as an empty season is silent data loss. `NoESPNDataError` remains as a
 back-compat alias of `NoDataError`; prefer the new name in new code. Repo-wide a
 **400 / 422** raises `ValueError` (the request itself is wrong; retrying cannot
-help), naming host, path and status. As of 0.1.5 the hand-written ESPN scrapers and
+help), naming host, path and status. From 0.2.0 the hand-written ESPN scrapers and
 every flat-API getter raise instead of returning an error body or `{}`.
 
 **Exception — remote columnar reads.** Release parquet is read DIRECTLY by Arrow
@@ -192,14 +195,15 @@ renamed with no aliases — don't reintroduce them. Validate Savant parsers
 against real captured payloads (the JSON/CSV/HTML shapes are easy to guess
 wrong); see `CLAUDE.md` → "MLB — Statcast".
 
-**NBA / WNBA stats API (`nba_stats_*` / `wnba_stats_*`, 0.0.72+):** two
+**NBA / WNBA / G League stats API (`nba_stats_*` / `wnba_stats_*` / `nbagl_stats_*`, 0.0.72+):** three
 codegen-generated flat-API stems — `nba_stats` (128 wrappers, `stats.nba.com`,
-`league_id="00"` NBA / `"20"` G-League / `"15"` Summer League) and `wnba_stats`
-(111 wrappers, `stats.wnba.com`). Key gotcha: **`stats.nba.com` TLS/JA3-
+`league_id="00"` NBA / `"20"` G-League / `"15"` Summer League), `wnba_stats`
+(111 wrappers, `stats.wnba.com`) and `nbagl_stats` (94 wrappers,
+`sportsdataverse.nbagl.nbagl_stats`, `stats.nba.com` with `LeagueID=20` by default). Key gotcha: **`stats.nba.com` TLS/JA3-
 fingerprint-blocks plain `requests`** — the runtime uses `curl_cffi` with
 `impersonate="chrome"`, which is a **lazy optional import** in the `tests`/`all`
 extras (not a hard dep). One generic parser `parse_nba_stats_result_sets`
-handles the `{resultSets:[{name,headers,rowSet}]}` envelope for both families
+handles the `{resultSets:[{name,headers,rowSet}]}` envelope for all three families
 (polars default, pandas via `return_as_pandas=True`, zero-row frame on
 empty/malformed). Generated via `tools/codegen/gen_nba_stats.py` → `FLAT_APIS`.
 See `CLAUDE.md` → "NBA / WNBA — stats.nba.com".
@@ -239,7 +243,7 @@ silently completing the build from the live API.
   cross-sport disambiguation there.
 - Use unified `load_nfl_nextgen_stats(stat_type=...)` and
   `load_nfl_pfr_advstats(stat_type=, summary_level=)`. The 11 per-type
-  variants (`load_nfl_ngs_passing`, etc.) were removed in 0.1.5. Extend the
+  variants (`load_nfl_ngs_passing`, etc.) are removed in 0.2.0. Extend the
   unified function; do NOT add new per-type wrappers.
 - `load_nfl_ff_rankings` accepts `kind=` (preferred — `type=` shadows
   the builtin) AND `type=` (kept for nflreadpy parity). Pass exactly one.
@@ -328,8 +332,9 @@ For rebuilding games from on-disk raw JSON without re-hitting ESPN:
   no default fallback) — the spread is an EPA/WPA *input*, so offline rebuilds
   must inject the persisted odds. Validated + coerced in `__init__` (bad payload
   → `ValueError`). Default `None` = unchanged. Pattern:
-  `CFBPlayProcess(gameId, path_to_json=raw_dir, odds_override=...).cfb_pbp_disk()`
-  then `.run_processing_pipeline()`.
+  `CFBPlayProcess(gameId, path_to_json=raw_dir, join_participants=False, odds_override=...).cfb_pbp_disk()`
+  then `.run_processing_pipeline()`. Without `join_participants=False` the pipeline still
+  requests participants for every play, so the run is not offline.
 
 ## Module Pattern (NEW modules)
 
@@ -418,7 +423,7 @@ uv add --dev some-package           # add dev-only dep
   `cache_mode="off"` during development. The cache key excludes
   `return_as_pandas`.
 - **Don't add new per-type NFL loaders.** The per-type `load_nfl_ngs_*`
-  and `load_nfl_pfr_*` variants were removed in 0.1.5. Extend the unified
+  and `load_nfl_pfr_*` variants are removed in 0.2.0. Extend the unified
   `load_nfl_nextgen_stats(stat_type=)` /
   `load_nfl_pfr_advstats(stat_type=, summary_level=)` instead.
 - **`cfb_play_participants` sidecar gaps** are mostly backfilled by the
@@ -479,15 +484,16 @@ uv add --dev some-package           # add dev-only dep
 
 ## Project Structure
 
-One package per league (`cfb/ mbb/ mlb/ nba/ nfl/ nhl/ wbb/ wnba/ pwhl/ nbagl/
-euroleague/ odds/`), the shared hosts (`cbs/ fox/ yahoo/`), the HockeyTech core
+One package per primary league (`cfb/ mbb/ mlb/ nba/ nfl/ nhl/ wbb/ wnba/ pwhl/ nbagl/ odds/`), the
+cross-sport sources under `providers/` (`cbs/ fox/ yahoo/ espn_content/ thesportsdb/`), the HockeyTech core
 (`hockeytech/`) and its 19 league families under `hockey/`, `baseball/` (college
 baseball + softball), `soccer/` (+ `mls/`, `nwsl/`), `cricket/`, `football/`
 (UFL/XFL/CFL + the `sources/` adapters), `scrape/` (`espn/ ncaa/ stats/`),
 `registry/`, `validation/`, `wexp/`, `parsed/` (DEPRECATED generated aliases) and
-`sdv_docs/` (the MCP server, which must never import `sportsdataverse`). Top-level
-analytics modules: `rolling_windows.py`, `metric_curves.py`,
-`defense_vs_position.py`, `paper_index.py`, plus `release.py`, `dl_utils.py`,
+`sdv_docs/` (the MCP server, which must never import `sportsdataverse`). `basketball/` holds
+EuroLeague, the international families and the ESPN side leagues (`nbl/ fiba/ olympics_*/ nbasl_*/`);
+`analytics/` holds `rolling_windows`, `metric_curves`, `defense_vs_position` and `paper_index`. Top-level
+`release.py`, `dl_utils.py`,
 `errors.py` and `cli.py` (the `sdv` console script).
 
 ## ESPN Cross-League Architecture
@@ -498,7 +504,7 @@ league modules, 4,566 wrappers. Never hand-edit one; edit the YAML and regenerat
 
 ## Parser Layer
 
-33 `*_parsers.py` modules, one per data surface. Universal contract: return a
+80+ parser modules (`*_parsers.py`), one per data surface. Universal contract: return a
 polars DataFrame by default (pandas via `return_as_pandas=True`), snake_case
 columns via `dl_utils.underscore`, and a zero-row frame (never an exception) for an
 empty or malformed payload. `parse_summary` dispatches the 21-section ESPN summary.
@@ -538,12 +544,12 @@ over a mismatch with a float->Utf8 cast (`"123.0"`); assert
 `left.schema[k] == right.schema[k]` before joining; fold case when matching names
 (polars/Rust regex has no lookaround — use `(?i)prefix(?-i: NAMES)`).
 
-## Error Vocabulary (0.1.5)
+## Error Vocabulary (0.2.0)
 
 `NoDataError` = the fetch SUCCEEDED and there is nothing there (a 404, or ESPN's
 200-with-`code:404`). `AssetFetchError` = the fetch FAILED and the answer is
 unknown (403, rate limit, exhausted retries). Never collapse the two. A **400 /
-422** raises `ValueError` naming host, path and status. As of 0.1.5 the
+422** raises `ValueError` naming host, path and status. From 0.2.0 the
 hand-written ESPN scrapers and every flat-API getter raise instead of returning an
 error body or `{}`.
 
@@ -563,7 +569,7 @@ wrappers return parsed frames by default, so call the league module directly.
 
 ## Cheat sheet
 
-There is a printable one-page reference for this package at
+There is a printable six-page reference for this package, in four layouts (24 pages in all), at
 <https://sportsdataverse.org/cheatsheets/sportsdataverse-py.pdf>, one of [a set covering every SportsDataverse package](https://sportsdataverse.org/cheatsheets).
 Keep it in mind when adding or renaming an exported function: the sheet is a
 hand-built canvas, so a surface change means the sheet needs a revision too.

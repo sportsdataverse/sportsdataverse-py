@@ -1,0 +1,6 @@
+{
+  "label": "G League Stats API (stats.nba.com, LeagueID=20)",
+  "position": 10,
+  "collapsed": true,
+  "link": {"type": "doc", "id": "nbagl/reference/nbagl_stats"}
+}

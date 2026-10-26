@@ -2,6 +2,7 @@
 title: Prediction markets
 sidebar_label: Prediction markets
 sidebar_position: 4
+description: "Polymarket and Kalshi market data for sports events through sportsdataverse.odds: markets, prices and history as polars frames."
 ---
 
 # Prediction markets

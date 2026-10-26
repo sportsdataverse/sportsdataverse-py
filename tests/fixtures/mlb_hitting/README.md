@@ -11,8 +11,8 @@
 
 # MLB hitting-spine oracle corpus (T6.2)
 
-Captured 2026-07-10 via `dev/mlb_hitting/capture_fixtures.py` (partial-season
-sample + 4 leaderboard snapshots) and `dev/mlb_hitting/build_reference_grid.py`
+Captured 2026-07-10 via `tools/models/mlb_hitting/capture_fixtures.py` (partial-season
+sample + 4 leaderboard snapshots) and `tools/models/mlb_hitting/build_reference_grid.py`
 (full-season reference grid, run after Task 1.1 landed, per the plan's
 two-step ordering note).
 
@@ -78,19 +78,19 @@ two-step ordering note).
   partial-sample correlation to ~0.498 and is Savant's own formulation. The
   live full-season `>= 0.90` gate must be RE-CONFIRMED with the corrected model
   on a residential IP -- the 0.298 recorded earlier was the pre-fix code.
-  Provenance: `dev/mlb_hitting/fit_swing_take.py`.
+  Provenance: `tools/models/mlb_hitting/fit_swing_take.py`.
 - **The EV x LA grid bin widths were fitted, not seeded.** The plan's seeded
   `ev_width=2.0, la_width=2.0, min_n=25` only reached per-batted-ball Spearman
   0.805 (woba) / 0.838 (ba) on the 3-week sample -- too many batted balls fell
   into `n < 25` cells over a partial season, diluting predictions to the
-  launch-angle-marginal fallback. `dev/mlb_hitting/fit_grid.py` swept EV/LA
+  launch-angle-marginal fallback. `tools/models/mlb_hitting/fit_grid.py` swept EV/LA
   width and `min_n` and found `(ev_width=6.0, la_width=5.0, min_n=10)` is the
   coarsest combination clearing the `>= 0.95` gate on both stats
   simultaneously (0.9522 / 0.9546). See `GridConfig`'s docstring in
   `mlb_hitting_constants.py` for the full rationale.
 - **`DEFAULT_REGRESSION_PA` for Marcel is a literature-typical starting
   value (1200 phantom PAs), pending confirmation by
-  `dev/mlb_hitting/fit_marcel.py`'s real 2021-2024 full-season OOS backtest
+  `tools/models/mlb_hitting/fit_marcel.py`'s real 2021-2024 full-season OOS backtest
   sweep (kicked off live; a genuinely long-running job -- 4 full-season
   pulls -- that had not finished at capture time). Re-run that script and
   update `mlb_batter_projection.py`'s `DEFAULT_REGRESSION_PA` docstring +

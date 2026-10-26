@@ -1,9 +1,9 @@
 ---
-title: BNXT
-sidebar_label: BNXT
-description: "sdv-py BNXT: endpoint references, dataset loaders and parsers for BNXT in the SportsDataverse Python package."
+title: BNXT League
+sidebar_label: BNXT League
+description: "sdv-py BNXT League: endpoint references, dataset loaders and parsers for BNXT League in the SportsDataverse Python package."
 ---
-# BNXT (`sportsdataverse.basketball.bnxt`)
+# BNXT League (`sportsdataverse.basketball.bnxt`)
 
 ## Data sources
 

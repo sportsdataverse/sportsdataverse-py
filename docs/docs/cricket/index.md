@@ -1,9 +1,9 @@
 ---
-title: CRICKET
-sidebar_label: CRICKET
-description: "sdv-py CRICKET: endpoint references, dataset loaders and parsers for CRICKET in the SportsDataverse Python package."
+title: Cricket
+sidebar_label: Cricket
+description: "sdv-py Cricket: endpoint references, dataset loaders and parsers for Cricket in the SportsDataverse Python package."
 ---
-# CRICKET (`sportsdataverse.cricket`)
+# Cricket (`sportsdataverse.cricket`)
 
 ## Data sources
 
@@ -19,6 +19,10 @@ description: "sdv-py CRICKET: endpoint references, dataset loaders and parsers f
 | [ESPN web API (v3)](reference/web) | 5 |
 | [ESPN core API (v2)](reference/core) | 82 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
+
+## See also
+
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `team_colors("cricket", ...)` gives each national side's colors
 
 ## Examples
 

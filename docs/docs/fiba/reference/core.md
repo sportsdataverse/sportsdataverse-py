@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # FIBA — ESPN core API (v2)
 
-`sportsdataverse.fiba` — 82 endpoints.
+`sportsdataverse.basketball.fiba` — 82 endpoints.
 
 ## Game
 

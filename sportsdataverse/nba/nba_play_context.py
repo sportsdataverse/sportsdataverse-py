@@ -226,7 +226,7 @@ def _shot_distance_ft() -> pl.Expr:
     committed fixtures, all in the single most important zone.
 
     Falls back to the rounded column only when a coordinate is null. Also the
-    distance :func:`sportsdataverse.metric_curves.shot_attempts` bins: the feed's
+    distance :func:`sportsdataverse.analytics.metric_curves.shot_attempts` bins: the feed's
     column is 0 for every three released under 23.5 ft (the corner).
     """
     coord = ((pl.col("x_legacy").cast(pl.Float64) ** 2 + pl.col("y_legacy").cast(pl.Float64) ** 2).sqrt()) / 10.0

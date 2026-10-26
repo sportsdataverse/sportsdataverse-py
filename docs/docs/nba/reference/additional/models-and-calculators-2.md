@@ -31,17 +31,17 @@ Frame with `FOUR_FACTOR_SCHEMA` — `{factor}__off` / `{factor}__def` columns pe
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `efg__off` | double |  |
-| `efg__def` | double |  |
-| `ftr__off` | double |  |
-| `ftr__def` | double |  |
-| `orbd__off` | double |  |
-| `orbd__def` | double |  |
-| `tov__off` | double |  |
-| `tov__def` | double |  |
-| `off_poss` | integer |  |
-| `def_poss` | integer |  |
+| `player_id` | Int64 | Unique player identifier. |
+| `efg__off` | Float64 |  |
+| `efg__def` | Float64 |  |
+| `ftr__off` | Float64 |  |
+| `ftr__def` | Float64 |  |
+| `orbd__off` | Float64 |  |
+| `orbd__def` | Float64 |  |
+| `tov__off` | Float64 |  |
+| `tov__def` | Float64 |  |
+| `off_poss` | Int64 |  |
+| `def_poss` | Int64 |  |
 
 **Example**
 
@@ -83,12 +83,12 @@ One row per play: the five feature columns plus `home_win_prob`.
 
 | col_name | type | description |
 |---|---|---|
-| `score_diff` | double |  |
-| `sec_left` | double |  |
-| `sqrt_sec_left` | double |  |
-| `pregame_logit` | double |  |
-| `home_has_ball` | integer |  |
-| `home_win_prob` | double |  |
+| `score_diff` | Float64 |  |
+| `sec_left` | Float64 |  |
+| `sqrt_sec_left` | Float64 |  |
+| `pregame_logit` | Float64 |  |
+| `home_has_ball` | Int64 |  |
+| `home_win_prob` | Float64 |  |
 
 **Raises**
 
@@ -133,12 +133,12 @@ Frame with `LA_RAPM_SCHEMA`. Empty input → zero-row frame.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `o_la_rapm` | double |  |
-| `d_la_rapm` | double |  |
-| `la_rapm` | double |  |
-| `off_poss` | integer |  |
-| `def_poss` | integer |  |
+| `player_id` | Int64 | Unique player identifier. |
+| `o_la_rapm` | Float64 |  |
+| `d_la_rapm` | Float64 |  |
+| `la_rapm` | Float64 |  |
+| `off_poss` | Int64 |  |
+| `def_poss` | Int64 |  |
 
 **Example**
 
@@ -188,9 +188,9 @@ One row per defender: `player_id` (Int64), `matchup_drapm` (Float64, points-allo
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `matchup_drapm` | double |  |
-| `matchup_poss` | double |  |
+| `player_id` | Int64 | Unique player identifier. |
+| `matchup_drapm` | Float64 |  |
+| `matchup_poss` | Float64 |  |
 
 **Example**
 
@@ -317,12 +317,12 @@ Per-player frame with columns `player_id` (Int64), `ospm` (Float64), `dspm` (Flo
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `ospm` | double |  |
-| `dspm` | double |  |
-| `spm` | double |  |
-| `min` | double | Minutes played. |
-| `gp` | integer | Games played. |
+| `player_id` | Int64 | Unique player identifier. |
+| `ospm` | Float64 |  |
+| `dspm` | Float64 |  |
+| `spm` | Float64 |  |
+| `min` | Float64 | Minutes played. |
+| `gp` | Int64 | Games played. |
 
 **Example**
 
@@ -364,18 +364,18 @@ One row per (season, team_id): `season, team_id, adj_off_rtg, adj_def_rtg, adj_n
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season year. |
-| `team_id` | character | Unique team identifier. |
-| `adj_off_rtg` | double |  |
-| `adj_def_rtg` | double |  |
-| `adj_net_rtg` | double |  |
-| `adj_pace` | double |  |
-| `raw_off_rtg` | double |  |
-| `raw_def_rtg` | double |  |
-| `raw_pace` | double |  |
-| `games` | integer | Games played. |
-| `rank` | integer | Rank. |
-| `adj_net_z` | double |  |
+| `season` | Int64 | Season year. |
+| `team_id` | String | Unique team identifier. |
+| `adj_off_rtg` | Float64 |  |
+| `adj_def_rtg` | Float64 |  |
+| `adj_net_rtg` | Float64 |  |
+| `adj_pace` | Float64 |  |
+| `raw_off_rtg` | Float64 |  |
+| `raw_def_rtg` | Float64 |  |
+| `raw_pace` | Float64 |  |
+| `games` | Int64 | Games played. |
+| `rank` | Int64 | Rank. |
+| `adj_net_z` | Float64 |  |
 
 **Example**
 
@@ -420,8 +420,8 @@ Frame with `WAR_SCHEMA` columns (`player_id`, `war`). Empty (that schema) when e
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `war` | double |  |
+| `player_id` | Int64 | Unique player identifier. |
+| `war` | Float64 |  |
 
 **Raises**
 
@@ -475,8 +475,8 @@ The frame with `wp_regime` (`"reg"` / `"ot"`) and the adjusted seconds column.
 
 | col_name | type | description |
 |---|---|---|
-| `wp_regime` | character | "reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame. |
-| `start_game_seconds_remaining` | double | Seconds remaining the model sees: the game clock in regulation, the overtime period clock (the quarter clock, or the period clock in men's college frames) on overtime plays. |
+| `wp_regime` | String | "reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame. |
+| `start_game_seconds_remaining` | Float64 | Seconds remaining the model sees: the game clock in regulation, the overtime period clock (the quarter clock, or the period clock in men's college frames) on overtime plays. |
 
 **Raises**
 
@@ -532,11 +532,11 @@ One row per `(game_id, athlete_id)` with `team_id, ts_pct, usg_pct`.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | ESPN game id, the join key to the play-by-play and box-score frames. |
-| `athlete_id` | integer | ESPN athlete id, the join key to the player box score. |
-| `team_id` | integer | ESPN team id, the join key to the team box score. |
-| `ts_pct` | double | True-shooting percentage, PTS / (2 x (FGA + 0.44 x FTA)); null for a player with no shots, no minutes or a DNP. |
-| `usg_pct` | double | Usage rate, 100 x (FGA + 0.44 x FTA + TOV) x (team minutes / 5) / (MIN x team (FGA + 0.44 x FTA + total turnovers)); null for no minutes, a DNP, or a team whose turnovers were not recorded (WBB before 2009, or a WBB game whose two teams together show fewer than 5 turnovers). |
+| `game_id` | Int64 | ESPN game id, the join key to the play-by-play and box-score frames. |
+| `athlete_id` | Int64 | ESPN athlete id, the join key to the player box score. |
+| `team_id` | Int64 | ESPN team id, the join key to the team box score. |
+| `ts_pct` | Float64 | True-shooting percentage, PTS / (2 x (FGA + 0.44 x FTA)); null for a player with no shots, no minutes or a DNP. |
+| `usg_pct` | Float64 | Usage rate, 100 x (FGA + 0.44 x FTA + TOV) x (team minutes / 5) / (MIN x team (FGA + 0.44 x FTA + total turnovers)); null for no minutes, a DNP, or a team whose turnovers were not recorded (WBB before 2009, or a WBB game whose two teams together show fewer than 5 turnovers). |
 
 **Raises**
 
@@ -640,16 +640,16 @@ One row per (game_id, team_id): `game_id, season, date, team_id, opp_team_id, is
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `season` | integer | Season year. |
-| `date` | character | Date in YYYY-MM-DD format. |
-| `team_id` | character | Unique team identifier. |
-| `opp_team_id` | character |  |
-| `is_home` | logical | Whether the team was home. |
-| `neutral_site` | logical | Neutral site. |
-| `poss` | double | Poss. |
-| `off_rtg` | double |  |
-| `def_rtg` | double |  |
+| `game_id` | String | Unique game identifier. |
+| `season` | Int64 | Season year. |
+| `date` | String | Date in YYYY-MM-DD format. |
+| `team_id` | String | Unique team identifier. |
+| `opp_team_id` | String |  |
+| `is_home` | Boolean | Whether the team was home. |
+| `neutral_site` | Boolean | Neutral site. |
+| `poss` | Float64 | Poss. |
+| `off_rtg` | Float64 |  |
+| `def_rtg` | Float64 |  |
 
 **Example**
 
@@ -719,11 +719,11 @@ The input plus `pregame_home_prob`, `prior_source` (`"spread"`, `"neutral"` or `
 
 | col_name | type | description |
 |---|---|---|
-| `pregame_home_prob` | double | Pregame home win probability fed to the in-game model: Phi(home_team_spread / margin_sd) when a line existed, else home-court advantage alone (0.5 at a neutral site without a line). |
-| `prior_source` | character | Where the prior came from: "spread" (a real line), "hfa" (no line; home-court advantage only, so the default +2.5 never reaches the model) or "neutral" (no line at a neutral site; prior 0.5). |
-| `wp_regime` | character | "reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame. |
-| `home_win_prob` | double | Home win probability before the play from the bundled in-game model (score margin, time left, the prior, possession). |
-| `wp_delta` | double | Change in home win probability from the previous play; the first play's delta is measured from the pregame prior. |
+| `pregame_home_prob` | Float64 | Pregame home win probability fed to the in-game model: Phi(home_team_spread / margin_sd) when a line existed, else home-court advantage alone (0.5 at a neutral site without a line). |
+| `prior_source` | String | Where the prior came from: "spread" (a real line), "hfa" (no line; home-court advantage only, so the default +2.5 never reaches the model) or "neutral" (no line at a neutral site; prior 0.5). |
+| `wp_regime` | String | "reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame. |
+| `home_win_prob` | Float64 | Home win probability before the play from the bundled in-game model (score margin, time left, the prior, possession). |
+| `wp_delta` | Float64 | Change in home win probability from the previous play; the first play's delta is measured from the pregame prior. |
 
 **Raises**
 
@@ -779,8 +779,8 @@ The input plus `x_legacy` and `y_legacy` (Float64).
 
 | col_name | type | description |
 |---|---|---|
-| `x_legacy` | double | Shot location in tenths of a foot with the hoop at the origin, x across the court; null for free throws, unlocated shots and non-shooting plays. |
-| `y_legacy` | double | Shot location in tenths of a foot with the hoop at the origin, y toward half court; null for free throws, unlocated shots and non-shooting plays. |
+| `x_legacy` | Float64 | Shot location in tenths of a foot with the hoop at the origin, x across the court; null for free throws, unlocated shots and non-shooting plays. |
+| `y_legacy` | Float64 | Shot location in tenths of a foot with the hoop at the origin, y toward half court; null for free throws, unlocated shots and non-shooting plays. |
 
 **Raises**
 
@@ -835,18 +835,18 @@ One row per `(game_id, team_id)` with `efg_pct, tov_pct, orb_pct, ft_rate, posse
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | ESPN game id, the join key to the play-by-play and box-score frames. |
-| `team_id` | integer | ESPN team id, the join key to the team box score. |
-| `efg_pct` | double | Effective field-goal percentage, (FGM + 0.5 x 3PM) / FGA; null with no attempts. |
-| `tov_pct` | double | Turnover rate, total turnovers / (FGA + 0.44 x FTA + total turnovers); null when the denominator is not positive or the box records no turnovers (WBB before 2009, or a WBB game whose two teams together show fewer than 5 turnovers). |
-| `orb_pct` | double | Offensive rebound rate, own ORB / (own ORB + opponent DRB); null when the denominator is not positive. |
-| `ft_rate` | double | Free-throw rate, FTA / FGA; null with no attempts. |
-| `possessions` | double | Oliver's possession estimate (FGA - ORB + total turnovers + 0.44 x FTA) averaged over the two teams; null when the box records no turnovers (WBB before 2009, or a WBB game whose two teams together show fewer than 5 turnovers). |
-| `off_rtg` | double | Points scored per 100 possessions; null when possessions are not positive. |
-| `def_rtg` | double | Points allowed per 100 possessions; null when possessions are not positive. |
-| `pace` | double | Possessions per regulation length (48 minutes NBA; 40 WNBA, MBB and WBB), overtime minutes included in the denominator; null when the box records no turnovers. |
-| `total_turnovers` | integer | The team turnover count every rate above uses, player plus team turnovers; ESPN's doubled pre-2013 NBA total is repaired to the player count; college: the box turnovers (team_turnovers in WBB 2009-2012), null when not recorded (WBB before 2009, or a WBB game whose two teams together show fewer than 5 turnovers). |
-| `game_minutes` | integer | Minutes played in the game: regulation (48 NBA, 40 WNBA and college) plus five per overtime. |
+| `game_id` | Int64 | ESPN game id, the join key to the play-by-play and box-score frames. |
+| `team_id` | Int64 | ESPN team id, the join key to the team box score. |
+| `efg_pct` | Float64 | Effective field-goal percentage, (FGM + 0.5 x 3PM) / FGA; null with no attempts. |
+| `tov_pct` | Float64 | Turnover rate, total turnovers / (FGA + 0.44 x FTA + total turnovers); null when the denominator is not positive or the box records no turnovers (WBB before 2009, or a WBB game whose two teams together show fewer than 5 turnovers). |
+| `orb_pct` | Float64 | Offensive rebound rate, own ORB / (own ORB + opponent DRB); null when the denominator is not positive. |
+| `ft_rate` | Float64 | Free-throw rate, FTA / FGA; null with no attempts. |
+| `possessions` | Float64 | Oliver's possession estimate (FGA - ORB + total turnovers + 0.44 x FTA) averaged over the two teams; null when the box records no turnovers (WBB before 2009, or a WBB game whose two teams together show fewer than 5 turnovers). |
+| `off_rtg` | Float64 | Points scored per 100 possessions; null when possessions are not positive. |
+| `def_rtg` | Float64 | Points allowed per 100 possessions; null when possessions are not positive. |
+| `pace` | Float64 | Possessions per regulation length (48 minutes NBA; 40 WNBA, MBB and WBB), overtime minutes included in the denominator; null when the box records no turnovers. |
+| `total_turnovers` | Int64 | The team turnover count every rate above uses, player plus team turnovers; ESPN's doubled pre-2013 NBA total is repaired to the player count; college: the box turnovers (team_turnovers in WBB 2009-2012), null when not recorded (WBB before 2009, or a WBB game whose two teams together show fewer than 5 turnovers). |
+| `game_minutes` | Int64 | Minutes played in the game: regulation (48 NBA, 40 WNBA and college) plus five per overtime. |
 
 **Raises**
 

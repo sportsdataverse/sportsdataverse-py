@@ -7,7 +7,7 @@ nflreadpy's API shape:
 - ``load_nfl_nextgen_stats(seasons, stat_type=...)``
 - ``load_nfl_pfr_advstats(seasons, stat_type=..., summary_level=...)``
 
-The 11 per-type functions were removed in 0.1.5 (``test_removed_loaders.py``
+The 11 per-type functions were removed in 0.2.0 (``test_removed_loaders.py``
 proves they are gone). These tests verify:
 
 1. The unified loaders return non-empty ``pl.DataFrame`` for every valid

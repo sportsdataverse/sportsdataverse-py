@@ -4,7 +4,7 @@ title: Changelog archive
 
 # Changelog archive
 
-Releases before 0.1.5. The newest are on the [Changelog](/CHANGELOG).
+Releases before 0.2.0b1. The newest are on the [Changelog](/CHANGELOG).
 
 ## 0.1.4 Release: September 1, 2026
 

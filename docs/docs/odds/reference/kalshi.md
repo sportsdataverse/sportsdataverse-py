@@ -1,11 +1,11 @@
 ---
-title: ODDS — Kalshi Trade API v2 market data (api.elections.kalshi.com)
+title: Betting odds — Kalshi Trade API v2 market data (api.elections.kalshi.com)
 sidebar_label: Kalshi Trade API v2 market data (api.elections.kalshi.com)
-description: "ODDS — Kalshi Trade API v2 market data (api.elections.kalshi.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "Betting odds — Kalshi Trade API v2 market data (api.elections.kalshi.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 11
 toc_max_heading_level: 2
 ---
-# ODDS — Kalshi Trade API v2 market data (api.elections.kalshi.com)
+# Betting odds — Kalshi Trade API v2 market data (api.elections.kalshi.com)
 
 `sportsdataverse.odds` — 9 endpoints.
 
@@ -28,20 +28,20 @@ One event, optionally with its markets nested.
 
 | col_name | type | description |
 |---|---|---|
-| `category` | character |  |
-| `collateral_return_type` | character |  |
-| `event_ticker` | character |  |
-| `exchange_index` | integer |  |
-| `last_updated_ts` | character |  |
-| `markets` | character |  |
-| `mutually_exclusive` | logical |  |
-| `series_ticker` | character |  |
-| `settlement_sources` | character |  |
-| `strike_period` | character |  |
-| `sub_title` | character |  |
-| `title` | character |  |
-| `product_metadata_competition` | character |  |
-| `product_metadata_competition_scope` | character |  |
+| `category` | String |  |
+| `collateral_return_type` | String |  |
+| `event_ticker` | String |  |
+| `exchange_index` | Int64 |  |
+| `last_updated_ts` | String |  |
+| `markets` | String |  |
+| `mutually_exclusive` | Boolean |  |
+| `series_ticker` | String |  |
+| `settlement_sources` | String |  |
+| `strike_period` | String |  |
+| `sub_title` | String |  |
+| `title` | String |  |
+| `product_metadata_competition` | String |  |
+| `product_metadata_competition_scope` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -80,19 +80,19 @@ Events, filterable by series and status; cursor-paged.
 
 | col_name | type | description |
 |---|---|---|
-| `category` | character |  |
-| `collateral_return_type` | character |  |
-| `event_ticker` | character |  |
-| `exchange_index` | integer |  |
-| `last_updated_ts` | character |  |
-| `mutually_exclusive` | logical |  |
-| `series_ticker` | character |  |
-| `settlement_sources` | character |  |
-| `strike_period` | character |  |
-| `sub_title` | character |  |
-| `title` | character |  |
-| `product_metadata_competition` | character |  |
-| `product_metadata_competition_scope` | character |  |
+| `category` | String |  |
+| `collateral_return_type` | String |  |
+| `event_ticker` | String |  |
+| `exchange_index` | Int64 |  |
+| `last_updated_ts` | String |  |
+| `mutually_exclusive` | Boolean |  |
+| `series_ticker` | String |  |
+| `settlement_sources` | String |  |
+| `strike_period` | String |  |
+| `sub_title` | String |  |
+| `title` | String |  |
+| `product_metadata_competition` | String |  |
+| `product_metadata_competition_scope` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -127,10 +127,10 @@ Exchange and trading status.
 
 | col_name | type | description |
 |---|---|---|
-| `exchange_active` | logical |  |
-| `exchange_index_statuses` | character |  |
-| `intra_exchange_transfers_active` | logical |  |
-| `trading_active` | logical |  |
+| `exchange_active` | Boolean |  |
+| `exchange_index_statuses` | String |  |
+| `intra_exchange_transfers_active` | Boolean |  |
+| `trading_active` | Boolean |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -166,48 +166,48 @@ One market.
 
 | col_name | type | description |
 |---|---|---|
-| `can_close_early` | logical |  |
-| `close_time` | character |  |
-| `created_time` | character |  |
-| `early_close_condition` | character |  |
-| `event_ticker` | character |  |
-| `exchange_index` | integer |  |
-| `expected_expiration_time` | character |  |
-| `expiration_time` | character |  |
-| `expiration_value` | character |  |
-| `last_price_dollars` | character |  |
-| `latest_expiration_time` | character |  |
-| `market_type` | character |  |
-| `no_ask_dollars` | character |  |
-| `no_bid_dollars` | character |  |
-| `no_sub_title` | character |  |
-| `notional_value_dollars` | character |  |
-| `occurrence_datetime` | character |  |
-| `open_interest_fp` | character |  |
-| `open_time` | character |  |
-| `previous_price_dollars` | character |  |
-| `previous_yes_ask_dollars` | character |  |
-| `previous_yes_bid_dollars` | character |  |
-| `price_level_structure` | character |  |
-| `price_ranges` | character |  |
-| `result` | character |  |
-| `rules_primary` | character |  |
-| `rules_secondary` | character |  |
-| `settlement_bounds_type` | character |  |
-| `settlement_timer_seconds` | integer |  |
-| `status` | character |  |
-| `strike_type` | character |  |
-| `ticker` | character |  |
-| `title` | character |  |
-| `updated_time` | character |  |
-| `volume_24h_fp` | character |  |
-| `volume_fp` | character |  |
-| `yes_ask_dollars` | character |  |
-| `yes_ask_size_fp` | character |  |
-| `yes_bid_dollars` | character |  |
-| `yes_bid_size_fp` | character |  |
-| `yes_sub_title` | character |  |
-| `custom_strike_football_team` | character |  |
+| `can_close_early` | Boolean |  |
+| `close_time` | String |  |
+| `created_time` | String |  |
+| `early_close_condition` | String |  |
+| `event_ticker` | String |  |
+| `exchange_index` | Int64 |  |
+| `expected_expiration_time` | String |  |
+| `expiration_time` | String |  |
+| `expiration_value` | String |  |
+| `last_price_dollars` | String |  |
+| `latest_expiration_time` | String |  |
+| `market_type` | String |  |
+| `no_ask_dollars` | String |  |
+| `no_bid_dollars` | String |  |
+| `no_sub_title` | String |  |
+| `notional_value_dollars` | String |  |
+| `occurrence_datetime` | String |  |
+| `open_interest_fp` | String |  |
+| `open_time` | String |  |
+| `previous_price_dollars` | String |  |
+| `previous_yes_ask_dollars` | String |  |
+| `previous_yes_bid_dollars` | String |  |
+| `price_level_structure` | String |  |
+| `price_ranges` | String |  |
+| `result` | String |  |
+| `rules_primary` | String |  |
+| `rules_secondary` | String |  |
+| `settlement_bounds_type` | String |  |
+| `settlement_timer_seconds` | Int64 |  |
+| `status` | String |  |
+| `strike_type` | String |  |
+| `ticker` | String |  |
+| `title` | String |  |
+| `updated_time` | String |  |
+| `volume_24h_fp` | String |  |
+| `volume_fp` | String |  |
+| `yes_ask_dollars` | String |  |
+| `yes_ask_size_fp` | String |  |
+| `yes_bid_dollars` | String |  |
+| `yes_bid_size_fp` | String |  |
+| `yes_sub_title` | String |  |
+| `custom_strike_football_team` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -245,48 +245,48 @@ Markets, filterable by event/series/status; cursor-paged.
 
 | col_name | type | description |
 |---|---|---|
-| `can_close_early` | logical |  |
-| `close_time` | character |  |
-| `created_time` | character |  |
-| `early_close_condition` | character |  |
-| `event_ticker` | character |  |
-| `exchange_index` | integer |  |
-| `expected_expiration_time` | character |  |
-| `expiration_time` | character |  |
-| `expiration_value` | character |  |
-| `last_price_dollars` | character |  |
-| `latest_expiration_time` | character |  |
-| `market_type` | character |  |
-| `no_ask_dollars` | character |  |
-| `no_bid_dollars` | character |  |
-| `no_sub_title` | character |  |
-| `notional_value_dollars` | character |  |
-| `occurrence_datetime` | character |  |
-| `open_interest_fp` | character |  |
-| `open_time` | character |  |
-| `previous_price_dollars` | character |  |
-| `previous_yes_ask_dollars` | character |  |
-| `previous_yes_bid_dollars` | character |  |
-| `price_level_structure` | character |  |
-| `price_ranges` | character |  |
-| `result` | character |  |
-| `rules_primary` | character |  |
-| `rules_secondary` | character |  |
-| `settlement_bounds_type` | character |  |
-| `settlement_timer_seconds` | integer |  |
-| `status` | character |  |
-| `strike_type` | character |  |
-| `ticker` | character |  |
-| `title` | character |  |
-| `updated_time` | character |  |
-| `volume_24h_fp` | character |  |
-| `volume_fp` | character |  |
-| `yes_ask_dollars` | character |  |
-| `yes_ask_size_fp` | character |  |
-| `yes_bid_dollars` | character |  |
-| `yes_bid_size_fp` | character |  |
-| `yes_sub_title` | character |  |
-| `custom_strike_football_team` | character |  |
+| `can_close_early` | Boolean |  |
+| `close_time` | String |  |
+| `created_time` | String |  |
+| `early_close_condition` | String |  |
+| `event_ticker` | String |  |
+| `exchange_index` | Int64 |  |
+| `expected_expiration_time` | String |  |
+| `expiration_time` | String |  |
+| `expiration_value` | String |  |
+| `last_price_dollars` | String |  |
+| `latest_expiration_time` | String |  |
+| `market_type` | String |  |
+| `no_ask_dollars` | String |  |
+| `no_bid_dollars` | String |  |
+| `no_sub_title` | String |  |
+| `notional_value_dollars` | String |  |
+| `occurrence_datetime` | String |  |
+| `open_interest_fp` | String |  |
+| `open_time` | String |  |
+| `previous_price_dollars` | String |  |
+| `previous_yes_ask_dollars` | String |  |
+| `previous_yes_bid_dollars` | String |  |
+| `price_level_structure` | String |  |
+| `price_ranges` | String |  |
+| `result` | String |  |
+| `rules_primary` | String |  |
+| `rules_secondary` | String |  |
+| `settlement_bounds_type` | String |  |
+| `settlement_timer_seconds` | Int64 |  |
+| `status` | String |  |
+| `strike_type` | String |  |
+| `ticker` | String |  |
+| `title` | String |  |
+| `updated_time` | String |  |
+| `volume_24h_fp` | String |  |
+| `volume_fp` | String |  |
+| `yes_ask_dollars` | String |  |
+| `yes_ask_size_fp` | String |  |
+| `yes_bid_dollars` | String |  |
+| `yes_bid_size_fp` | String |  |
+| `yes_sub_title` | String |  |
+| `custom_strike_football_team` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -323,9 +323,9 @@ Order book of a market (fixed-point dollar levels).
 
 | col_name | type | description |
 |---|---|---|
-| `side` | character |  |
-| `price` | character |  |
-| `size` | character |  |
+| `side` | String |  |
+| `price` | String |  |
+| `size` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -361,21 +361,21 @@ One series.
 
 | col_name | type | description |
 |---|---|---|
-| `additional_prohibitions` | character |  |
-| `categories` | character |  |
-| `category` | character |  |
-| `contract_terms_url` | character |  |
-| `contract_url` | character |  |
-| `exchange_index` | integer |  |
-| `fee_multiplier` | integer |  |
-| `fee_type` | character |  |
-| `frequency` | character |  |
-| `last_updated_ts` | character |  |
-| `settlement_sources` | character |  |
-| `tags` | character |  |
-| `ticker` | character |  |
-| `title` | character |  |
-| `product_metadata_scope` | character |  |
+| `additional_prohibitions` | String |  |
+| `categories` | String |  |
+| `category` | String |  |
+| `contract_terms_url` | String |  |
+| `contract_url` | String |  |
+| `exchange_index` | Int64 |  |
+| `fee_multiplier` | Int64 |  |
+| `fee_type` | String |  |
+| `frequency` | String |  |
+| `last_updated_ts` | String |  |
+| `settlement_sources` | String |  |
+| `tags` | String |  |
+| `ticker` | String |  |
+| `title` | String |  |
+| `product_metadata_scope` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -411,20 +411,20 @@ Series (market families) in a category; the whole category in one body.
 
 | col_name | type | description |
 |---|---|---|
-| `additional_prohibitions` | character |  |
-| `categories` | character |  |
-| `category` | character |  |
-| `contract_terms_url` | character |  |
-| `contract_url` | character |  |
-| `exchange_index` | integer |  |
-| `fee_multiplier` | integer |  |
-| `fee_type` | character |  |
-| `frequency` | character |  |
-| `last_updated_ts` | character |  |
-| `settlement_sources` | character |  |
-| `tags` | character |  |
-| `ticker` | character |  |
-| `title` | character |  |
+| `additional_prohibitions` | String |  |
+| `categories` | String |  |
+| `category` | String |  |
+| `contract_terms_url` | String |  |
+| `contract_url` | String |  |
+| `exchange_index` | Int64 |  |
+| `fee_multiplier` | Int64 |  |
+| `fee_type` | String |  |
+| `frequency` | String |  |
+| `last_updated_ts` | String |  |
+| `settlement_sources` | String |  |
+| `tags` | String |  |
+| `ticker` | String |  |
+| `title` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -462,16 +462,16 @@ Public trades, filterable by market; cursor-paged.
 
 | col_name | type | description |
 |---|---|---|
-| `count_fp` | character |  |
-| `created_time` | character |  |
-| `is_block_trade` | logical |  |
-| `no_price_dollars` | character |  |
-| `taker_book_side` | character |  |
-| `taker_outcome_side` | character |  |
-| `taker_side` | character |  |
-| `ticker` | character |  |
-| `trade_id` | character |  |
-| `yes_price_dollars` | character |  |
+| `count_fp` | String |  |
+| `created_time` | String |  |
+| `is_block_trade` | Boolean |  |
+| `no_price_dollars` | String |  |
+| `taker_book_side` | String |  |
+| `taker_outcome_side` | String |  |
+| `taker_side` | String |  |
+| `ticker` | String |  |
+| `trade_id` | String |  |
+| `yes_price_dollars` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

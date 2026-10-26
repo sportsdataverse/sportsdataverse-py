@@ -59,14 +59,14 @@ class _Resp:
 
 @pytest.fixture()
 def rt():
-    import sportsdataverse.yahoo.yahoo_shangrila_runtime as runtime
+    import sportsdataverse.providers.yahoo.yahoo_shangrila_runtime as runtime
 
     return runtime
 
 
 @pytest.fixture()
 def mod():
-    import sportsdataverse.yahoo.yahoo_shangrila as module
+    import sportsdataverse.providers.yahoo.yahoo_shangrila as module
 
     return module
 
@@ -131,7 +131,7 @@ def test_get_raises_on_404_and_non_json(rt, monkeypatch):
 
 
 def test_shangrila_single_collection():
-    from sportsdataverse.yahoo.yahoo_shangrila_parsers import parse_yahoo_shangrila
+    from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import parse_yahoo_shangrila
 
     df = parse_yahoo_shangrila(SINGLE_COLLECTION)
     assert isinstance(df, pl.DataFrame)
@@ -142,7 +142,7 @@ def test_shangrila_single_collection():
 
 
 def test_shangrila_descends_single_key_wrapper():
-    from sportsdataverse.yahoo.yahoo_shangrila_parsers import parse_yahoo_shangrila
+    from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import parse_yahoo_shangrila
 
     df = parse_yahoo_shangrila(WRAPPED_COLLECTION)
     assert df.height == 2
@@ -150,7 +150,7 @@ def test_shangrila_descends_single_key_wrapper():
 
 
 def test_shangrila_tables_on_real_legacy_capture():
-    from sportsdataverse.yahoo.yahoo_shangrila_parsers import parse_yahoo_shangrila_tables
+    from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import parse_yahoo_shangrila_tables
 
     tables = parse_yahoo_shangrila_tables(_load("shangrila_season_stats_football_passing_ncaaf"))
     # keyed by the TOP-LEVEL data keys, not the descended ones
@@ -168,7 +168,7 @@ def test_shangrila_tables_on_real_legacy_capture():
 def test_shangrila_tables_pandas_roundtrip():
     import pandas as pd
 
-    from sportsdataverse.yahoo.yahoo_shangrila_parsers import parse_yahoo_shangrila_tables
+    from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import parse_yahoo_shangrila_tables
 
     tables = parse_yahoo_shangrila_tables(_load("shangrila_season_stats_football_passing_ncaaf"), return_as_pandas=True)
     assert all(isinstance(v, pd.DataFrame) for v in tables.values())
@@ -176,7 +176,10 @@ def test_shangrila_tables_pandas_roundtrip():
 
 @pytest.mark.parametrize("payload", [None, {}, {"data": None}, {"data": {}}, GRAPHQL_ERROR, [], "nope"])
 def test_shangrila_empty_and_malformed(payload):
-    from sportsdataverse.yahoo.yahoo_shangrila_parsers import parse_yahoo_shangrila, parse_yahoo_shangrila_tables
+    from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import (
+        parse_yahoo_shangrila,
+        parse_yahoo_shangrila_tables,
+    )
 
     df = parse_yahoo_shangrila(payload)
     assert isinstance(df, pl.DataFrame)
@@ -185,7 +188,7 @@ def test_shangrila_empty_and_malformed(payload):
 
 
 def test_shangrila_empty_collection_is_zero_rows():
-    from sportsdataverse.yahoo.yahoo_shangrila_parsers import parse_yahoo_shangrila
+    from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import parse_yahoo_shangrila
 
     assert parse_yahoo_shangrila({"data": {"players": []}, "extensions": {}}).height == 0
 
@@ -196,7 +199,7 @@ def test_shangrila_empty_collection_is_zero_rows():
 
 
 def test_editorial_scoreboard_real_capture():
-    from sportsdataverse.yahoo.yahoo_shangrila_parsers import parse_yahoo_editorial
+    from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import parse_yahoo_editorial
 
     tables = parse_yahoo_editorial(_load("editorial_scoreboard_ncaaf"))
     assert {"games", "teams", "teamrecord", "leagues"} <= set(tables)
@@ -210,7 +213,7 @@ def test_editorial_scoreboard_real_capture():
 
 
 def test_editorial_boxscore_nested_id_maps_become_rows():
-    from sportsdataverse.yahoo.yahoo_shangrila_parsers import parse_yahoo_editorial
+    from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import parse_yahoo_editorial
 
     tables = parse_yahoo_editorial(_load("editorial_boxscore_ncaaf"))
     # player_stats[playerId][statVariation] -> one row per (player, variation)
@@ -230,7 +233,7 @@ def test_editorial_boxscore_nested_id_maps_become_rows():
 
 @pytest.mark.parametrize("payload", [None, {}, {"service": {}}, {"service": None}, "nope", []])
 def test_editorial_empty_and_malformed(payload):
-    from sportsdataverse.yahoo.yahoo_shangrila_parsers import parse_yahoo_editorial
+    from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import parse_yahoo_editorial
 
     assert parse_yahoo_editorial(payload) == {}
 
@@ -291,7 +294,7 @@ def test_numeric_ids_are_pinned_to_utf8_without_a_float_detour():
 
     import polars as pl
 
-    from sportsdataverse.yahoo import parse_yahoo_editorial
+    from sportsdataverse.providers.yahoo import parse_yahoo_editorial
 
     fixture = _p.Path(__file__).parent.parent / "fixtures" / "yahoo" / "editorial_scoreboard_ncaaf.json"
     frames = parse_yahoo_editorial(json.loads(fixture.read_text(encoding="utf-8")))
@@ -310,7 +313,7 @@ def test_numeric_ids_are_pinned_to_utf8_without_a_float_detour():
 
 def test_boolean_flags_stay_boolean_when_a_row_lacks_the_key():
     """B-M17: the real stream with ``official`` dropped from one play: null there, Boolean, never "nan"."""
-    from sportsdataverse.yahoo.yahoo_shangrila_parsers import parse_yahoo_editorial
+    from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import parse_yahoo_editorial
 
     raw = _load("editorial_boxscore_ncaaf")
     plays = next(iter(raw["service"]["boxscore"]["gamemedia_stream"].values()))

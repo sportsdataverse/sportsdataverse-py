@@ -1,4 +1,4 @@
-"""Generate nba_stats/wnba_stats endpoint YAML + returns-schemas.
+"""Generate nba_stats/wnba_stats/nbagl_stats endpoint YAML + returns-schemas.
 
 Endpoints and params come from the enriched canonical catalog (Plans 1-2). Column
 names and types come from what ``parse_nba_stats_result_sets`` emits on the
@@ -31,6 +31,9 @@ _CAT_BY_SLUG = {e["slug"]: e for e in CAT["endpoints"] if e["family"] == "stats"
 STEMS = {
     "nba_stats": {"host": "https://stats.nba.com", "league": "nba", "league_id": "00", "default_league": "00"},
     "wnba_stats": {"host": "https://stats.wnba.com", "league": "wnba", "league_id": "10", "default_league": "10"},
+    # The G League on the NBA host (LeagueID=20). No R package wraps it, so its param defaults are
+    # hoopR's (``_league_default``) with the NBA entity ids swapped for G League ones (_GLEAGUE_IDS).
+    "nbagl_stats": {"host": "https://stats.nba.com", "league": "nbagl", "league_id": "20", "default_league": "20"},
 }
 # catalog column type -> R-style returns-schema type
 _DTYPE = {
@@ -70,10 +73,16 @@ _STATS_RAISES = [
     "connection failure (timeout, reset), once ``SDV_PY_NBA_STATS_RETRIES`` retries "
     "are exhausted.",
 ]
-_SIBLING = {"nba_stats": ("wnba_stats", "wnba", "10"), "wnba_stats": ("nba_stats", "nba", "00")}
+_SIBLING = {
+    "nba_stats": ("wnba_stats", "wnba", "10"),
+    "wnba_stats": ("nba_stats", "nba", "00"),
+    "nbagl_stats": ("nba_stats", "nba", "00"),
+}
 _R_COMPANION = {
     "nba_stats": ("hoopR", "https://hoopR.sportsdataverse.org", "R sister package for the NBA stats API"),
     "wnba_stats": ("wehoop", "https://wehoop.sportsdataverse.org", "R sister package for the WNBA stats API"),
+    # No R package wraps the G League stats API; hoopR's nba_* wrappers take the same LeagueID.
+    "nbagl_stats": ("hoopR", "https://hoopR.sportsdataverse.org", "R package for the NBA stats API (pass LeagueID 20)"),
 }
 # Endpoints that opt into the extended docstring contract (Raises + See Also +
 # an import-bearing Example). Declared PER ENDPOINT: the family-level
@@ -141,18 +150,22 @@ def _schema(stem: str, slug: str, sets: Dict[str, pl.DataFrame], sibling: Dict[s
         }
         for name, df in sets.items()
     ]
+    rel = capture_path(stem, slug).relative_to(ROOT).as_posix()
     if not any(b["columns"] for b in blocks):
-        rel = capture_path(stem, slug).relative_to(ROOT).as_posix()
-        return {
-            "schema": slug,
-            "kind": "dataframe",
-            "columns": [],
-            "unverified": (
+        body = json.loads(capture_path(stem, slug).read_text(encoding="utf-8"))
+        if isinstance(body, dict) and not ({"resultSets", "resultSet"} & set(body)):
+            reason = (
+                f"the committed capture {rel} is not a resultSets envelope (top-level keys: "
+                f"{', '.join(sorted(body)[:6])}), which parse_nba_stats_result_sets does not read, so the parsed "
+                "output is empty; use return_parsed=False for the raw payload"
+            )
+        else:
+            reason = (
                 f"the committed capture {rel} holds no rows, so parse_nba_stats_result_sets emits no columns; "
                 "a capture with rows needs a residential IP (stats.nba.com / stats.wnba.com hang on datacenter "
                 "IPs) and SDV_PY_NBA_STATS_LIVE=1"
-            ),
-        }
+            )
+        return {"schema": slug, "kind": "dataframe", "columns": [], "unverified": reason}
     if len(blocks) == 1:
         return {"schema": slug, "kind": "dataframe", "columns": blocks[0]["columns"]}
     return {"schema": slug, "kind": "frames", "frames": blocks}
@@ -231,11 +244,18 @@ _SEASON_KEYS = ("Season", "SeasonYear")
 _SEASON_CALL_NOT_IN_CATALOG = {"scheduleleaguev2": "=year_to_season(most_recent_nba_season() - 1)"}
 # The documented example call passes a fixed season: the default itself depends on today's date,
 # and a docs page rendered from it would drift (and fail generate.py --check) at every rollover.
-_SEASON_EXAMPLE = {"nba_stats": "2024-25", "wnba_stats": "2024"}
+_SEASON_EXAMPLE = {"nba_stats": "2024-25", "wnba_stats": "2024", "nbagl_stats": "2024-25"}
 # hoopR defaults that fail once a season is sent. Measured 2026-10-05: playerdashptshots with
 # PlayerID 2544, Season 2025-26 and hoopR's TeamID "0" answered HTTP 500 (twice); with the player's
 # own team, the Lakers, 27 rows. ponytail: tied to the default player's team; re-pick if he moves.
-_DEFAULT_OVERRIDES = {("nba_stats", "playerdashptshots", "TeamID"): "1610612747"}
+_DEFAULT_OVERRIDES = {
+    ("nba_stats", "playerdashptshots", "TeamID"): "1610612747",
+    # G League defaults that must agree with each other: cumestatsteam's default GameIDs (2022500137) is OSC vs
+    # CPS, so its TeamID is OSC, not the sweep's Stockton; scoreboardv3's hoopR date (2023-03-26) falls in a G
+    # League off week, so it takes the sweep capture's date (2025-01-15, 2 games, nbagl_stats/scoreboardv3.json).
+    ("nbagl_stats", "cumestatsteam", "TeamID"): "1612709925",
+    ("nbagl_stats", "scoreboardv3", "GameDate"): "2025-01-15",
+}
 _SEASON_DOC = {
     # Never name the date helpers here: generate.py treats a whole-word mention on a reference
     # row as "already documented" and drops the helper's own section from the docs.
@@ -262,6 +282,15 @@ _SEASON_DOC = {
         "lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an "
         "empty HTTP 500 or every season summed."
     ),
+    "nbagl_stats": (
+        "Season label, e.g. ``2024-25``. Defaults at call time by a calendar cutoff, the month after a "
+        "season's first games, so it can lag the newest rows by a few weeks. A G League regular season "
+        "starts in late December and becomes the default in January (``2025-26`` from January 2026); "
+        "a draft combine (May) in June. With season type ``Playoffs`` (or ``commonplayoffseries``) it "
+        "rolls over in May, after the late-March playoffs start; the G League has no All-Star rows. A "
+        "month table cannot follow a lockout or pandemic calendar: pass a season then. Without one "
+        "stats.nba.com answers an empty HTTP 500 or every season summed."
+    ),
 }
 
 
@@ -280,10 +309,41 @@ _SEASON_TYPE_DOC = {
         "endpoint takes a subset). Not ESPN's numeric code: ``3`` is HTTP 400. A default season "
         "follows it: ``Playoffs`` rolls over in October, ``All Star`` in August."
     ),
+    "nbagl_stats": (
+        "Season type, a label: ``Regular Season``, ``Pre Season`` or ``Playoffs`` (each endpoint takes a "
+        "subset; the G League has no ``All Star`` rows). Not ESPN's numeric code: ``3`` is HTTP 400. A "
+        "default season follows it: ``Playoffs`` rolls over in May."
+    ),
 }
 
 
 _LEAGUE_SPECIFIC = re.compile(r"(?i)(id(s|list)?\d*|season(year)?)$")
+# G League entities for the params whose hoopR default is an NBA entity: the GameID / PlayerID / TeamID
+# the 2026-08 capture sweep took the committed G League captures with (sdv-internal-refs
+# nba/tools/sample_params.py SAMPLE_VALUES["20"]: a 2025 G League game, Jahmir Young, a G League
+# franchise), and for VsPlayerID a player in that game's box score (Alex Morales,
+# tests/fixtures/nbagl_stats/endpoints/boxscoretraditionalv2.json). A param missing here (GROUP_ID)
+# gets no default: the caller passes one.
+_GLEAGUE_IDS = {
+    "GameID": "2022500137",
+    "GameIDs": "2022500137",
+    "PlayerID": "1642443",
+    "TeamID": "1612709914",
+    "VsPlayerID": "1631457",
+}
+
+
+def _nba_entity_default(p: dict) -> bool:
+    """hoopR's default for ``p`` is an NBA entity id (a game, player, team or lineup), not a neutral value or a
+    season: the G League must not inherit it."""
+    nba = _league_default(p, "00")
+    return (
+        isinstance(nba, str)
+        and nba not in ("", "0")
+        and not nba.startswith("=")
+        and p["query_key"] not in _SEASON_KEYS
+        and _LEAGUE_SPECIFIC.search(p["query_key"]) is not None
+    )
 
 
 def _league_default(p: dict, league: str) -> Any:
@@ -292,8 +352,12 @@ def _league_default(p: dict, league: str) -> Any:
     The catalog's legacy ``default`` let wehoop's value overwrite hoopR's, so on its own it can name
     the OTHER league's entity (nba teaminfocommon defaulted to a WNBA team and 500s). It is used only
     when neither package set a value for this league and it did not come from the other league.
-    A call default arrives as ``"=<R expression>"``.
+    A call default arrives as ``"=<R expression>"``. No R package wraps the G League (``"20"``): it
+    takes hoopR's default, except that an NBA entity id becomes the G League one in ``_GLEAGUE_IDS``.
     """
+    if league == "20":
+        nba = _league_default(p, "00")
+        return _GLEAGUE_IDS.get(p["query_key"]) if _nba_entity_default(p) else nba
     per_league = p.get("league_defaults") or {}
     if league in per_league:
         return per_league[league]
@@ -370,6 +434,11 @@ def _endpoint_entry(
             param["default"] = _DEFAULT_OVERRIDES.get(
                 (stem, ep["slug"], p["query_key"]), _clean_default(p["name"], p["query_key"], default)
             )
+            if default_league == "20" and param["default"] is None and _nba_entity_default(p):
+                # hoopR names an NBA entity here and the sweep has no G League one (GROUP_ID): required, so a
+                # call without it raises TypeError instead of sending no id and getting empty sets back
+                param["required"] = True
+                param["description"] = f"{p['query_key']}: required; there is no G League default for it."
             extra.append(param)
     example_args: Dict[str, Any] = {"league_id": default_league} if has_league else {}
     example_args.update(

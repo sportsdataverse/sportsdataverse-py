@@ -12,8 +12,8 @@
 Committed offline validation corpus for the play-type/impact spine
 (`nba_playtype`, `nba_matchup_drapm`, `nba_foul_drawing`, `nba_expected_turnovers`).
 League: NBA (`league_id="00"`). Season: **2023-24** (`season="2023-24"`).
-Captured live 2026-07-08 via `dev/nba_playtype/capture_oracle.py` +
-`dev/nba_playtype/normalize_oracle.py` (both scratch, not committed) against
+Captured live 2026-07-08 via `tools/models/nba_playtype/capture_oracle.py` +
+`tools/models/nba_playtype/normalize_oracle.py` (both scratch, not committed) against
 `stats.nba.com` through the `nba_stats` runtime (curl_cffi `impersonate="chrome"`,
 `SDV_PY_NBA_STATS_LIVE=1`).
 
@@ -28,7 +28,7 @@ All ids (`team_id`, `player_id`, `off_player_id`, `def_player_id`) are `Int64`.
 | `leaguedash_base_2024.parquet` | `nba_stats_leaguedashplayerstats` | `measure_type_detailed_defense="Base"` | 572 | `poss` column joined in from the `Advanced` measure (Base doesn't ship `poss`); `pfd` IS present on Base |
 | `leaguedash_adv_2024.parquet` | `nba_stats_leaguedashplayerstats` | `measure_type_detailed_defense="Advanced"` | 572 | `pfd` joined in from Base (Advanced doesn't ship it) so both `pfd`-consuming call sites can read from either fixture |
 | `gamelog_2024.parquet` | `nba_stats_leaguegamelog` | `player_or_team_abbreviation="T"` | 2460 (1230 games x 2 teams) | `opp_team_id` derived by self-joining on `game_id` and keeping the non-self row |
-| `rapm_2024.parquet` | `nba_rapm` (shipped model, not a live wrapper) | fit over possessions from the **FULL 2023-24 season, all 1230 games** (via `dev/nba_playtype/close_drapm_oracle.py` through the ProxyBonanza pool, `lineup_source="pbp"`, resumable per-game checkpoint) | 572 players, 242,619 possessions | **Full-season, maximum possible sample** -- see the "Model (2) construct-gap finding" note below |
+| `rapm_2024.parquet` | `nba_rapm` (shipped model, not a live wrapper) | fit over possessions from the **FULL 2023-24 season, all 1230 games** (via `tools/models/nba_playtype/close_drapm_oracle.py` through the ProxyBonanza pool, `lineup_source="pbp"`, resumable per-game checkpoint) | 572 players, 242,619 possessions | **Full-season, maximum possible sample** -- see the "Model (2) construct-gap finding" note below |
 
 ## Model (2) construct-gap finding (resolved, not deferred)
 

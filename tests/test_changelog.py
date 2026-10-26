@@ -79,13 +79,13 @@ def _sections() -> dict[str, str]:
 
 
 def _release() -> str:
-    """The 0.1.5 section, found by heading so a newer release added above it changes nothing."""
-    return next(s for h, s in _sections().items() if h.startswith("## 0.1.5 Release"))
+    """The 0.2.0b1 section (which holds the unpublished 0.1.5 notes), found by heading so a newer release added above it changes nothing."""
+    return next(s for h, s in _sections().items() if h.startswith("## 0.2.0b1 Release"))
 
 
 @pytest.mark.parametrize("pr", _PRS)
 def test_the_release_section_names_the_pr(pr):
-    assert f"#{pr}" in _release(), f"the 0.1.5 section has no entry citing #{pr}"
+    assert f"#{pr}" in _release(), f"the 0.2.0b1 section has no entry citing #{pr}"
 
 
 @pytest.mark.parametrize("heading", list(_sections()))

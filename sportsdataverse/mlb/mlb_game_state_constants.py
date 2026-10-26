@@ -31,7 +31,7 @@ from sportsdataverse._common.metrics import (
 #: Smyth-Patriot "pythagenpat" run-environment-adaptive exponent (Task 4.1).
 PYTHAGENPAT_EXPONENT: float = 0.287
 #: Elo seeds (538 MLB-Elo methodology), confirmed optimal by a (k, hfa) grid
-#: search against the committed results corpus (dev/mlb_game_state/fit_elo.py) --
+#: search against the committed results corpus (tools/models/mlb_game_state/fit_elo.py) --
 #: k=4.0/hfa=24.0 minimized as-of-date game Brier over k in {2..20}, hfa in {0..60}.
 ELO_INIT: float = 1500.0
 ELO_K: float = 4.0

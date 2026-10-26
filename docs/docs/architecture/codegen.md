@@ -16,7 +16,7 @@ drift gate, but they are not the same pipeline — see
 |---|---|
 | `endpoints/leagues.yaml`, `endpoints/parameters.yaml` | the league registry (40 leagues) and the shared parameter catalog |
 | the five ESPN YAMLs in `generate.ESPN_APIS` | `espn_site_v2`, `espn_web_v3`, `espn_core_v2`, `espn_fitt_v3`, `espn_cdn` |
-| the 78 flat-API YAMLs in `generate.FLAT_APIS` | one live API family each (NHL ×4, MLB ×2, NFL ×5 including both PFF APIs and Sleeper, F1, basketball, soccer, recruiting, prediction markets, TheSportsDB, ESPN content, Swiss hockey (SIHF), the European hockey leagues (DEL, ICEHL, EIHL, Metal Ligaen, Czech Extraliga, Liiga, SHL, HockeyAllsvenskan, National League, Ligue Magnus, KHL ×2, VHL), the international basketball leagues (FIBA, Genius, Atrium, NBL, FEB, BBL/DBBL, Lega Basket, ACB, IBBA, W League, VTB, KBL, B.LEAGUE, KZS, LKL, TBF, CEBL, ABA League, EASL, BNXT, TPBL, P. LEAGUE+, CBA, Basketligaen), the vendor networks) |
+| the 79 flat-API YAMLs in `generate.FLAT_APIS` | one live API family each (NHL ×4, MLB ×2, NFL ×5 including both PFF APIs and Sleeper, F1, basketball, soccer, recruiting, prediction markets, TheSportsDB, ESPN content, Swiss hockey (SIHF), the European hockey leagues (DEL, ICEHL, EIHL, Metal Ligaen, Czech Extraliga, Liiga, SHL, HockeyAllsvenskan, National League, Ligue Magnus, KHL ×2, VHL), the international basketball leagues (FIBA, Genius, Atrium, NBL, FEB, BBL/DBBL, Lega Basket, ACB, IBBA, W League, VTB, KBL, B.LEAGUE, KZS, LKL, TBF, CEBL, ABA League, EASL, BNXT, TPBL, P. LEAGUE+, CBA, Basketligaen), the vendor networks) |
 | `endpoints/releases.yaml` | every dataset loader, its release `base`, tag and asset URL |
 | `espn_rename_map.yaml` | the ESPN short-name renames. A generated name a hand-written function already holds is version-qualified by `generate._ESPN_COLLISION_VERSIONED` (`player_stats_v3`, `calendar_site`, ...) |
 | `sources.yaml` | provider / category registry: which source each public function belongs to |
@@ -28,8 +28,8 @@ Upstream one-shot generators write some of those inputs rather than being run pe
 build: `gen_asa` / `gen_cbs` / `gen_mls` / `gen_nwsl` / `gen_on3` / `gen_pff` /
 `gen_pff_api` / `gen_sports247*` / `gen_yahoo` turn vendor OpenAPI specs into
 endpoint YAML; `gen_nba_stats` reads
-`inputs/nba_canonical_catalog.json`; `vendor_captures.py` copies sdv-internal-refs
-captures into `tests/fixtures/`; `gen_*_descriptions.py` mine column descriptions.
+`inputs/nba_canonical_catalog.json`; `vendor_captures.py` copies captures from the
+maintainers' private capture checkout into `tests/fixtures/`; `gen_*_descriptions.py` mine column descriptions.
 
 ## API generation
 
@@ -77,9 +77,13 @@ are hand-authored and preserved.
   family slug, and `docs/src/clientModules/anchorForward.ts` forwards a stale deep
   link at runtime.
 - **League registry.** `render_leagues_json()` writes `docs/src/data/leagues.json`
-  — 105 leagues across six sports — which drives the sidebar's
-  `sidebarItemsGenerator`, the home page's league grid and the per-league search
-  contexts in `docusaurus.config.ts`.
+  — 105 leagues across six sports — which `docs/sidebars.ts` imports directly, as do
+  the home page's league grid and the per-league search contexts in
+  `docusaurus.config.ts`. A league may carry a `group` (from `generate._LEAGUE_GROUPS`,
+  built from the home lists): `sportItems()` in `sidebars.ts` lists a sport's ungrouped
+  headline leagues first, then one collapsed sub-category per group (a group of one is
+  listed directly). Group labels are unique across sports, because Docusaurus derives a
+  category's translation key from its label.
 - **Autodoc pages.** The *coverage gap*: in-scope public names not documented by
   any other generated page, rendered from live signatures and docstrings, with the
   returns table read offline from `schemas/autodoc/<scope>/<fn>.yaml`.
@@ -88,6 +92,10 @@ are hand-authored and preserved.
   `--check` covers their drift too. The third page, `/changelog-unreleased`, is built
   from the `changelog.d/` fragments by `docs-deploy.yml` just before the site build and
   is gitignored, so a PR that adds a fragment changes no generated file.
+- **Returns tables.** The schemas store column types in the R packages' vocabulary
+  (`character`, `integer`, `numeric`, `logical`); `generate._doc_dtype` shows the
+  polars dtype (`String`, `Int64`, `Float64`, `Boolean`) at render time, so a
+  re-capture never has to rewrite `schemas/**`.
 - **Gates.** `_coverage_gaps()` fails on a public function that reaches no docs
   page; `_source_gaps()` fails on one that resolves to zero or two `sources.yaml`
   entries.
@@ -105,6 +113,10 @@ are hand-authored and preserved.
 
 `uv run python tools/codegen/generate.py --check` re-renders everything to a temp
 dir and byte-diffs it, orphan-checks the generated roots, and runs both gates. It
+also fails on maintainer-only text in any `docs/docs` page outside `tutorials/`
+(`generate._INTERNAL_LEAK_PATTERNS`: agent-persona comments, private-repo and
+working-note paths, plan task and phase ids, review rule ids, Scala file:line refs,
+local paths), which reaches the site through docstrings and endpoint-YAML notes. It
 runs in three places:
 
 - `.github/workflows/codegen.yml`, alongside `uv run pytest tests/codegen`;
@@ -113,7 +125,7 @@ runs in three places:
 
 Both hooks' `files:` filters match `tools/codegen/(endpoints|schemas|templates)/**`,
 `tools/codegen/*.py` and `CHANGELOG.md` — so editing `generate.py` or the
-changelog triggers the gate, which it did not before 0.1.5.
+changelog triggers the gate.
 
 Regenerate before pushing. A stale tree is green locally and red in CI.
 

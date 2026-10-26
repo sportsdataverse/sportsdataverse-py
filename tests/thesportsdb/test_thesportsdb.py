@@ -34,7 +34,7 @@ def load(name):
     ],
 )
 def test_rows_come_from_the_single_envelope_key(fixture, key):
-    from sportsdataverse.thesportsdb.thesportsdb_parsers import parse_thesportsdb
+    from sportsdataverse.providers.thesportsdb.thesportsdb_parsers import parse_thesportsdb
 
     body = load(fixture)
     assert key in body, f"{fixture} envelope key changed upstream"
@@ -45,7 +45,7 @@ def test_rows_come_from_the_single_envelope_key(fixture, key):
 
 def test_null_list_is_zero_rows():
     """A no-results lookup answers {"teams": null}, not an empty list."""
-    from sportsdataverse.thesportsdb.thesportsdb_parsers import parse_thesportsdb
+    from sportsdataverse.providers.thesportsdb.thesportsdb_parsers import parse_thesportsdb
 
     df = parse_thesportsdb({"teams": None})
     assert isinstance(df, pl.DataFrame)
@@ -53,20 +53,20 @@ def test_null_list_is_zero_rows():
 
 
 def test_empty_payload_is_zero_rows():
-    from sportsdataverse.thesportsdb.thesportsdb_parsers import parse_thesportsdb
+    from sportsdataverse.providers.thesportsdb.thesportsdb_parsers import parse_thesportsdb
 
     for payload in (None, {}, [], "nope", 7):
         assert parse_thesportsdb(payload).height == 0
 
 
 def test_pandas_round_trip():
-    from sportsdataverse.thesportsdb.thesportsdb_parsers import parse_thesportsdb
+    from sportsdataverse.providers.thesportsdb.thesportsdb_parsers import parse_thesportsdb
 
     assert isinstance(parse_thesportsdb(load("all_sports"), return_as_pandas=True), pd.DataFrame)
 
 
 def test_id_columns_are_utf8():
-    from sportsdataverse.thesportsdb.thesportsdb_parsers import parse_thesportsdb
+    from sportsdataverse.providers.thesportsdb.thesportsdb_parsers import parse_thesportsdb
 
     df = parse_thesportsdb(load("lookupteam"))
     for name, dtype in df.schema.items():
@@ -82,7 +82,7 @@ def test_yaml_host_pins_the_free_key_so_the_docs_links_resolve():
     doc = yaml.safe_load(YAML_PATH.read_text(encoding="utf-8"))
     assert doc["host"] == "https://www.thesportsdb.com/api/v1/json/123"
     assert "{" not in doc["host"]
-    assert doc["getter_module"] == "sportsdataverse.thesportsdb.thesportsdb_runtime"
+    assert doc["getter_module"] == "sportsdataverse.providers.thesportsdb.thesportsdb_runtime"
 
 
 def test_every_route_has_a_short_and_a_schema():

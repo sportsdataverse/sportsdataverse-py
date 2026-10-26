@@ -8,4 +8,4 @@ contact_links:
     about: Announcements and quick questions.
   - name: nflreadpy compatibility
     url: https://github.com/nflverse/nflreadpy
-    about: For NFL data questions, also check the canonical nflreadpy R/Python parity reference.
+    about: For NFL data questions, also check the nflreadpy reference (sdv-py's NFL loaders mirror its API).

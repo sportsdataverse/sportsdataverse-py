@@ -26,10 +26,10 @@ see the core function's Returns table.
 
 | col_name | type | description |
 |---|---|---|
-| `base_state` | character | 3-char base occupancy code ("_" = empty, "1"/"2"/"3" = occupied), e.g. "1_3" for runners on first and third. |
-| `outs` | integer |  |
-| `run_expectancy` | double | Empirical mean runs scored from this state through the end of the half-inning (RE24), fit on plate appearances outside the bottom of the 7th inning and later. |
-| `n` | integer | Number of plate appearances observed starting in this base-out state, excluding the bottom of the 7th inning and later. |
+| `base_state` | String | 3-char base occupancy code ("_" = empty, "1"/"2"/"3" = occupied), e.g. "1_3" for runners on first and third. |
+| `outs` | Int64 |  |
+| `run_expectancy` | Float64 | Empirical mean runs scored from this state through the end of the half-inning (RE24), fit on plate appearances outside the bottom of the 7th inning and later. |
+| `n` | Int64 | Number of plate appearances observed starting in this base-out state, excluding the bottom of the 7th inning and later. |
 
 **Example**
 
@@ -57,16 +57,16 @@ see the core function's Returns table.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character |  |
-| `inning` | integer |  |
-| `half` | character |  |
-| `base_state` | character |  |
-| `outs` | integer |  |
-| `runs_before` | integer |  |
-| `runs_after` | integer |  |
-| `batting_team_id` | character |  |
-| `play_seq` | integer |  |
-| `score_diff` | integer |  |
+| `game_id` | String |  |
+| `inning` | Int64 |  |
+| `half` | String |  |
+| `base_state` | String |  |
+| `outs` | Int64 |  |
+| `runs_before` | Int64 |  |
+| `runs_after` | Int64 |  |
+| `batting_team_id` | String |  |
+| `play_seq` | Int64 |  |
+| `score_diff` | Int64 |  |
 
 **Example**
 
@@ -96,12 +96,12 @@ see the core function's Returns table.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character |  |
-| `play_seq` | integer | 0-based game-global plate-appearance order (sorted by ESPN atBatId); joins back to college_softball_state. |
-| `re_before` | double | RE24 of the base-out state before the PA, looked up in the matrix fit on the same state frame; 0.0 when that state is absent from the matrix. |
-| `re_after` | double | RE24 of the base-out state after the PA (the next PA's before-state in the same half-inning); 0.0 for the last PA of a half-inning. |
-| `run_value` | double | re_after minus re_before, plus runs scored on the play (change in the combined cumulative score). |
-| `wpa` | double |  |
+| `game_id` | String |  |
+| `play_seq` | Int64 | 0-based game-global plate-appearance order (sorted by ESPN atBatId); joins back to college_softball_state. |
+| `re_before` | Float64 | RE24 of the base-out state before the PA, looked up in the matrix fit on the same state frame; 0.0 when that state is absent from the matrix. |
+| `re_after` | Float64 | RE24 of the base-out state after the PA (the next PA's before-state in the same half-inning); 0.0 for the last PA of a half-inning. |
+| `run_value` | Float64 | re_after minus re_before, plus runs scored on the play (change in the combined cumulative score). |
+| `wpa` | Float64 |  |
 
 **Example**
 

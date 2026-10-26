@@ -1,10 +1,10 @@
 ---
-title: "WBB — additional Python functions — Analytics: ConcurrentClump–using_roster"
+title: "Women's college basketball — additional Python functions — Analytics: ConcurrentClump–using_roster"
 sidebar_label: "Analytics: ConcurrentClump–using_roster"
 sidebar_position: 10
-description: "WBB — additional Python functions — Analytics: ConcurrentClump–using_roster — function reference in sdv-py, the SportsDataverse Python package."
+description: "Women's college basketball — additional Python functions — Analytics: ConcurrentClump–using_roster — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — Analytics: ConcurrentClump–using_roster
+# Women's college basketball — additional Python functions — Analytics: ConcurrentClump–using_roster
 
 ### ConcurrentClump {#ConcurrentClump}
 
@@ -12,8 +12,7 @@ description: "WBB — additional Python functions — Analytics: ConcurrentClump
 
 A clump of concurrent raw events, together with the lineups that end
 
-in that clump (`Concurrency.ConcurrentClump`, `PossessionUtils.scala
-:64-69`).
+in that clump (`Concurrency.ConcurrentClump`).
 
 **Parameters**
 
@@ -28,7 +27,7 @@ in that clump (`Concurrency.ConcurrentClump`, `PossessionUtils.scala
 
 Running state threaded through `calculate_possessions_by_event`
 
-(`PossessionUtils.PossState`, `PossessionUtils.scala:39-49`).
+(`PossessionUtils.PossState`).
 
 **Parameters**
 
@@ -44,7 +43,7 @@ Running state threaded through `calculate_possessions_by_event`
 
 `PossState.init() -> "'PossState'"`
 
-A fresh starting state (`PossState.init`, `:45-48`) -- builds
+A fresh starting state (`PossState.init`) -- builds
 
 new instances per call, matching the mutable-dataclass rationale in
 `mbb_ncaa_models.py`'s `.empty()` factories.
@@ -99,8 +98,7 @@ apply_relative_positional_overrides(results, "Men_Maryland_2019/20")
 
 Assign a clump's possessions to the lineup(s) ending in it
 
-(`PossessionUtils.assign_to_right_lineup`, `PossessionUtils.scala
-:418-518`).
+(`PossessionUtils.assign_to_right_lineup`).
 
 Applies the running `state` total (accumulated since the last lineup
 boundary) to the *first* ending lineup only, then hands off to
@@ -440,7 +438,7 @@ print(diags["deltaDefAdjEff"])
 Offensive 3P-luck adjustment for a single player.
 
 Faithful port of `LuckUtils.calcOffPlayerLuckAdj` (`LuckUtils.ts:174-187`).
-Per Task 2.1's surprise #4, this is a literal 1-player-team delegation
+Per the surprise #4, this is a literal 1-player-team delegation
 to `calc_off_team_luck_adj` -- ORB effects are ignored for an
 individual player (the upstream comment: "the team calc basically
 works fine here, apart from ORBs, which we'll ignore").
@@ -574,8 +572,7 @@ team_info = calculate_aggregated_lineup_stats(buckets)
 
 Top-level entry point: calculate team/opponent possessions for a
 
-sequence of lineup events (`PossessionUtils.calculate_possessions`,
-`PossessionUtils.scala:371-379`).
+sequence of lineup events (`PossessionUtils.calculate_possessions`).
 
 **Parameters**
 
@@ -602,8 +599,7 @@ enriched[0].team_stats.num_possessions
 
 Drive the batch loop + per-clump scoring over an already-flattened
 
-clump stream (`PossessionUtils.calculate_possessions_by_event`,
-`PossessionUtils.scala:521-573`).
+clump stream (`PossessionUtils.calculate_possessions_by_event`).
 
 **Parameters**
 
@@ -621,7 +617,7 @@ The lineups, each enriched with possession counts, in original order.
 
 Calculate one direction's possession-fragment for one merged clump
 
-(`PossessionUtils.calculate_stats`, `PossessionUtils.scala:170-369`).
+(`PossessionUtils.calculate_stats`).
 
 See the upstream source's inline worked examples (and-one detection,
 technical/flagrant offsetting, the deadball-rebound heuristic) for the
@@ -699,15 +695,8 @@ print(acc["off_ppp"]["value"])  # now a true weighted average
 Batch a stream of singleton/boundary clumps into merged
 
 concurrent-event clumps (`Concurrency.concurrent_event_handler` +
-`StateUtils.foldLeft`'s clumping machinery, `PossessionUtils.scala
-:71-111` -- see the module docstring for the full batching-predicate
+`StateUtils.foldLeft`'s clumping machinery -- see the module docstring for the full batching-predicate
 breakdown and the post-game-break singleton port trap).
-
-# ponytail: manual accumulate-and-flush loop replacing the generic
-# Clumper/StateUtils.foldLeft abstraction -- this is the ONE clumper
-# instantiation in the port, so a reusable abstraction buys nothing.
-# Lift this back into a small clumper type if a second concurrent-event
-# family needs the same batching later.
 
 **Parameters**
 
@@ -860,8 +849,7 @@ inject_luck(sample_team_on, None, None)
 
 Turn one lineup's raw events into unprocessed singleton clumps, plus a
 
-trailing lineup-boundary marker (`Concurrency.lineup_as_raw_clumps`,
-`PossessionUtils.scala:114-120`).
+trailing lineup-boundary marker (`Concurrency.lineup_as_raw_clumps`).
 
 **Parameters**
 
@@ -879,8 +867,7 @@ One `ConcurrentClump([ev])` per raw event (in order), then a final `ConcurrentCl
 
 Attribute this clump's possessions to the candidate lineup(s)
 
-(`PossessionUtils.assign_to_right_lineup.lineup_balancer`,
-`PossessionUtils.scala:429-471`).
+(`PossessionUtils.assign_to_right_lineup.lineup_balancer`).
 
 A single candidate just receives the whole clump's possessions. Multiple
 candidates (a lineup change landing mid-clump) are split via a greedy
@@ -909,7 +896,7 @@ New lineup copies with `num_possessions` incremented.
 
 Clamp obviously-broken possession counts (``PossessionUtils
 
-.assign_to_right_lineup.lineup_fixer`, `PossessionUtils.scala:490-507`).
+.assign_to_right_lineup.lineup_fixer`).
 
 For both `team_stats` and `opponent_stats` independently: a lineup
 that scored (`pts > 0``) but was attributed zero-or-fewer possessions
@@ -1011,81 +998,81 @@ One row per lineup+team; see the MBB sibling for the column contract.
 
 | col_name | type | description |
 |---|---|---|
-| `p1` | character |  |
-| `p2` | character |  |
-| `p3` | character |  |
-| `p4` | character |  |
-| `p5` | character |  |
-| `team` | character | Team-side label or team identifier. |
-| `mins` | double |  |
-| `o_mins` | double |  |
-| `d_mins` | double |  |
-| `o_poss` | double |  |
-| `d_poss` | double |  |
-| `ortg` | double |  |
-| `drtg` | double |  |
-| `netrtg` | double |  |
-| `pts` | double | Points scored. |
-| `d_pts` | double |  |
-| `fga` | double | Field goal attempts. |
-| `d_fga` | double |  |
-| `fgm` | double | Field goals made. |
-| `d_fgm` | double |  |
-| `tpa` | double |  |
-| `d_tpa` | double |  |
-| `tpm` | double |  |
-| `d_tpm` | double |  |
-| `fta` | double | Free throw attempts. |
-| `d_fta` | double |  |
-| `ftm` | double | Free throws made. |
-| `d_ftm` | double |  |
-| `rima` | double |  |
-| `d_rima` | double |  |
-| `rimm` | double |  |
-| `d_rimm` | double |  |
-| `orb` | double |  |
-| `d_orb` | double |  |
-| `drb` | double |  |
-| `d_drb` | double |  |
-| `blk` | double | Blocks. |
-| `d_blk` | double |  |
-| `to` | double | To. |
-| `d_to` | double |  |
-| `ast` | double | Assists. |
-| `d_ast` | double |  |
-| `e_poss` | double |  |
-| `fg_pct` | double | Field goal percentage (0-1). |
-| `d_fg_pct` | double |  |
-| `tpp` | double |  |
-| `d_tpp` | double |  |
-| `ftp` | double |  |
-| `d_ftp` | double |  |
-| `efg_pct` | double |  |
-| `d_efg_pct` | double |  |
-| `ts_pct` | double | True shooting percentage (0-1). |
-| `d_ts_pct` | double |  |
-| `rim_pct` | double |  |
-| `d_rim_pct` | double |  |
-| `mid_pct` | double |  |
-| `d_mid_pct` | double |  |
-| `tp_rate` | double |  |
-| `d_tp_rate` | double |  |
-| `rim_rate` | double |  |
-| `d_rim_rate` | double |  |
-| `mid_rate` | double |  |
-| `d_mid_rate` | double |  |
-| `ft_rate` | double | Ft rate. |
-| `d_ft_rate` | double |  |
-| `ast_rate` | double |  |
-| `d_ast_rate` | double |  |
-| `to_rate` | double | To rate. |
-| `d_to_rate` | double |  |
-| `blk_rate` | double |  |
-| `o_blk_rate` | double |  |
-| `orb_pct` | double | Offensive rebound percentage. |
-| `drb_pct` | double | Defensive rebound percentage. |
-| `time_per_poss` | double |  |
-| `d_time_per_poss` | double |  |
+| `p1` | String |  |
+| `p2` | String |  |
+| `p3` | String |  |
+| `p4` | String |  |
+| `p5` | String |  |
+| `team` | String | Team-side label or team identifier. |
+| `mins` | Float64 |  |
+| `o_mins` | Float64 |  |
+| `d_mins` | Float64 |  |
+| `o_poss` | Float64 |  |
+| `d_poss` | Float64 |  |
+| `ortg` | Float64 |  |
+| `drtg` | Float64 |  |
+| `netrtg` | Float64 |  |
+| `pts` | Float64 | Points scored. |
+| `d_pts` | Float64 |  |
+| `fga` | Float64 | Field goal attempts. |
+| `d_fga` | Float64 |  |
+| `fgm` | Float64 | Field goals made. |
+| `d_fgm` | Float64 |  |
+| `tpa` | Float64 |  |
+| `d_tpa` | Float64 |  |
+| `tpm` | Float64 |  |
+| `d_tpm` | Float64 |  |
+| `fta` | Float64 | Free throw attempts. |
+| `d_fta` | Float64 |  |
+| `ftm` | Float64 | Free throws made. |
+| `d_ftm` | Float64 |  |
+| `rima` | Float64 |  |
+| `d_rima` | Float64 |  |
+| `rimm` | Float64 |  |
+| `d_rimm` | Float64 |  |
+| `orb` | Float64 |  |
+| `d_orb` | Float64 |  |
+| `drb` | Float64 |  |
+| `d_drb` | Float64 |  |
+| `blk` | Float64 | Blocks. |
+| `d_blk` | Float64 |  |
+| `to` | Float64 | To. |
+| `d_to` | Float64 |  |
+| `ast` | Float64 | Assists. |
+| `d_ast` | Float64 |  |
+| `e_poss` | Float64 |  |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `d_fg_pct` | Float64 |  |
+| `tpp` | Float64 |  |
+| `d_tpp` | Float64 |  |
+| `ftp` | Float64 |  |
+| `d_ftp` | Float64 |  |
+| `efg_pct` | Float64 |  |
+| `d_efg_pct` | Float64 |  |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `d_ts_pct` | Float64 |  |
+| `rim_pct` | Float64 |  |
+| `d_rim_pct` | Float64 |  |
+| `mid_pct` | Float64 |  |
+| `d_mid_pct` | Float64 |  |
+| `tp_rate` | Float64 |  |
+| `d_tp_rate` | Float64 |  |
+| `rim_rate` | Float64 |  |
+| `d_rim_rate` | Float64 |  |
+| `mid_rate` | Float64 |  |
+| `d_mid_rate` | Float64 |  |
+| `ft_rate` | Float64 | Ft rate. |
+| `d_ft_rate` | Float64 |  |
+| `ast_rate` | Float64 |  |
+| `d_ast_rate` | Float64 |  |
+| `to_rate` | Float64 | To rate. |
+| `d_to_rate` | Float64 |  |
+| `blk_rate` | Float64 |  |
+| `o_blk_rate` | Float64 |  |
+| `orb_pct` | Float64 | Offensive rebound percentage. |
+| `drb_pct` | Float64 | Defensive rebound percentage. |
+| `time_per_poss` | Float64 |  |
+| `d_time_per_poss` | Float64 |  |
 
 **Example**
 
@@ -1121,76 +1108,76 @@ Pure delegation to
 
 | col_name | type | description |
 |---|---|---|
-| `status` | character | Status label. |
-| `mins` | double |  |
-| `o_mins` | double |  |
-| `d_mins` | double |  |
-| `o_poss` | double |  |
-| `d_poss` | double |  |
-| `ortg` | double |  |
-| `drtg` | double |  |
-| `netrtg` | double |  |
-| `pts` | double | Points scored. |
-| `d_pts` | double |  |
-| `fga` | double | Field goal attempts. |
-| `d_fga` | double |  |
-| `fgm` | double | Field goals made. |
-| `d_fgm` | double |  |
-| `tpa` | double |  |
-| `d_tpa` | double |  |
-| `tpm` | double |  |
-| `d_tpm` | double |  |
-| `fta` | double | Free throw attempts. |
-| `d_fta` | double |  |
-| `ftm` | double | Free throws made. |
-| `d_ftm` | double |  |
-| `rima` | double |  |
-| `d_rima` | double |  |
-| `rimm` | double |  |
-| `d_rimm` | double |  |
-| `orb` | double |  |
-| `d_orb` | double |  |
-| `drb` | double |  |
-| `d_drb` | double |  |
-| `blk` | double | Blocks. |
-| `d_blk` | double |  |
-| `to` | double | To. |
-| `d_to` | double |  |
-| `ast` | double | Assists. |
-| `d_ast` | double |  |
-| `e_poss` | double |  |
-| `fg_pct` | double | Field goal percentage (0-1). |
-| `d_fg_pct` | double |  |
-| `tpp` | double |  |
-| `d_tpp` | double |  |
-| `ftp` | double |  |
-| `d_ftp` | double |  |
-| `efg_pct` | double |  |
-| `d_efg_pct` | double |  |
-| `ts_pct` | double | True shooting percentage (0-1). |
-| `d_ts_pct` | double |  |
-| `rim_pct` | double |  |
-| `d_rim_pct` | double |  |
-| `mid_pct` | double |  |
-| `d_mid_pct` | double |  |
-| `tp_rate` | double |  |
-| `d_tp_rate` | double |  |
-| `rim_rate` | double |  |
-| `d_rim_rate` | double |  |
-| `mid_rate` | double |  |
-| `d_mid_rate` | double |  |
-| `ft_rate` | double | Ft rate. |
-| `d_ft_rate` | double |  |
-| `ast_rate` | double |  |
-| `d_ast_rate` | double |  |
-| `to_rate` | double | To rate. |
-| `d_to_rate` | double |  |
-| `blk_rate` | double |  |
-| `o_blk_rate` | double |  |
-| `orb_pct` | double | Offensive rebound percentage. |
-| `drb_pct` | double | Defensive rebound percentage. |
-| `time_per_poss` | double |  |
-| `d_time_per_poss` | double |  |
+| `status` | String | Status label. |
+| `mins` | Float64 |  |
+| `o_mins` | Float64 |  |
+| `d_mins` | Float64 |  |
+| `o_poss` | Float64 |  |
+| `d_poss` | Float64 |  |
+| `ortg` | Float64 |  |
+| `drtg` | Float64 |  |
+| `netrtg` | Float64 |  |
+| `pts` | Float64 | Points scored. |
+| `d_pts` | Float64 |  |
+| `fga` | Float64 | Field goal attempts. |
+| `d_fga` | Float64 |  |
+| `fgm` | Float64 | Field goals made. |
+| `d_fgm` | Float64 |  |
+| `tpa` | Float64 |  |
+| `d_tpa` | Float64 |  |
+| `tpm` | Float64 |  |
+| `d_tpm` | Float64 |  |
+| `fta` | Float64 | Free throw attempts. |
+| `d_fta` | Float64 |  |
+| `ftm` | Float64 | Free throws made. |
+| `d_ftm` | Float64 |  |
+| `rima` | Float64 |  |
+| `d_rima` | Float64 |  |
+| `rimm` | Float64 |  |
+| `d_rimm` | Float64 |  |
+| `orb` | Float64 |  |
+| `d_orb` | Float64 |  |
+| `drb` | Float64 |  |
+| `d_drb` | Float64 |  |
+| `blk` | Float64 | Blocks. |
+| `d_blk` | Float64 |  |
+| `to` | Float64 | To. |
+| `d_to` | Float64 |  |
+| `ast` | Float64 | Assists. |
+| `d_ast` | Float64 |  |
+| `e_poss` | Float64 |  |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `d_fg_pct` | Float64 |  |
+| `tpp` | Float64 |  |
+| `d_tpp` | Float64 |  |
+| `ftp` | Float64 |  |
+| `d_ftp` | Float64 |  |
+| `efg_pct` | Float64 |  |
+| `d_efg_pct` | Float64 |  |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `d_ts_pct` | Float64 |  |
+| `rim_pct` | Float64 |  |
+| `d_rim_pct` | Float64 |  |
+| `mid_pct` | Float64 |  |
+| `d_mid_pct` | Float64 |  |
+| `tp_rate` | Float64 |  |
+| `d_tp_rate` | Float64 |  |
+| `rim_rate` | Float64 |  |
+| `d_rim_rate` | Float64 |  |
+| `mid_rate` | Float64 |  |
+| `d_mid_rate` | Float64 |  |
+| `ft_rate` | Float64 | Ft rate. |
+| `d_ft_rate` | Float64 |  |
+| `ast_rate` | Float64 |  |
+| `d_ast_rate` | Float64 |  |
+| `to_rate` | Float64 | To rate. |
+| `d_to_rate` | Float64 |  |
+| `blk_rate` | Float64 |  |
+| `o_blk_rate` | Float64 |  |
+| `orb_pct` | Float64 | Offensive rebound percentage. |
+| `drb_pct` | Float64 | Defensive rebound percentage. |
+| `time_per_poss` | Float64 |  |
+| `d_time_per_poss` | Float64 |  |
 
 **Example**
 
@@ -1228,78 +1215,78 @@ One row per combo: `team, p1..pn` + the stat surface.
 
 | col_name | type | description |
 |---|---|---|
-| `team` | character | Team-side label or team identifier. |
-| `p1` | character |  |
-| `p2` | character |  |
-| `mins` | double |  |
-| `o_mins` | double |  |
-| `d_mins` | double |  |
-| `o_poss` | double |  |
-| `d_poss` | double |  |
-| `ortg` | double |  |
-| `drtg` | double |  |
-| `netrtg` | double |  |
-| `pts` | double | Points scored. |
-| `d_pts` | double |  |
-| `fga` | double | Field goal attempts. |
-| `d_fga` | double |  |
-| `fgm` | double | Field goals made. |
-| `d_fgm` | double |  |
-| `tpa` | double |  |
-| `d_tpa` | double |  |
-| `tpm` | double |  |
-| `d_tpm` | double |  |
-| `fta` | double | Free throw attempts. |
-| `d_fta` | double |  |
-| `ftm` | double | Free throws made. |
-| `d_ftm` | double |  |
-| `rima` | double |  |
-| `d_rima` | double |  |
-| `rimm` | double |  |
-| `d_rimm` | double |  |
-| `orb` | double |  |
-| `d_orb` | double |  |
-| `drb` | double |  |
-| `d_drb` | double |  |
-| `blk` | double | Blocks. |
-| `d_blk` | double |  |
-| `to` | double | To. |
-| `d_to` | double |  |
-| `ast` | double | Assists. |
-| `d_ast` | double |  |
-| `e_poss` | double |  |
-| `fg_pct` | double | Field goal percentage (0-1). |
-| `d_fg_pct` | double |  |
-| `tpp` | double |  |
-| `d_tpp` | double |  |
-| `ftp` | double |  |
-| `d_ftp` | double |  |
-| `efg_pct` | double |  |
-| `d_efg_pct` | double |  |
-| `ts_pct` | double | True shooting percentage (0-1). |
-| `d_ts_pct` | double |  |
-| `rim_pct` | double |  |
-| `d_rim_pct` | double |  |
-| `mid_pct` | double |  |
-| `d_mid_pct` | double |  |
-| `tp_rate` | double |  |
-| `d_tp_rate` | double |  |
-| `rim_rate` | double |  |
-| `d_rim_rate` | double |  |
-| `mid_rate` | double |  |
-| `d_mid_rate` | double |  |
-| `ft_rate` | double | Ft rate. |
-| `d_ft_rate` | double |  |
-| `ast_rate` | double |  |
-| `d_ast_rate` | double |  |
-| `to_rate` | double | To rate. |
-| `d_to_rate` | double |  |
-| `blk_rate` | double |  |
-| `o_blk_rate` | double |  |
-| `orb_pct` | double | Offensive rebound percentage. |
-| `drb_pct` | double | Defensive rebound percentage. |
-| `time_per_poss` | double |  |
-| `d_time_per_poss` | double |  |
+| `team` | String | Team-side label or team identifier. |
+| `p1` | String |  |
+| `p2` | String |  |
+| `mins` | Float64 |  |
+| `o_mins` | Float64 |  |
+| `d_mins` | Float64 |  |
+| `o_poss` | Float64 |  |
+| `d_poss` | Float64 |  |
+| `ortg` | Float64 |  |
+| `drtg` | Float64 |  |
+| `netrtg` | Float64 |  |
+| `pts` | Float64 | Points scored. |
+| `d_pts` | Float64 |  |
+| `fga` | Float64 | Field goal attempts. |
+| `d_fga` | Float64 |  |
+| `fgm` | Float64 | Field goals made. |
+| `d_fgm` | Float64 |  |
+| `tpa` | Float64 |  |
+| `d_tpa` | Float64 |  |
+| `tpm` | Float64 |  |
+| `d_tpm` | Float64 |  |
+| `fta` | Float64 | Free throw attempts. |
+| `d_fta` | Float64 |  |
+| `ftm` | Float64 | Free throws made. |
+| `d_ftm` | Float64 |  |
+| `rima` | Float64 |  |
+| `d_rima` | Float64 |  |
+| `rimm` | Float64 |  |
+| `d_rimm` | Float64 |  |
+| `orb` | Float64 |  |
+| `d_orb` | Float64 |  |
+| `drb` | Float64 |  |
+| `d_drb` | Float64 |  |
+| `blk` | Float64 | Blocks. |
+| `d_blk` | Float64 |  |
+| `to` | Float64 | To. |
+| `d_to` | Float64 |  |
+| `ast` | Float64 | Assists. |
+| `d_ast` | Float64 |  |
+| `e_poss` | Float64 |  |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `d_fg_pct` | Float64 |  |
+| `tpp` | Float64 |  |
+| `d_tpp` | Float64 |  |
+| `ftp` | Float64 |  |
+| `d_ftp` | Float64 |  |
+| `efg_pct` | Float64 |  |
+| `d_efg_pct` | Float64 |  |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `d_ts_pct` | Float64 |  |
+| `rim_pct` | Float64 |  |
+| `d_rim_pct` | Float64 |  |
+| `mid_pct` | Float64 |  |
+| `d_mid_pct` | Float64 |  |
+| `tp_rate` | Float64 |  |
+| `d_tp_rate` | Float64 |  |
+| `rim_rate` | Float64 |  |
+| `d_rim_rate` | Float64 |  |
+| `mid_rate` | Float64 |  |
+| `d_mid_rate` | Float64 |  |
+| `ft_rate` | Float64 | Ft rate. |
+| `d_ft_rate` | Float64 |  |
+| `ast_rate` | Float64 |  |
+| `d_ast_rate` | Float64 |  |
+| `to_rate` | Float64 | To rate. |
+| `d_to_rate` | Float64 |  |
+| `blk_rate` | Float64 |  |
+| `o_blk_rate` | Float64 |  |
+| `orb_pct` | Float64 | Offensive rebound percentage. |
+| `drb_pct` | Float64 | Defensive rebound percentage. |
+| `time_per_poss` | Float64 |  |
+| `d_time_per_poss` | Float64 |  |
 
 **Example**
 
@@ -1334,81 +1321,81 @@ Row-subset of `lineups`; schema unchanged.
 
 | col_name | type | description |
 |---|---|---|
-| `p1` | character |  |
-| `p2` | character |  |
-| `p3` | character |  |
-| `p4` | character |  |
-| `p5` | character |  |
-| `team` | character | Team-side label or team identifier. |
-| `mins` | double |  |
-| `o_mins` | double |  |
-| `d_mins` | double |  |
-| `o_poss` | double |  |
-| `d_poss` | double |  |
-| `ortg` | double |  |
-| `drtg` | double |  |
-| `netrtg` | double |  |
-| `pts` | double | Points scored. |
-| `d_pts` | double |  |
-| `fga` | double | Field goal attempts. |
-| `d_fga` | double |  |
-| `fgm` | double | Field goals made. |
-| `d_fgm` | double |  |
-| `tpa` | double |  |
-| `d_tpa` | double |  |
-| `tpm` | double |  |
-| `d_tpm` | double |  |
-| `fta` | double | Free throw attempts. |
-| `d_fta` | double |  |
-| `ftm` | double | Free throws made. |
-| `d_ftm` | double |  |
-| `rima` | double |  |
-| `d_rima` | double |  |
-| `rimm` | double |  |
-| `d_rimm` | double |  |
-| `orb` | double |  |
-| `d_orb` | double |  |
-| `drb` | double |  |
-| `d_drb` | double |  |
-| `blk` | double | Blocks. |
-| `d_blk` | double |  |
-| `to` | double | To. |
-| `d_to` | double |  |
-| `ast` | double | Assists. |
-| `d_ast` | double |  |
-| `e_poss` | double |  |
-| `fg_pct` | double | Field goal percentage (0-1). |
-| `d_fg_pct` | double |  |
-| `tpp` | double |  |
-| `d_tpp` | double |  |
-| `ftp` | double |  |
-| `d_ftp` | double |  |
-| `efg_pct` | double |  |
-| `d_efg_pct` | double |  |
-| `ts_pct` | double | True shooting percentage (0-1). |
-| `d_ts_pct` | double |  |
-| `rim_pct` | double |  |
-| `d_rim_pct` | double |  |
-| `mid_pct` | double |  |
-| `d_mid_pct` | double |  |
-| `tp_rate` | double |  |
-| `d_tp_rate` | double |  |
-| `rim_rate` | double |  |
-| `d_rim_rate` | double |  |
-| `mid_rate` | double |  |
-| `d_mid_rate` | double |  |
-| `ft_rate` | double | Ft rate. |
-| `d_ft_rate` | double |  |
-| `ast_rate` | double |  |
-| `d_ast_rate` | double |  |
-| `to_rate` | double | To rate. |
-| `d_to_rate` | double |  |
-| `blk_rate` | double |  |
-| `o_blk_rate` | double |  |
-| `orb_pct` | double | Offensive rebound percentage. |
-| `drb_pct` | double | Defensive rebound percentage. |
-| `time_per_poss` | double |  |
-| `d_time_per_poss` | double |  |
+| `p1` | String |  |
+| `p2` | String |  |
+| `p3` | String |  |
+| `p4` | String |  |
+| `p5` | String |  |
+| `team` | String | Team-side label or team identifier. |
+| `mins` | Float64 |  |
+| `o_mins` | Float64 |  |
+| `d_mins` | Float64 |  |
+| `o_poss` | Float64 |  |
+| `d_poss` | Float64 |  |
+| `ortg` | Float64 |  |
+| `drtg` | Float64 |  |
+| `netrtg` | Float64 |  |
+| `pts` | Float64 | Points scored. |
+| `d_pts` | Float64 |  |
+| `fga` | Float64 | Field goal attempts. |
+| `d_fga` | Float64 |  |
+| `fgm` | Float64 | Field goals made. |
+| `d_fgm` | Float64 |  |
+| `tpa` | Float64 |  |
+| `d_tpa` | Float64 |  |
+| `tpm` | Float64 |  |
+| `d_tpm` | Float64 |  |
+| `fta` | Float64 | Free throw attempts. |
+| `d_fta` | Float64 |  |
+| `ftm` | Float64 | Free throws made. |
+| `d_ftm` | Float64 |  |
+| `rima` | Float64 |  |
+| `d_rima` | Float64 |  |
+| `rimm` | Float64 |  |
+| `d_rimm` | Float64 |  |
+| `orb` | Float64 |  |
+| `d_orb` | Float64 |  |
+| `drb` | Float64 |  |
+| `d_drb` | Float64 |  |
+| `blk` | Float64 | Blocks. |
+| `d_blk` | Float64 |  |
+| `to` | Float64 | To. |
+| `d_to` | Float64 |  |
+| `ast` | Float64 | Assists. |
+| `d_ast` | Float64 |  |
+| `e_poss` | Float64 |  |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `d_fg_pct` | Float64 |  |
+| `tpp` | Float64 |  |
+| `d_tpp` | Float64 |  |
+| `ftp` | Float64 |  |
+| `d_ftp` | Float64 |  |
+| `efg_pct` | Float64 |  |
+| `d_efg_pct` | Float64 |  |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `d_ts_pct` | Float64 |  |
+| `rim_pct` | Float64 |  |
+| `d_rim_pct` | Float64 |  |
+| `mid_pct` | Float64 |  |
+| `d_mid_pct` | Float64 |  |
+| `tp_rate` | Float64 |  |
+| `d_tp_rate` | Float64 |  |
+| `rim_rate` | Float64 |  |
+| `d_rim_rate` | Float64 |  |
+| `mid_rate` | Float64 |  |
+| `d_mid_rate` | Float64 |  |
+| `ft_rate` | Float64 | Ft rate. |
+| `d_ft_rate` | Float64 |  |
+| `ast_rate` | Float64 |  |
+| `d_ast_rate` | Float64 |  |
+| `to_rate` | Float64 | To rate. |
+| `d_to_rate` | Float64 |  |
+| `blk_rate` | Float64 |  |
+| `o_blk_rate` | Float64 |  |
+| `orb_pct` | Float64 | Offensive rebound percentage. |
+| `drb_pct` | Float64 | Defensive rebound percentage. |
+| `time_per_poss` | Float64 |  |
+| `d_time_per_poss` | Float64 |  |
 
 **Example**
 

@@ -1,9 +1,9 @@
 ---
-title: METAL
-sidebar_label: METAL
-description: "sdv-py METAL: endpoint references, dataset loaders and parsers for METAL in the SportsDataverse Python package."
+title: Metal Ligaen
+sidebar_label: Metal Ligaen
+description: "sdv-py Metal Ligaen: endpoint references, dataset loaders and parsers for Metal Ligaen in the SportsDataverse Python package."
 ---
-# METAL (`sportsdataverse.hockey.metal`)
+# Metal Ligaen (`sportsdataverse.hockey.metal`)
 
 ## Data sources
 

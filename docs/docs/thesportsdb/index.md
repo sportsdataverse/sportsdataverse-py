@@ -1,9 +1,9 @@
 ---
-title: THESPORTSDB
-sidebar_label: THESPORTSDB
-description: "sdv-py THESPORTSDB: endpoint references, dataset loaders and parsers for THESPORTSDB in the SportsDataverse Python package."
+title: TheSportsDB
+sidebar_label: TheSportsDB
+description: "sdv-py TheSportsDB: endpoint references, dataset loaders and parsers for TheSportsDB in the SportsDataverse Python package."
 ---
-# THESPORTSDB (`sportsdataverse.thesportsdb`)
+# TheSportsDB (`sportsdataverse.providers.thesportsdb`)
 
 ## Data sources
 

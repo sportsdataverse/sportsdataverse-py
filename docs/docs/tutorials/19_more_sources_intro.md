@@ -1,5 +1,6 @@
 ---
 title: More sources tutorial
+description: "Four smaller surfaces, one notebook."
 sidebar_label: More sources
 sidebar_position: 19
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/19_more_sources_intro.ipynb
@@ -15,8 +16,8 @@ Four smaller surfaces, one notebook:
 |---|---|---|
 | NBA G League | `sportsdataverse.nbagl` | ESPN |
 | Formula 1 | `sportsdataverse.f1` | Jolpica (the Ergast API successor) |
-| TheSportsDB | `sportsdataverse.thesportsdb` | TheSportsDB (free tier) |
-| ESPN content | `sportsdataverse.espn_content` | ESPN news API |
+| TheSportsDB | `sportsdataverse.providers.thesportsdb` | TheSportsDB (free tier) |
+| ESPN content | `sportsdataverse.providers.espn_content` | ESPN news API |
 
 No API keys needed.
 

@@ -1,5 +1,6 @@
 ---
 title: MLB tutorial
+description: "Welcome to the ballpark! In just a few lines of Python you're about to pull official MLB data — schedules, standings, rosters, box scores, play-by-play — straight from the league's own MLB Stats…"
 sidebar_label: MLB
 sidebar_position: 8
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/09_mlb_intro.ipynb

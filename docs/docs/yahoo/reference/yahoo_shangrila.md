@@ -1,13 +1,13 @@
 ---
-title: YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)
+title: Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)
 sidebar_label: Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)
-description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
 ---
-# YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)
+# Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)
 
-`sportsdataverse.yahoo` — 107 endpoints.
+`sportsdataverse.providers.yahoo` — 107 endpoints.
 
 ## Editorial
 
@@ -63,8 +63,8 @@ toc_max_heading_level: 2
 | [yahoo_playbook_race](yahoo_shangrila/playbook.md#yahoo_playbook_race) | Yahoo shangrila persisted query `playbookRace` -> one row per `games` entry |
 | [yahoo_playbook_team](yahoo_shangrila/playbook.md#yahoo_playbook_team) | Yahoo shangrila persisted query `playbookTeam` -> tables: teams, leagues |
 | [yahoo_playbook_team_basic](yahoo_shangrila/playbook.md#yahoo_playbook_team_basic) | Yahoo shangrila persisted query `playbookTeamBasic` -> one row per `teams` entry |
-| [yahoo_playbook_team_social_share](yahoo_shangrila/playbook-2.md#yahoo_playbook_team_social_share) | Yahoo shangrila persisted query `playbookTeamSocialShare` -> one row per `teams` entry |
-| [yahoo_playbook_tennis_match](yahoo_shangrila/playbook-2.md#yahoo_playbook_tennis_match) | Yahoo shangrila persisted query `playbookTennisMatch` -> one row per `events` entry |
+| [yahoo_playbook_team_social_share](yahoo_shangrila/playbook.md#yahoo_playbook_team_social_share) | Yahoo shangrila persisted query `playbookTeamSocialShare` -> one row per `teams` entry |
+| [yahoo_playbook_tennis_match](yahoo_shangrila/playbook.md#yahoo_playbook_tennis_match) | Yahoo shangrila persisted query `playbookTennisMatch` -> one row per `events` entry |
 
 ## Player
 

@@ -1,1 +1,0 @@
-- **Basketball:** nine more FIBA competition families, each family id verified against the live GDAP API: `fiba_eurobasket_*`, `fiba_americup_*`, `fiba_asiacup_*`, `fiba_icup_*` (Intercontinental Cup), `fiba_bcla_*` (BCL Americas), and the women's `fiba_ecw_*` (EuroCup Women), `fiba_wamericup_*`, `fiba_wasiacup_*` and `fiba_wafrobasket_*`. (#864)

@@ -35,19 +35,19 @@ A polars (or pandas) DataFrame with one row per (season, team): `conf`, `divisio
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `conf` | character |  |
-| `division` | character |  |
-| `div_rank` | integer |  |
-| `seed` | integer |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `games` | integer | Games played in career |
-| `wins` | integer |  |
-| `losses` | integer |  |
-| `ties` | integer |  |
-| `win_pct` | double |  |
-| `div_pct` | double |  |
-| `conf_pct` | double |  |
+| `season` | Int64 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `conf` | String |  |
+| `division` | String |  |
+| `div_rank` | Int64 |  |
+| `seed` | Int64 |  |
+| `team` | String | NFL team. Uses official abbreviations as per NFL.com |
+| `games` | Int64 | Games played in career |
+| `wins` | Int64 |  |
+| `losses` | Int64 |  |
+| `ties` | Int64 |  |
+| `win_pct` | Float64 |  |
+| `div_pct` | Float64 |  |
+| `conf_pct` | Float64 |  |
 
 **Raises**
 
@@ -97,11 +97,11 @@ The **only** place skill (rate x volume) and availability meet:
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | nflverse gsis player id (character join key; asserted Utf8 on both sides of the join). |
-| `proj_rate` | double | Projected per-opportunity rate carried through from the skill projection (rate_col). |
-| `proj_volume` | double | Projected opportunity volume carried through from the skill projection (volume_col). |
-| `proj_availability` | double | Projected availability rate in [0, 1] from nfl_availability_projection. |
-| `proj_counting` | double | Composed counting projection - proj_rate x proj_volume x proj_availability (the only place skill and availability meet). |
+| `player_id` | String | nflverse gsis player id (character join key; asserted Utf8 on both sides of the join). |
+| `proj_rate` | Float64 | Projected per-opportunity rate carried through from the skill projection (rate_col). |
+| `proj_volume` | Float64 | Projected opportunity volume carried through from the skill projection (volume_col). |
+| `proj_availability` | Float64 | Projected availability rate in [0, 1] from nfl_availability_projection. |
+| `proj_counting` | Float64 | Composed counting projection - proj_rate x proj_volume x proj_availability (the only place skill and availability meet). |
 
 **Example**
 
@@ -134,12 +134,12 @@ Shrinks each player's historical availability toward the fitted position
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | nflverse gsis player id (character join key). |
-| `target_season` | integer | The season being projected (features use strictly earlier seasons only). |
-| `position` | character | Roster position from the most recent visible season. |
-| `proj_availability` | double | Projected availability rate in [0, 1] - empirical-Bayes shrinkage of historical snap-based availability toward the fitted position base rate, then the fold-fit linear recalibration. |
-| `proj_games` | double | Expected games available - proj_availability x team_games (17). |
-| `proj_games_missed` | double | Expected games missed - team_games minus proj_games. |
+| `player_id` | String | nflverse gsis player id (character join key). |
+| `target_season` | Int64 | The season being projected (features use strictly earlier seasons only). |
+| `position` | String | Roster position from the most recent visible season. |
+| `proj_availability` | Float64 | Projected availability rate in [0, 1] - empirical-Bayes shrinkage of historical snap-based availability toward the fitted position base rate, then the fold-fit linear recalibration. |
+| `proj_games` | Float64 | Expected games available - proj_availability x team_games (17). |
+| `proj_games_missed` | Float64 | Expected games missed - team_games minus proj_games. |
 
 **Example**
 
@@ -172,16 +172,16 @@ Per `(season, team)`: `games`, `off_plays_pg`, `sec_per_play`, `neutral_sec_per_
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season of the aggregate. |
-| `team` | character | Team abbreviation. |
-| `games` | integer | Games included in the aggregate. |
-| `off_plays_pg` | double | Realized offensive plays per game. |
-| `sec_per_play` | double | Season mean of the per-game sec_per_play. |
-| `neutral_sec_per_play` | double | Season mean neutral-situation seconds per play (lower = faster). |
-| `proe` | double | Season pass-rate over expected, dropback-weighted so it reconciles exactly with the pbp pass_oe aggregate. |
-| `exp_plays_pg` | double | Expected plays per game from the fitted PACE_CONSTANTS OLS (own pace, opponent pace, market total). |
-| `plays_oe` | double | Realized minus expected plays per game. |
-| `pace_rank` | integer | Rank of neutral pace within the season (1 = fastest). |
+| `season` | Int64 | Season of the aggregate. |
+| `team` | String | Team abbreviation. |
+| `games` | Int64 | Games included in the aggregate. |
+| `off_plays_pg` | Float64 | Realized offensive plays per game. |
+| `sec_per_play` | Float64 | Season mean of the per-game sec_per_play. |
+| `neutral_sec_per_play` | Float64 | Season mean neutral-situation seconds per play (lower = faster). |
+| `proe` | Float64 | Season pass-rate over expected, dropback-weighted so it reconciles exactly with the pbp pass_oe aggregate. |
+| `exp_plays_pg` | Float64 | Expected plays per game from the fitted PACE_CONSTANTS OLS (own pace, opponent pace, market total). |
+| `plays_oe` | Float64 | Realized minus expected plays per game. |
+| `pace_rank` | Int64 | Rank of neutral pace within the season (1 = fastest). |
 
 **Example**
 
@@ -216,19 +216,19 @@ Keys + per-family probabilities `p_inside_run` / `p_outside_run` / `p_short_pass
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | nflverse game identifier (Utf8 join key). |
-| `play_id` | integer | nflverse play identifier within the game (Int64 join key). |
-| `season` | integer | Season of the play. |
-| `week` | integer | Week of the play. |
-| `posteam` | character | Offense (possession) team abbreviation. |
-| `p_inside_run` | double | Predicted probability of an inside run (guard/center gap or middle). |
-| `p_outside_run` | double | Predicted probability of an outside run (end/tackle or off-middle). |
-| `p_short_pass` | double | Predicted probability of a short pass. |
-| `p_deep_pass` | double | Predicted probability of a deep pass. |
-| `p_scramble` | double | Predicted probability of a QB scramble. |
-| `p_pass` | double | Predicted pass probability (short + deep + scramble family sum). |
-| `pred_family` | character | Argmax family among the five class probabilities. |
-| `pass_oe_model` | double | Pass-rate over model expectation for the play, 100 * (is_pass - p_pass). |
+| `game_id` | String | nflverse game identifier (Utf8 join key). |
+| `play_id` | Int64 | nflverse play identifier within the game (Int64 join key). |
+| `season` | Int64 | Season of the play. |
+| `week` | Int64 | Week of the play. |
+| `posteam` | String | Offense (possession) team abbreviation. |
+| `p_inside_run` | Float64 | Predicted probability of an inside run (guard/center gap or middle). |
+| `p_outside_run` | Float64 | Predicted probability of an outside run (end/tackle or off-middle). |
+| `p_short_pass` | Float64 | Predicted probability of a short pass. |
+| `p_deep_pass` | Float64 | Predicted probability of a deep pass. |
+| `p_scramble` | Float64 | Predicted probability of a QB scramble. |
+| `p_pass` | Float64 | Predicted pass probability (short + deep + scramble family sum). |
+| `pred_family` | String | Argmax family among the five class probabilities. |
+| `pass_oe_model` | Float64 | Pass-rate over model expectation for the play, 100 * (is_pass - p_pass). |
 
 **Example**
 
@@ -265,17 +265,17 @@ Per `(season, posteam)`: `plays`, `mean_p_pass`, `pass_rate`, `proe` (`100 * (pa
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season of the aggregate. |
-| `posteam` | character | Offense team abbreviation. |
-| `plays` | integer | Offensive run/pass plays scored. |
-| `mean_p_pass` | double | Mean model pass probability across the team's plays. |
-| `pass_rate` | double | Actual pass rate (scrambles count as passes). |
-| `proe` | double | Pass rate over expected, 100 * (pass_rate - mean_p_pass). |
-| `share_inside_run` | double | Share of plays labeled inside_run. |
-| `share_outside_run` | double | Share of plays labeled outside_run. |
-| `share_short_pass` | double | Share of plays labeled short_pass. |
-| `share_deep_pass` | double | Share of plays labeled deep_pass. |
-| `share_scramble` | double | Share of plays labeled scramble. |
+| `season` | Int64 | Season of the aggregate. |
+| `posteam` | String | Offense team abbreviation. |
+| `plays` | Int64 | Offensive run/pass plays scored. |
+| `mean_p_pass` | Float64 | Mean model pass probability across the team's plays. |
+| `pass_rate` | Float64 | Actual pass rate (scrambles count as passes). |
+| `proe` | Float64 | Pass rate over expected, 100 * (pass_rate - mean_p_pass). |
+| `share_inside_run` | Float64 | Share of plays labeled inside_run. |
+| `share_outside_run` | Float64 | Share of plays labeled outside_run. |
+| `share_short_pass` | Float64 | Share of plays labeled short_pass. |
+| `share_deep_pass` | Float64 | Share of plays labeled deep_pass. |
+| `share_scramble` | Float64 | Share of plays labeled scramble. |
 
 **Example**
 
@@ -322,18 +322,18 @@ One row per (player-game, stat): `season` / `week` (Int64), `game_id` / `player_
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season the projection belongs to. |
-| `week` | integer | Week of the projected game; only weeks strictly before it feed the projection. |
-| `game_id` | character | Game identifier from the schedule (nflverse id, e.g. "2023_06_DET_TB"). |
-| `player_id` | character | nflverse GSIS player identifier (character join key). |
-| `position` | character | Player position (QB, RB, WR, TE) selecting the projected stat family. |
-| `team_id` | character | Player's team nflverse abbreviation as of the projection week. |
-| `opp_team_id` | character | Opponent team nflverse abbreviation (drives the matchup multiplier). |
-| `stat` | character | Projected stat name (passing_yards for QB, rushing_yards for RB, receiving_yards for WR/TE). |
-| `proj_mean` | double | Projected stat mean - EB-shrunk usage x efficiency x opponent matchup x game-script. |
-| `proj_sd` | double | Residual standard deviation for the stat family (fitted on the 2023 as-of backtest). |
-| `line` | double | Market prop line joined from the caller-supplied lines frame (e.g. espn_nfl_game_propbets); null when no line is available. |
-| `p_over` | double | Probability the player exceeds `line`, 1 - Phi((line - proj_mean) / proj_sd); null without a line. |
+| `season` | Int64 | Season the projection belongs to. |
+| `week` | Int64 | Week of the projected game; only weeks strictly before it feed the projection. |
+| `game_id` | String | Game identifier from the schedule (nflverse id, e.g. "2023_06_DET_TB"). |
+| `player_id` | String | nflverse GSIS player identifier (character join key). |
+| `position` | String | Player position (QB, RB, WR, TE) selecting the projected stat family. |
+| `team_id` | String | Player's team nflverse abbreviation as of the projection week. |
+| `opp_team_id` | String | Opponent team nflverse abbreviation (drives the matchup multiplier). |
+| `stat` | String | Projected stat name (passing_yards for QB, rushing_yards for RB, receiving_yards for WR/TE). |
+| `proj_mean` | Float64 | Projected stat mean - EB-shrunk usage x efficiency x opponent matchup x game-script. |
+| `proj_sd` | Float64 | Residual standard deviation for the stat family (fitted on the 2023 as-of backtest). |
+| `line` | Float64 | Market prop line joined from the caller-supplied lines frame (e.g. espn_nfl_game_propbets); null when no line is available. |
+| `p_over` | Float64 | Probability the player exceeds `line`, 1 - Phi((line - proj_mean) / proj_sd); null without a line. |
 
 **Example**
 
@@ -375,14 +375,14 @@ One row per input game: `game_id` / `home_team_id` / `away_team_id` (Utf8), `neu
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Game identifier carried through from the input schedule. |
-| `home_team_id` | character | Home team nflverse abbreviation (character; the ratings `team_id` join key). |
-| `away_team_id` | character | Away team nflverse abbreviation (character; the ratings `team_id` join key). |
-| `neutral_site` | logical | Whether the game is at a neutral site (home-field advantage is dropped when true). |
-| `exp_margin` | double | Expected home scoring margin in points (points_per_net * net rating differential + the fitted home-field advantage on non-neutral fields). |
-| `home_win_prob` | double | Home win probability, Phi(exp_margin / margin_sd) under a Gaussian margin model. |
-| `exp_total` | double | Expected combined point total (avg_total + total_scale * the four-way efficiency matchup sum). |
-| `market_edge` | double | Display-only native-minus-market spread edge (exp_margin - close_spread_home); null when no odds frame is supplied. |
+| `game_id` | String | Game identifier carried through from the input schedule. |
+| `home_team_id` | String | Home team nflverse abbreviation (character; the ratings `team_id` join key). |
+| `away_team_id` | String | Away team nflverse abbreviation (character; the ratings `team_id` join key). |
+| `neutral_site` | Boolean | Whether the game is at a neutral site (home-field advantage is dropped when true). |
+| `exp_margin` | Float64 | Expected home scoring margin in points (points_per_net * net rating differential + the fitted home-field advantage on non-neutral fields). |
+| `home_win_prob` | Float64 | Home win probability, Phi(exp_margin / margin_sd) under a Gaussian margin model. |
+| `exp_total` | Float64 | Expected combined point total (avg_total + total_scale * the four-way efficiency matchup sum). |
+| `market_edge` | Float64 | Display-only native-minus-market spread edge (exp_margin - close_spread_home); null when no odds frame is supplied. |
 
 **Raises**
 
@@ -427,14 +427,14 @@ Per `(season, punter_player_id)`: `punts`, `gross_avg`, `net_avg`, `exp_net_avg`
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season of the aggregate. |
-| `punter_player_id` | character | nflverse punter GSIS id (Utf8 join key). |
-| `punts` | integer | Punts with a recorded kick distance. |
-| `gross_avg` | double | Mean gross punt distance (yards). |
-| `net_avg` | double | Mean net distance, kick_distance - return_yards - 20 * touchback. |
-| `exp_net_avg` | double | Mean expected net from the shipped punt landing distribution at each punt's line of scrimmage. |
-| `net_over_expected` | double | net_avg minus exp_net_avg (yards of field position per punt over expectation). |
-| `epa` | double | Total EPA on the punter's punt plays (kicking-team perspective). |
+| `season` | Int64 | Season of the aggregate. |
+| `punter_player_id` | String | nflverse punter GSIS id (Utf8 join key). |
+| `punts` | Int64 | Punts with a recorded kick distance. |
+| `gross_avg` | Float64 | Mean gross punt distance (yards). |
+| `net_avg` | Float64 | Mean net distance, kick_distance - return_yards - 20 * touchback. |
+| `exp_net_avg` | Float64 | Mean expected net from the shipped punt landing distribution at each punt's line of scrimmage. |
+| `net_over_expected` | Float64 | net_avg minus exp_net_avg (yards of field position per punt over expectation). |
+| `epa` | Float64 | Total EPA on the punter's punt plays (kicking-team perspective). |
 
 **Example**
 
@@ -472,30 +472,30 @@ A standings frame with one row per (sim/season, team) including records, `win_pc
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season identifier from the input games frame (named `sim` instead when the input used a `sim` column). |
-| `conf` | character | Conference of the team (AFC or NFC). |
-| `division` | character | Division of the team (e.g. "AFC East"). |
-| `team` | character | Team abbreviation. |
-| `games` | integer | Number of regular season games played. |
-| `wins` | double | Regular season wins with ties counted as half a win. |
-| `true_wins` | integer | Regular season wins excluding ties (outright wins only). |
-| `losses` | integer | Regular season losses. |
-| `ties` | integer | Regular season ties. |
-| `pf` | integer | Points scored across regular season games (points for); present only when the input carries home_score and away_score. |
-| `pa` | integer | Points allowed across regular season games (points against); present only when the input carries scores. |
-| `pd` | integer | Regular season point differential (pf minus pa); present only when the input carries scores. |
-| `win_pct` | double | Regular season win percentage with ties counted as half a win. |
-| `div_pct` | double | Win percentage in games against division opponents (0 when the team played no division games). |
-| `conf_pct` | double | Win percentage in games against conference opponents (0 when the team played no conference games). |
-| `sov` | double | Strength of victory - combined win percentage of all opponents the team defeated (0 for winless teams). |
-| `sos` | double | Strength of schedule - combined win percentage of all opponents the team faced. |
-| `div_rank` | integer | Rank within the division (1-4) after applying the NFL division tiebreaking procedures. |
-| `div_tie_broken_by` | character | Tiebreaker step that resolved the team's division rank (e.g. "Head-To-Head Win PCT (2)" or "Coin Toss"); null when the rank needed no tiebreaker. |
-| `conf_rank` | integer | Conference rank, i.e. the playoff seed, after applying the NFL conference tiebreaking procedures; null beyond `playoff_seeds` when that argument is set. |
-| `conf_tie_broken_by` | character | Tiebreaker step that resolved the team's conference rank; null when the rank needed no tiebreaker. |
-| `exit` | character | Round of the team's final game - REG, WC, DIV, CON, SB, or SB_WIN for the Super Bowl winner (returned with ranks="DRAFT"). |
-| `draft_rank` | integer | Draft pick position (1 = first overall pick) derived from postseason exit, win percentage, SOS and the draft tiebreaking procedures (returned with ranks="DRAFT"). |
-| `draft_tie_broken_by` | character | Tiebreaker step that resolved the team's draft rank; null when the rank needed no tiebreaker. |
+| `season` | Int64 | Season identifier from the input games frame (named `sim` instead when the input used a `sim` column). |
+| `conf` | String | Conference of the team (AFC or NFC). |
+| `division` | String | Division of the team (e.g. "AFC East"). |
+| `team` | String | Team abbreviation. |
+| `games` | Int64 | Number of regular season games played. |
+| `wins` | Float64 | Regular season wins with ties counted as half a win. |
+| `true_wins` | Int64 | Regular season wins excluding ties (outright wins only). |
+| `losses` | Int64 | Regular season losses. |
+| `ties` | Int64 | Regular season ties. |
+| `pf` | Int64 | Points scored across regular season games (points for); present only when the input carries home_score and away_score. |
+| `pa` | Int64 | Points allowed across regular season games (points against); present only when the input carries scores. |
+| `pd` | Int64 | Regular season point differential (pf minus pa); present only when the input carries scores. |
+| `win_pct` | Float64 | Regular season win percentage with ties counted as half a win. |
+| `div_pct` | Float64 | Win percentage in games against division opponents (0 when the team played no division games). |
+| `conf_pct` | Float64 | Win percentage in games against conference opponents (0 when the team played no conference games). |
+| `sov` | Float64 | Strength of victory - combined win percentage of all opponents the team defeated (0 for winless teams). |
+| `sos` | Float64 | Strength of schedule - combined win percentage of all opponents the team faced. |
+| `div_rank` | Int64 | Rank within the division (1-4) after applying the NFL division tiebreaking procedures. |
+| `div_tie_broken_by` | String | Tiebreaker step that resolved the team's division rank (e.g. "Head-To-Head Win PCT (2)" or "Coin Toss"); null when the rank needed no tiebreaker. |
+| `conf_rank` | Int64 | Conference rank, i.e. the playoff seed, after applying the NFL conference tiebreaking procedures; null beyond `playoff_seeds` when that argument is set. |
+| `conf_tie_broken_by` | String | Tiebreaker step that resolved the team's conference rank; null when the rank needed no tiebreaker. |
+| `exit` | String | Round of the team's final game - REG, WC, DIV, CON, SB, or SB_WIN for the Super Bowl winner (returned with ranks="DRAFT"). |
+| `draft_rank` | Int64 | Draft pick position (1 = first overall pick) derived from postseason exit, win percentage, SOS and the draft tiebreaking procedures (returned with ranks="DRAFT"). |
+| `draft_tie_broken_by` | String | Tiebreaker step that resolved the team's draft rank; null when the rank needed no tiebreaker. |
 
 **Raises**
 
@@ -547,12 +547,12 @@ Per `(season, team, unit)`: `plays`, `epa`, `epa_per_play`. Empty seasons yield 
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season of the aggregate. |
-| `team` | character | Team abbreviation. |
-| `unit` | character | Special-teams unit (punt, punt_return, kickoff, kickoff_return, field_goal, extra_point). |
-| `plays` | integer | Plays credited to the unit. |
-| `epa` | double | Total EPA credited to the unit (kicking team carries the play EPA signed to it; the return team carries its negation). |
-| `epa_per_play` | double | EPA per play for the unit. |
+| `season` | Int64 | Season of the aggregate. |
+| `team` | String | Team abbreviation. |
+| `unit` | String | Special-teams unit (punt, punt_return, kickoff, kickoff_return, field_goal, extra_point). |
+| `plays` | Int64 | Plays credited to the unit. |
+| `epa` | Float64 | Total EPA credited to the unit (kicking team carries the play EPA signed to it; the return team carries its negation). |
+| `epa_per_play` | Float64 | EPA per play for the unit. |
 
 **Example**
 
@@ -585,27 +585,27 @@ Keys + `PLAYCALL_FEATURE_ORDER` columns + `family` + `is_pass`. Personnel column
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | nflverse game identifier (Utf8 join key). |
-| `play_id` | integer | nflverse play identifier within the game (Int64 join key). |
-| `season` | integer | Season of the play. |
-| `week` | integer | Week of the play. |
-| `posteam` | character | Offense (possession) team abbreviation. |
-| `down` | double | Down (1-4) at the snap. |
-| `ydstogo` | double | Yards to go for a first down. |
-| `yardline_100` | double | Yards from the opponent end zone at the snap. |
-| `score_differential` | double | Offense score minus defense score at the snap. |
-| `half_seconds_remaining` | double | Seconds remaining in the half. |
-| `game_seconds_remaining` | double | Seconds remaining in the game. |
-| `wp` | double | Start-of-play win probability for the offense. |
-| `shotgun` | double | 1 when the offense lined up in shotgun. |
-| `no_huddle` | double | 1 when the play was run without a huddle. |
-| `xpass` | double | Shipped nflfastR-parity expected-dropback probability for the play. |
-| `n_rb` | double | Running backs in the offensive personnel grouping (null without participation data). |
-| `n_te` | double | Tight ends in the offensive personnel grouping (null without participation data). |
-| `n_wr` | double | Wide receivers in the offensive personnel grouping (null without participation data). |
-| `has_participation` | integer | 1 when a participation row matched the play, else 0. |
-| `family` | character | 5-class play-call label (inside_run, outside_run, short_pass, deep_pass, scramble). |
-| `is_pass` | integer | 1 when the play was a pass (including scrambles), else 0. |
+| `game_id` | String | nflverse game identifier (Utf8 join key). |
+| `play_id` | Int64 | nflverse play identifier within the game (Int64 join key). |
+| `season` | Int64 | Season of the play. |
+| `week` | Int64 | Week of the play. |
+| `posteam` | String | Offense (possession) team abbreviation. |
+| `down` | Float64 | Down (1-4) at the snap. |
+| `ydstogo` | Float64 | Yards to go for a first down. |
+| `yardline_100` | Float64 | Yards from the opponent end zone at the snap. |
+| `score_differential` | Float64 | Offense score minus defense score at the snap. |
+| `half_seconds_remaining` | Float64 | Seconds remaining in the half. |
+| `game_seconds_remaining` | Float64 | Seconds remaining in the game. |
+| `wp` | Float64 | Start-of-play win probability for the offense. |
+| `shotgun` | Float64 | 1 when the offense lined up in shotgun. |
+| `no_huddle` | Float64 | 1 when the play was run without a huddle. |
+| `xpass` | Float64 | Shipped nflfastR-parity expected-dropback probability for the play. |
+| `n_rb` | Float64 | Running backs in the offensive personnel grouping (null without participation data). |
+| `n_te` | Float64 | Tight ends in the offensive personnel grouping (null without participation data). |
+| `n_wr` | Float64 | Wide receivers in the offensive personnel grouping (null without participation data). |
+| `has_participation` | Int64 | 1 when a participation row matched the play, else 0. |
+| `family` | String | 5-class play-call label (inside_run, outside_run, short_pass, deep_pass, scramble). |
+| `is_pass` | Int64 | 1 when the play was a pass (including scrambles), else 0. |
 
 **Example**
 
@@ -644,19 +644,19 @@ One row per `player_id` (Utf8) whose position has a prior table: `position` / `t
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `position` | character | Primary position as reported by NFL.com |
-| `team_id` | character |  |
-| `games` | integer | Games played in career |
-| `exp_attempts` | double |  |
-| `exp_carries` | double |  |
-| `exp_targets` | double |  |
-| `ypa` | double |  |
-| `ypc` | double |  |
-| `ypt` | double |  |
-| `pass_td_rate` | double |  |
-| `rush_td_rate` | double |  |
-| `rec_td_rate` | double |  |
+| `player_id` | String | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
+| `position` | String | Primary position as reported by NFL.com |
+| `team_id` | String |  |
+| `games` | Int64 | Games played in career |
+| `exp_attempts` | Float64 |  |
+| `exp_carries` | Float64 |  |
+| `exp_targets` | Float64 |  |
+| `ypa` | Float64 |  |
+| `ypc` | Float64 |  |
+| `ypt` | Float64 |  |
+| `pass_td_rate` | Float64 |  |
+| `rush_td_rate` | Float64 |  |
+| `rec_td_rate` | Float64 |  |
 
 **Example**
 
@@ -755,16 +755,16 @@ One row per `(game_id, season, week, posteam)` with `off_plays`, `sec_per_play`,
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | nflverse game identifier (Utf8 join key). |
-| `season` | integer | Season of the game. |
-| `week` | integer | Week of the game. |
-| `posteam` | character | Offense team abbreviation. |
-| `off_plays` | integer | Offensive plays in the game (kneels, spikes and no_plays excluded). |
-| `sec_per_play` | double | Mean over the team's drives of elapsed game clock divided by drive plays. |
-| `neutral_plays` | integer | Offensive plays in neutral situations (wp in [0.2, 0.8], over 2 minutes left in the half). |
-| `neutral_sec_per_play` | double | sec_per_play computed on neutral-situation plays only. |
-| `proe` | double | Mean pass_oe over the team's dropbacks in the game (percentage points). |
-| `dropbacks` | integer | Dropbacks with a non-null pass_oe (the proe denominator). |
+| `game_id` | String | nflverse game identifier (Utf8 join key). |
+| `season` | Int64 | Season of the game. |
+| `week` | Int64 | Week of the game. |
+| `posteam` | String | Offense team abbreviation. |
+| `off_plays` | Int64 | Offensive plays in the game (kneels, spikes and no_plays excluded). |
+| `sec_per_play` | Float64 | Mean over the team's drives of elapsed game clock divided by drive plays. |
+| `neutral_plays` | Int64 | Offensive plays in neutral situations (wp in [0.2, 0.8], over 2 minutes left in the half). |
+| `neutral_sec_per_play` | Float64 | sec_per_play computed on neutral-situation plays only. |
+| `proe` | Float64 | Mean pass_oe over the team's dropbacks in the game (percentage points). |
+| `dropbacks` | Int64 | Dropbacks with a non-null pass_oe (the proe denominator). |
 
 **Example**
 

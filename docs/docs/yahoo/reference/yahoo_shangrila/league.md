@@ -1,11 +1,11 @@
 ---
-title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — League"
+title: "Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — League"
 sidebar_label: "League"
 sidebar_position: 4
-description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — League — function reference in sdv-py, the SportsDataverse Python package."
+description: "Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — League — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — League
+# Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — League
 
 ## yahoo_league_conferences
 
@@ -26,8 +26,8 @@ Yahoo shangrila persisted query `leagueConferences` -> one row per `leagues` ent
 
 | col_name | type | description |
 |---|---|---|
-| `short_name` | character |  |
-| `conferences` | character | JSON-encoded list of the league's conference nodes, each carrying an id, a name and its member teams. |
+| `short_name` | String |  |
+| `conferences` | String | JSON-encoded list of the league's conference nodes, each carrying an id, a name and its member teams. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -66,23 +66,23 @@ Yahoo shangrila persisted query `leagueFiltersData` -> one row per `leagues` ent
 
 | col_name | type | description |
 |---|---|---|
-| `sport_sport_id` | character | Yahoo identifier of the sport the league belongs to. |
-| `sport_name` | character |  |
-| `short_name` | character |  |
-| `full_name` | character |  |
-| `name` | character |  |
-| `current_league_day` | character | Calendar date the league's live scoreboard is anchored on, in YYYY-MM-DD form. |
-| `teams` | character |  |
-| `current_week` | integer | Week number within the league's current season phase, counting from 1. |
-| `current_season_phase` | character | Phase of the season currently in effect (e.g., "season.phase.season", "season.phase.offseason"). |
-| `current_game_season_phase` | character | Season phase of the games the league feed is currently serving. |
-| `current_season` | integer | Season the league is currently playing, as the four-digit starting year. |
-| `current_league_season` | character | Yahoo league-season identifier for the season currently in progress. |
-| `league_seasons` | character | JSON-encoded list of the seasons for which Yahoo carries data for this league. |
-| `league_weeks` | character | JSON-encoded list of the league's week nodes for the season. |
-| `current_season_league_weeks` | character | JSON-encoded list of the week nodes making up the current league season. |
-| `divisions` | character | JSON-encoded list of the league's division nodes, each carrying its member conferences and teams. |
-| `conferences` | character | JSON-encoded list of the league's conference nodes, each carrying an id, a name and its member teams. |
+| `sport_sport_id` | String | Yahoo identifier of the sport the league belongs to. |
+| `sport_name` | String |  |
+| `short_name` | String |  |
+| `full_name` | String |  |
+| `name` | String |  |
+| `current_league_day` | String | Calendar date the league's live scoreboard is anchored on, in YYYY-MM-DD form. |
+| `teams` | String |  |
+| `current_week` | Int64 | Week number within the league's current season phase, counting from 1. |
+| `current_season_phase` | String | Phase of the season currently in effect (e.g., "season.phase.season", "season.phase.offseason"). |
+| `current_game_season_phase` | String | Season phase of the games the league feed is currently serving. |
+| `current_season` | Int64 | Season the league is currently playing, as the four-digit starting year. |
+| `current_league_season` | String | Yahoo league-season identifier for the season currently in progress. |
+| `league_seasons` | String | JSON-encoded list of the seasons for which Yahoo carries data for this league. |
+| `league_weeks` | String | JSON-encoded list of the league's week nodes for the season. |
+| `current_season_league_weeks` | String | JSON-encoded list of the week nodes making up the current league season. |
+| `divisions` | String | JSON-encoded list of the league's division nodes, each carrying its member conferences and teams. |
+| `conferences` | String | JSON-encoded list of the league's conference nodes, each carrying an id, a name and its member teams. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -119,8 +119,8 @@ Yahoo shangrila persisted query `leagueFutureOdds` -> one row per `leagues` entr
 
 | col_name | type | description |
 |---|---|---|
-| `bets` | character | JSON-encoded list of the betting markets offered on the event (spread, moneyline and total). |
-| `league` | character |  |
+| `bets` | String | JSON-encoded list of the betting markets offered on the event (spread, moneyline and total). |
+| `league` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -167,10 +167,10 @@ Yahoo shangrila persisted query `leagueGameIds` -> one row per `leagues` entry
 
 | col_name | type | description |
 |---|---|---|
-| `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
-| `alias_navigation_links` | character | JSON-encoded map of navigation links (scores, standings, teams) hanging off the entity's Yahoo alias. |
-| `current_week` | integer | Week number within the league's current season phase, counting from 1. |
-| `games` | character |  |
+| `alias_url` | String | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
+| `alias_navigation_links` | String | JSON-encoded map of navigation links (scores, standings, teams) hanging off the entity's Yahoo alias. |
+| `current_week` | Int64 | Week number within the league's current season phase, counting from 1. |
+| `games` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -217,13 +217,13 @@ Yahoo shangrila persisted query `leagueGameIdsByDate` -> one row per `leagues` e
 
 | col_name | type | description |
 |---|---|---|
-| `display_short` | character | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
-| `full_name` | character |  |
-| `name` | character |  |
-| `current_week` | integer | Week number within the league's current season phase, counting from 1. |
-| `current_game_season_phase` | character | Season phase of the games the league feed is currently serving. |
-| `current_league_season` | character | Yahoo league-season identifier for the season currently in progress. |
-| `games` | character |  |
+| `display_short` | String | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
+| `full_name` | String |  |
+| `name` | String |  |
+| `current_week` | Int64 | Week number within the league's current season phase, counting from 1. |
+| `current_game_season_phase` | String | Season phase of the games the league feed is currently serving. |
+| `current_league_season` | String | Yahoo league-season identifier for the season currently in progress. |
+| `games` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -292,10 +292,10 @@ Yahoo shangrila persisted query `leagueInfo` -> one row per `leagues` entry
 
 | col_name | type | description |
 |---|---|---|
-| `display_short` | character | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
-| `name` | character |  |
-| `full_name` | character |  |
-| `short_name` | character |  |
+| `display_short` | String | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
+| `name` | String |  |
+| `full_name` | String |  |
+| `short_name` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -331,17 +331,17 @@ Yahoo shangrila persisted query `leagueInjuries` -> one row per `leagues.teams` 
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character |  |
-| `nickname` | character |  |
-| `full_name` | character |  |
-| `location` | character |  |
-| `display_name` | character |  |
-| `primary_color` | character |  |
-| `abbreviation` | character |  |
-| `alias` | character | JSON-encoded Yahoo alias object for the entity, carrying the site URL, path and subpage routing used to build links to its page. |
-| `team_logo_white` | character | JSON-encoded image node for the team's white knockout logo. |
-| `team_logo` | character |  |
-| `players` | character |  |
+| `team_id` | String |  |
+| `nickname` | String |  |
+| `full_name` | String |  |
+| `location` | String |  |
+| `display_name` | String |  |
+| `primary_color` | String |  |
+| `abbreviation` | String |  |
+| `alias` | String | JSON-encoded Yahoo alias object for the entity, carrying the site URL, path and subpage routing used to build links to its page. |
+| `team_logo_white` | String | JSON-encoded image node for the team's white knockout logo. |
+| `team_logo` | String |  |
+| `players` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -377,17 +377,17 @@ Yahoo shangrila persisted query `leagueNames` -> one row per `leagues` entry
 
 | col_name | type | description |
 |---|---|---|
-| `league_id` | integer |  |
-| `short_name` | character |  |
-| `full_name` | character |  |
-| `name` | character |  |
-| `display_short` | character | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
-| `display_abbr` | character | Compact league abbreviation used in dense UI (e.g., "NCAAF"). |
-| `current_season` | integer | Season the league is currently playing, as the four-digit starting year. |
-| `league_seasons` | character | JSON-encoded list of the seasons for which Yahoo carries data for this league. |
-| `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
-| `alias_path` | character | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
-| `alias_subpages` | character | JSON-encoded list of subpage aliases (roster, schedule, stats) available beneath the entity's Yahoo page. |
+| `league_id` | Int64 |  |
+| `short_name` | String |  |
+| `full_name` | String |  |
+| `name` | String |  |
+| `display_short` | String | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
+| `display_abbr` | String | Compact league abbreviation used in dense UI (e.g., "NCAAF"). |
+| `current_season` | Int64 | Season the league is currently playing, as the four-digit starting year. |
+| `league_seasons` | String | JSON-encoded list of the seasons for which Yahoo carries data for this league. |
+| `alias_url` | String | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
+| `alias_path` | String | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
+| `alias_subpages` | String | JSON-encoded list of subpage aliases (roster, schedule, stats) available beneath the entity's Yahoo page. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -457,12 +457,12 @@ Yahoo shangrila persisted query `leagueStandings` -> one row per `leagues` entry
 
 | col_name | type | description |
 |---|---|---|
-| `sport_name` | character |  |
-| `current_season_phase` | character | Phase of the season currently in effect (e.g., "season.phase.season", "season.phase.offseason"). |
-| `current_league_season` | character | Yahoo league-season identifier for the season currently in progress. |
-| `divisions` | character | JSON-encoded list of the league's division nodes, each carrying its member conferences and teams. |
-| `teams` | character |  |
-| `conferences` | character | JSON-encoded list of the league's conference nodes, each carrying an id, a name and its member teams. |
+| `sport_name` | String |  |
+| `current_season_phase` | String | Phase of the season currently in effect (e.g., "season.phase.season", "season.phase.offseason"). |
+| `current_league_season` | String | Yahoo league-season identifier for the season currently in progress. |
+| `divisions` | String | JSON-encoded list of the league's division nodes, each carrying its member conferences and teams. |
+| `teams` | String |  |
+| `conferences` | String | JSON-encoded list of the league's conference nodes, each carrying an id, a name and its member teams. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -505,12 +505,12 @@ Yahoo shangrila persisted query `leagueStatsByTeam` -> one row per `leagues` ent
 
 | col_name | type | description |
 |---|---|---|
-| `sport_sport_id` | character | Yahoo identifier of the sport the league belongs to. |
-| `sport_name` | character |  |
-| `short_name` | character |  |
-| `full_name` | character |  |
-| `name` | character |  |
-| `football_stats` | character | JSON-encoded football statistics block returned by the league stats query. |
+| `sport_sport_id` | String | Yahoo identifier of the sport the league belongs to. |
+| `sport_name` | String |  |
+| `short_name` | String |  |
+| `full_name` | String |  |
+| `name` | String |  |
+| `football_stats` | String | JSON-encoded football statistics block returned by the league stats query. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -561,12 +561,12 @@ Yahoo shangrila persisted query `leagueStatsIndividual` -> one row per `leagues`
 
 | col_name | type | description |
 |---|---|---|
-| `sport_sport_id` | character | Yahoo identifier of the sport the league belongs to. |
-| `sport_name` | character |  |
-| `short_name` | character |  |
-| `full_name` | character |  |
-| `name` | character |  |
-| `football_stats` | character | JSON-encoded football statistics block returned by the league stats query. |
+| `sport_sport_id` | String | Yahoo identifier of the sport the league belongs to. |
+| `sport_name` | String |  |
+| `short_name` | String |  |
+| `full_name` | String |  |
+| `name` | String |  |
+| `football_stats` | String | JSON-encoded football statistics block returned by the league stats query. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -646,12 +646,12 @@ Yahoo shangrila persisted query `leagueStatsWeekly` -> one row per `leagues` ent
 
 | col_name | type | description |
 |---|---|---|
-| `sport_sport_id` | character | Yahoo identifier of the sport the league belongs to. |
-| `sport_name` | character |  |
-| `short_name` | character |  |
-| `full_name` | character |  |
-| `name` | character |  |
-| `football_stats` | character | JSON-encoded football statistics block returned by the league stats query. |
+| `sport_sport_id` | String | Yahoo identifier of the sport the league belongs to. |
+| `sport_name` | String |  |
+| `short_name` | String |  |
+| `full_name` | String |  |
+| `name` | String |  |
+| `football_stats` | String | JSON-encoded football statistics block returned by the league stats query. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -689,8 +689,8 @@ Yahoo shangrila persisted query `leagueTeamIds` -> one row per `leagues` entry
 
 | col_name | type | description |
 |---|---|---|
-| `short_name` | character |  |
-| `teams` | character |  |
+| `short_name` | String |  |
+| `teams` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -729,8 +729,8 @@ Yahoo shangrila persisted query `leagueTeams` -> one row per `leagues` entry
 
 | col_name | type | description |
 |---|---|---|
-| `short_name` | character |  |
-| `teams` | character |  |
+| `short_name` | String |  |
+| `teams` | String |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -766,21 +766,21 @@ Yahoo shangrila persisted query `leaguesSeasonStates` -> one row per `leagues` e
 
 | col_name | type | description |
 |---|---|---|
-| `name` | character |  |
-| `short_name` | character |  |
-| `full_name` | character |  |
-| `display_short` | character | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
-| `current_season_phase` | character | Phase of the season currently in effect (e.g., "season.phase.season", "season.phase.offseason"). |
-| `current_week` | integer | Week number within the league's current season phase, counting from 1. |
-| `current_season` | integer | Season the league is currently playing, as the four-digit starting year. |
-| `stats_season` | character | Season the returned statistics cover, as a four-digit year. |
-| `sport_name` | character |  |
-| `league_weeks` | character | JSON-encoded list of the league's week nodes for the season. |
-| `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
-| `alias_navigation_links` | character | JSON-encoded map of navigation links (scores, standings, teams) hanging off the entity's Yahoo alias. |
-| `league_seasons` | character | JSON-encoded list of the seasons for which Yahoo carries data for this league. |
-| `bye_weeks` | character | JSON-encoded list of the week numbers in which the team has no scheduled game. |
-| `divisions` | character | JSON-encoded list of the league's division nodes, each carrying its member conferences and teams. |
+| `name` | String |  |
+| `short_name` | String |  |
+| `full_name` | String |  |
+| `display_short` | String | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
+| `current_season_phase` | String | Phase of the season currently in effect (e.g., "season.phase.season", "season.phase.offseason"). |
+| `current_week` | Int64 | Week number within the league's current season phase, counting from 1. |
+| `current_season` | Int64 | Season the league is currently playing, as the four-digit starting year. |
+| `stats_season` | String | Season the returned statistics cover, as a four-digit year. |
+| `sport_name` | String |  |
+| `league_weeks` | String | JSON-encoded list of the league's week nodes for the season. |
+| `alias_url` | String | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
+| `alias_navigation_links` | String | JSON-encoded map of navigation links (scores, standings, teams) hanging off the entity's Yahoo alias. |
+| `league_seasons` | String | JSON-encoded list of the seasons for which Yahoo carries data for this league. |
+| `bye_weeks` | String | JSON-encoded list of the week numbers in which the team has no scheduled game. |
+| `divisions` | String | JSON-encoded list of the league's division nodes, each carrying its member conferences and teams. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

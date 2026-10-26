@@ -1,5 +1,6 @@
 ---
 title: Other ESPN leagues tutorial
+description: "Spring pro football is back, college diamonds are packed, and NCAA rinks are full."
 sidebar_label: Other ESPN leagues
 sidebar_position: 14
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/15_other_espn_leagues_intro.ipynb
@@ -283,7 +284,7 @@ summary_ufl = safe(
 _keys(summary_ufl)
 ```
 
-    ⏭️  UFL game summary (raw): NoDataError: NoDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/football/ufl/summary?event=401671648
+    ⏭️  UFL game summary (raw): NoDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/football/ufl/summary?event=401671648
 
       Suggestion: Try `find_event(date, league='<league>', home=..., away=...)` to look up a valid event_id.
       (from `sportsdataverse import find_team, find_athlete, find_event`)
@@ -300,7 +301,7 @@ plays_ufl = safe(
 _keys(plays_ufl)
 ```
 
-    ⏭️  UFL game plays (raw): NoDataError: NoDataError: No data found for https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/events/401671648/competitions/401671648/plays?limit=1000
+    ⏭️  UFL game plays (raw): NoDataError: No data found for https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/events/401671648/competitions/4016…
 
       Suggestion: Try `find_event(date, league='<league>', home=..., away=...)` to look up a valid event_id.
       (from `sportsdataverse import find_team, find_athlete, find_event`)
@@ -545,7 +546,7 @@ else:
     'rankings unavailable (only current during the season)'
 ```
 
-    ⏭️  college baseball rankings: NoDataError: NoDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/baseball/college-baseball/rankings
+    ⏭️  college baseball rankings: NoDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/baseball/college-baseball/rankings
 
 
 ### 📅 College baseball: team schedule
@@ -637,7 +638,7 @@ else:
     'rankings unavailable (only current during the season)'
 ```
 
-    ⏭️  college softball rankings: NoDataError: NoDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/rankings
+    ⏭️  college softball rankings: NoDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/rankings
 
 
 ### 🥎 College softball: game summary
@@ -659,7 +660,7 @@ summary_cbs = safe(
 _keys(summary_cbs)
 ```
 
-    ⏭️  college softball game summary (raw): NoDataError: NoDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/summary?event=401581278
+    ⏭️  college softball game summary (raw): NoDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/summary?eve…
 
       Suggestion: Try `find_event(date, league='<league>', home=..., away=...)` to look up a valid event_id.
       (from `sportsdataverse import find_team, find_athlete, find_event`)
@@ -1018,7 +1019,7 @@ else:
     print('roster not loaded — skipping player info example')
 ```
 
-    ⏭️  MCH player info (id=5136656): NoDataError: NoDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/athletes/5136656
+    ⏭️  MCH player info (id=5136656): NoDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/hockey/mens-college-hockey/athletes/5136656
 
       Suggestion: Try `find_athlete(name, league='<league>', team=<team>)` to look up a valid athlete_id.
       (from `sportsdataverse import find_team, find_athlete, find_event`)

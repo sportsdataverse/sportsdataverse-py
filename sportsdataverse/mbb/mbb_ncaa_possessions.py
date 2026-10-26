@@ -27,8 +27,7 @@ the lazy-and-correct choice (verified byte-for-byte against the oracle's
 ``concurrent_event_handler`` test, including the post-game-break singleton
 quirk described below).
 
-**The batching predicates** (``Concurrency.check_for_concurrent_event``,
-``PossessionUtils.scala:71-93``), replicated as :func:`concurrent_event_handler`'s
+**The batching predicates** (``Concurrency.check_for_concurrent_event``), replicated as :func:`concurrent_event_handler`'s
 loop body:
 
 * The very first item of a fresh batch is always accepted (unconditionally
@@ -89,7 +88,7 @@ fragments across clumps and, at each lineup boundary, calls
   ``@dataclass``\\ es (matching the Scala ``case class`` field shape); their
   ``.init()``/constructor defaults build a *fresh* instance per call (same
   aliased-mutable-default rationale as ``ScoreInfo.empty``/
-  ``LineupEventStats.empty`` in Task 5a.1).
+  ``LineupEventStats.empty``).
 * :func:`assign_to_right_lineup` **guards ``clump.lineups`` being empty**
   by returning ``[]`` immediately, rather than porting the Scala's
   ``case Nil => Nil`` pattern-match arm literally into :func:`lineup_balancer`.
@@ -189,8 +188,7 @@ Parser = Callable[[str], Optional[Any]]
 @dataclass
 class ConcurrentClump:
     """A clump of concurrent raw events, together with the lineups that end
-    in that clump (``Concurrency.ConcurrentClump``, ``PossessionUtils.scala
-    :64-69``).
+    in that clump (``Concurrency.ConcurrentClump``).
 
     Args:
         evs: The raw game events in this clump, in chronological order.
@@ -215,7 +213,7 @@ class ConcurrentClump:
 @dataclass
 class PossState:
     """Running state threaded through :func:`calculate_possessions_by_event`
-    (``PossessionUtils.PossState``, ``PossessionUtils.scala:39-49``).
+    (``PossessionUtils.PossState``).
 
     Args:
         team_stats: Accumulated fragment for the team since the last lineup
@@ -232,7 +230,7 @@ class PossState:
 
     @classmethod
     def init(cls) -> "PossState":
-        """A fresh starting state (``PossState.init``, ``:45-48``) -- builds
+        """A fresh starting state (``PossState.init``) -- builds
         new instances per call, matching the mutable-dataclass rationale in
         ``mbb_ncaa_models.py``'s ``.empty()`` factories."""
         return cls(PossCalcFragment(), PossCalcFragment(), ConcurrentClump())
@@ -240,8 +238,7 @@ class PossState:
 
 def lineup_as_raw_clumps(lineup: LineupEvent) -> Iterator[ConcurrentClump]:
     """Turn one lineup's raw events into unprocessed singleton clumps, plus a
-    trailing lineup-boundary marker (``Concurrency.lineup_as_raw_clumps``,
-    ``PossessionUtils.scala:114-120``).
+    trailing lineup-boundary marker (``Concurrency.lineup_as_raw_clumps``).
 
     Args:
         lineup: The lineup event to expand.
@@ -258,15 +255,8 @@ def lineup_as_raw_clumps(lineup: LineupEvent) -> Iterator[ConcurrentClump]:
 def concurrent_event_handler(clumps: Iterable[ConcurrentClump]) -> list[ConcurrentClump]:
     """Batch a stream of singleton/boundary clumps into merged
     concurrent-event clumps (``Concurrency.concurrent_event_handler`` +
-    ``StateUtils.foldLeft``'s clumping machinery, ``PossessionUtils.scala
-    :71-111`` -- see the module docstring for the full batching-predicate
+    ``StateUtils.foldLeft``'s clumping machinery -- see the module docstring for the full batching-predicate
     breakdown and the post-game-break singleton port trap).
-
-    # ponytail: manual accumulate-and-flush loop replacing the generic
-    # Clumper/StateUtils.foldLeft abstraction -- this is the ONE clumper
-    # instantiation in the port, so a reusable abstraction buys nothing.
-    # Lift this back into a small clumper type if a second concurrent-event
-    # family needs the same batching later.
 
     Args:
         clumps: An ordered stream of ``ConcurrentClump``\\ s, each either a
@@ -278,6 +268,12 @@ def concurrent_event_handler(clumps: Iterable[ConcurrentClump]) -> list[Concurre
         The merged clumps, each an in-order concatenation of one batch's
         ``evs``/``lineups``.
     """
+
+    # ponytail: manual accumulate-and-flush loop replacing the generic
+    # Clumper/StateUtils.foldLeft abstraction -- this is the ONE clumper
+    # instantiation in the port, so a reusable abstraction buys nothing.
+    # Lift this back into a small clumper type if a second concurrent-event
+    # family needs the same batching later.
 
     def merge(batch: list[ConcurrentClump]) -> ConcurrentClump:
         evs: list[RawGameEvent] = []
@@ -356,7 +352,7 @@ def count_matching(evs: Iterable[RawGameEvent], side: DirFn, *parsers: Parser) -
 
 def calculate_stats(clump: ConcurrentClump, prev: ConcurrentClump, dir: Direction) -> PossCalcFragment:
     """Calculate one direction's possession-fragment for one merged clump
-    (``PossessionUtils.calculate_stats``, ``PossessionUtils.scala:170-369``).
+    (``PossessionUtils.calculate_stats``).
 
     See the upstream source's inline worked examples (and-one detection,
     technical/flagrant offsetting, the deadball-rebound heuristic) for the
@@ -459,8 +455,7 @@ def calculate_stats(clump: ConcurrentClump, prev: ConcurrentClump, dir: Directio
 
 def calculate_possessions_by_event(raw_events_as_clumps: Iterable[ConcurrentClump]) -> list[LineupEvent]:
     """Drive the batch loop + per-clump scoring over an already-flattened
-    clump stream (``PossessionUtils.calculate_possessions_by_event``,
-    ``PossessionUtils.scala:521-573``).
+    clump stream (``PossessionUtils.calculate_possessions_by_event``).
 
     Args:
         raw_events_as_clumps: The unbatched clump stream, e.g. from
@@ -493,8 +488,7 @@ def calculate_possessions_by_event(raw_events_as_clumps: Iterable[ConcurrentClum
 
 def calculate_possessions(lineup_events: Iterable[LineupEvent]) -> list[LineupEvent]:
     """Top-level entry point: calculate team/opponent possessions for a
-    sequence of lineup events (``PossessionUtils.calculate_possessions``,
-    ``PossessionUtils.scala:371-379``).
+    sequence of lineup events (``PossessionUtils.calculate_possessions``).
 
     Args:
         lineup_events: The lineups to enrich, in chronological order.
@@ -542,8 +536,7 @@ def lineup_balancer(
     prev_clump: ConcurrentClump,
 ) -> list[LineupEvent]:
     """Attribute this clump's possessions to the candidate lineup(s)
-    (``PossessionUtils.assign_to_right_lineup.lineup_balancer``,
-    ``PossessionUtils.scala:429-471``).
+    (``PossessionUtils.assign_to_right_lineup.lineup_balancer``).
 
     A single candidate just receives the whole clump's possessions. Multiple
     candidates (a lineup change landing mid-clump) are split via a greedy
@@ -604,7 +597,7 @@ def lineup_balancer(
 
 def lineup_fixer(lineups: list[LineupEvent]) -> list[LineupEvent]:
     """Clamp obviously-broken possession counts (``PossessionUtils
-    .assign_to_right_lineup.lineup_fixer``, ``PossessionUtils.scala:490-507``).
+    .assign_to_right_lineup.lineup_fixer``).
 
     For both ``team_stats`` and ``opponent_stats`` independently: a lineup
     that scored (``pts > 0``) but was attributed zero-or-fewer possessions
@@ -639,8 +632,7 @@ def assign_to_right_lineup(
     prev_clump: ConcurrentClump,
 ) -> list[LineupEvent]:
     """Assign a clump's possessions to the lineup(s) ending in it
-    (``PossessionUtils.assign_to_right_lineup``, ``PossessionUtils.scala
-    :418-518``).
+    (``PossessionUtils.assign_to_right_lineup``).
 
     Applies the running ``state`` total (accumulated since the last lineup
     boundary) to the *first* ending lineup only, then hands off to

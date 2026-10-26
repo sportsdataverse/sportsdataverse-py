@@ -1,9 +1,9 @@
 ---
-title: SERIEA
-sidebar_label: SERIEA
-description: "sdv-py SERIEA: endpoint references, dataset loaders and parsers for SERIEA in the SportsDataverse Python package."
+title: Serie A
+sidebar_label: Serie A
+description: "sdv-py Serie A: endpoint references, dataset loaders and parsers for Serie A in the SportsDataverse Python package."
 ---
-# SERIEA (`sportsdataverse.soccer.seriea`)
+# Serie A (`sportsdataverse.soccer.seriea`)
 
 ## Data sources
 

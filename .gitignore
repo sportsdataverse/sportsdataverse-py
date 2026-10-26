@@ -74,3 +74,7 @@ tools/codegen/*_column_descriptions.snippet.yaml
 # tools/codegen/_fpi_descriptions.yaml; each is folded in by merge_column_descriptions.py, never committed
 /_*_descs.yaml
 tools/codegen/_fpi_descriptions.yaml
+
+# agent working files (plans, SDD briefs)
+.superpowers/
+docs/superpowers/

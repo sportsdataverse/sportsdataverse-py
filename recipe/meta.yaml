@@ -1,5 +1,5 @@
 {% set name = "sportsdataverse" %}
-{% set version = "0.1.5" %}
+{% set version = "0.2.0b1" %}
 {% set python_min = "3.10" %}
 
 # Conda recipe for the sportsdataverse-py package.
@@ -84,12 +84,13 @@ about:
   license: MIT
   license_family: MIT
   license_file: ../LICENSE
-  summary: Retrieve sports data in Python.
+  summary: Tidy sports data in Python across 100+ leagues.
   description: |
     sportsdataverse-py is the Python sister to the SportsDataverse R packages
     (wehoop, hoopR, cfbfastR, etc.). It provides tidy access to play-by-play,
-    box-score, schedule, and roster data across NFL, NBA, NHL, college
-    football, men's & women's college basketball, and the WNBA.
+    box-score, schedule, roster and model data across the NFL, NBA, WNBA, MLB,
+    NHL, PWHL, college sports, soccer, cricket, and international basketball
+    and hockey.
   doc_url: https://py.sportsdataverse.org/
   dev_url: https://github.com/sportsdataverse/sportsdataverse-py
 

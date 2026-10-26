@@ -56,7 +56,7 @@ class LeagueConstants:
 
     Attributes:
         hfa: Home-court advantage in points (fitted on the as-of-date
-            backtest for the league; see ``dev/nba_prediction/fit_pregame.py``).
+            backtest for the league; see ``tools/models/nba_prediction/fit_pregame.py``).
         margin_sd: Std. dev. of the game-margin residual (fitted jointly
             with ``hfa``; the Brier-minimizing sigma agrees to within a
             documented tolerance).
@@ -78,7 +78,7 @@ class LeagueConstants:
 
 
 # hfa/margin_sd are FITTED per league on their own as-of-date backtest
-# (dev/nba_prediction/fit_pregame.py, 2026-07-08): hfa = mean(actual_margin -
+# (tools/models/nba_prediction/fit_pregame.py, 2026-07-08): hfa = mean(actual_margin -
 # possession-scaled AdjNet diff) over non-neutral games, margin_sd = std of the residual
 # around that fitted hfa (0 for neutral games).
 #   NBA  ("00"): 1162 of 1320 2023-24 games -> hfa 2.184, margin_sd 14.504.

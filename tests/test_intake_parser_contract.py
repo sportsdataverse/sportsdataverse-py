@@ -22,8 +22,8 @@ import polars as pl
 import pytest
 
 PARSERS = [
-    ("sportsdataverse.espn_content.espn_content_parsers", "parse_espn_content"),
-    ("sportsdataverse.thesportsdb.thesportsdb_parsers", "parse_thesportsdb"),
+    ("sportsdataverse.providers.espn_content.espn_content_parsers", "parse_espn_content"),
+    ("sportsdataverse.providers.thesportsdb.thesportsdb_parsers", "parse_thesportsdb"),
     ("sportsdataverse.soccer.openligadb_parsers", "parse_openligadb"),
     ("sportsdataverse.odds.polymarket_parsers", "parse_polymarket"),
     ("sportsdataverse.odds.kalshi_parsers", "parse_kalshi"),

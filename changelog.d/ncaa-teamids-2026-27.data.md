@@ -1,1 +1,0 @@
-- NCAA 2026-27 MBB (365) and WBB (363) team ids added to the bundled `ncaa_teamids_{mbb,wbb}.csv`, captured from stats.ncaa.org's Division I team list, and their 2026-27 rows to the bundled NCAA ↔ ESPN team crosswalks (every team matched; West Florida joins in the ASUN, New Orleans is now LSU New Orleans, Saint Francis left Division I).

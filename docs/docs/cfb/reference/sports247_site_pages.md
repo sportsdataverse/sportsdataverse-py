@@ -1,11 +1,11 @@
 ---
-title: CFB — 247Sports Site Pages (247sports.com)
+title: College football — 247Sports Site Pages (247sports.com)
 sidebar_label: 247Sports Site Pages (247sports.com)
-description: "CFB — 247Sports Site Pages (247sports.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "College football — 247Sports Site Pages (247sports.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 12
 toc_max_heading_level: 2
 ---
-# CFB — 247Sports Site Pages (247sports.com)
+# College football — 247Sports Site Pages (247sports.com)
 
 `sportsdataverse.cfb` — 35 endpoints.
 

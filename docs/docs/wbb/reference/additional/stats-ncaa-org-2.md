@@ -1,10 +1,10 @@
 ---
-title: "WBB — additional Python functions — stats.ncaa.org: enrich_shot–ncaa_wbb"
+title: "Women's college basketball — additional Python functions — stats.ncaa.org: enrich_shot–ncaa_wbb"
 sidebar_label: "stats.ncaa.org: enrich_shot–ncaa_wbb"
 sidebar_position: 3
-description: "WBB — additional Python functions — stats.ncaa.org: enrich_shot–ncaa_wbb — function reference in sdv-py, the SportsDataverse Python package."
+description: "Women's college basketball — additional Python functions — stats.ncaa.org: enrich_shot–ncaa_wbb — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — stats.ncaa.org: enrich_shot–ncaa_wbb
+# Women's college basketball — additional Python functions — stats.ncaa.org: enrich_shot–ncaa_wbb
 
 ### enrich_shot_events_with_pbp {#enrich_shot_events_with_pbp}
 
@@ -12,8 +12,7 @@ description: "WBB — additional Python functions — stats.ncaa.org: enrich_sho
 
 Enrich each shot with its play-by-play event + on-floor lineup
 
-(`PlayByPlayUtils.enrich_shot_events_with_pbp`,
-`PlayByPlayUtils.scala:28-278`).
+(`PlayByPlayUtils.enrich_shot_events_with_pbp`).
 
 Folds over the (time-sorted) shots, threading two iterators (play-by-play
 and lineup) and a small amount of carry-over state. For each shot it:
@@ -28,7 +27,7 @@ and lineup) and a small amount of carry-over state. For each shot it:
 4. attributes an assist (a same-time non-self assist event) and transition
    flag (`"fastbreak"` in the event string), and fills in `lineup_id` /
    `players` / `pts` / `value` / `ast_by` / `is_ast` / `is_trans`
-   -- exactly the fields Task 5e.5's parser left as placeholders.
+   -- exactly the fields the parser left as placeholders.
 
 Shots with no matching play-by-play clump, no matching shot event, or no
 matching lineup are dropped (the Scala logs a `WARN` and discards; the
@@ -63,11 +62,11 @@ enriched = enrich_shot_events_with_pbp(
 
 Fold a lineup's raw events into a counting-stat tree (``protected def
 
-enrich_stats`, `LineupUtils.scala:115-162``). Reuses the Task 5a.3
+enrich_stats``). Reuses the
 concurrent-clump batching (`~sportsdataverse.mbb.mbb_ncaa_possessions
 .lineup_as_raw_clumps` + `~sportsdataverse.mbb.mbb_ncaa_possessions
 .concurrent_event_handler`) rather than duplicating it -- both were
-already public/exported from Task 5a.3.
+already public/exported.
 
 `stats` is deep-copied once up front (see the module docstring's
 "Scala idiom decisions"), so this function never mutates the caller's
@@ -81,8 +80,8 @@ literal (e.g. a shared "empty stats" fixture).
 | `lineup` | `LineupEvent` |  | The lineup whose `raw_game_events` to fold over. |
 | `event_parser` | `PossessionEvent` |  | Selects which side (team/opponent) is "attacking". |
 | `stats` | `LineupEventStats` |  | The starting stat tree (not mutated -- see above). |
-| `player_filter_coder` | `Optional[PlayerFilterCoder]` | `None` | Optional `name -> (is_this_player, code)` predicate/coder, for per-player scoping (Task 5c.4). |
-| `player_index` | `int` | `-1` | Lineup-slot index for `~sportsdataverse.mbb .mbb_ncaa_models.PlayerShotInfo` tuples (Task 5c.4; `-1` for team-level calls, the only value exercised before then). |
+| `player_filter_coder` | `Optional[PlayerFilterCoder]` | `None` | Optional `name -> (is_this_player, code)` predicate/coder, for per-player scoping. |
+| `player_index` | `int` | `-1` | Lineup-slot index for `~sportsdataverse.mbb .mbb_ncaa_models.PlayerShotInfo` tuples (`-1` for team-level calls). |
 
 **Returns**
 
@@ -95,7 +94,7 @@ A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEventStats` with every matchin
 Nudge each event's `min` by a tiny per-index delta so truly
 
 concurrent (identical-`min`) events within a clump don't collapse
-under `==` (`ensure_ev_uniqueness`, `LineupUtils.scala:105-111`).
+under `==` (`ensure_ev_uniqueness`).
 
 **Parameters**
 
@@ -114,8 +113,7 @@ A new `~sportsdataverse.mbb.mbb_ncaa_possessions.ConcurrentClump` with each even
 Resolve the player named in `pbp_event` to a
 
 `~sportsdataverse.mbb.mbb_ncaa_models.PlayerCodeId`
-(`ShotEnrichmentUtils.extract_player_from_ev`,
-`PlayByPlayUtils.scala:613-635`).
+(`ShotEnrichmentUtils.extract_player_from_ev`).
 
 For a shot by the team under analysis (`shot.is_off`) the name is
 tidied against the box score before coding (so a mis-spelled play-by-play
@@ -172,8 +170,7 @@ print(keys["off"], keys["def"])  # off_3p def_3p
 
 JSoup `:matchesOwn(regex)` applied to an already-computed candidate
 
-list, rather than a fresh `root.select(selector)` call (Task 5e.2
-addition; see the module docstring's note on composing this with
+list, rather than a fresh `root.select(selector)` call (see the module docstring's note on composing this with
 `attr_regex_filter`).
 
 Same own-text-only semantics as `select_matching_own` -- JSoup's
@@ -206,7 +203,7 @@ filter_matching_own(candidates, r"[0-9]+")  # [<td style="font-size:36px">92</td
 
 Find the lineup (stint) event on the floor for `shot`
 
-(`ShotEnrichmentUtils.find_lineup`, `PlayByPlayUtils.scala:352-517`).
+(`ShotEnrichmentUtils.find_lineup`).
 
 A recursive state machine over three lists: `curr_lineup` (the current
 candidate), `fallback_lineups` (time-matching lineups whose raw events
@@ -252,14 +249,13 @@ matched, retry = find_lineup(shot, None, [lineup], PeekableIterator([]))
 Trims a clump whose lineups carry TOO MANY players by identifying the
 
 "ghost" player(s) a missing sub-out left behind
-(`LineupErrorAnalysisUtils.find_missing_subs`, `:406-514`).
+(`LineupErrorAnalysisUtils.find_missing_subs`).
 
 Fires only when the clump's first event has `>= 6` on-floor players
-(`:415-416`: `candidates.size < 6` is a no-op). `expected_size_diff`
-(`:419`) is `first_event_player_count - 5` -- the number of ghosts the
+(`candidates.size < 6` is a no-op). `expected_size_diff` is `first_event_player_count - 5` -- the number of ghosts the
 trim should end up removing.
 
-**Phase 1 -- shrink the candidate pool** (`:437-478`). Starting from the
+**Phase 1 -- shrink the candidate pool**. Starting from the
 first event's players, walk the clump chronologically. At each event a
 candidate is *confirmed present* (and dropped from the pool) if it subs
 out (`ev.players_out`, **skipped for the first event** -- `:445`,
@@ -268,13 +264,13 @@ literal port of `clump.evs.headOption.contains(ev)` as value equality
 exactly `index == 0`) or is named in one of the event's team-side raw
 plays (`parse_any_play` -> `~sportsdataverse.mbb.mbb_ncaa_names
 .tidy_player` -> `~sportsdataverse.mbb.mbb_ncaa_stints
-.build_player_code`, `:448-456`; unlike `validate_lineup` this
+.build_player_code`; unlike `validate_lineup` this
 does NOT skip the literal `"team"` token -- ported verbatim).
 `matching_index` is the **FIRST** event index at which the pool size
-first equals `expected_size_diff` (`:475`); once set it freezes -- all
-later events are skipped in phase 1 (`:439-441`).
+first equals `expected_size_diff`; once set it freezes -- all
+later events are skipped in phase 1.
 
-**Accept gate** (`:479-480`): the final pool must be non-empty and no
+**Accept gate**: the final pool must be non-empty and no
 larger than `expected_size_diff`. If `matching_index` never fired
 (the pool jumped past `expected_size_diff` in a single step, or never
 shrank to it), the gate still accepts iff the residual pool is a non-empty
@@ -282,7 +278,7 @@ subset of size `<= expected_size_diff` -- in which case phase 3 routes
 **every** event through the "before match" branch (`index > None` is
 always false). On failure the **original** clump is returned unchanged.
 
-**Phase 3 -- rebuild the events** (`:482-503`, a `scanLeft` ported as
+**Phase 3 -- rebuild the events** (a `scanLeft` ported as
 a manual accumulate loop that drops the seed). For events at/before
 `matching_index` the ghost pool is simply removed from `players`
 (`filterNot`). For events strictly **after** `matching_index`
@@ -322,7 +318,7 @@ fixed, still = find_missing_subs(clump, box_lineup, valid_codes)
 
 Gather every play-by-play shot/assist event sharing `shot_time`
 
-(`ShotEnrichmentUtils.find_pbp_clump`, `PlayByPlayUtils.scala:556-608`).
+(`ShotEnrichmentUtils.find_pbp_clump`).
 
 If `curr_pbp_clump` (carried over from the previous shot) already holds
 events at `shot_time` they are returned as-is; otherwise the iterator is
@@ -360,8 +356,7 @@ clump, nxt = find_pbp_clump(5.0, PeekableIterator([]), [], None)
 
 Pair each of `combos`' three name variants with a shared
 
-player-code override (`DataQualityIssues.fix_combos`,
-`DataQualityIssues.scala:340-346`).
+player-code override (`DataQualityIssues.fix_combos`).
 
 **Parameters**
 
@@ -381,7 +376,7 @@ Three `(name_variant, code_start)` pairs.
 
 Undo a rare NCAA data bug where the scores get transposed
 
-(`fix_possible_score_swap_bug`, `LineupUtils.scala:51-90`).
+(`fix_possible_score_swap_bug`).
 
 If the last lineup's ending score is the exact transpose of the box
 score's ending score, every lineup's `score_info` is un-transposed and
@@ -405,7 +400,7 @@ score's ending score, every lineup's `score_info` is un-transposed and
 
 Converts the descending in-period clock time to an ascending
 
-game-elapsed time (`ShotEventParser.get_ascending_time`, `:531-537`).
+game-elapsed time (`ShotEventParser.get_ascending_time`).
 
 **Parameters**
 
@@ -432,7 +427,7 @@ get_ascending_time(shot_with_min_4, period=1, is_women_game=False)  # 16.0
 
 Gets the boxscore lineup from the HTML page (``BoxscoreParser
 
-.get_box_lineup`, `:122-222``).
+.get_box_lineup``).
 
 **Parameters**
 
@@ -518,8 +513,7 @@ print(get_game_weight(game, "3p", "off"))  # 70.0 (poss fallback)
 
 Extracts the set of neutral/away-marked game dates from a saved NCAA
 
-team-schedule page (`TeamScheduleParser.get_neutral_games`,
-`TeamScheduleParser.scala:63-94`).
+team-schedule page (`TeamScheduleParser.get_neutral_games`).
 
 **Parameters**
 
@@ -584,8 +578,7 @@ print(get_per_game_raw(game, "3p", "off"))  # 0.4
 
 Handy util to return the play-by-play events in chronological order,
 
-used in a few other places (`PlayByPlayParser.get_sorted_pbp_events`,
-`:221-239`).
+used in a few other places (`PlayByPlayParser.get_sorted_pbp_events`).
 
 **Parameters**
 
@@ -651,8 +644,7 @@ print(get_team_raw_from_per_game(team, "3p")["off"])  # 0.4
 
 Extracts `(team, NCAA id, conference)` triples from a saved NCAA
 
-team-list/attendance page (`TeamIdParser.get_team_triples`,
-`TeamIdParser.scala:69-91`).
+team-list/attendance page (`TeamIdParser.get_team_triples`).
 
 **Parameters**
 
@@ -682,7 +674,7 @@ result = get_team_triples("test_attendance_list.html", html, old_format=True)
 
 Gets a player's lowest cross-season NCAA id from a saved player page
 
-(`RosterParser.get_unified_ncaa_id`, `RosterParser.scala:136-152`).
+(`RosterParser.get_unified_ncaa_id`).
 
 Always uses the v1 selector table -- this bonus lookup only exists on
 2018+-era pages.
@@ -711,13 +703,12 @@ get_unified_ncaa_id("player.html", player_page_html)
 
 Fixes the "2-in-1-out then a compensating 1-out" substitution bug
 
-(`LineupErrorAnalysisUtils.handle_common_sub_bug`, `:269-298`).
+(`LineupErrorAnalysisUtils.handle_common_sub_bug`).
 
 Handles a **single-event** bad clump whose next known-good lineup carries
 a lone sub-out that the clump's event should have applied but didn't (e.g.
 `IN: X, Y, Z; OUT: A, B` in the bad event, then `OUT: C` in the good
-one). Fires only when all three guard conditions hold
-(`:275-278`):
+one). Fires only when all three guard conditions hold:
 
 * the bad event has more players subbing IN than OUT
   (`len(players_in) > len(players_out)`),
@@ -725,12 +716,12 @@ one). Fires only when all three guard conditions hold
   otherwise there's no way to tell which of its sub-outs to borrow), and
 * the good event has at least one sub-out (`len(good.players_out) > 0`).
 
-The fix (`:279-283`) removes the good event's sub-outs from the bad
+The fix removes the good event's sub-outs from the bad
 event's on-floor `players` (value-equality `not in` -- the Scala's
 `filterNot(good.players_out.toSet)`) and appends them to the bad
 event's `players_out` (order-preserving `_distinct` -- the Scala's
 `(bad.players_out ++ good.players_out).distinct`). The fix is **accepted
-only if** the result then passes `validate_lineup` (`:284-294`):
+only if** the result then passes `validate_lineup`:
 on success the fixed event is returned as the sole `fixed` lineup and
 the still-to-fix clump is emptied; on failure the *fixed* event (not the
 original) is returned as the still-to-fix clump, keeping the same
@@ -763,8 +754,7 @@ fixed, still = handle_common_sub_bug(clump, box_lineup, valid_codes)
 
 Infer the starting five and reorder the box-score roster so they lead
 
-(`PlayByPlayUtils.inject_starting_lineup_into_box`,
-`PlayByPlayUtils.scala:684-845`).
+(`PlayByPlayUtils.inject_starting_lineup_into_box`).
 
 The v1 (2018+) NCAA box score dropped the ordered list of starters, so we
 reconstruct it from the play-by-play sub sequencing. A player is a starter
@@ -800,8 +790,7 @@ fixed = inject_starting_lineup_into_box(pbp_events, box_lineup, ([], []), 1)
 
 Validates box players against the roster (if available) and any
 
-other available box scores (`BoxscoreParser.inject_validated_players`,
-`:233-279`).
+other available box scores (`BoxscoreParser.inject_validated_players`).
 
 See the module docstring's "un-threaded `tidy_ctx`" note -- every
 fuzzy-resolution call inside the loop uses the SAME original context,
@@ -851,7 +840,7 @@ True when `cached_path` already exists on disk.
 Check for intentional fouling to prolong the game, specifically so it
 
 can be excluded from being counted as a fast break
-(`is_end_of_game_fouling_vs_fastbreak`, `LineupUtils.scala:603-656`).
+(`is_end_of_game_fouling_vs_fastbreak`).
 
 **Parameters**
 
@@ -876,9 +865,7 @@ is_end_of_game_fouling_vs_fastbreak(curr_clump, event_parser)
 
 `is_gen2(ev: 'RawGameEvent') -> 'bool'`
 
-Detect the new/"gen2" NCAA event format (`EventUtils.is_gen2`,
-
-`EventUtils.scala:12-14`).
+Detect the new/"gen2" NCAA event format (`EventUtils.is_gen2`).
 
 **Parameters**
 
@@ -897,7 +884,7 @@ Detect the new/"gen2" NCAA event format (`EventUtils.is_gen2`,
 Figure out if (each event of) the current clump is part of a
 
 "scramble scenario" following an ORB (`is_scramble`, `LineupUtils
-.scala:222-597`).
+.scala`).
 
 Returns a `(predicate, debug_tag)` tuple -- **the tuple shape is
 load-bearing**: the oracle asserts the debug tag string directly
@@ -932,7 +919,7 @@ predicate, tag = is_scramble(curr_clump, prev_clumps, event_parser, player_versi
 Infers which side of the SVG court the team under analysis shoots
 
 towards in the first period, from its own made/missed shot locations
-(`ShotEventParser.is_team_shooting_left_to_start`, `:540-555`).
+(`ShotEventParser.is_team_shooting_left_to_start`).
 
 **Parameters**
 
@@ -957,8 +944,7 @@ is_team_shooting_left_to_start([(1, shot_a), (1, shot_b)])
 
 Figure out if the current clump is part of a transition offense
 
-following opponent offense (or a marked-fastbreak play) (`is_transition`,
-`LineupUtils.scala:668-927`).
+following opponent offense (or a marked-fastbreak play) (`is_transition`).
 
 Returns a `(predicate, debug_tag)` tuple mirroring `is_scramble`
 -- the oracle asserts the debug tag directly (`"N/A"`/`"0a.X"`/
@@ -996,9 +982,9 @@ predicate, tag = is_transition(curr_clump, prev_clumps, event_parser, player_ver
 
 Infers men's vs. women's game from timing evidence
 
-(`ShotEventParser.is_women_game`, `:558-566`). **Shot-parser-specific
+(`ShotEventParser.is_women_game`). **Shot-parser-specific
 variant** -- distinct from the play-by-play parser's own
-`is_women_game` (Task 5e.3), which uses PbP event timing instead of
+`is_women_game`, which uses PbP event timing instead of
 shot timing; the plan's recon flags both as "its OWN is_women_game
 variant" per module.
 
@@ -1094,7 +1080,7 @@ pool = load_proxybonanza_pool("key", "pkg", transport=fake)
 
 Whether the player in `pbp_event` matches `shot`'s shooter
 
-(`ShotEnrichmentUtils.matching_player`, `PlayByPlayUtils.scala:638-652`).
+(`ShotEnrichmentUtils.matching_player`).
 
 **Parameters**
 
@@ -1122,7 +1108,7 @@ matching_player(shot, pbp_event, tidy_ctx, code_match=False)
 
 Team-scoped misspelling map, falling back to the generic map
 
-(`DataQualityIssues.misspellings`, `DataQualityIssues.scala:165-322`
+(`DataQualityIssues.misspellings`
 -- see the module docstring's "fallback semantics" note for why this is
 a precomputed merge, not a runtime two-level lookup).
 
@@ -1175,34 +1161,34 @@ Per-player box rows (or per-player aggregates with `multi_games`).
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `box_id` | character |  |
-| `player` | character | Player name. |
-| `clean_name` | character |  |
-| `team` | character | Team-side label or team identifier. |
-| `mp` | double | Minutes played. |
-| `pts` | double | Points scored. |
-| `orb` | double |  |
-| `drb` | double |  |
-| `trb` | double | Career total rebounds. |
-| `ast` | double | Assists. |
-| `to` | double | To. |
-| `stl` | double | Steals. |
-| `blk` | double | Blocks. |
-| `fga` | double | Field goal attempts. |
-| `fgm` | double | Field goals made. |
-| `fg_pct` | double | Field goal percentage (0-1). |
-| `tpa` | double |  |
-| `tpm` | double |  |
-| `tp_pct` | double |  |
-| `fta` | double | Free throw attempts. |
-| `ftm` | double | Free throws made. |
-| `ft_pct` | double | Free throw percentage (0-1). |
-| `ts_pct` | double | True shooting percentage (0-1). |
-| `efg_pct` | double |  |
-| `fouls` | double | Personal fouls. |
-| `dq` | double |  |
-| `tech` | double |  |
+| `game_id` | String | Unique game identifier. |
+| `box_id` | String |  |
+| `player` | String | Player name. |
+| `clean_name` | String |  |
+| `team` | String | Team-side label or team identifier. |
+| `mp` | Float64 | Minutes played. |
+| `pts` | Float64 | Points scored. |
+| `orb` | Float64 |  |
+| `drb` | Float64 |  |
+| `trb` | Float64 | Career total rebounds. |
+| `ast` | Float64 | Assists. |
+| `to` | Float64 | To. |
+| `stl` | Float64 | Steals. |
+| `blk` | Float64 | Blocks. |
+| `fga` | Float64 | Field goal attempts. |
+| `fgm` | Float64 | Field goals made. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `tpa` | Float64 |  |
+| `tpm` | Float64 |  |
+| `tp_pct` | Float64 |  |
+| `fta` | Float64 | Free throw attempts. |
+| `ftm` | Float64 | Free throws made. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `efg_pct` | Float64 |  |
+| `fouls` | Float64 | Personal fouls. |
+| `dq` | Float64 |  |
+| `tech` | Float64 |  |
 
 **Raises**
 
@@ -1246,20 +1232,20 @@ One row per game — see the MBB sibling for the full `SCOREBOARD_SCHEMA` column
 
 | col_name | type | description |
 |---|---|---|
-| `date` | character | Date in YYYY-MM-DD format. |
-| `start_time` | character |  |
-| `home` | character | Home. |
-| `away` | character | Away record. |
-| `box_id` | character |  |
-| `game_id` | character | Unique game identifier. |
-| `home_score` | character | Home team score at the time of the play. |
-| `away_score` | character | Away team score at the time of the play. |
-| `attendance` | character | Reported attendance. |
-| `neutral_site` | logical | Neutral site. |
-| `home_wins` | integer | Home team's wins. |
-| `home_losses` | integer | Home team's losses. |
-| `away_wins` | integer | Away team's wins. |
-| `away_losses` | integer | Away team's losses. |
+| `date` | String | Date in YYYY-MM-DD format. |
+| `start_time` | String |  |
+| `home` | String | Home. |
+| `away` | String | Away record. |
+| `box_id` | String |  |
+| `game_id` | String | Unique game identifier. |
+| `home_score` | String | Home team score at the time of the play. |
+| `away_score` | String | Away team score at the time of the play. |
+| `attendance` | String | Reported attendance. |
+| `neutral_site` | Boolean | Neutral site. |
+| `home_wins` | Int64 | Home team's wins. |
+| `home_losses` | Int64 | Home team's losses. |
+| `away_wins` | Int64 | Away team's wins. |
+| `away_losses` | Int64 | Away team's losses. |
 
 **Raises**
 
@@ -1299,46 +1285,46 @@ The pbp frame with shot columns attached (unmatched rows NA-filled).
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `home` | character | Home. |
-| `away` | character | Away record. |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `clock` | character | Game clock value. |
-| `game_time` | character | Game start time. |
-| `game_seconds` | integer |  |
-| `home_score` | integer | Home team score at the time of the play. |
-| `away_score` | integer | Away team score at the time of the play. |
-| `event_team` | character |  |
-| `event_description` | character |  |
-| `player_1` | character |  |
-| `player_2` | character |  |
-| `event_type` | character | Event / play type code (V2 PBP). |
-| `event_result` | character |  |
-| `shot_value` | integer | Point value of the shot (2 or 3). |
-| `event_length` | integer |  |
-| `poss_num` | integer |  |
-| `poss_team` | character |  |
-| `poss_length` | integer |  |
-| `is_transition` | logical |  |
-| `home_1` | character |  |
-| `home_2` | character |  |
-| `home_3` | character |  |
-| `home_4` | character |  |
-| `home_5` | character |  |
-| `away_1` | character |  |
-| `away_2` | character |  |
-| `away_3` | character |  |
-| `away_4` | character |  |
-| `away_5` | character |  |
-| `status` | character | Status label. |
-| `is_garbage_time` | logical |  |
-| `sub_deviate` | integer |  |
-| `team` | character | Team-side label or team identifier. |
-| `player` | character | Player name. |
-| `x` | double | X. |
-| `y` | double | Y. |
-| `shot_dist` | double |  |
+| `game_id` | String | Unique game identifier. |
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `home` | String | Home. |
+| `away` | String | Away record. |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `clock` | String | Game clock value. |
+| `game_time` | String | Game start time. |
+| `game_seconds` | Int64 |  |
+| `home_score` | Int64 | Home team score at the time of the play. |
+| `away_score` | Int64 | Away team score at the time of the play. |
+| `event_team` | String |  |
+| `event_description` | String |  |
+| `player_1` | String |  |
+| `player_2` | String |  |
+| `event_type` | String | Event / play type code (V2 PBP). |
+| `event_result` | String |  |
+| `shot_value` | Int64 | Point value of the shot (2 or 3). |
+| `event_length` | Int64 |  |
+| `poss_num` | Int64 |  |
+| `poss_team` | String |  |
+| `poss_length` | Int64 |  |
+| `is_transition` | Boolean |  |
+| `home_1` | String |  |
+| `home_2` | String |  |
+| `home_3` | String |  |
+| `home_4` | String |  |
+| `home_5` | String |  |
+| `away_1` | String |  |
+| `away_2` | String |  |
+| `away_3` | String |  |
+| `away_4` | String |  |
+| `away_5` | String |  |
+| `status` | String | Status label. |
+| `is_garbage_time` | Boolean |  |
+| `sub_deviate` | Int64 |  |
+| `team` | String | Team-side label or team identifier. |
+| `player` | String | Player name. |
+| `x` | Float64 | X. |
+| `y` | Float64 | Y. |
+| `shot_dist` | Float64 |  |
 
 **Example**
 
@@ -1374,121 +1360,121 @@ One row per player+team (+game when `multi_games=False`).
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `home` | character | Home. |
-| `away` | character | Away record. |
-| `team` | character | Team-side label or team identifier. |
-| `player` | character | Player name. |
-| `mins` | double |  |
-| `o_poss` | double |  |
-| `pts` | double | Points scored. |
-| `orb` | double |  |
-| `drb` | double |  |
-| `ast` | double | Assists. |
-| `stl` | double | Steals. |
-| `blk` | double | Blocks. |
-| `tov` | double | Turnovers. |
-| `pf` | double | Personal fouls. |
-| `ts_pct` | double | True shooting percentage (0-1). |
-| `efg_pct` | double |  |
-| `fgm` | double | Field goals made. |
-| `fga` | double | Field goal attempts. |
-| `fg_pct` | double | Field goal percentage (0-1). |
-| `tpm` | double |  |
-| `tpa` | double |  |
-| `tp_pct` | double |  |
-| `ftm` | double | Free throws made. |
-| `fta` | double | Free throw attempts. |
-| `ft_pct` | double | Free throw percentage (0-1). |
-| `rimm` | double |  |
-| `rima` | double |  |
-| `rim_pct` | double |  |
-| `midm` | double |  |
-| `mida` | double |  |
-| `mid_pct` | double |  |
-| `pbackm` | double |  |
-| `pbacka` | double |  |
-| `pback_pct` | double |  |
-| `blk_rim` | double |  |
-| `blk_mid` | double |  |
-| `blk_three` | double |  |
-| `pct_fga_trans` | double |  |
-| `pct_tpa_trans` | double |  |
-| `pct_rima_trans` | double |  |
-| `pct_fgm_trans` | double |  |
-| `pct_tpm_trans` | double |  |
-| `pct_rimm_trans` | double |  |
-| `pct_fgm_ast` | double |  |
-| `pct_tpm_ast` | double |  |
-| `pct_rimm_ast` | double |  |
-| `pts_trans` | double |  |
-| `orb_trans` | double |  |
-| `drb_trans` | double |  |
-| `ast_trans` | double |  |
-| `stl_trans` | double |  |
-| `blk_trans` | double |  |
-| `tov_trans` | double |  |
-| `ts_pct_trans` | double |  |
-| `efg_pct_trans` | double |  |
-| `fgm_trans` | double |  |
-| `fga_trans` | double |  |
-| `fg_pct_trans` | double |  |
-| `tpm_trans` | double |  |
-| `tpa_trans` | double |  |
-| `tp_pct_trans` | double |  |
-| `ftm_trans` | double |  |
-| `fta_trans` | double |  |
-| `ft_pct_trans` | double |  |
-| `rimm_trans` | double |  |
-| `rima_trans` | double |  |
-| `rim_pct_trans` | double |  |
-| `midm_trans` | double |  |
-| `mida_trans` | double |  |
-| `mid_pct_trans` | double |  |
-| `pts_half` | double |  |
-| `orb_half` | double |  |
-| `drb_half` | double |  |
-| `ast_half` | double |  |
-| `stl_half` | double |  |
-| `blk_half` | double |  |
-| `tov_half` | double |  |
-| `ts_pct_half` | double |  |
-| `efg_pct_half` | double |  |
-| `fgm_half` | double |  |
-| `fga_half` | double |  |
-| `fg_pct_half` | double |  |
-| `tpm_half` | double |  |
-| `tpa_half` | double |  |
-| `tp_pct_half` | double |  |
-| `ftm_half` | double |  |
-| `fta_half` | double |  |
-| `ft_pct_half` | double |  |
-| `rimm_half` | double |  |
-| `rima_half` | double |  |
-| `rim_pct_half` | double |  |
-| `midm_half` | double |  |
-| `mida_half` | double |  |
-| `mid_pct_half` | double |  |
-| `pts_ast` | double |  |
-| `fgm_ast` | double |  |
-| `tpm_ast` | double |  |
-| `rimm_ast` | double |  |
-| `midm_ast` | double |  |
-| `pts_unast` | double |  |
-| `efg_pct_unast` | double |  |
-| `fgm_unast` | double |  |
-| `fga_unast` | double |  |
-| `fg_pct_unast` | double |  |
-| `tpm_unast` | double |  |
-| `tpa_unast` | double |  |
-| `tp_pct_unast` | double |  |
-| `rimm_unast` | double |  |
-| `rima_unast` | double |  |
-| `rim_pct_unast` | double |  |
-| `midm_unast` | double |  |
-| `mida_unast` | double |  |
-| `mid_pct_unast` | double |  |
+| `game_id` | String | Unique game identifier. |
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `home` | String | Home. |
+| `away` | String | Away record. |
+| `team` | String | Team-side label or team identifier. |
+| `player` | String | Player name. |
+| `mins` | Float64 |  |
+| `o_poss` | Float64 |  |
+| `pts` | Float64 | Points scored. |
+| `orb` | Float64 |  |
+| `drb` | Float64 |  |
+| `ast` | Float64 | Assists. |
+| `stl` | Float64 | Steals. |
+| `blk` | Float64 | Blocks. |
+| `tov` | Float64 | Turnovers. |
+| `pf` | Float64 | Personal fouls. |
+| `ts_pct` | Float64 | True shooting percentage (0-1). |
+| `efg_pct` | Float64 |  |
+| `fgm` | Float64 | Field goals made. |
+| `fga` | Float64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `tpm` | Float64 |  |
+| `tpa` | Float64 |  |
+| `tp_pct` | Float64 |  |
+| `ftm` | Float64 | Free throws made. |
+| `fta` | Float64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `rimm` | Float64 |  |
+| `rima` | Float64 |  |
+| `rim_pct` | Float64 |  |
+| `midm` | Float64 |  |
+| `mida` | Float64 |  |
+| `mid_pct` | Float64 |  |
+| `pbackm` | Float64 |  |
+| `pbacka` | Float64 |  |
+| `pback_pct` | Float64 |  |
+| `blk_rim` | Float64 |  |
+| `blk_mid` | Float64 |  |
+| `blk_three` | Float64 |  |
+| `pct_fga_trans` | Float64 |  |
+| `pct_tpa_trans` | Float64 |  |
+| `pct_rima_trans` | Float64 |  |
+| `pct_fgm_trans` | Float64 |  |
+| `pct_tpm_trans` | Float64 |  |
+| `pct_rimm_trans` | Float64 |  |
+| `pct_fgm_ast` | Float64 |  |
+| `pct_tpm_ast` | Float64 |  |
+| `pct_rimm_ast` | Float64 |  |
+| `pts_trans` | Float64 |  |
+| `orb_trans` | Float64 |  |
+| `drb_trans` | Float64 |  |
+| `ast_trans` | Float64 |  |
+| `stl_trans` | Float64 |  |
+| `blk_trans` | Float64 |  |
+| `tov_trans` | Float64 |  |
+| `ts_pct_trans` | Float64 |  |
+| `efg_pct_trans` | Float64 |  |
+| `fgm_trans` | Float64 |  |
+| `fga_trans` | Float64 |  |
+| `fg_pct_trans` | Float64 |  |
+| `tpm_trans` | Float64 |  |
+| `tpa_trans` | Float64 |  |
+| `tp_pct_trans` | Float64 |  |
+| `ftm_trans` | Float64 |  |
+| `fta_trans` | Float64 |  |
+| `ft_pct_trans` | Float64 |  |
+| `rimm_trans` | Float64 |  |
+| `rima_trans` | Float64 |  |
+| `rim_pct_trans` | Float64 |  |
+| `midm_trans` | Float64 |  |
+| `mida_trans` | Float64 |  |
+| `mid_pct_trans` | Float64 |  |
+| `pts_half` | Float64 |  |
+| `orb_half` | Float64 |  |
+| `drb_half` | Float64 |  |
+| `ast_half` | Float64 |  |
+| `stl_half` | Float64 |  |
+| `blk_half` | Float64 |  |
+| `tov_half` | Float64 |  |
+| `ts_pct_half` | Float64 |  |
+| `efg_pct_half` | Float64 |  |
+| `fgm_half` | Float64 |  |
+| `fga_half` | Float64 |  |
+| `fg_pct_half` | Float64 |  |
+| `tpm_half` | Float64 |  |
+| `tpa_half` | Float64 |  |
+| `tp_pct_half` | Float64 |  |
+| `ftm_half` | Float64 |  |
+| `fta_half` | Float64 |  |
+| `ft_pct_half` | Float64 |  |
+| `rimm_half` | Float64 |  |
+| `rima_half` | Float64 |  |
+| `rim_pct_half` | Float64 |  |
+| `midm_half` | Float64 |  |
+| `mida_half` | Float64 |  |
+| `mid_pct_half` | Float64 |  |
+| `pts_ast` | Float64 |  |
+| `fgm_ast` | Float64 |  |
+| `tpm_ast` | Float64 |  |
+| `rimm_ast` | Float64 |  |
+| `midm_ast` | Float64 |  |
+| `pts_unast` | Float64 |  |
+| `efg_pct_unast` | Float64 |  |
+| `fgm_unast` | Float64 |  |
+| `fga_unast` | Float64 |  |
+| `fg_pct_unast` | Float64 |  |
+| `tpm_unast` | Float64 |  |
+| `tpa_unast` | Float64 |  |
+| `tp_pct_unast` | Float64 |  |
+| `rimm_unast` | Float64 |  |
+| `rima_unast` | Float64 |  |
+| `rim_pct_unast` | Float64 |  |
+| `midm_unast` | Float64 |  |
+| `mida_unast` | Float64 |  |
+| `mid_pct_unast` | Float64 |  |
 
 **Example**
 
@@ -1524,34 +1510,34 @@ One row per possession.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | stats.ncaa.org game id of the play-by-play page the possession comes from. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `home` | character | Home team's name as the stats.ncaa.org play-by-play page lists it. |
-| `away` | character | Away team's name as the stats.ncaa.org play-by-play page lists it. |
-| `period` | integer | Period number from the stats.ncaa.org page: 1-2 for halves (3+ = overtime), or 1-4 for quarters (5+ = overtime) on a quarters page (women's games from 2015-16). |
-| `poss_num` | integer | Possession number within the game, stamped upstream by the play-by-play chain (parse_ncaa_bb_game_pbp). |
-| `poss_team` | character | Name of the team in possession. |
-| `home_1` | character | Home on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always occupies the same columns; simple=True keeps on-court order. |
-| `home_2` | character | Home on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True). |
-| `home_3` | character | Home on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True). |
-| `home_4` | character | Home on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True). |
-| `home_5` | character | Home on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True). |
-| `away_1` | character | Away on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always occupies the same columns; simple=True keeps on-court order. |
-| `away_2` | character | Away on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True). |
-| `away_3` | character | Away on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True). |
-| `away_4` | character | Away on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True). |
-| `away_5` | character | Away on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True). |
-| `home_score` | integer | Home team's score on the possession's first event row (the page's running score after that event). |
-| `away_score` | integer | Away team's score on the possession's first event row (the page's running score after that event). |
-| `pts` | integer | Points scored on the possession, summing shot_value (3, 2, or 1 for a free throw) over its made shots. |
-| `is_assisted` | integer | Count of the possession's events that carry a second player (player_2), usually 0 or 1 -- a count, not a flag, kept from bigballR's get_possessions for parity. |
-| `is_transition` | integer | 1 when the possession is a transition possession, else 0: its first event (a steal or a shot type, or a foul in the possessing team's favour) came within 10 seconds of the possession start and the previous possession ended on a terminal event. Null when any event of the possession has no flag. |
-| `is_garbage_time` | integer | 1 when any event of the possession falls in garbage time, else 0. Garbage time starts at the first event with a margin of 25+ inside the last 10 minutes of regulation (or later), 20+ inside the last 5 or 15+ inside the last 2, while at most 3 of the two teams' 10 starters are on the floor, and lasts to the end of the game. Null when any event has no flag. |
-| `start_event_type` | character | Event type of the play immediately before the possession's first event (what started it, e.g. a defensive rebound or a made basket). Null for a game's first possession (fix_cross_game_leak=True, the default). |
-| `first_shot_time` | integer | Seconds into the possession (poss_length) at its first field-goal attempt; null when the possession had no shot. |
-| `first_shot_type` | character | Event type of the possession's first field-goal attempt ("Layup", "Three Point Jumper", "Two Point Jumper", "Hook", "Dunk", "Tip In"); null when the possession had no shot. |
-| `last_event_time` | integer | Seconds into the possession (poss_length) at its final event. |
-| `last_event_type` | character | Event type of the possession's final event (e.g. a made shot, a turnover or a defensive rebound). |
+| `game_id` | String | stats.ncaa.org game id of the play-by-play page the possession comes from. |
+| `game_date` | String | Game date (YYYY-MM-DD). |
+| `home` | String | Home team's name as the stats.ncaa.org play-by-play page lists it. |
+| `away` | String | Away team's name as the stats.ncaa.org play-by-play page lists it. |
+| `period` | Int64 | Period number from the stats.ncaa.org page: 1-2 for halves (3+ = overtime), or 1-4 for quarters (5+ = overtime) on a quarters page (women's games from 2015-16). |
+| `poss_num` | Int64 | Possession number within the game, stamped upstream by the play-by-play chain (parse_ncaa_bb_game_pbp). |
+| `poss_team` | String | Name of the team in possession. |
+| `home_1` | String | Home on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always occupies the same columns; simple=True keeps on-court order. |
+| `home_2` | String | Home on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `home_3` | String | Home on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `home_4` | String | Home on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `home_5` | String | Home on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `away_1` | String | Away on-court player 1 of 5. The full variant sorts the five names alphabetically within the row, so a lineup always occupies the same columns; simple=True keeps on-court order. |
+| `away_2` | String | Away on-court player 2 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `away_3` | String | Away on-court player 3 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `away_4` | String | Away on-court player 4 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `away_5` | String | Away on-court player 5 of 5 (alphabetical in the full variant, on-court order with simple=True). |
+| `home_score` | Int64 | Home team's score on the possession's first event row (the page's running score after that event). |
+| `away_score` | Int64 | Away team's score on the possession's first event row (the page's running score after that event). |
+| `pts` | Int64 | Points scored on the possession, summing shot_value (3, 2, or 1 for a free throw) over its made shots. |
+| `is_assisted` | Int64 | Count of the possession's events that carry a second player (player_2), usually 0 or 1 -- a count, not a flag, kept from bigballR's get_possessions for parity. |
+| `is_transition` | Int64 | 1 when the possession is a transition possession, else 0: its first event (a steal or a shot type, or a foul in the possessing team's favour) came within 10 seconds of the possession start and the previous possession ended on a terminal event. Null when any event of the possession has no flag. |
+| `is_garbage_time` | Int64 | 1 when any event of the possession falls in garbage time, else 0. Garbage time starts at the first event with a margin of 25+ inside the last 10 minutes of regulation (or later), 20+ inside the last 5 or 15+ inside the last 2, while at most 3 of the two teams' 10 starters are on the floor, and lasts to the end of the game. Null when any event has no flag. |
+| `start_event_type` | String | Event type of the play immediately before the possession's first event (what started it, e.g. a defensive rebound or a made basket). Null for a game's first possession (fix_cross_game_leak=True, the default). |
+| `first_shot_time` | Int64 | Seconds into the possession (poss_length) at its first field-goal attempt; null when the possession had no shot. |
+| `first_shot_type` | String | Event type of the possession's first field-goal attempt ("Layup", "Three Point Jumper", "Two Point Jumper", "Hook", "Dunk", "Tip In"); null when the possession had no shot. |
+| `last_event_time` | Int64 | Seconds into the possession (poss_length) at its final event. |
+| `last_event_type` | String | Event type of the possession's final event (e.g. a made shot, a turnover or a defensive rebound). |
 
 **Example**
 
@@ -1597,16 +1583,16 @@ All games' shots row-bound (zero-row schema frame when none found).
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `clock` | character | Game clock value. |
-| `game_seconds` | integer |  |
-| `team` | character | Team-side label or team identifier. |
-| `player` | character | Player name. |
-| `shot_result` | character | Shot result ('Made' / 'Missed'). |
-| `x` | double | X. |
-| `y` | double | Y. |
-| `shot_dist` | double |  |
+| `game_id` | String | Unique game identifier. |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `clock` | String | Game clock value. |
+| `game_seconds` | Int64 |  |
+| `team` | String | Team-side label or team identifier. |
+| `player` | String | Player name. |
+| `shot_result` | String | Shot result ('Made' / 'Missed'). |
+| `x` | Float64 | X. |
+| `y` | Float64 | Y. |
+| `shot_dist` | Float64 |  |
 
 **Example**
 
@@ -1614,4 +1600,59 @@ All games' shots row-bound (zero-row schema frame when none found).
 from sportsdataverse.wbb.wbb_ncaa_shots import ncaa_wbb_shot_locations
 shots = ncaa_wbb_shot_locations(["5722355"])
 print(shots.shape)
+```
+
+### ncaa_wbb_team_roster {#ncaa_wbb_team_roster}
+
+`ncaa_wbb_team_roster(team_id: 'Optional[int]' = None, *, team: 'Optional[str]' = None, season: 'Optional[str]' = None, fetcher: "Optional['NcaaFetcher']" = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+
+Scrape a women's team roster from stats.ncaa.org.
+
+Port of wbigballR `get_team_roster` with name resolution fixed to the
+WBB crosswalk (see the module docstring). The roster parser itself is
+league-agnostic; algorithm detail:
+`sportsdataverse.mbb.mbb_ncaa_schedule.ncaa_mbb_team_roster`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Optional[int]` | `None` | stats.ncaa.org team id (changes every season). |
+| `team` | `Optional[str]` | `None` | School name, e.g. `"South Carolina"`. |
+| `season` | `Optional[str]` | `None` | Season string, e.g. `"2024-25"`; required with `team`. |
+| `fetcher` | `Optional['NcaaFetcher']` | `None` | Injectable `~sportsdataverse.mbb.mbb_ncaa_fetch. NcaaFetcher`; defaults to a fresh browser-transport fetcher. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per player — see `~sportsdataverse.mbb.mbb_ncaa_schedule.parse_ncaa_bb_team_roster` for the column contract.
+
+| col_name | type | description |
+|---|---|---|
+| `gp` | String | Games played. |
+| `gs` | String | Games started. |
+| `jersey` | String | Jersey number worn by the player. |
+| `name` | String | Display name. |
+| `class` | String | College class / draft eligibility note. |
+| `position` | String | Listed roster position (G, F, C, etc.). |
+| `height` | String | Player height (string e.g. '6-2' or inches). |
+| `hometown` | String | Player hometown. |
+| `high_school` | String |  |
+| `player` | String | Player name. |
+| `clean_name` | String |  |
+| `ht_inches` | Int64 |  |
+| `player_id` | String | Unique player identifier. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Neither `team_id` nor a resolvable `team`/`season` pair was given. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb.wbb_ncaa_schedule import ncaa_wbb_team_roster
+df = ncaa_wbb_team_roster(team="South Carolina", season="2024-25")
+print(df.select("jersey", "player", "ht_inches").head())
 ```

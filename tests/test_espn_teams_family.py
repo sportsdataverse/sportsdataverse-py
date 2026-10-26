@@ -139,6 +139,6 @@ def test_teams_404_raises_no_data(league, monkeypatch):
 @pytest.mark.parametrize("league", LEAGUES)
 def test_teams_cache_clear_shim_warns(league):
     fn = _fn(league)
-    with pytest.warns(DeprecationWarning, match=rf"espn_{league}_teams\.cache_clear is deprecated.*0\.2\.0"):
+    with pytest.warns(DeprecationWarning, match=rf"espn_{league}_teams\.cache_clear is deprecated.*0\.4\.0"):
         assert fn.cache_clear() is None
     assert not hasattr(fn, "clear_cache")  # the name the old docstrings gave never existed

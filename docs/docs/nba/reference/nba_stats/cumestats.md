@@ -9,7 +9,7 @@ toc_max_heading_level: 2
 
 ## nba_stats_cumestatsplayer
 
-GET /stats/cumestatsplayer
+Cume stats player.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/cumestatsplayer`
 
@@ -31,87 +31,87 @@ GET /stats/cumestatsplayer
 
 | col_name | type | description |
 |---|---|---|
-| `date_est` | character |  |
-| `visitor_team` | character |  |
-| `home_team` | character | Home team name. |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `actual_minutes` | integer | Whole minutes of actual playing time accumulated over the aggregated games. |
-| `actual_seconds` | integer | Leftover seconds of actual playing time beyond the whole minutes. |
-| `fg` | integer | Field goals made over the aggregated games. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3` | integer | Three-point field goals made over the aggregated games. |
-| `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ft` | integer | Free throws made over the aggregated games. |
-| `fta` | integer | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `off_reb` | integer | Offensive rebounds over the aggregated games. |
-| `def_reb` | integer | Defensive rebounds over the aggregated games. |
-| `tot_reb` | integer | Total rebounds over the aggregated games. |
-| `avg_tot_reb` | numeric | Average total rebounds per game over the aggregated games. |
-| `ast` | integer | Assists. |
-| `pf` | integer | Personal fouls. |
-| `dq` | integer | Disqualifications (fouled out) over the aggregated games. |
-| `stl` | integer | Steals. |
-| `turnovers` | integer | Total turnovers. |
-| `blk` | integer | Blocks. |
-| `pts` | integer | Points scored. |
-| `avg_pts` | numeric | Average points per game over the aggregated games. |
+| `date_est` | String |  |
+| `visitor_team` | String |  |
+| `home_team` | String | Home team name. |
+| `gp` | Int64 | Games played. |
+| `gs` | Int64 | Games started. |
+| `actual_minutes` | Int64 | Whole minutes of actual playing time accumulated over the aggregated games. |
+| `actual_seconds` | Int64 | Leftover seconds of actual playing time beyond the whole minutes. |
+| `fg` | Int64 | Field goals made over the aggregated games. |
+| `fga` | Int64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3` | Int64 | Three-point field goals made over the aggregated games. |
+| `fg3_a` | Int64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `ft` | Int64 | Free throws made over the aggregated games. |
+| `fta` | Int64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `off_reb` | Int64 | Offensive rebounds over the aggregated games. |
+| `def_reb` | Int64 | Defensive rebounds over the aggregated games. |
+| `tot_reb` | Int64 | Total rebounds over the aggregated games. |
+| `avg_tot_reb` | Float64 | Average total rebounds per game over the aggregated games. |
+| `ast` | Int64 | Assists. |
+| `pf` | Int64 | Personal fouls. |
+| `dq` | Int64 | Disqualifications (fouled out) over the aggregated games. |
+| `stl` | Int64 | Steals. |
+| `turnovers` | Int64 | Total turnovers. |
+| `blk` | Int64 | Blocks. |
+| `pts` | Int64 | Points scored. |
+| `avg_pts` | Float64 | Average points per game over the aggregated games. |
 
 **TotalPlayerStats**
 
 | col_name | type | description |
 |---|---|---|
-| `display_fi_last` | character | Abbreviated player name (first initial and last name). |
-| `person_id` | integer | Unique player identifier (V3 endpoints). |
-| `jersey_num` | character | Jersey number worn by the player. |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `actual_minutes` | integer | Whole minutes of actual playing time accumulated over the aggregated games. |
-| `actual_seconds` | integer | Leftover seconds of actual playing time beyond the whole minutes. |
-| `fg` | integer | Field goals made over the aggregated games. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3` | integer | Three-point field goals made over the aggregated games. |
-| `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ft` | integer | Free throws made over the aggregated games. |
-| `fta` | integer | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `off_reb` | integer | Offensive rebounds over the aggregated games. |
-| `def_reb` | integer | Defensive rebounds over the aggregated games. |
-| `tot_reb` | integer | Total rebounds over the aggregated games. |
-| `ast` | integer | Assists. |
-| `pf` | integer | Personal fouls. |
-| `dq` | integer | Disqualifications (fouled out) over the aggregated games. |
-| `stl` | integer | Steals. |
-| `turnovers` | integer | Total turnovers. |
-| `blk` | integer | Blocks. |
-| `pts` | integer | Points scored. |
-| `max_actual_minutes` | integer | Most whole minutes played in any single aggregated game. |
-| `max_actual_seconds` | integer | Seconds component paired with the single-game maximum minutes. |
-| `max_reb` | integer | Most rebounds recorded in any single aggregated game. |
-| `max_ast` | integer | Most assists recorded in any single aggregated game. |
-| `max_stl` | integer | Most steals recorded in any single aggregated game. |
-| `max_turnovers` | integer | Most turnovers recorded in any single aggregated game. |
-| `max_blk` | integer | Most blocked shots recorded in any single aggregated game. |
-| `max_pts` | integer | Most points recorded in any single aggregated game. |
-| `avg_actual_minutes` | integer | Average whole minutes played per aggregated game. |
-| `avg_actual_seconds` | numeric | Average seconds component of playing time per aggregated game. |
-| `avg_tot_reb` | numeric | Average total rebounds per game over the aggregated games. |
-| `avg_ast` | numeric | Average assists per game over the aggregated games. |
-| `avg_stl` | numeric | Average steals per game over the aggregated games. |
-| `avg_turnovers` | numeric | Average turnovers per game over the aggregated games. |
-| `avg_blk` | numeric | Average blocked shots per game over the aggregated games. |
-| `avg_pts` | numeric | Average points per game over the aggregated games. |
-| `per_min_tot_reb` | numeric | Total rebounds per minute played over the aggregated games. |
-| `per_min_ast` | numeric | Assists per minute played over the aggregated games. |
-| `per_min_stl` | numeric | Steals per minute played over the aggregated games. |
-| `per_min_turnovers` | numeric | Turnovers per minute played over the aggregated games. |
-| `per_min_blk` | numeric | Blocked shots per minute played over the aggregated games. |
-| `per_min_pts` | numeric | Points per minute played over the aggregated games. |
+| `display_fi_last` | String | Abbreviated player name (first initial and last name). |
+| `person_id` | Int64 | Unique player identifier (V3 endpoints). |
+| `jersey_num` | String | Jersey number worn by the player. |
+| `gp` | Int64 | Games played. |
+| `gs` | Int64 | Games started. |
+| `actual_minutes` | Int64 | Whole minutes of actual playing time accumulated over the aggregated games. |
+| `actual_seconds` | Int64 | Leftover seconds of actual playing time beyond the whole minutes. |
+| `fg` | Int64 | Field goals made over the aggregated games. |
+| `fga` | Int64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3` | Int64 | Three-point field goals made over the aggregated games. |
+| `fg3_a` | Int64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `ft` | Int64 | Free throws made over the aggregated games. |
+| `fta` | Int64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `off_reb` | Int64 | Offensive rebounds over the aggregated games. |
+| `def_reb` | Int64 | Defensive rebounds over the aggregated games. |
+| `tot_reb` | Int64 | Total rebounds over the aggregated games. |
+| `ast` | Int64 | Assists. |
+| `pf` | Int64 | Personal fouls. |
+| `dq` | Int64 | Disqualifications (fouled out) over the aggregated games. |
+| `stl` | Int64 | Steals. |
+| `turnovers` | Int64 | Total turnovers. |
+| `blk` | Int64 | Blocks. |
+| `pts` | Int64 | Points scored. |
+| `max_actual_minutes` | Int64 | Most whole minutes played in any single aggregated game. |
+| `max_actual_seconds` | Int64 | Seconds component paired with the single-game maximum minutes. |
+| `max_reb` | Int64 | Most rebounds recorded in any single aggregated game. |
+| `max_ast` | Int64 | Most assists recorded in any single aggregated game. |
+| `max_stl` | Int64 | Most steals recorded in any single aggregated game. |
+| `max_turnovers` | Int64 | Most turnovers recorded in any single aggregated game. |
+| `max_blk` | Int64 | Most blocked shots recorded in any single aggregated game. |
+| `max_pts` | Int64 | Most points recorded in any single aggregated game. |
+| `avg_actual_minutes` | Int64 | Average whole minutes played per aggregated game. |
+| `avg_actual_seconds` | Float64 | Average seconds component of playing time per aggregated game. |
+| `avg_tot_reb` | Float64 | Average total rebounds per game over the aggregated games. |
+| `avg_ast` | Float64 | Average assists per game over the aggregated games. |
+| `avg_stl` | Float64 | Average steals per game over the aggregated games. |
+| `avg_turnovers` | Float64 | Average turnovers per game over the aggregated games. |
+| `avg_blk` | Float64 | Average blocked shots per game over the aggregated games. |
+| `avg_pts` | Float64 | Average points per game over the aggregated games. |
+| `per_min_tot_reb` | Float64 | Total rebounds per minute played over the aggregated games. |
+| `per_min_ast` | Float64 | Assists per minute played over the aggregated games. |
+| `per_min_stl` | Float64 | Steals per minute played over the aggregated games. |
+| `per_min_turnovers` | Float64 | Turnovers per minute played over the aggregated games. |
+| `per_min_blk` | Float64 | Blocked shots per minute played over the aggregated games. |
+| `per_min_pts` | Float64 | Points per minute played over the aggregated games. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -132,7 +132,7 @@ nba_stats_cumestatsplayer(league_id='00')
 
 ## nba_stats_cumestatsplayergames
 
-GET /stats/cumestatsplayergames
+Cume stats player games.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/cumestatsplayergames`
 
@@ -156,8 +156,8 @@ GET /stats/cumestatsplayergames
 
 | col_name | type | description |
 |---|---|---|
-| `matchup` | character | Matchup. |
-| `game_id` | character | Unique game identifier. |
+| `matchup` | String | Matchup. |
+| `game_id` | String | Unique game identifier. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -178,7 +178,7 @@ nba_stats_cumestatsplayergames(league_id='00', season='2024-25')
 
 ## nba_stats_cumestatsteam
 
-GET /stats/cumestatsteam
+Cume stats team.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/cumestatsteam`
 
@@ -200,96 +200,96 @@ GET /stats/cumestatsteam
 
 | col_name | type | description |
 |---|---|---|
-| `jersey_num` | character | Jersey number worn by the player. |
-| `player` | character | Player name. |
-| `person_id` | character | Unique player identifier (V3 endpoints). |
-| `team_id` | character | Unique team identifier. |
-| `gp` | character | Games played. |
-| `gs` | character | Games started. |
-| `actual_minutes` | character | Whole minutes of actual playing time accumulated over the aggregated games. |
-| `actual_seconds` | character | Leftover seconds of actual playing time beyond the whole minutes. |
-| `fg` | character | Field goals made over the aggregated games. |
-| `fga` | character | Field goal attempts. |
-| `fg_pct` | character | Field goal percentage (0-1). |
-| `fg3` | character | Three-point field goals made over the aggregated games. |
-| `fg3_a` | character | Three-point field goal attempts. |
-| `fg3_pct` | character | Three-point field goal percentage (0-1). |
-| `ft` | character | Free throws made over the aggregated games. |
-| `fta` | character | Free throw attempts. |
-| `ft_pct` | character | Free throw percentage (0-1). |
-| `off_reb` | character | Offensive rebounds over the aggregated games. |
-| `def_reb` | character | Defensive rebounds over the aggregated games. |
-| `tot_reb` | character | Total rebounds over the aggregated games. |
-| `ast` | character | Assists. |
-| `pf` | character | Personal fouls. |
-| `dq` | character | Disqualifications (fouled out) over the aggregated games. |
-| `stl` | character | Steals. |
-| `turnovers` | character | Total turnovers. |
-| `blk` | character | Blocks. |
-| `pts` | character | Points scored. |
-| `max_actual_minutes` | character | Most whole minutes played in any single aggregated game. |
-| `max_actual_seconds` | character | Seconds component paired with the single-game maximum minutes. |
-| `max_reb` | character | Most rebounds recorded in any single aggregated game. |
-| `max_ast` | character | Most assists recorded in any single aggregated game. |
-| `max_stl` | character | Most steals recorded in any single aggregated game. |
-| `max_turnovers` | character | Most turnovers recorded in any single aggregated game. |
-| `max_blkp` | character | Most blocked shots recorded in any single aggregated game. |
-| `max_pts` | character | Most points recorded in any single aggregated game. |
-| `avg_actual_minutes` | character | Average whole minutes played per aggregated game. |
-| `avg_actual_seconds` | character | Average seconds component of playing time per aggregated game. |
-| `avg_reb` | character | Average rebounds per game over the aggregated games. |
-| `avg_ast` | character | Average assists per game over the aggregated games. |
-| `avg_stl` | character | Average steals per game over the aggregated games. |
-| `avg_turnovers` | character | Average turnovers per game over the aggregated games. |
-| `avg_blkp` | character | Average blocked shots per game over the aggregated games. |
-| `avg_pts` | character | Average points per game over the aggregated games. |
-| `per_min_reb` | character | Rebounds per minute played over the aggregated games. |
-| `per_min_ast` | character | Assists per minute played over the aggregated games. |
-| `per_min_stl` | character | Steals per minute played over the aggregated games. |
-| `per_min_turnovers` | character | Turnovers per minute played over the aggregated games. |
-| `per_min_blk` | character | Blocked shots per minute played over the aggregated games. |
-| `per_min_pts` | character | Points per minute played over the aggregated games. |
+| `jersey_num` | String | Jersey number worn by the player. |
+| `player` | String | Player name. |
+| `person_id` | String | Unique player identifier (V3 endpoints). |
+| `team_id` | String | Unique team identifier. |
+| `gp` | String | Games played. |
+| `gs` | String | Games started. |
+| `actual_minutes` | String | Whole minutes of actual playing time accumulated over the aggregated games. |
+| `actual_seconds` | String | Leftover seconds of actual playing time beyond the whole minutes. |
+| `fg` | String | Field goals made over the aggregated games. |
+| `fga` | String | Field goal attempts. |
+| `fg_pct` | String | Field goal percentage (0-1). |
+| `fg3` | String | Three-point field goals made over the aggregated games. |
+| `fg3_a` | String | Three-point field goal attempts. |
+| `fg3_pct` | String | Three-point field goal percentage (0-1). |
+| `ft` | String | Free throws made over the aggregated games. |
+| `fta` | String | Free throw attempts. |
+| `ft_pct` | String | Free throw percentage (0-1). |
+| `off_reb` | String | Offensive rebounds over the aggregated games. |
+| `def_reb` | String | Defensive rebounds over the aggregated games. |
+| `tot_reb` | String | Total rebounds over the aggregated games. |
+| `ast` | String | Assists. |
+| `pf` | String | Personal fouls. |
+| `dq` | String | Disqualifications (fouled out) over the aggregated games. |
+| `stl` | String | Steals. |
+| `turnovers` | String | Total turnovers. |
+| `blk` | String | Blocks. |
+| `pts` | String | Points scored. |
+| `max_actual_minutes` | String | Most whole minutes played in any single aggregated game. |
+| `max_actual_seconds` | String | Seconds component paired with the single-game maximum minutes. |
+| `max_reb` | String | Most rebounds recorded in any single aggregated game. |
+| `max_ast` | String | Most assists recorded in any single aggregated game. |
+| `max_stl` | String | Most steals recorded in any single aggregated game. |
+| `max_turnovers` | String | Most turnovers recorded in any single aggregated game. |
+| `max_blkp` | String | Most blocked shots recorded in any single aggregated game. |
+| `max_pts` | String | Most points recorded in any single aggregated game. |
+| `avg_actual_minutes` | String | Average whole minutes played per aggregated game. |
+| `avg_actual_seconds` | String | Average seconds component of playing time per aggregated game. |
+| `avg_reb` | String | Average rebounds per game over the aggregated games. |
+| `avg_ast` | String | Average assists per game over the aggregated games. |
+| `avg_stl` | String | Average steals per game over the aggregated games. |
+| `avg_turnovers` | String | Average turnovers per game over the aggregated games. |
+| `avg_blkp` | String | Average blocked shots per game over the aggregated games. |
+| `avg_pts` | String | Average points per game over the aggregated games. |
+| `per_min_reb` | String | Rebounds per minute played over the aggregated games. |
+| `per_min_ast` | String | Assists per minute played over the aggregated games. |
+| `per_min_stl` | String | Steals per minute played over the aggregated games. |
+| `per_min_turnovers` | String | Turnovers per minute played over the aggregated games. |
+| `per_min_blk` | String | Blocked shots per minute played over the aggregated games. |
+| `per_min_pts` | String | Points per minute played over the aggregated games. |
 
 **TotalTeamStats**
 
 | col_name | type | description |
 |---|---|---|
-| `city` | character | Venue city. |
-| `nickname` | character | Team or athlete nickname. |
-| `team_id` | integer | Unique team identifier. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_home` | integer |  |
-| `l_home` | integer |  |
-| `w_road` | integer |  |
-| `l_road` | integer |  |
-| `team_turnovers` | integer | Team turnovers (turnovers credited to the team rather than a player). |
-| `team_rebounds` | integer | Team rebounds (rebounds credited to the team rather than a player). |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `actual_minutes` | integer | Whole minutes of actual playing time accumulated over the aggregated games. |
-| `actual_seconds` | integer | Leftover seconds of actual playing time beyond the whole minutes. |
-| `fg` | integer | Field goals made over the aggregated games. |
-| `fga` | integer | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3` | integer | Three-point field goals made over the aggregated games. |
-| `fg3_a` | integer | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ft` | integer | Free throws made over the aggregated games. |
-| `fta` | integer | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `off_reb` | integer | Offensive rebounds over the aggregated games. |
-| `def_reb` | integer | Defensive rebounds over the aggregated games. |
-| `tot_reb` | integer | Total rebounds over the aggregated games. |
-| `ast` | integer | Assists. |
-| `pf` | integer | Personal fouls. |
-| `stl` | integer | Steals. |
-| `total_turnovers` | integer | Total turnovers (player + team). |
-| `blk` | integer | Blocks. |
-| `pts` | integer | Points scored. |
-| `avg_reb` | numeric | Average rebounds per game over the aggregated games. |
-| `avg_pts` | numeric | Average points per game over the aggregated games. |
-| `dq` | integer | Disqualifications (fouled out) over the aggregated games. |
+| `city` | String | Venue city. |
+| `nickname` | String | Team or athlete nickname. |
+| `team_id` | Int64 | Unique team identifier. |
+| `w` | Int64 | Wins. |
+| `l` | Int64 | Losses. |
+| `w_home` | Int64 |  |
+| `l_home` | Int64 |  |
+| `w_road` | Int64 |  |
+| `l_road` | Int64 |  |
+| `team_turnovers` | Int64 | Team turnovers (turnovers credited to the team rather than a player). |
+| `team_rebounds` | Int64 | Team rebounds (rebounds credited to the team rather than a player). |
+| `gp` | Int64 | Games played. |
+| `gs` | Int64 | Games started. |
+| `actual_minutes` | Int64 | Whole minutes of actual playing time accumulated over the aggregated games. |
+| `actual_seconds` | Int64 | Leftover seconds of actual playing time beyond the whole minutes. |
+| `fg` | Int64 | Field goals made over the aggregated games. |
+| `fga` | Int64 | Field goal attempts. |
+| `fg_pct` | Float64 | Field goal percentage (0-1). |
+| `fg3` | Int64 | Three-point field goals made over the aggregated games. |
+| `fg3_a` | Int64 | Three-point field goal attempts. |
+| `fg3_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `ft` | Int64 | Free throws made over the aggregated games. |
+| `fta` | Int64 | Free throw attempts. |
+| `ft_pct` | Float64 | Free throw percentage (0-1). |
+| `off_reb` | Int64 | Offensive rebounds over the aggregated games. |
+| `def_reb` | Int64 | Defensive rebounds over the aggregated games. |
+| `tot_reb` | Int64 | Total rebounds over the aggregated games. |
+| `ast` | Int64 | Assists. |
+| `pf` | Int64 | Personal fouls. |
+| `stl` | Int64 | Steals. |
+| `total_turnovers` | Int64 | Total turnovers (player + team). |
+| `blk` | Int64 | Blocks. |
+| `pts` | Int64 | Points scored. |
+| `avg_reb` | Float64 | Average rebounds per game over the aggregated games. |
+| `avg_pts` | Float64 | Average points per game over the aggregated games. |
+| `dq` | Int64 | Disqualifications (fouled out) over the aggregated games. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -310,7 +310,7 @@ nba_stats_cumestatsteam(league_id='00', season='2024-25')
 
 ## nba_stats_cumestatsteamgames
 
-GET /stats/cumestatsteamgames
+Cume stats team games.
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/cumestatsteamgames`
 
@@ -335,8 +335,8 @@ GET /stats/cumestatsteamgames
 
 | col_name | type | description |
 |---|---|---|
-| `matchup` | character | Matchup. |
-| `game_id` | character | Unique game identifier. |
+| `matchup` | String | Matchup. |
+| `game_id` | String | Unique game identifier. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

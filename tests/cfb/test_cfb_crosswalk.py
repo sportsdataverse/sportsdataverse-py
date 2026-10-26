@@ -1242,7 +1242,7 @@ def test_cfb_rosters_crosswalk_yahoo_roster_leg(monkeypatch: pytest.MonkeyPatch,
     player surfaces as a Yahoo-only row. With ``yahoo_team_id=None`` the Yahoo
     team is found in Yahoo's team directory by name."""
     import sportsdataverse.cfb.cfb_yahoo_ext as yext
-    import sportsdataverse.yahoo.yahoo_shangrila as ysh
+    import sportsdataverse.providers.yahoo.yahoo_shangrila as ysh
 
     monkeypatch.setattr(cw, "_get", lambda url, params=None, **k: load_fixture("espn", "team_roster_cfb"))
     monkeypatch.setattr(

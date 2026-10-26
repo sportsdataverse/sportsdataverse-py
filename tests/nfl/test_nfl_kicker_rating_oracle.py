@@ -2,7 +2,7 @@
 
 Fixture provenance: tests/fixtures/nfl_scheme/README.md.
 ENVIRONMENT_FG_COEF is fitted on 2010-2018 only
-(dev/nfl_scheme/fit_env_fg_coef.py), so the committed 2019-2023 fixture is a
+(tools/models/nfl_scheme/fit_env_fg_coef.py), so the committed 2019-2023 fixture is a
 strictly held-out calibration oracle (no fit/eval overlap).
 """
 

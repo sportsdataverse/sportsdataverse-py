@@ -19,7 +19,7 @@ subset of the training corpus, so it isn't a fair generalization check either.
 
 **Centering note**: ``STUFF_LEAGUE_MEAN_RV``/``STUFF_LEAGUE_SD_RV`` in
 ``mlb_pitching_constants.py`` were themselves recalibrated against this same
-holdout population (see ``dev/mlb_pitching/recalibrate_stuff_plus.py``) — the
+holdout population (see ``tools/models/mlb_pitching/recalibrate_stuff_plus.py``) — the
 training corpus is workhorse-selection-biased and centering on its own mean
 shifted this population's average to ~97.6. Recentering to the holdout
 population's own mean makes leg (a) close to exact by construction; leg (b)
@@ -69,7 +69,7 @@ FLOOR_RV = 0.20
 #: that dominate a naive unweighted mean-of-group-means (observed: 9/90
 #: arsenals on this fixture have < 10 pitches, dragging the unweighted mean to
 #: 98.5 even though the underlying pitch-level mean is 100.000 by
-#: construction -- confirmed via ``dev/mlb_pitching/recalibrate_stuff_plus.py``
+#: construction -- confirmed via ``tools/models/mlb_pitching/recalibrate_stuff_plus.py``
 #: style diagnostics). This is an aggregation-methodology fix, not a loosened
 #: gate: the pitch-level mean already satisfies the ±0.5 target exactly.
 MIN_ARSENAL_PITCHES = 10

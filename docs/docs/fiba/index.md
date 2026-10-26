@@ -3,7 +3,7 @@ title: FIBA
 sidebar_label: FIBA
 description: "sdv-py FIBA: endpoint references, dataset loaders and parsers for FIBA in the SportsDataverse Python package."
 ---
-# FIBA (`sportsdataverse.fiba`)
+# FIBA (`sportsdataverse.basketball.fiba`)
 
 ## Data sources
 
@@ -19,6 +19,11 @@ description: "sdv-py FIBA: endpoint references, dataset loaders and parsers for 
 | [ESPN web API (v3)](reference/web) | 5 |
 | [ESPN core API (v2)](reference/core) | 82 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
+
+## See also
+
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("fiba")` draws the FIBA court
+- [sportypy](https://sportypy.sportsdataverse.org/) — the FIBA court sdvplot draws with
 
 ## Examples
 

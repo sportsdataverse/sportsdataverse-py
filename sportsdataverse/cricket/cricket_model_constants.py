@@ -130,7 +130,7 @@ class FormatConstants:
 
 
 # par_score / sigma_* are FITTED on the real Cricsheet corpus (male T20I + ODI,
-# 2002-2026; refit 2026-10-10, 3,581 T20I + 2,589 ODI) by dev/league_ports/fit_cricket_resource_surface.py. Re-running that
+# 2002-2026; refit 2026-10-10, 3,581 T20I + 2,589 ODI) by tools/models/league_ports/fit_cricket_resource_surface.py. Re-running that
 # script rewrites both this block and the bundled parquet artifacts; keep them in
 # sync. balls_total / max_wickets are rule-fixed, not fitted.
 FORMAT_TABLE: dict[str, FormatConstants] = {
@@ -179,7 +179,7 @@ ODI_REGIMES: tuple[tuple[str, dt.date], ...] = (
     ("odi_2015", dt.date(2015, 7, 5)),
 )
 #: Per-regime ``par_score`` / ``sigma_set`` / ``sigma_chase`` overriding :data:`FORMAT_TABLE`,
-#: fitted 2026-10-10 by ``dev/league_ports/fit_cricket_resource_surface.py`` on Cricsheet male ODIs
+#: fitted 2026-10-10 by ``tools/models/league_ports/fit_cricket_resource_surface.py`` on Cricsheet male ODIs
 #: 2002-2026 (2,589 matches) for every regime with 100+ training matches and a thick grid (the
 #: runtime's whole-regime rule, ``cricket_win_prob._usable_regimes``), each on its own grid. The
 #: 13-month ``odi_2011`` window (rules/cricket.yaml#cricket-2011-odi-powerplay-window) has no entry

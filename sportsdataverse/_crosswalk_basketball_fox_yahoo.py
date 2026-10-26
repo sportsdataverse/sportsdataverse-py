@@ -295,7 +295,7 @@ def yahoo_teams(league: str, **kwargs: Any) -> pl.DataFrame:
     slug, _ = _YAHOO[league]
 
     def fetch() -> pl.DataFrame:
-        from sportsdataverse.yahoo.yahoo_shangrila import yahoo_league_teams
+        from sportsdataverse.providers.yahoo.yahoo_shangrila import yahoo_league_teams
 
         extra = {"division_ids": "1", "get_teams_by_division": "true"} if league in ("mbb", "wbb") else {}
         raw = yahoo_league_teams(league=slug, return_parsed=False, **extra, **kwargs)
@@ -471,7 +471,7 @@ def yahoo_game_ids(league: str, season: int, dates: Sequence[date], **kwargs: An
         CrosswalkSourceError: A week's fetch failed, or came back at the
             1000-row cap (a truncated list would null real games).
     """
-    from sportsdataverse.yahoo.yahoo_shangrila import yahoo_league_game_ids_by_date
+    from sportsdataverse.providers.yahoo.yahoo_shangrila import yahoo_league_game_ids_by_date
 
     slug, _ = _YAHOO[league]
     # Yahoo keys a college season by its starting year; without season= a past season returns nothing.

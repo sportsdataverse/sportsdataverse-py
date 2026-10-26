@@ -1,9 +1,9 @@
 ---
-title: NBASL_GS
-sidebar_label: NBASL_GS
-description: "sdv-py NBASL_GS: endpoint references, dataset loaders and parsers for NBASL_GS in the SportsDataverse Python package."
+title: NBA Summer League (Golden State)
+sidebar_label: NBA Summer League (Golden State)
+description: "sdv-py NBA Summer League (Golden State): endpoint references, dataset loaders and parsers for NBA Summer League (Golden State) in the SportsDataverse Python package."
 ---
-# NBASL_GS (`sportsdataverse.nbasl_gs`)
+# NBA Summer League (Golden State) (`sportsdataverse.basketball.nbasl_gs`)
 
 ## Data sources
 

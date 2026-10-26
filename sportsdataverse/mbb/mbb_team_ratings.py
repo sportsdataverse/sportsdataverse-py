@@ -6,9 +6,9 @@ style) from schedule results + per-team boxscores. The pieces:
 * :func:`raw_game_efficiency` -- per-team, per-game possessions + raw
   offensive/defensive efficiency.
 * :func:`adjust_efficiency` -- iterative opponent adjustment → AdjO / AdjD /
-  AdjEM (Task 1.2).
-* :func:`adjust_tempo` -- opponent-adjusted tempo (Task 1.3).
-* :func:`mbb_team_ratings` -- public per-team-season entry point (Task 1.4).
+  AdjEM.
+* :func:`adjust_tempo` -- opponent-adjusted tempo.
+* :func:`mbb_team_ratings` -- public per-team-season entry point.
 
 Algorithms here are league-agnostic; league-specific constants (HFA, tempo /
 efficiency baselines) come from

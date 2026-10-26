@@ -30,35 +30,35 @@ GET /api/secured/stats/team-offense/overview/season — one row per team for the
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | NFL team id as a zero-padded string (e.g. '0200'); casting it to a number drops the leading zero. |
-| `gp` | integer | Games played in the season (and season type); the denominator of every per-game column. |
-| `total` | integer | Offensive plays, season total (pass + run). |
-| `pass` | integer | Pass plays, season total. |
-| `run` | integer | Run plays, season total. |
-| `pass_pct` | double | Share of plays that were passes (pass / total). |
-| `ppg` | double | Points per game. |
-| `yds` | integer | Yards from scrimmage, season total (pass_yds + rush_yds). |
-| `ypg` | double | Yards per game (yds / gp). |
-| `ypp` | double | Yards per play (yds / total). |
-| `td` | integer | Touchdowns, season total. |
-| `epa` | double | Total expected points added over all plays (epa_pass + epa_rush). |
-| `epa_pp` | double | Expected points added per play (epa / total). |
-| `pass_yds` | integer | Net passing yards, season total. |
-| `pass_ypg` | double | Passing yards per game (pass_yds / gp). |
-| `pass_ypp` | double | Passing yards per pass play (pass_yds / pass). |
-| `sacked_yds` | integer | Yards lost to sacks, season total. |
-| `sacked_ypg` | double | Sack yards lost per game (sacked_yds / gp). |
-| `epa_pass` | double | Total expected points added on pass plays. |
-| `epa_pass_pp` | double | Expected points added per pass play (epa_pass / pass). |
-| `rush_yds` | integer | Rushing yards, season total. |
-| `rush_ypg` | double | Rushing yards per game (rush_yds / gp). |
-| `rush_ypp` | double | Rushing yards per run play (rush_yds / run). |
-| `epa_rush` | double | Total expected points added on run plays. |
-| `epa_rush_pp` | double | Expected points added per run play (epa_rush / run). |
-| `ryoe` | double | Rushing yards over expected, season total, per Next Gen Stats. |
-| `ttt` | double | Average time to throw in seconds on pass plays, per Next Gen Stats. |
-| `qbp` | integer | Quarterback pressures on pass plays, season total. |
-| `qbp_pct` | double | Pressure rate: share of pass plays with a quarterback pressure. |
+| `team_id` | String | NFL team id as a zero-padded string (e.g. '0200'); casting it to a number drops the leading zero. |
+| `gp` | Int64 | Games played in the season (and season type); the denominator of every per-game column. |
+| `total` | Int64 | Offensive plays, season total (pass + run). |
+| `pass` | Int64 | Pass plays, season total. |
+| `run` | Int64 | Run plays, season total. |
+| `pass_pct` | Float64 | Share of plays that were passes (pass / total). |
+| `ppg` | Float64 | Points per game. |
+| `yds` | Int64 | Yards from scrimmage, season total (pass_yds + rush_yds). |
+| `ypg` | Float64 | Yards per game (yds / gp). |
+| `ypp` | Float64 | Yards per play (yds / total). |
+| `td` | Int64 | Touchdowns, season total. |
+| `epa` | Float64 | Total expected points added over all plays (epa_pass + epa_rush). |
+| `epa_pp` | Float64 | Expected points added per play (epa / total). |
+| `pass_yds` | Int64 | Net passing yards, season total. |
+| `pass_ypg` | Float64 | Passing yards per game (pass_yds / gp). |
+| `pass_ypp` | Float64 | Passing yards per pass play (pass_yds / pass). |
+| `sacked_yds` | Int64 | Yards lost to sacks, season total. |
+| `sacked_ypg` | Float64 | Sack yards lost per game (sacked_yds / gp). |
+| `epa_pass` | Float64 | Total expected points added on pass plays. |
+| `epa_pass_pp` | Float64 | Expected points added per pass play (epa_pass / pass). |
+| `rush_yds` | Int64 | Rushing yards, season total. |
+| `rush_ypg` | Float64 | Rushing yards per game (rush_yds / gp). |
+| `rush_ypp` | Float64 | Rushing yards per run play (rush_yds / run). |
+| `epa_rush` | Float64 | Total expected points added on run plays. |
+| `epa_rush_pp` | Float64 | Expected points added per run play (epa_rush / run). |
+| `ryoe` | Float64 | Rushing yards over expected, season total, per Next Gen Stats. |
+| `ttt` | Float64 | Average time to throw in seconds on pass plays, per Next Gen Stats. |
+| `qbp` | Int64 | Quarterback pressures on pass plays, season total. |
+| `qbp_pct` | Float64 | Pressure rate: share of pass plays with a quarterback pressure. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -100,42 +100,42 @@ GET /api/secured/stats/team-offense/overview/week — one row per team per week 
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | NFL team id as a zero-padded string (e.g. '0200'); casting it to a number drops the leading zero. |
-| `gp` | integer | Games played in the season (and season type); the denominator of every per-game column. |
-| `total` | integer | Offensive plays in the game (pass + run). |
-| `pass` | integer | Pass plays in the game. |
-| `run` | integer | Run plays in the game. |
-| `pass_pct` | double | Share of plays that were passes (pass / total). |
-| `ppg` | integer | Points per game. |
-| `yds` | integer | Yards from scrimmage in the game (pass_yds + rush_yds). |
-| `ypg` | integer | Yards per game (yds / gp). |
-| `ypp` | double | Yards per play (yds / total). |
-| `td` | integer | Touchdowns in the game. |
-| `epa` | double | Total expected points added over all plays (epa_pass + epa_rush). |
-| `epa_pp` | double | Expected points added per play (epa / total). |
-| `pass_yds` | integer | Net passing yards in the game. |
-| `pass_ypg` | integer | Passing yards per game (pass_yds / gp). |
-| `pass_ypp` | double | Passing yards per pass play (pass_yds / pass). |
-| `sacked_yds` | integer | Yards lost to sacks in the game. |
-| `sacked_ypg` | integer | Sack yards lost per game (sacked_yds / gp). |
-| `epa_pass` | double | Total expected points added on pass plays. |
-| `epa_pass_pp` | double | Expected points added per pass play (epa_pass / pass). |
-| `rush_yds` | integer | Rushing yards in the game. |
-| `rush_ypg` | integer | Rushing yards per game (rush_yds / gp). |
-| `rush_ypp` | double | Rushing yards per run play (rush_yds / run). |
-| `epa_rush` | double | Total expected points added on run plays. |
-| `epa_rush_pp` | double | Expected points added per run play (epa_rush / run). |
-| `ryoe` | double | Rushing yards over expected in the game, per Next Gen Stats. |
-| `ttt` | double | Average time to throw in seconds on pass plays, per Next Gen Stats. |
-| `qbp` | integer | Quarterback pressures on pass plays in the game. |
-| `qbp_pct` | double | Pressure rate: share of pass plays with a quarterback pressure. |
-| `week_slug` | character | Week slug of the game (e.g. 'WEEK_1', 'WEEK_18'); the week scope of the row. |
-| `opponent_team_id` | character | Opponent's NFL team id as a zero-padded string. |
-| `game_result` | character | Result from the player's team's side: 'W', 'L' or 'T'. |
-| `final_score` | character | Final score as 'own-opponent' (e.g. '19-32' for a 32-19 loss). |
-| `is_home` | logical | Whether the player's team was the home team in the game. |
-| `game_id` | integer | NFL game id as an integer (e.g. 2024090900, the date followed by a two-digit sequence). |
-| `fapi_game_id` | character | NFL Football API (FAPI) UUID of the game, the id api.nfl.com uses for the same game. |
+| `team_id` | String | NFL team id as a zero-padded string (e.g. '0200'); casting it to a number drops the leading zero. |
+| `gp` | Int64 | Games played in the season (and season type); the denominator of every per-game column. |
+| `total` | Int64 | Offensive plays in the game (pass + run). |
+| `pass` | Int64 | Pass plays in the game. |
+| `run` | Int64 | Run plays in the game. |
+| `pass_pct` | Float64 | Share of plays that were passes (pass / total). |
+| `ppg` | Int64 | Points per game. |
+| `yds` | Int64 | Yards from scrimmage in the game (pass_yds + rush_yds). |
+| `ypg` | Int64 | Yards per game (yds / gp). |
+| `ypp` | Float64 | Yards per play (yds / total). |
+| `td` | Int64 | Touchdowns in the game. |
+| `epa` | Float64 | Total expected points added over all plays (epa_pass + epa_rush). |
+| `epa_pp` | Float64 | Expected points added per play (epa / total). |
+| `pass_yds` | Int64 | Net passing yards in the game. |
+| `pass_ypg` | Int64 | Passing yards per game (pass_yds / gp). |
+| `pass_ypp` | Float64 | Passing yards per pass play (pass_yds / pass). |
+| `sacked_yds` | Int64 | Yards lost to sacks in the game. |
+| `sacked_ypg` | Int64 | Sack yards lost per game (sacked_yds / gp). |
+| `epa_pass` | Float64 | Total expected points added on pass plays. |
+| `epa_pass_pp` | Float64 | Expected points added per pass play (epa_pass / pass). |
+| `rush_yds` | Int64 | Rushing yards in the game. |
+| `rush_ypg` | Int64 | Rushing yards per game (rush_yds / gp). |
+| `rush_ypp` | Float64 | Rushing yards per run play (rush_yds / run). |
+| `epa_rush` | Float64 | Total expected points added on run plays. |
+| `epa_rush_pp` | Float64 | Expected points added per run play (epa_rush / run). |
+| `ryoe` | Float64 | Rushing yards over expected in the game, per Next Gen Stats. |
+| `ttt` | Float64 | Average time to throw in seconds on pass plays, per Next Gen Stats. |
+| `qbp` | Int64 | Quarterback pressures on pass plays in the game. |
+| `qbp_pct` | Float64 | Pressure rate: share of pass plays with a quarterback pressure. |
+| `week_slug` | String | Week slug of the game (e.g. 'WEEK_1', 'WEEK_18'); the week scope of the row. |
+| `opponent_team_id` | String | Opponent's NFL team id as a zero-padded string. |
+| `game_result` | String | Result from the player's team's side: 'W', 'L' or 'T'. |
+| `final_score` | String | Final score as 'own-opponent' (e.g. '19-32' for a 32-19 loss). |
+| `is_home` | Boolean | Whether the player's team was the home team in the game. |
+| `game_id` | Int64 | NFL game id as an integer (e.g. 2024090900, the date followed by a two-digit sequence). |
+| `fapi_game_id` | String | NFL Football API (FAPI) UUID of the game, the id api.nfl.com uses for the same game. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -177,42 +177,42 @@ GET /api/secured/stats/team-defense/overview/season — one row per team for the
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | NFL team id as a zero-padded string (e.g. '0200'); casting it to a number drops the leading zero. |
-| `gp` | integer | Games played in the season (and season type); the denominator of every per-game column. |
-| `total` | integer | Defensive plays faced, season total (pass + run). |
-| `pass` | integer | Pass plays, season total, from the defense's side (allowed / faced). |
-| `run` | integer | Run plays, season total, from the defense's side (allowed / faced). |
-| `pass_pct` | double | Share of plays that were passes (pass / total), from the defense's side (allowed / faced). |
-| `ppg` | double | Points per game, from the defense's side (allowed / faced). |
-| `yds` | integer | Yards from scrimmage, season total (pass_yds + rush_yds), from the defense's side (allowed / faced). |
-| `ypg` | double | Yards per game (yds / gp), from the defense's side (allowed / faced). |
-| `ypp` | double | Yards per play (yds / total), from the defense's side (allowed / faced). |
-| `td` | integer | Touchdowns, season total, from the defense's side (allowed / faced). |
-| `pass_td` | integer | Passing touchdowns allowed, season total. |
-| `rush_td` | integer | Rushing touchdowns allowed, season total. |
-| `epa` | double | Total expected points added over all plays (epa_pass + epa_rush), from the defense's side (allowed / faced). |
-| `epa_pp` | double | Expected points added per play (epa / total), from the defense's side (allowed / faced). |
-| `pass_yds` | integer | Net passing yards, season total, from the defense's side (allowed / faced). |
-| `pass_ypg` | double | Passing yards per game (pass_yds / gp), from the defense's side (allowed / faced). |
-| `pass_ypp` | double | Passing yards per pass play (pass_yds / pass), from the defense's side (allowed / faced). |
-| `sacked_yds` | integer | Yards lost to sacks, season total, from the defense's side (allowed / faced). |
-| `sacked_ypg` | double | Sack yards lost per game (sacked_yds / gp), from the defense's side (allowed / faced). |
-| `epa_pass` | double | Total expected points added on pass plays, from the defense's side (allowed / faced). |
-| `epa_pass_pp` | double | Expected points added per pass play (epa_pass / pass), from the defense's side (allowed / faced). |
-| `rush_yds` | integer | Rushing yards, season total, from the defense's side (allowed / faced). |
-| `rush_ypg` | double | Rushing yards per game (rush_yds / gp), from the defense's side (allowed / faced). |
-| `rush_ypp` | double | Rushing yards per run play (rush_yds / run), from the defense's side (allowed / faced). |
-| `epa_rush` | double | Total expected points added on run plays, from the defense's side (allowed / faced). |
-| `epa_rush_pp` | double | Expected points added per run play (epa_rush / run), from the defense's side (allowed / faced). |
-| `ryoe` | double | Rushing yards over expected, season total, per Next Gen Stats, from the defense's side (allowed / faced). |
-| `ttt` | double | Average time to throw in seconds on pass plays, per Next Gen Stats, from the defense's side (allowed / faced). |
-| `qbp` | integer | Quarterback pressures on pass plays, season total, from the defense's side (allowed / faced). |
-| `qbp_pct` | double | Pressure rate: share of pass plays with a quarterback pressure, from the defense's side (allowed / faced). |
-| `interception` | integer | Interceptions made, season total. |
-| `forced_fumble` | integer | Fumbles forced, season total. |
-| `fumble_recovered` | integer | Opponent fumbles recovered, season total. |
-| `defensive_touchdown` | integer | Defensive touchdowns scored, season total. |
-| `total_takeaways` | integer | Takeaways, season total (interception + fumble_recovered). |
+| `team_id` | String | NFL team id as a zero-padded string (e.g. '0200'); casting it to a number drops the leading zero. |
+| `gp` | Int64 | Games played in the season (and season type); the denominator of every per-game column. |
+| `total` | Int64 | Defensive plays faced, season total (pass + run). |
+| `pass` | Int64 | Pass plays, season total, from the defense's side (allowed / faced). |
+| `run` | Int64 | Run plays, season total, from the defense's side (allowed / faced). |
+| `pass_pct` | Float64 | Share of plays that were passes (pass / total), from the defense's side (allowed / faced). |
+| `ppg` | Float64 | Points per game, from the defense's side (allowed / faced). |
+| `yds` | Int64 | Yards from scrimmage, season total (pass_yds + rush_yds), from the defense's side (allowed / faced). |
+| `ypg` | Float64 | Yards per game (yds / gp), from the defense's side (allowed / faced). |
+| `ypp` | Float64 | Yards per play (yds / total), from the defense's side (allowed / faced). |
+| `td` | Int64 | Touchdowns, season total, from the defense's side (allowed / faced). |
+| `pass_td` | Int64 | Passing touchdowns allowed, season total. |
+| `rush_td` | Int64 | Rushing touchdowns allowed, season total. |
+| `epa` | Float64 | Total expected points added over all plays (epa_pass + epa_rush), from the defense's side (allowed / faced). |
+| `epa_pp` | Float64 | Expected points added per play (epa / total), from the defense's side (allowed / faced). |
+| `pass_yds` | Int64 | Net passing yards, season total, from the defense's side (allowed / faced). |
+| `pass_ypg` | Float64 | Passing yards per game (pass_yds / gp), from the defense's side (allowed / faced). |
+| `pass_ypp` | Float64 | Passing yards per pass play (pass_yds / pass), from the defense's side (allowed / faced). |
+| `sacked_yds` | Int64 | Yards lost to sacks, season total, from the defense's side (allowed / faced). |
+| `sacked_ypg` | Float64 | Sack yards lost per game (sacked_yds / gp), from the defense's side (allowed / faced). |
+| `epa_pass` | Float64 | Total expected points added on pass plays, from the defense's side (allowed / faced). |
+| `epa_pass_pp` | Float64 | Expected points added per pass play (epa_pass / pass), from the defense's side (allowed / faced). |
+| `rush_yds` | Int64 | Rushing yards, season total, from the defense's side (allowed / faced). |
+| `rush_ypg` | Float64 | Rushing yards per game (rush_yds / gp), from the defense's side (allowed / faced). |
+| `rush_ypp` | Float64 | Rushing yards per run play (rush_yds / run), from the defense's side (allowed / faced). |
+| `epa_rush` | Float64 | Total expected points added on run plays, from the defense's side (allowed / faced). |
+| `epa_rush_pp` | Float64 | Expected points added per run play (epa_rush / run), from the defense's side (allowed / faced). |
+| `ryoe` | Float64 | Rushing yards over expected, season total, per Next Gen Stats, from the defense's side (allowed / faced). |
+| `ttt` | Float64 | Average time to throw in seconds on pass plays, per Next Gen Stats, from the defense's side (allowed / faced). |
+| `qbp` | Int64 | Quarterback pressures on pass plays, season total, from the defense's side (allowed / faced). |
+| `qbp_pct` | Float64 | Pressure rate: share of pass plays with a quarterback pressure, from the defense's side (allowed / faced). |
+| `interception` | Int64 | Interceptions made, season total. |
+| `forced_fumble` | Int64 | Fumbles forced, season total. |
+| `fumble_recovered` | Int64 | Opponent fumbles recovered, season total. |
+| `defensive_touchdown` | Int64 | Defensive touchdowns scored, season total. |
+| `total_takeaways` | Int64 | Takeaways, season total (interception + fumble_recovered). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -254,49 +254,49 @@ GET /api/secured/stats/team-defense/overview/week — one row per team per week 
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | NFL team id as a zero-padded string (e.g. '0200'); casting it to a number drops the leading zero. |
-| `gp` | integer | Games played in the season (and season type); the denominator of every per-game column. |
-| `total` | integer | Defensive plays faced in the game (pass + run). |
-| `pass` | integer | Pass plays in the game, from the defense's side (allowed / faced). |
-| `run` | integer | Run plays in the game, from the defense's side (allowed / faced). |
-| `pass_pct` | double | Share of plays that were passes (pass / total), from the defense's side (allowed / faced). |
-| `ppg` | integer | Points per game, from the defense's side (allowed / faced). |
-| `yds` | integer | Yards from scrimmage in the game (pass_yds + rush_yds), from the defense's side (allowed / faced). |
-| `ypg` | integer | Yards per game (yds / gp), from the defense's side (allowed / faced). |
-| `ypp` | double | Yards per play (yds / total), from the defense's side (allowed / faced). |
-| `td` | integer | Touchdowns in the game, from the defense's side (allowed / faced). |
-| `pass_td` | integer | Passing touchdowns allowed in the game. |
-| `rush_td` | integer | Rushing touchdowns allowed in the game. |
-| `epa` | double | Total expected points added over all plays (epa_pass + epa_rush), from the defense's side (allowed / faced). |
-| `epa_pp` | double | Expected points added per play (epa / total), from the defense's side (allowed / faced). |
-| `pass_yds` | integer | Net passing yards in the game, from the defense's side (allowed / faced). |
-| `pass_ypg` | integer | Passing yards per game (pass_yds / gp), from the defense's side (allowed / faced). |
-| `pass_ypp` | double | Passing yards per pass play (pass_yds / pass), from the defense's side (allowed / faced). |
-| `sacked_yds` | integer | Yards lost to sacks in the game, from the defense's side (allowed / faced). |
-| `sacked_ypg` | integer | Sack yards lost per game (sacked_yds / gp), from the defense's side (allowed / faced). |
-| `epa_pass` | double | Total expected points added on pass plays, from the defense's side (allowed / faced). |
-| `epa_pass_pp` | double | Expected points added per pass play (epa_pass / pass), from the defense's side (allowed / faced). |
-| `rush_yds` | integer | Rushing yards in the game, from the defense's side (allowed / faced). |
-| `rush_ypg` | integer | Rushing yards per game (rush_yds / gp), from the defense's side (allowed / faced). |
-| `rush_ypp` | double | Rushing yards per run play (rush_yds / run), from the defense's side (allowed / faced). |
-| `epa_rush` | double | Total expected points added on run plays, from the defense's side (allowed / faced). |
-| `epa_rush_pp` | double | Expected points added per run play (epa_rush / run), from the defense's side (allowed / faced). |
-| `ryoe` | double | Rushing yards over expected in the game, per Next Gen Stats, from the defense's side (allowed / faced). |
-| `ttt` | double | Average time to throw in seconds on pass plays, per Next Gen Stats, from the defense's side (allowed / faced). |
-| `qbp` | integer | Quarterback pressures on pass plays in the game, from the defense's side (allowed / faced). |
-| `qbp_pct` | double | Pressure rate: share of pass plays with a quarterback pressure, from the defense's side (allowed / faced). |
-| `interception` | integer | Interceptions made in the game. |
-| `forced_fumble` | integer | Fumbles forced in the game. |
-| `fumble_recovered` | integer | Opponent fumbles recovered in the game. |
-| `defensive_touchdown` | integer | Defensive touchdowns scored in the game. |
-| `total_takeaways` | integer | Takeaways in the game (interception + fumble_recovered). |
-| `week_slug` | character | Week slug of the game (e.g. 'WEEK_1', 'WEEK_18'); the week scope of the row. |
-| `opponent_team_id` | character | Opponent's NFL team id as a zero-padded string. |
-| `game_result` | character | Result from the player's team's side: 'W', 'L' or 'T'. |
-| `final_score` | character | Final score as 'own-opponent' (e.g. '19-32' for a 32-19 loss). |
-| `is_home` | logical | Whether the player's team was the home team in the game. |
-| `game_id` | integer | NFL game id as an integer (e.g. 2024090900, the date followed by a two-digit sequence). |
-| `fapi_game_id` | character | NFL Football API (FAPI) UUID of the game, the id api.nfl.com uses for the same game. |
+| `team_id` | String | NFL team id as a zero-padded string (e.g. '0200'); casting it to a number drops the leading zero. |
+| `gp` | Int64 | Games played in the season (and season type); the denominator of every per-game column. |
+| `total` | Int64 | Defensive plays faced in the game (pass + run). |
+| `pass` | Int64 | Pass plays in the game, from the defense's side (allowed / faced). |
+| `run` | Int64 | Run plays in the game, from the defense's side (allowed / faced). |
+| `pass_pct` | Float64 | Share of plays that were passes (pass / total), from the defense's side (allowed / faced). |
+| `ppg` | Int64 | Points per game, from the defense's side (allowed / faced). |
+| `yds` | Int64 | Yards from scrimmage in the game (pass_yds + rush_yds), from the defense's side (allowed / faced). |
+| `ypg` | Int64 | Yards per game (yds / gp), from the defense's side (allowed / faced). |
+| `ypp` | Float64 | Yards per play (yds / total), from the defense's side (allowed / faced). |
+| `td` | Int64 | Touchdowns in the game, from the defense's side (allowed / faced). |
+| `pass_td` | Int64 | Passing touchdowns allowed in the game. |
+| `rush_td` | Int64 | Rushing touchdowns allowed in the game. |
+| `epa` | Float64 | Total expected points added over all plays (epa_pass + epa_rush), from the defense's side (allowed / faced). |
+| `epa_pp` | Float64 | Expected points added per play (epa / total), from the defense's side (allowed / faced). |
+| `pass_yds` | Int64 | Net passing yards in the game, from the defense's side (allowed / faced). |
+| `pass_ypg` | Int64 | Passing yards per game (pass_yds / gp), from the defense's side (allowed / faced). |
+| `pass_ypp` | Float64 | Passing yards per pass play (pass_yds / pass), from the defense's side (allowed / faced). |
+| `sacked_yds` | Int64 | Yards lost to sacks in the game, from the defense's side (allowed / faced). |
+| `sacked_ypg` | Int64 | Sack yards lost per game (sacked_yds / gp), from the defense's side (allowed / faced). |
+| `epa_pass` | Float64 | Total expected points added on pass plays, from the defense's side (allowed / faced). |
+| `epa_pass_pp` | Float64 | Expected points added per pass play (epa_pass / pass), from the defense's side (allowed / faced). |
+| `rush_yds` | Int64 | Rushing yards in the game, from the defense's side (allowed / faced). |
+| `rush_ypg` | Int64 | Rushing yards per game (rush_yds / gp), from the defense's side (allowed / faced). |
+| `rush_ypp` | Float64 | Rushing yards per run play (rush_yds / run), from the defense's side (allowed / faced). |
+| `epa_rush` | Float64 | Total expected points added on run plays, from the defense's side (allowed / faced). |
+| `epa_rush_pp` | Float64 | Expected points added per run play (epa_rush / run), from the defense's side (allowed / faced). |
+| `ryoe` | Float64 | Rushing yards over expected in the game, per Next Gen Stats, from the defense's side (allowed / faced). |
+| `ttt` | Float64 | Average time to throw in seconds on pass plays, per Next Gen Stats, from the defense's side (allowed / faced). |
+| `qbp` | Int64 | Quarterback pressures on pass plays in the game, from the defense's side (allowed / faced). |
+| `qbp_pct` | Float64 | Pressure rate: share of pass plays with a quarterback pressure, from the defense's side (allowed / faced). |
+| `interception` | Int64 | Interceptions made in the game. |
+| `forced_fumble` | Int64 | Fumbles forced in the game. |
+| `fumble_recovered` | Int64 | Opponent fumbles recovered in the game. |
+| `defensive_touchdown` | Int64 | Defensive touchdowns scored in the game. |
+| `total_takeaways` | Int64 | Takeaways in the game (interception + fumble_recovered). |
+| `week_slug` | String | Week slug of the game (e.g. 'WEEK_1', 'WEEK_18'); the week scope of the row. |
+| `opponent_team_id` | String | Opponent's NFL team id as a zero-padded string. |
+| `game_result` | String | Result from the player's team's side: 'W', 'L' or 'T'. |
+| `final_score` | String | Final score as 'own-opponent' (e.g. '19-32' for a 32-19 loss). |
+| `is_home` | Boolean | Whether the player's team was the home team in the game. |
+| `game_id` | Int64 | NFL game id as an integer (e.g. 2024090900, the date followed by a two-digit sequence). |
+| `fapi_game_id` | String | NFL Football API (FAPI) UUID of the game, the id api.nfl.com uses for the same game. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

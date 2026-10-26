@@ -441,7 +441,7 @@ def _count_gets(monkeypatch, body):
 def test_redact_keyed_thesportsdb_entry_never_reaches_disk(monkeypatch, tmp_cache_dir, reset_cache):
     """A-N1 / A-L66: the premium key rides in the URL path; the filesystem entry holds none of it."""
     from sportsdataverse import cache
-    from sportsdataverse.thesportsdb import thesportsdb_runtime as rt
+    from sportsdataverse.providers.thesportsdb import thesportsdb_runtime as rt
 
     cache.set_cache_mode("filesystem")
     monkeypatch.setenv("THESPORTSDB_API_KEY", _FAKE_SECRET)

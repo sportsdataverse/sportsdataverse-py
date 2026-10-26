@@ -330,7 +330,7 @@ def test_one_browser_user_agent() -> None:
     from sportsdataverse.cfb import on3_runtime, sports247_runtime, sports247_site_pages_runtime
     from sportsdataverse.nfl import nfl_games, nfl_ngs, nflpro_runtime, pff_runtime
     from sportsdataverse.soccer import uefa_runtime
-    from sportsdataverse.yahoo import yahoo_shangrila_runtime
+    from sportsdataverse.providers.yahoo import yahoo_shangrila_runtime
 
     ua = _codegen_runtime._CHROME_UA
     assert ua == _OLD_UA

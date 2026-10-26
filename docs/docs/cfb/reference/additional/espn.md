@@ -1,10 +1,10 @@
 ---
-title: "CFB — additional Python functions — ESPN"
+title: "College football — additional Python functions — ESPN"
 sidebar_label: "ESPN"
 sidebar_position: 2
-description: "CFB — additional Python functions — ESPN — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — additional Python functions — ESPN — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# CFB — additional Python functions — ESPN
+# College football — additional Python functions — ESPN
 
 ### espn_cfb_calendar {#espn_cfb_calendar}
 
@@ -27,17 +27,17 @@ One row per calendar week of the requested season (`week`, `week_label`, `week_s
 
 | col_name | type | description |
 |---|---|---|
-| `week_label` | character | Week label as ESPN's calendar names it, e.g. Week 1. |
-| `week_alternate_label` | character | Alternate week label ESPN ships next to week_label; usually the same text. |
-| `week_detail` | character | Date span of the week as display text, e.g. Aug 22-Sep 7. |
-| `week` | character | Game week of the season. |
-| `week_start_date` | character | Start of the week window, an ISO 8601 UTC timestamp string (e.g. 2026-08-22T07:00Z). |
-| `week_end_date` | character | End of the week window, an ISO 8601 UTC timestamp string (the last minute before the next week). |
-| `season_type_label` | character | Name of the season segment the week belongs to, e.g. Regular Season or Postseason. |
-| `season_type` | character | ESPN season type (2 = regular, 3 = postseason). |
-| `season_type_start_date` | character | Start of that season segment, an ISO 8601 UTC timestamp string. |
-| `season_type_end_date` | character | End of that season segment, an ISO 8601 UTC timestamp string. |
-| `season` | integer | The season argument as passed (null when the call omits it); ondays=True returns a different frame (dates, dateURL, url). |
+| `week_label` | String | Week label as ESPN's calendar names it, e.g. Week 1. |
+| `week_alternate_label` | String | Alternate week label ESPN ships next to week_label; usually the same text. |
+| `week_detail` | String | Date span of the week as display text, e.g. Aug 22-Sep 7. |
+| `week` | String | Game week of the season. |
+| `week_start_date` | String | Start of the week window, an ISO 8601 UTC timestamp string (e.g. 2026-08-22T07:00Z). |
+| `week_end_date` | String | End of the week window, an ISO 8601 UTC timestamp string (the last minute before the next week). |
+| `season_type_label` | String | Name of the season segment the week belongs to, e.g. Regular Season or Postseason. |
+| `season_type` | String | ESPN season type (2 = regular, 3 = postseason). |
+| `season_type_start_date` | String | Start of that season segment, an ISO 8601 UTC timestamp string. |
+| `season_type_end_date` | String | End of that season segment, an ISO 8601 UTC timestamp string. |
+| `season` | Int64 | The season argument as passed (null when the call omits it); ondays=True returns a different frame (dates, dateURL, url). |
 
 **Raises**
 
@@ -82,81 +82,81 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 
 | col_name | type | description |
 |---|---|---|
-| `athlete_id` | integer | ESPN athlete id. |
-| `athlete_uid` | character |  |
-| `athlete_guid` | character |  |
-| `athlete_type` | character |  |
-| `first_name` | character | Athlete first name. |
-| `last_name` | character | Athlete last name. |
-| `full_name` | character | Venue full name (e.g. `Tenney Stadium`). |
-| `athlete_display_name` | character | Player display name. |
-| `short_name` | character | Ranking source short name (e.g. `AP Poll`). |
-| `weight` | double | Listed weight (lbs). |
-| `display_weight` | character | Human-readable weight (e.g. `205 lbs`). |
-| `height` | double | Listed height (inches). |
-| `display_height` | character | Human-readable height (e.g. `6' 1"`). |
-| `slug` | character | URL slug for the team. |
-| `jersey` | character | Jersey number. |
-| `linked` | logical |  |
-| `active` | logical | `TRUE` if the player was active for the game. |
-| `alternate_ids_sdr` | character |  |
-| `birth_place_city` | character |  |
-| `birth_place_state` | character |  |
-| `birth_place_country` | character |  |
-| `birth_country_alternate_id` | integer |  |
-| `birth_country_abbreviation` | character |  |
-| `headshot_href` | character | URL of the athlete headshot image. |
-| `headshot_alt` | character |  |
-| `flag_href` | character |  |
-| `flag_alt` | character |  |
-| `flag_rel` | character |  |
-| `experience_years` | integer | Years of experience. |
-| `experience_display_value` | character |  |
-| `experience_abbreviation` | character |  |
-| `status_id` | integer | ESPN commitment status id. |
-| `status_name` | character | Status-type key (e.g. `STATUS_FINAL`). |
-| `status_type` | character | Status type. |
-| `status_abbreviation` | character |  |
-| `position_id` | integer | ESPN's numeric identifier of the athlete's listed position (the Core v2 position resource id). |
-| `position_name` | character | Name of the athlete's listed position from ESPN's position resource, e.g. Guard or Offensive Lineman. |
-| `position_display_name` | character | Display form of the athlete's listed position as ESPN renders it; usually equal to position_name. |
-| `position_abbreviation` | character | Short code of the athlete's listed position (e.g. G, F, RW, OL), from ESPN's position resource. |
-| `position_leaf` | logical | Whether the position is a leaf of ESPN's position tree; False marks a grouping, not a specific role. |
-| `position_parent_href` | character | ESPN API URL of the broader position group above a leaf position; null for a grouping position. |
-| `hand_type` | character |  |
-| `hand_abbreviation` | character |  |
-| `hand_display_value` | character |  |
-| `age` | integer |  |
-| `date_of_birth` | character | Player date of birth (if published). |
-| `starter` | logical | `TRUE` if the athlete started the game. |
-| `jersey_right` | character |  |
-| `valid` | logical | `TRUE` if the roster entry is flagged valid by ESPN. |
-| `did_not_play` | logical | `TRUE` if the athlete did not play. |
-| `display_name` | character | Human-readable metric name. |
-| `athlete_href` | character |  |
-| `position_href` | character |  |
-| `statistics_href` | character |  |
-| `team_id` | integer | ESPN team id. |
-| `order` | integer | Team order within the competition (0 = first). |
-| `home_away` | character | `home` or `away`. |
-| `winner` | logical | `TRUE` if this team won the game. |
-| `team_guid` | character |  |
-| `team_uid` | character |  |
-| `team_slug` | character | Team slug for the stat row. |
-| `team_location` | character | Team location / school name. |
-| `team_name` | character | Team nickname. |
-| `team_nickname` | character | Team nickname label. |
-| `team_abbreviation` | character | Team abbreviation. |
-| `team_display_name` | character | Full team display name. |
-| `team_short_display_name` | character | Short team display name. |
-| `team_color` | character | Primary team color. |
-| `team_alternate_color` | character | Alternate team color. |
-| `is_active` | logical | Whether the team is currently active. |
-| `is_all_star` | logical | Whether the team is an all-star team. |
-| `team_alternate_ids_sdr` | character |  |
-| `logo_href` | character | URL of the default team logo. |
-| `logo_dark_href` | character | URL of the dark-variant team logo. |
-| `game_id` | integer | ESPN game identifier. |
+| `athlete_id` | Int64 | ESPN athlete id. |
+| `athlete_uid` | String |  |
+| `athlete_guid` | String |  |
+| `athlete_type` | String |  |
+| `first_name` | String | Athlete first name. |
+| `last_name` | String | Athlete last name. |
+| `full_name` | String | Venue full name (e.g. `Tenney Stadium`). |
+| `athlete_display_name` | String | Player display name. |
+| `short_name` | String | Ranking source short name (e.g. `AP Poll`). |
+| `weight` | Float64 | Listed weight (lbs). |
+| `display_weight` | String | Human-readable weight (e.g. `205 lbs`). |
+| `height` | Float64 | Listed height (inches). |
+| `display_height` | String | Human-readable height (e.g. `6' 1"`). |
+| `slug` | String | URL slug for the team. |
+| `jersey` | String | Jersey number. |
+| `linked` | Boolean |  |
+| `active` | Boolean | `TRUE` if the player was active for the game. |
+| `alternate_ids_sdr` | String |  |
+| `birth_place_city` | String |  |
+| `birth_place_state` | String |  |
+| `birth_place_country` | String |  |
+| `birth_country_alternate_id` | Int64 |  |
+| `birth_country_abbreviation` | String |  |
+| `headshot_href` | String | URL of the athlete headshot image. |
+| `headshot_alt` | String |  |
+| `flag_href` | String |  |
+| `flag_alt` | String |  |
+| `flag_rel` | String |  |
+| `experience_years` | Int64 | Years of experience. |
+| `experience_display_value` | String |  |
+| `experience_abbreviation` | String |  |
+| `status_id` | Int64 | ESPN commitment status id. |
+| `status_name` | String | Status-type key (e.g. `STATUS_FINAL`). |
+| `status_type` | String | Status type. |
+| `status_abbreviation` | String |  |
+| `position_id` | Int64 | ESPN's numeric identifier of the athlete's listed position (the Core v2 position resource id). |
+| `position_name` | String | Name of the athlete's listed position from ESPN's position resource, e.g. Guard or Offensive Lineman. |
+| `position_display_name` | String | Display form of the athlete's listed position as ESPN renders it; usually equal to position_name. |
+| `position_abbreviation` | String | Short code of the athlete's listed position (e.g. G, F, RW, OL), from ESPN's position resource. |
+| `position_leaf` | Boolean | Whether the position is a leaf of ESPN's position tree; False marks a grouping, not a specific role. |
+| `position_parent_href` | String | ESPN API URL of the broader position group above a leaf position; null for a grouping position. |
+| `hand_type` | String |  |
+| `hand_abbreviation` | String |  |
+| `hand_display_value` | String |  |
+| `age` | Int64 |  |
+| `date_of_birth` | String | Player date of birth (if published). |
+| `starter` | Boolean | `TRUE` if the athlete started the game. |
+| `jersey_right` | String |  |
+| `valid` | Boolean | `TRUE` if the roster entry is flagged valid by ESPN. |
+| `did_not_play` | Boolean | `TRUE` if the athlete did not play. |
+| `display_name` | String | Human-readable metric name. |
+| `athlete_href` | String |  |
+| `position_href` | String |  |
+| `statistics_href` | String |  |
+| `team_id` | Int64 | ESPN team id. |
+| `order` | Int64 | Team order within the competition (0 = first). |
+| `home_away` | String | `home` or `away`. |
+| `winner` | Boolean | `TRUE` if this team won the game. |
+| `team_guid` | String |  |
+| `team_uid` | String |  |
+| `team_slug` | String | Team slug for the stat row. |
+| `team_location` | String | Team location / school name. |
+| `team_name` | String | Team nickname. |
+| `team_nickname` | String | Team nickname label. |
+| `team_abbreviation` | String | Team abbreviation. |
+| `team_display_name` | String | Full team display name. |
+| `team_short_display_name` | String | Short team display name. |
+| `team_color` | String | Primary team color. |
+| `team_alternate_color` | String | Alternate team color. |
+| `is_active` | Boolean | Whether the team is currently active. |
+| `is_all_star` | Boolean | Whether the team is an all-star team. |
+| `team_alternate_ids_sdr` | String |  |
+| `logo_href` | String | URL of the default team logo. |
+| `logo_dark_href` | String | URL of the dark-variant team logo. |
+| `game_id` | Int64 | ESPN game identifier. |
 
 **Raises**
 
@@ -213,93 +213,93 @@ Polars (or pandas) DataFrame, one row per play with at least one participant (a 
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | ESPN game (event) id. |
-| `play_id` | integer | ESPN play id, the join key to the play-by-play frame. |
-| `kicker_player_name` | character | Display name of the play's first participant ESPN types `kicker`; null when the play has none. |
-| `passer_player_name` | character | Display name of the play's first participant ESPN types `passer`; null when the play has none. |
-| `receiver_player_name` | character | Display name of the play's first participant ESPN types `receiver`; null when the play has none. |
-| `rusher_player_name` | character | Display name of the play's first participant ESPN types `rusher`; null when the play has none. |
-| `scorer_player_name` | character | Display name of the play's first participant ESPN types `scorer`; null when the play has none. |
-| `returner_player_name` | character | Display name of the play's first participant ESPN types `returner`; null when the play has none. |
-| `pass_defender_player_name` | character | Display name of the play's first participant ESPN types `passDefender`; null when the play has none. |
-| `penalized_player_name` | character | Display name of the play's first participant ESPN types `penalized`; null when the play has none. |
-| `sacked_by_player_name` | character | Display name of the play's first participant ESPN types `sackedBy`; null when the play has none. |
-| `pat_scorer_player_name` | character | Display name of the play's first participant ESPN types `patScorer`; null when the play has none. |
-| `punter_player_name` | character | Display name of the play's first participant ESPN types `punter`; null when the play has none. |
-| `tackler_player_name` | character | Display name of the play's first participant ESPN types `tackler`; null when the play has none. |
-| `assisted_by_player_name` | character | Display name of the play's first participant ESPN types `assistedBy`; null when the play has none. |
-| `forced_by_player_name` | character | Display name of the play's first participant ESPN types `forcedBy`; null when the play has none. |
-| `recoverer_player_name` | character | Display name of the play's first participant ESPN types `recoverer`; null when the play has none. |
-| `pat_passer_player_name` | character | Display name of the play's first participant ESPN types `patPasser`; null when the play has none. |
-| `fumbler_player_name` | character | Display name of the play's first participant ESPN types `fumbler`; null when the play has none. |
-| `kicker_player_id` | character | ESPN athlete id of the play's first participant ESPN types `kicker`; null when the play has none. |
-| `passer_player_id` | character | ESPN athlete id of the play's first participant ESPN types `passer`; null when the play has none. |
-| `receiver_player_id` | character | ESPN athlete id of the play's first participant ESPN types `receiver`; null when the play has none. |
-| `rusher_player_id` | character | ESPN athlete id of the play's first participant ESPN types `rusher`; null when the play has none. |
-| `scorer_player_id` | character | ESPN athlete id of the play's first participant ESPN types `scorer`; null when the play has none. |
-| `returner_player_id` | character | ESPN athlete id of the play's first participant ESPN types `returner`; null when the play has none. |
-| `pass_defender_player_id` | character | ESPN athlete id of the play's first participant ESPN types `passDefender`; null when the play has none. |
-| `penalized_player_id` | character | ESPN athlete id of the play's first participant ESPN types `penalized`; null when the play has none. |
-| `sacked_by_player_id` | character | ESPN athlete id of the play's first participant ESPN types `sackedBy`; null when the play has none. |
-| `pat_scorer_player_id` | character | ESPN athlete id of the play's first participant ESPN types `patScorer`; null when the play has none. |
-| `punter_player_id` | character | ESPN athlete id of the play's first participant ESPN types `punter`; null when the play has none. |
-| `tackler_player_id` | character | ESPN athlete id of the play's first participant ESPN types `tackler`; null when the play has none. |
-| `assisted_by_player_id` | character | ESPN athlete id of the play's first participant ESPN types `assistedBy`; null when the play has none. |
-| `forced_by_player_id` | character | ESPN athlete id of the play's first participant ESPN types `forcedBy`; null when the play has none. |
-| `recoverer_player_id` | character | ESPN athlete id of the play's first participant ESPN types `recoverer`; null when the play has none. |
-| `pat_passer_player_id` | character | ESPN athlete id of the play's first participant ESPN types `patPasser`; null when the play has none. |
-| `fumbler_player_id` | character | ESPN athlete id of the play's first participant ESPN types `fumbler`; null when the play has none. |
-| `kicker_position_id` | character | ESPN position id of the play's first participant ESPN types `kicker` (see sportsdataverse.football.positions); null when none. |
-| `passer_position_id` | character | ESPN position id of the play's first participant ESPN types `passer` (see sportsdataverse.football.positions); null when none. |
-| `receiver_position_id` | character | ESPN position id of the play's first participant ESPN types `receiver` (see sportsdataverse.football.positions); null when none. |
-| `rusher_position_id` | character | ESPN position id of the play's first participant ESPN types `rusher` (see sportsdataverse.football.positions); null when none. |
-| `scorer_position_id` | character | ESPN position id of the play's first participant ESPN types `scorer` (see sportsdataverse.football.positions); null when none. |
-| `returner_position_id` | character | ESPN position id of the play's first participant ESPN types `returner` (see sportsdataverse.football.positions); null when none. |
-| `pass_defender_position_id` | character | ESPN position id of the play's first participant ESPN types `passDefender` (see sportsdataverse.football.positions); null when none. |
-| `penalized_position_id` | character | ESPN position id of the play's first participant ESPN types `penalized` (see sportsdataverse.football.positions); null when none. |
-| `sacked_by_position_id` | character | ESPN position id of the play's first participant ESPN types `sackedBy` (see sportsdataverse.football.positions); null when none. |
-| `pat_scorer_position_id` | character | ESPN position id of the play's first participant ESPN types `patScorer` (see sportsdataverse.football.positions); null when none. |
-| `punter_position_id` | character | ESPN position id of the play's first participant ESPN types `punter` (see sportsdataverse.football.positions); null when none. |
-| `tackler_position_id` | character | ESPN position id of the play's first participant ESPN types `tackler` (see sportsdataverse.football.positions); null when none. |
-| `assisted_by_position_id` | character | ESPN position id of the play's first participant ESPN types `assistedBy` (see sportsdataverse.football.positions); null when none. |
-| `forced_by_position_id` | character | ESPN position id of the play's first participant ESPN types `forcedBy` (see sportsdataverse.football.positions); null when none. |
-| `recoverer_position_id` | character | ESPN position id of the play's first participant ESPN types `recoverer` (see sportsdataverse.football.positions); null when none. |
-| `pat_passer_position_id` | character | ESPN position id of the play's first participant ESPN types `patPasser` (see sportsdataverse.football.positions); null when none. |
-| `fumbler_position_id` | character | ESPN position id of the play's first participant ESPN types `fumbler` (see sportsdataverse.football.positions); null when none. |
-| `kicker_player_names` | list | Display names of every participant ESPN types `kicker` on the play, in ESPN's order; [] when none. |
-| `passer_player_names` | list | Display names of every participant ESPN types `passer` on the play, in ESPN's order; [] when none. |
-| `receiver_player_names` | list | Display names of every participant ESPN types `receiver` on the play, in ESPN's order; [] when none. |
-| `rusher_player_names` | list | Display names of every participant ESPN types `rusher` on the play, in ESPN's order; [] when none. |
-| `scorer_player_names` | list | Display names of every participant ESPN types `scorer` on the play, in ESPN's order; [] when none. |
-| `returner_player_names` | list | Display names of every participant ESPN types `returner` on the play, in ESPN's order; [] when none. |
-| `pass_defender_player_names` | list | Display names of every participant ESPN types `passDefender` on the play, in ESPN's order; [] when none. |
-| `penalized_player_names` | list | Display names of every participant ESPN types `penalized` on the play, in ESPN's order; [] when none. |
-| `sacked_by_player_names` | list | Display names of every participant ESPN types `sackedBy` on the play, in ESPN's order; [] when none. |
-| `pat_scorer_player_names` | list | Display names of every participant ESPN types `patScorer` on the play, in ESPN's order; [] when none. |
-| `punter_player_names` | list | Display names of every participant ESPN types `punter` on the play, in ESPN's order; [] when none. |
-| `tackler_player_names` | list | Display names of every participant ESPN types `tackler` on the play, in ESPN's order; [] when none. |
-| `assisted_by_player_names` | list | Display names of every participant ESPN types `assistedBy` on the play, in ESPN's order; [] when none. |
-| `forced_by_player_names` | list | Display names of every participant ESPN types `forcedBy` on the play, in ESPN's order; [] when none. |
-| `recoverer_player_names` | list | Display names of every participant ESPN types `recoverer` on the play, in ESPN's order; [] when none. |
-| `pat_passer_player_names` | list | Display names of every participant ESPN types `patPasser` on the play, in ESPN's order; [] when none. |
-| `fumbler_player_names` | list | Display names of every participant ESPN types `fumbler` on the play, in ESPN's order; [] when none. |
-| `kicker_player_ids` | list | ESPN athlete ids of every participant ESPN types `kicker` on the play, in ESPN's order; [] when none. |
-| `passer_player_ids` | list | ESPN athlete ids of every participant ESPN types `passer` on the play, in ESPN's order; [] when none. |
-| `receiver_player_ids` | list | ESPN athlete ids of every participant ESPN types `receiver` on the play, in ESPN's order; [] when none. |
-| `rusher_player_ids` | list | ESPN athlete ids of every participant ESPN types `rusher` on the play, in ESPN's order; [] when none. |
-| `scorer_player_ids` | list | ESPN athlete ids of every participant ESPN types `scorer` on the play, in ESPN's order; [] when none. |
-| `returner_player_ids` | list | ESPN athlete ids of every participant ESPN types `returner` on the play, in ESPN's order; [] when none. |
-| `pass_defender_player_ids` | list | ESPN athlete ids of every participant ESPN types `passDefender` on the play, in ESPN's order; [] when none. |
-| `penalized_player_ids` | list | ESPN athlete ids of every participant ESPN types `penalized` on the play, in ESPN's order; [] when none. |
-| `sacked_by_player_ids` | list | ESPN athlete ids of every participant ESPN types `sackedBy` on the play, in ESPN's order; [] when none. |
-| `pat_scorer_player_ids` | list | ESPN athlete ids of every participant ESPN types `patScorer` on the play, in ESPN's order; [] when none. |
-| `punter_player_ids` | list | ESPN athlete ids of every participant ESPN types `punter` on the play, in ESPN's order; [] when none. |
-| `tackler_player_ids` | list | ESPN athlete ids of every participant ESPN types `tackler` on the play, in ESPN's order; [] when none. |
-| `assisted_by_player_ids` | list | ESPN athlete ids of every participant ESPN types `assistedBy` on the play, in ESPN's order; [] when none. |
-| `forced_by_player_ids` | list | ESPN athlete ids of every participant ESPN types `forcedBy` on the play, in ESPN's order; [] when none. |
-| `recoverer_player_ids` | list | ESPN athlete ids of every participant ESPN types `recoverer` on the play, in ESPN's order; [] when none. |
-| `pat_passer_player_ids` | list | ESPN athlete ids of every participant ESPN types `patPasser` on the play, in ESPN's order; [] when none. |
-| `fumbler_player_ids` | list | ESPN athlete ids of every participant ESPN types `fumbler` on the play, in ESPN's order; [] when none. |
+| `game_id` | Int64 | ESPN game (event) id. |
+| `play_id` | Int64 | ESPN play id, the join key to the play-by-play frame. |
+| `kicker_player_name` | String | Display name of the play's first participant ESPN types `kicker`; null when the play has none. |
+| `passer_player_name` | String | Display name of the play's first participant ESPN types `passer`; null when the play has none. |
+| `receiver_player_name` | String | Display name of the play's first participant ESPN types `receiver`; null when the play has none. |
+| `rusher_player_name` | String | Display name of the play's first participant ESPN types `rusher`; null when the play has none. |
+| `scorer_player_name` | String | Display name of the play's first participant ESPN types `scorer`; null when the play has none. |
+| `returner_player_name` | String | Display name of the play's first participant ESPN types `returner`; null when the play has none. |
+| `pass_defender_player_name` | String | Display name of the play's first participant ESPN types `passDefender`; null when the play has none. |
+| `penalized_player_name` | String | Display name of the play's first participant ESPN types `penalized`; null when the play has none. |
+| `sacked_by_player_name` | String | Display name of the play's first participant ESPN types `sackedBy`; null when the play has none. |
+| `pat_scorer_player_name` | String | Display name of the play's first participant ESPN types `patScorer`; null when the play has none. |
+| `punter_player_name` | String | Display name of the play's first participant ESPN types `punter`; null when the play has none. |
+| `tackler_player_name` | String | Display name of the play's first participant ESPN types `tackler`; null when the play has none. |
+| `assisted_by_player_name` | String | Display name of the play's first participant ESPN types `assistedBy`; null when the play has none. |
+| `forced_by_player_name` | String | Display name of the play's first participant ESPN types `forcedBy`; null when the play has none. |
+| `recoverer_player_name` | String | Display name of the play's first participant ESPN types `recoverer`; null when the play has none. |
+| `pat_passer_player_name` | String | Display name of the play's first participant ESPN types `patPasser`; null when the play has none. |
+| `fumbler_player_name` | String | Display name of the play's first participant ESPN types `fumbler`; null when the play has none. |
+| `kicker_player_id` | String | ESPN athlete id of the play's first participant ESPN types `kicker`; null when the play has none. |
+| `passer_player_id` | String | ESPN athlete id of the play's first participant ESPN types `passer`; null when the play has none. |
+| `receiver_player_id` | String | ESPN athlete id of the play's first participant ESPN types `receiver`; null when the play has none. |
+| `rusher_player_id` | String | ESPN athlete id of the play's first participant ESPN types `rusher`; null when the play has none. |
+| `scorer_player_id` | String | ESPN athlete id of the play's first participant ESPN types `scorer`; null when the play has none. |
+| `returner_player_id` | String | ESPN athlete id of the play's first participant ESPN types `returner`; null when the play has none. |
+| `pass_defender_player_id` | String | ESPN athlete id of the play's first participant ESPN types `passDefender`; null when the play has none. |
+| `penalized_player_id` | String | ESPN athlete id of the play's first participant ESPN types `penalized`; null when the play has none. |
+| `sacked_by_player_id` | String | ESPN athlete id of the play's first participant ESPN types `sackedBy`; null when the play has none. |
+| `pat_scorer_player_id` | String | ESPN athlete id of the play's first participant ESPN types `patScorer`; null when the play has none. |
+| `punter_player_id` | String | ESPN athlete id of the play's first participant ESPN types `punter`; null when the play has none. |
+| `tackler_player_id` | String | ESPN athlete id of the play's first participant ESPN types `tackler`; null when the play has none. |
+| `assisted_by_player_id` | String | ESPN athlete id of the play's first participant ESPN types `assistedBy`; null when the play has none. |
+| `forced_by_player_id` | String | ESPN athlete id of the play's first participant ESPN types `forcedBy`; null when the play has none. |
+| `recoverer_player_id` | String | ESPN athlete id of the play's first participant ESPN types `recoverer`; null when the play has none. |
+| `pat_passer_player_id` | String | ESPN athlete id of the play's first participant ESPN types `patPasser`; null when the play has none. |
+| `fumbler_player_id` | String | ESPN athlete id of the play's first participant ESPN types `fumbler`; null when the play has none. |
+| `kicker_position_id` | String | ESPN position id of the play's first participant ESPN types `kicker` (see sportsdataverse.football.positions); null when none. |
+| `passer_position_id` | String | ESPN position id of the play's first participant ESPN types `passer` (see sportsdataverse.football.positions); null when none. |
+| `receiver_position_id` | String | ESPN position id of the play's first participant ESPN types `receiver` (see sportsdataverse.football.positions); null when none. |
+| `rusher_position_id` | String | ESPN position id of the play's first participant ESPN types `rusher` (see sportsdataverse.football.positions); null when none. |
+| `scorer_position_id` | String | ESPN position id of the play's first participant ESPN types `scorer` (see sportsdataverse.football.positions); null when none. |
+| `returner_position_id` | String | ESPN position id of the play's first participant ESPN types `returner` (see sportsdataverse.football.positions); null when none. |
+| `pass_defender_position_id` | String | ESPN position id of the play's first participant ESPN types `passDefender` (see sportsdataverse.football.positions); null when none. |
+| `penalized_position_id` | String | ESPN position id of the play's first participant ESPN types `penalized` (see sportsdataverse.football.positions); null when none. |
+| `sacked_by_position_id` | String | ESPN position id of the play's first participant ESPN types `sackedBy` (see sportsdataverse.football.positions); null when none. |
+| `pat_scorer_position_id` | String | ESPN position id of the play's first participant ESPN types `patScorer` (see sportsdataverse.football.positions); null when none. |
+| `punter_position_id` | String | ESPN position id of the play's first participant ESPN types `punter` (see sportsdataverse.football.positions); null when none. |
+| `tackler_position_id` | String | ESPN position id of the play's first participant ESPN types `tackler` (see sportsdataverse.football.positions); null when none. |
+| `assisted_by_position_id` | String | ESPN position id of the play's first participant ESPN types `assistedBy` (see sportsdataverse.football.positions); null when none. |
+| `forced_by_position_id` | String | ESPN position id of the play's first participant ESPN types `forcedBy` (see sportsdataverse.football.positions); null when none. |
+| `recoverer_position_id` | String | ESPN position id of the play's first participant ESPN types `recoverer` (see sportsdataverse.football.positions); null when none. |
+| `pat_passer_position_id` | String | ESPN position id of the play's first participant ESPN types `patPasser` (see sportsdataverse.football.positions); null when none. |
+| `fumbler_position_id` | String | ESPN position id of the play's first participant ESPN types `fumbler` (see sportsdataverse.football.positions); null when none. |
+| `kicker_player_names` | List | Display names of every participant ESPN types `kicker` on the play, in ESPN's order; [] when none. |
+| `passer_player_names` | List | Display names of every participant ESPN types `passer` on the play, in ESPN's order; [] when none. |
+| `receiver_player_names` | List | Display names of every participant ESPN types `receiver` on the play, in ESPN's order; [] when none. |
+| `rusher_player_names` | List | Display names of every participant ESPN types `rusher` on the play, in ESPN's order; [] when none. |
+| `scorer_player_names` | List | Display names of every participant ESPN types `scorer` on the play, in ESPN's order; [] when none. |
+| `returner_player_names` | List | Display names of every participant ESPN types `returner` on the play, in ESPN's order; [] when none. |
+| `pass_defender_player_names` | List | Display names of every participant ESPN types `passDefender` on the play, in ESPN's order; [] when none. |
+| `penalized_player_names` | List | Display names of every participant ESPN types `penalized` on the play, in ESPN's order; [] when none. |
+| `sacked_by_player_names` | List | Display names of every participant ESPN types `sackedBy` on the play, in ESPN's order; [] when none. |
+| `pat_scorer_player_names` | List | Display names of every participant ESPN types `patScorer` on the play, in ESPN's order; [] when none. |
+| `punter_player_names` | List | Display names of every participant ESPN types `punter` on the play, in ESPN's order; [] when none. |
+| `tackler_player_names` | List | Display names of every participant ESPN types `tackler` on the play, in ESPN's order; [] when none. |
+| `assisted_by_player_names` | List | Display names of every participant ESPN types `assistedBy` on the play, in ESPN's order; [] when none. |
+| `forced_by_player_names` | List | Display names of every participant ESPN types `forcedBy` on the play, in ESPN's order; [] when none. |
+| `recoverer_player_names` | List | Display names of every participant ESPN types `recoverer` on the play, in ESPN's order; [] when none. |
+| `pat_passer_player_names` | List | Display names of every participant ESPN types `patPasser` on the play, in ESPN's order; [] when none. |
+| `fumbler_player_names` | List | Display names of every participant ESPN types `fumbler` on the play, in ESPN's order; [] when none. |
+| `kicker_player_ids` | List | ESPN athlete ids of every participant ESPN types `kicker` on the play, in ESPN's order; [] when none. |
+| `passer_player_ids` | List | ESPN athlete ids of every participant ESPN types `passer` on the play, in ESPN's order; [] when none. |
+| `receiver_player_ids` | List | ESPN athlete ids of every participant ESPN types `receiver` on the play, in ESPN's order; [] when none. |
+| `rusher_player_ids` | List | ESPN athlete ids of every participant ESPN types `rusher` on the play, in ESPN's order; [] when none. |
+| `scorer_player_ids` | List | ESPN athlete ids of every participant ESPN types `scorer` on the play, in ESPN's order; [] when none. |
+| `returner_player_ids` | List | ESPN athlete ids of every participant ESPN types `returner` on the play, in ESPN's order; [] when none. |
+| `pass_defender_player_ids` | List | ESPN athlete ids of every participant ESPN types `passDefender` on the play, in ESPN's order; [] when none. |
+| `penalized_player_ids` | List | ESPN athlete ids of every participant ESPN types `penalized` on the play, in ESPN's order; [] when none. |
+| `sacked_by_player_ids` | List | ESPN athlete ids of every participant ESPN types `sackedBy` on the play, in ESPN's order; [] when none. |
+| `pat_scorer_player_ids` | List | ESPN athlete ids of every participant ESPN types `patScorer` on the play, in ESPN's order; [] when none. |
+| `punter_player_ids` | List | ESPN athlete ids of every participant ESPN types `punter` on the play, in ESPN's order; [] when none. |
+| `tackler_player_ids` | List | ESPN athlete ids of every participant ESPN types `tackler` on the play, in ESPN's order; [] when none. |
+| `assisted_by_player_ids` | List | ESPN athlete ids of every participant ESPN types `assistedBy` on the play, in ESPN's order; [] when none. |
+| `forced_by_player_ids` | List | ESPN athlete ids of every participant ESPN types `forcedBy` on the play, in ESPN's order; [] when none. |
+| `recoverer_player_ids` | List | ESPN athlete ids of every participant ESPN types `recoverer` on the play, in ESPN's order; [] when none. |
+| `pat_passer_player_ids` | List | ESPN athlete ids of every participant ESPN types `patPasser` on the play, in ESPN's order; [] when none. |
+| `fumbler_player_ids` | List | ESPN athlete ids of every participant ESPN types `fumbler` on the play, in ESPN's order; [] when none. |
 
 **Example**
 
@@ -328,20 +328,20 @@ Polars dataframe of the college football teams, one row per team, with the colum
 
 | col_name | type | description |
 |---|---|---|
-| `team_abbreviation` | character | Team abbreviation. |
-| `team_alternate_color` | character | Alternate team color. |
-| `team_color` | character | Primary team color. |
-| `team_display_name` | character | Full team display name. |
-| `team_id` | integer | ESPN team id. |
-| `team_is_active` | logical |  |
-| `team_is_all_star` | logical |  |
-| `team_location` | character | Team location / school name. |
-| `team_logos` | integer |  |
-| `team_name` | character | Team nickname. |
-| `team_nickname` | character | Team nickname label. |
-| `team_short_display_name` | character | Short team display name. |
-| `team_slug` | character | Team slug for the stat row. |
-| `team_uid` | character |  |
+| `team_abbreviation` | String | Team abbreviation. |
+| `team_alternate_color` | String | Alternate team color. |
+| `team_color` | String | Primary team color. |
+| `team_display_name` | String | Full team display name. |
+| `team_id` | Int64 | ESPN team id. |
+| `team_is_active` | Boolean |  |
+| `team_is_all_star` | Boolean |  |
+| `team_location` | String | Team location / school name. |
+| `team_logos` | Int64 |  |
+| `team_name` | String | Team nickname. |
+| `team_nickname` | String | Team nickname label. |
+| `team_short_display_name` | String | Short team display name. |
+| `team_slug` | String | Team slug for the stat row. |
+| `team_uid` | String |  |
 
 **Raises**
 

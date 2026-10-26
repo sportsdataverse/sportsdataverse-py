@@ -1,11 +1,11 @@
 ---
-title: BLEAGUE — B.LEAGUE game contexts (S3) and pages (www.bleague.jp, Japan)
+title: B.LEAGUE — B.LEAGUE game contexts (S3) and pages (www.bleague.jp, Japan)
 sidebar_label: B.LEAGUE game contexts (S3) and pages (www.bleague.jp, Japan)
-description: "BLEAGUE — B.LEAGUE game contexts (S3) and pages (www.bleague.jp, Japan) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "B.LEAGUE — B.LEAGUE game contexts (S3) and pages (www.bleague.jp, Japan) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
 ---
-# BLEAGUE — B.LEAGUE game contexts (S3) and pages (www.bleague.jp, Japan)
+# B.LEAGUE — B.LEAGUE game contexts (S3) and pages (www.bleague.jp, Japan)
 
 `sportsdataverse.basketball.bleague` — 14 endpoints.
 

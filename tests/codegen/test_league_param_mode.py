@@ -159,7 +159,7 @@ def test_generated_wrapper_annotations_resolve(tmp_path):
     import pandas as pd
     import polars as pl
 
-    from sportsdataverse.cbs import cbs_napi
+    from sportsdataverse.providers.cbs import cbs_napi
     from sportsdataverse.mbb import kenpom
 
     lg, apis, hosts, _ = _real_league_views("nba")

@@ -218,7 +218,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 
 ## See also
 
-- [sdvplot](https://github.com/sportsdataverse/sdvplot) — `court_coords()` puts stats-API `x_legacy` / `y_legacy` shots on the court `surface("nba")` draws
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `court_coords()` puts stats-API `x_legacy` / `y_legacy` shots on the court `surface("nba")` draws
 - [sportypy](https://sportypy.sportsdataverse.org/) — the regulation NBA court (and every other surface) sdvplot draws with
 
 ## Examples

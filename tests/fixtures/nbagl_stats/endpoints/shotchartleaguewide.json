@@ -1,0 +1,41 @@
+{
+ "resource": "shotchartleaguewide",
+ "parameters": {
+  "LeagueID": "20",
+  "Season": "2023-24"
+ },
+ "resultSets": [
+  {
+   "name": "League_Wide",
+   "headers": [
+    "GRID_TYPE",
+    "SHOT_ZONE_BASIC",
+    "SHOT_ZONE_AREA",
+    "SHOT_ZONE_RANGE",
+    "FGA",
+    "FGM",
+    "FG_PCT"
+   ],
+   "rowSet": [
+    [
+     "League Averages",
+     "Above the Break 3",
+     "Back Court(BC)",
+     "Back Court Shot",
+     28,
+     0,
+     0.0
+    ],
+    [
+     "League Averages",
+     "Above the Break 3",
+     "Center(C)",
+     "24+ ft.",
+     7179,
+     2415,
+     0.336
+    ]
+   ]
+  }
+ ]
+}

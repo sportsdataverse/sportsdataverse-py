@@ -63,3 +63,31 @@ def test_a_cell_with_an_image_renders_once_per_output(tmp_path, monkeypatch):
     body = rn._to_markdown(nb, "16_demo")
     assert "16_demo_files/16_demo_0_0.png" in body
     assert (tmp_path / "16_demo_files" / "16_demo_0_0.png").exists()
+
+
+def test_skip_lines_lose_the_repeated_class_and_the_html_body():
+    """The published pages printed `NoDataError: NoDataError: ...` and Torvik's whole 403 error page."""
+    dup = "    ⏭️  IPL calendar: NoDataError: NoDataError: No data found for https://x.test/a"
+    html = '    ⏭️  ratings: AssetFetchError: x.test answered HTTP 403: <!DOCTYPE HTML PUBLIC "-//W3C"> <HTML>'
+    long = "    ⏭️  thing: AssetFetchError: " + "word " * 60
+    page = "\n".join([dup, html, long, "    NoDataError: NoDataError: kept, not a skip line"])
+    out = rn._tidy_skips(page).split("\n")
+    assert out[0] == "    ⏭️  IPL calendar: NoDataError: No data found for https://x.test/a"
+    assert out[1] == "    ⏭️  ratings: AssetFetchError: x.test answered HTTP 403"
+    assert len(out[2]) <= rn._SKIP_MAX and out[2].endswith("…")
+    assert out[3] == "    NoDataError: NoDataError: kept, not a skip line"
+    assert rn._tidy_skips("\n".join(out)) == "\n".join(out)  # idempotent, so --relink can run it every time
+
+
+def test_the_page_description_is_the_notebooks_first_paragraph(tmp_path, monkeypatch):
+    """Docusaurus took the notebook-links line as the description and read `04_nba_intro` as emphasis."""
+    import json
+
+    src = "# \U0001f3c0 NBA\n\nPull **NBA** teams and [box scores](https://x.test) with `sportsdataverse` \U0001f389\n\nMore."
+    nb = {"cells": [{"cell_type": "markdown", "source": [src]}]}
+    (tmp_path / "04_nba_intro.ipynb").write_text(json.dumps(nb), encoding="utf-8")
+    monkeypatch.setattr(rn, "NB_DIR", tmp_path)
+    head = rn._frontmatter("04_nba_intro", "NBA", 2)
+    assert 'description: "Pull NBA teams and box scores with sportsdataverse"\n' in head
+    assert rn._description("missing_notebook") is None
+    assert "description" not in rn._frontmatter("missing_notebook", "X", 1)

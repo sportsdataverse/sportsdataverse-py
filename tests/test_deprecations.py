@@ -20,7 +20,7 @@ def test_league_config_names_warn_on_access(name: str) -> None:
     league_config = importlib.import_module("sportsdataverse.scrape.ncaa.league_config")
     with pytest.warns(
         DeprecationWarning,
-        match=rf"league_config\.{name} is deprecated since 0\.1\.6 and will be removed in 0\.2\.0; use .*wbb_period_model",
+        match=rf"league_config\.{name} is deprecated since 0\.2\.0 and will be removed in 0\.4\.0; use .*wbb_period_model",
     ):
         getattr(league_config, name)
 
@@ -61,7 +61,7 @@ def test_dl_utils_http_classes_warn_on_access_and_still_resolve(name: str) -> No
     dl_utils = importlib.import_module("sportsdataverse.dl_utils")
     with pytest.warns(
         DeprecationWarning,
-        match=rf"dl_utils\.{name} is deprecated since 0\.1\.6 and will be removed in 0\.2\.0; use .*download\(\)",
+        match=rf"dl_utils\.{name} is deprecated since 0\.2\.0 and will be removed in 0\.4\.0; use .*download\(\)",
     ):
         cls = getattr(dl_utils, name)
     assert isinstance(cls, type)
@@ -88,7 +88,7 @@ def test_janitor_case_methods_warn_and_still_rename(method: str, expected: list[
     import sportsdataverse.dl_utils  # noqa: F401  (registers the ``janitor`` namespace)
 
     df = pl.DataFrame({"game_id": [1]})
-    with pytest.warns(DeprecationWarning, match=rf"janitor\.{method} is deprecated since 0\.1\.6"):
+    with pytest.warns(DeprecationWarning, match=rf"janitor\.{method} is deprecated since 0\.2\.0"):
         out = getattr(df.janitor, method)()
     assert out.columns == expected
 
@@ -111,7 +111,7 @@ def test_janitor_clean_names_is_not_deprecated() -> None:
 def test_record_time_usage_warns_when_applied_and_still_times(capsys: pytest.CaptureFixture[str]) -> None:
     from sportsdataverse.decorators import record_time_usage
 
-    with pytest.warns(DeprecationWarning, match=r"record_time_usage is deprecated since 0\.1\.6.*timer\(number=1\)"):
+    with pytest.warns(DeprecationWarning, match=r"record_time_usage is deprecated since 0\.2\.0.*timer\(number=1\)"):
         wrapped = record_time_usage(lambda x: x + 1)
     assert wrapped(1) == 2
     assert "Took" in capsys.readouterr().out
@@ -121,7 +121,7 @@ def test_record_mem_usage_warns_when_applied() -> None:
     from sportsdataverse.decorators import record_mem_usage
 
     with pytest.warns(
-        DeprecationWarning, match=r"record_mem_usage is deprecated since 0\.1\.6 and will be removed in 0\.2\.0"
+        DeprecationWarning, match=r"record_mem_usage is deprecated since 0\.2\.0 and will be removed in 0\.4\.0"
     ):
         wrapped = record_mem_usage(lambda: 7)
     assert callable(wrapped)
@@ -146,7 +146,7 @@ def test_config_dead_urls_warn_on_access_and_keep_their_value() -> None:
     assert len(config._DEPRECATED) == 29
     with pytest.warns(
         DeprecationWarning,
-        match=r"config\.NBA_BASE_URL is deprecated since 0\.1\.6 and will be removed in 0\.2\.0; use the league's generated",
+        match=r"config\.NBA_BASE_URL is deprecated since 0\.2\.0 and will be removed in 0\.4\.0; use the league's generated",
     ):
         url = config.NBA_BASE_URL
     assert url == config.SDVRELEASES + "espn_nba_pbp/play_by_play_{season}.parquet"
