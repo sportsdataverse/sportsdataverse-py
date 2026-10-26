@@ -148,8 +148,8 @@ uv run pytest
 # Run live tests (hits real APIs)
 SDV_PY_LIVE_TESTS=1 uv run pytest
 
-# Type-check the strict-listed modules
-uv run mypy sportsdataverse/<your_module>.py
+# Type-check the ratchet (the [tool.mypy] files list scopes it; passing a path bypasses that list)
+uv run mypy
 
 # Lint
 uv run ruff check sportsdataverse/

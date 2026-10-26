@@ -386,7 +386,7 @@ Mirror their structure for any new ESPN-endpoint module:
 uv sync --all-extras --dev          # install runtime + extras + dev group
 uv run pytest                       # run gated suite (live tests skip)
 SDV_PY_LIVE_TESTS=1 uv run pytest   # include live API tests
-uv run mypy sportsdataverse/<mod>.py
+uv run mypy                         # scoped by the [tool.mypy] files list; never pass a path
 uv run ruff check sportsdataverse/<mod>.py
 uv build                            # build wheel + sdist
 uv add some-package                 # add runtime dep

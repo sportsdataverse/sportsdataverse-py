@@ -62,6 +62,8 @@ _CLAUDE_STALE = [
     "run on both 1.x and 2.0",
     "don't exist in 1.x",
     "polars 1.x/2.x",
+    # a path argument bypasses the [tool.mypy] files ratchet
+    "uv run mypy sportsdataverse/<your_module>.py",
 ]
 
 _CLAUDE_CURRENT = [
