@@ -8,7 +8,7 @@ description: "Every breaking change in sportsdataverse-py 0.2.0, with before and
 # Migrating to 0.2.0
 
 0.2.0 is the release after 0.1.4 (0.1.5 was never published; its changes ship in 0.2.0); it ships first as the
-`0.2.0b1` pre-release (`pip install --pre sportsdataverse`). It carries fifteen breaking changes, each recorded
+`0.2.0b1` pre-release (`pip install --pre sportsdataverse`). It carries sixteen breaking changes, each recorded
 as a `changelog.d/*.breaking.md` fragment; the changes are on `main` already. This
 page takes them one at a time: what changed, who is affected, a before/after
 snippet and how to migrate. The fragments are the source of record, and the
@@ -152,6 +152,27 @@ columns directly if you were converting to the hoopR frame yourself. ESPN's
 missing-location sentinel reads about ±2.1e8 after the transform; filter on
 `coordinate_x_raw > nba_game_page.COORD_SENTINEL` (the snake-cased name in the
 processed frames).
+
+## ESPN leaders return one row per athlete
+
+**What changed.** `espn_<league>_leaders()` returns one row per athlete and stat
+category (#1018). It used to return a single envelope row whose `pagination_*`,
+`league_*` and `current_season_*` columns described the request, with the
+athletes packed into one cell. Leagues without a leaderboard return zero rows.
+
+**Who is affected.** Callers that read the envelope columns, or that unpacked the
+`athletes` / `categories` cells themselves.
+
+```python
+# 0.2.0
+from sportsdataverse.nba import espn_nba_leaders
+
+leaders = espn_nba_leaders()                     # one row per athlete
+raw = espn_nba_leaders(return_parsed=False)      # pagination and per-stat ranks
+```
+
+**How to migrate.** Drop the unpacking step. Read page counts and ESPN's
+per-stat ranks from `return_parsed=False`.
 
 ## ESPN game rosters honour `raw=True`
 
