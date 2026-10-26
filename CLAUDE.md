@@ -119,8 +119,8 @@ python -m build          # produces sdist + wheel into dist/
 setuptools is the build backend (`build-system.build-backend =
 "setuptools.build_meta"`). Runtime deps live under `[project.dependencies]`,
 extras under `[project.optional-dependencies]` (`tests`, `nflpro`, `models`, `pff`,
-`soccer`, `sportypy`, `mcp`, `all`) -- `soccer` is kloppy for `soccer_open_events`, `sportypy` the GPL-3.0 surface-drawing
-companion (no `sdvplot` extra until a release lifts its polars<2 pin); note `[all]`
+`soccer`, `sdvplot`, `sportypy`, `mcp`, `all`) -- `soccer` is kloppy for `soccer_open_events`, `sdvplot` the team
+logo/color/theme companion (>=0.1.1, its first polars-2 release), `sportypy` the GPL-3.0 surface-drawing companion; note `[all]`
 includes every extra EXCEPT `mcp`, which is the sdv-docs server's extra. Package data ships via `[tool.setuptools.package-data]` (currently
 `cfb/models/*`, `nfl/models/*`, and `py.typed`). The `[tool.setuptools.packages.find]`
 block excludes `tests*`, `Sphinx-docs*`, `docs*`, `examples*`, `archive*`,
