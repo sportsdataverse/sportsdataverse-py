@@ -119,7 +119,7 @@ def main() -> None:
         "host": HOST,
         "name_pattern": "espn_content_{short}",
         "module": STEM,
-        "parser_module": "espn_content.espn_content_parsers",
+        "parser_module": "providers.espn_content.espn_content_parsers",
         "qualifier": "",
         "passthrough_query": False,
         "docstring": {

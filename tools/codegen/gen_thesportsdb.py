@@ -156,7 +156,7 @@ def main() -> None:
         "host": HOST,
         "name_pattern": "thesportsdb_{short}",
         "module": STEM,
-        "parser_module": "thesportsdb.thesportsdb_parsers",
+        "parser_module": "providers.thesportsdb.thesportsdb_parsers",
         "getter_module": "sportsdataverse.providers.thesportsdb.thesportsdb_runtime",
         "qualifier": "",
         "passthrough_query": False,

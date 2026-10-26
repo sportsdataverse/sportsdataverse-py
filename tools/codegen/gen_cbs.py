@@ -226,7 +226,7 @@ def main() -> None:
         "host": HOST,
         "name_pattern": "cbs_{short}",
         "module": "cbs_napi",
-        "parser_module": "cbs.cbs_napi_parsers",
+        "parser_module": "providers.cbs.cbs_napi_parsers",
         "qualifier": "",
         "passthrough_query": False,
         "getter_module": "sportsdataverse.providers.cbs.cbs_napi_runtime",

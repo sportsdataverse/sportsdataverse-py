@@ -1491,8 +1491,8 @@ _SCALAR_ARRAY_CAPTURED = {
 # Generic "any body" flatteners whose shape rule reads a scalar array as a ``value`` column by design
 # (soccer/_frames.rows_to_frame, cbs_napi_parsers._rows_to_frame); no capture of that shape is committed.
 _SCALAR_ARRAY_ANY_BODY = {
-    "cbs.cbs_napi_parsers.parse_cbs_napi": "value",
-    "euroleague.euroleague_parsers.parse_euroleague": "value",
+    "providers.cbs.cbs_napi_parsers.parse_cbs_napi": "value",
+    "basketball.euroleague.euroleague_parsers.parse_euroleague": "value",
     "soccer.asa_parsers.parse_asa": "value",
     "soccer.fifa_parsers.parse_fifa": "value",
     "soccer.fotmob_parsers.parse_fotmob": "value",

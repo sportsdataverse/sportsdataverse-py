@@ -665,7 +665,7 @@ def main() -> None:
         "host": HOST,
         "name_pattern": "euroleague_{short}",
         "module": STEM,
-        "parser_module": "euroleague.euroleague_parsers",
+        "parser_module": "basketball.euroleague.euroleague_parsers",
         "getter_module": "sportsdataverse.basketball.euroleague.euroleague_runtime",
         "qualifier": "",
         "passthrough_query": False,

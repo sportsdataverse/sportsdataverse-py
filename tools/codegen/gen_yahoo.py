@@ -346,7 +346,7 @@ def main() -> None:
         "host": HOST,
         "name_pattern": "yahoo_{short}",
         "module": "yahoo_shangrila",
-        "parser_module": "yahoo.yahoo_shangrila_parsers",
+        "parser_module": "providers.yahoo.yahoo_shangrila_parsers",
         "getter_module": "sportsdataverse.providers.yahoo.yahoo_shangrila_runtime",
         "qualifier": "",
         "passthrough_query": False,
