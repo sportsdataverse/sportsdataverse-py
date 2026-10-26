@@ -1214,6 +1214,10 @@ loaders:
   min_season: 1996
   example_args:
     seasons: 2025
+  see_also:
+  - name: sdvplot
+    note: court_coords() converts x_legacy / y_legacy to the court surface("nba") draws
+    url: https://sdvplot.sportsdataverse.org/
 - fn: load_nba_stats_standings
   league: nba
   base: sdv_releases
@@ -1895,6 +1899,10 @@ loaders:
   min_season: 1997
   example_args:
     seasons: 2026
+  see_also:
+  - name: sdvplot
+    note: court_coords() converts x_legacy / y_legacy to the court surface("wnba") draws
+    url: https://sdvplot.sportsdataverse.org/
 - fn: load_wnba_stats_team_boxscores
   league: wnba
   base: sdv_releases

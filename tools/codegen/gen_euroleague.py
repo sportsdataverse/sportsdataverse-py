@@ -551,6 +551,19 @@ def _docstring(host: Optional[str]) -> Dict[str, Any]:
     return doc
 
 
+# Per-endpoint companions appended to the family See Also.
+_EXTRA_SEE_ALSO: Dict[str, List[Dict[str, str]]] = {
+    "game_points": [
+        {
+            "name": "sdvplot",
+            "url": "https://sdvplot.sportsdataverse.org/",
+            "note": 'court_coords(provider="euroleague") converts coord_x / coord_y to meters on the '
+            'FIBA court surface("fiba") draws',
+        },
+    ],
+}
+
+
 def _endpoint_entry(spec: dict, path: str, op: dict) -> Dict[str, Any]:
     short = _short(op)
     host = _host(spec, path)
@@ -581,6 +594,7 @@ def _endpoint_entry(spec: dict, path: str, op: dict) -> Dict[str, Any]:
     if host:
         entry["host"] = host
         entry["docstring"] = _docstring(host)
+        entry["docstring"]["see_also"] += _EXTRA_SEE_ALSO.get(short, [])
     if pps:
         entry["path_params"] = pps
     if qps:

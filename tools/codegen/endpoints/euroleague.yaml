@@ -161,6 +161,10 @@ endpoints:
     - name: euroleague-api
       note: community Python client over the same v2 / v3 / live APIs
       url: https://github.com/giasemidis/euroleague_api
+    - name: sdvplot
+      note: court_coords(provider="euroleague") converts coord_x / coord_y to meters
+        on the FIBA court surface("fiba") draws
+      url: https://sdvplot.sportsdataverse.org/
   example_args:
     game_code: 1
     season_code: E2025
