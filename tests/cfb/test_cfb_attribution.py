@@ -1475,3 +1475,123 @@ def test_parse_recovery_sides_paren_that_is_no_team_falls_back_to_the_token():
     assert _sides("Kent State fumbled, recovered by Miami (OH) at the KENT 30.", _MOH_KENT) == ["home"]
     # A real 2004-06 code still wins over the name before it.
     assert _sides("Omar Jacobs fumbled, recovered by Joe Smith (KENT) at the M-OH 40.", _MOH_KENT) == ["away"]
+
+
+# 401752674 (2025): Central Arkansas at Missouri. ESPN's text writes "recovered by CARK" for two
+# Missouri recoveries; the box score (FUM / LOST / REC) says who actually recovered.
+_MIZ_CARK = {
+    "homeTeamAbbrev": "MIZ",
+    "awayTeamAbbrev": "CARK",
+    "homeTeamName": "Missouri",
+    "awayTeamName": "Central Arkansas",
+    "homeTeamNameAlt": None,
+    "awayTeamNameAlt": None,
+    "homeTeamMascot": "Tigers",
+    "awayTeamMascot": "Bears",
+}
+_MIZ_CARK_OWN = (
+    "Tavorus Jones run for a loss of 2 yards to the MIZ 32 Tavorus Jones fumbled, recovered by CARK Tavorus Jones"
+)
+_MIZ_CARK_LOST = (
+    "Luther Richesson pass complete to Triston Edwards for 4 yds Triston Edwards fumbled, "
+    "recovered by CARK Cameron Keys"
+)
+_MIZ_CARK_BOX = {  # the box score's fumbles category, as ESPN shipped it
+    "players": [
+        {
+            "team": {"id": "2110", "abbreviation": "CARK"},
+            "statistics": [
+                {
+                    "name": "fumbles",
+                    "labels": ["FUM", "LOST", "REC"],
+                    "athletes": [
+                        {"athlete": {"id": "5085383", "displayName": "Triston Edwards"}, "stats": ["1", "1", "0"]}
+                    ],
+                },
+            ],
+        },
+        {
+            "team": {"id": "142", "abbreviation": "MIZ"},
+            "statistics": [
+                {
+                    "name": "fumbles",
+                    "labels": ["FUM", "LOST", "REC"],
+                    "athletes": [
+                        {"athlete": {"id": "4685418", "displayName": "Tavorus Jones"}, "stats": ["1", "0", "0"]},
+                        {"athlete": {"id": "5109866", "displayName": "Cameron Keys"}, "stats": ["0", "0", "1"]},
+                    ],
+                },
+            ],
+        },
+    ]
+}
+
+
+def _sides_by_recoverer(text, box_sides, teams=_MIZ_CARK):
+    from sportsdataverse.cfb.cfb_pbp import _recovery_sides_by_recoverer
+
+    return _recovery_sides_by_recoverer(box_sides)({"_clean_text": text, **teams})
+
+
+@pytest.mark.parametrize("text", [_MIZ_CARK_OWN, _MIZ_CARK_LOST])
+def test_recovering_side_comes_from_the_recoverer_not_the_text_token(text):
+    assert _sides(text, _MIZ_CARK) == ["away"]  # what the token alone says: wrong for both
+    box = {"tavorus jones": "home", "cameron keys": "home", "triston edwards": "away"}
+    assert _sides_by_recoverer(text, box) == ["home"]
+
+
+def test_recoverer_the_box_score_does_not_place_keeps_the_text_token():
+    # a name absent from the box (or listed on both sides, which __box_sides drops) cannot overrule the token
+    assert _sides_by_recoverer(_MIZ_CARK_LOST, {"triston edwards": "away"}) == ["away"]
+    assert _sides_by_recoverer(_MIZ_CARK_LOST, {}) == ["away"]
+
+
+def test_parenthesised_recoverer_form_resolves_by_name():
+    teams = {**_AUB_ALST, "homeTeamAbbrev": "BGSU", "homeTeamName": "Bowling Green", "homeTeamMascot": "Falcons"}
+    text = "Omar Jacobs pass incomplete, fumbled at the BGSU 30, recovered by Omar Jacobs (BGSU) at the BGSU 28."
+    assert _sides_by_recoverer(text, {"omar jacobs": "home"}, teams) == ["home"]
+
+
+def test_box_score_recoverer_sets_turnover_and_recovery_team():
+    """401752674: an own recovery is not a turnover and a defensive recovery is, whatever the token says."""
+    proc = CFBPlayProcess(gameId=401752674)
+    proc.json = {"boxscore": _MIZ_CARK_BOX}
+    teams = dict(_MIZ_CARK, homeTeamId=142, awayTeamId=2110)
+    rows = [
+        _base(pos_team=142, def_pos_team=2110, text=_MIZ_CARK_OWN, **teams),
+        _base(pos_team=2110, def_pos_team=142, text=_MIZ_CARK_LOST, **teams),
+    ]
+    own, lost = proc._CFBPlayProcess__add_attribution_cols(pl.DataFrame(rows)).to_dicts()
+    assert (own["fumble_recovery_team"], own["is_turnover"], own["fumble_lost"]) == (142, False, False)
+    assert (lost["fumble_recovery_team"], lost["is_turnover"], lost["fumble_lost"]) == (142, True, True)
+
+
+def test_jersey_form_recoverer_resolves_by_jersey_and_surname():
+    """2025+ vendor text names the recoverer "#91 J.Williams" (401856709); the box has jersey + first/last."""
+    from sportsdataverse.cfb.cfb_pbp import _jersey_key
+
+    assert _jersey_key("91", "Jaden", "Williams") == "#91 j williams"
+    assert _jersey_key("20", "Rodney", "Terrero Jr.") == "#20 r terrero"
+    teams = {
+        **_MIZ_CARK,
+        "homeTeamAbbrev": "SC",
+        "awayTeamAbbrev": "UK",
+        "homeTeamName": "South Carolina",
+        "awayTeamName": "Kentucky",
+        "homeTeamMascot": "Gamecocks",
+        "awayTeamMascot": "Wildcats",
+    }
+    text = (
+        "(05:11) Shotgun #21 J.Coleman rush right for 5 yards gain to the USC33 fumbled by #21 J.Coleman at USC30 "
+        "forced by #2 S.Greene recovered by UKY #91 J.Williams at USC33, End Of Play"
+    )
+    assert _sides_by_recoverer(text, {"#91 j williams": "away"}, teams) == ["away"]
+    assert _sides_by_recoverer(text, {"#91 j williams": "home"}, teams) == ["home"]  # the box wins over the token
+
+
+def test_jersey_key_tolerates_a_non_numeric_box_jersey():
+    from sportsdataverse.cfb.cfb_pbp import _jersey_key
+
+    assert _jersey_key("9F", "Ann", "Lee") == "#9F a lee"  # seen in a 2024-26 box score; must not raise
+    assert _jersey_key("07", "Ann", "Lee") == "#7 a lee"
+    assert _jersey_key(None, "Ann", "Lee") is None

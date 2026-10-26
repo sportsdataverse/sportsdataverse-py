@@ -1802,6 +1802,72 @@ def _parse_recovery_sides(row):
     return sides
 
 
+#: The words after "recovered by": a team token and/or the recoverer's name ("CARK Cameron Keys",
+#: "Omar Jacobs (BGSU)", "AlbSt Kimar Martin Jr."), up to a clause break.
+_RECOVERER_RUN_RE = re.compile(r"[A-Za-z&][A-Za-z&.'\-]*(?:\s+[A-Z][A-Za-z.'\-]*){0,4}")
+
+
+#: The jersey form 2025+ vendor text uses: "recovered by UKY #91 J.Williams", the team token optional.
+_RECOVERER_JERSEY_RE = re.compile(r"(?:[A-Za-z&][A-Za-z&.'\-]*\s+)?#(\d{1,2})\s+([A-Za-z])\.\s?([A-Za-z][A-Za-z'\-]*)")
+
+
+def _jersey_key(jersey, first, last):
+    """``"#91 j williams"``: jersey, first initial, first word of the surname, as box and text both spell it."""
+    surname = _norm_player_name(last).split()
+    initial = _norm_player_name(first)[:1]
+    number = str(jersey or "").strip()
+    if not number or not initial or not surname:
+        return None
+    number = str(int(number)) if number.isdigit() else number  # "07" is "#7"; a box jersey can be "9F"
+    return f"#{number} {initial} {surname[0]}"
+
+
+def _box_recoverer_side(text, start, box_sides):
+    """ "home" / "away" for the recoverer named at ``text[start:]``, from the box score, or None.
+
+    Reads the jersey form ("UKY #91 J.Williams") first, then a full name: the longest run of
+    words, with and without the leading team token. A name counts only when the box score places
+    it on exactly one side (``box_sides`` holds only those).
+    """
+    jm = _RECOVERER_JERSEY_RE.match(text, start)
+    if jm:
+        side = box_sides.get(_jersey_key(jm.group(1), jm.group(2), jm.group(3)))
+        if side:
+            return side
+    run = _RECOVERER_RUN_RE.match(text, start)
+    words = run.group(0).split() if run else []
+    for k in range(len(words), 1, -1):
+        for cand in (words[1:k], words[:k]):
+            side = box_sides.get(_norm_player_name(" ".join(cand)))
+            if side:
+                return side
+    return None
+
+
+def _recovery_sides_by_recoverer(box_sides):
+    """``_parse_recovery_sides``, with each clause's side taken from its recoverer's box-score team.
+
+    ESPN's "recovered by <TEAM> <Name>" token is not reliable: on 401752674 (2025) it reads CARK for
+    two Missouri recoveries, which turned an own recovery into a turnover and a turnover into an own
+    recovery. The recoverer is a named athlete, and the box score (in the summary, so offline
+    rebuilds have it too) says which team he played for. The text token stays the fallback for a
+    recoverer the box score does not list, or lists on both sides.
+    """
+
+    def parse(row):
+        sides = _parse_recovery_sides(row)
+        text = row["_clean_text"]
+        if not text or not box_sides:
+            return sides
+        for i, m in enumerate(_RECOVERY_TOKEN_RE.finditer(text)):
+            side = _box_recoverer_side(text, m.start(1), box_sides)
+            if side and i < len(sides):
+                sides[i] = side
+        return sides
+
+    return parse
+
+
 def _two_word_school_side(run, row):
     """ "home" / "away" when a two-word run spells one side's school name, else None.
 
@@ -7539,7 +7605,7 @@ class CFBPlayProcess(object):
         play_df = _add_attribution_cols(
             play_df,
             parse_recovery_abbrevs=_parse_recovery_abbrevs,
-            parse_recovery_sides=_parse_recovery_sides,
+            parse_recovery_sides=_recovery_sides_by_recoverer(self.__box_sides(play_df)),
             parse_penalty_team_side=_parse_penalty_team_side,
             parse_penalty_spot=_parse_penalty_spot,
         )
@@ -10589,6 +10655,32 @@ class CFBPlayProcess(object):
             except (TypeError, ValueError):
                 continue
         return out
+
+    def __box_sides(self, play_df):
+        """Box-score player -> ``"home"`` / ``"away"``, for players on exactly one side.
+
+        Keyed by the normalized full name and by the jersey key (``_jersey_key``), the two ways
+        play text names a recoverer. Feeds the recovering-team resolution in
+        ``__add_attribution_cols``. A key the box score lists on both teams is left out, so its
+        clause keeps the text token.
+        """
+        if play_df.height == 0 or not {"homeTeamId", "awayTeamId"} <= set(play_df.columns):
+            return {}
+        side_of = {str(play_df["homeTeamId"][0]): "home", str(play_df["awayTeamId"][0]): "away"}
+        sides = {}
+        box = (getattr(self, "json", None) or {}).get("boxscore") or {}
+        for team in box.get("players") or []:
+            side = side_of.get(str((team.get("team") or {}).get("id")))
+            for stat in team.get("statistics") or []:
+                for entry in stat.get("athletes") or []:
+                    a = entry.get("athlete") or {}
+                    keys = (
+                        _norm_player_name(a.get("displayName")),
+                        _jersey_key(a.get("jersey"), a.get("firstName"), a.get("lastName")),
+                    )
+                    for key in filter(None, keys):
+                        sides.setdefault(key, set()).add(side)
+        return {k: s.pop() for k, s in sides.items() if len(s) == 1 and None not in s}
 
     def __attach_player_ids(self, play_df):
         """Null garbage names, then attach a roster-resolved ``{type}_player_id``
