@@ -65,7 +65,7 @@ def test_fox_events_keep_only_in_window_games() -> None:
 
 
 def test_fox_listing_resumes_without_requests(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    import sportsdataverse.fox.fox_api as fox_api
+    import sportsdataverse.providers.fox.fox_api as fox_api
 
     raw = _load("fox_nba_scores_segment_20241114.json")
     calls: List[str] = []

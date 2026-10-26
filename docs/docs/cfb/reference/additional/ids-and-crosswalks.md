@@ -73,7 +73,7 @@ matching Fox team id.
 
 The default is `("espn", "fox")`. **Yahoo is opt-in** (pass
 `providers=("espn", "fox", "yahoo")`): its leg is Yahoo's current roster
-(`sportsdataverse.yahoo.yahoo_team_roster`, active players only), and
+(`sportsdataverse.providers.yahoo.yahoo_team_roster`, active players only), and
 each Yahoo player attaches to the ESPN/Fox player with the same name and
 jersey, else the same name when that name is unique on the team. Pass
 `yahoo_team_id` (`yahoo_team_id` of `cfb_teams_crosswalk`) to skip

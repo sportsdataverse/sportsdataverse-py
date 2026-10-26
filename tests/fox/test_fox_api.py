@@ -18,8 +18,8 @@ import pytest
 import yaml
 
 import sportsdataverse
-from sportsdataverse.fox import fox_api as gen
-from sportsdataverse.fox import fox_api_parsers as P
+from sportsdataverse.providers.fox import fox_api as gen
+from sportsdataverse.providers.fox import fox_api_parsers as P
 
 ROOT = Path(__file__).resolve().parents[2]
 FIX = ROOT / "tests" / "fixtures" / "fox_api"
@@ -46,7 +46,7 @@ def test_no_public_name_collision() -> None:
         assert getattr(sportsdataverse, name) is getattr(gen, name)
     owners: Dict[str, List[str]] = {}
     for mod in pkgutil.walk_packages(sportsdataverse.__path__, "sportsdataverse."):
-        if mod.name.startswith("sportsdataverse.fox"):
+        if mod.name.startswith("sportsdataverse.providers.fox"):
             continue
         try:
             m = importlib.import_module(mod.name)

@@ -35,7 +35,7 @@ from gen_soccer_common import (
 )
 
 from sportsdataverse.dl_utils import underscore
-from sportsdataverse.espn_content.espn_content_parsers import parse_espn_content
+from sportsdataverse.providers.espn_content.espn_content_parsers import parse_espn_content
 
 HOST = "https://content.core.api.espn.com/v1"
 SPEC = "espn-content.openapi.yaml"

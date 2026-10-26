@@ -3,7 +3,7 @@ title: YAHOO
 sidebar_label: YAHOO
 description: "sdv-py YAHOO: endpoint references, dataset loaders and parsers for YAHOO in the SportsDataverse Python package."
 ---
-# YAHOO (`sportsdataverse.yahoo`)
+# YAHOO (`sportsdataverse.providers.yahoo`)
 
 ## Data sources
 

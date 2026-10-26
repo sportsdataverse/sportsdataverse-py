@@ -14,7 +14,7 @@ EPA/play, success and explosive rate each defense allowed to QBs, RBs, WRs and T
 
 Population: plays from scrimmage on a numbered down (1-4) with an EPA, in the
 regular season or postseason -- CFB `EPA_scrimmage` not null and `seasonType`
-2/3 (the `sportsdataverse.rolling_windows` population), NFL `play_type`
+2/3 (the `sportsdataverse.analytics.rolling_windows` population), NFL `play_type`
 pass/run and `season_type` REG/POST. Filter season types first to narrow it.
 
 A dropback (`pass`: attempts and sacks, plus NFL scrambles) is the QB's; a
@@ -78,7 +78,7 @@ one row per `(season, team_id, position_group)` the defense faced, `OUTPUT_SCHEM
 ```python
 import polars as pl
 from sportsdataverse.cfb import load_cfb_pbp, load_cfb_rosters
-from sportsdataverse.defense_vs_position import PBP_COLUMNS, defense_vs_position
+from sportsdataverse.analytics.defense_vs_position import PBP_COLUMNS, defense_vs_position
 
 pbp = load_cfb_pbp(2024).select(PBP_COLUMNS["cfb"])
 dvp = defense_vs_position(pbp, load_cfb_rosters(2024), "cfb")
@@ -152,7 +152,7 @@ one row per attempt x metric, `ATTEMPT_SCHEMA`; ids are text.
 ```python
 import polars as pl
 from sportsdataverse.cfb import load_cfb_pbp
-from sportsdataverse.metric_curves import FOOTBALL_ATTEMPT_COLUMNS, football_attempts
+from sportsdataverse.analytics.metric_curves import FOOTBALL_ATTEMPT_COLUMNS, football_attempts
 
 pbp = load_cfb_pbp(2024).select(FOOTBALL_ATTEMPT_COLUMNS)
 att = football_attempts(pbp)
@@ -199,7 +199,7 @@ No returns table is published for this function: no capture: its game_dates inpu
 ```python
 import polars as pl
 from sportsdataverse.cfb import load_cfb_pbp, load_cfb_schedule
-from sportsdataverse.rolling_windows import FOOTBALL_PBP_COLUMNS, football_events
+from sportsdataverse.analytics.rolling_windows import FOOTBALL_PBP_COLUMNS, football_events
 
 pbp = load_cfb_pbp(2024).select(FOOTBALL_PBP_COLUMNS)
 sched = load_cfb_schedule(2024)
@@ -264,7 +264,7 @@ one row per (season, entity, metric, down, bucket), `OUTPUT_SCHEMA`: * `entity_t
 ```python
 import polars as pl
 from sportsdataverse.cfb import load_cfb_pbp
-from sportsdataverse.metric_curves import FOOTBALL_ATTEMPT_COLUMNS, football_attempts, metric_curves
+from sportsdataverse.analytics.metric_curves import FOOTBALL_ATTEMPT_COLUMNS, football_attempts, metric_curves
 
 pbp = load_cfb_pbp(2024).select(FOOTBALL_ATTEMPT_COLUMNS)
 curves = metric_curves(football_attempts(pbp), "cfb")
@@ -333,7 +333,7 @@ one row per attempt x metric, `ATTEMPT_SCHEMA`.
 ```python
 import polars as pl
 from sportsdataverse.nfl import load_nfl_model_pbp
-from sportsdataverse.metric_curves import NFLFASTR_ATTEMPT_COLUMNS, metric_curves, nflfastr_attempts
+from sportsdataverse.analytics.metric_curves import NFLFASTR_ATTEMPT_COLUMNS, metric_curves, nflfastr_attempts
 
 pbp = load_nfl_model_pbp([2024]).select(NFLFASTR_ATTEMPT_COLUMNS)
 curves = metric_curves(nflfastr_attempts(pbp), "nfl")
@@ -386,7 +386,7 @@ one row per (entity, unit, metric, window size), `OUTPUT_SCHEMA`. Null / NaN eve
 ```python
 import polars as pl
 from sportsdataverse.cfb import load_cfb_pbp, load_cfb_schedule
-from sportsdataverse.rolling_windows import FOOTBALL_PBP_COLUMNS, football_events, rolling_windows
+from sportsdataverse.analytics.rolling_windows import FOOTBALL_PBP_COLUMNS, football_events, rolling_windows
 
 pbp = load_cfb_pbp(2024).select(FOOTBALL_PBP_COLUMNS)
 sched = load_cfb_schedule(2024)
@@ -463,7 +463,7 @@ one row per shot, `ATTEMPT_SCHEMA`; `season` is the asset's key (END year for th
 ```python
 import polars as pl
 from sportsdataverse.nba import load_nba_stats_shots
-from sportsdataverse.metric_curves import SHOT_ATTEMPT_COLUMNS, metric_curves, shot_attempts
+from sportsdataverse.analytics.metric_curves import SHOT_ATTEMPT_COLUMNS, metric_curves, shot_attempts
 
 shots = load_nba_stats_shots([2024]).select(SHOT_ATTEMPT_COLUMNS)
 curves = metric_curves(shot_attempts(shots), "nba")
@@ -477,7 +477,7 @@ curves.filter((pl.col("entity_type") == "player") & (pl.col("entity_id") == "201
 Field-goal-attempt events from released `{nba,wnba}_stats_shots`.
 
 Population: regular-season (`season_type_id` `"2"`) and playoff (`"4"`) shots,
-the population `sportsdataverse.metric_curves.shot_attempts` keeps; play-in
+the population `sportsdataverse.analytics.metric_curves.shot_attempts` keeps; play-in
 and NBA Cup final games do not count. Every attempt is an `fga` event (metric
 `fg_pct`); a three-point attempt is also an `fg3a` event (metric `fg3_pct`).
 `value` is 1.0 for a make, 0.0 for a miss. `seq` orders a game's shots by
@@ -520,7 +520,7 @@ one row per attempt x unit, `EVENT_SCHEMA`. `entity_id` is the stats.nba / stats
 ```python
 import polars as pl
 from sportsdataverse.nba import load_nba_stats_schedules, load_nba_stats_shots
-from sportsdataverse.rolling_windows import SHOT_COLUMNS, rolling_windows, shot_events
+from sportsdataverse.analytics.rolling_windows import SHOT_COLUMNS, rolling_windows, shot_events
 
 shots = load_nba_stats_shots([2024, 2025]).select(SHOT_COLUMNS)
 sched = load_nba_stats_schedules([2024, 2025])

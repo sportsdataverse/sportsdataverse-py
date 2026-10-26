@@ -75,6 +75,13 @@ def test_moved_map_matches_grouped_leagues():
             "mjhl",
         )
     }
+    # moved from the top level without a leagues.yaml group: a flat-API family, the cross-sport
+    # providers, and the analytics modules
+    hand_moved |= {
+        "euroleague": "basketball.euroleague",
+        **{p: f"providers.{p}" for p in ("cbs", "fox", "yahoo", "espn_content", "thesportsdb")},
+        **{m: f"analytics.{m}" for m in ("rolling_windows", "metric_curves", "defense_vs_position", "paper_index")},
+    }
     expected = {**grouped, **hand_moved}
     assert sportsdataverse._MOVED == expected, (
         f"_MOVED drifted from grouped leagues.yaml: "

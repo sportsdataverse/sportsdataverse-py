@@ -204,7 +204,7 @@ def _fetch_cbs_game(cbs_game_id: str, *, optional: Sequence[str] = ("drives",), 
     ``game`` (the CFB venue). Any other failure of an optional resource raises: a fetch that
     failed is not a resource CBS lacks.
     """
-    from sportsdataverse.cbs.cbs_napi import (
+    from sportsdataverse.providers.cbs.cbs_napi import (
         cbs_game,
         cbs_game_odds,
         cbs_game_scoring_drives,

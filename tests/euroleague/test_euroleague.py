@@ -19,9 +19,9 @@ import polars as pl
 import pytest
 import yaml
 
-from sportsdataverse.euroleague import euroleague, euroleague_runtime
-from sportsdataverse.euroleague._euroleague_schemas import SCHEMAS
-from sportsdataverse.euroleague.euroleague_parsers import (
+from sportsdataverse.basketball.euroleague import euroleague, euroleague_runtime
+from sportsdataverse.basketball.euroleague._euroleague_schemas import SCHEMAS
+from sportsdataverse.basketball.euroleague.euroleague_parsers import (
     parse_euroleague,
     parse_euroleague_boxscore,
     parse_euroleague_header,
@@ -354,7 +354,7 @@ def test_header_is_one_row() -> None:
 
 def test_yaml_lists_every_wrapper_with_its_host() -> None:
     doc = _yaml()
-    assert doc["getter_module"] == "sportsdataverse.euroleague.euroleague_runtime"
+    assert doc["getter_module"] == "sportsdataverse.basketball.euroleague.euroleague_runtime"
     assert doc["host"] == V2
     by_short = {e["short"]: e for e in doc["endpoints"]}
     assert sorted(by_short) == _SHORTS
@@ -578,7 +578,7 @@ def test_live_points_e2025_game_1() -> None:
 
 def test_round_int64_across_generations():
     """B-GB-15: the v1 header's round joins the v2 rounds / games routes' round without a cast."""
-    from sportsdataverse.euroleague.euroleague_parsers import parse_euroleague, parse_euroleague_header
+    from sportsdataverse.basketball.euroleague.euroleague_parsers import parse_euroleague, parse_euroleague_header
 
     header = parse_euroleague_header(_load("api__Header"))
     games = parse_euroleague(_load("competitions__E__seasons__E2025__games"))

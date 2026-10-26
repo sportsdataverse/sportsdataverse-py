@@ -13,7 +13,7 @@ from typing import Any, Dict
 import pytest
 
 from sportsdataverse.errors import AssetFetchError, NoDataError
-from sportsdataverse.euroleague import euroleague_runtime as rt
+from sportsdataverse.basketball.euroleague import euroleague_runtime as rt
 
 
 class _Resp:

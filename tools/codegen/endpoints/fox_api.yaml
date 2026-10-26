@@ -12,7 +12,7 @@ api: fox_api
 host: https://api.foxsports.com
 name_pattern: fox_api_{short}
 module: fox_api
-parser_module: fox.fox_api_parsers
+parser_module: providers.fox.fox_api_parsers
 qualifier: ''
 docstring:
   example_import: true

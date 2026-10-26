@@ -84,8 +84,8 @@ def yahoo(monkeypatch: pytest.MonkeyPatch) -> List[Dict[str, Any]]:
         calls.append(kw)
         return _json("yahoo_ncaab_game_ids_20251126_20251127.json")
 
-    monkeypatch.setattr("sportsdataverse.yahoo.yahoo_shangrila.yahoo_league_teams", teams)
-    monkeypatch.setattr("sportsdataverse.yahoo.yahoo_shangrila.yahoo_league_game_ids_by_date", game_ids)
+    monkeypatch.setattr("sportsdataverse.providers.yahoo.yahoo_shangrila.yahoo_league_teams", teams)
+    monkeypatch.setattr("sportsdataverse.providers.yahoo.yahoo_shangrila.yahoo_league_game_ids_by_date", game_ids)
     return calls
 
 
@@ -360,7 +360,7 @@ def test_yahoo_id_list_failure_keeps_unverified_ids(
     def down(**_: Any) -> Dict[str, Any]:
         raise ConnectionError("yahoo down")
 
-    monkeypatch.setattr("sportsdataverse.yahoo.yahoo_shangrila.yahoo_league_game_ids_by_date", down)
+    monkeypatch.setattr("sportsdataverse.providers.yahoo.yahoo_shangrila.yahoo_league_game_ids_by_date", down)
     with caplog.at_level(logging.WARNING, logger=_LOG):
         out = fy.with_yahoo_games("mbb", 2026, _schedule(), team)
     assert _by_game(out, "yahoo_game_id")["401817234"] == "ncaab.g.202511270019"
@@ -373,7 +373,7 @@ def test_yahoo_teams_failure_leaves_the_columns_null(
     def down(**_: Any) -> Dict[str, Any]:
         raise ConnectionError("yahoo down")
 
-    monkeypatch.setattr("sportsdataverse.yahoo.yahoo_shangrila.yahoo_league_teams", down)
+    monkeypatch.setattr("sportsdataverse.providers.yahoo.yahoo_shangrila.yahoo_league_teams", down)
     team = _teams()
     with caplog.at_level(logging.WARNING, logger=_LOG):
         out = fy.with_yahoo_teams("mbb", team)
@@ -397,7 +397,7 @@ def test_a_nickname_alone_never_pairs_two_schools(yahoo: List[Dict[str, Any]]) -
 
 
 def test_a_malformed_yahoo_id_list_is_a_source_error(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr("sportsdataverse.yahoo.yahoo_shangrila.yahoo_league_game_ids_by_date", lambda **_: [])
+    monkeypatch.setattr("sportsdataverse.providers.yahoo.yahoo_shangrila.yahoo_league_game_ids_by_date", lambda **_: [])
     with pytest.raises(CrosswalkSourceError, match="AttributeError"):
         fy.yahoo_game_ids("mbb", 2026, [THANKSGIVING])
 
@@ -406,7 +406,9 @@ def test_a_capped_yahoo_week_is_refused(monkeypatch: pytest.MonkeyPatch) -> None
     # A week at the 1000-row cap is truncated; trusting it would null real games.
     games = _json("yahoo_ncaab_game_ids_20251126_20251127.json")["data"]["leagues"][0]["games"]
     capped = {"data": {"leagues": [{"games": (games * 11)[:1000]}]}}
-    monkeypatch.setattr("sportsdataverse.yahoo.yahoo_shangrila.yahoo_league_game_ids_by_date", lambda **_: capped)
+    monkeypatch.setattr(
+        "sportsdataverse.providers.yahoo.yahoo_shangrila.yahoo_league_game_ids_by_date", lambda **_: capped
+    )
     with pytest.raises(CrosswalkSourceError, match="1000-row cap"):
         fy.yahoo_game_ids("mbb", 2026, [THANKSGIVING])
 

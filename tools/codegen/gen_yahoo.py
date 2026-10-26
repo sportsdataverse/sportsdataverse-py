@@ -23,7 +23,7 @@ already reachable unauthenticated through ``editorial_scoreboard``.
 
 Auth: none. ``graphite-secure`` and ``api-secure`` only require
 ``Origin``/``Referer`` headers, which
-:mod:`sportsdataverse.yahoo.yahoo_shangrila_runtime` supplies -- so the YAML sets
+:mod:`sportsdataverse.providers.yahoo.yahoo_shangrila_runtime` supplies -- so the YAML sets
 ``getter_module`` but NOT ``auth: true``.
 
 The three locale parameters every path declares (``lang``/``region``/``tz``, all
@@ -305,7 +305,7 @@ def _editorial_schema_docs() -> Dict[str, Dict[str, Any]]:
     mapping when the captures are unavailable (the endpoints then keep an empty
     returns-schema rather than a fabricated one).
     """
-    from sportsdataverse.yahoo.yahoo_shangrila_parsers import parse_yahoo_editorial
+    from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import parse_yahoo_editorial
 
     resp_dir = refs_root() / "yahoo" / "discovery" / "responses"
     docs: Dict[str, Dict[str, Any]] = {}
@@ -347,13 +347,13 @@ def main() -> None:
         "name_pattern": "yahoo_{short}",
         "module": "yahoo_shangrila",
         "parser_module": "yahoo.yahoo_shangrila_parsers",
-        "getter_module": "sportsdataverse.yahoo.yahoo_shangrila_runtime",
+        "getter_module": "sportsdataverse.providers.yahoo.yahoo_shangrila_runtime",
         "qualifier": "",
         "passthrough_query": False,
         "runtime_imports": ["_get"],
         "docstring": {
             "example_import": True,
-            "example_import_from": "sportsdataverse.yahoo.yahoo_shangrila",
+            "example_import_from": "sportsdataverse.providers.yahoo.yahoo_shangrila",
             "see_also": [
                 {
                     "name": "cfbfastR",

@@ -1399,11 +1399,11 @@ endpoints:
   returns_schema: native/cbs_napi/venue_metadata
   short: venue_metadata
   summary: Get a venues metadata resource
-getter_module: sportsdataverse.cbs.cbs_napi_runtime
+getter_module: sportsdataverse.providers.cbs.cbs_napi_runtime
 host: https://api.cbssports.com/napi
 module: cbs_napi
 name_pattern: cbs_{short}
-parser_module: cbs.cbs_napi_parsers
+parser_module: providers.cbs.cbs_napi_parsers
 passthrough_query: false
 qualifier: ''
 runtime_imports:

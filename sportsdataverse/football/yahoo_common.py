@@ -113,7 +113,7 @@ def _resolve_game(payload: Any) -> Optional[Dict[str, Any]]:
 
 def _fetch_playbook_boxscore(yahoo_game_id: str, *, live: bool = False, **kwargs: Any) -> Dict[str, Any]:
     """The shangrila playbook boxscore for one Yahoo game id (``...Poll`` variant when ``live``)."""
-    from sportsdataverse.yahoo.yahoo_shangrila import yahoo_playbook_boxscore, yahoo_playbook_boxscore_poll
+    from sportsdataverse.providers.yahoo.yahoo_shangrila import yahoo_playbook_boxscore, yahoo_playbook_boxscore_poll
 
     fetch = yahoo_playbook_boxscore_poll if live else yahoo_playbook_boxscore
     return fetch(game_id=yahoo_game_id, is_football="true", return_parsed=False, **kwargs)

@@ -235,7 +235,7 @@ def _returns_dict(schema_doc: dict) -> bool:
 _VOCAB_GETTERS = frozenset(
     {
         "sportsdataverse._codegen_runtime",
-        "sportsdataverse.euroleague.euroleague_runtime",
+        "sportsdataverse.basketball.euroleague.euroleague_runtime",
         "sportsdataverse.hockey.euro_hockey_runtime",
         "sportsdataverse.basketball.basketball_runtime",
         "sportsdataverse.basketball.fiba_hub.fiba_runtime",
@@ -276,7 +276,7 @@ _VOCAB_GETTERS = frozenset(
         "sportsdataverse.hockey.nl.nationalleague_runtime",
         "sportsdataverse.hockey.shl.shl_runtime",
         "sportsdataverse.hockey.vhl.vhl_runtime",
-        "sportsdataverse.thesportsdb.thesportsdb_runtime",
+        "sportsdataverse.providers.thesportsdb.thesportsdb_runtime",
         "sportsdataverse.wnba.wnba_stats_runtime",
         "sportsdataverse.soccer.football_data_runtime",
         "sportsdataverse.soccer.uefa_runtime",
@@ -293,11 +293,11 @@ _VOCAB_GETTERS = frozenset(
         "sportsdataverse.soccer.mls.mls_api_runtime",
         "sportsdataverse.soccer.nwsl.nwsl_api_runtime",
         "sportsdataverse.wnba.wnba_stats_runtime",
-        "sportsdataverse.yahoo.yahoo_shangrila_runtime",
+        "sportsdataverse.providers.yahoo.yahoo_shangrila_runtime",
         # 4.1b
         "sportsdataverse.nfl.nflpro_runtime",
         # 4.4
-        "sportsdataverse.cbs.cbs_napi_runtime",
+        "sportsdataverse.providers.cbs.cbs_napi_runtime",
     }
 )
 # (error name, aliases a YAML ``raises:`` line may already use for it, line to add)
@@ -762,6 +762,9 @@ _NESTED_HOMES = {
     **{h: f"hockey.{h}" for h in _EURO_HOCKEY_HOMES},
     **{h: f"basketball.{h}" for h in _BASKETBALL_HOMES},
     "del": "hockey.del_",
+    # moved from the top level (old paths alias through sportsdataverse._MOVED)
+    "euroleague": "basketball.euroleague",
+    **{h: f"providers.{h}" for h in ("cbs", "fox", "yahoo", "espn_content", "thesportsdb")},
 }
 
 

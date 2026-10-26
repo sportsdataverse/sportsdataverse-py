@@ -252,7 +252,7 @@ def test_red_path_stale_gate_reports_an_orphaned_generated_module(in_tree, gate)
     reason="A-N6: _euroleague_schemas.py (gen_euroleague.py) is owned by no --check gate; task 3.9",
 )
 def test_red_path_flat_stale_owns_euroleague_schemas(in_tree):
-    with _restored(in_tree / "sportsdataverse/euroleague/_euroleague_schemas.py") as f:
+    with _restored(in_tree / "sportsdataverse/basketball/euroleague/_euroleague_schemas.py") as f:
         f.write_text(f.read_text(encoding="utf-8") + "\nX = 1\n", encoding="utf-8", newline="\n")
         assert generate._flat_stale()
 

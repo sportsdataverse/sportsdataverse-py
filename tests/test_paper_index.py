@@ -23,7 +23,7 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-from sportsdataverse.paper_index import (
+from sportsdataverse.analytics.paper_index import (
     DESERVED_WINS_SCHEMA,
     GAMES_SCHEMA,
     HOLDOUT_SEASONS,

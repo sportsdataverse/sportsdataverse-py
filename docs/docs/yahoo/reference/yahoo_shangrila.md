@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)
 
-`sportsdataverse.yahoo` — 107 endpoints.
+`sportsdataverse.providers.yahoo` — 107 endpoints.
 
 ## Editorial
 

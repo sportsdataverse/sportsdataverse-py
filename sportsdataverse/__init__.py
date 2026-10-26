@@ -105,9 +105,9 @@ from sportsdataverse.f1 import *  # noqa: F401,F403,E402
 # --- ESPN additional leagues — sport param-families stay top-level; minor/alias
 #     leagues are nested under sport-group packages (0.0.65+). ---
 from sportsdataverse.soccer import *  # noqa: F401,F403,E402
-from sportsdataverse.cbs import *  # noqa: F401,F403,E402
-from sportsdataverse.yahoo import *  # noqa: F401,F403,E402
-from sportsdataverse.fox import *  # noqa: F401,F403,E402
+from sportsdataverse.providers.cbs import *  # noqa: F401,F403,E402
+from sportsdataverse.providers.yahoo import *  # noqa: F401,F403,E402
+from sportsdataverse.providers.fox import *  # noqa: F401,F403,E402
 from sportsdataverse.pff import *  # noqa: F401,F403,E402
 from sportsdataverse.cricket import *  # noqa: F401,F403,E402
 from sportsdataverse.football.ufl import *  # noqa: F401,F403,E402
@@ -206,21 +206,21 @@ from sportsdataverse.discover import function_count, list_functions
 from sportsdataverse.validation import validate_game
 
 # Rolling event-count windows (F3): one pure function every producer calls.
-# Note: sportsdataverse.rolling_windows is this FUNCTION (it shadows the submodule
-# name at package level) -- import module constants with
-# `from sportsdataverse.rolling_windows import WINDOWS`, not an attribute path.
-from sportsdataverse.rolling_windows import football_events, rolling_windows, shot_events
+# Note: top-level sportsdataverse.rolling_windows is this FUNCTION (it shadows the old module
+# alias); the module is sportsdataverse.analytics.rolling_windows -- import its constants with
+# `from sportsdataverse.analytics.rolling_windows import WINDOWS`.
+from sportsdataverse.analytics.rolling_windows import football_events, rolling_windows, shot_events
 
-# Metric-by-continuous-axis curves (F4): same pattern -- sportsdataverse.metric_curves
-# is the FUNCTION; import BUCKET_EDGES etc. from the submodule path.
-from sportsdataverse.metric_curves import football_attempts, metric_curves, nflfastr_attempts, shot_attempts
+# Metric-by-continuous-axis curves (F4): same pattern -- top-level sportsdataverse.metric_curves
+# is the FUNCTION; import BUCKET_EDGES etc. from sportsdataverse.analytics.metric_curves.
+from sportsdataverse.analytics.metric_curves import football_attempts, metric_curves, nflfastr_attempts, shot_attempts
 
-# Defense vs position (TFD-2d): same pattern -- sportsdataverse.defense_vs_position
-# is the FUNCTION; import PBP_COLUMNS etc. from the submodule path.
-from sportsdataverse.defense_vs_position import defense_vs_position
+# Defense vs position (TFD-2d): same pattern -- top-level sportsdataverse.defense_vs_position
+# is the FUNCTION; import PBP_COLUMNS etc. from sportsdataverse.analytics.defense_vs_position.
+from sportsdataverse.analytics.defense_vs_position import defense_vs_position
 
 # Paper Index deserved-win shares + season luck (CFBE-5d): ported from Game on Paper.
-from sportsdataverse.paper_index import deserved_wins, paper_index_game, paper_index_games
+from sportsdataverse.analytics.paper_index import deserved_wins, paper_index_game, paper_index_games
 from sportsdataverse.find import (
     clear_team_cache,
     find_athlete,
@@ -299,6 +299,16 @@ _MOVED = {
     "nbasl_sac": "basketball.nbasl_sac",
     "nbasl_orl": "basketball.nbasl_orl",
     "nbasl_gs": "basketball.nbasl_gs",
+    "euroleague": "basketball.euroleague",
+    "cbs": "providers.cbs",
+    "fox": "providers.fox",
+    "yahoo": "providers.yahoo",
+    "espn_content": "providers.espn_content",
+    "thesportsdb": "providers.thesportsdb",
+    "rolling_windows": "analytics.rolling_windows",
+    "metric_curves": "analytics.metric_curves",
+    "defense_vs_position": "analytics.defense_vs_position",
+    "paper_index": "analytics.paper_index",
 }
 
 

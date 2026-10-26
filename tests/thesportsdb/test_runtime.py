@@ -5,7 +5,7 @@ import pathlib
 
 import pytest
 
-from sportsdataverse.thesportsdb import thesportsdb_runtime as rt
+from sportsdataverse.providers.thesportsdb import thesportsdb_runtime as rt
 
 URL = "https://www.thesportsdb.com/api/v1/json/{key}/all_sports.php"
 
@@ -147,7 +147,7 @@ def test_free_key_capped_table_warns(monkeypatch):
 
 
 def test_free_key_capped_sports_list_warns_from_the_wrapper(monkeypatch):
-    from sportsdataverse.thesportsdb import thesportsdb_sports
+    from sportsdataverse.providers.thesportsdb import thesportsdb_sports
 
     monkeypatch.delenv("THESPORTSDB_API_KEY", raising=False)
     _answer(monkeypatch, _FIX / "free_key_123" / "all_sports.json")

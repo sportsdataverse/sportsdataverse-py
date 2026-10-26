@@ -9,7 +9,13 @@ import polars as pl
 import pytest
 from polars.testing import assert_frame_equal
 
-from sportsdataverse.rolling_windows import EVENT_SCHEMA, OUTPUT_SCHEMA, football_events, rolling_windows, shot_events
+from sportsdataverse.analytics.rolling_windows import (
+    EVENT_SCHEMA,
+    OUTPUT_SCHEMA,
+    football_events,
+    rolling_windows,
+    shot_events,
+)
 
 FIX = Path(__file__).parent / "fixtures" / "rolling_windows"
 QB = "4433971"  # Kyle McCord: Ohio State 2021-23, Syracuse 2024
@@ -304,7 +310,7 @@ def test_windows_override_and_empty_season(cfb_events):
 def test_package_level_export_and_reference_docs():
     import sportsdataverse
 
-    assert sportsdataverse.rolling_windows is rolling_windows
+    assert sportsdataverse.analytics.rolling_windows is rolling_windows
     assert sportsdataverse.football_events is football_events
     assert sportsdataverse.shot_events is shot_events
     # the page is split into family pages under reference/python-helpers/ (the overview stays at the old path)

@@ -165,11 +165,11 @@ endpoints:
   returns_schema: native/thesportsdb/team_players
   short: team_players
   summary: Players of a team.
-getter_module: sportsdataverse.thesportsdb.thesportsdb_runtime
+getter_module: sportsdataverse.providers.thesportsdb.thesportsdb_runtime
 host: https://www.thesportsdb.com/api/v1/json/123
 module: thesportsdb
 name_pattern: thesportsdb_{short}
-parser_module: thesportsdb.thesportsdb_parsers
+parser_module: providers.thesportsdb.thesportsdb_parsers
 passthrough_query: false
 qualifier: ''
 runtime_imports:

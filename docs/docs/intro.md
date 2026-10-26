@@ -142,13 +142,13 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 | [KIJHL](kijhl/) | `sportsdataverse.hockey.kijhl` | HockeyTech / LeagueStat (12) |
 | [MJHL](mjhl/) | `sportsdataverse.hockey.mjhl` | HockeyTech / LeagueStat (12) |
 | [Betting odds](odds/) | `sportsdataverse.odds` | The Odds API (11), Polymarket (8), Kalshi (9) |
-| [CBS Sports](cbs/) | `sportsdataverse.cbs` | CBS Sports NAPI (82) |
-| [Yahoo Sports](yahoo/) | `sportsdataverse.yahoo` | Yahoo Sports Shangrila (107) |
-| [Fox Sports](fox/) | `sportsdataverse.fox` | Fox Sports API (33) |
-| [EuroLeague](euroleague/) | `sportsdataverse.euroleague` | EuroLeague Competition Engine (15) |
+| [CBS Sports](cbs/) | `sportsdataverse.providers.cbs` | CBS Sports NAPI (82) |
+| [Yahoo Sports](yahoo/) | `sportsdataverse.providers.yahoo` | Yahoo Sports Shangrila (107) |
+| [Fox Sports](fox/) | `sportsdataverse.providers.fox` | Fox Sports API (33) |
+| [EuroLeague](euroleague/) | `sportsdataverse.basketball.euroleague` | EuroLeague Competition Engine (15) |
 | [Formula 1](f1/) | `sportsdataverse.f1` | Jolpica F1 API (Ergast-compatible) (16) |
-| [ESPN content (news)](espn_content/) | `sportsdataverse.espn_content` | ESPN (3) |
-| [TheSportsDB](thesportsdb/) | `sportsdataverse.thesportsdb` | TheSportsDB (12) |
+| [ESPN content (news)](espn_content/) | `sportsdataverse.providers.espn_content` | ESPN (3) |
+| [TheSportsDB](thesportsdb/) | `sportsdataverse.providers.thesportsdb` | TheSportsDB (12) |
 | [SIHF (Swiss hockey)](sihf/) | `sportsdataverse.hockey.sihf` | SIHF statistics API (33) |
 | [DEL](del/) | `sportsdataverse.hockey.del_` | eSports hokejovyzapis (DEL, ICEHL, EIHL, Metal Ligaen) (12) |
 | [ICE Hockey League](icehl/) | `sportsdataverse.hockey.icehl` | eSports hokejovyzapis (DEL, ICEHL, EIHL, Metal Ligaen) (12) |

@@ -91,6 +91,10 @@
           "label": "WBB"
         },
         {
+          "prefix": "euroleague",
+          "label": "EuroLeague"
+        },
+        {
           "prefix": "fiba_hub",
           "label": "FIBA (digital API and game pages)"
         },
@@ -437,10 +441,6 @@
         {
           "prefix": "fox",
           "label": "Fox Sports"
-        },
-        {
-          "prefix": "euroleague",
-          "label": "EuroLeague"
         },
         {
           "prefix": "f1",

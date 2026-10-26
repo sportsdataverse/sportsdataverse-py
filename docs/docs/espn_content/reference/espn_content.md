@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # ESPN content (news) — ESPN content API (content.core.api.espn.com/v1, news)
 
-`sportsdataverse.espn_content` — 3 endpoints.
+`sportsdataverse.providers.espn_content` — 3 endpoints.
 
 ## espn_content_league_news
 

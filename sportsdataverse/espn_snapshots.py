@@ -381,7 +381,9 @@ def espn_injuries_snapshot(
 
     def _one(slug: str) -> pl.DataFrame:
         try:
-            module = importlib.import_module(f"sportsdataverse.{slug}")
+            from sportsdataverse import _MOVED  # a moved league (nbl -> basketball.nbl) imports from its home
+
+            module = importlib.import_module(f"sportsdataverse.{_MOVED.get(slug, slug)}")
             fetch = getattr(module, f"espn_{slug}_injuries")
         except (ImportError, AttributeError) as exc:
             raise ValueError(
@@ -585,7 +587,9 @@ def espn_depthcharts_snapshot(
     """
     stamp = as_of_date or datetime.now(timezone.utc).date()
     try:
-        module = importlib.import_module(f"sportsdataverse.{league}")
+        from sportsdataverse import _MOVED  # a moved league imports from its home, not the warning alias
+
+        module = importlib.import_module(f"sportsdataverse.{_MOVED.get(league, league)}")
         fetch = getattr(module, f"espn_{league}_team_depthcharts")
         # resolved in the same guard: a league missing its teams wrapper must
         # fail with the same clear error, not an AttributeError three lines later

@@ -11571,7 +11571,7 @@ load_cfb_team_summaries:
   def_strength_faced_rank: 'National rank of def_strength_faced, where 1 = toughest slate (the strongest opposing defenses,
     i.e. the lowest def_strength_faced). Ties share the average rank. Null when def_strength_faced is null: unranked, not
     last.'
-  deserved_wins: 'Sum of the team''s paper_share over the games in the row''s span: the wins the Paper Index says its play earned (sportsdataverse.paper_index.deserved_wins).'
+  deserved_wins: 'Sum of the team''s paper_share over the games in the row''s span: the wins the Paper Index says its play earned (sportsdataverse.analytics.paper_index.deserved_wins).'
   drive_start_ep_def: Average expected points (EP) at the first snap of a drive, over the drives the side owned, with the
     team on defense (i.e. allowed to opponents).
   drive_start_ep_def_conf_pct: Percentile (0-100) of average expected points (EP) at the first snap of a drive, over the drives
@@ -12250,7 +12250,7 @@ load_cfb_team_summaries:
     yards on rush plays with the team on offense, where 1 is best. Null when the metric is null or the column holds fewer
     than two distinct values: unranked, not last.'
   paper_index_games_n: Games in the row's span that the Paper Index scored for the team (completed, not tied, both sides at least 20 scrimmage snaps); deserved_wins and luck are sums over these games.
-  paper_index_span: 'Where the season sits relative to the Paper Index fit (sportsdataverse.paper_index TRAIN_SEASONS / HOLDOUT_SEASONS): train (in-sample, its games were part of the fit), holdout (scored out of sample) or out_of_span (scored, never seen by the fit).'
+  paper_index_span: 'Where the season sits relative to the Paper Index fit (sportsdataverse.analytics.paper_index TRAIN_SEASONS / HOLDOUT_SEASONS): train (in-sample, its games were part of the fit), holdout (scored out of sample) or out_of_span (scored, never seen by the fit).'
   passrate_def: Share of plays that were pass plays, with the team on defense (i.e. allowed to opponents).
   passrate_def_conf_pct: Percentile (0-100) of share of plays that were pass plays with the team on defense (i.e. allowed
     to opponents) among teams in the same conference, where 100 is best. Direction is already encoded in the matching rank,
@@ -13703,7 +13703,7 @@ load_cfb_team_summaries_weekly:
   def_strength_faced_rank: 'National rank of def_strength_faced, where 1 = toughest slate (the strongest opposing defenses,
     i.e. the lowest def_strength_faced). Ties share the average rank. Null when def_strength_faced is null: unranked, not
     last.'
-  deserved_wins: 'Sum of the team''s paper_share over the games in the row''s span: the wins the Paper Index says its play earned (sportsdataverse.paper_index.deserved_wins).'
+  deserved_wins: 'Sum of the team''s paper_share over the games in the row''s span: the wins the Paper Index says its play earned (sportsdataverse.analytics.paper_index.deserved_wins).'
   drive_start_ep_def: Average expected points (EP) at the first snap of a drive, over the drives the side owned, with the
     team on defense (i.e. allowed to opponents).
   drive_start_ep_def_conf_pct: Percentile (0-100) of average expected points (EP) at the first snap of a drive, over the drives
@@ -14382,7 +14382,7 @@ load_cfb_team_summaries_weekly:
     yards on rush plays with the team on offense, where 1 is best. Null when the metric is null or the column holds fewer
     than two distinct values: unranked, not last.'
   paper_index_games_n: Games in the row's span that the Paper Index scored for the team (completed, not tied, both sides at least 20 scrimmage snaps); deserved_wins and luck are sums over these games.
-  paper_index_span: 'Where the season sits relative to the Paper Index fit (sportsdataverse.paper_index TRAIN_SEASONS / HOLDOUT_SEASONS): train (in-sample, its games were part of the fit), holdout (scored out of sample) or out_of_span (scored, never seen by the fit).'
+  paper_index_span: 'Where the season sits relative to the Paper Index fit (sportsdataverse.analytics.paper_index TRAIN_SEASONS / HOLDOUT_SEASONS): train (in-sample, its games were part of the fit), holdout (scored out of sample) or out_of_span (scored, never seen by the fit).'
   passrate_def: Share of plays that were pass plays, with the team on defense (i.e. allowed to opponents).
   passrate_def_conf_pct: Percentile (0-100) of share of plays that were pass plays with the team on defense (i.e. allowed
     to opponents) among teams in the same conference, where 100 is best. Direction is already encoded in the matching rank,

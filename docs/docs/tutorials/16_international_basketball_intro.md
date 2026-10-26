@@ -14,7 +14,7 @@ feeds behind the biggest of them, and this notebook tours four:
 
 | League | Module | Provider |
 |---|---|---|
-| EuroLeague | `sportsdataverse.euroleague` | EuroLeague Competition Engine |
+| EuroLeague | `sportsdataverse.basketball.euroleague` | EuroLeague Competition Engine |
 | Super League Basketball (UK) | `sportsdataverse.basketball.genius` | Genius Sports LiveStats |
 | NBL (Australia) | `sportsdataverse.basketball.nbl_au` | NBL Rosetta |
 | Liga Endesa (Spain) | `sportsdataverse.basketball.acb` | ACB |

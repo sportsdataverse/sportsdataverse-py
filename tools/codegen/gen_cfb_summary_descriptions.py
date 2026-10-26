@@ -177,11 +177,11 @@ EXTRA: dict[str, str] = {
         "the lowest def_strength_faced). Ties share the average rank. Null when def_strength_faced is null: "
         "unranked, not last."
     ),
-    # The Paper Index columns (sportsdataverse.paper_index), over the games in the row's span: the season,
+    # The Paper Index columns (sportsdataverse.analytics.paper_index), over the games in the row's span: the season,
     # or the season through through_week in the weekly table.
     "deserved_wins": (
         "Sum of the team's paper_share over the games in the row's span: the wins the Paper Index says its play "
-        "earned (sportsdataverse.paper_index.deserved_wins)."
+        "earned (sportsdataverse.analytics.paper_index.deserved_wins)."
     ),
     "luck_wins": "wins minus deserved_wins; positive means the team won more games than its play deserved.",
     "luck_wins_rank": (
@@ -201,7 +201,7 @@ EXTRA: dict[str, str] = {
         "least 20 scrimmage snaps); deserved_wins and luck are sums over these games."
     ),
     "paper_index_span": (
-        "Where the season sits relative to the Paper Index fit (sportsdataverse.paper_index TRAIN_SEASONS / "
+        "Where the season sits relative to the Paper Index fit (sportsdataverse.analytics.paper_index TRAIN_SEASONS / "
         "HOLDOUT_SEASONS): train (in-sample, its games were part of the fit), holdout (scored out of sample) or "
         "out_of_span (scored, never seen by the fit)."
     ),

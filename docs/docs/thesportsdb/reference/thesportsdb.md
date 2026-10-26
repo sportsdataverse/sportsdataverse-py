@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # THESPORTSDB — TheSportsDB API v1 (thesportsdb.com; free test key by default, $THESPORTSDB_API_KEY to use your own)
 
-`sportsdataverse.thesportsdb` — 12 endpoints.
+`sportsdataverse.providers.thesportsdb` — 12 endpoints.
 
 ## thesportsdb_event
 

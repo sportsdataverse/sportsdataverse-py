@@ -2710,7 +2710,7 @@
 - id: yahoo-array-becomes-empty-dict
   group: codegen-runtime
   finding: A-L18
-  file: sportsdataverse/yahoo/yahoo_shangrila_runtime.py
+  file: sportsdataverse/providers/yahoo/yahoo_shangrila_runtime.py
   snippet: '    if not isinstance(body, dict):  # every Shangrila route answers {"data": ...}'
   mutant: '    if False:'
   test: tests/codegen/test_runtime_errors.py -k yahoo_object
@@ -3777,7 +3777,7 @@
 - id: fox-empty-dedicated-table-is-zero-rows
   group: codegen-runtime
   finding: B-GB-02
-  file: sportsdataverse/fox/fox_api_parsers.py
+  file: sportsdataverse/providers/fox/fox_api_parsers.py
   snippet: '        if rows or (rows is not None and isinstance(raw, dict) and any(k in raw for k in keys)):'
   mutant: '        if rows:'
   test: tests/fox/test_fox_api.py::test_an_empty_standings_table_is_a_zero_row_frame_not_the_page_nav
@@ -3787,7 +3787,7 @@
 - id: fox-dedicated-any-layout-key
   group: codegen-runtime
   finding: B-GB-02
-  file: sportsdataverse/fox/fox_api_parsers.py
+  file: sportsdataverse/providers/fox/fox_api_parsers.py
   snippet: '        if rows or (rows is not None and isinstance(raw, dict) and any(k in raw for k in keys)):'
   mutant: '        if rows or (rows is not None and isinstance(raw, dict) and all(k in raw for k in keys)):'
   test: tests/fox/test_fox_api.py::test_an_empty_nav_layout_is_a_zero_row_frame
@@ -7090,7 +7090,7 @@
 - id: shared-browser-user-agent-copy-again
   group: share-private-bodies
   finding: A-L59
-  file: sportsdataverse/yahoo/yahoo_shangrila_runtime.py
+  file: sportsdataverse/providers/yahoo/yahoo_shangrila_runtime.py
   snippet: '    "User-Agent": _CHROME_UA,'
   mutant: '    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",'
   test: tests/test_shared_private_bodies.py -k one_browser_user_agent
@@ -7167,7 +7167,7 @@
 - id: cbs-flag-column-stays-boolean
   group: dtype-contract-5-1
   finding: B-M17
-  file: sportsdataverse/cbs/cbs_napi_parsers.py
+  file: sportsdataverse/providers/cbs/cbs_napi_parsers.py
   snippet: '            frame[col] = cells if flags else cells.map(_stringify)'
   mutant: '            frame[col] = cells.map(_stringify)'
   test: tests/cbs/test_cbs_napi.py -k "boolean_flags"
@@ -7177,7 +7177,7 @@
 - id: yahoo-flag-column-stays-boolean
   group: dtype-contract-5-1
   finding: B-M17
-  file: sportsdataverse/yahoo/yahoo_shangrila_parsers.py
+  file: sportsdataverse/providers/yahoo/yahoo_shangrila_parsers.py
   snippet: '            if {type(v) for v in cells if v is not None} <= {bool}:'
   mutant: '            if False:'
   test: tests/yahoo/test_yahoo_shangrila.py -k "boolean_flags"
@@ -7197,7 +7197,7 @@
 - id: euroleague-header-round-int64
   group: dtype-contract-5-1
   finding: B-GB-15
-  file: sportsdataverse/euroleague/euroleague_parsers.py
+  file: sportsdataverse/basketball/euroleague/euroleague_parsers.py
   snippet: '    df = df.with_columns(pl.col("round").cast(pl.Int64, strict=False)) if "round" in df.columns else df'
   mutant: '    df = df'
   test: tests/euroleague/test_euroleague.py -k "round_int64"
@@ -7461,7 +7461,7 @@
 - id: espn-content-ids-int64
   group: dtype-contract-5-2
   finding: B-GB-10
-  file: sportsdataverse/espn_content/espn_content_parsers.py
+  file: sportsdataverse/providers/espn_content/espn_content_parsers.py
   snippet: '_TEXT_ID = re.compile(r"^now_id$|(^|_)code$")'
   mutant: '_TEXT_ID = _ID'
   test: tests/espn_content/test_espn_content.py -k "id_columns_are_int64"

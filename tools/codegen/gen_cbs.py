@@ -33,7 +33,7 @@ import polars as pl
 from gen_soccer_common import load_spec, refs_dir, rewrite_schema_dir, snake_path, write_yaml
 from openapi_params import _query_params
 
-from sportsdataverse.cbs.cbs_napi_parsers import (
+from sportsdataverse.providers.cbs.cbs_napi_parsers import (
     parse_cbs_napi,
     parse_cbs_napi_scoring_drives,
     parse_cbs_napi_scoring_plays,
@@ -229,7 +229,7 @@ def main() -> None:
         "parser_module": "cbs.cbs_napi_parsers",
         "qualifier": "",
         "passthrough_query": False,
-        "getter_module": "sportsdataverse.cbs.cbs_napi_runtime",
+        "getter_module": "sportsdataverse.providers.cbs.cbs_napi_runtime",
         "runtime_imports": ["_get"],
         "docstring": {
             "example_import": True,
