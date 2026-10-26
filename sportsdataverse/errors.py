@@ -212,7 +212,7 @@ class RawStoreMissError(SportsDataverseError):
         Distinguish "not captured" from a real failure::
 
             from sportsdataverse.errors import RawStoreMissError
-            from sportsdataverse.nba import nba_possessions
+            from sportsdataverse.nba.nba_possessions import nba_possessions
 
             try:
                 poss = nba_possessions("0022300001", raw_store_readonly=True)
