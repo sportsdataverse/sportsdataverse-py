@@ -37,7 +37,7 @@ SPEC_PATHS = FIXTURES / "spec_paths_segev.json"
 GAME = 50
 
 ACCESS = (
-    "Access (sdv-internal-refs/ibba/README.md): Segev Stats is the live-stats vendor behind basket.co.il's game "
+    "Access: Segev Stats is the live-stats vendor behind basket.co.il's game "
     "pages; its JSON-RPC API is keyless, unofficial and not documented for outside use. The wrappers space requests "
     "at least one second apart and read only finished games; payloads are not redistributed as release assets. "
     "The host serves JSON as text/html."

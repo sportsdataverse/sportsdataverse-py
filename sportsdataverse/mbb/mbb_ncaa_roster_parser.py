@@ -123,15 +123,14 @@ __all__ = [
 ]
 
 #: Error-reporter location tags (``` `ncaa.parse_roster` ```/``` `ncaa.parse_player` ```,
-#: ``RosterParser.scala:33-34``).
+#: ``RosterParser.scala``).
 _LOCATION_PARSE_ROSTER = "ncaa.parse_roster"
 _LOCATION_PARSE_PLAYER = "ncaa.parse_player"
 
 
 @dataclass(frozen=True)
 class _RosterBuilders:
-    """One version-era's HTML finder functions (``RosterParser.base_builders``,
-    ``RosterParser.scala:37-48``)."""
+    """One version-era's HTML finder functions (``RosterParser.base_builders``)."""
 
     coach_finder: Callable[[BeautifulSoup], Optional[str]]
     player_info_finder: Callable[[BeautifulSoup], list[Tag]]
@@ -146,7 +145,7 @@ class _RosterBuilders:
 
 
 # ---------------------------------------------------------------------------
-# v0 (legacy) selectors (``RosterParser.builders_v0``, ``:49-84``)
+# v0 (legacy) selectors (``RosterParser.builders_v0``)
 # ---------------------------------------------------------------------------
 
 
@@ -221,7 +220,7 @@ _BUILDERS_V0 = _RosterBuilders(
 
 
 # ---------------------------------------------------------------------------
-# v1 (2018+) selectors (``RosterParser.builders_v1``, ``:85-132``)
+# v1 (2018+) selectors (``RosterParser.builders_v1``)
 # ---------------------------------------------------------------------------
 
 
@@ -297,13 +296,12 @@ _BUILDERS_V1 = _RosterBuilders(
     origin_finder=_v1_origin_finder,
 )
 
-#: Indexed by ``version_format`` (``RosterParser.builders_array``, ``:133``).
+#: Indexed by ``version_format`` (``RosterParser.builders_array``).
 _BUILDERS = (_BUILDERS_V0, _BUILDERS_V1)
 
 
 def _player_unified_ncaa_id_finder(doc: BeautifulSoup) -> list[str]:
-    """v1-only bonus finder (``builders_v1.player_unified_ncaa_id_finder``,
-    ``RosterParser.scala:123-131``)."""
+    """v1-only bonus finder (``builders_v1.player_unified_ncaa_id_finder``)."""
     ids = []
     for el in doc.select("tr[id^=player_season_] td:first-child a"):
         href = el.get("href")
@@ -459,8 +457,7 @@ def parse_roster(
     version_format: int,
     include_coach: bool = False,
 ) -> Union[list[RosterEntry], list[ParseError]]:
-    """Parses a saved NCAA team-roster page (``RosterParser.parse_roster``,
-    ``RosterParser.scala:155-302``).
+    """Parses a saved NCAA team-roster page (``RosterParser.parse_roster``).
 
     Args:
         filename: The source file name, used only for error reporting.
@@ -579,7 +576,7 @@ def parse_roster(
 
 def get_unified_ncaa_id(filename: str, in_html: str) -> Union[Optional[str], list[ParseError]]:
     """Gets a player's lowest cross-season NCAA id from a saved player page
-    (``RosterParser.get_unified_ncaa_id``, ``RosterParser.scala:136-152``).
+    (``RosterParser.get_unified_ncaa_id``).
 
     Always uses the v1 selector table -- this bonus lookup only exists on
     2018+-era pages.

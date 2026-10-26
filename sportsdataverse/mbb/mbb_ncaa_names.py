@@ -16,16 +16,15 @@ to validate.
 Ported members (Scala anchors in each docstring):
 
 * :class:`TidyPlayerContext` / :func:`build_tidy_player_context` --
-  precomputed box-score-code lookup tables (``LineupErrorAnalysisUtils.scala:31-73``).
-* :func:`tidy_player` -- the ordered name-resolution fallback chain
-  (``:76-144``).
+  precomputed box-score-code lookup tables.
+* :func:`tidy_player` -- the ordered name-resolution fallback chain.
 * :func:`convert_from_initials` / :func:`convert_from_digits` -- two of the
-  chain's fallback strategies (``:147-175``).
+  chain's fallback strategies.
 * :class:`NoSurnameMatch` / :class:`WeakSurnameMatch` / :class:`StrongSurnameMatch`
   / :func:`box_aware_compare` -- fuzzy single-candidate scoring
-  (``NameFixer``, ``:658-766``).
+  (``NameFixer``).
 * :class:`FuzzyMatchError` / :func:`fuzzy_box_match` -- the top-level fuzzy
-  resolver that picks among box-score names (``:774-905``).
+  resolver that picks among box-score names.
 
 **FUZZY-MATCH PARITY (rapidfuzz vs Java fuzzywuzzy) -- read before touching
 the scoring code.** The Scala calls Java ``me.xdrop.fuzzywuzzy.FuzzySearch
@@ -62,7 +61,7 @@ always passes ``processor=rapidfuzz.utils.default_process`` explicitly.
 keyed asymmetrically.** The cache is *read* by the raw, un-normalized
 ``p_in`` argument but *written* under the misspelling-corrected /
 diacritic-stripped ``p`` (``player_id.id.name``) -- see
-``LineupErrorAnalysisUtils.scala:80-143``. When ``p_in`` needed no
+``LineupErrorAnalysisUtils.scala``. When ``p_in`` needed no
 correction (``p == p_in``) the cache behaves normally; when ``p_in`` *was*
 corrected, the write goes under a different key than any future read of
 that same misspelled ``p_in`` will ever hit, so the cache never actually
@@ -76,10 +75,10 @@ double-barrel-strip fallback (dashes stripped, e.g. ``"Smith-Jones"`` ->
 ``"Jones"``) recurses into :func:`tidy_player` with the *original* ``ctx``
 and keeps only the resolved name (``tidy_player(new_p, ctx)[0]``) -- any
 cache population from that inner call is discarded; only the outer call's
-final :func:`_with_updated_cache` survives. Ported as-is (``:95-100``).
+final :func:`_with_updated_cache` survives. Ported as-is.
 
 **``fixes_for_debug`` dropped.** The Scala ``NameFixer.fixes_for_debug``
-mutable ``Map`` (``:769``) exists purely to de-duplicate ``println``
+mutable ``Map`` exists purely to de-duplicate ``println``
 diagnostics across repeated ``fuzzy_box_match`` calls with the same
 ``(team_context, candidate)`` key -- it has no effect on any return value.
 This port has no logging surface to de-duplicate, so it is dropped entirely
@@ -170,19 +169,19 @@ __all__ = [
     "fuzzy_box_match",
 ]
 
-#: Surname-fragment score threshold (``NameFixer.min_surname_score``, ``:649``).
+#: Surname-fragment score threshold (``NameFixer.min_surname_score``).
 MIN_SURNAME_SCORE = 80
 
-#: First-name-fragment score threshold (``NameFixer.min_first_name_score``, ``:650``).
+#: First-name-fragment score threshold (``NameFixer.min_first_name_score``).
 MIN_FIRST_NAME_SCORE = 75
 
-#: Whole-name score threshold for a "strong" match (``NameFixer.min_overall_score``, ``:651``).
+#: Whole-name score threshold for a "strong" match (``NameFixer.min_overall_score``).
 MIN_OVERALL_SCORE = 70
 
-#: Minimum surname-fragment length to trust a fuzzy surname match (``:652``).
+#: Minimum surname-fragment length to trust a fuzzy surname match.
 MIN_USEFUL_SURNAME_LEN = 4
 
-#: Minimum first-name-fragment length to trust a fuzzy first-name match (``:653``).
+#: Minimum first-name-fragment length to trust a fuzzy first-name match.
 MIN_USEFUL_FIRST_NAME_LEN = 3
 
 _TRUNCATE_CODE_1_RE = re.compile(r"([A-Z]).*?([A-Z][a-z.-]*)")
@@ -269,24 +268,24 @@ def display_name_to_roster_key(name: Optional[str]) -> str:
 
 def _truncate_code_1(code: str) -> str:
     """``AaBbCcc...`` -> ``ABbb...`` -- initial + surname only
-    (``LineupErrorAnalysisUtils.truncate_code_1``, ``:39-46``)."""
+    (``LineupErrorAnalysisUtils.truncate_code_1``)."""
     m = _TRUNCATE_CODE_1_RE.fullmatch(code)
     return code if m is None else m.group(1) + m.group(2)
 
 
 def _truncate_code_2(code: str) -> str:
     """``AaBbCcc...`` -> ``AaCcc...`` -- first-name-initials + surname
-    (``LineupErrorAnalysisUtils.truncate_code_2``, ``:48-56``)."""
+    (``LineupErrorAnalysisUtils.truncate_code_2``)."""
     m = _TRUNCATE_CODE_2_RE.fullmatch(code)
     return code if m is None else m.group(1) + m.group(2)
 
 
 def name_is_initials(name: str) -> Optional[tuple[str, str]]:
     """Detect a 2-initial name shorthand, e.g. ``"A B"`` or ``"B, A"``
-    (``ExtractorUtils.name_is_initials``, ``ExtractorUtils.scala:94-102``).
+    (``ExtractorUtils.name_is_initials``).
     Ported here (rather than into ``mbb_ncaa_stints.py``) since
     :func:`convert_from_initials` was this module's original consumer;
-    promoted from private to public in Task 5e.1 for
+    promoted from private to public for
     ``mbb_ncaa_roster_parser.py``'s ``parse_roster`` (a second consumer,
     which only needs ``.nonEmpty`` -- whether a match exists at all -- to
     reject initials-only roster rows).
@@ -310,8 +309,7 @@ def name_is_initials(name: str) -> Optional[tuple[str, str]]:
 @dataclass
 class TidyPlayerContext:
     """Precomputed box-score lookup tables + resolution cache for
-    :func:`tidy_player` (``LineupErrorAnalysisUtils.TidyPlayerContext``,
-    ``:31-36``).
+    :func:`tidy_player` (``LineupErrorAnalysisUtils.TidyPlayerContext``).
 
     Args:
         box_lineup: The box-score lineup event this context resolves names
@@ -336,7 +334,7 @@ class TidyPlayerContext:
 
 def build_tidy_player_context(box_lineup: LineupEvent) -> TidyPlayerContext:
     """Build the alternative player-code lookup maps for a box-score lineup
-    (``LineupErrorAnalysisUtils.build_tidy_player_context``, ``:59-73``).
+    (``LineupErrorAnalysisUtils.build_tidy_player_context``).
 
     Sometimes the play-by-play uses ``SURNAME,INITIAL`` instead of
     ``SURNAME,NAME``, or ``SURNAME,NAME1`` instead of ``SURNAME,NAME1
@@ -378,7 +376,7 @@ def build_tidy_player_context(box_lineup: LineupEvent) -> TidyPlayerContext:
 def convert_from_initials(name: str, codes_to_names: dict[str, str]) -> Optional[str]:
     """Resolve a 2-initial name (``"A B"`` / ``"B, A"``) to the single
     box-score player whose code starts with those initials
-    (``LineupErrorAnalysisUtils.convert_from_initials``, ``:147-164``).
+    (``LineupErrorAnalysisUtils.convert_from_initials``).
 
     Args:
         name: The candidate initials string.
@@ -409,7 +407,7 @@ def convert_from_initials(name: str, codes_to_names: dict[str, str]) -> Optional
 
 def convert_from_digits(name: str, player_numbers: list[PlayerCodeId]) -> Optional[str]:
     """Resolve a jersey-number-only name to its box-score player
-    (``LineupErrorAnalysisUtils.convert_from_digits``, ``:166-175``).
+    (``LineupErrorAnalysisUtils.convert_from_digits``).
 
     Args:
         name: The candidate name; only matches if every character is a
@@ -441,8 +439,7 @@ def convert_from_digits(name: str, player_numbers: list[PlayerCodeId]) -> Option
 
 def tidy_player(p_in: str, ctx: TidyPlayerContext) -> tuple[str, TidyPlayerContext]:
     """Resolve a raw play-by-play name to its box-score full name, via an
-    ordered fallback chain (``LineupErrorAnalysisUtils.tidy_player``,
-    ``:76-144``). Order is semantic -- ported as ordered first-non-``None``:
+    ordered fallback chain (``LineupErrorAnalysisUtils.tidy_player``). Order is semantic -- ported as ordered first-non-``None``:
 
     1. Cache hit (see the module docstring's asymmetric-cache note).
     2. Exact box-score code match.
@@ -530,7 +527,7 @@ def tidy_player(p_in: str, ctx: TidyPlayerContext) -> tuple[str, TidyPlayerConte
 @dataclass
 class NoSurnameMatch:
     """No candidate surname fragment scored well enough
-    (``NameFixer.NoSurnameMatch``, ``:638-643``).
+    (``NameFixer.NoSurnameMatch``).
 
     Args:
         box_name: The box-score name compared against.
@@ -553,7 +550,7 @@ class NoSurnameMatch:
 @dataclass
 class WeakSurnameMatch:
     """A surname fragment matched, but the whole-name score fell short of
-    :data:`MIN_OVERALL_SCORE` (``NameFixer.WeakSurnameMatch``, ``:644-645``).
+    :data:`MIN_OVERALL_SCORE` (``NameFixer.WeakSurnameMatch``).
 
     Args:
         box_name: The box-score name compared against.
@@ -570,7 +567,7 @@ class WeakSurnameMatch:
 @dataclass
 class StrongSurnameMatch:
     """A surname fragment matched and the whole-name score cleared
-    :data:`MIN_OVERALL_SCORE` (``NameFixer.StrongSurnameMatch``, ``:646-647``).
+    :data:`MIN_OVERALL_SCORE` (``NameFixer.StrongSurnameMatch``).
 
     Args:
         box_name: The box-score name compared against.
@@ -582,7 +579,7 @@ class StrongSurnameMatch:
 
 
 #: Union of :func:`box_aware_compare`'s three possible outcomes
-#: (``NameFixer.MatchResult``, ``:637``).
+#: (``NameFixer.MatchResult``).
 MatchResult = Union[NoSurnameMatch, WeakSurnameMatch, StrongSurnameMatch]
 
 
@@ -599,13 +596,13 @@ def _weighted_ratio(a: str, b: str) -> int:
 
 def _remove_jr(fragment: str) -> bool:
     """``True`` unless ``fragment`` is the literal suffix ``"jr."``
-    (``box_aware_compare``'s local ``remove_jr``, ``:665``)."""
+    (``box_aware_compare``'s local ``remove_jr``)."""
     return fragment != "jr."
 
 
 def box_aware_compare(candidate_in: str, box_name_in: str) -> MatchResult:
     """Score how well a single play-by-play candidate name fits a single
-    box-score name (``NameFixer.box_aware_compare``, ``:658-766``).
+    box-score name (``NameFixer.box_aware_compare``).
 
     Args:
         candidate_in: The raw play-by-play name fragment.
@@ -710,7 +707,7 @@ class FuzzyMatchError:
 
 def fuzzy_box_match(candidate: str, unassigned_box_names: list[str], team_context: str) -> Union[str, FuzzyMatchError]:
     """Pick the single unassigned box-score name a mis-spelled play-by-play
-    name most likely refers to (``NameFixer.fuzzy_box_match``, ``:774-905``).
+    name most likely refers to (``NameFixer.fuzzy_box_match``).
 
     Resolution order: a single strong match wins outright; multiple strong
     matches only resolve if there's a clear (>10-point) winner; failing

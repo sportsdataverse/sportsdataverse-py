@@ -140,14 +140,14 @@ __all__ = [
 ]
 
 #: Error-reporter location tags (``` `ncaa.get_team_ids` ```/
-#: ``` `ncaa.get_neutral_games` ```, ``TeamIdParser.scala:35`` /
-#: ``TeamScheduleParser.scala:33``).
+#: ``` `ncaa.get_neutral_games` ```, ``TeamIdParser.scala`` /
+#: ``TeamScheduleParser.scala``).
 _LOCATION_GET_TEAM_IDS = "ncaa.get_team_ids"
 _LOCATION_GET_NEUTRAL_GAMES = "ncaa.get_neutral_games"
 
 #: ``ParseUtils.enrich_sub_error``/``build_sub_error``'s ``base_id`` at the
 #: no-team-name call site (``` `parent_fills_in` = "" ```,
-#: ``ExtractorUtils.scala:20``).
+#: ``ExtractorUtils.scala``).
 _PARENT_FILLS_IN = ""
 
 
@@ -159,7 +159,7 @@ def _build_request_error(location: str, filename: str, exc: Exception) -> list[P
 
 
 # ---------------------------------------------------------------------------
-# TeamIdParser (``TeamIdParser.scala:27-125``)
+# TeamIdParser
 # ---------------------------------------------------------------------------
 
 _ID_REGEX_OLD = re.compile(r"/teams/([0-9]+)")
@@ -188,7 +188,7 @@ def _team_id_finder(row: Tag) -> Optional[str]:
 
 def _team_name_finder(row: Tag, old_format: bool) -> Optional[Union[str, tuple[str, str]]]:
     """``e >?> element("a.skipMask")`` -> ``.text`` -> ``Either[String,
-    (String, String)]`` (``:54-58``). ``old_format=True`` always yields the
+    (String, String)]``. ``old_format=True`` always yields the
     plain name (Scala's ``Left(s)``, ported as a bare ``str``); otherwise
     only a ``"Team (Conf)"``-shaped text yields the ``(team, conf)`` pair
     (``Right``, ported as a ``tuple[str, str]``) -- anything else is
@@ -207,7 +207,7 @@ def _team_name_finder(row: Tag, old_format: bool) -> Optional[Union[str, tuple[s
 
 def _team_conference_finder(row: Tag) -> Optional[str]:
     """``e >?> element("td:has(a.skipMask) + td")`` -> ``.text`` -> must
-    start with a letter (``:60-65``) -- fully plain CSS (``:has()`` + the
+    start with a letter -- fully plain CSS (``:has()`` + the
     ``+`` adjacent-sibling combinator), direct ``select_one``."""
     td = row.select_one("td:has(a.skipMask) + td")
     if td is None:
@@ -223,8 +223,7 @@ def get_team_triples(
     filename: str, in_html: str, old_format: bool = False
 ) -> Union[list[tuple[TeamId, str, ConferenceId]], list[ParseError]]:
     """Extracts ``(team, NCAA id, conference)`` triples from a saved NCAA
-    team-list/attendance page (``TeamIdParser.get_team_triples``,
-    ``TeamIdParser.scala:69-91``).
+    team-list/attendance page (``TeamIdParser.get_team_triples``).
 
     Args:
         filename: The source file name, used only for error reporting.
@@ -277,7 +276,7 @@ def get_team_triples(
 
 def build_lineup_cli_array(in_triples: list[tuple[TeamId, str, ConferenceId]]) -> dict[ConferenceId, str]:
     """Builds the per-conference team array for ``lineups-cli.sh`` files
-    (``TeamIdParser.build_lineup_cli_array``, ``TeamIdParser.scala:94-100``).
+    (``TeamIdParser.build_lineup_cli_array``).
 
     **Iteration-order note (upstream-DISABLED context).** Scala's
     ``List.groupBy`` returns an immutable ``Map`` whose iteration order is
@@ -318,8 +317,7 @@ def build_available_team_list(
     in_by_year: dict[str, list[tuple[TeamId, str, ConferenceId]]],
 ) -> dict[ConferenceId, Callable[[str], str]]:
     """Builds a per-conference team-index JSON fragment for
-    ``cbb-on-off-analyzer`` (``TeamIdParser.build_available_team_list``,
-    ``TeamIdParser.scala:105-124``) -- the caller inserts the app-specific
+    ``cbb-on-off-analyzer`` (``TeamIdParser.build_available_team_list``) -- the caller inserts the app-specific
     index key to get the final JSON string.
 
     See :func:`build_lineup_cli_array`'s docstring for why this port doesn't
@@ -373,7 +371,7 @@ def build_available_team_list(
 
 
 # ---------------------------------------------------------------------------
-# TeamScheduleParser (``TeamScheduleParser.scala:25-96``)
+# TeamScheduleParser
 # ---------------------------------------------------------------------------
 
 _NEUTRAL_ROW_REGEX = r".*[@][a-zA-Z]+.*"
@@ -388,14 +386,14 @@ def _direct_child_tds_matching(row: Tag, regex: str) -> list[str]:
 
 
 def _v0_team_name_finder(doc: BeautifulSoup) -> Optional[str]:
-    """``fieldset > legend > img[alt]`` (``:41-42``) -- fully plain CSS."""
+    """``fieldset > legend > img[alt]`` -- fully plain CSS."""
     img = doc.select_one("fieldset > legend > img[alt]")
     return str(img.get("alt", "")) if img is not None else None
 
 
 def _v0_neutral_game_finder(doc: BeautifulSoup) -> list[str]:
     """``legend:contains(Schedule/Results) + table tr:has(td:matches(AT))
-    > td:matches(DATE)`` (``:44-48``) -- decomposed per the module
+    > td:matches(DATE)`` -- decomposed per the module
     docstring's four-step recipe."""
     dates: list[str] = []
     for legend in select_contains(doc, "legend", "Schedule/Results"):
@@ -410,14 +408,14 @@ def _v0_neutral_game_finder(doc: BeautifulSoup) -> list[str]:
 
 
 def _v1_team_name_finder(doc: BeautifulSoup) -> Optional[str]:
-    """``div.card-header > img[alt]`` (``:51-52``) -- fully plain CSS."""
+    """``div.card-header > img[alt]`` -- fully plain CSS."""
     img = doc.select_one("div.card-header > img[alt]")
     return str(img.get("alt", "")) if img is not None else None
 
 
 def _v1_neutral_game_finder(doc: BeautifulSoup) -> list[str]:
     """``div.card-header:contains(Schedule/Results) + div.card-body
-    tr:has(td:matches(AT)) > td:matches(DATE)`` (``:54-58``) -- same
+    tr:has(td:matches(AT)) > td:matches(DATE)`` -- same
     four-step decomposition as :func:`_v0_neutral_game_finder`; the
     ``+``-sibling target is ``div.card-body`` instead of ``table``."""
     dates: list[str] = []
@@ -435,20 +433,20 @@ def _v1_neutral_game_finder(doc: BeautifulSoup) -> list[str]:
 @dataclass(frozen=True)
 class ScheduleBuilders:
     """One version-era's HTML finder functions (``TeamScheduleParser
-    .base_builders``, ``TeamScheduleParser.scala:36-39``)."""
+    .base_builders``)."""
 
     team_name_finder: Callable[[BeautifulSoup], Optional[str]]
     neutral_game_finder: Callable[[BeautifulSoup], list[str]]
 
 
-#: ``v0_builders``/``v1_builders`` (``:40-59``), exported at module level to
-#: match the pbp parser's precedent (Task 5e.3's note: later tasks needing
+#: ``v0_builders``/``v1_builders``, exported at module level to
+#: match the pbp parser's precedent (the note: later tasks needing
 #: inline low-level oracle transliteration should export builder tables the
 #: same way, when the Scala oracle references them by name).
 v0_builders = ScheduleBuilders(team_name_finder=_v0_team_name_finder, neutral_game_finder=_v0_neutral_game_finder)
 v1_builders = ScheduleBuilders(team_name_finder=_v1_team_name_finder, neutral_game_finder=_v1_neutral_game_finder)
 
-#: ``builders_from_version = Array(v0_builders, v1_builders)`` (``:60``).
+#: ``builders_from_version = Array(v0_builders, v1_builders)``.
 _SCHEDULE_BUILDERS = (v0_builders, v1_builders)
 
 
@@ -456,8 +454,7 @@ def get_neutral_games(
     filename: str, in_html: str, format_version: int
 ) -> Union[tuple[TeamId, set[str]], list[ParseError]]:
     """Extracts the set of neutral/away-marked game dates from a saved NCAA
-    team-schedule page (``TeamScheduleParser.get_neutral_games``,
-    ``TeamScheduleParser.scala:63-94``).
+    team-schedule page (``TeamScheduleParser.get_neutral_games``).
 
     Args:
         filename: The source file name, used only for error reporting.

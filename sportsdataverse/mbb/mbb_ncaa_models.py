@@ -7,13 +7,12 @@ four Phase-5a modules (``mbb_ncaa_models.py`` / ``mbb_ncaa_events.py`` /
 consumed by the PBP-line extractors (5a.2) and the possession calculator
 (5a.3): the identity/value types (:class:`TeamId`, :class:`PlayerId`,
 :class:`Year`, :class:`TeamSeasonId`, :class:`Score`, :class:`LocationType`),
-:class:`~LineupEvent.RawGameEvent` (``LineupEvent.scala:65-116``) and its
+:class:`~LineupEvent.RawGameEvent` and its
 :class:`Direction` / :class:`PossessionEvent` possession-accessor companions,
 :class:`ScoreInfo`, :class:`LineupId`, :class:`PlayerCodeId`,
 :class:`LineupEventStats` (``LineupEventStats.scala``, all nested types), the
-full :class:`LineupEvent` record, and :class:`PossCalcFragment`
-(``PossessionUtils.scala:124-154``) with :func:`poss_calc_fragment_sum` and
-:func:`score_to_tuple` (``ExtractorUtils.scala:107-113``).
+full :class:`LineupEvent` record, and :class:`PossCalcFragment` with :func:`poss_calc_fragment_sum` and
+:func:`score_to_tuple`.
 
 **Only ``num_events``/``num_possessions``/``pts``/``plus_minus`` on
 ``LineupEventStats`` are exercised by this task** -- the shot/rebound/assist/
@@ -27,7 +26,7 @@ the roadmap). Porting the full shape now avoids a second migration.
 * **``RawGameEvent.team`` / ``.opponent`` companion factories are renamed
   ``RawGameEvent.for_team`` / ``.for_opponent``.** The Scala companion
   object defines factory methods with the *same* names as the case class's
-  own ``team`` / ``opponent`` fields (``LineupEvent.scala:107-110``) --
+  own ``team`` / ``opponent`` fields --
   legal in Scala because methods and case-class fields live in disjoint
   namespaces there. In Python a ``@dataclass``, a class-body
   ``team: Optional[str] = None`` annotation *is* the class attribute that
@@ -61,15 +60,14 @@ the roadmap). Porting the full shape now avoids a second migration.
   classes' field shape without over-constraining Python mutability.
 * **``Game.Score.by_winner`` / ``.by_location`` are NOT ported.** Both
   operate on a full upstream ``Game`` case class (``won``, ``score``,
-  ``location_type``, plus ``pace``/``rank``/``opp_rank``/``tier``,
-  ``Game.scala:10-19``) that is out of scope for 5a -- neither
+  ``location_type``, plus ``pace``/``rank``/``opp_rank``/``tier``) that is out of scope for 5a -- neither
   ``LineupEvent`` nor ``PossessionUtils`` reference ``Game`` itself, only
   ``Game.Score`` (renamed :class:`Score` here) and ``Game.LocationType``
   (renamed :class:`LocationType`). Without a ``Game``-shaped argument
   these two functions have nothing to operate on; if a later phase ports
   ``Game`` this note flags where to add them back.
 * **``Year.until`` and the ``Year`` companion's ``y2002_``.. named-constant
-  table (``Year.scala:11-45``) are NOT ported** -- unused by
+  table are NOT ported** -- unused by
   ``LineupEvent``/``PossessionUtils``; only the bare ``Year(value)`` wrapper
   is needed for 5a.
 
@@ -137,7 +135,7 @@ __all__ = [
 
 
 class LocationType(Enum):
-    """Game location (``Game.LocationType``, ``Game.scala:36-38``)."""
+    """Game location (``Game.LocationType``)."""
 
     HOME = "Home"
     AWAY = "Away"
@@ -148,7 +146,7 @@ class LocationType(Enum):
 
 @dataclass
 class Score:
-    """Points scored / allowed (``Game.Score``, ``Game.scala:22``).
+    """Points scored / allowed (``Game.Score``).
 
     Args:
         scored: Points scored by the team under analysis.
@@ -206,7 +204,7 @@ class TeamSeasonId:
 
 
 class Direction(Enum):
-    """Which team is in possession (``RawGameEvent.Direction``, ``:119-121``)."""
+    """Which team is in possession (``RawGameEvent.Direction``)."""
 
     INIT = "Init"
     TEAM = "Team"
@@ -215,8 +213,7 @@ class Direction(Enum):
 
 @dataclass
 class RawGameEvent:
-    """A single NCAA play-by-play event line (``LineupEvent.RawGameEvent``,
-    ``LineupEvent.scala:65-105``).
+    """A single NCAA play-by-play event line (``LineupEvent.RawGameEvent``).
 
     Exactly one of ``team`` / ``opponent`` is populated per event -- the raw
     string is the literal ``"date,time,event"`` line from the NCAA website.
@@ -278,8 +275,7 @@ class RawGameEvent:
 
     @classmethod
     def for_team(cls, s: str, min: float) -> "RawGameEvent":
-        """Build a team-side event (Scala ``RawGameEvent.team(s, min)``,
-        ``LineupEvent.scala:107-108`` -- renamed per the "Scala idiom
+        """Build a team-side event (Scala ``RawGameEvent.team(s, min)`` -- renamed per the "Scala idiom
         decisions" module note to avoid colliding with the ``team`` field).
         """
         return cls(min=min, team=s, opponent=None)
@@ -287,7 +283,7 @@ class RawGameEvent:
     @classmethod
     def for_opponent(cls, s: str, min: float) -> "RawGameEvent":
         """Build an opponent-side event (Scala ``RawGameEvent.opponent(s,
-        min)``, ``LineupEvent.scala:109-110`` -- renamed per the "Scala
+        min)`` -- renamed per the "Scala
         idiom decisions" module note to avoid colliding with the
         ``opponent`` field).
         """
@@ -297,7 +293,7 @@ class RawGameEvent:
 @dataclass(frozen=True)
 class PossessionEvent:
     """Decomposes :class:`RawGameEvent`\\ s into attacking/defending sides
-    (``RawGameEvent.PossessionEvent``, ``LineupEvent.scala:126-149``).
+    (``RawGameEvent.PossessionEvent``).
 
     Args:
         dir: Which team (``Direction.TEAM`` / ``Direction.OPPONENT``) is
@@ -342,7 +338,7 @@ class PossessionEvent:
 @dataclass
 class ScoreInfo:
     """Score context at the start/end of a lineup event
-    (``LineupEvent.ScoreInfo``, ``LineupEvent.scala:153-158``).
+    (``LineupEvent.ScoreInfo``).
 
     Args:
         start: Score at the start of the event.
@@ -358,14 +354,14 @@ class ScoreInfo:
 
     @classmethod
     def empty(cls) -> "ScoreInfo":
-        """A fresh zeroed :class:`ScoreInfo` (``ScoreInfo.empty``, ``:161-166``)."""
+        """A fresh zeroed :class:`ScoreInfo` (``ScoreInfo.empty``)."""
         return cls(Score(0, 0), Score(0, 0), 0, 0)
 
 
 @dataclass(frozen=True)
 class LineupId:
     """The set of players on the floor, as an opaque id string
-    (``LineupEvent.LineupId``, ``LineupEvent.scala:172``, ``AnyVal``).
+    (``LineupEvent.LineupId``, ``AnyVal``).
 
     Args:
         value: The opaque lineup identifier.
@@ -373,7 +369,7 @@ class LineupId:
 
     value: str
 
-    #: Placeholder lineup id used before lineup ids are calculated (``:179``).
+    #: Placeholder lineup id used before lineup ids are calculated.
     #: Declared as a ``ClassVar`` so cross-module use sites type-check under
     #: the whole-ratchet mypy run; assigned after the class body (a frozen
     #: dataclass cannot self-reference during class creation).
@@ -386,7 +382,7 @@ LineupId.unknown = LineupId("")
 @dataclass
 class PlayerCodeId:
     """A player's within-team-season code paired with their full identity
-    (``LineupEvent.PlayerCodeId``, ``LineupEvent.scala:185-189``).
+    (``LineupEvent.PlayerCodeId``).
 
     Args:
         code: The player code, unique within the team/season only.
@@ -402,7 +398,7 @@ class PlayerCodeId:
 @dataclass
 class ShotClockStats:
     """Counting stats broken down by shot-clock segment
-    (``LineupEventStats.ShotClockStats``, ``LineupEventStats.scala:51-57``).
+    (``LineupEventStats.ShotClockStats``).
 
     Args:
         total: Count across the entire shot clock.
@@ -422,8 +418,7 @@ class ShotClockStats:
 
 @dataclass
 class FieldGoalStats:
-    """Field-goal counting stats (``LineupEventStats.FieldGoalStats``,
-    ``LineupEventStats.scala:75-79``).
+    """Field-goal counting stats (``LineupEventStats.FieldGoalStats``).
 
     Args:
         attempts: Shot attempts, successful or not.
@@ -438,8 +433,7 @@ class FieldGoalStats:
 
 @dataclass
 class AssistEvent:
-    """One assist relationship's counts (``LineupEventStats.AssistEvent``,
-    ``LineupEventStats.scala:64-67``).
+    """One assist relationship's counts (``LineupEventStats.AssistEvent``).
 
     Args:
         player_code: The other player in the assist event (by code).
@@ -453,7 +447,7 @@ class AssistEvent:
 @dataclass
 class AssistInfo:
     """Detailed assist info, split into given/received
-    (``LineupEventStats.AssistInfo``, ``LineupEventStats.scala:87-91``).
+    (``LineupEventStats.AssistInfo``).
 
     Args:
         counts: Raw assist statistics.
@@ -469,7 +463,7 @@ class AssistInfo:
 @dataclass
 class PlayerShotInfo:
     """Per-player shot-quality info, keyed by lineup slot
-    (``LineupEventStats.PlayerShotInfo``, ``LineupEventStats.scala:98-103``).
+    (``LineupEventStats.PlayerShotInfo``).
     Each tuple is a fixed-arity 5-slot (one per lineup spot), mirroring the
     Scala ``PlayerTuple[Int] = Tuple5[Int, Int, Int, Int, Int]`` alias.
 
@@ -488,11 +482,10 @@ class PlayerShotInfo:
 
 @dataclass
 class LineupEventStats:
-    """A lineup event's full counting-stat tree (``LineupEventStats``,
-    ``LineupEventStats.scala:7-38``).
+    """A lineup event's full counting-stat tree (``LineupEventStats``).
 
     Only ``num_events``/``num_possessions``/``pts``/``plus_minus`` are
-    exercised by Phase 5a -- see the module docstring's scope note.
+    exercised by the possession builder -- see the module docstring's scope note.
 
     Args:
         num_events: Number of raw events folded into this lineup event.
@@ -550,14 +543,14 @@ class LineupEventStats:
 
     @classmethod
     def empty(cls) -> "LineupEventStats":
-        """A fresh all-defaults :class:`LineupEventStats` (``:41``)."""
+        """A fresh all-defaults :class:`LineupEventStats`."""
         return cls()
 
 
 @dataclass
 class LineupEvent:
     """A portion of a game during which a given lineup was on the floor
-    (``LineupEvent``, ``LineupEvent.scala:41-58``).
+    (``LineupEvent``).
 
     Args:
         date: The date of the game.
@@ -601,8 +594,7 @@ class LineupEvent:
 @dataclass
 class PossCalcFragment:
     """Running stats needed to calculate possessions for one lineup event,
-    one direction at a time (``PossessionUtils.PossCalcFragment``,
-    ``PossessionUtils.scala:124-144``).
+    one direction at a time (``PossessionUtils.PossCalcFragment``).
 
     Args:
         shots_made_or_missed: Count of shot attempts (made or missed).
@@ -630,7 +622,7 @@ class PossCalcFragment:
 
     @property
     def total_poss(self) -> int:
-        """Estimated possessions for this fragment (``:134-137``)."""
+        """Estimated possessions for this fragment."""
         return (
             self.shots_made_or_missed
             - (self.liveball_orbs + self.actual_deadball_orbs)
@@ -641,7 +633,7 @@ class PossCalcFragment:
     @property
     def summary(self) -> str:
         """Debug string breaking down :attr:`total_poss`'s components
-        (``:138-143``, exact format -- oracle-pinned)."""
+        (exact format -- oracle-pinned)."""
         return (
             f"total=[{self.total_poss}] = "
             f"shots=[{self.shots_made_or_missed}] - (orbs=[{self.liveball_orbs}] + "
@@ -653,7 +645,7 @@ class PossCalcFragment:
 
 def poss_calc_fragment_sum(a: PossCalcFragment, b: PossCalcFragment) -> PossCalcFragment:
     """Field-wise add two :class:`PossCalcFragment`\\ s
-    (``PossCalcFragment.sum``, ``PossessionUtils.scala:146-153``).
+    (``PossCalcFragment.sum``).
 
     The Scala original uses ``shapeless.Generic`` to zip the two case
     classes' fields and sum pairwise; since every field is a plain ``Int``,
@@ -687,8 +679,7 @@ _SCORE_PATTERN = re.compile(r"([0-9]+)-([0-9]+)")
 
 
 def score_to_tuple(s: str) -> tuple[int, int]:
-    """Parse a ``"scored-allowed"`` score string (``ExtractorUtils.score_to_tuple``,
-    ``ExtractorUtils.scala:107-113``).
+    """Parse a ``"scored-allowed"`` score string (``ExtractorUtils.score_to_tuple``).
 
     Scala's ``str match { case regex(s1, s2) => ... }`` on a compiled
     ``Regex`` requires the ENTIRE string to match (``Regex.unapplySeq`` calls
@@ -718,8 +709,7 @@ def score_to_tuple(s: str) -> tuple[int, int]:
 
 @dataclass
 class PlayerEvent:
-    """A lineup event's stats, narrowed to one player (``PlayerEvent``,
-    ``models/ncaa/PlayerEvent.scala:48-70``). **Scope addition, Task 5c.4**
+    """A lineup event's stats, narrowed to one player (``PlayerEvent``). **Scope addition**
     -- deferred by 5a since only :func:`~sportsdataverse.mbb
     .mbb_ncaa_lineup_enrich.create_player_events` (5c.4) returns it. Appended
     here (not inserted among the 5a-reviewed classes above) to keep this an
@@ -736,8 +726,7 @@ class PlayerEvent:
     **``SingleEventMeta`` / ``event_meta`` / ``game_id`` are NOT ported.**
     ``PlayerEvent.scala``'s companion object nests a ``SingleEventMeta`` case
     class, but the two fields that would carry it (``event_meta``,
-    ``game_id``) are commented out in the Scala source itself
-    (``PlayerEvent.scala:67-69``) -- never part of the live case class, and
+    ``game_id``) are commented out in the Scala source itself -- never part of the live case class, and
     ``create_player_events`` never constructs a ``SingleEventMeta``. Nothing
     to defer; there is no live field to port.
 
@@ -787,7 +776,7 @@ class PlayerEvent:
 @dataclass
 class RosterEntry:
     """An entry in an NCAA team roster (``RosterEntry``, ``models/ncaa
-    /RosterEntry.scala:11-21``). **Scope addition, Task 5e.1** -- the first
+    /RosterEntry.scala``). **Scope addition** -- the first
     model consumed by the HTML-parser layer (``mbb_ncaa_roster_parser.py``).
     Appended here (not inserted among the 5a-reviewed classes above) to keep
     this an additive-only change, matching :class:`PlayerEvent`'s precedent.
@@ -797,7 +786,7 @@ class RosterEntry:
     site there, both the real-player and ``__coach__`` branches, passes the
     literal ``None`` for it) is presumably set by a later phase's box-score
     parser (``BoxscoreParser``, out of this task's scope); it is carried
-    here for shape fidelity even though Task 5e.1's only producer never
+    here for shape fidelity even though the only producer never
     populates it.
 
     Args:
@@ -828,26 +817,25 @@ class RosterEntry:
     role: Optional[str]
 
     #: Feet-hyphen-inches height matcher (``RosterEntry.height_regex``,
-    #: ``models/ncaa/RosterEntry.scala:24``).
+    #: ``models/ncaa/RosterEntry.scala``).
     height_regex: ClassVar[re.Pattern[str]] = re.compile(r"([0-9]+)[-]([0-9]+)")
 
 
 @dataclass(frozen=True)
 class ConferenceId:
     """CBB conference identifier (``ConferenceId``, ``models/ConferenceId
-    .scala:7``, ``AnyVal``). **Scope addition, Task 5e.4** -- the first model
+    .scala``, ``AnyVal``). **Scope addition** -- the first model
     consumed by ``mbb_ncaa_team_parsers.py`` (``TeamIdParser.get_team_triples``
     / ``build_lineup_cli_array`` / ``build_available_team_list``). Appended
     here (not inserted among the 5a-reviewed classes above) to keep this an
     additive-only change, matching :class:`RosterEntry`'s precedent.
 
-    **``ConferenceId.is_high_major`` (the companion object's other member,
-    ``models/ConferenceId.scala:11-16``) is NOT ported.** It has no call site
+    **``ConferenceId.is_high_major`` (the companion object's other member) is NOT ported.** It has no call site
     anywhere in ``TeamIdParser``/``TeamScheduleParser`` (verified: the only
     other ``ConferenceId`` construction sites in the upstream tree are
     ``kenpom/TeamParser.scala`` and ``BuildIngestPipeline.scala``, neither of
     which is in this port's scope, and neither calls ``is_high_major``
-    either) -- nothing in Phase 5e would exercise it. Noted here rather than
+    either) -- nothing in the ported parsers would exercise it. Noted here rather than
     silently dropped, matching this module's precedent for other
     unreferenced companion-object members (see the module docstring's
     ``Year.until`` / ``Game.Score.by_winner`` notes).
@@ -861,8 +849,7 @@ class ConferenceId:
 
 @dataclass
 class ShotLocation:
-    """A shot's court-relative coordinates, in feet (``ShotEvent.ShotLocation``,
-    ``models/ncaa/ShotEvent.scala:48``). **Scope addition, Task 5e.5** --
+    """A shot's court-relative coordinates, in feet (``ShotEvent.ShotLocation``). **Scope addition** --
     flattened out of the Scala ``ShotEvent`` companion object per this
     module's established nested-object-flattening precedent (see the module
     docstring's "Scala idiom decisions": ``ScoreInfo``/``PlayerCodeId`` were
@@ -881,8 +868,8 @@ class ShotLocation:
 @dataclass
 class ShotGeo:
     """A shot's synthetic lat/lon, for geo-aware visualization tooling
-    (``ShotEvent.ShotGeo``, ``models/ncaa/ShotEvent.scala:45``). **Scope
-    addition, Task 5e.5** -- flattened per :class:`ShotLocation`'s note.
+    (``ShotEvent.ShotGeo``). **Scope
+    addition** -- flattened per :class:`ShotLocation`'s note.
 
     Args:
         lat: Synthetic latitude (feet-to-meters converted, offset from an
@@ -897,8 +884,7 @@ class ShotGeo:
 @dataclass
 class ShotEvent:
     """Info about one shot taken during a game, all distances in feet
-    (``ShotEvent``, ``models/ncaa/ShotEvent.scala:9-29``). **Scope addition,
-    Task 5e.5** -- the model produced by
+    (``ShotEvent``). **Scope addition** -- the model produced by
     :func:`~sportsdataverse.mbb.mbb_ncaa_shot_parser.create_shot_event_data`.
 
     **Fields ``mbb_ncaa_shot_parser.create_shot_event_data`` (this task)
@@ -912,18 +898,17 @@ class ShotEvent:
     self-correcting flip pass), ``geo`` (synthetic lat/lon), ``raw_event``
     (the SVG ``<title>`` text, for debugging).
 
-    **Fields left as placeholders for a LATER phase (Task 5e.6,
-    ``PlayByPlayUtils``/``ShotEnrichmentUtils``):** ``lineup_id`` (always
+    **Fields left as placeholders for the later enrichment pass
+    (``PlayByPlayUtils``/``ShotEnrichmentUtils``):** ``lineup_id`` (always
     ``None`` here -- "discard if bad lineup" per the Scala comment, filled in
     once the shot is matched against an actual on-floor lineup), ``players``
     (always ``[]`` here -- filled in from the matched lineup), ``pts``
     (**not the real point value** -- this task only sets it to ``1``/``0``
     for made/missed, matching the Scala's own ``// (enrich in final phase)``
-    comment; the real 2pt/3pt value comes from ``PlayByPlayUtils.shot_value``
-    in Task 5e.6), ``value`` (always ``0`` here, same "final phase" note),
+    comment; the real 2pt/3pt value comes from ``PlayByPlayUtils.shot_value``), ``value`` (always ``0`` here, same "final phase" note),
     ``ast_by``/``is_ast``/``is_trans`` (always ``None`` here -- assist/
-    transition attribution needs the play-by-play cross-reference Task 5e.6
-    builds).
+    transition attribution needs the play-by-play cross-reference that the
+    enrichment pass builds).
 
     Args:
         player: The shooting player's code + identity, if resolved (``None``
@@ -976,15 +961,14 @@ class ShotEvent:
 @dataclass
 class CutdownShotEvent:
     """A narrowed :class:`ShotEvent`, keeping only the fields needed once a
-    shot has been matched to a player/lineup event (``CutdownShotEvent``,
-    ``models/ncaa/ShotEvent.scala:31-40``). **Scope addition, Task 5e.5** --
+    shot has been matched to a player/lineup event (``CutdownShotEvent``). **Scope addition** --
     ported for shape fidelity even though **it is dead code in the ENTIRE
     upstream tree**: grepping shows it appears only in its own definition
     (``ShotEvent.scala``) and as the never-populated ``shot_info:
     Option[CutdownShotEvent]`` field on ``PlayerEvent.scala`` -- it is never
     constructed anywhere. (``PlayByPlayUtils.shot_value`` is an UNRELATED
     ``event_str -> int`` point-value classifier that merely shares a similar
-    name -- Task 5e.6 will NOT produce this type either.) Appended here (not
+    name -- the enrichment pass does NOT produce this type either.) Appended here (not
     inserted among the 5a-reviewed classes above) to keep this an
     additive-only change, matching :class:`RosterEntry`/:class:`ConferenceId`'s
     precedent.

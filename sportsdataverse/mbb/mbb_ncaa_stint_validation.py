@@ -10,11 +10,10 @@ that flag a built lineup stint as internally inconsistent. The
 directly (:func:`~sportsdataverse.mbb.mbb_ncaa_names.build_tidy_player_context`,
 :func:`~sportsdataverse.mbb.mbb_ncaa_names.tidy_player`) rather than
 re-deriving it. Task 5d.1 ports only ``ValidationError`` + ``allowedErrors``
-+ ``validate_lineup`` (``LineupErrorAnalysisUtils.scala:18-26,181-218``) --
-the ONE piece of this Scala object with an upstream oracle
-(``LineupErrorAnalysisUtilsTests.scala:55-120``). Task 5d.2 extends this
++ ``validate_lineup`` --
+the ONE piece of this Scala object with an upstream oracle. Task 5d.2 extends this
 module with ``BadLineupClump`` + ``clump_bad_lineups`` +
-``categorize_bad_lineups`` (``:223-263,617-633``) -- the clump-grouping half,
+``categorize_bad_lineups`` -- the clump-grouping half,
 which has NO upstream oracle (the Scala's own doc comment on
 ``clump_bad_lineups`` says "TODO test"); its tests are hand-built fixtures
 with expected outputs hand-derived from the Scala fold, not transliterations
@@ -29,33 +28,29 @@ never produced by running the port.
 
 Ported members (Scala anchors in each docstring):
 
-* :class:`ValidationError` -- the 3 ways a lineup can be declared invalid
-  (``:18-20``).
-* :data:`ALLOWED_ERRORS` -- the terminating filter set (``:21-26``).
-* :func:`validate_lineup` -- the 3 independent checks (``:181-218``).
+* :class:`ValidationError` -- the 3 ways a lineup can be declared invalid.
+* :data:`ALLOWED_ERRORS` -- the terminating filter set.
+* :func:`validate_lineup` -- the 3 independent checks.
 * :class:`BadLineupClump` -- a clumped run of bad lineup events, plus the
-  next known-good event (``:223-226``).
+  next known-good event.
 * :func:`clump_bad_lineups` -- groups consecutive bad lineup events into
-  :class:`BadLineupClump`\\ s via a 5-condition adjacency predicate
-  (``:229-263``).
+  :class:`BadLineupClump`\\ s via a 5-condition adjacency predicate.
 * :func:`categorize_bad_lineups` -- display-only aggregation of clumps by
-  player count (``:617-633``).
+  player count.
 * :func:`handle_common_sub_bug` -- fixes a single-event ``2-in-1-out``
-  followed by a compensating ``1-out`` in the next good lineup (``:269-298``).
+  followed by a compensating ``1-out`` in the next good lineup.
 * :func:`find_missing_subs` -- trims a too-many-players clump by identifying
-  the "ghost" player(s) never confirmed by a sub-out or play mention
-  (``:406-514``).
+  the "ghost" player(s) never confirmed by a sub-out or play mention.
 * :func:`add_missing_players` -- back-fills a too-few-players clump from the
-  next-good sub-outs and play mentions (``:315-401``).
+  next-good sub-outs and play mentions.
 * :func:`analyze_and_fix_clumps` -- the strict fixer pipeline
   ``handle_common_sub_bug`` -> ``find_missing_subs`` -> ``add_missing_players``
   -> ``find_missing_subs`` (again), then a ``lineup_id`` recompute on every
-  fixed lineup (``:556-610``).
+  fixed lineup.
 
-**Debug-only ``display_lineup`` (``:301-312``) and ``analyze_unfixed_clumps``
-(``:517-553``) are DROPPED, not ported.** Both are pure ``println``
+**Debug-only ``display_lineup`` and ``analyze_unfixed_clumps`` are DROPPED, not ported.** Both are pure ``println``
 diagnostics gated behind the Scala object's ``debug`` flag (their only
-call site, ``:594-595``, is ``if (debug && to_fix.evs.nonEmpty)``); this port
+call site, is ``if (debug && to_fix.evs.nonEmpty)``); this port
 has no ``debug`` flag and no equivalent output path, so
 :func:`analyze_and_fix_clumps` simply omits the gated branch. Dropping them is
 behavior-preserving -- neither function has any effect on the returned
@@ -93,7 +88,7 @@ list identically to a set.
 **``tidy_ctx`` is rebuilt per call, and NOT threaded across the loop
 iterations within one call.** ``validate_lineup`` calls
 :func:`~sportsdataverse.mbb.mbb_ncaa_names.build_tidy_player_context` fresh
-every time (cheap; matches the Scala exactly, ``:195``) -- no caching
+every time (cheap; matches the Scala exactly) -- no caching
 across calls. Within one call's inactive-players loop, every
 :func:`~sportsdataverse.mbb.mbb_ncaa_names.tidy_player` call reads the SAME
 ``tidy_ctx`` object; the Scala's ``.collect { case ParseAnyPlay(player) if
@@ -177,18 +172,18 @@ __all__ = [
 
 class ValidationError(Enum):
     """The 3 ways a lineup can be declared invalid, in Scala declaration
-    (ordinal) order (``LineupErrorAnalysisUtils.ValidationError``, ``:18-20``).
+    (ordinal) order (``LineupErrorAnalysisUtils.ValidationError``).
     Member order is load-bearing -- see the module docstring's "Return
     shape" note.
     """
 
-    #: ``len(lineup.players) != 5`` (``:22``).
+    #: ``len(lineup.players) != 5``.
     WRONG_NUMBER_OF_PLAYERS = "WrongNumberOfPlayers"
 
-    #: A player on the floor isn't in the box score (``:23``).
+    #: A player on the floor isn't in the box score.
     UNKNOWN_PLAYERS = "UnknownPlayers"
 
-    #: A player mentioned in a game event isn't on the floor (``:24``).
+    #: A player mentioned in a game event isn't on the floor.
     INACTIVE_PLAYERS = "InactivePlayers"
 
 
@@ -212,7 +207,7 @@ def validate_lineup(
     valid_player_codes: set[str],
 ) -> list[ValidationError]:
     """Flags a lineup stint as internally inconsistent, via 3 independent
-    checks (``LineupErrorAnalysisUtils.validate_lineup``, ``:181-218``).
+    checks (``LineupErrorAnalysisUtils.validate_lineup``).
 
     Args:
         lineup_event: The lineup stint to validate.
@@ -249,7 +244,7 @@ def validate_lineup(
     right_number_of_players = len(lineup_event.players) == 5
     all_players_known = all(p.code in valid_player_codes for p in lineup_event.players)
 
-    # Players mentioned in game events who aren't in the lineup (``:195-208``).
+    # Players mentioned in game events who aren't in the lineup.
     # `tidy_ctx` is built once and never reassigned below -- see the module
     # docstring's "tidy_ctx is rebuilt per call" note.
     tidy_ctx = build_tidy_player_context(box_lineup)
@@ -280,10 +275,10 @@ def validate_lineup(
 class BadLineupClump:
     """A run of consecutive bad :class:`~sportsdataverse.mbb.mbb_ncaa_models
     .LineupEvent`\\ s that were merged together, plus the first following
-    good event (``LineupErrorAnalysisUtils.BadLineupClump``, ``:223-226``).
+    good event (``LineupErrorAnalysisUtils.BadLineupClump``).
 
     The Scala case class is ``protected`` (module-private), but this port
-    exports it: the Task 5d.3 fixers and the (not-yet-ported) Task 5e
+    exports it: the lineup fixers and the play-by-play
     orchestrator both consume ``BadLineupClump`` instances directly, so
     keeping it private here would just force every caller to reach past a
     leading underscore.
@@ -291,7 +286,7 @@ class BadLineupClump:
     Args:
         evs: The clumped lineup events, in chronological order.
         next_good: The first known-good lineup event following the clump,
-            if any -- used by the Task 5d.3 fixers to reason about a
+            if any -- used by the lineup fixers to reason about a
             player who should have subbed back in.
     """
 
@@ -303,7 +298,7 @@ def clump_bad_lineups(
     lineup_events: list[tuple[LineupEvent, Optional[LineupEvent]]],
 ) -> list[BadLineupClump]:
     """Groups consecutive bad lineup events into :class:`BadLineupClump`\\ s
-    (``LineupErrorAnalysisUtils.clump_bad_lineups``, ``:229-263``).
+    (``LineupErrorAnalysisUtils.clump_bad_lineups``).
 
     The Scala original is a bespoke ``foldLeft`` (NOT the generic
     ``Clumper`` utility used elsewhere in the codebase) that prepends onto
@@ -318,7 +313,7 @@ def clump_bad_lineups(
 
     The current clump extends to cover the next ``(lineup, next_good)`` pair
     iff ALL 5 conditions hold, compared against the clump's LAST-ADDED event
-    (``last``, not its first event) (``:242-249``):
+    (``last``, not its first event):
 
     1. ``lineup.team == last.team``
     2. ``lineup.opponent == last.opponent``
@@ -336,15 +331,14 @@ def clump_bad_lineups(
     set of ``PlayerCodeId``.
 
     Each time a clump is extended, ``next_good`` is REPLACED with the
-    incoming pair's own second element (``:251``) -- the final clump's
+    incoming pair's own second element -- the final clump's
     ``next_good`` is always the LAST-extended event's ``next``, discarding
     whatever ``next_good`` an earlier extension set.
 
-    Starting a new clump uses the incoming pair's own ``next`` too (``:234``,
-    ``:253``) -- a fresh clump's ``next_good`` is never inherited from the
+    Starting a new clump uses the incoming pair's own ``next`` too -- a fresh clump's ``next_good`` is never inherited from the
     clump before it.
 
-    The Scala's third ``foldLeft`` case (``:255-259``, matching a head clump
+    The Scala's third ``foldLeft`` case (matching a head clump
     whose ``evs`` is empty) is dead code in practice -- every
     ``BadLineupClump`` this function ever constructs starts with exactly one
     event and is only ever appended to, so ``evs`` can never be empty. Omitted
@@ -385,7 +379,7 @@ def clump_bad_lineups(
 
 def categorize_bad_lineups(lineup_events: list[LineupEvent]) -> dict[int, tuple[int, int]]:
     """Aggregates bad lineup events for display, by clump-leader player count
-    (``LineupErrorAnalysisUtils.categorize_bad_lineups``, ``:617-633``,
+    (``LineupErrorAnalysisUtils.categorize_bad_lineups``,
     display-only -- the Scala doc comment says "can live without tests").
 
     Re-clumps ``lineup_events`` (each paired with ``next_good=None`` --
@@ -457,13 +451,12 @@ def handle_common_sub_bug(
     valid_player_codes: set[str],
 ) -> tuple[list[LineupEvent], BadLineupClump]:
     """Fixes the "2-in-1-out then a compensating 1-out" substitution bug
-    (``LineupErrorAnalysisUtils.handle_common_sub_bug``, ``:269-298``).
+    (``LineupErrorAnalysisUtils.handle_common_sub_bug``).
 
     Handles a **single-event** bad clump whose next known-good lineup carries
     a lone sub-out that the clump's event should have applied but didn't (e.g.
     ``IN: X, Y, Z; OUT: A, B`` in the bad event, then ``OUT: C`` in the good
-    one). Fires only when all three guard conditions hold
-    (``:275-278``):
+    one). Fires only when all three guard conditions hold:
 
     * the bad event has more players subbing IN than OUT
       (``len(players_in) > len(players_out)``),
@@ -471,12 +464,12 @@ def handle_common_sub_bug(
       otherwise there's no way to tell which of its sub-outs to borrow), and
     * the good event has at least one sub-out (``len(good.players_out) > 0``).
 
-    The fix (``:279-283``) removes the good event's sub-outs from the bad
+    The fix removes the good event's sub-outs from the bad
     event's on-floor ``players`` (value-equality ``not in`` -- the Scala's
     ``filterNot(good.players_out.toSet)``) and appends them to the bad
     event's ``players_out`` (order-preserving :func:`_distinct` -- the Scala's
     ``(bad.players_out ++ good.players_out).distinct``). The fix is **accepted
-    only if** the result then passes :func:`validate_lineup` (``:284-294``):
+    only if** the result then passes :func:`validate_lineup`:
     on success the fixed event is returned as the sole ``fixed`` lineup and
     the still-to-fix clump is emptied; on failure the *fixed* event (not the
     original) is returned as the still-to-fix clump, keeping the same
@@ -526,14 +519,13 @@ def find_missing_subs(
 ) -> tuple[list[LineupEvent], BadLineupClump]:
     """Trims a clump whose lineups carry TOO MANY players by identifying the
     "ghost" player(s) a missing sub-out left behind
-    (``LineupErrorAnalysisUtils.find_missing_subs``, ``:406-514``).
+    (``LineupErrorAnalysisUtils.find_missing_subs``).
 
     Fires only when the clump's first event has ``>= 6`` on-floor players
-    (``:415-416``: ``candidates.size < 6`` is a no-op). ``expected_size_diff``
-    (``:419``) is ``first_event_player_count - 5`` -- the number of ghosts the
+    (``candidates.size < 6`` is a no-op). ``expected_size_diff`` is ``first_event_player_count - 5`` -- the number of ghosts the
     trim should end up removing.
 
-    **Phase 1 -- shrink the candidate pool** (``:437-478``). Starting from the
+    **Phase 1 -- shrink the candidate pool**. Starting from the
     first event's players, walk the clump chronologically. At each event a
     candidate is *confirmed present* (and dropped from the pool) if it subs
     out (``ev.players_out``, **skipped for the first event** -- ``:445``,
@@ -542,13 +534,13 @@ def find_missing_subs(
     exactly ``index == 0``) or is named in one of the event's team-side raw
     plays (``parse_any_play`` -> :func:`~sportsdataverse.mbb.mbb_ncaa_names
     .tidy_player` -> :func:`~sportsdataverse.mbb.mbb_ncaa_stints
-    .build_player_code`, ``:448-456``; unlike :func:`validate_lineup` this
+    .build_player_code`; unlike :func:`validate_lineup` this
     does NOT skip the literal ``"team"`` token -- ported verbatim).
     ``matching_index`` is the **FIRST** event index at which the pool size
-    first equals ``expected_size_diff`` (``:475``); once set it freezes -- all
-    later events are skipped in phase 1 (``:439-441``).
+    first equals ``expected_size_diff``; once set it freezes -- all
+    later events are skipped in phase 1.
 
-    **Accept gate** (``:479-480``): the final pool must be non-empty and no
+    **Accept gate**: the final pool must be non-empty and no
     larger than ``expected_size_diff``. If ``matching_index`` never fired
     (the pool jumped past ``expected_size_diff`` in a single step, or never
     shrank to it), the gate still accepts iff the residual pool is a non-empty
@@ -556,7 +548,7 @@ def find_missing_subs(
     **every** event through the "before match" branch (``index > None`` is
     always false). On failure the **original** clump is returned unchanged.
 
-    **Phase 3 -- rebuild the events** (``:482-503``, a ``scanLeft`` ported as
+    **Phase 3 -- rebuild the events** (a ``scanLeft`` ported as
     a manual accumulate loop that drops the seed). For events at/before
     ``matching_index`` the ghost pool is simply removed from ``players``
     (``filterNot``). For events strictly **after** ``matching_index``
@@ -599,7 +591,7 @@ def find_missing_subs(
     matching_index: Optional[int] = None
     for index, ev in enumerate(clump.evs):
         if matching_index is not None:
-            # Phase 2: candidate already matched -- freeze and skip (``:439-441``).
+            # Phase 2: candidate already matched -- freeze and skip.
             continue
         if ev == head:
             candidates_who_sub_out: list[PlayerCodeId] = []
@@ -652,17 +644,16 @@ def add_missing_players(
     valid_player_codes: set[str],
 ) -> tuple[list[LineupEvent], BadLineupClump]:
     """Back-fills a clump whose lineups carry TOO FEW players
-    (``LineupErrorAnalysisUtils.add_missing_players``, ``:315-401``).
+    (``LineupErrorAnalysisUtils.add_missing_players``).
 
     Fires only when the clump's first event has ``<= 4`` on-floor players
-    (``:324-325``: ``players_in.size > 4`` is a no-op). The candidate pool is
-    every box-score player NOT already on the first event's floor
-    (``:328``), **seeded** with a heuristic (``:352-357``): the ``next_good``
+    (``players_in.size > 4`` is a no-op). The candidate pool is
+    every box-score player NOT already on the first event's floor, **seeded** with a heuristic: the ``next_good``
     lineup's sub-outs minus anyone appearing anywhere in the clump -- a good
     lineup that opens by subbing out a player who was never actually on the
     floor is a strong signal that player belongs to this under-filled clump.
 
-    Walking the clump chronologically (``:359-385``): a candidate who subs IN
+    Walking the clump chronologically: a candidate who subs IN
     is dropped from the pool (they're accounted for), and any remaining
     candidate named in a team-side raw play (same ``parse_any_play`` ->
     ``tidy_player`` -> ``build_player_code`` chain as
@@ -739,7 +730,7 @@ def analyze_and_fix_clumps(
     valid_player_codes: set[str],
 ) -> tuple[list[LineupEvent], BadLineupClump]:
     """Runs the full self-healing fixer pipeline over one bad-lineup clump
-    (``LineupErrorAnalysisUtils.analyze_and_fix_clumps``, ``:556-610``).
+    (``LineupErrorAnalysisUtils.analyze_and_fix_clumps``).
 
     The strict, order-dependent sequence (each stage threads
     ``(fixed_so_far + newly_fixed, still_to_fix)``):
@@ -747,16 +738,15 @@ def analyze_and_fix_clumps(
     1. :func:`handle_common_sub_bug`,
     2. :func:`find_missing_subs`,
     3. :func:`add_missing_players`,
-    4. :func:`find_missing_subs` **again** -- the Scala's own comment
-       (``:587-588``) explains: "Try this again since add_missing_players can
+    4. :func:`find_missing_subs` **again** -- the Scala's own comment explains: "Try this again since add_missing_players can
        go too far". Step 3 back-fills onto every event and can push some past
        5 players; the second trim pass removes the over-add.
 
     Finally every accumulated ``fixed`` lineup gets a fresh ``lineup_id`` via
-    :func:`~sportsdataverse.mbb.mbb_ncaa_stints.build_lineup_id` (``:597-605``)
+    :func:`~sportsdataverse.mbb.mbb_ncaa_stints.build_lineup_id`
     -- the fixers changed the on-floor ``players``, so the id computed during
     stint construction is stale. The Scala's ``debug``-gated
-    ``analyze_unfixed_clumps`` call (``:593-596``) is dropped (see the module
+    ``analyze_unfixed_clumps`` call is dropped (see the module
     docstring's "Debug-only" note); it only prints.
 
     The Scala wraps the whole pipeline in ``Some(clump).map { ... }

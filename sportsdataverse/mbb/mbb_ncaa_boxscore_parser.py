@@ -7,7 +7,7 @@ second of six Phase-5e modules. Turns a saved NCAA box-score page into a
 field is the team's full box-score lineup (not yet split into stints -- that
 is the play-by-play parser's job, Task 5e.3).
 
-**v0/v1 selector tables.** As with the roster parser (Task 5e.1), two eras of
+**v0/v1 selector tables.** As with the roster parser, two eras of
 the NCAA stats site ship different HTML shapes for the same box-score data.
 Both eras are ported as a pair of finder-function bundles (``_BUILDERS_V0`` /
 ``_BUILDERS_V1``, indexed by ``format_version`` exactly like the Scala's
@@ -65,14 +65,14 @@ Both eras are ported as a pair of finder-function bundles (``_BUILDERS_V0`` /
 **Coverage note.** Only the v0 path is exercised by the vendored fixture
 (``tests/fixtures/ncaa/test_lineup.html`` is v0-only; ``BoxscoreParserTests
 .scala`` only calls ``get_box_lineup`` with ``format_version=0``) -- same
-situation as the roster parser's v1 table (Task 5e.1). The v1 selector table
+situation as the roster parser's v1 table. The v1 selector table
 here is implemented per spec but untested by this task.
 
 **``players_missing_from_boxscore`` (Task 5b.1 deferral, closed here).**
 ``inject_validated_players`` needs
 :data:`~sportsdataverse.mbb.mbb_ncaa_data_quality.players_missing_from_boxscore`
--- ``DataQualityIssues.scala:16-34``'s table of players entirely absent from
-a box-score page (4 team/season entries), deferred by Task 5b.1 since this
+-- ``DataQualityIssues.scala``'s table of players entirely absent from
+a box-score page (4 team/season entries), deferred since this
 was its only consumer. Appended (verbatim) to ``mbb_ncaa_data_quality.py`` by
 this task.
 
@@ -95,13 +95,13 @@ game with >1 mismatched box-score name.
 
 **Extra-players ``Set`` ordering (a second instance of the Scala
 ``HashMap``/``HashSet`` iteration-order problem, ported by re-application of
-the algorithm derived in Task 5e.1).** ``inject_validated_players``'s trailer
+the algorithm derived).** ``inject_validated_players``'s trailer
 -- ``(just_players ++ other_players ++ manual_extra_players)
 .filterNot(validated_ordered_lineup_set).toSet`` -- converts a
 deduplicated ``List[String]`` to a Scala ``Set[String]`` before appending it
 back onto the validated lineup. For >4 elements this is the SAME
 ``scala.collection.immutable.HashSet`` hash-trie iteration order documented
-at length in ``mbb_ncaa_roster_parser.py`` (Task 5e.1) for
+at length in ``mbb_ncaa_roster_parser.py`` for
 ``Map[PlayerCodeId, _]`` -- except a plain ``Set[String]`` hashes its raw
 ``String`` elements directly (Java's own polynomial ``String.hashCode()``),
 not a case-class ``productHash``. :func:`_scala_string_set_order` reuses the
@@ -115,8 +115,7 @@ and a team/year absent from ``players_missing_from_boxscore``, so
 ``just_players``/``other_players``/``manual_extra_players`` are always empty
 and the trailing ``Set`` is always empty too -- the extra-players branch (and
 therefore its ordering) is exercised by none of this task's tests, ported
-for correctness against a future non-empty-roster caller (e.g. Task 5e.3's
-pipeline orchestration, which will call ``get_box_lineup`` with a real
+for correctness against a future non-empty-roster caller (e.g. the pipeline orchestration, which will call ``get_box_lineup`` with a real
 ``RosterEntry`` list).
 
 **``get_box_lineup``'s ``players`` field is NOT sorted.** Re-reading
@@ -234,29 +233,28 @@ __all__ = [
     "validate_box_score",
 ]
 
-#: Error-reporter location tag (``` `ncaa.parse_boxscore` ```, ``BoxscoreParser.scala:33``).
+#: Error-reporter location tag (``` `ncaa.parse_boxscore` ```).
 _LOCATION_PARSE_BOXSCORE = "ncaa.parse_boxscore"
 
 #: ``[^_]+_p([0-9]+)[.][^.]*`` -- e.g. ``test_p2.html`` -> period ``2``
-#: (``BoxscoreParser.parse_period_from_filename``, ``:288``). Scala's
+#: (``BoxscoreParser.parse_period_from_filename``). Scala's
 #: ``s match { case filename_parser(g) => ... }`` requires a FULL match ->
 #: ``re.fullmatch``.
 _FILENAME_PERIOD_RE = re.compile(r"[^_]+_p([0-9]+)[.][^.]*")
 
-#: ``"MM/dd/yyyy"`` (``BoxscoreParser.parse_date``, ``:302``).
+#: ``"MM/dd/yyyy"`` (``BoxscoreParser.parse_date``).
 _DATE_FORMAT = "%m/%d/%Y"
 
 
 # ---------------------------------------------------------------------------
 # v0/v1 builder tables (``base_builders``/``v0_builders``/``v1_builders``,
-# ``BoxscoreParser.scala:36-117``)
+# ``BoxscoreParser.scala``)
 # ---------------------------------------------------------------------------
 
 
 @dataclass(frozen=True)
 class _BoxscoreBuilders:
-    """One version-era's HTML finder functions (``BoxscoreParser.base_builders``,
-    ``BoxscoreParser.scala:36-44``)."""
+    """One version-era's HTML finder functions (``BoxscoreParser.base_builders``)."""
 
     team_finder: Callable[[BeautifulSoup], list[str]]
     score_finder: Callable[[BeautifulSoup], list[str]]
@@ -268,7 +266,7 @@ def _v0_score_tables(doc: BeautifulSoup) -> list[Tag]:
     """``table.mytable[width~=[45]0%]`` -- a JSoup attribute-*regex* match
     (unsupported by soupsieve), shared by :func:`_v0_team_finder` and
     :func:`_v0_score_finder` (both scoped to the same period-scores table;
-    ``BoxscoreParser.scala:47-61`` comment: "2020+ is 40%, 2019- is 50%")."""
+    ``BoxscoreParser.scala`` comment: "2020+ is 40%, 2019- is 50%")."""
     return attr_regex_filter(doc.select("div#contentarea table.mytable"), "width", r"[45]0%")
 
 
@@ -289,7 +287,7 @@ def _v0_score_finder(doc: BeautifulSoup) -> list[str]:
 
 
 def _v0_date_finder(doc: BeautifulSoup) -> Optional[str]:
-    """``td.boldtext:contains(Game Date:) + td`` (``:63-64``) -- see the
+    """``td.boldtext:contains(Game Date:) + td`` -- see the
     module docstring's ``:contains()`` case-insensitivity note."""
     candidates = select_contains(doc, "td.boldtext", "Game Date:")
     if not candidates:
@@ -318,7 +316,7 @@ _BUILDERS_V0 = _BoxscoreBuilders(
 
 def _v1_team_finder(doc: BeautifulSoup) -> list[str]:
     """``div.card-header img[alt]`` -> the ``alt`` attribute, not
-    :func:`~sportsdataverse.mbb.mbb_ncaa_html.jsoup_text` (``:82-85``).
+    :func:`~sportsdataverse.mbb.mbb_ncaa_html.jsoup_text`.
 
     Falls back to :func:`~sportsdataverse.mbb.mbb_ncaa_html.current_ncaa_team_alts`
     for current (2026) markup, which no longer wraps the team logos in a
@@ -328,7 +326,7 @@ def _v1_team_finder(doc: BeautifulSoup) -> list[str]:
 
 
 def _v1_score_finder(doc: BeautifulSoup) -> list[str]:
-    """``td[style~=font-size:36px]:matchesOwn([0-9]+)`` (``:87-92``) -- a
+    """``td[style~=font-size:36px]:matchesOwn([0-9]+)`` -- a
     compound selector mixing an attribute-regex term with a ``:matchesOwn``
     term, ported as a 2-step manual filter (see the module docstring)."""
     candidates = doc.select("div.table-responsive td[style]")
@@ -338,8 +336,7 @@ def _v1_score_finder(doc: BeautifulSoup) -> list[str]:
 
 
 def _v1_date_finder(doc: BeautifulSoup) -> Optional[str]:
-    """``div.table-responsive > table table td:matchesOwn([0-9]+/[0-9]+/[0-9]+)``
-    (``:94-97``) -- a single plain-CSS structural selector, handled directly
+    """``div.table-responsive > table table td:matchesOwn([0-9]+/[0-9]+/[0-9]+)`` -- a single plain-CSS structural selector, handled directly
     by :func:`~sportsdataverse.mbb.mbb_ncaa_html.select_matching_own`."""
     matches = select_matching_own(doc, "div.table-responsive > table table td", r"[0-9]+/[0-9]+/[0-9]+")
     return jsoup_text(matches[0]) if matches else None
@@ -363,18 +360,18 @@ _BUILDERS_V1 = _BoxscoreBuilders(
     boxscore_finder=_v1_boxscore_finder,
 )
 
-#: Indexed by ``format_version`` (``BoxscoreParser.builders_from_version``, ``:117``).
+#: Indexed by ``format_version`` (``BoxscoreParser.builders_from_version``).
 _BUILDERS = (_BUILDERS_V0, _BUILDERS_V1)
 
 
 # ---------------------------------------------------------------------------
-# Utils (``BoxscoreParser.scala:284-404``)
+# Utils
 # ---------------------------------------------------------------------------
 
 
 def parse_period_from_filename(filename: str) -> int:
     """Gets the box score's period from the filename (``BoxscoreParser
-    .parse_period_from_filename``, ``:285-296``). See the module docstring's
+    .parse_period_from_filename``). See the module docstring's
     "vestigial ``Either``" note -- there is no reachable error case, so this
     returns a plain ``int`` rather than a ``Union[int, ParseError]``.
 
@@ -397,8 +394,7 @@ def parse_period_from_filename(filename: str) -> int:
 
 
 def parse_date(date: Optional[str]) -> Union[datetime, ParseError]:
-    """Parses dates of the format ``'12/03/2017'`` (``BoxscoreParser.parse_date``,
-    ``:299-329``).
+    """Parses dates of the format ``'12/03/2017'`` (``BoxscoreParser.parse_date``).
 
     Args:
         date: The raw date-cell text (already whitespace-collapsed by the
@@ -430,7 +426,7 @@ def parse_date(date: Optional[str]) -> Union[datetime, ParseError]:
 
 def parse_final_score(scores_per_period: list[str], target_team_first: bool) -> Union[Score, ParseError]:
     """Computes the final score from a list of per-period score strings
-    (``BoxscoreParser.parse_final_score``, ``:331-360``).
+    (``BoxscoreParser.parse_final_score``).
 
     Args:
         scores_per_period: Every period's score-cell text for BOTH teams,
@@ -470,7 +466,7 @@ def parse_final_score(scores_per_period: list[str], target_team_first: bool) -> 
 
 def parse_players_from_boxscore(boxscore_table: Optional[list[Tag]]) -> Union[list[str], ParseError]:
     """Gets the list of starters from the boxscore (``BoxscoreParser
-    .parse_players_from_boxscore``, ``:363-385``).
+    .parse_players_from_boxscore``).
 
     Args:
         boxscore_table: The player-name anchor elements found by a
@@ -498,7 +494,7 @@ def parse_players_from_boxscore(boxscore_table: Optional[list[Tag]]) -> Union[li
 
 def validate_box_score(team: TeamId, lineup: list[str]) -> Union[list[PlayerCodeId], ParseError]:
     """Checks there are no duplicates in the lineup (``BoxscoreParser
-    .validate_box_score``, ``:388-404``).
+    .validate_box_score``).
 
     Args:
         team: The team the lineup belongs to (feeds
@@ -658,7 +654,7 @@ def _scala_string_set_order(items: list[str]) -> list[str]:
 
 
 # ---------------------------------------------------------------------------
-# Public surface (``BoxscoreParser.scala:119-279``)
+# Public surface
 # ---------------------------------------------------------------------------
 
 
@@ -668,8 +664,7 @@ def inject_validated_players(
     external_roster: tuple[list[str], list[RosterEntry]],
 ) -> list[str]:
     """Validates box players against the roster (if available) and any
-    other available box scores (``BoxscoreParser.inject_validated_players``,
-    ``:233-279``).
+    other available box scores (``BoxscoreParser.inject_validated_players``).
 
     See the module docstring's "un-threaded ``tidy_ctx``" note -- every
     fuzzy-resolution call inside the loop uses the SAME original context,
@@ -743,7 +738,7 @@ def get_box_lineup(
     away_team: Optional[str] = None,
 ) -> Union[LineupEvent, list[ParseError]]:
     """Gets the boxscore lineup from the HTML page (``BoxscoreParser
-    .get_box_lineup``, ``:122-222``).
+    .get_box_lineup``).
 
     Args:
         filename: The source file name -- used both for error reporting and

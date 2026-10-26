@@ -12,22 +12,21 @@ no ``v0_builders`` table here.
 Ported surface (Scala anchors in each docstring):
 
 * :data:`ShotMapDimensions` -- the SVG's pixel<->feet conversion constants
-  (``ShotEventParser.ShotMapDimensions``, ``:568-582``).
+  (``ShotEventParser.ShotMapDimensions``).
 * :class:`ShotEventBuilders` / :data:`v1_builders` -- the HTML finder-function
-  table (``ShotEventParser.base_builders``/``v1_builders``, ``:37-172``).
-* :func:`create_shot_event_data` -- the entry point (``:175-259``).
+  table (``ShotEventParser.base_builders``/``v1_builders``).
+* :func:`create_shot_event_data` -- the entry point.
 * :func:`shot_js_to_html` -- converts the client-side-JS ``addShot(...)``
   fallback into parseable HTML circles, for pages where the shot map is
-  built on the fly rather than baked into the initial HTML (``:266-283``).
+  built on the fly rather than baked into the initial HTML.
 * :func:`parse_shot_html` / :func:`build_base_event` -- per-``<circle>``
-  extraction (``:285-410``).
+  extraction.
 * :func:`phase1_shot_event_enrichment` -- the court-geometry pipeline:
   ascending-time conversion, side-to-shoot-on inference, coordinate
-  transform, geo synthesis, and the self-correcting side-flip re-run
-  (``:412-528``).
+  transform, geo synthesis, and the self-correcting side-flip re-run.
 * :func:`get_ascending_time` / :func:`is_team_shooting_left_to_start` /
   :func:`is_women_game` / :func:`transform_shot_location` -- the geometry
-  pipeline's building blocks (``:530-620``).
+  pipeline's building blocks.
 
 **Scala idiom decision: ``shot_js_to_html``'s ``builders``/``browser``
 parameters are dropped.** The Scala signature is
@@ -161,14 +160,13 @@ __all__ = [
 ]
 
 #: Error-reporter location tag (``` `ncaa.parse_shotevent` ```,
-#: ``ShotEventParser.scala:34``).
+#: ``ShotEventParser.scala``).
 _LOCATION_PARSE_SHOTEVENT = "ncaa.parse_shotevent"
 
 
 class ShotMapDimensions:
     """SVG shot-map pixel<->feet conversion constants, taken from the
-    ``svg#court`` element (``ShotEventParser.ShotMapDimensions``,
-    ``:568-582``). A plain class (not a dataclass) used purely as a
+    ``svg#court`` element (``ShotEventParser.ShotMapDimensions``). A plain class (not a dataclass) used purely as a
     namespace, mirroring the Scala ``object``'s "static singleton" role --
     field names are kept snake_case to match the Scala vals verbatim,
     letting the ported oracle tests reference e.g.
@@ -190,14 +188,13 @@ class ShotMapDimensions:
 
 
 # ---------------------------------------------------------------------------
-# v1_builders (``ShotEventParser.base_builders``/``v1_builders``, ``:37-172``)
+# v1_builders (``ShotEventParser.base_builders``/``v1_builders``)
 # ---------------------------------------------------------------------------
 
 
 @dataclass(frozen=True)
 class ShotEventBuilders:
-    """The HTML finder-function table (``ShotEventParser.base_builders``,
-    ``:37-50``). v1-only -- SVG shot maps did not exist in the v0 page
+    """The HTML finder-function table (``ShotEventParser.base_builders``). v1-only -- SVG shot maps did not exist in the v0 page
     format, so there is exactly one instance (:data:`v1_builders`), unlike
     the v0/v1 pairs in every other 5e parser."""
 
@@ -215,12 +212,12 @@ class ShotEventBuilders:
 
 
 def _v1_team_finder(doc: BeautifulSoup) -> list[str]:
-    """``table[align=center] img[alt]`` (``:53-56``)."""
+    """``table[align=center] img[alt]``."""
     return [str(img.get("alt", "")) for img in doc.select("table[align=center] img[alt]")]
 
 
 def _v1_shot_event_finder(doc: BeautifulSoup) -> list[Tag]:
-    """``circle.shot`` (``:58-61``)."""
+    """``circle.shot``."""
     return doc.select("circle.shot")
 
 
@@ -238,32 +235,32 @@ _SCRIPT_BLOCK_RE = re.compile(r"<script\b[^>]*>.*?</script\s*>", re.DOTALL | re.
 def _v1_script_extractor(raw_html: str) -> Optional[str]:
     """Every ``<script>`` block (wrapper included, matching JSoup
     ``outerHtml``) whose first 128 chars contain ``"addShot("``, joined with
-    ``"\\n"`` (``:63-73``). Operates on the raw HTML string -- see
+    ``"\\n"``. Operates on the raw HTML string -- see
     :data:`_SCRIPT_BLOCK_RE` for why the parsed doc must not be used here."""
     joined = "\n".join(m.group(0) for m in _SCRIPT_BLOCK_RE.finditer(raw_html) if "addShot(" in m.group(0)[:128])
     return joined if joined else None
 
 
 def _v1_title_extractor(event: Tag) -> Optional[str]:
-    """First ``<title>`` descendant's text (``:75-76``)."""
+    """First ``<title>`` descendant's text."""
     titles = event.select("title")
     return jsoup_text(titles[0]) if titles else None
 
 
 #: ``[0-9]+(st|nd|rd|th) HH:MM:SS...`` -- a FULL match (Scala's
-#: ``Regex.unapplySeq`` requires ``Matcher.matches()``) (``:78-79``).
+#: ``Regex.unapplySeq`` requires ``Matcher.matches()``).
 _PERIOD_RE = re.compile(r"([0-9]+)(?:st|nd|rd|th) [0-9]+:[0-9]+:[0-9]+.*")
 
-#: ``...MM:SS[:CC] ...`` (``:86``).
+#: ``...MM:SS[:CC] ...``.
 _TIME_RE = re.compile(r".*?([0-9]+):([0-9]+)(?:[:]([0-9]+))? .*")
 
-#: ``... made|missed by NAME(TEAM) NN-NN`` (``:125-126``).
+#: ``... made|missed by NAME(TEAM) NN-NN``.
 _PLAYER_AND_TEAM_RE = re.compile(r".*?(?:made|missed) by *?(.*?) [0-9]+-[0-9]+.*")
 
-#: ``... NN-NN`` at the end of the title (``:147``).
+#: ``... NN-NN`` at the end of the title.
 _SCORE_RE = re.compile(r".* ([0-9]+)[-]([0-9]+)$")
 
-#: ``...: made|missed by...`` (``:155``).
+#: ``...: made|missed by...``.
 _MADE_OR_MISSED_RE = re.compile(r".*?: (made|missed) by.*")
 
 
@@ -294,7 +291,7 @@ def _v1_event_time_finder(event: Tag) -> Optional[float]:
 def _resolve_team_name(name_and_team: str) -> Optional[tuple[str, str]]:
     """Splits ``"NAME(TEAM)"`` into ``(name, team)``, handling a team name
     that itself contains balanced parens (e.g. ``"St. Francis (PA)"``)
-    (``ShotEventParser.resolve_team_name``, ``:98-122``).
+    (``ShotEventParser.resolve_team_name``).
 
     Scans ``name_and_team`` in reverse (right to left) tracking a bracket
     depth counter: the first ``)`` (if the string doesn't end in ``)``,
@@ -356,7 +353,7 @@ def _v1_event_player_finder(event: Tag) -> Optional[str]:
 
 
 def _v1_shot_location_finder(event: Tag) -> Optional[tuple[float, float]]:
-    """``cx``/``cy`` attributes, parsed as floats (``:139-145``)."""
+    """``cx``/``cy`` attributes, parsed as floats."""
     x_str, y_str = event.get("cx"), event.get("cy")
     if x_str is None or y_str is None:
         return None
@@ -400,7 +397,7 @@ def _v1_shot_taking_team_finder(event: Tag) -> Optional[str]:
 
 
 #: The only builders table (v1-only page format, ``ShotEventParser
-#: .v1_builders``, ``:52-172``).
+#: .v1_builders``).
 v1_builders = ShotEventBuilders(
     team_finder=_v1_team_finder,
     shot_event_finder=_v1_shot_event_finder,
@@ -417,7 +414,7 @@ v1_builders = ShotEventBuilders(
 
 
 # ---------------------------------------------------------------------------
-# create_shot_event_data -- the entry point (``:175-259``)
+# create_shot_event_data -- the entry point
 # ---------------------------------------------------------------------------
 
 
@@ -440,8 +437,7 @@ def create_shot_event_data(
     box_lineup: LineupEvent,
 ) -> Union[list[ShotEvent], list[ParseError]]:
     """Parses a game page's SVG shot map into a list of :class:`~sportsdataverse
-    .mbb.mbb_ncaa_models.ShotEvent` (``ShotEventParser.create_shot_event_data``,
-    ``:175-259``).
+    .mbb.mbb_ncaa_models.ShotEvent` (``ShotEventParser.create_shot_event_data``).
 
     Args:
         filename: The source file name, used only for error reporting.
@@ -514,7 +510,7 @@ def shot_js_to_html(js: str) -> list[Tag]:
     """Converts client-side ``addShot(...)`` JS calls into parseable
     ``circle.shot`` HTML, for pages where the shot map is built on the fly
     rather than baked into the initial HTML (``ShotEventParser
-    .shot_js_to_html``, ``:266-283``). See the module docstring's "Scala
+    .shot_js_to_html``). See the module docstring's "Scala
     idiom decision" note -- the Scala's ``builders``/``browser`` parameters
     are dropped here since the Scala body never actually uses them.
 
@@ -561,7 +557,7 @@ def shot_js_to_html(js: str) -> list[Tag]:
 def build_base_event(box_lineup: LineupEvent) -> ShotEvent:
     """Fills in the fields a shot event can borrow straight from the
     box-score lineup, leaving the shot-specific fields as overridable
-    placeholders (``ShotEventParser.build_base_event``, ``:379-410``).
+    placeholders (``ShotEventParser.build_base_event``).
 
     Args:
         box_lineup: The team's box-score lineup event.
@@ -615,8 +611,7 @@ def parse_shot_html(
 ) -> Union[tuple[int, ShotEvent], list[ParseError]]:
     """An initial parse of one shot ``<circle>`` based solely on the element
     itself -- some fields cannot be filled in until the full collection of
-    events provides context (``ShotEventParser.parse_shot_html``,
-    ``:288-377``).
+    events provides context (``ShotEventParser.parse_shot_html``).
 
     Args:
         event: The ``circle.shot`` element to parse.
@@ -637,7 +632,7 @@ def parse_shot_html(
         ValueError: If ``box_lineup.location_type`` is
             ``LocationType.SEMI_HOME``/``SEMI_AWAY`` -- landmine, ported for
             parity: the Scala ``match`` on ``Game.LocationType`` here only
-            handles ``Home``/``Away``/``Neutral`` (``:344-351``) and would
+            handles ``Home``/``Away``/``Neutral`` and would
             raise ``MatchError`` at runtime for either semi-* value too;
             neither language's parser is expected to see a semi-neutral game
             in this code path.
@@ -706,21 +701,21 @@ def parse_shot_html(
 
 
 # ---------------------------------------------------------------------------
-# phase1_shot_event_enrichment -- the court-geometry pipeline (``:412-620``)
+# phase1_shot_event_enrichment -- the court-geometry pipeline
 # ---------------------------------------------------------------------------
 
 #: Shots farther than this (feet) from the basket are suspiciously long --
-#: used by the self-correcting side-flip heuristic (``:419``).
+#: used by the self-correcting side-flip heuristic.
 _LONG_DISTANCE = 50.0
 
 #: Synthetic geo base point + earth radius, for the lat/lon conversion
-#: (``:473-477``). Not a real-world location.
+#:. Not a real-world location.
 _BASE_LAT = 40.750298
 _BASE_LON = -73.993324
 _EARTH_RADIUS_M = 6371000.0
 
 #: Degree<->radian conversion, computed as the EXACT same two-step chain as
-#: the Scala (``:475-476``) -- see the module docstring's geometry note on
+#: the Scala -- see the module docstring's geometry note on
 #: why this isn't :func:`math.degrees`/:func:`math.radians`.
 _PI_OVER_180 = math.pi / 180.0
 _180_OVER_PI = 1.0 / _PI_OVER_180
@@ -728,7 +723,7 @@ _180_OVER_PI = 1.0 / _PI_OVER_180
 
 def get_ascending_time(event: ShotEvent, period: int, is_women_game: bool) -> float:
     """Converts the descending in-period clock time to an ascending
-    game-elapsed time (``ShotEventParser.get_ascending_time``, ``:531-537``).
+    game-elapsed time (``ShotEventParser.get_ascending_time``).
 
     Args:
         event: The shot event (only :attr:`~sportsdataverse.mbb
@@ -753,7 +748,7 @@ def get_ascending_time(event: ShotEvent, period: int, is_women_game: bool) -> fl
 def is_team_shooting_left_to_start(sorted_very_raw_events: list[tuple[int, ShotEvent]]) -> tuple[bool, int]:
     """Infers which side of the SVG court the team under analysis shoots
     towards in the first period, from its own made/missed shot locations
-    (``ShotEventParser.is_team_shooting_left_to_start``, ``:540-555``).
+    (``ShotEventParser.is_team_shooting_left_to_start``).
 
     Args:
         sorted_very_raw_events: The chronologically-sorted (period, shot)
@@ -781,9 +776,9 @@ def is_team_shooting_left_to_start(sorted_very_raw_events: list[tuple[int, ShotE
 
 def is_women_game(sorted_very_raw_events: list[tuple[int, ShotEvent]]) -> bool:
     """Infers men's vs. women's game from timing evidence
-    (``ShotEventParser.is_women_game``, ``:558-566``). **Shot-parser-specific
+    (``ShotEventParser.is_women_game``). **Shot-parser-specific
     variant** -- distinct from the play-by-play parser's own
-    ``is_women_game`` (Task 5e.3), which uses PbP event timing instead of
+    ``is_women_game``, which uses PbP event timing instead of
     shot timing; the plan's recon flags both as "its OWN is_women_game
     variant" per module.
 
@@ -817,7 +812,7 @@ def transform_shot_location(
 ) -> tuple[float, float, float, float]:
     """Transforms a raw SVG pixel location into feet from the basket, always
     oriented as if shooting towards the left goal (``ShotEventParser
-    .transform_shot_location``, ``:588-620``).
+    .transform_shot_location``).
 
     Args:
         x: Raw SVG ``cx`` pixel coordinate.
@@ -869,7 +864,7 @@ def phase1_shot_event_enrichment(
 ) -> list[ShotEvent]:
     """The court-geometry enrichment pass: ascending time, coordinate
     transform + geo synthesis, and the self-correcting side-flip re-run
-    (``ShotEventParser.phase1_shot_event_enrichment``, ``:415-528``).
+    (``ShotEventParser.phase1_shot_event_enrichment``).
 
     For each shot: compute the ascending game time, decide (from
     :func:`is_team_shooting_left_to_start` + which half the period falls in)

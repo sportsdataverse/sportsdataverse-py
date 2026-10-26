@@ -394,7 +394,7 @@ LOCAL: Dict[str, str] = {
     "visitor_score": "Visitor points after the action, parsed from the score text (2021-22 on; else null).",
     "coord_frame": "Frame of x and y: half_court_px (2017-18 and 2018-19 image pixels) or court_pct (2019-20 on, 0-100).",
     "code": "Qualifier code, the value of action_1_qualifier_code / action_2_qualifier_code on the actions.",
-    "label": "Italian label of the qualifier code, as sent (translated in sdv-internal-refs legabasket-returns.md).",
+    "label": "Italian label of the qualifier code, as sent.",
     "zone": "Court zone 1-10 (the play-by-play side_area_code); zone 7 also holds the free throws.",
     "made": "Shots made in the zone, parsed from num.",
     "attempts": "Shots attempted in the zone, parsed from num.",

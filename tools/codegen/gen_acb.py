@@ -55,7 +55,7 @@ _BANNED = re.compile(r"^(the\s+)?\w+(\s+\w+)?\s+(column|field|value|id|name)\.?$
 MATCH, MATCH_2016, CLUB, LICENCE, LICENCE_IN_MATCH = 105401, 17718, 2, 20209407, 20212243
 
 LEGAL = (
-    "Legal notice (sdv-internal-refs/acb/README.md, aviso legal of acb.com read 2026-10-12): ACEB, S.A.U. claims "
+    "Legal notice (the aviso legal of acb.com, read 2026-10-12): ACEB, S.A.U. claims "
     "intellectual property in the site's databases (the EU sui generis database right) among its other content. It "
     "authorises viewing and private copies for personal or journalistic use with the source credited, and requires "
     "prior express consent for distribution, reproduction or public communication. These wrappers fetch on the "

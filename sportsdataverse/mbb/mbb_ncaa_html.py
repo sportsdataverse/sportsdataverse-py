@@ -51,7 +51,7 @@ helpers rather than re-deriving the translation.
 * ``[attr~=regex]`` (JSoup attribute-regex matcher) -> :func:`attr_regex_filter`,
   a plain ``re.search`` filter over each candidate tag's named attribute.
 * ``el :contains(text)`` (JSoup substring-containment filter) -> :func:`select_contains`.
-  **Critical divergence, found during Task 5e.2's review of the BoxscoreParser
+  **Critical divergence, found during the review of the BoxscoreParser
   port: JSoup's ``:contains()`` is documented CASE-INSENSITIVE substring
   containment, but soupsieve's non-deprecated spelling
   ``:-soup-contains()`` is CASE-SENSITIVE** (soupsieve has no
@@ -295,7 +295,7 @@ def attr_regex_filter(tags: list[Tag], attr: str, regex: str) -> list[Tag]:
 def select_contains(root: Tag, selector: str, text: str) -> list[Tag]:
     """JSoup ``root.select(sel + ":contains(text)")``: candidates whose full
     text (own + every descendant's) case-insensitively CONTAINS ``text`` as
-    a plain substring -- **not** a regex (Task 5e.2 addition; see the module
+    a plain substring -- **not** a regex (see the module
     docstring's "Critical divergence" note).
 
     JSoup's ``:contains()`` is documented case-insensitive substring
@@ -328,8 +328,7 @@ def select_contains(root: Tag, selector: str, text: str) -> list[Tag]:
 
 def filter_matching_own(tags: list[Tag], regex: str) -> list[Tag]:
     """JSoup ``:matchesOwn(regex)`` applied to an already-computed candidate
-    list, rather than a fresh ``root.select(selector)`` call (Task 5e.2
-    addition; see the module docstring's note on composing this with
+    list, rather than a fresh ``root.select(selector)`` call (see the module docstring's note on composing this with
     :func:`attr_regex_filter`).
 
     Same own-text-only semantics as :func:`select_matching_own` -- JSoup's

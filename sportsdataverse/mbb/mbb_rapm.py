@@ -247,8 +247,7 @@ does (``_.omit(results, ["filteredLineups", "teamInfo"])`` before
   recursion (not a general-purpose deep-merge utility) -- see its own
   docstring for the exact ``None``-as-``undefined`` convention it relies on
   and why that convention is safe only at this call site.
-- **Gaps NOT closed by this task** (both already flagged by Task 3.5's
-  docstrings as oracle-uncovered, and still uncovered after Task 3.6):
+- **Gaps NOT closed by this task** (both already flagged by the docstrings as oracle-uncovered, and still uncovered after Task 3.6):
   ``pick_ridge_regression``'s ``diag_mode=True`` path (every
   ``RapmUtils.test.ts`` call site across all 7 test blocks -- including the
   two this task adds -- passes ``diagMode=false``) and the
@@ -273,7 +272,7 @@ classification map, item 3, for the full accounting.
 **Task 3.4 numpy-dependency note:** ``numpy`` was already an explicit
 ``[project.dependencies]`` entry (``pyproject.toml``, ``numpy>=1.23.0``)
 before this task -- no ``pyproject.toml`` change was needed to promote it;
-this module was already importing it (Task 3.3's ``calc_player_weights``/
+this module was already importing it (the ``calc_player_weights``/
 ``calc_lineup_outputs``).
 
 **Task 3.5 notes:**
@@ -809,8 +808,7 @@ def calc_player_weights(ctx: RapmPlayerContext) -> list[NDArray[np.float64]]:
     Faithful port of ``RapmUtils.calcPlayerWeights`` (``RapmUtils.ts:544-595``).
     One row per (filtered) lineup, one column per remaining player; each
     filled cell is ``sqrt(lineup_possessions / total_side_possessions)`` --
-    the possession-weighted design-matrix entry the ridge regression (Task
-    3.4) solves against. This is the first function in the module where a
+    the possession-weighted design-matrix entry the ridge regression solves against. This is the first function in the module where a
     ``dict``-shaped ``RapmPlayerContext`` gets materialized into a
     ``numpy.ndarray`` -- see the module docstring's "dict -> ``numpy.ndarray``
     boundary" note.
@@ -906,7 +904,7 @@ def calc_lineup_outputs(
     in ``tests/fixtures/hoop_explorer/README.md``). This port still
     materializes both output vectors as ``numpy.ndarray`` for consistency
     with :func:`calc_player_weights` at the same dict -> array boundary --
-    Task 3.4's ridge-regression solve consumes both as arrays regardless of
+    the ridge-regression solve consumes both as arrays regardless of
     the upstream distinction.
 
     Args:
@@ -923,15 +921,14 @@ def calc_lineup_outputs(
         use_old_val_if_possible: ``(use_old_val_for_off, use_old_val_for_def)``
             -- whether to prefer each lineup/team stat's luck-adjusted
             ``old_value`` over its raw ``value`` when present. This is the
-            luck-adjustment hook Task 3.1's classification map flags as an
+            luck-adjustment hook, an
             **inherited coverage gap**: the vendored oracle fixture has
             ``old_value == value`` on every field (via ``insertOldValues``),
             so neither jest nor this port's replay test ever observes this
             flag change the resulting numbers -- only that passing it
-            doesn't crash. See the module docstring's "Task 3.3 coverage
-            gap" note.
+            doesn't crash. See the module docstring's coverage-gap note.
 
-    **Additional inherited-jest coverage gap (Task 3.4 note, distinct from
+    **Additional inherited-jest coverage gap (distinct from
     the value/old_value gap above):** this function's own "extra row"
     branch (``ctx["unbias_weight"] > 0``, the ``build_side`` closure's
     ``if extra: ...`` tail) is **never exercised** by
@@ -1074,14 +1071,14 @@ def calc_lineup_outputs(
 
 
 # ---------------------------------------------------------------------------
-# 2] PROCESSING -- the ridge-regression solve (Task 3.4).
+# 2] PROCESSING -- the ridge-regression solve.
 #
 # ``RapmUtils.ts`` imports `svd-js`'s `SVD` (`RapmUtils.ts:101`) but the solve
 # functions below (`slowRegression`/`calculateRapm`/`calcSlowPseudoInverse`)
 # do NOT use it -- they call mathjs's plain `inv()` (an LU/Gauss-Jordan
 # matrix inverse, not an SVD) on `X^T X + lambda I`. `SVD` IS used elsewhere
 # in the TS file, in exactly two places, both outside this task's six
-# functions: (a) `pickRidgeRegression` (Task 3.5) calls it once per side on
+# functions: (a) `pickRidgeRegression` calls it once per side on
 # the weight matrices (`RapmUtils.ts:1065-1070`) to compute `avgEigenVal`
 # (`:1077`, the mean singular value that scales the lambda range -- Task 3.5
 # needs `numpy.linalg.svd` for that step); and (b) `calcCollinearityDiag`
@@ -1178,7 +1175,7 @@ def calculate_rapm(regression_matrix: NDArray[np.float64], player_outputs: list[
 
 
 # ---------------------------------------------------------------------------
-# 3] ERROR VALIDATION (Task 3.4).
+# 3] ERROR VALIDATION.
 # ---------------------------------------------------------------------------
 
 
@@ -1240,7 +1237,7 @@ def calculate_predicted_out(
         player_weight_matrix: The off/def design matrix, shape
             ``(num_lineups, num_players)``.
         regressed_players: The fitted per-player values (e.g. the final,
-            strong-prior-blended RAPM from Task 3.5's ``pickRidgeRegression``,
+            strong-prior-blended RAPM from the ``pickRidgeRegression``,
             or a raw :func:`calculate_rapm` output), length ``num_players``.
         ctx: A :class:`RapmPlayerContext` (unused).
 
@@ -1327,7 +1324,7 @@ def calculate_sd_rapm(
     Faithful port of the inline ``sdRapm`` computation in
     ``RapmUtils.pickRidgeRegression`` (``RapmUtils.ts:1373-1390``, not itself
     a named TS function -- promoted to a standalone, independently testable
-    helper here since Task 3.4's brief calls out the formula explicitly).
+    helper here since the brief calls out the formula explicitly).
     Cites `arXiv:1509.09169 <https://arxiv.org/pdf/1509.09169.pdf>`_.
 
     **Two NaN/error regimes (landmines 8-9):**
@@ -1382,11 +1379,11 @@ def calculate_sd_rapm(
 
 
 # ---------------------------------------------------------------------------
-# 4] ADAPTIVE LAMBDA SELECTION (Task 3.5).
+# 4] ADAPTIVE LAMBDA SELECTION.
 #
 # ``pickRidgeRegression`` sits physically *between* `slowRegression`/
-# `calculateRapm` (TS:756/772, Task 3.4's "2] PROCESSING") and
-# `calcSlowPseudoInverse` (TS:1544, Task 3.4's "3] ERROR VALIDATION") in the
+# `calculateRapm` (TS:756/772, the "2] PROCESSING") and
+# `calcSlowPseudoInverse` (TS:1544, the "3] ERROR VALIDATION") in the
 # TS source. This module groups it (and its two helpers, one of which --
 # `buildWeakPriorFromRapm` -- sits much earlier in TS, at :410, right after
 # `buildPriors`) into its own trailing section instead, by *usage* rather
@@ -1398,7 +1395,7 @@ def calculate_sd_rapm(
 class RapmProcessingInputs(TypedDict):
     """Port of ``RapmProcessingInputs`` (``RapmUtils.ts:196-203``).
 
-    See the module docstring's "Task 3.5 notes" for why ``soln_matrix`` and
+    See the module docstring for why ``soln_matrix`` and
     ``sd_rapm`` are plain nested ``list``s rather than ``NDArray``s, and why
     ``sd_rapm`` exists at all (a Python-only addition beyond upstream's own
     return shape).
@@ -1439,8 +1436,7 @@ def build_weak_prior_from_rapm(rapm_results: list[float], off_or_def: str) -> li
     ``"pickRidgeRegression"`` test never calls this function. Ported
     faithfully from TS regardless (per "TS governs"); flagged as a documented
     gap rather than backed by a synthetic test, matching this module's
-    existing convention for other upstream-untested branches (e.g. the
-    "Task 3.3 coverage gap" note above).
+    existing convention for other upstream-untested branches.
 
     Args:
         rapm_results: A flat per-player RAPM estimate vector, e.g.
@@ -1622,7 +1618,7 @@ def pick_ridge_regression(
     behind the same hardcoded-``False`` ``debugMode`` as
     :func:`apply_weak_priors` -- none of the four is ever stored on
     ``acc.output`` upstream (``RapmProcessingInputs`` has no ``sdRapm``
-    field there either). Since Task 3.4 built
+    field there either). Since this module builds
     :func:`calculate_predicted_out`/:func:`calculate_residual_error`/
     :func:`calc_slow_pseudo_inverse`/:func:`calculate_sd_rapm` specifically
     so this task could surface real standard errors, this port keeps
@@ -1893,7 +1889,7 @@ def pick_ridge_regression(
 
 
 # ---------------------------------------------------------------------------
-# 5] PLAYER WRITE-BACK + COLLINEARITY DIAGNOSTICS (Task 3.6).
+# 5] PLAYER WRITE-BACK + COLLINEARITY DIAGNOSTICS.
 # ---------------------------------------------------------------------------
 
 #: Port of ``LuckUtils.affectedPartialFieldnames`` (``LuckUtils.ts:171``) --
@@ -2251,8 +2247,8 @@ def calc_collinearity_diag(weight_matrix: NDArray[np.float64], ctx: RapmPlayerCo
     descending convention vs whatever order ``svd-js`` happens to return.
 
     **``correl_matrix``/``poss_correl_matrix`` stay ``numpy.ndarray``** (see
-    the module docstring's "Task 3.6 notes" for why this doesn't hit the
-    Task 3.5 "``ndarray`` breaks deep ``==``" concern).
+    the module docstring for why an ``ndarray`` here does not break deep ``==``
+    comparisons).
 
     Args:
         weight_matrix: An off/def design matrix, shape ``(num_lineups,

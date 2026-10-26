@@ -26,7 +26,7 @@ with a 2-tuple return. That stub does not match ``buildORtg``'s actual
 anywhere in ``RatingUtils.ts``; ``calc_diags``/``override_adjusted`` are
 required booleans, not defaulted keyword-only flags). Per the task's own
 governing rule ("where brief and TS disagree, TS governs") and per
-Task 2.1's surprise #1 (getting the ``(calc_diags, override_adjusted)`` flag
+the surprise #1 (getting the ``(calc_diags, override_adjusted)`` flag
 pair wrong only silently diverges the 2nd/3rd oracle assertions, not the
 1st), this module mirrors ``buildORtg``'s actual TS signature verbatim,
 snake-cased:
@@ -70,15 +70,14 @@ Ported behavior (``RatingUtils.ts`` anchors):
   ``rating_utils_snap.json`` entry, so it isn't this task's oracle gate) --
   but the math is ported verbatim now since ``build_o_rtg`` cannot compute
   its 2nd/3rd progressive-override oracle assertions without it.
-- :func:`build_productivity` -- **public** (promoted in Task 2.3) port of
+- :func:`build_productivity` -- **public** (promoted) port of
   ``buildProductivity`` (``RatingUtils.ts:963-990``, Dean Oliver's "PUE" with
   diagnostics). Turns ``(ORtg, o_adj, usage, avgEfficiency)`` into
-  ``{Adj_ORtg, Adj_ORtgPlus, Usage_Bonus, SoS_Bonus}``. Per Task 2.1's
-  report, this function has **no direct jest test** -- it is only exercised
+  ``{Adj_ORtg, Adj_ORtgPlus, Usage_Bonus, SoS_Bonus}``. Per the report, this function has **no direct jest test** -- it is only exercised
   indirectly through ``buildORtg``, ``buildDRtg``'s sibling
   ``adjustOffRatingStats``, and (in Task 2.3) :func:`build_d_rtg` /
   :func:`adjust_off_rating_stats`. Task 2.2 kept it private
-  (``_build_productivity``) pending Task 2.3's promotion decision; Task 2.3
+  (``_build_productivity``) pending the promotion decision; Task 2.3
   promotes it to public because it is the documented **RAPM prior source for
   Phase 3** (a *different* Python module will need to import it across
   package boundaries -- Python's private-name convention, not the TS
@@ -103,13 +102,12 @@ Ported behavior (``RatingUtils.ts`` anchors):
   ``oppo_total_def_fgm``). Kept private -- the TS source itself marks it
   private, so there is no promotion question here.
 - :func:`build_d_rtg` -- the full ``buildDRtg`` port (``RatingUtils.ts:1252-1485``),
-  Task 2.3's headline addition: individual defensive rating (Dean-Oliver
+  the headline addition: individual defensive rating (Dean-Oliver
   ``DRtg``) + diagnostics, mirroring :func:`build_o_rtg`'s structure
   (``stat_get`` closure, ``calc_diags``/``override_adjusted`` flag pair,
   recursive un-overridden raw-value pass) but over a simpler
   ``(stat_set, avg_efficiency, calc_diags, override_adjusted)`` signature
-  (no roster/extra-team-stat args -- confirmed against the TS, per Task
-  2.1's surprise #2). **Every division in ``buildDRtg`` is
+  (no roster/extra-team-stat args -- confirmed against the TS, per the surprise #2). **Every division in ``buildDRtg`` is
   guard-ternary'd** (``x > 0 ? a/b : 0``) -- unlike :func:`build_o_rtg`,
   this function introduces **zero** new unguarded-division landmines (see
   the landmine list below, which stays at 3 entries plus one added by
@@ -127,8 +125,7 @@ Ported behavior (``RatingUtils.ts`` anchors):
   (``RatingUtils.ts:993-1033``), which mutates an ``ORtgDiagnostics`` dict
   in place to apply a pts/possession correction factor (used when a lineup
   sample is missing possessions) and recomputes the productivity fields via
-  :func:`build_productivity` -- reused, not re-derived, per Task 2.1's
-  surprise #2. Python dict mutation-in-place mirrors the TS's mutation of
+  :func:`build_productivity` -- reused, not re-derived, per the surprise #2. Python dict mutation-in-place mirrors the TS's mutation of
   ``mutableORtg`` directly.
 
 **Known unguarded-division landmines (preserved for fidelity).** Several TS
@@ -184,7 +181,7 @@ oversight in this port.
 - ``adjustDefRatingStats`` (``RatingUtils.ts:1488-1522``) -- the DRtg analog
   of :func:`adjust_off_rating_stats`. **No jest test exercises it**
   (``RatingUtils.test.ts`` has no ``adjustDefRatingStats`` test/snapshot, and
-  it is absent from Task 2.1's snapshot inventory), so there is no oracle to
+  it is absent from the snapshot inventory), so there is no oracle to
   validate a port against. A future task can add it as a direct structural
   analog of :func:`adjust_off_rating_stats` + :func:`build_d_rtg`'s
   ``Off_SOS > 0`` guard once a caller (e.g. Phase 3 RAPM/lineup aggregation)
@@ -374,15 +371,14 @@ def build_productivity(
 ) -> dict[str, float]:
     """Public port of ``RatingUtils.buildProductivity`` (``RatingUtils.ts:963-990``).
 
-    Promoted to public in Task 2.3 -- see the module docstring's "Ported
-    behavior" section for the promotion rationale (Phase-3 RAPM needs to
+    Promoted to public -- see the module docstring's "Ported
+    behavior" section for the promotion rationale (RAPM needs to
     import this across module boundaries).
 
     Converts ``ORtg`` and a few other numbers into "productivity" using Dean
     Oliver's PUE ("Player Usage Efficiency") formulation, SoS-adjusted via
-    ``o_adj = avgEfficiency / Def_SOS``. **RAPM prior source (Phase 3):**
-    ``Adj_ORtgPlus`` is the value RAPM uses as an individual-offense prior --
-    see ``PLAN-phase2.md``'s self-review notes.
+    ``o_adj = avgEfficiency / Def_SOS``. **RAPM prior source:**
+    ``Adj_ORtgPlus`` is the value RAPM uses as an individual-offense prior.
 
     Args:
         o_rtg: The player's (possibly override-adjusted) ``ORtg``.

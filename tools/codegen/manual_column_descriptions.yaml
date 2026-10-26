@@ -29151,7 +29151,7 @@ lba_pbp:
   y: Court y; 2019-20 on, 0-100 % of the 15 m width; 2017-18 / 2018-19, image pixels (see the coordinates section).
 lba_pbp_legend:
   code: Qualifier code, the value of action_1_qualifier_code / action_2_qualifier_code on the actions.
-  label: Italian label of the qualifier code, as sent (translated in sdv-internal-refs legabasket-returns.md).
+  label: Italian label of the qualifier code, as sent.
 lba_player:
   birth_date: Birth date, Date `YYYY-MM-DD`.
   code: Player code `SURNAME3-NAME3-YY`.

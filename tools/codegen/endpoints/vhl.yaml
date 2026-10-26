@@ -2,7 +2,7 @@ api: vhl
 docstring:
   example_import: true
   notes:
-  - 'Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league
+  - 'Owner flag: the VHL is run by Russian league
     operators, and several clubs are owned or sponsored by sanctioned state companies.
     Fetching on your own machine is fine; a published data release or a hosted mirror
     needs the owner''s sanctions / legal sign-off first.'
@@ -13,8 +13,7 @@ docstring:
   - 'sportsdataverse.errors.AssetFetchError: the page could not be fetched, or it
     is not the page asked for (another season, game or player; a missing table or
     header drift).'
-  raw_doc: 'the page''s parsed record (``dict``): the sdv-internal-refs capture shape,
-    plus ``_request`` (season, stage, tn and the ids asked for)'
+  raw_doc: 'the page''s parsed record (``dict``), plus ``_request`` (season, stage, tn and the ids asked for)'
   see_also:
   - name: VHL
     note: the league site whose pages these wrappers read
