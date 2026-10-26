@@ -214,7 +214,7 @@ dev = [
     "ipykernel>=6.0",  # for executing examples/notebooks/*.ipynb locally
     "jinja2>=3.1",
     # tools/codegen/render_notebooks.py executes the example notebooks and renders
-    # them to docs/docs/tutorials/ (run weekly in live-tests-cron). nbclient runs
+    # them to docs/docs/tutorials/ (run weekly in tutorials-refresh). nbclient runs
     # them; nbconvert turns them into markdown. Build/CI-time only.
     "json5>=0.15.0",
     "nbclient>=0.10",

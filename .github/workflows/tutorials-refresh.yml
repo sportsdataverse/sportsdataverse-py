@@ -1,0 +1,130 @@
+# Re-executes the example notebooks and renders them (with outputs) to docs/docs/tutorials/,
+# then opens or updates the `auto/tutorials-refresh` PR. It runs no test suite: the live-API
+# drift tests are live-tests-cron.yml's job, and a render should not wait two hours behind them.
+#
+# Triggers:
+#   * schedule          — every Monday 13:00 UTC, alongside live-tests-cron.
+#   * workflow_dispatch — refresh the tutorials now (from main only; see the render step).
+name: tutorials-refresh
+on:
+  schedule:
+    - cron: "0 13 * * 1" # Every Monday at 13:00 UTC
+  workflow_dispatch:
+permissions:
+  contents: read # each job below widens only what it needs
+concurrency:
+  group: tutorials-refresh
+  cancel-in-progress: false
+jobs:
+  render:
+    name: render notebook tutorials
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    # Executes the notebooks (project + third-party code), so it holds a read-only token:
+    # any step can read a job's token from the runner, so write access lives in `publish`.
+    permissions:
+      contents: read
+    outputs:
+      has_changes: ${{ steps.tutorial-changes.outputs.has_changes }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # No token on disk while project and third-party code runs.
+          persist-credentials: false
+      - name: Install uv
+        # setup-uv stopped publishing major/minor tags at v8; pin an immutable patch tag.
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - name: Set up Python 3.13.2
+        run: uv python install 3.13.2
+      - name: Install project + extras + dep groups
+        run: uv sync --all-extras --all-groups --frozen --python 3.13.2
+      - name: Render notebook tutorials
+        # Only from main: a dispatch from another branch would otherwise build the refresh PR
+        # on top of that branch's unmerged commits.
+        id: render
+        if: ${{ github.ref == 'refs/heads/main' }}
+        env:
+          SDV_PY_LIVE_TESTS: "1"
+          # Optional: set the ODDS_API_KEY repo secret to refresh the betting-odds tutorial with
+          # live outputs; unset -> it re-renders the key-guarded fallback.
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: |
+          # render_notebooks.py exits 1 if ANY of the 19 live notebooks flakes, but it still writes
+          # the pages that DID render (a failed notebook keeps its prior page). Record the failure
+          # and fail the job at the end, after the pages that did render are uploaded for `publish`.
+          set -o pipefail
+          if ! uv run --frozen python tools/codegen/render_notebooks.py 2>&1 | tee render-notebooks.log; then
+            echo "failed=1" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Detect tutorial changes
+        id: tutorial-changes
+        if: ${{ steps.render.outcome == 'success' }}
+        # git status, not git diff: a new notebook renders an untracked page.
+        run: |
+          if [ -n "$(git status --porcelain -- docs/docs/tutorials)" ]; then
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Upload rendered tutorials
+        if: ${{ steps.tutorial-changes.outputs.has_changes == 'true' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: rendered-tutorials
+          path: docs/docs/tutorials
+          if-no-files-found: error
+          retention-days: 7
+      - name: Upload notebook render log
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: render-notebooks-log
+          path: render-notebooks.log
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Fail when a notebook did not render
+        if: ${{ steps.render.outputs.failed == '1' }}
+        run: |
+          echo "::error::at least one notebook failed to render; its page kept the previous render (see render-notebooks-log)"
+          exit 1
+
+  # Publishes the rendered tutorials on a fresh runner that executes no project code.
+  publish:
+    name: tutorials refresh PR
+    needs: render
+    # !cancelled(): a partly failed render still publishes the pages that did render.
+    if: ${{ !cancelled() && needs.render.outputs.has_changes == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # push the tutorials-refresh branch
+      pull-requests: write # open the tutorials-refresh PR
+    steps:
+      - uses: actions/checkout@v5
+      - name: Download the rendered tutorials
+        uses: actions/download-artifact@v8
+        with:
+          name: rendered-tutorials
+          path: docs/docs/tutorials
+      - name: Open / update the refresh PR
+        # main is PR-only, so push a refresh branch and open/update a PR.
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -z "$(git status --porcelain -- docs/docs/tutorials)" ]; then
+            echo "No tutorial changes to publish."
+            exit 0
+          fi
+          branch="auto/tutorials-refresh"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$branch"
+          git add docs/docs/tutorials
+          git commit -m "docs(tutorials): refresh executed notebook pages"
+          git push -f origin "$branch"
+          if [ -z "$(gh pr list --head "$branch" --state open --json number -q '.[0].number')" ]; then
+            gh pr create --head "$branch" --base main \
+              --title "docs(tutorials): weekly refresh of executed notebook pages" \
+              --body "Automated re-execution + render of \`examples/notebooks/\` to \`docs/docs/tutorials/\` by \`render_notebooks.py\` (tutorials-refresh). Review the output diffs and merge to refresh the rendered tutorials."
+          fi

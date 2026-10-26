@@ -77,7 +77,7 @@ const sidebars: SidebarsConfig = {
     ...sports,
     // Executed example notebooks, rendered to docs/docs/tutorials/ by
     // `python tools/codegen/render_notebooks.py` (refreshed weekly in
-    // live-tests-cron). The whole section sits at the bottom, below the per-sport
+    // tutorials-refresh). The whole section sits at the bottom, below the per-sport
     // API-doc sections; pages order by their frontmatter sidebar_position
     // (Quickstart first, then one per sport).
     {

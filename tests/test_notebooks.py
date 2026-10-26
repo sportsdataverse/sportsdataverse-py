@@ -12,7 +12,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 NB_DIR = ROOT / "examples" / "notebooks"
 NOTEBOOKS = sorted(NB_DIR.glob("*.ipynb"))
-CRON = ROOT / ".github" / "workflows" / "live-tests-cron.yml"
+CRON = ROOT / ".github" / "workflows" / "tutorials-refresh.yml"
 DOCS = ROOT / "docs" / "docs"
 
 # Families that had no notebook cell at all (exploration notes, "Missing coverage").

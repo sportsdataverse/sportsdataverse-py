@@ -8,7 +8,7 @@ values, not just code.
 
 Because execution hits live ESPN / MLB / nflverse / PWHL APIs, this is **not**
 part of the offline ``generate.py`` docs build. It is meant to run in the weekly
-``live-tests-cron`` workflow (execute -> render -> commit); the regular doc build
+``tutorials-refresh`` workflow (execute -> render -> PR); the regular doc build
 just consumes the committed ``.md``. Run locally with:
 
     python tools/codegen/render_notebooks.py            # execute + render
