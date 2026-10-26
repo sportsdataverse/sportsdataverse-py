@@ -1,3 +1,3 @@
-- **Notebooks:** the UFL and college softball cells take their game ids from the scoreboard, the cricket notebook drops
-  the calendar cell (ESPN serves no cricket calendar) and labels its pinned IPL match, the Torvik cells print one line
-  when barttorvik.com refuses the request, and the NBA notebook no longer points at a private repository. (#1021)
+- **Notebooks:** UFL and college softball game ids come from the scoreboard, the dead cricket calendar cell is gone, Torvik
+  cells print one line on a 403, cells ending in `if`/`else` now show their frame or message, the college hockey player
+  cell finds a working athlete, UFL says ESPN ships no plays, and no cell points at a private repository. (#1021)
