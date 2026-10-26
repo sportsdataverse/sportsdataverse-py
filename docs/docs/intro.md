@@ -245,19 +245,10 @@ pages for full details.
 
 ## Installation
 
-sportsdataverse-py can be installed via pip:
-
-```bash
-pip install sportsdataverse
-```
-
-or from the repo (which may at times be more up to date):
-
-```bash
-git clone https://github.com/sportsdataverse/sportsdataverse-py
-cd sportsdataverse-py
-pip install -e .
-```
+`pip install sportsdataverse` (or `uv add sportsdataverse`). The
+[Install & CLI guide](guides/install-and-cli.md) covers uv, the optional extras, the
+supported Python and polars versions, the `sdv` command line and the `sdv-docs` MCP
+server.
 
 # **Our Authors**
 
