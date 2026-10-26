@@ -28,8 +28,8 @@ Upstream one-shot generators write some of those inputs rather than being run pe
 build: `gen_asa` / `gen_cbs` / `gen_mls` / `gen_nwsl` / `gen_on3` / `gen_pff` /
 `gen_pff_api` / `gen_sports247*` / `gen_yahoo` turn vendor OpenAPI specs into
 endpoint YAML; `gen_nba_stats` reads
-`inputs/nba_canonical_catalog.json`; `vendor_captures.py` copies sdv-internal-refs
-captures into `tests/fixtures/`; `gen_*_descriptions.py` mine column descriptions.
+`inputs/nba_canonical_catalog.json`; `vendor_captures.py` copies captures from the
+maintainers' private capture checkout into `tests/fixtures/`; `gen_*_descriptions.py` mine column descriptions.
 
 ## API generation
 
@@ -92,6 +92,10 @@ are hand-authored and preserved.
   `--check` covers their drift too. The third page, `/changelog-unreleased`, is built
   from the `changelog.d/` fragments by `docs-deploy.yml` just before the site build and
   is gitignored, so a PR that adds a fragment changes no generated file.
+- **Returns tables.** The schemas store column types in the R packages' vocabulary
+  (`character`, `integer`, `numeric`, `logical`); `generate._doc_dtype` shows the
+  polars dtype (`String`, `Int64`, `Float64`, `Boolean`) at render time, so a
+  re-capture never has to rewrite `schemas/**`.
 - **Gates.** `_coverage_gaps()` fails on a public function that reaches no docs
   page; `_source_gaps()` fails on one that resolves to zero or two `sources.yaml`
   entries.
@@ -109,6 +113,10 @@ are hand-authored and preserved.
 
 `uv run python tools/codegen/generate.py --check` re-renders everything to a temp
 dir and byte-diffs it, orphan-checks the generated roots, and runs both gates. It
+also fails on maintainer-only text in any `docs/docs` page outside `tutorials/`
+(`generate._INTERNAL_LEAK_PATTERNS`: agent-persona comments, private-repo and
+working-note paths, plan task and phase ids, review rule ids, Scala file:line refs,
+local paths), which reaches the site through docstrings and endpoint-YAML notes. It
 runs in three places:
 
 - `.github/workflows/codegen.yml`, alongside `uv run pytest tests/codegen`;

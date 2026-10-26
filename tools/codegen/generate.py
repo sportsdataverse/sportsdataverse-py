@@ -341,6 +341,51 @@ def _choices_note(p: spec.Param) -> str:
     return " One of: " + ", ".join(str(c) for c in p.choices) + "."
 
 
+# Words a concatenated stats.nba.com slug is built from (``boxscoreadvancedv3`` = box score advanced v3).
+_SLUG_WORDS = frozenset(
+    "all time leaders leader grids assist tracker box score advanced defensive four factors hustle matchups misc "
+    "player players track scoring summary traditional usage common info playoff series team roster years cume "
+    "stats games game draft combine drill results non stationary shooting anthro spot history fantasy widget "
+    "franchise w rank rotation homepage infographic fanduel tiles league dash lineups lineup opp pt shot bio "
+    "clutch locations defend finder log logs viz on off details detail season standings rollup play by awards "
+    "career college compare dashboard splits general last n opponent performance year over pass reb shots "
+    "estimated metrics profile bar graph streak index vs picture schedule int scoreboard chart wide synergy "
+    "types video events asset status v2 v3".split()
+)
+
+
+def _humanize_slug(slug: str) -> str:
+    """``"boxscoreadvancedv3"`` -> ``"Box score advanced v3"``, ``"coaches_history"`` -> ``"Coaches history"``.
+
+    Each ``_``/``-`` part is split into the fewest :data:`_SLUG_WORDS` that spell it exactly; a part with no
+    such split stays whole, so an unknown slug reads as itself rather than as a wrong guess."""
+
+    def split(part: str) -> list[str]:
+        best: list[list[str] | None] = [[]] + [None] * len(part)
+        for end in range(1, len(part) + 1):
+            for start in range(end):
+                word, head = part[start:end], best[start]
+                if head is not None and word in _SLUG_WORDS and (best[end] is None or len(head) + 1 < len(best[end])):
+                    best[end] = [*head, word]
+        return best[-1] or [part]
+
+    words = [w for part in re.split(r"[_\-\s]+", slug.lower()) if part for w in split(part)]
+    text = " ".join("PT" if w == "pt" else w for w in words)
+    return text[:1].upper() + text[1:]
+
+
+def _ep_summary(ep: spec.Endpoint) -> str:
+    """The one-line summary a wrapper's docstring and its reference row lead with.
+
+    A family generated from an OpenAPI spec or a catalog without prose names the request instead
+    (``GET /stats/boxscoreadvancedv3``), which the docstring's ``Endpoint:`` line already says; such a
+    summary reads as the endpoint's humanized short name ("Box score advanced v3.")."""
+    summary = ep.summary or ""
+    if re.fullmatch(r"(?:GET|POST|PUT|DELETE) /\S*", summary.strip()):
+        return f"{_humanize_slug(ep.short)}."
+    return summary
+
+
 def _build_docstring(
     ep: spec.Endpoint,
     sport: str,
@@ -385,7 +430,7 @@ def _build_docstring(
     # parser returns something other than a single DataFrame (e.g. the video
     # endpoints' dict of ``videoUrls``/``playlist`` frames).
     parsed_doc = str(extras.get("parsed_doc") or "")
-    lines = [ep.summary, ""]
+    lines = [_ep_summary(ep), ""]
     if not flat:
         if league_param:
             lines.append(f"Bound to sport={sport!r}; ``league`` is a required argument (e.g. {league!r}).")
@@ -847,20 +892,14 @@ _NO_R_DICT_FAMILIES = frozenset(
 
 
 def _doc_display_name(prefix: str) -> str:
-    """The name a league/home shows in the sidebar, its page title and its description.
+    """The name a league/home shows in its page title, H1, description and ``_category_.json``.
 
-    Historically this was just ``prefix.upper()``, which reads fine for NFL, SOCCER and
-    EUROLEAGUE. ``espn_content`` is the first multi-word NON-LEAGUE home, and ``ESPN_CONTENT``
-    puts the underscore on the page, so such a home shows its curated label instead.
-
-    Deliberately scoped to non-league homes: ``college_baseball`` and ``college_softball`` have
-    the same underscore, and widening the rule to every prefix renames 22 of their existing
-    pages. That is probably an improvement, but it does not belong in a PR about six new
-    providers -- it is a one-line follow-up (drop the ``_NONLEAGUE_EXTRA`` condition).
+    The curated :data:`_LEAGUE_LABELS` entry when there is one (``nbasl_lv`` -> "NBA Summer League
+    (Las Vegas)", ``thesportsdb`` -> "TheSportsDB"), else the upper-cased prefix (``nfl`` -> "NFL").
+    It is the same label ``leagues.json`` gives the sidebar and the home grid, so a page title never
+    reads as a raw prefix such as ``NBASL_LV`` beside a curated sidebar entry.
     """
-    if "_" in prefix and prefix in _NONLEAGUE_HOMES:
-        return _LEAGUE_LABELS.get(prefix, prefix.upper())
-    return prefix.upper()
+    return _LEAGUE_LABELS.get(prefix, prefix.upper())
 
 
 def _r_dict_applies(key: str | None) -> bool:
@@ -1237,6 +1276,35 @@ def _documented_table(ep: spec.Endpoint, league_key: str) -> str:
     return f"{ep.returns_schema}/{league_key}" if per_league.exists() else str(ep.returns_schema)
 
 
+# Returns-table type cells are stored in R's vocabulary (the schemas mirror the SDV R packages' @return
+# tables, and a re-capture rewrites them), but a Python reader expects the polars dtype. The mapping is
+# applied at RENDER time only, so ``schemas/**`` keep their stored names; a real polars dtype
+# (``Int32``, ``Datetime(...)``) is not in the map and passes through unchanged.
+_R_TO_POLARS_TYPE = {
+    "character": "String",
+    "Utf8": "String",
+    "integer": "Int64",
+    "numeric": "Float64",
+    "number": "Float64",
+    "double": "Float64",
+    "logical": "Boolean",
+    "list": "List",
+    "data.frame": "List(Struct)",
+    "date": "Date",
+    "datetime": "Datetime",
+}
+
+
+def _doc_dtype(stored: object) -> str:
+    """The polars dtype a returns-table cell shows for a stored ``type`` (``character`` -> ``String``).
+
+    A union such as ``integer / character`` maps each side; an unknown name passes through."""
+    t = str(stored or "").strip()
+    if " / " in t:
+        return " / ".join(_doc_dtype(x) for x in t.split(" / "))
+    return _R_TO_POLARS_TYPE.get(t, t)
+
+
 @functools.lru_cache(maxsize=None)
 def _return_table(schema_name: str | None, league: str | None = None) -> str:
     """Markdown ``@return`` table(s) for a ``returns_schema`` (resolved by ``_schema_doc``).
@@ -1254,7 +1322,7 @@ def _return_table(schema_name: str | None, league: str | None = None) -> str:
     def tbl(cols) -> str:
         head = "| col_name | type | description |\n|---|---|---|\n"
         return head + "".join(
-            f"| `{c['name']}` | {c.get('type', '')} | "
+            f"| `{c['name']}` | {_doc_dtype(c.get('type', ''))} | "
             f"{_table_cell_desc(c.get('description', ''), league, c.get('name', ''), d.get('schema'), r_dict_key=schema_name)} |\n"
             for c in cols
         )
@@ -1325,7 +1393,7 @@ class _EndpointView:
         self.parsed_doc_md = str((doc_extras or {}).get("parsed_doc") or "").replace("``", "`")
         self.fn_name = fn_name
         self.short = ep.short
-        self.summary = _normalize_rst(ep.summary or "")
+        self.summary = _normalize_rst(_ep_summary(ep))
         self.query_params = ep.query_params
         self.fixed_params = ep.fixed_params
         self.path_params = ep.path_params
@@ -3746,7 +3814,7 @@ def _loader_schema_table(fn: str, league: str | None = None) -> str:
         return ""
     head = "| col_name | type | description |\n|---|---|---|\n"
     return head + "".join(
-        f"| `{c['name']}` | {c['type']} | {_table_cell_desc('', league, c['name'], fn)} |\n" for c in cols
+        f"| `{c['name']}` | {_doc_dtype(c['type'])} | {_table_cell_desc('', league, c['name'], fn)} |\n" for c in cols
     )
 
 
@@ -4942,7 +5010,7 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
                 section and _table_cell_desc(stored, league, f"{section}.{raw_name}", desc_schema)
             ) or _table_cell_desc(stored, league, raw_name, desc_schema)
             c["name"] = raw_name.replace("|", "\\|")
-            c["type"] = str(c.get("type", "")).replace("|", "\\|")
+            c["type"] = _doc_dtype(c.get("type", "")).replace("|", "\\|")
         by_family.setdefault(_autodoc_family(n, highlighted, module=getattr(obj, "__module__", "")), []).append(
             {
                 "name": n,
@@ -5731,8 +5799,18 @@ _EXTRA_LEAGUE_SPORT = {
     # A nested home's sport is its container (``hockey.liiga`` -> hockey).
     **{home: mod.split(".")[0] for home, mod in _NESTED_HOMES.items()},
 }
-# Labels for prefixes that are not initials; every other prefix is upper-cased (nfl -> NFL).
+# Labels for prefixes that are not a league's own name; every other prefix is upper-cased (nfl -> NFL), so a
+# bare code a reader cannot expand (MBB, MCH, WC) is spelled out here.
 _LEAGUE_LABELS = {
+    "cfb": "College football",
+    "mbb": "Men's college basketball",
+    "wbb": "Women's college basketball",
+    "mch": "Men's college hockey",
+    "wch": "Women's college hockey",
+    "ucl": "UEFA Champions League",
+    "uel": "UEFA Europa League",
+    "wc": "FIFA World Cup",
+    "wwc": "FIFA Women's World Cup",
     "bundesliga": "Bundesliga",
     "cbs": "CBS Sports",
     "college_baseball": "College baseball",
@@ -5794,7 +5872,7 @@ def render_leagues_json() -> str:
     leagues: dict[str, list[dict[str, str]]] = {key: [] for key in keys}
     for prefix in _doc_leagues():
         sport = sport_of.get(prefix, "other")
-        entry = {"prefix": prefix, "label": _LEAGUE_LABELS.get(prefix, prefix.upper())}
+        entry = {"prefix": prefix, "label": _doc_display_name(prefix)}
         if prefix in _LEAGUE_GROUPS:
             entry["group"] = _LEAGUE_GROUPS[prefix]
         leagues[sport if sport in keys else "other"].append(entry)
@@ -5812,6 +5890,22 @@ _INTRO_MARKERS = (
 )
 
 
+# ``sportsdataverse/discover.py`` (hand-written) indexes the package by league; the generator owns its
+# ``_LEAGUES`` table, written from the same registry as leagues.json, so ``function_count()`` counts every
+# documented league without the package importing ``tools/`` at runtime.
+_DISCOVER_REL = "../../sportsdataverse/discover.py"
+_DISCOVER_MARKERS = ("# BEGIN generated: league homes", "# END generated: league homes")
+
+
+def render_discover_leagues() -> str:
+    """The ``_LEAGUES`` literal for ``discover.py``: ``{prefix: module path under sportsdataverse}`` for
+    every documented league, in ``leagues.json`` order (``"del": "hockey.del_"``, ``"epl": "soccer.epl"``)."""
+    lines = ["_LEAGUES: Dict[str, str] = {"]
+    for sport in json.loads(render_leagues_json())["sports"]:
+        lines += [f'    "{lg["prefix"]}": "{_league_module(lg["prefix"])}",' for lg in sport["leagues"]]
+    return "\n".join([*lines, "}"])
+
+
 def _patch_between_markers(text: str, begin: str, end: str, body: str) -> str:
     """``text`` with everything between ``begin`` and ``end`` replaced by ``body``.
 
@@ -5820,24 +5914,57 @@ def _patch_between_markers(text: str, begin: str, end: str, body: str) -> str:
     i, j = text.find(begin), text.find(end)
     if i < 0 or j < 0 or j < i:
         missing = begin if i < 0 else end
-        raise SystemExit(f"codegen: docs/docs/intro.md is missing the marker {missing}")
+        raise SystemExit(f"codegen: a generated span is missing the marker {missing}")
     return text[: i + len(begin)] + "\n" + body.rstrip() + "\n" + text[j:]
 
 
+def _sidebar_order() -> list[tuple[str, str, str | None]]:
+    """``[(sport_label, prefix, group)]`` in the order the sidebar lists them: sport by sport as in
+    ``leagues.json``, each sport's ungrouped headline leagues first, then each group (in the order the
+    registry first names it) -- the same walk ``sportItems()`` in ``docs/sidebars.ts`` makes."""
+    out: list[tuple[str, str, str | None]] = []
+    for sport in json.loads(render_leagues_json())["sports"]:
+        groups: dict[str, list[str]] = {}
+        for lg in sport["leagues"]:
+            if "group" in lg:
+                groups.setdefault(lg["group"], []).append(lg["prefix"])
+            else:
+                out.append((sport["label"], lg["prefix"], None))
+        out += [(sport["label"], p, g) for g, members in groups.items() for p in members]
+    return out
+
+
+def _intro_sources_cell(rows: list[dict]) -> str:
+    """The Data-sources cell: ``label (count)`` per provider. A league with ONE provider spells out its
+    APIs instead (``ESPN (112): site API (v2) 24, core API (v2) 82, ...``), so the many ESPN-only leagues
+    say what they carry rather than repeating one bare count."""
+    if len(rows) == 1 and len(rows[0]["entries"]) > 1:
+        r = rows[0]
+        prefix = f"{r['label']} "
+        parts = [
+            f"{e['label'][len(prefix) :] if e['label'].startswith(prefix) else e['label']} {e['count']}"
+            for e in r["entries"]
+        ]
+        return f"{r['label']} ({r['count']}): " + ", ".join(parts)
+    return ", ".join(f"{r['label']} ({r['count']})" for r in rows)
+
+
 def render_intro_sources_table(autodoc_by_scope: dict[str | None, list[str]]) -> str:
-    """``| League | Module | Data sources |`` for every documented league.
+    """``| Sport | League | Module | Data sources |`` for every documented league, in sidebar order.
 
     The Data-sources cell lists each provider present in that league with its
     function count, in ``sources.yaml`` registry order -- the same rows the league
     index's own table shows, so the two can never disagree."""
-    lines = ["| League | Module | Data sources |", "|---|---|---|"]
-    for prefix in _doc_leagues():
+    lines = ["| Sport | League | Module | Data sources |", "|---|---|---|---|"]
+    for sport, prefix, group in _sidebar_order():
         rows = _league_source_rows(prefix, autodoc_names=autodoc_by_scope.get(prefix) or [])
         if not rows:
             continue
-        cell = ", ".join(f"{r['label']} ({r['count']})" for r in rows)
+        where = f"{sport} ({group})" if group else sport
         module = _home_module(prefix)
-        lines.append(f"| [{_LEAGUE_LABELS.get(prefix, prefix.upper())}]({prefix}/) | `{module}` | {cell} |")
+        lines.append(
+            f"| {where} | [{_doc_display_name(prefix)}]({prefix}/) | `{module}` | {_intro_sources_cell(rows)} |"
+        )
     return "\n".join(lines)
 
 
@@ -5944,6 +6071,11 @@ def _render_docs_all() -> dict[str, str]:
     pkgs = render_packages_page()
     if pkgs is not None:
         out["packages.mdx"] = pkgs
+    discover = DOCS / _DISCOVER_REL
+    if discover.exists():
+        out[_DISCOVER_REL] = _patch_between_markers(
+            discover.read_text(encoding="utf-8"), *_DISCOVER_MARKERS, render_discover_leagues()
+        )
     intro = DOCS / "intro.md"
     if intro.exists():
         out["intro.md"] = _patch_between_markers(
@@ -5981,6 +6113,46 @@ def build_docs() -> list[Path]:
         dest.write_text(content, encoding="utf-8", newline="\n")
         written.append(dest)
     return sorted(written)
+
+
+# Maintainer-only content that must never reach a public page: it reaches the site through docstrings,
+# endpoint-YAML notes and column descriptions, and each pattern below once did. ``dev/<...>.py`` fitting
+# scripts are NOT listed: model docstrings and the model-lineage page cite them as provenance.
+_INTERNAL_LEAK_PATTERNS: dict[str, re.Pattern[str]] = {
+    "agent-persona comment": re.compile(r"\bponytail:"),
+    "private repository": re.compile(r"sdv-internal-refs"),
+    "working-note path": re.compile(r"(?<![\w/.-])dev/[\w./-]+\.md\b"),
+    "plan task id": re.compile(r"\bTask\s+\d+[a-z]?\.\d+"),
+    "plan phase id": re.compile(r"\bPhase \d+[a-z]\b|\bPLAN-phase"),
+    "review rule id": re.compile(r"\b[A-Z]-[A-Z]{1,2}\d+\b"),
+    "Scala file:line": re.compile(r"\.scala\s*:\d"),
+    "local path": re.compile(r"\b[A-Za-z]:[/\\]Users[/\\]"),
+}
+# Executed notebooks are rendered by the tutorials refresh, not by this generator.
+_LEAK_EXEMPT_DIRS = ("tutorials",)
+
+
+def _internal_leaks(pages: dict[str, str] | None = None) -> list[str]:
+    """``["<page>:<line>: <kind>: <text>"]`` for every maintainer-only reference on a public docs page.
+
+    Args:
+        pages: ``{relpath: markdown}`` to scan. Defaults to every ``docs/docs/**/*.md`` on disk outside
+            :data:`_LEAK_EXEMPT_DIRS`; ``--check`` scans the disk only after the drift gate has proved
+            it equal to a fresh render.
+    """
+    if pages is None:
+        pages = {
+            f.relative_to(DOCS).as_posix(): f.read_text(encoding="utf-8")
+            for f in sorted(DOCS.rglob("*.md*"))
+            if f.suffix in (".md", ".mdx") and f.relative_to(DOCS).parts[0] not in _LEAK_EXEMPT_DIRS
+        }
+    hits = []
+    for rel, text in pages.items():
+        for kind, pat in _INTERNAL_LEAK_PATTERNS.items():
+            for m in pat.finditer(text):
+                line = text.count("\n", 0, m.start()) + 1
+                hits.append(f"{rel}:{line}: {kind}: {text.splitlines()[line - 1].strip()[:120]}")
+    return sorted(hits)
 
 
 def _docs_stale(rendered: dict[str, str] | None = None) -> list[str]:
@@ -6100,6 +6272,15 @@ def main(argv=None) -> int:
             print(
                 "codegen --check: public functions with no single source:",
                 "; ".join(f"{label}.{name}: {why}" for label, name, why in src_gaps),
+                file=sys.stderr,
+            )
+            rc = 1
+        leaks = _internal_leaks()
+        if leaks:
+            print(
+                f"codegen --check: {len(leaks)} maintainer-only references on public docs pages:",
+                *leaks[:50],
+                sep="\n  ",
                 file=sys.stderr,
             )
             rc = 1
