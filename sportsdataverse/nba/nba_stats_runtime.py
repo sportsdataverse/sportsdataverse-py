@@ -248,7 +248,9 @@ def _get(
         transport: Callable with signature
             ``(url, params, headers, proxy_url) -> (status_code, text)``.
             Defaults to ``_curl_transport`` (curl_cffi Chrome impersonation).
-        proxy_url: Optional proxy URL forwarded to the transport.
+        proxy_url: Optional proxy URL forwarded to the transport. When omitted, the
+            ``SDV_PY_NBA_STATS_PROXY`` environment variable is used (``http://user:pass@host:port``);
+            pass ``""`` to bypass it. The host still needs Chrome impersonation behind any proxy.
         **kwargs: Accepted for forward-compatibility with generated callers; unused.
 
     Returns:
@@ -303,6 +305,9 @@ def _get(
 
     _transport = transport or _curl_transport
     _headers = headers or stats_headers(host)
+    # An explicit proxy_url wins; "" disables the env proxy for this call.
+    if proxy_url is None:
+        proxy_url = os.environ.get("SDV_PY_NBA_STATS_PROXY") or None
 
     # Optional retry-with-backoff for the throttle/slowness failure modes.
     # stats.nba.com intermittently hangs (curl timeout), errs or returns a blank /

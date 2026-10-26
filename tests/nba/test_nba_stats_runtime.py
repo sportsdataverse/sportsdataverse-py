@@ -301,3 +301,23 @@ def test_get_exhausted_empty_returns_blank(monkeypatch):
     with pytest.warns(EmptyResponseWarning):
         assert _get("gamerotation", {}, transport=transport) == {}
     assert calls["n"] == 3  # 1 + 2 retries, then gives up
+
+
+@GETTERS
+def test_proxy_comes_from_the_env_unless_the_call_passes_one(get, monkeypatch):
+    """SDV_PY_NBA_STATS_PROXY routes every call (tutorials-refresh sets it); an explicit proxy_url wins, "" opts out."""
+    seen = []
+
+    def transport(url, params, headers, proxy_url):
+        seen.append(proxy_url)
+        return 200, '{"resultSets": []}'
+
+    monkeypatch.setenv("SDV_PY_NBA_STATS_PROXY", "http://u:p@10.0.0.1:8080")
+    # Distinct params per call: identical requests are served from the response cache.
+    get("leaguedashplayerstats", {"Season": "2023-24"}, transport=transport)
+    get("leaguedashplayerstats", {"Season": "2022-23"}, transport=transport, proxy_url="http://u:p@10.0.0.2:8080")
+    get("leaguedashplayerstats", {"Season": "2021-22"}, transport=transport, proxy_url="")
+    monkeypatch.delenv("SDV_PY_NBA_STATS_PROXY")
+    get("leaguedashplayerstats", {"Season": "2020-21"}, transport=transport)
+    # "" reaches the transport as "", which _curl_transport treats as no proxy.
+    assert seen == ["http://u:p@10.0.0.1:8080", "http://u:p@10.0.0.2:8080", "", None]
