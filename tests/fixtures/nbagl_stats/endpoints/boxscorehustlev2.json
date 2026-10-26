@@ -1,0 +1,126 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/games/2022500137/boxscorehustle?Format=json",
+  "time": "2026-06-28T20:00:49.049Z"
+ },
+ "boxScoreHustle": {
+  "gameId": "2022500137",
+  "awayTeamId": 0,
+  "homeTeamId": 0,
+  "homeTeam": {
+   "teamId": 0,
+   "teamCity": "",
+   "teamName": "",
+   "teamTricode": "",
+   "teamSlug": "",
+   "players": [
+    {
+     "personId": 0,
+     "firstName": "",
+     "familyName": "",
+     "nameI": "",
+     "playerSlug": "",
+     "position": "",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "",
+      "points": 0,
+      "contestedShots": 0,
+      "contestedShots2pt": 0,
+      "contestedShots3pt": 0,
+      "deflections": 0,
+      "chargesDrawn": 0,
+      "screenAssists": 0,
+      "screenAssistPoints": 0,
+      "looseBallsRecoveredOffensive": 0,
+      "looseBallsRecoveredDefensive": 0,
+      "looseBallsRecoveredTotal": 0,
+      "offensiveBoxOuts": 0,
+      "defensiveBoxOuts": 0,
+      "boxOutPlayerTeamRebounds": 0,
+      "boxOutPlayerRebounds": 0,
+      "boxOuts": 0
+     }
+    }
+   ],
+   "statistics": {
+    "minutes": "",
+    "points": 0,
+    "contestedShots": 0,
+    "contestedShots2pt": 0,
+    "contestedShots3pt": 0,
+    "deflections": 0,
+    "chargesDrawn": 0,
+    "screenAssists": 0,
+    "screenAssistPoints": 0,
+    "looseBallsRecoveredOffensive": 0,
+    "looseBallsRecoveredDefensive": 0,
+    "looseBallsRecoveredTotal": 0,
+    "offensiveBoxOuts": 0,
+    "defensiveBoxOuts": 0,
+    "boxOutPlayerTeamRebounds": 0,
+    "boxOutPlayerRebounds": 0,
+    "boxOuts": 0
+   }
+  },
+  "awayTeam": {
+   "teamId": 0,
+   "teamCity": "",
+   "teamName": "",
+   "teamTricode": "",
+   "teamSlug": "",
+   "players": [
+    {
+     "personId": 0,
+     "firstName": "",
+     "familyName": "",
+     "nameI": "",
+     "playerSlug": "",
+     "position": "",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "",
+      "points": 0,
+      "contestedShots": 0,
+      "contestedShots2pt": 0,
+      "contestedShots3pt": 0,
+      "deflections": 0,
+      "chargesDrawn": 0,
+      "screenAssists": 0,
+      "screenAssistPoints": 0,
+      "looseBallsRecoveredOffensive": 0,
+      "looseBallsRecoveredDefensive": 0,
+      "looseBallsRecoveredTotal": 0,
+      "offensiveBoxOuts": 0,
+      "defensiveBoxOuts": 0,
+      "boxOutPlayerTeamRebounds": 0,
+      "boxOutPlayerRebounds": 0,
+      "boxOuts": 0
+     }
+    }
+   ],
+   "statistics": {
+    "minutes": "",
+    "points": 0,
+    "contestedShots": 0,
+    "contestedShots2pt": 0,
+    "contestedShots3pt": 0,
+    "deflections": 0,
+    "chargesDrawn": 0,
+    "screenAssists": 0,
+    "screenAssistPoints": 0,
+    "looseBallsRecoveredOffensive": 0,
+    "looseBallsRecoveredDefensive": 0,
+    "looseBallsRecoveredTotal": 0,
+    "offensiveBoxOuts": 0,
+    "defensiveBoxOuts": 0,
+    "boxOutPlayerTeamRebounds": 0,
+    "boxOutPlayerRebounds": 0,
+    "boxOuts": 0
+   }
+  }
+ }
+}

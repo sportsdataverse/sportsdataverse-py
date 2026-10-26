@@ -1,0 +1,302 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/league/20/2025/01/15/scoreboard?Format=json",
+  "time": "2025-07-02T17:41:11.4111Z"
+ },
+ "scoreboard": {
+  "gameDate": "2025-01-15",
+  "leagueId": "20",
+  "leagueName": "NBA G League",
+  "games": [
+   {
+    "gameId": "2022400116",
+    "gameCode": "20250115/VALMCC",
+    "gameStatus": 3,
+    "gameStatusText": "Final",
+    "period": 4,
+    "gameClock": "",
+    "gameTimeUTC": "2025-01-16T00:00:00Z",
+    "gameEt": "2025-01-15T19:00:00Z",
+    "regulationPeriods": 4,
+    "seriesGameNumber": "",
+    "gameLabel": "",
+    "gameSubLabel": "",
+    "seriesText": "",
+    "ifNecessary": false,
+    "seriesConference": "",
+    "poRoundDesc": "",
+    "gameSubtype": "",
+    "isNeutral": false,
+    "gameLeaders": {
+     "homeLeaders": {
+      "personId": 1642449,
+      "name": "Tolu Smith",
+      "playerSlug": "tolu-smith",
+      "jerseyNum": "35",
+      "position": "F",
+      "teamTricode": "MCC",
+      "points": 20,
+      "rebounds": 22,
+      "assists": 2
+     },
+     "awayLeaders": {
+      "personId": 1631221,
+      "name": "Collin Gillespie",
+      "playerSlug": "collin-gillespie",
+      "jerseyNum": "12",
+      "position": "G",
+      "teamTricode": "VAL",
+      "points": 29,
+      "rebounds": 5,
+      "assists": 17
+     }
+    },
+    "teamLeaders": {
+     "homeLeaders": {
+      "personId": 1642449,
+      "name": "Tolu Smith",
+      "playerSlug": "tolu-smith",
+      "jerseyNum": "35",
+      "position": "F",
+      "teamTricode": "MCC",
+      "points": 17.9,
+      "rebounds": 13.6,
+      "assists": 2.3
+     },
+     "awayLeaders": {
+      "personId": 1631455,
+      "name": "Jaden Shackelford",
+      "playerSlug": "jaden-shackelford",
+      "jerseyNum": "23",
+      "position": "G",
+      "teamTricode": "VAL",
+      "points": 17.5,
+      "rebounds": 3.5,
+      "assists": 3.0
+     },
+     "seasonLeadersFlag": 0
+    },
+    "broadcasters": {
+     "nationalBroadcasters": [
+      {
+       "broadcasterId": 1741,
+       "broadcastDisplay": "ESPN+",
+       "broadcasterTeamId": -1,
+       "broadcasterDescription": ""
+      }
+     ],
+     "nationalRadioBroadcasters": [],
+     "nationalOttBroadcasters": [],
+     "homeTvBroadcasters": [
+      {
+       "broadcasterId": 1000912,
+       "broadcastDisplay": "MCC Stream",
+       "broadcasterTeamId": -1,
+       "broadcasterDescription": ""
+      }
+     ],
+     "homeRadioBroadcasters": [],
+     "homeOttBroadcasters": [],
+     "awayTvBroadcasters": [],
+     "awayRadioBroadcasters": [],
+     "awayOttBroadcasters": []
+    },
+    "homeTeam": {
+     "teamId": 1612709932,
+     "teamName": "Cruise",
+     "teamCity": "Motor City",
+     "teamTricode": "MCC",
+     "teamSlug": "cruise",
+     "wins": 3,
+     "losses": 5,
+     "score": 124,
+     "seed": 0,
+     "inBonus": null,
+     "timeoutsRemaining": 1,
+     "periods": [
+      {
+       "period": 1,
+       "periodType": "REGULAR",
+       "score": 39
+      },
+      {
+       "period": 2,
+       "periodType": "REGULAR",
+       "score": 25
+      }
+     ]
+    },
+    "awayTeam": {
+     "teamId": 1612709934,
+     "teamName": "Suns",
+     "teamCity": "Valley",
+     "teamTricode": "VAL",
+     "teamSlug": "suns",
+     "wins": 5,
+     "losses": 4,
+     "score": 137,
+     "seed": 0,
+     "inBonus": null,
+     "timeoutsRemaining": 1,
+     "periods": [
+      {
+       "period": 1,
+       "periodType": "REGULAR",
+       "score": 34
+      },
+      {
+       "period": 2,
+       "periodType": "REGULAR",
+       "score": 36
+      }
+     ]
+    }
+   },
+   {
+    "gameId": "2022400117",
+    "gameCode": "20250115/WISWES",
+    "gameStatus": 3,
+    "gameStatusText": "Final",
+    "period": 4,
+    "gameClock": "",
+    "gameTimeUTC": "2025-01-16T00:00:00Z",
+    "gameEt": "2025-01-15T19:00:00Z",
+    "regulationPeriods": 4,
+    "seriesGameNumber": "",
+    "gameLabel": "",
+    "gameSubLabel": "",
+    "seriesText": "",
+    "ifNecessary": false,
+    "seriesConference": "",
+    "poRoundDesc": "",
+    "gameSubtype": "",
+    "isNeutral": false,
+    "gameLeaders": {
+     "homeLeaders": {
+      "personId": 203933,
+      "name": "T.J. Warren",
+      "playerSlug": "tj-warren",
+      "jerseyNum": "1",
+      "position": "F",
+      "teamTricode": "WES",
+      "points": 33,
+      "rebounds": 4,
+      "assists": 2
+     },
+     "awayLeaders": {
+      "personId": 1627740,
+      "name": "Henry Ellenson",
+      "playerSlug": "henry-ellenson",
+      "jerseyNum": "4",
+      "position": "F-C",
+      "teamTricode": "WIS",
+      "points": 20,
+      "rebounds": 12,
+      "assists": 2
+     }
+    },
+    "teamLeaders": {
+     "homeLeaders": {
+      "personId": 1629650,
+      "name": "Moses Brown",
+      "playerSlug": "moses-brown",
+      "jerseyNum": "34",
+      "position": "C",
+      "teamTricode": "WES",
+      "points": 18.3,
+      "rebounds": 16.8,
+      "assists": 0.8
+     },
+     "awayLeaders": {
+      "personId": 1627740,
+      "name": "Henry Ellenson",
+      "playerSlug": "henry-ellenson",
+      "jerseyNum": "4",
+      "position": "F-C",
+      "teamTricode": "WIS",
+      "points": 21.6,
+      "rebounds": 9.6,
+      "assists": 3.3
+     },
+     "seasonLeadersFlag": 0
+    },
+    "broadcasters": {
+     "nationalBroadcasters": [
+      {
+       "broadcasterId": 1741,
+       "broadcastDisplay": "ESPN+",
+       "broadcasterTeamId": -1,
+       "broadcasterDescription": ""
+      }
+     ],
+     "nationalRadioBroadcasters": [],
+     "nationalOttBroadcasters": [],
+     "homeTvBroadcasters": [],
+     "homeRadioBroadcasters": [],
+     "homeOttBroadcasters": [],
+     "awayTvBroadcasters": [
+      {
+       "broadcasterId": 1000714,
+       "broadcastDisplay": "WACY-TV",
+       "broadcasterTeamId": -1,
+       "broadcasterDescription": ""
+      }
+     ],
+     "awayRadioBroadcasters": [],
+     "awayOttBroadcasters": []
+    },
+    "homeTeam": {
+     "teamId": 1612709919,
+     "teamName": "Knicks",
+     "teamCity": "Westchester",
+     "teamTricode": "WES",
+     "teamSlug": "knicks",
+     "wins": 6,
+     "losses": 4,
+     "score": 114,
+     "seed": 0,
+     "inBonus": null,
+     "timeoutsRemaining": 1,
+     "periods": [
+      {
+       "period": 1,
+       "periodType": "REGULAR",
+       "score": 23
+      },
+      {
+       "period": 2,
+       "periodType": "REGULAR",
+       "score": 27
+      }
+     ]
+    },
+    "awayTeam": {
+     "teamId": 1612709927,
+     "teamName": "Herd",
+     "teamCity": "Wisconsin",
+     "teamTricode": "WIS",
+     "teamSlug": "herd",
+     "wins": 2,
+     "losses": 6,
+     "score": 110,
+     "seed": 0,
+     "inBonus": null,
+     "timeoutsRemaining": 0,
+     "periods": [
+      {
+       "period": 1,
+       "periodType": "REGULAR",
+       "score": 28
+      },
+      {
+       "period": 2,
+       "periodType": "REGULAR",
+       "score": 34
+      }
+     ]
+    }
+   }
+  ]
+ }
+}

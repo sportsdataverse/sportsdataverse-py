@@ -508,6 +508,7 @@ _CASES = {  # case -> (status, body, content type, the vocabulary's answer)
 _URL = {
     "nba_stats_runtime": "https://stats.nba.com/stats/x",
     "wnba_stats_runtime": "https://stats.wnba.com/stats/x",
+    "nbagl_stats_runtime": "https://stats.nba.com/stats/x",
     # Route-checked getters (main 10-17/10-18 families): each refuses a path its family does not wrap with
     # ValueError before any fetch, so it is called with one route (the endpoint YAML's path filled from its
     # ``example_args``) that reaches the transport.
@@ -772,9 +773,10 @@ def test_the_stats_wrappers_name_the_missing_curl_cffi_import_error():
     import inspect
 
     from sportsdataverse.nba import nba_stats
+    from sportsdataverse.nbagl import nbagl_stats
     from sportsdataverse.wnba import wnba_stats
 
-    for mod, prefix in ((nba_stats, "nba_stats_"), (wnba_stats, "wnba_stats_")):
+    for mod, prefix in ((nba_stats, "nba_stats_"), (wnba_stats, "wnba_stats_"), (nbagl_stats, "nbagl_stats_")):
         fns = [f for n, f in inspect.getmembers(mod, inspect.isfunction) if n.startswith(prefix)]
         assert fns
         for fn in fns:

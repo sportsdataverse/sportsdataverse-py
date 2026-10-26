@@ -1,0 +1,41 @@
+{
+ "resource": "commonteamyears",
+ "parameters": {
+  "LeagueID": "20"
+ },
+ "resultSets": [
+  {
+   "name": "TeamYears",
+   "headers": [
+    "LEAGUE_ID",
+    "TEAM_ID",
+    "MIN_YEAR",
+    "MAX_YEAR",
+    "ABBREVIATION"
+   ],
+   "rowSet": [
+    [
+     "20",
+     1612709889,
+     "2001",
+     "2026",
+     "OKL"
+    ],
+    [
+     "20",
+     1612709890,
+     "2001",
+     "2026",
+     "AUS"
+    ],
+    [
+     "20",
+     1612709891,
+     "2001",
+     "2005",
+     null
+    ]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,202 @@
+frames:
+- columns:
+  - description: ''
+    name: game_id
+    type: character
+  - description: ''
+    name: away_team_id
+    type: integer
+  - description: ''
+    name: home_team_id
+    type: integer
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_city
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: team_tricode
+    type: character
+  - description: ''
+    name: team_slug
+    type: character
+  - description: ''
+    name: person_id
+    type: integer
+  - description: ''
+    name: first_name
+    type: character
+  - description: ''
+    name: family_name
+    type: character
+  - description: ''
+    name: name_i
+    type: character
+  - description: ''
+    name: player_slug
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: comment
+    type: character
+  - description: ''
+    name: jersey_num
+    type: character
+  - description: ''
+    name: minutes
+    type: character
+  - description: ''
+    name: speed
+    type: numeric
+  - description: ''
+    name: distance
+    type: numeric
+  - description: ''
+    name: rebound_chances_offensive
+    type: integer
+  - description: ''
+    name: rebound_chances_defensive
+    type: integer
+  - description: ''
+    name: rebound_chances_total
+    type: integer
+  - description: ''
+    name: touches
+    type: integer
+  - description: ''
+    name: secondary_assists
+    type: integer
+  - description: ''
+    name: free_throw_assists
+    type: integer
+  - description: ''
+    name: passes
+    type: integer
+  - description: ''
+    name: assists
+    type: integer
+  - description: ''
+    name: contested_field_goals_made
+    type: integer
+  - description: ''
+    name: contested_field_goals_attempted
+    type: integer
+  - description: ''
+    name: contested_field_goal_percentage
+    type: numeric
+  - description: ''
+    name: uncontested_field_goals_made
+    type: integer
+  - description: ''
+    name: uncontested_field_goals_attempted
+    type: integer
+  - description: ''
+    name: uncontested_field_goals_percentage
+    type: numeric
+  - description: ''
+    name: field_goal_percentage
+    type: numeric
+  - description: ''
+    name: defended_at_rim_field_goals_made
+    type: integer
+  - description: ''
+    name: defended_at_rim_field_goals_attempted
+    type: integer
+  - description: ''
+    name: defended_at_rim_field_goal_percentage
+    type: numeric
+  section: PlayerStats
+- columns:
+  - description: ''
+    name: game_id
+    type: character
+  - description: ''
+    name: away_team_id
+    type: integer
+  - description: ''
+    name: home_team_id
+    type: integer
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_city
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: team_tricode
+    type: character
+  - description: ''
+    name: team_slug
+    type: character
+  - description: ''
+    name: minutes
+    type: character
+  - description: ''
+    name: distance
+    type: numeric
+  - description: ''
+    name: rebound_chances_offensive
+    type: integer
+  - description: ''
+    name: rebound_chances_defensive
+    type: integer
+  - description: ''
+    name: rebound_chances_total
+    type: integer
+  - description: ''
+    name: touches
+    type: integer
+  - description: ''
+    name: secondary_assists
+    type: integer
+  - description: ''
+    name: free_throw_assists
+    type: integer
+  - description: ''
+    name: passes
+    type: integer
+  - description: ''
+    name: assists
+    type: integer
+  - description: ''
+    name: contested_field_goals_made
+    type: integer
+  - description: ''
+    name: contested_field_goals_attempted
+    type: integer
+  - description: ''
+    name: contested_field_goal_percentage
+    type: numeric
+  - description: ''
+    name: uncontested_field_goals_made
+    type: integer
+  - description: ''
+    name: uncontested_field_goals_attempted
+    type: integer
+  - description: ''
+    name: uncontested_field_goals_percentage
+    type: numeric
+  - description: ''
+    name: field_goal_percentage
+    type: numeric
+  - description: ''
+    name: defended_at_rim_field_goals_made
+    type: integer
+  - description: ''
+    name: defended_at_rim_field_goals_attempted
+    type: integer
+  - description: ''
+    name: defended_at_rim_field_goal_percentage
+    type: numeric
+  section: TeamStats
+kind: frames
+schema: boxscoreplayertrackv3

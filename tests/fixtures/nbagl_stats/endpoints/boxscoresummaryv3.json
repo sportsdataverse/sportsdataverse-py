@@ -1,0 +1,449 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/games/2022500137/boxscoresummary?Format=json",
+  "time": "2026-01-30T16:40:31.4031Z"
+ },
+ "boxScoreSummary": {
+  "gameId": "2022500137",
+  "gameCode": "20260112/OSCCPS",
+  "gameStatus": 3,
+  "gameStatusText": "Final",
+  "period": 4,
+  "gameClock": "PT00M00.00S",
+  "gameTimeUTC": "2026-01-13T00:00:00Z",
+  "gameEt": "2026-01-12T19:00:00Z",
+  "awayTeamId": 1612709925,
+  "homeTeamId": 1612709929,
+  "duration": "1:56",
+  "attendance": 911,
+  "sellout": 0,
+  "seriesGameNumber": "",
+  "gameLabel": "",
+  "gameSubLabel": "",
+  "seriesText": "",
+  "ifNecessary": false,
+  "isNeutral": false,
+  "arena": {
+   "arenaId": 1000008,
+   "arenaName": "Gateway Center Arena",
+   "arenaCity": "College Park",
+   "arenaState": "GA",
+   "arenaCountry": "US",
+   "arenaTimezone": "Eastern",
+   "arenaStreetAddress": "",
+   "arenaPostalCode": ""
+  },
+  "officials": [
+   {
+    "personId": 1629764,
+    "name": "Ken Jones",
+    "nameI": "K. Jones",
+    "firstName": "Ken",
+    "familyName": "Jones",
+    "jerseyNum": "40  ",
+    "assignment": ""
+   },
+   {
+    "personId": 1641522,
+    "name": "Ryan Johnson",
+    "nameI": "R. Johnson",
+    "firstName": "Ryan",
+    "familyName": "Johnson",
+    "jerseyNum": "29  ",
+    "assignment": ""
+   }
+  ],
+  "broadcasters": {
+   "internationalBroadcasters": [],
+   "internationalRadioBroadcasters": [],
+   "internationalOttBroadcasters": [],
+   "nationalBroadcasters": [
+    {
+     "broadcasterId": 1000176,
+     "broadcastDisplay": "NBAGLeague.com",
+     "broadcasterDisplay": "NBAGLeague.com",
+     "broadcasterVideoLink": "",
+     "broadcasterDescription": "",
+     "broadcasterTeamId": -1,
+     "regionId": 1
+    }
+   ],
+   "nationalRadioBroadcasters": [],
+   "nationalOttBroadcasters": [],
+   "homeTvBroadcasters": [
+    {
+     "broadcasterId": 1001176,
+     "broadcastDisplay": "WPCH.2",
+     "broadcasterDisplay": "Peachtree Sports Network",
+     "broadcasterVideoLink": "",
+     "broadcasterDescription": "",
+     "broadcasterTeamId": -1,
+     "regionId": 1
+    }
+   ],
+   "homeRadioBroadcasters": [],
+   "homeOttBroadcasters": [],
+   "awayTvBroadcasters": [],
+   "awayRadioBroadcasters": [],
+   "awayOttBroadcasters": []
+  },
+  "homeTeam": {
+   "teamId": 1612709929,
+   "teamName": "Skyhawks",
+   "teamCity": "College Park",
+   "teamTricode": "CPS",
+   "teamSlug": "skyhawks",
+   "teamWins": 3,
+   "teamLosses": 7,
+   "score": 109,
+   "inBonus": "",
+   "timeoutsRemaining": 1,
+   "seed": 0,
+   "statistics": {
+    "dummyKey": "dummyValue"
+   },
+   "periods": [
+    {
+     "period": 1,
+     "periodType": "REGULAR",
+     "score": 21
+    },
+    {
+     "period": 2,
+     "periodType": "REGULAR",
+     "score": 42
+    }
+   ],
+   "players": [
+    {
+     "personId": 1630640,
+     "name": "MJ Walker",
+     "nameI": "M. Walker",
+     "firstName": "MJ",
+     "familyName": "Walker",
+     "jerseyNum": ""
+    },
+    {
+     "personId": 1631216,
+     "name": "Caleb Houstan",
+     "nameI": "C. Houstan",
+     "firstName": "Caleb",
+     "familyName": "Houstan",
+     "jerseyNum": ""
+    }
+   ],
+   "inactives": [
+    {
+     "personId": 1642552,
+     "firstName": "Tyler",
+     "familyName": "Polley",
+     "jerseyNum": "24  "
+    },
+    {
+     "personId": 1643090,
+     "firstName": "Deivon",
+     "familyName": "Smith",
+     "jerseyNum": "4   "
+    }
+   ]
+  },
+  "awayTeam": {
+   "teamId": 1612709925,
+   "teamName": "Magic",
+   "teamCity": "Osceola",
+   "teamTricode": "OSC",
+   "teamSlug": "magic",
+   "teamWins": 8,
+   "teamLosses": 2,
+   "score": 130,
+   "inBonus": "",
+   "timeoutsRemaining": 1,
+   "seed": 0,
+   "statistics": {
+    "dummyKey": "dummyValue"
+   },
+   "periods": [
+    {
+     "period": 1,
+     "periodType": "REGULAR",
+     "score": 36
+    },
+    {
+     "period": 2,
+     "periodType": "REGULAR",
+     "score": 41
+    }
+   ],
+   "players": [
+    {
+     "personId": 1629600,
+     "name": "Jarron Cumberland",
+     "nameI": "J. Cumberland",
+     "firstName": "Jarron",
+     "familyName": "Cumberland",
+     "jerseyNum": ""
+    },
+    {
+     "personId": 1630606,
+     "name": "Javonte Smart",
+     "nameI": "J. Smart",
+     "firstName": "Javonte",
+     "familyName": "Smart",
+     "jerseyNum": ""
+    }
+   ],
+   "inactives": [
+    {
+     "personId": 1630658,
+     "firstName": "Colin",
+     "familyName": "Castleton",
+     "jerseyNum": "3   "
+    },
+    {
+     "personId": 1631115,
+     "firstName": "Orlando",
+     "familyName": "Robinson",
+     "jerseyNum": "7   "
+    }
+   ]
+  },
+  "lastFiveMeetings": {
+   "meetings": [
+    {
+     "recencyOrder": 1,
+     "gameId": "2022400191",
+     "gameTimeUTC": "2025-01-29T00:00:00Z",
+     "gameEt": "2025-01-28T19:00:00Z",
+     "gameStatus": 3,
+     "gameStatusText": "Final",
+     "gameClock": "PT00M00.00S",
+     "broadcasterVideoLink": "",
+     "awayTeam": {
+      "teamId": 1612709929,
+      "teamCity": "College Park",
+      "teamName": "Skyhawks",
+      "teamTricode": "CPS",
+      "teamSlug": "skyhawks",
+      "score": 110,
+      "wins": 8,
+      "losses": 5
+     },
+     "homeTeam": {
+      "teamId": 1612709925,
+      "teamCity": "Osceola",
+      "teamName": "Magic",
+      "teamTricode": "OSC",
+      "teamSlug": "magic",
+      "score": 115,
+      "wins": 5,
+      "losses": 6
+     }
+    },
+    {
+     "recencyOrder": 2,
+     "gameId": "2022400007",
+     "gameTimeUTC": "2024-12-28T00:00:00Z",
+     "gameEt": "2024-12-27T19:00:00Z",
+     "gameStatus": 3,
+     "gameStatusText": "Final",
+     "gameClock": "PT00M00.00S",
+     "broadcasterVideoLink": "",
+     "awayTeam": {
+      "teamId": 1612709929,
+      "teamCity": "College Park",
+      "teamName": "Skyhawks",
+      "teamTricode": "CPS",
+      "teamSlug": "skyhawks",
+      "score": 107,
+      "wins": 0,
+      "losses": 1
+     },
+     "homeTeam": {
+      "teamId": 1612709925,
+      "teamCity": "Osceola",
+      "teamName": "Magic",
+      "teamTricode": "OSC",
+      "teamSlug": "magic",
+      "score": 115,
+      "wins": 1,
+      "losses": 0
+     }
+    }
+   ]
+  },
+  "pregameCharts": {
+   "homeTeam": {
+    "teamId": 1612709929,
+    "teamCity": "College Park",
+    "teamName": "Skyhawks",
+    "teamTricode": "CPS",
+    "statistics": {
+     "points": 116.0,
+     "reboundsTotal": 44.1,
+     "assists": 29.0,
+     "steals": 9.6,
+     "blocks": 5.4,
+     "turnovers": 17.2,
+     "fieldGoalsPercentage": 0.45,
+     "threePointersPercentage": 0.363,
+     "freeThrowsPercentage": 0.777,
+     "pointsInThePaint": 48.4,
+     "pointsSecondChance": 12.5,
+     "pointsFastBreak": 18.3,
+     "playerPtsLeaderFirstName": "Caleb",
+     "playerPtsLeaderFamilyName": "Houstan",
+     "playerPtsLeaderId": 1631216,
+     "playerPtsLeaderPts": 15.3,
+     "playerRebLeaderFirstName": "Kobe",
+     "playerRebLeaderFamilyName": "Johnson",
+     "playerRebLeaderId": 1642937,
+     "playerRebLeaderReb": 5.8,
+     "playerAstLeaderFirstName": "Kobe",
+     "playerAstLeaderFamilyName": "Johnson",
+     "playerAstLeaderId": 1642937,
+     "playerAstLeaderAst": 2.8,
+     "playerBlkLeaderFirstName": "Caleb",
+     "playerBlkLeaderFamilyName": "Houstan",
+     "playerBlkLeaderId": 1631216,
+     "playerBlkLeaderBlk": 0.29
+    }
+   },
+   "awayTeam": {
+    "teamId": 1612709925,
+    "teamCity": "Osceola",
+    "teamName": "Magic",
+    "teamTricode": "OSC",
+    "statistics": {
+     "points": 117.7,
+     "reboundsTotal": 42.3,
+     "assists": 25.4,
+     "steals": 11.9,
+     "blocks": 4.9,
+     "turnovers": 15.3,
+     "fieldGoalsPercentage": 0.479,
+     "threePointersPercentage": 0.356,
+     "freeThrowsPercentage": 0.784,
+     "pointsInThePaint": 56.5,
+     "pointsSecondChance": 12.9,
+     "pointsFastBreak": 17.5,
+     "playerPtsLeaderFirstName": "Lester",
+     "playerPtsLeaderFamilyName": "Quinones",
+     "playerPtsLeaderId": 1631311,
+     "playerPtsLeaderPts": 22.0,
+     "playerRebLeaderFirstName": "Alex",
+     "playerRebLeaderFamilyName": "Morales",
+     "playerRebLeaderId": 1631457,
+     "playerRebLeaderReb": 8.5,
+     "playerAstLeaderFirstName": "Reece",
+     "playerAstLeaderFamilyName": "Beekman",
+     "playerAstLeaderId": 1641736,
+     "playerAstLeaderAst": 7.3,
+     "playerBlkLeaderFirstName": "Justin",
+     "playerBlkLeaderFamilyName": "Minaya",
+     "playerBlkLeaderId": 1631303,
+     "playerBlkLeaderBlk": 1.43
+    }
+   }
+  },
+  "postgameCharts": {
+   "homeTeam": {
+    "teamId": 1612709929,
+    "teamCity": "College Park",
+    "teamName": "Skyhawks",
+    "teamTricode": "CPS",
+    "statistics": {
+     "points": 109.0,
+     "reboundsTotal": 46.0,
+     "assists": 32.0,
+     "steals": 6.0,
+     "blocks": 4.0,
+     "turnovers": 14.0,
+     "fieldGoalsPercentage": 0.419,
+     "threePointersPercentage": 0.325,
+     "freeThrowsPercentage": 0.818,
+     "pointsInThePaint": 46.0,
+     "pointsSecondChance": 10.0,
+     "pointsFastBreak": 14.0,
+     "biggestLead": 3.0,
+     "leadChanges": 1.0,
+     "timesTied": 1.0,
+     "biggestScoringRun": 9.0,
+     "turnoversTeam": 0.0,
+     "turnoversTotal": 14.0,
+     "reboundsTeam": 3.0,
+     "pointsFromTurnovers": 11.0,
+     "benchPoints": 40.0,
+     "playerPtsLeaderFirstName": "Nikola",
+     "playerPtsLeaderFamilyName": "Đurišić",
+     "playerPtsLeaderId": 1642365,
+     "playerPtsLeaderPts": 21.0,
+     "playerRebLeaderFirstName": "Malik",
+     "playerRebLeaderFamilyName": "Williams",
+     "playerRebLeaderId": 1642013,
+     "playerRebLeaderReb": 11.0,
+     "playerAstLeaderFirstName": "RayJ",
+     "playerAstLeaderFamilyName": "Dennis",
+     "playerAstLeaderId": 1642484,
+     "playerAstLeaderAst": 9.0,
+     "playerBlkLeaderFirstName": "Seth",
+     "playerBlkLeaderFamilyName": "Maxwell",
+     "playerBlkLeaderId": 1642679,
+     "playerBlkLeaderBlk": 2.0
+    }
+   },
+   "awayTeam": {
+    "teamId": 1612709925,
+    "teamCity": "Osceola",
+    "teamName": "Magic",
+    "teamTricode": "OSC",
+    "statistics": {
+     "points": 130.0,
+     "reboundsTotal": 51.0,
+     "assists": 22.0,
+     "steals": 10.0,
+     "blocks": 4.0,
+     "turnovers": 11.0,
+     "fieldGoalsPercentage": 0.479,
+     "threePointersPercentage": 0.432,
+     "freeThrowsPercentage": 0.917,
+     "pointsInThePaint": 60.0,
+     "pointsSecondChance": 22.0,
+     "pointsFastBreak": 20.0,
+     "biggestLead": 24.0,
+     "leadChanges": 1.0,
+     "timesTied": 1.0,
+     "biggestScoringRun": 15.0,
+     "turnoversTeam": 1.0,
+     "turnoversTotal": 12.0,
+     "reboundsTeam": 8.0,
+     "pointsFromTurnovers": 20.0,
+     "benchPoints": 46.0,
+     "playerPtsLeaderFirstName": "Lester",
+     "playerPtsLeaderFamilyName": "Quinones",
+     "playerPtsLeaderId": 1631311,
+     "playerPtsLeaderPts": 27.0,
+     "playerRebLeaderFirstName": "William",
+     "playerRebLeaderFamilyName": "Baker",
+     "playerRebLeaderId": 1642475,
+     "playerRebLeaderReb": 11.0,
+     "playerAstLeaderFirstName": "Javonte",
+     "playerAstLeaderFamilyName": "Smart",
+     "playerAstLeaderId": 1630606,
+     "playerAstLeaderAst": 4.0,
+     "playerBlkLeaderFirstName": "Jarron",
+     "playerBlkLeaderFamilyName": "Cumberland",
+     "playerBlkLeaderId": 1629600,
+     "playerBlkLeaderBlk": 3.0
+    }
+   }
+  },
+  "videoAvailableFlag": 0,
+  "ptAvailable": 0,
+  "ptXYZAvailable": 0,
+  "whStatus": 1,
+  "hustleStatus": 0,
+  "historicalStatus": 0,
+  "gameSubtype": ""
+ }
+}

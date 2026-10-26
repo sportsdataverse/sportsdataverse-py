@@ -539,6 +539,14 @@ providers:
       - sportsdataverse.wnba.wnba_stats_runtime
       - sportsdataverse.wnba.wnba_live
 
+  nbagl_stats:
+    label: G League Stats API
+    home: https://stats.nba.com
+    auth: none (curl_cffi chrome TLS impersonation)
+    flat_apis: [nbagl_stats]
+    modules:
+      - sportsdataverse.nbagl.nbagl_stats_runtime
+
   euroleague:
     label: EuroLeague Competition Engine
     home: https://api-live.euroleague.net

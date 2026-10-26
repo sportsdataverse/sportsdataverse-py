@@ -1,0 +1,50 @@
+{
+ "resource": "assistleaders",
+ "parameters": {
+  "LeagueID": "20",
+  "Season": "2023-24",
+  "SeasonType": "Regular Season",
+  "PerMode": "PerGame",
+  "PlayerOrTeam": "Player"
+ },
+ "resultSets": [
+  {
+   "name": "AssistLeaders",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "JERSEY_NUM",
+    "PLAYER_POSITION",
+    "AST"
+   ],
+   "rowSet": [
+    [
+     1,
+     203901,
+     "Elfrid Payton",
+     1612709910,
+     "IMA",
+     "Indiana Mad Ants",
+     "2",
+     "G",
+     9.8
+    ],
+    [
+     2,
+     1630554,
+     "Jason Preston",
+     1612709903,
+     "SLC",
+     "Salt Lake City Stars",
+     "7",
+     "G",
+     9.7
+    ]
+   ]
+  }
+ ]
+}

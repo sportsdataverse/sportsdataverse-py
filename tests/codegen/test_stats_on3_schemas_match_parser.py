@@ -1,8 +1,8 @@
-"""The nba_stats / wnba_stats / on3 returns-schemas must name, order and type exactly
+"""The nba_stats / wnba_stats / nbagl_stats / on3 returns-schemas must name, order and type exactly
 the columns their parser emits on every committed real capture of the endpoint.
 
 Regenerate with tools/codegen/gen_nba_stats.py and tools/codegen/gen_on3.py; the
-captures under tests/fixtures/{nba_stats,wnba_stats}/endpoints/ and the On3 ones
+captures under tests/fixtures/{nba_stats,wnba_stats,nbagl_stats}/endpoints/ and the On3 ones
 come from tools/codegen/vendor_captures.py.
 """
 

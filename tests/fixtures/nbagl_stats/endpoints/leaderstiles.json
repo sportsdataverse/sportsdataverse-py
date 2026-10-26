@@ -1,0 +1,124 @@
+{
+ "resource": "leaderstiles",
+ "parameters": {
+  "LeagueID": "20",
+  "Season": "2023-24",
+  "SeasonType": "Regular Season",
+  "GameScope": null,
+  "PlayerScope": "All Players",
+  "PlayerOrTeam": "Player",
+  "Stat": "PTS"
+ },
+ "resultSet": [
+  {
+   "name": "LeadersTiles",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "PTS"
+   ],
+   "rowSet": [
+    [
+     1,
+     1630527,
+     "Brandon Boston",
+     1612709924,
+     "ONT",
+     "Ontario Clippers",
+     34.0
+    ],
+    [
+     2,
+     202738,
+     "Isaiah Thomas",
+     1612709903,
+     "SLC",
+     "Salt Lake City Stars",
+     32.5
+    ]
+   ]
+  },
+  {
+   "name": "AllTimeSeasonHigh",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "PTS",
+    "SEASON_YEAR",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME"
+   ],
+   "rowSet": [
+    [
+     1628469,
+     "Antonio Blakeney",
+     32.0,
+     "2017-18",
+     1612709923,
+     "WCB",
+     "Bulls"
+    ]
+   ]
+  },
+  {
+   "name": "LastSeasonHigh",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "PTS"
+   ],
+   "rowSet": [
+    [
+     1,
+     1630568,
+     "Luka Garza",
+     1612709911,
+     "IWA",
+     "Iowa Wolves",
+     31.2
+    ],
+    [
+     2,
+     1630540,
+     "Miles McBride",
+     1612709919,
+     "WES",
+     "Westchester Knicks",
+     28.0
+    ]
+   ]
+  },
+  {
+   "name": "LowSeasonHigh",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "PTS",
+    "SEASON_YEAR",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME"
+   ],
+   "rowSet": [
+    [
+     101232,
+     "Roger Powell",
+     22.3,
+     "2006-07",
+     1612709898,
+     "ARK",
+     "RimRockers"
+    ]
+   ]
+  }
+ ]
+}

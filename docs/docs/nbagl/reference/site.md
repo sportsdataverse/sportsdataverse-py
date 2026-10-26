@@ -32,54 +32,54 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `game_id` | integer | ESPN event id. |
-| `uid` | character |  |
+| `uid` | character | ESPN UID string. |
 | `date` | character | Match start timestamp (ISO 8601, UTC). |
 | `name` | character | Full event name (e.g. 'Team A at Team B'). |
 | `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
 | `season_year` | integer | Integer season year ESPN assigns the event (e.g. 2025 for the 2025-26 season). |
 | `season_type` | integer | ESPN season-type id of the event's season: 1 preseason, 2 regular season, 3 postseason, 4 offseason for the US leagues; soccer competitions carry their own competition-specific ids (e.g. 13481). |
 | `season_slug` | character | ESPN slug of the event's season type (e.g. 'regular-season', 'post-season'; soccer competitions use their own, such as 'final' or 'torneo-apertura'). |
-| `status_type_id` | integer |  |
-| `status_type_name` | character |  |
-| `status_type_state` | character |  |
-| `status_type_completed` | logical |  |
-| `status_type_description` | character |  |
-| `status_type_detail` | character |  |
-| `status_type_short_detail` | character |  |
+| `status_type_id` | integer | Unique identifier for status type. |
+| `status_type_name` | character | Status type name. |
+| `status_type_state` | character | Status type state. |
+| `status_type_completed` | logical | Status type completed. |
+| `status_type_description` | character | Status type description. |
+| `status_type_detail` | character | Status type detail. |
+| `status_type_short_detail` | character | Status type short detail. |
 | `status_clock` | double | Game clock in seconds as ESPN reports it: time remaining in the period for clock sports, elapsed seconds for soccer (e.g. 5400.0 at full time); 0.0 once a game has ended. |
-| `status_display_clock` | character |  |
+| `status_display_clock` | character | Status display clock. |
 | `status_period` | integer | Current or final period number (quarter, half, inning or period, depending on the sport). |
 | `neutral_site` | logical | Whether the match is played at a neutral venue. |
-| `conference_competition` | logical |  |
-| `attendance` | integer |  |
-| `venue_id` | integer |  |
-| `venue_full_name` | character |  |
-| `venue_city` | character |  |
-| `venue_state` | character |  |
-| `venue_indoor` | logical |  |
+| `conference_competition` | logical | Conference competition. |
+| `attendance` | integer | Reported attendance. |
+| `venue_id` | integer | Unique venue identifier. |
+| `venue_full_name` | character | Venue full name. |
+| `venue_city` | character | Venue city. |
+| `venue_state` | character | Venue state / region. |
+| `venue_indoor` | logical | TRUE if the venue is indoors. |
 | `broadcast` | character | Every network name of the competition in feed order, deduped and ", "-joined (an entry with no names gives its market); "" when the game lists no broadcast. |
 | `note` | character | Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none. |
-| `home_id` | integer |  |
-| `home_name` | character |  |
-| `home_abbreviation` | character |  |
-| `home_display_name` | character |  |
-| `home_location` | character |  |
-| `home_color` | character |  |
-| `home_alternate_color` | character |  |
-| `home_logo` | character |  |
+| `home_id` | integer | Unique identifier for home. |
+| `home_name` | character | Home name. |
+| `home_abbreviation` | character | Home team's abbreviation. |
+| `home_display_name` | character | Home display name. |
+| `home_location` | character | Home team's location. |
+| `home_color` | character | Color code (hex) for home. |
+| `home_alternate_color` | character | Color code (hex) for home alternate. |
+| `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
-| `home_winner` | logical |  |
+| `home_winner` | logical | Home team's winner. |
 | `home_rank` | character |  |
-| `away_id` | integer |  |
-| `away_name` | character |  |
-| `away_abbreviation` | character |  |
-| `away_display_name` | character |  |
-| `away_location` | character |  |
-| `away_color` | character |  |
-| `away_alternate_color` | character |  |
-| `away_logo` | character |  |
+| `away_id` | integer | Unique identifier for away. |
+| `away_name` | character | Away name. |
+| `away_abbreviation` | character | Away team's abbreviation. |
+| `away_display_name` | character | Away display name. |
+| `away_location` | character | Away team's location. |
+| `away_color` | character | Color code (hex) for away. |
+| `away_alternate_color` | character | Color code (hex) for away alternate. |
+| `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away team's score. For cricket, the innings string. |
-| `away_winner` | logical |  |
+| `away_winner` | logical | Away team's winner. |
 | `away_rank` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -524,17 +524,17 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `date` | character |  |
-| `description` | character |  |
-| `team_abbreviation` | character |  |
-| `team_alternate_color` | character |  |
-| `team_color` | character |  |
-| `team_display_name` | character |  |
-| `team_id` | integer |  |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `description` | character | Long-form description text. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
+| `team_color` | character | Team primary color (hex without leading '#'). |
+| `team_display_name` | character | Full team display name. |
+| `team_id` | integer | Unique team identifier. |
 | `team_links` | character |  |
-| `team_location` | character |  |
+| `team_location` | character | Team city or location string. |
 | `team_logos` | character |  |
-| `team_name` | character |  |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -569,12 +569,12 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `group_id` | integer |  |
-| `name` | character |  |
-| `abbreviation` | character |  |
-| `short_name` | character |  |
-| `is_conference` | logical |  |
-| `parent_group_id` | integer |  |
+| `group_id` | integer | ESPN group id. |
+| `name` | character | Display name. |
+| `abbreviation` | character | Short abbreviation. |
+| `short_name` | character | Short display name. |
+| `is_conference` | logical | Whether this group is a conference. |
+| `parent_group_id` | integer | Unique identifier for parent group. |
 | `depth` | integer |  |
 | `children_count` | integer |  |
 
@@ -727,10 +727,10 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `team_abbreviation` | character |  |
-| `team_alternate_color` | character |  |
-| `team_color` | character |  |
-| `team_display_name` | character |  |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
+| `team_color` | character | Team primary color (hex without leading '#'). |
+| `team_display_name` | character | Full team display name. |
 | `team_franchise_$ref` | character |  |
 | `team_franchise_abbreviation` | character |  |
 | `team_franchise_color` | character |  |
@@ -756,18 +756,18 @@ ESPN endpoint.
 | `team_groups_id` | integer |  |
 | `team_groups_is_conference` | logical |  |
 | `team_groups_parent_id` | integer |  |
-| `team_id` | integer |  |
-| `team_is_active` | logical |  |
+| `team_id` | integer | Unique team identifier. |
+| `team_is_active` | logical | TRUE if the team is currently active. |
 | `team_links` | character |  |
-| `team_location` | character |  |
+| `team_location` | character | Team city or location string. |
 | `team_logos` | character |  |
-| `team_name` | character |  |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `team_next_event` | character |  |
 | `team_record_items` | character |  |
-| `team_short_display_name` | character |  |
-| `team_slug` | character |  |
+| `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |
+| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
 | `team_standing_summary` | character |  |
-| `team_uid` | character |  |
+| `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

@@ -287,6 +287,7 @@ _VOCAB_GETTERS = frozenset(
         "sportsdataverse.mbb.torvik_runtime",
         "sportsdataverse.mlb.mlb_statcast_runtime",
         "sportsdataverse.nba.nba_stats_runtime",
+        "sportsdataverse.nbagl.nbagl_stats_runtime",
         "sportsdataverse.nfl.nfl_api_runtime",
         "sportsdataverse.nfl.pff_api_runtime",
         "sportsdataverse.nfl.pff_runtime",
@@ -311,7 +312,11 @@ _GETTER_RAISES: dict[str, tuple] = {
             "``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).",
         ),
     )
-    for m in ("sportsdataverse.nba.nba_stats_runtime", "sportsdataverse.wnba.wnba_stats_runtime")
+    for m in (
+        "sportsdataverse.nba.nba_stats_runtime",
+        "sportsdataverse.wnba.wnba_stats_runtime",
+        "sportsdataverse.nbagl.nbagl_stats_runtime",
+    )
 }
 _VOCAB_RAISES = (
     (
@@ -696,6 +701,8 @@ _LEAGUE_R_PACKAGE = {
     "nfl": "nflreadr",
     # NCAA hoops loaders (``load_ncaa_*``, men's and women's): hoopR, then its sibling wehoop.
     "ncaa": "hoopR",
+    # No R package wraps the G League; its stats.nba.com and ESPN columns are the NBA ones hoopR documents.
+    "nbagl": "hoopR",
     # Hockey: the HockeyTech league families, PWHL/PHF and the NHL all read fastRhockey.
     **{lg: "fastRhockey" for lg in ("pwhl", "phf", *_HOCKEYTECH_MODULE_LEAGUES)},
 }
@@ -2917,6 +2924,7 @@ FLAT_APIS = [
     ("nflpro", "nfl"),
     ("nba_stats", "nba"),
     ("wnba_stats", "wnba"),
+    ("nbagl_stats", "nbagl"),
     ("on3", "cfb"),
     ("sports247", "cfb"),
     ("sports247_site_pages", "cfb"),
@@ -3638,6 +3646,7 @@ _FLAT_API_DOC = {
     "nflpro": "NFL Pro API (pro.nfl.com, NFL+ Premium account)",
     "nba_stats": "NBA Stats API (stats.nba.com)",
     "wnba_stats": "WNBA Stats API (stats.wnba.com)",
+    "nbagl_stats": "G League Stats API (stats.nba.com, LeagueID=20)",
     "on3": "On3 Recruit Database (api.on3.com)",
     "sports247": "247Sports Recruit Database (ipa.247sports.com)",
     "sports247_site_pages": "247Sports Site Pages (247sports.com)",

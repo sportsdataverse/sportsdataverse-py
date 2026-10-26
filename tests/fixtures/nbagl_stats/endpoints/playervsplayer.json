@@ -1,0 +1,253 @@
+{
+ "resource": "playervsplayer",
+ "parameters": {
+  "MeasureType": "Base",
+  "PerMode": "PerGame",
+  "PlusMinus": "N",
+  "PaceAdjust": "N",
+  "Rank": "N",
+  "LeagueID": "20",
+  "Season": "2023-24",
+  "SeasonType": "Regular Season",
+  "PlayerID": 1642443,
+  "Outcome": null,
+  "Location": null,
+  "Month": 0,
+  "SeasonSegment": null,
+  "DateFrom": "",
+  "DateTo": "",
+  "OpponentTeamID": 0,
+  "VsConference": null,
+  "VsDivision": null,
+  "GameSegment": null,
+  "Period": 0,
+  "LastNGames": 0,
+  "VsPlayerID": 201939
+ },
+ "resultSets": [
+  {
+   "name": "Overall",
+   "headers": [
+    "GROUP_SET",
+    "GROUP_VALUE",
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "GP",
+    "W",
+    "L",
+    "W_PCT",
+    "MIN",
+    "FGM",
+    "FGA",
+    "FG_PCT",
+    "FG3M",
+    "FG3A",
+    "FG3_PCT",
+    "FTM",
+    "FTA",
+    "FT_PCT",
+    "OREB",
+    "DREB",
+    "REB",
+    "AST",
+    "TOV",
+    "STL",
+    "BLK",
+    "BLKA",
+    "PF",
+    "PFD",
+    "PTS",
+    "PLUS_MINUS",
+    "NBA_FANTASY_PTS"
+   ],
+   "rowSet": []
+  },
+  {
+   "name": "OnOffCourt",
+   "headers": [
+    "GROUP_SET",
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "VS_PLAYER_ID",
+    "VS_PLAYER_NAME",
+    "COURT_STATUS",
+    "GP",
+    "W",
+    "L",
+    "W_PCT",
+    "MIN",
+    "FGM",
+    "FGA",
+    "FG_PCT",
+    "FG3M",
+    "FG3A",
+    "FG3_PCT",
+    "FTM",
+    "FTA",
+    "FT_PCT",
+    "OREB",
+    "DREB",
+    "REB",
+    "AST",
+    "TOV",
+    "STL",
+    "BLK",
+    "BLKA",
+    "PF",
+    "PFD",
+    "PTS",
+    "PLUS_MINUS",
+    "NBA_FANTASY_PTS"
+   ],
+   "rowSet": []
+  },
+  {
+   "name": "ShotDistanceOverall",
+   "headers": [
+    "GROUP_SET",
+    "GROUP_VALUE",
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FGM",
+    "FGA",
+    "FG_PCT"
+   ],
+   "rowSet": []
+  },
+  {
+   "name": "ShotDistanceOnCourt",
+   "headers": [
+    "GROUP_SET",
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "VS_PLAYER_ID",
+    "VS_PLAYER_NAME",
+    "COURT_STATUS",
+    "GROUP_VALUE",
+    "FGM",
+    "FGA",
+    "FG_PCT"
+   ],
+   "rowSet": []
+  },
+  {
+   "name": "ShotDistanceOffCourt",
+   "headers": [
+    "GROUP_SET",
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "VS_PLAYER_ID",
+    "VS_PLAYER_NAME",
+    "COURT_STATUS",
+    "GROUP_VALUE",
+    "FGM",
+    "FGA",
+    "FG_PCT"
+   ],
+   "rowSet": []
+  },
+  {
+   "name": "ShotAreaOverall",
+   "headers": [
+    "GROUP_SET",
+    "GROUP_VALUE",
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FGM",
+    "FGA",
+    "FG_PCT"
+   ],
+   "rowSet": []
+  },
+  {
+   "name": "ShotAreaOnCourt",
+   "headers": [
+    "GROUP_SET",
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "VS_PLAYER_ID",
+    "VS_PLAYER_NAME",
+    "COURT_STATUS",
+    "GROUP_VALUE",
+    "FGM",
+    "FGA",
+    "FG_PCT"
+   ],
+   "rowSet": []
+  },
+  {
+   "name": "ShotAreaOffCourt",
+   "headers": [
+    "GROUP_SET",
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "VS_PLAYER_ID",
+    "VS_PLAYER_NAME",
+    "COURT_STATUS",
+    "GROUP_VALUE",
+    "FGM",
+    "FGA",
+    "FG_PCT"
+   ],
+   "rowSet": []
+  },
+  {
+   "name": "PlayerInfo",
+   "headers": [
+    "PERSON_ID",
+    "FIRST_NAME",
+    "LAST_NAME",
+    "DISPLAY_FIRST_LAST",
+    "DISPLAY_LAST_COMMA_FIRST",
+    "DISPLAY_FI_LAST",
+    "BIRTHDATE",
+    "SCHOOL",
+    "COUNTRY",
+    "LAST_AFFILIATION"
+   ],
+   "rowSet": [
+    [
+     1642443,
+     "Jahmir",
+     "Young",
+     "Jahmir Young",
+     "Young, Jahmir",
+     "J. Young",
+     "2000-10-07T00:00:00",
+     "Maryland",
+     "USA",
+     "Maryland/USA"
+    ]
+   ]
+  },
+  {
+   "name": "VsPlayerInfo",
+   "headers": [
+    "PERSON_ID",
+    "FIRST_NAME",
+    "LAST_NAME",
+    "DISPLAY_FIRST_LAST",
+    "DISPLAY_LAST_COMMA_FIRST",
+    "DISPLAY_FI_LAST",
+    "BIRTHDATE",
+    "SCHOOL",
+    "COUNTRY",
+    "LAST_AFFILIATION"
+   ],
+   "rowSet": [
+    [
+     201939,
+     "Stephen",
+     "Curry",
+     "Stephen Curry",
+     "Curry, Stephen",
+     "S. Curry",
+     "1988-03-14T00:00:00",
+     "Davidson",
+     "USA",
+     "Davidson/USA"
+    ]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,103 @@
+{
+ "resource": "gamerotation",
+ "parameters": {
+  "GameID": "2022500137",
+  "LeagueID": "20"
+ },
+ "resultSets": [
+  {
+   "name": "AwayTeam",
+   "headers": [
+    "GAME_ID",
+    "TEAM_ID",
+    "TEAM_CITY",
+    "TEAM_NAME",
+    "PERSON_ID",
+    "PLAYER_FIRST",
+    "PLAYER_LAST",
+    "IN_TIME_REAL",
+    "OUT_TIME_REAL",
+    "PLAYER_PTS",
+    "PT_DIFF",
+    "USG_PCT"
+   ],
+   "rowSet": [
+    [
+     "2022500137",
+     1612709925,
+     "Osceola",
+     "Magic",
+     1629600,
+     "Jarron",
+     "Cumberland",
+     4610.0,
+     9720.0,
+     0,
+     1.0,
+     0.13
+    ],
+    [
+     "2022500137",
+     1612709925,
+     "Osceola",
+     "Magic",
+     1629600,
+     "Jarron",
+     "Cumberland",
+     18510.0,
+     23510.0,
+     0,
+     0.0,
+     0.13
+    ]
+   ]
+  },
+  {
+   "name": "HomeTeam",
+   "headers": [
+    "GAME_ID",
+    "TEAM_ID",
+    "TEAM_CITY",
+    "TEAM_NAME",
+    "PERSON_ID",
+    "PLAYER_FIRST",
+    "PLAYER_LAST",
+    "IN_TIME_REAL",
+    "OUT_TIME_REAL",
+    "PLAYER_PTS",
+    "PT_DIFF",
+    "USG_PCT"
+   ],
+   "rowSet": [
+    [
+     "2022500137",
+     1612709929,
+     "College Park",
+     "Skyhawks",
+     1630640,
+     "MJ",
+     "Walker",
+     4610.0,
+     12020.0,
+     6,
+     3.0,
+     0.097
+    ],
+    [
+     "2022500137",
+     1612709929,
+     "College Park",
+     "Skyhawks",
+     1630640,
+     "MJ",
+     "Walker",
+     18630.0,
+     26880.0,
+     5,
+     -9.0,
+     0.156
+    ]
+   ]
+  }
+ ]
+}

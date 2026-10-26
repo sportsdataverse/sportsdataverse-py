@@ -1,0 +1,505 @@
+{
+ "resource": "alltimeleadersgrids",
+ "parameters": {
+  "LeagueID": "20",
+  "SeasonType": "Regular Season",
+  "PerMode": "PerGame",
+  "TopX": "10"
+ },
+ "resultSets": [
+  {
+   "name": "GPLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "GP",
+    "GP_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     201281,
+     "Andre Ingram",
+     474,
+     1,
+     "N"
+    ],
+    [
+     200970,
+     "Renaldo Major",
+     401,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "PTSLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "PTS",
+    "PTS_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     200970,
+     "Renaldo Major",
+     12.6,
+     1,
+     "N"
+    ],
+    [
+     201281,
+     "Andre Ingram",
+     9.6,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "ASTLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "AST",
+    "AST_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     201028,
+     "Curtis Stinson",
+     8.0,
+     1,
+     "N"
+    ],
+    [
+     200970,
+     "Renaldo Major",
+     1.9,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "STLLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "STL",
+    "STL_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     200970,
+     "Renaldo Major",
+     1.25436,
+     1,
+     "N"
+    ],
+    [
+     201281,
+     "Andre Ingram",
+     0.88608,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "OREBLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "OREB",
+    "OREB_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     200970,
+     "Renaldo Major",
+     1.34165,
+     1,
+     "N"
+    ],
+    [
+     201281,
+     "Andre Ingram",
+     0.54219,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "DREBLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "DREB",
+    "DREB_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     200970,
+     "Renaldo Major",
+     2.72319,
+     1,
+     "N"
+    ],
+    [
+     201281,
+     "Andre Ingram",
+     2.35021,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "REBLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "REB",
+    "REB_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     200970,
+     "Renaldo Major",
+     4.06484,
+     1,
+     "N"
+    ],
+    [
+     201281,
+     "Andre Ingram",
+     2.89241,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "BLKLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "BLK",
+    "BLK_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     200970,
+     "Renaldo Major",
+     0.72818,
+     1,
+     "N"
+    ],
+    [
+     201281,
+     "Andre Ingram",
+     0.11392,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "FGMLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FGM",
+    "FGM_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     202412,
+     "Manny Harris",
+     8.85965,
+     1,
+     "N"
+    ],
+    [
+     1630644,
+     "Mac McClung",
+     8.76389,
+     2,
+     "Y"
+    ]
+   ]
+  },
+  {
+   "name": "FGALeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FGA",
+    "FGA_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     202412,
+     "Manny Harris",
+     19.32456,
+     1,
+     "N"
+    ],
+    [
+     203183,
+     "Tony Mitchell",
+     17.89344,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "FG_PCTLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FG_PCT",
+    "FG_PCT_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     2765,
+     "Andre Emmett",
+     0.511,
+     1,
+     "N"
+    ],
+    [
+     1630644,
+     "Mac McClung",
+     0.509,
+     2,
+     "Y"
+    ]
+   ]
+  },
+  {
+   "name": "TOVLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "TOV",
+    "TOV_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     200970,
+     "Renaldo Major",
+     1.12718,
+     1,
+     "N"
+    ],
+    [
+     201281,
+     "Andre Ingram",
+     0.80802,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "FG3MLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FG3M",
+    "FG3M_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     203584,
+     "Troy Daniels",
+     5.0,
+     1,
+     "N"
+    ],
+    [
+     1629130,
+     "Duncan Robinson",
+     4.75758,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "FG3ALeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FG3A",
+    "FG3A_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     1630310,
+     "Craig Randall II",
+     12.65714,
+     1,
+     "Y"
+    ],
+    [
+     203584,
+     "Troy Daniels",
+     12.47917,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "FG3_PCTLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FG3_PCT",
+    "FG3_PCT_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     1629130,
+     "Duncan Robinson",
+     0.483,
+     1,
+     "N"
+    ],
+    [
+     202198,
+     "Chad Toppert",
+     0.479,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "PFLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "PF",
+    "PF_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     200970,
+     "Renaldo Major",
+     2.41646,
+     1,
+     "N"
+    ],
+    [
+     201281,
+     "Andre Ingram",
+     1.64768,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "FTMLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FTM",
+    "FTM_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     203505,
+     "Vander Blue",
+     5.19665,
+     1,
+     "N"
+    ],
+    [
+     202407,
+     "Elijah Millsap",
+     5.05138,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "FTALeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FTA",
+    "FTA_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     201785,
+     "Othyus Jeffers",
+     6.75543,
+     1,
+     "N"
+    ],
+    [
+     202407,
+     "Elijah Millsap",
+     6.66008,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "FT_PCTLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FT_PCT",
+    "FT_PCT_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     200970,
+     "Renaldo Major",
+     0.805,
+     1,
+     "N"
+    ],
+    [
+     201351,
+     "Ron Howard",
+     0.804,
+     2,
+     "N"
+    ]
+   ]
+  }
+ ]
+}

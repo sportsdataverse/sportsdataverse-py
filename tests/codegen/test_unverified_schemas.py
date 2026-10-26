@@ -73,7 +73,7 @@ def test_the_reason_says_why_not_just_that_it_is_unverified(path):
 
 
 def test_the_playbyplayv3_reason_names_the_datacenter_ip_cause():
-    for family in ("nba_stats", "wnba_stats"):
+    for family in ("nba_stats", "wnba_stats", "nbagl_stats"):
         doc = yaml.safe_load((SCHEMAS / "native" / family / "playbyplayv3.yaml").read_text(encoding="utf-8"))
         assert "datacenter" in str(doc["unverified"]).lower()
         assert "SDV_PY_NBA_STATS_LIVE" in str(doc["unverified"])

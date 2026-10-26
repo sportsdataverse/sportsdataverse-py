@@ -83,7 +83,7 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 |---|---|---|
 | [NBA](nba/) | `sportsdataverse.nba` | ESPN (123), sportsdataverse-data releases (53), NBA Stats API (130), Fox Sports API (26), Basketball-Reference (9), RealGM (18), Public model datasets (7) |
 | [WNBA](wnba/) | `sportsdataverse.wnba` | ESPN (127), sportsdataverse-data releases (39), WNBA Stats API (113), Fox Sports API (26) |
-| [NBA G League](nbagl/) | `sportsdataverse.nbagl` | ESPN (112) |
+| [NBA G League](nbagl/) | `sportsdataverse.nbagl` | ESPN (112), G League Stats API (94) |
 | [NBL](nbl/) | `sportsdataverse.basketball.nbl` | ESPN (112) |
 | [FIBA](fiba/) | `sportsdataverse.basketball.fiba` | ESPN (112) |
 | [Olympics men's basketball](olympics_mbk/) | `sportsdataverse.basketball.olympics_mbk` | ESPN (112) |

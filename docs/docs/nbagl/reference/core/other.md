@@ -25,19 +25,19 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
-| `abbreviation` | character |  |
-| `color` | character |  |
-| `display_name` | character |  |
+| `abbreviation` | character | Short abbreviation. |
+| `color` | character | Primary color (hex without leading '#'). |
+| `display_name` | character | Display name. |
 | `gender` | character |  |
-| `guid` | character |  |
-| `id` | integer |  |
+| `guid` | character | Stable cross-league team GUID. |
+| `id` | integer | Id. |
 | `is_tournament` | logical |  |
 | `links` | character |  |
-| `logos` | character |  |
-| `name` | character |  |
-| `short_name` | character |  |
-| `slug` | character |  |
-| `uid` | character |  |
+| `logos` | character | Logos. |
+| `name` | character | Display name. |
+| `short_name` | character | Short display name. |
+| `slug` | character | URL-safe identifier. |
+| `uid` | character | ESPN UID string. |
 | `athletes_$ref` | character |  |
 | `awards_$ref` | character |  |
 | `calendar_$ref` | character |  |
@@ -52,26 +52,26 @@ ESPN endpoint.
 | `season_$ref` | character |  |
 | `season_athletes_$ref` | character |  |
 | `season_coaches_$ref` | character |  |
-| `season_display_name` | character |  |
-| `season_end_date` | character |  |
+| `season_display_name` | character | Season display label. |
+| `season_end_date` | character | Date in YYYY-MM-DD format. |
 | `season_futures_$ref` | character |  |
 | `season_power_index_leaders_$ref` | character |  |
 | `season_power_indexes_$ref` | character |  |
 | `season_rankings_$ref` | character |  |
-| `season_start_date` | character |  |
+| `season_start_date` | character | Date in YYYY-MM-DD format. |
 | `season_type_$ref` | character |  |
-| `season_type_abbreviation` | character |  |
+| `season_type_abbreviation` | character | Season type abbreviation. |
 | `season_type_corrections_$ref` | character |  |
 | `season_type_end_date` | character |  |
 | `season_type_groups_$ref` | character |  |
 | `season_type_has_groups` | logical |  |
 | `season_type_has_legs` | logical |  |
 | `season_type_has_standings` | logical |  |
-| `season_type_id` | integer |  |
-| `season_type_name` | character |  |
+| `season_type_id` | integer | Unique identifier for season type. |
+| `season_type_name` | character | Season type name. |
 | `season_type_slug` | character |  |
 | `season_type_start_date` | character |  |
-| `season_type_type` | integer |  |
+| `season_type_type` | integer | Season type type. |
 | `season_type_weeks_$ref` | character |  |
 | `season_type_year` | integer |  |
 | `season_types_$ref` | character |  |
@@ -80,7 +80,7 @@ ESPN endpoint.
 | `season_types_page_count` | integer |  |
 | `season_types_page_index` | integer |  |
 | `season_types_page_size` | integer |  |
-| `season_year` | integer |  |
+| `season_year` | integer | Season year string ('YYYY-YY' format). |
 | `seasons_$ref` | character |  |
 | `teams_$ref` | character |  |
 | `transactions_$ref` | character |  |
@@ -198,13 +198,13 @@ ESPN endpoint.
 |---|---|---|
 | `$ref` | character |  |
 | `competitions` | character |  |
-| `date` | character |  |
-| `id` | integer |  |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `id` | integer | Id. |
 | `links` | character |  |
-| `name` | character |  |
-| `short_name` | character |  |
-| `time_valid` | logical |  |
-| `uid` | character |  |
+| `name` | character | Display name. |
+| `short_name` | character | Short display name. |
+| `time_valid` | logical | Time valid. |
+| `uid` | character | ESPN UID string. |
 | `venues` | character |  |
 | `league_$ref` | character |  |
 | `season_$ref` | character |  |
@@ -295,21 +295,21 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
-| `abbreviation` | character |  |
-| `alternate_color` | character |  |
-| `color` | character |  |
-| `display_name` | character |  |
-| `guid` | character |  |
-| `id` | integer |  |
-| `is_active` | logical |  |
-| `is_all_star` | logical |  |
+| `abbreviation` | character | Short abbreviation. |
+| `alternate_color` | character | Alternate color (hex without leading '#'). |
+| `color` | character | Primary color (hex without leading '#'). |
+| `display_name` | character | Display name. |
+| `guid` | character | Stable cross-league team GUID. |
+| `id` | integer | Id. |
+| `is_active` | logical | Is active. |
+| `is_all_star` | logical | Is all star. |
 | `links` | character |  |
-| `location` | character |  |
-| `logos` | character |  |
-| `name` | character |  |
-| `short_display_name` | character |  |
-| `slug` | character |  |
-| `uid` | character |  |
+| `location` | character | Location. |
+| `logos` | character | Logos. |
+| `name` | character | Display name. |
+| `short_display_name` | character | Short display name. |
+| `slug` | character | URL-safe identifier. |
+| `uid` | character | ESPN UID string. |
 | `against_the_spread_records_$ref` | character |  |
 | `athletes_$ref` | character |  |
 | `awards_$ref` | character |  |
@@ -325,14 +325,14 @@ ESPN endpoint.
 | `record_$ref` | character |  |
 | `transactions_$ref` | character |  |
 | `venue_$ref` | character |  |
-| `venue_address_city` | character |  |
-| `venue_address_state` | character |  |
-| `venue_full_name` | character |  |
+| `venue_address_city` | character | Venue address city. |
+| `venue_address_state` | character | Venue address state / region. |
+| `venue_full_name` | character | Venue full name. |
 | `venue_grass` | logical |  |
 | `venue_guid` | character |  |
-| `venue_id` | integer |  |
+| `venue_id` | integer | Unique venue identifier. |
 | `venue_images` | character |  |
-| `venue_indoor` | logical |  |
+| `venue_indoor` | logical | TRUE if the venue is indoors. |
 | `venue_short_name` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -408,12 +408,12 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
-| `full_name` | character |  |
-| `grass` | logical |  |
-| `guid` | character |  |
-| `id` | integer |  |
+| `full_name` | character | Player's full name. |
+| `grass` | logical | Grass. |
+| `guid` | character | Stable cross-league team GUID. |
+| `id` | integer | Id. |
 | `images` | character |  |
-| `indoor` | logical |  |
+| `indoor` | logical | Indoor. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -488,26 +488,26 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
-| `abbreviation` | character |  |
-| `color` | character |  |
-| `display_name` | character |  |
-| `id` | integer |  |
-| `is_active` | logical |  |
-| `location` | character |  |
-| `name` | character |  |
-| `short_display_name` | character |  |
-| `slug` | character |  |
-| `uid` | character |  |
+| `abbreviation` | character | Short abbreviation. |
+| `color` | character | Primary color (hex without leading '#'). |
+| `display_name` | character | Display name. |
+| `id` | integer | Id. |
+| `is_active` | logical | Is active. |
+| `location` | character | Location. |
+| `name` | character | Display name. |
+| `short_display_name` | character | Short display name. |
+| `slug` | character | URL-safe identifier. |
+| `uid` | character | ESPN UID string. |
 | `team_$ref` | character |  |
 | `venue_$ref` | character |  |
-| `venue_address_city` | character |  |
-| `venue_address_state` | character |  |
-| `venue_full_name` | character |  |
+| `venue_address_city` | character | Venue address city. |
+| `venue_address_state` | character | Venue address state / region. |
+| `venue_full_name` | character | Venue full name. |
 | `venue_grass` | logical |  |
 | `venue_guid` | character |  |
-| `venue_id` | integer |  |
+| `venue_id` | integer | Unique venue identifier. |
 | `venue_images` | character |  |
-| `venue_indoor` | logical |  |
+| `venue_indoor` | logical | TRUE if the venue is indoors. |
 | `venue_short_name` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -547,13 +547,13 @@ ESPN endpoint.
 | `$ref` | character |  |
 | `career_records` | character |  |
 | `coach_seasons` | character |  |
-| `experience` | integer |  |
-| `first_name` | character |  |
-| `id` | integer |  |
-| `last_name` | character |  |
-| `uid` | character |  |
-| `birth_place_city` | character |  |
-| `birth_place_state` | character |  |
+| `experience` | integer | Years of professional experience. |
+| `first_name` | character | Player's first name. |
+| `id` | integer | Id. |
+| `last_name` | character | Player's last name. |
+| `uid` | character | ESPN UID string. |
+| `birth_place_city` | character | Birth place city. |
+| `birth_place_state` | character | Birth place state. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -591,13 +591,13 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
-| `display_value` | character |  |
-| `id` | integer |  |
-| `name` | character |  |
-| `stats` | character |  |
-| `summary` | character |  |
-| `type` | character |  |
-| `value` | double |  |
+| `display_value` | character | Display-formatted value. |
+| `id` | integer | Id. |
+| `name` | character | Display name. |
+| `stats` | character | Stats. |
+| `summary` | character | W-L summary (e.g. "50-32"). |
+| `type` | character | Record type / category. |
+| `value` | double | Numeric or string value field. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -707,11 +707,11 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
-| `abbreviation` | character |  |
-| `display_name` | character |  |
-| `id` | integer |  |
+| `abbreviation` | character | Short abbreviation. |
+| `display_name` | character | Display name. |
+| `id` | integer | Id. |
 | `leaf` | logical |  |
-| `name` | character |  |
+| `name` | character | Display name. |
 | `parent_$ref` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -824,7 +824,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `count` | integer |  |
+| `count` | integer | Count of count. |
 | `items` | character |  |
 | `page_count` | integer |  |
 | `page_index` | integer |  |

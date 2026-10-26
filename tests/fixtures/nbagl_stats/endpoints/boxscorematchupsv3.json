@@ -1,0 +1,28 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/games/2022500137/boxscorematchups?Format=json",
+  "time": "2026-06-28T20:00:55.055Z"
+ },
+ "boxScoreMatchups": {
+  "gameId": "2022500137",
+  "awayTeamId": 1612709925,
+  "homeTeamId": 1612709929,
+  "homeTeam": {
+   "teamId": 0,
+   "teamCity": null,
+   "teamName": null,
+   "teamTricode": null,
+   "teamSlug": null,
+   "players": []
+  },
+  "awayTeam": {
+   "teamId": 0,
+   "teamCity": null,
+   "teamName": null,
+   "teamTricode": null,
+   "teamSlug": null,
+   "players": []
+  }
+ }
+}

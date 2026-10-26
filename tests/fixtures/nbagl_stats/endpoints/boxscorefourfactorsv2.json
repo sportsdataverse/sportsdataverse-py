@@ -1,0 +1,151 @@
+{
+ "resource": "boxscore",
+ "parameters": {
+  "GameID": "2022500137",
+  "RangeType": 0,
+  "StartPeriod": 0,
+  "EndPeriod": 0,
+  "StartRange": 0,
+  "EndRange": 28800
+ },
+ "resultSets": [
+  {
+   "name": "sqlPlayersFourFactors",
+   "headers": [
+    "GAME_ID",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_CITY",
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "NICKNAME",
+    "START_POSITION",
+    "COMMENT",
+    "MIN",
+    "EFG_PCT",
+    "FTA_RATE",
+    "TM_TOV_PCT",
+    "OREB_PCT",
+    "OPP_EFG_PCT",
+    "OPP_FTA_RATE",
+    "OPP_TOV_PCT",
+    "OPP_OREB_PCT"
+   ],
+   "rowSet": [
+    [
+     "2022500137",
+     1612709925,
+     "OSC",
+     "Osceola",
+     1631457,
+     "Alex Morales",
+     "Alex",
+     "F",
+     "",
+     "32:00",
+     0.578,
+     0.109,
+     0.134,
+     0.31,
+     0.484,
+     0.115,
+     0.179,
+     0.265
+    ],
+    [
+     "2022500137",
+     1612709925,
+     "OSC",
+     "Osceola",
+     1631303,
+     "Justin Minaya",
+     "Justin",
+     "F",
+     "",
+     "30:32",
+     0.595,
+     0.155,
+     0.117,
+     0.346,
+     0.459,
+     0.098,
+     0.132,
+     0.306
+    ],
+    [
+     "2022500137",
+     1612709929,
+     "CPS",
+     "College Park",
+     1643115,
+     "Erik Reynolds II",
+     "Erik",
+     "",
+     "DNP - Coach's Decision",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ]
+  },
+  {
+   "name": "sqlTeamsFourFactors",
+   "headers": [
+    "GAME_ID",
+    "TEAM_ID",
+    "TEAM_NAME",
+    "TEAM_ABBREVIATION",
+    "TEAM_CITY",
+    "MIN",
+    "EFG_PCT",
+    "FTA_RATE",
+    "TM_TOV_PCT",
+    "OREB_PCT",
+    "OPP_EFG_PCT",
+    "OPP_FTA_RATE",
+    "OPP_TOV_PCT",
+    "OPP_OREB_PCT"
+   ],
+   "rowSet": [
+    [
+     "2022500137",
+     1612709925,
+     "Magic",
+     "OSC",
+     "Osceola",
+     "240:00",
+     0.563,
+     0.125,
+     0.118,
+     0.385,
+     0.489,
+     0.118,
+     0.137,
+     0.304
+    ],
+    [
+     "2022500137",
+     1612709929,
+     "Skyhawks",
+     "CPS",
+     "College Park",
+     "240:00",
+     0.489,
+     0.118,
+     0.137,
+     0.304,
+     0.563,
+     0.125,
+     0.118,
+     0.385
+    ]
+   ]
+  }
+ ]
+}

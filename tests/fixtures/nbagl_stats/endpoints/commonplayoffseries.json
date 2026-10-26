@@ -1,0 +1,36 @@
+{
+ "resource": "commonplayoffseries",
+ "parameters": {
+  "LeagueID": "20",
+  "Season": "2023-24",
+  "SeriesID": null
+ },
+ "resultSets": [
+  {
+   "name": "PlayoffSeries",
+   "headers": [
+    "GAME_ID",
+    "HOME_TEAM_ID",
+    "VISITOR_TEAM_ID",
+    "SERIES_ID",
+    "GAME_NUM"
+   ],
+   "rowSet": [
+    [
+     "2042300101",
+     1612709910,
+     1612709909,
+     "204230010",
+     1
+    ],
+    [
+     "2042300102",
+     1612709928,
+     1612709921,
+     "204230010",
+     2
+    ]
+   ]
+  }
+ ]
+}
