@@ -312,11 +312,9 @@ _GETTER_RAISES: dict[str, tuple] = {
             "``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).",
         ),
     )
-    for m in (
-        "sportsdataverse.nba.nba_stats_runtime",
-        "sportsdataverse.wnba.wnba_stats_runtime",
-        "sportsdataverse.nbagl.nbagl_stats_runtime",
-    )
+    # the three stats.nba.com stems; built, not spelled out, so the vocab-getters list above stays the only line
+    # naming each runtime (the codegen-vocab-getters-nba-stats mutant must find its snippet exactly once)
+    for m in (f"sportsdataverse.{lg}.{lg}_stats_runtime" for lg in ("nba", "wnba", "nbagl"))
 }
 _VOCAB_RAISES = (
     (
