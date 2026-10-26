@@ -445,6 +445,77 @@ ratings = efficiency_ratings(pbp)
 ratings.sort("adj_net", descending=True).head()
 ```
 
+### enrich_nfl_pbp {#enrich_nfl_pbp}
+
+`enrich_nfl_pbp(df: 'pl.DataFrame', *, method: 'str' = 'lead_diff', models_dir: 'Union[str, None]' = None, add_fourth_down: 'bool' = True, league: 'str' = 'nfl', touchback_yardline: 'Union[int, None]' = None, ep_point_values: 'Union[np.ndarray, None]' = None, return_as_pandas: 'bool' = False, strict: 'bool | None' = None) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+
+Enrich an nflverse-shape PBP frame with EP/EPA/WP/WPA/CP/CPOE/xYAC.
+
+`method="lead_diff"` (the default and only implemented method) is a
+NFLVERSE-NATIVE derivation that mirrors nflfastR's `helper_add_ep_wp.R`.
+It runs EP -> EPA -> WP -> WPA -> CP/CPOE -> xYAC, deriving `epa` / `wpa`
+with grouped lead-differences (over `game_id`) and the nflfastR scoring /
+end-of-half / OT overlays — it does **not** call `calculate_epa` /
+`calculate_wpa` (those consume ESPN-internal columns absent from a
+nflverse frame).  Kickoffs have their EP model features substituted
+(the season's rule touchback `yardline_100`, `down=1`, `ydstogo=10`)
+before EP scoring and down-NA plays (PATs, two-point conversions) are
+scored on their own spot as 1st-and-10 — see
+`_apply_feature_substitution`.  Overtime `wp` comes from the
+closed form of the season's overtime rule format
+(`_apply_ot_wp_overlay`).
+
+The orchestrator is idempotent: stale `ep` / `epa` / `wp` / `wpa` /
+`cp` / `cpoe` / xYAC columns are recomputed on each call.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` | `DataFrame` |  | Play-by-play DataFrame in nflverse shape. Must satisfy the `NFLVERSE_FRAME_CONTRACT` minimum (`game_id`, `season`, `posteam`, `home_team`, `yardline_100`, `ydstogo`, `down`, `half_seconds_remaining`, the timeout columns, plus the WP inputs `score_differential` / `game_seconds_remaining` / `spread_line` / `receive_2h_ko`). |
+| `method` | `str` | `'lead_diff'` | `"lead_diff"` (default) — the native, nflfastR-faithful EPA/WPA derivation and the canonical parity path. It is the only supported method; any other value raises `ValueError`. (The param is retained for forward extensibility / API stability.) |
+| `models_dir` | `Union[str, None]` | `None` | Optional directory to load the xYAC model (`xyac_model.ubj`) from instead of downloading/caching it — for offline use or a custom-trained model. When `None` (default) the bundled EP/WP/CP models load from `sportsdataverse/nfl/models/` and the large xYAC model is resolved bundled → cache → downloaded-from-release. |
+| `add_fourth_down` | `bool` | `True` | When `True` (default), attach the nfl4th 4th-down decision columns (`go_wp` / `fg_wp` / `punt_wp` / `go_boost` / `fourth_down_recommendation` etc.) — scored only on the qualifying 4th-down rows and null elsewhere. The 4th-down models are download-on-demand; when they are unavailable offline the columns are emitted as all-null (with a `RuntimeWarning`). Set `False` to skip the step entirely. |
+| `league` | `str` | `'nfl'` | `"nfl"` (default) applies the NFL overtime rule formats. The spring-football port passes its league (`"xfl"` / `"ufl"` / `"cfl"`), whose shootout overtime has no NFL closed form: overtime `wp` / `vegas_wp` are left null there. |
+| `touchback_yardline` | `Union[int, None]` | `None` | Fixed kickoff-touchback yards-to-endzone for the EP feature substitution and the overtime re-score. `None` (default) resolves the NFL rule spot per season (`~sportsdataverse.nfl.model_vars.touchback_yardline`); the spring-football port passes its league-season constant. |
+| `ep_point_values` | `Union[ndarray, None]` | `None` | 7-class point vector collapsing the EP class probabilities into `ep` (see `calculate_expected_points`). `None` (default) is the NFL vector. The air-yards / qb_epa re-scores keep the NFL vector; today every league's vector equals it, so nothing diverges. |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+| `strict` | `bool \| None` | `None` | When `True`, a model that cannot be obtained (the download-on-demand xYAC / nfl4th boosters offline with an empty cache) raises instead of warning and nulling the columns it feeds. `None` (default) reads `SDV_PY_MODELS_STRICT` (`1` = strict); a producer that must not publish null model columns turns it on. |
+
+**Returns**
+
+polars.DataFrame (or pandas.DataFrame when *return_as_pandas* is `True`) — the input frame with the following columns added or recomputed: * `ep` — start-of-play expected points (float64, clipped to [-10, 10]). * `epa` — expected points added (float64; null on terminal/timeout rows). * `qb_epa` — EPA crediting the QB (float64). Equals `epa` on every play except completed passes the receiver then loses to a fumble (`complete_pass == 1 & fumble_lost == 1`), which are re-spotted at the fumble spot (no turnover) and re-scored so the QB keeps completion + YAC credit and is not penalised for the turnover (nflfastR `add_qb_epa`). * `wp` — naive win probability from the `wp_naive` model (float64). * `vegas_wp` — spread-adjusted win probability from `wp_spread` (falls back to `wp` when `spread_line` is null). * `def_wp` — defensive team win probability (`1 - wp`). * `home_wp` — home-team win probability (possession-team frame flip). * `away_wp` — away-team win probability (`1 - home_wp`). * `wpa` — win probability added (float64; null on kneel/terminal rows). * `vegas_wpa` — spread-adjusted WPA. * `vegas_home_wpa` — home-frame spread-adjusted WPA lead difference (kept as a real column per nflfastR; NOT null'd on kneel rows). * `total_home_epa`, `total_away_epa`, `total_home_rush_epa`, `total_away_rush_epa`, `total_home_pass_epa`, `total_away_pass_epa`, `total_home_rush_wpa`, `total_away_rush_wpa`, `total_home_pass_wpa`, `total_away_pass_wpa` — per-game cumulative home/away-signed EPA/WPA running totals (nflfastR `add_ep_variables` / `add_wp_variables` tails; every cumsum is within `game_id`). * `air_epa`, `yac_epa`, `comp_air_epa`, `comp_yac_epa`, `total_home_comp_air_epa`, `total_away_comp_air_epa`, `total_home_comp_yac_epa`, `total_away_comp_yac_epa`, `total_home_raw_air_epa`, `total_away_raw_air_epa`, `total_home_raw_yac_epa`, `total_away_raw_yac_epa` — the air/YAC EPA family (nflfastR `add_air_yac_ep_variables`): an EP re-score on the air-yards-projected state splits `epa` into its air and yards-after-catch components; `comp_*` gate to completions; the totals are per-game signed cumulative sums. Null on non-qualifying plays (all float64). * `air_wpa`, `yac_wpa`, `comp_air_wpa`, `comp_yac_wpa`, and the eight `total_{home,away}_{comp,raw}_{air,yac}_wpa` mirrors — the air/YAC WPA family (`add_air_yac_wp_variables`), same structure on `wp` / `wpa`. * `cp` — completion probability for intended pass plays (null otherwise; float64). * `cpoe` — completion probability over expected, percentage-point scale (null when `complete_pass` absent; float64). * `xpass` — expected dropback (pass) probability from the `binary:logistic` xpass model (faithful to nflfastR's `add_xpass`; null outside the `valid_play` filter — `season < 2006` or any required input null; float64). `xpass_model.ubj` is **not** bundled — on first use it is downloaded from the `nfl_model_artifacts` GitHub release and cached under `<cache_dir>/models/`. If the model is unavailable offline the xpass step is skipped with a `RuntimeWarning` and `xpass` / `pass_oe` stay null. * `pass_oe` — dropback percent over expected, `100 * (pass - xpass)` (null when `xpass` is null and when `rush == 0 & pass == 0`; float64). * `xyac_epa`, `xyac_mean_yardage`, `xyac_median_yardage`, `xyac_success`, `xyac_fd` — expected yards after catch, derived from the single multinomial xYAC model (faithful to nflfastR's `add_xyac`; null on non-qualifying plays). `xyac_model.ubj` (~34 MB) is **not** bundled in the wheel — on first use it is downloaded from the `nfl_model_artifacts` GitHub release and cached under `<cache_dir>/models/` (preserved across `clear_cache()`). If the model is unavailable offline (no cache + no network) the xYAC step is skipped with a `RuntimeWarning` and the five columns stay null while the rest of the enrichment proceeds. * `qbr_epa`, `weight`, `non_fumble_sack`, `sack_epa`, `pass_epa`, `rush_epa`, `pen_epa`, `sack_weight`, `pass_weight`, `rush_weight`, `pen_weight`, `action_play` — the per-play Total-QBR EPA components (nflverse port of the ESPN `__process_qbr` step): `qb_epa` clamped at `-5`/`-3.5` (fumble), the win-probability leverage `weight`, and the play-family EPA / weight partitions. These are the inputs the QBR rating aggregates downstream (the rating itself is not computed here). * `go_wp`, `first_down_prob`, `wp_succeed`, `wp_fail`, `fg_make_prob`, `make_fg_wp`, `miss_fg_wp`, `fg_wp`, `punt_wp`, `go_boost`, `go_wp_diff`, `punt_wp_diff`, `fg_wp_diff`, `fourth_down_recommendation` — the nfl4th 4th-down decision surface (default-on; see *add_fourth_down*). Scored only on 4th-down rows (`down == 4` with a non-null `yardline_100`); null on every other play. Omitted / all-null when *add_fourth_down* is `False` or the 4th-down models are unavailable offline.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When `method` is not `"lead_diff"`, or required contract columns are absent from `df`. |
+| `FileNotFoundError` | In strict mode, when a model cannot be obtained (the message names the artifact). |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_pbp
+from sportsdataverse.nfl.ep_wp import enrich_nfl_pbp
+
+pbp = load_nfl_pbp([2023])
+enriched = enrich_nfl_pbp(pbp)
+print(enriched.select("ep", "epa", "wp", "wpa").head())
+
+# Pandas output
+
+from sportsdataverse.nfl import load_nfl_pbp
+from sportsdataverse.nfl.ep_wp import enrich_nfl_pbp
+
+enriched_pd = enrich_nfl_pbp(load_nfl_pbp([2023]), return_as_pandas=True)
+print(enriched_pd[["ep", "epa", "wp", "wpa"]].head())
+
+# Pipeline next step
+
+enriched.filter(pl.col("play_type") == "pass").select("posteam", "epa", "cp", "cpoe").head()
+```
+
 ### env_adjusted_make_prob {#env_adjusted_make_prob}
 
 `env_adjusted_make_prob(pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
