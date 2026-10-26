@@ -159,6 +159,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [calculate_xpass](additional/models-and-calculators-6.md#calculate_xpass) | Compute expected dropback probability (`xpass`) and `pass_oe`. |
 | [calculate_xyac](additional/models-and-calculators-7.md#calculate_xyac) | Compute expected yards after catch (xYAC) for intended pass plays. |
 | [efficiency_ratings](additional/models-and-calculators-7.md#efficiency_ratings) | One row per team: opponent-adjusted offense/defense EPA per play. |
+| [enrich_nfl_pbp](additional/models-and-calculators-7.md#enrich_nfl_pbp) | Enrich an nflverse-shape PBP frame with EP/EPA/WP/WPA/CP/CPOE/xYAC. |
 | [env_adjusted_make_prob](additional/models-and-calculators-7.md#env_adjusted_make_prob) | Add `base_make_prob` + environment-adjusted `exp_make_prob`. |
 | [fg_make_probability](additional/models-and-calculators-7.md#fg_make_probability) | Predict FG make probability from the bundled `fg_model` (public wrapper). |
 | [fit_nfl_field_position_ep](additional/models-and-calculators-7.md#fit_nfl_field_position_ep) | Fit the NFL EP-by-starting-yardline curve from released `espn_nfl_pbp` plays. |

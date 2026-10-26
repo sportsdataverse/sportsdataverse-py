@@ -18,7 +18,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 | [nflverse data releases](#nflverse-data-releases) | `github.com` | 48 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 21 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 25 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 170 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 171 | — |
 
 ## ESPN {#espn}
 
@@ -109,6 +109,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 - [`calculate_xpass`](reference/additional/models-and-calculators-6#calculate_xpass)
 - [`calculate_xyac`](reference/additional/models-and-calculators-7#calculate_xyac)
 - [`efficiency_ratings`](reference/additional/models-and-calculators-7#efficiency_ratings)
+- [`enrich_nfl_pbp`](reference/additional/models-and-calculators-7#enrich_nfl_pbp)
 - [`env_adjusted_make_prob`](reference/additional/models-and-calculators-7#env_adjusted_make_prob)
 - [`fg_make_probability`](reference/additional/models-and-calculators-7#fg_make_probability)
 - [`fit_nfl_field_position_ep`](reference/additional/models-and-calculators-7#fit_nfl_field_position_ep)

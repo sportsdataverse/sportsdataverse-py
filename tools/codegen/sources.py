@@ -57,6 +57,7 @@ class Entry:
     release_bases: tuple[str, ...] = ()
     modules: tuple[str, ...] = ()
     functions: tuple[str, ...] = ()
+    featured: bool = False
 
     @property
     def apis(self) -> tuple[str, ...]:
@@ -87,6 +88,7 @@ def load() -> tuple[Entry, ...]:
                     release_bases=tuple(rule.get("release_bases") or ()),
                     modules=tuple(rule.get("modules") or ()),
                     functions=tuple(rule.get("functions") or ()),
+                    featured=bool(rule.get("featured", False)),
                 ),
             )
     return tuple(out)
