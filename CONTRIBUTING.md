@@ -498,18 +498,38 @@ and are never touched by edits to `current`.
 
 ### At release time
 
-Fold the changelog fragments into a release section first. The script writes
-`## <x.y.z> Release: <Month D, YYYY>` above the newest release, with the groups
-in order and each group's bullets sorted, deletes the fragments and stages both:
+A release is one branch + PR that carries the version bump, the folded changelog and the docs
+snapshot, followed by a GitHub Release once it has merged to `main`.
+
+**1. Pick the version.** Pending `changelog.d/*.breaking.md` fragments force a minor (or major)
+bump: `tools/release_changelog.py` refuses to release them as a patch of the newest
+`## x.y.z Release` heading. With 0.1.5 the newest release and breaking fragments pending, the
+next release is **0.2.0**, not 0.1.6.
+
+**2. Bump the version** in `pyproject.toml` (`[project] version`) and in `recipe/meta.yaml`
+(`{% set version = "..." %}`; `tools/check_recipe_mirror.py` asserts the two match), then re-lock
+and re-sync so the lockfile's self entry and the installed distribution agree with it
+(`tests/test_release_metadata.py` checks both):
+
+```sh
+uv lock
+uv sync --all-extras --dev
+```
+
+**3. Fold the changelog fragments** into a release section in the same commit as the bump, since
+`tests/test_release_metadata.py` also requires the newest `CHANGELOG.md` heading to be the
+`pyproject.toml` version. The script writes `## <x.y.z> Release: <Month D, YYYY>` above the
+newest release, with the groups in order and each group's bullets sorted, deletes the fragments
+and stages both:
 
 ```sh
 uv run python tools/release_changelog.py <x.y.z>   # --date YYYY-MM-DD for a date other than today
 # then: write the **Highlights** paragraph under the new heading,
 npx --yes doctoc@2 --github CHANGELOG.md
-uv run python tools/codegen/generate.py
+uv run python tools/codegen/generate.py && uv run python tools/codegen/generate.py --check
 ```
 
-Then freeze a permanent snapshot of the docs for that release, and keep going.
+**4. Snapshot the docs.** Freeze a permanent snapshot of the docs for that release, and keep going.
 **This had not been done since 0.0.75** — 0.1.0 through 0.1.4 have no snapshot,
 which 0.1.5 fixes. Only the three newest snapshots are built
 (`VERSIONS_TO_KEEP=3` in `docusaurus.config.ts`), so `/docs/0.0.50/` is no longer
@@ -526,3 +546,15 @@ docs stay the default and keep tracking the code. The snapshot becomes a
 read-only archive at `/docs/<x.y.z>/` in the version dropdown. (To backport a
 fix into an already-released archive — rare — edit
 `docs/versioned_docs/version-<x.y.z>/...` directly.)
+
+**5. Publish through a GitHub Release.** After the release PR merges, publish a GitHub Release
+on `main` tagged `v<x.y.z>` (the convention since `v0.1.1`):
+
+```sh
+gh release create v<x.y.z> --target main --title "sportsdataverse-py <x.y.z>" --notes "<the Highlights paragraph>"
+```
+
+`.github/workflows/python-publish.yml` runs on `release: published`: it builds the sdist and
+wheel with `uv build` and uploads them to PyPI through Trusted Publishing (the `pypi`
+environment; no token). A manual `workflow_dispatch` only builds and uploads the artifacts, as
+a dry run, and never publishes; the rolling `docs-index` release is skipped.
