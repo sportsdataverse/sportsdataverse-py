@@ -56,9 +56,13 @@ def _stamp_game_id(dataset: Any, game_id: Union[int, str]) -> Any:
 # ponytail: statsbomb only; Metrica / SkillCorner open samples follow the same shape when asked for.
 _OPEN_DATA_PROVIDERS: Dict[str, str] = {"statsbomb": "statsbomb"}
 # The files each provider's loader reads, as (GitHub repository, paths): evicted from kloppy's cache when one
-# arrives cut off. The first path is the one a corrupt-body error names.
+# arrives cut off (a file never cached, such as a match without 360 data, matches nothing). The first path is
+# the one a corrupt-body error names.
 _OPEN_DATA_FILES: Dict[str, tuple] = {
-    "statsbomb": ("statsbomb/open-data", ("data/events/{match_id}.json", "data/lineups/{match_id}.json")),
+    "statsbomb": (
+        "statsbomb/open-data",
+        ("data/events/{match_id}.json", "data/lineups/{match_id}.json", "data/three-sixty/{match_id}.json"),
+    ),
 }
 
 
