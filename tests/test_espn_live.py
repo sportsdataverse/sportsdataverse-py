@@ -320,7 +320,9 @@ def test_parse_scoreboard_handles_wnba_payload():
     raw = espn_wnba_scoreboard(dates=20240707, return_parsed=False)
     df = parse_scoreboard(raw)
     assert isinstance(df, pl.DataFrame)
-    assert df["game_id"].to_list() == [e["id"] for e in raw["events"]] and df.height == 4
+    # ids are Int64 at the parser boundary (changelog.d/ids-int64.breaking.md); ESPN ships them as strings
+    assert df["game_id"].to_list() == [int(e["id"]) for e in raw["events"]] and df.height == 4
+    assert df.schema["game_id"] == pl.Int64  # values alone would also pass an integral Float64 or Int32
 
 
 def test_parse_standings_handles_wnba_payload():

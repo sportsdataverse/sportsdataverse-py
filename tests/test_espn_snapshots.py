@@ -11,7 +11,6 @@ row) are all invisible to a synthetic capture.
 
 from __future__ import annotations
 
-import re
 from datetime import date
 
 import polars as pl
@@ -354,7 +353,7 @@ def test_live_nfl_snapshot_returns_joinable_rows():
 def test_live_multi_league_snapshot_is_long_over_league():
     df = espn_injuries_snapshot(["nfl", "nhl"], request_delay=1.5)
     assert sorted(df["league"].unique().to_list()) == ["nfl", "nhl"]
-    assert not re.search(r"\.\d", "".join(df["team_id"].drop_nulls().to_list()))
+    assert df.schema["team_id"] == pl.Int64  # an Int64 id cannot carry a float-born ".0"
 
 
 # ---------------------------------------------------------------------------
