@@ -42,6 +42,46 @@ jobs:
         run: uv python install 3.13.2
       - name: Install project + extras + dep groups
         run: uv sync --all-extras --all-groups --frozen --python 3.13.2
+      - name: Route stats.nba.com / stats.wnba.com through a ProxyBonanza IP
+        # Both hosts hang on cloud runner IPs, so the NBA / WNBA tutorials' stats cells go through one IP
+        # from the org's ProxyBonanza pool (org secrets PROXY_KEY + PROXY_PKG), via the runtime's
+        # SDV_PY_NBA_STATS_PROXY. Without the secrets those cells time out and print a skip line.
+        if: ${{ github.ref == 'refs/heads/main' }}
+        env:
+          PROXY_KEY: ${{ secrets.PROXY_KEY }}
+          PROXY_PKG: ${{ secrets.PROXY_PKG }}
+        run: |
+          if [ -z "$PROXY_KEY" ] || [ -z "$PROXY_PKG" ]; then
+            echo "::warning::PROXY_KEY / PROXY_PKG not available; stats.nba.com cells will skip"
+            exit 0
+          fi
+          pkg=$(curl -fsS --max-time 30 -H "Authorization: $PROXY_KEY" "https://api.proxybonanza.com/v1/userpackages/$PROXY_PKG.json")
+          login=$(jq -r .data.login <<<"$pkg")
+          pass=$(jq -r .data.password <<<"$pkg")
+          ipport=$(jq -r '.data.ippacks | .[(now | floor) % length] | "\(.ip):\(.port_http)"' <<<"$pkg")
+          # Mask before anything can echo them.
+          echo "::add-mask::$login"
+          echo "::add-mask::$pass"
+          echo "::add-mask::$ipport"
+          echo "SDV_PY_NBA_STATS_PROXY=http://$login:$pass@$ipport" >> "$GITHUB_ENV"
+      - name: Route stats.ncaa.org through a Decodo residential IP
+        # stats.ncaa.org bans aggressively, so every request to it goes through a proxy: a US sticky
+        # residential Decodo session (org secrets DECODO_USER_NAME + DECODO_PASSWORD), read by the NCAA
+        # fetch layer as SDV_PY_NCAA_PROXY_URL. The `-session-` id in the username is what pins the IP.
+        if: ${{ github.ref == 'refs/heads/main' }}
+        env:
+          DECODO_USER_NAME: ${{ secrets.DECODO_USER_NAME }}
+          DECODO_PASSWORD: ${{ secrets.DECODO_PASSWORD }}
+        run: |
+          if [ -z "$DECODO_USER_NAME" ] || [ -z "$DECODO_PASSWORD" ]; then
+            echo "::warning::DECODO_USER_NAME / DECODO_PASSWORD not available; stats.ncaa.org cells will skip"
+            exit 0
+          fi
+          echo "::add-mask::$DECODO_USER_NAME"
+          echo "::add-mask::$DECODO_PASSWORD"
+          session="user-$DECODO_USER_NAME-country-us-session-$(openssl rand -hex 6)-sessionduration-30"
+          echo "::add-mask::$session"
+          echo "SDV_PY_NCAA_PROXY_URL=http://$session:$DECODO_PASSWORD@gate.decodo.com:7000" >> "$GITHUB_ENV"
       - name: Render notebook tutorials
         # Only from main: a dispatch from another branch would otherwise build the refresh PR
         # on top of that branch's unmerged commits.
