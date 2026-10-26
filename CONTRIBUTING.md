@@ -118,8 +118,9 @@ no run measured.
 Supported: 3.10, 3.11, 3.12, 3.13, 3.14. The suite runs on **3.13.2 only**; a separate
 job installs every extra and imports every module on the **3.10 floor** (`tests.yml`
 `floor-import`). No other version runs the full suite. New modules use modern type syntax
-(`dict[str, X]`, `X | None`). DO add `from __future__ import annotations` — 682 of
-729 modules already do, and it keeps `X | None` valid on the 3.10 floor.
+(`dict[str, X]`, `X | None`). DO add `from __future__ import annotations` — 931 of the
+991 `.py` files under `sportsdataverse/` already do (October 2026), and it keeps `X | None`
+valid on the 3.10 floor.
 
 ## Code standards for new modules
 
@@ -129,13 +130,36 @@ The rules below apply to **new modules** (and to legacy modules that you
 are intentionally migrating).
 
 - **Python target:** 3.10–3.14. `pyproject.toml` `[tool.ruff]` pins
-  `line-length = 120` and `fix = true`; the `[project]` classifiers
-  cover through py314. Linting + formatting run via Ruff
-  (`ruff check --fix` and `ruff format`) — see `.pre-commit-config.yaml`
-  for the full pre-commit chain (Ruff, whose `I` rules own import order — the
-standalone import-sorting hook is inactive — plus
-  pygrep-hooks + add-trailing-comma + actionlint + yamlfmt + doctoc +
-  markdownlint-cli2).
+  `line-length = 120` and `fix = true` (so a bare `ruff check` rewrites files; pass
+  `--no-fix` to only report); the `[project]` classifiers cover through py314. Ruff runs
+  its default rules plus `BLE001` (`[tool.ruff.lint] extend-select`); the import-sorting
+  `I` rules are **not** enabled and the standalone isort hook was removed, so import order
+  is not enforced. Keep the load-bearing `# isort: off` block in
+  `sportsdataverse/__init__.py` as it is.
+- **Pre-commit hooks** (`.pre-commit-config.yaml`). A plain `pre-commit install` wires all
+  three stages, because the config sets
+  `default_install_hook_types: [pre-commit, commit-msg, pre-push]`. On an older clone, run
+  `pre-commit install --hook-type pre-commit --hook-type commit-msg --hook-type pre-push`.
+  - **At commit:** `ruff-check` and `ruff-format`; the pre-commit-hooks file checks
+    (`trailing-whitespace`, `check-merge-conflict`, `check-ast`, `check-toml` / `-json` /
+    `-xml` / `-yaml`, `check-symlinks`, `end-of-file-fixer`, `requirements-txt-fixer`,
+    `check-added-large-files`, `debug-statements`); the pygrep-hooks
+    (`python-use-type-annotations`, `python-no-eval`, `python-no-log-warn`, the three `rst-*`
+    checks, `text-unicode-replacement-char`, `python-check-mock-methods`,
+    `python-check-blanket-noqa`, `python-check-blanket-type-ignore`); `sync-pre-commit-deps`;
+    `check-github-workflows` (check-jsonschema); `actionlint`; `doctoc`; `markdownlint-cli2`;
+    and the local `sync-docs-changelog` (on `CHANGELOG.md` / `changelog.d/`) and `sdv-codegen`
+    (`generate.py --check` on codegen inputs and `CHANGELOG.md`).
+  - **At commit-msg:** `conventional-commit-no-ai` (Conventional Commits, no AI
+    `Co-Authored-By` trailer).
+  - **At push:** `mypy-ratchet-prepush` (`uv run mypy`, when `sportsdataverse/**.py` is
+    pushed), `codegen-drift-prepush` (`generate.py --check`, also on `docs/docs/`),
+    `preflight-id-contract-prepush` (`tests/test_id_conventions.py`) and
+    `validation-contracts-prepush` (`tests/contracts/`, when `tools/validation/` or
+    `tests/contracts/` is pushed).
+
+  When doctoc rewrites a staged file's table of contents, pre-commit aborts the commit:
+  `git add` the file again and re-commit, then check `git log -1`.
 - **Type hints required** on all new public functions and helpers
   (parameters and return types). Internal one-line lambdas and trivial
   callbacks may be omitted at author discretion.
@@ -167,8 +191,8 @@ standalone import-sorting hook is inactive — plus
   gated by the `SDV_PY_LIVE_TESTS=1` environment variable, which `live-tests.yml`
 sets on pushes to main and manual runs (not on PRs; opt out with a `workflow_dispatch`
 `live_tests=false`) and `live-tests-cron.yml` always sets; `nba_stats` / `wnba_stats` live tests use
-the separate `SDV_PY_NBA_STATS_LIVE=1` gate that no workflow sets. Historically so CI and
-  routine local runs do not hit upstream APIs.
+the separate `SDV_PY_NBA_STATS_LIVE=1` gate that no workflow sets. The gates keep PR CI and
+  routine local runs off upstream APIs.
 - **Warnings are errors** (`pytest.ini`). A test that exercises a warning path asserts
   it with `pytest.warns(..., match=...)`; one that trips a warning incidentally filters
   exactly that message, with a comment naming the test that asserts it. Fix a warning
