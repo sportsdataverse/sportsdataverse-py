@@ -1881,6 +1881,102 @@ def test_leaders_uid_composite_is_text_not_a_refused_id(league):
     assert ids and all(df.schema[c] == pl.Int64 for c in ids), {c: df.schema[c] for c in ids}
 
 
+@pytest.mark.parametrize(
+    "stem",
+    [
+        "leaders_cfb_2023_offense_passing",
+        "leaders_mbb_2024_sort_avg_points",
+        "leaders_nba",
+        "leaders_nfl",
+        "leaders_nhl",
+    ],
+)
+def test_parse_leaders_one_row_per_athlete_with_named_stats(stem):
+    """The byathlete payload ships rows under ``athletes[]`` and the stat names once, under top-level
+    ``categories[].names[]``. The parser used to look for ``categories[].leaders[]`` and fall back to
+    flattening the envelope into one row with ``athletes`` / ``glossary`` stringified."""
+    from sportsdataverse._common_espn_parsers import parse_leaders
+    from sportsdataverse.dl_utils import underscore
+
+    raw = _load(stem)
+    df = parse_leaders(raw)
+    assert df.height == len(raw["athletes"]) > 1
+    assert not {"athletes", "glossary", "categories", "pagination_count"} & set(df.columns)
+    assert df["athlete_id"].to_list() == [int(a["athlete"]["id"]) for a in raw["athletes"]]
+    assert df.schema["athlete_id"] == df.schema["team_id"] == pl.Int64
+    # every stat lands under {category}_{name}, Float64 even when no athlete on the page has the category
+    names = {c["name"]: c["names"] for c in raw["categories"]}
+    for i, entry in enumerate(raw["athletes"]):
+        for cat in entry["categories"]:
+            for name, val in zip(names[cat["name"]], cat["values"]):
+                col = f"{underscore(cat['name'])}_{underscore(name)}"
+                assert df.schema[col] == pl.Float64
+                assert df[col][i] == val
+
+
+def test_parse_leaders_category_and_sort_captures_rank_their_stat():
+    """``category=offense:passing`` (cfb) and ``sort=offensive.avgPoints:desc`` (mbb) return the leaderboard in
+    that stat's order; ``rank`` is the place in it."""
+    from sportsdataverse._common_espn_parsers import parse_leaders
+
+    cfb = parse_leaders(_load("leaders_cfb_2023_offense_passing"))
+    assert cfb["rank"].to_list() == list(range(1, 11))
+    assert cfb["athlete_display_name"][0] == "Bo Nix" and cfb["team_abbreviation"][0] == "ORE"
+    assert cfb["passing_passing_yards"][0] == 4508.0
+    mbb = parse_leaders(_load("leaders_mbb_2024_sort_avg_points"))
+    pts = mbb["offensive_avg_points"].to_list()
+    assert pts == sorted(pts, reverse=True)
+
+
+def test_parse_leaders_rank_counts_across_pages():
+    import copy
+
+    from sportsdataverse._common_espn_parsers import parse_leaders
+
+    raw = copy.deepcopy(_load("leaders_nba"))
+    raw["pagination"]["page"] = 3
+    assert parse_leaders(raw)["rank"][0] == 2 * raw["pagination"]["limit"] + 1
+
+
+def test_parse_leaders_league_without_leaderboard_is_zero_rows():
+    """UFL (and the other leagues ESPN keeps no leaderboard for) answer ``{currentSeason}`` alone; that used to
+    flatten into a one-row frame of season metadata."""
+    from sportsdataverse._common_espn_parsers import parse_leaders
+
+    raw = _load("leaders_ufl_no_leaderboard")
+    assert set(raw) == {"currentSeason"}
+    assert parse_leaders(raw).height == 0
+
+
+def test_parse_leaders_still_reads_the_categories_leaders_shape():
+    """No league serves ``categories[].leaders[]`` any more (live sweep 2026-10-26); the branch stays for one that
+    might. Built from the real nba capture's athletes, regrouped into that shape."""
+    from sportsdataverse._common_espn_parsers import parse_leaders
+
+    raw = _load("leaders_nba")
+    cat = next(c for c in raw["categories"] if c["name"] == "offensive")
+    old = {
+        "categories": [
+            {
+                "name": "offensive",
+                "names": cat["names"],
+                "leaders": [
+                    {
+                        "rank": n,
+                        "athlete": a["athlete"],
+                        "team": {"id": a["athlete"]["teamId"]},
+                        "stats": next(c for c in a["categories"] if c["name"] == "offensive")["values"],
+                    }
+                    for n, a in enumerate(raw["athletes"][:3], start=1)
+                ],
+            }
+        ]
+    }
+    df = parse_leaders(old)
+    assert df.height == 3 and df["category"].to_list() == ["offensive"] * 3
+    assert df["athlete_id"].to_list() == [int(a["athlete"]["id"]) for a in raw["athletes"][:3]]
+
+
 def test_fpi_joins_weekly_powerindex_on_team_id():
     """A-M15: ``parse_fpi`` emitted ``team_id`` String and ``parse_weekly_powerindex`` Int64, so the join raised."""
     from sportsdataverse._common_espn_parsers import parse_fpi, parse_weekly_powerindex

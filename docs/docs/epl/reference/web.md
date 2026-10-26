@@ -223,12 +223,12 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `category` | `category` |  |  | `Y` | category query parameter. |
+| `category` | `category` |  |  | `Y` | Leaderboard population, which also fills that category's per-stat ranks. Football takes '<group>:<category>' ('offense:passing', 'offense:rushing', 'offense:receiving', 'defense:defensive', 'scoring:scoring'); a bare 'passing' is rejected with HTTP 400 (ValueError). |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `seasontype` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 | `page` | `page` |  |  | `Y` | page query parameter. |
-| `sort` | `sort` |  |  | `Y` | sort query parameter. |
+| `sort` | `sort` |  |  | `Y` | Sort key '<category>.<statName>:<asc\|desc>', the names in the payload's categories ('passing.passingYards:desc', 'offensive.avgPoints:desc'). A stat without its category is rejected with HTTP 400 (ValueError). |
 
 ### Returns {#espn_epl_leaders-returns}
 
@@ -236,40 +236,18 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `athletes` | character | Athletes. |
-| `glossary` | character | Glossary. |
-| `categories` | character | Categories. |
-| `pagination_count` | integer | Pagination count. |
-| `pagination_limit` | integer | Pagination limit. |
-| `pagination_page` | integer | Pagination page. |
-| `pagination_pages` | integer | Pagination pages. |
-| `pagination_first` | character | Pagination first. |
-| `pagination_next` | character | Pagination next. |
-| `pagination_last` | character | Pagination last. |
-| `league_id` | integer | League id. |
-| `league_uid` | character | League uid. |
-| `league_name` | character | League name. |
-| `league_abbreviation` | character | League abbreviation. |
-| `league_slug` | character | League slug. |
-| `league_short_name` | character | League short name. |
-| `current_season_year` | integer | Current season year. |
-| `current_season_display_name` | character | Current season display name. |
-| `current_season_start_date` | character | Current season start date. |
-| `current_season_end_date` | character | Current season end date. |
-| `current_season_type_id` | integer | Current season type id. |
-| `current_season_type_type` | integer | Current season type type. |
-| `current_season_type_name` | character | Current season type name. |
-| `current_season_type_start_date` | character | Current season type start date. |
-| `current_season_type_end_date` | character | Current season type end date. |
-| `requested_season_year` | integer | Requested season year. |
-| `requested_season_display_name` | character | Requested season display name. |
-| `requested_season_start_date` | character | Requested season start date. |
-| `requested_season_end_date` | character | Requested season end date. |
-| `requested_season_type_id` | integer | Requested season type id. |
-| `requested_season_type_type` | integer | Requested season type type. |
-| `requested_season_type_name` | character | Requested season type name. |
-| `requested_season_type_start_date` | character | Requested season type start date. |
-| `requested_season_type_end_date` | character | Requested season type end date. |
+| `rank` | integer | Place of the athlete in ESPN's leaderboard order (the requested category or sort), counted across pages: (page - 1) * limit + position on the page. |
+| `athlete_id` | integer | ESPN id of the athlete, the key the athlete endpoints (athlete_overview, athlete_stats) take. |
+| `athlete_uid` | character | ESPN composite athlete uid (s:<sport>~l:<league>~a:<athlete id>), kept as text. |
+| `athlete_display_name` | character | Athlete's full display name. |
+| `athlete_short_name` | character | Athlete's abbreviated name (e.g. 'B. Nix'). |
+| `athlete_first_name` | character | Athlete's first name. |
+| `athlete_last_name` | character | Athlete's last name. |
+| `athlete_position` | character | Athlete's position abbreviation (e.g. QB, G, C). |
+| `athlete_status` | character | Athlete's ESPN status name (e.g. Active, Inactive) as ESPN reports it at request time, not for the requested season. |
+| `team_id` | integer | ESPN id of the team the athlete played for in the requested season. |
+| `team_abbreviation` | character | Abbreviation of the athlete's team in the requested season (ESPN teamShortName, e.g. ORE). |
+| `team_name` | character | Nickname of the athlete's team in the requested season (ESPN teamName, e.g. Ducks). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

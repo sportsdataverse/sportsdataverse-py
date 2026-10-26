@@ -272,12 +272,12 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `category` | `category` |  |  | `Y` | category query parameter. |
+| `category` | `category` |  |  | `Y` | Leaderboard population, which also fills that category's per-stat ranks. Football takes '<group>:<category>' ('offense:passing', 'offense:rushing', 'offense:receiving', 'defense:defensive', 'scoring:scoring'); a bare 'passing' is rejected with HTTP 400 (ValueError). |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `seasontype` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 | `page` | `page` |  |  | `Y` | page query parameter. |
-| `sort` | `sort` |  |  | `Y` | sort query parameter. |
+| `sort` | `sort` |  |  | `Y` | Sort key '<category>.<statName>:<asc\|desc>', the names in the payload's categories ('passing.passingYards:desc', 'offensive.avgPoints:desc'). A stat without its category is rejected with HTTP 400 (ValueError). |
 
 ### Returns {#espn_nfl_leaders-returns}
 
@@ -285,44 +285,118 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `athletes` | character | Athletes. |
-| `glossary` | character | Glossary. |
-| `categories` | character | Categories. |
-| `pagination_count` | integer | Pagination count. |
-| `pagination_limit` | integer | Pagination limit. |
-| `pagination_page` | integer | Pagination page. |
-| `pagination_pages` | integer | Pagination pages. |
-| `pagination_first` | character | Pagination first. |
-| `pagination_next` | character | Pagination next. |
-| `pagination_last` | character | Pagination last. |
-| `league_id` | integer | League id. |
-| `league_uid` | character | League uid. |
-| `league_name` | character | League name. |
-| `league_abbreviation` | character | League abbreviation. |
-| `league_slug` | character | League slug. |
-| `league_short_name` | character | League short name. |
-| `current_season_year` | integer | Current season year. |
-| `current_season_display_name` | character | Current season display name. |
-| `current_season_start_date` | character | Current season start date. |
-| `current_season_end_date` | character | Current season end date. |
-| `current_season_type_id` | integer | Current season type id. |
-| `current_season_type_type` | integer | Current season type type. |
-| `current_season_type_name` | character | Current season type name. |
-| `current_season_type_start_date` | character | Current season type start date. |
-| `current_season_type_end_date` | character | Current season type end date. |
-| `current_season_type_week_number` | integer | Ordinal week number within the current season type. |
-| `current_season_type_week_start_date` | character | ISO 8601 start date of the current week within the active season type. |
-| `current_season_type_week_end_date` | character | ISO 8601 end date of the current week within the active season type (e.g., regular season, playoffs). |
-| `current_season_type_week_text` | character | Human-readable label for the current week within the active season type (e.g., 'Week 14'). |
-| `requested_season_year` | integer | Requested season year. |
-| `requested_season_display_name` | character | Requested season display name. |
-| `requested_season_start_date` | character | Requested season start date. |
-| `requested_season_end_date` | character | Requested season end date. |
-| `requested_season_type_id` | integer | Requested season type id. |
-| `requested_season_type_type` | integer | Requested season type type. |
-| `requested_season_type_name` | character | Requested season type name. |
-| `requested_season_type_start_date` | character | Requested season type start date. |
-| `requested_season_type_end_date` | character | Requested season type end date. |
+| `rank` | integer | Place of the athlete in ESPN's leaderboard order (the requested category or sort), counted across pages: (page - 1) * limit + position on the page. |
+| `athlete_id` | integer | ESPN id of the athlete, the key the athlete endpoints (athlete_overview, athlete_stats) take. |
+| `athlete_uid` | character | ESPN composite athlete uid (s:<sport>~l:<league>~a:<athlete id>), kept as text. |
+| `athlete_display_name` | character | Athlete's full display name. |
+| `athlete_short_name` | character | Athlete's abbreviated name (e.g. 'B. Nix'). |
+| `athlete_first_name` | character | Athlete's first name. |
+| `athlete_last_name` | character | Athlete's last name. |
+| `athlete_position` | character | Athlete's position abbreviation (e.g. QB, G, C). |
+| `athlete_status` | character | Athlete's ESPN status name (e.g. Active, Inactive) as ESPN reports it at request time, not for the requested season. |
+| `team_id` | integer | ESPN id of the team the athlete played for in the requested season. |
+| `team_abbreviation` | character | Abbreviation of the athlete's team in the requested season (ESPN teamShortName, e.g. ORE). |
+| `team_name` | character | Nickname of the athlete's team in the requested season (ESPN teamName, e.g. Ducks). |
+| `general_games_played` | double | Games Played (ESPN 'general' category). |
+| `general_fumbles_forced` | double | Forced Fumbles (ESPN 'general' category): The total number of forced fumbles. |
+| `general_fumbles_recovered` | double | Fumbles Recovered (ESPN 'general' category): The number of fumbles recovered. |
+| `general_fumbles_touchdowns` | double | Fumbles Touchdowns (ESPN 'general' category): The number of times a fumbles is recovered and returned for a touchdown. |
+| `passing_completions` | double | Completions (ESPN 'passing' category): The times a player completes a pass to another player who is eligible to catch a pass. |
+| `passing_passing_attempts` | double | Passing Attempts (ESPN 'passing' category): The number of times a pass is attempted. |
+| `passing_completion_pct` | double | Completion Percentage (ESPN 'passing' category): The percentage of completed passes. |
+| `passing_passing_yards` | double | Passing Yards (ESPN 'passing' category): The total passing yards. |
+| `passing_yards_per_pass_attempt` | double | Yards Per Pass Attempt (ESPN 'passing' category): The average number yards per pass attempt. |
+| `passing_passing_yards_per_game` | double | Passing Yards Per Game (ESPN 'passing' category): The number of passing yards per game. |
+| `passing_long_passing` | double | Longest Pass (ESPN 'passing' category): The longest pass play completed in terms of yards. |
+| `passing_passing_touchdowns` | double | Passing Touchdowns (ESPN 'passing' category): The total number of passing touchdowns. |
+| `passing_interceptions` | double | Interceptions (ESPN 'passing' category): The number of passes thrown that were intercepted by the opposing team. |
+| `passing_sacks` | double | Total Sacks (ESPN 'passing' category): The total number of sacks. |
+| `passing_sack_yards_lost` | double | Sack Yards Lost (ESPN 'passing' category): The amount of yards lost due to sacks. |
+| `passing_qbr` | double | Total QBR (ESPN 'passing' category): Total Quarterback Rating, which values quarterback on all play types on a 0-to-100 scale. |
+| `passing_qb_rating` | double | Passer Rating (ESPN 'passing' category). |
+| `passing_adj_qbr` | double | Adjusted QBR (ESPN 'passing' category): Adjusted Quarterback Rating. |
+| `rushing_rushing_attempts` | double | Rushing Attempts (ESPN 'rushing' category): The total number of attempted rushes. |
+| `rushing_rushing_yards` | double | Rushing Yards (ESPN 'rushing' category): The total rushing yards. |
+| `rushing_yards_per_rush_attempt` | double | Yards Per Rush Attempt (ESPN 'rushing' category): The average number of yards per rush attempt. |
+| `rushing_long_rushing` | double | Long Rushing (ESPN 'rushing' category): The amount of yards for the longest run. |
+| `rushing_rushing_big_plays` | double | 20+ Yard Rushing Plays (ESPN 'rushing' category): The number of rushing big plays gained. |
+| `rushing_rushing_touchdowns` | double | Rushing Touchdowns (ESPN 'rushing' category): The total number of rushing touchdowns. |
+| `rushing_rushing_yards_per_game` | double | Rushing Yards Per Game (ESPN 'rushing' category): The average number of rushing yards per game. |
+| `rushing_rushing_fumbles` | double | Rushing Fumbles (ESPN 'rushing' category): The number of times there is a run and then the ball is fumbled. |
+| `rushing_rushing_fumbles_lost` | double | Rushing Fumbles Lost (ESPN 'rushing' category): The number of times there is a run and then the ball is fumbled. |
+| `rushing_rushing_first_downs` | double | Rushing 1st downs (ESPN 'rushing' category): The number of times a first down is picked up by a run. |
+| `receiving_receptions` | double | Receptions (ESPN 'receiving' category): The total number of receptions. |
+| `receiving_receiving_targets` | double | Receiving Targets (ESPN 'receiving' category): The number of times a receiver is thrown to. |
+| `receiving_receiving_yards` | double | Receiving Yards (ESPN 'receiving' category): The total receiving yards. |
+| `receiving_yards_per_reception` | double | Yards Per Reception (ESPN 'receiving' category): The average number of yards per reception. |
+| `receiving_receiving_touchdowns` | double | Receiving Touchdowns (ESPN 'receiving' category): The total number of receiving touchdowns. |
+| `receiving_long_reception` | double | Long Reception (ESPN 'receiving' category): The amount of yards for the longest reception. |
+| `receiving_receiving_big_plays` | double | 20+ Yard Receiving Plays (ESPN 'receiving' category): The number of receiving big plays gained. |
+| `receiving_receiving_yards_per_game` | double | Receiving Yards Per Game (ESPN 'receiving' category): The average number of receiving yards per game. |
+| `receiving_receiving_fumbles` | double | Receiving Fumbles (ESPN 'receiving' category): The number of times a reception is made and then the ball is fumbled. |
+| `receiving_receiving_fumbles_lost` | double | Receiving Fumbles Lost (ESPN 'receiving' category): The number of times a reception is made and the balled is fumbled and recovered by the opposing team. |
+| `receiving_receiving_yards_after_catch` | double | Receiving Yards After Catch (ESPN 'receiving' category): The number of yards gained after the catch has been made. |
+| `receiving_receiving_first_downs` | double | Receiving First Downs (ESPN 'receiving' category): The number of times a first down is picked up by a reception. |
+| `defensive_solo_tackles` | double | Solo Tackles (ESPN 'defensive' category): The number of times a tackle was made unassisted. |
+| `defensive_assist_tackles` | double | Assist Tackles (ESPN 'defensive' category): The number of assists on tackles. |
+| `defensive_total_tackles` | double | Total Tackles (ESPN 'defensive' category): The total number of tackles. |
+| `defensive_sacks` | double | Sacks (ESPN 'defensive' category): The total number of sacks. |
+| `defensive_sack_yards` | double | Sack Yards (ESPN 'defensive' category): The number of yards lost from sacks. |
+| `defensive_tackles_for_loss` | double | Tackles For Loss (ESPN 'defensive' category): The number of tackles that result in a loss of yardage. |
+| `defensive_passes_defended` | double | Passes Defended (ESPN 'defensive' category): The total number of passes defended. |
+| `defensive_long_interception` | double | Long Interception (ESPN 'defensive' category): The amount of yards of the longest interception return. |
+| `defensiveinterceptions_interceptions` | double | Interceptions (ESPN 'defensiveinterceptions' category): The total number of interceptions. |
+| `defensiveinterceptions_interception_yards` | double | Interception Yards (ESPN 'defensiveinterceptions' category): The number of yards gained after an interception. |
+| `defensiveinterceptions_interception_touchdowns` | double | Interception Touchdowns (ESPN 'defensiveinterceptions' category): The number of times an interception is returned for a touchdown. |
+| `scoring_rushing_touchdowns` | double | Rushing Touchdowns (ESPN 'scoring' category): The total number of rushing touchdowns. |
+| `scoring_receiving_touchdowns` | double | Receiving Touchdowns (ESPN 'scoring' category): The total number of receiving touchdowns. |
+| `scoring_return_touchdowns` | double | Return Touchdowns (ESPN 'scoring' category): The total number of return touchdowns. |
+| `scoring_total_touchdowns` | double | Total Touchdowns (ESPN 'scoring' category): The number of touchdowns scored in total. |
+| `scoring_field_goals` | double | Field Goals (ESPN 'scoring' category): The number of field goals made. |
+| `scoring_kick_extra_points` | double | Kick Extra Points (ESPN 'scoring' category): The number of extra points made. |
+| `scoring_total_two_point_convs` | double | Total Two Point Conversions (ESPN 'scoring' category): The number of times a 2-point conversion is successful. |
+| `scoring_total_points` | double | Total Points (ESPN 'scoring' category): The number of total points scored. |
+| `scoring_total_points_per_game` | double | Total Points Per Game (ESPN 'scoring' category): The number of points scored per game. |
+| `returning_kick_returns` | double | Kick Returns (ESPN 'returning' category): The number of kick returns. |
+| `returning_kick_return_yards` | double | Kick Return Yards (ESPN 'returning' category): The total yardage of kick returns. |
+| `returning_yards_per_kick_return` | double | Yards Per Kick Return (ESPN 'returning' category): The average number of yards per kick return. |
+| `returning_long_kick_return` | double | Long Kick Return (ESPN 'returning' category): The longest kick return in yards. |
+| `returning_kick_return_touchdowns` | double | Kick Return Touchdowns (ESPN 'returning' category): The number of kick return touchdowns. |
+| `returning_punt_returns` | double | Punt Returns (ESPN 'returning' category): The number of punt returns. |
+| `returning_punt_return_yards` | double | Punt Return Yards (ESPN 'returning' category): The total yardage of punt returns. |
+| `returning_yards_per_punt_return` | double | Yards Per Punt Return (ESPN 'returning' category): The average number of yards per punt return. |
+| `returning_long_punt_return` | double | Long Punt Return (ESPN 'returning' category): The longest punt return in yards. |
+| `returning_punt_return_touchdowns` | double | Punt Return Touchdowns (ESPN 'returning' category): The number of punt return touchdowns. |
+| `returning_punt_return_fair_catches` | double | Punt Return Fair Catches (ESPN 'returning' category): The number of punt return fair catches. |
+| `kicking_field_goals_made` | double | Field Goal Made (ESPN 'kicking' category): The number of times a field goal is made. |
+| `kicking_field_goal_attempts` | double | Field Goal Attempts (ESPN 'kicking' category): The number of times a field goal is attempted. |
+| `kicking_field_goal_pct` | double | Field Goal Percentage (ESPN 'kicking' category): The percentage of field goals attempted that are made. |
+| `kicking_long_field_goal_made` | double | Long Field Goal Made (ESPN 'kicking' category): The distance of the longest field goal made. |
+| `kicking_field_goals_made1_19` | double | Field Goals Made 1-19 (ESPN 'kicking' category): The number of field goals made from 1-19 yards. |
+| `kicking_field_goals_made20_29` | double | Field Goals Made 20-29 (ESPN 'kicking' category): The number of field goals made from 20-29 yards. |
+| `kicking_field_goals_made30_39` | double | Field Goals Made 30-39 (ESPN 'kicking' category): The number of field goals made from 30-39 yards. |
+| `kicking_field_goals_made40_49` | double | Field Goals Made 40-49 (ESPN 'kicking' category): The number of field goals made from 40-49 yards. |
+| `kicking_field_goals_made50` | double | Field Goals Made 50+ (ESPN 'kicking' category): The number of field goals made from 50+ yards. |
+| `kicking_field_goal_attempts1_19` | double | Field Goal Attempts 1-19 (ESPN 'kicking' category): The number of field goals attempted from 1-19 yards. |
+| `kicking_field_goal_attempts20_29` | double | Field Goal Attempts 20-29 (ESPN 'kicking' category): The number of field goals attempted from 20-29 yards. |
+| `kicking_field_goal_attempts30_39` | double | Field Goal Attempts 30-39 (ESPN 'kicking' category): The number of field goals attempted from 30-39 yards. |
+| `kicking_field_goal_attempts40_49` | double | Field Goal Attempts 40-49 (ESPN 'kicking' category): The number of field goals attempted from 40-49 yards. |
+| `kicking_field_goal_attempts50` | double | Field Goal Attempts 50+ (ESPN 'kicking' category): The number of field goals attempted from 50+ yards. |
+| `kicking_extra_points_made` | double | Extra Points Made (ESPN 'kicking' category): The number of extra point attempts made. |
+| `kicking_extra_point_attempts` | double | Extra Point Attempts (ESPN 'kicking' category): The number of extra point attempts. |
+| `kicking_extra_point_pct` | double | Extra Point Percentage (ESPN 'kicking' category): The percentage of extra point attempts that are converted. |
+| `punting_punts` | double | Punts (ESPN 'punting' category): The number of punts taken. |
+| `punting_punt_yards` | double | Punt Yards (ESPN 'punting' category): The total amount of yardage of punts. |
+| `punting_long_punt` | double | Long Punt (ESPN 'punting' category): The distance of the longest punt. |
+| `punting_gross_avg_punt_yards` | double | Gross Average Punt Yards (ESPN 'punting' category): The average gross number of yards per punt. |
+| `punting_net_avg_punt_yards` | double | Net Average Punt Yards (ESPN 'punting' category): The average net number of yards per punt. |
+| `punting_punts_blocked` | double | Punts Blocked (ESPN 'punting' category): The number of times a punt was blocked. |
+| `punting_punts_inside20` | double | Punts Inside 20 (ESPN 'punting' category): The number of times a punt is downed inside the 20. |
+| `punting_touchbacks` | double | Touchbacks (ESPN 'punting' category): The number of kickoffs that result in touchbacks. |
+| `punting_fair_catches` | double | Fair Catches (ESPN 'punting' category): The number of fair catches. |
+| `punting_punt_returns` | double | Punt Returns (ESPN 'punting' category): The number of times a punt was returned. |
+| `punting_punt_return_yards` | double | Punt Return Yards (ESPN 'punting' category): The total amount of yardage of punt returns. |
+| `punting_avg_punt_return_yards` | double | Average Punt Return Yards (ESPN 'punting' category): The average number of yards per punt return. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

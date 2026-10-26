@@ -5826,12 +5826,304 @@ landing:
   venue_location_default: Default-language display string for the city or location associated with the game's venue, as provided
     by the NHL api-web landing endpoint.
 leaders:
-  current_season_type_week_end_date: ISO 8601 end date of the current week within the active season type (e.g., regular season,
-    playoffs).
-  current_season_type_week_number: Ordinal week number within the current season type.
-  current_season_type_week_start_date: ISO 8601 start date of the current week within the active season type.
-  current_season_type_week_text: Human-readable label for the current week within the active season type (e.g., 'Week 14').
-  league_midsize_name: Medium-length display name for the league, between the full name and the short abbreviation.
+  athlete_display_name: Athlete's full display name.
+  athlete_first_name: Athlete's first name.
+  athlete_id: ESPN id of the athlete, the key the athlete endpoints (athlete_overview, athlete_stats) take.
+  athlete_last_name: Athlete's last name.
+  athlete_position: Athlete's position abbreviation (e.g. QB, G, C).
+  athlete_short_name: Athlete's abbreviated name (e.g. 'B. Nix').
+  athlete_status: Athlete's ESPN status name (e.g. Active, Inactive) as ESPN reports it at request time, not for the requested
+    season.
+  athlete_uid: ESPN composite athlete uid (s:<sport>~l:<league>~a:<athlete id>), kept as text.
+  batting_at_bats: 'At Bats (ESPN ''batting'' category): The number of times a batter comes up to bat not counting walks and sacrifices.'
+  batting_avg: 'Batting Average (ESPN ''batting'' category): The average number of times the batter reached successfully on base
+    due to a hit: hits / atBats.'
+  batting_doubles: 'Doubles (ESPN ''batting'' category): The number of times that a batter reaches second base as the result of
+    a hit without an error being committed.'
+  batting_games_played: Games Played (ESPN 'batting' category).
+  batting_hits: 'Hits (ESPN ''batting'' category): The number of hits.'
+  batting_home_runs: 'Home Runs (ESPN ''batting'' category): The number of hits that allowed the batter to round the bases and
+    score without the aid of an error of the defense.'
+  batting_on_base_pct: 'On Base Percentage (ESPN ''batting'' category): The ratio of the number of times the batter reached base
+    per plate appearnce: (hits + walks + hbp / plateAppearances).'
+  batting_ops: 'OBP Pct + SLG Pct (ESPN ''batting'' category): The average calculated by adding up on-base percentage and slugging
+    percentage.'
+  batting_rb_is: 'Runs Batted In (ESPN ''batting'' category): The number of runs scored by a batter''s play.'
+  batting_runs: 'Runs (ESPN ''batting'' category): The number of runs scored.'
+  batting_slug_avg: 'Slugging Percentage (ESPN ''batting'' category): Slugging percentage is a metric that is meant to measuring
+    how many bases the hitter safely advances to after making contact with the ball: (totalBases / atBats).'
+  batting_stolen_bases: 'Stolen Bases (ESPN ''batting'' category): The number of bases stolen.'
+  batting_strikeouts: 'Strikeouts (ESPN ''batting'' category): The number of times a player strikes out.'
+  batting_total_bases: 'Total Bases (ESPN ''batting'' category): The number of bases calculated as 1 for a 1B, 2 for a 2B, 3 for
+    a 3B and 4 for a HR.'
+  batting_triples: 'Triples (ESPN ''batting'' category): The number of hits that result in the batter reaching 3rd base without
+    the aid of an error.'
+  batting_walks: 'Walks (ESPN ''batting'' category): The number of times a batter reaches base on four balls.'
+  batting_warbr: Wins Above Replacement (ESPN 'batting' category).
+  defensive_assist_tackles: 'Assist Tackles (ESPN ''defensive'' category): The number of assists on tackles.'
+  defensive_avg_blocks: 'Blocks Per Game (ESPN ''defensive'' category): The average blocks per game.'
+  defensive_avg_goals_against: Goals Against Average (ESPN 'defensive' category).
+  defensive_avg_steals: 'Steals Per Game (ESPN ''defensive'' category): The average steals per game.'
+  defensive_blocks: 'Blocks (ESPN ''defensive'' category): Short for blocked shot, number of times when a defensive player legally
+    deflects a field goal attempt from an offensive player.'
+  defensive_goals_against: 'Goals Against (ESPN ''defensive'' category): Total goals against.'
+  defensive_long_interception: 'Long Interception (ESPN ''defensive'' category): The amount of yards of the longest interception
+    return.'
+  defensive_overtime_losses: 'Overtime Losses (ESPN ''defensive'' category): Total games lost in overtime.'
+  defensive_passes_defended: 'Passes Defended (ESPN ''defensive'' category): The total number of passes defended.'
+  defensive_sack_yards: 'Sack Yards (ESPN ''defensive'' category): The number of yards lost from sacks.'
+  defensive_sacks: 'Sacks (ESPN ''defensive'' category): The total number of sacks.'
+  defensive_save_pct: 'Save Percentage (ESPN ''defensive'' category): Percentage of shots saved.'
+  defensive_saves: 'Saves (ESPN ''defensive'' category): Total saves.'
+  defensive_shootout_save_pct: 'Shootout Save Percentage (ESPN ''defensive'' category): Percentage of shootout shots saved.'
+  defensive_shootout_saves: 'Shootout Saves (ESPN ''defensive'' category): Total shootout saves.'
+  defensive_shootout_shots_against: 'Shootout Shots Against (ESPN ''defensive'' category): Total shootout shots against.'
+  defensive_shots_against: 'Shots Against (ESPN ''defensive'' category): Total shots against.'
+  defensive_shutouts: 'Shutouts (ESPN ''defensive'' category): Total shutouts.'
+  defensive_solo_tackles: 'Solo Tackles (ESPN ''defensive'' category): The number of times a tackle was made unassisted.'
+  defensive_steals: 'Steals (ESPN ''defensive'' category): The number of times a defensive player forced a turnover by intercepting
+    or deflecting a pass or a dribble of an offensive player.'
+  defensive_tackles_for_loss: 'Tackles For Loss (ESPN ''defensive'' category): The number of tackles that result in a loss of yardage.'
+  defensive_total_tackles: 'Total Tackles (ESPN ''defensive'' category): The total number of tackles.'
+  defensiveinterceptions_interception_touchdowns: 'Interception Touchdowns (ESPN ''defensiveinterceptions'' category): The number
+    of times an interception is returned for a touchdown.'
+  defensiveinterceptions_interception_yards: 'Interception Yards (ESPN ''defensiveinterceptions'' category): The number of yards
+    gained after an interception.'
+  defensiveinterceptions_interceptions: 'Interceptions (ESPN ''defensiveinterceptions'' category): The total number of interceptions.'
+  fielding_assists: 'Assists (ESPN ''fielding'' category): The number of times a fielder is involved in an out when the fielder
+    is not the putouter.'
+  fielding_catcher_caught_stealing: 'Caught Stealing (ESPN ''fielding'' category): The number of times a catcher throws a baserunner
+    trying to steal a base.'
+  fielding_catcher_caught_stealing_pct: 'Caught Stealing Percentage (ESPN ''fielding'' category): The percentage of baserunners
+    caught by the catcher given the total number of steal attempts.'
+  fielding_catcher_stolen_bases_allowed: 'Stolen Bases Allowed (ESPN ''fielding'' category): The number of stolen bases that a
+    catcher allows.'
+  fielding_def_warbr: Defensive Wins Above Replacement (ESPN 'fielding' category).
+  fielding_double_plays: 'Double Plays (ESPN ''fielding'' category): The number of double plays a fielder has been a part of as
+    either the assister or putouter.'
+  fielding_errors: 'Errors (ESPN ''fielding'' category): The number of times a fielder fails to make the play they are expected
+    to make.'
+  fielding_fielding_pct: 'Fielding Percentage (ESPN ''fielding'' category): The percentage of plays made by a fielder given the
+    total number of chances.'
+  fielding_full_innings_played: 'Full Innings (ESPN ''fielding'' category): The number of fully completed innings by a fielder.'
+  fielding_games_played: Games Played (ESPN 'fielding' category).
+  fielding_games_started: 'Games Started (ESPN ''fielding'' category): The number of games started by a fielder.'
+  fielding_passed_balls: 'Passed Balls (ESPN ''fielding'' category): The number of times the ball is dropped or passes by the catcher.'
+  fielding_putouts: 'Putouts (ESPN ''fielding'' category): The number of times the fielder tags or forces the out of a baserunner.'
+  fielding_range_factor: 'Range Factor (ESPN ''fielding'' category): The estimation of how much field a fielder can cover.'
+  fielding_total_chances: 'Total Chances (ESPN ''fielding'' category): The number of chances a fielder has to make an out calculated
+    by assists plus putouts plus errors.'
+  general_avg_fouls: 'Fouls Per Game (ESPN ''general'' category): The average fouls committed per game.'
+  general_avg_minutes: 'Minutes Per Game (ESPN ''general'' category): The average number of minutes per game.'
+  general_avg_rebounds: 'Rebounds Per Game (ESPN ''general'' category): The average rebounds per game.'
+  general_double_double: 'Double Double (ESPN ''general'' category): The number of times double digit values were accumulated in
+    2 of the following categories: points, rebounds, assists, steals, and blocked shots.'
+  general_ejections: 'Ejections (ESPN ''general'' category): The number of times a player or coach is removed from the game as
+    a result of a serious offense.'
+  general_flagrant_fouls: 'Flagrant Fouls (ESPN ''general'' category): The number of fouls that the officials thought were unnecessary
+    or excessive.'
+  general_fouls: 'Fouls (ESPN ''general'' category): The number of times a player had illegal contact with the opponent.'
+  general_fumbles_forced: 'Forced Fumbles (ESPN ''general'' category): The total number of forced fumbles.'
+  general_fumbles_recovered: 'Fumbles Recovered (ESPN ''general'' category): The number of fumbles recovered.'
+  general_fumbles_touchdowns: 'Fumbles Touchdowns (ESPN ''general'' category): The number of times a fumbles is recovered and returned
+    for a touchdown.'
+  general_games: 'Games Played (ESPN ''general'' category): Total games played.'
+  general_games_played: Games Played (ESPN 'general' category).
+  general_losses: Losses (ESPN 'general' category).
+  general_minutes: 'Minutes (ESPN ''general'' category): The total number of minutes played.'
+  general_per: 'Player Efficiency Rating (ESPN ''general'' category): A numerical value for each of a player''s accomplishments
+    per-minute and is pace-adjusted for the team they play on. The league average in PER to 15.00 every season.'
+  general_plus_minus: Plus/Minus Rating (ESPN 'general' category).
+  general_production: 'Production (ESPN ''general'' category): Total production.'
+  general_rebounds: 'Rebounds (ESPN ''general'' category): The total number of rebounds (offensive and defensive).'
+  general_shifts: 'Shifts (ESPN ''general'' category): Total shifts.'
+  general_technical_fouls: 'Technical Fouls (ESPN ''general'' category): The number of times an player or coach was called for
+    a technical foul (unsportsmanlike conduct or violations).'
+  general_time_on_ice: 'Time On Ice (ESPN ''general'' category): Total time on ice.'
+  general_time_on_ice_per_game: 'Time On Ice Per Game (ESPN ''general'' category): Total time on ice per game.'
+  general_triple_double: 'Triple Double (ESPN ''general'' category): The number of times double digit values were accumulated in
+    3 of the following categories: points, rebounds, assists, steals, and blocked shots.'
+  general_wins: Wins (ESPN 'general' category).
+  kicking_extra_point_attempts: 'Extra Point Attempts (ESPN ''kicking'' category): The number of extra point attempts.'
+  kicking_extra_point_pct: 'Extra Point Percentage (ESPN ''kicking'' category): The percentage of extra point attempts that are
+    converted.'
+  kicking_extra_points_made: 'Extra Points Made (ESPN ''kicking'' category): The number of extra point attempts made.'
+  kicking_field_goal_attempts: 'Field Goal Attempts (ESPN ''kicking'' category): The number of times a field goal is attempted.'
+  kicking_field_goal_attempts1_19: 'Field Goal Attempts 1-19 (ESPN ''kicking'' category): The number of field goals attempted from
+    1-19 yards.'
+  kicking_field_goal_attempts20_29: 'Field Goal Attempts 20-29 (ESPN ''kicking'' category): The number of field goals attempted
+    from 20-29 yards.'
+  kicking_field_goal_attempts30_39: 'Field Goal Attempts 30-39 (ESPN ''kicking'' category): The number of field goals attempted
+    from 30-39 yards.'
+  kicking_field_goal_attempts40_49: 'Field Goal Attempts 40-49 (ESPN ''kicking'' category): The number of field goals attempted
+    from 40-49 yards.'
+  kicking_field_goal_attempts50: 'Field Goal Attempts 50+ (ESPN ''kicking'' category): The number of field goals attempted from
+    50+ yards.'
+  kicking_field_goal_pct: 'Field Goal Percentage (ESPN ''kicking'' category): The percentage of field goals attempted that are
+    made.'
+  kicking_field_goals_made: 'Field Goal Made (ESPN ''kicking'' category): The number of times a field goal is made.'
+  kicking_field_goals_made1_19: 'Field Goals Made 1-19 (ESPN ''kicking'' category): The number of field goals made from 1-19 yards.'
+  kicking_field_goals_made20_29: 'Field Goals Made 20-29 (ESPN ''kicking'' category): The number of field goals made from 20-29
+    yards.'
+  kicking_field_goals_made30_39: 'Field Goals Made 30-39 (ESPN ''kicking'' category): The number of field goals made from 30-39
+    yards.'
+  kicking_field_goals_made40_49: 'Field Goals Made 40-49 (ESPN ''kicking'' category): The number of field goals made from 40-49
+    yards.'
+  kicking_field_goals_made50: 'Field Goals Made 50+ (ESPN ''kicking'' category): The number of field goals made from 50+ yards.'
+  kicking_long_field_goal_made: 'Long Field Goal Made (ESPN ''kicking'' category): The distance of the longest field goal made.'
+  offensive_assists: 'Assists (ESPN ''Assists'', offensive category): passes that lead directly to a score in basketball; goal
+    assists in hockey.'
+  offensive_avg_assists: 'Assists Per Game (ESPN ''offensive'' category): The average assists per game.'
+  offensive_avg_field_goals_attempted: 'Average Field Goals Attempted (ESPN ''offensive'' category): The average field goals attempted
+    per game.'
+  offensive_avg_field_goals_made: 'Average Field Goals Made (ESPN ''offensive'' category): The average field goals made per game.'
+  offensive_avg_free_throws_attempted: 'Average Free Throws Attempted (ESPN ''offensive'' category): The average free throw shots
+    attempted per game.'
+  offensive_avg_free_throws_made: 'Average Free Throws Made (ESPN ''offensive'' category): The average free throw shots made per
+    game.'
+  offensive_avg_points: 'Points Per Game (ESPN ''offensive'' category): The average number of points scored per game.'
+  offensive_avg_three_point_field_goals_attempted: 'Average 3-Point Field Goals Attempted (ESPN ''offensive'' category): The average
+    three point field goals attempted per game.'
+  offensive_avg_three_point_field_goals_made: 'Average 3-Point Field Goals Made (ESPN ''offensive'' category): The average three
+    point field goals made per game.'
+  offensive_avg_turnovers: 'Turnovers Per Game (ESPN ''offensive'' category): The average turnovers committed per game.'
+  offensive_faceoff_percent: 'Faceoff Win Percent (ESPN ''offensive'' category): Percentage of faceoffs won.'
+  offensive_faceoffs_lost: 'Faceoffs Lost (ESPN ''offensive'' category): Total faceoffs lost.'
+  offensive_faceoffs_won: 'Faceoffs Won (ESPN ''offensive'' category): Total faceoffs won.'
+  offensive_field_goal_pct: 'Field Goal Percentage (ESPN ''offensive'' category): The ratio of field goals made to field goals
+    attempted: FGM / FGA.'
+  offensive_field_goals_attempted: 'Field Goals Attempted (ESPN ''offensive'' category): The number of times a 2pt field goal was
+    attempted.'
+  offensive_field_goals_made: 'Field Goals Made (ESPN ''offensive'' category): The number of times a 2pt field goal was made.'
+  offensive_free_throw_pct: 'Free Throw Percentage (ESPN ''offensive'' category): The ratio of free throws made to free throws
+    attempted: FTM / FTA.'
+  offensive_free_throws_attempted: 'Free Throws Attempted (ESPN ''offensive'' category): The number of times a free throw was attempted.'
+  offensive_free_throws_made: 'Free Throws Made (ESPN ''offensive'' category): The number of times a free throw was made.'
+  offensive_game_winning_goals: 'Game-Winning Goals (ESPN ''offensive'' category): Total game-winning goals.'
+  offensive_goals: 'Goals (ESPN ''offensive'' category): Total goals scored.'
+  offensive_points: 'Points (ESPN ''Points'', offensive category): points scored in basketball; goals plus assists in hockey.'
+  offensive_power_play_assists: 'Power Play Assists (ESPN ''offensive'' category): Total power play assists.'
+  offensive_power_play_goals: 'Power Play Goals (ESPN ''offensive'' category): Total power play goals.'
+  offensive_shooting_pct: 'Shooting Percentage (ESPN ''offensive'' category): Percentage of shots scored.'
+  offensive_shootout_attempts: 'Shootout Attempts (ESPN ''offensive'' category): Total shootout attempts.'
+  offensive_shootout_goals: 'Shootout Goals (ESPN ''offensive'' category): Total shootout goals.'
+  offensive_shootout_shot_pct: 'Shootout Shot Percentage (ESPN ''offensive'' category): Percentage of shootout goals made.'
+  offensive_shots_total: 'Shots (ESPN ''offensive'' category): Total shots.'
+  offensive_three_point_field_goal_pct: '3-Point Field Goal Percentage (ESPN ''offensive'' category): The ratio of 3pt field goals
+    made to 3pt field goals attempted: 3PM / 3PA.'
+  offensive_three_point_field_goals_attempted: '3-Point Field Goals Attempted (ESPN ''offensive'' category): The number of times
+    a 3pt field goal was attempted.'
+  offensive_three_point_field_goals_made: '3-Point Field Goals Made (ESPN ''offensive'' category): The number of times a 3pt field
+    goal was made.'
+  offensive_turnovers: 'Turnovers (ESPN ''offensive'' category): The number of times a player loses possession to the other team.'
+  passing_adj_qbr: 'Adjusted QBR (ESPN ''passing'' category): Adjusted Quarterback Rating.'
+  passing_completion_pct: 'Completion Percentage (ESPN ''passing'' category): The percentage of completed passes.'
+  passing_completions: 'Completions (ESPN ''passing'' category): The times a player completes a pass to another player who is eligible
+    to catch a pass.'
+  passing_interceptions: 'Interceptions (ESPN ''passing'' category): The number of passes thrown that were intercepted by the opposing
+    team.'
+  passing_long_passing: 'Longest Pass (ESPN ''passing'' category): The longest pass play completed in terms of yards.'
+  passing_passing_attempts: 'Passing Attempts (ESPN ''passing'' category): The number of times a pass is attempted.'
+  passing_passing_touchdowns: 'Passing Touchdowns (ESPN ''passing'' category): The total number of passing touchdowns.'
+  passing_passing_yards: 'Passing Yards (ESPN ''passing'' category): The total passing yards.'
+  passing_passing_yards_per_game: 'Passing Yards Per Game (ESPN ''passing'' category): The number of passing yards per game.'
+  passing_qb_rating: Passer Rating (ESPN 'passing' category).
+  passing_qbr: 'Total QBR (ESPN ''passing'' category): Total Quarterback Rating, which values quarterback on all play types on
+    a 0-to-100 scale.'
+  passing_sack_yards_lost: 'Sack Yards Lost (ESPN ''passing'' category): The amount of yards lost due to sacks.'
+  passing_sacks: 'Total Sacks (ESPN ''passing'' category): The total number of sacks.'
+  passing_yards_per_pass_attempt: 'Yards Per Pass Attempt (ESPN ''passing'' category): The average number yards per pass attempt.'
+  penalties_penalty_minutes: 'Penalty Minutes (ESPN ''penalties'' category): Total penalty minutes.'
+  pitching_earned_runs: 'Earned runs (ESPN ''pitching'' category): The number of earned runs surrendered by a pitcher.'
+  pitching_era: 'Earned Run Average (ESPN ''pitching'' category): The average number of runs a pitcher yields per 9 innings thrown.'
+  pitching_games_played: Games Played (ESPN 'pitching' category).
+  pitching_games_started: 'Games Started (ESPN ''pitching'' category): The number of games started by a pitcher.'
+  pitching_hits: 'Hits (ESPN ''pitching'' category): The number of hits surrendered by a pitcher.'
+  pitching_holds: 'Holds (ESPN ''pitching'' category): The number of times a pitcher enters the game with the lead, gets at least
+    an out and leaves the game wihtout having given up the lead.'
+  pitching_home_runs: 'Home Runs (ESPN ''pitching'' category): The number of times a pitcher has allowed a home run.'
+  pitching_innings: 'Innings pitched (ESPN ''pitching'' category): The number of innings pitched.'
+  pitching_losses: 'Losses (ESPN ''pitching'' category): The number of losses for a pitcher.'
+  pitching_quality_starts: 'Quality Starts (ESPN ''pitching'' category): The number of quality starts for a pitcher.'
+  pitching_saves: 'Saves (ESPN ''pitching'' category): The number of times a pitcher enters and finishes the game without surrendering
+    the lead in a save opportunity.'
+  pitching_strikeouts: 'Strikeouts (ESPN ''pitching'' category): The number of times the pitcher struck out a batter.'
+  pitching_strikeouts_per_nine_innings: 'Strikeouts Per 9 Innings (ESPN ''pitching'' category): The average number of strikeouts
+    for a pitcher per 9 innings.'
+  pitching_walks: 'Walks (ESPN ''pitching'' category): The number of times a pitcher surrenders a base on balls.'
+  pitching_warbr: Wins Above Replacement (ESPN 'pitching' category).
+  pitching_whip: 'Walks Plus Hits Per Inning Pitched (ESPN ''pitching'' category): The number representing walks plus hits divided
+    by innings pitched.'
+  pitching_wins: 'Wins (ESPN ''pitching'' category): The number of times the pitcher was attributed with a win.'
+  punting_avg_punt_return_yards: 'Average Punt Return Yards (ESPN ''punting'' category): The average number of yards per punt return.'
+  punting_fair_catches: 'Fair Catches (ESPN ''punting'' category): The number of fair catches.'
+  punting_gross_avg_punt_yards: 'Gross Average Punt Yards (ESPN ''punting'' category): The average gross number of yards per punt.'
+  punting_long_punt: 'Long Punt (ESPN ''punting'' category): The distance of the longest punt.'
+  punting_net_avg_punt_yards: 'Net Average Punt Yards (ESPN ''punting'' category): The average net number of yards per punt.'
+  punting_punt_return_yards: 'Punt Return Yards (ESPN ''punting'' category): The total amount of yardage of punt returns.'
+  punting_punt_returns: 'Punt Returns (ESPN ''punting'' category): The number of times a punt was returned.'
+  punting_punt_yards: 'Punt Yards (ESPN ''punting'' category): The total amount of yardage of punts.'
+  punting_punts: 'Punts (ESPN ''punting'' category): The number of punts taken.'
+  punting_punts_blocked: 'Punts Blocked (ESPN ''punting'' category): The number of times a punt was blocked.'
+  punting_punts_inside20: 'Punts Inside 20 (ESPN ''punting'' category): The number of times a punt is downed inside the 20.'
+  punting_touchbacks: 'Touchbacks (ESPN ''punting'' category): The number of kickoffs that result in touchbacks.'
+  rank: 'Place of the athlete in ESPN''s leaderboard order (the requested category or sort), counted across pages: (page - 1) *
+    limit + position on the page.'
+  receiving_long_reception: 'Long Reception (ESPN ''receiving'' category): The amount of yards for the longest reception.'
+  receiving_receiving_big_plays: '20+ Yard Receiving Plays (ESPN ''receiving'' category): The number of receiving big plays gained.'
+  receiving_receiving_first_downs: 'Receiving First Downs (ESPN ''receiving'' category): The number of times a first down is picked
+    up by a reception.'
+  receiving_receiving_fumbles: 'Receiving Fumbles (ESPN ''receiving'' category): The number of times a reception is made and then
+    the ball is fumbled.'
+  receiving_receiving_fumbles_lost: 'Receiving Fumbles Lost (ESPN ''receiving'' category): The number of times a reception is made
+    and the balled is fumbled and recovered by the opposing team.'
+  receiving_receiving_targets: 'Receiving Targets (ESPN ''receiving'' category): The number of times a receiver is thrown to.'
+  receiving_receiving_touchdowns: 'Receiving Touchdowns (ESPN ''receiving'' category): The total number of receiving touchdowns.'
+  receiving_receiving_yards: 'Receiving Yards (ESPN ''receiving'' category): The total receiving yards.'
+  receiving_receiving_yards_after_catch: 'Receiving Yards After Catch (ESPN ''receiving'' category): The number of yards gained
+    after the catch has been made.'
+  receiving_receiving_yards_per_game: 'Receiving Yards Per Game (ESPN ''receiving'' category): The average number of receiving
+    yards per game.'
+  receiving_receptions: 'Receptions (ESPN ''receiving'' category): The total number of receptions.'
+  receiving_yards_per_reception: 'Yards Per Reception (ESPN ''receiving'' category): The average number of yards per reception.'
+  returning_kick_return_touchdowns: 'Kick Return Touchdowns (ESPN ''returning'' category): The number of kick return touchdowns.'
+  returning_kick_return_yards: 'Kick Return Yards (ESPN ''returning'' category): The total yardage of kick returns.'
+  returning_kick_returns: 'Kick Returns (ESPN ''returning'' category): The number of kick returns.'
+  returning_long_kick_return: 'Long Kick Return (ESPN ''returning'' category): The longest kick return in yards.'
+  returning_long_punt_return: 'Long Punt Return (ESPN ''returning'' category): The longest punt return in yards.'
+  returning_punt_return_fair_catches: 'Punt Return Fair Catches (ESPN ''returning'' category): The number of punt return fair catches.'
+  returning_punt_return_touchdowns: 'Punt Return Touchdowns (ESPN ''returning'' category): The number of punt return touchdowns.'
+  returning_punt_return_yards: 'Punt Return Yards (ESPN ''returning'' category): The total yardage of punt returns.'
+  returning_punt_returns: 'Punt Returns (ESPN ''returning'' category): The number of punt returns.'
+  returning_yards_per_kick_return: 'Yards Per Kick Return (ESPN ''returning'' category): The average number of yards per kick return.'
+  returning_yards_per_punt_return: 'Yards Per Punt Return (ESPN ''returning'' category): The average number of yards per punt return.'
+  rushing_long_rushing: 'Long Rushing (ESPN ''rushing'' category): The amount of yards for the longest run.'
+  rushing_rushing_attempts: 'Rushing Attempts (ESPN ''rushing'' category): The total number of attempted rushes.'
+  rushing_rushing_big_plays: '20+ Yard Rushing Plays (ESPN ''rushing'' category): The number of rushing big plays gained.'
+  rushing_rushing_first_downs: 'Rushing 1st downs (ESPN ''rushing'' category): The number of times a first down is picked up by
+    a run.'
+  rushing_rushing_fumbles: 'Rushing Fumbles (ESPN ''rushing'' category): The number of times there is a run and then the ball is
+    fumbled.'
+  rushing_rushing_fumbles_lost: 'Rushing Fumbles Lost (ESPN ''rushing'' category): The number of times there is a run and then
+    the ball is fumbled.'
+  rushing_rushing_touchdowns: 'Rushing Touchdowns (ESPN ''rushing'' category): The total number of rushing touchdowns.'
+  rushing_rushing_yards: 'Rushing Yards (ESPN ''rushing'' category): The total rushing yards.'
+  rushing_rushing_yards_per_game: 'Rushing Yards Per Game (ESPN ''rushing'' category): The average number of rushing yards per
+    game.'
+  rushing_yards_per_rush_attempt: 'Yards Per Rush Attempt (ESPN ''rushing'' category): The average number of yards per rush attempt.'
+  scoring_field_goals: 'Field Goals (ESPN ''scoring'' category): The number of field goals made.'
+  scoring_kick_extra_points: 'Kick Extra Points (ESPN ''scoring'' category): The number of extra points made.'
+  scoring_receiving_touchdowns: 'Receiving Touchdowns (ESPN ''scoring'' category): The total number of receiving touchdowns.'
+  scoring_return_touchdowns: 'Return Touchdowns (ESPN ''scoring'' category): The total number of return touchdowns.'
+  scoring_rushing_touchdowns: 'Rushing Touchdowns (ESPN ''scoring'' category): The total number of rushing touchdowns.'
+  scoring_total_points: 'Total Points (ESPN ''scoring'' category): The number of total points scored.'
+  scoring_total_points_per_game: 'Total Points Per Game (ESPN ''scoring'' category): The number of points scored per game.'
+  scoring_total_touchdowns: 'Total Touchdowns (ESPN ''scoring'' category): The number of touchdowns scored in total.'
+  scoring_total_two_point_convs: 'Total Two Point Conversions (ESPN ''scoring'' category): The number of times a 2-point conversion
+    is successful.'
+  team_abbreviation: Abbreviation of the athlete's team in the requested season (ESPN teamShortName, e.g. ORE).
+  team_id: ESPN id of the team the athlete played for in the requested season.
+  team_name: Nickname of the athlete's team in the requested season (ESPN teamName, e.g. Ducks).
 league:
   color_primary: Primary brand colour of the league as six hex digits, inconsistently prefixed with a hash (#003369 for the
     NFL, 002D72 for MLB); null for the leagues CBS carries no palette for.

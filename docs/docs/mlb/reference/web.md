@@ -262,12 +262,12 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `category` | `category` |  |  | `Y` | category query parameter. |
+| `category` | `category` |  |  | `Y` | Leaderboard population, which also fills that category's per-stat ranks. Football takes '<group>:<category>' ('offense:passing', 'offense:rushing', 'offense:receiving', 'defense:defensive', 'scoring:scoring'); a bare 'passing' is rejected with HTTP 400 (ValueError). |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `seasontype` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 | `page` | `page` |  |  | `Y` | page query parameter. |
-| `sort` | `sort` |  |  | `Y` | sort query parameter. |
+| `sort` | `sort` |  |  | `Y` | Sort key '<category>.<statName>:<asc\|desc>', the names in the payload's categories ('passing.passingYards:desc', 'offensive.avgPoints:desc'). A stat without its category is rejected with HTTP 400 (ValueError). |
 
 ### Returns {#espn_mlb_leaders-returns}
 
@@ -275,45 +275,67 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `athletes` | character | Athletes. |
-| `glossary` | character | Glossary. |
-| `categories` | character | Categories. |
-| `pagination_count` | integer | Pagination count. |
-| `pagination_limit` | integer | Pagination limit. |
-| `pagination_page` | integer | Pagination page. |
-| `pagination_pages` | integer | Pagination pages. |
-| `pagination_first` | character | Pagination first. |
-| `pagination_next` | character | Pagination next. |
-| `pagination_last` | character | Pagination last. |
-| `league_id` | integer | League id. |
-| `league_uid` | character | League uid. |
-| `league_name` | character | League name. |
-| `league_abbreviation` | character | League abbreviation. |
-| `league_slug` | character | League slug. |
-| `league_midsize_name` | character | Medium-length display name for the league, between the full name and the short abbreviation. |
-| `league_short_name` | character | League short name. |
-| `current_season_year` | integer | Current season year. |
-| `current_season_display_name` | character | Current season display name. |
-| `current_season_start_date` | character | Current season start date. |
-| `current_season_end_date` | character | Current season end date. |
-| `current_season_type_id` | integer | Current season type id. |
-| `current_season_type_type` | integer | Current season type type. |
-| `current_season_type_name` | character | Current season type name. |
-| `current_season_type_start_date` | character | Current season type start date. |
-| `current_season_type_end_date` | character | Current season type end date. |
-| `current_season_type_week_number` | integer | Ordinal week number within the current season type. |
-| `current_season_type_week_start_date` | character | ISO 8601 start date of the current week within the active season type. |
-| `current_season_type_week_end_date` | character | ISO 8601 end date of the current week within the active season type (e.g., regular season, playoffs). |
-| `current_season_type_week_text` | character | Human-readable label for the current week within the active season type (e.g., 'Week 14'). |
-| `requested_season_year` | integer | Requested season year. |
-| `requested_season_display_name` | character | Requested season display name. |
-| `requested_season_start_date` | character | Requested season start date. |
-| `requested_season_end_date` | character | Requested season end date. |
-| `requested_season_type_id` | integer | Requested season type id. |
-| `requested_season_type_type` | integer | Requested season type type. |
-| `requested_season_type_name` | character | Requested season type name. |
-| `requested_season_type_start_date` | character | Requested season type start date. |
-| `requested_season_type_end_date` | character | Requested season type end date. |
+| `rank` | integer | Place of the athlete in ESPN's leaderboard order (the requested category or sort), counted across pages: (page - 1) * limit + position on the page. |
+| `athlete_id` | integer | ESPN id of the athlete, the key the athlete endpoints (athlete_overview, athlete_stats) take. |
+| `athlete_uid` | character | ESPN composite athlete uid (s:<sport>~l:<league>~a:<athlete id>), kept as text. |
+| `athlete_display_name` | character | Athlete's full display name. |
+| `athlete_short_name` | character | Athlete's abbreviated name (e.g. 'B. Nix'). |
+| `athlete_first_name` | character | Athlete's first name. |
+| `athlete_last_name` | character | Athlete's last name. |
+| `athlete_position` | character | Athlete's position abbreviation (e.g. QB, G, C). |
+| `athlete_status` | character | Athlete's ESPN status name (e.g. Active, Inactive) as ESPN reports it at request time, not for the requested season. |
+| `team_id` | integer | ESPN id of the team the athlete played for in the requested season. |
+| `team_abbreviation` | character | Abbreviation of the athlete's team in the requested season (ESPN teamShortName, e.g. ORE). |
+| `team_name` | character | Nickname of the athlete's team in the requested season (ESPN teamName, e.g. Ducks). |
+| `batting_games_played` | double | Games Played (ESPN 'batting' category). |
+| `batting_at_bats` | double | At Bats (ESPN 'batting' category): The number of times a batter comes up to bat not counting walks and sacrifices. |
+| `batting_runs` | double | Runs (ESPN 'batting' category): The number of runs scored. |
+| `batting_hits` | double | Hits (ESPN 'batting' category): The number of hits. |
+| `batting_avg` | double | Batting Average (ESPN 'batting' category): The average number of times the batter reached successfully on base due to a hit: hits / atBats. |
+| `batting_doubles` | double | Doubles (ESPN 'batting' category): The number of times that a batter reaches second base as the result of a hit without an error being committed. |
+| `batting_triples` | double | Triples (ESPN 'batting' category): The number of hits that result in the batter reaching 3rd base without the aid of an error. |
+| `batting_home_runs` | double | Home Runs (ESPN 'batting' category): The number of hits that allowed the batter to round the bases and score without the aid of an error of the defense. |
+| `batting_rb_is` | double | Runs Batted In (ESPN 'batting' category): The number of runs scored by a batter's play. |
+| `batting_total_bases` | double | Total Bases (ESPN 'batting' category): The number of bases calculated as 1 for a 1B, 2 for a 2B, 3 for a 3B and 4 for a HR. |
+| `batting_walks` | double | Walks (ESPN 'batting' category): The number of times a batter reaches base on four balls. |
+| `batting_strikeouts` | double | Strikeouts (ESPN 'batting' category): The number of times a player strikes out. |
+| `batting_stolen_bases` | double | Stolen Bases (ESPN 'batting' category): The number of bases stolen. |
+| `batting_on_base_pct` | double | On Base Percentage (ESPN 'batting' category): The ratio of the number of times the batter reached base per plate appearnce: (hits + walks + hbp / plateAppearances). |
+| `batting_slug_avg` | double | Slugging Percentage (ESPN 'batting' category): Slugging percentage is a metric that is meant to measuring how many bases the hitter safely advances to after making contact with the ball: (totalBases / atBats). |
+| `batting_ops` | double | OBP Pct + SLG Pct (ESPN 'batting' category): The average calculated by adding up on-base percentage and slugging percentage. |
+| `batting_warbr` | double | Wins Above Replacement (ESPN 'batting' category). |
+| `pitching_games_played` | double | Games Played (ESPN 'pitching' category). |
+| `pitching_games_started` | double | Games Started (ESPN 'pitching' category): The number of games started by a pitcher. |
+| `pitching_quality_starts` | double | Quality Starts (ESPN 'pitching' category): The number of quality starts for a pitcher. |
+| `pitching_era` | double | Earned Run Average (ESPN 'pitching' category): The average number of runs a pitcher yields per 9 innings thrown. |
+| `pitching_wins` | double | Wins (ESPN 'pitching' category): The number of times the pitcher was attributed with a win. |
+| `pitching_losses` | double | Losses (ESPN 'pitching' category): The number of losses for a pitcher. |
+| `pitching_saves` | double | Saves (ESPN 'pitching' category): The number of times a pitcher enters and finishes the game without surrendering the lead in a save opportunity. |
+| `pitching_holds` | double | Holds (ESPN 'pitching' category): The number of times a pitcher enters the game with the lead, gets at least an out and leaves the game wihtout having given up the lead. |
+| `pitching_innings` | double | Innings pitched (ESPN 'pitching' category): The number of innings pitched. |
+| `pitching_hits` | double | Hits (ESPN 'pitching' category): The number of hits surrendered by a pitcher. |
+| `pitching_earned_runs` | double | Earned runs (ESPN 'pitching' category): The number of earned runs surrendered by a pitcher. |
+| `pitching_home_runs` | double | Home Runs (ESPN 'pitching' category): The number of times a pitcher has allowed a home run. |
+| `pitching_walks` | double | Walks (ESPN 'pitching' category): The number of times a pitcher surrenders a base on balls. |
+| `pitching_strikeouts` | double | Strikeouts (ESPN 'pitching' category): The number of times the pitcher struck out a batter. |
+| `pitching_strikeouts_per_nine_innings` | double | Strikeouts Per 9 Innings (ESPN 'pitching' category): The average number of strikeouts for a pitcher per 9 innings. |
+| `pitching_whip` | double | Walks Plus Hits Per Inning Pitched (ESPN 'pitching' category): The number representing walks plus hits divided by innings pitched. |
+| `pitching_warbr` | double | Wins Above Replacement (ESPN 'pitching' category). |
+| `fielding_games_played` | double | Games Played (ESPN 'fielding' category). |
+| `fielding_games_started` | double | Games Started (ESPN 'fielding' category): The number of games started by a fielder. |
+| `fielding_full_innings_played` | double | Full Innings (ESPN 'fielding' category): The number of fully completed innings by a fielder. |
+| `fielding_total_chances` | double | Total Chances (ESPN 'fielding' category): The number of chances a fielder has to make an out calculated by assists plus putouts plus errors. |
+| `fielding_putouts` | double | Putouts (ESPN 'fielding' category): The number of times the fielder tags or forces the out of a baserunner. |
+| `fielding_assists` | double | Assists (ESPN 'fielding' category): The number of times a fielder is involved in an out when the fielder is not the putouter. |
+| `fielding_fielding_pct` | double | Fielding Percentage (ESPN 'fielding' category): The percentage of plays made by a fielder given the total number of chances. |
+| `fielding_errors` | double | Errors (ESPN 'fielding' category): The number of times a fielder fails to make the play they are expected to make. |
+| `fielding_double_plays` | double | Double Plays (ESPN 'fielding' category): The number of double plays a fielder has been a part of as either the assister or putouter. |
+| `fielding_range_factor` | double | Range Factor (ESPN 'fielding' category): The estimation of how much field a fielder can cover. |
+| `fielding_def_warbr` | double | Defensive Wins Above Replacement (ESPN 'fielding' category). |
+| `fielding_passed_balls` | double | Passed Balls (ESPN 'fielding' category): The number of times the ball is dropped or passes by the catcher. |
+| `fielding_catcher_stolen_bases_allowed` | double | Stolen Bases Allowed (ESPN 'fielding' category): The number of stolen bases that a catcher allows. |
+| `fielding_catcher_caught_stealing` | double | Caught Stealing (ESPN 'fielding' category): The number of times a catcher throws a baserunner trying to steal a base. |
+| `fielding_catcher_caught_stealing_pct` | double | Caught Stealing Percentage (ESPN 'fielding' category): The percentage of baserunners caught by the catcher given the total number of steal attempts. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

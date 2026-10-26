@@ -360,10 +360,21 @@ def test_parse_leaders_handles_wnba_payload():
     from sportsdataverse._common_espn_parsers import parse_leaders
     from sportsdataverse.wnba.wnba_espn_ext import espn_wnba_leaders
 
-    raw = espn_wnba_leaders(return_parsed=False)
+    raw = espn_wnba_leaders(season=2024, return_parsed=False)
     df = parse_leaders(raw)
     assert isinstance(df, pl.DataFrame)
-    assert df["pagination_count"].to_list() == [raw["pagination"]["count"]]
+    # one row per athlete, not the flattened envelope
+    assert df["athlete_id"].to_list() == [int(a["athlete"]["id"]) for a in raw["athletes"]]
+
+
+def test_cfb_leaders_category_takes_group_prefix():
+    """Football wants ``<group>:<category>``: ``offense:passing`` ranks passers, a bare ``passing`` is a 400."""
+    from sportsdataverse.cfb.cfb_espn_ext import espn_cfb_leaders
+
+    df = espn_cfb_leaders(season=2023, category="offense:passing", limit=5)
+    assert df.height == 5 and df["passing_passing_yards"].null_count() < 5
+    with pytest.raises(ValueError, match="400"):
+        espn_cfb_leaders(season=2023, category="passing", limit=5)
 
 
 # ===========================================================================

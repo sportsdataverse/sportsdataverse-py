@@ -72,10 +72,16 @@ endpoints:
 - short: leaders
   scope: universal
   path: /{sport}/{league}/statistics/byathlete
+  # Live-probed 2026-10-26: football takes category as '<group>:<category>' and answers a bare
+  # 'passing' with HTTP 400; basketball takes a bare name and ranks the same either way. sort is
+  # '<category>.<statName>:<asc|desc>'; a stat without its category ('passingYards:desc') is a 400.
   extra_params:
   - name: category
     query_key: category
     type: str
+    description: "Leaderboard population, which also fills that category's per-stat ranks. Football takes '<group>:<category>'
+      ('offense:passing', 'offense:rushing', 'offense:receiving', 'defense:defensive', 'scoring:scoring'); a bare
+      'passing' is rejected with HTTP 400 (ValueError)."
   - name: season
     query_key: season
     type: int|str
@@ -93,5 +99,7 @@ endpoints:
   - name: sort
     query_key: sort
     type: str
+    description: "Sort key '<category>.<statName>:<asc|desc>', the names in the payload's categories ('passing.passingYards:desc',
+      'offensive.avgPoints:desc'). A stat without its category is rejected with HTTP 400 (ValueError)."
   parser: parse_leaders
   returns_schema: leaders

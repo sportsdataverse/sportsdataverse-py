@@ -965,10 +965,17 @@ def parse_athlete_splits(payload: Dict, return_as_pandas: bool = False) -> pl.Da
 def parse_leaders(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a statistics-by-athlete leaderboard response into a tidy polars frame.
 
-    Input: raw payload from ``_espn_statistics_byathlete()``.
-    Output: one row per athlete in ``categories[].leaders[]`` with
-    athlete_id + per-stat values. Stat column names are each category's
-    ``names[]`` (``labels[]`` when a category has no ``names``), snake-cased.
+    Input: raw payload from the web v3 ``statistics/byathlete`` endpoint.
+    Output: one row per athlete in ``athletes[]``, in ESPN's sort order, with the
+    athlete and team identity plus one column per stat, named
+    ``{category}_{stat}`` (``passing_passing_yards``): the stat names come from the
+    payload's top-level ``categories[].names[]`` and the values from the athlete's
+    ``categories[].values[]``, matched by category name. ``rank`` is the row's place
+    in ESPN's order across pages (``(page - 1) * limit + n``).
+
+    The older shape, rows under ``categories[].leaders[]``, still parses: one row per
+    leader with the category in ``category`` and the stats under their own names. A
+    league without a leaderboard (ESPN answers ``{currentSeason}`` alone) gives zero rows.
 
     Args:
         payload: Raw JSON dict from the statistics/byathlete endpoint.
@@ -982,6 +989,37 @@ def parse_leaders(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame
 
     categories = payload.get("categories") or []
     rows: List[dict] = []
+    stat_cols: dict = {}  # insertion-ordered set of the byathlete stat columns
+
+    if payload.get("athletes"):
+        # names[i] labels values[i]; labels only where a category ships no names
+        stat_names = {c.get("name"): c.get("names") or c.get("labels") or [] for c in categories}
+        page = payload.get("pagination") or {}
+        offset = (int(page.get("page") or 1) - 1) * int(page.get("limit") or 0)
+        for n, entry in enumerate(payload["athletes"], start=1):
+            athlete = entry.get("athlete") or {}
+            row = {
+                "rank": offset + n,
+                "athlete_id": athlete.get("id"),
+                "athlete_uid": athlete.get("uid"),
+                "athlete_display_name": athlete.get("displayName"),
+                "athlete_short_name": athlete.get("shortName"),
+                "athlete_first_name": athlete.get("firstName"),
+                "athlete_last_name": athlete.get("lastName"),
+                "athlete_position": (athlete.get("position") or {}).get("abbreviation"),
+                "athlete_status": (athlete.get("status") or {}).get("name"),
+                "team_id": athlete.get("teamId"),
+                "team_abbreviation": athlete.get("teamShortName"),
+                "team_name": athlete.get("teamName"),
+            }
+            for cat in entry.get("categories") or []:
+                names = stat_names.get(cat.get("name")) or []
+                for i, val in enumerate(cat.get("values") or []):
+                    stat = underscore(names[i]) if i < len(names) else f"stat_{i}"
+                    col = f"{underscore(cat.get('name') or '')}_{stat}"
+                    stat_cols[col] = None
+                    row[col] = val
+            rows.append(row)
 
     for cat in categories:
         cat_name = cat.get("name") or cat.get("displayName") or ""
@@ -1015,10 +1053,13 @@ def parse_leaders(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame
             rows.append(row)
 
     if not rows:
-        df = pd.json_normalize(payload, sep="_")
-        return _to_output(_snake_columns(df), return_as_pandas)
+        return _empty_frame(return_as_pandas)
 
     df = pd.DataFrame(rows)
+    # values[] is numeric or null; a category no athlete on the page has (all null) must stay Float64,
+    # not ride the pandas hop to an all-null String column
+    for col in stat_cols:
+        df[col] = pd.to_numeric(df[col], errors="coerce").astype("float64")
     df = _snake_columns(df)
     return _to_output(df, return_as_pandas)
 
