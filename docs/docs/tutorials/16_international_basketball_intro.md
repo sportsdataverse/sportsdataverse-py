@@ -1,5 +1,6 @@
 ---
 title: International basketball tutorial
+description: "The NBA is one league; the rest of the basketball world is dozens. sportsdataverse-py wraps the feeds behind the biggest of them, and this notebook tours four."
 sidebar_label: International basketball
 sidebar_position: 16
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/16_international_basketball_intro.ipynb

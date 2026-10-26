@@ -1,5 +1,6 @@
 ---
 title: CFB tutorial
+description: "Saturdays in autumn, condensed into tidy DataFrames. In a few lines of Python you're about to pull a decade of play-by-play, full rosters, schedules, team info, plus live ESPN scoreboards…"
 sidebar_label: CFB
 sidebar_position: 7
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/02_cfb_intro.ipynb

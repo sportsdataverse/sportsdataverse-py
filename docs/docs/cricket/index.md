@@ -20,6 +20,10 @@ description: "sdv-py CRICKET: endpoint references, dataset loaders and parsers f
 | [ESPN core API (v2)](reference/core) | 82 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
 
+## See also
+
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `team_colors("cricket", ...)` gives each national side's colors
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):

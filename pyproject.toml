@@ -127,9 +127,10 @@ pff = [
 ]
 sdvplot = [
     # SportsDataverse team logos, colors and chart themes for the frames this package returns.
-    # 0.1.1 is the first release that allows polars 2. Plot backends are sdvplot's own extras
-    # (`sdvplot[mpl]`, `[plotly]`, `[altair]`, ...).
-    "sdvplot>=0.1.1",
+    # 0.1.1 is the first release that allows polars 2. `[mpl]` brings matplotlib (MIT), so the
+    # extra draws charts out of the box; other backends are sdvplot's own extras (`[plotly]`, ...).
+    # Courts, rinks and pitches also need the separate GPL-3.0 `sportypy` extra.
+    "sdvplot[mpl]>=0.1.1",
 ]
 sportypy = [
     # Rulebook-accurate fields, courts, rinks and pitches to draw play-by-play and shot coordinates
@@ -161,7 +162,7 @@ all = [
     # sportsdataverse.schemas.raw_schema() reads the bundled YAML payload schemas and
     # its install hint names this extra; pyyaml was only ever present through pycln.
     "pyyaml>=6.0",
-    "sdvplot>=0.1.1",
+    "sdvplot[mpl]>=0.1.1",
     "sportypy>=1.0",
 ]
 

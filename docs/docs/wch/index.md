@@ -20,6 +20,11 @@ description: "sdv-py WCH: endpoint references, dataset loaders and parsers for W
 | [ESPN core API (v2)](reference/core) | 87 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
 
+## See also
+
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("ncaa_whockey")` draws the NCAA rink and `team_colors("ncaa_whockey", ...)` the school colors
+- [sportypy](https://sportypy.sportsdataverse.org/) — the regulation NCAA rink sdvplot draws with
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):

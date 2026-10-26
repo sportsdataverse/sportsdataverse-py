@@ -1,5 +1,6 @@
 ---
 title: WNBA tutorial
+description: "Welcome! In just a few lines of Python you're about to pull WNBA teams, rosters, schedules, play-by-play, season stats, standings and the draft — all as tidy polars DataFrames that are ready to model."
 sidebar_label: WNBA
 sidebar_position: 3
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/08_wnba_intro.ipynb

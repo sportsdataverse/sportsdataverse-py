@@ -109,7 +109,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 
 ## See also
 
-- [sdvplot](https://github.com/sportsdataverse/sdvplot) — `court_coords()` puts stats-API `x_legacy` / `y_legacy` shots on the court `surface("wnba")` draws
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `court_coords()` puts stats-API `x_legacy` / `y_legacy` shots on the court `surface("wnba")` draws
 - [sportypy](https://sportypy.sportsdataverse.org/) — the regulation WNBA court sdvplot draws with
 
 ## Examples

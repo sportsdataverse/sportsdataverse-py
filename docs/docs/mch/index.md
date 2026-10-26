@@ -27,6 +27,11 @@ description: "sdv-py MCH: endpoint references, dataset loaders and parsers for M
 - [`mch_ratings`](reference/additional#mch_ratings)
 
 
+## See also
+
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("ncaa_mhockey")` draws the NCAA rink and `team_colors("ncaa_mhockey", ...)` the school colors
+- [sportypy](https://sportypy.sportsdataverse.org/) — the regulation NCAA rink sdvplot draws with
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):

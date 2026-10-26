@@ -158,7 +158,7 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 
 ## See also
 
-- [sdvplot](https://github.com/sportsdataverse/sdvplot) — `surface("cfb")` draws the field with a team's end zones
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("cfb")` draws the field with a team's end zones
 - [sportypy](https://sportypy.sportsdataverse.org/) — the regulation college football field sdvplot draws with
 
 ## Examples

@@ -21,6 +21,10 @@ description: "sdv-py COLLEGE_SOFTBALL: endpoint references, dataset loaders and 
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
 | [ESPN CDN API (cdn.espn.com)](reference/cdn) | 3 |
 
+## See also
+
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `team_colors("ncaa_softball", ...)` gives each school's colors
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):

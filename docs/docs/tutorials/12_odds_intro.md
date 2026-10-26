@@ -1,5 +1,6 @@
 ---
 title: Betting odds tutorial
+description: "Welcome! In a few lines of Python you're about to pull live betting odds from a whole market of sportsbooks — moneylines, spreads, totals, player props, scores, even point-in-time history."
 sidebar_label: Betting odds
 sidebar_position: 15
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/12_odds_intro.ipynb

@@ -243,6 +243,11 @@ description: "sdv-py WBB: endpoint references, dataset loaders and parsers for W
 - [`wbb_team_crosswalk`](reference/additional/ids-and-crosswalks#wbb_team_crosswalk)
 
 
+## See also
+
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("wbb")` draws the NCAA court in a team's colors; `team_colors()` takes ESPN ids and abbreviations
+- [sportypy](https://sportypy.sportsdataverse.org/) — the regulation NCAA court sdvplot draws with
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):

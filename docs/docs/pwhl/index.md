@@ -53,7 +53,7 @@ description: "sdv-py PWHL: endpoint references, dataset loaders and parsers for 
 
 ## See also
 
-- [sdvplot](https://github.com/sportsdataverse/sdvplot) — `surface("pwhl")` draws the rink in a team's colors
+- [sdvplot](https://sdvplot.sportsdataverse.org/) — `surface("pwhl")` draws the rink in a team's colors
 - [sportypy](https://sportypy.sportsdataverse.org/) — the rink sdvplot draws with
 
 ## Examples

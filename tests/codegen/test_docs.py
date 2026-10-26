@@ -201,7 +201,7 @@ def test_render_league_index_see_also_comes_from_companions_yaml():
     assert "[kloppy](https://kloppy.pysport.org)" in soccer
     # The block sits between the reference table and the Examples section.
     assert soccer.index("## See also") < soccer.index("## Examples")
-    assert "## See also" not in generate.render_league_index("mbb")
+    assert "## See also" not in generate.render_league_index("mls")  # no companions.yaml key
 
 
 def test_companions_yaml_entries_are_well_formed():

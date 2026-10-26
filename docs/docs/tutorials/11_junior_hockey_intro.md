@@ -1,5 +1,6 @@
 ---
 title: Junior & minor hockey tutorial
+description: "Four leagues, one toolkit. sportsdataverse wraps the HockeyTech / LeagueStat feed behind the American Hockey League (AHL) and the three Canadian Hockey League major-junior loops — Ontario (OHL)…"
 sidebar_label: Junior & minor hockey
 sidebar_position: 11
 custom_edit_url: https://github.com/sportsdataverse/sportsdataverse-py/edit/main/examples/notebooks/11_junior_hockey_intro.ipynb
