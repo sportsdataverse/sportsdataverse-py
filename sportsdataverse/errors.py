@@ -827,7 +827,7 @@ def suggest_next_action(url: str) -> str | None:
 
 def _format_404(url: str, body: object | None = None) -> str:
     """Build a NoDataError message with an optional next-action hint."""
-    base = f"NoDataError: No data found for {url}"
+    base = f"No data found for {url}"
     if body is not None:
         base += f", response: {body}"
     hint = suggest_next_action(url)

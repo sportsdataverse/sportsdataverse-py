@@ -15,8 +15,10 @@ if you want pandas instead.
 ## Install with pip or uv
 
 ```bash
-pip install sportsdataverse
+pip install --pre sportsdataverse   # 0.2.0b1, the 0.2.0 beta
 ```
+
+Without `--pre`, pip installs 0.1.4, the latest final release, until 0.2.0 ships.
 
 With [uv](https://docs.astral.sh/uv/), which the project uses day to day:
 
@@ -52,8 +54,8 @@ None of them is needed for the core loaders and ESPN wrappers.
 | `nflpro` | `pip install "sportsdataverse[nflpro]"` | Playwright, for the NFL Pro (pro.nfl.com) Next Gen Stats client |
 | `models` | `pip install "sportsdataverse[models]"` | Nothing. It is kept so that existing `[models]` installs keep working; the models ship in the wheel |
 | `pff` | `pip install "sportsdataverse[pff]"` | Playwright, for the optional headless sign-in of the legacy PFF Premium client |
-| `sdvplot` | `pip install "sportsdataverse[sdvplot]"` | [sdvplot](https://github.com/sportsdataverse/sdvplot) 0.1.1 or later: team logos, colors and chart themes |
-| `sportypy` | `pip install "sportsdataverse[sportypy]"` | [sportypy](https://github.com/sportsdataverse/sportypy): rulebook fields, rinks and courts to draw coordinates on |
+| `sdvplot` | `pip install "sportsdataverse[sdvplot]"` | [sdvplot](https://sdvplot.sportsdataverse.org/) 0.1.1 or later with matplotlib (`sdvplot[mpl]`): team logos, colors and chart themes |
+| `sportypy` | `pip install "sportsdataverse[sportypy]"` | [sportypy](https://sportypy.sportsdataverse.org/): rulebook fields, rinks and courts to draw coordinates on |
 | `mcp` | `pip install "sportsdataverse[mcp]"` | The `mcp` SDK, for the [sdv-docs MCP server](#the-sdv-docs-mcp-server) |
 | `all` | `pip install "sportsdataverse[all]"` | Every extra above except `mcp`, plus `patchright` (the stats.ncaa.org browser transport) |
 
@@ -68,10 +70,8 @@ Three notes on the extras:
   it is missing, those calls raise an `ImportError` that names it
   (`pip install curl_cffi`). See [Troubleshooting](troubleshooting.md).
 
-sdvplot draws through its own plotting extras (`sdvplot[mpl]`, `sdvplot[plotly]`,
-`sdvplot[altair]`, ...). The `sdvplot` extra here installs the core package, which
-resolves team colors and logos; add the backend you draw with, such as
-`pip install matplotlib`.
+The `sdvplot` extra installs `sdvplot[mpl]`, so matplotlib comes with it. For another
+backend, add sdvplot's own extra: `pip install "sdvplot[plotly]"` or `"sdvplot[altair]"`.
 
 ## The `sdv` command line
 
