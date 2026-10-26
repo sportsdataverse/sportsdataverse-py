@@ -5326,6 +5326,12 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/84/64/2441484c7707d7f7e50aad19ceb4a38f94b28bb36b824cb223c425debbae/sdvplot-0.1.1-py3-none-any.whl", hash = "sha256:6c686648845091e3e3db808019a924c93c16e355a9520b58008320bc958a16e5", size = 661676, upload-time = "2026-10-26T04:40:09.686Z" },
 ]
 
+[package.optional-dependencies]
+mpl = [
+    { name = "matplotlib", version = "3.10.9", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "matplotlib", version = "3.11.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+]
+
 [[package]]
 name = "secretstorage"
 version = "3.5.0"
@@ -5407,7 +5413,7 @@ all = [
     { name = "pytest-xdist" },
     { name = "pyyaml" },
     { name = "ruff" },
-    { name = "sdvplot" },
+    { name = "sdvplot", extra = ["mpl"] },
     { name = "sportypy" },
 ]
 mcp = [
@@ -5420,7 +5426,7 @@ pff = [
     { name = "playwright" },
 ]
 sdvplot = [
-    { name = "sdvplot" },
+    { name = "sdvplot", extra = ["mpl"] },
 ]
 soccer = [
     { name = "kloppy", extra = ["polars"] },
@@ -5506,8 +5512,8 @@ requires-dist = [
     { name = "ruff", marker = "extra == 'tests'", specifier = ">=0.1.0" },
     { name = "scikit-learn", specifier = ">=1.0.0" },
     { name = "scipy", specifier = ">=1.10.0" },
-    { name = "sdvplot", marker = "extra == 'all'", specifier = ">=0.1.1" },
-    { name = "sdvplot", marker = "extra == 'sdvplot'", specifier = ">=0.1.1" },
+    { name = "sdvplot", extras = ["mpl"], marker = "extra == 'all'", specifier = ">=0.1.1" },
+    { name = "sdvplot", extras = ["mpl"], marker = "extra == 'sdvplot'", specifier = ">=0.1.1" },
     { name = "sportypy", marker = "extra == 'all'", specifier = ">=1.0" },
     { name = "sportypy", marker = "extra == 'sportypy'", specifier = ">=1.0" },
     { name = "tomli", marker = "python_full_version < '3.11'", specifier = ">=2.0" },
